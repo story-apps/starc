@@ -21,20 +21,20 @@
 namespace Ui {
 
 namespace {
-const QVector<BusinessLayer::ScreenplayParagraphType> kParagraphTypes
-    = { BusinessLayer::ScreenplayParagraphType::SceneHeading,
-        BusinessLayer::ScreenplayParagraphType::SceneCharacters,
-        BusinessLayer::ScreenplayParagraphType::Action,
-        BusinessLayer::ScreenplayParagraphType::Character,
-        BusinessLayer::ScreenplayParagraphType::Parenthetical,
-        BusinessLayer::ScreenplayParagraphType::Dialogue,
-        BusinessLayer::ScreenplayParagraphType::Lyrics,
-        BusinessLayer::ScreenplayParagraphType::Transition,
-        BusinessLayer::ScreenplayParagraphType::Shot,
-        BusinessLayer::ScreenplayParagraphType::InlineNote,
-        BusinessLayer::ScreenplayParagraphType::UnformattedText,
-        BusinessLayer::ScreenplayParagraphType::FolderHeader,
-        BusinessLayer::ScreenplayParagraphType::FolderFooter };
+const QVector<BusinessLayer::TextParagraphType> kParagraphTypes
+    = { BusinessLayer::TextParagraphType::SceneHeading,
+        BusinessLayer::TextParagraphType::SceneCharacters,
+        BusinessLayer::TextParagraphType::Action,
+        BusinessLayer::TextParagraphType::Character,
+        BusinessLayer::TextParagraphType::Parenthetical,
+        BusinessLayer::TextParagraphType::Dialogue,
+        BusinessLayer::TextParagraphType::Lyrics,
+        BusinessLayer::TextParagraphType::Transition,
+        BusinessLayer::TextParagraphType::Shot,
+        BusinessLayer::TextParagraphType::InlineNote,
+        BusinessLayer::TextParagraphType::UnformattedText,
+        BusinessLayer::TextParagraphType::FolderHeader,
+        BusinessLayer::TextParagraphType::FolderFooter };
 }
 
 class ScreenplayTemplateParagraphsView::Implementation
@@ -346,14 +346,14 @@ void ScreenplayTemplateParagraphsView::setUseMm(bool _mm)
     updateTranslations();
 }
 
-BusinessLayer::ScreenplayParagraphType ScreenplayTemplateParagraphsView::currentParagraphType()
+BusinessLayer::TextParagraphType ScreenplayTemplateParagraphsView::currentParagraphType()
     const
 {
     return kParagraphTypes.at(d->paragraphs->currentTab());
 }
 
 void ScreenplayTemplateParagraphsView::setCurrentParagraphType(
-    BusinessLayer::ScreenplayParagraphType _type)
+    BusinessLayer::TextParagraphType _type)
 {
     d->paragraphs->setCurrentTab(kParagraphTypes.indexOf(_type));
 }

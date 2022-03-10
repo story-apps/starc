@@ -63,12 +63,12 @@ public:
     /**
      * @brief Обновить параметры параграфа в представлении
      */
-    void updateParagraphParameters(BusinessLayer::ScreenplayParagraphType _paragraphType);
+    void updateParagraphParameters(BusinessLayer::TextParagraphType _paragraphType);
 
     /**
      * @brief Сохранить параметры заданного параграфа
      */
-    void saveParagraphParameters(BusinessLayer::ScreenplayParagraphType _paragraphType);
+    void saveParagraphParameters(BusinessLayer::TextParagraphType _paragraphType);
 
     /**
      * @brief Сохранить шаблон
@@ -183,7 +183,7 @@ void ScreenplayTemplateManager::Implementation::saveTitlePage()
 }
 
 void ScreenplayTemplateManager::Implementation::updateParagraphParameters(
-    BusinessLayer::ScreenplayParagraphType _paragraphType)
+    BusinessLayer::TextParagraphType _paragraphType)
 {
     const auto paragraphStyle = currentTemplate.paragraphStyle(_paragraphType);
     paragraphsView->setParagraphEnabled(paragraphStyle.isActive());
@@ -215,7 +215,7 @@ void ScreenplayTemplateManager::Implementation::updateParagraphParameters(
 }
 
 void ScreenplayTemplateManager::Implementation::saveParagraphParameters(
-    BusinessLayer::ScreenplayParagraphType _paragraphType)
+    BusinessLayer::TextParagraphType _paragraphType)
 {
     auto paragraphStyle = currentTemplate.paragraphStyle(_paragraphType);
     paragraphStyle.setActive(paragraphsView->isParagraphEnabled());
@@ -246,7 +246,7 @@ void ScreenplayTemplateManager::Implementation::saveParagraphParameters(
     marginsOnHalfPage.setRight(mmFromCurrentMetrics(paragraphsView->rightIndentInTable()));
     paragraphStyle.setMarginsOnHalfPage(marginsOnHalfPage);
     paragraphStyle.setLineSpacingType(
-        static_cast<BusinessLayer::ScreenplayBlockStyle::LineSpacingType>(
+        static_cast<BusinessLayer::TextBlockStyle::LineSpacingType>(
             paragraphsView->lineSpacingType()));
     paragraphStyle.setLineSpacingValue(mmFromCurrentMetrics(paragraphsView->lineSpacingValue()));
 
@@ -382,8 +382,8 @@ ScreenplayTemplateManager::ScreenplayTemplateManager(QObject* _parent, QWidget* 
             [this] { d->saveTemplate(); });
     connect(d->paragraphsView, &Ui::ScreenplayTemplateParagraphsView::currentParagraphTypeChanged,
             this,
-            [this](BusinessLayer::ScreenplayParagraphType _currentType,
-                   BusinessLayer::ScreenplayParagraphType _previousType) {
+            [this](BusinessLayer::TextParagraphType _currentType,
+                   BusinessLayer::TextParagraphType _previousType) {
                 d->saveParagraphParameters(_previousType);
                 d->updateParagraphParameters(_currentType);
             });
@@ -426,7 +426,7 @@ void ScreenplayTemplateManager::editTemplate(const QString& _templateId)
     d->toolBar->checkPageSettings();
     d->navigator->checkMm();
     d->paragraphsView->setCurrentParagraphType(
-        BusinessLayer::ScreenplayParagraphType::SceneHeading);
+        BusinessLayer::TextParagraphType::SceneHeading);
 
     d->currentTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(_templateId);
 
@@ -446,7 +446,7 @@ void ScreenplayTemplateManager::duplicateTemplate(const QString& _templateId)
     d->toolBar->checkPageSettings();
     d->navigator->checkMm();
     d->paragraphsView->setCurrentParagraphType(
-        BusinessLayer::ScreenplayParagraphType::SceneHeading);
+        BusinessLayer::TextParagraphType::SceneHeading);
 
     d->currentTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(_templateId);
     d->currentTemplate.setIsNew();

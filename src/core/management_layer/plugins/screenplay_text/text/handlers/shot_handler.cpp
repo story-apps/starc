@@ -7,7 +7,7 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
@@ -51,7 +51,7 @@ void ShotHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ScreenplayParagraphType::Shot);
+            editor()->addParagraph(TextParagraphType::Shot);
         } else {
             //! Нет выделения
 
@@ -61,7 +61,7 @@ void ShotHandler::handleEnter(QKeyEvent*)
                 //
                 // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::Shot));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Shot));
             } else {
                 //! Текст не пуст
 
@@ -77,14 +77,14 @@ void ShotHandler::handleEnter(QKeyEvent*)
                     //
                     // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Shot));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::Shot));
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(ScreenplayParagraphType::Action);
+                    editor()->addParagraph(TextParagraphType::Action);
                 }
             }
         }
@@ -133,7 +133,7 @@ void ShotHandler::handleTab(QKeyEvent*)
                 //
                 // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::Shot));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Shot));
             } else {
                 //! Текст не пуст
 
@@ -149,7 +149,7 @@ void ShotHandler::handleTab(QKeyEvent*)
                     //
                     // Действуем как нажатие клавиши ENTER
                     //
-                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Shot));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::Shot));
                 } else {
                     //! Внутри блока
 

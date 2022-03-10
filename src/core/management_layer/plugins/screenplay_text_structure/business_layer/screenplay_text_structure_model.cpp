@@ -61,7 +61,7 @@ bool ScreenplayTextStructureModel::filterAcceptsRow(int _sourceRow,
     if (item->type() == ScreenplayTextModelItemType::Text) {
         const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
         return !textItem->isCorrection()
-            && textItem->paragraphType() == ScreenplayParagraphType::Shot;
+            && textItem->paragraphType() == TextParagraphType::Shot;
     }
     //
     // Остальное не показываем

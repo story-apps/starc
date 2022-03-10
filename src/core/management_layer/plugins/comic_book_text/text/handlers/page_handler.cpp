@@ -7,8 +7,8 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ComicBookBlockStyle;
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
 
@@ -54,7 +54,7 @@ void PageHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ComicBookParagraphType::Page);
+            editor()->addParagraph(TextParagraphType::Page);
         } else {
             //! Нет выделения
 
@@ -64,7 +64,7 @@ void PageHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль блока на описание действия
                 //
-                editor()->setCurrentParagraphType(changeForEnter(ComicBookParagraphType::Page));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Page));
             } else {
                 //! Текст не пуст
 
@@ -80,14 +80,14 @@ void PageHandler::handleEnter(QKeyEvent*)
                     //
                     // Перейдём к блоку персонажа
                     //
-                    editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Page));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::Page));
                 } else {
                     //! Внутри блока
 
                     //
                     // Оставшийся текст форматируем, как "лирика"
                     //
-                    editor()->addParagraph(ComicBookParagraphType::Page);
+                    editor()->addParagraph(TextParagraphType::Page);
                 }
             }
         }
@@ -136,7 +136,7 @@ void PageHandler::handleTab(QKeyEvent*)
                 //
                 // Меняем стиль на ремарку
                 //
-                editor()->setCurrentParagraphType(changeForTab(ComicBookParagraphType::Page));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Page));
             } else {
                 //! Текст не пуст
 
@@ -152,7 +152,7 @@ void PageHandler::handleTab(QKeyEvent*)
                     //
                     // Вставляем блок ремарки
                     //
-                    editor()->addParagraph(jumpForTab(ComicBookParagraphType::Page));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::Page));
                 } else {
                     //! Внутри блока
 

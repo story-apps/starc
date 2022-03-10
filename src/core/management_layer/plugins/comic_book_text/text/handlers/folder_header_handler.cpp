@@ -8,8 +8,8 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ComicBookBlockStyle;
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
 
@@ -63,7 +63,7 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
                 // Меняем стиль в соответствии с настройками
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ComicBookParagraphType::FolderHeader));
+                    changeForEnter(TextParagraphType::FolderHeader));
             } else {
                 //! Текст не пуст
 
@@ -73,21 +73,21 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
                     //
                     // Вставка блока заголовка перед собой
                     //
-                    editor()->addParagraph(ComicBookParagraphType::Page);
+                    editor()->addParagraph(TextParagraphType::Page);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
                     // Вставить блок время и место
                     //
-                    editor()->addParagraph(jumpForEnter(ComicBookParagraphType::FolderHeader));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::FolderHeader));
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставить блок время и место
                     //
-                    editor()->addParagraph(ComicBookParagraphType::Page);
+                    editor()->addParagraph(TextParagraphType::Page);
                 }
             }
         }
@@ -137,7 +137,7 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
                 // Ни чего не делаем
                 //
                 editor()->setCurrentParagraphType(
-                    changeForTab(ComicBookParagraphType::FolderHeader));
+                    changeForTab(TextParagraphType::FolderHeader));
             } else {
                 //! Текст не пуст
 
@@ -153,7 +153,7 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
                     //
                     // Как ENTER
                     //
-                    editor()->addParagraph(jumpForTab(ComicBookParagraphType::FolderHeader));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::FolderHeader));
                 } else {
                     //! Внутри блока
 

@@ -99,6 +99,13 @@ SOURCES += \
     business_layer/model/abstract_model.cpp \
     business_layer/model/abstract_model_item.cpp \
     business_layer/model/abstract_model_xml.cpp \
+    business_layer/model/atext/abstract_text_model.cpp \
+    business_layer/model/atext/abstract_text_model_folder_item.cpp \
+    business_layer/model/atext/abstract_text_model_group_item.cpp \
+    business_layer/model/atext/abstract_text_model_item.cpp \
+    business_layer/model/atext/abstract_text_model_splitter_item.cpp \
+    business_layer/model/atext/abstract_text_model_text_item.cpp \
+    business_layer/model/atext/abstract_text_model_xml_writer.cpp \
     business_layer/model/characters/character_model.cpp \
     business_layer/model/characters/characters_model.cpp \
     business_layer/model/comic_book/comic_book_dictionaries_model.cpp \
@@ -146,6 +153,7 @@ SOURCES += \
     business_layer/templates/screenplay_template.cpp \
     business_layer/templates/simple_text_template.cpp \
     business_layer/templates/templates_facade.cpp \
+    business_layer/templates/text_template.cpp \
     data_layer/database.cpp \
     data_layer/mapper/abstract_mapper.cpp \
     data_layer/mapper/document_change_mapper.cpp \
@@ -296,6 +304,14 @@ HEADERS += \
     business_layer/model/abstract_model.h \
     business_layer/model/abstract_model_item.h \
     business_layer/model/abstract_model_xml.h \
+    business_layer/model/atext/abstract_text_model.h \
+    business_layer/model/atext/abstract_text_model_folder_item.h \
+    business_layer/model/atext/abstract_text_model_group_item.h \
+    business_layer/model/atext/abstract_text_model_item.h \
+    business_layer/model/atext/abstract_text_model_splitter_item.h \
+    business_layer/model/atext/abstract_text_model_text_item.h \
+    business_layer/model/atext/abstract_text_model_xml.h \
+    business_layer/model/atext/abstract_text_model_xml_writer.h \
     business_layer/model/characters/character_model.h \
     business_layer/model/characters/characters_model.h \
     business_layer/model/comic_book/comic_book_dictionaries_model.h \
@@ -347,6 +363,7 @@ HEADERS += \
     business_layer/templates/screenplay_template.h \
     business_layer/templates/simple_text_template.h \
     business_layer/templates/templates_facade.h \
+    business_layer/templates/text_template.h \
     corelib_global.h \
     data_layer/database.h \
     data_layer/mapper/abstract_mapper.h \

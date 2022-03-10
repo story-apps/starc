@@ -11,7 +11,7 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::SimpleTextBlockStyle;
+using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
 using Ui::TitlePageEdit;
 

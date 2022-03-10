@@ -8,8 +8,8 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ScreenplayBlockStyle;
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
@@ -63,7 +63,7 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
                 // Меняем стиль в соответствии с настройками
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ScreenplayParagraphType::FolderHeader));
+                    changeForEnter(TextParagraphType::FolderHeader));
             } else {
                 //! Текст не пуст
 
@@ -73,21 +73,21 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
                     //
                     // Вставка блока заголовка перед собой
                     //
-                    editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
+                    editor()->addParagraph(TextParagraphType::SceneHeading);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
                     // Вставить блок время и место
                     //
-                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::FolderHeader));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::FolderHeader));
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставить блок время и место
                     //
-                    editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
+                    editor()->addParagraph(TextParagraphType::SceneHeading);
                 }
             }
         }
@@ -137,7 +137,7 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
                 // Ни чего не делаем
                 //
                 editor()->setCurrentParagraphType(
-                    changeForTab(ScreenplayParagraphType::FolderHeader));
+                    changeForTab(TextParagraphType::FolderHeader));
             } else {
                 //! Текст не пуст
 
@@ -153,7 +153,7 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
                     //
                     // Как ENTER
                     //
-                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::FolderHeader));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::FolderHeader));
                 } else {
                     //! Внутри блока
 

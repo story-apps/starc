@@ -5,7 +5,7 @@
 #include <data_layer/storage/storage_facade.h>
 
 
-QString ShortcutsHelper::screenplayShortcut(BusinessLayer::ScreenplayParagraphType _type)
+QString ShortcutsHelper::screenplayShortcut(BusinessLayer::TextParagraphType _type)
 {
     return settingsValue(
                QString("%1/%2").arg(DataStorageLayer::kComponentsScreenplayEditorShortcutsKey,
@@ -13,7 +13,7 @@ QString ShortcutsHelper::screenplayShortcut(BusinessLayer::ScreenplayParagraphTy
         .toString();
 }
 
-void ShortcutsHelper::setScreenplayShortcut(BusinessLayer::ScreenplayParagraphType _type,
+void ShortcutsHelper::setScreenplayShortcut(BusinessLayer::TextParagraphType _type,
                                             const QString& _shortcut)
 {
     setSettingsValue(QString("%1/%2").arg(DataStorageLayer::kComponentsScreenplayEditorShortcutsKey,
@@ -21,7 +21,7 @@ void ShortcutsHelper::setScreenplayShortcut(BusinessLayer::ScreenplayParagraphTy
                      _shortcut);
 }
 
-QString ShortcutsHelper::screenplayJumpByTab(BusinessLayer::ScreenplayParagraphType _type)
+QString ShortcutsHelper::screenplayJumpByTab(BusinessLayer::TextParagraphType _type)
 {
     return settingsValue(QString("%1/styles-jumping/from-%2-by-tab")
                              .arg(DataStorageLayer::kComponentsScreenplayEditorKey,
@@ -29,8 +29,8 @@ QString ShortcutsHelper::screenplayJumpByTab(BusinessLayer::ScreenplayParagraphT
         .toString();
 }
 
-void ShortcutsHelper::setScreenplayJumpByTab(BusinessLayer::ScreenplayParagraphType _fromType,
-                                             BusinessLayer::ScreenplayParagraphType _toType)
+void ShortcutsHelper::setScreenplayJumpByTab(BusinessLayer::TextParagraphType _fromType,
+                                             BusinessLayer::TextParagraphType _toType)
 {
     setSettingsValue(QString("%1/styles-jumping/from-%2-by-tab")
                          .arg(DataStorageLayer::kComponentsScreenplayEditorKey,
@@ -38,7 +38,7 @@ void ShortcutsHelper::setScreenplayJumpByTab(BusinessLayer::ScreenplayParagraphT
                      BusinessLayer::toString(_toType));
 }
 
-QString ShortcutsHelper::screenplayJumpByEnter(BusinessLayer::ScreenplayParagraphType _type)
+QString ShortcutsHelper::screenplayJumpByEnter(BusinessLayer::TextParagraphType _type)
 {
     return settingsValue(QString("%1/styles-jumping/from-%2-by-enter")
                              .arg(DataStorageLayer::kComponentsScreenplayEditorKey,
@@ -46,8 +46,8 @@ QString ShortcutsHelper::screenplayJumpByEnter(BusinessLayer::ScreenplayParagrap
         .toString();
 }
 
-void ShortcutsHelper::setScreenplayJumpByEnter(BusinessLayer::ScreenplayParagraphType _fromType,
-                                               BusinessLayer::ScreenplayParagraphType _toType)
+void ShortcutsHelper::setScreenplayJumpByEnter(BusinessLayer::TextParagraphType _fromType,
+                                               BusinessLayer::TextParagraphType _toType)
 {
     setSettingsValue(QString("%1/styles-jumping/from-%2-by-enter")
                          .arg(DataStorageLayer::kComponentsScreenplayEditorKey,
@@ -55,7 +55,7 @@ void ShortcutsHelper::setScreenplayJumpByEnter(BusinessLayer::ScreenplayParagrap
                      BusinessLayer::toString(_toType));
 }
 
-QString ShortcutsHelper::screenplayChangeByTab(BusinessLayer::ScreenplayParagraphType _type)
+QString ShortcutsHelper::screenplayChangeByTab(BusinessLayer::TextParagraphType _type)
 {
     return settingsValue(QString("%1/styles-changing/from-%2-by-tab")
                              .arg(DataStorageLayer::kComponentsScreenplayEditorKey,
@@ -63,8 +63,8 @@ QString ShortcutsHelper::screenplayChangeByTab(BusinessLayer::ScreenplayParagrap
         .toString();
 }
 
-void ShortcutsHelper::setScreenplayChangeByTab(BusinessLayer::ScreenplayParagraphType _fromType,
-                                               BusinessLayer::ScreenplayParagraphType _toType)
+void ShortcutsHelper::setScreenplayChangeByTab(BusinessLayer::TextParagraphType _fromType,
+                                               BusinessLayer::TextParagraphType _toType)
 {
     setSettingsValue(QString("%1/styles-changing/from-%2-by-tab")
                          .arg(DataStorageLayer::kComponentsScreenplayEditorKey,
@@ -72,7 +72,7 @@ void ShortcutsHelper::setScreenplayChangeByTab(BusinessLayer::ScreenplayParagrap
                      BusinessLayer::toString(_toType));
 }
 
-QString ShortcutsHelper::screenplayChangeByEnter(BusinessLayer::ScreenplayParagraphType _type)
+QString ShortcutsHelper::screenplayChangeByEnter(BusinessLayer::TextParagraphType _type)
 {
     return settingsValue(QString("%1/styles-changing/from-%2-by-enter")
                              .arg(DataStorageLayer::kComponentsScreenplayEditorKey,
@@ -80,8 +80,8 @@ QString ShortcutsHelper::screenplayChangeByEnter(BusinessLayer::ScreenplayParagr
         .toString();
 }
 
-void ShortcutsHelper::setScreenplayChangeByEnter(BusinessLayer::ScreenplayParagraphType _fromType,
-                                                 BusinessLayer::ScreenplayParagraphType _toType)
+void ShortcutsHelper::setScreenplayChangeByEnter(BusinessLayer::TextParagraphType _fromType,
+                                                 BusinessLayer::TextParagraphType _toType)
 {
     setSettingsValue(QString("%1/styles-changing/from-%2-by-enter")
                          .arg(DataStorageLayer::kComponentsScreenplayEditorKey,

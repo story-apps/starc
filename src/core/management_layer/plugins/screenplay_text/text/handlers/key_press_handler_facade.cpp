@@ -22,7 +22,7 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 namespace KeyProcessingLayer {
@@ -106,7 +106,7 @@ void KeyPressHandlerFacade::prehandle()
 void KeyPressHandlerFacade::handle(QEvent* _event, bool _pre)
 {
     QTextBlock currentBlock = d->m_editor->textCursor().block();
-    const auto currentType = BusinessLayer::ScreenplayBlockStyle::forBlock(currentBlock);
+    const auto currentType = BusinessLayer::TextBlockStyle::forBlock(currentBlock);
     auto currentHandler = handlerFor(currentType);
 
     if (currentHandler == nullptr) {
@@ -140,58 +140,58 @@ KeyPressHandlerFacade::KeyPressHandlerFacade(ScreenplayTextEdit* _editor)
 {
 }
 
-AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(ScreenplayParagraphType _type)
+AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
 {
     switch (_type) {
-    case ScreenplayParagraphType::UnformattedText: {
+    case TextParagraphType::UnformattedText: {
         return d->m_unformattedTextHandler.data();
     }
 
-    case ScreenplayParagraphType::SceneHeading: {
+    case TextParagraphType::SceneHeading: {
         return d->m_sceneHeaderHandler.data();
     }
 
-    case ScreenplayParagraphType::SceneCharacters: {
+    case TextParagraphType::SceneCharacters: {
         return d->m_sceneCharactersHandler.data();
     }
 
-    case ScreenplayParagraphType::Action: {
+    case TextParagraphType::Action: {
         return d->m_actionHandler.data();
     }
 
-    case ScreenplayParagraphType::Character: {
+    case TextParagraphType::Character: {
         return d->m_characterHandler.data();
     }
 
-    case ScreenplayParagraphType::Parenthetical: {
+    case TextParagraphType::Parenthetical: {
         return d->m_parentheticalHandler.data();
     }
 
-    case ScreenplayParagraphType::Dialogue: {
+    case TextParagraphType::Dialogue: {
         return d->m_dialogHandler.data();
     }
 
-    case ScreenplayParagraphType::Lyrics: {
+    case TextParagraphType::Lyrics: {
         return d->m_lyricsHandler.data();
     }
 
-    case ScreenplayParagraphType::Transition: {
+    case TextParagraphType::Transition: {
         return d->m_transitionHandler.data();
     }
 
-    case ScreenplayParagraphType::Shot: {
+    case TextParagraphType::Shot: {
         return d->m_shotHandler.data();
     }
 
-    case ScreenplayParagraphType::InlineNote: {
+    case TextParagraphType::InlineNote: {
         return d->m_inlineNoteHandler.data();
     }
 
-    case ScreenplayParagraphType::FolderHeader: {
+    case TextParagraphType::FolderHeader: {
         return d->m_folderHeaderHandler.data();
     }
 
-    case ScreenplayParagraphType::FolderFooter: {
+    case TextParagraphType::FolderFooter: {
         return d->m_folderFooterHandler.data();
     }
 

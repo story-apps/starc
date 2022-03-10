@@ -10,7 +10,7 @@
 #include <QTextBlock>
 #include <QTimer>
 
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
@@ -59,7 +59,7 @@ void TransitionHandler::handleEnter(QKeyEvent* _event)
         if (_event != nullptr) { // ... чтобы таб не переводил на новую строку
             cursor.movePosition(QTextCursor::EndOfBlock);
             editor()->setTextCursor(cursor);
-            editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Transition));
+            editor()->addParagraph(jumpForEnter(TextParagraphType::Transition));
         }
     } else {
         //! Подстановщик закрыт
@@ -70,7 +70,7 @@ void TransitionHandler::handleEnter(QKeyEvent* _event)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ScreenplayParagraphType::Transition);
+            editor()->addParagraph(TextParagraphType::Transition);
         } else {
             //! Нет выделения
 
@@ -81,7 +81,7 @@ void TransitionHandler::handleEnter(QKeyEvent* _event)
                 // Сменить стиль
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ScreenplayParagraphType::Transition));
+                    changeForEnter(TextParagraphType::Transition));
             } else {
                 //! Текст не пуст
 
@@ -96,21 +96,21 @@ void TransitionHandler::handleEnter(QKeyEvent* _event)
                     //
                     // Вставим блок перехода перед собой
                     //
-                    editor()->addParagraph(ScreenplayParagraphType::Transition);
+                    editor()->addParagraph(TextParagraphType::Transition);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
                     // Вставляем блок и применяем ему стиль время и место
                     //
-                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Transition));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::Transition));
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставляем блок и применяем ему стиль время и место
                     //
-                    editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
+                    editor()->addParagraph(TextParagraphType::SceneHeading);
                 }
             }
         }
@@ -161,7 +161,7 @@ void TransitionHandler::handleTab(QKeyEvent*)
                 // Сменить стиль
                 //
                 editor()->setCurrentParagraphType(
-                    changeForTab(ScreenplayParagraphType::Transition));
+                    changeForTab(TextParagraphType::Transition));
             } else {
                 //! Текст не пуст
 
@@ -182,7 +182,7 @@ void TransitionHandler::handleTab(QKeyEvent*)
                     //
                     // Вставить блок
                     //
-                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Transition));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::Transition));
                 } else {
                     //! Внутри блока
 

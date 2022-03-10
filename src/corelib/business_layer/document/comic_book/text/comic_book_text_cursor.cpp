@@ -150,11 +150,11 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
                 // ... в разрыве, удаляем символы в оторванном абзаце
                 //
                 if (checkCursor.blockFormat().boolProperty(
-                        ComicBookBlockStyle::PropertyIsBreakCorrectionStart)) {
+                        TextBlockStyle::PropertyIsBreakCorrectionStart)) {
                     checkCursor.movePosition(QTextCursor::NextBlock);
                     while (!checkCursor.atEnd()
                            && checkCursor.blockFormat().boolProperty(
-                               ComicBookBlockStyle::PropertyIsCorrection)) {
+                               TextBlockStyle::PropertyIsCorrection)) {
                         checkCursor.movePosition(QTextCursor::EndOfBlock);
                         checkCursor.movePosition(QTextCursor::NextCharacter);
                     }
@@ -166,11 +166,11 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
                 // ... в смещении блоков, удаляем все декорации
                 //
                 else if (checkCursor.block().next().blockFormat().boolProperty(
-                             ComicBookBlockStyle::PropertyIsCorrection)) {
+                             TextBlockStyle::PropertyIsCorrection)) {
                     checkCursor.movePosition(QTextCursor::NextBlock);
                     while (!checkCursor.atEnd()
                            && checkCursor.blockFormat().boolProperty(
-                               ComicBookBlockStyle::PropertyIsCorrection)) {
+                               TextBlockStyle::PropertyIsCorrection)) {
                         checkCursor.movePosition(QTextCursor::EndOfBlock);
                         checkCursor.movePosition(QTextCursor::NextCharacter);
                     }
@@ -186,12 +186,12 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
                 // ... в разрыве, удаляем символы в оторванном абзаце
                 //
                 if (checkCursor.blockFormat().boolProperty(
-                        ComicBookBlockStyle::PropertyIsBreakCorrectionStart)
+                        TextBlockStyle::PropertyIsBreakCorrectionStart)
                     || checkCursor.block().next().blockFormat().boolProperty(
-                        ComicBookBlockStyle::PropertyIsBreakCorrectionEnd)) {
+                        TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
                     while (!checkCursor.atStart()
                            && checkCursor.blockFormat().boolProperty(
-                               ComicBookBlockStyle::PropertyIsCorrection)) {
+                               TextBlockStyle::PropertyIsCorrection)) {
                         checkCursor.movePosition(QTextCursor::PreviousBlock);
                     }
                     checkCursor.movePosition(QTextCursor::EndOfBlock);
@@ -204,10 +204,10 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
                 // ... в смещении блоков, удаляем все декорации
                 //
                 else if (checkCursor.blockFormat().boolProperty(
-                             ComicBookBlockStyle::PropertyIsCorrection)) {
+                             TextBlockStyle::PropertyIsCorrection)) {
                     while (!checkCursor.atStart()
                            && checkCursor.blockFormat().boolProperty(
-                               ComicBookBlockStyle::PropertyIsCorrection)) {
+                               TextBlockStyle::PropertyIsCorrection)) {
                         checkCursor.movePosition(QTextCursor::PreviousBlock);
                     }
                     checkCursor.movePosition(QTextCursor::EndOfBlock);
@@ -228,9 +228,9 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
         {
             auto topBlock = document()->findBlock(topCursorPosition);
             auto bottomBlock = document()->findBlock(bottomCursorPosition);
-            if (ComicBookBlockStyle::forBlock(topBlock) == ComicBookParagraphType::FolderHeader
-                && ComicBookBlockStyle::forBlock(bottomBlock)
-                    == ComicBookParagraphType::FolderFooter
+            if (TextBlockStyle::forBlock(topBlock) == TextParagraphType::FolderHeader
+                && TextBlockStyle::forBlock(bottomBlock)
+                    == TextParagraphType::FolderFooter
                 && topBlock == document()->begin() && bottomBlock.next() == document()->end()) {
                 //
                 // Нельзя просто взять и удалить весь текст, потому что тогда останется блок
@@ -244,7 +244,7 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
                 auto comicBookDocument
                     = dynamic_cast<BusinessLayer::ComicBookTextDocument*>(document());
                 Q_ASSERT(comicBookDocument);
-                comicBookDocument->setParagraphType(ComicBookParagraphType::Page, cursor);
+                comicBookDocument->setParagraphType(TextParagraphType::Page, cursor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 cursor.insertText(" ");
                 cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
@@ -292,8 +292,8 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
             checkCursor.setPosition(bottomCursorPosition);
             if (checkCursor.atEnd()) {
                 checkCursor.setPosition(topCursorPosition);
-                if (ComicBookBlockStyle::forBlock(checkCursor.block())
-                    == ComicBookParagraphType::PageSplitter) {
+                if (TextBlockStyle::forBlock(checkCursor.block())
+                    == TextParagraphType::PageSplitter) {
                     return;
                 }
             }
@@ -306,27 +306,27 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
     // ... начала
     //
     const auto topBlock = document()->findBlock(topCursorPosition);
-    const auto topParagraphType = ComicBookBlockStyle::forBlock(topBlock);
+    const auto topParagraphType = TextBlockStyle::forBlock(topBlock);
     const auto topStyle = TemplatesFacade::comicBookTemplate().paragraphStyle(topParagraphType);
     //
     // ... и конца
     //
     const auto bottomBlock = document()->findBlock(bottomCursorPosition);
-    const auto bottomParagraphType = ComicBookBlockStyle::forBlock(bottomBlock);
+    const auto bottomParagraphType = TextBlockStyle::forBlock(bottomBlock);
     const auto bottomStyle
         = TemplatesFacade::comicBookTemplate().paragraphStyle(bottomParagraphType);
 
     //
     // Определим стиль результирующего блока и сохраним его данные
     //
-    ComicBookBlockStyle targetStyle;
+    TextBlockStyle targetStyle;
     ComicBookTextBlockData* targetBlockData = nullptr;
     bool isTopBlockShouldBeRemoved = false;
     //
     // Если пользователь хочет удалить пустую папку, расширим выделение, чтобы полностью её удалить
     //
-    if (topParagraphType == ComicBookParagraphType::FolderHeader
-        && bottomParagraphType == ComicBookParagraphType::FolderFooter
+    if (topParagraphType == TextParagraphType::FolderHeader
+        && bottomParagraphType == TextParagraphType::FolderFooter
         && topBlock.next() == bottomBlock) {
         if (bottomBlock.next() == document()->end()) {
             cursor.setPosition(topBlock.position());
@@ -340,7 +340,7 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
             isTopBlockShouldBeRemoved = true;
         }
         const QTextBlock targetBlock = cursor.block();
-        const auto targetBlockType = ComicBookBlockStyle::forBlock(targetBlock);
+        const auto targetBlockType = TextBlockStyle::forBlock(targetBlock);
         targetStyle = TemplatesFacade::comicBookTemplate().paragraphStyle(targetBlockType);
         targetBlockData = cloneBlockData(targetBlock);
     }
@@ -447,12 +447,12 @@ ComicBookTextCursor::FoldersToDelete ComicBookTextCursor::findFoldersToDelete(
         //
         // Определим тип блока
         //
-        const auto currentType = ComicBookBlockStyle::forBlock(cursor.block());
+        const auto currentType = TextBlockStyle::forBlock(cursor.block());
 
         //
         // Если найден блок открывающий папку, то нужно удалить закрывающий блок
         //
-        if (currentType == ComicBookParagraphType::FolderHeader) {
+        if (currentType == TextParagraphType::FolderHeader) {
             //
             // ... если все группы закрыты, нужно удалить последующую закрытую
             //
@@ -469,7 +469,7 @@ ComicBookTextCursor::FoldersToDelete ComicBookTextCursor::findFoldersToDelete(
         //
         // Если найден блок закрывающий папку
         //
-        else if (currentType == ComicBookParagraphType::FolderFooter) {
+        else if (currentType == TextParagraphType::FolderFooter) {
             //
             // ... если все группы закрыты, нужно удалить предыдущую открытую
             //
@@ -524,8 +524,8 @@ void ComicBookTextCursor::removeGroupsPairs(
         int openedGroups = 0;
         int groupsToDeleteCount = _foldersToDelete.footers;
         do {
-            const auto currentType = ComicBookBlockStyle::forBlock(cursor.block());
-            if (currentType == ComicBookParagraphType::FolderFooter) {
+            const auto currentType = TextBlockStyle::forBlock(cursor.block());
+            if (currentType == TextParagraphType::FolderFooter) {
                 if (openedGroups == 0) {
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -552,7 +552,7 @@ void ComicBookTextCursor::removeGroupsPairs(
                 } else {
                     --openedGroups;
                 }
-            } else if (currentType == ComicBookParagraphType::FolderHeader) {
+            } else if (currentType == TextParagraphType::FolderHeader) {
                 //
                 // ... встретилась новая группа, которую не нужно удалять
                 //
@@ -589,8 +589,8 @@ void ComicBookTextCursor::removeGroupsPairs(
         int openedGroups = 0;
         int groupsToDeleteCount = _foldersToDelete.headers;
         do {
-            const auto currentType = ComicBookBlockStyle::forBlock(cursor.block());
-            if (currentType == ComicBookParagraphType::FolderHeader) {
+            const auto currentType = TextBlockStyle::forBlock(cursor.block());
+            if (currentType == TextParagraphType::FolderHeader) {
                 if (openedGroups == 0) {
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -617,7 +617,7 @@ void ComicBookTextCursor::removeGroupsPairs(
                 } else {
                     --openedGroups;
                 }
-            } else if (currentType == ComicBookParagraphType::FolderFooter) {
+            } else if (currentType == TextParagraphType::FolderFooter) {
                 //
                 // ... встретилась новая группа, которую не нужно удалять
                 //

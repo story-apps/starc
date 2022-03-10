@@ -11,8 +11,8 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ComicBookBlockStyle;
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
 
@@ -22,7 +22,7 @@ namespace {
 /**
  * @brief Получить тип перехода/смены в зависимости от заданных параметров
  */
-static ComicBookParagraphType actionFor(bool _tab, bool _jump, ComicBookParagraphType _blockType)
+static TextParagraphType actionFor(bool _tab, bool _jump, TextParagraphType _blockType)
 {
     const QString settingsKey = QString("comicbook-editor/styles-%1/from-%2-by-%3")
                                     .arg(_jump ? "jumping" : "changing")
@@ -31,7 +31,7 @@ static ComicBookParagraphType actionFor(bool _tab, bool _jump, ComicBookParagrap
 
     const auto typeString = settingsValue(settingsKey).toString();
 
-    return BusinessLayer::comicBookParagraphTypeFromString(typeString);
+    return BusinessLayer::textParagraphTypeFromString(typeString);
 }
 
 /**
@@ -51,22 +51,22 @@ StandardKeyHandler::StandardKeyHandler(Ui::ComicBookTextEdit* _editor)
 {
 }
 
-ComicBookParagraphType StandardKeyHandler::jumpForTab(ComicBookParagraphType _blockType)
+TextParagraphType StandardKeyHandler::jumpForTab(TextParagraphType _blockType)
 {
     return actionFor(kTab, kJump, _blockType);
 }
 
-ComicBookParagraphType StandardKeyHandler::jumpForEnter(ComicBookParagraphType _blockType)
+TextParagraphType StandardKeyHandler::jumpForEnter(TextParagraphType _blockType)
 {
     return actionFor(kEnter, kJump, _blockType);
 }
 
-ComicBookParagraphType StandardKeyHandler::changeForTab(ComicBookParagraphType _blockType)
+TextParagraphType StandardKeyHandler::changeForTab(TextParagraphType _blockType)
 {
     return actionFor(kTab, kChange, _blockType);
 }
 
-ComicBookParagraphType StandardKeyHandler::changeForEnter(ComicBookParagraphType _blockType)
+TextParagraphType StandardKeyHandler::changeForEnter(TextParagraphType _blockType)
 {
     return actionFor(kEnter, kChange, _blockType);
 }
@@ -152,9 +152,8 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
         const QTextBlock firstDocumentBlock = cursor.document()->firstBlock();
         while (cursor.block() != firstDocumentBlock
                && (!cursor.block().isVisible()
-                   || ComicBookBlockStyle::forBlock(cursor.block())
-                       == ComicBookParagraphType::PageSplitter
-                   || cursor.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection)
+                   || TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::PageSplitter
+                   || cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                    || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
             cursor.movePosition(QTextCursor::PreviousBlock, cursorMoveMode);
             cursor.movePosition(QTextCursor::EndOfBlock, cursorMoveMode);
@@ -256,9 +255,8 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
         //
         while (!cursor.atEnd()
                && (!cursor.block().isVisible()
-                   || ComicBookBlockStyle::forBlock(cursor.block())
-                       == ComicBookParagraphType::PageSplitter
-                   || cursor.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection)
+                   || TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::PageSplitter
+                   || cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                    || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
             cursor.movePosition(QTextCursor::NextBlock, cursorMoveMode);
             cursor.movePosition(QTextCursor::EndOfBlock, cursorMoveMode);
@@ -282,14 +280,14 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
             //
             if (!cursor.atEnd()) {
                 cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode);
-                while (!cursor.atStart()
-                       && (!cursor.block().isVisible()
-                           || ComicBookBlockStyle::forBlock(cursor.block())
-                               == ComicBookParagraphType::PageSplitter
-                           || cursor.blockFormat().boolProperty(
-                               ComicBookBlockStyle::PropertyIsCorrection)
-                           || cursor.blockFormat().boolProperty(
-                               PageTextEdit::PropertyDontShowCursor))) {
+                while (
+                    !cursor.atStart()
+                    && (!cursor.block().isVisible()
+                        || TextBlockStyle::forBlock(cursor.block())
+                            == TextParagraphType::PageSplitter
+                        || cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
+                        || cursor.blockFormat().boolProperty(
+                            PageTextEdit::PropertyDontShowCursor))) {
                     if (!cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode)) {
                         break;
                     }

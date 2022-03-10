@@ -21,9 +21,9 @@
 
 #include <cmath>
 
-using BusinessLayer::ComicBookBlockStyle;
+using BusinessLayer::TextBlockStyle;
 using BusinessLayer::ComicBookCharacterParser;
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextParagraphType;
 using BusinessLayer::TemplatesFacade;
 
 
@@ -316,12 +316,12 @@ void ComicBookTextCorrector::Implementation::correctCharactersNames(int _positio
     //
     // ... от начала сцены
     //
-    QVector<ComicBookParagraphType> sceneBorders
-        = { ComicBookParagraphType::Page, ComicBookParagraphType::Panel,
-            ComicBookParagraphType::FolderHeader, ComicBookParagraphType::FolderFooter };
+    QVector<TextParagraphType> sceneBorders
+        = { TextParagraphType::Page, TextParagraphType::Panel,
+            TextParagraphType::FolderHeader, TextParagraphType::FolderFooter };
     QTextBlock block = document->findBlock(startPosition);
     while (block != document->begin()) {
-        const auto blockType = ComicBookBlockStyle::forBlock(block);
+        const auto blockType = TextBlockStyle::forBlock(block);
         if (sceneBorders.contains(blockType)) {
             break;
         }
@@ -334,7 +334,7 @@ void ComicBookTextCorrector::Implementation::correctCharactersNames(int _positio
     {
         QTextBlock endBlock = document->findBlock(endPosition);
         while (endBlock.isValid() && endBlock != document->end()) {
-            const ComicBookParagraphType blockType = ComicBookBlockStyle::forBlock(endBlock);
+            const TextParagraphType blockType = TextBlockStyle::forBlock(endBlock);
             if (sceneBorders.contains(blockType)) {
                 break;
             }
@@ -349,7 +349,7 @@ void ComicBookTextCorrector::Implementation::correctCharactersNames(int _positio
     //
     QString lastCharacterName;
     do {
-        const auto blockType = ComicBookBlockStyle::forBlock(block);
+        const auto blockType = TextBlockStyle::forBlock(block);
         //
         // Если дошли до новой сцены, очищаем последнее найдённое имя персонажа
         //
@@ -359,7 +359,7 @@ void ComicBookTextCorrector::Implementation::correctCharactersNames(int _positio
         //
         // Корректируем имя персонажа при необходимости
         //
-        else if (blockType == ComicBookParagraphType::Character) {
+        else if (blockType == TextParagraphType::Character) {
             const QString characterName = ComicBookCharacterParser::name(block.text());
             const bool isStartPositionInBlock = block.position() < startPosition
                 && block.position() + block.length() > startPosition;
@@ -373,9 +373,9 @@ void ComicBookTextCorrector::Implementation::correctCharactersNames(int _positio
                 if (lastCharacterName.isEmpty() || characterName != lastCharacterName) {
                     QTextBlockFormat characterFormat = block.blockFormat();
                     if (characterFormat.boolProperty(
-                            ComicBookBlockStyle::PropertyIsCharacterContinued)) {
+                            TextBlockStyle::PropertyIsCharacterContinued)) {
                         characterFormat.setProperty(
-                            ComicBookBlockStyle::PropertyIsCharacterContinued, false);
+                            TextBlockStyle::PropertyIsCharacterContinued, false);
                         cursor.setPosition(block.position());
                         cursor.setBlockFormat(characterFormat);
                     }
@@ -389,9 +389,9 @@ void ComicBookTextCorrector::Implementation::correctCharactersNames(int _positio
                     QTextBlockFormat characterFormat = block.blockFormat();
                     if (characterState.isEmpty()
                         && !characterFormat.boolProperty(
-                            ComicBookBlockStyle::PropertyIsCharacterContinued)) {
+                            TextBlockStyle::PropertyIsCharacterContinued)) {
                         characterFormat.setProperty(
-                            ComicBookBlockStyle::PropertyIsCharacterContinued, true);
+                            TextBlockStyle::PropertyIsCharacterContinued, true);
                         cursor.setPosition(block.position());
                         cursor.setBlockFormat(characterFormat);
                     }
@@ -426,12 +426,12 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
     //
     // ... от начала сцены
     //
-    QVector<ComicBookParagraphType> sceneBorders
-        = { ComicBookParagraphType::Page, ComicBookParagraphType::Panel,
-            ComicBookParagraphType::FolderHeader, ComicBookParagraphType::FolderFooter };
+    QVector<TextParagraphType> sceneBorders
+        = { TextParagraphType::Page, TextParagraphType::Panel,
+            TextParagraphType::FolderHeader, TextParagraphType::FolderFooter };
     QTextBlock block = document->findBlock(startPosition);
     while (block != document->begin()) {
-        const auto blockType = ComicBookBlockStyle::forBlock(block);
+        const auto blockType = TextBlockStyle::forBlock(block);
         if (sceneBorders.contains(blockType)) {
             break;
         }
@@ -456,7 +456,7 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
         return blockData->item();
     };
     do {
-        const auto blockType = ComicBookBlockStyle::forBlock(block);
+        const auto blockType = TextBlockStyle::forBlock(block);
 
         //
         // Если этот блок редактируется в данный момент, то не трогаем его
@@ -471,7 +471,7 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
         }
 
         switch (blockType) {
-        case ComicBookParagraphType::Page: {
+        case TextParagraphType::Page: {
             const auto item = itemFromBlock(block);
             do {
                 if (item->parent() == nullptr
@@ -503,7 +503,7 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
             break;
         }
 
-        case ComicBookParagraphType::Panel: {
+        case TextParagraphType::Panel: {
             const auto item = itemFromBlock(block);
             do {
                 if (item->parent() == nullptr
@@ -564,7 +564,7 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
             break;
         }
 
-        case ComicBookParagraphType::Character: {
+        case TextParagraphType::Character: {
             const auto item = itemFromBlock(block);
             do {
                 if (item->type() != ComicBookTextModelItemType::Text) {
@@ -572,7 +572,7 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
                 }
 
                 const auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
-                if (textItem->paragraphType() != ComicBookParagraphType::Character) {
+                if (textItem->paragraphType() != TextParagraphType::Character) {
                     break;
                 }
 
@@ -675,9 +675,9 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
     //
     if (_position != -1) {
         auto block = document->findBlock(_position);
-        if (block.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsBreakCorrectionStart)
+        if (block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionStart)
             || block.blockFormat().boolProperty(
-                ComicBookBlockStyle::PropertyIsBreakCorrectionEnd)) {
+                TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
             //
             // ... два вперёд и два назад, включая текущий получается 5
             //
@@ -697,11 +697,11 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
             } while (
                 block.isValid()
                 && (replies-- > 0
-                    || block.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection)
+                    || block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                     || block.blockFormat().boolProperty(
-                        ComicBookBlockStyle::PropertyIsBreakCorrectionStart)
+                        TextBlockStyle::PropertyIsBreakCorrectionStart)
                     || block.blockFormat().boolProperty(
-                        ComicBookBlockStyle::PropertyIsBreakCorrectionEnd)));
+                        TextBlockStyle::PropertyIsBreakCorrectionEnd)));
         }
     }
 
@@ -732,7 +732,7 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
         //
         // Если вошли в таблицу, или вышли из неё
         //
-        if (ComicBookBlockStyle::forBlock(block) == ComicBookParagraphType::PageSplitter) {
+        if (TextBlockStyle::forBlock(block) == TextParagraphType::PageSplitter) {
             if (!currentBlockInfo.inTable) {
                 currentBlockInfo.inTable = true;
                 currentBlockInfo.inFirstColumn = true;
@@ -831,7 +831,7 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
         // и что текущий блок это не пустая декорация в начале страницы
         //
         const bool isBlockEmptyDecorationOnTopOfThePage
-            = blockFormat.boolProperty(ComicBookBlockStyle::PropertyIsCorrection)
+            = blockFormat.boolProperty(TextBlockStyle::PropertyIsCorrection)
             && block.text().isEmpty()
             && qFuzzyCompare(blockItems[currentBlockInfo.number].top, 0.0);
         if (blockItems[currentBlockInfo.number].isValid() && !isBlockEmptyDecorationOnTopOfThePage
@@ -886,8 +886,8 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                 //
                 // Контролируем, чтобы расположение блоков не переходило через границу таблицы
                 //
-                if (ComicBookBlockStyle::forBlock(block.previous())
-                    == ComicBookParagraphType::PageSplitter) {
+                if (TextBlockStyle::forBlock(block.previous())
+                    == TextParagraphType::PageSplitter) {
                     break;
                 }
 
@@ -915,7 +915,7 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
         //
         // ... если блок декорация, то удаляем его
         //
-        if (blockFormat.boolProperty(ComicBookBlockStyle::PropertyIsCorrection)) {
+        if (blockFormat.boolProperty(TextBlockStyle::PropertyIsCorrection)) {
             blockItems[currentBlockInfo.number] = {};
             cursor.setPosition(block.position());
             if (cursor.block().next() != cursor.document()->end()) {
@@ -941,14 +941,14 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
         //
         // ... если в текущем блоке есть разрыв, пробуем его вернуть
         //
-        else if (blockFormat.boolProperty(ComicBookBlockStyle::PropertyIsBreakCorrectionStart)
-                 || blockFormat.boolProperty(ComicBookBlockStyle::PropertyIsBreakCorrectionEnd)) {
+        else if (blockFormat.boolProperty(TextBlockStyle::PropertyIsBreakCorrectionStart)
+                 || blockFormat.boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
             cursor.setPosition(block.position());
 
             //
             // Если в конце разрыва, вернёмся к началу
             //
-            if (blockFormat.boolProperty(ComicBookBlockStyle::PropertyIsBreakCorrectionEnd)) {
+            if (blockFormat.boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
                 //
                 // Началом может быть элемент с соответствующим флагом, либо простой элемент,
                 // в случае, когда было удаление переноса строки между абзацем с переносом и
@@ -963,9 +963,9 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                     //
                     lastBlockHeight = blockItems[currentBlockInfo.number].top;
                 } while (
-                    cursor.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection)
+                    cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                     && !cursor.blockFormat().boolProperty(
-                        ComicBookBlockStyle::PropertyIsBreakCorrectionStart));
+                        TextBlockStyle::PropertyIsBreakCorrectionStart));
             }
 
             //
@@ -975,12 +975,12 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
             do {
                 cursor.movePosition(ComicBookTextCursor::NextBlock,
                                     ComicBookTextCursor::KeepAnchor);
-            } while (cursor.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection));
+            } while (cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection));
             //
             // ... если дошли до конца разрыва, то сшиваем его
             //
             if (cursor.blockFormat().boolProperty(
-                    ComicBookBlockStyle::PropertyIsBreakCorrectionEnd)) {
+                    TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
                 cursor.insertText(" ");
             }
             //
@@ -994,13 +994,13 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                     //     когда был нажат энтер в блоке начала разрыва и нужно перенести флаг
                     //     разрыва в следующий за текущим блок
                     //
-                    if (cursor.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection)
+                    if (cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                         || cursor.blockFormat().boolProperty(
-                            ComicBookBlockStyle::PropertyIsBreakCorrectionEnd)) {
+                            TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
                         cursor.movePosition(QTextCursor::PreviousBlock);
                         QTextBlockFormat breakStartFormat = cursor.blockFormat();
                         breakStartFormat.setProperty(
-                            ComicBookBlockStyle::PropertyIsBreakCorrectionStart, true);
+                            TextBlockStyle::PropertyIsBreakCorrectionStart, true);
                         cursor.setBlockFormat(breakStartFormat);
                     }
                     //
@@ -1015,15 +1015,15 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                 }
 
                 Q_ASSERT(cursor.blockFormat().boolProperty(
-                    ComicBookBlockStyle::PropertyIsBreakCorrectionStart));
+                    TextBlockStyle::PropertyIsBreakCorrectionStart));
             }
             //
             // ... очищаем значения обрывов
             //
             QTextBlockFormat cleanFormat = blockFormat;
             cleanFormat.clearProperty(PageTextEdit::PropertyDontShowCursor);
-            cleanFormat.clearProperty(ComicBookBlockStyle::PropertyIsBreakCorrectionStart);
-            cleanFormat.clearProperty(ComicBookBlockStyle::PropertyIsBreakCorrectionEnd);
+            cleanFormat.clearProperty(TextBlockStyle::PropertyIsBreakCorrectionStart);
+            cleanFormat.clearProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd);
             cursor.setBlockFormat(cleanFormat);
             //
             // ... и проработаем текущий блок с начала
@@ -1038,13 +1038,13 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
         // Работаем с переносами
         //
         if (needToCorrectPageBreaks && (atPageEnd || atPageBreak)) {
-            switch (ComicBookBlockStyle::forBlock(block)) {
+            switch (TextBlockStyle::forBlock(block)) {
             //
             // Если это время и место или начало папки
             //
-            case ComicBookParagraphType::Page:
-            case ComicBookParagraphType::Panel:
-            case ComicBookParagraphType::FolderHeader: {
+            case TextParagraphType::Page:
+            case TextParagraphType::Panel:
+            case TextParagraphType::FolderHeader: {
                 //
                 // Переносим на следующую страницу
                 //
@@ -1058,7 +1058,7 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
             // Конец папки распологаем либо только в конце страницы, либо целиком переносим на
             // следующую страницу
             //
-            case ComicBookParagraphType::FolderFooter: {
+            case TextParagraphType::FolderFooter: {
                 //
                 // Если в конце страницы, оставляем как есть
                 //
@@ -1087,7 +1087,7 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
             //
             // Если это имя персонажа
             //
-            case ComicBookParagraphType::Character: {
+            case TextParagraphType::Character: {
                 //
                 // Определим предыдущий блок
                 //
@@ -1096,8 +1096,8 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                 // Если перед ним идёт время и место, переносим его тоже
                 //
                 if (previousBlock.isValid()
-                    && ComicBookBlockStyle::forBlock(previousBlock)
-                        == ComicBookParagraphType::Panel) {
+                    && TextBlockStyle::forBlock(previousBlock)
+                        == TextParagraphType::Panel) {
                     moveCurrentBlockWithPreviousToNextPage(previousBlock, pageHeight,
                                                            currentBlockWidth(), cursor, block,
                                                            lastBlockHeight);
@@ -1125,7 +1125,7 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
             // --- если перед ремаркой идёт диалог, то разрываем по ремарке, пишем вместо неё
             //	   ДАЛЬШЕ, а на следующей странице имя персонажа с (ПРОД), ремарку и сам диалог
             //
-            case ComicBookParagraphType::Dialogue: {
+            case TextParagraphType::Dialogue: {
                 //
                 // Проверяем следующий блок
                 //
@@ -1197,13 +1197,13 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                             //
                             QTextBlockFormat breakStartFormat = blockFormat;
                             breakStartFormat.setProperty(
-                                ComicBookBlockStyle::PropertyIsBreakCorrectionStart, true);
+                                TextBlockStyle::PropertyIsBreakCorrectionStart, true);
                             cursor.movePosition(ComicBookTextCursor::PreviousBlock);
                             cursor.setBlockFormat(breakStartFormat);
                             //
                             QTextBlockFormat breakEndFormat = blockFormat;
                             breakEndFormat.setProperty(
-                                ComicBookBlockStyle::PropertyIsBreakCorrectionEnd, true);
+                                TextBlockStyle::PropertyIsBreakCorrectionEnd, true);
                             cursor.movePosition(ComicBookTextCursor::NextBlock);
                             cursor.setBlockFormat(breakEndFormat);
                             //
@@ -1251,8 +1251,8 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                         // Если перед ним идёт персонаж, переносим его тоже
                         //
                         if (previousBlock.isValid()
-                            && ComicBookBlockStyle::forBlock(previousBlock)
-                                == ComicBookParagraphType::Character) {
+                            && TextBlockStyle::forBlock(previousBlock)
+                                == TextParagraphType::Character) {
                             //
                             // Проверяем предыдущий блок
                             //
@@ -1261,8 +1261,8 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                             // Если перед именем идёт время и место, переносим его тоже
                             //
                             if (prePreviousBlock.isValid()
-                                && ComicBookBlockStyle::forBlock(prePreviousBlock)
-                                    == ComicBookParagraphType::Panel) {
+                                && TextBlockStyle::forBlock(prePreviousBlock)
+                                    == TextParagraphType::Panel) {
                                 moveCurrentBlockWithTwoPreviousToNextPage(
                                     prePreviousBlock, previousBlock, pageHeight,
                                     currentBlockWidth(), cursor, block, lastBlockHeight);
@@ -1359,13 +1359,13 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                             //
                             QTextBlockFormat breakStartFormat = blockFormat;
                             breakStartFormat.setProperty(
-                                ComicBookBlockStyle::PropertyIsBreakCorrectionStart, true);
+                                TextBlockStyle::PropertyIsBreakCorrectionStart, true);
                             cursor.movePosition(ComicBookTextCursor::PreviousBlock);
                             cursor.setBlockFormat(breakStartFormat);
                             //
                             QTextBlockFormat breakEndFormat = blockFormat;
                             breakEndFormat.setProperty(
-                                ComicBookBlockStyle::PropertyIsBreakCorrectionEnd, true);
+                                TextBlockStyle::PropertyIsBreakCorrectionEnd, true);
                             cursor.movePosition(ComicBookTextCursor::NextBlock);
                             cursor.setBlockFormat(breakEndFormat);
                             //
@@ -1418,8 +1418,8 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                         // Если перед ним идёт время и место, переносим его тоже
                         //
                         if (previousBlock.isValid()
-                            && ComicBookBlockStyle::forBlock(previousBlock)
-                                == ComicBookParagraphType::Panel) {
+                            && TextBlockStyle::forBlock(previousBlock)
+                                == TextParagraphType::Panel) {
                             moveCurrentBlockWithPreviousToNextPage(previousBlock, pageHeight,
                                                                    currentBlockWidth(), cursor,
                                                                    block, lastBlockHeight);
@@ -1590,11 +1590,11 @@ void ComicBookTextCorrector::Implementation::breakDialogue(
     // Оформить его, как персонажа, но без отступа сверху
     //
     const auto moreKeywordStyle = TemplatesFacade::comicBookTemplate(templateId)
-                                      .paragraphStyle(ComicBookParagraphType::Character);
+                                      .paragraphStyle(TextParagraphType::Character);
     QTextBlockFormat moreKeywordFormat = moreKeywordStyle.blockFormat(_cursor.inTable());
     moreKeywordFormat.setTopMargin(0);
-    moreKeywordFormat.setProperty(ComicBookBlockStyle::PropertyIsCorrection, true);
-    moreKeywordFormat.setProperty(ComicBookBlockStyle::PropertyIsCorrectionContinued, true);
+    moreKeywordFormat.setProperty(TextBlockStyle::PropertyIsCorrection, true);
+    moreKeywordFormat.setProperty(TextBlockStyle::PropertyIsCorrectionContinued, true);
     moreKeywordFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
     _cursor.setBlockFormat(moreKeywordFormat);
     _cursor.setBlockCharFormat(moreKeywordStyle.charFormat());
@@ -1624,9 +1624,9 @@ void ComicBookTextCorrector::Implementation::breakDialogue(
     //
     QTextBlock characterBlock = _block.previous();
     while (characterBlock.isValid()
-           && (characterBlock.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection)
-               || ComicBookBlockStyle::forBlock(characterBlock)
-                   != ComicBookParagraphType::Character)) {
+           && (characterBlock.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
+               || TextBlockStyle::forBlock(characterBlock)
+                   != TextParagraphType::Character)) {
         characterBlock = characterBlock.previous();
     }
     //
@@ -1643,8 +1643,8 @@ void ComicBookTextCorrector::Implementation::breakDialogue(
         // Оформляем его, как имя персонажа
         //
         QTextBlockFormat characterBlockFormat = characterBlock.blockFormat();
-        characterBlockFormat.setProperty(ComicBookBlockStyle::PropertyIsCorrection, true);
-        characterBlockFormat.setProperty(ComicBookBlockStyle::PropertyIsCorrectionCharacter, true);
+        characterBlockFormat.setProperty(TextBlockStyle::PropertyIsCorrection, true);
+        characterBlockFormat.setProperty(TextBlockStyle::PropertyIsCorrectionCharacter, true);
         characterBlockFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
         _cursor.setBlockFormat(characterBlockFormat);
         _cursor.setBlockCharFormat(characterBlock.charFormat());
@@ -1693,7 +1693,7 @@ QTextBlock ComicBookTextCorrector::Implementation::findNextBlock(const QTextBloc
 {
     QTextBlock nextBlock = _block.next();
     while (nextBlock.isValid() && !nextBlock.isVisible()
-           && nextBlock.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection)) {
+           && nextBlock.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
         nextBlock = nextBlock.next();
     }
     return nextBlock;
@@ -1719,18 +1719,18 @@ void ComicBookTextCorrector::Implementation::moveBlockToNextPage(const QTextBloc
     // Определим формат блоков декорации
     //
     QTextBlockFormat decorationFormat = format;
-    const auto paragraphType = ComicBookBlockStyle::forBlock(_block);
-    if (paragraphType == ComicBookParagraphType::Panel) {
-        decorationFormat.setProperty(ComicBookBlockStyle::PropertyType,
-                                     static_cast<int>(ComicBookParagraphType::PanelShadow));
+    const auto paragraphType = TextBlockStyle::forBlock(_block);
+    if (paragraphType == TextParagraphType::Panel) {
+        decorationFormat.setProperty(TextBlockStyle::PropertyType,
+                                     static_cast<int>(TextParagraphType::PanelShadow));
     }
-    if (paragraphType == ComicBookParagraphType::FolderHeader
-        || paragraphType == ComicBookParagraphType::FolderHeader) {
-        decorationFormat.setProperty(ComicBookBlockStyle::PropertyType,
-                                     static_cast<int>(ComicBookParagraphType::Description));
+    if (paragraphType == TextParagraphType::FolderHeader
+        || paragraphType == TextParagraphType::FolderHeader) {
+        decorationFormat.setProperty(TextBlockStyle::PropertyType,
+                                     static_cast<int>(TextParagraphType::Description));
         decorationFormat.setBackground(Qt::NoBrush);
     }
-    decorationFormat.setProperty(ComicBookBlockStyle::PropertyIsCorrection, true);
+    decorationFormat.setProperty(TextBlockStyle::PropertyIsCorrection, true);
     decorationFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
     //
     // Вставляем блоки декорации

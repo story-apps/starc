@@ -7,7 +7,7 @@ class ScreenplayDictionariesModel;
 class ScreenplayTextCursor;
 class ScreenplayTextModel;
 class ScreenplayTemplate;
-enum class ScreenplayParagraphType;
+enum class TextParagraphType;
 } // namespace BusinessLayer
 
 
@@ -94,18 +94,18 @@ public:
      * @brief Вставить новый блок
      * @param Тип блока
      */
-    void addParagraph(BusinessLayer::ScreenplayParagraphType _type);
+    void addParagraph(BusinessLayer::TextParagraphType _type);
 
     /**
      * @brief Установить тип текущего блока
      * @param Тип блока
      */
-    void setCurrentParagraphType(BusinessLayer::ScreenplayParagraphType _type);
+    void setCurrentParagraphType(BusinessLayer::TextParagraphType _type);
 
     /**
      * @brief Получить тип блока в котором находится курсор
      */
-    BusinessLayer::ScreenplayParagraphType currentParagraphType() const;
+    BusinessLayer::TextParagraphType currentParagraphType() const;
 
     /**
      * @brief Своя реализация установки курсора

@@ -359,7 +359,7 @@ void ComicBookTextModelPageItem::handleChange()
 
         case ComicBookTextModelItemType::Text: {
             auto childItem = static_cast<ComicBookTextModelTextItem*>(child);
-            if (childItem->paragraphType() == ComicBookParagraphType::Page) {
+            if (childItem->paragraphType() == TextParagraphType::Page) {
                 d->name = TextHelper::smartToUpper(childItem->text());
             }
             break;

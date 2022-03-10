@@ -235,7 +235,7 @@ SettingsStorage::Implementation::Implementation()
     {
         auto addScreenplayEditorStylesAction
             = [this](const QString& _actionType, const QString& _actionKey,
-                     ScreenplayParagraphType _from, ScreenplayParagraphType _to) {
+                     TextParagraphType _from, TextParagraphType _to) {
                   defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
                                            .arg(kComponentsScreenplayEditorKey, _actionType,
                                                 toString(_from), _actionKey),
@@ -243,154 +243,154 @@ SettingsStorage::Implementation::Implementation()
               };
         auto addScreenplayEditorStylesActionByTab
             = [addScreenplayEditorStylesAction](const QString& _actionType,
-                                                ScreenplayParagraphType _from,
-                                                ScreenplayParagraphType _to) {
+                                                TextParagraphType _from,
+                                                TextParagraphType _to) {
                   addScreenplayEditorStylesAction(_actionType, "tab", _from, _to);
               };
         auto addScreenplayEditorStylesActionByEnter
             = [addScreenplayEditorStylesAction](const QString& _actionType,
-                                                ScreenplayParagraphType _from,
-                                                ScreenplayParagraphType _to) {
+                                                TextParagraphType _from,
+                                                TextParagraphType _to) {
                   addScreenplayEditorStylesAction(_actionType, "enter", _from, _to);
               };
         //
         auto addScreenplayEditorStylesJumpByTab
-            = [addScreenplayEditorStylesActionByTab](ScreenplayParagraphType _from,
-                                                     ScreenplayParagraphType _to) {
+            = [addScreenplayEditorStylesActionByTab](TextParagraphType _from,
+                                                     TextParagraphType _to) {
                   addScreenplayEditorStylesActionByTab("jumping", _from, _to);
               };
         auto addScreenplayEditorStylesJumpByEnter
-            = [addScreenplayEditorStylesActionByEnter](ScreenplayParagraphType _from,
-                                                       ScreenplayParagraphType _to) {
+            = [addScreenplayEditorStylesActionByEnter](TextParagraphType _from,
+                                                       TextParagraphType _to) {
                   addScreenplayEditorStylesActionByEnter("jumping", _from, _to);
               };
-        addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::UnformattedText,
-                                           ScreenplayParagraphType::UnformattedText);
-        addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::UnformattedText,
-                                             ScreenplayParagraphType::UnformattedText);
-        addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::SceneHeading,
-                                           ScreenplayParagraphType::SceneCharacters);
-        addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::SceneHeading,
-                                             ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::SceneCharacters,
-                                           ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::SceneCharacters,
-                                             ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Action,
-                                           ScreenplayParagraphType::Character);
-        addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Action,
-                                             ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Character,
-                                           ScreenplayParagraphType::Parenthetical);
-        addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Character,
-                                             ScreenplayParagraphType::Dialogue);
-        addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Parenthetical,
-                                           ScreenplayParagraphType::Dialogue);
-        addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Parenthetical,
-                                             ScreenplayParagraphType::Dialogue);
-        addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Dialogue,
-                                           ScreenplayParagraphType::Parenthetical);
-        addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Dialogue,
-                                             ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Lyrics,
-                                           ScreenplayParagraphType::Parenthetical);
-        addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Lyrics,
-                                             ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Transition,
-                                           ScreenplayParagraphType::SceneHeading);
-        addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Transition,
-                                             ScreenplayParagraphType::SceneHeading);
-        addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::Shot,
-                                           ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::Shot,
-                                             ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::InlineNote,
-                                           ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::InlineNote,
-                                             ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesJumpByTab(ScreenplayParagraphType::FolderHeader,
-                                           ScreenplayParagraphType::SceneHeading);
-        addScreenplayEditorStylesJumpByEnter(ScreenplayParagraphType::FolderHeader,
-                                             ScreenplayParagraphType::SceneHeading);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::UnformattedText,
+                                           TextParagraphType::UnformattedText);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::UnformattedText,
+                                             TextParagraphType::UnformattedText);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::SceneHeading,
+                                           TextParagraphType::SceneCharacters);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::SceneHeading,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::SceneCharacters,
+                                           TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::SceneCharacters,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::Action,
+                                           TextParagraphType::Character);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Action,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::Character,
+                                           TextParagraphType::Parenthetical);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Character,
+                                             TextParagraphType::Dialogue);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::Parenthetical,
+                                           TextParagraphType::Dialogue);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Parenthetical,
+                                             TextParagraphType::Dialogue);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::Dialogue,
+                                           TextParagraphType::Parenthetical);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Dialogue,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::Lyrics,
+                                           TextParagraphType::Parenthetical);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Lyrics,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::Transition,
+                                           TextParagraphType::SceneHeading);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Transition,
+                                             TextParagraphType::SceneHeading);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::Shot,
+                                           TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Shot,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::InlineNote,
+                                           TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::InlineNote,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::FolderHeader,
+                                           TextParagraphType::SceneHeading);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::FolderHeader,
+                                             TextParagraphType::SceneHeading);
         //
         auto addScreenplayEditorStylesChangeByTab
-            = [addScreenplayEditorStylesActionByTab](ScreenplayParagraphType _from,
-                                                     ScreenplayParagraphType _to) {
+            = [addScreenplayEditorStylesActionByTab](TextParagraphType _from,
+                                                     TextParagraphType _to) {
                   addScreenplayEditorStylesActionByTab("changing", _from, _to);
               };
         auto addScreenplayEditorStylesChangeByEnter
-            = [addScreenplayEditorStylesActionByEnter](ScreenplayParagraphType _from,
-                                                       ScreenplayParagraphType _to) {
+            = [addScreenplayEditorStylesActionByEnter](TextParagraphType _from,
+                                                       TextParagraphType _to) {
                   addScreenplayEditorStylesActionByEnter("changing", _from, _to);
               };
-        addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::UnformattedText,
-                                             ScreenplayParagraphType::UnformattedText);
-        addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::UnformattedText,
-                                               ScreenplayParagraphType::UnformattedText);
-        addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::SceneHeading,
-                                             ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::SceneHeading,
-                                               ScreenplayParagraphType::SceneHeading);
-        addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::SceneCharacters,
-                                             ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::SceneCharacters,
-                                               ScreenplayParagraphType::SceneCharacters);
-        addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Action,
-                                             ScreenplayParagraphType::Character);
-        addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Action,
-                                               ScreenplayParagraphType::SceneHeading);
-        addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Character,
-                                             ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Character,
-                                               ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Parenthetical,
-                                             ScreenplayParagraphType::Dialogue);
-        addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Parenthetical,
-                                               ScreenplayParagraphType::Parenthetical);
-        addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Dialogue,
-                                             ScreenplayParagraphType::Parenthetical);
-        addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Dialogue,
-                                               ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Lyrics,
-                                             ScreenplayParagraphType::Parenthetical);
-        addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Lyrics,
-                                               ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Transition,
-                                             ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Transition,
-                                               ScreenplayParagraphType::Transition);
-        addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::Shot,
-                                             ScreenplayParagraphType::Action);
-        addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::Shot,
-                                               ScreenplayParagraphType::Shot);
-        addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::InlineNote,
-                                             ScreenplayParagraphType::InlineNote);
-        addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::InlineNote,
-                                               ScreenplayParagraphType::InlineNote);
-        addScreenplayEditorStylesChangeByTab(ScreenplayParagraphType::FolderHeader,
-                                             ScreenplayParagraphType::FolderHeader);
-        addScreenplayEditorStylesChangeByEnter(ScreenplayParagraphType::FolderHeader,
-                                               ScreenplayParagraphType::FolderHeader);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::UnformattedText,
+                                             TextParagraphType::UnformattedText);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::UnformattedText,
+                                               TextParagraphType::UnformattedText);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::SceneHeading,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::SceneHeading,
+                                               TextParagraphType::SceneHeading);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::SceneCharacters,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::SceneCharacters,
+                                               TextParagraphType::SceneCharacters);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::Action,
+                                             TextParagraphType::Character);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::Action,
+                                               TextParagraphType::SceneHeading);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::Character,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::Character,
+                                               TextParagraphType::Action);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::Parenthetical,
+                                             TextParagraphType::Dialogue);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::Parenthetical,
+                                               TextParagraphType::Parenthetical);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::Dialogue,
+                                             TextParagraphType::Parenthetical);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::Dialogue,
+                                               TextParagraphType::Action);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::Lyrics,
+                                             TextParagraphType::Parenthetical);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::Lyrics,
+                                               TextParagraphType::Action);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::Transition,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::Transition,
+                                               TextParagraphType::Transition);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::Shot,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::Shot,
+                                               TextParagraphType::Shot);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::InlineNote,
+                                             TextParagraphType::InlineNote);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::InlineNote,
+                                               TextParagraphType::InlineNote);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::FolderHeader,
+                                             TextParagraphType::FolderHeader);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::FolderHeader,
+                                               TextParagraphType::FolderHeader);
         //
         auto addShortcut
-            = [this](BusinessLayer::ScreenplayParagraphType _type, const QString& _shortcut) {
+            = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
                   defaultValues.insert(
                       QString("%1/shortcuts/%2")
                           .arg(kComponentsScreenplayEditorKey, BusinessLayer::toString(_type)),
                       QKeySequence(_shortcut).toString(QKeySequence::NativeText));
               };
-        addShortcut(BusinessLayer::ScreenplayParagraphType::UnformattedText, "Ctrl+0");
-        addShortcut(BusinessLayer::ScreenplayParagraphType::SceneHeading, "Ctrl+1");
-        addShortcut(BusinessLayer::ScreenplayParagraphType::SceneCharacters, "Ctrl+2");
-        addShortcut(BusinessLayer::ScreenplayParagraphType::Action, "Ctrl+3");
-        addShortcut(BusinessLayer::ScreenplayParagraphType::Character, "Ctrl+4");
-        addShortcut(BusinessLayer::ScreenplayParagraphType::Parenthetical, "Ctrl+5");
-        addShortcut(BusinessLayer::ScreenplayParagraphType::Dialogue, "Ctrl+6");
-        addShortcut(BusinessLayer::ScreenplayParagraphType::Lyrics, "Ctrl+7");
-        addShortcut(BusinessLayer::ScreenplayParagraphType::Shot, "Ctrl+8");
-        addShortcut(BusinessLayer::ScreenplayParagraphType::Transition, "Ctrl+9");
-        addShortcut(BusinessLayer::ScreenplayParagraphType::InlineNote, "Ctrl+Esc");
-        addShortcut(BusinessLayer::ScreenplayParagraphType::FolderHeader, "Ctrl+Space");
+        addShortcut(BusinessLayer::TextParagraphType::UnformattedText, "Ctrl+0");
+        addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
+        addShortcut(BusinessLayer::TextParagraphType::SceneCharacters, "Ctrl+2");
+        addShortcut(BusinessLayer::TextParagraphType::Action, "Ctrl+3");
+        addShortcut(BusinessLayer::TextParagraphType::Character, "Ctrl+4");
+        addShortcut(BusinessLayer::TextParagraphType::Parenthetical, "Ctrl+5");
+        addShortcut(BusinessLayer::TextParagraphType::Dialogue, "Ctrl+6");
+        addShortcut(BusinessLayer::TextParagraphType::Lyrics, "Ctrl+7");
+        addShortcut(BusinessLayer::TextParagraphType::Shot, "Ctrl+8");
+        addShortcut(BusinessLayer::TextParagraphType::Transition, "Ctrl+9");
+        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        addShortcut(BusinessLayer::TextParagraphType::FolderHeader, "Ctrl+Space");
         //
         defaultValues.insert(kComponentsScreenplayEditorDefaultTemplateKey, "world_cp");
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersKey, false);
@@ -420,7 +420,7 @@ SettingsStorage::Implementation::Implementation()
         const QString kComicBookEditorKey = "comicbook-editor";
         auto addComicBookEditorStylesAction =
             [this, kComicBookEditorKey](const QString& _actionType, const QString& _actionKey,
-                                        ComicBookParagraphType _from, ComicBookParagraphType _to) {
+                                        TextParagraphType _from, TextParagraphType _to) {
                 defaultValues.insert(
                     QString("%1/styles-%2/from-%3-by-%4")
                         .arg(kComicBookEditorKey, _actionType, toString(_from), _actionKey),
@@ -428,116 +428,116 @@ SettingsStorage::Implementation::Implementation()
             };
         auto addComicBookEditorStylesActionByTab
             = [addComicBookEditorStylesAction](const QString& _actionType,
-                                               ComicBookParagraphType _from,
-                                               ComicBookParagraphType _to) {
+                                               TextParagraphType _from,
+                                               TextParagraphType _to) {
                   addComicBookEditorStylesAction(_actionType, "tab", _from, _to);
               };
         auto addComicBookEditorStylesActionByEnter
             = [addComicBookEditorStylesAction](const QString& _actionType,
-                                               ComicBookParagraphType _from,
-                                               ComicBookParagraphType _to) {
+                                               TextParagraphType _from,
+                                               TextParagraphType _to) {
                   addComicBookEditorStylesAction(_actionType, "enter", _from, _to);
               };
         //
         auto addComicBookEditorStylesJumpByTab
-            = [addComicBookEditorStylesActionByTab](ComicBookParagraphType _from,
-                                                    ComicBookParagraphType _to) {
+            = [addComicBookEditorStylesActionByTab](TextParagraphType _from,
+                                                    TextParagraphType _to) {
                   addComicBookEditorStylesActionByTab("jumping", _from, _to);
               };
         auto addComicBookEditorStylesJumpByEnter
-            = [addComicBookEditorStylesActionByEnter](ComicBookParagraphType _from,
-                                                      ComicBookParagraphType _to) {
+            = [addComicBookEditorStylesActionByEnter](TextParagraphType _from,
+                                                      TextParagraphType _to) {
                   addComicBookEditorStylesActionByEnter("jumping", _from, _to);
               };
-        addComicBookEditorStylesJumpByTab(ComicBookParagraphType::UnformattedText,
-                                          ComicBookParagraphType::UnformattedText);
-        addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::UnformattedText,
-                                            ComicBookParagraphType::UnformattedText);
-        addComicBookEditorStylesJumpByTab(ComicBookParagraphType::Page,
-                                          ComicBookParagraphType::Panel);
-        addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::Page,
-                                            ComicBookParagraphType::Panel);
-        addComicBookEditorStylesJumpByTab(ComicBookParagraphType::Panel,
-                                          ComicBookParagraphType::Character);
-        addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::Panel,
-                                            ComicBookParagraphType::Description);
-        addComicBookEditorStylesJumpByTab(ComicBookParagraphType::Description,
-                                          ComicBookParagraphType::Character);
-        addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::Description,
-                                            ComicBookParagraphType::Description);
-        addComicBookEditorStylesJumpByTab(ComicBookParagraphType::Character,
-                                          ComicBookParagraphType::Dialogue);
-        addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::Character,
-                                            ComicBookParagraphType::Dialogue);
-        addComicBookEditorStylesJumpByTab(ComicBookParagraphType::Dialogue,
-                                          ComicBookParagraphType::Character);
-        addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::Dialogue,
-                                            ComicBookParagraphType::Description);
-        addComicBookEditorStylesJumpByTab(ComicBookParagraphType::InlineNote,
-                                          ComicBookParagraphType::Description);
-        addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::InlineNote,
-                                            ComicBookParagraphType::Description);
-        addComicBookEditorStylesJumpByTab(ComicBookParagraphType::FolderHeader,
-                                          ComicBookParagraphType::Page);
-        addComicBookEditorStylesJumpByEnter(ComicBookParagraphType::FolderHeader,
-                                            ComicBookParagraphType::Page);
+        addComicBookEditorStylesJumpByTab(TextParagraphType::UnformattedText,
+                                          TextParagraphType::UnformattedText);
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::UnformattedText,
+                                            TextParagraphType::UnformattedText);
+        addComicBookEditorStylesJumpByTab(TextParagraphType::Page,
+                                          TextParagraphType::Panel);
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::Page,
+                                            TextParagraphType::Panel);
+        addComicBookEditorStylesJumpByTab(TextParagraphType::Panel,
+                                          TextParagraphType::Character);
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::Panel,
+                                            TextParagraphType::Description);
+        addComicBookEditorStylesJumpByTab(TextParagraphType::Description,
+                                          TextParagraphType::Character);
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::Description,
+                                            TextParagraphType::Description);
+        addComicBookEditorStylesJumpByTab(TextParagraphType::Character,
+                                          TextParagraphType::Dialogue);
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::Character,
+                                            TextParagraphType::Dialogue);
+        addComicBookEditorStylesJumpByTab(TextParagraphType::Dialogue,
+                                          TextParagraphType::Character);
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::Dialogue,
+                                            TextParagraphType::Description);
+        addComicBookEditorStylesJumpByTab(TextParagraphType::InlineNote,
+                                          TextParagraphType::Description);
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::InlineNote,
+                                            TextParagraphType::Description);
+        addComicBookEditorStylesJumpByTab(TextParagraphType::FolderHeader,
+                                          TextParagraphType::Page);
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::FolderHeader,
+                                            TextParagraphType::Page);
         //
         auto addComicBookEditorStylesChangeByTab
-            = [addComicBookEditorStylesActionByTab](ComicBookParagraphType _from,
-                                                    ComicBookParagraphType _to) {
+            = [addComicBookEditorStylesActionByTab](TextParagraphType _from,
+                                                    TextParagraphType _to) {
                   addComicBookEditorStylesActionByTab("changing", _from, _to);
               };
         auto addComicBookEditorStylesChangeByEnter
-            = [addComicBookEditorStylesActionByEnter](ComicBookParagraphType _from,
-                                                      ComicBookParagraphType _to) {
+            = [addComicBookEditorStylesActionByEnter](TextParagraphType _from,
+                                                      TextParagraphType _to) {
                   addComicBookEditorStylesActionByEnter("changing", _from, _to);
               };
-        addComicBookEditorStylesChangeByTab(ComicBookParagraphType::UnformattedText,
-                                            ComicBookParagraphType::UnformattedText);
-        addComicBookEditorStylesChangeByEnter(ComicBookParagraphType::UnformattedText,
-                                              ComicBookParagraphType::UnformattedText);
-        addComicBookEditorStylesChangeByTab(ComicBookParagraphType::Page,
-                                            ComicBookParagraphType::Panel);
-        addComicBookEditorStylesChangeByEnter(ComicBookParagraphType::Page,
-                                              ComicBookParagraphType::Page);
-        addComicBookEditorStylesChangeByTab(ComicBookParagraphType::Panel,
-                                            ComicBookParagraphType::Description);
-        addComicBookEditorStylesChangeByEnter(ComicBookParagraphType::Panel,
-                                              ComicBookParagraphType::Page);
-        addComicBookEditorStylesChangeByTab(ComicBookParagraphType::Description,
-                                            ComicBookParagraphType::Character);
-        addComicBookEditorStylesChangeByEnter(ComicBookParagraphType::Description,
-                                              ComicBookParagraphType::Panel);
-        addComicBookEditorStylesChangeByTab(ComicBookParagraphType::Character,
-                                            ComicBookParagraphType::Description);
-        addComicBookEditorStylesChangeByEnter(ComicBookParagraphType::Character,
-                                              ComicBookParagraphType::Description);
-        addComicBookEditorStylesChangeByTab(ComicBookParagraphType::Dialogue,
-                                            ComicBookParagraphType::Character);
-        addComicBookEditorStylesChangeByEnter(ComicBookParagraphType::Dialogue,
-                                              ComicBookParagraphType::Description);
-        addComicBookEditorStylesChangeByTab(ComicBookParagraphType::InlineNote,
-                                            ComicBookParagraphType::InlineNote);
-        addComicBookEditorStylesChangeByEnter(ComicBookParagraphType::InlineNote,
-                                              ComicBookParagraphType::InlineNote);
-        addComicBookEditorStylesChangeByTab(ComicBookParagraphType::FolderHeader,
-                                            ComicBookParagraphType::FolderHeader);
-        addComicBookEditorStylesChangeByEnter(ComicBookParagraphType::FolderHeader,
-                                              ComicBookParagraphType::FolderHeader);
+        addComicBookEditorStylesChangeByTab(TextParagraphType::UnformattedText,
+                                            TextParagraphType::UnformattedText);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::UnformattedText,
+                                              TextParagraphType::UnformattedText);
+        addComicBookEditorStylesChangeByTab(TextParagraphType::Page,
+                                            TextParagraphType::Panel);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::Page,
+                                              TextParagraphType::Page);
+        addComicBookEditorStylesChangeByTab(TextParagraphType::Panel,
+                                            TextParagraphType::Description);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::Panel,
+                                              TextParagraphType::Page);
+        addComicBookEditorStylesChangeByTab(TextParagraphType::Description,
+                                            TextParagraphType::Character);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::Description,
+                                              TextParagraphType::Panel);
+        addComicBookEditorStylesChangeByTab(TextParagraphType::Character,
+                                            TextParagraphType::Description);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::Character,
+                                              TextParagraphType::Description);
+        addComicBookEditorStylesChangeByTab(TextParagraphType::Dialogue,
+                                            TextParagraphType::Character);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::Dialogue,
+                                              TextParagraphType::Description);
+        addComicBookEditorStylesChangeByTab(TextParagraphType::InlineNote,
+                                            TextParagraphType::InlineNote);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::InlineNote,
+                                              TextParagraphType::InlineNote);
+        addComicBookEditorStylesChangeByTab(TextParagraphType::FolderHeader,
+                                            TextParagraphType::FolderHeader);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::FolderHeader,
+                                              TextParagraphType::FolderHeader);
         //
-        auto addShortcut = [this, kComicBookEditorKey](BusinessLayer::ComicBookParagraphType _type,
+        auto addShortcut = [this, kComicBookEditorKey](BusinessLayer::TextParagraphType _type,
                                                        const QString& _shortcut) {
             defaultValues.insert(
                 QString("%1/shortcuts/%2").arg(kComicBookEditorKey, BusinessLayer::toString(_type)),
                 QKeySequence(_shortcut).toString(QKeySequence::NativeText));
         };
-        addShortcut(BusinessLayer::ComicBookParagraphType::UnformattedText, "Ctrl+0");
-        addShortcut(BusinessLayer::ComicBookParagraphType::Page, "Ctrl+1");
-        addShortcut(BusinessLayer::ComicBookParagraphType::Panel, "Ctrl+2");
-        addShortcut(BusinessLayer::ComicBookParagraphType::Description, "Ctrl+3");
-        addShortcut(BusinessLayer::ComicBookParagraphType::Character, "Ctrl+4");
-        addShortcut(BusinessLayer::ComicBookParagraphType::Dialogue, "Ctrl+5");
-        addShortcut(BusinessLayer::ComicBookParagraphType::InlineNote, "Ctrl+Esc");
+        addShortcut(BusinessLayer::TextParagraphType::UnformattedText, "Ctrl+0");
+        addShortcut(BusinessLayer::TextParagraphType::Page, "Ctrl+1");
+        addShortcut(BusinessLayer::TextParagraphType::Panel, "Ctrl+2");
+        addShortcut(BusinessLayer::TextParagraphType::Description, "Ctrl+3");
+        addShortcut(BusinessLayer::TextParagraphType::Character, "Ctrl+4");
+        addShortcut(BusinessLayer::TextParagraphType::Dialogue, "Ctrl+5");
+        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
         //
         defaultValues.insert(kComponentsComicBookEditorDefaultTemplateKey, "world");
         //

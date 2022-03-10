@@ -7,7 +7,7 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
@@ -51,7 +51,7 @@ void InlineNoteHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ScreenplayParagraphType::InlineNote);
+            editor()->addParagraph(TextParagraphType::InlineNote);
         } else {
             //! Нет выделения
 
@@ -62,7 +62,7 @@ void InlineNoteHandler::handleEnter(QKeyEvent*)
                 // Ни чего не делаем
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ScreenplayParagraphType::InlineNote));
+                    changeForEnter(TextParagraphType::InlineNote));
             } else {
                 //! Текст не пуст
 
@@ -78,14 +78,14 @@ void InlineNoteHandler::handleEnter(QKeyEvent*)
                     //
                     // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::InlineNote));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::InlineNote));
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(ScreenplayParagraphType::Action);
+                    editor()->addParagraph(TextParagraphType::Action);
                 }
             }
         }

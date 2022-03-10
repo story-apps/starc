@@ -96,8 +96,8 @@ public:
     ComicBookTextEditToolbar* toolbar = nullptr;
     BusinessLayer::ComicBookTextSearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
-    BusinessLayer::ComicBookParagraphType currentParagraphType
-        = BusinessLayer::ComicBookParagraphType::Undefined;
+    BusinessLayer::TextParagraphType currentParagraphType
+        = BusinessLayer::TextParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
 
     ComicBookTextCommentsToolbar* commentsToolbar = nullptr;
@@ -194,8 +194,8 @@ void ComicBookTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 
     currentParagraphType = paragraphType;
 
-    if (paragraphType == BusinessLayer::ComicBookParagraphType::FolderFooter) {
-        paragraphType = BusinessLayer::ComicBookParagraphType::FolderHeader;
+    if (paragraphType == BusinessLayer::TextParagraphType::FolderFooter) {
+        paragraphType = BusinessLayer::TextParagraphType::FolderHeader;
         toolbar->setParagraphTypesEnabled(false);
         fastFormatWidget->setEnabled(false);
     } else {
@@ -206,7 +206,7 @@ void ComicBookTextView::Implementation::updateToolBarCurrentParagraphTypeName()
     for (int itemRow = 0; itemRow < paragraphTypesModel->rowCount(); ++itemRow) {
         const auto item = paragraphTypesModel->item(itemRow);
         const auto itemType
-            = static_cast<BusinessLayer::ComicBookParagraphType>(item->data(kTypeDataRole).toInt());
+            = static_cast<BusinessLayer::TextParagraphType>(item->data(kTypeDataRole).toInt());
         if (itemType == paragraphType) {
             toolbar->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));
             fastFormatWidget->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));
@@ -338,7 +338,7 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
             &ComicBookTextEdit::redo);
     connect(d->toolbar, &ComicBookTextEditToolbar::paragraphTypeChanged, this,
             [this](const QModelIndex& _index) {
-                const auto type = static_cast<BusinessLayer::ComicBookParagraphType>(
+                const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
                 d->comicBookText->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();
@@ -427,7 +427,7 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
     //
     connect(d->fastFormatWidget, &ComicBookTextFastFormatWidget::paragraphTypeChanged, this,
             [this](const QModelIndex& _index) {
-                const auto type = static_cast<BusinessLayer::ComicBookParagraphType>(
+                const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
                 d->comicBookText->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();
@@ -494,15 +494,15 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
 
     using namespace BusinessLayer;
     const auto usedTemplate = BusinessLayer::TemplatesFacade::comicBookTemplate();
-    const QVector<ComicBookParagraphType> types = {
-        ComicBookParagraphType::Page,
-        ComicBookParagraphType::Panel,
-        ComicBookParagraphType::Description,
-        ComicBookParagraphType::Character,
-        ComicBookParagraphType::Dialogue,
-        ComicBookParagraphType::InlineNote,
-        ComicBookParagraphType::UnformattedText,
-        ComicBookParagraphType::FolderHeader,
+    const QVector<TextParagraphType> types = {
+        TextParagraphType::Page,
+        TextParagraphType::Panel,
+        TextParagraphType::Description,
+        TextParagraphType::Character,
+        TextParagraphType::Dialogue,
+        TextParagraphType::InlineNote,
+        TextParagraphType::UnformattedText,
+        TextParagraphType::FolderHeader,
     };
     for (const auto type : types) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {

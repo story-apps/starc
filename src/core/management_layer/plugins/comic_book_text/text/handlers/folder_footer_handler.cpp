@@ -7,7 +7,7 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
 namespace KeyProcessingLayer {
@@ -59,7 +59,7 @@ void FolderFooterHandler::handleEnter(QKeyEvent*)
                 //
                 // Вставить блок время и место
                 //
-                editor()->addParagraph(ComicBookParagraphType::Page);
+                editor()->addParagraph(TextParagraphType::Page);
             } else {
                 //! Текст не пуст
 
@@ -73,7 +73,7 @@ void FolderFooterHandler::handleEnter(QKeyEvent*)
                     cursor.movePosition(QTextCursor::PreviousCharacter);
                     cursor.setBlockFormat(QTextBlockFormat());
                     editor()->setTextCursor(cursor);
-                    editor()->setCurrentParagraphType(ComicBookParagraphType::Page);
+                    editor()->setCurrentParagraphType(TextParagraphType::Page);
                     editor()->moveCursor(QTextCursor::NextCharacter);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
@@ -81,14 +81,14 @@ void FolderFooterHandler::handleEnter(QKeyEvent*)
                     //
                     // Вставить блок время и место
                     //
-                    editor()->addParagraph(ComicBookParagraphType::Page);
+                    editor()->addParagraph(TextParagraphType::Page);
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставить блок время и место
                     //
-                    editor()->addParagraph(ComicBookParagraphType::Page);
+                    editor()->addParagraph(TextParagraphType::Page);
                 }
             }
         }

@@ -12,7 +12,7 @@
 #include <QTextBlock>
 #include <QVector>
 
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 namespace KeyProcessingLayer {
@@ -55,7 +55,7 @@ void ActionHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ScreenplayParagraphType::Action);
+            editor()->addParagraph(TextParagraphType::Action);
         } else {
             //! Нет выделения
 
@@ -65,7 +65,7 @@ void ActionHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль на место и время
                 //
-                editor()->setCurrentParagraphType(changeForEnter(ScreenplayParagraphType::Action));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Action));
             } else {
                 //! Текст не пуст
 
@@ -76,14 +76,14 @@ void ActionHandler::handleEnter(QKeyEvent*)
                     = qobject_cast<BusinessLayer::CharactersModel*>(editor()->characters());
                 if (cursorForwardText.isEmpty() && charactersModel
                     && charactersModel->exists(cursorBackwardText)) {
-                    editor()->setCurrentParagraphType(ScreenplayParagraphType::Character);
-                    editor()->addParagraph(ScreenplayParagraphType::Dialogue);
+                    editor()->setCurrentParagraphType(TextParagraphType::Character);
+                    editor()->addParagraph(TextParagraphType::Dialogue);
                 }
                 //
                 // Вставляем блок и применяем ему стиль описания действия
                 //
                 else {
-                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Action));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::Action));
                 }
             }
         }
@@ -132,7 +132,7 @@ void ActionHandler::handleTab(QKeyEvent*)
                 //
                 // Если строка пуста, то сменить стиль на имя героя
                 //
-                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::Action));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Action));
             } else {
                 //! Текст не пуст
 
@@ -142,14 +142,14 @@ void ActionHandler::handleTab(QKeyEvent*)
                     //
                     // Меняем на блок персонажа
                     //
-                    editor()->setCurrentParagraphType(ScreenplayParagraphType::Character);
+                    editor()->setCurrentParagraphType(TextParagraphType::Character);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
                     // Вставляем блок персонажа
                     //
-                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Action));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::Action));
                 } else {
                     //! Внутри блока
 
@@ -189,7 +189,7 @@ void ActionHandler::handleOther(QKeyEvent* _event)
 
         const QString maybeSceneIntro = TextHelper::smartToUpper(cursorBackwardText);
         if (editor()->dictionaries()->sceneIntros().contains(maybeSceneIntro)) {
-            editor()->setCurrentParagraphType(ScreenplayParagraphType::SceneHeading);
+            editor()->setCurrentParagraphType(TextParagraphType::SceneHeading);
         }
     } else if (cursorBackwardText.endsWith(":") && _event != 0 && _event->text() == ":") {
         //! Если нажата двоеточие
@@ -200,7 +200,7 @@ void ActionHandler::handleOther(QKeyEvent* _event)
         //
         const QString maybeTransition = TextHelper::smartToUpper(cursorBackwardText);
         if (editor()->dictionaries()->transitions().contains(maybeTransition)) {
-            editor()->setCurrentParagraphType(ScreenplayParagraphType::Transition);
+            editor()->setCurrentParagraphType(TextParagraphType::Transition);
         }
     } else {
         //! В противном случае, обрабатываем в базовом классе

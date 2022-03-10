@@ -53,8 +53,8 @@ void writeLine(QXmlStreamWriter& _writer, const QTextBlock& _block,
 {
     QString paragraphType;
     QString sceneNumber;
-    switch (ScreenplayBlockStyle::forBlock(_block)) {
-    case ScreenplayParagraphType::SceneHeading: {
+    switch (TextBlockStyle::forBlock(_block)) {
+    case TextParagraphType::SceneHeading: {
         paragraphType = "Scene Heading";
 
         //
@@ -72,42 +72,42 @@ void writeLine(QXmlStreamWriter& _writer, const QTextBlock& _block,
         break;
     }
 
-    case ScreenplayParagraphType::Action: {
+    case TextParagraphType::Action: {
         paragraphType = "Action";
         break;
     }
 
-    case ScreenplayParagraphType::Character: {
+    case TextParagraphType::Character: {
         paragraphType = "Character";
         break;
     }
 
-    case ScreenplayParagraphType::Parenthetical: {
+    case TextParagraphType::Parenthetical: {
         paragraphType = "Parenthetical";
         break;
     }
 
-    case ScreenplayParagraphType::Dialogue: {
+    case TextParagraphType::Dialogue: {
         paragraphType = "Dialogue";
         break;
     }
 
-    case ScreenplayParagraphType::Transition: {
+    case TextParagraphType::Transition: {
         paragraphType = "Transition";
         break;
     }
 
-    case ScreenplayParagraphType::Shot: {
+    case TextParagraphType::Shot: {
         paragraphType = "Shot";
         break;
     }
 
-    case ScreenplayParagraphType::SceneCharacters: {
+    case TextParagraphType::SceneCharacters: {
         paragraphType = "Cast List";
         break;
     }
 
-    case ScreenplayParagraphType::Lyrics: {
+    case TextParagraphType::Lyrics: {
         paragraphType = "Lyrics";
         break;
     }
@@ -195,7 +195,7 @@ void writeContent(QXmlStreamWriter& _writer, ScreenplayTextDocument* _screenplay
     bool titlePageSkipped = false;
     while (block.isValid()) {
         if (_exportOptions.includeTiltePage && !titlePageSkipped) {
-            if (ScreenplayBlockStyle::forBlock(block) == ScreenplayParagraphType::Undefined) {
+            if (TextBlockStyle::forBlock(block) == TextParagraphType::Undefined) {
                 block = block.next();
                 continue;
             } else {
@@ -276,7 +276,7 @@ void writeTitlePage(QXmlStreamWriter& _writer, ScreenplayTextDocument* _screenpl
     //
     auto block = _screenplayText->begin();
     while (block.isValid()
-           && ScreenplayBlockStyle::forBlock(block) == ScreenplayParagraphType::Undefined) {
+           && TextBlockStyle::forBlock(block) == TextParagraphType::Undefined) {
         writeLine(_writer, block, _exportOptions);
 
         block = block.next();

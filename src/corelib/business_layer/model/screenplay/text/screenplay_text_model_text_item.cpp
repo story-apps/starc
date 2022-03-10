@@ -70,7 +70,7 @@ public:
     /**
      * @brief Тип параграфа
      */
-    ScreenplayParagraphType paragraphType = ScreenplayParagraphType::UnformattedText;
+    TextParagraphType paragraphType = TextParagraphType::UnformattedText;
 
     /**
      * @brief Выравнивание текста в блоке
@@ -110,8 +110,8 @@ public:
 
 ScreenplayTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentReader)
 {
-    paragraphType = screenplayParagraphTypeFromString(_contentReader.name().toString());
-    Q_ASSERT(paragraphType != ScreenplayParagraphType::Undefined);
+    paragraphType = textParagraphTypeFromString(_contentReader.name().toString());
+    Q_ASSERT(paragraphType != TextParagraphType::Undefined);
 
     auto currentTag = xml::readNextElement(_contentReader);
 
@@ -476,14 +476,14 @@ bool ScreenplayTextModelTextItem::ReviewMark::operator==(
 QTextCharFormat ScreenplayTextModelTextItem::ReviewMark::charFormat() const
 {
     QTextCharFormat format;
-    format.setProperty(ScreenplayBlockStyle::PropertyIsReviewMark, true);
+    format.setProperty(TextBlockStyle::PropertyIsReviewMark, true);
     if (textColor.isValid()) {
         format.setForeground(textColor);
     }
     if (backgroundColor.isValid()) {
         format.setBackground(backgroundColor);
     }
-    format.setProperty(ScreenplayBlockStyle::PropertyIsDone, isDone);
+    format.setProperty(TextBlockStyle::PropertyIsDone, isDone);
     QStringList authors, dates, comments, isEdited;
     for (const auto& comment : this->comments) {
         authors.append(comment.author);
@@ -491,10 +491,10 @@ QTextCharFormat ScreenplayTextModelTextItem::ReviewMark::charFormat() const
         comments.append(comment.text);
         isEdited.append(QVariant(comment.isEdited).toString());
     }
-    format.setProperty(ScreenplayBlockStyle::PropertyCommentsAuthors, authors);
-    format.setProperty(ScreenplayBlockStyle::PropertyCommentsDates, dates);
-    format.setProperty(ScreenplayBlockStyle::PropertyComments, comments);
-    format.setProperty(ScreenplayBlockStyle::PropertyCommentsIsEdited, isEdited);
+    format.setProperty(TextBlockStyle::PropertyCommentsAuthors, authors);
+    format.setProperty(TextBlockStyle::PropertyCommentsDates, dates);
+    format.setProperty(TextBlockStyle::PropertyComments, comments);
+    format.setProperty(TextBlockStyle::PropertyCommentsIsEdited, isEdited);
     return format;
 }
 
@@ -642,12 +642,12 @@ void ScreenplayTextModelTextItem::setInFirstColumn(const std::optional<bool>& _i
     markChanged();
 }
 
-const ScreenplayParagraphType& ScreenplayTextModelTextItem::paragraphType() const
+const TextParagraphType& ScreenplayTextModelTextItem::paragraphType() const
 {
     return d->paragraphType;
 }
 
-void ScreenplayTextModelTextItem::setParagraphType(ScreenplayParagraphType _type)
+void ScreenplayTextModelTextItem::setParagraphType(TextParagraphType _type)
 {
     if (d->paragraphType == _type) {
         return;
@@ -846,7 +846,7 @@ void ScreenplayTextModelTextItem::setReviewMarks(
 {
     QVector<ReviewMark> newReviewMarks;
     for (const auto& reviewMark : _reviewMarks) {
-        if (reviewMark.format.boolProperty(ScreenplayBlockStyle::PropertyIsReviewMark) == false) {
+        if (reviewMark.format.boolProperty(TextBlockStyle::PropertyIsReviewMark) == false) {
             continue;
         }
 
@@ -859,18 +859,15 @@ void ScreenplayTextModelTextItem::setReviewMarks(
         if (reviewMark.format.hasProperty(QTextFormat::BackgroundBrush)) {
             newReviewMark.backgroundColor = reviewMark.format.background().color();
         }
-        newReviewMark.isDone = reviewMark.format.boolProperty(ScreenplayBlockStyle::PropertyIsDone);
+        newReviewMark.isDone = reviewMark.format.boolProperty(TextBlockStyle::PropertyIsDone);
         const QStringList comments
-            = reviewMark.format.property(ScreenplayBlockStyle::PropertyComments).toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyComments).toStringList();
         const QStringList dates
-            = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsDates)
-                  .toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsDates).toStringList();
         const QStringList authors
-            = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsAuthors)
-                  .toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthors).toStringList();
         const QStringList isEdited
-            = reviewMark.format.property(ScreenplayBlockStyle::PropertyCommentsIsEdited)
-                  .toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsIsEdited).toStringList();
         for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
             newReviewMark.comments.append({ authors.at(commentIndex), dates.at(commentIndex),
                                             comments.at(commentIndex),
@@ -914,7 +911,7 @@ QVariant ScreenplayTextModelTextItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
-        return d->paragraphType == ScreenplayParagraphType::Shot ? u8"\U000F0332" : u8"\U000F09A8";
+        return d->paragraphType == TextParagraphType::Shot ? u8"\U000F0332" : u8"\U000F09A8";
     }
 
     case Qt::DisplayRole: {

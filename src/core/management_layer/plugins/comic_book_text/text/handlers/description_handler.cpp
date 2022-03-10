@@ -11,7 +11,7 @@
 #include <QRegularExpression>
 #include <QTextBlock>
 
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
 namespace KeyProcessingLayer {
@@ -54,7 +54,7 @@ void DescriptionHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ComicBookParagraphType::Description);
+            editor()->addParagraph(TextParagraphType::Description);
         } else {
             //! Нет выделения
 
@@ -65,7 +65,7 @@ void DescriptionHandler::handleEnter(QKeyEvent*)
                 // Меняем стиль на место и время
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ComicBookParagraphType::Description));
+                    changeForEnter(TextParagraphType::Description));
             } else {
                 //! Текст не пуст
                 bool isHandled = false;
@@ -75,8 +75,8 @@ void DescriptionHandler::handleEnter(QKeyEvent*)
                 //
                 if (cursorForwardText.isEmpty()) {
                     if (editor()->characters()->exists(cursorBackwardText)) {
-                        editor()->setCurrentParagraphType(ComicBookParagraphType::Character);
-                        editor()->addParagraph(ComicBookParagraphType::Dialogue);
+                        editor()->setCurrentParagraphType(TextParagraphType::Character);
+                        editor()->addParagraph(TextParagraphType::Dialogue);
                         isHandled = true;
                     } else {
                         //
@@ -88,13 +88,13 @@ void DescriptionHandler::handleEnter(QKeyEvent*)
                                 backwardTextCorrected)
                             || editor()->dictionaries()->multiplePageIntros().contains(
                                 backwardTextCorrected)) {
-                            editor()->setCurrentParagraphType(ComicBookParagraphType::Page);
-                            editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Page));
+                            editor()->setCurrentParagraphType(TextParagraphType::Page);
+                            editor()->addParagraph(jumpForEnter(TextParagraphType::Page));
                             isHandled = true;
                         } else if (editor()->dictionaries()->panelIntros().contains(
                                        backwardTextCorrected)) {
-                            editor()->setCurrentParagraphType(ComicBookParagraphType::Panel);
-                            editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Panel));
+                            editor()->setCurrentParagraphType(TextParagraphType::Panel);
+                            editor()->addParagraph(jumpForEnter(TextParagraphType::Panel));
                             isHandled = true;
                         }
                     }
@@ -103,7 +103,7 @@ void DescriptionHandler::handleEnter(QKeyEvent*)
                 // Вставляем блок и применяем ему стиль описания действия
                 //
                 if (!isHandled) {
-                    editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Description));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::Description));
                 }
             }
         }
@@ -153,7 +153,7 @@ void DescriptionHandler::handleTab(QKeyEvent*)
                 // Если строка пуста, то сменить стиль на имя героя
                 //
                 editor()->setCurrentParagraphType(
-                    changeForTab(ComicBookParagraphType::Description));
+                    changeForTab(TextParagraphType::Description));
             } else {
                 //! Текст не пуст
 
@@ -163,14 +163,14 @@ void DescriptionHandler::handleTab(QKeyEvent*)
                     //
                     // Меняем на блок персонажа
                     //
-                    editor()->setCurrentParagraphType(ComicBookParagraphType::Character);
+                    editor()->setCurrentParagraphType(TextParagraphType::Character);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
                     // Вставляем блок персонажа
                     //
-                    editor()->addParagraph(jumpForTab(ComicBookParagraphType::Description));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::Description));
                 } else {
                     //! Внутри блока
 
@@ -211,9 +211,9 @@ void DescriptionHandler::handleOther(QKeyEvent* _event)
         }
         if (editor()->dictionaries()->singlePageIntros().contains(backwardTextCorrected)
             || editor()->dictionaries()->multiplePageIntros().contains(backwardTextCorrected)) {
-            editor()->setCurrentParagraphType(ComicBookParagraphType::Page);
+            editor()->setCurrentParagraphType(TextParagraphType::Page);
         } else if (editor()->dictionaries()->panelIntros().contains(backwardTextCorrected)) {
-            editor()->setCurrentParagraphType(ComicBookParagraphType::Panel);
+            editor()->setCurrentParagraphType(TextParagraphType::Panel);
         }
     } else {
         //! В противном случае, обрабатываем в базовом классе

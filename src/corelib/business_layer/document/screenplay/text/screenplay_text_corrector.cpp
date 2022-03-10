@@ -18,9 +18,9 @@
 
 #include <cmath>
 
-using BusinessLayer::ScreenplayBlockStyle;
+using BusinessLayer::TextBlockStyle;
 using BusinessLayer::ScreenplayCharacterParser;
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextParagraphType;
 using BusinessLayer::TemplatesFacade;
 
 
@@ -243,7 +243,7 @@ public:
      */
     struct BlockInfo {
         BlockInfo() = default;
-        explicit BlockInfo(qreal _height, qreal _top, ScreenplayParagraphType _type)
+        explicit BlockInfo(qreal _height, qreal _top, TextParagraphType _type)
             : height(_height)
             , top(_top)
             , type(_type)
@@ -271,7 +271,7 @@ public:
         /**
          * @brief Тип блока
          */
-        ScreenplayParagraphType type = ScreenplayParagraphType::Undefined;
+        TextParagraphType type = TextParagraphType::Undefined;
     };
 
     /**
@@ -309,12 +309,12 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
     //
     // ... от начала сцены
     //
-    QVector<ScreenplayParagraphType> sceneBorders
-        = { ScreenplayParagraphType::SceneHeading, ScreenplayParagraphType::FolderHeader,
-            ScreenplayParagraphType::FolderFooter };
+    QVector<TextParagraphType> sceneBorders
+        = { TextParagraphType::SceneHeading, TextParagraphType::FolderHeader,
+            TextParagraphType::FolderFooter };
     QTextBlock block = document->findBlock(startPosition);
     while (block != document->begin()) {
-        const auto blockType = ScreenplayBlockStyle::forBlock(block);
+        const auto blockType = TextBlockStyle::forBlock(block);
         if (sceneBorders.contains(blockType)) {
             break;
         }
@@ -327,7 +327,7 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
     {
         QTextBlock endBlock = document->findBlock(endPosition);
         while (endBlock.isValid() && endBlock != document->end()) {
-            const ScreenplayParagraphType blockType = ScreenplayBlockStyle::forBlock(endBlock);
+            const TextParagraphType blockType = TextBlockStyle::forBlock(endBlock);
             if (sceneBorders.contains(blockType)) {
                 break;
             }
@@ -342,7 +342,7 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
     //
     QString lastCharacterName;
     do {
-        const auto blockType = ScreenplayBlockStyle::forBlock(block);
+        const auto blockType = TextBlockStyle::forBlock(block);
         //
         // Если дошли до новой сцены, очищаем последнее найдённое имя персонажа
         //
@@ -352,7 +352,7 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
         //
         // Корректируем имя персонажа при необходимости
         //
-        else if (blockType == ScreenplayParagraphType::Character) {
+        else if (blockType == TextParagraphType::Character) {
             const QString characterName = ScreenplayCharacterParser::name(block.text());
             //
             // Если имя текущего персонажа не пусто
@@ -366,9 +366,9 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
                     || characterName != TextHelper::smartToUpper(block.text())) {
                     QTextBlockFormat characterFormat = block.blockFormat();
                     if (characterFormat.boolProperty(
-                            ScreenplayBlockStyle::PropertyIsCharacterContinued)) {
+                            TextBlockStyle::PropertyIsCharacterContinued)) {
                         characterFormat.setProperty(
-                            ScreenplayBlockStyle::PropertyIsCharacterContinued, false);
+                            TextBlockStyle::PropertyIsCharacterContinued, false);
                         cursor.setPosition(block.position());
                         cursor.setBlockFormat(characterFormat);
                     }
@@ -382,9 +382,9 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
                     QTextBlockFormat characterFormat = block.blockFormat();
                     if (characterState.isEmpty()
                         && !characterFormat.boolProperty(
-                            ScreenplayBlockStyle::PropertyIsCharacterContinued)) {
+                            TextBlockStyle::PropertyIsCharacterContinued)) {
                         characterFormat.setProperty(
-                            ScreenplayBlockStyle::PropertyIsCharacterContinued, true);
+                            TextBlockStyle::PropertyIsCharacterContinued, true);
                         cursor.setPosition(block.position());
                         cursor.setBlockFormat(characterFormat);
                     }
@@ -410,11 +410,11 @@ void ScreenplayTextCorrector::Implementation::clearCharacterNamesCorrections()
 
     auto block = document->begin();
     do {
-        const auto blockType = ScreenplayBlockStyle::forBlock(block);
-        if (blockType == ScreenplayParagraphType::Character) {
+        const auto blockType = TextBlockStyle::forBlock(block);
+        if (blockType == TextParagraphType::Character) {
             auto characterFormat = block.blockFormat();
-            if (characterFormat.boolProperty(ScreenplayBlockStyle::PropertyIsCharacterContinued)) {
-                characterFormat.setProperty(ScreenplayBlockStyle::PropertyIsCharacterContinued,
+            if (characterFormat.boolProperty(TextBlockStyle::PropertyIsCharacterContinued)) {
+                characterFormat.setProperty(TextBlockStyle::PropertyIsCharacterContinued,
                                             false);
                 cursor.setPosition(block.position());
                 cursor.setBlockFormat(characterFormat);
@@ -493,9 +493,9 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     //
     if (_position != -1) {
         auto block = document->findBlock(_position);
-        if (block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
+        if (block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionStart)
             || block.blockFormat().boolProperty(
-                ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
+                TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
             //
             // ... два вперёд и два назад, включая текущий получается 5
             //
@@ -515,11 +515,11 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             } while (
                 block.isValid()
                 && (replies-- > 0
-                    || block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)
+                    || block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                     || block.blockFormat().boolProperty(
-                        ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
+                        TextBlockStyle::PropertyIsBreakCorrectionStart)
                     || block.blockFormat().boolProperty(
-                        ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)));
+                        TextBlockStyle::PropertyIsBreakCorrectionEnd)));
         }
     }
 
@@ -547,12 +547,12 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             currentBlockInfo.tableBottom = std::max(currentBlockInfo.tableBottom, lastBlockHeight);
         }
 
-        const auto blockType = ScreenplayBlockStyle::forBlock(block);
+        const auto blockType = TextBlockStyle::forBlock(block);
 
         //
         // Если вошли в таблицу, или вышли из неё
         //
-        if (blockType == ScreenplayParagraphType::PageSplitter) {
+        if (blockType == TextParagraphType::PageSplitter) {
             if (!currentBlockInfo.inTable) {
                 currentBlockInfo.inTable = true;
                 currentBlockInfo.inFirstColumn = true;
@@ -651,7 +651,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         // и что текущий блок это не пустая декорация в начале страницы
         //
         const bool isBlockEmptyDecorationOnTopOfThePage
-            = blockFormat.boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)
+            = blockFormat.boolProperty(TextBlockStyle::PropertyIsCorrection)
             && block.text().isEmpty()
             && qFuzzyCompare(blockItems[currentBlockInfo.number].top, 0.0);
         if (blockItems[currentBlockInfo.number].isValid() && !isBlockEmptyDecorationOnTopOfThePage
@@ -707,8 +707,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 //
                 // Контролируем, чтобы расположение блоков не переходило через границу таблицы
                 //
-                if (ScreenplayBlockStyle::forBlock(block.previous())
-                    == ScreenplayParagraphType::PageSplitter) {
+                if (TextBlockStyle::forBlock(block.previous())
+                    == TextParagraphType::PageSplitter) {
                     break;
                 }
 
@@ -736,7 +736,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         //
         // ... если блок декорация, то удаляем его
         //
-        if (blockFormat.boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+        if (blockFormat.boolProperty(TextBlockStyle::PropertyIsCorrection)) {
             blockItems[currentBlockInfo.number] = {};
             cursor.setPosition(block.position());
             if (cursor.block().next() != cursor.document()->end()) {
@@ -762,14 +762,14 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         //
         // ... если в текущем блоке есть разрыв, пробуем его вернуть
         //
-        else if (blockFormat.boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart)
-                 || blockFormat.boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
+        else if (blockFormat.boolProperty(TextBlockStyle::PropertyIsBreakCorrectionStart)
+                 || blockFormat.boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
             cursor.setPosition(block.position());
 
             //
             // Если в конце разрыва, вернёмся к началу
             //
-            if (blockFormat.boolProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
+            if (blockFormat.boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
                 //
                 // Началом может быть элемент с соответствующим флагом, либо простой элемент,
                 // в случае, когда было удаление переноса строки между абзацем с переносом и
@@ -784,9 +784,9 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                     //
                     lastBlockHeight = blockItems[currentBlockInfo.number].top;
                 } while (
-                    cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)
+                    cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                     && !cursor.blockFormat().boolProperty(
-                        ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
+                        TextBlockStyle::PropertyIsBreakCorrectionStart));
             }
 
             //
@@ -796,12 +796,12 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             do {
                 cursor.movePosition(ScreenplayTextCursor::NextBlock,
                                     ScreenplayTextCursor::KeepAnchor);
-            } while (cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection));
+            } while (cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection));
             //
             // ... если дошли до конца разрыва, то сшиваем его
             //
             if (cursor.blockFormat().boolProperty(
-                    ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
+                    TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
                 cursor.insertText(" ");
             }
             //
@@ -816,13 +816,13 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                     //     разрыва в следующий за текущим блок
                     //
                     if (cursor.blockFormat().boolProperty(
-                            ScreenplayBlockStyle::PropertyIsCorrection)
+                            TextBlockStyle::PropertyIsCorrection)
                         || cursor.blockFormat().boolProperty(
-                            ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd)) {
+                            TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
                         cursor.movePosition(QTextCursor::PreviousBlock);
                         QTextBlockFormat breakStartFormat = cursor.blockFormat();
                         breakStartFormat.setProperty(
-                            ScreenplayBlockStyle::PropertyIsBreakCorrectionStart, true);
+                            TextBlockStyle::PropertyIsBreakCorrectionStart, true);
                         cursor.setBlockFormat(breakStartFormat);
                     }
                     //
@@ -837,15 +837,15 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 }
 
                 Q_ASSERT(cursor.blockFormat().boolProperty(
-                    ScreenplayBlockStyle::PropertyIsBreakCorrectionStart));
+                    TextBlockStyle::PropertyIsBreakCorrectionStart));
             }
             //
             // ... очищаем значения обрывов
             //
             QTextBlockFormat cleanFormat = blockFormat;
             cleanFormat.clearProperty(PageTextEdit::PropertyDontShowCursor);
-            cleanFormat.clearProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionStart);
-            cleanFormat.clearProperty(ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd);
+            cleanFormat.clearProperty(TextBlockStyle::PropertyIsBreakCorrectionStart);
+            cleanFormat.clearProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd);
             cursor.setBlockFormat(cleanFormat);
             //
             // ... и проработаем текущий блок с начала
@@ -864,9 +864,9 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             //
             // Если это время и место или начало папки
             //
-            case ScreenplayParagraphType::SceneHeading:
-            case ScreenplayParagraphType::FolderHeader:
-            case ScreenplayParagraphType::Shot: {
+            case TextParagraphType::SceneHeading:
+            case TextParagraphType::FolderHeader:
+            case TextParagraphType::Shot: {
                 //
                 // Переносим на следующую страницу
                 //
@@ -880,7 +880,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             // Конец папки распологаем либо только в конце страницы, либо целиком переносим на
             // следующую страницу
             //
-            case ScreenplayParagraphType::FolderFooter: {
+            case TextParagraphType::FolderFooter: {
                 //
                 // Если в конце страницы, оставляем как есть
                 //
@@ -909,7 +909,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             //
             // Если это участники сцены
             //
-            case ScreenplayParagraphType::SceneCharacters: {
+            case TextParagraphType::SceneCharacters: {
                 //
                 // Определим предыдущий блок
                 //
@@ -918,8 +918,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 // Если перед ним идёт время и место, переносим его тоже
                 //
                 if (previousBlock.isValid()
-                    && ScreenplayBlockStyle::forBlock(previousBlock)
-                        == ScreenplayParagraphType::SceneHeading) {
+                    && TextBlockStyle::forBlock(previousBlock)
+                        == TextParagraphType::SceneHeading) {
                     moveCurrentBlockWithPreviousToNextPage(previousBlock, pageHeight,
                                                            currentBlockWidth(), cursor, block,
                                                            lastBlockHeight);
@@ -938,7 +938,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             //
             // Если это имя персонажа
             //
-            case ScreenplayParagraphType::Character: {
+            case TextParagraphType::Character: {
                 //
                 // Определим предыдущий блок
                 //
@@ -947,8 +947,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 // Если перед ним идёт время и место, переносим его тоже
                 //
                 if (previousBlock.isValid()
-                    && ScreenplayBlockStyle::forBlock(previousBlock)
-                        == ScreenplayParagraphType::SceneHeading) {
+                    && TextBlockStyle::forBlock(previousBlock)
+                        == TextParagraphType::SceneHeading) {
                     moveCurrentBlockWithPreviousToNextPage(previousBlock, pageHeight,
                                                            currentBlockWidth(), cursor, block,
                                                            lastBlockHeight);
@@ -957,8 +957,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 // Если перед ним идут участники сцены, то проверим ещё на один блок назад
                 //
                 else if (previousBlock.isValid()
-                         && ScreenplayBlockStyle::forBlock(previousBlock)
-                             == ScreenplayParagraphType::SceneCharacters) {
+                         && TextBlockStyle::forBlock(previousBlock)
+                             == TextParagraphType::SceneCharacters) {
                     //
                     // Проверяем предыдущий блок
                     //
@@ -967,8 +967,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                     // Если перед участниками идёт время и место, переносим его тоже
                     //
                     if (prePreviousBlock.isValid()
-                        && ScreenplayBlockStyle::forBlock(prePreviousBlock)
-                            == ScreenplayParagraphType::SceneHeading) {
+                        && TextBlockStyle::forBlock(prePreviousBlock)
+                            == TextParagraphType::SceneHeading) {
                         moveCurrentBlockWithTwoPreviousToNextPage(prePreviousBlock, previousBlock,
                                                                   pageHeight, currentBlockWidth(),
                                                                   cursor, block, lastBlockHeight);
@@ -997,7 +997,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             //
             // Если это ремарка
             //
-            case ScreenplayParagraphType::Parenthetical: {
+            case TextParagraphType::Parenthetical: {
                 //
                 // Определим предыдущий блок
                 //
@@ -1007,10 +1007,10 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 // и переносим на следующую страницу вставляя ПЕРСОНАЖ (ПРОД.) перед ремаркой
                 //
                 if (previousBlock.isValid()
-                    && (ScreenplayBlockStyle::forBlock(previousBlock)
-                            == ScreenplayParagraphType::Dialogue
-                        || ScreenplayBlockStyle::forBlock(previousBlock)
-                            == ScreenplayParagraphType::Lyrics)) {
+                    && (TextBlockStyle::forBlock(previousBlock)
+                            == TextParagraphType::Dialogue
+                        || TextBlockStyle::forBlock(previousBlock)
+                            == TextParagraphType::Lyrics)) {
                     breakDialogue(blockFormat, blockHeight, pageHeight, currentBlockWidth(), cursor,
                                   block, lastBlockHeight);
                 }
@@ -1018,8 +1018,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 // В противном случае, если перед ремаркой идёт персонаж
                 //
                 else if (previousBlock.isValid()
-                         && ScreenplayBlockStyle::forBlock(previousBlock)
-                             == ScreenplayParagraphType::Character) {
+                         && TextBlockStyle::forBlock(previousBlock)
+                             == TextParagraphType::Character) {
                     //
                     // Проверяем предыдущий блок
                     //
@@ -1028,8 +1028,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                     // Если перед персонажем идёт время и место, переносим его тоже
                     //
                     if (prePreviousBlock.isValid()
-                        && ScreenplayBlockStyle::forBlock(prePreviousBlock)
-                            == ScreenplayParagraphType::SceneHeading) {
+                        && TextBlockStyle::forBlock(prePreviousBlock)
+                            == TextParagraphType::SceneHeading) {
                         moveCurrentBlockWithTwoPreviousToNextPage(prePreviousBlock, previousBlock,
                                                                   pageHeight, currentBlockWidth(),
                                                                   cursor, block, lastBlockHeight);
@@ -1038,8 +1038,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                     // В противном случае, если перед персонажем идут участники сцены
                     //
                     else if (prePreviousBlock.isValid()
-                             && ScreenplayBlockStyle::forBlock(prePreviousBlock)
-                                 == ScreenplayParagraphType::SceneCharacters) {
+                             && TextBlockStyle::forBlock(prePreviousBlock)
+                                 == TextParagraphType::SceneCharacters) {
                         //
                         // Проверяем предыдущий блок
                         //
@@ -1048,8 +1048,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                         // Если перед участниками идёт время и место, переносим его тоже
                         //
                         if (prePreviousBlock.isValid()
-                            && ScreenplayBlockStyle::forBlock(prePreviousBlock)
-                                == ScreenplayParagraphType::SceneHeading) {
+                            && TextBlockStyle::forBlock(prePreviousBlock)
+                                == TextParagraphType::SceneHeading) {
                             moveCurrentBlockWithThreePreviousToNextPage(
                                 prePrePreviousBlock, prePreviousBlock, previousBlock, pageHeight,
                                 currentBlockWidth(), cursor, block, lastBlockHeight);
@@ -1095,8 +1095,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             // --- если перед ремаркой идёт диалог, то разрываем по ремарке, пишем вместо неё
             //	   ДАЛЬШЕ, а на следующей странице имя персонажа с (ПРОД), ремарку и сам диалог
             //
-            case ScreenplayParagraphType::Dialogue:
-            case ScreenplayParagraphType::Lyrics: {
+            case TextParagraphType::Dialogue:
+            case TextParagraphType::Lyrics: {
                 //
                 // Проверяем следующий блок
                 //
@@ -1107,8 +1107,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 if (atPageEnd
                     && (!nextBlock.isValid()
                         || (nextBlock.isValid()
-                            && ScreenplayBlockStyle::forBlock(nextBlock)
-                                != ScreenplayParagraphType::Parenthetical))) {
+                            && TextBlockStyle::forBlock(nextBlock)
+                                != TextParagraphType::Parenthetical))) {
                     //
                     // Запоминаем параметры текущего блока
                     //
@@ -1172,13 +1172,13 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                             //
                             QTextBlockFormat breakStartFormat = blockFormat;
                             breakStartFormat.setProperty(
-                                ScreenplayBlockStyle::PropertyIsBreakCorrectionStart, true);
+                                TextBlockStyle::PropertyIsBreakCorrectionStart, true);
                             cursor.movePosition(ScreenplayTextCursor::PreviousBlock);
                             cursor.setBlockFormat(breakStartFormat);
                             //
                             QTextBlockFormat breakEndFormat = blockFormat;
                             breakEndFormat.setProperty(
-                                ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd, true);
+                                TextBlockStyle::PropertyIsBreakCorrectionEnd, true);
                             cursor.movePosition(ScreenplayTextCursor::NextBlock);
                             cursor.setBlockFormat(breakEndFormat);
                             //
@@ -1226,8 +1226,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                         // Если перед ним идёт персонаж, переносим его тоже
                         //
                         if (previousBlock.isValid()
-                            && ScreenplayBlockStyle::forBlock(previousBlock)
-                                == ScreenplayParagraphType::Character) {
+                            && TextBlockStyle::forBlock(previousBlock)
+                                == TextParagraphType::Character) {
                             //
                             // Проверяем предыдущий блок
                             //
@@ -1236,8 +1236,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                             // Если перед именем идёт время и место, переносим его тоже
                             //
                             if (prePreviousBlock.isValid()
-                                && ScreenplayBlockStyle::forBlock(prePreviousBlock)
-                                    == ScreenplayParagraphType::SceneHeading) {
+                                && TextBlockStyle::forBlock(prePreviousBlock)
+                                    == TextParagraphType::SceneHeading) {
                                 moveCurrentBlockWithTwoPreviousToNextPage(
                                     prePreviousBlock, previousBlock, pageHeight,
                                     currentBlockWidth(), cursor, block, lastBlockHeight);
@@ -1246,8 +1246,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                             // Если перед именем идут участники сцены
                             //
                             else if (prePreviousBlock.isValid()
-                                     && ScreenplayBlockStyle::forBlock(prePreviousBlock)
-                                         == ScreenplayParagraphType::SceneCharacters) {
+                                     && TextBlockStyle::forBlock(prePreviousBlock)
+                                         == TextParagraphType::SceneCharacters) {
                                 //
                                 // Проверяем предыдущий блок
                                 //
@@ -1257,8 +1257,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                                 // Если перед участниками идёт время и место, переносим его тоже
                                 //
                                 if (prePreviousBlock.isValid()
-                                    && ScreenplayBlockStyle::forBlock(prePreviousBlock)
-                                        == ScreenplayParagraphType::SceneHeading) {
+                                    && TextBlockStyle::forBlock(prePreviousBlock)
+                                        == TextParagraphType::SceneHeading) {
                                     moveCurrentBlockWithThreePreviousToNextPage(
                                         prePrePreviousBlock, prePreviousBlock, previousBlock,
                                         pageHeight, currentBlockWidth(), cursor, block,
@@ -1286,8 +1286,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                         // Если перед ним идёт ремарка, то проверим ещё на один блок назад
                         //
                         else if (previousBlock.isValid()
-                                 && ScreenplayBlockStyle::forBlock(previousBlock)
-                                     == ScreenplayParagraphType::Parenthetical) {
+                                 && TextBlockStyle::forBlock(previousBlock)
+                                     == TextParagraphType::Parenthetical) {
                             //
                             // Проверяем предыдущий блок
                             //
@@ -1296,8 +1296,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                             // Если перед ремаркой идёт персонаж, переносим его тоже
                             //
                             if (prePreviousBlock.isValid()
-                                && ScreenplayBlockStyle::forBlock(prePreviousBlock)
-                                    == ScreenplayParagraphType::Character) {
+                                && TextBlockStyle::forBlock(prePreviousBlock)
+                                    == TextParagraphType::Character) {
                                 moveCurrentBlockWithTwoPreviousToNextPage(
                                     prePreviousBlock, previousBlock, pageHeight,
                                     currentBlockWidth(), cursor, block, lastBlockHeight);
@@ -1404,13 +1404,13 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                             //
                             QTextBlockFormat breakStartFormat = blockFormat;
                             breakStartFormat.setProperty(
-                                ScreenplayBlockStyle::PropertyIsBreakCorrectionStart, true);
+                                TextBlockStyle::PropertyIsBreakCorrectionStart, true);
                             cursor.movePosition(ScreenplayTextCursor::PreviousBlock);
                             cursor.setBlockFormat(breakStartFormat);
                             //
                             QTextBlockFormat breakEndFormat = blockFormat;
                             breakEndFormat.setProperty(
-                                ScreenplayBlockStyle::PropertyIsBreakCorrectionEnd, true);
+                                TextBlockStyle::PropertyIsBreakCorrectionEnd, true);
                             cursor.movePosition(ScreenplayTextCursor::NextBlock);
                             cursor.setBlockFormat(breakEndFormat);
                             //
@@ -1463,8 +1463,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                         // Если перед ним идёт время и место, переносим его тоже
                         //
                         if (previousBlock.isValid()
-                            && ScreenplayBlockStyle::forBlock(previousBlock)
-                                == ScreenplayParagraphType::SceneHeading) {
+                            && TextBlockStyle::forBlock(previousBlock)
+                                == TextParagraphType::SceneHeading) {
                             moveCurrentBlockWithPreviousToNextPage(previousBlock, pageHeight,
                                                                    currentBlockWidth(), cursor,
                                                                    block, lastBlockHeight);
@@ -1473,8 +1473,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                         // Если перед ним идут участники сцены, то проверим ещё на один блок назад
                         //
                         else if (previousBlock.isValid()
-                                 && ScreenplayBlockStyle::forBlock(previousBlock)
-                                     == ScreenplayParagraphType::SceneCharacters) {
+                                 && TextBlockStyle::forBlock(previousBlock)
+                                     == TextParagraphType::SceneCharacters) {
                             //
                             // Проверяем предыдущий блок
                             //
@@ -1483,8 +1483,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                             // Если перед участниками идёт время и место, переносим его тоже
                             //
                             if (prePreviousBlock.isValid()
-                                && ScreenplayBlockStyle::forBlock(prePreviousBlock)
-                                    == ScreenplayParagraphType::SceneHeading) {
+                                && TextBlockStyle::forBlock(prePreviousBlock)
+                                    == TextParagraphType::SceneHeading) {
                                 moveCurrentBlockWithTwoPreviousToNextPage(
                                     prePreviousBlock, previousBlock, pageHeight,
                                     currentBlockWidth(), cursor, block, lastBlockHeight);
@@ -1564,7 +1564,7 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockWithThreePreviousT
     //
     blockItems[currentBlockInfo.number++]
         = BlockInfo{ prePreviousBlockHeight - prePreviousBlockFormat.topMargin(), 0,
-                     ScreenplayBlockStyle::forBlock(_block) };
+                     TextBlockStyle::forBlock(_block) };
     //
     // Обозначаем последнюю высоту, как высоту предпредпредыдущего блока
     //
@@ -1598,7 +1598,7 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockWithTwoPreviousToN
     //
     blockItems[currentBlockInfo.number++]
         = BlockInfo{ prePreviousBlockHeight - prePreviousBlockFormat.topMargin(), 0,
-                     ScreenplayBlockStyle::forBlock(_block) };
+                     TextBlockStyle::forBlock(_block) };
     //
     // Обозначаем последнюю высоту, как высоту предпредыдущего блока
     //
@@ -1626,7 +1626,7 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockWithPreviousToNext
     //
     blockItems[currentBlockInfo.number++]
         = BlockInfo{ previousBlockHeight - previousBlockFormat.topMargin(), 0,
-                     ScreenplayBlockStyle::forBlock(_block) };
+                     TextBlockStyle::forBlock(_block) };
     //
     // Обозначаем последнюю высоту, как высоту предыдущего блока
     //
@@ -1650,7 +1650,7 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockToNextPage(
     // Запоминаем параметры текущего блока
     //
     blockItems[currentBlockInfo.number++] = BlockInfo{ _blockHeight - _blockFormat.topMargin(), 0,
-                                                       ScreenplayBlockStyle::forBlock(_block) };
+                                                       TextBlockStyle::forBlock(_block) };
 
     if (_blockHeight < _pageHeight) {
         //
@@ -1680,11 +1680,11 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(
     // Оформить его, как персонажа, но без отступа сверху
     //
     const auto moreKeywordStyle = TemplatesFacade::screenplayTemplate(templateId)
-                                      .paragraphStyle(ScreenplayParagraphType::Character);
+                                      .paragraphStyle(TextParagraphType::Character);
     QTextBlockFormat moreKeywordFormat = moreKeywordStyle.blockFormat(_cursor.inTable());
     moreKeywordFormat.setTopMargin(0);
-    moreKeywordFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);
-    moreKeywordFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrectionContinued, true);
+    moreKeywordFormat.setProperty(TextBlockStyle::PropertyIsCorrection, true);
+    moreKeywordFormat.setProperty(TextBlockStyle::PropertyIsCorrectionContinued, true);
     moreKeywordFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
     _cursor.setBlockFormat(moreKeywordFormat);
     _cursor.setBlockCharFormat(moreKeywordStyle.charFormat());
@@ -1697,7 +1697,7 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(
     const qreal moreBlockHeight = _block.layout()->lineCount() * moreKeywordFormat.lineHeight()
         + moreKeywordFormat.topMargin() + moreKeywordFormat.bottomMargin();
     blockItems[currentBlockInfo.number++]
-        = BlockInfo{ moreBlockHeight, _lastBlockHeight, ScreenplayBlockStyle::forBlock(_block) };
+        = BlockInfo{ moreBlockHeight, _lastBlockHeight, TextBlockStyle::forBlock(_block) };
     //
     // Перенести текущий блок на следующую страницу, если на текущей влезает
     // ещё хотя бы одна строка текста
@@ -1715,9 +1715,9 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(
     //
     QTextBlock characterBlock = _block.previous();
     while (characterBlock.isValid()
-           && (characterBlock.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)
-               || ScreenplayBlockStyle::forBlock(characterBlock)
-                   != ScreenplayParagraphType::Character)) {
+           && (characterBlock.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
+               || TextBlockStyle::forBlock(characterBlock)
+                   != TextParagraphType::Character)) {
         characterBlock = characterBlock.previous();
     }
     //
@@ -1734,8 +1734,8 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(
         // Оформляем его, как имя персонажа
         //
         QTextBlockFormat characterBlockFormat = characterBlock.blockFormat();
-        characterBlockFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);
-        characterBlockFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrectionCharacter, true);
+        characterBlockFormat.setProperty(TextBlockStyle::PropertyIsCorrection, true);
+        characterBlockFormat.setProperty(TextBlockStyle::PropertyIsCorrectionCharacter, true);
         characterBlockFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
         _cursor.setBlockFormat(characterBlockFormat);
         _cursor.setBlockCharFormat(characterBlock.charFormat());
@@ -1751,7 +1751,7 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(
             = _block.layout()->lineCount() * characterBlockFormat.lineHeight()
             + characterBlockFormat.bottomMargin();
         blockItems[currentBlockInfo.number++]
-            = BlockInfo{ continuedBlockHeight, 0, ScreenplayBlockStyle::forBlock(_block) };
+            = BlockInfo{ continuedBlockHeight, 0, TextBlockStyle::forBlock(_block) };
         //
         // Обозначаем последнюю высоту, как высоту предыдущего блока
         //
@@ -1767,7 +1767,7 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(
     else {
         blockItems[currentBlockInfo.number++]
             = BlockInfo{ _blockHeight - _blockFormat.topMargin(), 0,
-                         ScreenplayBlockStyle::forBlock(_block) };
+                         TextBlockStyle::forBlock(_block) };
         _lastBlockHeight = _blockHeight - _blockFormat.topMargin();
     }
 }
@@ -1786,7 +1786,7 @@ QTextBlock ScreenplayTextCorrector::Implementation::findNextBlock(const QTextBlo
 {
     QTextBlock nextBlock = _block.next();
     while (nextBlock.isValid() && !nextBlock.isVisible()
-           && nextBlock.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+           && nextBlock.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
         nextBlock = nextBlock.next();
     }
     return nextBlock;
@@ -1812,18 +1812,18 @@ void ScreenplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBlo
     // Определим формат блоков декорации
     //
     QTextBlockFormat decorationFormat = format;
-    const auto paragraphType = ScreenplayBlockStyle::forBlock(_block);
-    if (paragraphType == ScreenplayParagraphType::SceneHeading) {
-        decorationFormat.setProperty(ScreenplayBlockStyle::PropertyType,
-                                     static_cast<int>(ScreenplayParagraphType::SceneHeadingShadow));
+    const auto paragraphType = TextBlockStyle::forBlock(_block);
+    if (paragraphType == TextParagraphType::SceneHeading) {
+        decorationFormat.setProperty(TextBlockStyle::PropertyType,
+                                     static_cast<int>(TextParagraphType::SceneHeadingShadow));
     }
-    if (paragraphType == ScreenplayParagraphType::FolderHeader
-        || paragraphType == ScreenplayParagraphType::FolderHeader) {
-        decorationFormat.setProperty(ScreenplayBlockStyle::PropertyType,
-                                     static_cast<int>(ScreenplayParagraphType::Action));
+    if (paragraphType == TextParagraphType::FolderHeader
+        || paragraphType == TextParagraphType::FolderHeader) {
+        decorationFormat.setProperty(TextBlockStyle::PropertyType,
+                                     static_cast<int>(TextParagraphType::Action));
         decorationFormat.setBackground(Qt::NoBrush);
     }
-    decorationFormat.setProperty(ScreenplayBlockStyle::PropertyIsCorrection, true);
+    decorationFormat.setProperty(TextBlockStyle::PropertyIsCorrection, true);
     decorationFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
     //
     // Вставляем блоки декорации
@@ -1850,7 +1850,7 @@ void ScreenplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBlo
         //
         blockItems[currentBlockInfo.number++]
             = BlockInfo{ blockHeight, _pageHeight - _spaceToPageEnd + blockIndex * blockHeight,
-                         ScreenplayBlockStyle::forBlock(block) };
+                         TextBlockStyle::forBlock(block) };
         //
         // Переведём курсор на блок после декорации
         //

@@ -7,7 +7,7 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
 
@@ -51,7 +51,7 @@ void UnformattedTextHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ComicBookParagraphType::UnformattedText);
+            editor()->addParagraph(TextParagraphType::UnformattedText);
         } else {
             //! Нет выделения
 
@@ -62,7 +62,7 @@ void UnformattedTextHandler::handleEnter(QKeyEvent*)
                 // Ни чего не делаем
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ComicBookParagraphType::UnformattedText));
+                    changeForEnter(TextParagraphType::UnformattedText));
             } else {
                 //! Текст не пуст
 
@@ -78,14 +78,14 @@ void UnformattedTextHandler::handleEnter(QKeyEvent*)
                     //
                     // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(jumpForEnter(ComicBookParagraphType::UnformattedText));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::UnformattedText));
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(ComicBookParagraphType::Description);
+                    editor()->addParagraph(TextParagraphType::Description);
                 }
             }
         }
@@ -135,7 +135,7 @@ void UnformattedTextHandler::handleTab(QKeyEvent*)
                 // Ни чего не делаем
                 //
                 editor()->setCurrentParagraphType(
-                    changeForTab(ComicBookParagraphType::UnformattedText));
+                    changeForTab(TextParagraphType::UnformattedText));
             } else {
                 //! Текст не пуст
 
@@ -151,7 +151,7 @@ void UnformattedTextHandler::handleTab(QKeyEvent*)
                     //
                     // Действуем как нажатие клавиши ENTER
                     //
-                    editor()->addParagraph(jumpForTab(ComicBookParagraphType::UnformattedText));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::UnformattedText));
                 } else {
                     //! Внутри блока
 

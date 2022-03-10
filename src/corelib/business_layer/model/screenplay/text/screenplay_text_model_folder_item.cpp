@@ -173,7 +173,7 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
 {
     auto folderFooterXml = [this] {
         ScreenplayTextModelTextItem item(model());
-        item.setParagraphType(ScreenplayParagraphType::FolderFooter);
+        item.setParagraphType(TextParagraphType::FolderFooter);
         return item.toXml();
     };
 
@@ -237,7 +237,7 @@ QByteArray ScreenplayTextModelFolderItem::toXml(ScreenplayTextModelItem* _from, 
             //
             // Если папка не была закрыта, добавим корректное завершение для неё
             //
-            if (textItem->paragraphType() != ScreenplayParagraphType::FolderFooter) {
+            if (textItem->paragraphType() != TextParagraphType::FolderFooter) {
                 xml += folderFooterXml();
             }
             break;
@@ -315,7 +315,7 @@ void ScreenplayTextModelFolderItem::handleChange()
 
         case ScreenplayTextModelItemType::Text: {
             auto childItem = static_cast<ScreenplayTextModelTextItem*>(child);
-            if (childItem->paragraphType() == ScreenplayParagraphType::FolderHeader) {
+            if (childItem->paragraphType() == TextParagraphType::FolderHeader) {
                 d->name = TextHelper::smartToUpper(childItem->text());
             }
             d->duration += childItem->duration();

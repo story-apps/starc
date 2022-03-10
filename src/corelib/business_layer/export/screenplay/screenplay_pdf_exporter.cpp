@@ -12,8 +12,8 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
-#include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QAbstractTextDocumentLayout>
@@ -67,15 +67,15 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
         while (block.isValid()) {
             const QRectF blockRect = layout->blockBoundingRect(block);
             if (blockRect.bottom() > pageYPos + _body.height()
-                    - PageMetrics::mmToPx(_template.pageMargins().bottom())) {
+                    - MeasurementHelper::mmToPx(_template.pageMargins().bottom())) {
                 break;
             }
 
             //
             // Покажем номер сцены, если необходимо
             //
-            const auto paragraphType = ScreenplayBlockStyle::forBlock(block);
-            if (paragraphType == ScreenplayParagraphType::SceneHeading && !block.text().isEmpty()
+            const auto paragraphType = TextBlockStyle::forBlock(block);
+            if (paragraphType == TextParagraphType::SceneHeading && !block.text().isEmpty()
                 && _exportOptions.showScenesNumbers) {
                 const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
                 if (blockData != nullptr) {
@@ -88,10 +88,10 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                     if (_exportOptions.showScenesNumbersOnLeft) {
                         const QRectF leftSceneNumberRect(
                             0,
-                            blockRect.top() <= pageYPos
-                                ? (pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
-                                : blockRect.top(),
-                            PageMetrics::mmToPx(_template.pageMargins().left())
+                            blockRect.top() <= pageYPos ? (
+                                pageYPos + MeasurementHelper::mmToPx(_template.pageMargins().top()))
+                                                        : blockRect.top(),
+                            MeasurementHelper::mmToPx(_template.pageMargins().left())
                                 - distanceBetweenSceneNumberAndText,
                             blockRect.height());
                         _painter->drawText(leftSceneNumberRect, Qt::AlignRight | Qt::AlignTop,
@@ -100,12 +100,13 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
 
                     if (_exportOptions.showScenesNumbersOnRight) {
                         const QRectF rightSceneNumberRect(
-                            _body.width() - PageMetrics::mmToPx(_template.pageMargins().right())
+                            _body.width()
+                                - MeasurementHelper::mmToPx(_template.pageMargins().right())
                                 + distanceBetweenSceneNumberAndText,
-                            blockRect.top() <= pageYPos
-                                ? (pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()))
-                                : blockRect.top(),
-                            PageMetrics::mmToPx(_template.pageMargins().right())
+                            blockRect.top() <= pageYPos ? (
+                                pageYPos + MeasurementHelper::mmToPx(_template.pageMargins().top()))
+                                                        : blockRect.top(),
+                            MeasurementHelper::mmToPx(_template.pageMargins().right())
                                 - distanceBetweenSceneNumberAndText,
                             blockRect.height());
                         _painter->drawText(rightSceneNumberRect, Qt::AlignLeft | Qt::AlignTop,
@@ -116,8 +117,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
             //
             // Печатаем номер диалога, если необходимо, а также автоматические (ПРОД)
             //
-            else if (paragraphType == ScreenplayParagraphType::Character
-                     && !block.text().isEmpty()) {
+            else if (paragraphType == TextParagraphType::Character && !block.text().isEmpty()) {
                 //
                 // Номера реплик
                 //
@@ -136,10 +136,11 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                             if (QLocale().textDirection() == Qt::LeftToRight) {
                                 if (block.blockFormat().leftMargin() > numberDelta) {
                                     dialogueNumberRect = QRectF(
-                                        PageMetrics::mmToPx(_template.pageMargins().left()),
+                                        MeasurementHelper::mmToPx(_template.pageMargins().left()),
                                         blockRect.top() <= pageYPos
                                             ? (pageYPos
-                                               + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                               + MeasurementHelper::mmToPx(
+                                                   _template.pageMargins().top()))
                                             : blockRect.top(),
                                         numberDelta, blockRect.height());
                                 } else {
@@ -148,32 +149,35 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                                         0,
                                         blockRect.top() <= pageYPos
                                             ? (pageYPos
-                                               + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                               + MeasurementHelper::mmToPx(
+                                                   _template.pageMargins().top()))
                                             : blockRect.top(),
-                                        PageMetrics::mmToPx(_template.pageMargins().left())
+                                        MeasurementHelper::mmToPx(_template.pageMargins().left())
                                             - distanceBetweenSceneNumberAndText,
                                         blockRect.height());
                                 }
                             } else {
                                 if (block.blockFormat().rightMargin() > numberDelta) {
                                     dialogueNumberRect = QRectF(
-                                        PageMetrics::mmToPx(_template.pageMargins().left())
+                                        MeasurementHelper::mmToPx(_template.pageMargins().left())
                                             + _body.width() - numberDelta,
                                         blockRect.top() <= pageYPos
                                             ? (pageYPos
-                                               + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                               + MeasurementHelper::mmToPx(
+                                                   _template.pageMargins().top()))
                                             : blockRect.top(),
                                         numberDelta, blockRect.height());
                                 } else {
                                     const int distanceBetweenSceneNumberAndText = 10;
                                     dialogueNumberRect = QRectF(
-                                        PageMetrics::mmToPx(_template.pageMargins().left())
+                                        MeasurementHelper::mmToPx(_template.pageMargins().left())
                                             + _body.width() + distanceBetweenSceneNumberAndText,
                                         blockRect.top() <= pageYPos
                                             ? (pageYPos
-                                               + PageMetrics::mmToPx(_template.pageMargins().top()))
+                                               + MeasurementHelper::mmToPx(
+                                                   _template.pageMargins().top()))
                                             : blockRect.top(),
-                                        PageMetrics::mmToPx(_template.pageMargins().right())
+                                        MeasurementHelper::mmToPx(_template.pageMargins().right())
                                             - distanceBetweenSceneNumberAndText,
                                         blockRect.height());
                                 }
@@ -187,10 +191,8 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                 //
                 // Автоматические (ПРОД)
                 //
-                if (block.blockFormat().boolProperty(
-                        ScreenplayBlockStyle::PropertyIsCharacterContinued)
-                    && !block.blockFormat().boolProperty(
-                        ScreenplayBlockStyle::PropertyIsCorrection)) {
+                if (block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCharacterContinued)
+                    && !block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
                     _painter->setFont(block.charFormat().font());
 
                     const auto continuedTerm
@@ -207,7 +209,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                         + continuedTerm;
                     const auto correctedBlockRect
                         = QRectF({ block.blockFormat().leftMargin()
-                                       + PageMetrics::mmToPx(_template.pageMargins().left()),
+                                       + MeasurementHelper::mmToPx(_template.pageMargins().left()),
                                    blockRect.top() },
                                  blockRect.size());
                     const QPoint bottomRight
@@ -228,20 +230,20 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
             // Прорисовка префикса/постфикса для блока текста, если это не пустая декорация
             //
             if (!block.text().isEmpty()
-                || !block.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)) {
+                || !block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
                 const auto correctedBlockRect
                     = QRectF({ block.blockFormat().leftMargin()
-                                   + PageMetrics::mmToPx(_template.pageMargins().left()),
+                                   + MeasurementHelper::mmToPx(_template.pageMargins().left()),
                                blockRect.top() },
                              blockRect.size());
                 //
                 // ... префикс
                 //
-                if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPrefix)) {
+                if (block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)) {
                     _painter->setFont(block.charFormat().font());
 
                     const auto prefix
-                        = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPrefix);
+                        = block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
                     auto prefixRect = blockRect;
                     prefixRect.setWidth(TextHelper::fineTextWidthF(prefix, _painter->font()));
                     prefixRect.moveLeft(prefixRect.left() + block.blockFormat().leftMargin()
@@ -252,11 +254,11 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                 //
                 // ... постфикс
                 //
-                if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPostfix)) {
+                if (block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix)) {
                     _painter->setFont(block.charFormat().font());
 
                     const auto postfix
-                        = block.charFormat().stringProperty(ScreenplayBlockStyle::PropertyPostfix);
+                        = block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
 
                     //
                     // Почему-то если взять просто ширину последней строки текста, то получается
@@ -303,27 +305,27 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
         else {
             _painter->save();
             _painter->setFont(
-                _template.paragraphStyle(ScreenplayParagraphType::Action).charFormat().font());
+                _template.paragraphStyle(TextParagraphType::Action).charFormat().font());
 
             //
             // Середины верхнего и нижнего полей
             //
-            qreal headerY = pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()) / 2;
+            qreal headerY = pageYPos + MeasurementHelper::mmToPx(_template.pageMargins().top()) / 2;
             qreal footerY = pageYPos + currentPageRect.height()
-                - PageMetrics::mmToPx(_template.pageMargins().bottom()) / 2;
+                - MeasurementHelper::mmToPx(_template.pageMargins().bottom()) / 2;
 
             //
             // Области для прорисовки текста на полях
             //
-            QRectF headerRect(PageMetrics::mmToPx(_template.pageMargins().left()), headerY,
+            QRectF headerRect(MeasurementHelper::mmToPx(_template.pageMargins().left()), headerY,
                               currentPageRect.width()
-                                  - PageMetrics::mmToPx(_template.pageMargins().left())
-                                  - PageMetrics::mmToPx(_template.pageMargins().right()),
+                                  - MeasurementHelper::mmToPx(_template.pageMargins().left())
+                                  - MeasurementHelper::mmToPx(_template.pageMargins().right()),
                               20);
-            QRectF footerRect(PageMetrics::mmToPx(_template.pageMargins().left()), footerY,
+            QRectF footerRect(MeasurementHelper::mmToPx(_template.pageMargins().left()), footerY,
                               currentPageRect.width()
-                                  - PageMetrics::mmToPx(_template.pageMargins().left())
-                                  - PageMetrics::mmToPx(_template.pageMargins().right()),
+                                  - MeasurementHelper::mmToPx(_template.pageMargins().left())
+                                  - MeasurementHelper::mmToPx(_template.pageMargins().right()),
                               20);
 
             //
@@ -367,28 +369,27 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
             || _exportOptions.printFooterOnTitlePage;
 
         _painter->save();
-        _painter->setFont(
-            _template.paragraphStyle(ScreenplayParagraphType::Action).charFormat().font());
+        _painter->setFont(_template.paragraphStyle(TextParagraphType::Action).charFormat().font());
 
         //
         // Середины верхнего и нижнего полей
         //
-        qreal headerY = pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()) / 2;
+        qreal headerY = pageYPos + MeasurementHelper::mmToPx(_template.pageMargins().top()) / 2;
         qreal footerY = pageYPos + currentPageRect.height()
-            - PageMetrics::mmToPx(_template.pageMargins().bottom()) / 2;
+            - MeasurementHelper::mmToPx(_template.pageMargins().bottom()) / 2;
 
         //
         // Области для прорисовки текста на полях
         //
-        QRectF headerRect(PageMetrics::mmToPx(_template.pageMargins().left()), headerY,
+        QRectF headerRect(MeasurementHelper::mmToPx(_template.pageMargins().left()), headerY,
                           currentPageRect.width()
-                              - PageMetrics::mmToPx(_template.pageMargins().left())
-                              - PageMetrics::mmToPx(_template.pageMargins().right()),
+                              - MeasurementHelper::mmToPx(_template.pageMargins().left())
+                              - MeasurementHelper::mmToPx(_template.pageMargins().right()),
                           20);
-        QRectF footerRect(PageMetrics::mmToPx(_template.pageMargins().left()), footerY,
+        QRectF footerRect(MeasurementHelper::mmToPx(_template.pageMargins().left()), footerY,
                           currentPageRect.width()
-                              - PageMetrics::mmToPx(_template.pageMargins().left())
-                              - PageMetrics::mmToPx(_template.pageMargins().right()),
+                              - MeasurementHelper::mmToPx(_template.pageMargins().left())
+                              - MeasurementHelper::mmToPx(_template.pageMargins().right()),
                           20);
 
         //

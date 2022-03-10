@@ -20,7 +20,7 @@ public:
     /**
      * @brief Получить тип блока, в котором будем искать
      */
-    ComicBookParagraphType searchInType() const;
+    TextParagraphType searchInType() const;
 
     /**
      * @brief Найти текст в заданном направлении
@@ -52,19 +52,19 @@ ComicBookTextSearchManager::Implementation::Implementation(QWidget* _parent,
     toolbar->hide();
 }
 
-ComicBookParagraphType ComicBookTextSearchManager::Implementation::searchInType() const
+TextParagraphType ComicBookTextSearchManager::Implementation::searchInType() const
 {
     switch (toolbar->searchInType()) {
     default:
-        return ComicBookParagraphType::Undefined;
+        return TextParagraphType::Undefined;
     case 1:
-        return ComicBookParagraphType::Panel;
+        return TextParagraphType::Panel;
     case 2:
-        return ComicBookParagraphType::Description;
+        return TextParagraphType::Description;
     case 3:
-        return ComicBookParagraphType::Character;
+        return TextParagraphType::Character;
     case 4:
-        return ComicBookParagraphType::Dialogue;
+        return TextParagraphType::Dialogue;
     }
 }
 
@@ -116,9 +116,9 @@ void ComicBookTextSearchManager::Implementation::findText(bool _backward)
         restartSearch = false;
         cursor = textEdit->document()->find(searchText, cursor, findFlags);
         const auto searchType = searchInType();
-        auto blockType = ComicBookBlockStyle::forBlock(cursor.block());
+        auto blockType = TextBlockStyle::forBlock(cursor.block());
         if (!cursor.isNull()) {
-            if (searchType == ComicBookParagraphType::Undefined || searchType == blockType) {
+            if (searchType == TextParagraphType::Undefined || searchType == blockType) {
                 textEdit->ensureCursorVisible(cursor);
             } else {
                 restartSearch = true;
@@ -132,9 +132,9 @@ void ComicBookTextSearchManager::Implementation::findText(bool _backward)
                 cursor = textEdit->textCursor();
                 cursor.movePosition(_backward ? QTextCursor::End : QTextCursor::Start);
                 cursor = textEdit->document()->find(searchText, cursor, findFlags);
-                blockType = ComicBookBlockStyle::forBlock(cursor.block());
+                blockType = TextBlockStyle::forBlock(cursor.block());
                 if (!cursor.isNull()) {
-                    if (searchType == ComicBookParagraphType::Undefined
+                    if (searchType == TextParagraphType::Undefined
                         || searchType == blockType) {
                         textEdit->ensureCursorVisible(cursor);
                     } else {

@@ -57,7 +57,7 @@ ComicBookAbstractImporter::Document ComicBookPlainTextImporter::importComicBook(
 
     const QStringList paragraphs = QString(_text).split("\n");
     for (const auto& paragraph : paragraphs) {
-        writer.writeStartElement(toString(ComicBookParagraphType::Description));
+        writer.writeStartElement(toString(TextParagraphType::Description));
         writer.writeStartElement(xml::kValueTag);
         writer.writeCDATA(TextHelper::toHtmlEscaped(paragraph));
         writer.writeEndElement();

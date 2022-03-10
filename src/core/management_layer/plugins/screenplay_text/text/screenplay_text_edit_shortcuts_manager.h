@@ -3,7 +3,7 @@
 #include <QObject>
 
 namespace BusinessLayer {
-enum class ScreenplayParagraphType;
+enum class TextParagraphType;
 }
 
 
@@ -35,7 +35,7 @@ public:
     /**
      * @brief Получить шорткат для блока
      */
-    QString shortcut(BusinessLayer::ScreenplayParagraphType _forBlockType) const;
+    QString shortcut(BusinessLayer::TextParagraphType _forBlockType) const;
 
 private:
     class Implementation;

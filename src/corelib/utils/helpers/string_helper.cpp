@@ -6,12 +6,20 @@
 #include <QString>
 
 namespace {
-const QHash<Qt::Alignment, QString> kAlignmentToString
-    = { { Qt::AlignLeft, "left" },    { Qt::AlignHCenter, "hcenter" },
-        { Qt::AlignRight, "right" },  { Qt::AlignJustify, "justify" },
-        { Qt::AlignTop, "top" },      { Qt::AlignVCenter, "vcenter" },
-        { Qt::AlignBottom, "bottom" } };
-}
+
+const QHash<Qt::Alignment, QString> kAlignmentToString = {
+    { Qt::AlignLeft, QLatin1String("left") },     { Qt::AlignHCenter, QLatin1String("hcenter") },
+    { Qt::AlignRight, QLatin1String("right") },   { Qt::AlignJustify, QLatin1String("justify") },
+    { Qt::AlignTop, QLatin1String("top") },       { Qt::AlignVCenter, QLatin1String("vcenter") },
+    { Qt::AlignBottom, QLatin1String("bottom") },
+};
+
+const QHash<QPageSize::PageSizeId, QString> kPageSizeIdToString = {
+    { QPageSize::A4, QLatin1String("A4") },
+    { QPageSize::Letter, QLatin1String("Letter") },
+};
+
+} // namespace
 
 
 Qt::Alignment alignmentFromString(const QString& _alignment)
@@ -39,6 +47,12 @@ QRectF rectFromString(const QString& _rect)
         rect.value(0, 0).simplified().toDouble(), rect.value(1, 0).simplified().toDouble(),
         rect.value(2, 0).simplified().toDouble(), rect.value(3, 0).simplified().toDouble());
 }
+
+QPageSize::PageSizeId pageSizeIdFromString(const QString& _pageSize)
+{
+    return kPageSizeIdToString.key(_pageSize, QPageSize::A4);
+}
+
 
 QString toString(bool _value)
 {
@@ -84,4 +98,9 @@ QString toString(const QRectF& _rect)
         .arg(_rect.top())
         .arg(_rect.width())
         .arg(_rect.height());
+}
+
+QString toString(QPageSize::PageSizeId _pageSize)
+{
+    return kPageSizeIdToString.value(_pageSize, "A4");
 }

@@ -13,7 +13,7 @@ class QXmlStreamReader;
 
 namespace BusinessLayer {
 
-enum class ScreenplayParagraphType;
+enum class TextParagraphType;
 
 /**
  * @brief Класс элемента текста модели сценария
@@ -120,8 +120,8 @@ public:
     /**
      * @brief Тип параграфа
      */
-    const ScreenplayParagraphType& paragraphType() const;
-    void setParagraphType(ScreenplayParagraphType _type);
+    const TextParagraphType& paragraphType() const;
+    void setParagraphType(TextParagraphType _type);
 
     /**
      * @brief Выравнивание текста в блоке

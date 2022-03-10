@@ -7,8 +7,8 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ComicBookBlockStyle;
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
 
@@ -54,7 +54,7 @@ void DialogHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ComicBookParagraphType::Dialogue);
+            editor()->addParagraph(TextParagraphType::Dialogue);
         } else {
             //! Нет выделения
 
@@ -64,7 +64,7 @@ void DialogHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль блока на описание действия
                 //
-                editor()->setCurrentParagraphType(changeForEnter(ComicBookParagraphType::Dialogue));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Dialogue));
             } else {
                 //! Текст не пуст
 
@@ -81,7 +81,7 @@ void DialogHandler::handleEnter(QKeyEvent*)
                     // Перейдём к следующему блоку
                     //
                     editor()->moveCursor(QTextCursor::NextBlock);
-                    editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Dialogue));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::Dialogue));
                 } else {
                     //! Внутри блока
 
@@ -96,19 +96,19 @@ void DialogHandler::handleEnter(QKeyEvent*)
                         {
                             QTextCursor cursor = editor()->textCursor();
                             QTextBlock cursorBlock = cursor.block();
-                            while ((ComicBookBlockStyle::forBlock(cursorBlock)
-                                        != ComicBookParagraphType::Character
-                                    || ComicBookBlockStyle::forBlock(cursorBlock)
-                                        == ComicBookParagraphType::Dialogue
-                                    || ComicBookBlockStyle::forBlock(cursorBlock)
-                                        == ComicBookParagraphType::PageSplitter)
+                            while ((TextBlockStyle::forBlock(cursorBlock)
+                                        != TextParagraphType::Character
+                                    || TextBlockStyle::forBlock(cursorBlock)
+                                        == TextParagraphType::Dialogue
+                                    || TextBlockStyle::forBlock(cursorBlock)
+                                        == TextParagraphType::PageSplitter)
                                    && !cursor.atStart()) {
                                 cursor.movePosition(QTextCursor::PreviousBlock);
                                 cursorBlock = cursor.block();
                             }
 
-                            if (ComicBookBlockStyle::forBlock(cursorBlock)
-                                == ComicBookParagraphType::Character) {
+                            if (TextBlockStyle::forBlock(cursorBlock)
+                                == TextParagraphType::Character) {
                                 characterName = cursorBlock.text().simplified();
                             }
                         }
@@ -116,13 +116,13 @@ void DialogHandler::handleEnter(QKeyEvent*)
                         //
                         // Вставляем блок "герой" и добавляем имя
                         //
-                        editor()->addParagraph(ComicBookParagraphType::Character);
+                        editor()->addParagraph(TextParagraphType::Character);
                         editor()->insertPlainText(characterName);
 
                         //
                         // Оставшийся текст форматируем, как "диалог"
                         //
-                        editor()->addParagraph(ComicBookParagraphType::Dialogue);
+                        editor()->addParagraph(TextParagraphType::Dialogue);
                     }
                 }
             }
@@ -172,7 +172,7 @@ void DialogHandler::handleTab(QKeyEvent*)
                 //
                 // Меняем стиль на ремарку
                 //
-                editor()->setCurrentParagraphType(changeForTab(ComicBookParagraphType::Dialogue));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Dialogue));
             } else {
                 //! Текст не пуст
 
@@ -189,7 +189,7 @@ void DialogHandler::handleTab(QKeyEvent*)
                     // Вставляем блок ремарки
                     //
                     editor()->moveCursor(QTextCursor::NextBlock);
-                    editor()->addParagraph(jumpForTab(ComicBookParagraphType::Dialogue));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::Dialogue));
                 } else {
                     //! Внутри блока
 

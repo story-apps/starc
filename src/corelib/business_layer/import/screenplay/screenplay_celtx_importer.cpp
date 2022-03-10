@@ -75,11 +75,11 @@ ScreenplayAbstractImporter::Documents ScreenplayCeltxImporter::importDocuments(
     const auto pNodes = rootNode.getElementsByTagName(HtmlTag::P);
     for (const auto& pNode : pNodes) {
         const QString pNodeClass = pNode.getAttribute("class");
-        auto blockType = ScreenplayParagraphType::Undefined;
+        auto blockType = TextParagraphType::Undefined;
         if (pNodeClass == "sceneheading") {
-            blockType = ScreenplayParagraphType::SceneHeading;
+            blockType = TextParagraphType::SceneHeading;
         } else if (pNodeClass == "character") {
-            blockType = ScreenplayParagraphType::Character;
+            blockType = TextParagraphType::Character;
         }
 
         //
@@ -88,7 +88,7 @@ ScreenplayAbstractImporter::Documents ScreenplayCeltxImporter::importDocuments(
         QString paragraphText = pNode.innerText().simplified();
 
         switch (blockType) {
-        case ScreenplayParagraphType::SceneHeading: {
+        case TextParagraphType::SceneHeading: {
             if (!_options.importLocations) {
                 break;
             }
@@ -102,7 +102,7 @@ ScreenplayAbstractImporter::Documents ScreenplayCeltxImporter::importDocuments(
             break;
         }
 
-        case ScreenplayParagraphType::Character: {
+        case TextParagraphType::Character: {
             if (!_options.importCharacters) {
                 break;
             }
@@ -170,21 +170,21 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayCeltxImporter::importS
     bool alreadyInScene = false;
     for (const auto& pNode : pNodes) {
         const QString pNodeClass = pNode.getAttribute("class");
-        auto blockType = ScreenplayParagraphType::UnformattedText;
+        auto blockType = TextParagraphType::UnformattedText;
         if (pNodeClass == "sceneheading") {
-            blockType = ScreenplayParagraphType::SceneHeading;
+            blockType = TextParagraphType::SceneHeading;
         } else if (pNodeClass == "action") {
-            blockType = ScreenplayParagraphType::Action;
+            blockType = TextParagraphType::Action;
         } else if (pNodeClass == "character") {
-            blockType = ScreenplayParagraphType::Character;
+            blockType = TextParagraphType::Character;
         } else if (pNodeClass == "parenthetical") {
-            blockType = ScreenplayParagraphType::Parenthetical;
+            blockType = TextParagraphType::Parenthetical;
         } else if (pNodeClass == "dialog") {
-            blockType = ScreenplayParagraphType::Dialogue;
+            blockType = TextParagraphType::Dialogue;
         } else if (pNodeClass == "transition") {
-            blockType = ScreenplayParagraphType::Transition;
+            blockType = TextParagraphType::Transition;
         } else if (pNodeClass == "shot") {
-            blockType = ScreenplayParagraphType::Shot;
+            blockType = TextParagraphType::Shot;
         }
 
         //
@@ -195,7 +195,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayCeltxImporter::importS
         //
         // Корректируем при необходимости
         //
-        if (blockType == ScreenplayParagraphType::Parenthetical) {
+        if (blockType == TextParagraphType::Parenthetical) {
             if (!paragraphText.isEmpty() && paragraphText.front() == '(') {
                 paragraphText.remove(0, 1);
             }
@@ -257,7 +257,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayCeltxImporter::importS
         //
         // Формируем блок сценария
         //
-        if (blockType == ScreenplayParagraphType::SceneHeading) {
+        if (blockType == TextParagraphType::SceneHeading) {
             if (alreadyInScene) {
                 writer.writeEndElement(); // контент предыдущей сцены
                 writer.writeEndElement(); // предыдущая сцена

@@ -90,13 +90,13 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
         int occurrences = 0;
         int words = 0;
     };
-    QHash<ScreenplayParagraphType, Counters> paragraphsToCounters;
-    const QVector<ScreenplayParagraphType> paragraphTypes
-        = { ScreenplayParagraphType::SceneHeading,  ScreenplayParagraphType::SceneCharacters,
-            ScreenplayParagraphType::Action,        ScreenplayParagraphType::Character,
-            ScreenplayParagraphType::Parenthetical, ScreenplayParagraphType::Dialogue,
-            ScreenplayParagraphType::Lyrics,        ScreenplayParagraphType::Transition,
-            ScreenplayParagraphType::Shot };
+    QHash<TextParagraphType, Counters> paragraphsToCounters;
+    const QVector<TextParagraphType> paragraphTypes
+        = { TextParagraphType::SceneHeading,  TextParagraphType::SceneCharacters,
+            TextParagraphType::Action,        TextParagraphType::Character,
+            TextParagraphType::Parenthetical, TextParagraphType::Dialogue,
+            TextParagraphType::Lyrics,        TextParagraphType::Transition,
+            TextParagraphType::Shot };
     for (const auto type : paragraphTypes) {
         paragraphsToCounters.insert(type, {});
     }
@@ -144,12 +144,12 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
                       // ... стата по объектам
                       //
                       switch (textItem->paragraphType()) {
-                      case ScreenplayParagraphType::SceneHeading: {
+                      case TextParagraphType::SceneHeading: {
                           scenes.append(TextHelper::smartToUpper(textItem->text()));
                           break;
                       }
 
-                      case ScreenplayParagraphType::SceneCharacters: {
+                      case TextParagraphType::SceneCharacters: {
                           const auto sceneCharacters
                               = ScreenplaySceneCharactersParser::characters(textItem->text());
                           for (const auto& character : sceneCharacters) {
@@ -160,7 +160,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
                           break;
                       }
 
-                      case ScreenplayParagraphType::Character: {
+                      case TextParagraphType::Character: {
                           lastCharacter = ScreenplayCharacterParser::name(textItem->text());
                           if (!charactersToDialogues.contains(lastCharacter)) {
                               charactersToDialogues.insert(lastCharacter, 0);
@@ -168,8 +168,8 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
                           break;
                       }
 
-                      case ScreenplayParagraphType::Dialogue:
-                      case ScreenplayParagraphType::Lyrics: {
+                      case TextParagraphType::Dialogue:
+                      case TextParagraphType::Lyrics: {
                           charactersToDialogues[lastCharacter] += 1;
                           break;
                       }

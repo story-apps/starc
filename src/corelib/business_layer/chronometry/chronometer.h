@@ -8,7 +8,7 @@ class QTextBlock;
 
 namespace BusinessLayer {
 
-enum class ScreenplayParagraphType;
+enum class TextParagraphType;
 
 /**
  * @brief Тип счётчика хронометража
@@ -24,7 +24,7 @@ public:
     /**
      * @brief Определить длительность заданного блока
      */
-    static std::chrono::milliseconds duration(ScreenplayParagraphType _type, const QString& _text,
+    static std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
                                               const QString& _screenplayTemplateId);
 };
 

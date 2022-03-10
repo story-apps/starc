@@ -7,7 +7,7 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
@@ -51,7 +51,7 @@ void UnformattedTextHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ScreenplayParagraphType::UnformattedText);
+            editor()->addParagraph(TextParagraphType::UnformattedText);
         } else {
             //! Нет выделения
 
@@ -62,7 +62,7 @@ void UnformattedTextHandler::handleEnter(QKeyEvent*)
                 // Ни чего не делаем
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ScreenplayParagraphType::UnformattedText));
+                    changeForEnter(TextParagraphType::UnformattedText));
             } else {
                 //! Текст не пуст
 
@@ -78,14 +78,14 @@ void UnformattedTextHandler::handleEnter(QKeyEvent*)
                     //
                     // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::UnformattedText));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::UnformattedText));
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(ScreenplayParagraphType::Action);
+                    editor()->addParagraph(TextParagraphType::Action);
                 }
             }
         }
@@ -135,7 +135,7 @@ void UnformattedTextHandler::handleTab(QKeyEvent*)
                 // Ни чего не делаем
                 //
                 editor()->setCurrentParagraphType(
-                    changeForTab(ScreenplayParagraphType::UnformattedText));
+                    changeForTab(TextParagraphType::UnformattedText));
             } else {
                 //! Текст не пуст
 
@@ -151,7 +151,7 @@ void UnformattedTextHandler::handleTab(QKeyEvent*)
                     //
                     // Действуем как нажатие клавиши ENTER
                     //
-                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::UnformattedText));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::UnformattedText));
                 } else {
                     //! Внутри блока
 

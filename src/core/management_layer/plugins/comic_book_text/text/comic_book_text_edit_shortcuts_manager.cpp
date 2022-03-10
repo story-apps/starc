@@ -9,7 +9,7 @@
 #include <QShortcut>
 #include <QSignalMapper>
 
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextParagraphType;
 
 
 namespace Ui {
@@ -22,7 +22,7 @@ public:
     /**
      * @brief Создать или обновить комбинацию для заданного типа
      */
-    void createOrUpdateShortcut(ComicBookParagraphType _forBlockType);
+    void createOrUpdateShortcut(TextParagraphType _forBlockType);
 
     //
     // Данные
@@ -41,7 +41,7 @@ public:
     /**
      * @brief Тип блока - горячие клавиши
      */
-    QHash<ComicBookParagraphType, QShortcut*> paragraphTypeToShortcut;
+    QHash<TextParagraphType, QShortcut*> paragraphTypeToShortcut;
 };
 
 ComicBookTextEditShortcutsManager::Implementation::Implementation(ComicBookTextEdit* _editor)
@@ -50,13 +50,13 @@ ComicBookTextEditShortcutsManager::Implementation::Implementation(ComicBookTextE
 }
 
 void ComicBookTextEditShortcutsManager::Implementation::createOrUpdateShortcut(
-    ComicBookParagraphType _forBlockType)
+    TextParagraphType _forBlockType)
 {
     if (shortcutsContext == nullptr) {
         return;
     }
 
-    const auto blockType = static_cast<ComicBookParagraphType>(_forBlockType);
+    const auto blockType = static_cast<TextParagraphType>(_forBlockType);
     const QString typeShortName = BusinessLayer::toString(blockType);
     const QString keySequenceText
         = settingsValue(QString("comicbook-editor/shortcuts/%1").arg(typeShortName)).toString();
@@ -95,14 +95,14 @@ void ComicBookTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
     //
     // Создаём шорткаты
     //
-    d->createOrUpdateShortcut(ComicBookParagraphType::UnformattedText);
-    d->createOrUpdateShortcut(ComicBookParagraphType::Page);
-    d->createOrUpdateShortcut(ComicBookParagraphType::Panel);
-    d->createOrUpdateShortcut(ComicBookParagraphType::Description);
-    d->createOrUpdateShortcut(ComicBookParagraphType::Character);
-    d->createOrUpdateShortcut(ComicBookParagraphType::Dialogue);
-    d->createOrUpdateShortcut(ComicBookParagraphType::InlineNote);
-    d->createOrUpdateShortcut(ComicBookParagraphType::FolderHeader);
+    d->createOrUpdateShortcut(TextParagraphType::UnformattedText);
+    d->createOrUpdateShortcut(TextParagraphType::Page);
+    d->createOrUpdateShortcut(TextParagraphType::Panel);
+    d->createOrUpdateShortcut(TextParagraphType::Description);
+    d->createOrUpdateShortcut(TextParagraphType::Character);
+    d->createOrUpdateShortcut(TextParagraphType::Dialogue);
+    d->createOrUpdateShortcut(TextParagraphType::InlineNote);
+    d->createOrUpdateShortcut(TextParagraphType::FolderHeader);
 
     //
     // Настраиваем их
@@ -115,7 +115,7 @@ void ComicBookTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
         mapper->setMapping(shortcutIter.value(), static_cast<int>(shortcutIter.key()));
     }
     connect(mapper, &QSignalMapper::mappedInt, this, [this](int _value) {
-        d->comicBookEditor->setCurrentParagraphType(static_cast<ComicBookParagraphType>(_value));
+        d->comicBookEditor->setCurrentParagraphType(static_cast<TextParagraphType>(_value));
     });
 }
 
@@ -129,7 +129,7 @@ void ComicBookTextEditShortcutsManager::reconfigure()
     }
 }
 
-QString ComicBookTextEditShortcutsManager::shortcut(ComicBookParagraphType _forBlockType) const
+QString ComicBookTextEditShortcutsManager::shortcut(TextParagraphType _forBlockType) const
 {
     if (!d->paragraphTypeToShortcut.contains(_forBlockType)) {
         return {};

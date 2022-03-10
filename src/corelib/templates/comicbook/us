@@ -1,11 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <style id="us" default="true" page_format="Letter" page_margins="25.4,25.4,25.4,25.4" page_numbers_alignment="bottom,right" left_half_of_page_width="30">
-    <block id="unformatted_text" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
-    <block id="page_name" active="true" starts_from_new_page="true" font_family="Courier Prime" font_size="24" bold="true" italic="false" underline="false" uppercase="true" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
-    <block id="panel_name" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
-    <block id="description" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
-    <block id="character" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="true" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
-    <block id="dialogue" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
-    <block id="inline_note" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="67.5,0,0,0" margins_on_half_page="33,0,0,0" line_spacing="single" line_spacing_value="0"/>
-    <block id="page_splitter" active="false" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+    <titlepage>
+        <document mime-type="application/x-starc/document/screenplay/title-page" version="1.0">
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><params align="hcenter"/><v><![CDATA[SCRIPT TITLE]]></v><fms><fm from="0" length="12" underline="true"/></fms></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><params align="hcenter"/><v><![CDATA[Written by]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><params align="hcenter"/><v><![CDATA[Name of first author]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><params align="hcenter"/><v><![CDATA[Based on, if any]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[Address]]></v></text>
+            <text><v><![CDATA[Phone number]]></v></text>
+        </document>
+    </titlepage>
+    <blocks>
+        <block id="unformatted_text" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="page_heading" active="true" starts_from_new_page="true" font_family="Courier Prime" font_size="24" bold="true" italic="false" underline="false" uppercase="true" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="panel_heading" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="description" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="character" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="true" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="dialogue" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="inline_note" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="67.5,0,0,0" margins_on_half_page="33,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="page_splitter" active="false" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+    </blocks>
 </style>

@@ -8,7 +8,7 @@ class LocationsModel;
 class ComicBookDictionariesModel;
 class ComicBookTextCursor;
 class ComicBookTextModel;
-enum class ComicBookParagraphType;
+enum class TextParagraphType;
 } // namespace BusinessLayer
 
 
@@ -70,18 +70,18 @@ public:
      * @brief Вставить новый блок
      * @param Тип блока
      */
-    void addParagraph(BusinessLayer::ComicBookParagraphType _type);
+    void addParagraph(BusinessLayer::TextParagraphType _type);
 
     /**
      * @brief Установить тип текущего блока
      * @param Тип блока
      */
-    void setCurrentParagraphType(BusinessLayer::ComicBookParagraphType _type);
+    void setCurrentParagraphType(BusinessLayer::TextParagraphType _type);
 
     /**
      * @brief Получить тип блока в котором находится курсор
      */
-    BusinessLayer::ComicBookParagraphType currentParagraphType() const;
+    BusinessLayer::TextParagraphType currentParagraphType() const;
 
     /**
      * @brief Своя реализация установки курсора

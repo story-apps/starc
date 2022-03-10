@@ -31,8 +31,8 @@
 #include <QTextTable>
 #include <QTimer>
 
-using BusinessLayer::ScreenplayBlockStyle;
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextParagraphType;
 using BusinessLayer::TemplatesFacade;
 
 namespace Ui {
@@ -258,14 +258,14 @@ void ScreenplayTextEdit::redo()
     d->revertAction(false);
 }
 
-void ScreenplayTextEdit::addParagraph(BusinessLayer::ScreenplayParagraphType _type)
+void ScreenplayTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
 {
     d->document.addParagraph(_type, textCursor());
 
     emit paragraphTypeChanged();
 }
 
-void ScreenplayTextEdit::setCurrentParagraphType(BusinessLayer::ScreenplayParagraphType _type)
+void ScreenplayTextEdit::setCurrentParagraphType(BusinessLayer::TextParagraphType _type)
 {
     if (currentParagraphType() == _type) {
         return;
@@ -276,16 +276,16 @@ void ScreenplayTextEdit::setCurrentParagraphType(BusinessLayer::ScreenplayParagr
     //
     // Если вставили папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
     //
-    if (_type == ScreenplayParagraphType::FolderHeader) {
+    if (_type == TextParagraphType::FolderHeader) {
         moveCursor(QTextCursor::PreviousBlock);
     }
 
     emit paragraphTypeChanged();
 }
 
-BusinessLayer::ScreenplayParagraphType ScreenplayTextEdit::currentParagraphType() const
+BusinessLayer::TextParagraphType ScreenplayTextEdit::currentParagraphType() const
 {
-    return ScreenplayBlockStyle::forBlock(textCursor().block());
+    return TextBlockStyle::forBlock(textCursor().block());
 }
 
 void ScreenplayTextEdit::setTextCursorReimpl(const QTextCursor& _cursor)
@@ -450,10 +450,10 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
 
         while (!textCursor().atEnd()
                && (!textCursor().block().isVisible()
-                   || ScreenplayBlockStyle::forBlock(textCursor().block())
-                       == ScreenplayParagraphType::PageSplitter
+                   || TextBlockStyle::forBlock(textCursor().block())
+                       == TextParagraphType::PageSplitter
                    || textCursor().blockFormat().boolProperty(
-                       ScreenplayBlockStyle::PropertyIsCorrection))) {
+                       TextBlockStyle::PropertyIsCorrection))) {
             moveCursor(QTextCursor::NextBlock);
         }
     }
@@ -468,10 +468,10 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         }
         while (!textCursor().atStart()
                && (!textCursor().block().isVisible()
-                   || ScreenplayBlockStyle::forBlock(textCursor().block())
-                       == ScreenplayParagraphType::PageSplitter
+                   || TextBlockStyle::forBlock(textCursor().block())
+                       == TextParagraphType::PageSplitter
                    || textCursor().blockFormat().boolProperty(
-                       ScreenplayBlockStyle::PropertyIsCorrection))) {
+                       TextBlockStyle::PropertyIsCorrection))) {
             moveCursor(QTextCursor::StartOfBlock);
             if (textCursor().block().textDirection() == Qt::LeftToRight) {
                 moveCursor(QTextCursor::PreviousCharacter);
@@ -522,7 +522,7 @@ bool ScreenplayTextEdit::updateEnteredText(const QString& _eventText)
     //
     // Определяем необходимость установки верхнего регистра для первого символа блока
     //
-    if (currentCharFormat.boolProperty(ScreenplayBlockStyle::PropertyIsFirstUppercase)
+    if (currentCharFormat.boolProperty(TextBlockStyle::PropertyIsFirstUppercase)
         && cursorBackwardText != " " && cursorBackwardText == _eventText
         && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
         //
@@ -620,8 +620,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     //
     // ... идём до начала сцены
     //
-    while (ScreenplayBlockStyle::forBlock(topBlock) != ScreenplayParagraphType::SceneHeading
-           && ScreenplayBlockStyle::forBlock(topBlock) != ScreenplayParagraphType::FolderHeader
+    while (TextBlockStyle::forBlock(topBlock) != TextParagraphType::SceneHeading
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::FolderHeader
            && topBlock != document()->firstBlock()) {
         topBlock = topBlock.previous();
     }
@@ -690,7 +690,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Стиль текущего блока
                 //
-                const auto blockType = ScreenplayBlockStyle::forBlock(block);
+                const auto blockType = TextBlockStyle::forBlock(block);
 
                 cursor.setPosition(block.position());
                 const QRect cursorR = cursorRect(cursor);
@@ -702,8 +702,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Определим цвет сцены
                 //
-                if (blockType == ScreenplayParagraphType::SceneHeading
-                    || blockType == ScreenplayParagraphType::FolderHeader) {
+                if (blockType == TextParagraphType::SceneHeading
+                    || blockType == TextParagraphType::FolderHeader) {
                     lastSceneBlockBottom = cursorR.top();
                     lastSceneColor = d->document.itemColor(block);
                 }
@@ -713,7 +713,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 if (lastSceneColor.isValid()) {
                     const auto isBlockSceneHeadingWithNumberAtRight
-                        = blockType == ScreenplayParagraphType::SceneHeading && d->showSceneNumber
+                        = blockType == TextParagraphType::SceneHeading && d->showSceneNumber
                         && d->showSceneNumberOnRight;
                     if (!isBlockSceneHeadingWithNumberAtRight) {
                         const QPointF topLeft(
@@ -736,7 +736,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Определим цвет персонажа
                 //
-                if (blockType == ScreenplayParagraphType::Character && d->model
+                if (blockType == TextParagraphType::Character && d->model
                     && d->model->charactersModel() != nullptr) {
                     lastCharacterBlockBottom = cursorR.top();
                     lastCharacterColor = QColor();
@@ -747,9 +747,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             lastCharacterColor = character->color();
                         }
                     }
-                } else if (blockType != ScreenplayParagraphType::Parenthetical
-                           && blockType != ScreenplayParagraphType::Dialogue
-                           && blockType != ScreenplayParagraphType::Lyrics) {
+                } else if (blockType != TextParagraphType::Parenthetical
+                           && blockType != TextParagraphType::Dialogue
+                           && blockType != TextParagraphType::Lyrics) {
                     lastCharacterColor = QColor();
                 }
 
@@ -758,7 +758,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 if (lastCharacterColor.isValid()) {
                     const auto isBlockCharacterWithNumber
-                        = blockType == ScreenplayParagraphType::Character && d->showDialogueNumber;
+                        = blockType == TextParagraphType::Character && d->showDialogueNumber;
                     if (!isBlockCharacterWithNumber) {
                         QPointF topLeft(
                             isLeftToRight ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
@@ -839,13 +839,13 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     // Прорисовка декораций пустой строки
                     //
                     if (!block.blockFormat().boolProperty(
-                            ScreenplayBlockStyle::PropertyIsCorrection)
-                        && blockType != ScreenplayParagraphType::PageSplitter
+                            TextBlockStyle::PropertyIsCorrection)
+                        && blockType != TextParagraphType::PageSplitter
                         && block.text().simplified().isEmpty()) {
                         //
                         // Для пустого футера рисуем плейсхолдер
                         //
-                        if (blockType == ScreenplayParagraphType::FolderFooter) {
+                        if (blockType == TextParagraphType::FolderFooter) {
                             setPainterPen(palette().text().color());
                             painter.setFont(block.charFormat().font());
 
@@ -856,15 +856,15 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             int openedFolders = 0;
                             while (headerBlock.isValid()) {
                                 const auto headerBlockType
-                                    = ScreenplayBlockStyle::forBlock(headerBlock);
-                                if (headerBlockType == ScreenplayParagraphType::FolderHeader) {
+                                    = TextBlockStyle::forBlock(headerBlock);
+                                if (headerBlockType == TextParagraphType::FolderHeader) {
                                     if (openedFolders > 0) {
                                         --openedFolders;
                                     } else {
                                         break;
                                     }
                                 } else if (headerBlockType
-                                           == ScreenplayParagraphType::FolderFooter) {
+                                           == TextParagraphType::FolderFooter) {
                                     ++openedFolders;
                                 }
 
@@ -934,7 +934,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Прорисовка значков папки (можно использовать для закладок)
                         //
-                        if (blockType == ScreenplayParagraphType::FolderHeader) {
+                        if (blockType == TextParagraphType::FolderHeader) {
                             setPainterPen(palette().text().color());
                             painter.setFont(DesignSystem::font().iconsForEditors());
 
@@ -963,7 +963,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         // Прорисовка номеров сцен, если необходимо
                         //
                         if (d->showSceneNumber
-                            && blockType == ScreenplayParagraphType::SceneHeading) {
+                            && blockType == TextParagraphType::SceneHeading) {
                             //
                             // Определим номер сцены
                             //
@@ -1012,7 +1012,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         // Прорисовка номеров реплик, если необходимо
                         //
                         if (d->showDialogueNumber
-                            && blockType == ScreenplayParagraphType::Character) {
+                            && blockType == TextParagraphType::Character) {
                             //
                             // Определим номер реплики
                             //
@@ -1060,11 +1060,11 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Прорисовка автоматических (ПРОД) для реплик
                         //
-                        if (blockType == ScreenplayParagraphType::Character
+                        if (blockType == TextParagraphType::Character
                             && block.blockFormat().boolProperty(
-                                ScreenplayBlockStyle::PropertyIsCharacterContinued)
+                                TextBlockStyle::PropertyIsCharacterContinued)
                             && !block.blockFormat().boolProperty(
-                                ScreenplayBlockStyle::PropertyIsCorrection)) {
+                                TextBlockStyle::PropertyIsCorrection)) {
                             setPainterPen(palette().text().color());
                             painter.setFont(cursor.charFormat().font());
 
@@ -1091,15 +1091,15 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     //
                     if (!block.text().isEmpty()
                         || !block.blockFormat().boolProperty(
-                            ScreenplayBlockStyle::PropertyIsCorrection)) {
+                            TextBlockStyle::PropertyIsCorrection)) {
                         setPainterPen(palette().text().color());
                         painter.setFont(block.charFormat().font());
                         //
                         // ... префикс
                         //
-                        if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPrefix)) {
+                        if (block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)) {
                             const auto prefix = block.charFormat().stringProperty(
-                                ScreenplayBlockStyle::PropertyPrefix);
+                                TextBlockStyle::PropertyPrefix);
                             const QPoint topLeft = block.text().isRightToLeft()
                                 ? QPoint(cursorREnd.left()
                                              - painter.fontMetrics().horizontalAdvance(prefix),
@@ -1116,9 +1116,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // ... постфикс
                         //
-                        if (block.charFormat().hasProperty(ScreenplayBlockStyle::PropertyPostfix)) {
+                        if (block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix)) {
                             const auto postfix = block.charFormat().stringProperty(
-                                ScreenplayBlockStyle::PropertyPostfix);
+                                TextBlockStyle::PropertyPostfix);
                             const QPoint topLeft = block.text().isRightToLeft()
                                 ? QPoint(cursorR.left(), cursorR.top())
                                 : QPoint(cursorREnd.left(), cursorREnd.top());
@@ -1232,11 +1232,11 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
         //
         // Запрещаем разделять некоторые блоки
         //
-        const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
-        splitAction->setEnabled(blockType != ScreenplayParagraphType::SceneHeading
-                                && blockType != ScreenplayParagraphType::SceneHeadingShadow
-                                && blockType != ScreenplayParagraphType::FolderHeader
-                                && blockType != ScreenplayParagraphType::FolderFooter);
+        const auto blockType = TextBlockStyle::forBlock(cursor.block());
+        splitAction->setEnabled(blockType != TextParagraphType::SceneHeading
+                                && blockType != TextParagraphType::SceneHeadingShadow
+                                && blockType != TextParagraphType::FolderHeader
+                                && blockType != TextParagraphType::FolderFooter);
     }
     connect(splitAction, &QAction::triggered, this, [this] {
         BusinessLayer::ScreenplayTextCursor cursor = textCursor();

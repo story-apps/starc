@@ -62,7 +62,7 @@ public:
     /**
      * @brief Тип параграфа
      */
-    ComicBookParagraphType paragraphType = ComicBookParagraphType::UnformattedText;
+    TextParagraphType paragraphType = TextParagraphType::UnformattedText;
 
     /**
      * @brief Выравнивание текста в блоке
@@ -102,8 +102,8 @@ public:
 
 ComicBookTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentReader)
 {
-    paragraphType = comicBookParagraphTypeFromString(_contentReader.name().toString());
-    Q_ASSERT(paragraphType != ComicBookParagraphType::Undefined);
+    paragraphType = textParagraphTypeFromString(_contentReader.name().toString());
+    Q_ASSERT(paragraphType != TextParagraphType::Undefined);
 
     auto currentTag = xml::readNextElement(_contentReader);
 
@@ -463,23 +463,23 @@ bool ComicBookTextModelTextItem::ReviewMark::operator==(
 QTextCharFormat ComicBookTextModelTextItem::ReviewMark::charFormat() const
 {
     QTextCharFormat format;
-    format.setProperty(ComicBookBlockStyle::PropertyIsReviewMark, true);
+    format.setProperty(TextBlockStyle::PropertyIsReviewMark, true);
     if (textColor.isValid()) {
         format.setForeground(textColor);
     }
     if (backgroundColor.isValid()) {
         format.setBackground(backgroundColor);
     }
-    format.setProperty(ComicBookBlockStyle::PropertyIsDone, isDone);
+    format.setProperty(TextBlockStyle::PropertyIsDone, isDone);
     QStringList authors, dates, comments;
     for (const auto& comment : this->comments) {
         authors.append(comment.author);
         dates.append(comment.date);
         comments.append(comment.text);
     }
-    format.setProperty(ComicBookBlockStyle::PropertyCommentsAuthors, authors);
-    format.setProperty(ComicBookBlockStyle::PropertyCommentsDates, dates);
-    format.setProperty(ComicBookBlockStyle::PropertyComments, comments);
+    format.setProperty(TextBlockStyle::PropertyCommentsAuthors, authors);
+    format.setProperty(TextBlockStyle::PropertyCommentsDates, dates);
+    format.setProperty(TextBlockStyle::PropertyComments, comments);
     return format;
 }
 
@@ -603,12 +603,12 @@ void ComicBookTextModelTextItem::setInFirstColumn(const std::optional<bool>& _in
     markChanged();
 }
 
-const ComicBookParagraphType& ComicBookTextModelTextItem::paragraphType() const
+const TextParagraphType& ComicBookTextModelTextItem::paragraphType() const
 {
     return d->paragraphType;
 }
 
-void ComicBookTextModelTextItem::setParagraphType(ComicBookParagraphType _type)
+void ComicBookTextModelTextItem::setParagraphType(TextParagraphType _type)
 {
     if (d->paragraphType == _type) {
         return;
@@ -802,7 +802,7 @@ void ComicBookTextModelTextItem::setReviewMarks(
 {
     QVector<ReviewMark> newReviewMarks;
     for (const auto& reviewMark : _reviewMarks) {
-        if (reviewMark.format.boolProperty(ComicBookBlockStyle::PropertyIsReviewMark) == false) {
+        if (reviewMark.format.boolProperty(TextBlockStyle::PropertyIsReviewMark) == false) {
             continue;
         }
 
@@ -815,14 +815,13 @@ void ComicBookTextModelTextItem::setReviewMarks(
         if (reviewMark.format.hasProperty(QTextFormat::BackgroundBrush)) {
             newReviewMark.backgroundColor = reviewMark.format.background().color();
         }
-        newReviewMark.isDone = reviewMark.format.boolProperty(ComicBookBlockStyle::PropertyIsDone);
+        newReviewMark.isDone = reviewMark.format.boolProperty(TextBlockStyle::PropertyIsDone);
         const QStringList comments
-            = reviewMark.format.property(ComicBookBlockStyle::PropertyComments).toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyComments).toStringList();
         const QStringList dates
-            = reviewMark.format.property(ComicBookBlockStyle::PropertyCommentsDates).toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsDates).toStringList();
         const QStringList authors
-            = reviewMark.format.property(ComicBookBlockStyle::PropertyCommentsAuthors)
-                  .toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthors).toStringList();
         for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
             newReviewMark.comments.append(
                 { authors.at(commentIndex), dates.at(commentIndex), comments.at(commentIndex) });

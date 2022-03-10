@@ -192,7 +192,7 @@ void ScreenplayTextModel::Implementation::updateNumbering()
 
             case ScreenplayTextModelItemType::Text: {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == ScreenplayParagraphType::Character
+                if (textItem->paragraphType() == TextParagraphType::Character
                     && !textItem->isCorrection()) {
                     textItem->setNumber(dialogueNumber++);
                 }
@@ -217,20 +217,20 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
             xml::kDocumentTag,
             xml::kFolderTag,
             xml::kSceneTag,
-            toString(ScreenplayParagraphType::UnformattedText),
-            toString(ScreenplayParagraphType::SceneHeading),
-            toString(ScreenplayParagraphType::SceneCharacters),
-            toString(ScreenplayParagraphType::Action),
-            toString(ScreenplayParagraphType::Character),
-            toString(ScreenplayParagraphType::Parenthetical),
-            toString(ScreenplayParagraphType::Dialogue),
-            toString(ScreenplayParagraphType::Lyrics),
-            toString(ScreenplayParagraphType::Transition),
-            toString(ScreenplayParagraphType::Shot),
-            toString(ScreenplayParagraphType::InlineNote),
-            toString(ScreenplayParagraphType::FolderHeader),
-            toString(ScreenplayParagraphType::FolderFooter),
-            toString(ScreenplayParagraphType::PageSplitter),
+            toString(TextParagraphType::UnformattedText),
+            toString(TextParagraphType::SceneHeading),
+            toString(TextParagraphType::SceneCharacters),
+            toString(TextParagraphType::Action),
+            toString(TextParagraphType::Character),
+            toString(TextParagraphType::Parenthetical),
+            toString(TextParagraphType::Dialogue),
+            toString(TextParagraphType::Lyrics),
+            toString(TextParagraphType::Transition),
+            toString(TextParagraphType::Shot),
+            toString(TextParagraphType::InlineNote),
+            toString(TextParagraphType::FolderHeader),
+            toString(TextParagraphType::FolderFooter),
+            toString(TextParagraphType::PageSplitter),
         },
         _parent)
     , d(new Implementation(this))
@@ -798,7 +798,7 @@ QString ScreenplayTextModel::mimeFromSelection(const QModelIndex& _from, int _fr
                 // Не сохраняем закрывающие блоки неоткрытых папок, всё это делается внутри самих
                 // папок
                 //
-                if (textItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
+                if (textItem->paragraphType() == TextParagraphType::FolderFooter) {
                     break;
                 }
 
@@ -836,8 +836,8 @@ QString ScreenplayTextModel::mimeFromSelection(const QModelIndex& _from, int _fr
     //
     if (fromItem->type() == ScreenplayTextModelItemType::Text) {
         const auto textItem = static_cast<ScreenplayTextModelTextItem*>(fromItem);
-        if (textItem->paragraphType() == ScreenplayParagraphType::SceneHeading
-            || textItem->paragraphType() == ScreenplayParagraphType::FolderHeader) {
+        if (textItem->paragraphType() == TextParagraphType::SceneHeading
+            || textItem->paragraphType() == TextParagraphType::FolderHeader) {
             auto newFromItem = fromItemParent;
             fromItemParent = fromItemParent->parent();
             fromItemRow = fromItemParent->rowOfChild(newFromItem);
@@ -888,7 +888,7 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         //
         // Если в заголовок папки
         //
-        if (textItem->paragraphType() == ScreenplayParagraphType::FolderHeader) {
+        if (textItem->paragraphType() == TextParagraphType::FolderHeader) {
             //
             // ... то вставим после него
             //
@@ -896,7 +896,7 @@ void ScreenplayTextModel::insertFromMime(const QModelIndex& _index, int _positio
         //
         // Если завершение папки
         //
-        else if (textItem->paragraphType() == ScreenplayParagraphType::FolderFooter) {
+        else if (textItem->paragraphType() == TextParagraphType::FolderFooter) {
             //
             // ... то вставляем после папки
             //
@@ -1250,7 +1250,7 @@ void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QSt
 
             case ScreenplayTextModelItemType::Text: {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == ScreenplayParagraphType::SceneCharacters
+                if (textItem->paragraphType() == TextParagraphType::SceneCharacters
                     && ScreenplaySceneCharactersParser::characters(textItem->text())
                            .contains(oldName)) {
                     auto text = textItem->text();
@@ -1277,7 +1277,7 @@ void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QSt
                         updateItem(textItem);
                         break;
                     }
-                } else if (textItem->paragraphType() == ScreenplayParagraphType::Character
+                } else if (textItem->paragraphType() == TextParagraphType::Character
                            && ScreenplayCharacterParser::name(textItem->text()) == oldName) {
                     auto text = textItem->text();
                     text.remove(0, oldName.length());
@@ -1334,13 +1334,13 @@ QSet<QString> ScreenplayTextModel::findCharactersFromText() const
 
             case ScreenplayTextModelItemType::Text: {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == ScreenplayParagraphType::SceneCharacters) {
+                if (textItem->paragraphType() == TextParagraphType::SceneCharacters) {
                     const auto textCharacters
                         = ScreenplaySceneCharactersParser::characters(textItem->text());
                     for (const auto& character : textCharacters) {
                         characters.insert(character);
                     }
-                } else if (textItem->paragraphType() == ScreenplayParagraphType::Character) {
+                } else if (textItem->paragraphType() == TextParagraphType::Character) {
                     characters.insert(ScreenplayCharacterParser::name(textItem->text()));
                 }
                 break;
@@ -1392,7 +1392,7 @@ QSet<QString> ScreenplayTextModel::findLocationsFromText() const
 
             case ScreenplayTextModelItemType::Text: {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == ScreenplayParagraphType::SceneHeading) {
+                if (textItem->paragraphType() == TextParagraphType::SceneHeading) {
                     locations.insert(ScreenplaySceneHeadingParser::location(textItem->text()));
                 }
                 break;
@@ -1425,7 +1425,7 @@ void ScreenplayTextModel::updateLocationName(const QString& _oldName, const QStr
 
                   case ScreenplayTextModelItemType::Text: {
                       auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                      if (textItem->paragraphType() == ScreenplayParagraphType::SceneHeading
+                      if (textItem->paragraphType() == TextParagraphType::SceneHeading
                           && ScreenplaySceneHeadingParser::location(textItem->text()) == oldName) {
                           auto text = textItem->text();
                           const auto nameIndex = TextHelper::smartToUpper(text).indexOf(oldName);
@@ -1562,7 +1562,7 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
                       auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
 
                       switch (textItem->paragraphType()) {
-                      case ScreenplayParagraphType::SceneCharacters: {
+                      case TextParagraphType::SceneCharacters: {
                           const auto sceneCharacters
                               = ScreenplaySceneCharactersParser::characters(textItem->text());
                           for (const auto& character : sceneCharacters) {
@@ -1573,7 +1573,7 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
                           break;
                       }
 
-                      case ScreenplayParagraphType::Character: {
+                      case TextParagraphType::Character: {
                           const auto character = ScreenplayCharacterParser::name(textItem->text());
                           if (d->charactersModel->exists(character)) {
                               characters.insert(character);
@@ -1620,7 +1620,7 @@ void ScreenplayTextModel::initDocument()
     //
     if (document()->content().isEmpty()) {
         auto sceneHeading = new ScreenplayTextModelTextItem(this);
-        sceneHeading->setParagraphType(ScreenplayParagraphType::SceneHeading);
+        sceneHeading->setParagraphType(TextParagraphType::SceneHeading);
         auto scene = new ScreenplayTextModelSceneItem(this);
         scene->appendItem(sceneHeading);
         appendItem(scene);

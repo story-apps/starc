@@ -158,29 +158,29 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
         // Определим тип блока
         //
         const QString paragraphType = paragraph.nodeName();
-        auto blockType = ScreenplayParagraphType::Action;
+        auto blockType = TextParagraphType::Action;
         if (paragraphType == "scene_heading") {
-            blockType = ScreenplayParagraphType::SceneHeading;
+            blockType = TextParagraphType::SceneHeading;
         } else if (paragraphType == "scene_characters") {
-            blockType = ScreenplayParagraphType::SceneCharacters;
+            blockType = TextParagraphType::SceneCharacters;
         } else if (paragraphType == "action") {
-            blockType = ScreenplayParagraphType::Action;
+            blockType = TextParagraphType::Action;
         } else if (paragraphType == "character") {
-            blockType = ScreenplayParagraphType::Character;
+            blockType = TextParagraphType::Character;
         } else if (paragraphType == "parenthetical") {
-            blockType = ScreenplayParagraphType::Parenthetical;
+            blockType = TextParagraphType::Parenthetical;
         } else if (paragraphType == "dialog") {
-            blockType = ScreenplayParagraphType::Dialogue;
+            blockType = TextParagraphType::Dialogue;
         } else if (paragraphType == "transition") {
-            blockType = ScreenplayParagraphType::Transition;
+            blockType = TextParagraphType::Transition;
         } else if (paragraphType == "note") {
-            blockType = ScreenplayParagraphType::Shot;
+            blockType = TextParagraphType::Shot;
         } else if (paragraphType == "noprintable_text") {
-            blockType = ScreenplayParagraphType::InlineNote;
+            blockType = TextParagraphType::InlineNote;
         } else if (paragraphType == "folder_header") {
-            blockType = ScreenplayParagraphType::FolderHeader;
+            blockType = TextParagraphType::FolderHeader;
         } else if (paragraphType == "folder_footer") {
-            blockType = ScreenplayParagraphType::FolderFooter;
+            blockType = TextParagraphType::FolderFooter;
         } else if (paragraphType == "scene_description") {
             //
             // TODO:
@@ -188,7 +188,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
             paragraph = paragraph.nextSibling();
             continue;
         } else if (paragraphType == "lyrics") {
-            blockType = ScreenplayParagraphType::Lyrics;
+            blockType = TextParagraphType::Lyrics;
         }
 
         //
@@ -264,7 +264,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
             //
             // Корректируем при необходимости
             //
-            if (blockType == ScreenplayParagraphType::Parenthetical) {
+            if (blockType == TextParagraphType::Parenthetical) {
                 if (!paragraphText.isEmpty() && paragraphText.front() == '(') {
                     paragraphText.remove(0, 1);
                 }
@@ -278,7 +278,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
         // Формируем блок сценария
         //
         switch (blockType) {
-        case ScreenplayParagraphType::FolderHeader: {
+        case TextParagraphType::FolderHeader: {
             if (alreadyInScene) {
                 writer.writeEndElement(); // контент предыдущей сцены
                 writer.writeEndElement(); // предыдущая сцена
@@ -292,7 +292,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
             break;
         }
 
-        case ScreenplayParagraphType::FolderFooter: {
+        case TextParagraphType::FolderFooter: {
             if (alreadyInScene) {
                 writer.writeEndElement(); // контент предыдущей сцены
                 writer.writeEndElement(); // предыдущая сцена
@@ -305,7 +305,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
             break;
         }
 
-        case ScreenplayParagraphType::SceneHeading: {
+        case TextParagraphType::SceneHeading: {
             if (alreadyInScene) {
                 writer.writeEndElement(); // контент предыдущей сцены
                 writer.writeEndElement(); // предыдущая сцена

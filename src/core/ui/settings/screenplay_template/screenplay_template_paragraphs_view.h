@@ -3,7 +3,7 @@
 #include <ui/widgets/widget/widget.h>
 
 namespace BusinessLayer {
-enum class ScreenplayParagraphType;
+enum class TextParagraphType;
 }
 
 
@@ -28,12 +28,12 @@ public:
     /**
      * @brief Текущий выбранный тип параграфа
      */
-    BusinessLayer::ScreenplayParagraphType currentParagraphType() const;
+    BusinessLayer::TextParagraphType currentParagraphType() const;
 
     /**
      * @brief Выбрать заданный тип параграфа
      */
-    void setCurrentParagraphType(BusinessLayer::ScreenplayParagraphType _type);
+    void setCurrentParagraphType(BusinessLayer::TextParagraphType _type);
 
     //
     // Параметры параграфа
@@ -79,8 +79,8 @@ signals:
     /**
      * @brief Пользователь хочет настроить параметры параграфа заданного типа
      */
-    void currentParagraphTypeChanged(BusinessLayer::ScreenplayParagraphType _currentType,
-                                     BusinessLayer::ScreenplayParagraphType _previousType);
+    void currentParagraphTypeChanged(BusinessLayer::TextParagraphType _currentType,
+                                     BusinessLayer::TextParagraphType _previousType);
 
     /**
      * @brief Изменились параметры текущего параграфа

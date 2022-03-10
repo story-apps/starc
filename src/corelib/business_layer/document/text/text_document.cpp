@@ -22,8 +22,8 @@
 #include <QScopedValueRollback>
 #include <QTextTable>
 
-using BusinessLayer::SimpleTextBlockStyle;
 using BusinessLayer::TemplatesFacade;
+using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
 
 
@@ -40,7 +40,7 @@ public:
     /**
      * @brief Получить шаблон документа
      */
-    const SimpleTextTemplate& documentTemplate() const;
+    const TextTemplate& documentTemplate() const;
 
     /**
      * @brief Скорректировать позиции элементов на заданную дистанцию
@@ -77,7 +77,7 @@ SimpleTextDocument::Implementation::Implementation(SimpleTextDocument* _document
 {
 }
 
-const SimpleTextTemplate& SimpleTextDocument::Implementation::documentTemplate() const
+const TextTemplate& SimpleTextDocument::Implementation::documentTemplate() const
 {
     if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(model)) {
         return TemplatesFacade::screenplayTitlePageTemplate(
@@ -358,7 +358,7 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
                 //
                 // ... тип параграфа
                 //
-                if (SimpleTextBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
+                if (TextBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
                     applyParagraphType(textItem->paragraphType(), cursor);
                 }
                 //
@@ -417,7 +417,7 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
                     //
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-                    const auto blockType = SimpleTextBlockStyle::forBlock(cursor.block());
+                    const auto blockType = TextBlockStyle::forBlock(cursor.block());
                     const auto blockStyle = d->documentTemplate().paragraphStyle(blockType);
                     cursor.setBlockCharFormat(blockStyle.charFormat());
                     cursor.setCharFormat(blockStyle.charFormat());
@@ -818,7 +818,7 @@ void SimpleTextDocument::addParagraph(BusinessLayer::TextParagraphType _type, QT
 void SimpleTextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
                                           const QTextCursor& _cursor)
 {
-    const auto currentParagraphType = SimpleTextBlockStyle::forBlock(_cursor.block());
+    const auto currentParagraphType = TextBlockStyle::forBlock(_cursor.block());
     if (currentParagraphType == _type) {
         return;
     }
@@ -869,7 +869,7 @@ void SimpleTextDocument::applyParagraphType(BusinessLayer::TextParagraphType _ty
         if (!currentBlock.textFormats().isEmpty()) {
             const auto formats = currentBlock.textFormats();
             for (const auto& range : formats) {
-                if (range.format.boolProperty(SimpleTextBlockStyle::PropertyIsReviewMark)) {
+                if (range.format.boolProperty(TextBlockStyle::PropertyIsReviewMark)) {
                     continue;
                 }
                 cursor.setPosition(currentBlock.position() + range.start);
@@ -1249,7 +1249,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
     }();
 
     while (block.isValid() && block.position() <= _position + _charsAdded) {
-        const auto paragraphType = SimpleTextBlockStyle::forBlock(block);
+        const auto paragraphType = TextBlockStyle::forBlock(block);
 
         //
         // Новый блок

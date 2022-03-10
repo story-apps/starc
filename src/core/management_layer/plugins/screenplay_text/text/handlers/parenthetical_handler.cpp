@@ -8,7 +8,7 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
@@ -34,7 +34,7 @@ void ParentheticalHandler::handleEnter(QKeyEvent*)
     QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
     // ... префикс и постфикс стиля
     const auto style
-        = editor()->screenplayTemplate().paragraphStyle(ScreenplayParagraphType::Parenthetical);
+        = editor()->screenplayTemplate().paragraphStyle(TextParagraphType::Parenthetical);
     QString stylePrefix = style.prefix();
     QString stylePostfix = style.postfix();
 
@@ -57,7 +57,7 @@ void ParentheticalHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ScreenplayParagraphType::Parenthetical);
+            editor()->addParagraph(TextParagraphType::Parenthetical);
         } else {
             //! Нет выделения
 
@@ -69,7 +69,7 @@ void ParentheticalHandler::handleEnter(QKeyEvent*)
                 // Ни чего не делаем
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ScreenplayParagraphType::Parenthetical));
+                    changeForEnter(TextParagraphType::Parenthetical));
             } else {
                 //! Текст не пуст
 
@@ -87,7 +87,7 @@ void ParentheticalHandler::handleEnter(QKeyEvent*)
                     //
                     cursor.movePosition(QTextCursor::EndOfBlock);
                     editor()->setTextCursor(cursor);
-                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Parenthetical));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::Parenthetical));
                 } else {
                     //! Внутри блока
 
@@ -107,7 +107,7 @@ void ParentheticalHandler::handleEnter(QKeyEvent*)
                     // Перейдём к блоку реплики
                     //
                     editor()->setTextCursor(cursor);
-                    editor()->addParagraph(ScreenplayParagraphType::Dialogue);
+                    editor()->addParagraph(TextParagraphType::Dialogue);
                 }
             }
         }
@@ -129,7 +129,7 @@ void ParentheticalHandler::handleTab(QKeyEvent*)
     QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
     // ... префикс и постфикс стиля
     const auto style
-        = editor()->screenplayTemplate().paragraphStyle(ScreenplayParagraphType::Parenthetical);
+        = editor()->screenplayTemplate().paragraphStyle(TextParagraphType::Parenthetical);
     QString stylePrefix = style.prefix();
     QString stylePostfix = style.postfix();
 
@@ -163,7 +163,7 @@ void ParentheticalHandler::handleTab(QKeyEvent*)
                 // Меняем стиль на реплику
                 //
                 editor()->setCurrentParagraphType(
-                    changeForTab(ScreenplayParagraphType::Parenthetical));
+                    changeForTab(TextParagraphType::Parenthetical));
             } else {
                 //! Текст не пуст
 
@@ -181,7 +181,7 @@ void ParentheticalHandler::handleTab(QKeyEvent*)
                     //
                     cursor.movePosition(QTextCursor::EndOfBlock);
                     editor()->setTextCursor(cursor);
-                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Parenthetical));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::Parenthetical));
                 } else {
                     //! Внутри блока
 
@@ -239,7 +239,7 @@ void ParentheticalHandler::handleOther(QKeyEvent* _event)
             //
             cursor.movePosition(QTextCursor::EndOfBlock);
             editor()->setTextCursor(cursor);
-            editor()->addParagraph(ScreenplayParagraphType::Dialogue);
+            editor()->addParagraph(TextParagraphType::Dialogue);
         }
     }
     //

@@ -6,7 +6,7 @@ class QEvent;
 class QKeyEvent;
 
 namespace BusinessLayer {
-enum class ComicBookParagraphType;
+enum class TextParagraphType;
 }
 
 namespace Ui {
@@ -71,7 +71,7 @@ private:
     /**
      * @brief Получить обработчик для заданного типа
      */
-    AbstractKeyHandler* handlerFor(BusinessLayer::ComicBookParagraphType _type);
+    AbstractKeyHandler* handlerFor(BusinessLayer::TextParagraphType _type);
 
 private:
     class Implementation;

@@ -90,8 +90,8 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
             //
             // ... сбросим тип
             //
-            blockFormat.setProperty(ScreenplayBlockStyle::PropertyType,
-                                    static_cast<int>(ScreenplayParagraphType::Undefined));
+            blockFormat.setProperty(TextBlockStyle::PropertyType,
+                                    static_cast<int>(TextParagraphType::Undefined));
             //
             // ... и уравняем отступы
             //
@@ -154,14 +154,14 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
     //
     QString currentCharacter;
     do {
-        const auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
+        const auto blockType = TextBlockStyle::forBlock(cursor.block());
 
         //
         // Если не нужно печатать папки, то удаляем их
         //
         if (!_exportOptions.includeFolders) {
-            if (blockType == ScreenplayParagraphType::FolderHeader
-                || blockType == ScreenplayParagraphType::FolderFooter) {
+            if (blockType == TextParagraphType::FolderHeader
+                || blockType == TextParagraphType::FolderFooter) {
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 if (cursor.hasSelection()) {
                     cursor.deleteChar();
@@ -173,19 +173,19 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         //
         // В противном случае подставляем текст для пустых завершающих блоков
         //
-        else if (blockType == ScreenplayParagraphType::FolderFooter) {
+        else if (blockType == TextParagraphType::FolderFooter) {
             if (cursor.block().text().isEmpty()) {
                 auto headerBlock = cursor.block().previous();
                 int openedFolders = 0;
                 while (headerBlock.isValid()) {
-                    const auto headerBlockType = ScreenplayBlockStyle::forBlock(headerBlock);
-                    if (headerBlockType == ScreenplayParagraphType::FolderHeader) {
+                    const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
+                    if (headerBlockType == TextParagraphType::FolderHeader) {
                         if (openedFolders > 0) {
                             --openedFolders;
                         } else {
                             break;
                         }
-                    } else if (headerBlockType == ScreenplayParagraphType::FolderFooter) {
+                    } else if (headerBlockType == TextParagraphType::FolderFooter) {
                         ++openedFolders;
                     }
 
@@ -203,7 +203,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         // Если не нужно печатать заметки по тексту, то удаляем их
         //
         if (!_exportOptions.includeInlineNotes
-            && blockType == ScreenplayParagraphType::InlineNote) {
+            && blockType == TextParagraphType::InlineNote) {
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             if (cursor.hasSelection()) {
                 cursor.deleteChar();
@@ -245,14 +245,14 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         //
         if (!_exportOptions.highlightCharacter.isEmpty()) {
             switch (blockType) {
-            case ScreenplayParagraphType::Character: {
+            case TextParagraphType::Character: {
                 currentCharacter = ScreenplayCharacterParser::name(cursor.block().text());
                 Q_FALLTHROUGH();
             }
 
-            case ScreenplayParagraphType::Parenthetical:
-            case ScreenplayParagraphType::Dialogue:
-            case ScreenplayParagraphType::Lyrics: {
+            case TextParagraphType::Parenthetical:
+            case TextParagraphType::Dialogue:
+            case TextParagraphType::Lyrics: {
                 if (currentCharacter == _exportOptions.highlightCharacter) {
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);

@@ -61,13 +61,13 @@ public:
     /**
      * @brief Обработка конкретного блока перед его добавлением
      */
-    void processBlock(const QString& _paragraphText, ScreenplayParagraphType _type,
+    void processBlock(const QString& _paragraphText, TextParagraphType _type,
                       QXmlStreamWriter& _writer);
 
     /**
      * @brief Добавление блока
      */
-    void appendBlock(const QString& _paragraphText, ScreenplayParagraphType _type,
+    void appendBlock(const QString& _paragraphText, TextParagraphType _type,
                      QXmlStreamWriter& _writer);
 
     /**
@@ -157,7 +157,7 @@ public:
 };
 
 void ScreenplayFountainImporter::Implementation::processBlock(const QString& _paragraphText,
-                                                              ScreenplayParagraphType _type,
+                                                              TextParagraphType _type,
                                                               QXmlStreamWriter& _writer)
 {
     if (!isNotation && !isCommenting) {
@@ -219,7 +219,7 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
                 // Закроем предыдущий блок, добавим текущий
                 //
                 _writer.writeEndElement();
-                appendBlock(blockText.left(blockText.size()), ScreenplayParagraphType::InlineNote,
+                appendBlock(blockText.left(blockText.size()), TextParagraphType::InlineNote,
                             _writer);
                 blockText.clear();
             } else {
@@ -440,7 +440,7 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
         //
         // Добавим текущий блок
         //
-        if (!blockText.isEmpty() || _type == ScreenplayParagraphType::FolderFooter) {
+        if (!blockText.isEmpty() || _type == TextParagraphType::FolderFooter) {
             appendBlock(blockText, _type, _writer);
         }
         blockText.clear();
@@ -455,7 +455,7 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
 }
 
 void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _paragraphText,
-                                                             ScreenplayParagraphType _type,
+                                                             TextParagraphType _type,
                                                              QXmlStreamWriter& _writer)
 {
     int leadSpaceCount = 0;
@@ -585,7 +585,7 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
     // Формируем блок сценария
     //
     switch (_type) {
-    case ScreenplayParagraphType::FolderHeader: {
+    case TextParagraphType::FolderHeader: {
         if (alreadyInScene) {
             _writer.writeEndElement(); // контент предыдущей сцены
             _writer.writeEndElement(); // предыдущая сцена
@@ -599,7 +599,7 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
         break;
     }
 
-    case ScreenplayParagraphType::FolderFooter: {
+    case TextParagraphType::FolderFooter: {
         if (alreadyInScene) {
             _writer.writeEndElement(); // контент предыдущей сцены
             _writer.writeEndElement(); // предыдущая сцена
@@ -612,7 +612,7 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
         break;
     }
 
-    case ScreenplayParagraphType::SceneHeading: {
+    case TextParagraphType::SceneHeading: {
         if (alreadyInScene) {
             _writer.writeEndElement(); // контент предыдущей сцены
             _writer.writeEndElement(); // предыдущая сцена
@@ -872,8 +872,8 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
     }
 
     const int paragraphsCount = paragraphs.size();
-    auto prevBlockType = ScreenplayParagraphType::Undefined;
-    ScreenplayParagraphType blockType;
+    auto prevBlockType = TextParagraphType::Undefined;
+    TextParagraphType blockType;
     std::set<QString> characterNames;
     std::set<QString> locationNames;
     for (int i = 0; i != paragraphsCount; ++i) {
@@ -881,12 +881,12 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
             continue;
         }
 
-        blockType = ScreenplayParagraphType::Undefined;
+        blockType = TextParagraphType::Undefined;
         QString paragraphText;
 
         switch (paragraphs[i][0].toLatin1()) {
         case '.': {
-            blockType = ScreenplayParagraphType::SceneHeading;
+            blockType = TextParagraphType::SceneHeading;
             //
             // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
             //
@@ -902,7 +902,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
         }
 
         case '@': {
-            blockType = ScreenplayParagraphType::Character;
+            blockType = TextParagraphType::Character;
             paragraphText = paragraphs[i].mid(1);
             break;
         }
@@ -929,7 +929,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
                 // Если начинается с одного из времен действия, а после обязательно пустая строка
                 // Значит это заголовок сцены
                 //
-                blockType = ScreenplayParagraphType::SceneHeading;
+                blockType = TextParagraphType::SceneHeading;
 
                 //
                 // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
@@ -951,8 +951,8 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
                        && paragraphs[i + 1].isEmpty() && paragraphs[i].endsWith("TO:")) {
                 continue;
             } else if (paragraphs[i].startsWith("(") && paragraphs[i].endsWith(")")
-                       && (prevBlockType == ScreenplayParagraphType::Character
-                           || prevBlockType == ScreenplayParagraphType::Dialogue)) {
+                       && (prevBlockType == TextParagraphType::Character
+                           || prevBlockType == TextParagraphType::Dialogue)) {
                 continue;
             } else if (paragraphs[i] == TextHelper::smartToUpper(paragraphs[i]) && i != 0
                        && paragraphs[i - 1].isEmpty() && i + 1 < paragraphsCount
@@ -961,7 +961,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
                 // Если состоит из только из заглавных букв, впереди не пустая строка, а перед
                 // пустая Значит это имя персонажа (для реплики)
                 //
-                blockType = ScreenplayParagraphType::Character;
+                blockType = TextParagraphType::Character;
                 if (paragraphs[i].endsWith("^")) {
                     //
                     // Двойной диалог, который мы пока что не умеем обрабатывать
@@ -977,7 +977,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
         }
 
         switch (blockType) {
-        case ScreenplayParagraphType::SceneHeading: {
+        case TextParagraphType::SceneHeading: {
             if (!_options.importLocations) {
                 break;
             }
@@ -991,7 +991,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
             break;
         }
 
-        case ScreenplayParagraphType::Character: {
+        case TextParagraphType::Character: {
             if (!_options.importCharacters) {
                 break;
             }
@@ -1121,9 +1121,9 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
     d->lastFormat = {};
 
     const int paragraphsCount = paragraphs.size();
-    auto prevBlockType = ScreenplayParagraphType::Undefined;
+    auto prevBlockType = TextParagraphType::Undefined;
     QStack<QString> dirs;
-    ScreenplayParagraphType blockType;
+    TextParagraphType blockType;
     for (int i = 0; i != paragraphsCount; ++i) {
         if (d->isNotation || d->isCommenting) {
             //
@@ -1137,12 +1137,12 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
             continue;
         }
 
-        blockType = ScreenplayParagraphType::Action;
+        blockType = TextParagraphType::Action;
         QString paragraphText;
 
         switch (paragraphs[i][0].toLatin1()) {
         case '.': {
-            blockType = ScreenplayParagraphType::SceneHeading;
+            blockType = TextParagraphType::SceneHeading;
             //
             // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
             //
@@ -1158,23 +1158,23 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
         }
 
         case '!': {
-            blockType = ScreenplayParagraphType::Action;
+            blockType = TextParagraphType::Action;
             paragraphText = paragraphs[i].mid(1);
             break;
         }
 
         case '@': {
-            blockType = ScreenplayParagraphType::Character;
+            blockType = TextParagraphType::Character;
             paragraphText = paragraphs[i].mid(1);
             break;
         }
 
         case '>': {
             if (paragraphs[i].endsWith("<")) {
-                blockType = ScreenplayParagraphType::Action;
+                blockType = TextParagraphType::Action;
                 paragraphText = paragraphs[i].mid(1, paragraphs[i].size() - 2);
             } else {
-                blockType = ScreenplayParagraphType::Transition;
+                blockType = TextParagraphType::Transition;
                 paragraphText = paragraphs[i].mid(1);
             }
             break;
@@ -1202,7 +1202,7 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 // TODO: тритмент подгружается тут
                 //
                 continue;
-                //                    blockType = ScreenplayParagraphType::SceneDescription;
+                //                    blockType = TextParagraphType::SceneDescription;
                 //                    paragraphText = paragraphs[i].mid(1);
             }
             break;
@@ -1212,7 +1212,7 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
             //
             // Лирика
             //
-            blockType = ScreenplayParagraphType::Lyrics;
+            blockType = TextParagraphType::Lyrics;
             paragraphText = paragraphs[i].mid(1);
             break;
         }
@@ -1232,18 +1232,18 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 //
                 unsigned toClose = dirs.size() - sharpCount + 1;
                 for (unsigned i = 0; i != toClose; ++i) {
-                    d->processBlock({}, ScreenplayParagraphType::FolderFooter, writer);
+                    d->processBlock({}, TextParagraphType::FolderFooter, writer);
                     dirs.pop();
                 }
-                prevBlockType = ScreenplayParagraphType::FolderFooter;
+                prevBlockType = TextParagraphType::FolderFooter;
             }
             //
             // И откроем новую
             //
             QString text = paragraphs[i].mid(sharpCount);
-            d->processBlock(text, ScreenplayParagraphType::FolderHeader, writer);
+            d->processBlock(text, TextParagraphType::FolderHeader, writer);
             dirs.push(text);
-            prevBlockType = ScreenplayParagraphType::FolderHeader;
+            prevBlockType = TextParagraphType::FolderHeader;
 
             //
             // Поскольку директории добавляются прямо здесь без обработки, то в конец цикла идти не
@@ -1267,7 +1267,7 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 // Если начинается с одного из времен действия, а после обязательно пустая строка
                 // Значит это заголовок сцены
                 //
-                blockType = ScreenplayParagraphType::SceneHeading;
+                blockType = TextParagraphType::SceneHeading;
 
                 //
                 // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
@@ -1300,15 +1300,15 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 // Если состоит только из заглавных букв, предыдущая и следующая строки пустые
                 // и заканчивается "TO:", то это переход
                 //
-                blockType = ScreenplayParagraphType::Transition;
+                blockType = TextParagraphType::Transition;
                 paragraphText = paragraphs[i].left(paragraphs[i].size() - 4);
             } else if (paragraphs[i].startsWith("(") && paragraphs[i].endsWith(")")
-                       && (prevBlockType == ScreenplayParagraphType::Character
-                           || prevBlockType == ScreenplayParagraphType::Dialogue)) {
+                       && (prevBlockType == TextParagraphType::Character
+                           || prevBlockType == TextParagraphType::Dialogue)) {
                 //
                 // Если текущий блок обернут в (), то это ремарка
                 //
-                blockType = ScreenplayParagraphType::Parenthetical;
+                blockType = TextParagraphType::Parenthetical;
                 paragraphText = paragraphs[i].mid(1, paragraphs[i].length() - 2);
             } else if (paragraphs[i] == TextHelper::smartToUpper(paragraphs[i]) && i != 0
                        && paragraphs[i - 1].isEmpty() && i + 1 < paragraphsCount
@@ -1317,7 +1317,7 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 // Если состоит из только из заглавных букв, впереди не пустая строка, а перед
                 // пустая Значит это имя персонажа (для реплики)
                 //
-                blockType = ScreenplayParagraphType::Character;
+                blockType = TextParagraphType::Character;
                 if (paragraphs[i].endsWith("^")) {
                     //
                     // Двойной диалог, который мы пока что не умеем обрабатывать
@@ -1326,21 +1326,21 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 } else {
                     paragraphText = paragraphs[i];
                 }
-            } else if (prevBlockType == ScreenplayParagraphType::Character
-                       || prevBlockType == ScreenplayParagraphType::Parenthetical
-                       || (prevBlockType == ScreenplayParagraphType::Dialogue && i > 0
+            } else if (prevBlockType == TextParagraphType::Character
+                       || prevBlockType == TextParagraphType::Parenthetical
+                       || (prevBlockType == TextParagraphType::Dialogue && i > 0
                            && !paragraphs[i - 1].isEmpty())) {
                 //
                 // Если предыдущий блок - имя персонажа или ремарка, то сейчас диалог
                 // Или предыдущая строка является диалогом
                 //
-                blockType = ScreenplayParagraphType::Dialogue;
+                blockType = TextParagraphType::Dialogue;
                 paragraphText = paragraphs[i];
             } else {
                 //
                 // Во всех остальных случаях - Action
                 //
-                blockType = ScreenplayParagraphType::Action;
+                blockType = TextParagraphType::Action;
                 paragraphText = paragraphs[i];
             }
         }
@@ -1365,7 +1365,7 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
     // Закроем директории нужное число раз
     //
     while (!dirs.empty()) {
-        d->processBlock({}, ScreenplayParagraphType::FolderFooter, writer);
+        d->processBlock({}, TextParagraphType::FolderFooter, writer);
         dirs.pop();
     }
 

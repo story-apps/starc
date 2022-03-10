@@ -4,7 +4,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-#include <ui/widgets/text_edit/page/page_metrics.h>
+#include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QTextBlock>
@@ -22,7 +22,7 @@ class AbstractChronometer
 {
 public:
     virtual ~AbstractChronometer() = default;
-    virtual std::chrono::milliseconds duration(ScreenplayParagraphType _type, const QString& _text,
+    virtual std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
                                                const QString& _screenplayTemplateId) const = 0;
 };
 
@@ -32,7 +32,7 @@ public:
 class PageChronometer : public AbstractChronometer
 {
 public:
-    std::chrono::milliseconds duration(ScreenplayParagraphType _type, const QString& _text,
+    std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
                                        const QString& _screenplayTemplateId) const override
     {
         using namespace DataStorageLayer;
@@ -43,21 +43,22 @@ public:
         const auto mmPageSize
             = QPageSize(currentTemplate.pageSizeId()).rect(QPageSize::Millimeter).size();
         const bool x = true, y = false;
-        const auto pxPageSize = QSizeF(PageMetrics::mmToPx(mmPageSize.width(), x),
-                                       PageMetrics::mmToPx(mmPageSize.height(), y));
+        const auto pxPageSize = QSizeF(MeasurementHelper::mmToPx(mmPageSize.width(), x),
+                                       MeasurementHelper::mmToPx(mmPageSize.height(), y));
         const auto mmPageMargins = currentTemplate.pageMargins();
-        const auto pxPageMargins = QMarginsF(PageMetrics::mmToPx(mmPageMargins.left(), x),
-                                             PageMetrics::mmToPx(mmPageMargins.top(), y),
-                                             PageMetrics::mmToPx(mmPageMargins.right(), x),
-                                             PageMetrics::mmToPx(mmPageMargins.bottom(), y));
+        const auto pxPageMargins = QMarginsF(MeasurementHelper::mmToPx(mmPageMargins.left(), x),
+                                             MeasurementHelper::mmToPx(mmPageMargins.top(), y),
+                                             MeasurementHelper::mmToPx(mmPageMargins.right(), x),
+                                             MeasurementHelper::mmToPx(mmPageMargins.bottom(), y));
         const auto pageHeight = pxPageSize.height() - pxPageMargins.top() - pxPageMargins.bottom();
 
         const auto blockStyle = currentTemplate.paragraphStyle(_type);
         const auto mmBlockMargins = blockStyle.margins();
-        const auto pxBlockMargins = QMarginsF(PageMetrics::mmToPx(mmBlockMargins.left(), x),
-                                              PageMetrics::mmToPx(mmBlockMargins.top(), y),
-                                              PageMetrics::mmToPx(mmBlockMargins.right(), x),
-                                              PageMetrics::mmToPx(mmBlockMargins.bottom(), y));
+        const auto pxBlockMargins
+            = QMarginsF(MeasurementHelper::mmToPx(mmBlockMargins.left(), x),
+                        MeasurementHelper::mmToPx(mmBlockMargins.top(), y),
+                        MeasurementHelper::mmToPx(mmBlockMargins.right(), x),
+                        MeasurementHelper::mmToPx(mmBlockMargins.bottom(), y));
         const auto textWidth = pxPageSize.width() - pxPageMargins.left() - pxPageMargins.right()
             - pxBlockMargins.left() - pxBlockMargins.right();
         const auto textLineHeight = TextHelper::fineLineSpacing(blockStyle.font());
@@ -79,7 +80,7 @@ public:
 class CharactersChronometer : public AbstractChronometer
 {
 public:
-    std::chrono::milliseconds duration(ScreenplayParagraphType _type, const QString& _text,
+    std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
                                        const QString& _screenplayTemplateId) const override
     {
         Q_UNUSED(_type)
@@ -110,11 +111,11 @@ public:
 //{
 // public:
 //    std::chrono::seconds duration(const QTextBlock& _block) const override {
-//        const auto blockType = ScreenplayBlockStyle::forBlock(_block);
-//        if (blockType != ScreenplayParagraphType::SceneHeading
-//            && blockType != ScreenplayParagraphType::Action
-//            && blockType != ScreenplayParagraphType::Dialogue
-//            && blockType != ScreenplayParagraphType::Lyrics) {
+//        const auto blockType = TextBlockStyle::forBlock(_block);
+//        if (blockType != TextParagraphType::SceneHeading
+//            && blockType != TextParagraphType::Action
+//            && blockType != TextParagraphType::Dialogue
+//            && blockType != TextParagraphType::Lyrics) {
 //            return std::chrono::seconds{0};
 //        }
 
@@ -164,7 +165,7 @@ public:
 } // namespace
 
 
-std::chrono::milliseconds Chronometer::duration(ScreenplayParagraphType _type, const QString& _text,
+std::chrono::milliseconds Chronometer::duration(TextParagraphType _type, const QString& _text,
                                                 const QString& _screenplayTemplateId)
 {
     const auto chronometerType

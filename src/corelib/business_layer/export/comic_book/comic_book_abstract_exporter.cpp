@@ -78,8 +78,8 @@ ComicBookTextDocument* ComicBookAbstractExporter::prepareDocument(
             //
             // ... сбросим тип
             //
-            blockFormat.setProperty(ComicBookBlockStyle::PropertyType,
-                                    static_cast<int>(ComicBookParagraphType::Undefined));
+            blockFormat.setProperty(TextBlockStyle::PropertyType,
+                                    static_cast<int>(TextParagraphType::Undefined));
             //
             // ... и уравняем отступы
             //
@@ -141,14 +141,14 @@ ComicBookTextDocument* ComicBookAbstractExporter::prepareDocument(
     }
     //
     do {
-        const auto blockType = ComicBookBlockStyle::forBlock(cursor.block());
+        const auto blockType = TextBlockStyle::forBlock(cursor.block());
 
         //
         // Если не нужно печатать папки, то удаляем их
         //
         if (!_exportOptions.printFolders) {
-            if (blockType == ComicBookParagraphType::FolderHeader
-                || blockType == ComicBookParagraphType::FolderFooter) {
+            if (blockType == TextParagraphType::FolderHeader
+                || blockType == TextParagraphType::FolderFooter) {
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 if (cursor.hasSelection()) {
                     cursor.deleteChar();
@@ -160,19 +160,19 @@ ComicBookTextDocument* ComicBookAbstractExporter::prepareDocument(
         //
         // В противном случае подставляем текст для пустых завершающих блоков
         //
-        else if (blockType == ComicBookParagraphType::FolderFooter) {
+        else if (blockType == TextParagraphType::FolderFooter) {
             if (cursor.block().text().isEmpty()) {
                 auto headerBlock = cursor.block().previous();
                 int openedFolders = 0;
                 while (headerBlock.isValid()) {
-                    const auto headerBlockType = ComicBookBlockStyle::forBlock(headerBlock);
-                    if (headerBlockType == ComicBookParagraphType::FolderHeader) {
+                    const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
+                    if (headerBlockType == TextParagraphType::FolderHeader) {
                         if (openedFolders > 0) {
                             --openedFolders;
                         } else {
                             break;
                         }
-                    } else if (headerBlockType == ComicBookParagraphType::FolderFooter) {
+                    } else if (headerBlockType == TextParagraphType::FolderFooter) {
                         ++openedFolders;
                     }
 
@@ -189,7 +189,7 @@ ComicBookTextDocument* ComicBookAbstractExporter::prepareDocument(
         //
         // Если не нужно печатать заметки по тексту, то удаляем их
         //
-        if (!_exportOptions.printInlineNotes && blockType == ComicBookParagraphType::InlineNote) {
+        if (!_exportOptions.printInlineNotes && blockType == TextParagraphType::InlineNote) {
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             if (cursor.hasSelection()) {
                 cursor.deleteChar();

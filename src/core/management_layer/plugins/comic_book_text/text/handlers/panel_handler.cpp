@@ -9,7 +9,7 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
 
@@ -53,7 +53,7 @@ void PanelHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ComicBookParagraphType::Panel);
+            editor()->addParagraph(TextParagraphType::Panel);
         } else {
             //! Нет выделения
 
@@ -63,7 +63,7 @@ void PanelHandler::handleEnter(QKeyEvent*)
                 //
                 // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(changeForEnter(ComicBookParagraphType::Panel));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Panel));
             } else {
                 //! Текст не пуст
 
@@ -90,8 +90,8 @@ void PanelHandler::handleEnter(QKeyEvent*)
                                 backwardTextCorrected)
                             || editor()->dictionaries()->multiplePageIntros().contains(
                                 backwardTextCorrected)) {
-                            editor()->setCurrentParagraphType(ComicBookParagraphType::Page);
-                            editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Page));
+                            editor()->setCurrentParagraphType(TextParagraphType::Page);
+                            editor()->addParagraph(jumpForEnter(TextParagraphType::Page));
                             isHandled = true;
                         }
                     }
@@ -99,7 +99,7 @@ void PanelHandler::handleEnter(QKeyEvent*)
                     // Вставляем блок и применяем ему стиль описания действия
                     //
                     if (!isHandled) {
-                        editor()->addParagraph(jumpForEnter(ComicBookParagraphType::Panel));
+                        editor()->addParagraph(jumpForEnter(TextParagraphType::Panel));
                     }
                 } else {
                     //! Внутри блока
@@ -107,7 +107,7 @@ void PanelHandler::handleEnter(QKeyEvent*)
                     //
                     // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(ComicBookParagraphType::Description);
+                    editor()->addParagraph(TextParagraphType::Description);
                 }
             }
         }
@@ -156,7 +156,7 @@ void PanelHandler::handleTab(QKeyEvent*)
                 //
                 // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(changeForTab(ComicBookParagraphType::Panel));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Panel));
             } else {
                 //! Текст не пуст
 
@@ -172,7 +172,7 @@ void PanelHandler::handleTab(QKeyEvent*)
                     //
                     // Действуем как нажатие клавиши ENTER
                     //
-                    editor()->addParagraph(jumpForTab(ComicBookParagraphType::Panel));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::Panel));
                 } else {
                     //! Внутри блока
 
@@ -208,7 +208,7 @@ void PanelHandler::handleOther(QKeyEvent* _event)
             = TextHelper::smartToLower(cursorBackwardText.trimmed());
         if (editor()->dictionaries()->singlePageIntros().contains(backwardTextCorrected)
             || editor()->dictionaries()->multiplePageIntros().contains(backwardTextCorrected)) {
-            editor()->setCurrentParagraphType(ComicBookParagraphType::Page);
+            editor()->setCurrentParagraphType(TextParagraphType::Page);
         }
     } else {
         //! В противном случае, обрабатываем в базовом классе

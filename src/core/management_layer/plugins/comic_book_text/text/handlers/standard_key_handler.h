@@ -5,7 +5,7 @@
 class QString;
 
 namespace BusinessLayer {
-enum class ComicBookParagraphType;
+enum class TextParagraphType;
 }
 
 
@@ -24,14 +24,14 @@ protected:
      * @brief Получить стиль блока к которому переходить
      */
     /** @{ */
-    static BusinessLayer::ComicBookParagraphType jumpForTab(
-        BusinessLayer::ComicBookParagraphType _blockType);
-    static BusinessLayer::ComicBookParagraphType jumpForEnter(
-        BusinessLayer::ComicBookParagraphType _blockType);
-    static BusinessLayer::ComicBookParagraphType changeForTab(
-        BusinessLayer::ComicBookParagraphType _blockType);
-    static BusinessLayer::ComicBookParagraphType changeForEnter(
-        BusinessLayer::ComicBookParagraphType _blockType);
+    static BusinessLayer::TextParagraphType jumpForTab(
+        BusinessLayer::TextParagraphType _blockType);
+    static BusinessLayer::TextParagraphType jumpForEnter(
+        BusinessLayer::TextParagraphType _blockType);
+    static BusinessLayer::TextParagraphType changeForTab(
+        BusinessLayer::TextParagraphType _blockType);
+    static BusinessLayer::TextParagraphType changeForEnter(
+        BusinessLayer::TextParagraphType _blockType);
     /** @} */
 
     /**

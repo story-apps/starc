@@ -293,7 +293,7 @@ QJsonObject getCharacters(const QString& _starcFileName)
                 //
                 // Сцена, всё очищаем
                 //
-                case ScreenplayParagraphType::SceneHeading: {
+                case TextParagraphType::SceneHeading: {
                     sceneSpeakingCharacters.clear();
                     sceneNonspeakingCharacters.clear();
                     break;
@@ -302,7 +302,7 @@ QJsonObject getCharacters(const QString& _starcFileName)
                 //
                 // Список персонажей, всех в молчаливых
                 //
-                case ScreenplayParagraphType::SceneCharacters: {
+                case TextParagraphType::SceneCharacters: {
                     const auto sceneCharacters
                         = ScreenplaySceneCharactersParser::characters(textItem->text());
                     for (const auto& character : sceneCharacters) {
@@ -330,7 +330,7 @@ QJsonObject getCharacters(const QString& _starcFileName)
                 //
                 // Персонаж +1 реплика и в список говорящих
                 //
-                case ScreenplayParagraphType::Character: {
+                case TextParagraphType::Character: {
                     const QString character = ScreenplayCharacterParser::name(textItem->text());
                     //
                     // Если имя персонажа задано
@@ -397,7 +397,7 @@ QJsonObject getCharacters(const QString& _starcFileName)
                 //
                 // Описание действия, в молчаливые, если ещё не встречался
                 //
-                case ScreenplayParagraphType::Action: {
+                case TextParagraphType::Action: {
                     QRegularExpressionMatch match = rxCharacterFinder.match(textItem->text());
                     while (match.hasMatch()) {
                         const QString character = TextHelper::smartToUpper(match.captured(2));
@@ -562,7 +562,7 @@ QJsonObject getCharacter(const QString& _starcFileName, const QString& _characte
                 //
                 // Список персонажей, ищем нашего среди всех
                 //
-                case ScreenplayParagraphType::SceneCharacters: {
+                case TextParagraphType::SceneCharacters: {
                     const auto sceneCharacters
                         = ScreenplaySceneCharactersParser::characters(textItem->text());
                     if (sceneCharacters.contains(_characterName, Qt::CaseInsensitive)) {
@@ -574,7 +574,7 @@ QJsonObject getCharacter(const QString& _starcFileName, const QString& _characte
                 //
                 // Персонаж, запоним, кто говорит
                 //
-                case ScreenplayParagraphType::Character: {
+                case TextParagraphType::Character: {
                     lastCharacter = ScreenplayCharacterParser::name(textItem->text());
                     if (lastCharacter.compare(_characterName, Qt::CaseInsensitive) == 0) {
                         scenesData.last().characterPresented = true;
@@ -589,8 +589,8 @@ QJsonObject getCharacter(const QString& _starcFileName, const QString& _characte
                 //
                 // Реплика, или лирика, если говорит искомый, обновим счётчики
                 //
-                case ScreenplayParagraphType::Dialogue:
-                case ScreenplayParagraphType::Lyrics: {
+                case TextParagraphType::Dialogue:
+                case TextParagraphType::Lyrics: {
                     if (lastCharacter.compare(_characterName, Qt::CaseInsensitive) == 0) {
                         scenesData.last().dialoguesDuration
                             += std::chrono::duration_cast<std::chrono::seconds>(
@@ -602,7 +602,7 @@ QJsonObject getCharacter(const QString& _starcFileName, const QString& _characte
                 //
                 // Описание действия, возможно персонаж упоминается
                 //
-                case ScreenplayParagraphType::Action: {
+                case TextParagraphType::Action: {
                     QRegularExpressionMatch match = rxCharacterFinder.match(textItem->text());
                     if (match.hasMatch()) {
                         scenesData.last().characterPresented = true;

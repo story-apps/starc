@@ -23,8 +23,8 @@
 #include <QScopedValueRollback>
 #include <QTextTable>
 
-using BusinessLayer::ComicBookBlockStyle;
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextParagraphType;
 using BusinessLayer::TemplatesFacade;
 
 
@@ -169,7 +169,7 @@ void ComicBookTextDocument::Implementation::readModelItemContent(int _itemRow,
             //
             auto insertPageSplitter = [&_cursor, this] {
                 const auto style
-                    = documentTemplate().paragraphStyle(ComicBookParagraphType::PageSplitter);
+                    = documentTemplate().paragraphStyle(TextParagraphType::PageSplitter);
                 _cursor.setBlockFormat(style.blockFormat());
                 _cursor.setBlockCharFormat(style.charFormat());
                 _cursor.setCharFormat(style.charFormat());
@@ -255,7 +255,7 @@ void ComicBookTextDocument::Implementation::readModelItemContent(int _itemRow,
         //
         // Если вставляемый элемент должен быть в таблице, а курсор стоит на разделителе
         //
-        if (ComicBookBlockStyle::forBlock(_cursor.block()) == ComicBookParagraphType::PageSplitter
+        if (TextBlockStyle::forBlock(_cursor.block()) == TextParagraphType::PageSplitter
             && textItem->isInFirstColumn().has_value()) {
             //
             // Зайдём внутрь таблицы
@@ -304,18 +304,18 @@ void ComicBookTextDocument::Implementation::readModelItemContent(int _itemRow,
         //
         auto decorationFormat = _cursor.block().blockFormat();
         if (textItem->isCorrection()) {
-            decorationFormat.setProperty(ComicBookBlockStyle::PropertyIsCorrection, true);
+            decorationFormat.setProperty(TextBlockStyle::PropertyIsCorrection, true);
             decorationFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
         }
         if (textItem->isCorrectionContinued()) {
-            decorationFormat.setProperty(ComicBookBlockStyle::PropertyIsCorrectionContinued, true);
+            decorationFormat.setProperty(TextBlockStyle::PropertyIsCorrectionContinued, true);
             decorationFormat.setTopMargin(0);
         }
         if (textItem->isBreakCorrectionStart()) {
-            decorationFormat.setProperty(ComicBookBlockStyle::PropertyIsBreakCorrectionStart, true);
+            decorationFormat.setProperty(TextBlockStyle::PropertyIsBreakCorrectionStart, true);
         }
         if (textItem->isBreakCorrectionEnd()) {
-            decorationFormat.setProperty(ComicBookBlockStyle::PropertyIsBreakCorrectionEnd, true);
+            decorationFormat.setProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd, true);
         }
         _cursor.setBlockFormat(decorationFormat);
 
@@ -462,7 +462,7 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
     // Обновим шрифт документа, в моменте когда текста нет
     //
     const auto templateDefaultFont
-        = d->documentTemplate().paragraphStyle(ComicBookParagraphType::Description).font();
+        = d->documentTemplate().paragraphStyle(TextParagraphType::Description).font();
     if (defaultFont() != templateDefaultFont) {
         setDefaultFont(templateDefaultFont);
     }
@@ -524,7 +524,7 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                 //
                 // ... тип параграфа
                 //
-                if (ComicBookBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
+                if (TextBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
                     applyParagraphType(textItem->paragraphType(), cursor);
                 }
                 //
@@ -583,7 +583,7 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                     //
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-                    const auto blockType = ComicBookBlockStyle::forBlock(cursor.block());
+                    const auto blockType = TextBlockStyle::forBlock(cursor.block());
                     const auto blockStyle = d->documentTemplate().paragraphStyle(blockType);
                     cursor.setBlockCharFormat(blockStyle.charFormat());
                     cursor.setCharFormat(blockStyle.charFormat());
@@ -612,10 +612,10 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                 // ... разрыв
                 //
                 if (cursor.blockFormat().boolProperty(
-                        ComicBookBlockStyle::PropertyIsBreakCorrectionStart)
+                        TextBlockStyle::PropertyIsBreakCorrectionStart)
                     && !textItem->isBreakCorrectionStart()) {
                     auto clearFormat = cursor.blockFormat();
-                    clearFormat.clearProperty(ComicBookBlockStyle::PropertyIsBreakCorrectionStart);
+                    clearFormat.clearProperty(TextBlockStyle::PropertyIsBreakCorrectionStart);
                     cursor.setBlockFormat(clearFormat);
                     //
                     // ... в обратную сторону не делаем, т.к. это реализует сам корректор текста
@@ -672,8 +672,8 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                         cursor.movePosition(ComicBookTextCursor::EndOfBlock);
                     }
                 }
-                bool isFirstParagraph = ComicBookBlockStyle::forBlock(cursor.block())
-                    == ComicBookParagraphType::Undefined;
+                bool isFirstParagraph = TextBlockStyle::forBlock(cursor.block())
+                    == TextParagraphType::Undefined;
                 d->readModelItemContent(_topLeft.row(), _topLeft.parent(), cursor,
                                         isFirstParagraph);
             }
@@ -820,8 +820,8 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                         //
                         int row = _from + 1;
                         auto insertCursor = cursor;
-                        while (ComicBookBlockStyle::forBlock(insertCursor.block())
-                               != ComicBookParagraphType::PageSplitter) {
+                        while (TextBlockStyle::forBlock(insertCursor.block())
+                               != TextParagraphType::PageSplitter) {
                             insertCursor.movePosition(ComicBookTextCursor::NextBlock);
                         }
                         bool isFirstParagraph = false;
@@ -829,8 +829,8 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                         //
                         // Идём по таблице
                         //
-                        while (ComicBookBlockStyle::forBlock(cursor.block())
-                               != ComicBookParagraphType::PageSplitter) {
+                        while (TextBlockStyle::forBlock(cursor.block())
+                               != TextParagraphType::PageSplitter) {
                             //
                             // ... проставим элементу блока флаг, что он теперь вне таблицы
                             //
@@ -975,8 +975,8 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                     //     то берём на один символ вперёд
                     //
                     const bool isFirstBlockOfFirstColumn = cursor.inFirstColumn()
-                        && ComicBookBlockStyle::forBlock(cursor.block().previous())
-                            == ComicBookParagraphType::PageSplitter;
+                        && TextBlockStyle::forBlock(cursor.block().previous())
+                            == TextParagraphType::PageSplitter;
                     auto previousBlockCursor = cursor;
                     previousBlockCursor.movePosition(QTextCursor::PreviousBlock);
                     const bool isFirstBlockOfSecondColumn
@@ -1196,7 +1196,7 @@ void ComicBookTextDocument::insertFromMime(int _position, const QString& _mimeDa
     d->model->insertFromMime(itemIndex, positionInBlock, _mimeData);
 }
 
-void ComicBookTextDocument::addParagraph(BusinessLayer::ComicBookParagraphType _type,
+void ComicBookTextDocument::addParagraph(BusinessLayer::TextParagraphType _type,
                                          ComicBookTextCursor _cursor)
 {
     _cursor.beginEditBlock();
@@ -1252,10 +1252,10 @@ void ComicBookTextDocument::addParagraph(BusinessLayer::ComicBookParagraphType _
     _cursor.endEditBlock();
 }
 
-void ComicBookTextDocument::setParagraphType(BusinessLayer::ComicBookParagraphType _type,
+void ComicBookTextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
                                              const ComicBookTextCursor& _cursor)
 {
-    const auto currentParagraphType = ComicBookBlockStyle::forBlock(_cursor.block());
+    const auto currentParagraphType = TextBlockStyle::forBlock(_cursor.block());
     if (currentParagraphType == _type) {
         return;
     }
@@ -1263,7 +1263,7 @@ void ComicBookTextDocument::setParagraphType(BusinessLayer::ComicBookParagraphTy
     //
     // Нельзя сменить стиль конечных элементов папок
     //
-    if (currentParagraphType == ComicBookParagraphType::FolderFooter) {
+    if (currentParagraphType == TextParagraphType::FolderFooter) {
         return;
     }
 
@@ -1290,8 +1290,8 @@ void ComicBookTextDocument::setParagraphType(BusinessLayer::ComicBookParagraphTy
 
 void ComicBookTextDocument::cleanParagraphType(const ComicBookTextCursor& _cursor)
 {
-    const auto oldBlockType = ComicBookBlockStyle::forBlock(_cursor.block());
-    if (oldBlockType != ComicBookParagraphType::FolderHeader) {
+    const auto oldBlockType = TextBlockStyle::forBlock(_cursor.block());
+    if (oldBlockType != TextParagraphType::FolderHeader) {
         return;
     }
 
@@ -1306,8 +1306,8 @@ void ComicBookTextDocument::cleanParagraphType(const ComicBookTextCursor& _curso
     int openedGroups = 0;
     bool isFooterUpdated = false;
     do {
-        const auto currentType = ComicBookBlockStyle::forBlock(cursor.block());
-        if (currentType == ComicBookParagraphType::FolderFooter) {
+        const auto currentType = TextBlockStyle::forBlock(cursor.block());
+        if (currentType == TextParagraphType::FolderFooter) {
             if (openedGroups == 0) {
                 cursor.movePosition(QTextCursor::PreviousBlock);
                 cursor.movePosition(QTextCursor::EndOfBlock);
@@ -1335,7 +1335,7 @@ void ComicBookTextDocument::cleanParagraphType(const ComicBookTextCursor& _curso
     } while (!isFooterUpdated);
 }
 
-void ComicBookTextDocument::applyParagraphType(BusinessLayer::ComicBookParagraphType _type,
+void ComicBookTextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
                                                const ComicBookTextCursor& _cursor)
 {
     auto cursor = _cursor;
@@ -1365,7 +1365,7 @@ void ComicBookTextDocument::applyParagraphType(BusinessLayer::ComicBookParagraph
         if (!currentBlock.textFormats().isEmpty()) {
             const auto formats = currentBlock.textFormats();
             for (const auto& range : formats) {
-                if (range.format.boolProperty(ComicBookBlockStyle::PropertyIsReviewMark)) {
+                if (range.format.boolProperty(TextBlockStyle::PropertyIsReviewMark)) {
                     continue;
                 }
                 cursor.setPosition(currentBlock.position() + range.start);
@@ -1387,9 +1387,9 @@ void ComicBookTextDocument::applyParagraphType(BusinessLayer::ComicBookParagraph
     //
     // Для заголовка папки нужно создать завершение
     //
-    if (_type == ComicBookParagraphType::FolderHeader) {
+    if (_type == TextParagraphType::FolderHeader) {
         const auto footerStyle
-            = d->documentTemplate().paragraphStyle(ComicBookParagraphType::FolderFooter);
+            = d->documentTemplate().paragraphStyle(TextParagraphType::FolderFooter);
 
         //
         // Вставляем закрывающий блок
@@ -1414,7 +1414,7 @@ void ComicBookTextDocument::splitParagraph(const ComicBookTextCursor& _cursor)
     // Сохраним текущий формат блока
     //
     const auto lastBlockType
-        = ComicBookBlockStyle::forBlock(findBlock(cursor.selectionInterval().from));
+        = TextBlockStyle::forBlock(findBlock(cursor.selectionInterval().from));
     //
     // Вырезаем выделение, захватывая блоки целиком
     //
@@ -1457,7 +1457,7 @@ void ComicBookTextDocument::splitParagraph(const ComicBookTextCursor& _cursor)
     //
     // Назначим блоку перед таблицей формат PageSplitter
     //
-    setParagraphType(ComicBookParagraphType::PageSplitter, cursor);
+    setParagraphType(TextParagraphType::PageSplitter, cursor);
 
     //
     // Вставляем таблицу
@@ -1477,14 +1477,14 @@ void ComicBookTextDocument::splitParagraph(const ComicBookTextCursor& _cursor)
     //
     // Назначим блоку после таблицы формат PageSplitter
     //
-    setParagraphType(ComicBookParagraphType::PageSplitter, cursor);
+    setParagraphType(TextParagraphType::PageSplitter, cursor);
 
     //
     // Вставляем параграф после таблицы - это обязательное условие, чтобы после таблицы всегда
     // оставался один параграф, чтобы пользователь всегда мог выйти из таблицы
     //
     if (cursor.atEnd()) {
-        addParagraph(ComicBookParagraphType::Description, cursor);
+        addParagraph(TextParagraphType::Description, cursor);
     }
 
     //
@@ -1510,7 +1510,7 @@ void ComicBookTextDocument::mergeParagraph(const ComicBookTextCursor& _cursor)
     //
     // Идём до начала таблицы
     //
-    while (ComicBookBlockStyle::forBlock(cursor.block()) != ComicBookParagraphType::PageSplitter) {
+    while (TextBlockStyle::forBlock(cursor.block()) != TextParagraphType::PageSplitter) {
         cursor.movePosition(QTextCursor::PreviousBlock);
     }
 
@@ -1831,9 +1831,9 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 //     когда дойдём до обработки именно конца папки
                 //
                 needToDeleteParent
-                    = textItem->paragraphType() == ComicBookParagraphType::FolderFooter
-                    || textItem->paragraphType() == ComicBookParagraphType::Page
-                    || textItem->paragraphType() == ComicBookParagraphType::Panel;
+                    = textItem->paragraphType() == TextParagraphType::FolderFooter
+                    || textItem->paragraphType() == TextParagraphType::Page
+                    || textItem->paragraphType() == TextParagraphType::Panel;
             }
 
             //
@@ -1982,7 +1982,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
     updateTableInfo(block);
 
     while (block.isValid() && block.position() <= _position + _charsAdded) {
-        const auto paragraphType = ComicBookBlockStyle::forBlock(block);
+        const auto paragraphType = TextBlockStyle::forBlock(block);
 
         //
         // Новый блок
@@ -1991,7 +1991,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             //
             // Разделитель
             //
-            if (paragraphType == ComicBookParagraphType::PageSplitter) {
+            if (paragraphType == TextParagraphType::PageSplitter) {
                 ComicBookTextCursor cursor(this);
                 cursor.setPosition(block.position());
                 cursor.movePosition(QTextCursor::NextBlock);
@@ -2038,17 +2038,17 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             //
             ComicBookTextModelItem* parentItem = nullptr;
             switch (paragraphType) {
-            case ComicBookParagraphType::FolderHeader: {
+            case TextParagraphType::FolderHeader: {
                 parentItem = new ComicBookTextModelFolderItem;
                 break;
             }
 
-            case ComicBookParagraphType::Page: {
+            case TextParagraphType::Page: {
                 parentItem = new ComicBookTextModelPageItem;
                 break;
             }
 
-            case ComicBookParagraphType::Panel: {
+            case TextParagraphType::Panel: {
                 parentItem = new ComicBookTextModelPanelItem;
                 break;
             }
@@ -2062,13 +2062,13 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             //
             auto textItem = new ComicBookTextModelTextItem;
             textItem->setCorrection(
-                block.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection));
+                block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection));
             textItem->setCorrectionContinued(block.blockFormat().boolProperty(
-                ComicBookBlockStyle::PropertyIsCorrectionContinued));
+                TextBlockStyle::PropertyIsCorrectionContinued));
             textItem->setBreakCorrectionStart(block.blockFormat().boolProperty(
-                ComicBookBlockStyle::PropertyIsBreakCorrectionStart));
+                TextBlockStyle::PropertyIsBreakCorrectionStart));
             textItem->setBreakCorrectionEnd(block.blockFormat().boolProperty(
-                ComicBookBlockStyle::PropertyIsBreakCorrectionEnd));
+                TextBlockStyle::PropertyIsBreakCorrectionEnd));
             if (tableInfo.inTable) {
                 textItem->setInFirstColumn(tableInfo.inFirstColumn);
             } else {
@@ -2094,7 +2094,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 }
 
                 auto textItem = static_cast<ComicBookTextModelTextItem*>(previousItem);
-                return textItem->paragraphType() == ComicBookParagraphType::FolderFooter;
+                return textItem->paragraphType() == TextParagraphType::FolderFooter;
             }();
 
             //
@@ -2210,7 +2210,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                         auto grandParentChildTextItem
                             = static_cast<ComicBookTextModelTextItem*>(grandParentChildItem);
                         if (grandParentChildTextItem->paragraphType()
-                            == ComicBookParagraphType::FolderFooter) {
+                            == TextParagraphType::FolderFooter) {
                             break;
                         }
 
@@ -2241,7 +2241,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                         auto grandParentChildTextItem
                             = static_cast<ComicBookTextModelTextItem*>(grandParentChildItem);
                         if (grandParentChildTextItem->paragraphType()
-                            == ComicBookParagraphType::FolderFooter) {
+                            == TextParagraphType::FolderFooter) {
                             break;
                         }
 
@@ -2296,13 +2296,13 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             if (item->type() == ComicBookTextModelItemType::Text) {
                 auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
                 textItem->setCorrection(
-                    block.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection));
+                    block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection));
                 textItem->setCorrectionContinued(block.blockFormat().boolProperty(
-                    ComicBookBlockStyle::PropertyIsCorrectionContinued));
+                    TextBlockStyle::PropertyIsCorrectionContinued));
                 textItem->setBreakCorrectionStart(block.blockFormat().boolProperty(
-                    ComicBookBlockStyle::PropertyIsBreakCorrectionStart));
+                    TextBlockStyle::PropertyIsBreakCorrectionStart));
                 textItem->setBreakCorrectionEnd(block.blockFormat().boolProperty(
-                    ComicBookBlockStyle::PropertyIsBreakCorrectionEnd));
+                    TextBlockStyle::PropertyIsBreakCorrectionEnd));
                 if (tableInfo.inTable) {
                     textItem->setInFirstColumn(tableInfo.inFirstColumn);
                 } else {

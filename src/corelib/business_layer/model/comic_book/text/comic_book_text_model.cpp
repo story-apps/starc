@@ -179,7 +179,7 @@ void ComicBookTextModel::Implementation::updateNumbering()
 
             case ComicBookTextModelItemType::Text: {
                 auto textItem = static_cast<ComicBookTextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == ComicBookParagraphType::Character
+                if (textItem->paragraphType() == TextParagraphType::Character
                     && !textItem->isCorrection()) {
                     textItem->setNumber(dialogueNumber++);
                 }
@@ -205,16 +205,16 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
             xml::kFolderTag,
             xml::kPageTag,
             xml::kPanelTag,
-            toString(ComicBookParagraphType::UnformattedText),
-            toString(ComicBookParagraphType::Page),
-            toString(ComicBookParagraphType::Panel),
-            toString(ComicBookParagraphType::Description),
-            toString(ComicBookParagraphType::Character),
-            toString(ComicBookParagraphType::Dialogue),
-            toString(ComicBookParagraphType::InlineNote),
-            toString(ComicBookParagraphType::FolderHeader),
-            toString(ComicBookParagraphType::FolderFooter),
-            toString(ComicBookParagraphType::PageSplitter),
+            toString(TextParagraphType::UnformattedText),
+            toString(TextParagraphType::Page),
+            toString(TextParagraphType::Panel),
+            toString(TextParagraphType::Description),
+            toString(TextParagraphType::Character),
+            toString(TextParagraphType::Dialogue),
+            toString(TextParagraphType::InlineNote),
+            toString(TextParagraphType::FolderHeader),
+            toString(TextParagraphType::FolderFooter),
+            toString(TextParagraphType::PageSplitter),
         },
         _parent)
     , d(new Implementation)
@@ -831,7 +831,7 @@ QString ComicBookTextModel::mimeFromSelection(const QModelIndex& _from, int _fro
                 // Не сохраняем закрывающие блоки неоткрытых папок, всё это делается внутри самих
                 // папок
                 //
-                if (textItem->paragraphType() == ComicBookParagraphType::FolderFooter) {
+                if (textItem->paragraphType() == TextParagraphType::FolderFooter) {
                     break;
                 }
 
@@ -869,9 +869,9 @@ QString ComicBookTextModel::mimeFromSelection(const QModelIndex& _from, int _fro
     //
     if (fromItem->type() == ComicBookTextModelItemType::Text) {
         const auto textItem = static_cast<ComicBookTextModelTextItem*>(fromItem);
-        if (textItem->paragraphType() == ComicBookParagraphType::FolderHeader
-            || textItem->paragraphType() == ComicBookParagraphType::Page
-            || textItem->paragraphType() == ComicBookParagraphType::Panel) {
+        if (textItem->paragraphType() == TextParagraphType::FolderHeader
+            || textItem->paragraphType() == TextParagraphType::Page
+            || textItem->paragraphType() == TextParagraphType::Panel) {
             auto newFromItem = fromItemParent;
             fromItemParent = fromItemParent->parent();
             fromItemRow = fromItemParent->rowOfChild(newFromItem);
@@ -922,7 +922,7 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
         //
         // Если в заголовок папки
         //
-        if (textItem->paragraphType() == ComicBookParagraphType::FolderHeader) {
+        if (textItem->paragraphType() == TextParagraphType::FolderHeader) {
             //
             // ... то вставим после него
             //
@@ -930,7 +930,7 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
         //
         // Если завершение папки
         //
-        else if (textItem->paragraphType() == ComicBookParagraphType::FolderFooter) {
+        else if (textItem->paragraphType() == TextParagraphType::FolderFooter) {
             //
             // ... то вставляем после папки
             //
@@ -1263,7 +1263,7 @@ void ComicBookTextModel::updateCharacterName(const QString& _oldName, const QStr
 
             case ComicBookTextModelItemType::Text: {
                 auto textItem = static_cast<ComicBookTextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == ComicBookParagraphType::Character
+                if (textItem->paragraphType() == TextParagraphType::Character
                     && ComicBookCharacterParser::name(textItem->text()) == oldName) {
                     auto text = textItem->text();
                     text.remove(0, oldName.length());
@@ -1320,7 +1320,7 @@ QSet<QString> ComicBookTextModel::findCharactersFromText() const
 
             case ComicBookTextModelItemType::Text: {
                 auto textItem = static_cast<ComicBookTextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == ComicBookParagraphType::Character) {
+                if (textItem->paragraphType() == TextParagraphType::Character) {
                     characters.insert(ComicBookCharacterParser::name(textItem->text()));
                 }
                 break;
@@ -1343,7 +1343,7 @@ void ComicBookTextModel::initDocument()
     //
     if (document()->content().isEmpty()) {
         auto pageText = new ComicBookTextModelTextItem;
-        pageText->setParagraphType(ComicBookParagraphType::Page);
+        pageText->setParagraphType(TextParagraphType::Page);
         auto page = new ComicBookTextModelPageItem;
         page->appendItem(pageText);
         appendItem(page);

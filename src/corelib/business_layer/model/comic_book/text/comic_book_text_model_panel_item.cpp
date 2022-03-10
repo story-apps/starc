@@ -400,7 +400,7 @@ void ComicBookTextModelPanelItem::handleChange()
         // Собираем текст
         //
         switch (childTextItem->paragraphType()) {
-        case ComicBookParagraphType::Panel: {
+        case TextParagraphType::Panel: {
             d->heading
                 = TextHelper::smartToUpper(ComicBookPanelParser::panelTitle(childTextItem->text()));
             const auto panelDescription
@@ -409,12 +409,12 @@ void ComicBookTextModelPanelItem::handleChange()
             break;
         }
 
-        case ComicBookParagraphType::Dialogue: {
+        case TextParagraphType::Dialogue: {
             d->dialoguesWordsCount += TextHelper::wordsCount(childTextItem->text());
             break;
         }
 
-        case ComicBookParagraphType::InlineNote: {
+        case TextParagraphType::InlineNote: {
             ++d->inlineNotesSize;
             break;
         }

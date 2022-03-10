@@ -12,8 +12,8 @@
 #include <business_layer/model/comic_book/text/comic_book_text_model_text_item.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
-#include <ui/widgets/text_edit/page/page_metrics.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QAbstractTextDocumentLayout>
@@ -72,27 +72,27 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
         else {
             _painter->save();
             _painter->setFont(
-                _template.paragraphStyle(ComicBookParagraphType::Description).charFormat().font());
+                _template.paragraphStyle(TextParagraphType::Description).charFormat().font());
 
             //
             // Середины верхнего и нижнего полей
             //
-            qreal headerY = pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()) / 2;
+            qreal headerY = pageYPos + MeasurementHelper::mmToPx(_template.pageMargins().top()) / 2;
             qreal footerY = pageYPos + currentPageRect.height()
-                - PageMetrics::mmToPx(_template.pageMargins().bottom()) / 2;
+                - MeasurementHelper::mmToPx(_template.pageMargins().bottom()) / 2;
 
             //
             // Области для прорисовки текста на полях
             //
-            QRectF headerRect(PageMetrics::mmToPx(_template.pageMargins().left()), headerY,
+            QRectF headerRect(MeasurementHelper::mmToPx(_template.pageMargins().left()), headerY,
                               currentPageRect.width()
-                                  - PageMetrics::mmToPx(_template.pageMargins().left())
-                                  - PageMetrics::mmToPx(_template.pageMargins().right()),
+                                  - MeasurementHelper::mmToPx(_template.pageMargins().left())
+                                  - MeasurementHelper::mmToPx(_template.pageMargins().right()),
                               20);
-            QRectF footerRect(PageMetrics::mmToPx(_template.pageMargins().left()), footerY,
+            QRectF footerRect(MeasurementHelper::mmToPx(_template.pageMargins().left()), footerY,
                               currentPageRect.width()
-                                  - PageMetrics::mmToPx(_template.pageMargins().left())
-                                  - PageMetrics::mmToPx(_template.pageMargins().right()),
+                                  - MeasurementHelper::mmToPx(_template.pageMargins().left())
+                                  - MeasurementHelper::mmToPx(_template.pageMargins().right()),
                               20);
 
             //
@@ -144,27 +144,27 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
         else {
             _painter->save();
             _painter->setFont(
-                _template.paragraphStyle(ComicBookParagraphType::Description).charFormat().font());
+                _template.paragraphStyle(TextParagraphType::Description).charFormat().font());
 
             //
             // Середины верхнего и нижнего полей
             //
-            qreal headerY = pageYPos + PageMetrics::mmToPx(_template.pageMargins().top()) / 2;
+            qreal headerY = pageYPos + MeasurementHelper::mmToPx(_template.pageMargins().top()) / 2;
             qreal footerY = pageYPos + currentPageRect.height()
-                - PageMetrics::mmToPx(_template.pageMargins().bottom()) / 2;
+                - MeasurementHelper::mmToPx(_template.pageMargins().bottom()) / 2;
 
             //
             // Области для прорисовки текста на полях
             //
-            QRectF headerRect(PageMetrics::mmToPx(_template.pageMargins().left()), headerY,
+            QRectF headerRect(MeasurementHelper::mmToPx(_template.pageMargins().left()), headerY,
                               currentPageRect.width()
-                                  - PageMetrics::mmToPx(_template.pageMargins().left())
-                                  - PageMetrics::mmToPx(_template.pageMargins().right()),
+                                  - MeasurementHelper::mmToPx(_template.pageMargins().left())
+                                  - MeasurementHelper::mmToPx(_template.pageMargins().right()),
                               20);
-            QRectF footerRect(PageMetrics::mmToPx(_template.pageMargins().left()), footerY,
+            QRectF footerRect(MeasurementHelper::mmToPx(_template.pageMargins().left()), footerY,
                               currentPageRect.width()
-                                  - PageMetrics::mmToPx(_template.pageMargins().left())
-                                  - PageMetrics::mmToPx(_template.pageMargins().right()),
+                                  - MeasurementHelper::mmToPx(_template.pageMargins().left())
+                                  - MeasurementHelper::mmToPx(_template.pageMargins().right()),
                               20);
 
             //

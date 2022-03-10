@@ -13,7 +13,7 @@ class QXmlStreamReader;
 
 namespace BusinessLayer {
 
-enum class ComicBookParagraphType;
+enum class TextParagraphType;
 
 /**
  * @brief Класс элемента текста модели комикса
@@ -111,8 +111,8 @@ public:
     /**
      * @brief Тип параграфа
      */
-    const ComicBookParagraphType& paragraphType() const;
-    void setParagraphType(ComicBookParagraphType _type);
+    const TextParagraphType& paragraphType() const;
+    void setParagraphType(TextParagraphType _type);
 
     /**
      * @brief Выравнивание текста в блоке

@@ -7,7 +7,7 @@
 
 namespace BusinessLayer {
 class ScreenplayTextModel;
-enum class ScreenplayParagraphType;
+enum class TextParagraphType;
 } // namespace BusinessLayer
 
 namespace BusinessLayer {
@@ -76,12 +76,12 @@ public:
     /**
      * @brief Вставить новый блок заданного типа
      */
-    void addParagraph(BusinessLayer::ScreenplayParagraphType _type, ScreenplayTextCursor _cursor);
+    void addParagraph(BusinessLayer::TextParagraphType _type, ScreenplayTextCursor _cursor);
 
     /**
      * @brief Установить тип блока для заданного курсора
      */
-    void setParagraphType(BusinessLayer::ScreenplayParagraphType _type,
+    void setParagraphType(BusinessLayer::TextParagraphType _type,
                           const ScreenplayTextCursor& _cursor);
 
     /**
@@ -92,7 +92,7 @@ public:
     /**
      * @brief Применить заданный тип блока к тексту, на который указывает курсор
      */
-    void applyParagraphType(BusinessLayer::ScreenplayParagraphType _type,
+    void applyParagraphType(BusinessLayer::TextParagraphType _type,
                             const ScreenplayTextCursor& _cursor);
 
     /**

@@ -7,7 +7,7 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
 
@@ -51,7 +51,7 @@ void InlineNoteHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ComicBookParagraphType::InlineNote);
+            editor()->addParagraph(TextParagraphType::InlineNote);
         } else {
             //! Нет выделения
 
@@ -62,7 +62,7 @@ void InlineNoteHandler::handleEnter(QKeyEvent*)
                 // Ни чего не делаем
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ComicBookParagraphType::InlineNote));
+                    changeForEnter(TextParagraphType::InlineNote));
             } else {
                 //! Текст не пуст
 
@@ -78,14 +78,14 @@ void InlineNoteHandler::handleEnter(QKeyEvent*)
                     //
                     // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(jumpForEnter(ComicBookParagraphType::InlineNote));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::InlineNote));
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(ComicBookParagraphType::Description);
+                    editor()->addParagraph(TextParagraphType::Description);
                 }
             }
         }

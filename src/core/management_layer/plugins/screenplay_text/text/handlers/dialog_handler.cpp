@@ -7,8 +7,8 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ScreenplayBlockStyle;
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
@@ -54,7 +54,7 @@ void DialogHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ScreenplayParagraphType::Dialogue);
+            editor()->addParagraph(TextParagraphType::Dialogue);
         } else {
             //! Нет выделения
 
@@ -65,7 +65,7 @@ void DialogHandler::handleEnter(QKeyEvent*)
                 // Меняем стиль блока на описание действия
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ScreenplayParagraphType::Dialogue));
+                    changeForEnter(TextParagraphType::Dialogue));
             } else {
                 //! Текст не пуст
 
@@ -81,7 +81,7 @@ void DialogHandler::handleEnter(QKeyEvent*)
                     //
                     // Перейдём к блоку персонажа
                     //
-                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::Dialogue));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::Dialogue));
                 } else {
                     //! Внутри блока
 
@@ -96,22 +96,22 @@ void DialogHandler::handleEnter(QKeyEvent*)
                         {
                             QTextCursor cursor = editor()->textCursor();
                             QTextBlock cursorBlock = cursor.block();
-                            while ((ScreenplayBlockStyle::forBlock(cursorBlock)
-                                        != ScreenplayParagraphType::Character
-                                    || ScreenplayBlockStyle::forBlock(cursorBlock)
-                                        == ScreenplayParagraphType::Dialogue
-                                    || ScreenplayBlockStyle::forBlock(cursorBlock)
-                                        == ScreenplayParagraphType::Parenthetical
-                                    || ScreenplayBlockStyle::forBlock(cursorBlock)
-                                        == ScreenplayParagraphType::Lyrics)
+                            while ((TextBlockStyle::forBlock(cursorBlock)
+                                        != TextParagraphType::Character
+                                    || TextBlockStyle::forBlock(cursorBlock)
+                                        == TextParagraphType::Dialogue
+                                    || TextBlockStyle::forBlock(cursorBlock)
+                                        == TextParagraphType::Parenthetical
+                                    || TextBlockStyle::forBlock(cursorBlock)
+                                        == TextParagraphType::Lyrics)
                                    && !cursor.atStart()) {
                                 cursor.movePosition(QTextCursor::PreviousBlock);
                                 cursor.movePosition(QTextCursor::StartOfBlock);
                                 cursorBlock = cursor.block();
                             }
 
-                            if (ScreenplayBlockStyle::forBlock(cursorBlock)
-                                == ScreenplayParagraphType::Character) {
+                            if (TextBlockStyle::forBlock(cursorBlock)
+                                == TextParagraphType::Character) {
                                 characterName = cursorBlock.text().simplified();
                             }
                         }
@@ -119,13 +119,13 @@ void DialogHandler::handleEnter(QKeyEvent*)
                         //
                         // Вставляем блок "герой" и добавляем имя
                         //
-                        editor()->addParagraph(ScreenplayParagraphType::Character);
+                        editor()->addParagraph(TextParagraphType::Character);
                         editor()->insertPlainText(characterName);
 
                         //
                         // Оставшийся текст форматируем, как "диалог"
                         //
-                        editor()->addParagraph(ScreenplayParagraphType::Dialogue);
+                        editor()->addParagraph(TextParagraphType::Dialogue);
                     }
                 }
             }
@@ -175,7 +175,7 @@ void DialogHandler::handleTab(QKeyEvent*)
                 //
                 // Меняем стиль на ремарку
                 //
-                editor()->setCurrentParagraphType(changeForTab(ScreenplayParagraphType::Dialogue));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Dialogue));
             } else {
                 //! Текст не пуст
 
@@ -191,7 +191,7 @@ void DialogHandler::handleTab(QKeyEvent*)
                     //
                     // Вставляем блок ремарки
                     //
-                    editor()->addParagraph(jumpForTab(ScreenplayParagraphType::Dialogue));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::Dialogue));
                 } else {
                     //! Внутри блока
 
@@ -202,8 +202,8 @@ void DialogHandler::handleTab(QKeyEvent*)
                     //
                     // ... оставляем пустой блок реплики
                     //
-                    editor()->addParagraph(ScreenplayParagraphType::Dialogue);
-                    editor()->addParagraph(ScreenplayParagraphType::Dialogue);
+                    editor()->addParagraph(TextParagraphType::Dialogue);
+                    editor()->addParagraph(TextParagraphType::Dialogue);
 
                     //
                     // ... возвращаем курсор к пустому блоку
@@ -215,7 +215,7 @@ void DialogHandler::handleTab(QKeyEvent*)
                     //
                     // ... делаем блок под курсором ремаркой
                     //
-                    editor()->setCurrentParagraphType(ScreenplayParagraphType::Parenthetical);
+                    editor()->setCurrentParagraphType(TextParagraphType::Parenthetical);
                 }
             }
         }
@@ -254,7 +254,7 @@ void DialogHandler::handleOther(QKeyEvent* _event)
             //
             // Cменить стиль на ремарку
             //
-            editor()->setCurrentParagraphType(ScreenplayParagraphType::Parenthetical);
+            editor()->setCurrentParagraphType(TextParagraphType::Parenthetical);
         } else {
             //! Если текст не пуст
 
@@ -268,13 +268,13 @@ void DialogHandler::handleOther(QKeyEvent* _event)
             // если скобка нажата в начале строки, то делаем лишь один перевод строки
             //
             if (cursorBackwardText != "(") {
-                editor()->addParagraph(ScreenplayParagraphType::Dialogue);
+                editor()->addParagraph(TextParagraphType::Dialogue);
             }
             //
             // ... если после скобки нет текста, не добавляем новый параграф
             //
             if (!cursorForwardText.isEmpty()) {
-                editor()->addParagraph(ScreenplayParagraphType::Dialogue);
+                editor()->addParagraph(TextParagraphType::Dialogue);
 
                 //
                 // ... возвращаем курсор к пустому блоку
@@ -287,7 +287,7 @@ void DialogHandler::handleOther(QKeyEvent* _event)
             //
             // ... делаем блок под курсором ремаркой
             //
-            editor()->setCurrentParagraphType(ScreenplayParagraphType::Parenthetical);
+            editor()->setCurrentParagraphType(TextParagraphType::Parenthetical);
         }
     } else {
         //! В противном случае, обрабатываем в базовом классе

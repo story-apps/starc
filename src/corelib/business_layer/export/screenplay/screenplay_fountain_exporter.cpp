@@ -161,13 +161,13 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                     // Если это редактораская заметка, обработаем комментарии
                     //
                     if (formats[formatIndex].format.boolProperty(
-                            ScreenplayBlockStyle::PropertyIsReviewMark)) {
+                            TextBlockStyle::PropertyIsReviewMark)) {
                         //
                         // Извлечем список редакторских заметок для данной области блока
                         //
                         const QStringList comments
                             = formats[formatIndex]
-                                  .format.property(ScreenplayBlockStyle::PropertyComments)
+                                  .format.property(TextBlockStyle::PropertyComments)
                                   .toStringList();
                         //
                         // Вставлять редакторские заметки нужно с конца, чтобы не сбилась их
@@ -246,8 +246,8 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
             //
             bool skipBlock = false;
 
-            switch (ScreenplayBlockStyle::forBlock(block)) {
-            case ScreenplayParagraphType::SceneHeading: {
+            switch (TextBlockStyle::forBlock(block)) {
+            case TextParagraphType::SceneHeading: {
                 //
                 // Если заголовок сцены начинается с одного из ключевых слов, то все хорошо
                 //
@@ -284,7 +284,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 break;
             }
 
-            case ScreenplayParagraphType::Character: {
+            case TextParagraphType::Character: {
                 if (paragraphText != TextHelper::smartToUpper(paragraphText)) {
                     //
                     // Если название персонажа не состоит из заглавных букв,
@@ -296,7 +296,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 break;
             }
 
-            case ScreenplayParagraphType::Transition: {
+            case TextParagraphType::Transition: {
                 //
                 // Если переход задан заглавными буквами и в конце есть TO:
                 //
@@ -319,7 +319,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 break;
             }
 
-            case ScreenplayParagraphType::InlineNote: {
+            case TextParagraphType::InlineNote: {
                 //
                 // Обернем в /* и */
                 //
@@ -327,7 +327,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 break;
             }
 
-            case ScreenplayParagraphType::Action: {
+            case TextParagraphType::Action: {
                 //
                 // Если не первое действие, то отделим его пустой строкой от предыдущего
                 //
@@ -340,7 +340,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 //
                 // TODO: добавить экспорт описания сцен
                 //
-                //            case ScreenplayParagraphType::SceneDescription: {
+                //            case TextParagraphType::SceneDescription: {
                 //                //
                 //                // Блоки описания сцены предворяются = и расставляются обособлено
                 //                //
@@ -348,7 +348,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 //                break;
                 //            }
 
-            case ScreenplayParagraphType::Lyrics: {
+            case TextParagraphType::Lyrics: {
                 //
                 // Добавим ~ вначало блока лирики
                 //
@@ -356,7 +356,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 break;
             }
 
-            case ScreenplayParagraphType::FolderHeader: {
+            case TextParagraphType::FolderHeader: {
                 //
                 // Напечатаем в начале столько #, насколько глубоко мы в директории
                 //
@@ -369,14 +369,14 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 break;
             }
 
-            case ScreenplayParagraphType::FolderFooter: {
+            case TextParagraphType::FolderFooter: {
                 --dirNesting;
                 skipBlock = true;
                 break;
             }
 
-            case ScreenplayParagraphType::Dialogue:
-            case ScreenplayParagraphType::Parenthetical:
+            case TextParagraphType::Dialogue:
+            case TextParagraphType::Parenthetical:
                 break;
             default: {
                 //
@@ -425,7 +425,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 // Заметки
                 //
                 const QStringList comments
-                    = paragraphFormat.property(ScreenplayBlockStyle::PropertyComments)
+                    = paragraphFormat.property(TextBlockStyle::PropertyComments)
                           .toStringList();
                 for (const QString& comment : comments) {
                     if (!comment.isEmpty()) {

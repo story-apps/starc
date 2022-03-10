@@ -10,6 +10,8 @@ class QStandardItemModel;
 
 namespace BusinessLayer {
 
+class AbstractTextModel;
+class TextTemplate;
 class ComicBookTemplate;
 class ScreenplayTemplate;
 class SimpleTextTemplate;
@@ -33,17 +35,18 @@ public:
     static QStandardItemModel* comicBookTemplates();
 
     /**
+     * @brief Получить шаблон используемый для заданной модели
+     */
+    static const TextTemplate& abstractTextTemplate(const AbstractTextModel* _model);
+
+    /**
      * @brief Получить шаблон в соответствии с заданным идентификатором
      * @note Если id не задан, возвращается стандартный шаблон
      */
-    static const BusinessLayer::SimpleTextTemplate& simpleTextTemplate(const QString& _templateId
-                                                                       = {});
-    static const BusinessLayer::ScreenplayTemplate& screenplayTemplate(const QString& _templateId
-                                                                       = {});
-    static const BusinessLayer::SimpleTextTemplate& screenplayTitlePageTemplate(
-        const QString& _templateId = {});
-    static const BusinessLayer::ComicBookTemplate& comicBookTemplate(const QString& _templateId
-                                                                     = {});
+    static const SimpleTextTemplate& simpleTextTemplate(const QString& _templateId = {});
+    static const ScreenplayTemplate& screenplayTemplate(const QString& _templateId = {});
+    static const TextTemplate& screenplayTitlePageTemplate(const QString& _templateId = {});
+    static const ComicBookTemplate& comicBookTemplate(const QString& _templateId = {});
 
     /**
      * @brief Задать стандартный шаблон

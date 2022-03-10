@@ -191,7 +191,7 @@ void SettingsManager::Implementation::loadShortcutsSettings()
     //
     // Сформировать строку таблицы переходов между блоками для заданного типа
     //
-    auto blocksJumpsModelRow = [](ScreenplayParagraphType _type) {
+    auto blocksJumpsModelRow = [](TextParagraphType _type) {
         const auto shortcut = ShortcutsHelper::screenplayShortcut(_type);
         const auto jumpForTab = ShortcutsHelper::screenplayJumpByTab(_type);
         const auto jumpForEnter = ShortcutsHelper::screenplayJumpByEnter(_type);
@@ -199,13 +199,11 @@ void SettingsManager::Implementation::loadShortcutsSettings()
         const auto changeForEnter = ShortcutsHelper::screenplayChangeByEnter(_type);
 
         QList<QStandardItem*> result;
-        result
-            << new QStandardItem(toDisplayString(_type)) << new QStandardItem(shortcut)
-            << new QStandardItem(toDisplayString(screenplayParagraphTypeFromString(jumpForTab)))
-            << new QStandardItem(toDisplayString(screenplayParagraphTypeFromString(jumpForEnter)))
-            << new QStandardItem(toDisplayString(screenplayParagraphTypeFromString(changeForTab)))
-            << new QStandardItem(
-                   toDisplayString(screenplayParagraphTypeFromString(changeForEnter)));
+        result << new QStandardItem(toDisplayString(_type)) << new QStandardItem(shortcut)
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(jumpForTab)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(jumpForEnter)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(changeForTab)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(changeForEnter)));
         result.first()->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         return result;
     };
@@ -215,18 +213,18 @@ void SettingsManager::Implementation::loadShortcutsSettings()
     const int rows = 0;
     const int columns = 6;
     QStandardItemModel* blocksJumpsModel = new QStandardItemModel(rows, columns, view);
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::SceneHeading));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::SceneCharacters));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Action));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Character));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Parenthetical));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Dialogue));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Lyrics));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Transition));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::Shot));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::InlineNote));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::FolderHeader));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(ScreenplayParagraphType::UnformattedText));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::SceneHeading));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::SceneCharacters));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Action));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Character));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Parenthetical));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Dialogue));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Lyrics));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Transition));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Shot));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::InlineNote));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::FolderHeader));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::UnformattedText));
     //
     // ... модель переходов между блоками, её заголовок и делегат
     //
@@ -911,16 +909,16 @@ void SettingsManager::setShortcutsForScreenplayEdit(
     const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab,
     const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
 {
-    const auto blockType = BusinessLayer::screenplayParagraphTypeFromDisplayString(_blockType);
+    const auto blockType = BusinessLayer::textParagraphTypeFromDisplayString(_blockType);
     ShortcutsHelper::setScreenplayShortcut(blockType, _shortcut);
     ShortcutsHelper::setScreenplayJumpByTab(
-        blockType, BusinessLayer::screenplayParagraphTypeFromDisplayString(_jumpByTab));
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_jumpByTab));
     ShortcutsHelper::setScreenplayJumpByEnter(
-        blockType, BusinessLayer::screenplayParagraphTypeFromDisplayString(_jumpByEnter));
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_jumpByEnter));
     ShortcutsHelper::setScreenplayChangeByTab(
-        blockType, BusinessLayer::screenplayParagraphTypeFromDisplayString(_changeByTab));
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByTab));
     ShortcutsHelper::setScreenplayChangeByEnter(
-        blockType, BusinessLayer::screenplayParagraphTypeFromDisplayString(_changeByEnter));
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByEnter));
     emit screenplayEditorChanged({ DataStorageLayer::kComponentsScreenplayEditorShortcutsKey });
 }
 

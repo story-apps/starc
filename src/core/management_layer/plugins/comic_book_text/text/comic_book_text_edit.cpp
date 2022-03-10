@@ -28,9 +28,9 @@
 #include <QScrollBar>
 #include <QTextTable>
 
-using BusinessLayer::ComicBookBlockStyle;
-using BusinessLayer::ComicBookParagraphType;
 using BusinessLayer::TemplatesFacade;
+using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextParagraphType;
 
 namespace Ui {
 
@@ -199,21 +199,21 @@ void ComicBookTextEdit::redo()
     d->revertAction(false);
 }
 
-void ComicBookTextEdit::addParagraph(BusinessLayer::ComicBookParagraphType _type)
+void ComicBookTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
 {
     d->document.addParagraph(_type, textCursor());
 
     //
     // Если вставляется персонаж, то разделяем страницу, для добавления реплики
     //
-    if (_type == BusinessLayer::ComicBookParagraphType::Character) {
+    if (_type == BusinessLayer::TextParagraphType::Character) {
         const auto cursorPosition = textCursor().position();
         d->document.splitParagraph(textCursor());
         auto cursor = textCursor();
         cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
         setTextCursor(cursor);
         cursor.movePosition(BusinessLayer::ComicBookTextCursor::NextBlock);
-        d->document.setParagraphType(BusinessLayer::ComicBookParagraphType::Dialogue, cursor);
+        d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
         //
         // Очищаем диалог, от текста, который туда добавляет корректор, пока там был блок персонажа
         //
@@ -226,7 +226,7 @@ void ComicBookTextEdit::addParagraph(BusinessLayer::ComicBookParagraphType _type
     emit paragraphTypeChanged();
 }
 
-void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::ComicBookParagraphType _type)
+void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::TextParagraphType _type)
 {
     if (currentParagraphType() == _type) {
         return;
@@ -237,8 +237,8 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::ComicBookParagrap
     //
     BusinessLayer::ComicBookTextCursor cursor = textCursor();
     const auto needSplitParagraph
-        = _type == BusinessLayer::ComicBookParagraphType::Character && !cursor.inTable();
-    const auto needMergeParagraph = currentParagraphType() == ComicBookParagraphType::Character
+        = _type == BusinessLayer::TextParagraphType::Character && !cursor.inTable();
+    const auto needMergeParagraph = currentParagraphType() == TextParagraphType::Character
         && cursor.inTable() && cursor.inFirstColumn();
 
     d->document.setParagraphType(_type, textCursor());
@@ -246,7 +246,7 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::ComicBookParagrap
     //
     // Если вставили папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
     //
-    if (_type == ComicBookParagraphType::FolderHeader) {
+    if (_type == TextParagraphType::FolderHeader) {
         moveCursor(QTextCursor::PreviousBlock);
     }
     //
@@ -260,7 +260,7 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::ComicBookParagrap
             cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
             setTextCursor(cursor);
             cursor.movePosition(BusinessLayer::ComicBookTextCursor::NextBlock);
-            d->document.setParagraphType(BusinessLayer::ComicBookParagraphType::Dialogue, cursor);
+            d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
             //
             // Очищаем диалог, от текста, который туда добавляет корректор, пока там был блок
             // персонажа
@@ -279,9 +279,9 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::ComicBookParagrap
     emit paragraphTypeChanged();
 }
 
-BusinessLayer::ComicBookParagraphType ComicBookTextEdit::currentParagraphType() const
+BusinessLayer::TextParagraphType ComicBookTextEdit::currentParagraphType() const
 {
-    return ComicBookBlockStyle::forBlock(textCursor().block());
+    return TextBlockStyle::forBlock(textCursor().block());
 }
 
 void ComicBookTextEdit::setTextCursorReimpl(const QTextCursor& _cursor)
@@ -444,12 +444,11 @@ bool ComicBookTextEdit::keyPressEventReimpl(QKeyEvent* _event)
             moveCursor(QTextCursor::PreviousCharacter);
         }
 
-        while (!textCursor().atEnd()
-               && (!textCursor().block().isVisible()
-                   || ComicBookBlockStyle::forBlock(textCursor().block())
-                       == ComicBookParagraphType::PageSplitter
-                   || textCursor().blockFormat().boolProperty(
-                       ComicBookBlockStyle::PropertyIsCorrection))) {
+        while (
+            !textCursor().atEnd()
+            && (!textCursor().block().isVisible()
+                || TextBlockStyle::forBlock(textCursor().block()) == TextParagraphType::PageSplitter
+                || textCursor().blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection))) {
             moveCursor(QTextCursor::NextBlock);
         }
     }
@@ -462,12 +461,11 @@ bool ComicBookTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         } else {
             moveCursor(QTextCursor::NextCharacter);
         }
-        while (!textCursor().atStart()
-               && (!textCursor().block().isVisible()
-                   || ComicBookBlockStyle::forBlock(textCursor().block())
-                       == ComicBookParagraphType::PageSplitter
-                   || textCursor().blockFormat().boolProperty(
-                       ComicBookBlockStyle::PropertyIsCorrection))) {
+        while (
+            !textCursor().atStart()
+            && (!textCursor().block().isVisible()
+                || TextBlockStyle::forBlock(textCursor().block()) == TextParagraphType::PageSplitter
+                || textCursor().blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection))) {
             moveCursor(QTextCursor::StartOfBlock);
             if (textCursor().block().textDirection() == Qt::LeftToRight) {
                 moveCursor(QTextCursor::PreviousCharacter);
@@ -518,7 +516,7 @@ bool ComicBookTextEdit::updateEnteredText(const QString& _eventText)
     //
     // Определяем необходимость установки верхнего регистра для первого символа блока
     //
-    if (currentCharFormat.boolProperty(ComicBookBlockStyle::PropertyIsFirstUppercase)
+    if (currentCharFormat.boolProperty(TextBlockStyle::PropertyIsFirstUppercase)
         && cursorBackwardText != " " && cursorBackwardText == _eventText
         && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
         //
@@ -617,9 +615,9 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
     //
     // ... идём до начала сцены
     //
-    while (ComicBookBlockStyle::forBlock(topBlock) != ComicBookParagraphType::Page
-           && ComicBookBlockStyle::forBlock(topBlock) != ComicBookParagraphType::Panel
-           && ComicBookBlockStyle::forBlock(topBlock) != ComicBookParagraphType::FolderHeader
+    while (TextBlockStyle::forBlock(topBlock) != TextParagraphType::Page
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Panel
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::FolderHeader
            && topBlock != document()->firstBlock()) {
         topBlock = topBlock.previous();
     }
@@ -679,7 +677,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Стиль текущего блока
                 //
-                const auto blockType = ComicBookBlockStyle::forBlock(block);
+                const auto blockType = TextBlockStyle::forBlock(block);
 
                 cursor.setPosition(block.position());
                 const QRect cursorR = cursorRect(cursor);
@@ -691,9 +689,8 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Определим цвет сцены
                 //
-                if (blockType == ComicBookParagraphType::Page
-                    || blockType == ComicBookParagraphType::Panel
-                    || blockType == ComicBookParagraphType::FolderHeader) {
+                if (blockType == TextParagraphType::Page || blockType == TextParagraphType::Panel
+                    || blockType == TextParagraphType::FolderHeader) {
                     lastSceneBlockBottom = cursorR.top();
                     lastItemColor = d->document.itemColor(block);
                 }
@@ -703,7 +700,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 if (lastItemColor.isValid()) {
                     const auto isBlockSceneHeadingWithNumberAtRight
-                        = blockType == ComicBookParagraphType::Panel && d->showSceneNumber
+                        = blockType == TextParagraphType::Panel && d->showSceneNumber
                         && d->showSceneNumberOnRight;
                     if (!isBlockSceneHeadingWithNumberAtRight) {
                         const QPointF topLeft(
@@ -828,13 +825,13 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                     //
                     // Прорисовка декораций пустой строки
                     //
-                    if (!block.blockFormat().boolProperty(ComicBookBlockStyle::PropertyIsCorrection)
-                        && blockType != ComicBookParagraphType::PageSplitter
+                    if (!block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
+                        && blockType != TextParagraphType::PageSplitter
                         && block.text().simplified().isEmpty()) {
                         //
                         // Для пустого футера рисуем плейсхолдер
                         //
-                        if (blockType == ComicBookParagraphType::FolderFooter) {
+                        if (blockType == TextParagraphType::FolderFooter) {
                             painter.setFont(block.charFormat().font());
 
                             //
@@ -843,16 +840,14 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                             auto headerBlock = block.previous();
                             int openedFolders = 0;
                             while (headerBlock.isValid()) {
-                                const auto headerBlockType
-                                    = ComicBookBlockStyle::forBlock(headerBlock);
-                                if (headerBlockType == ComicBookParagraphType::FolderHeader) {
+                                const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
+                                if (headerBlockType == TextParagraphType::FolderHeader) {
                                     if (openedFolders > 0) {
                                         --openedFolders;
                                     } else {
                                         break;
                                     }
-                                } else if (headerBlockType
-                                           == ComicBookParagraphType::FolderFooter) {
+                                } else if (headerBlockType == TextParagraphType::FolderFooter) {
                                     ++openedFolders;
                                 }
 
@@ -921,7 +916,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Прорисовка декораций страницы
                         //
-                        if (blockType == ComicBookParagraphType::Page) {
+                        if (blockType == TextParagraphType::Page) {
                             //
                             // Прорисовка количества панелей
                             //
@@ -942,7 +937,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                                     painter.setFont(
                                         currentTemplate
                                             .paragraphStyle(
-                                                BusinessLayer::ComicBookParagraphType::Description)
+                                                BusinessLayer::TextParagraphType::Description)
                                             .font());
                                     const auto panelsCountText = QString(" (%1)").arg(
                                         tr("%n panels", "", pageItem->panelsCount()));
@@ -1147,12 +1142,12 @@ ContextMenu* ComicBookTextEdit::createContextMenu(const QPoint& _position, QWidg
         //
         // Запрещаем разделять некоторые блоки
         //
-        const auto blockType = ComicBookBlockStyle::forBlock(cursor.block());
-        splitAction->setEnabled(blockType != ComicBookParagraphType::Page
-                                && blockType != ComicBookParagraphType::Panel
-                                && blockType != ComicBookParagraphType::PanelShadow
-                                && blockType != ComicBookParagraphType::FolderHeader
-                                && blockType != ComicBookParagraphType::FolderFooter);
+        const auto blockType = TextBlockStyle::forBlock(cursor.block());
+        splitAction->setEnabled(blockType != TextParagraphType::Page
+                                && blockType != TextParagraphType::Panel
+                                && blockType != TextParagraphType::PanelShadow
+                                && blockType != TextParagraphType::FolderHeader
+                                && blockType != TextParagraphType::FolderFooter);
     }
     connect(splitAction, &QAction::triggered, this, [this] {
         BusinessLayer::ComicBookTextCursor cursor = textCursor();

@@ -57,8 +57,8 @@ const QString kOldSchoolCenteringPrefix = "                    ";
  * @brief Определить тип блока в текущей позиции курсора
  *		  с указанием предыдущего типа и количества предшествующих пустых строк
  */
-ScreenplayParagraphType typeForTextCursor(const QTextCursor& _cursor,
-                                          ScreenplayParagraphType _lastBlockType,
+TextParagraphType typeForTextCursor(const QTextCursor& _cursor,
+                                          TextParagraphType _lastBlockType,
                                           int _prevEmptyLines, int _minLeftMargin)
 {
     //
@@ -70,7 +70,7 @@ ScreenplayParagraphType typeForTextCursor(const QTextCursor& _cursor,
     //
     // Для всех нераспознаных блоков ставим тип "Описание действия"
     //
-    ScreenplayParagraphType blockType = ScreenplayParagraphType::Action;
+    TextParagraphType blockType = TextParagraphType::Action;
 
     //
     // Определим некоторые характеристики исследуемого текста
@@ -99,22 +99,22 @@ ScreenplayParagraphType typeForTextCursor(const QTextCursor& _cursor,
             // Персонаж
             // 1. В верхнем регистре
             //
-            if (textIsUppercase && _lastBlockType != ScreenplayParagraphType::Character) {
-                blockType = ScreenplayParagraphType::Character;
+            if (textIsUppercase && _lastBlockType != TextParagraphType::Character) {
+                blockType = TextParagraphType::Character;
             }
             //
             // Ремарка
             // 1. начинается со скобки
             //
             else if (blockText.startsWith("(")) {
-                blockType = ScreenplayParagraphType::Parenthetical;
+                blockType = TextParagraphType::Parenthetical;
             }
             //
             // Реплика
             // 1. всё что осталось
             //
             else {
-                blockType = ScreenplayParagraphType::Dialogue;
+                blockType = TextParagraphType::Dialogue;
             }
 
         }
@@ -133,7 +133,7 @@ ScreenplayParagraphType typeForTextCursor(const QTextCursor& _cursor,
                 //
                 if (blockTextUppercase.contains(kPlaceContainsChecker)
                     || blockTextUppercase.contains(kStartFromNumberChecker)) {
-                    blockType = ScreenplayParagraphType::SceneHeading;
+                    blockType = TextParagraphType::SceneHeading;
                 }
                 //
                 // Участника сцены
@@ -141,9 +141,9 @@ ScreenplayParagraphType typeForTextCursor(const QTextCursor& _cursor,
                 // 2. идут сразу же после времени и места
                 // 3. не имеют сверху отступа
                 //
-                else if (_lastBlockType == ScreenplayParagraphType::SceneHeading
+                else if (_lastBlockType == TextParagraphType::SceneHeading
                          && _prevEmptyLines == 0 && blockFormat.topMargin() == 0) {
-                    blockType = ScreenplayParagraphType::SceneCharacters;
+                    blockType = TextParagraphType::SceneCharacters;
                 }
                 //
                 // Примечание
@@ -151,14 +151,14 @@ ScreenplayParagraphType typeForTextCursor(const QTextCursor& _cursor,
                 // 2. выровнено по левому краю
                 //
                 else if (blockFormat.alignment().testFlag(Qt::AlignLeft) && !isCentered) {
-                    blockType = ScreenplayParagraphType::UnformattedText;
+                    blockType = TextParagraphType::UnformattedText;
                 }
                 //
                 // Переход
                 // 1. всё что осталось и выровнено по правому краю
                 //
                 else if (blockFormat.alignment().testFlag(Qt::AlignRight)) {
-                    blockType = ScreenplayParagraphType::Transition;
+                    blockType = TextParagraphType::Transition;
                 }
             }
         }
@@ -171,7 +171,7 @@ ScreenplayParagraphType typeForTextCursor(const QTextCursor& _cursor,
         // 1. начинается со слова ТИТР:
         //
         if (blockTextUppercase.contains(kTitleChecker)) {
-            blockType = ScreenplayParagraphType::Action;
+            blockType = TextParagraphType::Action;
         }
     }
 
@@ -196,7 +196,7 @@ const QRegularExpression NOISE_AT_END(NOISE + "$");
 /**
  * @brief Очистка блоков от мусора и их корректировки
  */
-static QString clearBlockText(ScreenplayParagraphType _blockType, const QString& _blockText)
+static QString clearBlockText(TextParagraphType _blockType, const QString& _blockText)
 {
     QString result = _blockText;
 
@@ -210,7 +210,7 @@ static QString clearBlockText(ScreenplayParagraphType _blockType, const QString&
     // * всевозможные "инт - " меняем на "инт. "
     // * убираем точки в конце названия локации
     //
-    if (_blockType == ScreenplayParagraphType::SceneHeading) {
+    if (_blockType == TextParagraphType::SceneHeading) {
         const QString location = ScreenplaySceneHeadingParser::location(_blockText);
         QString clearLocation = location.simplified();
         clearLocation.remove(NOISE_AT_START);
@@ -223,7 +223,7 @@ static QString clearBlockText(ScreenplayParagraphType _blockType, const QString&
     // Для персонажей
     // * убираем точки в конце
     //
-    else if (_blockType == ScreenplayParagraphType::Character) {
+    else if (_blockType == TextParagraphType::Character) {
         const QString name = ScreenplayCharacterParser::name(_blockText);
         QString clearName = name.simplified();
         clearName.remove(NOISE_AT_END);
@@ -235,7 +235,7 @@ static QString clearBlockText(ScreenplayParagraphType _blockType, const QString&
     // Ремарка
     // * убираем скобки
     //
-    else if (_blockType == ScreenplayParagraphType::Parenthetical) {
+    else if (_blockType == TextParagraphType::Parenthetical) {
         QString clearParenthetical = _blockText.simplified();
         if (!clearParenthetical.isEmpty() && clearParenthetical.front() == '(') {
             clearParenthetical.remove(0, 1);
@@ -296,7 +296,7 @@ ScreenplayAbstractImporter::Documents ScreenplayDocumentImporter::importDocument
     // Для каждого блока текста определяем тип
     //
     // ... последний стиль блока
-    auto lastBlockType = ScreenplayParagraphType::Undefined;
+    auto lastBlockType = TextParagraphType::Undefined;
     // ... количество пустых строк
     int emptyLines = 0;
     std::set<QString> characterNames;
@@ -318,7 +318,7 @@ ScreenplayAbstractImporter::Documents ScreenplayDocumentImporter::importDocument
             //
             // Если текущий тип "Время и место", то удалим номер сцены
             //
-            if (blockType == ScreenplayParagraphType::SceneHeading) {
+            if (blockType == TextParagraphType::SceneHeading) {
                 paragraphText = TextHelper::smartToUpper(paragraphText);
                 const auto match = kStartFromNumberChecker.match(paragraphText);
                 if (match.hasMatch()) {
@@ -332,7 +332,7 @@ ScreenplayAbstractImporter::Documents ScreenplayDocumentImporter::importDocument
             paragraphText = clearBlockText(blockType, paragraphText);
 
             switch (blockType) {
-            case ScreenplayParagraphType::SceneHeading: {
+            case TextParagraphType::SceneHeading: {
                 if (!_options.importLocations) {
                     break;
                 }
@@ -346,7 +346,7 @@ ScreenplayAbstractImporter::Documents ScreenplayDocumentImporter::importDocument
                 break;
             }
 
-            case ScreenplayParagraphType::Character: {
+            case TextParagraphType::Character: {
                 if (!_options.importCharacters) {
                     break;
                 }
@@ -452,7 +452,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::impo
     // Для каждого блока текста определяем тип
     //
     // ... последний стиль блока
-    auto lastBlockType = ScreenplayParagraphType::Undefined;
+    auto lastBlockType = TextParagraphType::Undefined;
     // ... количество пустых строк
     int emptyLines = 0;
     bool alreadyInScene = false;
@@ -471,7 +471,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::impo
             //
             // Если текущий тип "Время и место", то удалим номер сцены
             //
-            if (blockType == ScreenplayParagraphType::SceneHeading && !_options.keepSceneNumbers) {
+            if (blockType == TextParagraphType::SceneHeading && !_options.keepSceneNumbers) {
                 const auto match
                     = kStartFromNumberChecker.match(cursor.block().text().simplified());
                 if (match.hasMatch()) {
@@ -494,7 +494,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::impo
             //
             // Формируем блок сценария
             //
-            if (blockType == ScreenplayParagraphType::SceneHeading) {
+            if (blockType == TextParagraphType::SceneHeading) {
                 if (alreadyInScene) {
                     writer.writeEndElement(); // контент предыдущей сцены
                     writer.writeEndElement(); // предыдущая сцена

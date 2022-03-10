@@ -388,23 +388,23 @@ bool TextModelTextItem::ReviewMark::operator==(const TextModelTextItem::ReviewMa
 QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const
 {
     QTextCharFormat format;
-    format.setProperty(SimpleTextBlockStyle::PropertyIsReviewMark, true);
+    format.setProperty(TextBlockStyle::PropertyIsReviewMark, true);
     if (textColor.isValid()) {
         format.setForeground(textColor);
     }
     if (backgroundColor.isValid()) {
         format.setBackground(backgroundColor);
     }
-    format.setProperty(SimpleTextBlockStyle::PropertyIsDone, isDone);
+    format.setProperty(TextBlockStyle::PropertyIsDone, isDone);
     QStringList authors, dates, comments;
     for (const auto& comment : this->comments) {
         authors.append(comment.author);
         dates.append(comment.date);
         comments.append(comment.text);
     }
-    format.setProperty(SimpleTextBlockStyle::PropertyCommentsAuthors, authors);
-    format.setProperty(SimpleTextBlockStyle::PropertyCommentsDates, dates);
-    format.setProperty(SimpleTextBlockStyle::PropertyComments, comments);
+    format.setProperty(TextBlockStyle::PropertyCommentsAuthors, authors);
+    format.setProperty(TextBlockStyle::PropertyCommentsDates, dates);
+    format.setProperty(TextBlockStyle::PropertyComments, comments);
     return format;
 }
 
@@ -600,7 +600,7 @@ void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& 
 {
     QVector<ReviewMark> newReviewMarks;
     for (const auto& reviewMark : _reviewMarks) {
-        if (reviewMark.format.boolProperty(SimpleTextBlockStyle::PropertyIsReviewMark) == false) {
+        if (reviewMark.format.boolProperty(TextBlockStyle::PropertyIsReviewMark) == false) {
             continue;
         }
 
@@ -613,14 +613,14 @@ void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& 
         if (reviewMark.format.hasProperty(QTextFormat::BackgroundBrush)) {
             newReviewMark.backgroundColor = reviewMark.format.background().color();
         }
-        newReviewMark.isDone = reviewMark.format.boolProperty(SimpleTextBlockStyle::PropertyIsDone);
+        newReviewMark.isDone = reviewMark.format.boolProperty(TextBlockStyle::PropertyIsDone);
         const QStringList comments
-            = reviewMark.format.property(SimpleTextBlockStyle::PropertyComments).toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyComments).toStringList();
         const QStringList dates
-            = reviewMark.format.property(SimpleTextBlockStyle::PropertyCommentsDates)
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsDates)
                   .toStringList();
         const QStringList authors
-            = reviewMark.format.property(SimpleTextBlockStyle::PropertyCommentsAuthors)
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthors)
                   .toStringList();
         for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
             newReviewMark.comments.append(

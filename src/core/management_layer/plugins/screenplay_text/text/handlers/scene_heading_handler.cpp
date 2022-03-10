@@ -12,7 +12,7 @@
 #include <QTextBlock>
 #include <QTimer>
 
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextParagraphType;
 using BusinessLayer::ScreenplaySceneHeadingParser;
 using Ui::ScreenplayTextEdit;
 
@@ -92,7 +92,7 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
             //
             cursor.movePosition(QTextCursor::EndOfBlock);
             editor()->setTextCursor(cursor);
-            editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::SceneHeading));
+            editor()->addParagraph(jumpForEnter(TextParagraphType::SceneHeading));
         }
     } else {
         //! Подстановщик закрыт
@@ -103,7 +103,7 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
+            editor()->addParagraph(TextParagraphType::SceneHeading);
         } else {
             //! Нет выделения
 
@@ -114,7 +114,7 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
                 // Меняем в соответствии с настройками
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ScreenplayParagraphType::SceneHeading));
+                    changeForEnter(TextParagraphType::SceneHeading));
             } else {
                 //! Текст не пуст
 
@@ -129,21 +129,21 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
                     //
                     // Вставка блока заголовка перед собой
                     //
-                    editor()->addParagraph(ScreenplayParagraphType::SceneHeading);
+                    editor()->addParagraph(TextParagraphType::SceneHeading);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
                     // Вставка блока описания действия
                     //
-                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::SceneHeading));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::SceneHeading));
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставка блока описания действия
                     //
-                    editor()->addParagraph(ScreenplayParagraphType::Action);
+                    editor()->addParagraph(TextParagraphType::Action);
                 }
             }
         }
@@ -194,7 +194,7 @@ void SceneHeadingHandler::handleTab(QKeyEvent*)
                 // Если строка пуста, то сменить стиль на описание действия
                 //
                 editor()->setCurrentParagraphType(
-                    changeForTab(ScreenplayParagraphType::SceneHeading));
+                    changeForTab(TextParagraphType::SceneHeading));
             } else {
                 //! Текст не пуст
 
@@ -241,7 +241,7 @@ void SceneHeadingHandler::handleTab(QKeyEvent*)
                         //
                         // А затем вставим блок
                         //
-                        editor()->addParagraph(jumpForTab(ScreenplayParagraphType::SceneHeading));
+                        editor()->addParagraph(jumpForTab(TextParagraphType::SceneHeading));
                     }
                 } else {
                     //! Внутри блока

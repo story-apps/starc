@@ -44,21 +44,21 @@ int pxToTwips(qreal _px)
 /**
  * @brief Пронумерованный список типов блоков
  */
-const QMap<int, ComicBookParagraphType>& paragraphTypes()
+const QMap<int, TextParagraphType>& paragraphTypes()
 {
-    static QMap<int, ComicBookParagraphType> s_types;
+    static QMap<int, TextParagraphType> s_types;
     if (s_types.isEmpty()) {
         int i = 0;
-        s_types.insert(i++, ComicBookParagraphType::Undefined);
-        s_types.insert(i++, ComicBookParagraphType::UnformattedText);
-        s_types.insert(i++, ComicBookParagraphType::Page);
-        s_types.insert(i++, ComicBookParagraphType::Panel);
-        s_types.insert(i++, ComicBookParagraphType::Description);
-        s_types.insert(i++, ComicBookParagraphType::Character);
-        s_types.insert(i++, ComicBookParagraphType::Dialogue);
-        s_types.insert(i++, ComicBookParagraphType::InlineNote);
-        s_types.insert(i++, ComicBookParagraphType::FolderHeader);
-        s_types.insert(i++, ComicBookParagraphType::FolderFooter);
+        s_types.insert(i++, TextParagraphType::Undefined);
+        s_types.insert(i++, TextParagraphType::UnformattedText);
+        s_types.insert(i++, TextParagraphType::Page);
+        s_types.insert(i++, TextParagraphType::Panel);
+        s_types.insert(i++, TextParagraphType::Description);
+        s_types.insert(i++, TextParagraphType::Character);
+        s_types.insert(i++, TextParagraphType::Dialogue);
+        s_types.insert(i++, TextParagraphType::InlineNote);
+        s_types.insert(i++, TextParagraphType::FolderHeader);
+        s_types.insert(i++, TextParagraphType::FolderFooter);
     }
     return s_types;
 }
@@ -92,7 +92,7 @@ bool needWriteFooter(const ComicBookExportOptions& _exportOptions)
 /**
  * @brief Название типа параграфа в специальном формате
  */
-QString paragraphTypeName(ComicBookParagraphType _type, const QString suffix = "",
+QString paragraphTypeName(TextParagraphType _type, const QString suffix = "",
                           const QString& _separator = "")
 {
     return (toString(_type) + suffix).toUpper().replace("_", _separator);
@@ -133,13 +133,13 @@ QString docxAlignment(Qt::Alignment _alignment)
 /**
  * @brief Сформировать строку DOCX-стиля из стиля блока
  */
-QString docxBlockStyle(const ComicBookBlockStyle& _style, const QString& _defaultFontFamily,
+QString docxBlockStyle(const TextBlockStyle& _style, const QString& _defaultFontFamily,
                        bool _onHalfPage = false)
 {
     //
     // Для неопределённого стиля формируется простая заглушка
     //
-    if (_style.type() == ComicBookParagraphType::Undefined) {
+    if (_style.type() == TextParagraphType::Undefined) {
         return QString("<w:style w:type=\"paragraph\" w:styleId=\"Normal\">"
                        "<w:name w:val=\"Normal\"/>"
                        "<w:pPr>"
@@ -201,21 +201,21 @@ QString docxBlockStyle(const ComicBookBlockStyle& _style, const QString& _defaul
     QString lineSpacingType = "auto";
     switch (_style.lineSpacingType()) {
     default:
-    case ComicBookBlockStyle::LineSpacingType::SingleLineSpacing: {
+    case TextBlockStyle::LineSpacingType::SingleLineSpacing: {
         break;
     }
 
-    case ComicBookBlockStyle::LineSpacingType::OneAndHalfLineSpacing: {
+    case TextBlockStyle::LineSpacingType::OneAndHalfLineSpacing: {
         lineSpacing = 360;
         break;
     }
 
-    case ComicBookBlockStyle::LineSpacingType::DoubleLineSpacing: {
+    case TextBlockStyle::LineSpacingType::DoubleLineSpacing: {
         lineSpacing = 480;
         break;
     }
 
-    case ComicBookBlockStyle::LineSpacingType::FixedLineSpacing: {
+    case TextBlockStyle::LineSpacingType::FixedLineSpacing: {
         lineSpacing = mmToTwips(_style.lineSpacingValue());
         lineSpacingType = "exact";
         break;
@@ -364,9 +364,9 @@ QString docxText(QMap<int, QStringList>& _comments, const ComicBookTextCursor& _
     // Получим стиль параграфа
     //
     const QTextBlock block = _cursor.block();
-    const auto currentBlockType = ComicBookBlockStyle::forBlock(block);
-    const auto correctedBlockType = currentBlockType == ComicBookParagraphType::PanelShadow
-        ? ComicBookParagraphType::Panel
+    const auto currentBlockType = TextBlockStyle::forBlock(block);
+    const auto correctedBlockType = currentBlockType == TextParagraphType::PanelShadow
+        ? TextParagraphType::Panel
         : currentBlockType;
 
     //
@@ -374,7 +374,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ComicBookTextCursor& _
     //
     // ... неизвестный стиль параграфа
     //
-    if (currentBlockType == ComicBookParagraphType::Undefined) {
+    if (currentBlockType == TextParagraphType::Undefined) {
         //
         // ... настройки абзаца
         //
@@ -422,7 +422,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ComicBookTextCursor& _
     //
     // ... начало и конец таблицы
     //
-    else if (currentBlockType == ComicBookParagraphType::PageSplitter) {
+    else if (currentBlockType == TextParagraphType::PageSplitter) {
         const auto blockData = dynamic_cast<ComicBookTextBlockData*>(block.userData());
         if (blockData != nullptr) {
             const auto splitterItem
@@ -505,7 +505,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ComicBookTextCursor& _
         //
         else if (_cursor.atStart()
                  || _cursor.blockFormat().hasProperty(
-                     ComicBookBlockStyle::PropertyIsCorrectionContinued)) {
+                     TextBlockStyle::PropertyIsCorrectionContinued)) {
             documentXml.append("<w:spacing w:before=\"0\"/>");
         }
 
@@ -528,7 +528,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ComicBookTextCursor& _
             //
             // ... не является редакторской заметкой
             //
-            if (range.format.boolProperty(ComicBookBlockStyle::PropertyIsReviewMark) == false) {
+            if (range.format.boolProperty(TextBlockStyle::PropertyIsReviewMark) == false) {
                 //
                 // ... стандартный для абзаца
                 //
@@ -572,7 +572,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ComicBookTextCursor& _
             //
             else {
                 const QStringList comments
-                    = range.format.property(ComicBookBlockStyle::PropertyComments).toStringList();
+                    = range.format.property(TextBlockStyle::PropertyComments).toStringList();
                 const bool hasComments = !comments.isEmpty() && !comments.first().isEmpty();
                 int lastCommentIndex = _comments.isEmpty() ? 0 : _comments.lastKey();
                 //
@@ -580,10 +580,10 @@ QString docxText(QMap<int, QStringList>& _comments, const ComicBookTextCursor& _
                 //
                 if (hasComments && isCommentsRangeStart(block, range)) {
                     const QStringList authors
-                        = range.format.property(ComicBookBlockStyle::PropertyCommentsAuthors)
+                        = range.format.property(TextBlockStyle::PropertyCommentsAuthors)
                               .toStringList();
                     const QStringList dates
-                        = range.format.property(ComicBookBlockStyle::PropertyCommentsDates)
+                        = range.format.property(TextBlockStyle::PropertyCommentsDates)
                               .toStringList();
 
                     for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
@@ -794,7 +794,7 @@ void writeStyles(QtZipWriter* _zip, const ComicBookExportOptions& _exportOptions
     //
     const auto& comicBookTemplate = exportTemplate(_exportOptions);
     const QString defaultFontFamily
-        = comicBookTemplate.paragraphStyle(ComicBookParagraphType::Description).font().family();
+        = comicBookTemplate.paragraphStyle(TextParagraphType::Description).font().family();
     for (const auto& paragraphType : paragraphTypes()) {
         const auto blockStyle = comicBookTemplate.paragraphStyle(paragraphType);
         styleXml.append(docxBlockStyle(blockStyle, defaultFontFamily));

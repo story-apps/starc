@@ -160,7 +160,7 @@ QByteArray ComicBookTextModelFolderItem::toXml(ComicBookTextModelItem* _from, in
 {
     auto folderFooterXml = [] {
         ComicBookTextModelTextItem item;
-        item.setParagraphType(ComicBookParagraphType::FolderFooter);
+        item.setParagraphType(TextParagraphType::FolderFooter);
         return item.toXml();
     };
 
@@ -227,7 +227,7 @@ QByteArray ComicBookTextModelFolderItem::toXml(ComicBookTextModelItem* _from, in
             //
             // Если папка не была закрыта, добавим корректное завершение для неё
             //
-            if (textItem->paragraphType() != ComicBookParagraphType::FolderFooter) {
+            if (textItem->paragraphType() != TextParagraphType::FolderFooter) {
                 xml += folderFooterXml();
             }
             break;
@@ -291,7 +291,7 @@ void ComicBookTextModelFolderItem::handleChange()
         switch (child->type()) {
         case ComicBookTextModelItemType::Text: {
             auto childItem = static_cast<ComicBookTextModelTextItem*>(child);
-            if (childItem->paragraphType() == ComicBookParagraphType::FolderHeader) {
+            if (childItem->paragraphType() == TextParagraphType::FolderHeader) {
                 d->name = TextHelper::smartToUpper(childItem->text());
             }
             break;

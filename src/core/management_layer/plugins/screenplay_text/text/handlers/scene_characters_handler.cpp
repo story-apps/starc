@@ -14,7 +14,7 @@
 #include <QTextBlock>
 #include <QTimer>
 
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
@@ -41,7 +41,7 @@ void SceneCharactersHandler::handleEnter(QKeyEvent*)
     QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
     // ... префикс и постфикс стиля
     const auto style
-        = editor()->screenplayTemplate().paragraphStyle(ScreenplayParagraphType::SceneCharacters);
+        = editor()->screenplayTemplate().paragraphStyle(TextParagraphType::SceneCharacters);
     QString stylePrefix = style.prefix();
     QString stylePostfix = style.postfix();
 
@@ -64,7 +64,7 @@ void SceneCharactersHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ScreenplayParagraphType::SceneCharacters);
+            editor()->addParagraph(TextParagraphType::SceneCharacters);
         } else {
             //! Нет выделения
 
@@ -76,7 +76,7 @@ void SceneCharactersHandler::handleEnter(QKeyEvent*)
                 // Cменить стиль на описание действия
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ScreenplayParagraphType::SceneCharacters));
+                    changeForEnter(TextParagraphType::SceneCharacters));
             } else {
                 //! Текст не пуст
 
@@ -99,7 +99,7 @@ void SceneCharactersHandler::handleEnter(QKeyEvent*)
                     //
                     cursor.movePosition(QTextCursor::EndOfBlock);
                     editor()->setTextCursor(cursor);
-                    editor()->addParagraph(jumpForEnter(ScreenplayParagraphType::SceneCharacters));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::SceneCharacters));
                 } else {
                     //! Внутри блока
 
@@ -120,7 +120,7 @@ void SceneCharactersHandler::handleEnter(QKeyEvent*)
                     // Перейдём к блоку действия
                     //
                     editor()->setTextCursor(cursor);
-                    editor()->addParagraph(ScreenplayParagraphType::Action);
+                    editor()->addParagraph(TextParagraphType::Action);
                 }
             }
         }
@@ -201,7 +201,7 @@ void SceneCharactersHandler::complete(const QString& _currentBlockText,
     }
     // ... уберём префикс
     const auto style
-        = editor()->screenplayTemplate().paragraphStyle(ScreenplayParagraphType::SceneCharacters);
+        = editor()->screenplayTemplate().paragraphStyle(TextParagraphType::SceneCharacters);
     QString stylePrefix = style.prefix();
     if (!stylePrefix.isEmpty() && cursorBackwardTextToComma.startsWith(stylePrefix)) {
         cursorBackwardTextToComma.remove(QRegularExpression(QString("^[%1]").arg(stylePrefix)));

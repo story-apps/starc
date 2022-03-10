@@ -7,7 +7,7 @@
 
 namespace BusinessLayer {
 class ComicBookTextModel;
-enum class ComicBookParagraphType;
+enum class TextParagraphType;
 } // namespace BusinessLayer
 
 namespace BusinessLayer {
@@ -76,12 +76,12 @@ public:
     /**
      * @brief Вставить новый блок заданного типа
      */
-    void addParagraph(BusinessLayer::ComicBookParagraphType _type, ComicBookTextCursor _cursor);
+    void addParagraph(BusinessLayer::TextParagraphType _type, ComicBookTextCursor _cursor);
 
     /**
      * @brief Установить тип блока для заданного курсора
      */
-    void setParagraphType(BusinessLayer::ComicBookParagraphType _type,
+    void setParagraphType(BusinessLayer::TextParagraphType _type,
                           const ComicBookTextCursor& _cursor);
 
     /**
@@ -92,7 +92,7 @@ public:
     /**
      * @brief Применить заданный тип блока к тексту, на который указывает курсор
      */
-    void applyParagraphType(BusinessLayer::ComicBookParagraphType _type,
+    void applyParagraphType(BusinessLayer::TextParagraphType _type,
                             const ComicBookTextCursor& _cursor);
 
     /**

@@ -97,18 +97,18 @@ QStringListModel* buildScreenplayParagraphTypesModel(QObject* _parent,
 {
     using namespace BusinessLayer;
     const QStringList paragraphTypes = {
-        toDisplayString(ScreenplayParagraphType::SceneHeading),
-        toDisplayString(ScreenplayParagraphType::SceneCharacters),
-        toDisplayString(ScreenplayParagraphType::Action),
-        toDisplayString(ScreenplayParagraphType::Character),
-        toDisplayString(ScreenplayParagraphType::Parenthetical),
-        toDisplayString(ScreenplayParagraphType::Dialogue),
-        toDisplayString(ScreenplayParagraphType::Lyrics),
-        toDisplayString(ScreenplayParagraphType::Transition),
-        toDisplayString(ScreenplayParagraphType::Shot),
-        toDisplayString(ScreenplayParagraphType::InlineNote),
-        toDisplayString(ScreenplayParagraphType::FolderHeader),
-        toDisplayString(ScreenplayParagraphType::UnformattedText),
+        toDisplayString(TextParagraphType::SceneHeading),
+        toDisplayString(TextParagraphType::SceneCharacters),
+        toDisplayString(TextParagraphType::Action),
+        toDisplayString(TextParagraphType::Character),
+        toDisplayString(TextParagraphType::Parenthetical),
+        toDisplayString(TextParagraphType::Dialogue),
+        toDisplayString(TextParagraphType::Lyrics),
+        toDisplayString(TextParagraphType::Transition),
+        toDisplayString(TextParagraphType::Shot),
+        toDisplayString(TextParagraphType::InlineNote),
+        toDisplayString(TextParagraphType::FolderHeader),
+        toDisplayString(TextParagraphType::UnformattedText),
     };
 
     if (!_model) {

@@ -17,9 +17,9 @@
 #include <QTextBlock>
 #include <QTimer>
 
-using BusinessLayer::ComicBookBlockStyle;
+using BusinessLayer::TextBlockStyle;
 using BusinessLayer::ComicBookCharacterParser;
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
 
@@ -118,7 +118,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(ComicBookParagraphType::Character);
+            editor()->addParagraph(TextParagraphType::Character);
         } else {
             //! Нет выделения
 
@@ -129,7 +129,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                 // Cменить стиль
                 //
                 editor()->setCurrentParagraphType(
-                    changeForEnter(ComicBookParagraphType::Character));
+                    changeForEnter(TextParagraphType::Character));
             } else {
                 //! Текст не пуст
 
@@ -151,7 +151,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                     //
                     // Вставим блок имени героя перед собой
                     //
-                    editor()->addParagraph(ComicBookParagraphType::Character);
+                    editor()->addParagraph(TextParagraphType::Character);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
@@ -165,7 +165,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                     //
                     // Вставить блок реплики героя
                     //
-                    editor()->addParagraph(ComicBookParagraphType::Dialogue);
+                    editor()->addParagraph(TextParagraphType::Dialogue);
                 }
             }
         }
@@ -215,7 +215,7 @@ void CharacterHandler::handleTab(QKeyEvent*)
                 //
                 // Cменить стиль на описание действия
                 //
-                editor()->setCurrentParagraphType(changeForTab(ComicBookParagraphType::Character));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Character));
             } else {
                 //! Текст не пуст
 
@@ -344,9 +344,9 @@ void CharacterHandler::complete(const QString& _currentBlockText,
         //
         cursor.movePosition(QTextCursor::PreviousBlock);
         while (!cursor.atStart()
-               && ComicBookBlockStyle::forBlock(cursor.block()) != ComicBookParagraphType::Page) {
-            if (ComicBookBlockStyle::forBlock(cursor.block())
-                == ComicBookParagraphType::Character) {
+               && TextBlockStyle::forBlock(cursor.block()) != TextParagraphType::Page) {
+            if (TextBlockStyle::forBlock(cursor.block())
+                == TextParagraphType::Character) {
                 const QString characterName = ComicBookCharacterParser::name(cursor.block().text());
                 if (!characterName.isEmpty() && !charactersToComplete.contains(characterName)
                     && !editor()->dictionaries()->commonCharacters().contains(characterName)) {

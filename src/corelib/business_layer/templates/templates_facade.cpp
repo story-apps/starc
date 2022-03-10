@@ -4,6 +4,8 @@
 #include "screenplay_template.h"
 #include "simple_text_template.h"
 
+#include <business_layer/model/screenplay/text/screenplay_text_model.h>
+
 #include <QApplication>
 #include <QDir>
 #include <QStandardItemModel>
@@ -336,6 +338,17 @@ QStandardItemModel* TemplatesFacade::comicBookTemplates()
     return instance().d->templatesModel<ComicBookTemplate>();
 }
 
+const TextTemplate& TemplatesFacade::abstractTextTemplate(const AbstractTextModel* _model)
+{
+    //
+    // Получить шаблон в зависимости от заданной модели
+    //
+    //    if (auto screenplayModel = qobject_cast<const ScreenplayTextModel*>(_model)) {
+    //        return screenplayTemplate(screenplayModel->informationModel()->templateId());
+    //    }
+    return screenplayTemplate();
+}
+
 const SimpleTextTemplate& TemplatesFacade::simpleTextTemplate(const QString& _templateId)
 {
     return instance().d->getTemplate<SimpleTextTemplate>(_templateId);
@@ -346,7 +359,7 @@ const ScreenplayTemplate& TemplatesFacade::screenplayTemplate(const QString& _te
     return instance().d->getTemplate<ScreenplayTemplate>(_templateId);
 }
 
-const SimpleTextTemplate& TemplatesFacade::screenplayTitlePageTemplate(const QString& _templateId)
+const TextTemplate& TemplatesFacade::screenplayTitlePageTemplate(const QString& _templateId)
 {
     return screenplayTemplate(_templateId).titlePageTemplate();
 }

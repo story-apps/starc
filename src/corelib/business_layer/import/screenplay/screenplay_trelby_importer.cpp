@@ -48,11 +48,11 @@ ScreenplayAbstractImporter::Documents ScreenplayTrelbyImporter::importDocuments(
         //
         // Определим тип блока
         //
-        auto blockType = ScreenplayParagraphType::Undefined;
+        auto blockType = TextParagraphType::Undefined;
         if (paragraphType.endsWith("\\")) {
-            blockType = ScreenplayParagraphType::SceneHeading;
+            blockType = TextParagraphType::SceneHeading;
         } else if (paragraphType.endsWith("_")) {
-            blockType = ScreenplayParagraphType::Character;
+            blockType = TextParagraphType::Character;
         }
 
         //
@@ -68,7 +68,7 @@ ScreenplayAbstractImporter::Documents ScreenplayTrelbyImporter::importDocuments(
         //
         if (paragraphType.startsWith(".")) {
             switch (blockType) {
-            case ScreenplayParagraphType::SceneHeading: {
+            case TextParagraphType::SceneHeading: {
                 if (!_options.importLocations) {
                     break;
                 }
@@ -82,7 +82,7 @@ ScreenplayAbstractImporter::Documents ScreenplayTrelbyImporter::importDocuments(
                 break;
             }
 
-            case ScreenplayParagraphType::Character: {
+            case TextParagraphType::Character: {
                 if (!_options.importCharacters) {
                     break;
                 }
@@ -167,23 +167,23 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayTrelbyImporter::import
         //
         // Определим тип блока
         //
-        auto blockType = ScreenplayParagraphType::Action;
+        auto blockType = TextParagraphType::Action;
         if (paragraphType.endsWith("\\")) {
-            blockType = ScreenplayParagraphType::SceneHeading;
+            blockType = TextParagraphType::SceneHeading;
         } else if (paragraphType.endsWith(".")) {
-            blockType = ScreenplayParagraphType::Action;
+            blockType = TextParagraphType::Action;
         } else if (paragraphType.endsWith("_")) {
-            blockType = ScreenplayParagraphType::Character;
+            blockType = TextParagraphType::Character;
         } else if (paragraphType.endsWith("(")) {
-            blockType = ScreenplayParagraphType::Parenthetical;
+            blockType = TextParagraphType::Parenthetical;
         } else if (paragraphType.endsWith(":")) {
-            blockType = ScreenplayParagraphType::Dialogue;
+            blockType = TextParagraphType::Dialogue;
         } else if (paragraphType.endsWith("/")) {
-            blockType = ScreenplayParagraphType::Transition;
+            blockType = TextParagraphType::Transition;
         } else if (paragraphType.endsWith("=")) {
-            blockType = ScreenplayParagraphType::Shot;
+            blockType = TextParagraphType::Shot;
         } else if (paragraphType.endsWith("%")) {
-            blockType = ScreenplayParagraphType::InlineNote;
+            blockType = TextParagraphType::InlineNote;
         }
 
         //
@@ -197,7 +197,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayTrelbyImporter::import
         //
         // Корректируем при необходимости
         //
-        if (blockType == ScreenplayParagraphType::Parenthetical) {
+        if (blockType == TextParagraphType::Parenthetical) {
             if (!paragraphText.isEmpty() && paragraphText.front() == '(') {
                 paragraphText.remove(0, 1);
             }
@@ -213,7 +213,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayTrelbyImporter::import
             //
             // Формируем блок сценария
             //
-            if (blockType == ScreenplayParagraphType::SceneHeading) {
+            if (blockType == TextParagraphType::SceneHeading) {
                 if (alreadyInScene) {
                     writer.writeEndElement(); // контент предыдущей сцены
                     writer.writeEndElement(); // предыдущая сцена

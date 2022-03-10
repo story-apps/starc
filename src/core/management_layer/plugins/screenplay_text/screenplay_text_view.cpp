@@ -110,8 +110,8 @@ public:
     ScreenplayTextEditToolbar* toolbar = nullptr;
     BusinessLayer::ScreenplayTextSearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
-    BusinessLayer::ScreenplayParagraphType currentParagraphType
-        = BusinessLayer::ScreenplayParagraphType::Undefined;
+    BusinessLayer::TextParagraphType currentParagraphType
+        = BusinessLayer::TextParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
 
     ScreenplayTextCommentsToolbar* commentsToolbar = nullptr;
@@ -187,13 +187,13 @@ void ScreenplayTextView::Implementation::reconfigureTemplate(bool _withModelRein
     using namespace BusinessLayer;
     const auto& usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(
         model && model->informationModel() ? model->informationModel()->templateId() : "");
-    const QVector<ScreenplayParagraphType> types = {
-        ScreenplayParagraphType::SceneHeading,    ScreenplayParagraphType::SceneCharacters,
-        ScreenplayParagraphType::Action,          ScreenplayParagraphType::Character,
-        ScreenplayParagraphType::Parenthetical,   ScreenplayParagraphType::Dialogue,
-        ScreenplayParagraphType::Lyrics,          ScreenplayParagraphType::Shot,
-        ScreenplayParagraphType::Transition,      ScreenplayParagraphType::InlineNote,
-        ScreenplayParagraphType::UnformattedText, ScreenplayParagraphType::FolderHeader,
+    const QVector<TextParagraphType> types = {
+        TextParagraphType::SceneHeading,    TextParagraphType::SceneCharacters,
+        TextParagraphType::Action,          TextParagraphType::Character,
+        TextParagraphType::Parenthetical,   TextParagraphType::Dialogue,
+        TextParagraphType::Lyrics,          TextParagraphType::Shot,
+        TextParagraphType::Transition,      TextParagraphType::InlineNote,
+        TextParagraphType::UnformattedText, TextParagraphType::FolderHeader,
     };
     for (const auto type : types) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {
@@ -271,8 +271,8 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 
     currentParagraphType = paragraphType;
 
-    if (paragraphType == BusinessLayer::ScreenplayParagraphType::FolderFooter) {
-        paragraphType = BusinessLayer::ScreenplayParagraphType::FolderHeader;
+    if (paragraphType == BusinessLayer::TextParagraphType::FolderFooter) {
+        paragraphType = BusinessLayer::TextParagraphType::FolderHeader;
         toolbar->setParagraphTypesEnabled(false);
         fastFormatWidget->setEnabled(false);
     } else {
@@ -282,7 +282,7 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 
     for (int itemRow = 0; itemRow < paragraphTypesModel->rowCount(); ++itemRow) {
         const auto item = paragraphTypesModel->item(itemRow);
-        const auto itemType = static_cast<BusinessLayer::ScreenplayParagraphType>(
+        const auto itemType = static_cast<BusinessLayer::TextParagraphType>(
             item->data(kTypeDataRole).toInt());
         if (itemType == paragraphType) {
             toolbar->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));
@@ -418,7 +418,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             &ScreenplayTextEdit::redo);
     connect(d->toolbar, &ScreenplayTextEditToolbar::paragraphTypeChanged, this,
             [this](const QModelIndex& _index) {
-                const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>(
+                const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
                 d->screenplayText->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();
@@ -512,7 +512,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     //
     connect(d->fastFormatWidget, &ScreenplayTextFastFormatWidget::paragraphTypeChanged, this,
             [this](const QModelIndex& _index) {
-                const auto type = static_cast<BusinessLayer::ScreenplayParagraphType>(
+                const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
                 d->screenplayText->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();

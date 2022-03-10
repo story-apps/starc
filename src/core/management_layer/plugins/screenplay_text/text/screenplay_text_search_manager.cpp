@@ -20,7 +20,7 @@ public:
     /**
      * @brief Получить тип блока, в котором будем искать
      */
-    ScreenplayParagraphType searchInType() const;
+    TextParagraphType searchInType() const;
 
     /**
      * @brief Найти текст в заданном направлении
@@ -52,19 +52,19 @@ ScreenplayTextSearchManager::Implementation::Implementation(QWidget* _parent,
     toolbar->hide();
 }
 
-ScreenplayParagraphType ScreenplayTextSearchManager::Implementation::searchInType() const
+TextParagraphType ScreenplayTextSearchManager::Implementation::searchInType() const
 {
     switch (toolbar->searchInType()) {
     default:
-        return ScreenplayParagraphType::Undefined;
+        return TextParagraphType::Undefined;
     case 1:
-        return ScreenplayParagraphType::SceneHeading;
+        return TextParagraphType::SceneHeading;
     case 2:
-        return ScreenplayParagraphType::Action;
+        return TextParagraphType::Action;
     case 3:
-        return ScreenplayParagraphType::Character;
+        return TextParagraphType::Character;
     case 4:
-        return ScreenplayParagraphType::Dialogue;
+        return TextParagraphType::Dialogue;
     }
 }
 
@@ -116,9 +116,9 @@ void ScreenplayTextSearchManager::Implementation::findText(bool _backward)
         restartSearch = false;
         cursor = textEdit->document()->find(searchText, cursor, findFlags);
         const auto searchType = searchInType();
-        auto blockType = ScreenplayBlockStyle::forBlock(cursor.block());
+        auto blockType = TextBlockStyle::forBlock(cursor.block());
         if (!cursor.isNull()) {
-            if (searchType == ScreenplayParagraphType::Undefined || searchType == blockType) {
+            if (searchType == TextParagraphType::Undefined || searchType == blockType) {
                 textEdit->ensureCursorVisible(cursor);
             } else {
                 restartSearch = true;
@@ -132,9 +132,9 @@ void ScreenplayTextSearchManager::Implementation::findText(bool _backward)
                 cursor = textEdit->textCursor();
                 cursor.movePosition(_backward ? QTextCursor::End : QTextCursor::Start);
                 cursor = textEdit->document()->find(searchText, cursor, findFlags);
-                blockType = ScreenplayBlockStyle::forBlock(cursor.block());
+                blockType = TextBlockStyle::forBlock(cursor.block());
                 if (!cursor.isNull()) {
-                    if (searchType == ScreenplayParagraphType::Undefined
+                    if (searchType == TextParagraphType::Undefined
                         || searchType == blockType) {
                         textEdit->ensureCursorVisible(cursor);
                     } else {

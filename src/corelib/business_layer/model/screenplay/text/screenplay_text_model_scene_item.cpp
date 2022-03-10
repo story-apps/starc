@@ -452,12 +452,12 @@ void ScreenplayTextModelSceneItem::handleChange()
         // Собираем текст
         //
         switch (childTextItem->paragraphType()) {
-        case ScreenplayParagraphType::SceneHeading: {
+        case TextParagraphType::SceneHeading: {
             d->heading = TextHelper::smartToUpper(childTextItem->text());
             break;
         }
 
-        case ScreenplayParagraphType::InlineNote: {
+        case TextParagraphType::InlineNote: {
             ++d->inlineNotesSize;
             break;
         }

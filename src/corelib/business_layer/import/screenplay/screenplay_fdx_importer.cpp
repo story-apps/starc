@@ -49,11 +49,11 @@ ScreenplayAbstractImporter::Documents ScreenplayFdxImporter::importDocuments(
         // Определим тип блока
         //
         const QString paragraphType = paragraph.attributes().namedItem("Type").nodeValue();
-        auto blockType = ScreenplayParagraphType::Undefined;
+        auto blockType = TextParagraphType::Undefined;
         if (paragraphType == "Scene Heading") {
-            blockType = ScreenplayParagraphType::SceneHeading;
+            blockType = TextParagraphType::SceneHeading;
         } else if (paragraphType == "Character") {
-            blockType = ScreenplayParagraphType::Character;
+            blockType = TextParagraphType::Character;
         }
 
         //
@@ -81,7 +81,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFdxImporter::importDocuments(
         }
 
         switch (blockType) {
-        case ScreenplayParagraphType::SceneHeading: {
+        case TextParagraphType::SceneHeading: {
             if (!_options.importLocations) {
                 break;
             }
@@ -95,7 +95,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFdxImporter::importDocuments(
             break;
         }
 
-        case ScreenplayParagraphType::Character: {
+        case TextParagraphType::Character: {
             if (!_options.importCharacters) {
                 break;
             }
@@ -170,25 +170,25 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayFdxImporter::importScr
         // Определим тип блока
         //
         const QString paragraphType = paragraph.attributes().namedItem("Type").nodeValue();
-        auto blockType = ScreenplayParagraphType::Action;
+        auto blockType = TextParagraphType::Action;
         if (paragraphType == "Scene Heading") {
-            blockType = ScreenplayParagraphType::SceneHeading;
+            blockType = TextParagraphType::SceneHeading;
         } else if (paragraphType == "Action") {
-            blockType = ScreenplayParagraphType::Action;
+            blockType = TextParagraphType::Action;
         } else if (paragraphType == "Character") {
-            blockType = ScreenplayParagraphType::Character;
+            blockType = TextParagraphType::Character;
         } else if (paragraphType == "Parenthetical") {
-            blockType = ScreenplayParagraphType::Parenthetical;
+            blockType = TextParagraphType::Parenthetical;
         } else if (paragraphType == "Dialogue") {
-            blockType = ScreenplayParagraphType::Dialogue;
+            blockType = TextParagraphType::Dialogue;
         } else if (paragraphType == "Transition") {
-            blockType = ScreenplayParagraphType::Transition;
+            blockType = TextParagraphType::Transition;
         } else if (paragraphType == "Shot") {
-            blockType = ScreenplayParagraphType::Shot;
+            blockType = TextParagraphType::Shot;
         } else if (paragraphType == "Cast List") {
-            blockType = ScreenplayParagraphType::SceneCharacters;
+            blockType = TextParagraphType::SceneCharacters;
         } else if (paragraphType == "Lyrics") {
-            blockType = ScreenplayParagraphType::Lyrics;
+            blockType = TextParagraphType::Lyrics;
         }
 
         //
@@ -234,7 +234,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayFdxImporter::importScr
             //
             // Корректируем при необходимости
             //
-            if (blockType == ScreenplayParagraphType::Parenthetical) {
+            if (blockType == TextParagraphType::Parenthetical) {
                 if (!paragraphText.isEmpty() && paragraphText.front() == '(') {
                     paragraphText.remove(0, 1);
                 }
@@ -277,7 +277,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayFdxImporter::importScr
         //
         // Формируем блок сценария
         //
-        if (blockType == ScreenplayParagraphType::SceneHeading) {
+        if (blockType == TextParagraphType::SceneHeading) {
             if (alreadyInScene) {
                 writer.writeEndElement(); // контент предыдущей сцены
                 writer.writeEndElement(); // предыдущая сцена

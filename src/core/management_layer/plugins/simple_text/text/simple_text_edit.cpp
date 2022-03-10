@@ -25,7 +25,7 @@
 #include <QScrollBar>
 #include <QTextTable>
 
-using BusinessLayer::SimpleTextBlockStyle;
+using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextCursor;
 using BusinessLayer::TextParagraphType;
@@ -159,7 +159,7 @@ void SimpleTextEdit::setCurrentParagraphType(BusinessLayer::TextParagraphType _t
 
 BusinessLayer::TextParagraphType SimpleTextEdit::currentParagraphType() const
 {
-    return SimpleTextBlockStyle::forBlock(textCursor().block());
+    return TextBlockStyle::forBlock(textCursor().block());
 }
 
 void SimpleTextEdit::setTextCursorReimpl(const QTextCursor& _cursor)
@@ -386,7 +386,7 @@ bool SimpleTextEdit::updateEnteredText(const QString& _eventText)
     //
     // Определяем необходимость установки верхнего регистра для первого символа блока
     //
-    if (currentCharFormat.boolProperty(SimpleTextBlockStyle::PropertyIsFirstUppercase)
+    if (currentCharFormat.boolProperty(TextBlockStyle::PropertyIsFirstUppercase)
         && cursorBackwardText != " " && cursorBackwardText == _eventText
         && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
         //
@@ -484,12 +484,12 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
     //
     // ... идём до начала сцены
     //
-    while (SimpleTextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading1
-           && SimpleTextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading2
-           && SimpleTextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading3
-           && SimpleTextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading4
-           && SimpleTextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading5
-           && SimpleTextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading6
+    while (TextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading1
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading2
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading3
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading4
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading5
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading6
            && topBlock != document()->firstBlock()) {
         topBlock = topBlock.previous();
     }

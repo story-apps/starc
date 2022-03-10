@@ -85,11 +85,11 @@ void ComicBookSummaryReport::build(QAbstractItemModel* _model)
         int occurrences = 0;
         int words = 0;
     };
-    QHash<ComicBookParagraphType, Counters> paragraphsToCounters;
-    const QVector<ComicBookParagraphType> paragraphTypes = {
-        ComicBookParagraphType::Page,        ComicBookParagraphType::Panel,
-        ComicBookParagraphType::Description, ComicBookParagraphType::Character,
-        ComicBookParagraphType::Dialogue,
+    QHash<TextParagraphType, Counters> paragraphsToCounters;
+    const QVector<TextParagraphType> paragraphTypes = {
+        TextParagraphType::Page,        TextParagraphType::Panel,
+        TextParagraphType::Description, TextParagraphType::Character,
+        TextParagraphType::Dialogue,
     };
     for (const auto type : paragraphTypes) {
         paragraphsToCounters.insert(type, {});
@@ -135,12 +135,12 @@ void ComicBookSummaryReport::build(QAbstractItemModel* _model)
                 // ... стата по объектам
                 //
                 switch (textItem->paragraphType()) {
-                case ComicBookParagraphType::Page: {
+                case TextParagraphType::Page: {
                     ++totalPages;
                     break;
                 }
 
-                case ComicBookParagraphType::Panel: {
+                case TextParagraphType::Panel: {
                     ++totalPanels;
                     break;
                 }

@@ -18,7 +18,7 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ComicBookParagraphType;
+using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
 namespace KeyProcessingLayer {
@@ -94,7 +94,7 @@ void KeyPressHandlerFacade::prehandle()
 void KeyPressHandlerFacade::handle(QEvent* _event, bool _pre)
 {
     QTextBlock currentBlock = d->m_editor->textCursor().block();
-    const auto currentType = BusinessLayer::ComicBookBlockStyle::forBlock(currentBlock);
+    const auto currentType = BusinessLayer::TextBlockStyle::forBlock(currentBlock);
     auto currentHandler = handlerFor(currentType);
 
     if (currentHandler == nullptr) {
@@ -128,42 +128,42 @@ KeyPressHandlerFacade::KeyPressHandlerFacade(ComicBookTextEdit* _editor)
 {
 }
 
-AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(ComicBookParagraphType _type)
+AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
 {
     switch (_type) {
-    case ComicBookParagraphType::UnformattedText: {
+    case TextParagraphType::UnformattedText: {
         return d->m_unformattedTextHandler.data();
     }
 
-    case ComicBookParagraphType::Page: {
+    case TextParagraphType::Page: {
         return d->m_pageHandler.data();
     }
 
-    case ComicBookParagraphType::Panel: {
+    case TextParagraphType::Panel: {
         return d->m_panelHandler.data();
     }
 
-    case ComicBookParagraphType::Description: {
+    case TextParagraphType::Description: {
         return d->m_actionHandler.data();
     }
 
-    case ComicBookParagraphType::Character: {
+    case TextParagraphType::Character: {
         return d->m_characterHandler.data();
     }
 
-    case ComicBookParagraphType::Dialogue: {
+    case TextParagraphType::Dialogue: {
         return d->m_dialogHandler.data();
     }
 
-    case ComicBookParagraphType::InlineNote: {
+    case TextParagraphType::InlineNote: {
         return d->m_inlineNoteHandler.data();
     }
 
-    case ComicBookParagraphType::FolderHeader: {
+    case TextParagraphType::FolderHeader: {
         return d->m_folderHeaderHandler.data();
     }
 
-    case ComicBookParagraphType::FolderFooter: {
+    case TextParagraphType::FolderFooter: {
         return d->m_folderFooterHandler.data();
     }
 

@@ -43,25 +43,25 @@ int pxToTwips(qreal _px)
 /**
  * @brief Пронумерованный список типов блоков
  */
-const QMap<int, ScreenplayParagraphType>& paragraphTypes()
+const QMap<int, TextParagraphType>& paragraphTypes()
 {
-    static QMap<int, ScreenplayParagraphType> s_types;
+    static QMap<int, TextParagraphType> s_types;
     if (s_types.isEmpty()) {
         int i = 0;
-        s_types.insert(i++, ScreenplayParagraphType::Undefined);
-        s_types.insert(i++, ScreenplayParagraphType::UnformattedText);
-        s_types.insert(i++, ScreenplayParagraphType::SceneHeading);
-        s_types.insert(i++, ScreenplayParagraphType::SceneCharacters);
-        s_types.insert(i++, ScreenplayParagraphType::Action);
-        s_types.insert(i++, ScreenplayParagraphType::Character);
-        s_types.insert(i++, ScreenplayParagraphType::Parenthetical);
-        s_types.insert(i++, ScreenplayParagraphType::Dialogue);
-        s_types.insert(i++, ScreenplayParagraphType::Lyrics);
-        s_types.insert(i++, ScreenplayParagraphType::Transition);
-        s_types.insert(i++, ScreenplayParagraphType::Shot);
-        s_types.insert(i++, ScreenplayParagraphType::InlineNote);
-        s_types.insert(i++, ScreenplayParagraphType::FolderHeader);
-        s_types.insert(i++, ScreenplayParagraphType::FolderFooter);
+        s_types.insert(i++, TextParagraphType::Undefined);
+        s_types.insert(i++, TextParagraphType::UnformattedText);
+        s_types.insert(i++, TextParagraphType::SceneHeading);
+        s_types.insert(i++, TextParagraphType::SceneCharacters);
+        s_types.insert(i++, TextParagraphType::Action);
+        s_types.insert(i++, TextParagraphType::Character);
+        s_types.insert(i++, TextParagraphType::Parenthetical);
+        s_types.insert(i++, TextParagraphType::Dialogue);
+        s_types.insert(i++, TextParagraphType::Lyrics);
+        s_types.insert(i++, TextParagraphType::Transition);
+        s_types.insert(i++, TextParagraphType::Shot);
+        s_types.insert(i++, TextParagraphType::InlineNote);
+        s_types.insert(i++, TextParagraphType::FolderHeader);
+        s_types.insert(i++, TextParagraphType::FolderFooter);
     }
     return s_types;
 }
@@ -95,7 +95,7 @@ bool needWriteFooter(const ScreenplayExportOptions& _exportOptions)
 /**
  * @brief Название типа параграфа в специальном формате
  */
-QString paragraphTypeName(ScreenplayParagraphType _type, const QString suffix = "",
+QString paragraphTypeName(TextParagraphType _type, const QString suffix = "",
                           const QString& _separator = "")
 {
     return (toString(_type) + suffix).toUpper().replace("_", _separator);
@@ -136,13 +136,13 @@ QString docxAlignment(Qt::Alignment _alignment)
 /**
  * @brief Сформировать строку DOCX-стиля из стиля блока
  */
-QString docxBlockStyle(const ScreenplayBlockStyle& _style, const QString& _defaultFontFamily,
+QString docxBlockStyle(const TextBlockStyle& _style, const QString& _defaultFontFamily,
                        bool _onHalfPage = false)
 {
     //
     // Для неопределённого стиля формируется простая заглушка
     //
-    if (_style.type() == ScreenplayParagraphType::Undefined) {
+    if (_style.type() == TextParagraphType::Undefined) {
         return QString("<w:style w:type=\"paragraph\" w:styleId=\"Normal\">"
                        "<w:name w:val=\"Normal\"/>"
                        "<w:pPr>"
@@ -204,21 +204,21 @@ QString docxBlockStyle(const ScreenplayBlockStyle& _style, const QString& _defau
     QString lineSpacingType = "auto";
     switch (_style.lineSpacingType()) {
     default:
-    case ScreenplayBlockStyle::LineSpacingType::SingleLineSpacing: {
+    case TextBlockStyle::LineSpacingType::SingleLineSpacing: {
         break;
     }
 
-    case ScreenplayBlockStyle::LineSpacingType::OneAndHalfLineSpacing: {
+    case TextBlockStyle::LineSpacingType::OneAndHalfLineSpacing: {
         lineSpacing = 360;
         break;
     }
 
-    case ScreenplayBlockStyle::LineSpacingType::DoubleLineSpacing: {
+    case TextBlockStyle::LineSpacingType::DoubleLineSpacing: {
         lineSpacing = 480;
         break;
     }
 
-    case ScreenplayBlockStyle::LineSpacingType::FixedLineSpacing: {
+    case TextBlockStyle::LineSpacingType::FixedLineSpacing: {
         lineSpacing = mmToTwips(_style.lineSpacingValue());
         lineSpacingType = "exact";
         break;
@@ -367,9 +367,9 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
     // Получим стиль параграфа
     //
     const QTextBlock block = _cursor.block();
-    const auto currentBlockType = ScreenplayBlockStyle::forBlock(block);
-    const auto correctedBlockType = currentBlockType == ScreenplayParagraphType::SceneHeadingShadow
-        ? ScreenplayParagraphType::SceneHeading
+    const auto currentBlockType = TextBlockStyle::forBlock(block);
+    const auto correctedBlockType = currentBlockType == TextParagraphType::SceneHeadingShadow
+        ? TextParagraphType::SceneHeading
         : currentBlockType;
 
     //
@@ -377,7 +377,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
     //
     // ... неизвестный стиль параграфа
     //
-    if (currentBlockType == ScreenplayParagraphType::Undefined) {
+    if (currentBlockType == TextParagraphType::Undefined) {
         //
         // ... настройки абзаца
         //
@@ -425,7 +425,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
     //
     // ... начало и конец таблицы
     //
-    else if (currentBlockType == ScreenplayParagraphType::PageSplitter) {
+    else if (currentBlockType == TextParagraphType::PageSplitter) {
         const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
         if (blockData != nullptr) {
             const auto splitterItem
@@ -508,7 +508,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
         //
         else if (_cursor.atStart()
                  || _cursor.blockFormat().hasProperty(
-                     ScreenplayBlockStyle::PropertyIsCorrectionContinued)) {
+                     TextBlockStyle::PropertyIsCorrectionContinued)) {
             documentXml.append("<w:spacing w:before=\"0\"/>");
         }
 
@@ -523,7 +523,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
         //
         // ... если необходимо, добавляем номер сцены
         //
-        if (currentBlockType == ScreenplayParagraphType::SceneHeading
+        if (currentBlockType == TextParagraphType::SceneHeading
             && _exportOptions.showScenesNumbers) {
             const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
             if (blockData != nullptr) {
@@ -545,7 +545,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
         //
         // ... для ремарки подхачиваем отступ перед блоком и ширину самого блока
         //
-        else if (currentBlockType == ScreenplayParagraphType::Parenthetical
+        else if (currentBlockType == TextParagraphType::Parenthetical
                  && !block.text().isEmpty()) {
             const QLatin1String prefix("(");
             const QLatin1String postfix(")");
@@ -574,7 +574,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
             //
             // ... не является редакторской заметкой
             //
-            if (range.format.boolProperty(ScreenplayBlockStyle::PropertyIsReviewMark) == false) {
+            if (range.format.boolProperty(TextBlockStyle::PropertyIsReviewMark) == false) {
                 //
                 // ... стандартный для абзаца
                 //
@@ -618,7 +618,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
             //
             else {
                 const QStringList comments
-                    = range.format.property(ScreenplayBlockStyle::PropertyComments).toStringList();
+                    = range.format.property(TextBlockStyle::PropertyComments).toStringList();
                 const bool hasComments = !comments.isEmpty() && !comments.first().isEmpty();
                 int lastCommentIndex = _comments.isEmpty() ? 0 : _comments.lastKey();
                 //
@@ -626,10 +626,10 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
                 //
                 if (hasComments && isCommentsRangeStart(block, range)) {
                     const QStringList authors
-                        = range.format.property(ScreenplayBlockStyle::PropertyCommentsAuthors)
+                        = range.format.property(TextBlockStyle::PropertyCommentsAuthors)
                               .toStringList();
                     const QStringList dates
-                        = range.format.property(ScreenplayBlockStyle::PropertyCommentsDates)
+                        = range.format.property(TextBlockStyle::PropertyCommentsDates)
                               .toStringList();
 
                     for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
@@ -840,7 +840,7 @@ void writeStyles(QtZipWriter* _zip, const ScreenplayExportOptions& _exportOption
     //
     const auto& screenplayTemplate = exportTemplate(_exportOptions);
     const QString defaultFontFamily
-        = screenplayTemplate.paragraphStyle(ScreenplayParagraphType::Action).font().family();
+        = screenplayTemplate.paragraphStyle(TextParagraphType::Action).font().family();
     for (const auto& paragraphType : paragraphTypes()) {
         const auto blockStyle = screenplayTemplate.paragraphStyle(paragraphType);
         styleXml.append(docxBlockStyle(blockStyle, defaultFontFamily));

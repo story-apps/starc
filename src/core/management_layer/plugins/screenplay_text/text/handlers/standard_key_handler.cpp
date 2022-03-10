@@ -11,8 +11,8 @@
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::ScreenplayBlockStyle;
-using BusinessLayer::ScreenplayParagraphType;
+using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
@@ -22,7 +22,7 @@ namespace {
 /**
  * @brief Получить тип перехода/смены в зависимости от заданных параметров
  */
-static ScreenplayParagraphType actionFor(bool _tab, bool _jump, ScreenplayParagraphType _blockType)
+static TextParagraphType actionFor(bool _tab, bool _jump, TextParagraphType _blockType)
 {
     const QString settingsKey
         = QString("%1/styles-%2/from-%3-by-%4")
@@ -30,7 +30,7 @@ static ScreenplayParagraphType actionFor(bool _tab, bool _jump, ScreenplayParagr
                    (_jump ? "jumping" : "changing"), BusinessLayer::toString(_blockType),
                    (_tab ? "tab" : "enter"));
     const auto typeString = settingsValue(settingsKey).toString();
-    return BusinessLayer::screenplayParagraphTypeFromString(typeString);
+    return BusinessLayer::textParagraphTypeFromString(typeString);
 }
 
 /**
@@ -50,22 +50,22 @@ StandardKeyHandler::StandardKeyHandler(Ui::ScreenplayTextEdit* _editor)
 {
 }
 
-ScreenplayParagraphType StandardKeyHandler::jumpForTab(ScreenplayParagraphType _blockType)
+TextParagraphType StandardKeyHandler::jumpForTab(TextParagraphType _blockType)
 {
     return actionFor(kTab, kJump, _blockType);
 }
 
-ScreenplayParagraphType StandardKeyHandler::jumpForEnter(ScreenplayParagraphType _blockType)
+TextParagraphType StandardKeyHandler::jumpForEnter(TextParagraphType _blockType)
 {
     return actionFor(kEnter, kJump, _blockType);
 }
 
-ScreenplayParagraphType StandardKeyHandler::changeForTab(ScreenplayParagraphType _blockType)
+TextParagraphType StandardKeyHandler::changeForTab(TextParagraphType _blockType)
 {
     return actionFor(kTab, kChange, _blockType);
 }
 
-ScreenplayParagraphType StandardKeyHandler::changeForEnter(ScreenplayParagraphType _blockType)
+TextParagraphType StandardKeyHandler::changeForEnter(TextParagraphType _blockType)
 {
     return actionFor(kEnter, kChange, _blockType);
 }
@@ -151,9 +151,8 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
         const QTextBlock firstDocumentBlock = cursor.document()->firstBlock();
         while (cursor.block() != firstDocumentBlock
                && (!cursor.block().isVisible()
-                   || ScreenplayBlockStyle::forBlock(cursor.block())
-                       == ScreenplayParagraphType::PageSplitter
-                   || cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)
+                   || TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::PageSplitter
+                   || cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                    || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
             cursor.movePosition(QTextCursor::PreviousBlock, cursorMoveMode);
             cursor.movePosition(QTextCursor::EndOfBlock, cursorMoveMode);
@@ -255,9 +254,8 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
         //
         while (!cursor.atEnd()
                && (!cursor.block().isVisible()
-                   || ScreenplayBlockStyle::forBlock(cursor.block())
-                       == ScreenplayParagraphType::PageSplitter
-                   || cursor.blockFormat().boolProperty(ScreenplayBlockStyle::PropertyIsCorrection)
+                   || TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::PageSplitter
+                   || cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                    || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
             cursor.movePosition(QTextCursor::NextBlock, cursorMoveMode);
             cursor.movePosition(QTextCursor::EndOfBlock, cursorMoveMode);
@@ -281,14 +279,14 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
             //
             if (!cursor.atEnd()) {
                 cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode);
-                while (!cursor.atStart()
-                       && (!cursor.block().isVisible()
-                           || ScreenplayBlockStyle::forBlock(cursor.block())
-                               == ScreenplayParagraphType::PageSplitter
-                           || cursor.blockFormat().boolProperty(
-                               ScreenplayBlockStyle::PropertyIsCorrection)
-                           || cursor.blockFormat().boolProperty(
-                               PageTextEdit::PropertyDontShowCursor))) {
+                while (
+                    !cursor.atStart()
+                    && (!cursor.block().isVisible()
+                        || TextBlockStyle::forBlock(cursor.block())
+                            == TextParagraphType::PageSplitter
+                        || cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
+                        || cursor.blockFormat().boolProperty(
+                            PageTextEdit::PropertyDontShowCursor))) {
                     if (!cursor.movePosition(QTextCursor::PreviousCharacter, cursorMoveMode)) {
                         break;
                     }

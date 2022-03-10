@@ -31,7 +31,7 @@
 #include <QScrollBar>
 #include <QTextTable>
 
-using BusinessLayer::SimpleTextBlockStyle;
+using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextCursor;
 using BusinessLayer::TextParagraphType;
