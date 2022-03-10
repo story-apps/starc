@@ -352,24 +352,24 @@ void Database::updateDatabase(QSqlDatabase& _database)
     //
     // 0.X.X
     //
-    if (versionMajor <= 0) {
+    if (versionMajor == 0) {
         //
         // 0.0.X
         //
-        if (versionMinor <= 0) {
-            if (versionMinor < 0 || versionBuild <= 9) {
+        if (versionMinor == 0) {
+            if (versionBuild <= 9) {
                 updateDatabaseTo_0_0_10(_database);
-            }
-            if (versionMinor < 0 || versionBuild <= 10) {
-                //                updateDatabaseTo_0_0_11(_database);
             }
         }
         //
         // 0.1.X
         //
-        if (versionMinor <= 1) {
-            if (versionMinor < 1 || versionBuild <= 0) {
-                //                updateDatabaseTo_0_1_0(_database);
+        if (versionMinor == 1) {
+            //
+            // 0.1.2
+            //
+            if (versionBuild <= 2) {
+                updateDatabaseTo_0_1_3(_database);
             }
         }
     }
@@ -419,6 +419,44 @@ void Database::updateDatabaseTo_0_0_10(QSqlDatabase& _database)
         q_updater.prepare("UPDATE documents SET content = ? WHERE type = 1");
         q_updater.addBindValue(structure);
         q_updater.exec();
+    }
+
+    _database.commit();
+}
+
+void Database::updateDatabaseTo_0_1_3(QSqlDatabase& _database)
+{
+    //
+    // Изменить в комиксах блоки page_name & panel_name на page_heading & panel_heading
+    //
+
+    QSqlQuery q_updater(_database);
+
+    _database.transaction();
+
+    {
+        //
+        // Извлекаем документы комиксов
+        //
+        std::map<QString, QString> comicBooks;
+        q_updater.exec("SELECT id, content FROM documents WHERE type = 10203");
+        while (q_updater.next()) {
+            comicBooks[q_updater.record().value("id").toString()]
+                = q_updater.record()
+                      .value("content")
+                      .toString()
+                      .replace("page_name", "page_heading")
+                      .replace("panel_name", "panel_heading");
+        }
+
+        //
+        // Обновим данные
+        //
+        for (const auto& [id, content] : comicBooks) {
+            q_updater.prepare("UPDATE documents SET content = ? WHERE id = ?");
+            q_updater.addBindValue(content);
+            q_updater.addBindValue(id);
+        }
     }
 
     _database.commit();
