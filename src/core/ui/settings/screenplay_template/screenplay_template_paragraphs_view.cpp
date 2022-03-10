@@ -346,8 +346,7 @@ void ScreenplayTemplateParagraphsView::setUseMm(bool _mm)
     updateTranslations();
 }
 
-BusinessLayer::TextParagraphType ScreenplayTemplateParagraphsView::currentParagraphType()
-    const
+BusinessLayer::TextParagraphType ScreenplayTemplateParagraphsView::currentParagraphType() const
 {
     return kParagraphTypes.at(d->paragraphs->currentTab());
 }

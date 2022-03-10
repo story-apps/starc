@@ -245,9 +245,8 @@ void ScreenplayTemplateManager::Implementation::saveParagraphParameters(
     marginsOnHalfPage.setLeft(mmFromCurrentMetrics(paragraphsView->leftIndentInTable()));
     marginsOnHalfPage.setRight(mmFromCurrentMetrics(paragraphsView->rightIndentInTable()));
     paragraphStyle.setMarginsOnHalfPage(marginsOnHalfPage);
-    paragraphStyle.setLineSpacingType(
-        static_cast<BusinessLayer::TextBlockStyle::LineSpacingType>(
-            paragraphsView->lineSpacingType()));
+    paragraphStyle.setLineSpacingType(static_cast<BusinessLayer::TextBlockStyle::LineSpacingType>(
+        paragraphsView->lineSpacingType()));
     paragraphStyle.setLineSpacingValue(mmFromCurrentMetrics(paragraphsView->lineSpacingValue()));
 
     currentTemplate.setParagraphStyle(paragraphStyle);
@@ -425,8 +424,7 @@ void ScreenplayTemplateManager::editTemplate(const QString& _templateId)
 {
     d->toolBar->checkPageSettings();
     d->navigator->checkMm();
-    d->paragraphsView->setCurrentParagraphType(
-        BusinessLayer::TextParagraphType::SceneHeading);
+    d->paragraphsView->setCurrentParagraphType(BusinessLayer::TextParagraphType::SceneHeading);
 
     d->currentTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(_templateId);
 
@@ -445,8 +443,7 @@ void ScreenplayTemplateManager::duplicateTemplate(const QString& _templateId)
 {
     d->toolBar->checkPageSettings();
     d->navigator->checkMm();
-    d->paragraphsView->setCurrentParagraphType(
-        BusinessLayer::TextParagraphType::SceneHeading);
+    d->paragraphsView->setCurrentParagraphType(BusinessLayer::TextParagraphType::SceneHeading);
 
     d->currentTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(_templateId);
     d->currentTemplate.setIsNew();

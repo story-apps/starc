@@ -5,9 +5,9 @@
 
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
-#include <business_layer/model/text/text_model.h>
-#include <business_layer/model/text/text_model_chapter_item.h>
-#include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/model/simple_text/simple_text_model_chapter_item.h>
+#include <business_layer/model/simple_text/simple_text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -45,7 +45,7 @@ public:
     /**
      * @brief Скорректировать позиции элементов на заданную дистанцию
      */
-    void correctPositionsToItems(std::map<int, BusinessLayer::TextModelItem*>::iterator _from,
+    void correctPositionsToItems(std::map<int, BusinessLayer::SimpleTextModelItem*>::iterator _from,
                                  int _distance);
     void correctPositionsToItems(int _fromPosition, int _distance);
 
@@ -67,9 +67,9 @@ public:
     SimpleTextDocument* q = nullptr;
 
     DocumentState state = DocumentState::Undefined;
-    QPointer<BusinessLayer::TextModel> model;
+    QPointer<BusinessLayer::SimpleTextModel> model;
     bool canChangeModel = true;
-    std::map<int, BusinessLayer::TextModelItem*> positionsToItems;
+    std::map<int, BusinessLayer::SimpleTextModelItem*> positionsToItems;
 };
 
 SimpleTextDocument::Implementation::Implementation(SimpleTextDocument* _document)
@@ -87,14 +87,14 @@ const TextTemplate& SimpleTextDocument::Implementation::documentTemplate() const
 }
 
 void SimpleTextDocument::Implementation::correctPositionsToItems(
-    std::map<int, BusinessLayer::TextModelItem*>::iterator _from, int _distance)
+    std::map<int, BusinessLayer::SimpleTextModelItem*>::iterator _from, int _distance)
 {
     if (_from == positionsToItems.end()) {
         return;
     }
 
     if (_distance > 0) {
-        auto reversed = [](std::map<int, BusinessLayer::TextModelItem*>::iterator iter) {
+        auto reversed = [](std::map<int, BusinessLayer::SimpleTextModelItem*>::iterator iter) {
             return std::prev(std::make_reverse_iterator(iter));
         };
         for (auto iter = positionsToItems.rbegin(); iter != std::make_reverse_iterator(_from);
@@ -130,7 +130,7 @@ void SimpleTextDocument::Implementation::readModelItemContent(int _itemRow,
     }
 
     case TextModelItemType::Text: {
-        const auto textItem = static_cast<TextModelTextItem*>(item);
+        const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
 
         //
         // При корректировке положений блоков нужно учитывать перенос строки
@@ -268,7 +268,7 @@ SimpleTextDocument::SimpleTextDocument(QObject* _parent)
 
 SimpleTextDocument::~SimpleTextDocument() = default;
 
-void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeModel)
+void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _canChangeModel)
 {
     d->state = DocumentState::Loading;
 
@@ -323,11 +323,11 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
     //
     // Настроим соединения
     //
-    connect(d->model, &TextModel::modelReset, this, [this] {
+    connect(d->model, &SimpleTextModel::modelReset, this, [this] {
         QSignalBlocker signalBlocker(this);
         setModel(d->model);
     });
-    connect(d->model, &TextModel::dataChanged, this,
+    connect(d->model, &SimpleTextModel::dataChanged, this,
             [this](const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
                 if (d->state != DocumentState::Ready) {
                     return;
@@ -347,7 +347,7 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
                     return;
                 }
 
-                const auto textItem = static_cast<TextModelTextItem*>(item);
+                const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
 
                 QTextCursor cursor(this);
                 cursor.setPosition(position);
@@ -467,7 +467,7 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
 
                 cursor.endEditBlock();
             });
-    connect(d->model, &TextModel::rowsInserted, this,
+    connect(d->model, &SimpleTextModel::rowsInserted, this,
             [this](const QModelIndex& _parent, int _from, int _to) {
                 if (d->state != DocumentState::Ready) {
                     return;
@@ -560,7 +560,7 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
 
                 cursor.endEditBlock();
             });
-    connect(d->model, &TextModel::rowsAboutToBeRemoved, this,
+    connect(d->model, &SimpleTextModel::rowsAboutToBeRemoved, this,
             [this](const QModelIndex& _parent, int _from, int _to) {
                 if (d->state != DocumentState::Ready) {
                     return;
@@ -655,9 +655,9 @@ void SimpleTextDocument::setModel(BusinessLayer::TextModel* _model, bool _canCha
     //
     // Группируем массовые изменения, чтобы не мелькать пользователю перед глазами
     //
-    connect(d->model, &TextModel::rowsAboutToBeChanged, this,
+    connect(d->model, &SimpleTextModel::rowsAboutToBeChanged, this,
             [this] { QTextCursor(this).beginEditBlock(); });
-    connect(d->model, &TextModel::rowsChanged, this, [this] {
+    connect(d->model, &SimpleTextModel::rowsChanged, this, [this] {
         d->state = DocumentState::Changing;
         QTextCursor(this).endEditBlock();
         d->state = DocumentState::Ready;
@@ -711,7 +711,7 @@ QString SimpleTextDocument::chapterNumber(const QTextBlock& _forBlock) const
         return {};
     }
 
-    auto itemScene = static_cast<TextModelChapterItem*>(itemParent);
+    auto itemScene = static_cast<SimpleTextModelChapterItem*>(itemParent);
     return itemScene->number().value;
 }
 
@@ -894,7 +894,7 @@ void SimpleTextDocument::applyParagraphType(BusinessLayer::TextParagraphType _ty
 void SimpleTextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
                                        const QString& _comment, const QTextCursor& _cursor)
 {
-    TextModelTextItem::ReviewMark reviewMark;
+    SimpleTextModelTextItem::ReviewMark reviewMark;
     if (_textColor.isValid()) {
         reviewMark.textColor = _textColor;
     }
@@ -947,7 +947,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
         //
         // Собираем элементы которые потенциально могут быть удалены
         //
-        std::map<TextModelItem*, int> itemsToDelete;
+        std::map<SimpleTextModelItem*, int> itemsToDelete;
         {
             auto itemsToDeleteIter = d->positionsToItems.lower_bound(_position);
             while (itemsToDeleteIter != d->positionsToItems.end()
@@ -965,7 +965,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             //
             // Формируем мапу элементов со скорректированными позициями
             //
-            std::map<int, TextModelItem*> correctedItems;
+            std::map<int, SimpleTextModelItem*> correctedItems;
             for (auto itemIter = itemToUpdateIter; itemIter != d->positionsToItems.end();
                  ++itemIter) {
                 correctedItems.emplace(itemIter->first - _charsRemoved + _charsAdded,
@@ -1010,19 +1010,19 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
         //
         // Сначала группируем и "сжимаем" блоки
         //
-        std::map<int, TextModelItem*> itemsToDeleteSorted;
+        std::map<int, SimpleTextModelItem*> itemsToDeleteSorted;
         for (auto [item, position] : itemsToDelete) {
             itemsToDeleteSorted.emplace(position, item);
         }
         //
-        std::map<int, TextModelItem*> itemsToDeleteCompressed;
+        std::map<int, SimpleTextModelItem*> itemsToDeleteCompressed;
         int compressionCycle = 0;
         while (!itemsToDeleteSorted.empty()) {
             //
             // Формируем список идущих подряд элементов
             //
             struct ItemToPosition {
-                TextModelItem* item;
+                SimpleTextModelItem* item;
                 int position;
             };
             QVector<ItemToPosition> itemsGroup;
@@ -1070,7 +1070,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
         //
         // Удаляем все верхнеуровневые элементы, а так же группы сцен и папок любого уровня
         //
-        QVector<TextModelItem*> itemsToDeleteGroup;
+        QVector<SimpleTextModelItem*> itemsToDeleteGroup;
         auto removeGroup = [this, &itemsToDeleteGroup] {
             if (itemsToDeleteGroup.isEmpty()) {
                 return;
@@ -1117,7 +1117,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             //
             bool needToDeleteParent = false;
             if (item->type() == TextModelItemType::Text) {
-                const auto textItem = static_cast<TextModelTextItem*>(item);
+                const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
                 needToDeleteParent = textItem->paragraphType() == TextParagraphType::Heading1
                     || textItem->paragraphType() == TextParagraphType::Heading2
                     || textItem->paragraphType() == TextParagraphType::Heading3
@@ -1139,7 +1139,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                 //
                 // Определим предыдущий
                 //
-                TextModelItem* previousItem = nullptr;
+                SimpleTextModelItem* previousItem = nullptr;
                 const int itemRow
                     = itemParent->hasParent() ? itemParent->parent()->rowOfChild(itemParent) : 0;
                 if (itemRow > 0) {
@@ -1150,7 +1150,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                 //
                 // Переносим дочерние элементы на уровень родительского элемента
                 //
-                TextModelItem* lastMovedItem = nullptr;
+                SimpleTextModelItem* lastMovedItem = nullptr;
                 while (itemParent->childCount() > 0) {
                     auto childItem = itemParent->childAt(0);
                     d->model->takeItem(childItem, itemParent);
@@ -1234,7 +1234,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
     //
     // ... определим элемент модели для предыдущего блока
     //
-    auto previousItem = [block]() -> TextModelItem* {
+    auto previousItem = [block]() -> SimpleTextModelItem* {
         if (!block.isValid()) {
             return nullptr;
         }
@@ -1258,7 +1258,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             //
             // Создаём группирующий элемент, если создаётся глава
             //
-            TextModelItem* parentItem = nullptr;
+            SimpleTextModelItem* parentItem = nullptr;
             switch (paragraphType) {
             case TextParagraphType::Heading1:
             case TextParagraphType::Heading2:
@@ -1266,7 +1266,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             case TextParagraphType::Heading4:
             case TextParagraphType::Heading5:
             case TextParagraphType::Heading6: {
-                parentItem = new TextModelChapterItem;
+                parentItem = new SimpleTextModelChapterItem;
                 break;
             }
 
@@ -1277,7 +1277,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             //
             // Создаём сам текстовый элемент
             //
-            auto textItem = new TextModelTextItem;
+            auto textItem = new SimpleTextModelTextItem;
             textItem->setParagraphType(paragraphType);
             if (d->documentTemplate().paragraphStyle(paragraphType).align()
                 != block.blockFormat().alignment()) {
@@ -1309,7 +1309,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                     // то вставляем его на том же уровне, что и предыдущий
                     //
                     auto previousChapterItem
-                        = static_cast<TextModelChapterItem*>(previousTextItemParent);
+                        = static_cast<SimpleTextModelChapterItem*>(previousTextItemParent);
                     if (previousChapterItem->level() == parentItemLevel) {
                         d->model->insertItem(parentItem, previousTextItemParent);
                     }
@@ -1328,7 +1328,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                             Q_ASSERT(previousChapterItemParent->type()
                                      == TextModelItemType::Chapter);
                             const auto grandPreviousChapterItem
-                                = static_cast<TextModelChapterItem*>(previousChapterItemParent);
+                                = static_cast<SimpleTextModelChapterItem*>(previousChapterItemParent);
 
                             //
                             // Если уровень деда такой же, то вставляем его на том же уровне
@@ -1426,7 +1426,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                         auto grandParentChildItem = grandParentItem->childAt(itemIndex);
                         if (grandParentChildItem->type() == TextModelItemType::Chapter) {
                             auto grandParentChildChapter
-                                = static_cast<TextModelChapterItem*>(grandParentChildItem);
+                                = static_cast<SimpleTextModelChapterItem*>(grandParentChildItem);
                             if (grandParentChildChapter->level() <= parentItemLevel) {
                                 break;
                             }
@@ -1471,7 +1471,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             auto item = blockData->item();
 
             if (item->type() == TextModelItemType::Text) {
-                auto textItem = static_cast<TextModelTextItem*>(item);
+                auto textItem = static_cast<SimpleTextModelTextItem*>(item);
                 textItem->setParagraphType(paragraphType);
                 if (d->documentTemplate().paragraphStyle(paragraphType).align()
                     != block.blockFormat().alignment()) {

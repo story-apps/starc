@@ -143,10 +143,10 @@ SOURCES += \
     business_layer/model/structure/structure_model.cpp \
     business_layer/model/structure/structure_model_item.cpp \
     business_layer/model/structure/structure_proxy_model.cpp \
-    business_layer/model/text/text_model.cpp \
-    business_layer/model/text/text_model_chapter_item.cpp \
-    business_layer/model/text/text_model_item.cpp \
-    business_layer/model/text/text_model_text_item.cpp \
+    business_layer/model/simple_text/simple_text_model.cpp \
+    business_layer/model/simple_text/simple_text_model_chapter_item.cpp \
+    business_layer/model/simple_text/simple_text_model_item.cpp \
+    business_layer/model/simple_text/simple_text_model_text_item.cpp \
     business_layer/reports/comic_book/comic_book_summary_report.cpp \
     business_layer/reports/screenplay/screenplay_summary_report.cpp \
     business_layer/templates/comic_book_template.cpp \
@@ -351,11 +351,11 @@ HEADERS += \
     business_layer/model/structure/structure_model.h \
     business_layer/model/structure/structure_model_item.h \
     business_layer/model/structure/structure_proxy_model.h \
-    business_layer/model/text/text_model.h \
-    business_layer/model/text/text_model_chapter_item.h \
-    business_layer/model/text/text_model_item.h \
-    business_layer/model/text/text_model_text_item.h \
-    business_layer/model/text/text_model_xml.h \
+    business_layer/model/simple_text/simple_text_model.h \
+    business_layer/model/simple_text/simple_text_model_chapter_item.h \
+    business_layer/model/simple_text/simple_text_model_item.h \
+    business_layer/model/simple_text/simple_text_model_text_item.h \
+    business_layer/model/simple_text/simple_text_model_xml.h \
     business_layer/reports/abstract_report.h \
     business_layer/reports/comic_book/comic_book_summary_report.h \
     business_layer/reports/screenplay/screenplay_summary_report.h \

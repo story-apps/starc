@@ -21,7 +21,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
-#include <business_layer/model/text/text_model.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
 #include <data_layer/storage/document_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
@@ -197,7 +197,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             Q_ASSERT(titlePageItem);
             Q_ASSERT(titlePageItem->type() == Domain::DocumentObjectType::ScreenplayTitlePage);
             auto titlePageModel
-                = qobject_cast<BusinessLayer::TextModel*>(modelFor(titlePageItem->uuid()));
+                = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(titlePageItem->uuid()));
             screenplayModel->setTitlePageModel(titlePageModel);
             //
             // ... модель справочников сценариев
@@ -310,7 +310,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             Q_ASSERT(titlePageItem);
             Q_ASSERT(titlePageItem->type() == Domain::DocumentObjectType::ComicBookTitlePage);
             auto titlePageModel
-                = qobject_cast<BusinessLayer::TextModel*>(modelFor(titlePageItem->uuid()));
+                = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(titlePageItem->uuid()));
             comicBookModel->setTitlePageModel(titlePageModel);
             //
             // ... модель справочников
@@ -418,7 +418,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
 
         case Domain::DocumentObjectType::Folder:
         case Domain::DocumentObjectType::Text: {
-            model = new BusinessLayer::TextModel;
+            model = new BusinessLayer::SimpleTextModel;
             break;
         }
 

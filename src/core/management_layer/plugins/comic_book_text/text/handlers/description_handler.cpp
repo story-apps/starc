@@ -64,8 +64,7 @@ void DescriptionHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль на место и время
                 //
-                editor()->setCurrentParagraphType(
-                    changeForEnter(TextParagraphType::Description));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Description));
             } else {
                 //! Текст не пуст
                 bool isHandled = false;
@@ -152,8 +151,7 @@ void DescriptionHandler::handleTab(QKeyEvent*)
                 //
                 // Если строка пуста, то сменить стиль на имя героя
                 //
-                editor()->setCurrentParagraphType(
-                    changeForTab(TextParagraphType::Description));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Description));
             } else {
                 //! Текст не пуст
 

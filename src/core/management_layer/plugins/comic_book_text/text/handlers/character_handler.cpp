@@ -17,8 +17,8 @@
 #include <QTextBlock>
 #include <QTimer>
 
-using BusinessLayer::TextBlockStyle;
 using BusinessLayer::ComicBookCharacterParser;
+using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
@@ -128,8 +128,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                 //
                 // Cменить стиль
                 //
-                editor()->setCurrentParagraphType(
-                    changeForEnter(TextParagraphType::Character));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Character));
             } else {
                 //! Текст не пуст
 
@@ -345,8 +344,7 @@ void CharacterHandler::complete(const QString& _currentBlockText,
         cursor.movePosition(QTextCursor::PreviousBlock);
         while (!cursor.atStart()
                && TextBlockStyle::forBlock(cursor.block()) != TextParagraphType::Page) {
-            if (TextBlockStyle::forBlock(cursor.block())
-                == TextParagraphType::Character) {
+            if (TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::Character) {
                 const QString characterName = ComicBookCharacterParser::name(cursor.block().text());
                 if (!characterName.isEmpty() && !charactersToComplete.contains(characterName)
                     && !editor()->dictionaries()->commonCharacters().contains(characterName)) {

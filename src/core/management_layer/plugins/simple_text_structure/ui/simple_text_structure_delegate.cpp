@@ -1,6 +1,6 @@
 #include "simple_text_structure_delegate.h"
 
-#include <business_layer/model/text/text_model_chapter_item.h>
+#include <business_layer/model/simple_text/simple_text_model_chapter_item.h>
 #include <business_layer/simple_text_structure_model.h>
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
@@ -102,7 +102,7 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     const QRectF chapterHeadingRect(
         QPointF(chapterHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
         QSizeF(chapterHeadingWidth, Ui::DesignSystem::layout().px24()));
-    auto chapterHeading = _index.data(TextModelChapterItem::ChapterHeadingRole).toString();
+    auto chapterHeading = _index.data(SimpleTextModelChapterItem::ChapterHeadingRole).toString();
     chapterHeading = _painter->fontMetrics().elidedText(
         chapterHeading, Qt::ElideRight, static_cast<int>(chapterHeadingRect.width()));
     _painter->drawText(chapterHeadingRect, Qt::AlignLeft | Qt::AlignVCenter, chapterHeading);
@@ -110,7 +110,7 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     //
     // ... текст главы
     //
-    auto chapterText = _index.data(TextModelChapterItem::ChapterTextRole).toString();
+    auto chapterText = _index.data(SimpleTextModelChapterItem::ChapterTextRole).toString();
     if (chapterText.isEmpty()) {
         return;
     }
@@ -133,7 +133,7 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     // ... иконки заметок
     //
     const auto inlineNotesSize
-        = _index.data(TextModelChapterItem::ChapterInlineNotesSizeRole).toInt();
+        = _index.data(SimpleTextModelChapterItem::ChapterInlineNotesSizeRole).toInt();
     const qreal notesLeft = iconRect.left();
     const qreal notesTop
         = (chapterTextRect.isValid() ? chapterTextRect : chapterHeadingRect).bottom()
@@ -155,7 +155,7 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
         _painter->drawText(inlineNotesIconRect, Qt::AlignLeft | Qt::AlignVCenter, u8"\U000F09A8");
     }
     const auto reviewMarksSize
-        = _index.data(TextModelChapterItem::ChapterReviewMarksSizeRole).toInt();
+        = _index.data(SimpleTextModelChapterItem::ChapterReviewMarksSizeRole).toInt();
     if (reviewMarksSize > 0) {
         _painter->setFont(Ui::DesignSystem::font().caption());
         const auto reviewMarksSizeText = QString::number(reviewMarksSize);
@@ -200,8 +200,8 @@ QSize SimpleTextStructureDelegate::Implementation::chapterSizeHint(
         height += Ui::DesignSystem::layout().px16();
     }
     const bool haveNotesLine
-        = (_index.data(TextModelChapterItem::ChapterInlineNotesSizeRole).toInt()
-           + _index.data(TextModelChapterItem::ChapterReviewMarksSizeRole).toInt())
+        = (_index.data(SimpleTextModelChapterItem::ChapterInlineNotesSizeRole).toInt()
+           + _index.data(SimpleTextModelChapterItem::ChapterReviewMarksSizeRole).toInt())
         > 0;
     if (haveNotesLine) {
         height += Ui::DesignSystem::layout().px24();

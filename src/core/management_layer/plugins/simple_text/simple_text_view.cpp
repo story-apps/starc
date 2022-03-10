@@ -283,7 +283,7 @@ void SimpleTextView::saveViewSettings()
     setSettingsValue(kScaleFactorKey, d->scalableWrapper->zoomRange());
 }
 
-void SimpleTextView::setModel(BusinessLayer::TextModel* _model)
+void SimpleTextView::setModel(BusinessLayer::SimpleTextModel* _model)
 {
     d->textEdit->initWithModel(_model);
 

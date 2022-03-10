@@ -68,7 +68,7 @@ public:
     /**
      * @brief Модель титульной страницы
      */
-    TextModel* titlePageModel = nullptr;
+    SimpleTextModel* titlePageModel = nullptr;
 
     /**
      * @brief Модель справочников
@@ -1215,12 +1215,12 @@ ComicBookInformationModel* ComicBookTextModel::informationModel() const
     return d->informationModel;
 }
 
-void ComicBookTextModel::setTitlePageModel(TextModel* _model)
+void ComicBookTextModel::setTitlePageModel(SimpleTextModel* _model)
 {
     d->titlePageModel = _model;
 }
 
-TextModel* ComicBookTextModel::titlePageModel() const
+SimpleTextModel* ComicBookTextModel::titlePageModel() const
 {
     return d->titlePageModel;
 }

@@ -1,8 +1,8 @@
 #include "simple_text_structure_model.h"
 
-#include <business_layer/model/text/text_model.h>
-#include <business_layer/model/text/text_model_item.h>
-#include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/model/simple_text/simple_text_model_item.h>
+#include <business_layer/model/simple_text/simple_text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 
 #include <QApplication>
@@ -13,7 +13,7 @@ namespace BusinessLayer {
 class SimpleTextStructureModel::Implementation
 {
 public:
-    TextModel* textModel = nullptr;
+    SimpleTextModel* textModel = nullptr;
 };
 
 
@@ -34,7 +34,7 @@ void SimpleTextStructureModel::setSourceModel(QAbstractItemModel* _sourceModel)
         d->textModel->disconnect(this);
     }
 
-    d->textModel = qobject_cast<TextModel*>(_sourceModel);
+    d->textModel = qobject_cast<SimpleTextModel*>(_sourceModel);
     QSortFilterProxyModel::setSourceModel(_sourceModel);
 }
 

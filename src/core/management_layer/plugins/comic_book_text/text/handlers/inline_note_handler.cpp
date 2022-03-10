@@ -61,8 +61,7 @@ void InlineNoteHandler::handleEnter(QKeyEvent*)
                 //
                 // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(
-                    changeForEnter(TextParagraphType::InlineNote));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::InlineNote));
             } else {
                 //! Текст не пуст
 

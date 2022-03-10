@@ -3,7 +3,7 @@
 #include <ui/widgets/text_edit/base/base_text_edit.h>
 
 namespace BusinessLayer {
-class TextModel;
+class SimpleTextModel;
 enum class TextParagraphType;
 } // namespace BusinessLayer
 
@@ -24,7 +24,7 @@ public:
     /**
      * @brief Задать модель текста сценария
      */
-    void initWithModel(BusinessLayer::TextModel* _model);
+    void initWithModel(BusinessLayer::SimpleTextModel* _model);
 
     /**
      * @brief Перенастроить редактор в соответствии с текущей моделью

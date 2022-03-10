@@ -2,7 +2,7 @@
 
 #include "title_page_view.h"
 
-#include <business_layer/model/text/text_model.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
@@ -52,7 +52,7 @@ public:
     /**
      * @brief Текущая модель представления основного окна
      */
-    QPointer<BusinessLayer::TextModel> model;
+    QPointer<BusinessLayer::SimpleTextModel> model;
 
     /**
      * @brief Предаставление для основного окна
@@ -134,7 +134,7 @@ void TitlePageManager::setModel(BusinessLayer::AbstractModel* _model)
     //
     // Определяем новую модель
     //
-    d->model = qobject_cast<BusinessLayer::TextModel*>(_model);
+    d->model = qobject_cast<BusinessLayer::SimpleTextModel*>(_model);
     d->view->setModel(d->model);
 
     //

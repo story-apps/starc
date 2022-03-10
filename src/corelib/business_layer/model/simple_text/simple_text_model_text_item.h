@@ -1,6 +1,6 @@
 #pragma once
 
-#include "text_model_item.h"
+#include "simple_text_model_item.h"
 
 #include <QTextLayout>
 
@@ -16,7 +16,7 @@ enum class TextParagraphType;
 /**
  * @brief Элемент модели текстового документа
  */
-class CORE_LIBRARY_EXPORT TextModelTextItem : public TextModelItem
+class CORE_LIBRARY_EXPORT SimpleTextModelTextItem : public SimpleTextModelItem
 {
 public:
     struct CORE_LIBRARY_EXPORT TextPart {
@@ -56,9 +56,9 @@ public:
     };
 
 public:
-    TextModelTextItem();
-    explicit TextModelTextItem(QXmlStreamReader& _contentReaded);
-    ~TextModelTextItem() override;
+    SimpleTextModelTextItem();
+    explicit SimpleTextModelTextItem(QXmlStreamReader& _contentReaded);
+    ~SimpleTextModelTextItem() override;
 
     /**
      * @brief Тип параграфа
@@ -102,7 +102,7 @@ public:
     /**
      * @brief Объединить с заданным элементом
      */
-    void mergeWith(const TextModelTextItem* _other);
+    void mergeWith(const SimpleTextModelTextItem* _other);
 
     /**
      * @brief Определяем интерфейс получения данных элемента
@@ -118,12 +118,12 @@ public:
     /**
      * @brief Скопировать контент с заданного элемента
      */
-    void copyFrom(TextModelItem* _item) override;
+    void copyFrom(SimpleTextModelItem* _item) override;
 
     /**
      * @brief Проверить равен ли текущий элемент заданному
      */
-    bool isEqual(TextModelItem* _item) const override;
+    bool isEqual(SimpleTextModelItem* _item) const override;
 
 private:
     /**

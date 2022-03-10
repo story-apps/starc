@@ -198,7 +198,7 @@ void TitlePageView::saveViewSettings()
     setSettingsValue(kScaleFactorKey, d->scalableWrapper->zoomRange());
 }
 
-void TitlePageView::setModel(BusinessLayer::TextModel* _model)
+void TitlePageView::setModel(BusinessLayer::SimpleTextModel* _model)
 {
     if (qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(_model)) {
         d->currentModelType = Domain::DocumentObjectType::ComicBookTitlePage;

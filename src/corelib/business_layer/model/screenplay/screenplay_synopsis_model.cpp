@@ -4,7 +4,7 @@
 namespace BusinessLayer {
 
 ScreenplaySynopsisModel::ScreenplaySynopsisModel(QObject* _parent)
-    : TextModel(_parent)
+    : SimpleTextModel(_parent)
 {
     setName(tr("Synopsis"));
 }

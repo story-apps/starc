@@ -6,7 +6,7 @@
 
 
 namespace BusinessLayer {
-class TextModel;
+class SimpleTextModel;
 enum class TextParagraphType;
 } // namespace BusinessLayer
 
@@ -26,7 +26,7 @@ public:
     /**
      * @brief Задать модель текста
      */
-    void setModel(BusinessLayer::TextModel* _model, bool _canChangeModel = true);
+    void setModel(BusinessLayer::SimpleTextModel* _model, bool _canChangeModel = true);
 
     /**
      * @brief Получить позицию элемента в заданном индексе

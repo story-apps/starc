@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../text/text_model.h"
+#include "../simple_text/simple_text_model.h"
 
 
 namespace BusinessLayer {
@@ -8,7 +8,7 @@ namespace BusinessLayer {
 /**
  * @brief Модель
  */
-class CORE_LIBRARY_EXPORT ScreenplaySynopsisModel : public TextModel
+class CORE_LIBRARY_EXPORT ScreenplaySynopsisModel : public SimpleTextModel
 {
     Q_OBJECT
 

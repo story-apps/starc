@@ -3,7 +3,7 @@
 #include "business_layer/simple_text_structure_model.h"
 #include "ui/simple_text_structure_view.h"
 
-#include <business_layer/model/text/text_model.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
 
 
 namespace ManagementLayer {
@@ -22,7 +22,7 @@ public:
     /**
      * @brief Текущая модель документа
      */
-    QPointer<BusinessLayer::TextModel> model;
+    QPointer<BusinessLayer::SimpleTextModel> model;
 
     /**
      * @brief Индекс модели, который необходимо выделить
@@ -92,7 +92,7 @@ void SimpleTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
     //
     // Определяем новую модель
     //
-    d->model = qobject_cast<BusinessLayer::TextModel*>(_model);
+    d->model = qobject_cast<BusinessLayer::SimpleTextModel*>(_model);
 
     //
     // Создаём прокси модель, если ещё не была создана и настриваем её
@@ -112,7 +112,7 @@ void SimpleTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
     //
     if (d->model != nullptr) {
         d->view->setTitle(d->model->name());
-        connect(d->model, &BusinessLayer::TextModel::nameChanged, d->view,
+        connect(d->model, &BusinessLayer::SimpleTextModel::nameChanged, d->view,
                 &Ui::SimpleTextStructureView::setTitle);
     }
 

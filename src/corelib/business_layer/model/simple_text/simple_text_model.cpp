@@ -1,8 +1,8 @@
-#include "text_model.h"
+#include "simple_text_model.h"
 
-#include "text_model_chapter_item.h"
-#include "text_model_text_item.h"
-#include "text_model_xml.h"
+#include "simple_text_model_chapter_item.h"
+#include "simple_text_model_text_item.h"
+#include "simple_text_model_xml.h"
 
 #include <business_layer/templates/simple_text_template.h>
 #include <domain/document_object.h>
@@ -27,7 +27,7 @@ const char* kMimeType = "application/x-starc/text/item";
 /**
  * @brief Найти первый текстовый элемент вложенный в заданный
  */
-TextModelItem* firstTextItem(TextModelItem* _item)
+SimpleTextModelItem* firstTextItem(SimpleTextModelItem* _item)
 {
     Q_ASSERT(_item->type() != TextModelItemType::Text);
     for (auto childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
@@ -43,7 +43,7 @@ TextModelItem* firstTextItem(TextModelItem* _item)
 
 } // namespace
 
-class TextModel::Implementation
+class SimpleTextModel::Implementation
 {
 public:
     Implementation();
@@ -72,7 +72,7 @@ public:
     /**
      * @brief Корневой элемент дерева
      */
-    TextModelChapterItem* rootItem = nullptr;
+    SimpleTextModelChapterItem* rootItem = nullptr;
 
     /**
      * @brief Последние скопированные данные модели
@@ -84,12 +84,12 @@ public:
     } lastMime;
 };
 
-TextModel::Implementation::Implementation()
-    : rootItem(new TextModelChapterItem)
+SimpleTextModel::Implementation::Implementation()
+    : rootItem(new SimpleTextModelChapterItem)
 {
 }
 
-void TextModel::Implementation::buildModel(Domain::DocumentObject* _text)
+void SimpleTextModel::Implementation::buildModel(Domain::DocumentObject* _text)
 {
     if (_text == nullptr) {
         return;
@@ -105,20 +105,20 @@ void TextModel::Implementation::buildModel(Domain::DocumentObject* _text)
         }
 
         if (currentTag == xml::kChapterTag) {
-            rootItem->appendItem(new TextModelChapterItem(contentReader));
+            rootItem->appendItem(new SimpleTextModelChapterItem(contentReader));
         } else {
-            rootItem->appendItem(new TextModelTextItem(contentReader));
+            rootItem->appendItem(new SimpleTextModelTextItem(contentReader));
         }
     }
 
     const auto firstItem = firstTextItem(rootItem);
     if (firstItem != nullptr) {
-        const auto textItem = static_cast<const TextModelTextItem*>(firstItem);
+        const auto textItem = static_cast<const SimpleTextModelTextItem*>(firstItem);
         name = textItem->text();
     }
 }
 
-QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _text) const
+QByteArray SimpleTextModel::Implementation::toXml(Domain::DocumentObject* _text) const
 {
     if (_text == nullptr) {
         return {};
@@ -132,17 +132,17 @@ QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _text) const
     return xml;
 }
 
-void TextModel::Implementation::updateNumbering()
+void SimpleTextModel::Implementation::updateNumbering()
 {
     int sceneNumber = 1;
-    std::function<void(const TextModelItem*)> updateChildNumbering;
-    updateChildNumbering = [&sceneNumber, &updateChildNumbering](const TextModelItem* _item) {
+    std::function<void(const SimpleTextModelItem*)> updateChildNumbering;
+    updateChildNumbering = [&sceneNumber, &updateChildNumbering](const SimpleTextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
             case TextModelItemType::Chapter: {
                 updateChildNumbering(childItem);
-                auto chapterItem = static_cast<TextModelChapterItem*>(childItem);
+                auto chapterItem = static_cast<SimpleTextModelChapterItem*>(childItem);
                 chapterItem->setNumber(sceneNumber++);
                 break;
             }
@@ -159,7 +159,7 @@ void TextModel::Implementation::updateNumbering()
 // ****
 
 
-TextModel::TextModel(QObject* _parent)
+SimpleTextModel::SimpleTextModel(QObject* _parent)
     : AbstractModel({ xml::kDocumentTag, xml::kChapterTag, toString(TextParagraphType::Heading1),
                       toString(TextParagraphType::Heading2), toString(TextParagraphType::Heading3),
                       toString(TextParagraphType::Heading4), toString(TextParagraphType::Heading5),
@@ -170,14 +170,14 @@ TextModel::TextModel(QObject* _parent)
 {
 }
 
-TextModel::~TextModel() = default;
+SimpleTextModel::~SimpleTextModel() = default;
 
-QString TextModel::name() const
+QString SimpleTextModel::name() const
 {
     return d->name;
 }
 
-void TextModel::setName(const QString& _name)
+void SimpleTextModel::setName(const QString& _name)
 {
     if (d->name == _name) {
         return;
@@ -185,7 +185,7 @@ void TextModel::setName(const QString& _name)
 
     const auto item = firstTextItem(d->rootItem);
     if (item != nullptr && item->type() == TextModelItemType::Text) {
-        auto textItem = static_cast<TextModelTextItem*>(item);
+        auto textItem = static_cast<SimpleTextModelTextItem*>(item);
         textItem->setText(_name);
     }
 
@@ -193,20 +193,20 @@ void TextModel::setName(const QString& _name)
     emit nameChanged(d->name);
 }
 
-void TextModel::setDocumentName(const QString& _name)
+void SimpleTextModel::setDocumentName(const QString& _name)
 {
     setName(_name);
     emit documentNameChanged(_name);
 }
 
-void TextModel::setDocumentContent(const QByteArray& _content)
+void SimpleTextModel::setDocumentContent(const QByteArray& _content)
 {
     clearDocument();
     document()->setContent(_content);
     initDocument();
 }
 
-void TextModel::appendItem(TextModelItem* _item, TextModelItem* _parentItem)
+void SimpleTextModel::appendItem(SimpleTextModelItem* _item, SimpleTextModelItem* _parentItem)
 {
     if (_item == nullptr) {
         return;
@@ -230,7 +230,7 @@ void TextModel::appendItem(TextModelItem* _item, TextModelItem* _parentItem)
     updateItem(_parentItem);
 }
 
-void TextModel::prependItem(TextModelItem* _item, TextModelItem* _parentItem)
+void SimpleTextModel::prependItem(SimpleTextModelItem* _item, SimpleTextModelItem* _parentItem)
 {
     if (_item == nullptr) {
         return;
@@ -253,7 +253,7 @@ void TextModel::prependItem(TextModelItem* _item, TextModelItem* _parentItem)
     updateItem(_parentItem);
 }
 
-void TextModel::insertItem(TextModelItem* _item, TextModelItem* _afterSiblingItem)
+void SimpleTextModel::insertItem(SimpleTextModelItem* _item, SimpleTextModelItem* _afterSiblingItem)
 {
     if (_item == nullptr || _afterSiblingItem == nullptr
         || _afterSiblingItem->parent() == nullptr) {
@@ -275,7 +275,7 @@ void TextModel::insertItem(TextModelItem* _item, TextModelItem* _afterSiblingIte
     updateItem(parentItem);
 }
 
-void TextModel::takeItem(TextModelItem* _item, TextModelItem* _parentItem)
+void SimpleTextModel::takeItem(SimpleTextModelItem* _item, SimpleTextModelItem* _parentItem)
 {
     if (_item == nullptr) {
         return;
@@ -299,12 +299,12 @@ void TextModel::takeItem(TextModelItem* _item, TextModelItem* _parentItem)
     updateItem(_parentItem);
 }
 
-void TextModel::removeItem(TextModelItem* _item)
+void SimpleTextModel::removeItem(SimpleTextModelItem* _item)
 {
     removeItems(_item, _item);
 }
 
-void TextModel::removeItems(TextModelItem* _fromItem, TextModelItem* _toItem)
+void SimpleTextModel::removeItems(SimpleTextModelItem* _fromItem, SimpleTextModelItem* _toItem)
 {
     if (_fromItem == nullptr || _fromItem->parent() == nullptr || _toItem == nullptr
         || _toItem->parent() == nullptr || _fromItem->parent() != _toItem->parent()) {
@@ -324,7 +324,7 @@ void TextModel::removeItems(TextModelItem* _fromItem, TextModelItem* _toItem)
     updateItem(parentItem);
 }
 
-void TextModel::updateItem(TextModelItem* _item)
+void SimpleTextModel::updateItem(SimpleTextModelItem* _item)
 {
     if (_item == nullptr || !_item->isChanged()) {
         return;
@@ -346,13 +346,13 @@ void TextModel::updateItem(TextModelItem* _item)
         if (item == nullptr || item->type() != TextModelItemType::Text) {
             setDocumentName({});
         } else {
-            const auto textItem = static_cast<TextModelTextItem*>(item);
+            const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
             setDocumentName(textItem->text());
         }
     }
 }
 
-QModelIndex TextModel::index(int _row, int _column, const QModelIndex& _parent) const
+QModelIndex SimpleTextModel::index(int _row, int _column, const QModelIndex& _parent) const
 {
     if (_row < 0 || _row > rowCount(_parent) || _column < 0 || _column > columnCount(_parent)
         || (_parent.isValid() && (_parent.column() != 0))) {
@@ -370,7 +370,7 @@ QModelIndex TextModel::index(int _row, int _column, const QModelIndex& _parent) 
     return createIndex(_row, _column, indexItem);
 }
 
-QModelIndex TextModel::parent(const QModelIndex& _child) const
+QModelIndex SimpleTextModel::parent(const QModelIndex& _child) const
 {
     if (!_child.isValid()) {
         return {};
@@ -391,13 +391,13 @@ QModelIndex TextModel::parent(const QModelIndex& _child) const
     return createIndex(row, 0, parentItem);
 }
 
-int TextModel::columnCount(const QModelIndex& _parent) const
+int SimpleTextModel::columnCount(const QModelIndex& _parent) const
 {
     Q_UNUSED(_parent)
     return 1;
 }
 
-int TextModel::rowCount(const QModelIndex& _parent) const
+int SimpleTextModel::rowCount(const QModelIndex& _parent) const
 {
     if (_parent.isValid() && _parent.column() != 0) {
         return 0;
@@ -411,7 +411,7 @@ int TextModel::rowCount(const QModelIndex& _parent) const
     return item->childCount();
 }
 
-Qt::ItemFlags TextModel::flags(const QModelIndex& _index) const
+Qt::ItemFlags SimpleTextModel::flags(const QModelIndex& _index) const
 {
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 
@@ -429,7 +429,7 @@ Qt::ItemFlags TextModel::flags(const QModelIndex& _index) const
     return flags;
 }
 
-QVariant TextModel::data(const QModelIndex& _index, int _role) const
+QVariant SimpleTextModel::data(const QModelIndex& _index, int _role) const
 {
     if (!_index.isValid()) {
         return {};
@@ -443,8 +443,8 @@ QVariant TextModel::data(const QModelIndex& _index, int _role) const
     return item->data(_role);
 }
 
-bool TextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
-                                int _column, const QModelIndex& _parent) const
+bool SimpleTextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
+                                      int _column, const QModelIndex& _parent) const
 {
     Q_UNUSED(_action);
     Q_UNUSED(_row);
@@ -458,8 +458,8 @@ bool TextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, 
     return _data->formats().contains(mimeTypes().constFirst());
 }
 
-bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
-                             const QModelIndex& _parent)
+bool SimpleTextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row,
+                                   int _column, const QModelIndex& _parent)
 {
     //
     // FIXME: возможен кейс, когда юзер тащит два заголовка один например
@@ -526,7 +526,7 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
         if (d->lastMime.from == insertAnchorIndex || d->lastMime.to == insertAnchorIndex) {
             return false;
         }
-        TextModelItem* insertAnchorItem = itemForIndex(insertAnchorIndex);
+        SimpleTextModelItem* insertAnchorItem = itemForIndex(insertAnchorIndex);
 
         //
         // Начинаем операцию изменения модели
@@ -554,7 +554,7 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
         contentReader.readNextStartElement(); // document
         contentReader.readNextStartElement();
         bool isFirstItemHandled = false;
-        TextModelItem* lastItem = insertAnchorItem;
+        SimpleTextModelItem* lastItem = insertAnchorItem;
         while (!contentReader.atEnd()) {
             const auto currentTag = contentReader.name();
             if (currentTag == xml::kDocumentTag) {
@@ -565,7 +565,7 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
             // ... вставляем главу
             //
             if (currentTag == xml::kChapterTag) {
-                auto newChapterItem = new TextModelChapterItem(contentReader);
+                auto newChapterItem = new SimpleTextModelChapterItem(contentReader);
 
                 if (!isFirstItemHandled) {
                     isFirstItemHandled = true;
@@ -590,7 +590,8 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
                         // Если вставка идёт после главы
                         //
                         if (lastItem->type() == TextModelItemType::Chapter) {
-                            auto lastChapterItem = static_cast<TextModelChapterItem*>(lastItem);
+                            auto lastChapterItem
+                                = static_cast<SimpleTextModelChapterItem*>(lastItem);
                             //
                             // ... и её уровень ниже, либо равен вставляемой
                             //
@@ -610,7 +611,8 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
                                 lastItem
                                     = lastChapterItem->childAt(lastChapterItem->childCount() - 1);
                                 while (lastItem->type() == TextModelItemType::Chapter) {
-                                    lastChapterItem = static_cast<TextModelChapterItem*>(lastItem);
+                                    lastChapterItem
+                                        = static_cast<SimpleTextModelChapterItem*>(lastItem);
                                     if (lastChapterItem->level() >= newChapterItem->level()) {
                                         insertItem(newChapterItem, lastChapterItem);
                                         break;
@@ -641,7 +643,7 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
             // ... вставляем текст
             //
             else {
-                auto newTextItem = new TextModelTextItem(contentReader);
+                auto newTextItem = new SimpleTextModelTextItem(contentReader);
 
                 if (!isFirstItemHandled) {
                     isFirstItemHandled = true;
@@ -685,7 +687,7 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
     }
 }
 
-QMimeData* TextModel::mimeData(const QModelIndexList& _indexes) const
+QMimeData* SimpleTextModel::mimeData(const QModelIndexList& _indexes) const
 {
     if (_indexes.isEmpty()) {
         return nullptr;
@@ -740,23 +742,24 @@ QMimeData* TextModel::mimeData(const QModelIndexList& _indexes) const
     return mimeData;
 }
 
-QStringList TextModel::mimeTypes() const
+QStringList SimpleTextModel::mimeTypes() const
 {
     return { kMimeType };
 }
 
-Qt::DropActions TextModel::supportedDragActions() const
+Qt::DropActions SimpleTextModel::supportedDragActions() const
 {
     return Qt::MoveAction;
 }
 
-Qt::DropActions TextModel::supportedDropActions() const
+Qt::DropActions SimpleTextModel::supportedDropActions() const
 {
     return Qt::MoveAction;
 }
 
-QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition,
-                                     const QModelIndex& _to, int _toPosition, bool _clearUuid) const
+QString SimpleTextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition,
+                                           const QModelIndex& _to, int _toPosition,
+                                           bool _clearUuid) const
 {
     if (document() == nullptr) {
         return {};
@@ -783,20 +786,20 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
         + "\" version=\"1.0\">\n";
 
     auto buildXmlFor = [&xml, fromItem, _fromPosition, toItem, _toPosition,
-                        _clearUuid](TextModelItem* _fromItemParent, int _fromItemRow) {
+                        _clearUuid](SimpleTextModelItem* _fromItemParent, int _fromItemRow) {
         for (int childIndex = _fromItemRow; childIndex < _fromItemParent->childCount();
              ++childIndex) {
             const auto childItem = _fromItemParent->childAt(childIndex);
 
             switch (childItem->type()) {
             case TextModelItemType::Chapter: {
-                const auto folderItem = static_cast<TextModelChapterItem*>(childItem);
+                const auto folderItem = static_cast<SimpleTextModelChapterItem*>(childItem);
                 xml += folderItem->toXml(fromItem, _fromPosition, toItem, _toPosition, _clearUuid);
                 break;
             }
 
             case TextModelItemType::Text: {
-                const auto textItem = static_cast<TextModelTextItem*>(childItem);
+                const auto textItem = static_cast<SimpleTextModelTextItem*>(childItem);
                 if (textItem == fromItem && textItem == toItem) {
                     xml += textItem->toXml(_fromPosition, _toPosition - _fromPosition);
                 } else if (textItem == fromItem) {
@@ -831,7 +834,7 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     // сцену/папку
     //
     if (fromItem->type() == TextModelItemType::Text) {
-        const auto textItem = static_cast<TextModelTextItem*>(fromItem);
+        const auto textItem = static_cast<SimpleTextModelTextItem*>(fromItem);
         if (textItem->paragraphType() == TextParagraphType::Heading1
             || textItem->paragraphType() == TextParagraphType::Heading2
             || textItem->paragraphType() == TextParagraphType::Heading3
@@ -857,8 +860,8 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     return xml;
 }
 
-void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
-                               const QString& _mimeData)
+void SimpleTextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
+                                     const QString& _mimeData)
 {
     if (!_index.isValid()) {
         return;
@@ -882,9 +885,9 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     // Извлекаем остающийся в блоке текст, если нужно
     //
     QString sourceBlockEndContent;
-    QVector<TextModelItem*> lastItemsFromSourceScene;
+    QVector<SimpleTextModelItem*> lastItemsFromSourceScene;
     if (item->type() == TextModelItemType::Text) {
-        auto textItem = static_cast<TextModelTextItem*>(item);
+        auto textItem = static_cast<SimpleTextModelTextItem*>(item);
         //
         // Если в заголовок папки
         //
@@ -929,18 +932,18 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     contentReader.readNextStartElement(); // document
     contentReader.readNextStartElement();
     bool isFirstTextItemHandled = false;
-    TextModelItem* lastItem = item;
+    SimpleTextModelItem* lastItem = item;
     while (!contentReader.atEnd()) {
         const auto currentTag = contentReader.name();
         if (currentTag == xml::kDocumentTag) {
             break;
         }
 
-        TextModelItem* newItem = nullptr;
+        SimpleTextModelItem* newItem = nullptr;
         if (currentTag == xml::kChapterTag) {
-            newItem = new TextModelChapterItem(contentReader);
+            newItem = new SimpleTextModelChapterItem(contentReader);
         } else {
-            auto newTextItem = new TextModelTextItem(contentReader);
+            auto newTextItem = new SimpleTextModelTextItem(contentReader);
             //
             // Если вставляется текстовый элемент внутрь уже существующего элемента
             //
@@ -952,7 +955,7 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                 //
                 if (item->type() == TextModelItemType::Text
                     && !lastItemsFromSourceScene.contains(item)) {
-                    auto textItem = static_cast<TextModelTextItem*>(item);
+                    auto textItem = static_cast<SimpleTextModelTextItem*>(item);
                     if (!textItem->text().isEmpty()) {
                         textItem->mergeWith(newTextItem);
                     } else {
@@ -994,12 +997,12 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         contentReader.addData(sourceBlockEndContent);
         contentReader.readNextStartElement(); // document
         contentReader.readNextStartElement(); // text node
-        auto item = new TextModelTextItem(contentReader);
+        auto item = new SimpleTextModelTextItem(contentReader);
         //
         // ... и последний вставленный элемент был текстовым
         //
         if (lastItem->type() == TextModelItemType::Text) {
-            auto lastTextItem = static_cast<TextModelTextItem*>(lastItem);
+            auto lastTextItem = static_cast<SimpleTextModelTextItem*>(lastItem);
 
             //
             // Объединим элементы
@@ -1043,7 +1046,7 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         // Просто вставляем их внутрь или после последнего элемента
         //
         for (auto item : lastItemsFromSourceScene) {
-            auto textItem = static_cast<TextModelTextItem*>(item);
+            auto textItem = static_cast<SimpleTextModelTextItem*>(item);
             //
             // Удаляем пустые элементы модели
             //
@@ -1065,13 +1068,13 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     emit rowsChanged();
 }
 
-TextModelItem* TextModel::itemForIndex(const QModelIndex& _index) const
+SimpleTextModelItem* SimpleTextModel::itemForIndex(const QModelIndex& _index) const
 {
     if (!_index.isValid()) {
         return d->rootItem;
     }
 
-    auto item = static_cast<TextModelItem*>(_index.internalPointer());
+    auto item = static_cast<SimpleTextModelItem*>(_index.internalPointer());
     if (item == nullptr) {
         return d->rootItem;
     }
@@ -1079,7 +1082,7 @@ TextModelItem* TextModel::itemForIndex(const QModelIndex& _index) const
     return item;
 }
 
-QModelIndex TextModel::indexForItem(TextModelItem* _item) const
+QModelIndex SimpleTextModel::indexForItem(SimpleTextModelItem* _item) const
 {
     if (_item == nullptr) {
         return {};
@@ -1097,13 +1100,13 @@ QModelIndex TextModel::indexForItem(TextModelItem* _item) const
     return index(row, 0, parent);
 }
 
-void TextModel::initDocument()
+void SimpleTextModel::initDocument()
 {
     //
     // Если документ пустой, создаём первоначальную структуру
     //
     if (document()->content().isEmpty()) {
-        auto textItem = new TextModelTextItem;
+        auto textItem = new SimpleTextModelTextItem;
         textItem->setParagraphType(TextParagraphType::Text);
         appendItem(textItem);
     }
@@ -1119,7 +1122,7 @@ void TextModel::initDocument()
     d->updateNumbering();
 }
 
-void TextModel::clearDocument()
+void SimpleTextModel::clearDocument()
 {
     if (!d->rootItem->hasChildren()) {
         return;
@@ -1132,12 +1135,12 @@ void TextModel::clearDocument()
     endResetModel();
 }
 
-QByteArray TextModel::toXml() const
+QByteArray SimpleTextModel::toXml() const
 {
     return d->toXml(document());
 }
 
-void TextModel::applyPatch(const QByteArray& _patch)
+void SimpleTextModel::applyPatch(const QByteArray& _patch)
 {
     Q_ASSERT(document());
 
@@ -1167,14 +1170,14 @@ void TextModel::applyPatch(const QByteArray& _patch)
         xml::readNextElement(_reader); // document
         xml::readNextElement(_reader);
 
-        QVector<TextModelItem*> items;
+        QVector<SimpleTextModelItem*> items;
         while (!_reader.atEnd()) {
             const auto currentTag = _reader.name();
-            TextModelItem* item = nullptr;
+            SimpleTextModelItem* item = nullptr;
             if (currentTag == xml::kChapterTag) {
-                item = new TextModelChapterItem(_reader);
+                item = new SimpleTextModelChapterItem(_reader);
             } else {
-                item = new TextModelTextItem(_reader);
+                item = new SimpleTextModelTextItem(_reader);
             }
             items.append(item);
 
@@ -1194,9 +1197,10 @@ void TextModel::applyPatch(const QByteArray& _patch)
     //
     // Раскладываем элементы в плоские списки для сравнения
     //
-    std::function<QVector<TextModelItem*>(const QVector<TextModelItem*>&)> makeItemsPlain;
-    makeItemsPlain = [&makeItemsPlain](const QVector<TextModelItem*>& _items) {
-        QVector<TextModelItem*> itemsPlain;
+    std::function<QVector<SimpleTextModelItem*>(const QVector<SimpleTextModelItem*>&)>
+        makeItemsPlain;
+    makeItemsPlain = [&makeItemsPlain](const QVector<SimpleTextModelItem*>& _items) {
+        QVector<SimpleTextModelItem*> itemsPlain;
         for (auto item : _items) {
             itemsPlain.append(item);
             for (int row = 0; row < item->childCount(); ++row) {
@@ -1217,8 +1221,9 @@ void TextModel::applyPatch(const QByteArray& _patch)
             + "\" version=\"1.0\">\n";
         return xml.length();
     }();
-    std::function<TextModelItem*(TextModelItem*)> findStartItem;
-    findStartItem = [changes, &length, &findStartItem](TextModelItem* _item) -> TextModelItem* {
+    std::function<SimpleTextModelItem*(SimpleTextModelItem*)> findStartItem;
+    findStartItem
+        = [changes, &length, &findStartItem](SimpleTextModelItem* _item) -> SimpleTextModelItem* {
         if (changes.first.from == 0) {
             return _item->childAt(0);
         }
@@ -1236,7 +1241,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
                 //
                 int headerLength = 0;
                 if (child->type() == TextModelItemType::Chapter) {
-                    auto folder = static_cast<TextModelChapterItem*>(child);
+                    auto folder = static_cast<SimpleTextModelChapterItem*>(child);
                     headerLength = QString(folder->xmlHeader()).length();
                 }
 
@@ -1297,9 +1302,10 @@ void TextModel::applyPatch(const QByteArray& _patch)
     //
     const auto operations = edit_distance::editDistance(oldItemsPlain, newItemsPlain);
     //
-    std::function<TextModelItem*(TextModelItem*, bool)> findNextItemWithChildren;
-    findNextItemWithChildren = [&findNextItemWithChildren](
-                                   TextModelItem* _item, bool _searchInChildren) -> TextModelItem* {
+    std::function<SimpleTextModelItem*(SimpleTextModelItem*, bool)> findNextItemWithChildren;
+    findNextItemWithChildren
+        = [&findNextItemWithChildren](SimpleTextModelItem* _item,
+                                      bool _searchInChildren) -> SimpleTextModelItem* {
         if (_item == nullptr) {
             return nullptr;
         }
@@ -1340,28 +1346,29 @@ void TextModel::applyPatch(const QByteArray& _patch)
             return findNextItemWithChildren(parent, false);
         }
     };
-    auto findNextItem = [&findNextItemWithChildren](TextModelItem* _item) {
+    auto findNextItem = [&findNextItemWithChildren](SimpleTextModelItem* _item) {
         return findNextItemWithChildren(_item, true);
     };
     //
     // И применяем их
     //
     emit rowsAboutToBeChanged();
-    TextModelItem* previousModelItem = nullptr;
+    SimpleTextModelItem* previousModelItem = nullptr;
     //
     // В некоторых ситуациях мы не знаем сразу, куда будут извлечены элементы из удаляемого
     // элемента, или когда элемент вставляется посреди и отрезает часть вложенных элементов, поэтому
     // упаковываем их в список для размещения в правильном месте в следующем проходе
     //
-    QVector<TextModelItem*> movedSiblingItems;
+    QVector<SimpleTextModelItem*> movedSiblingItems;
     auto updateItemPlacement = [this, &modelItem, &previousModelItem, newItemsPlain,
-                                &movedSiblingItems](TextModelItem* _newItem, TextModelItem* _item) {
+                                &movedSiblingItems](SimpleTextModelItem* _newItem,
+                                                    SimpleTextModelItem* _item) {
         //
         // Определим предыдущий элемент из списка новых, в дальнейшем будем опираться
         // на его расположение относительно текущего нового
         //
         const auto newItemIndex = newItemsPlain.indexOf(_newItem);
-        TextModelItem* previousNewItem
+        SimpleTextModelItem* previousNewItem
             = newItemIndex > 0 ? newItemsPlain.at(newItemIndex - 1) : nullptr;
         //
         // У элемента нет родителя, то это вставка нового элемента
@@ -1598,15 +1605,15 @@ void TextModel::applyPatch(const QByteArray& _patch)
             //
             // Создаём новый элемент
             //
-            TextModelItem* itemToInsert = nullptr;
+            SimpleTextModelItem* itemToInsert = nullptr;
             switch (newItem->type()) {
             case TextModelItemType::Chapter: {
-                itemToInsert = new TextModelChapterItem;
+                itemToInsert = new SimpleTextModelChapterItem;
                 break;
             }
 
             case TextModelItemType::Text: {
-                itemToInsert = new TextModelTextItem;
+                itemToInsert = new SimpleTextModelTextItem;
                 break;
             }
             }

@@ -62,8 +62,7 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль в соответствии с настройками
                 //
-                editor()->setCurrentParagraphType(
-                    changeForEnter(TextParagraphType::FolderHeader));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::FolderHeader));
             } else {
                 //! Текст не пуст
 
@@ -136,8 +135,7 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
                 //
                 // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(
-                    changeForTab(TextParagraphType::FolderHeader));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::FolderHeader));
             } else {
                 //! Текст не пуст
 

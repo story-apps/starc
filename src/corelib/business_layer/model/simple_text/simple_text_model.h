@@ -5,18 +5,18 @@
 
 namespace BusinessLayer {
 
-class TextModelItem;
+class SimpleTextModelItem;
 
 /**
  * @brief Модель текстового документа
  */
-class CORE_LIBRARY_EXPORT TextModel : public AbstractModel
+class CORE_LIBRARY_EXPORT SimpleTextModel : public AbstractModel
 {
     Q_OBJECT
 
 public:
-    explicit TextModel(QObject* _parent = nullptr);
-    ~TextModel() override;
+    explicit SimpleTextModel(QObject* _parent = nullptr);
+    ~SimpleTextModel() override;
 
     /**
      * @brief Название текстового документа
@@ -34,33 +34,33 @@ public:
     /**
      * @brief Добавить элемент в конец
      */
-    void appendItem(TextModelItem* _item, TextModelItem* _parentItem = nullptr);
+    void appendItem(SimpleTextModelItem* _item, SimpleTextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Добавить элемент в начало
      */
-    void prependItem(TextModelItem* _item, TextModelItem* _parentItem = nullptr);
+    void prependItem(SimpleTextModelItem* _item, SimpleTextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Вставить элемент после заданного
      */
-    void insertItem(TextModelItem* _item, TextModelItem* _afterSiblingItem);
+    void insertItem(SimpleTextModelItem* _item, SimpleTextModelItem* _afterSiblingItem);
 
     /**
      * @brief Извлечь заданный элемент без удаления
      */
-    void takeItem(TextModelItem* _item, TextModelItem* _parentItem = nullptr);
+    void takeItem(SimpleTextModelItem* _item, SimpleTextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Удалить заданный элемент
      */
-    void removeItem(TextModelItem* _item);
-    void removeItems(TextModelItem* _fromItem, TextModelItem* _toItem);
+    void removeItem(SimpleTextModelItem* _item);
+    void removeItems(SimpleTextModelItem* _fromItem, SimpleTextModelItem* _toItem);
 
     /**
      * @brief Обновить заданный элемент
      */
-    void updateItem(TextModelItem* _item);
+    void updateItem(SimpleTextModelItem* _item);
 
     /**
      * @brief Реализация древовидной модели
@@ -97,12 +97,12 @@ public:
     /**
      * @brief Получить элемент находящийся в заданном индексе
      */
-    TextModelItem* itemForIndex(const QModelIndex& _index) const;
+    SimpleTextModelItem* itemForIndex(const QModelIndex& _index) const;
 
     /**
      * @brief Получить индекс заданного элемента
      */
-    QModelIndex indexForItem(TextModelItem* _item) const;
+    QModelIndex indexForItem(SimpleTextModelItem* _item) const;
 
 protected:
     /**

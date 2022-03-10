@@ -1,6 +1,6 @@
 #include "comic_book_title_page_model.h"
 
-#include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/model/simple_text/simple_text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <domain/document_object.h>
 
@@ -8,7 +8,7 @@
 namespace BusinessLayer {
 
 ComicBookTitlePageModel::ComicBookTitlePageModel(QObject* _parent)
-    : TextModel(_parent)
+    : SimpleTextModel(_parent)
 {
 }
 
@@ -26,7 +26,7 @@ void ComicBookTitlePageModel::initDocument()
         //
         // FIXME: подгрузка структуры из шаблона сценария
         //
-        auto textItem = new TextModelTextItem;
+        auto textItem = new SimpleTextModelTextItem;
         textItem->setParagraphType(TextParagraphType::Text);
         appendItem(textItem);
     }
@@ -34,7 +34,7 @@ void ComicBookTitlePageModel::initDocument()
     // А если данные есть, то загрузим их из документа
     //
     else {
-        TextModel::initDocument();
+        SimpleTextModel::initDocument();
     }
 }
 

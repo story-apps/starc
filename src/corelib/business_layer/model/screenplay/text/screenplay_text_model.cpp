@@ -79,7 +79,7 @@ public:
     /**
      * @brief Модель титульной страницы
      */
-    TextModel* titlePageModel = nullptr;
+    SimpleTextModel* titlePageModel = nullptr;
 
     /**
      * @brief Модель справочников
@@ -1182,12 +1182,12 @@ ScreenplayInformationModel* ScreenplayTextModel::informationModel() const
     return d->informationModel;
 }
 
-void ScreenplayTextModel::setTitlePageModel(TextModel* _model)
+void ScreenplayTextModel::setTitlePageModel(SimpleTextModel* _model)
 {
     d->titlePageModel = _model;
 }
 
-TextModel* ScreenplayTextModel::titlePageModel() const
+SimpleTextModel* ScreenplayTextModel::titlePageModel() const
 {
     return d->titlePageModel;
 }

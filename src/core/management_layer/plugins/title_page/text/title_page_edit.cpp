@@ -9,8 +9,8 @@
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
-#include <business_layer/model/text/text_model.h>
-#include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/model/simple_text/simple_text_model_text_item.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/simple_text_template.h>
@@ -48,7 +48,7 @@ public:
 
     TitlePageEdit* q = nullptr;
 
-    QPointer<BusinessLayer::TextModel> model;
+    QPointer<BusinessLayer::SimpleTextModel> model;
     BusinessLayer::SimpleTextDocument document;
 };
 
@@ -104,7 +104,7 @@ TitlePageEdit::TitlePageEdit(QWidget* _parent)
 
 TitlePageEdit::~TitlePageEdit() = default;
 
-void TitlePageEdit::initWithModel(BusinessLayer::TextModel* _model)
+void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
 {
     if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
         disconnect(titlePageModel->informationModel());
@@ -156,7 +156,7 @@ void TitlePageEdit::initWithModel(BusinessLayer::TextModel* _model)
     if (d->model && d->model->rowCount() == 1) {
         const auto item = d->model->itemForIndex(d->model->index(0, 0));
         if (item->type() == BusinessLayer::TextModelItemType::Text) {
-            const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+            const auto textItem = static_cast<BusinessLayer::SimpleTextModelTextItem*>(item);
             if (textItem->text().isEmpty()) {
                 restoreFromTemplate();
             }

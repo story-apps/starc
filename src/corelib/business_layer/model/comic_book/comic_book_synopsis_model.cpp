@@ -4,7 +4,7 @@
 namespace BusinessLayer {
 
 ComicBookSynopsisModel::ComicBookSynopsisModel(QObject* _parent)
-    : TextModel(_parent)
+    : SimpleTextModel(_parent)
 {
 }
 

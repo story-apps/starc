@@ -9,7 +9,7 @@ class CharactersModel;
 class ComicBookDictionariesModel;
 class ComicBookInformationModel;
 class ComicBookTextModelItem;
-class TextModel;
+class SimpleTextModel;
 
 /**
  * @brief Модель текста комикса
@@ -106,8 +106,8 @@ public:
     /**
      * @brief Задать модель титульной страницы
      */
-    void setTitlePageModel(TextModel* _model);
-    TextModel* titlePageModel() const;
+    void setTitlePageModel(SimpleTextModel* _model);
+    SimpleTextModel* titlePageModel() const;
 
     /**
      * @brief Задать модель справочников комикса

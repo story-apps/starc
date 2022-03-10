@@ -1,6 +1,6 @@
 #pragma once
 
-#include "text_model_item.h"
+#include "simple_text_model_item.h"
 
 #include <QString>
 
@@ -12,7 +12,7 @@ namespace BusinessLayer {
 /**
  * @brief Класс элементов глав модели текста
  */
-class CORE_LIBRARY_EXPORT TextModelChapterItem : public TextModelItem
+class CORE_LIBRARY_EXPORT SimpleTextModelChapterItem : public SimpleTextModelItem
 {
 public:
     /**
@@ -37,9 +37,9 @@ public:
     };
 
 public:
-    TextModelChapterItem();
-    explicit TextModelChapterItem(QXmlStreamReader& _contentReader);
-    ~TextModelChapterItem() override;
+    SimpleTextModelChapterItem();
+    explicit SimpleTextModelChapterItem(QXmlStreamReader& _contentReader);
+    ~SimpleTextModelChapterItem() override;
 
     /**
      * @brief Номер главы
@@ -76,19 +76,19 @@ public:
      * @brief Определяем интерфейс для получения XML блока
      */
     QByteArray toXml() const override;
-    QByteArray toXml(TextModelItem* _from, int _fromPosition, TextModelItem* _to, int _toPosition,
+    QByteArray toXml(SimpleTextModelItem* _from, int _fromPosition, SimpleTextModelItem* _to, int _toPosition,
                      bool _clearUuid) const;
     QByteArray xmlHeader(bool _clearUuid = false) const;
 
     /**
      * @brief Скопировать контент с заданного элемента
      */
-    void copyFrom(TextModelItem* _item) override;
+    void copyFrom(SimpleTextModelItem* _item) override;
 
     /**
      * @brief Проверить равен ли текущий элемент заданному
      */
-    bool isEqual(TextModelItem* _item) const override;
+    bool isEqual(SimpleTextModelItem* _item) const override;
 
 protected:
     /**

@@ -12,7 +12,7 @@ class LocationsModel;
 class ScreenplayDictionariesModel;
 class ScreenplayInformationModel;
 class ScreenplayTextModelItem;
-class TextModel;
+class SimpleTextModel;
 
 /**
  * @brief Модель текста сценария
@@ -114,8 +114,8 @@ public:
     /**
      * @brief Задать модель титульной страницы
      */
-    void setTitlePageModel(TextModel* _model);
-    TextModel* titlePageModel() const;
+    void setTitlePageModel(SimpleTextModel* _model);
+    SimpleTextModel* titlePageModel() const;
 
     /**
      * @brief Задать модель справочников сценария

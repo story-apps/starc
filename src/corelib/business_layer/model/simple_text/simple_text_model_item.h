@@ -17,11 +17,11 @@ enum class TextModelItemType { Chapter, Text };
 /**
  * @brief Базовый класс элемента модели текста
  */
-class CORE_LIBRARY_EXPORT TextModelItem : public AbstractModelItem
+class CORE_LIBRARY_EXPORT SimpleTextModelItem : public AbstractModelItem
 {
 public:
-    explicit TextModelItem(TextModelItemType _type);
-    ~TextModelItem() override;
+    explicit SimpleTextModelItem(TextModelItemType _type);
+    ~SimpleTextModelItem() override;
 
     /**
      * @brief Получить тип элемента
@@ -31,8 +31,8 @@ public:
     /**
      * @brief Переопределяем интерфейс для возврата элемента собственного класса
      */
-    TextModelItem* parent() const override;
-    TextModelItem* childAt(int _index) const override;
+    SimpleTextModelItem* parent() const override;
+    SimpleTextModelItem* childAt(int _index) const override;
 
     /**
      * @brief Определяем интерфейс получения данных элемента
@@ -47,12 +47,12 @@ public:
     /**
      * @brief Скопировать контент с заданного элемента
      */
-    virtual void copyFrom(TextModelItem* _item) = 0;
+    virtual void copyFrom(SimpleTextModelItem* _item) = 0;
 
     /**
      * @brief Проверить равен ли текущий элемент заданному
      */
-    virtual bool isEqual(TextModelItem* _item) const = 0;
+    virtual bool isEqual(SimpleTextModelItem* _item) const = 0;
 
 private:
     class Implementation;

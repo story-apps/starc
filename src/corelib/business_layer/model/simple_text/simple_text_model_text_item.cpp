@@ -1,6 +1,6 @@
-#include "text_model_text_item.h"
+#include "simple_text_model_text_item.h"
 
-#include "text_model_xml.h"
+#include "simple_text_model_xml.h"
 
 #include <business_layer/templates/simple_text_template.h>
 #include <utils/helpers/measurement_helper.h>
@@ -16,7 +16,7 @@
 
 namespace BusinessLayer {
 
-class TextModelTextItem::Implementation
+class SimpleTextModelTextItem::Implementation
 {
 public:
     Implementation() = default;
@@ -64,7 +64,7 @@ public:
     QByteArray xml;
 };
 
-TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentReader)
+SimpleTextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentReader)
 {
     paragraphType = textParagraphTypeFromString(_contentReader.name().toString());
     Q_ASSERT(paragraphType != TextParagraphType::Undefined);
@@ -175,12 +175,12 @@ TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentRead
     xml::readNextElement(_contentReader); // next
 }
 
-void TextModelTextItem::Implementation::updateXml()
+void SimpleTextModelTextItem::Implementation::updateXml()
 {
     xml = buildXml(0, text.length());
 }
 
-QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
+QByteArray SimpleTextModelTextItem::Implementation::buildXml(int _from, int _length)
 {
     const auto _end = _from + _length;
 
@@ -329,25 +329,26 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
 // ****
 
 
-int TextModelTextItem::TextPart::end() const
+int SimpleTextModelTextItem::TextPart::end() const
 {
     return from + length;
 }
 
-bool TextModelTextItem::TextFormat::operator==(const TextModelTextItem::TextFormat& _other) const
+bool SimpleTextModelTextItem::TextFormat::operator==(
+    const SimpleTextModelTextItem::TextFormat& _other) const
 {
     return from == _other.from && length == _other.length && font == _other.font
         && isBold == _other.isBold && isItalic == _other.isItalic
         && isUnderline == _other.isUnderline && isStrikethrough == _other.isStrikethrough;
 }
 
-bool TextModelTextItem::TextFormat::isValid() const
+bool SimpleTextModelTextItem::TextFormat::isValid() const
 {
     return font.has_value() || isBold != false || isItalic != false || isUnderline != false
         || isStrikethrough != false;
 }
 
-QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
+QTextCharFormat SimpleTextModelTextItem::TextFormat::charFormat() const
 {
     if (!isValid()) {
         return {};
@@ -372,20 +373,21 @@ QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
     return format;
 }
 
-bool TextModelTextItem::ReviewComment::operator==(
-    const TextModelTextItem::ReviewComment& _other) const
+bool SimpleTextModelTextItem::ReviewComment::operator==(
+    const SimpleTextModelTextItem::ReviewComment& _other) const
 {
     return author == _other.author && date == _other.date && text == _other.text;
 }
 
-bool TextModelTextItem::ReviewMark::operator==(const TextModelTextItem::ReviewMark& _other) const
+bool SimpleTextModelTextItem::ReviewMark::operator==(
+    const SimpleTextModelTextItem::ReviewMark& _other) const
 {
     return from == _other.from && length == _other.length && textColor == _other.textColor
         && backgroundColor == _other.backgroundColor && isDone == _other.isDone
         && comments == _other.comments;
 }
 
-QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const
+QTextCharFormat SimpleTextModelTextItem::ReviewMark::charFormat() const
 {
     QTextCharFormat format;
     format.setProperty(TextBlockStyle::PropertyIsReviewMark, true);
@@ -408,28 +410,28 @@ QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const
     return format;
 }
 
-TextModelTextItem::TextModelTextItem()
-    : TextModelItem(TextModelItemType::Text)
+SimpleTextModelTextItem::SimpleTextModelTextItem()
+    : SimpleTextModelItem(TextModelItemType::Text)
     , d(new Implementation)
 {
     d->updateXml();
 }
 
-TextModelTextItem::TextModelTextItem(QXmlStreamReader& _contentReaded)
-    : TextModelItem(TextModelItemType::Text)
+SimpleTextModelTextItem::SimpleTextModelTextItem(QXmlStreamReader& _contentReaded)
+    : SimpleTextModelItem(TextModelItemType::Text)
     , d(new Implementation(_contentReaded))
 {
     d->updateXml();
 }
 
-TextModelTextItem::~TextModelTextItem() = default;
+SimpleTextModelTextItem::~SimpleTextModelTextItem() = default;
 
-const TextParagraphType& TextModelTextItem::paragraphType() const
+const TextParagraphType& SimpleTextModelTextItem::paragraphType() const
 {
     return d->paragraphType;
 }
 
-void TextModelTextItem::setParagraphType(TextParagraphType _type)
+void SimpleTextModelTextItem::setParagraphType(TextParagraphType _type)
 {
     if (d->paragraphType == _type) {
         return;
@@ -440,12 +442,12 @@ void TextModelTextItem::setParagraphType(TextParagraphType _type)
     markChanged();
 }
 
-std::optional<Qt::Alignment> TextModelTextItem::alignment() const
+std::optional<Qt::Alignment> SimpleTextModelTextItem::alignment() const
 {
     return d->alignment;
 }
 
-void TextModelTextItem::setAlignment(Qt::Alignment _align)
+void SimpleTextModelTextItem::setAlignment(Qt::Alignment _align)
 {
     if (d->alignment.has_value() && d->alignment == _align) {
         return;
@@ -456,7 +458,7 @@ void TextModelTextItem::setAlignment(Qt::Alignment _align)
     markChanged();
 }
 
-void TextModelTextItem::clearAlignment()
+void SimpleTextModelTextItem::clearAlignment()
 {
     if (!d->alignment.has_value()) {
         return;
@@ -467,12 +469,12 @@ void TextModelTextItem::clearAlignment()
     markChanged();
 }
 
-const QString& TextModelTextItem::text() const
+const QString& SimpleTextModelTextItem::text() const
 {
     return d->text;
 }
 
-void TextModelTextItem::setText(const QString& _text)
+void SimpleTextModelTextItem::setText(const QString& _text)
 {
     if (d->text == _text) {
         return;
@@ -483,7 +485,7 @@ void TextModelTextItem::setText(const QString& _text)
     markChanged();
 }
 
-void TextModelTextItem::removeText(int _from)
+void SimpleTextModelTextItem::removeText(int _from)
 {
     if (_from >= d->text.length()) {
         return;
@@ -534,13 +536,13 @@ void TextModelTextItem::removeText(int _from)
     markChanged();
 }
 
-const QVector<TextModelTextItem::TextFormat>& TextModelTextItem::formats() const
+const QVector<SimpleTextModelTextItem::TextFormat>& SimpleTextModelTextItem::formats() const
 {
     return d->formats;
 }
 
-void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats,
-                                   const QTextCharFormat& _blockCharFormat)
+void SimpleTextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _formats,
+                                         const QTextCharFormat& _blockCharFormat)
 {
     QVector<TextFormat> newFormats;
     for (const auto& format : _formats) {
@@ -580,12 +582,13 @@ void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _for
     markChanged();
 }
 
-const QVector<TextModelTextItem::ReviewMark>& TextModelTextItem::reviewMarks() const
+const QVector<SimpleTextModelTextItem::ReviewMark>& SimpleTextModelTextItem::reviewMarks() const
 {
     return d->reviewMarks;
 }
 
-void TextModelTextItem::setReviewMarks(const QVector<TextModelTextItem::ReviewMark>& _reviewMarks)
+void SimpleTextModelTextItem::setReviewMarks(
+    const QVector<SimpleTextModelTextItem::ReviewMark>& _reviewMarks)
 {
     if (d->reviewMarks == _reviewMarks) {
         return;
@@ -596,7 +599,7 @@ void TextModelTextItem::setReviewMarks(const QVector<TextModelTextItem::ReviewMa
     markChanged();
 }
 
-void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks)
+void SimpleTextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks)
 {
     QVector<ReviewMark> newReviewMarks;
     for (const auto& reviewMark : _reviewMarks) {
@@ -617,11 +620,9 @@ void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& 
         const QStringList comments
             = reviewMark.format.property(TextBlockStyle::PropertyComments).toStringList();
         const QStringList dates
-            = reviewMark.format.property(TextBlockStyle::PropertyCommentsDates)
-                  .toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsDates).toStringList();
         const QStringList authors
-            = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthors)
-                  .toStringList();
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthors).toStringList();
         for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
             newReviewMark.comments.append(
                 { authors.at(commentIndex), dates.at(commentIndex), comments.at(commentIndex) });
@@ -633,7 +634,7 @@ void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& 
     setReviewMarks(newReviewMarks);
 }
 
-void TextModelTextItem::mergeWith(const TextModelTextItem* _other)
+void SimpleTextModelTextItem::mergeWith(const SimpleTextModelTextItem* _other)
 {
     if (_other == nullptr || _other->text().isEmpty()) {
         return;
@@ -654,7 +655,7 @@ void TextModelTextItem::mergeWith(const TextModelTextItem* _other)
     markChanged();
 }
 
-QVariant TextModelTextItem::data(int _role) const
+QVariant SimpleTextModelTextItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
@@ -666,17 +667,17 @@ QVariant TextModelTextItem::data(int _role) const
     }
 
     default: {
-        return TextModelItem::data(_role);
+        return SimpleTextModelItem::data(_role);
     }
     }
 }
 
-QByteArray TextModelTextItem::toXml() const
+QByteArray SimpleTextModelTextItem::toXml() const
 {
     return d->xml;
 }
 
-QByteArray TextModelTextItem::toXml(int _from, int _length)
+QByteArray SimpleTextModelTextItem::toXml(int _from, int _length)
 {
     //
     // Для блока целиком, используем закешированные данные
@@ -688,14 +689,14 @@ QByteArray TextModelTextItem::toXml(int _from, int _length)
     return d->buildXml(_from, _length);
 }
 
-void TextModelTextItem::copyFrom(TextModelItem* _item)
+void SimpleTextModelTextItem::copyFrom(SimpleTextModelItem* _item)
 {
     if (_item->type() != TextModelItemType::Text) {
         Q_ASSERT(false);
         return;
     }
 
-    auto textItem = static_cast<TextModelTextItem*>(_item);
+    auto textItem = static_cast<SimpleTextModelTextItem*>(_item);
     d->paragraphType = textItem->d->paragraphType;
     d->alignment = textItem->d->alignment;
     d->text = textItem->d->text;
@@ -706,19 +707,19 @@ void TextModelTextItem::copyFrom(TextModelItem* _item)
     markChanged();
 }
 
-bool TextModelTextItem::isEqual(TextModelItem* _item) const
+bool SimpleTextModelTextItem::isEqual(SimpleTextModelItem* _item) const
 {
     if (_item == nullptr || type() != _item->type()) {
         return false;
     }
 
-    const auto textItem = static_cast<TextModelTextItem*>(_item);
+    const auto textItem = static_cast<SimpleTextModelTextItem*>(_item);
     return d->paragraphType == textItem->d->paragraphType && d->alignment == textItem->d->alignment
         && d->text == textItem->d->text && d->reviewMarks == textItem->d->reviewMarks
         && d->formats == textItem->d->formats;
 }
 
-void TextModelTextItem::markChanged()
+void SimpleTextModelTextItem::markChanged()
 {
     setChanged(true);
 }

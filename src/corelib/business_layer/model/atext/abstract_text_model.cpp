@@ -63,7 +63,7 @@ public:
     /**
      * @brief Модель титульной страницы
      */
-    TextModel* titlePageModel = nullptr;
+    SimpleTextModel* titlePageModel = nullptr;
 
     /**
      * @brief Последние скопированные данные модели
@@ -1070,12 +1070,12 @@ QModelIndex AbstractTextModel::indexForItem(AbstractTextModelItem* _item) const
     return index(row, 0, parent);
 }
 
-void AbstractTextModel::setTitlePageModel(TextModel* _model)
+void AbstractTextModel::setTitlePageModel(SimpleTextModel* _model)
 {
     d->titlePageModel = _model;
 }
 
-TextModel* AbstractTextModel::titlePageModel() const
+SimpleTextModel* AbstractTextModel::titlePageModel() const
 {
     return d->titlePageModel;
 }
