@@ -33,8 +33,8 @@ const QVector<BusinessLayer::TextParagraphType> kParagraphTypes
         BusinessLayer::TextParagraphType::Shot,
         BusinessLayer::TextParagraphType::InlineNote,
         BusinessLayer::TextParagraphType::UnformattedText,
-        BusinessLayer::TextParagraphType::FolderHeader,
-        BusinessLayer::TextParagraphType::FolderFooter };
+        BusinessLayer::TextParagraphType::SequenceHeader,
+        BusinessLayer::TextParagraphType::SequenceFooter };
 }
 
 class ScreenplayTemplateParagraphsView::Implementation

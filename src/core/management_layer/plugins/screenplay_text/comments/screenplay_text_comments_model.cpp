@@ -289,7 +289,7 @@ void ScreenplayTextCommentsModel::Implementation::processSourceModelRowsInserted
         //
         const auto itemIndex = model->index(row, 0, _parent);
         const auto item = model->itemForIndex(itemIndex);
-        if (item == nullptr || item->type() != ScreenplayTextModelItemType::Text) {
+        if (item == nullptr || item->type() != TextModelItemType::Text) {
             if (item->hasChildren()) {
                 processSourceModelRowsInserted(itemIndex, 0, item->childCount() - 1);
             }
@@ -413,7 +413,7 @@ void ScreenplayTextCommentsModel::Implementation::processSourceModelRowsRemoved(
         //
         const auto itemIndex = model->index(row, 0, _parent);
         const auto item = model->itemForIndex(itemIndex);
-        if (item == nullptr || item->type() != ScreenplayTextModelItemType::Text) {
+        if (item == nullptr || item->type() != TextModelItemType::Text) {
             if (item->hasChildren()) {
                 processSourceModelRowsRemoved(itemIndex, 0, item->childCount() - 1);
             }
@@ -518,7 +518,7 @@ void ScreenplayTextCommentsModel::Implementation::processSourceModelDataChanged(
     }
 
     const auto item = model->itemForIndex(_index);
-    if (item == nullptr || item->type() != ScreenplayTextModelItemType::Text) {
+    if (item == nullptr || item->type() != TextModelItemType::Text) {
         return;
     }
 
@@ -672,7 +672,7 @@ void ScreenplayTextCommentsModel::setModel(ScreenplayTextModel* _model)
                 const auto itemIndex = d->model->index(itemRow, 0, _parent);
                 const auto item = d->model->itemForIndex(itemIndex);
                 switch (item->type()) {
-                case ScreenplayTextModelItemType::Text: {
+                case TextModelItemType::Text: {
                     const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
 
                     //
@@ -807,7 +807,7 @@ QModelIndex ScreenplayTextCommentsModel::mapFromScreenplay(const QModelIndex& _i
     }
 
     const auto item = d->model->itemForIndex(_index);
-    if (item == nullptr || item->type() != ScreenplayTextModelItemType::Text) {
+    if (item == nullptr || item->type() != TextModelItemType::Text) {
         return {};
     }
 

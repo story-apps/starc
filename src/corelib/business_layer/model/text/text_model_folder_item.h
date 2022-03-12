@@ -19,15 +19,20 @@ public:
     /**
      * @brief Роли данных из модели
      */
-    enum DataRole {
-        FolderNameRole = Qt::UserRole + 1,
+    enum {
+        FolderHeadingRole = Qt::UserRole + 1,
         FolderColorRole,
+        FolderUserRole,
     };
 
 public:
     explicit TextModelFolderItem(const TextModel* _model);
-    TextModelFolderItem(const TextModel* _model, QXmlStreamReader& _contentReader);
     ~TextModelFolderItem() override;
+
+    /**
+     * @brief Название папки
+     */
+    QString heading() const;
 
     /**
      * @brief Цвет папки
@@ -41,11 +46,16 @@ public:
     QVariant data(int _role) const override;
 
     /**
+     * @brief Считать контент из заданного ридера
+     */
+    void readContent(QXmlStreamReader& _contentReader) override final;
+
+    /**
      * @brief Определяем интерфейс для получения XML блока
      */
     QByteArray toXml() const override;
-    QByteArray toXml(TextModelItem* _from, int _fromPosition, TextModelItem* _to,
-                     int _toPosition, bool _clearUuid) const;
+    QByteArray toXml(TextModelItem* _from, int _fromPosition, TextModelItem* _to, int _toPosition,
+                     bool _clearUuid) const;
     QByteArray xmlHeader(bool _clearUuid = false) const;
 
     /**
@@ -60,9 +70,9 @@ public:
 
 protected:
     /**
-     * @brief Обновляем текст папки при изменении кого-то из детей
+     * @brief Задать заголовок папки
      */
-    void handleChange() override;
+    void setHeading(const QString& _heading);
 
 private:
     class Implementation;

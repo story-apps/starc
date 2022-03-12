@@ -308,9 +308,9 @@ SettingsStorage::Implementation::Implementation()
                                            TextParagraphType::Action);
         addScreenplayEditorStylesJumpByEnter(TextParagraphType::InlineNote,
                                              TextParagraphType::Action);
-        addScreenplayEditorStylesJumpByTab(TextParagraphType::FolderHeader,
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::SequenceHeader,
                                            TextParagraphType::SceneHeading);
-        addScreenplayEditorStylesJumpByEnter(TextParagraphType::FolderHeader,
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::SequenceHeader,
                                              TextParagraphType::SceneHeading);
         //
         auto addScreenplayEditorStylesChangeByTab
@@ -367,10 +367,10 @@ SettingsStorage::Implementation::Implementation()
                                              TextParagraphType::InlineNote);
         addScreenplayEditorStylesChangeByEnter(TextParagraphType::InlineNote,
                                                TextParagraphType::InlineNote);
-        addScreenplayEditorStylesChangeByTab(TextParagraphType::FolderHeader,
-                                             TextParagraphType::FolderHeader);
-        addScreenplayEditorStylesChangeByEnter(TextParagraphType::FolderHeader,
-                                               TextParagraphType::FolderHeader);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::SequenceHeader,
+                                             TextParagraphType::SequenceHeader);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::SequenceHeader,
+                                               TextParagraphType::SequenceHeader);
         //
         auto addShortcut
             = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
@@ -390,7 +390,7 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Shot, "Ctrl+8");
         addShortcut(BusinessLayer::TextParagraphType::Transition, "Ctrl+9");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
-        addShortcut(BusinessLayer::TextParagraphType::FolderHeader, "Ctrl+Space");
+        addShortcut(BusinessLayer::TextParagraphType::SequenceHeader, "Ctrl+Space");
         //
         defaultValues.insert(kComponentsScreenplayEditorDefaultTemplateKey, "world_cp");
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersKey, false);
@@ -477,9 +477,9 @@ SettingsStorage::Implementation::Implementation()
                                           TextParagraphType::Description);
         addComicBookEditorStylesJumpByEnter(TextParagraphType::InlineNote,
                                             TextParagraphType::Description);
-        addComicBookEditorStylesJumpByTab(TextParagraphType::FolderHeader,
+        addComicBookEditorStylesJumpByTab(TextParagraphType::SequenceHeader,
                                           TextParagraphType::Page);
-        addComicBookEditorStylesJumpByEnter(TextParagraphType::FolderHeader,
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::SequenceHeader,
                                             TextParagraphType::Page);
         //
         auto addComicBookEditorStylesChangeByTab
@@ -520,10 +520,10 @@ SettingsStorage::Implementation::Implementation()
                                             TextParagraphType::InlineNote);
         addComicBookEditorStylesChangeByEnter(TextParagraphType::InlineNote,
                                               TextParagraphType::InlineNote);
-        addComicBookEditorStylesChangeByTab(TextParagraphType::FolderHeader,
-                                            TextParagraphType::FolderHeader);
-        addComicBookEditorStylesChangeByEnter(TextParagraphType::FolderHeader,
-                                              TextParagraphType::FolderHeader);
+        addComicBookEditorStylesChangeByTab(TextParagraphType::SequenceHeader,
+                                            TextParagraphType::SequenceHeader);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::SequenceHeader,
+                                              TextParagraphType::SequenceHeader);
         //
         auto addShortcut = [this, kComicBookEditorKey](BusinessLayer::TextParagraphType _type,
                                                        const QString& _shortcut) {

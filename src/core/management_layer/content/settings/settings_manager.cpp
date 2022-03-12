@@ -223,7 +223,7 @@ void SettingsManager::Implementation::loadShortcutsSettings()
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Transition));
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Shot));
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::InlineNote));
-    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::FolderHeader));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::SequenceHeader));
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::UnformattedText));
     //
     // ... модель переходов между блоками, её заголовок и делегат

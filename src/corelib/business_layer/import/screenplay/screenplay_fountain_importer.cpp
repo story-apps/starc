@@ -440,7 +440,7 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
         //
         // Добавим текущий блок
         //
-        if (!blockText.isEmpty() || _type == TextParagraphType::FolderFooter) {
+        if (!blockText.isEmpty() || _type == TextParagraphType::SequenceFooter) {
             appendBlock(blockText, _type, _writer);
         }
         blockText.clear();
@@ -585,7 +585,7 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
     // Формируем блок сценария
     //
     switch (_type) {
-    case TextParagraphType::FolderHeader: {
+    case TextParagraphType::SequenceHeader: {
         if (alreadyInScene) {
             _writer.writeEndElement(); // контент предыдущей сцены
             _writer.writeEndElement(); // предыдущая сцена
@@ -599,7 +599,7 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
         break;
     }
 
-    case TextParagraphType::FolderFooter: {
+    case TextParagraphType::SequenceFooter: {
         if (alreadyInScene) {
             _writer.writeEndElement(); // контент предыдущей сцены
             _writer.writeEndElement(); // предыдущая сцена
@@ -1232,18 +1232,18 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 //
                 unsigned toClose = dirs.size() - sharpCount + 1;
                 for (unsigned i = 0; i != toClose; ++i) {
-                    d->processBlock({}, TextParagraphType::FolderFooter, writer);
+                    d->processBlock({}, TextParagraphType::SequenceFooter, writer);
                     dirs.pop();
                 }
-                prevBlockType = TextParagraphType::FolderFooter;
+                prevBlockType = TextParagraphType::SequenceFooter;
             }
             //
             // И откроем новую
             //
             QString text = paragraphs[i].mid(sharpCount);
-            d->processBlock(text, TextParagraphType::FolderHeader, writer);
+            d->processBlock(text, TextParagraphType::SequenceHeader, writer);
             dirs.push(text);
-            prevBlockType = TextParagraphType::FolderHeader;
+            prevBlockType = TextParagraphType::SequenceHeader;
 
             //
             // Поскольку директории добавляются прямо здесь без обработки, то в конец цикла идти не
@@ -1365,7 +1365,7 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
     // Закроем директории нужное число раз
     //
     while (!dirs.empty()) {
-        d->processBlock({}, TextParagraphType::FolderFooter, writer);
+        d->processBlock({}, TextParagraphType::SequenceFooter, writer);
         dirs.pop();
     }
 

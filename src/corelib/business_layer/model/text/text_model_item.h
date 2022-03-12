@@ -2,6 +2,8 @@
 
 #include <business_layer/model/abstract_model_item.h>
 
+class QXmlStreamReader;
+
 
 namespace BusinessLayer {
 
@@ -59,6 +61,11 @@ public:
      * @brief Определяем интерфейс получения данных элемента
      */
     QVariant data(int _role) const override;
+
+    /**
+     * @brief Считать контент из заданного ридера
+     */
+    virtual void readContent(QXmlStreamReader& _contentReader) = 0;
 
     /**
      * @brief Сформировать xml блока

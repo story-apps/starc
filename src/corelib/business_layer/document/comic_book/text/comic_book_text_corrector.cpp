@@ -318,7 +318,7 @@ void ComicBookTextCorrector::Implementation::correctCharactersNames(int _positio
     //
     QVector<TextParagraphType> sceneBorders
         = { TextParagraphType::Page, TextParagraphType::Panel,
-            TextParagraphType::FolderHeader, TextParagraphType::FolderFooter };
+            TextParagraphType::SequenceHeader, TextParagraphType::SequenceFooter };
     QTextBlock block = document->findBlock(startPosition);
     while (block != document->begin()) {
         const auto blockType = TextBlockStyle::forBlock(block);
@@ -428,7 +428,7 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
     //
     QVector<TextParagraphType> sceneBorders
         = { TextParagraphType::Page, TextParagraphType::Panel,
-            TextParagraphType::FolderHeader, TextParagraphType::FolderFooter };
+            TextParagraphType::SequenceHeader, TextParagraphType::SequenceFooter };
     QTextBlock block = document->findBlock(startPosition);
     while (block != document->begin()) {
         const auto blockType = TextBlockStyle::forBlock(block);
@@ -1044,7 +1044,7 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
             //
             case TextParagraphType::Page:
             case TextParagraphType::Panel:
-            case TextParagraphType::FolderHeader: {
+            case TextParagraphType::SequenceHeader: {
                 //
                 // Переносим на следующую страницу
                 //
@@ -1058,7 +1058,7 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
             // Конец папки распологаем либо только в конце страницы, либо целиком переносим на
             // следующую страницу
             //
-            case TextParagraphType::FolderFooter: {
+            case TextParagraphType::SequenceFooter: {
                 //
                 // Если в конце страницы, оставляем как есть
                 //
@@ -1724,8 +1724,8 @@ void ComicBookTextCorrector::Implementation::moveBlockToNextPage(const QTextBloc
         decorationFormat.setProperty(TextBlockStyle::PropertyType,
                                      static_cast<int>(TextParagraphType::PanelShadow));
     }
-    if (paragraphType == TextParagraphType::FolderHeader
-        || paragraphType == TextParagraphType::FolderHeader) {
+    if (paragraphType == TextParagraphType::SequenceHeader
+        || paragraphType == TextParagraphType::SequenceHeader) {
         decorationFormat.setProperty(TextBlockStyle::PropertyType,
                                      static_cast<int>(TextParagraphType::Description));
         decorationFormat.setBackground(Qt::NoBrush);

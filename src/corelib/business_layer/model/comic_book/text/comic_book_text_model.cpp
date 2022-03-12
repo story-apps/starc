@@ -212,8 +212,8 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
             toString(TextParagraphType::Character),
             toString(TextParagraphType::Dialogue),
             toString(TextParagraphType::InlineNote),
-            toString(TextParagraphType::FolderHeader),
-            toString(TextParagraphType::FolderFooter),
+            toString(TextParagraphType::SequenceHeader),
+            toString(TextParagraphType::SequenceFooter),
             toString(TextParagraphType::PageSplitter),
         },
         _parent)
@@ -831,7 +831,7 @@ QString ComicBookTextModel::mimeFromSelection(const QModelIndex& _from, int _fro
                 // Не сохраняем закрывающие блоки неоткрытых папок, всё это делается внутри самих
                 // папок
                 //
-                if (textItem->paragraphType() == TextParagraphType::FolderFooter) {
+                if (textItem->paragraphType() == TextParagraphType::SequenceFooter) {
                     break;
                 }
 
@@ -869,7 +869,7 @@ QString ComicBookTextModel::mimeFromSelection(const QModelIndex& _from, int _fro
     //
     if (fromItem->type() == ComicBookTextModelItemType::Text) {
         const auto textItem = static_cast<ComicBookTextModelTextItem*>(fromItem);
-        if (textItem->paragraphType() == TextParagraphType::FolderHeader
+        if (textItem->paragraphType() == TextParagraphType::SequenceHeader
             || textItem->paragraphType() == TextParagraphType::Page
             || textItem->paragraphType() == TextParagraphType::Panel) {
             auto newFromItem = fromItemParent;
@@ -922,7 +922,7 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
         //
         // Если в заголовок папки
         //
-        if (textItem->paragraphType() == TextParagraphType::FolderHeader) {
+        if (textItem->paragraphType() == TextParagraphType::SequenceHeader) {
             //
             // ... то вставим после него
             //
@@ -930,7 +930,7 @@ void ComicBookTextModel::insertFromMime(const QModelIndex& _index, int _position
         //
         // Если завершение папки
         //
-        else if (textItem->paragraphType() == TextParagraphType::FolderFooter) {
+        else if (textItem->paragraphType() == TextParagraphType::SequenceFooter) {
             //
             // ... то вставляем после папки
             //

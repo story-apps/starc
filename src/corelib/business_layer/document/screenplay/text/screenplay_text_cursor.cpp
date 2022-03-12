@@ -229,9 +229,9 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
         {
             auto topBlock = document()->findBlock(topCursorPosition);
             auto bottomBlock = document()->findBlock(bottomCursorPosition);
-            if (TextBlockStyle::forBlock(topBlock) == TextParagraphType::FolderHeader
+            if (TextBlockStyle::forBlock(topBlock) == TextParagraphType::SequenceHeader
                 && TextBlockStyle::forBlock(bottomBlock)
-                    == TextParagraphType::FolderFooter
+                    == TextParagraphType::SequenceFooter
                 && topBlock == document()->begin() && bottomBlock.next() == document()->end()) {
                 //
                 // Нельзя просто взять и удалить весь текст, потому что тогда останется блок
@@ -325,8 +325,8 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
     //
     // Если пользователь хочет удалить пустую папку, расширим выделение, чтобы полностью её удалить
     //
-    if (topParagraphType == TextParagraphType::FolderHeader
-        && bottomParagraphType == TextParagraphType::FolderFooter
+    if (topParagraphType == TextParagraphType::SequenceHeader
+        && bottomParagraphType == TextParagraphType::SequenceFooter
         && topBlock.next() == bottomBlock) {
         if (bottomBlock.next() == document()->end()) {
             cursor.setPosition(topBlock.position());
@@ -453,7 +453,7 @@ ScreenplayTextCursor::FoldersToDelete ScreenplayTextCursor::findFoldersToDelete(
         //
         // Если найден блок открывающий папку, то нужно удалить закрывающий блок
         //
-        if (currentType == TextParagraphType::FolderHeader) {
+        if (currentType == TextParagraphType::SequenceHeader) {
             //
             // ... если все группы закрыты, нужно удалить последующую закрытую
             //
@@ -470,7 +470,7 @@ ScreenplayTextCursor::FoldersToDelete ScreenplayTextCursor::findFoldersToDelete(
         //
         // Если найден блок закрывающий папку
         //
-        else if (currentType == TextParagraphType::FolderFooter) {
+        else if (currentType == TextParagraphType::SequenceFooter) {
             //
             // ... если все группы закрыты, нужно удалить предыдущую открытую
             //
@@ -526,7 +526,7 @@ void ScreenplayTextCursor::removeGroupsPairs(
         int groupsToDeleteCount = _foldersToDelete.footers;
         do {
             const auto currentType = TextBlockStyle::forBlock(cursor.block());
-            if (currentType == TextParagraphType::FolderFooter) {
+            if (currentType == TextParagraphType::SequenceFooter) {
                 if (openedGroups == 0) {
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -553,7 +553,7 @@ void ScreenplayTextCursor::removeGroupsPairs(
                 } else {
                     --openedGroups;
                 }
-            } else if (currentType == TextParagraphType::FolderHeader) {
+            } else if (currentType == TextParagraphType::SequenceHeader) {
                 //
                 // ... встретилась новая группа, которую не нужно удалять
                 //
@@ -591,7 +591,7 @@ void ScreenplayTextCursor::removeGroupsPairs(
         int groupsToDeleteCount = _foldersToDelete.headers;
         do {
             const auto currentType = TextBlockStyle::forBlock(cursor.block());
-            if (currentType == TextParagraphType::FolderHeader) {
+            if (currentType == TextParagraphType::SequenceHeader) {
                 if (openedGroups == 0) {
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -618,7 +618,7 @@ void ScreenplayTextCursor::removeGroupsPairs(
                 } else {
                     --openedGroups;
                 }
-            } else if (currentType == TextParagraphType::FolderFooter) {
+            } else if (currentType == TextParagraphType::SequenceFooter) {
                 //
                 // ... встретилась новая группа, которую не нужно удалять
                 //

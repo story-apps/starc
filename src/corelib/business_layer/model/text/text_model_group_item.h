@@ -34,18 +34,18 @@ public:
     /**
      * @brief Роли данных из модели
      */
-    enum DataRole {
-        SceneNumberRole = Qt::UserRole + 1,
-        SceneHeadingRole,
-        SceneTextRole,
-        SceneColorRole,
-        SceneInlineNotesSizeRole,
-        SceneReviewMarksSizeRole,
+    enum {
+        GroupNumberRole = Qt::UserRole + 1,
+        GroupHeadingRole,
+        GroupTextRole,
+        GroupColorRole,
+        GroupInlineNotesSizeRole,
+        GroupReviewMarksSizeRole,
+        GroupUserRole,
     };
 
 public:
     explicit TextModelGroupItem(const TextModel* _model);
-    TextModelGroupItem(const TextModel* _model, QXmlStreamReader& _contentReader);
     ~TextModelGroupItem() override;
 
     /**
@@ -88,11 +88,16 @@ public:
     QVariant data(int _role) const override;
 
     /**
+     * @brief Считать контент из заданного ридера
+     */
+    void readContent(QXmlStreamReader& _contentReader) override final;
+
+    /**
      * @brief Определяем интерфейс для получения XML блока
      */
     QByteArray toXml() const override;
-    QByteArray toXml(TextModelItem* _from, int _fromPosition, TextModelItem* _to,
-                     int _toPosition, bool _clearUuid) const;
+    QByteArray toXml(TextModelItem* _from, int _fromPosition, TextModelItem* _to, int _toPosition,
+                     bool _clearUuid) const;
     QByteArray xmlHeader(bool _clearUuid = false) const;
 
     /**
@@ -107,9 +112,34 @@ public:
 
 protected:
     /**
-     * @brief Обновляем текст группы при изменении кого-то из детей
+     * @brief Задать заголовок группы
      */
-    void handleChange() override;
+    void setHeading(const QString& _heading);
+
+    /**
+     * @brief Задать текст группы
+     */
+    void setText(const QString& _text);
+
+    /**
+     * @brief Задать количество заметок по тексту в группе
+     */
+    void setInlineNotesSize(int _size);
+
+    /**
+     * @brief Задать количество заметок на полях в группе
+     */
+    void setReviewMarksSize(int _size);
+
+    /**
+     * @brief Считать кастомный контент и вернуть название тэга на котором стоит ридер
+     */
+    virtual QStringRef readCustomContent(QXmlStreamReader& _contentReader) = 0;
+
+    /**
+     * @brief Сформировать xml-блок с кастомными данными элемента
+     */
+    virtual QByteArray customContent() const = 0;
 
 private:
     class Implementation;

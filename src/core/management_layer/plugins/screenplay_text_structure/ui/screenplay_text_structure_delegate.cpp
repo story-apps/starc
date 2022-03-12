@@ -170,7 +170,7 @@ void ScreenplayTextStructureDelegate::Implementation::paintFolder(
         QPointF(folderNameLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
         QSizeF(folderNameWidth, Ui::DesignSystem::layout().px24()));
     const auto folderName = _painter->fontMetrics().elidedText(
-        _index.data(ScreenplayTextModelFolderItem::FolderNameRole).toString(), Qt::ElideRight,
+        _index.data(ScreenplayTextModelFolderItem::FolderHeadingRole).toString(), Qt::ElideRight,
         static_cast<int>(folderNameRect.width()));
     _painter->drawText(folderNameRect, Qt::AlignLeft | Qt::AlignVCenter, folderName);
 }
@@ -213,7 +213,7 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
     //
     // ... цвет сцены
     //
-    paintItemColor(_painter, _option, _index.data(ScreenplayTextModelSceneItem::SceneColorRole));
+    paintItemColor(_painter, _option, _index.data(ScreenplayTextModelSceneItem::GroupColorRole));
 
     //
     // ... иконка
@@ -251,9 +251,9 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
     const QRectF sceneHeadingRect(
         QPointF(sceneHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
         QSizeF(sceneHeadingWidth, Ui::DesignSystem::layout().px24()));
-    auto sceneHeading = _index.data(ScreenplayTextModelSceneItem::SceneHeadingRole).toString();
+    auto sceneHeading = _index.data(ScreenplayTextModelSceneItem::GroupHeadingRole).toString();
     if (showSceneNumber) {
-        sceneHeading.prepend(_index.data(ScreenplayTextModelSceneItem::SceneNumberRole).toString()
+        sceneHeading.prepend(_index.data(ScreenplayTextModelSceneItem::GroupNumberRole).toString()
                              + " ");
     }
     sceneHeading = _painter->fontMetrics().elidedText(sceneHeading, Qt::ElideRight,
@@ -263,7 +263,7 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
     //
     // ... текст сцены
     //
-    auto sceneText = _index.data(ScreenplayTextModelSceneItem::SceneTextRole).toString();
+    auto sceneText = _index.data(ScreenplayTextModelSceneItem::GroupTextRole).toString();
     if (sceneText.isEmpty()) {
         return;
     }
@@ -285,7 +285,7 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
     // ... иконки заметок
     //
     const auto inlineNotesSize
-        = _index.data(ScreenplayTextModelSceneItem::SceneInlineNotesSizeRole).toInt();
+        = _index.data(ScreenplayTextModelSceneItem::GroupInlineNotesSizeRole).toInt();
     const qreal notesLeft = iconRect.left();
     const qreal notesTop = (sceneTextRect.isValid() ? sceneTextRect : sceneHeadingRect).bottom()
         + Ui::DesignSystem::layout().px8();
@@ -306,7 +306,7 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
         _painter->drawText(inlineNotesIconRect, Qt::AlignLeft | Qt::AlignVCenter, u8"\U000F09A8");
     }
     const auto reviewMarksSize
-        = _index.data(ScreenplayTextModelSceneItem::SceneReviewMarksSizeRole).toInt();
+        = _index.data(ScreenplayTextModelSceneItem::GroupReviewMarksSizeRole).toInt();
     if (reviewMarksSize > 0) {
         _painter->setFont(Ui::DesignSystem::font().caption());
         const auto reviewMarksSizeText = QString::number(reviewMarksSize);
@@ -451,8 +451,8 @@ QSize ScreenplayTextStructureDelegate::Implementation::sceneSizeHint(
         height += Ui::DesignSystem::layout().px16();
     }
     const bool haveNotesLine
-        = (_index.data(ScreenplayTextModelSceneItem::SceneInlineNotesSizeRole).toInt()
-           + _index.data(ScreenplayTextModelSceneItem::SceneReviewMarksSizeRole).toInt())
+        = (_index.data(ScreenplayTextModelSceneItem::GroupInlineNotesSizeRole).toInt()
+           + _index.data(ScreenplayTextModelSceneItem::GroupReviewMarksSizeRole).toInt())
         > 0;
     if (haveNotesLine) {
         height += Ui::DesignSystem::layout().px24();
@@ -512,19 +512,19 @@ void ScreenplayTextStructureDelegate::paint(QPainter* _painter, const QStyleOpti
     }
 
     using namespace BusinessLayer;
-    const auto type = static_cast<ScreenplayTextModelItemType>(typeValue.toInt());
+    const auto type = static_cast<TextModelItemType>(typeValue.toInt());
     switch (type) {
-    case ScreenplayTextModelItemType::Folder: {
+    case TextModelItemType::Folder: {
         d->paintFolder(_painter, opt, _index);
         break;
     }
 
-    case ScreenplayTextModelItemType::Scene: {
+    case TextModelItemType::Group: {
         d->paintScene(_painter, opt, _index);
         break;
     }
 
-    case ScreenplayTextModelItemType::Text: {
+    case TextModelItemType::Text: {
         d->paintText(_painter, opt, _index);
         break;
     }
@@ -547,17 +547,17 @@ QSize ScreenplayTextStructureDelegate::sizeHint(const QStyleOptionViewItem& _opt
     }
 
     using namespace BusinessLayer;
-    const auto type = static_cast<ScreenplayTextModelItemType>(typeValue.toInt());
+    const auto type = static_cast<TextModelItemType>(typeValue.toInt());
     switch (type) {
-    case ScreenplayTextModelItemType::Folder: {
+    case TextModelItemType::Folder: {
         return d->folderSizeHint(_option, _index);
     }
 
-    case ScreenplayTextModelItemType::Scene: {
+    case TextModelItemType::Group: {
         return d->sceneSizeHint(_option, _index);
     }
 
-    case ScreenplayTextModelItemType::Text: {
+    case TextModelItemType::Text: {
         return d->textSizeHint(_option, _index);
     }
 

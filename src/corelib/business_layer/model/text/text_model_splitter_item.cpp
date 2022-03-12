@@ -34,17 +34,30 @@ TextModelSplitterItem::Implementation::Implementation(TextModelSplitterItemType 
 // ****
 
 
-TextModelSplitterItem::TextModelSplitterItem(const TextModel* _model,
-                                             TextModelSplitterItemType _type)
+TextModelSplitterItem::TextModelSplitterItem(const TextModel* _model)
     : TextModelItem(TextModelItemType::Splitter, _model)
-    , d(new Implementation(_type))
+    , d(new Implementation)
 {
 }
 
-TextModelSplitterItem::TextModelSplitterItem(const TextModel* _model,
-                                             QXmlStreamReader& _contentReader)
-    : TextModelItem(TextModelItemType::Splitter, _model)
-    , d(new Implementation)
+TextModelSplitterItem::~TextModelSplitterItem() = default;
+
+TextModelSplitterItemType TextModelSplitterItem::splitterType() const
+{
+    return d->splitterType;
+}
+
+void TextModelSplitterItem::setSplitterType(TextModelSplitterItemType _type)
+{
+    if (d->splitterType == _type) {
+        return;
+    }
+
+    d->splitterType = _type;
+    setChanged(true);
+}
+
+void TextModelSplitterItem::readContent(QXmlStreamReader& _contentReader)
 {
     Q_ASSERT(_contentReader.name() == xml::kSplitterTag);
 
@@ -53,13 +66,6 @@ TextModelSplitterItem::TextModelSplitterItem(const TextModel* _model,
 
     xml::readNextElement(_contentReader); // end
     xml::readNextElement(_contentReader); // next
-}
-
-TextModelSplitterItem::~TextModelSplitterItem() = default;
-
-TextModelSplitterItemType TextModelSplitterItem::splitterType() const
-{
-    return d->splitterType;
 }
 
 QByteArray TextModelSplitterItem::toXml() const
@@ -76,7 +82,7 @@ QByteArray TextModelSplitterItem::toXml() const
 
 void TextModelSplitterItem::copyFrom(TextModelItem* _item)
 {
-    if (_item->type() != TextModelItemType::Splitter) {
+    if (_item == nullptr || type() != _item->type()) {
         Q_ASSERT(false);
         return;
     }

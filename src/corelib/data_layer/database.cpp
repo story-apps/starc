@@ -426,13 +426,13 @@ void Database::updateDatabaseTo_0_0_10(QSqlDatabase& _database)
 
 void Database::updateDatabaseTo_0_1_3(QSqlDatabase& _database)
 {
-    //
-    // Изменить в комиксах блоки page_name & panel_name на page_heading & panel_heading
-    //
-
     QSqlQuery q_updater(_database);
 
     _database.transaction();
+
+    //
+    // Изменить в комиксах блоки page_name & panel_name на page_heading & panel_heading
+    //
 
     {
         //
@@ -456,6 +456,41 @@ void Database::updateDatabaseTo_0_1_3(QSqlDatabase& _database)
             q_updater.prepare("UPDATE documents SET content = ? WHERE id = ?");
             q_updater.addBindValue(content);
             q_updater.addBindValue(id);
+            q_updater.exec();
+        }
+    }
+
+    //
+    // Изменить в сценариях элементы
+    // folder_header -> sequence_heading
+    // folder_footer -> sequence_footer
+    // folder -> sequence
+    //
+
+    {
+        //
+        // Извлекаем документы комиксов
+        //
+        std::map<QString, QString> comicBooks;
+        q_updater.exec("SELECT id, content FROM documents WHERE type = 10104");
+        while (q_updater.next()) {
+            comicBooks[q_updater.record().value("id").toString()]
+                = q_updater.record()
+                      .value("content")
+                      .toString()
+                      .replace("folder_header", "sequence_heading")
+                      .replace("folder_footer", "sequence_footer")
+                      .replace("folder", "sequence");
+        }
+
+        //
+        // Обновим данные
+        //
+        for (const auto& [id, content] : comicBooks) {
+            q_updater.prepare("UPDATE documents SET content = ? WHERE id = ?");
+            q_updater.addBindValue(content);
+            q_updater.addBindValue(id);
+            q_updater.exec();
         }
     }
 

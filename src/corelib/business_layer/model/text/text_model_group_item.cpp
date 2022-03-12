@@ -1,5 +1,6 @@
 #include "text_model_group_item.h"
 
+#include "text_model.h"
 #include "text_model_splitter_item.h"
 #include "text_model_text_item.h"
 #include "text_model_xml.h"
@@ -29,7 +30,7 @@ public:
     /**
      * @brief Идентификатор группы
      */
-    QUuid uuid;
+    QUuid uuid = QUuid::createUuid();
 
     /**
      * @brief Уровень группы (чем больше число, тем ниже уровень)
@@ -104,84 +105,6 @@ TextModelGroupItem::TextModelGroupItem(const TextModel* _model)
     : TextModelItem(TextModelItemType::Group, _model)
     , d(new Implementation)
 {
-    d->uuid = QUuid::createUuid();
-}
-
-TextModelGroupItem::TextModelGroupItem(const TextModel* _model, QXmlStreamReader& _contentReader)
-    : TextModelItem(TextModelItemType::Group, _model)
-    , d(new Implementation)
-{
-    d->groupType = textGroupTypeFromString(_contentReader.name().toString());
-    Q_ASSERT(d->groupType != TextGroupType::Undefined);
-
-    const auto attributes = _contentReader.attributes();
-    if (attributes.hasAttribute(xml::kUuidAttribute)) {
-        d->uuid = QUuid::fromString(attributes.value(xml::kUuidAttribute).toString());
-    }
-
-    //
-    // TODO: plots
-    //
-    d->isOmited = attributes.hasAttribute(xml::kOmitedAttribute);
-    xml::readNextElement(_contentReader);
-
-    auto currentTag = _contentReader.name();
-    if (currentTag == xml::kNumberTag) {
-        //        d->number = {
-        //        _contentReader.attributes().value(xml::kNumberValueAttribute).toString() };
-        xml::readNextElement(_contentReader); // end
-        currentTag = xml::readNextElement(_contentReader); // next
-    }
-
-    if (currentTag == xml::kColorTag) {
-        d->color = xml::readContent(_contentReader).toString();
-        xml::readNextElement(_contentReader); // end
-        currentTag = xml::readNextElement(_contentReader); // next
-    }
-
-    if (currentTag == xml::kStampTag) {
-        d->stamp = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
-        xml::readNextElement(_contentReader); // end
-        currentTag = xml::readNextElement(_contentReader); // next
-    }
-
-    if (currentTag == xml::kContentTag) {
-        xml::readNextElement(_contentReader); // next item
-        do {
-            currentTag = _contentReader.name();
-
-            //
-            // Проглатываем закрывающий контентный тэг
-            //
-            if (currentTag == xml::kContentTag && _contentReader.isEndElement()) {
-                xml::readNextElement(_contentReader);
-                continue;
-            }
-            //
-            // Если дошли до конца группы, выходим из обработки
-            //
-            else if (textGroupTypeFromString(currentTag.toString()) != TextGroupType::Undefined
-                     && _contentReader.isEndElement()) {
-                xml::readNextElement(_contentReader);
-                break;
-            }
-            //
-            // Считываем вложенный контент
-            //
-            else if (textGroupTypeFromString(currentTag.toString()) != TextGroupType::Undefined) {
-                appendItem(new TextModelGroupItem(model(), _contentReader));
-            } else if (currentTag == xml::kSplitterTag) {
-                appendItem(new TextModelSplitterItem(model(), _contentReader));
-            } else {
-                appendItem(new TextModelTextItem(model(), _contentReader));
-            }
-        } while (!_contentReader.atEnd());
-    }
-
-    //
-    // Соберём заголовок, текст группы и прочие параметры
-    //
-    handleChange();
 }
 
 TextModelGroupItem::~TextModelGroupItem() = default;
@@ -296,30 +219,30 @@ QVariant TextModelGroupItem::data(int _role) const
         return u8"\U000f021a";
     }
 
-    case SceneNumberRole: {
+    case GroupNumberRole: {
         if (d->number.has_value()) {
             return d->number->text;
         }
         return {};
     }
 
-    case SceneColorRole: {
+    case GroupColorRole: {
         return d->color;
     }
 
-    case SceneHeadingRole: {
+    case GroupHeadingRole: {
         return d->heading;
     }
 
-    case SceneTextRole: {
+    case GroupTextRole: {
         return d->text;
     }
 
-    case SceneInlineNotesSizeRole: {
+    case GroupInlineNotesSizeRole: {
         return d->inlineNotesSize;
     }
 
-    case SceneReviewMarksSizeRole: {
+    case GroupReviewMarksSizeRole: {
         return d->reviewMarksSize;
     }
 
@@ -329,14 +252,93 @@ QVariant TextModelGroupItem::data(int _role) const
     }
 }
 
+void TextModelGroupItem::readContent(QXmlStreamReader& _contentReader)
+{
+    d->groupType = textGroupTypeFromString(_contentReader.name().toString());
+    Q_ASSERT(d->groupType != TextGroupType::Undefined);
+
+    const auto attributes = _contentReader.attributes();
+    if (attributes.hasAttribute(xml::kUuidAttribute)) {
+        d->uuid = QUuid::fromString(attributes.value(xml::kUuidAttribute).toString());
+    }
+
+    //
+    // TODO: plots
+    //
+    d->isOmited = attributes.hasAttribute(xml::kOmitedAttribute);
+    xml::readNextElement(_contentReader);
+
+    auto currentTag = _contentReader.name();
+    if (currentTag == xml::kNumberTag) {
+        //        d->number = {
+        //        _contentReader.attributes().value(xml::kNumberValueAttribute).toString() };
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
+
+    if (currentTag == xml::kColorTag) {
+        d->color = xml::readContent(_contentReader).toString();
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
+
+    if (currentTag == xml::kStampTag) {
+        d->stamp = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
+
+    currentTag = readCustomContent(_contentReader);
+
+    if (currentTag == xml::kContentTag) {
+        xml::readNextElement(_contentReader); // next item
+        do {
+            currentTag = _contentReader.name();
+
+            //
+            // Проглатываем закрывающий контентный тэг
+            //
+            if (currentTag == xml::kContentTag && _contentReader.isEndElement()) {
+                xml::readNextElement(_contentReader);
+                continue;
+            }
+            //
+            // Если дошли до конца группы, выходим из обработки
+            //
+            else if (textGroupTypeFromString(currentTag.toString()) != TextGroupType::Undefined
+                     && _contentReader.isEndElement()) {
+                xml::readNextElement(_contentReader);
+                break;
+            }
+            //
+            // Считываем вложенный контент
+            //
+            else if (textGroupTypeFromString(currentTag.toString()) != TextGroupType::Undefined) {
+                auto item = model()->createGroupItem(_contentReader);
+                appendItem(item);
+            } else if (currentTag == xml::kSplitterTag) {
+                auto item = model()->createSplitterItem(_contentReader);
+                appendItem(item);
+            } else {
+                auto item = model()->createTextItem(_contentReader);
+                appendItem(item);
+            }
+        } while (!_contentReader.atEnd());
+    }
+
+    //
+    // Соберём заголовок, текст группы и прочие параметры
+    //
+    handleChange();
+}
+
 QByteArray TextModelGroupItem::toXml() const
 {
     return toXml(nullptr, 0, nullptr, 0, false);
 }
 
-QByteArray TextModelGroupItem::toXml(TextModelItem* _from, int _fromPosition,
-                                     TextModelItem* _to, int _toPosition,
-                                     bool _clearUuid) const
+QByteArray TextModelGroupItem::toXml(TextModelItem* _from, int _fromPosition, TextModelItem* _to,
+                                     int _toPosition, bool _clearUuid) const
 {
     xml::TextModelXmlWriter xml;
     xml += xmlHeader(_clearUuid);
@@ -403,6 +405,7 @@ QByteArray TextModelGroupItem::xmlHeader(bool _clearUuid) const
                    .arg(xml::kStampTag, TextHelper::toHtmlEscaped(d->stamp))
                    .toUtf8();
     }
+    xml += customContent();
     xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
 
     return xml;
@@ -410,7 +413,7 @@ QByteArray TextModelGroupItem::xmlHeader(bool _clearUuid) const
 
 void TextModelGroupItem::copyFrom(TextModelItem* _item)
 {
-    if (_item->type() != TextModelItemType::Group) {
+    if (_item == nullptr || type() != _item->type()) {
         Q_ASSERT(false);
         return;
     }
@@ -439,58 +442,24 @@ bool TextModelGroupItem::isEqual(TextModelItem* _item) const
         && d->color == sceneItem->d->color && d->stamp == sceneItem->d->stamp;
 }
 
-void TextModelGroupItem::handleChange()
+void TextModelGroupItem::setHeading(const QString& _heading)
 {
-    //
-    // TODO: Возможно это нужно переопределить для дочерних элементов
-    //
-    d->heading.clear();
-    d->text.clear();
-    d->inlineNotesSize = 0;
-    d->reviewMarksSize = 0;
+    d->heading = _heading;
+}
 
-    for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
-        auto child = childAt(childIndex);
-        if (child->type() != TextModelItemType::Text) {
-            continue;
-        }
+void TextModelGroupItem::setText(const QString& _text)
+{
+    d->text = _text;
+}
 
-        auto childTextItem = static_cast<TextModelTextItem*>(child);
+void TextModelGroupItem::setInlineNotesSize(int _size)
+{
+    d->inlineNotesSize = _size;
+}
 
-        //
-        // Собираем текст
-        //
-        switch (childTextItem->paragraphType()) {
-        case TextParagraphType::SceneHeading:
-        case TextParagraphType::Beat:
-        case TextParagraphType::Page:
-        case TextParagraphType::Panel:
-        case TextParagraphType::Heading1:
-        case TextParagraphType::Heading2:
-        case TextParagraphType::Heading3:
-        case TextParagraphType::Heading4:
-        case TextParagraphType::Heading5:
-        case TextParagraphType::Heading6: {
-            d->heading = TextHelper::smartToUpper(childTextItem->text());
-            break;
-        }
-
-        case TextParagraphType::InlineNote: {
-            ++d->inlineNotesSize;
-            break;
-        }
-
-        default: {
-            d->text.append(childTextItem->text() + " ");
-            d->reviewMarksSize += std::count_if(
-                childTextItem->reviewMarks().begin(), childTextItem->reviewMarks().end(),
-                [](const TextModelTextItem::ReviewMark& _reviewMark) {
-                    return !_reviewMark.isDone;
-                });
-            break;
-        }
-        }
-    }
+void TextModelGroupItem::setReviewMarksSize(int _size)
+{
+    d->reviewMarksSize = _size;
 }
 
 } // namespace BusinessLayer

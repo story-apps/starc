@@ -178,9 +178,9 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
         } else if (paragraphType == "noprintable_text") {
             blockType = TextParagraphType::InlineNote;
         } else if (paragraphType == "folder_header") {
-            blockType = TextParagraphType::FolderHeader;
+            blockType = TextParagraphType::SequenceHeader;
         } else if (paragraphType == "folder_footer") {
-            blockType = TextParagraphType::FolderFooter;
+            blockType = TextParagraphType::SequenceFooter;
         } else if (paragraphType == "scene_description") {
             //
             // TODO:
@@ -278,7 +278,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
         // Формируем блок сценария
         //
         switch (blockType) {
-        case TextParagraphType::FolderHeader: {
+        case TextParagraphType::SequenceHeader: {
             if (alreadyInScene) {
                 writer.writeEndElement(); // контент предыдущей сцены
                 writer.writeEndElement(); // предыдущая сцена
@@ -292,7 +292,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
             break;
         }
 
-        case TextParagraphType::FolderFooter: {
+        case TextParagraphType::SequenceFooter: {
             if (alreadyInScene) {
                 writer.writeEndElement(); // контент предыдущей сцены
                 writer.writeEndElement(); // предыдущая сцена

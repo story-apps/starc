@@ -276,7 +276,7 @@ void ScreenplayTextEdit::setCurrentParagraphType(BusinessLayer::TextParagraphTyp
     //
     // Если вставили папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
     //
-    if (_type == TextParagraphType::FolderHeader) {
+    if (_type == TextParagraphType::SequenceHeader) {
         moveCursor(QTextCursor::PreviousBlock);
     }
 
@@ -621,7 +621,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     // ... идём до начала сцены
     //
     while (TextBlockStyle::forBlock(topBlock) != TextParagraphType::SceneHeading
-           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::FolderHeader
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::SequenceHeader
            && topBlock != document()->firstBlock()) {
         topBlock = topBlock.previous();
     }
@@ -703,7 +703,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 // Определим цвет сцены
                 //
                 if (blockType == TextParagraphType::SceneHeading
-                    || blockType == TextParagraphType::FolderHeader) {
+                    || blockType == TextParagraphType::SequenceHeader) {
                     lastSceneBlockBottom = cursorR.top();
                     lastSceneColor = d->document.itemColor(block);
                 }
@@ -845,7 +845,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Для пустого футера рисуем плейсхолдер
                         //
-                        if (blockType == TextParagraphType::FolderFooter) {
+                        if (blockType == TextParagraphType::SequenceFooter) {
                             setPainterPen(palette().text().color());
                             painter.setFont(block.charFormat().font());
 
@@ -857,14 +857,14 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             while (headerBlock.isValid()) {
                                 const auto headerBlockType
                                     = TextBlockStyle::forBlock(headerBlock);
-                                if (headerBlockType == TextParagraphType::FolderHeader) {
+                                if (headerBlockType == TextParagraphType::SequenceHeader) {
                                     if (openedFolders > 0) {
                                         --openedFolders;
                                     } else {
                                         break;
                                     }
                                 } else if (headerBlockType
-                                           == TextParagraphType::FolderFooter) {
+                                           == TextParagraphType::SequenceFooter) {
                                     ++openedFolders;
                                 }
 
@@ -934,7 +934,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Прорисовка значков папки (можно использовать для закладок)
                         //
-                        if (blockType == TextParagraphType::FolderHeader) {
+                        if (blockType == TextParagraphType::SequenceHeader) {
                             setPainterPen(palette().text().color());
                             painter.setFont(DesignSystem::font().iconsForEditors());
 
@@ -1235,8 +1235,8 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
         const auto blockType = TextBlockStyle::forBlock(cursor.block());
         splitAction->setEnabled(blockType != TextParagraphType::SceneHeading
                                 && blockType != TextParagraphType::SceneHeadingShadow
-                                && blockType != TextParagraphType::FolderHeader
-                                && blockType != TextParagraphType::FolderFooter);
+                                && blockType != TextParagraphType::SequenceHeader
+                                && blockType != TextParagraphType::SequenceFooter);
     }
     connect(splitAction, &QAction::triggered, this, [this] {
         BusinessLayer::ScreenplayTextCursor cursor = textCursor();

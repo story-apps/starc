@@ -6,7 +6,6 @@
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
-#include <business_layer/model/screenplay/text/screenplay_text_model_splitter_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <utils/helpers/text_helper.h>
@@ -356,7 +355,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 break;
             }
 
-            case TextParagraphType::FolderHeader: {
+            case TextParagraphType::SequenceHeader: {
                 //
                 // Напечатаем в начале столько #, насколько глубоко мы в директории
                 //
@@ -369,7 +368,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 break;
             }
 
-            case TextParagraphType::FolderFooter: {
+            case TextParagraphType::SequenceFooter: {
                 --dirNesting;
                 skipBlock = true;
                 break;
@@ -425,8 +424,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 // Заметки
                 //
                 const QStringList comments
-                    = paragraphFormat.property(TextBlockStyle::PropertyComments)
-                          .toStringList();
+                    = paragraphFormat.property(TextBlockStyle::PropertyComments).toStringList();
                 for (const QString& comment : comments) {
                     if (!comment.isEmpty()) {
                         paragraphText += "\n[[" + comment + "]]\n";

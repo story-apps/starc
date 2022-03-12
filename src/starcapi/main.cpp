@@ -274,20 +274,20 @@ QJsonObject getCharacters(const QString& _starcFileName)
     QStringList characters;
     QStringList sceneSpeakingCharacters;
     QStringList sceneNonspeakingCharacters;
-    std::function<void(const ScreenplayTextModelItem*)> findCharacters;
+    std::function<void(const TextModelItem*)> findCharacters;
     findCharacters = [&findCharacters, &charactersStatistics, &characters, &sceneSpeakingCharacters,
                       &sceneNonspeakingCharacters,
-                      &rxCharacterFinder](const ScreenplayTextModelItem* _item) {
+                      &rxCharacterFinder](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
-            case ScreenplayTextModelItemType::Folder:
-            case ScreenplayTextModelItemType::Scene: {
+            case TextModelItemType::Folder:
+            case TextModelItemType::Group: {
                 findCharacters(childItem);
                 break;
             }
 
-            case ScreenplayTextModelItemType::Text: {
+            case TextModelItemType::Text: {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
                 switch (textItem->paragraphType()) {
                 //
@@ -530,18 +530,18 @@ QJsonObject getCharacter(const QString& _starcFileName, const QString& _characte
     const QRegularExpression rxCharacterFinder(
         "(^|\\W)(" + _characterName + ")($|\\W)",
         QRegularExpression::CaseInsensitiveOption | QRegularExpression::UseUnicodePropertiesOption);
-    std::function<void(const ScreenplayTextModelItem*)> includeInReport;
+    std::function<void(const TextModelItem*)> includeInReport;
     includeInReport = [&includeInReport, &scenesData, &lastCharacter, &rxCharacterFinder,
-                       _characterName](const ScreenplayTextModelItem* _item) {
+                       _characterName](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
-            case ScreenplayTextModelItemType::Folder: {
+            case TextModelItemType::Folder: {
                 includeInReport(childItem);
                 break;
             }
 
-            case ScreenplayTextModelItemType::Scene: {
+            case TextModelItemType::Group: {
                 scenesData.append(SceneData());
                 auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
                 scenesData.last().uuid = sceneItem->uuid().toString();
@@ -555,7 +555,7 @@ QJsonObject getCharacter(const QString& _starcFileName, const QString& _characte
                 break;
             }
 
-            case ScreenplayTextModelItemType::Text: {
+            case TextModelItemType::Text: {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
                 switch (textItem->paragraphType()) {
 
@@ -684,13 +684,13 @@ QJsonObject printScene(const QString& _starcFileName, const QString& _screenplay
         ScreenplayInformationModel informationsModel;
         screenplayModel.setInformationModel(&informationsModel);
         screenplayModel.setDocument(screenplayDocument);
-        std::function<QString(const ScreenplayTextModelItem*)> findSceneNumber;
+        std::function<QString(const TextModelItem*)> findSceneNumber;
         findSceneNumber
-            = [&findSceneNumber, _sceneUuid](const ScreenplayTextModelItem* _item) -> QString {
+            = [&findSceneNumber, _sceneUuid](const TextModelItem* _item) -> QString {
             for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
                 auto childItem = _item->childAt(childIndex);
                 switch (childItem->type()) {
-                case ScreenplayTextModelItemType::Folder: {
+                case TextModelItemType::Folder: {
                     const auto sceneNumber = findSceneNumber(childItem);
                     if (!sceneNumber.isEmpty()) {
                         return sceneNumber;
@@ -698,7 +698,7 @@ QJsonObject printScene(const QString& _starcFileName, const QString& _screenplay
                     break;
                 }
 
-                case ScreenplayTextModelItemType::Scene: {
+                case TextModelItemType::Group: {
                     auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
                     if (sceneItem->uuid() == QUuid::fromString(_sceneUuid)) {
                         return QString::number(sceneItem->number().value);

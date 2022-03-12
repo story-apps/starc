@@ -45,8 +45,8 @@ enum class TextParagraphType {
     InlineNote, //!< Заметка по тексту
     ActHeader, //!< Заголовок акта
     ActFooter, //!< Окончание акта
-    FolderHeader, //!< Заголовок папки
-    FolderFooter, //!< Окончание папки
+    SequenceHeader, //!< Заголовок папки
+    SequenceFooter, //!< Окончание папки
     //
     PageSplitter, //!< Разделитель страницы (для блоков внутри которых находятся таблицы)
     //

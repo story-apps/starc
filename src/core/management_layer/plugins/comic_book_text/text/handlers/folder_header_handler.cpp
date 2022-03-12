@@ -62,7 +62,7 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль в соответствии с настройками
                 //
-                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::FolderHeader));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::SequenceHeader));
             } else {
                 //! Текст не пуст
 
@@ -79,7 +79,7 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
                     //
                     // Вставить блок время и место
                     //
-                    editor()->addParagraph(jumpForEnter(TextParagraphType::FolderHeader));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::SequenceHeader));
                 } else {
                     //! Внутри блока
 
@@ -135,7 +135,7 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
                 //
                 // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::FolderHeader));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::SequenceHeader));
             } else {
                 //! Текст не пуст
 
@@ -151,7 +151,7 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
                     //
                     // Как ENTER
                     //
-                    editor()->addParagraph(jumpForTab(TextParagraphType::FolderHeader));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::SequenceHeader));
                 } else {
                     //! Внутри блока
 

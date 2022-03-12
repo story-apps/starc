@@ -2,10 +2,17 @@
 
 #include <business_layer/model/abstract_model.h>
 
+class QXmlStreamReader;
+
+
 namespace BusinessLayer {
 
-class TextModelItem;
 class SimpleTextModel;
+class TextModelItem;
+class TextModelGroupItem;
+class TextModelFolderItem;
+class TextModelSplitterItem;
+class TextModelTextItem;
 
 /**
  * @brief Модель текста сценария
@@ -15,15 +22,26 @@ class CORE_LIBRARY_EXPORT TextModel : public AbstractModel
     Q_OBJECT
 
 public:
-    explicit TextModel(QObject* _parent = nullptr);
+    explicit TextModel(QObject* _parent, TextModelFolderItem* _rootItem);
     ~TextModel() override;
+
+    /**
+     * @brief Создать элементы модели
+     */
+    virtual TextModelFolderItem* createFolderItem() const = 0;
+    virtual TextModelFolderItem* createFolderItem(QXmlStreamReader& _contentReader) const;
+    virtual TextModelGroupItem* createGroupItem() const = 0;
+    virtual TextModelGroupItem* createGroupItem(QXmlStreamReader& _contentReader) const;
+    virtual TextModelSplitterItem* createSplitterItem() const;
+    virtual TextModelSplitterItem* createSplitterItem(QXmlStreamReader& _contentReader) const;
+    virtual TextModelTextItem* createTextItem() const = 0;
+    virtual TextModelTextItem* createTextItem(QXmlStreamReader& _contentReader) const;
 
     /**
      * @brief Добавить элемент в конец
      */
     void appendItem(TextModelItem* _item, TextModelItem* _parentItem = nullptr);
-    void appendItems(const QVector<TextModelItem*>& _items,
-                     TextModelItem* _parentItem = nullptr);
+    void appendItems(const QVector<TextModelItem*>& _items, TextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Добавить элемент в начало
@@ -34,8 +52,7 @@ public:
      * @brief Вставить элемент после заданного
      */
     void insertItem(TextModelItem* _item, TextModelItem* _afterSiblingItem);
-    void insertItems(const QVector<TextModelItem*>& _items,
-                     TextModelItem* _afterSiblingItem);
+    void insertItems(const QVector<TextModelItem*>& _items, TextModelItem* _afterSiblingItem);
 
     /**
      * @brief Извлечь заданный элемент без удаления
@@ -71,7 +88,6 @@ public:
     bool dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
                       const QModelIndex& _parent = {}) override;
     QMimeData* mimeData(const QModelIndexList& _indexes) const override;
-    QStringList mimeTypes() const override;
     Qt::DropActions supportedDragActions() const override;
     Qt::DropActions supportedDropActions() const override;
     /** @} */
@@ -113,6 +129,11 @@ protected:
     QByteArray toXml() const override;
     void applyPatch(const QByteArray& _patch) override;
     /** @} */
+
+    /**
+     * @brief Инициилизировать пустой документ
+     */
+    virtual void initEmptyDocument() = 0;
 
 private:
     class Implementation;

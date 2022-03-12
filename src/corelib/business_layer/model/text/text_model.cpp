@@ -28,26 +28,23 @@
 #define XML_CHECKS
 #endif
 
-namespace BusinessLayer {
 
-namespace {
-const char* kMimeType = "application/x-starc/screenplay/text/item";
-}
+namespace BusinessLayer {
 
 class TextModel::Implementation
 {
 public:
-    explicit Implementation(TextModel* _q);
+    explicit Implementation(TextModel* _q, TextModelFolderItem* _rootItem);
 
     /**
      * @brief Построить модель структуры из xml хранящегося в документе
      */
-    void buildModel(Domain::DocumentObject* _screenplay);
+    void buildModel(Domain::DocumentObject* _document);
 
     /**
      * @brief Сформировать xml из данных модели
      */
-    QByteArray toXml(Domain::DocumentObject* _screenplay) const;
+    QByteArray toXml(Domain::DocumentObject* _document) const;
 
 
     /**
@@ -75,19 +72,20 @@ public:
     } lastMime;
 };
 
-TextModel::Implementation::Implementation(TextModel* _q)
+TextModel::Implementation::Implementation(TextModel* _q, TextModelFolderItem* _rootItem)
     : q(_q)
-    , rootItem(new TextModelFolderItem(q))
+    , rootItem(_rootItem)
 {
+    Q_ASSERT(_rootItem);
 }
 
-void TextModel::Implementation::buildModel(Domain::DocumentObject* _screenplay)
+void TextModel::Implementation::buildModel(Domain::DocumentObject* _document)
 {
-    if (_screenplay == nullptr) {
+    if (_document == nullptr) {
         return;
     }
 
-    QXmlStreamReader contentReader(_screenplay->content());
+    QXmlStreamReader contentReader(_document->content());
     contentReader.readNextStartElement(); // document
     contentReader.readNextStartElement();
     while (!contentReader.atEnd()) {
@@ -97,26 +95,26 @@ void TextModel::Implementation::buildModel(Domain::DocumentObject* _screenplay)
         }
 
         if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
-            rootItem->appendItem(new TextModelFolderItem(q, contentReader));
+            rootItem->appendItem(q->createFolderItem(contentReader));
         } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
-            rootItem->appendItem(new TextModelGroupItem(q, contentReader));
+            rootItem->appendItem(q->createGroupItem(contentReader));
         } else if (currentTag == xml::kSplitterTag) {
-            rootItem->appendItem(new TextModelSplitterItem(q, contentReader));
+            rootItem->appendItem(q->createSplitterItem(contentReader));
         } else {
-            rootItem->appendItem(new TextModelTextItem(q, contentReader));
+            rootItem->appendItem(q->createTextItem(contentReader));
         }
     }
 }
 
-QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _screenplay) const
+QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _document) const
 {
-    if (_screenplay == nullptr) {
+    if (_document == nullptr) {
         return {};
     }
 
     const bool addXMlHeader = true;
     xml::TextModelXmlWriter xml(addXMlHeader);
-    xml += "<document mime-type=\"" + Domain::mimeTypeFor(_screenplay->type())
+    xml += "<document mime-type=\"" + Domain::mimeTypeFor(_document->type())
         + "\" version=\"1.0\">\n";
     for (int childIndex = 0; childIndex < rootItem->childCount(); ++childIndex) {
         xml += rootItem->childAt(childIndex);
@@ -129,7 +127,7 @@ QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _screenplay)
 // ****
 
 
-TextModel::TextModel(QObject* _parent)
+TextModel::TextModel(QObject* _parent, TextModelFolderItem* _rootItem)
     : AbstractModel(
         {
             xml::kDocumentTag,
@@ -137,6 +135,9 @@ TextModel::TextModel(QObject* _parent)
             toString(TextFolderType::Sequence),
             toString(TextGroupType::Scene),
             toString(TextGroupType::Beat),
+            toString(TextGroupType::Page),
+            toString(TextGroupType::Panel),
+            toString(TextGroupType::Chapter),
             toString(TextParagraphType::UnformattedText),
             toString(TextParagraphType::SceneHeading),
             toString(TextParagraphType::SceneCharacters),
@@ -150,16 +151,49 @@ TextModel::TextModel(QObject* _parent)
             toString(TextParagraphType::InlineNote),
             toString(TextParagraphType::ActHeader),
             toString(TextParagraphType::ActFooter),
-            toString(TextParagraphType::FolderHeader),
-            toString(TextParagraphType::FolderFooter),
+            toString(TextParagraphType::SequenceHeader),
+            toString(TextParagraphType::SequenceFooter),
             toString(TextParagraphType::PageSplitter),
         },
         _parent)
-    , d(new Implementation(this))
+    , d(new Implementation(this, _rootItem))
 {
 }
 
 TextModel::~TextModel() = default;
+
+TextModelFolderItem* TextModel::createFolderItem(QXmlStreamReader& _contentReader) const
+{
+    auto item = createFolderItem();
+    item->readContent(_contentReader);
+    return item;
+}
+
+TextModelGroupItem* TextModel::createGroupItem(QXmlStreamReader& _contentReader) const
+{
+    auto item = createGroupItem();
+    item->readContent(_contentReader);
+    return item;
+}
+
+TextModelSplitterItem* TextModel::createSplitterItem() const
+{
+    return new TextModelSplitterItem(this);
+}
+
+TextModelSplitterItem* TextModel::createSplitterItem(QXmlStreamReader& _contentReader) const
+{
+    auto item = createSplitterItem();
+    item->readContent(_contentReader);
+    return item;
+}
+
+TextModelTextItem* TextModel::createTextItem(QXmlStreamReader& _contentReader) const
+{
+    auto item = createTextItem();
+    item->readContent(_contentReader);
+    return item;
+}
 
 void TextModel::appendItem(TextModelItem* _item, TextModelItem* _parentItem)
 {
@@ -408,6 +442,10 @@ bool TextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, 
     Q_UNUSED(_column);
     Q_UNUSED(_parent);
 
+    //
+    // TODO: детализировать разрешённые кейсы для вставки (папки - группы, уровни групп)
+    //
+
     return _data->formats().contains(mimeTypes().constFirst());
 }
 
@@ -506,13 +544,13 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
 
             TextModelItem* newItem = nullptr;
             if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
-                newItem = new TextModelFolderItem(this, contentReader);
+                newItem = createFolderItem(contentReader);
             } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
-                newItem = new TextModelGroupItem(this, contentReader);
+                newItem = createGroupItem(contentReader);
             } else if (currentTag == xml::kSplitterTag) {
-                newItem = new TextModelSplitterItem(this, contentReader);
+                newItem = createSplitterItem(contentReader);
             } else {
-                newItem = new TextModelTextItem(this, contentReader);
+                newItem = createTextItem(contentReader);
             }
 
             if (!isFirstItemHandled) {
@@ -633,11 +671,6 @@ QMimeData* TextModel::mimeData(const QModelIndexList& _indexes) const
     return mimeData;
 }
 
-QStringList TextModel::mimeTypes() const
-{
-    return { kMimeType };
-}
-
 Qt::DropActions TextModel::supportedDragActions() const
 {
     return Qt::MoveAction;
@@ -702,7 +735,7 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
                 // Не сохраняем закрывающие блоки неоткрытых папок, всё это делается внутри самих
                 // папок
                 //
-                if (textItem->paragraphType() == TextParagraphType::FolderFooter) {
+                if (textItem->paragraphType() == TextParagraphType::SequenceFooter) {
                     break;
                 }
 
@@ -741,7 +774,7 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     if (fromItem->type() == TextModelItemType::Text) {
         const auto textItem = static_cast<TextModelTextItem*>(fromItem);
         if (textItem->paragraphType() == TextParagraphType::SceneHeading
-            || textItem->paragraphType() == TextParagraphType::FolderHeader) {
+            || textItem->paragraphType() == TextParagraphType::SequenceHeader) {
             auto newFromItem = fromItemParent;
             fromItemParent = fromItemParent->parent();
             fromItemRow = fromItemParent->rowOfChild(newFromItem);
@@ -792,7 +825,7 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         // Если в заголовок папки
         //
-        if (textItem->paragraphType() == TextParagraphType::FolderHeader) {
+        if (textItem->paragraphType() == TextParagraphType::SequenceHeader) {
             //
             // ... то вставим после него
             //
@@ -800,7 +833,7 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         // Если завершение папки
         //
-        else if (textItem->paragraphType() == TextParagraphType::FolderFooter) {
+        else if (textItem->paragraphType() == TextParagraphType::SequenceFooter) {
             //
             // ... то вставляем после папки
             //
@@ -901,13 +934,13 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
 
 
         if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
-            newItem = new TextModelFolderItem(this, contentReader);
+            newItem = createFolderItem(contentReader);
         } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
-            newItem = new TextModelGroupItem(this, contentReader);
+            newItem = createGroupItem(contentReader);
         } else if (currentTag == xml::kSplitterTag) {
-            newItem = new TextModelSplitterItem(this, contentReader);
+            newItem = createSplitterItem(contentReader);
         } else {
-            auto newTextItem = new TextModelTextItem(this, contentReader);
+            auto newTextItem = createTextItem(contentReader);
             //
             // Если вставляется текстовый элемент внутрь уже существующего элемента
             //
@@ -956,7 +989,7 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         contentReader.addData(sourceBlockEndContent);
         contentReader.readNextStartElement(); // document
         contentReader.readNextStartElement(); // text node
-        auto item = new TextModelTextItem(this, contentReader);
+        auto item = createTextItem(contentReader);
         //
         // ... и последний вставленный элемент был текстовым
         //
@@ -1078,11 +1111,7 @@ void TextModel::initDocument()
     // Если документ пустой, создаём первоначальную структуру
     //
     if (document()->content().isEmpty()) {
-        auto sceneHeading = new TextModelTextItem(this);
-        sceneHeading->setParagraphType(TextParagraphType::SceneHeading);
-        auto scene = new TextModelGroupItem(this);
-        scene->appendItem(sceneHeading);
-        appendItem(scene);
+        initEmptyDocument();
     }
     //
     // А если данные есть, то загрузим их из документа
@@ -1147,13 +1176,13 @@ void TextModel::applyPatch(const QByteArray& _patch)
             const auto currentTag = _reader.name().toString();
             TextModelItem* item = nullptr;
             if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
-                item = new TextModelFolderItem(this, _reader);
+                item = createFolderItem(_reader);
             } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
-                item = new TextModelGroupItem(this, _reader);
+                item = createGroupItem(_reader);
             } else if (currentTag == xml::kSplitterTag) {
-                item = new TextModelSplitterItem(this, _reader);
+                item = createSplitterItem(_reader);
             } else {
-                item = new TextModelTextItem(this, _reader);
+                item = createTextItem(_reader);
             }
             items.append(item);
 
@@ -1671,23 +1700,25 @@ void TextModel::applyPatch(const QByteArray& _patch)
             TextModelItem* itemToInsert = nullptr;
             switch (newItem->type()) {
             case TextModelItemType::Folder: {
-                itemToInsert = new TextModelFolderItem(this);
+                itemToInsert = createFolderItem();
                 break;
             }
 
             case TextModelItemType::Group: {
-                itemToInsert = new TextModelGroupItem(this);
+                itemToInsert = createGroupItem();
                 break;
             }
 
             case TextModelItemType::Text: {
-                itemToInsert = new TextModelTextItem(this);
+                itemToInsert = createTextItem();
                 break;
             }
 
             case TextModelItemType::Splitter: {
-                itemToInsert = new TextModelSplitterItem(
-                    this, static_cast<TextModelSplitterItem*>(newItem)->splitterType());
+                auto splitterItem = createSplitterItem();
+                splitterItem->setSplitterType(
+                    static_cast<TextModelSplitterItem*>(newItem)->splitterType());
+                itemToInsert = splitterItem;
                 break;
             }
             }

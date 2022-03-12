@@ -3,7 +3,7 @@
 
 namespace BusinessLayer {
 
-ScreenplayTextBlockData::ScreenplayTextBlockData(BusinessLayer::ScreenplayTextModelItem* _item)
+ScreenplayTextBlockData::ScreenplayTextBlockData(TextModelItem* _item)
     : QTextBlockUserData()
     , m_item(_item)
 {
@@ -15,7 +15,7 @@ ScreenplayTextBlockData::ScreenplayTextBlockData(const ScreenplayTextBlockData* 
 {
 }
 
-BusinessLayer::ScreenplayTextModelItem* ScreenplayTextBlockData::item() const
+TextModelItem* ScreenplayTextBlockData::item() const
 {
     return m_item;
 }

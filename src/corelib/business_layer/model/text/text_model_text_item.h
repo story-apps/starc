@@ -74,7 +74,6 @@ public:
 
 public:
     explicit TextModelTextItem(const TextModel* _model);
-    TextModelTextItem(const TextModel* _model, QXmlStreamReader& _contentReaded);
     ~TextModelTextItem() override;
 
     /**
@@ -170,6 +169,11 @@ public:
     QVariant data(int _role) const override;
 
     /**
+     * @brief Считать контент из заданного ридера
+     */
+    void readContent(QXmlStreamReader& _contentReader) override final;
+
+    /**
      * @brief Определяем интерфейс для получения XML блока
      */
     QByteArray toXml() const override;
@@ -185,7 +189,7 @@ public:
      */
     bool isEqual(TextModelItem* _item) const override;
 
-private:
+protected:
     /**
      * @brief Пометить блок изменённым
      */

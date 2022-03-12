@@ -7,7 +7,7 @@
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
-#include <business_layer/model/screenplay/text/screenplay_text_model_splitter_item.h>
+#include <business_layer/model/text/text_model_splitter_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <utils/helpers/measurement_helper.h>
@@ -60,8 +60,8 @@ const QMap<int, TextParagraphType>& paragraphTypes()
         s_types.insert(i++, TextParagraphType::Transition);
         s_types.insert(i++, TextParagraphType::Shot);
         s_types.insert(i++, TextParagraphType::InlineNote);
-        s_types.insert(i++, TextParagraphType::FolderHeader);
-        s_types.insert(i++, TextParagraphType::FolderFooter);
+        s_types.insert(i++, TextParagraphType::SequenceHeader);
+        s_types.insert(i++, TextParagraphType::SequenceFooter);
     }
     return s_types;
 }
@@ -428,9 +428,8 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
     else if (currentBlockType == TextParagraphType::PageSplitter) {
         const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
         if (blockData != nullptr) {
-            const auto splitterItem
-                = static_cast<ScreenplayTextModelSplitterItem*>(blockData->item());
-            if (splitterItem->splitterType() == ScreenplayTextModelSplitterItemType::Start) {
+            const auto splitterItem = static_cast<TextModelSplitterItem*>(blockData->item());
+            if (splitterItem->splitterType() == TextModelSplitterItemType::Start) {
                 documentXml.append("<w:tbl><w:tblPr>");
                 const auto fullTableWidth = tableWidth();
                 documentXml.append(
@@ -545,8 +544,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
         //
         // ... для ремарки подхачиваем отступ перед блоком и ширину самого блока
         //
-        else if (currentBlockType == TextParagraphType::Parenthetical
-                 && !block.text().isEmpty()) {
+        else if (currentBlockType == TextParagraphType::Parenthetical && !block.text().isEmpty()) {
             const QLatin1String prefix("(");
             const QLatin1String postfix(")");
             const QFontMetrics fontMetrics(block.charFormat().font());

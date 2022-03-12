@@ -1,7 +1,6 @@
 #include "screenplay_text_structure_model.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
-#include <business_layer/model/screenplay/text/screenplay_text_model_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
 
@@ -51,14 +50,13 @@ bool ScreenplayTextStructureModel::filterAcceptsRow(int _sourceRow,
     //
     // Показываем папки и сцены
     //
-    if (item->type() == ScreenplayTextModelItemType::Folder
-        || item->type() == ScreenplayTextModelItemType::Scene) {
+    if (item->type() == TextModelItemType::Folder || item->type() == TextModelItemType::Group) {
         return true;
     }
     //
     // Из текста показываем только кадры, которые не являются корректировочными блоками
     //
-    if (item->type() == ScreenplayTextModelItemType::Text) {
+    if (item->type() == TextModelItemType::Text) {
         const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
         return !textItem->isCorrection() && textItem->paragraphType() == TextParagraphType::Shot;
     }

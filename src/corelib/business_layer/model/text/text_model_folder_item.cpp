@@ -1,5 +1,6 @@
 #include "text_model_folder_item.h"
 
+#include "text_model.h"
 #include "text_model_group_item.h"
 #include "text_model_splitter_item.h"
 #include "text_model_text_item.h"
@@ -27,7 +28,7 @@ public:
     /**
      * @brief Идентификатор папки
      */
-    QUuid uuid;
+    QUuid uuid = QUuid::createUuid();
 
     /**
      * @brief Цвет папки
@@ -41,7 +42,7 @@ public:
     /**
      * @brief Название папки
      */
-    QString name;
+    QString heading;
 };
 
 
@@ -52,12 +53,52 @@ TextModelFolderItem::TextModelFolderItem(const TextModel* _model)
     : TextModelItem(TextModelItemType::Folder, _model)
     , d(new Implementation)
 {
-    d->uuid = QUuid::createUuid();
 }
 
-TextModelFolderItem::TextModelFolderItem(const TextModel* _model, QXmlStreamReader& _contentReader)
-    : TextModelItem(TextModelItemType::Folder, _model)
-    , d(new Implementation)
+TextModelFolderItem::~TextModelFolderItem() = default;
+
+QString TextModelFolderItem::heading() const
+{
+    return d->heading;
+}
+
+QColor TextModelFolderItem::color() const
+{
+    return d->color;
+}
+
+void TextModelFolderItem::setColor(const QColor& _color)
+{
+    if (d->color == _color) {
+        return;
+    }
+
+    d->color = _color;
+    setChanged(true);
+}
+
+QVariant TextModelFolderItem::data(int _role) const
+{
+    switch (_role) {
+    case Qt::DecorationRole: {
+        return u8"\U000f024b";
+    }
+
+    case FolderHeadingRole: {
+        return d->heading;
+    }
+
+    case FolderColorRole: {
+        return d->color;
+    }
+
+    default: {
+        return TextModelItem::data(_role);
+    }
+    }
+}
+
+void TextModelFolderItem::readContent(QXmlStreamReader& _contentReader)
 {
     d->groupType = textFolderTypeFromString(_contentReader.name().toString());
     Q_ASSERT(d->groupType != TextFolderType::Undefined);
@@ -98,13 +139,13 @@ TextModelFolderItem::TextModelFolderItem(const TextModel* _model, QXmlStreamRead
             // Считываем вложенный контент
             //
             else if (textFolderTypeFromString(currentTag.toString()) != TextFolderType::Undefined) {
-                appendItem(new TextModelFolderItem(model(), _contentReader));
+                appendItem(model()->createFolderItem(_contentReader));
             } else if (textGroupTypeFromString(currentTag.toString()) != TextGroupType::Undefined) {
-                appendItem(new TextModelGroupItem(model(), _contentReader));
+                appendItem(model()->createGroupItem(_contentReader));
             } else if (currentTag == xml::kSplitterTag) {
-                appendItem(new TextModelSplitterItem(model(), _contentReader));
+                appendItem(model()->createSplitterItem(_contentReader));
             } else {
-                appendItem(new TextModelTextItem(model(), _contentReader));
+                appendItem(model()->createTextItem(_contentReader));
             }
         } while (!_contentReader.atEnd());
     }
@@ -115,58 +156,19 @@ TextModelFolderItem::TextModelFolderItem(const TextModel* _model, QXmlStreamRead
     handleChange();
 }
 
-TextModelFolderItem::~TextModelFolderItem() = default;
-
-QColor TextModelFolderItem::color() const
-{
-    return d->color;
-}
-
-void TextModelFolderItem::setColor(const QColor& _color)
-{
-    if (d->color == _color) {
-        return;
-    }
-
-    d->color = _color;
-    setChanged(true);
-}
-
-QVariant TextModelFolderItem::data(int _role) const
-{
-    switch (_role) {
-    case Qt::DecorationRole: {
-        return u8"\U000f024b";
-    }
-
-    case FolderNameRole: {
-        return d->name;
-    }
-
-    case FolderColorRole: {
-        return d->color;
-    }
-
-    default: {
-        return TextModelItem::data(_role);
-    }
-    }
-}
-
 QByteArray TextModelFolderItem::toXml() const
 {
     return toXml(nullptr, 0, nullptr, 0, false);
 }
 
-QByteArray TextModelFolderItem::toXml(TextModelItem* _from, int _fromPosition,
-                                      TextModelItem* _to, int _toPosition,
-                                      bool _clearUuid) const
+QByteArray TextModelFolderItem::toXml(TextModelItem* _from, int _fromPosition, TextModelItem* _to,
+                                      int _toPosition, bool _clearUuid) const
 {
     auto folderFooterXml = [this] {
         TextModelTextItem item(model());
         item.setParagraphType(d->groupType == TextFolderType::Act
                                   ? TextParagraphType::ActFooter
-                                  : TextParagraphType::FolderFooter);
+                                  : TextParagraphType::SequenceFooter);
         return item.toXml();
     };
 
@@ -230,7 +232,7 @@ QByteArray TextModelFolderItem::toXml(TextModelItem* _from, int _fromPosition,
             //
             // Если папка не была закрыта, добавим корректное завершение для неё
             //
-            if (textItem->paragraphType() != TextParagraphType::FolderFooter) {
+            if (textItem->paragraphType() != TextParagraphType::SequenceFooter) {
                 xml += folderFooterXml();
             }
             break;
@@ -266,7 +268,7 @@ QByteArray TextModelFolderItem::xmlHeader(bool _clearUuid) const
 
 void TextModelFolderItem::copyFrom(TextModelItem* _item)
 {
-    if (_item->type() != TextModelItemType::Folder) {
+    if (_item == nullptr || type() != _item->type()) {
         Q_ASSERT(false);
         return;
     }
@@ -286,25 +288,9 @@ bool TextModelFolderItem::isEqual(TextModelItem* _item) const
     return d->uuid == folderItem->d->uuid && d->color == folderItem->d->color;
 }
 
-void TextModelFolderItem::handleChange()
+void TextModelFolderItem::setHeading(const QString& _heading)
 {
-    d->name.clear();
-
-    for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
-        auto child = childAt(childIndex);
-        switch (child->type()) {
-        case TextModelItemType::Text: {
-            auto childItem = static_cast<TextModelTextItem*>(child);
-            if (childItem->paragraphType() == TextParagraphType::FolderHeader) {
-                d->name = TextHelper::smartToUpper(childItem->text());
-            }
-            break;
-        }
-
-        default:
-            break;
-        }
-    }
+    d->heading = _heading;
 }
 
 } // namespace BusinessLayer

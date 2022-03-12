@@ -8,8 +8,8 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_folder_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
-#include <business_layer/model/screenplay/text/screenplay_text_model_splitter_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
+#include <business_layer/model/text/text_model_splitter_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -23,9 +23,9 @@
 #include <QScopedValueRollback>
 #include <QTextTable>
 
+using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
-using BusinessLayer::TemplatesFacade;
 
 
 namespace BusinessLayer {
@@ -46,8 +46,7 @@ public:
     /**
      * @brief Скорректировать позиции элементов на заданную дистанцию
      */
-    void correctPositionsToItems(
-        std::map<int, BusinessLayer::ScreenplayTextModelItem*>::iterator _from, int _distance);
+    void correctPositionsToItems(std::map<int, TextModelItem*>::iterator _from, int _distance);
     void correctPositionsToItems(int _fromPosition, int _distance);
 
     /**
@@ -76,7 +75,7 @@ public:
     QString templateId;
     QPointer<BusinessLayer::ScreenplayTextModel> model;
     bool canChangeModel = true;
-    std::map<int, BusinessLayer::ScreenplayTextModelItem*> positionsToItems;
+    std::map<int, TextModelItem*> positionsToItems;
     ScreenplayTextCorrector corrector;
 };
 
@@ -92,14 +91,14 @@ const ScreenplayTemplate& ScreenplayTextDocument::Implementation::documentTempla
 }
 
 void ScreenplayTextDocument::Implementation::correctPositionsToItems(
-    std::map<int, BusinessLayer::ScreenplayTextModelItem*>::iterator _from, int _distance)
+    std::map<int, TextModelItem*>::iterator _from, int _distance)
 {
     if (_from == positionsToItems.end()) {
         return;
     }
 
     if (_distance > 0) {
-        auto reversed = [](std::map<int, BusinessLayer::ScreenplayTextModelItem*>::iterator iter) {
+        auto reversed = [](std::map<int, TextModelItem*>::iterator iter) {
             return std::prev(std::make_reverse_iterator(iter));
         };
         for (auto iter = positionsToItems.rbegin(); iter != std::make_reverse_iterator(_from);
@@ -131,18 +130,18 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
     const auto itemIndex = model->index(_itemRow, 0, _parent);
     const auto item = model->itemForIndex(itemIndex);
     switch (item->type()) {
-    case ScreenplayTextModelItemType::Folder: {
+    case TextModelItemType::Folder: {
         break;
     }
 
-    case ScreenplayTextModelItemType::Scene: {
+    case TextModelItemType::Group: {
         break;
     }
 
-    case ScreenplayTextModelItemType::Splitter: {
-        const auto splitterItem = static_cast<ScreenplayTextModelSplitterItem*>(item);
+    case TextModelItemType::Splitter: {
+        const auto splitterItem = static_cast<TextModelSplitterItem*>(item);
         switch (splitterItem->splitterType()) {
-        case ScreenplayTextModelSplitterItemType::Start: {
+        case TextModelSplitterItemType::Start: {
             //
             // Если это не первый абзац, вставим блок для него
             //
@@ -211,7 +210,7 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
             break;
         }
 
-        case ScreenplayTextModelSplitterItemType::End: {
+        case TextModelSplitterItemType::End: {
             //
             // Блок завершения таблицы уже был вставлен, при вставке начала и самой таблицы,
             // поэтому тут лишь сохраняем его в карту позиций элементов
@@ -234,7 +233,7 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
         break;
     }
 
-    case ScreenplayTextModelItemType::Text: {
+    case TextModelItemType::Text: {
         const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
 
         //
@@ -314,8 +313,7 @@ void ScreenplayTextDocument::Implementation::readModelItemContent(int _itemRow,
             decorationFormat.setTopMargin(0);
         }
         if (textItem->isBreakCorrectionStart()) {
-            decorationFormat.setProperty(TextBlockStyle::PropertyIsBreakCorrectionStart,
-                                         true);
+            decorationFormat.setProperty(TextBlockStyle::PropertyIsBreakCorrectionStart, true);
         }
         if (textItem->isBreakCorrectionEnd()) {
             decorationFormat.setProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd, true);
@@ -509,7 +507,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
             }
 
             const auto item = d->model->itemForIndex(_topLeft);
-            if (item->type() != ScreenplayTextModelItemType::Text) {
+            if (item->type() != TextModelItemType::Text) {
                 return;
             }
 
@@ -674,8 +672,8 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                         cursor.movePosition(ScreenplayTextCursor::EndOfBlock);
                     }
                 }
-                bool isFirstParagraph = TextBlockStyle::forBlock(cursor.block())
-                    == TextParagraphType::Undefined;
+                bool isFirstParagraph
+                    = TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::Undefined;
                 d->readModelItemContent(_topLeft.row(), _topLeft.parent(), cursor,
                                         isFirstParagraph);
             }
@@ -695,8 +693,8 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                 // Игнорируем добавление пустых сцен и папок
                 //
                 const auto item = d->model->itemForIndex(d->model->index(_from, 0, _parent));
-                if ((item->type() == ScreenplayTextModelItemType::Folder
-                     || item->type() == ScreenplayTextModelItemType::Scene)
+                if ((item->type() == TextModelItemType::Folder
+                     || item->type() == TextModelItemType::Group)
                     && !item->hasChildren()) {
                     return;
                 }
@@ -715,8 +713,8 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                     // о её позиции, поэтому берём предыдущую, либо смотрим в конец общего родителя
                     //
                     const auto cursorItem = d->model->itemForIndex(cursorItemIndex);
-                    if ((cursorItem->type() == ScreenplayTextModelItemType::Folder
-                         || cursorItem->type() == ScreenplayTextModelItemType::Scene)
+                    if ((cursorItem->type() == TextModelItemType::Folder
+                         || cursorItem->type() == TextModelItemType::Group)
                         && !cursorItem->hasChildren()) {
                         if (_from > 1) {
                             cursorItemIndex = d->model->index(_from - 2, 0, _parent);
@@ -801,14 +799,13 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                 // а все блоки переносим за таблицу
                 //
                 if (auto item = d->model->itemForIndex(fromIndex);
-                    item->type() == ScreenplayTextModelItemType::Splitter) {
-                    auto splitterItem = static_cast<ScreenplayTextModelSplitterItem*>(item);
+                    item->type() == TextModelItemType::Splitter) {
+                    auto splitterItem = static_cast<TextModelSplitterItem*>(item);
 
                     //
                     // ... убираем таблицу на удалении стартового элемента
                     //
-                    if (splitterItem->splitterType()
-                        == ScreenplayTextModelSplitterItemType::Start) {
+                    if (splitterItem->splitterType() == TextModelSplitterItemType::Start) {
                         //
                         // Заходим в таблицу
                         //
@@ -835,7 +832,7 @@ void ScreenplayTextDocument::setModel(BusinessLayer::ScreenplayTextModel* _model
                             // ... проставим элементу блока флаг, что он теперь вне таблицы
                             //
                             auto item = d->positionsToItems[cursor.position()];
-                            if (item->type() == ScreenplayTextModelItemType::Text) {
+                            if (item->type() == TextModelItemType::Text) {
                                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
                                 textItem->setInFirstColumn({});
                             }
@@ -1079,7 +1076,7 @@ QString ScreenplayTextDocument::sceneNumber(const QTextBlock& _forBlock) const
     }
 
     const auto itemParent = blockData->item()->parent();
-    if (itemParent == nullptr || itemParent->type() != ScreenplayTextModelItemType::Scene) {
+    if (itemParent == nullptr || itemParent->type() != TextModelItemType::Group) {
         return {};
     }
 
@@ -1099,7 +1096,7 @@ QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) cons
     }
 
     const auto item = blockData->item();
-    if (item == nullptr || item->type() != ScreenplayTextModelItemType::Text) {
+    if (item == nullptr || item->type() != TextModelItemType::Text) {
         return {};
     }
 
@@ -1123,10 +1120,10 @@ QColor ScreenplayTextDocument::itemColor(const QTextBlock& _forBlock) const
         return {};
     }
     QColor color;
-    if (itemParent->type() == ScreenplayTextModelItemType::Folder) {
+    if (itemParent->type() == TextModelItemType::Folder) {
         const auto folderItem = static_cast<const ScreenplayTextModelFolderItem*>(itemParent);
         color = folderItem->color();
-    } else if (itemParent->type() == ScreenplayTextModelItemType::Scene) {
+    } else if (itemParent->type() == TextModelItemType::Group) {
         const auto sceneItem = static_cast<const ScreenplayTextModelSceneItem*>(itemParent);
         color = sceneItem->color();
     }
@@ -1247,7 +1244,7 @@ void ScreenplayTextDocument::setParagraphType(BusinessLayer::TextParagraphType _
     //
     // Нельзя сменить стиль конечных элементов папок
     //
-    if (currentParagraphType == TextParagraphType::FolderFooter) {
+    if (currentParagraphType == TextParagraphType::SequenceFooter) {
         return;
     }
 
@@ -1275,7 +1272,7 @@ void ScreenplayTextDocument::setParagraphType(BusinessLayer::TextParagraphType _
 void ScreenplayTextDocument::cleanParagraphType(const ScreenplayTextCursor& _cursor)
 {
     const auto oldBlockType = TextBlockStyle::forBlock(_cursor.block());
-    if (oldBlockType != TextParagraphType::FolderHeader) {
+    if (oldBlockType != TextParagraphType::SequenceHeader) {
         return;
     }
 
@@ -1291,7 +1288,7 @@ void ScreenplayTextDocument::cleanParagraphType(const ScreenplayTextCursor& _cur
     bool isFooterUpdated = false;
     do {
         const auto currentType = TextBlockStyle::forBlock(cursor.block());
-        if (currentType == TextParagraphType::FolderFooter) {
+        if (currentType == TextParagraphType::SequenceFooter) {
             if (openedGroups == 0) {
                 cursor.movePosition(QTextCursor::PreviousBlock);
                 cursor.movePosition(QTextCursor::EndOfBlock);
@@ -1371,9 +1368,9 @@ void ScreenplayTextDocument::applyParagraphType(BusinessLayer::TextParagraphType
     //
     // Для заголовка папки нужно создать завершение
     //
-    if (_type == TextParagraphType::FolderHeader) {
+    if (_type == TextParagraphType::SequenceHeader) {
         const auto footerStyle
-            = d->documentTemplate().paragraphStyle(TextParagraphType::FolderFooter);
+            = d->documentTemplate().paragraphStyle(TextParagraphType::SequenceFooter);
 
         //
         // Вставляем закрывающий блок
@@ -1397,8 +1394,7 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
     //
     // Сохраним текущий формат блока
     //
-    const auto lastBlockType
-        = TextBlockStyle::forBlock(findBlock(cursor.selectionInterval().from));
+    const auto lastBlockType = TextBlockStyle::forBlock(findBlock(cursor.selectionInterval().from));
     //
     // Вырезаем выделение, захватывая блоки целиком
     //
@@ -1423,7 +1419,7 @@ void ScreenplayTextDocument::splitParagraph(const ScreenplayTextCursor& _cursor)
         auto block = findBlock(cursor.selectionStart());
         while (block.isValid() && block.position() < cursor.selectionEnd()) {
             auto item = d->positionsToItems[block.position()];
-            if (item->type() == ScreenplayTextModelItemType::Text) {
+            if (item->type() == TextModelItemType::Text) {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
                 textItem->setInFirstColumn(true);
             }
@@ -1494,8 +1490,7 @@ void ScreenplayTextDocument::mergeParagraph(const ScreenplayTextCursor& _cursor)
     //
     // Идём до начала таблицы
     //
-    while (TextBlockStyle::forBlock(cursor.block())
-           != TextParagraphType::PageSplitter) {
+    while (TextBlockStyle::forBlock(cursor.block()) != TextParagraphType::PageSplitter) {
         cursor.movePosition(QTextCursor::PreviousBlock);
     }
 
@@ -1507,7 +1502,7 @@ void ScreenplayTextDocument::mergeParagraph(const ScreenplayTextCursor& _cursor)
         updateCursor.movePosition(QTextCursor::NextBlock);
         while (!updateCursor.atEnd() && updateCursor.inTable()) {
             auto item = d->positionsToItems[updateCursor.position()];
-            if (item->type() == ScreenplayTextModelItemType::Text) {
+            if (item->type() == TextModelItemType::Text) {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
                 textItem->setInFirstColumn({});
             }
@@ -1629,7 +1624,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         // Собираем элементы которые потенциально могут быть удалены
         //
-        std::map<ScreenplayTextModelItem*, int> itemsToDelete;
+        std::map<TextModelItem*, int> itemsToDelete;
         {
             auto itemsToDeleteIter = d->positionsToItems.lower_bound(_position);
             while (itemsToDeleteIter != d->positionsToItems.end()
@@ -1647,7 +1642,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             //
             // Формируем мапу элементов со скорректированными позициями
             //
-            std::map<int, ScreenplayTextModelItem*> correctedItems;
+            std::map<int, TextModelItem*> correctedItems;
             for (auto itemIter = itemToUpdateIter; itemIter != d->positionsToItems.end();
                  ++itemIter) {
                 correctedItems.emplace(itemIter->first - _charsRemoved + _charsAdded,
@@ -1692,19 +1687,19 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         // Сначала группируем и "сжимаем" блоки
         //
-        std::map<int, ScreenplayTextModelItem*> itemsToDeleteSorted;
+        std::map<int, TextModelItem*> itemsToDeleteSorted;
         for (auto [item, position] : itemsToDelete) {
             itemsToDeleteSorted.emplace(position, item);
         }
         //
-        std::map<int, ScreenplayTextModelItem*> itemsToDeleteCompressed;
+        std::map<int, TextModelItem*> itemsToDeleteCompressed;
         int compressionCycle = 0;
         while (!itemsToDeleteSorted.empty()) {
             //
             // Формируем список идущих подряд элементов
             //
             struct ItemToPosition {
-                ScreenplayTextModelItem* item;
+                TextModelItem* item;
                 int position;
             };
             QVector<ItemToPosition> itemsGroup;
@@ -1752,7 +1747,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
         //
         // Удаляем все верхнеуровневые элементы, а так же группы сцен и папок любого уровня
         //
-        QVector<ScreenplayTextModelItem*> itemsToDeleteGroup;
+        QVector<TextModelItem*> itemsToDeleteGroup;
         auto removeGroup = [this, &itemsToDeleteGroup] {
             if (itemsToDeleteGroup.isEmpty()) {
                 return;
@@ -1768,8 +1763,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             // Будем удалять только если элемент лежит в руте, или является папкой, или сценой
             //
             if (removeIter->second->parent()->hasParent()
-                && removeIter->second->type() != ScreenplayTextModelItemType::Folder
-                && removeIter->second->type() != ScreenplayTextModelItemType::Scene) {
+                && removeIter->second->type() != TextModelItemType::Folder
+                && removeIter->second->type() != TextModelItemType::Group) {
                 removeGroup();
                 ++removeIter;
                 continue;
@@ -1799,15 +1794,14 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             // и перенести элементы к предыдущему группирующему элементу
             //
             bool needToDeleteParent = false;
-            if (item->type() == ScreenplayTextModelItemType::Text) {
+            if (item->type() == TextModelItemType::Text) {
                 const auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
                 //
                 // ... т.к. при удалении папки удаляются и заголовок и конец, но удаляются они
                 //     последовательно сверху вниз, то удалять непосредственно папку будем,
                 //     когда дойдём до обработки именно конца папки
                 //
-                needToDeleteParent
-                    = textItem->paragraphType() == TextParagraphType::FolderFooter
+                needToDeleteParent = textItem->paragraphType() == TextParagraphType::SequenceFooter
                     || textItem->paragraphType() == TextParagraphType::SceneHeading;
             }
 
@@ -1824,7 +1818,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 //
                 // Определим предыдущий
                 //
-                ScreenplayTextModelItem* previousItem = nullptr;
+                TextModelItem* previousItem = nullptr;
                 const int itemRow
                     = itemParent->hasParent() ? itemParent->parent()->rowOfChild(itemParent) : 0;
                 if (itemRow > 0) {
@@ -1836,11 +1830,10 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 // нужно вынести из папки -> пробуем вставить их в папку идущую после удаляемой
                 // папки
                 //
-                const bool needInsertInNextFolder
-                    = itemParent->type() == ScreenplayTextModelItemType::Folder
+                const bool needInsertInNextFolder = itemParent->type() == TextModelItemType::Folder
                     && itemParent->hasParent() && itemParent->parent()->childCount() > 1
                     && itemParent->parent()->childAt(itemRow + 1)->type()
-                        == ScreenplayTextModelItemType::Folder;
+                        == TextModelItemType::Folder;
                 if (needInsertInNextFolder) {
                     previousItem = itemParent->parent()->childAt(itemRow + 1);
                 }
@@ -1848,7 +1841,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 //
                 // Переносим дочерние элементы на уровень родительского элемента
                 //
-                ScreenplayTextModelItem* lastMovedItem = nullptr;
+                TextModelItem* lastMovedItem = nullptr;
                 while (itemParent->childCount() > 0) {
                     auto childItem = itemParent->childAt(0);
                     d->model->takeItem(childItem, itemParent);
@@ -1856,8 +1849,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     //
                     // Папки и сцены переносим на один уровень с текущим элементом
                     //
-                    if (childItem->type() == ScreenplayTextModelItemType::Folder
-                        || childItem->type() == ScreenplayTextModelItemType::Scene) {
+                    if (childItem->type() == TextModelItemType::Folder
+                        || childItem->type() == TextModelItemType::Group) {
                         if (lastMovedItem == nullptr
                             || lastMovedItem->parent() != itemParent->parent()) {
                             d->model->insertItem(childItem, itemParent);
@@ -1882,9 +1875,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                             // Если перед удаляемым была сцена или папка, то в её конец
                             //
                             else if (previousItem != nullptr
-                                     && (previousItem->type() == ScreenplayTextModelItemType::Folder
-                                         || previousItem->type()
-                                             == ScreenplayTextModelItemType::Scene)) {
+                                     && (previousItem->type() == TextModelItemType::Folder
+                                         || previousItem->type() == TextModelItemType::Group)) {
                                 d->model->appendItem(childItem, previousItem);
                             }
                             //
@@ -1918,8 +1910,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в
                 // предыдущую сцену
                 //
-                if (previousItem != nullptr
-                    && previousItem->type() == ScreenplayTextModelItemType::Scene) {
+                if (previousItem != nullptr && previousItem->type() == TextModelItemType::Group) {
                     const auto previousItemRow = previousItem->parent()->rowOfChild(previousItem);
                     if (previousItemRow >= 0
                         && previousItemRow < previousItem->parent()->childCount() - 1) {
@@ -1928,12 +1919,12 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                         //
                         // Подготовим элементы для переноса
                         //
-                        QVector<ScreenplayTextModelItem*> itemsToMove;
+                        QVector<TextModelItem*> itemsToMove;
                         for (int itemRow = nextItemRow;
                              itemRow < previousItem->parent()->childCount(); ++itemRow) {
                             if (nextItem == nullptr
-                                || (nextItem->type() != ScreenplayTextModelItemType::Text
-                                    && nextItem->type() != ScreenplayTextModelItemType::Splitter)) {
+                                || (nextItem->type() != TextModelItemType::Text
+                                    && nextItem->type() != TextModelItemType::Splitter)) {
                                 break;
                             }
 
@@ -1958,7 +1949,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
     //
     // ... определим элемент модели для предыдущего блока
     //
-    auto previousItem = [block]() -> ScreenplayTextModelItem* {
+    auto previousItem = [block]() -> TextModelItem* {
         if (!block.isValid()) {
             return nullptr;
         }
@@ -2004,16 +1995,16 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 //
                 // Сформируем элемент в зависимости от типа разделителя
                 //
-                ScreenplayTextModelSplitterItem* splitterItem = nullptr;
+                TextModelSplitterItem* splitterItem = nullptr;
                 if (cursor.inTable() && !tableInfo.inTable) {
                     tableInfo.inTable = true;
                     tableInfo.inFirstColumn = true;
-                    splitterItem = new ScreenplayTextModelSplitterItem(
-                        d->model, ScreenplayTextModelSplitterItemType::Start);
+                    splitterItem = d->model->createSplitterItem();
+                    splitterItem->setSplitterType(TextModelSplitterItemType::Start);
                 } else {
                     tableInfo = {};
-                    splitterItem = new ScreenplayTextModelSplitterItem(
-                        d->model, ScreenplayTextModelSplitterItemType::End);
+                    splitterItem = d->model->createSplitterItem();
+                    splitterItem->setSplitterType(TextModelSplitterItemType::End);
                 }
                 if (previousItem == nullptr) {
                     d->model->prependItem(splitterItem);
@@ -2042,15 +2033,15 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             //
             // Создаём группирующий элемент, если создаётся непосредственно сцена или папка
             //
-            ScreenplayTextModelItem* parentItem = nullptr;
+            TextModelItem* parentItem = nullptr;
             switch (paragraphType) {
-            case TextParagraphType::FolderHeader: {
-                parentItem = new ScreenplayTextModelFolderItem(d->model);
+            case TextParagraphType::SequenceHeader: {
+                parentItem = d->model->createFolderItem();
                 break;
             }
 
             case TextParagraphType::SceneHeading: {
-                parentItem = new ScreenplayTextModelSceneItem(d->model);
+                parentItem = d->model->createGroupItem();
                 break;
             }
 
@@ -2061,15 +2052,15 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             //
             // Создаём сам текстовый элемент
             //
-            auto textItem = new ScreenplayTextModelTextItem(d->model);
+            auto textItem = d->model->createTextItem();
             textItem->setCorrection(
                 block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection));
-            textItem->setCorrectionContinued(block.blockFormat().boolProperty(
-                TextBlockStyle::PropertyIsCorrectionContinued));
-            textItem->setBreakCorrectionStart(block.blockFormat().boolProperty(
-                TextBlockStyle::PropertyIsBreakCorrectionStart));
-            textItem->setBreakCorrectionEnd(block.blockFormat().boolProperty(
-                TextBlockStyle::PropertyIsBreakCorrectionEnd));
+            textItem->setCorrectionContinued(
+                block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrectionContinued));
+            textItem->setBreakCorrectionStart(
+                block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionStart));
+            textItem->setBreakCorrectionEnd(
+                block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd));
             if (tableInfo.inTable) {
                 textItem->setInFirstColumn(tableInfo.inFirstColumn);
             } else {
@@ -2090,12 +2081,12 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             // Является ли предыдущий элемент футером папки
             //
             const bool previousItemIsFolderFooter = [previousItem] {
-                if (!previousItem || previousItem->type() != ScreenplayTextModelItemType::Text) {
+                if (!previousItem || previousItem->type() != TextModelItemType::Text) {
                     return false;
                 }
 
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(previousItem);
-                return textItem->paragraphType() == TextParagraphType::FolderFooter;
+                return textItem->paragraphType() == TextParagraphType::SequenceFooter;
             }();
 
             //
@@ -2115,7 +2106,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     // Если элемент вставляется после другой сцены, или после окончания папки,
                     // то вставляем его на том же уровне, что и предыдущий
                     //
-                    if (previousTextItemParent->type() == ScreenplayTextModelItemType::Scene
+                    if (previousTextItemParent->type() == TextModelItemType::Group
                         || previousItemIsFolderFooter) {
                         d->model->insertItem(parentItem, previousTextItemParent);
                     }
@@ -2142,7 +2133,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 // Если вставляется сцена, то все текстовые элементы идущие после неё нужно
                 // положить к ней внутрь
                 //
-                if (parentItem->type() == ScreenplayTextModelItemType::Scene) {
+                if (parentItem->type() == TextModelItemType::Group) {
                     //
                     // Определим родителя из которого нужно извлекать те самые текстовые элементы
                     //
@@ -2180,8 +2171,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                         if (previousItem != nullptr) {
                             if (previousItemIsFolderFooter) {
                                 return grandParentItem->rowOfChild(previousItem->parent()) + 2;
-                            } else if (grandParentItem->type()
-                                       == ScreenplayTextModelItemType::Scene) {
+                            } else if (grandParentItem->type() == TextModelItemType::Group) {
                                 return grandParentItem->rowOfChild(previousItem) + 1;
                             }
                         }
@@ -2192,18 +2182,18 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     //
                     // Соберём элементы для переноса
                     //
-                    QVector<ScreenplayTextModelItem*> itemsToMove;
+                    QVector<TextModelItem*> itemsToMove;
                     for (int childIndex = itemIndex; childIndex < grandParentItem->childCount();
                          ++childIndex) {
                         auto grandParentChildItem = grandParentItem->childAt(childIndex);
-                        if (grandParentChildItem->type() != ScreenplayTextModelItemType::Text) {
+                        if (grandParentChildItem->type() != TextModelItemType::Text) {
                             break;
                         }
 
                         auto grandParentChildTextItem
                             = static_cast<ScreenplayTextModelTextItem*>(grandParentChildItem);
                         if (grandParentChildTextItem->paragraphType()
-                            == TextParagraphType::FolderFooter) {
+                            == TextParagraphType::SequenceFooter) {
                             break;
                         }
 
@@ -2223,25 +2213,25 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                 // элементы, которые идут после вставленной папки на уровень самой папки
                 //
                 else if (previousItem != nullptr
-                         && previousItem->parent()->type() == ScreenplayTextModelItemType::Scene) {
+                         && previousItem->parent()->type() == TextModelItemType::Group) {
                     auto grandParentItem = previousItem->parent();
                     const int lastItemIndex = grandParentItem->rowOfChild(previousItem) + 1;
 
                     //
                     // Соберём элементы для переноса
                     //
-                    QVector<ScreenplayTextModelItem*> itemsToMove;
+                    QVector<TextModelItem*> itemsToMove;
                     for (int childIndex = lastItemIndex; childIndex < grandParentItem->childCount();
                          ++childIndex) {
                         auto grandParentChildItem = grandParentItem->childAt(childIndex);
-                        if (grandParentChildItem->type() != ScreenplayTextModelItemType::Text) {
+                        if (grandParentChildItem->type() != TextModelItemType::Text) {
                             break;
                         }
 
                         auto grandParentChildTextItem
                             = static_cast<ScreenplayTextModelTextItem*>(grandParentChildItem);
                         if (grandParentChildTextItem->paragraphType()
-                            == TextParagraphType::FolderFooter) {
+                            == TextParagraphType::SequenceFooter) {
                             break;
                         }
 
@@ -2300,7 +2290,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             auto blockData = static_cast<ScreenplayTextBlockData*>(block.userData());
             auto item = blockData->item();
 
-            if (item->type() == ScreenplayTextModelItemType::Text) {
+            if (item->type() == TextModelItemType::Text) {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(item);
                 textItem->setCorrection(
                     block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection));
@@ -2308,8 +2298,8 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
                     TextBlockStyle::PropertyIsCorrectionContinued));
                 textItem->setBreakCorrectionStart(block.blockFormat().boolProperty(
                     TextBlockStyle::PropertyIsBreakCorrectionStart));
-                textItem->setBreakCorrectionEnd(block.blockFormat().boolProperty(
-                    TextBlockStyle::PropertyIsBreakCorrectionEnd));
+                textItem->setBreakCorrectionEnd(
+                    block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd));
                 if (tableInfo.inTable) {
                     textItem->setInFirstColumn(tableInfo.inFirstColumn);
                 } else {

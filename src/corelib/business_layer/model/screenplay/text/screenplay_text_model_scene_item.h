@@ -1,74 +1,32 @@
 #pragma once
 
-#include "screenplay_text_model_item.h"
-
-#include <QString>
+#include <business_layer/model/text/text_model_group_item.h>
 
 #include <chrono>
 
-class QColor;
-class QUuid;
 class QXmlStreamReader;
 
 
 namespace BusinessLayer {
 
+class ScreenplayTextModel;
+
 /**
  * @brief Класс элементов сцен модели сценария
  */
-class CORE_LIBRARY_EXPORT ScreenplayTextModelSceneItem : public ScreenplayTextModelItem
+class CORE_LIBRARY_EXPORT ScreenplayTextModelSceneItem : public TextModelGroupItem
 {
 public:
     /**
-     * @brief Номер сцены
-     */
-    struct Number {
-        int value = 0;
-        QString text;
-
-        bool operator==(const Number& _other) const;
-    };
-
-    /**
      * @brief Роли данных из модели
      */
-    enum DataRole {
-        SceneNumberRole = Qt::UserRole + 1,
-        SceneHeadingRole,
-        SceneTextRole,
-        SceneColorRole,
-        SceneInlineNotesSizeRole,
-        SceneReviewMarksSizeRole,
-        SceneDurationRole,
+    enum {
+        SceneDurationRole = TextModelGroupItem::GroupUserRole + 1,
     };
 
 public:
     explicit ScreenplayTextModelSceneItem(const ScreenplayTextModel* _model);
-    ScreenplayTextModelSceneItem(const ScreenplayTextModel* _model,
-                                 QXmlStreamReader& _contentReader);
     ~ScreenplayTextModelSceneItem() override;
-
-    /**
-     * @brief Идентификатор сцены
-     */
-    QUuid uuid() const;
-
-    /**
-     * @brief Номер сцены
-     */
-    Number number() const;
-    bool setNumber(int _number, const QString& _prefix);
-
-    /**
-     * @brief Цвет сцены
-     */
-    QColor color() const;
-    void setColor(const QColor& _color);
-
-    /**
-     * @brief Заголовок сцены
-     */
-    QString heading() const;
 
     /**
      * @brief Длительность сцены
@@ -81,24 +39,26 @@ public:
     QVariant data(int _role) const override;
 
     /**
-     * @brief Определяем интерфейс для получения XML блока
-     */
-    QByteArray toXml() const override;
-    QByteArray toXml(ScreenplayTextModelItem* _from, int _fromPosition,
-                     ScreenplayTextModelItem* _to, int _toPosition, bool _clearUuid) const;
-    QByteArray xmlHeader(bool _clearUuid = false) const;
-
-    /**
      * @brief Скопировать контент с заданного элемента
      */
-    void copyFrom(ScreenplayTextModelItem* _item) override;
+    void copyFrom(TextModelItem* _item) override;
 
     /**
      * @brief Проверить равен ли текущий элемент заданному
      */
-    bool isEqual(ScreenplayTextModelItem* _item) const override;
+    bool isEqual(TextModelItem* _item) const override;
 
 protected:
+    /**
+     * @brief Считываем дополнительный контент
+     */
+    QStringRef readCustomContent(QXmlStreamReader& _contentReader) override;
+
+    /**
+     * @brief Сформировать xml-блок с кастомными данными элемента
+     */
+    QByteArray customContent() const override;
+
     /**
      * @brief Обновляем текст сцены при изменении кого-то из детей
      */

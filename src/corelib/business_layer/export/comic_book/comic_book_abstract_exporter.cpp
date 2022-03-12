@@ -147,8 +147,8 @@ ComicBookTextDocument* ComicBookAbstractExporter::prepareDocument(
         // Если не нужно печатать папки, то удаляем их
         //
         if (!_exportOptions.printFolders) {
-            if (blockType == TextParagraphType::FolderHeader
-                || blockType == TextParagraphType::FolderFooter) {
+            if (blockType == TextParagraphType::SequenceHeader
+                || blockType == TextParagraphType::SequenceFooter) {
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 if (cursor.hasSelection()) {
                     cursor.deleteChar();
@@ -160,19 +160,19 @@ ComicBookTextDocument* ComicBookAbstractExporter::prepareDocument(
         //
         // В противном случае подставляем текст для пустых завершающих блоков
         //
-        else if (blockType == TextParagraphType::FolderFooter) {
+        else if (blockType == TextParagraphType::SequenceFooter) {
             if (cursor.block().text().isEmpty()) {
                 auto headerBlock = cursor.block().previous();
                 int openedFolders = 0;
                 while (headerBlock.isValid()) {
                     const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
-                    if (headerBlockType == TextParagraphType::FolderHeader) {
+                    if (headerBlockType == TextParagraphType::SequenceHeader) {
                         if (openedFolders > 0) {
                             --openedFolders;
                         } else {
                             break;
                         }
-                    } else if (headerBlockType == TextParagraphType::FolderFooter) {
+                    } else if (headerBlockType == TextParagraphType::SequenceFooter) {
                         ++openedFolders;
                     }
 

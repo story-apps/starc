@@ -246,7 +246,7 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::TextParagraphType
     //
     // Если вставили папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
     //
-    if (_type == TextParagraphType::FolderHeader) {
+    if (_type == TextParagraphType::SequenceHeader) {
         moveCursor(QTextCursor::PreviousBlock);
     }
     //
@@ -617,7 +617,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
     //
     while (TextBlockStyle::forBlock(topBlock) != TextParagraphType::Page
            && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Panel
-           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::FolderHeader
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::SequenceHeader
            && topBlock != document()->firstBlock()) {
         topBlock = topBlock.previous();
     }
@@ -690,7 +690,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                 // Определим цвет сцены
                 //
                 if (blockType == TextParagraphType::Page || blockType == TextParagraphType::Panel
-                    || blockType == TextParagraphType::FolderHeader) {
+                    || blockType == TextParagraphType::SequenceHeader) {
                     lastSceneBlockBottom = cursorR.top();
                     lastItemColor = d->document.itemColor(block);
                 }
@@ -831,7 +831,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Для пустого футера рисуем плейсхолдер
                         //
-                        if (blockType == TextParagraphType::FolderFooter) {
+                        if (blockType == TextParagraphType::SequenceFooter) {
                             painter.setFont(block.charFormat().font());
 
                             //
@@ -841,13 +841,13 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                             int openedFolders = 0;
                             while (headerBlock.isValid()) {
                                 const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
-                                if (headerBlockType == TextParagraphType::FolderHeader) {
+                                if (headerBlockType == TextParagraphType::SequenceHeader) {
                                     if (openedFolders > 0) {
                                         --openedFolders;
                                     } else {
                                         break;
                                     }
-                                } else if (headerBlockType == TextParagraphType::FolderFooter) {
+                                } else if (headerBlockType == TextParagraphType::SequenceFooter) {
                                     ++openedFolders;
                                 }
 
@@ -1146,8 +1146,8 @@ ContextMenu* ComicBookTextEdit::createContextMenu(const QPoint& _position, QWidg
         splitAction->setEnabled(blockType != TextParagraphType::Page
                                 && blockType != TextParagraphType::Panel
                                 && blockType != TextParagraphType::PanelShadow
-                                && blockType != TextParagraphType::FolderHeader
-                                && blockType != TextParagraphType::FolderFooter);
+                                && blockType != TextParagraphType::SequenceHeader
+                                && blockType != TextParagraphType::SequenceFooter);
     }
     connect(splitAction, &QAction::triggered, this, [this] {
         BusinessLayer::ComicBookTextCursor cursor = textCursor();

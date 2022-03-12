@@ -102,7 +102,7 @@ void ComicBookTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
     d->createOrUpdateShortcut(TextParagraphType::Character);
     d->createOrUpdateShortcut(TextParagraphType::Dialogue);
     d->createOrUpdateShortcut(TextParagraphType::InlineNote);
-    d->createOrUpdateShortcut(TextParagraphType::FolderHeader);
+    d->createOrUpdateShortcut(TextParagraphType::SequenceHeader);
 
     //
     // Настраиваем их

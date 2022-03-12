@@ -57,8 +57,8 @@ const QMap<int, TextParagraphType>& paragraphTypes()
         s_types.insert(i++, TextParagraphType::Character);
         s_types.insert(i++, TextParagraphType::Dialogue);
         s_types.insert(i++, TextParagraphType::InlineNote);
-        s_types.insert(i++, TextParagraphType::FolderHeader);
-        s_types.insert(i++, TextParagraphType::FolderFooter);
+        s_types.insert(i++, TextParagraphType::SequenceHeader);
+        s_types.insert(i++, TextParagraphType::SequenceFooter);
     }
     return s_types;
 }

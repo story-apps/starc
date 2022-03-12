@@ -111,20 +111,20 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
     //
     // Собираем статистику
     //
-    std::function<void(const ScreenplayTextModelItem*)> includeInReport;
+    std::function<void(const TextModelItem*)> includeInReport;
     includeInReport
         = [&includeInReport, &paragraphsToCounters, &totalWords, &totalCharacters, &scenes,
-           &charactersToDialogues, &lastCharacter](const ScreenplayTextModelItem* _item) {
+           &charactersToDialogues, &lastCharacter](const TextModelItem* _item) {
               for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
                   auto childItem = _item->childAt(childIndex);
                   switch (childItem->type()) {
-                  case ScreenplayTextModelItemType::Folder:
-                  case ScreenplayTextModelItemType::Scene: {
+                  case TextModelItemType::Folder:
+                  case TextModelItemType::Group: {
                       includeInReport(childItem);
                       break;
                   }
 
-                  case ScreenplayTextModelItemType::Text: {
+                  case TextModelItemType::Text: {
                       auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
                       //
                       // ... счётчики

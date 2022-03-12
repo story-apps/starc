@@ -1263,7 +1263,7 @@ void ComicBookTextDocument::setParagraphType(BusinessLayer::TextParagraphType _t
     //
     // Нельзя сменить стиль конечных элементов папок
     //
-    if (currentParagraphType == TextParagraphType::FolderFooter) {
+    if (currentParagraphType == TextParagraphType::SequenceFooter) {
         return;
     }
 
@@ -1291,7 +1291,7 @@ void ComicBookTextDocument::setParagraphType(BusinessLayer::TextParagraphType _t
 void ComicBookTextDocument::cleanParagraphType(const ComicBookTextCursor& _cursor)
 {
     const auto oldBlockType = TextBlockStyle::forBlock(_cursor.block());
-    if (oldBlockType != TextParagraphType::FolderHeader) {
+    if (oldBlockType != TextParagraphType::SequenceHeader) {
         return;
     }
 
@@ -1307,7 +1307,7 @@ void ComicBookTextDocument::cleanParagraphType(const ComicBookTextCursor& _curso
     bool isFooterUpdated = false;
     do {
         const auto currentType = TextBlockStyle::forBlock(cursor.block());
-        if (currentType == TextParagraphType::FolderFooter) {
+        if (currentType == TextParagraphType::SequenceFooter) {
             if (openedGroups == 0) {
                 cursor.movePosition(QTextCursor::PreviousBlock);
                 cursor.movePosition(QTextCursor::EndOfBlock);
@@ -1387,9 +1387,9 @@ void ComicBookTextDocument::applyParagraphType(BusinessLayer::TextParagraphType 
     //
     // Для заголовка папки нужно создать завершение
     //
-    if (_type == TextParagraphType::FolderHeader) {
+    if (_type == TextParagraphType::SequenceHeader) {
         const auto footerStyle
-            = d->documentTemplate().paragraphStyle(TextParagraphType::FolderFooter);
+            = d->documentTemplate().paragraphStyle(TextParagraphType::SequenceFooter);
 
         //
         // Вставляем закрывающий блок
@@ -1831,7 +1831,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 //     когда дойдём до обработки именно конца папки
                 //
                 needToDeleteParent
-                    = textItem->paragraphType() == TextParagraphType::FolderFooter
+                    = textItem->paragraphType() == TextParagraphType::SequenceFooter
                     || textItem->paragraphType() == TextParagraphType::Page
                     || textItem->paragraphType() == TextParagraphType::Panel;
             }
@@ -2038,7 +2038,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             //
             ComicBookTextModelItem* parentItem = nullptr;
             switch (paragraphType) {
-            case TextParagraphType::FolderHeader: {
+            case TextParagraphType::SequenceHeader: {
                 parentItem = new ComicBookTextModelFolderItem;
                 break;
             }
@@ -2094,7 +2094,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 }
 
                 auto textItem = static_cast<ComicBookTextModelTextItem*>(previousItem);
-                return textItem->paragraphType() == TextParagraphType::FolderFooter;
+                return textItem->paragraphType() == TextParagraphType::SequenceFooter;
             }();
 
             //
@@ -2210,7 +2210,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                         auto grandParentChildTextItem
                             = static_cast<ComicBookTextModelTextItem*>(grandParentChildItem);
                         if (grandParentChildTextItem->paragraphType()
-                            == TextParagraphType::FolderFooter) {
+                            == TextParagraphType::SequenceFooter) {
                             break;
                         }
 
@@ -2241,7 +2241,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                         auto grandParentChildTextItem
                             = static_cast<ComicBookTextModelTextItem*>(grandParentChildItem);
                         if (grandParentChildTextItem->paragraphType()
-                            == TextParagraphType::FolderFooter) {
+                            == TextParagraphType::SequenceFooter) {
                             break;
                         }
 

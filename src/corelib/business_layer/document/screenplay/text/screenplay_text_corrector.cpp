@@ -310,8 +310,8 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
     // ... от начала сцены
     //
     QVector<TextParagraphType> sceneBorders
-        = { TextParagraphType::SceneHeading, TextParagraphType::FolderHeader,
-            TextParagraphType::FolderFooter };
+        = { TextParagraphType::SceneHeading, TextParagraphType::SequenceHeader,
+            TextParagraphType::SequenceFooter };
     QTextBlock block = document->findBlock(startPosition);
     while (block != document->begin()) {
         const auto blockType = TextBlockStyle::forBlock(block);
@@ -865,7 +865,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             // Если это время и место или начало папки
             //
             case TextParagraphType::SceneHeading:
-            case TextParagraphType::FolderHeader:
+            case TextParagraphType::SequenceHeader:
             case TextParagraphType::Shot: {
                 //
                 // Переносим на следующую страницу
@@ -880,7 +880,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             // Конец папки распологаем либо только в конце страницы, либо целиком переносим на
             // следующую страницу
             //
-            case TextParagraphType::FolderFooter: {
+            case TextParagraphType::SequenceFooter: {
                 //
                 // Если в конце страницы, оставляем как есть
                 //
@@ -1817,8 +1817,8 @@ void ScreenplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBlo
         decorationFormat.setProperty(TextBlockStyle::PropertyType,
                                      static_cast<int>(TextParagraphType::SceneHeadingShadow));
     }
-    if (paragraphType == TextParagraphType::FolderHeader
-        || paragraphType == TextParagraphType::FolderHeader) {
+    if (paragraphType == TextParagraphType::SequenceHeader
+        || paragraphType == TextParagraphType::SequenceHeader) {
         decorationFormat.setProperty(TextBlockStyle::PropertyType,
                                      static_cast<int>(TextParagraphType::Action));
         decorationFormat.setBackground(Qt::NoBrush);

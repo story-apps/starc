@@ -160,8 +160,8 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         // Если не нужно печатать папки, то удаляем их
         //
         if (!_exportOptions.includeFolders) {
-            if (blockType == TextParagraphType::FolderHeader
-                || blockType == TextParagraphType::FolderFooter) {
+            if (blockType == TextParagraphType::SequenceHeader
+                || blockType == TextParagraphType::SequenceFooter) {
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 if (cursor.hasSelection()) {
                     cursor.deleteChar();
@@ -173,19 +173,19 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         //
         // В противном случае подставляем текст для пустых завершающих блоков
         //
-        else if (blockType == TextParagraphType::FolderFooter) {
+        else if (blockType == TextParagraphType::SequenceFooter) {
             if (cursor.block().text().isEmpty()) {
                 auto headerBlock = cursor.block().previous();
                 int openedFolders = 0;
                 while (headerBlock.isValid()) {
                     const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
-                    if (headerBlockType == TextParagraphType::FolderHeader) {
+                    if (headerBlockType == TextParagraphType::SequenceHeader) {
                         if (openedFolders > 0) {
                             --openedFolders;
                         } else {
                             break;
                         }
-                    } else if (headerBlockType == TextParagraphType::FolderFooter) {
+                    } else if (headerBlockType == TextParagraphType::SequenceFooter) {
                         ++openedFolders;
                     }
 
@@ -202,8 +202,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         //
         // Если не нужно печатать заметки по тексту, то удаляем их
         //
-        if (!_exportOptions.includeInlineNotes
-            && blockType == TextParagraphType::InlineNote) {
+        if (!_exportOptions.includeInlineNotes && blockType == TextParagraphType::InlineNote) {
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             if (cursor.hasSelection()) {
                 cursor.deleteChar();
@@ -220,7 +219,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
                 = dynamic_cast<ScreenplayTextBlockData*>(cursor.block().userData());
             bool needRemoveBlock = false;
             if (!blockData || !blockData->item() || !blockData->item()->parent()
-                || blockData->item()->parent()->type() != ScreenplayTextModelItemType::Scene) {
+                || blockData->item()->parent()->type() != TextModelItemType::Group) {
                 needRemoveBlock = true;
             } else {
                 const auto sceneItem

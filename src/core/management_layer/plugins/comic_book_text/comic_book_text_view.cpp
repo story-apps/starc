@@ -194,8 +194,8 @@ void ComicBookTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 
     currentParagraphType = paragraphType;
 
-    if (paragraphType == BusinessLayer::TextParagraphType::FolderFooter) {
-        paragraphType = BusinessLayer::TextParagraphType::FolderHeader;
+    if (paragraphType == BusinessLayer::TextParagraphType::SequenceFooter) {
+        paragraphType = BusinessLayer::TextParagraphType::SequenceHeader;
         toolbar->setParagraphTypesEnabled(false);
         fastFormatWidget->setEnabled(false);
     } else {
@@ -502,7 +502,7 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
         TextParagraphType::Dialogue,
         TextParagraphType::InlineNote,
         TextParagraphType::UnformattedText,
-        TextParagraphType::FolderHeader,
+        TextParagraphType::SequenceHeader,
     };
     for (const auto type : types) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {

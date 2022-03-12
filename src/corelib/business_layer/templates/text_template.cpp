@@ -38,8 +38,8 @@ const QHash<TextParagraphType, QString> kAbstractParagraphTypeToString = {
     { TextParagraphType::InlineNote, QLatin1String("inline_note") },
     { TextParagraphType::ActHeader, QLatin1String("act_header") },
     { TextParagraphType::ActFooter, QLatin1String("act_footer") },
-    { TextParagraphType::FolderHeader, QLatin1String("folder_header") },
-    { TextParagraphType::FolderFooter, QLatin1String("folder_footer") },
+    { TextParagraphType::SequenceHeader, QLatin1String("sequence_heading") },
+    { TextParagraphType::SequenceFooter, QLatin1String("sequence_footer") },
     { TextParagraphType::PageSplitter, QLatin1String("page_splitter") },
     //
     { TextParagraphType::SceneHeading, QLatin1String("scene_heading") },
@@ -128,9 +128,9 @@ QString toDisplayString(TextParagraphType _type)
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Act");
     case TextParagraphType::ActFooter:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Act footer");
-    case TextParagraphType::FolderHeader:
+    case TextParagraphType::SequenceHeader:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Sequence");
-    case TextParagraphType::FolderFooter:
+    case TextParagraphType::SequenceFooter:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Sequence footer");
     //
     case TextParagraphType::SceneHeading:

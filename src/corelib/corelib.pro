@@ -127,12 +127,9 @@ SOURCES += \
     business_layer/model/screenplay/text/screenplay_text_block_parser.cpp \
     business_layer/model/screenplay/text/screenplay_text_model.cpp \
     business_layer/model/screenplay/text/screenplay_text_model_folder_item.cpp \
-    business_layer/model/screenplay/text/screenplay_text_model_item.cpp \
     business_layer/model/screenplay/text/screenplay_text_model_scene_item.cpp \
-    business_layer/model/screenplay/text/screenplay_text_model_splitter_item.cpp \
     business_layer/model/screenplay/text/screenplay_text_model_text_item.cpp \
     business_layer/model/screenplay/screenplay_title_page_model.cpp \
-    business_layer/model/screenplay/text/screenplay_text_model_xml_writer.cpp \
     business_layer/model/simple_text/simple_text_model.cpp \
     business_layer/model/simple_text/simple_text_model_chapter_item.cpp \
     business_layer/model/simple_text/simple_text_model_item.cpp \
@@ -333,13 +330,10 @@ HEADERS += \
     business_layer/model/screenplay/text/screenplay_text_block_parser.h \
     business_layer/model/screenplay/text/screenplay_text_model.h \
     business_layer/model/screenplay/text/screenplay_text_model_folder_item.h \
-    business_layer/model/screenplay/text/screenplay_text_model_item.h \
     business_layer/model/screenplay/text/screenplay_text_model_scene_item.h \
-    business_layer/model/screenplay/text/screenplay_text_model_splitter_item.h \
     business_layer/model/screenplay/text/screenplay_text_model_text_item.h \
     business_layer/model/screenplay/screenplay_title_page_model.h \
     business_layer/model/screenplay/text/screenplay_text_model_xml.h \
-    business_layer/model/screenplay/text/screenplay_text_model_xml_writer.h \
     business_layer/model/simple_text/simple_text_model.h \
     business_layer/model/simple_text/simple_text_model_chapter_item.h \
     business_layer/model/simple_text/simple_text_model_item.h \

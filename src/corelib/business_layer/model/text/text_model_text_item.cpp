@@ -21,8 +21,10 @@ namespace BusinessLayer {
 class TextModelTextItem::Implementation
 {
 public:
-    Implementation() = default;
-    explicit Implementation(QXmlStreamReader& _contentReader);
+    /**
+     * @brief Считать данные из xml
+     */
+    void readXml(QXmlStreamReader& _contentReader);
 
     /**
      * @brief Обновить закешированный xml
@@ -102,7 +104,7 @@ public:
     QByteArray xml;
 };
 
-TextModelTextItem::Implementation::Implementation(QXmlStreamReader& _contentReader)
+void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader)
 {
     paragraphType = textParagraphTypeFromString(_contentReader.name().toString());
     Q_ASSERT(paragraphType != TextParagraphType::Undefined);
@@ -504,14 +506,6 @@ TextModelTextItem::TextModelTextItem(const TextModel* _model)
     : TextModelItem(TextModelItemType::Text, _model)
     , d(new Implementation)
 {
-    d->updateXml();
-}
-
-TextModelTextItem::TextModelTextItem(const TextModel* _model, QXmlStreamReader& _contentReaded)
-    : TextModelItem(TextModelItemType::Text, _model)
-    , d(new Implementation(_contentReaded))
-{
-    d->updateXml();
 }
 
 TextModelTextItem::~TextModelTextItem() = default;
@@ -883,6 +877,23 @@ QVariant TextModelTextItem::data(int _role) const
     }
 }
 
+void TextModelTextItem::readContent(QXmlStreamReader& _contentReader)
+{
+    //
+    // Считываем контент
+    //
+    d->readXml(_contentReader);
+    //
+    // и обновляем собственное представление в соответствии с обновлёнными данными
+    //
+    d->updateXml();
+
+    //
+    // Делаем необходимую работу после изменения данных элемента
+    //
+    markChanged();
+}
+
 QByteArray TextModelTextItem::toXml() const
 {
     return d->xml;
@@ -902,7 +913,7 @@ QByteArray TextModelTextItem::toXml(int _from, int _length)
 
 void TextModelTextItem::copyFrom(TextModelItem* _item)
 {
-    if (_item->type() != TextModelItemType::Text) {
+    if (_item == nullptr || type() != _item->type()) {
         Q_ASSERT(false);
         return;
     }

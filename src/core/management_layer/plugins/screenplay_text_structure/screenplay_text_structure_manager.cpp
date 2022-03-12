@@ -106,11 +106,11 @@ void ScreenplayTextStructureManager::Implementation::updateContextMenu(
         const auto itemIndex = structureModel->mapToSource(_indexes.constFirst());
         std::optional<QColor> itemColor;
         const auto item = model->itemForIndex(itemIndex);
-        if (item->type() == BusinessLayer::ScreenplayTextModelItemType::Folder) {
+        if (item->type() == BusinessLayer::TextModelItemType::Folder) {
             const auto folderItem
                 = static_cast<BusinessLayer::ScreenplayTextModelFolderItem*>(item);
             itemColor = folderItem->color();
-        } else if (item->type() == BusinessLayer::ScreenplayTextModelItemType::Scene) {
+        } else if (item->type() == BusinessLayer::TextModelItemType::Group) {
             const auto sceneItem = static_cast<BusinessLayer::ScreenplayTextModelSceneItem*>(item);
             itemColor = sceneItem->color();
         }
@@ -128,12 +128,12 @@ void ScreenplayTextStructureManager::Implementation::updateContextMenu(
             colorPicker->setTextColor(Ui::DesignSystem::color().onBackground());
             connect(colorPicker, &ColorPicker::selectedColorChanged, view,
                     [this, itemColor, item](const QColor& _color) {
-                        if (item->type() == BusinessLayer::ScreenplayTextModelItemType::Folder) {
+                        if (item->type() == BusinessLayer::TextModelItemType::Folder) {
                             const auto folderItem
                                 = static_cast<BusinessLayer::ScreenplayTextModelFolderItem*>(item);
                             folderItem->setColor(_color);
                         } else if (item->type()
-                                   == BusinessLayer::ScreenplayTextModelItemType::Scene) {
+                                   == BusinessLayer::TextModelItemType::Group) {
                             const auto sceneItem
                                 = static_cast<BusinessLayer::ScreenplayTextModelSceneItem*>(item);
                             sceneItem->setColor(_color);

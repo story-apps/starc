@@ -33,16 +33,19 @@ CORE_LIBRARY_EXPORT inline uint qHash(TextModelSplitterItemType _type)
 class CORE_LIBRARY_EXPORT TextModelSplitterItem : public TextModelItem
 {
 public:
-    TextModelSplitterItem(const TextModel* _model,
-                                  TextModelSplitterItemType _type);
-    TextModelSplitterItem(const TextModel* _model,
-                                  QXmlStreamReader& _contentReader);
+    explicit TextModelSplitterItem(const TextModel* _model);
     ~TextModelSplitterItem() override;
 
     /**
      * @brief Тип разделителя
      */
     TextModelSplitterItemType splitterType() const;
+    void setSplitterType(TextModelSplitterItemType _type);
+
+    /**
+     * @brief Считать контент из заданного ридера
+     */
+    void readContent(QXmlStreamReader& _contentReader) override final;
 
     /**
      * @brief Определяем интерфейс для получения XML блока
