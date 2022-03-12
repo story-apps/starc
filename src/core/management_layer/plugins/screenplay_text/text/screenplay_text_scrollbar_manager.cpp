@@ -324,7 +324,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
         auto endDuration = startDuration;
         QColor color = d->colors.begin()->second;
         auto paintColor = [this, &painter, scrollbarRect, &startDuration, &endDuration, &color] {
-            if (!color.isValid()) {
+            if (!color.isValid() || d->maximum.count() == 0) {
                 return;
             }
 
