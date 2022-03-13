@@ -64,8 +64,7 @@ void DialogHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль блока на описание действия
                 //
-                editor()->setCurrentParagraphType(
-                    changeForEnter(TextParagraphType::Dialogue));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Dialogue));
             } else {
                 //! Текст не пуст
 

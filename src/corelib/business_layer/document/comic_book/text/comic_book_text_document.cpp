@@ -23,9 +23,9 @@
 #include <QScopedValueRollback>
 #include <QTextTable>
 
+using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
-using BusinessLayer::TemplatesFacade;
 
 
 namespace BusinessLayer {
@@ -672,8 +672,8 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                         cursor.movePosition(ComicBookTextCursor::EndOfBlock);
                     }
                 }
-                bool isFirstParagraph = TextBlockStyle::forBlock(cursor.block())
-                    == TextParagraphType::Undefined;
+                bool isFirstParagraph
+                    = TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::Undefined;
                 d->readModelItemContent(_topLeft.row(), _topLeft.parent(), cursor,
                                         isFirstParagraph);
             }
@@ -1413,8 +1413,7 @@ void ComicBookTextDocument::splitParagraph(const ComicBookTextCursor& _cursor)
     //
     // Сохраним текущий формат блока
     //
-    const auto lastBlockType
-        = TextBlockStyle::forBlock(findBlock(cursor.selectionInterval().from));
+    const auto lastBlockType = TextBlockStyle::forBlock(findBlock(cursor.selectionInterval().from));
     //
     // Вырезаем выделение, захватывая блоки целиком
     //
@@ -1830,8 +1829,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 //     последовательно сверху вниз, то удалять непосредственно папку будем,
                 //     когда дойдём до обработки именно конца папки
                 //
-                needToDeleteParent
-                    = textItem->paragraphType() == TextParagraphType::SequenceFooter
+                needToDeleteParent = textItem->paragraphType() == TextParagraphType::SequenceFooter
                     || textItem->paragraphType() == TextParagraphType::Page
                     || textItem->paragraphType() == TextParagraphType::Panel;
             }
@@ -2063,12 +2061,12 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             auto textItem = new ComicBookTextModelTextItem;
             textItem->setCorrection(
                 block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection));
-            textItem->setCorrectionContinued(block.blockFormat().boolProperty(
-                TextBlockStyle::PropertyIsCorrectionContinued));
-            textItem->setBreakCorrectionStart(block.blockFormat().boolProperty(
-                TextBlockStyle::PropertyIsBreakCorrectionStart));
-            textItem->setBreakCorrectionEnd(block.blockFormat().boolProperty(
-                TextBlockStyle::PropertyIsBreakCorrectionEnd));
+            textItem->setCorrectionContinued(
+                block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrectionContinued));
+            textItem->setBreakCorrectionStart(
+                block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionStart));
+            textItem->setBreakCorrectionEnd(
+                block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd));
             if (tableInfo.inTable) {
                 textItem->setInFirstColumn(tableInfo.inFirstColumn);
             } else {
@@ -2301,8 +2299,8 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                     TextBlockStyle::PropertyIsCorrectionContinued));
                 textItem->setBreakCorrectionStart(block.blockFormat().boolProperty(
                     TextBlockStyle::PropertyIsBreakCorrectionStart));
-                textItem->setBreakCorrectionEnd(block.blockFormat().boolProperty(
-                    TextBlockStyle::PropertyIsBreakCorrectionEnd));
+                textItem->setBreakCorrectionEnd(
+                    block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd));
                 if (tableInfo.inTable) {
                     textItem->setInFirstColumn(tableInfo.inFirstColumn);
                 } else {

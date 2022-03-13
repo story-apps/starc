@@ -234,31 +234,28 @@ SettingsStorage::Implementation::Implementation()
     //
     {
         auto addScreenplayEditorStylesAction
-            = [this](const QString& _actionType, const QString& _actionKey,
-                     TextParagraphType _from, TextParagraphType _to) {
+            = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
+                     TextParagraphType _to) {
                   defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
                                            .arg(kComponentsScreenplayEditorKey, _actionType,
                                                 toString(_from), _actionKey),
                                        toString(_to));
               };
         auto addScreenplayEditorStylesActionByTab
-            = [addScreenplayEditorStylesAction](const QString& _actionType,
-                                                TextParagraphType _from,
+            = [addScreenplayEditorStylesAction](const QString& _actionType, TextParagraphType _from,
                                                 TextParagraphType _to) {
                   addScreenplayEditorStylesAction(_actionType, "tab", _from, _to);
               };
         auto addScreenplayEditorStylesActionByEnter
-            = [addScreenplayEditorStylesAction](const QString& _actionType,
-                                                TextParagraphType _from,
+            = [addScreenplayEditorStylesAction](const QString& _actionType, TextParagraphType _from,
                                                 TextParagraphType _to) {
                   addScreenplayEditorStylesAction(_actionType, "enter", _from, _to);
               };
         //
-        auto addScreenplayEditorStylesJumpByTab
-            = [addScreenplayEditorStylesActionByTab](TextParagraphType _from,
-                                                     TextParagraphType _to) {
-                  addScreenplayEditorStylesActionByTab("jumping", _from, _to);
-              };
+        auto addScreenplayEditorStylesJumpByTab =
+            [addScreenplayEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                addScreenplayEditorStylesActionByTab("jumping", _from, _to);
+            };
         auto addScreenplayEditorStylesJumpByEnter
             = [addScreenplayEditorStylesActionByEnter](TextParagraphType _from,
                                                        TextParagraphType _to) {
@@ -276,10 +273,8 @@ SettingsStorage::Implementation::Implementation()
                                            TextParagraphType::Action);
         addScreenplayEditorStylesJumpByEnter(TextParagraphType::SceneCharacters,
                                              TextParagraphType::Action);
-        addScreenplayEditorStylesJumpByTab(TextParagraphType::Action,
-                                           TextParagraphType::Character);
-        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Action,
-                                             TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::Action, TextParagraphType::Character);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Action, TextParagraphType::Action);
         addScreenplayEditorStylesJumpByTab(TextParagraphType::Character,
                                            TextParagraphType::Parenthetical);
         addScreenplayEditorStylesJumpByEnter(TextParagraphType::Character,
@@ -294,16 +289,13 @@ SettingsStorage::Implementation::Implementation()
                                              TextParagraphType::Action);
         addScreenplayEditorStylesJumpByTab(TextParagraphType::Lyrics,
                                            TextParagraphType::Parenthetical);
-        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Lyrics,
-                                             TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Lyrics, TextParagraphType::Action);
         addScreenplayEditorStylesJumpByTab(TextParagraphType::Transition,
                                            TextParagraphType::SceneHeading);
         addScreenplayEditorStylesJumpByEnter(TextParagraphType::Transition,
                                              TextParagraphType::SceneHeading);
-        addScreenplayEditorStylesJumpByTab(TextParagraphType::Shot,
-                                           TextParagraphType::Action);
-        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Shot,
-                                             TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::Shot, TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::Shot, TextParagraphType::Action);
         addScreenplayEditorStylesJumpByTab(TextParagraphType::InlineNote,
                                            TextParagraphType::Action);
         addScreenplayEditorStylesJumpByEnter(TextParagraphType::InlineNote,
@@ -313,11 +305,10 @@ SettingsStorage::Implementation::Implementation()
         addScreenplayEditorStylesJumpByEnter(TextParagraphType::SequenceHeader,
                                              TextParagraphType::SceneHeading);
         //
-        auto addScreenplayEditorStylesChangeByTab
-            = [addScreenplayEditorStylesActionByTab](TextParagraphType _from,
-                                                     TextParagraphType _to) {
-                  addScreenplayEditorStylesActionByTab("changing", _from, _to);
-              };
+        auto addScreenplayEditorStylesChangeByTab =
+            [addScreenplayEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                addScreenplayEditorStylesActionByTab("changing", _from, _to);
+            };
         auto addScreenplayEditorStylesChangeByEnter
             = [addScreenplayEditorStylesActionByEnter](TextParagraphType _from,
                                                        TextParagraphType _to) {
@@ -359,10 +350,8 @@ SettingsStorage::Implementation::Implementation()
                                              TextParagraphType::Action);
         addScreenplayEditorStylesChangeByEnter(TextParagraphType::Transition,
                                                TextParagraphType::Transition);
-        addScreenplayEditorStylesChangeByTab(TextParagraphType::Shot,
-                                             TextParagraphType::Action);
-        addScreenplayEditorStylesChangeByEnter(TextParagraphType::Shot,
-                                               TextParagraphType::Shot);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::Shot, TextParagraphType::Action);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::Shot, TextParagraphType::Shot);
         addScreenplayEditorStylesChangeByTab(TextParagraphType::InlineNote,
                                              TextParagraphType::InlineNote);
         addScreenplayEditorStylesChangeByEnter(TextParagraphType::InlineNote,
@@ -418,32 +407,29 @@ SettingsStorage::Implementation::Implementation()
     //
     {
         const QString kComicBookEditorKey = "comicbook-editor";
-        auto addComicBookEditorStylesAction =
-            [this, kComicBookEditorKey](const QString& _actionType, const QString& _actionKey,
-                                        TextParagraphType _from, TextParagraphType _to) {
-                defaultValues.insert(
-                    QString("%1/styles-%2/from-%3-by-%4")
-                        .arg(kComicBookEditorKey, _actionType, toString(_from), _actionKey),
-                    toString(_to));
-            };
+        auto addComicBookEditorStylesAction
+            = [this, kComicBookEditorKey](const QString& _actionType, const QString& _actionKey,
+                                          TextParagraphType _from, TextParagraphType _to) {
+                  defaultValues.insert(
+                      QString("%1/styles-%2/from-%3-by-%4")
+                          .arg(kComicBookEditorKey, _actionType, toString(_from), _actionKey),
+                      toString(_to));
+              };
         auto addComicBookEditorStylesActionByTab
-            = [addComicBookEditorStylesAction](const QString& _actionType,
-                                               TextParagraphType _from,
+            = [addComicBookEditorStylesAction](const QString& _actionType, TextParagraphType _from,
                                                TextParagraphType _to) {
                   addComicBookEditorStylesAction(_actionType, "tab", _from, _to);
               };
         auto addComicBookEditorStylesActionByEnter
-            = [addComicBookEditorStylesAction](const QString& _actionType,
-                                               TextParagraphType _from,
+            = [addComicBookEditorStylesAction](const QString& _actionType, TextParagraphType _from,
                                                TextParagraphType _to) {
                   addComicBookEditorStylesAction(_actionType, "enter", _from, _to);
               };
         //
-        auto addComicBookEditorStylesJumpByTab
-            = [addComicBookEditorStylesActionByTab](TextParagraphType _from,
-                                                    TextParagraphType _to) {
-                  addComicBookEditorStylesActionByTab("jumping", _from, _to);
-              };
+        auto addComicBookEditorStylesJumpByTab =
+            [addComicBookEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                addComicBookEditorStylesActionByTab("jumping", _from, _to);
+            };
         auto addComicBookEditorStylesJumpByEnter
             = [addComicBookEditorStylesActionByEnter](TextParagraphType _from,
                                                       TextParagraphType _to) {
@@ -453,12 +439,9 @@ SettingsStorage::Implementation::Implementation()
                                           TextParagraphType::UnformattedText);
         addComicBookEditorStylesJumpByEnter(TextParagraphType::UnformattedText,
                                             TextParagraphType::UnformattedText);
-        addComicBookEditorStylesJumpByTab(TextParagraphType::Page,
-                                          TextParagraphType::Panel);
-        addComicBookEditorStylesJumpByEnter(TextParagraphType::Page,
-                                            TextParagraphType::Panel);
-        addComicBookEditorStylesJumpByTab(TextParagraphType::Panel,
-                                          TextParagraphType::Character);
+        addComicBookEditorStylesJumpByTab(TextParagraphType::Page, TextParagraphType::Panel);
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::Page, TextParagraphType::Panel);
+        addComicBookEditorStylesJumpByTab(TextParagraphType::Panel, TextParagraphType::Character);
         addComicBookEditorStylesJumpByEnter(TextParagraphType::Panel,
                                             TextParagraphType::Description);
         addComicBookEditorStylesJumpByTab(TextParagraphType::Description,
@@ -482,11 +465,10 @@ SettingsStorage::Implementation::Implementation()
         addComicBookEditorStylesJumpByEnter(TextParagraphType::SequenceHeader,
                                             TextParagraphType::Page);
         //
-        auto addComicBookEditorStylesChangeByTab
-            = [addComicBookEditorStylesActionByTab](TextParagraphType _from,
-                                                    TextParagraphType _to) {
-                  addComicBookEditorStylesActionByTab("changing", _from, _to);
-              };
+        auto addComicBookEditorStylesChangeByTab =
+            [addComicBookEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                addComicBookEditorStylesActionByTab("changing", _from, _to);
+            };
         auto addComicBookEditorStylesChangeByEnter
             = [addComicBookEditorStylesActionByEnter](TextParagraphType _from,
                                                       TextParagraphType _to) {
@@ -496,14 +478,11 @@ SettingsStorage::Implementation::Implementation()
                                             TextParagraphType::UnformattedText);
         addComicBookEditorStylesChangeByEnter(TextParagraphType::UnformattedText,
                                               TextParagraphType::UnformattedText);
-        addComicBookEditorStylesChangeByTab(TextParagraphType::Page,
-                                            TextParagraphType::Panel);
-        addComicBookEditorStylesChangeByEnter(TextParagraphType::Page,
-                                              TextParagraphType::Page);
+        addComicBookEditorStylesChangeByTab(TextParagraphType::Page, TextParagraphType::Panel);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::Page, TextParagraphType::Page);
         addComicBookEditorStylesChangeByTab(TextParagraphType::Panel,
                                             TextParagraphType::Description);
-        addComicBookEditorStylesChangeByEnter(TextParagraphType::Panel,
-                                              TextParagraphType::Page);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::Panel, TextParagraphType::Page);
         addComicBookEditorStylesChangeByTab(TextParagraphType::Description,
                                             TextParagraphType::Character);
         addComicBookEditorStylesChangeByEnter(TextParagraphType::Description,

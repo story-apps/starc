@@ -2,8 +2,8 @@
 
 #include "screenplay_text_model.h"
 #include "screenplay_text_model_text_item.h"
-#include "screenplay_text_model_xml.h"
 
+#include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <utils/helpers/text_helper.h>
 
@@ -36,6 +36,7 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const ScreenplayTextM
     : TextModelGroupItem(_model)
     , d(new Implementation)
 {
+    setGroupType(TextGroupType::Scene);
 }
 
 ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;

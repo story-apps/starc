@@ -19,9 +19,9 @@
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/screenplay/screenplay_treatment_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
-#include <business_layer/model/simple_text/simple_text_model.h>
 #include <data_layer/storage/document_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>

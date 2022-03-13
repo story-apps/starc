@@ -4,7 +4,7 @@
 
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
-#include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
+#include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <domain/document_object.h>
 #include <utils/helpers/text_helper.h>
@@ -286,7 +286,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
 
             alreadyInScene = false; // вышли из сцены
 
-            writer.writeStartElement(xml::kFolderTag);
+            writer.writeStartElement(toString(TextFolderType::Sequence));
             writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
             writer.writeStartElement(xml::kContentTag);
             break;
@@ -313,7 +313,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
 
             alreadyInScene = true; // вошли в новую сцену
 
-            writer.writeStartElement(xml::kSceneTag);
+            writer.writeStartElement(toString(TextGroupType::Scene));
             writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
             writer.writeStartElement(xml::kContentTag);
             break;

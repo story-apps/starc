@@ -3,7 +3,7 @@
 #include "screenlay_import_options.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
-#include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
+#include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -57,9 +57,8 @@ const QString kOldSchoolCenteringPrefix = "                    ";
  * @brief Определить тип блока в текущей позиции курсора
  *		  с указанием предыдущего типа и количества предшествующих пустых строк
  */
-TextParagraphType typeForTextCursor(const QTextCursor& _cursor,
-                                          TextParagraphType _lastBlockType,
-                                          int _prevEmptyLines, int _minLeftMargin)
+TextParagraphType typeForTextCursor(const QTextCursor& _cursor, TextParagraphType _lastBlockType,
+                                    int _prevEmptyLines, int _minLeftMargin)
 {
     //
     // Определим текст блока
@@ -141,8 +140,8 @@ TextParagraphType typeForTextCursor(const QTextCursor& _cursor,
                 // 2. идут сразу же после времени и места
                 // 3. не имеют сверху отступа
                 //
-                else if (_lastBlockType == TextParagraphType::SceneHeading
-                         && _prevEmptyLines == 0 && blockFormat.topMargin() == 0) {
+                else if (_lastBlockType == TextParagraphType::SceneHeading && _prevEmptyLines == 0
+                         && blockFormat.topMargin() == 0) {
                     blockType = TextParagraphType::SceneCharacters;
                 }
                 //
@@ -501,7 +500,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::impo
                 }
                 alreadyInScene = true;
 
-                writer.writeStartElement(xml::kSceneTag);
+                writer.writeStartElement(toString(TextGroupType::Scene));
                 writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
                 writer.writeStartElement(xml::kContentTag);
             }

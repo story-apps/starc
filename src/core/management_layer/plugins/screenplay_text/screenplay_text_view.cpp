@@ -282,8 +282,8 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 
     for (int itemRow = 0; itemRow < paragraphTypesModel->rowCount(); ++itemRow) {
         const auto item = paragraphTypesModel->item(itemRow);
-        const auto itemType = static_cast<BusinessLayer::TextParagraphType>(
-            item->data(kTypeDataRole).toInt());
+        const auto itemType
+            = static_cast<BusinessLayer::TextParagraphType>(item->data(kTypeDataRole).toInt());
         if (itemType == paragraphType) {
             toolbar->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));
             fastFormatWidget->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));

@@ -4,7 +4,6 @@
 #include "screenplay_text_model_folder_item.h"
 #include "screenplay_text_model_scene_item.h"
 #include "screenplay_text_model_text_item.h"
-#include "screenplay_text_model_xml.h"
 
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
@@ -13,23 +12,12 @@
 #include <business_layer/templates/screenplay_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-#include <domain/document_object.h>
-#include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/logging.h>
-#include <utils/shugar.h>
-#include <utils/tools/edit_distance.h>
-#include <utils/tools/model_index_path.h>
 
-#include <QDateTime>
-#include <QMimeData>
 #include <QRegularExpression>
 #include <QStringListModel>
 #include <QXmlStreamReader>
-
-#ifdef QT_DEBUG
-#define XML_CHECKS
-#endif
 
 namespace BusinessLayer {
 
@@ -77,15 +65,6 @@ public:
      * @brief Модель локаций
      */
     LocationsModel* locationsModel = nullptr;
-
-    /**
-     * @brief Последние скопированные данные модели
-     */
-    struct {
-        QModelIndex from;
-        QModelIndex to;
-        QMimeData* data = nullptr;
-    } lastMime;
 
     /**
      * @brief Нужно ли обновить справочники, которые строятся в рантайме

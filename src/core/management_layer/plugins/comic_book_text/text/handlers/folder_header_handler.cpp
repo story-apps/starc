@@ -62,7 +62,8 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль в соответствии с настройками
                 //
-                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::SequenceHeader));
+                editor()->setCurrentParagraphType(
+                    changeForEnter(TextParagraphType::SequenceHeader));
             } else {
                 //! Текст не пуст
 

@@ -12,7 +12,7 @@ namespace BusinessLayer {
 /**
  * @brief Тип разделителя
  */
-enum class TextModelSplitterItemType {
+enum class CORE_LIBRARY_EXPORT TextModelSplitterItemType {
     Undefined,
     Start,
     End,

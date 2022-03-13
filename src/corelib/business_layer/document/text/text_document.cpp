@@ -45,7 +45,7 @@ public:
     /**
      * @brief Скорректировать позиции элементов на заданную дистанцию
      */
-    void correctPositionsToItems(std::map<int, BusinessLayer::SimpleTextModelItem*>::iterator _from,
+    void correctPositionsToItems(std::map<int, BusinessLayer::TextModelItem*>::iterator _from,
                                  int _distance);
     void correctPositionsToItems(int _fromPosition, int _distance);
 
@@ -69,7 +69,7 @@ public:
     DocumentState state = DocumentState::Undefined;
     QPointer<BusinessLayer::SimpleTextModel> model;
     bool canChangeModel = true;
-    std::map<int, BusinessLayer::SimpleTextModelItem*> positionsToItems;
+    std::map<int, BusinessLayer::TextModelItem*> positionsToItems;
 };
 
 SimpleTextDocument::Implementation::Implementation(SimpleTextDocument* _document)
@@ -87,14 +87,14 @@ const TextTemplate& SimpleTextDocument::Implementation::documentTemplate() const
 }
 
 void SimpleTextDocument::Implementation::correctPositionsToItems(
-    std::map<int, BusinessLayer::SimpleTextModelItem*>::iterator _from, int _distance)
+    std::map<int, BusinessLayer::TextModelItem*>::iterator _from, int _distance)
 {
     if (_from == positionsToItems.end()) {
         return;
     }
 
     if (_distance > 0) {
-        auto reversed = [](std::map<int, BusinessLayer::SimpleTextModelItem*>::iterator iter) {
+        auto reversed = [](std::map<int, BusinessLayer::TextModelItem*>::iterator iter) {
             return std::prev(std::make_reverse_iterator(iter));
         };
         for (auto iter = positionsToItems.rbegin(); iter != std::make_reverse_iterator(_from);
@@ -125,11 +125,11 @@ void SimpleTextDocument::Implementation::readModelItemContent(int _itemRow,
     const auto itemIndex = model->index(_itemRow, 0, _parent);
     const auto item = model->itemForIndex(itemIndex);
     switch (item->type()) {
-    case SimpleTextModelItemType::Chapter: {
+    case TextModelItemType::Group: {
         break;
     }
 
-    case SimpleTextModelItemType::Text: {
+    case TextModelItemType::Text: {
         const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
 
         //
@@ -343,7 +343,7 @@ void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _
                 }
 
                 const auto item = d->model->itemForIndex(_topLeft);
-                if (item->type() != SimpleTextModelItemType::Text) {
+                if (item->type() != TextModelItemType::Text) {
                     return;
                 }
 
@@ -467,99 +467,97 @@ void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _
 
                 cursor.endEditBlock();
             });
-    connect(d->model, &SimpleTextModel::rowsInserted, this,
-            [this](const QModelIndex& _parent, int _from, int _to) {
-                if (d->state != DocumentState::Ready) {
-                    return;
-                }
+    connect(
+        d->model, &SimpleTextModel::rowsInserted, this,
+        [this](const QModelIndex& _parent, int _from, int _to) {
+            if (d->state != DocumentState::Ready) {
+                return;
+            }
 
-                QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+            QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+
+            //
+            // Игнорируем добавление пустых глав
+            //
+            const auto item = d->model->itemForIndex(d->model->index(_from, 0, _parent));
+            if (item->type() == TextModelItemType::Group && !item->hasChildren()) {
+                return;
+            }
+
+            //
+            // Определим позицию курсора откуда нужно начинать вставку
+            //
+            QModelIndex cursorItemIndex;
+            if (_from > 0) {
+                cursorItemIndex = d->model->index(_from - 1, 0, _parent);
 
                 //
-                // Игнорируем добавление пустых глав
+                // В кейсе, когда вставляется новая глава перед уже существующей и существующую
+                // нужно перенести после неё, добавляем дополнительное условие на определение
+                // позиции, т.к. у новой главы ещё нет элементов и мы не знаем о её позиции,
+                // поэтому берём предыдущую, либо смотрим в конец общего родителя
                 //
-                const auto item = d->model->itemForIndex(d->model->index(_from, 0, _parent));
-                if (item->type() == SimpleTextModelItemType::Chapter && !item->hasChildren()) {
-                    return;
-                }
-
-                //
-                // Определим позицию курсора откуда нужно начинать вставку
-                //
-                QModelIndex cursorItemIndex;
-                if (_from > 0) {
-                    cursorItemIndex = d->model->index(_from - 1, 0, _parent);
-
-                    //
-                    // В кейсе, когда вставляется новая глава перед уже существующей и существующую
-                    // нужно перенести после неё, добавляем дополнительное условие на определение
-                    // позиции, т.к. у новой главы ещё нет элементов и мы не знаем о её позиции,
-                    // поэтому берём предыдущую, либо смотрим в конец общего родителя
-                    //
-                    const auto cursorItem = d->model->itemForIndex(cursorItemIndex);
-                    if (cursorItem->type() == SimpleTextModelItemType::Chapter
-                        && !cursorItem->hasChildren()) {
-                        if (_from > 1) {
-                            cursorItemIndex = d->model->index(_from - 2, 0, _parent);
-                        } else {
-                            cursorItemIndex
-                                = d->model->index(_parent.row() - 1, 0, _parent.parent());
-                        }
+                const auto cursorItem = d->model->itemForIndex(cursorItemIndex);
+                if (cursorItem->type() == TextModelItemType::Group && !cursorItem->hasChildren()) {
+                    if (_from > 1) {
+                        cursorItemIndex = d->model->index(_from - 2, 0, _parent);
+                    } else {
+                        cursorItemIndex = d->model->index(_parent.row() - 1, 0, _parent.parent());
                     }
-                } else {
-                    cursorItemIndex = d->model->index(_parent.row() - 1, 0, _parent.parent());
                 }
+            } else {
+                cursorItemIndex = d->model->index(_parent.row() - 1, 0, _parent.parent());
+            }
+            //
+            bool isFirstParagraph = !cursorItemIndex.isValid();
+            const int cursorPosition = isFirstParagraph ? 0 : itemEndPosition(cursorItemIndex);
+            if (cursorPosition < 0) {
+                return;
+            }
+
+            //
+            // Собственно вставляем контент
+            //
+            QTextCursor cursor(this);
+            cursor.beginEditBlock();
+
+            cursor.setPosition(cursorPosition);
+            if (isFirstParagraph) {
                 //
-                bool isFirstParagraph = !cursorItemIndex.isValid();
-                const int cursorPosition = isFirstParagraph ? 0 : itemEndPosition(cursorItemIndex);
-                if (cursorPosition < 0) {
-                    return;
+                // Если первый параграф, то нужно перенести блок со своими данными дальше
+                //
+                TextBlockData* blockData = nullptr;
+                auto block = cursor.block();
+                if (block.userData() != nullptr) {
+                    blockData = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
+                    block.setUserData(nullptr);
                 }
+                cursor.insertBlock();
+                cursor.block().setUserData(blockData);
+                //
+                // И вернуться назад, для вставки данныхшт
+                //
+                cursor.movePosition(QTextCursor::PreviousBlock);
+                //
+                // Корректируем позиции всех блоков на один символ
+                //
+                d->correctPositionsToItems(0, 1);
+            } else {
+                cursor.movePosition(QTextCursor::EndOfBlock);
+            }
+
+            for (int itemRow = _from; itemRow <= _to; ++itemRow) {
+                d->readModelItemContent(itemRow, _parent, cursor, isFirstParagraph);
 
                 //
-                // Собственно вставляем контент
+                // Считываем информацию о детях
                 //
-                QTextCursor cursor(this);
-                cursor.beginEditBlock();
+                const auto itemIndex = d->model->index(itemRow, 0, _parent);
+                d->readModelItemsContent(itemIndex, cursor, isFirstParagraph);
+            }
 
-                cursor.setPosition(cursorPosition);
-                if (isFirstParagraph) {
-                    //
-                    // Если первый параграф, то нужно перенести блок со своими данными дальше
-                    //
-                    TextBlockData* blockData = nullptr;
-                    auto block = cursor.block();
-                    if (block.userData() != nullptr) {
-                        blockData
-                            = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
-                        block.setUserData(nullptr);
-                    }
-                    cursor.insertBlock();
-                    cursor.block().setUserData(blockData);
-                    //
-                    // И вернуться назад, для вставки данныхшт
-                    //
-                    cursor.movePosition(QTextCursor::PreviousBlock);
-                    //
-                    // Корректируем позиции всех блоков на один символ
-                    //
-                    d->correctPositionsToItems(0, 1);
-                } else {
-                    cursor.movePosition(QTextCursor::EndOfBlock);
-                }
-
-                for (int itemRow = _from; itemRow <= _to; ++itemRow) {
-                    d->readModelItemContent(itemRow, _parent, cursor, isFirstParagraph);
-
-                    //
-                    // Считываем информацию о детях
-                    //
-                    const auto itemIndex = d->model->index(itemRow, 0, _parent);
-                    d->readModelItemsContent(itemIndex, cursor, isFirstParagraph);
-                }
-
-                cursor.endEditBlock();
-            });
+            cursor.endEditBlock();
+        });
     connect(d->model, &SimpleTextModel::rowsAboutToBeRemoved, this,
             [this](const QModelIndex& _parent, int _from, int _to) {
                 if (d->state != DocumentState::Ready) {
@@ -707,12 +705,12 @@ QString SimpleTextDocument::chapterNumber(const QTextBlock& _forBlock) const
     }
 
     auto itemParent = blockData->item()->parent();
-    if (itemParent == nullptr || itemParent->type() != SimpleTextModelItemType::Chapter) {
+    if (itemParent == nullptr || itemParent->type() != TextModelItemType::Group) {
         return {};
     }
 
     auto itemScene = static_cast<SimpleTextModelChapterItem*>(itemParent);
-    return itemScene->number().value;
+    return itemScene->number().text;
 }
 
 QString SimpleTextDocument::mimeFromSelection(int _fromPosition, int _toPosition) const
@@ -947,7 +945,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
         //
         // Собираем элементы которые потенциально могут быть удалены
         //
-        std::map<SimpleTextModelItem*, int> itemsToDelete;
+        std::map<TextModelItem*, int> itemsToDelete;
         {
             auto itemsToDeleteIter = d->positionsToItems.lower_bound(_position);
             while (itemsToDeleteIter != d->positionsToItems.end()
@@ -965,7 +963,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             //
             // Формируем мапу элементов со скорректированными позициями
             //
-            std::map<int, SimpleTextModelItem*> correctedItems;
+            std::map<int, TextModelItem*> correctedItems;
             for (auto itemIter = itemToUpdateIter; itemIter != d->positionsToItems.end();
                  ++itemIter) {
                 correctedItems.emplace(itemIter->first - _charsRemoved + _charsAdded,
@@ -1010,19 +1008,19 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
         //
         // Сначала группируем и "сжимаем" блоки
         //
-        std::map<int, SimpleTextModelItem*> itemsToDeleteSorted;
+        std::map<int, TextModelItem*> itemsToDeleteSorted;
         for (auto [item, position] : itemsToDelete) {
             itemsToDeleteSorted.emplace(position, item);
         }
         //
-        std::map<int, SimpleTextModelItem*> itemsToDeleteCompressed;
+        std::map<int, TextModelItem*> itemsToDeleteCompressed;
         int compressionCycle = 0;
         while (!itemsToDeleteSorted.empty()) {
             //
             // Формируем список идущих подряд элементов
             //
             struct ItemToPosition {
-                SimpleTextModelItem* item;
+                TextModelItem* item;
                 int position;
             };
             QVector<ItemToPosition> itemsGroup;
@@ -1070,7 +1068,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
         //
         // Удаляем все верхнеуровневые элементы, а так же группы сцен и папок любого уровня
         //
-        QVector<SimpleTextModelItem*> itemsToDeleteGroup;
+        QVector<TextModelItem*> itemsToDeleteGroup;
         auto removeGroup = [this, &itemsToDeleteGroup] {
             if (itemsToDeleteGroup.isEmpty()) {
                 return;
@@ -1086,7 +1084,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             // Будем удалять только если элемент лежит в руте, или является папкой, или сценой
             //
             if (removeIter->second->parent()->hasParent()
-                && removeIter->second->type() != SimpleTextModelItemType::Chapter) {
+                && removeIter->second->type() != TextModelItemType::Group) {
                 removeGroup();
                 ++removeIter;
                 continue;
@@ -1116,7 +1114,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             // и перенести элементы к предыдущему группирующему элементу
             //
             bool needToDeleteParent = false;
-            if (item->type() == SimpleTextModelItemType::Text) {
+            if (item->type() == TextModelItemType::Text) {
                 const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
                 needToDeleteParent = textItem->paragraphType() == TextParagraphType::Heading1
                     || textItem->paragraphType() == TextParagraphType::Heading2
@@ -1139,7 +1137,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                 //
                 // Определим предыдущий
                 //
-                SimpleTextModelItem* previousItem = nullptr;
+                TextModelItem* previousItem = nullptr;
                 const int itemRow
                     = itemParent->hasParent() ? itemParent->parent()->rowOfChild(itemParent) : 0;
                 if (itemRow > 0) {
@@ -1150,7 +1148,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                 //
                 // Переносим дочерние элементы на уровень родительского элемента
                 //
-                SimpleTextModelItem* lastMovedItem = nullptr;
+                TextModelItem* lastMovedItem = nullptr;
                 while (itemParent->childCount() > 0) {
                     auto childItem = itemParent->childAt(0);
                     d->model->takeItem(childItem, itemParent);
@@ -1158,7 +1156,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                     //
                     // Главы переносим на один уровень с текущим элементом
                     //
-                    if (childItem->type() == SimpleTextModelItemType::Chapter) {
+                    if (childItem->type() == TextModelItemType::Group) {
                         if (lastMovedItem == nullptr
                             || lastMovedItem->parent() != itemParent->parent()) {
                             d->model->insertItem(childItem, itemParent);
@@ -1176,7 +1174,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                             // Если перед удаляемым была глава, то в её конец
                             //
                             if (previousItem != nullptr
-                                && previousItem->type() == SimpleTextModelItemType::Chapter) {
+                                && previousItem->type() == TextModelItemType::Group) {
                                 d->model->appendItem(childItem, previousItem);
                             }
                             //
@@ -1210,13 +1208,13 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                 // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в
                 // предыдущую главу
                 //
-                if (previousItem != nullptr && previousItem->type() == SimpleTextModelItemType::Chapter) {
+                if (previousItem != nullptr && previousItem->type() == TextModelItemType::Group) {
                     const auto previousItemRow = previousItem->parent()->rowOfChild(previousItem);
                     if (previousItemRow >= 0
                         && previousItemRow < previousItem->parent()->childCount() - 1) {
                         const int nextItemRow = previousItemRow + 1;
                         auto nextItem = previousItem->parent()->childAt(nextItemRow);
-                        while (nextItem != nullptr && nextItem->type() == SimpleTextModelItemType::Text) {
+                        while (nextItem != nullptr && nextItem->type() == TextModelItemType::Text) {
                             d->model->takeItem(nextItem, nextItem->parent());
                             d->model->appendItem(nextItem, previousItem);
                             nextItem = previousItem->parent()->childAt(nextItemRow);
@@ -1234,7 +1232,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
     //
     // ... определим элемент модели для предыдущего блока
     //
-    auto previousItem = [block]() -> SimpleTextModelItem* {
+    auto previousItem = [block]() -> TextModelItem* {
         if (!block.isValid()) {
             return nullptr;
         }
@@ -1258,7 +1256,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             //
             // Создаём группирующий элемент, если создаётся глава
             //
-            SimpleTextModelItem* parentItem = nullptr;
+            TextModelItem* parentItem = nullptr;
             switch (paragraphType) {
             case TextParagraphType::Heading1:
             case TextParagraphType::Heading2:
@@ -1266,7 +1264,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             case TextParagraphType::Heading4:
             case TextParagraphType::Heading5:
             case TextParagraphType::Heading6: {
-                parentItem = new SimpleTextModelChapterItem;
+                parentItem = d->model->createGroupItem();
                 break;
             }
 
@@ -1277,7 +1275,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             //
             // Создаём сам текстовый элемент
             //
-            auto textItem = new SimpleTextModelTextItem;
+            auto textItem = d->model->createTextItem();
             textItem->setParagraphType(paragraphType);
             if (d->documentTemplate().paragraphStyle(paragraphType).align()
                 != block.blockFormat().alignment()) {
@@ -1286,7 +1284,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                 textItem->clearAlignment();
             }
             textItem->setText(block.text());
-            textItem->setFormats(block.textFormats(), block.charFormat());
+            textItem->setFormats(block.textFormats());
             textItem->setReviewMarks(block.textFormats());
 
             //
@@ -1302,7 +1300,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                 if (previousItem != nullptr) {
                     auto previousTextItemParent = previousItem->parent();
                     Q_ASSERT(previousTextItemParent);
-                    Q_ASSERT(previousTextItemParent->type() == SimpleTextModelItemType::Chapter);
+                    Q_ASSERT(previousTextItemParent->type() == TextModelItemType::Group);
 
                     //
                     // Если элемент вставляется после главы с таким же уровнем,
@@ -1325,10 +1323,10 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                     else {
                         auto previousChapterItemParent = previousChapterItem->parent();
                         while (previousChapterItemParent != nullptr) {
-                            Q_ASSERT(previousChapterItemParent->type()
-                                     == SimpleTextModelItemType::Chapter);
+                            Q_ASSERT(previousChapterItemParent->type() == TextModelItemType::Group);
                             const auto grandPreviousChapterItem
-                                = static_cast<SimpleTextModelChapterItem*>(previousChapterItemParent);
+                                = static_cast<SimpleTextModelChapterItem*>(
+                                    previousChapterItemParent);
 
                             //
                             // Если уровень деда такой же, то вставляем его на том же уровне
@@ -1411,7 +1409,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                         }
 
                         if (previousItem != nullptr) {
-                            if (grandParentItem->type() == SimpleTextModelItemType::Chapter) {
+                            if (grandParentItem->type() == TextModelItemType::Group) {
                                 return grandParentItem->rowOfChild(previousItem) + indexDelta;
                             }
                         }
@@ -1424,7 +1422,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                     //
                     while (grandParentItem->childCount() > itemIndex) {
                         auto grandParentChildItem = grandParentItem->childAt(itemIndex);
-                        if (grandParentChildItem->type() == SimpleTextModelItemType::Chapter) {
+                        if (grandParentChildItem->type() == TextModelItemType::Group) {
                             auto grandParentChildChapter
                                 = static_cast<SimpleTextModelChapterItem*>(grandParentChildItem);
                             if (grandParentChildChapter->level() <= parentItemLevel) {
@@ -1470,7 +1468,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             auto blockData = static_cast<TextBlockData*>(block.userData());
             auto item = blockData->item();
 
-            if (item->type() == SimpleTextModelItemType::Text) {
+            if (item->type() == TextModelItemType::Text) {
                 auto textItem = static_cast<SimpleTextModelTextItem*>(item);
                 textItem->setParagraphType(paragraphType);
                 if (d->documentTemplate().paragraphStyle(paragraphType).align()
@@ -1480,7 +1478,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                     textItem->clearAlignment();
                 }
                 textItem->setText(block.text());
-                textItem->setFormats(block.textFormats(), block.charFormat());
+                textItem->setFormats(block.textFormats());
                 textItem->setReviewMarks(block.textFormats());
             }
 

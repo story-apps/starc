@@ -7,18 +7,18 @@
 
 namespace BusinessLayer {
 
-class SimpleTextModelItem;
+class TextModelItem;
 
 class CORE_LIBRARY_EXPORT TextBlockData : public QTextBlockUserData
 {
 public:
-    explicit TextBlockData(BusinessLayer::SimpleTextModelItem* _item);
+    explicit TextBlockData(BusinessLayer::TextModelItem* _item);
     explicit TextBlockData(const TextBlockData* _other);
 
-    BusinessLayer::SimpleTextModelItem* item() const;
+    BusinessLayer::TextModelItem* item() const;
 
 private:
-    BusinessLayer::SimpleTextModelItem* m_item = nullptr;
+    BusinessLayer::TextModelItem* m_item = nullptr;
 };
 
 } // namespace BusinessLayer

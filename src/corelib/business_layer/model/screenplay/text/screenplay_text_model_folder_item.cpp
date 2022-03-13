@@ -31,6 +31,7 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const ScreenplayTex
     : TextModelFolderItem(_model)
     , d(new Implementation)
 {
+    setFolderType(TextFolderType::Sequence);
 }
 
 ScreenplayTextModelFolderItem::~ScreenplayTextModelFolderItem() = default;

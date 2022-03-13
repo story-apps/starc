@@ -17,10 +17,10 @@
 #include <QTextBlock>
 #include <QTimer>
 
-using BusinessLayer::TextBlockStyle;
 using BusinessLayer::ScreenplayCharacterParser;
-using BusinessLayer::TextParagraphType;
 using BusinessLayer::ScreenplaySceneCharactersParser;
+using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
@@ -126,8 +126,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                 //
                 // Cменить стиль
                 //
-                editor()->setCurrentParagraphType(
-                    changeForEnter(TextParagraphType::Character));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Character));
             } else {
                 //! Текст не пуст
 
@@ -320,10 +319,8 @@ void CharacterHandler::complete(const QString& _currentBlockText,
         //
         cursor.movePosition(QTextCursor::PreviousBlock);
         while (!cursor.atStart()
-               && TextBlockStyle::forBlock(cursor.block())
-                   != TextParagraphType::SceneHeading) {
-            if (TextBlockStyle::forBlock(cursor.block())
-                == TextParagraphType::Character) {
+               && TextBlockStyle::forBlock(cursor.block()) != TextParagraphType::SceneHeading) {
+            if (TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::Character) {
                 const QString characterName
                     = ScreenplayCharacterParser::name(cursor.block().text());
                 if (!characterName.isEmpty() && !charactersToComplete.contains(characterName)) {

@@ -31,8 +31,8 @@
 #include <QScrollBar>
 #include <QTextTable>
 
-using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TemplatesFacade;
+using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextCursor;
 using BusinessLayer::TextParagraphType;
 
@@ -155,7 +155,7 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
     //
     if (d->model && d->model->rowCount() == 1) {
         const auto item = d->model->itemForIndex(d->model->index(0, 0));
-        if (item->type() == BusinessLayer::SimpleTextModelItemType::Text) {
+        if (item->type() == BusinessLayer::TextModelItemType::Text) {
             const auto textItem = static_cast<BusinessLayer::SimpleTextModelTextItem*>(item);
             if (textItem->text().isEmpty()) {
                 restoreFromTemplate();

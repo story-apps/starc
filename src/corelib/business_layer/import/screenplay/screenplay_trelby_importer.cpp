@@ -3,7 +3,7 @@
 #include "screenlay_import_options.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
-#include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
+#include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <domain/document_object.h>
 
@@ -220,7 +220,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayTrelbyImporter::import
                 }
                 alreadyInScene = true;
 
-                writer.writeStartElement(xml::kSceneTag);
+                writer.writeStartElement(toString(TextGroupType::Scene));
                 writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
                 writer.writeStartElement(xml::kContentTag);
             }

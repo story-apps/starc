@@ -29,12 +29,6 @@ public:
     void setInformationModel(ScreenplayInformationModel* _model);
     ScreenplayInformationModel* informationModel() const;
 
-protected:
-    /**
-     * @brief Реализуем собственную инициализацию для пустого документа
-     */
-    void initDocument() override;
-
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

@@ -4,7 +4,7 @@
 
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
-#include <business_layer/model/screenplay/text/screenplay_text_model_xml.h>
+#include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <domain/document_object.h>
 #include <utils/helpers/text_helper.h>
@@ -264,7 +264,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayCeltxImporter::importS
             }
             alreadyInScene = true;
 
-            writer.writeStartElement(xml::kSceneTag);
+            writer.writeStartElement(toString(TextGroupType::Scene));
             writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
             writer.writeStartElement(xml::kContentTag);
         }

@@ -665,7 +665,7 @@ TextTemplate::Implementation::Implementation()
 void TextTemplate::Implementation::buildTitlePageTemplate()
 {
     if (titlePageTemplate.isNull()) {
-        titlePageTemplate.reset(new TextTemplate);
+        return;
     }
 
     titlePageTemplate->setPageSizeId(pageSizeId);
@@ -705,7 +705,7 @@ void TextTemplate::Implementation::buildTitlePageTemplate()
 void TextTemplate::Implementation::buildSynopsisTemplate()
 {
     if (synopsisTemplate.isNull()) {
-        synopsisTemplate.reset(new TextTemplate);
+        return;
     }
 
     synopsisTemplate->setPageSizeId(pageSizeId);
@@ -1019,6 +1019,7 @@ qreal TextTemplate::pageSplitterWidth() const
 const TextTemplate& TextTemplate::titlePageTemplate() const
 {
     if (d->titlePageTemplate.isNull()) {
+        d->titlePageTemplate.reset(new TextTemplate);
         d->buildTitlePageTemplate();
     }
 
@@ -1038,6 +1039,7 @@ void TextTemplate::setTitlePage(const QString& _titlePage)
 const TextTemplate& TextTemplate::synopsisTemplate() const
 {
     if (d->synopsisTemplate.isNull()) {
+        d->synopsisTemplate.reset(new TextTemplate);
         d->buildSynopsisTemplate();
     }
 

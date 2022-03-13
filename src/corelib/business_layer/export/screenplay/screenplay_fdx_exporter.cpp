@@ -275,8 +275,7 @@ void writeTitlePage(QXmlStreamWriter& _writer, ScreenplayTextDocument* _screenpl
     // Данные титульной страницы считываются из исходного документа, до момент начала сценария
     //
     auto block = _screenplayText->begin();
-    while (block.isValid()
-           && TextBlockStyle::forBlock(block) == TextParagraphType::Undefined) {
+    while (block.isValid() && TextBlockStyle::forBlock(block) == TextParagraphType::Undefined) {
         writeLine(_writer, block, _exportOptions);
 
         block = block.next();

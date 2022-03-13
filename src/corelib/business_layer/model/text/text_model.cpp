@@ -1166,10 +1166,17 @@ void TextModel::applyPatch(const QByteArray& _patch)
     //
     // Считываем элементы из обоих изменений для дальнейшего определения необходимых изменений
     //
-    auto readItems = [this](const QString& _xml) {
+    auto readItems = [this](const QString& _xml) -> QVector<TextModelItem*> {
         QXmlStreamReader _reader(_xml);
         xml::readNextElement(_reader); // document
         xml::readNextElement(_reader);
+
+        //
+        // Если попался пустой документ
+        //
+        if (_reader.name() == xml::kDocumentTag) {
+            return {};
+        }
 
         QVector<TextModelItem*> items;
         while (!_reader.atEnd()) {

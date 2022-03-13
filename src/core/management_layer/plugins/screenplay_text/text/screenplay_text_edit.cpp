@@ -31,9 +31,9 @@
 #include <QTextTable>
 #include <QTimer>
 
+using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
-using BusinessLayer::TemplatesFacade;
 
 namespace Ui {
 
@@ -448,12 +448,11 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
             moveCursor(QTextCursor::PreviousCharacter);
         }
 
-        while (!textCursor().atEnd()
-               && (!textCursor().block().isVisible()
-                   || TextBlockStyle::forBlock(textCursor().block())
-                       == TextParagraphType::PageSplitter
-                   || textCursor().blockFormat().boolProperty(
-                       TextBlockStyle::PropertyIsCorrection))) {
+        while (
+            !textCursor().atEnd()
+            && (!textCursor().block().isVisible()
+                || TextBlockStyle::forBlock(textCursor().block()) == TextParagraphType::PageSplitter
+                || textCursor().blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection))) {
             moveCursor(QTextCursor::NextBlock);
         }
     }
@@ -466,12 +465,11 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         } else {
             moveCursor(QTextCursor::NextCharacter);
         }
-        while (!textCursor().atStart()
-               && (!textCursor().block().isVisible()
-                   || TextBlockStyle::forBlock(textCursor().block())
-                       == TextParagraphType::PageSplitter
-                   || textCursor().blockFormat().boolProperty(
-                       TextBlockStyle::PropertyIsCorrection))) {
+        while (
+            !textCursor().atStart()
+            && (!textCursor().block().isVisible()
+                || TextBlockStyle::forBlock(textCursor().block()) == TextParagraphType::PageSplitter
+                || textCursor().blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection))) {
             moveCursor(QTextCursor::StartOfBlock);
             if (textCursor().block().textDirection() == Qt::LeftToRight) {
                 moveCursor(QTextCursor::PreviousCharacter);
@@ -838,8 +836,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     //
                     // Прорисовка декораций пустой строки
                     //
-                    if (!block.blockFormat().boolProperty(
-                            TextBlockStyle::PropertyIsCorrection)
+                    if (!block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                         && blockType != TextParagraphType::PageSplitter
                         && block.text().simplified().isEmpty()) {
                         //
@@ -855,16 +852,14 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             auto headerBlock = block.previous();
                             int openedFolders = 0;
                             while (headerBlock.isValid()) {
-                                const auto headerBlockType
-                                    = TextBlockStyle::forBlock(headerBlock);
+                                const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
                                 if (headerBlockType == TextParagraphType::SequenceHeader) {
                                     if (openedFolders > 0) {
                                         --openedFolders;
                                     } else {
                                         break;
                                     }
-                                } else if (headerBlockType
-                                           == TextParagraphType::SequenceFooter) {
+                                } else if (headerBlockType == TextParagraphType::SequenceFooter) {
                                     ++openedFolders;
                                 }
 
@@ -962,8 +957,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Прорисовка номеров сцен, если необходимо
                         //
-                        if (d->showSceneNumber
-                            && blockType == TextParagraphType::SceneHeading) {
+                        if (d->showSceneNumber && blockType == TextParagraphType::SceneHeading) {
                             //
                             // Определим номер сцены
                             //
@@ -1011,8 +1005,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Прорисовка номеров реплик, если необходимо
                         //
-                        if (d->showDialogueNumber
-                            && blockType == TextParagraphType::Character) {
+                        if (d->showDialogueNumber && blockType == TextParagraphType::Character) {
                             //
                             // Определим номер реплики
                             //
@@ -1098,8 +1091,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         // ... префикс
                         //
                         if (block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)) {
-                            const auto prefix = block.charFormat().stringProperty(
-                                TextBlockStyle::PropertyPrefix);
+                            const auto prefix
+                                = block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
                             const QPoint topLeft = block.text().isRightToLeft()
                                 ? QPoint(cursorREnd.left()
                                              - painter.fontMetrics().horizontalAdvance(prefix),

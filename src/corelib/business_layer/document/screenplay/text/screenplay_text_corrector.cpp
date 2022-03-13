@@ -18,10 +18,10 @@
 
 #include <cmath>
 
-using BusinessLayer::TextBlockStyle;
 using BusinessLayer::ScreenplayCharacterParser;
-using BusinessLayer::TextParagraphType;
 using BusinessLayer::TemplatesFacade;
+using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextParagraphType;
 
 
 namespace BusinessLayer {
@@ -367,8 +367,8 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
                     QTextBlockFormat characterFormat = block.blockFormat();
                     if (characterFormat.boolProperty(
                             TextBlockStyle::PropertyIsCharacterContinued)) {
-                        characterFormat.setProperty(
-                            TextBlockStyle::PropertyIsCharacterContinued, false);
+                        characterFormat.setProperty(TextBlockStyle::PropertyIsCharacterContinued,
+                                                    false);
                         cursor.setPosition(block.position());
                         cursor.setBlockFormat(characterFormat);
                     }
@@ -383,8 +383,8 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
                     if (characterState.isEmpty()
                         && !characterFormat.boolProperty(
                             TextBlockStyle::PropertyIsCharacterContinued)) {
-                        characterFormat.setProperty(
-                            TextBlockStyle::PropertyIsCharacterContinued, true);
+                        characterFormat.setProperty(TextBlockStyle::PropertyIsCharacterContinued,
+                                                    true);
                         cursor.setPosition(block.position());
                         cursor.setBlockFormat(characterFormat);
                     }
@@ -414,8 +414,7 @@ void ScreenplayTextCorrector::Implementation::clearCharacterNamesCorrections()
         if (blockType == TextParagraphType::Character) {
             auto characterFormat = block.blockFormat();
             if (characterFormat.boolProperty(TextBlockStyle::PropertyIsCharacterContinued)) {
-                characterFormat.setProperty(TextBlockStyle::PropertyIsCharacterContinued,
-                                            false);
+                characterFormat.setProperty(TextBlockStyle::PropertyIsCharacterContinued, false);
                 cursor.setPosition(block.position());
                 cursor.setBlockFormat(characterFormat);
             }
@@ -494,8 +493,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     if (_position != -1) {
         auto block = document->findBlock(_position);
         if (block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionStart)
-            || block.blockFormat().boolProperty(
-                TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
+            || block.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
             //
             // ... два вперёд и два назад, включая текущий получается 5
             //
@@ -512,14 +510,13 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             do {
                 blockItems[block.blockNumber()] = {};
                 block = block.previous();
-            } while (
-                block.isValid()
-                && (replies-- > 0
-                    || block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
-                    || block.blockFormat().boolProperty(
-                        TextBlockStyle::PropertyIsBreakCorrectionStart)
-                    || block.blockFormat().boolProperty(
-                        TextBlockStyle::PropertyIsBreakCorrectionEnd)));
+            } while (block.isValid()
+                     && (replies-- > 0
+                         || block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
+                         || block.blockFormat().boolProperty(
+                             TextBlockStyle::PropertyIsBreakCorrectionStart)
+                         || block.blockFormat().boolProperty(
+                             TextBlockStyle::PropertyIsBreakCorrectionEnd)));
         }
     }
 
@@ -707,8 +704,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 //
                 // Контролируем, чтобы расположение блоков не переходило через границу таблицы
                 //
-                if (TextBlockStyle::forBlock(block.previous())
-                    == TextParagraphType::PageSplitter) {
+                if (TextBlockStyle::forBlock(block.previous()) == TextParagraphType::PageSplitter) {
                     break;
                 }
 
@@ -783,10 +779,9 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                     // ... восстанавливаем последнюю высоту от предыдущего элемента
                     //
                     lastBlockHeight = blockItems[currentBlockInfo.number].top;
-                } while (
-                    cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
-                    && !cursor.blockFormat().boolProperty(
-                        TextBlockStyle::PropertyIsBreakCorrectionStart));
+                } while (cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
+                         && !cursor.blockFormat().boolProperty(
+                             TextBlockStyle::PropertyIsBreakCorrectionStart));
             }
 
             //
@@ -800,8 +795,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             //
             // ... если дошли до конца разрыва, то сшиваем его
             //
-            if (cursor.blockFormat().boolProperty(
-                    TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
+            if (cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
                 cursor.insertText(" ");
             }
             //
@@ -815,14 +809,13 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                     //     когда был нажат энтер в блоке начала разрыва и нужно перенести флаг
                     //     разрыва в следующий за текущим блок
                     //
-                    if (cursor.blockFormat().boolProperty(
-                            TextBlockStyle::PropertyIsCorrection)
+                    if (cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                         || cursor.blockFormat().boolProperty(
                             TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
                         cursor.movePosition(QTextCursor::PreviousBlock);
                         QTextBlockFormat breakStartFormat = cursor.blockFormat();
-                        breakStartFormat.setProperty(
-                            TextBlockStyle::PropertyIsBreakCorrectionStart, true);
+                        breakStartFormat.setProperty(TextBlockStyle::PropertyIsBreakCorrectionStart,
+                                                     true);
                         cursor.setBlockFormat(breakStartFormat);
                     }
                     //
@@ -918,8 +911,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 // Если перед ним идёт время и место, переносим его тоже
                 //
                 if (previousBlock.isValid()
-                    && TextBlockStyle::forBlock(previousBlock)
-                        == TextParagraphType::SceneHeading) {
+                    && TextBlockStyle::forBlock(previousBlock) == TextParagraphType::SceneHeading) {
                     moveCurrentBlockWithPreviousToNextPage(previousBlock, pageHeight,
                                                            currentBlockWidth(), cursor, block,
                                                            lastBlockHeight);
@@ -947,8 +939,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 // Если перед ним идёт время и место, переносим его тоже
                 //
                 if (previousBlock.isValid()
-                    && TextBlockStyle::forBlock(previousBlock)
-                        == TextParagraphType::SceneHeading) {
+                    && TextBlockStyle::forBlock(previousBlock) == TextParagraphType::SceneHeading) {
                     moveCurrentBlockWithPreviousToNextPage(previousBlock, pageHeight,
                                                            currentBlockWidth(), cursor, block,
                                                            lastBlockHeight);
@@ -1007,10 +998,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 // и переносим на следующую страницу вставляя ПЕРСОНАЖ (ПРОД.) перед ремаркой
                 //
                 if (previousBlock.isValid()
-                    && (TextBlockStyle::forBlock(previousBlock)
-                            == TextParagraphType::Dialogue
-                        || TextBlockStyle::forBlock(previousBlock)
-                            == TextParagraphType::Lyrics)) {
+                    && (TextBlockStyle::forBlock(previousBlock) == TextParagraphType::Dialogue
+                        || TextBlockStyle::forBlock(previousBlock) == TextParagraphType::Lyrics)) {
                     breakDialogue(blockFormat, blockHeight, pageHeight, currentBlockWidth(), cursor,
                                   block, lastBlockHeight);
                 }
@@ -1177,8 +1166,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                             cursor.setBlockFormat(breakStartFormat);
                             //
                             QTextBlockFormat breakEndFormat = blockFormat;
-                            breakEndFormat.setProperty(
-                                TextBlockStyle::PropertyIsBreakCorrectionEnd, true);
+                            breakEndFormat.setProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd,
+                                                       true);
                             cursor.movePosition(ScreenplayTextCursor::NextBlock);
                             cursor.setBlockFormat(breakEndFormat);
                             //
@@ -1409,8 +1398,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                             cursor.setBlockFormat(breakStartFormat);
                             //
                             QTextBlockFormat breakEndFormat = blockFormat;
-                            breakEndFormat.setProperty(
-                                TextBlockStyle::PropertyIsBreakCorrectionEnd, true);
+                            breakEndFormat.setProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd,
+                                                       true);
                             cursor.movePosition(ScreenplayTextCursor::NextBlock);
                             cursor.setBlockFormat(breakEndFormat);
                             //
@@ -1649,8 +1638,8 @@ void ScreenplayTextCorrector::Implementation::moveCurrentBlockToNextPage(
     //
     // Запоминаем параметры текущего блока
     //
-    blockItems[currentBlockInfo.number++] = BlockInfo{ _blockHeight - _blockFormat.topMargin(), 0,
-                                                       TextBlockStyle::forBlock(_block) };
+    blockItems[currentBlockInfo.number++]
+        = BlockInfo{ _blockHeight - _blockFormat.topMargin(), 0, TextBlockStyle::forBlock(_block) };
 
     if (_blockHeight < _pageHeight) {
         //
@@ -1716,8 +1705,7 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(
     QTextBlock characterBlock = _block.previous();
     while (characterBlock.isValid()
            && (characterBlock.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
-               || TextBlockStyle::forBlock(characterBlock)
-                   != TextParagraphType::Character)) {
+               || TextBlockStyle::forBlock(characterBlock) != TextParagraphType::Character)) {
         characterBlock = characterBlock.previous();
     }
     //
@@ -1765,9 +1753,8 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(
     // А если не нашли то оставляем блок прямо сверху страницы
     //
     else {
-        blockItems[currentBlockInfo.number++]
-            = BlockInfo{ _blockHeight - _blockFormat.topMargin(), 0,
-                         TextBlockStyle::forBlock(_block) };
+        blockItems[currentBlockInfo.number++] = BlockInfo{ _blockHeight - _blockFormat.topMargin(),
+                                                           0, TextBlockStyle::forBlock(_block) };
         _lastBlockHeight = _blockHeight - _blockFormat.topMargin();
     }
 }

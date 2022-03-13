@@ -134,8 +134,7 @@ void UnformattedTextHandler::handleTab(QKeyEvent*)
                 //
                 // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(
-                    changeForTab(TextParagraphType::UnformattedText));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::UnformattedText));
             } else {
                 //! Текст не пуст
 

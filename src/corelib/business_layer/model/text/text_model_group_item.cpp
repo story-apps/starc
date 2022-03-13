@@ -212,6 +212,11 @@ QString TextModelGroupItem::heading() const
     return d->heading;
 }
 
+QString TextModelGroupItem::text() const
+{
+    return d->text;
+}
+
 QVariant TextModelGroupItem::data(int _role) const
 {
     switch (_role) {

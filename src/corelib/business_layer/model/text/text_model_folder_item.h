@@ -10,10 +10,12 @@ class QXmlStreamReader;
 
 namespace BusinessLayer {
 
+enum class TextFolderType;
+
 /**
  * @brief Класс элементов папок модели текста
  */
-class TextModelFolderItem : public TextModelItem
+class CORE_LIBRARY_EXPORT TextModelFolderItem : public TextModelItem
 {
 public:
     /**
@@ -28,6 +30,12 @@ public:
 public:
     explicit TextModelFolderItem(const TextModel* _model);
     ~TextModelFolderItem() override;
+
+    /**
+     * @brief Тип группы
+     */
+    const TextFolderType& folderType() const;
+    void setFolderType(TextFolderType _type);
 
     /**
      * @brief Название папки

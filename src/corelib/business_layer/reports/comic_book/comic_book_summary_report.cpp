@@ -87,9 +87,8 @@ void ComicBookSummaryReport::build(QAbstractItemModel* _model)
     };
     QHash<TextParagraphType, Counters> paragraphsToCounters;
     const QVector<TextParagraphType> paragraphTypes = {
-        TextParagraphType::Page,        TextParagraphType::Panel,
-        TextParagraphType::Description, TextParagraphType::Character,
-        TextParagraphType::Dialogue,
+        TextParagraphType::Page,      TextParagraphType::Panel,    TextParagraphType::Description,
+        TextParagraphType::Character, TextParagraphType::Dialogue,
     };
     for (const auto type : paragraphTypes) {
         paragraphsToCounters.insert(type, {});

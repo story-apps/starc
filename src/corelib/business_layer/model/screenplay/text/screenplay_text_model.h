@@ -11,7 +11,6 @@ class LocationModel;
 class LocationsModel;
 class ScreenplayDictionariesModel;
 class ScreenplayInformationModel;
-class TextModelItem;
 
 /**
  * @brief Модель текста сценария

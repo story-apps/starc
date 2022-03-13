@@ -229,8 +229,7 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
             auto topBlock = document()->findBlock(topCursorPosition);
             auto bottomBlock = document()->findBlock(bottomCursorPosition);
             if (TextBlockStyle::forBlock(topBlock) == TextParagraphType::SequenceHeader
-                && TextBlockStyle::forBlock(bottomBlock)
-                    == TextParagraphType::SequenceFooter
+                && TextBlockStyle::forBlock(bottomBlock) == TextParagraphType::SequenceFooter
                 && topBlock == document()->begin() && bottomBlock.next() == document()->end()) {
                 //
                 // Нельзя просто взять и удалить весь текст, потому что тогда останется блок

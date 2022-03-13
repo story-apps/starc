@@ -1,7 +1,6 @@
 #include "screenplay_text_model_text_item.h"
 
 #include "screenplay_text_model.h"
-#include "screenplay_text_model_xml.h"
 
 #include <business_layer/chronometry/chronometer.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>

@@ -4,8 +4,6 @@
 
 #include <chrono>
 
-class QXmlStreamReader;
-
 
 namespace BusinessLayer {
 

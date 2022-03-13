@@ -17,25 +17,4 @@ void ComicBookTitlePageModel::setDocumentName(const QString& _name)
     Q_UNUSED(_name);
 }
 
-void ComicBookTitlePageModel::initDocument()
-{
-    //
-    // Если документ пустой, создаём первоначальную структуру
-    //
-    if (document()->content().isEmpty()) {
-        //
-        // FIXME: подгрузка структуры из шаблона сценария
-        //
-        auto textItem = new SimpleTextModelTextItem;
-        textItem->setParagraphType(TextParagraphType::Text);
-        appendItem(textItem);
-    }
-    //
-    // А если данные есть, то загрузим их из документа
-    //
-    else {
-        SimpleTextModel::initDocument();
-    }
-}
-
 } // namespace BusinessLayer

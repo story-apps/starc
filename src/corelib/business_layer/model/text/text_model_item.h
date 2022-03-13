@@ -12,7 +12,7 @@ class TextModel;
 /**
  * @brief Перечисление типов элементов модели текста
  */
-enum class TextModelItemType {
+enum class CORE_LIBRARY_EXPORT TextModelItemType {
     //
     // Элементы имеющие открывающий и закрывающий блоки (Акты и папки)
     //
@@ -35,7 +35,7 @@ enum class TextModelItemType {
 /**
  * @brief Базовый класс элемента модели текста
  */
-class TextModelItem : public AbstractModelItem
+class CORE_LIBRARY_EXPORT TextModelItem : public AbstractModelItem
 {
 public:
     TextModelItem(TextModelItemType _type, const TextModel* _model);

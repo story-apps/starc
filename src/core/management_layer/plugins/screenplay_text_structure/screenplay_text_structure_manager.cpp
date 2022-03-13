@@ -132,8 +132,7 @@ void ScreenplayTextStructureManager::Implementation::updateContextMenu(
                             const auto folderItem
                                 = static_cast<BusinessLayer::ScreenplayTextModelFolderItem*>(item);
                             folderItem->setColor(_color);
-                        } else if (item->type()
-                                   == BusinessLayer::TextModelItemType::Group) {
+                        } else if (item->type() == BusinessLayer::TextModelItemType::Group) {
                             const auto sceneItem
                                 = static_cast<BusinessLayer::ScreenplayTextModelSceneItem*>(item);
                             sceneItem->setColor(_color);

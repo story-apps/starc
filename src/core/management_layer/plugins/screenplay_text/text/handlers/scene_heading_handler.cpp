@@ -12,8 +12,8 @@
 #include <QTextBlock>
 #include <QTimer>
 
-using BusinessLayer::TextParagraphType;
 using BusinessLayer::ScreenplaySceneHeadingParser;
+using BusinessLayer::TextParagraphType;
 using Ui::ScreenplayTextEdit;
 
 
@@ -113,8 +113,7 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
                 //
                 // Меняем в соответствии с настройками
                 //
-                editor()->setCurrentParagraphType(
-                    changeForEnter(TextParagraphType::SceneHeading));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::SceneHeading));
             } else {
                 //! Текст не пуст
 
@@ -193,8 +192,7 @@ void SceneHeadingHandler::handleTab(QKeyEvent*)
                 //
                 // Если строка пуста, то сменить стиль на описание действия
                 //
-                editor()->setCurrentParagraphType(
-                    changeForTab(TextParagraphType::SceneHeading));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::SceneHeading));
             } else {
                 //! Текст не пуст
 

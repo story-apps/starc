@@ -68,8 +68,7 @@ void ParentheticalHandler::handleEnter(QKeyEvent*)
                 //
                 // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(
-                    changeForEnter(TextParagraphType::Parenthetical));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Parenthetical));
             } else {
                 //! Текст не пуст
 
@@ -162,8 +161,7 @@ void ParentheticalHandler::handleTab(QKeyEvent*)
                 //
                 // Меняем стиль на реплику
                 //
-                editor()->setCurrentParagraphType(
-                    changeForTab(TextParagraphType::Parenthetical));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Parenthetical));
             } else {
                 //! Текст не пуст
 

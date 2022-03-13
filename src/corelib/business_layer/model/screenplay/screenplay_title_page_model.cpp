@@ -39,25 +39,4 @@ ScreenplayInformationModel* ScreenplayTitlePageModel::informationModel() const
     return d->informationModel;
 }
 
-void ScreenplayTitlePageModel::initDocument()
-{
-    //
-    // Если документ пустой, создаём первоначальную структуру
-    //
-    if (document()->content().isEmpty()) {
-        //
-        // FIXME: подгрузка структуры из шаблона сценария
-        //
-        auto textItem = new SimpleTextModelTextItem;
-        textItem->setParagraphType(TextParagraphType::Text);
-        appendItem(textItem);
-    }
-    //
-    // А если данные есть, то загрузим их из документа
-    //
-    else {
-        SimpleTextModel::initDocument();
-    }
-}
-
 } // namespace BusinessLayer

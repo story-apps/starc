@@ -136,8 +136,7 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
                 //
                 // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(
-                    changeForTab(TextParagraphType::SequenceHeader));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::SequenceHeader));
             } else {
                 //! Текст не пуст
 

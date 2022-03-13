@@ -1,7 +1,6 @@
 #include "simple_text_structure_model.h"
 
 #include <business_layer/model/simple_text/simple_text_model.h>
-#include <business_layer/model/simple_text/simple_text_model_item.h>
 #include <business_layer/model/simple_text/simple_text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 
@@ -51,7 +50,7 @@ bool SimpleTextStructureModel::filterAcceptsRow(int _sourceRow,
     //
     // Показываем главы
     //
-    if (item->type() == SimpleTextModelItemType::Chapter) {
+    if (item->type() == TextModelItemType::Group) {
         return true;
     }
     //

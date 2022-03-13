@@ -276,8 +276,7 @@ QJsonObject getCharacters(const QString& _starcFileName)
     QStringList sceneNonspeakingCharacters;
     std::function<void(const TextModelItem*)> findCharacters;
     findCharacters = [&findCharacters, &charactersStatistics, &characters, &sceneSpeakingCharacters,
-                      &sceneNonspeakingCharacters,
-                      &rxCharacterFinder](const TextModelItem* _item) {
+                      &sceneNonspeakingCharacters, &rxCharacterFinder](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
@@ -685,8 +684,7 @@ QJsonObject printScene(const QString& _starcFileName, const QString& _screenplay
         screenplayModel.setInformationModel(&informationsModel);
         screenplayModel.setDocument(screenplayDocument);
         std::function<QString(const TextModelItem*)> findSceneNumber;
-        findSceneNumber
-            = [&findSceneNumber, _sceneUuid](const TextModelItem* _item) -> QString {
+        findSceneNumber = [&findSceneNumber, _sceneUuid](const TextModelItem* _item) -> QString {
             for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
                 auto childItem = _item->childAt(childIndex);
                 switch (childItem->type()) {

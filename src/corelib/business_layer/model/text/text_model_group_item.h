@@ -83,6 +83,11 @@ public:
     QString heading() const;
 
     /**
+     * @brief Текст группы
+     */
+    QString text() const;
+
+    /**
      * @brief Определяем интерфейс получения данных группы
      */
     QVariant data(int _role) const override;

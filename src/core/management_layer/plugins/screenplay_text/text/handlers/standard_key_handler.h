@@ -24,8 +24,7 @@ protected:
      * @brief Получить стиль блока к которому переходить
      */
     /** @{ */
-    static BusinessLayer::TextParagraphType jumpForTab(
-        BusinessLayer::TextParagraphType _blockType);
+    static BusinessLayer::TextParagraphType jumpForTab(BusinessLayer::TextParagraphType _blockType);
     static BusinessLayer::TextParagraphType jumpForEnter(
         BusinessLayer::TextParagraphType _blockType);
     static BusinessLayer::TextParagraphType changeForTab(

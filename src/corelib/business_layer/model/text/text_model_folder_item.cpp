@@ -23,7 +23,7 @@ public:
     /**
      * @brief Тип папки
      */
-    TextFolderType groupType = TextFolderType::Undefined;
+    TextFolderType folderType = TextFolderType::Undefined;
 
     /**
      * @brief Идентификатор папки
@@ -56,6 +56,21 @@ TextModelFolderItem::TextModelFolderItem(const TextModel* _model)
 }
 
 TextModelFolderItem::~TextModelFolderItem() = default;
+
+const TextFolderType& TextModelFolderItem::folderType() const
+{
+    return d->folderType;
+}
+
+void TextModelFolderItem::setFolderType(TextFolderType _type)
+{
+    if (d->folderType == _type) {
+        return;
+    }
+
+    d->folderType = _type;
+    setChanged(true);
+}
 
 QString TextModelFolderItem::heading() const
 {
@@ -100,8 +115,8 @@ QVariant TextModelFolderItem::data(int _role) const
 
 void TextModelFolderItem::readContent(QXmlStreamReader& _contentReader)
 {
-    d->groupType = textFolderTypeFromString(_contentReader.name().toString());
-    Q_ASSERT(d->groupType != TextFolderType::Undefined);
+    d->folderType = textFolderTypeFromString(_contentReader.name().toString());
+    Q_ASSERT(d->folderType != TextFolderType::Undefined);
 
     if (_contentReader.attributes().hasAttribute(xml::kUuidAttribute)) {
         d->uuid
@@ -166,7 +181,7 @@ QByteArray TextModelFolderItem::toXml(TextModelItem* _from, int _fromPosition, T
 {
     auto folderFooterXml = [this] {
         TextModelTextItem item(model());
-        item.setParagraphType(d->groupType == TextFolderType::Act
+        item.setParagraphType(d->folderType == TextFolderType::Act
                                   ? TextParagraphType::ActFooter
                                   : TextParagraphType::SequenceFooter);
         return item.toXml();
@@ -246,7 +261,7 @@ QByteArray TextModelFolderItem::toXml(TextModelItem* _from, int _fromPosition, T
         }
     }
     xml += QString("</%1>\n").arg(xml::kContentTag).toUtf8();
-    xml += QString("</%1>\n").arg(toString(d->groupType)).toUtf8();
+    xml += QString("</%1>\n").arg(toString(d->folderType)).toUtf8();
 
     return xml.data();
 }
@@ -255,7 +270,7 @@ QByteArray TextModelFolderItem::xmlHeader(bool _clearUuid) const
 {
     QByteArray xml;
     xml += QString("<%1 %2=\"%3\">\n")
-               .arg(toString(d->groupType), xml::kUuidAttribute,
+               .arg(toString(d->folderType), xml::kUuidAttribute,
                     _clearUuid ? QUuid::createUuid().toString() : d->uuid.toString())
                .toUtf8();
     if (d->color.isValid()) {

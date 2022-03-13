@@ -3,7 +3,7 @@
 
 namespace BusinessLayer {
 
-TextBlockData::TextBlockData(BusinessLayer::SimpleTextModelItem* _item)
+TextBlockData::TextBlockData(BusinessLayer::TextModelItem* _item)
     : QTextBlockUserData()
     , m_item(_item)
 {
@@ -15,7 +15,7 @@ TextBlockData::TextBlockData(const TextBlockData* _other)
 {
 }
 
-BusinessLayer::SimpleTextModelItem* TextBlockData::item() const
+TextModelItem* TextBlockData::item() const
 {
     return m_item;
 }

@@ -80,8 +80,7 @@ void TransitionHandler::handleEnter(QKeyEvent* _event)
                 //
                 // Сменить стиль
                 //
-                editor()->setCurrentParagraphType(
-                    changeForEnter(TextParagraphType::Transition));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Transition));
             } else {
                 //! Текст не пуст
 
@@ -160,8 +159,7 @@ void TransitionHandler::handleTab(QKeyEvent*)
                 //
                 // Сменить стиль
                 //
-                editor()->setCurrentParagraphType(
-                    changeForTab(TextParagraphType::Transition));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Transition));
             } else {
                 //! Текст не пуст
 
