@@ -2,9 +2,9 @@
 
 #include "handlers/key_press_handler_facade.h"
 
-#include <business_layer/document/text/text_block_data.h>
-#include <business_layer/document/text/text_cursor.h>
-#include <business_layer/document/text/text_document.h>
+#include <business_layer/document/simple_text/simple_text_block_data.h>
+#include <business_layer/document/simple_text/simple_text_cursor.h>
+#include <business_layer/document/simple_text/simple_text_document.h>
 #include <business_layer/import/text/simple_text_markdown_importer.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/model/simple_text/simple_text_model_text_item.h>
@@ -27,7 +27,7 @@
 
 using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextBlockStyle;
-using BusinessLayer::TextCursor;
+using BusinessLayer::SimpleTextCursor;
 using BusinessLayer::TextParagraphType;
 
 namespace Ui {
@@ -183,7 +183,7 @@ QModelIndex SimpleTextEdit::currentModelIndex() const
         return {};
     }
 
-    auto screenplayBlockData = static_cast<BusinessLayer::TextBlockData*>(userData);
+    auto screenplayBlockData = static_cast<BusinessLayer::SimpleTextBlockData*>(userData);
     return d->model->indexForItem(screenplayBlockData->item());
 }
 
@@ -589,7 +589,7 @@ QMimeData* SimpleTextEdit::createMimeDataFromSelection() const
     }
 
     QMimeData* mimeData = new QMimeData;
-    TextCursor cursor = textCursor();
+    SimpleTextCursor cursor = textCursor();
     const auto selection = cursor.selectionInterval();
 
     //
@@ -637,7 +637,7 @@ void SimpleTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Удаляем выделенный текст
     //
-    TextCursor cursor = textCursor();
+    SimpleTextCursor cursor = textCursor();
     if (cursor.hasSelection()) {
         cursor.removeSelectedText();
     }

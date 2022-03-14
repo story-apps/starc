@@ -3,8 +3,8 @@
 #include "text/title_page_edit.h"
 #include "text/title_page_edit_toolbar.h"
 
-#include <business_layer/document/text/text_block_data.h>
-#include <business_layer/document/text/text_cursor.h>
+#include <business_layer/document/simple_text/simple_text_block_data.h>
+#include <business_layer/document/simple_text/simple_text_cursor.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/templates/simple_text_template.h>

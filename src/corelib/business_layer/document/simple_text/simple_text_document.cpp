@@ -1,7 +1,7 @@
-#include "text_document.h"
+#include "simple_text_document.h"
 
-#include "text_block_data.h"
-#include "text_cursor.h"
+#include "simple_text_block_data.h"
+#include "simple_text_cursor.h"
 
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
@@ -182,7 +182,7 @@ void SimpleTextDocument::Implementation::readModelItemContent(int _itemRow,
         //
         // Вставим данные блока
         //
-        auto blockData = new TextBlockData(textItem);
+        auto blockData = new SimpleTextBlockData(textItem);
         _cursor.block().setUserData(blockData);
 
         //
@@ -283,7 +283,7 @@ void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _
     //
     // Аккуратно очищаем текст, чтобы не сломать форматирование самого документа
     //
-    TextCursor cursor(this);
+    SimpleTextCursor cursor(this);
     cursor.beginEditBlock();
     cursor.select(QTextCursor::Document);
     cursor.deleteChar();
@@ -526,10 +526,10 @@ void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _
                 //
                 // Если первый параграф, то нужно перенести блок со своими данными дальше
                 //
-                TextBlockData* blockData = nullptr;
+                SimpleTextBlockData* blockData = nullptr;
                 auto block = cursor.block();
                 if (block.userData() != nullptr) {
-                    blockData = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
+                    blockData = new SimpleTextBlockData(static_cast<SimpleTextBlockData*>(block.userData()));
                     block.setUserData(nullptr);
                 }
                 cursor.insertBlock();
@@ -584,7 +584,7 @@ void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _
                     return;
                 }
 
-                TextCursor cursor(this);
+                SimpleTextCursor cursor(this);
                 cursor.setPosition(fromPosition);
                 cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -637,11 +637,11 @@ void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _
                     //
                     // ... и при этом нужно сохранить данные блока и его формат
                     //
-                    TextBlockData* blockData = nullptr;
+                    SimpleTextBlockData* blockData = nullptr;
                     auto block = cursor.block().previous();
                     if (block.userData() != nullptr) {
                         blockData
-                            = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
+                            = new SimpleTextBlockData(static_cast<SimpleTextBlockData*>(block.userData()));
                     }
                     const auto blockFormat = cursor.block().previous().blockFormat();
                     cursor.deletePreviousChar();
@@ -699,7 +699,7 @@ QString SimpleTextDocument::chapterNumber(const QTextBlock& _forBlock) const
         return {};
     }
 
-    auto blockData = static_cast<TextBlockData*>(_forBlock.userData());
+    auto blockData = static_cast<SimpleTextBlockData*>(_forBlock.userData());
     if (blockData == nullptr) {
         return {};
     }
@@ -719,7 +719,7 @@ QString SimpleTextDocument::mimeFromSelection(int _fromPosition, int _toPosition
     if (fromBlock.userData() == nullptr) {
         return {};
     }
-    auto fromBlockData = static_cast<TextBlockData*>(fromBlock.userData());
+    auto fromBlockData = static_cast<SimpleTextBlockData*>(fromBlock.userData());
     if (fromBlockData == nullptr) {
         return {};
     }
@@ -730,7 +730,7 @@ QString SimpleTextDocument::mimeFromSelection(int _fromPosition, int _toPosition
     if (toBlock.userData() == nullptr) {
         return {};
     }
-    auto toBlockData = static_cast<TextBlockData*>(toBlock.userData());
+    auto toBlockData = static_cast<SimpleTextBlockData*>(toBlock.userData());
     if (toBlockData == nullptr) {
         return {};
     }
@@ -749,7 +749,7 @@ void SimpleTextDocument::insertFromMime(int _position, const QString& _mimeData)
         return;
     }
 
-    auto blockData = static_cast<TextBlockData*>(block.userData());
+    auto blockData = static_cast<SimpleTextBlockData*>(block.userData());
     if (blockData == nullptr) {
         return;
     }
@@ -769,10 +769,10 @@ void SimpleTextDocument::addParagraph(BusinessLayer::TextParagraphType _type, QT
     //
     if (_cursor.block().text().left(_cursor.positionInBlock()).isEmpty()
         && !_cursor.block().text().isEmpty()) {
-        TextBlockData* blockData = nullptr;
+        SimpleTextBlockData* blockData = nullptr;
         auto block = _cursor.block();
         if (block.userData() != nullptr) {
-            blockData = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
+            blockData = new SimpleTextBlockData(static_cast<SimpleTextBlockData*>(block.userData()));
             block.setUserData(nullptr);
         }
 
@@ -923,8 +923,8 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
     //
     if (_position == 0
         && begin().blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
-        TextCursor cursor(this);
-        cursor.movePosition(TextCursor::Start);
+        SimpleTextCursor cursor(this);
+        cursor.movePosition(SimpleTextCursor::Start);
         auto blockFormat = cursor.blockFormat();
         blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
         cursor.setBlockFormat(blockFormat);
@@ -988,7 +988,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
         while (!itemsToDelete.empty() && block.isValid()
                && block.position() <= _position + std::max(_charsRemoved, _charsAdded)) {
             if (block.userData() != nullptr) {
-                const auto blockData = static_cast<TextBlockData*>(block.userData());
+                const auto blockData = static_cast<SimpleTextBlockData*>(block.userData());
                 const auto notRemovedItemIter = itemsToDelete.find(blockData->item());
                 if (notRemovedItemIter != itemsToDelete.end()) {
                     //
@@ -1242,7 +1242,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             return nullptr;
         }
 
-        auto blockData = static_cast<TextBlockData*>(previousBlock.userData());
+        auto blockData = static_cast<SimpleTextBlockData*>(previousBlock.userData());
         return blockData->item();
     }();
 
@@ -1456,7 +1456,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
                 }
             }
 
-            auto blockData = new TextBlockData(textItem);
+            auto blockData = new SimpleTextBlockData(textItem);
             block.setUserData(blockData);
 
             previousItem = textItem;
@@ -1465,7 +1465,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
         // Старый блок
         //
         else {
-            auto blockData = static_cast<TextBlockData*>(block.userData());
+            auto blockData = static_cast<SimpleTextBlockData*>(block.userData());
             auto item = blockData->item();
 
             if (item->type() == TextModelItemType::Text) {
@@ -1511,7 +1511,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             if (!qFuzzyCompare(block.blockFormat().lineHeight(), blockHeight)) {
                 auto blockFormat = block.blockFormat();
                 blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
-                auto cursor = TextCursor(this);
+                auto cursor = SimpleTextCursor(this);
                 cursor.setPosition(block.position());
                 cursor.setBlockFormat(blockFormat);
             }

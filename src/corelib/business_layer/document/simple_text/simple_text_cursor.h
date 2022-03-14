@@ -12,13 +12,13 @@ namespace BusinessLayer {
 /**
  * @brief Класс курсора со вспомогательными функциями
  */
-class CORE_LIBRARY_EXPORT TextCursor : public QTextCursor
+class CORE_LIBRARY_EXPORT SimpleTextCursor : public QTextCursor
 {
 public:
-    TextCursor();
-    TextCursor(const QTextCursor& other);
-    explicit TextCursor(QTextDocument* _document);
-    ~TextCursor();
+    SimpleTextCursor();
+    SimpleTextCursor(const QTextCursor& other);
+    explicit SimpleTextCursor(QTextDocument* _document);
+    ~SimpleTextCursor();
 
     /**
      * @brief Находимся ли в данный момент в режиме редактирования

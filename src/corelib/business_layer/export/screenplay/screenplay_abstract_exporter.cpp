@@ -5,7 +5,7 @@
 #include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
 #include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
-#include <business_layer/document/text/text_document.h>
+#include <business_layer/document/simple_text/simple_text_document.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>

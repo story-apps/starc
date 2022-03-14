@@ -1,28 +1,28 @@
-#include "text_cursor.h"
+#include "simple_text_cursor.h"
 
 #include <QtGui/private/qtextdocument_p.h>
 
 
 namespace BusinessLayer {
 
-TextCursor::TextCursor()
+SimpleTextCursor::SimpleTextCursor()
     : QTextCursor()
 {
 }
 
-TextCursor::TextCursor(const QTextCursor& _other)
+SimpleTextCursor::SimpleTextCursor(const QTextCursor& _other)
     : QTextCursor(_other)
 {
 }
 
-TextCursor::TextCursor(QTextDocument* _document)
+SimpleTextCursor::SimpleTextCursor(QTextDocument* _document)
     : QTextCursor(_document)
 {
 }
 
-TextCursor::~TextCursor() = default;
+SimpleTextCursor::~SimpleTextCursor() = default;
 
-bool TextCursor::isInEditBlock() const
+bool SimpleTextCursor::isInEditBlock() const
 {
 #if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
     return QTextDocumentPrivate::get(document())->isInEditBlock();
@@ -31,7 +31,7 @@ bool TextCursor::isInEditBlock() const
 #endif
 }
 
-TextCursor::Selection TextCursor::selectionInterval() const
+SimpleTextCursor::Selection SimpleTextCursor::selectionInterval() const
 {
     if (!hasSelection()) {
         return { position(), position() };
@@ -44,7 +44,7 @@ TextCursor::Selection TextCursor::selectionInterval() const
     }
 }
 
-void TextCursor::restartEditBlock()
+void SimpleTextCursor::restartEditBlock()
 {
     endEditBlock();
 

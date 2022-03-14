@@ -9,11 +9,11 @@ namespace BusinessLayer {
 
 class TextModelItem;
 
-class CORE_LIBRARY_EXPORT TextBlockData : public QTextBlockUserData
+class CORE_LIBRARY_EXPORT SimpleTextBlockData : public QTextBlockUserData
 {
 public:
-    explicit TextBlockData(BusinessLayer::TextModelItem* _item);
-    explicit TextBlockData(const TextBlockData* _other);
+    explicit SimpleTextBlockData(BusinessLayer::TextModelItem* _item);
+    explicit SimpleTextBlockData(const SimpleTextBlockData* _other);
 
     BusinessLayer::TextModelItem* item() const;
 

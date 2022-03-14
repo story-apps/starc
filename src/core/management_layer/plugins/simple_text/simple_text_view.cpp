@@ -5,8 +5,8 @@
 #include "text/simple_text_edit_toolbar.h"
 #include "text/simple_text_search_manager.h"
 
-#include <business_layer/document/text/text_block_data.h>
-#include <business_layer/document/text/text_cursor.h>
+#include <business_layer/document/simple_text/simple_text_block_data.h>
+#include <business_layer/document/simple_text/simple_text_cursor.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
