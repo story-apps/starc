@@ -14,8 +14,6 @@
 #include <QVariant>
 #include <QXmlStreamReader>
 
-#include <optional>
-
 
 namespace BusinessLayer {
 
@@ -144,13 +142,9 @@ void TextModelGroupItem::setLevel(int _level)
     setChanged(true);
 }
 
-TextModelGroupItem::Number TextModelGroupItem::number() const
+std::optional<TextModelGroupItem::Number> TextModelGroupItem::number() const
 {
-    if (!d->number.has_value()) {
-        return {};
-    }
-
-    return *d->number;
+    return d->number;
 }
 
 bool TextModelGroupItem::setNumber(int _number, const QString& _prefix)
@@ -222,6 +216,10 @@ QVariant TextModelGroupItem::data(int _role) const
     switch (_role) {
     case Qt::DecorationRole: {
         return u8"\U000f021a";
+    }
+
+    case GroupTypeRole: {
+        return static_cast<int>(d->groupType);
     }
 
     case GroupNumberRole: {

@@ -1081,7 +1081,7 @@ QString ScreenplayTextDocument::sceneNumber(const QTextBlock& _forBlock) const
     }
 
     const auto sceneItem = static_cast<const ScreenplayTextModelSceneItem*>(itemParent);
-    return sceneItem->number().text;
+    return sceneItem->number()->text;
 }
 
 QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) const
@@ -1101,7 +1101,7 @@ QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) cons
     }
 
     const auto sceneItem = static_cast<const ScreenplayTextModelTextItem*>(item);
-    return sceneItem->number().value_or(ScreenplayTextModelTextItem::Number()).displayValue;
+    return sceneItem->number().value_or(ScreenplayTextModelTextItem::Number()).text;
 }
 
 QColor ScreenplayTextDocument::itemColor(const QTextBlock& _forBlock) const
@@ -2041,7 +2041,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             }
 
             case TextParagraphType::SceneHeading: {
-                parentItem = d->model->createGroupItem();
+                parentItem = d->model->createGroupItem(TextGroupType::Scene);
                 break;
             }
 

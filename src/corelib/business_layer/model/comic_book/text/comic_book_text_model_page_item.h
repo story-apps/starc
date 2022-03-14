@@ -1,60 +1,46 @@
 #pragma once
 
-#include "comic_book_text_model_item.h"
-
-#include <QString>
-
-#include <chrono>
-
-class QColor;
-class QXmlStreamReader;
+#include <business_layer/model/text/text_model_group_item.h>
 
 
 namespace BusinessLayer {
 
+class ComicBookTextModel;
+
 /**
  * @brief Класс элементов страниц модели комикса
  */
-class CORE_LIBRARY_EXPORT ComicBookTextModelPageItem : public ComicBookTextModelItem
+class CORE_LIBRARY_EXPORT ComicBookTextModelPageItem : public TextModelGroupItem
 {
 public:
     /**
-     * @brief Номер панели
+     * @brief Номер страницы
      */
-    struct Number {
-        QString value;
-
-        bool operator==(const Number& _other) const;
+    struct PageNumber {
+        int fromPage = 0;
+        int pageCount = 0;
+        QString text;
     };
 
     /**
      * @brief Роли данных из модели
      */
-    enum DataRole {
-        PageNameRole = Qt::UserRole + 1,
-        PageColorRole,
-        PagePanelsCountRole,
+    enum {
+        PagePanelsCountRole = TextModelGroupItem::GroupUserRole + 1,
         PageDialoguesWordsCountRole,
         PageHasNumberingErrorRole,
     };
 
 public:
-    ComicBookTextModelPageItem();
-    explicit ComicBookTextModelPageItem(QXmlStreamReader& _contentReader);
+    explicit ComicBookTextModelPageItem(const ComicBookTextModel* _model);
     ~ComicBookTextModelPageItem() override;
 
     /**
-     * @brief Номер панели
+     * @brief Номер страницы
      */
-    Number number() const;
-    bool updateNumber(int& _fromNumber, const QVector<QString>& _singlePageIntros,
-                      const QVector<QString>& _multiplePageIntros);
-
-    /**
-     * @brief Цвет страницы
-     */
-    QColor color() const;
-    void setColor(const QColor& _color);
+    std::optional<PageNumber> pageNumber() const;
+    void setPageNumber(int& _fromNumber, const QVector<QString>& _singlePageIntros,
+                       const QVector<QString>& _multiplePageIntros);
 
     /**
      * @brief Получить количество панелей на странице
@@ -71,25 +57,17 @@ public:
      */
     QVariant data(int _role) const override;
 
-    /**
-     * @brief Определяем интерфейс для получения XML блока
-     */
-    QByteArray toXml() const override;
-    QByteArray toXml(ComicBookTextModelItem* _from, int _fromPosition, ComicBookTextModelItem* _to,
-                     int _toPosition, bool _clearUuid) const;
-    QByteArray xmlHeader(bool _clearUuid = false) const;
-
-    /**
-     * @brief Скопировать контент с заданного элемента
-     */
-    void copyFrom(ComicBookTextModelItem* _item) override;
-
-    /**
-     * @brief Проверить равен ли текущий элемент заданному
-     */
-    bool isEqual(ComicBookTextModelItem* _item) const override;
-
 protected:
+    /**
+     * @brief Считываем дополнительный контент
+     */
+    QStringRef readCustomContent(QXmlStreamReader& _contentReader) override;
+
+    /**
+     * @brief Сформировать xml-блок с кастомными данными элемента
+     */
+    QByteArray customContent() const override;
+
     /**
      * @brief Обновляем текст страницы при изменении кого-то из детей
      */

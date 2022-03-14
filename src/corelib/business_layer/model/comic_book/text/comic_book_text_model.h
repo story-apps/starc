@@ -1,6 +1,6 @@
 #pragma once
 
-#include <business_layer/model/abstract_model.h>
+#include <business_layer/model/text/text_model.h>
 
 
 namespace BusinessLayer {
@@ -8,13 +8,11 @@ namespace BusinessLayer {
 class CharactersModel;
 class ComicBookDictionariesModel;
 class ComicBookInformationModel;
-class ComicBookTextModelItem;
-class SimpleTextModel;
 
 /**
  * @brief Модель текста комикса
  */
-class CORE_LIBRARY_EXPORT ComicBookTextModel : public AbstractModel
+class CORE_LIBRARY_EXPORT ComicBookTextModel : public TextModel
 {
     Q_OBJECT
 
@@ -23,91 +21,17 @@ public:
     ~ComicBookTextModel() override;
 
     /**
-     * @brief Добавить элемент в конец
+     * @brief Создать элементы модели
      */
-    void appendItem(ComicBookTextModelItem* _item, ComicBookTextModelItem* _parentItem = nullptr);
-
-    /**
-     * @brief Добавить элемент в начало
-     */
-    void prependItem(ComicBookTextModelItem* _item, ComicBookTextModelItem* _parentItem = nullptr);
-
-    /**
-     * @brief Вставить элемент после заданного
-     */
-    void insertItem(ComicBookTextModelItem* _item, ComicBookTextModelItem* _afterSiblingItem);
-    void insertItems(const QVector<ComicBookTextModelItem*>& _items,
-                     ComicBookTextModelItem* _afterSiblingItem);
-
-    /**
-     * @brief Извлечь заданный элемент без удаления
-     */
-    void takeItem(ComicBookTextModelItem* _item, ComicBookTextModelItem* _parentItem = nullptr);
-
-    /**
-     * @brief Удалить заданный элемент
-     */
-    void removeItem(ComicBookTextModelItem* _item);
-    void removeItems(ComicBookTextModelItem* _fromItem, ComicBookTextModelItem* _toItem);
-
-    /**
-     * @brief Обновить заданный элемент
-     */
-    void updateItem(ComicBookTextModelItem* _item);
-
-    /**
-     * @brief Реализация древовидной модели
-     */
-    /** @{ */
-    QModelIndex index(int _row, int _column, const QModelIndex& _parent = {}) const override;
-    QModelIndex parent(const QModelIndex& _child) const override;
-    int columnCount(const QModelIndex& _parent = {}) const override;
-    int rowCount(const QModelIndex& _parent = {}) const override;
-    Qt::ItemFlags flags(const QModelIndex& _index) const override;
-    QVariant data(const QModelIndex& _index, int _role) const override;
-    //! Реализация перетаскивания элементов
-    bool canDropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
-                         const QModelIndex& _parent = {}) const override;
-    bool dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
-                      const QModelIndex& _parent = {}) override;
-    QMimeData* mimeData(const QModelIndexList& _indexes) const override;
-    QStringList mimeTypes() const override;
-    Qt::DropActions supportedDragActions() const override;
-    Qt::DropActions supportedDropActions() const override;
-    /** @} */
-
-    /**
-     * @brief Сформировать mime-данные комикса в заданном диапазоне
-     */
-    QString mimeFromSelection(const QModelIndex& _from, int _fromPosition, const QModelIndex& _to,
-                              int _toPosition, bool _clearUuid) const;
-
-    /**
-     * @brief Вставить контент из mime-данных с комиксом в заданной позиции
-     */
-    void insertFromMime(const QModelIndex& _index, int _positionInBlock, const QString& _mimeData);
-
-    /**
-     * @brief Получить элемент находящийся в заданном индексе
-     */
-    ComicBookTextModelItem* itemForIndex(const QModelIndex& _index) const;
-
-    /**
-     * @brief Получить индекс заданного элемента
-     */
-    QModelIndex indexForItem(ComicBookTextModelItem* _item) const;
+    TextModelFolderItem* createFolderItem() const override;
+    TextModelGroupItem* createGroupItem(TextGroupType _type) const override;
+    TextModelTextItem* createTextItem() const override;
 
     /**
      * @brief Задать модель информации о комиксе
      */
     void setInformationModel(ComicBookInformationModel* _model);
     ComicBookInformationModel* informationModel() const;
-
-    /**
-     * @brief Задать модель титульной страницы
-     */
-    void setTitlePageModel(SimpleTextModel* _model);
-    SimpleTextModel* titlePageModel() const;
 
     /**
      * @brief Задать модель справочников комикса
@@ -131,16 +55,21 @@ public:
      */
     QSet<QString> findCharactersFromText() const;
 
+    /**
+     * @brief Определим список майм типов для модели
+     */
+    QStringList mimeTypes() const override;
+
 protected:
     /**
-     * @brief Реализация модели для работы с документами
+     * @brief Инициилизировать пустой документ
      */
-    /** @{ */
-    void initDocument() override;
-    void clearDocument() override;
-    QByteArray toXml() const override;
-    void applyPatch(const QByteArray& _patch) override;
-    /** @} */
+    void initEmptyDocument() override;
+
+    /**
+     * @brief Донастроить модель после её инициилизации
+     */
+    void finalizeInitialization() override;
 
 private:
     class Implementation;

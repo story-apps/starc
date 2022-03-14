@@ -65,7 +65,7 @@ void writeLine(QXmlStreamWriter& _writer, const QTextBlock& _block,
             if (blockData != nullptr) {
                 const auto sceneItem
                     = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
-                sceneNumber = sceneItem->number().text;
+                sceneNumber = sceneItem->number()->text;
             }
         }
 

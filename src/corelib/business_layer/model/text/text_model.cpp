@@ -171,7 +171,7 @@ TextModelFolderItem* TextModel::createFolderItem(QXmlStreamReader& _contentReade
 
 TextModelGroupItem* TextModel::createGroupItem(QXmlStreamReader& _contentReader) const
 {
-    auto item = createGroupItem();
+    auto item = createGroupItem(textGroupTypeFromString(_contentReader.name().toString()));
     item->readContent(_contentReader);
     return item;
 }
@@ -403,13 +403,9 @@ Qt::ItemFlags TextModel::flags(const QModelIndex& _index) const
 
     const auto item = itemForIndex(_index);
     switch (item->type()) {
-    case TextModelItemType::Folder: {
-        flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
-        break;
-    }
-
+    case TextModelItemType::Folder:
     case TextModelItemType::Group: {
-        flags |= Qt::ItemIsDragEnabled;
+        flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         break;
     }
 
@@ -438,15 +434,80 @@ bool TextModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _action, 
                                 int _column, const QModelIndex& _parent) const
 {
     Q_UNUSED(_action);
-    Q_UNUSED(_row);
     Q_UNUSED(_column);
-    Q_UNUSED(_parent);
+
+    if (!_data->formats().contains(mimeTypes().constFirst())) {
+        return false;
+    }
 
     //
-    // TODO: детализировать разрешённые кейсы для вставки (папки - группы, уровни групп)
+    // Определим родителя, куда будет происходить вставка
     //
+    const auto parentItemType
+        = _parent.isValid() ? itemForIndex(_parent)->type() : TextModelItemType::Folder;
 
-    return _data->formats().contains(mimeTypes().constFirst());
+    //
+    // Получим первый из перемещаемых элементов
+    //
+    QXmlStreamReader contentReader(_data->data(mimeTypes().constFirst()));
+    contentReader.readNextStartElement(); // document
+    contentReader.readNextStartElement();
+    TextModelItemType firstItemType = TextModelItemType::Text;
+    do {
+        const auto currentTag = contentReader.name().toString();
+        if (currentTag == xml::kDocumentTag) {
+            break;
+        }
+
+        if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
+            firstItemType = TextModelItemType::Folder;
+        } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
+            firstItemType = TextModelItemType::Group;
+        } else if (currentTag == xml::kSplitterTag) {
+            firstItemType = TextModelItemType::Splitter;
+        }
+    }
+    once;
+
+    //
+    // Собственно определяем правила перемещения
+    //
+    switch (firstItemType) {
+
+    case TextModelItemType::Folder: {
+        //
+        // Папки можно вставить только в папки
+        //
+        return parentItemType == TextModelItemType::Folder;
+    }
+
+    case TextModelItemType::Group: {
+        //
+        // Группы можно вставить в папки
+        //
+        if (parentItemType == TextModelItemType::Folder) {
+            return true;
+        }
+        //
+        // ... либо в группы более высокого уровня иерархии
+        //
+        else if (parentItemType == TextModelItemType::Group) {
+            const auto parentItem = static_cast<TextModelGroupItem*>(itemForIndex(_parent));
+            const auto firstItem = createGroupItem(contentReader);
+            return parentItem->level() < firstItem->level();
+        }
+        //
+        // ... а больше никуда нельзя
+        //
+        else {
+            return false;
+        }
+    }
+
+    default: {
+        return false;
+    }
+    }
 }
 
 bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int _row, int _column,
@@ -495,11 +556,12 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
         //
         else {
             int delta = 1;
-            if (_parent.isValid() && rowCount(_parent) == _row) {
-                //
-                // ... для папок, при вставке в самый конец также нужно учитывать
-                //     текстовый блок закрывающий папку
-                //
+            //
+            // ... для папок, при вставке в самый конец также нужно учитывать
+            //     текстовый блок закрывающий папку
+            //
+            if (_parent.isValid() && rowCount(_parent) == _row
+                && itemForIndex(_parent)->type() == TextModelItemType::Folder) {
                 ++delta;
             }
             insertAnchorIndex = index(_row - delta, 0, _parent);
@@ -581,6 +643,12 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
                     //
                     if (lastItem->type() == TextModelItemType::Folder && _parent.isValid()) {
                         insertItem(newItem, lastItem->childAt(lastItem->childCount() - 2));
+                    }
+                    //
+                    // При вставке в группу, просто добавляем в конец
+                    //
+                    else if (lastItem->type() == TextModelItemType::Group && _parent.isValid()) {
+                        appendItem(newItem, lastItem);
                     }
                     //
                     // В остальных случаях просто вставляем после предыдущего
@@ -1121,6 +1189,11 @@ void TextModel::initDocument()
         d->buildModel(document());
         endResetModel();
     }
+
+    //
+    // Исполним всё, что необходимо после инициализации
+    //
+    finalizeInitialization();
 }
 
 void TextModel::clearDocument()
@@ -1712,7 +1785,8 @@ void TextModel::applyPatch(const QByteArray& _patch)
             }
 
             case TextModelItemType::Group: {
-                itemToInsert = createGroupItem();
+                itemToInsert
+                    = createGroupItem(static_cast<TextModelGroupItem*>(itemToInsert)->groupType());
                 break;
             }
 

@@ -710,7 +710,7 @@ QString SimpleTextDocument::chapterNumber(const QTextBlock& _forBlock) const
     }
 
     auto itemScene = static_cast<SimpleTextModelChapterItem*>(itemParent);
-    return itemScene->number().text;
+    return itemScene->number()->text;
 }
 
 QString SimpleTextDocument::mimeFromSelection(int _fromPosition, int _toPosition) const
@@ -1264,7 +1264,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             case TextParagraphType::Heading4:
             case TextParagraphType::Heading5:
             case TextParagraphType::Heading6: {
-                parentItem = d->model->createGroupItem();
+                parentItem = d->model->createGroupItem(TextGroupType::Chapter);
                 break;
             }
 

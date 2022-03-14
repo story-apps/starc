@@ -1,9 +1,10 @@
 #include "comic_book_text_structure_delegate.h"
 
 #include <business_layer/comic_book_text_structure_model.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_folder_item.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_page_item.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_panel_item.h>
+#include <business_layer/model/text/text_model_folder_item.h>
+#include <business_layer/templates/comic_book_template.h>
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -138,7 +139,7 @@ void ComicBookTextStructureDelegate::Implementation::paintFolder(
     //
     // ... цвет папки
     //
-    paintItemColor(_painter, _option, _index.data(ComicBookTextModelFolderItem::FolderColorRole));
+    paintItemColor(_painter, _option, _index.data(TextModelFolderItem::FolderColorRole));
 
     //
     // ... иконка
@@ -175,7 +176,7 @@ void ComicBookTextStructureDelegate::Implementation::paintFolder(
         QPointF(folderNameLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
         QSizeF(folderNameWidth, Ui::DesignSystem::layout().px24()));
     const auto folderName = _painter->fontMetrics().elidedText(
-        _index.data(ComicBookTextModelFolderItem::FolderNameRole).toString(), Qt::ElideRight,
+        _index.data(TextModelFolderItem::FolderHeadingRole).toString(), Qt::ElideRight,
         static_cast<int>(folderNameRect.width()));
     _painter->drawText(folderNameRect, Qt::AlignLeft | Qt::AlignVCenter, folderName);
 }
@@ -219,7 +220,7 @@ void ComicBookTextStructureDelegate::Implementation::paintPage(QPainter* _painte
     //
     // ... цвет папки
     //
-    paintItemColor(_painter, _option, _index.data(ComicBookTextModelFolderItem::FolderColorRole));
+    paintItemColor(_painter, _option, _index.data(TextModelFolderItem::FolderColorRole));
 
     //
     // ... иконка
@@ -260,7 +261,7 @@ void ComicBookTextStructureDelegate::Implementation::paintPage(QPainter* _painte
         QPointF(pageNameLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
         QSizeF(pageNameWidth, Ui::DesignSystem::layout().px24()));
     const auto pageName = QString("%1 (%2)").arg(
-        _index.data(ComicBookTextModelPageItem::PageNameRole).toString(),
+        _index.data(ComicBookTextModelPageItem::GroupHeadingRole).toString(),
         tr("%n PANELS", "", _index.data(ComicBookTextModelPageItem::PagePanelsCountRole).toInt()));
     const auto pageNameCorrected = _painter->fontMetrics().elidedText(
         pageName, Qt::ElideRight, static_cast<int>(pageNameRect.width()));
@@ -306,7 +307,7 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     //
     // ... цвет сцены
     //
-    paintItemColor(_painter, _option, _index.data(ComicBookTextModelPanelItem::PanelColorRole));
+    paintItemColor(_painter, _option, _index.data(ComicBookTextModelPanelItem::GroupColorRole));
 
     //
     // ... иконка
@@ -343,7 +344,7 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     const QRectF panelHeadingRect(
         QPointF(panelHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
         QSizeF(panelHeadingWidth, Ui::DesignSystem::layout().px24()));
-    auto panelHeading = _index.data(ComicBookTextModelPanelItem::PanelHeadingRole).toString();
+    auto panelHeading = _index.data(ComicBookTextModelPanelItem::GroupHeadingRole).toString();
     panelHeading = _painter->fontMetrics().elidedText(panelHeading, Qt::ElideRight,
                                                       static_cast<int>(panelHeadingRect.width()));
     _painter->drawText(panelHeadingRect, Qt::AlignLeft | Qt::AlignVCenter, panelHeading);
@@ -351,7 +352,7 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     //
     // ... текст сцены
     //
-    auto panelText = _index.data(ComicBookTextModelPanelItem::PanelTextRole).toString();
+    auto panelText = _index.data(ComicBookTextModelPanelItem::GroupTextRole).toString();
     if (panelText.isEmpty()) {
         return;
     }
@@ -373,7 +374,7 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     // ... иконки заметок
     //
     const auto inlineNotesSize
-        = _index.data(ComicBookTextModelPanelItem::PanelInlineNotesSizeRole).toInt();
+        = _index.data(ComicBookTextModelPanelItem::GroupInlineNotesSizeRole).toInt();
     const qreal notesLeft = iconRect.left();
     const qreal notesTop = (panelTextRect.isValid() ? panelTextRect : panelHeadingRect).bottom()
         + Ui::DesignSystem::layout().px8();
@@ -394,7 +395,7 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
         _painter->drawText(inlineNotesIconRect, Qt::AlignLeft | Qt::AlignVCenter, u8"\U000F09A8");
     }
     const auto reviewMarksSize
-        = _index.data(ComicBookTextModelPanelItem::PanelReviewMarksSizeRole).toInt();
+        = _index.data(ComicBookTextModelPanelItem::GroupReviewMarksSizeRole).toInt();
     if (reviewMarksSize > 0) {
         _painter->setFont(Ui::DesignSystem::font().caption());
         const auto reviewMarksSizeText = QString::number(reviewMarksSize);
@@ -471,8 +472,8 @@ QSize ComicBookTextStructureDelegate::Implementation::panelSizeHint(
         height += Ui::DesignSystem::layout().px16();
     }
     const bool haveNotesLine
-        = (_index.data(ComicBookTextModelPanelItem::PanelInlineNotesSizeRole).toInt()
-           + _index.data(ComicBookTextModelPanelItem::PanelReviewMarksSizeRole).toInt())
+        = (_index.data(ComicBookTextModelPanelItem::GroupInlineNotesSizeRole).toInt()
+           + _index.data(ComicBookTextModelPanelItem::GroupReviewMarksSizeRole).toInt())
         > 0;
     if (haveNotesLine) {
         height += Ui::DesignSystem::layout().px24();
@@ -521,20 +522,21 @@ void ComicBookTextStructureDelegate::paint(QPainter* _painter, const QStyleOptio
     }
 
     using namespace BusinessLayer;
-    const auto type = static_cast<ComicBookTextModelItemType>(typeValue.toInt());
+    const auto type = static_cast<TextModelItemType>(typeValue.toInt());
     switch (type) {
-    case ComicBookTextModelItemType::Folder: {
+    case TextModelItemType::Folder: {
         d->paintFolder(_painter, opt, _index);
         break;
     }
 
-    case ComicBookTextModelItemType::Page: {
-        d->paintPage(_painter, opt, _index);
-        break;
-    }
-
-    case ComicBookTextModelItemType::Panel: {
-        d->paintPanel(_painter, opt, _index);
+    case TextModelItemType::Group: {
+        const auto groupType
+            = static_cast<TextGroupType>(_index.data(TextModelGroupItem::GroupTypeRole).toInt());
+        if (groupType == TextGroupType::Page) {
+            d->paintPage(_painter, opt, _index);
+        } else {
+            d->paintPanel(_painter, opt, _index);
+        }
         break;
     }
 
@@ -556,18 +558,20 @@ QSize ComicBookTextStructureDelegate::sizeHint(const QStyleOptionViewItem& _opti
     }
 
     using namespace BusinessLayer;
-    const auto type = static_cast<ComicBookTextModelItemType>(typeValue.toInt());
+    const auto type = static_cast<TextModelItemType>(typeValue.toInt());
     switch (type) {
-    case ComicBookTextModelItemType::Folder: {
+    case TextModelItemType::Folder: {
         return d->folderSizeHint(_option, _index);
     }
 
-    case ComicBookTextModelItemType::Page: {
-        return d->pageSizeHint(_option, _index);
-    }
-
-    case ComicBookTextModelItemType::Panel: {
-        return d->panelSizeHint(_option, _index);
+    case TextModelItemType::Group: {
+        const auto groupType
+            = static_cast<TextGroupType>(_index.data(TextModelGroupItem::GroupTypeRole).toInt());
+        if (groupType == TextGroupType::Page) {
+            return d->pageSizeHint(_option, _index);
+        } else {
+            return d->panelSizeHint(_option, _index);
+        }
     }
 
     default: {

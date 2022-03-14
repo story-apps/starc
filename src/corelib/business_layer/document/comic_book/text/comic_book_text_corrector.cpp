@@ -6,7 +6,7 @@
 #include <business_layer/model/comic_book/text/comic_book_text_block_parser.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_page_item.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_panel_item.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_text_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
@@ -443,7 +443,7 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
     // Корректируем имена пресонажей в изменённой части документа
     //
     QString lastCharacterName;
-    auto itemFromBlock = [](const QTextBlock& _block) -> ComicBookTextModelItem* {
+    auto itemFromBlock = [](const QTextBlock& _block) -> TextModelItem* {
         if (_block.userData() == nullptr) {
             return {};
         }
@@ -474,8 +474,9 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
         case TextParagraphType::Page: {
             const auto item = itemFromBlock(block);
             do {
-                if (item->parent() == nullptr
-                    || item->parent()->type() != ComicBookTextModelItemType::Page) {
+                if (item->parent() == nullptr || item->parent()->type() != TextModelItemType::Group
+                    || static_cast<TextModelGroupItem*>(item->parent())->groupType()
+                        != TextGroupType::Page) {
                     break;
                 }
 
@@ -486,12 +487,12 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
                 //
                 // При необходимости обновляем номер страницы
                 //
-                if (!sourcePageTitle.endsWith(pageItem->number().value)) {
+                if (!sourcePageTitle.trimmed().endsWith(pageItem->pageNumber()->text)) {
                     newPageTitle.remove(QRegularExpression("(\\d|-)*$"));
                     if (!newPageTitle.endsWith(' ')) {
                         newPageTitle.append(' ');
                     }
-                    newPageTitle.append(pageItem->number().value);
+                    newPageTitle.append(pageItem->pageNumber()->text);
 
                     cursor.setPosition(block.position());
                     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
@@ -506,8 +507,9 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
         case TextParagraphType::Panel: {
             const auto item = itemFromBlock(block);
             do {
-                if (item->parent() == nullptr
-                    || item->parent()->type() != ComicBookTextModelItemType::Panel) {
+                if (item->parent() == nullptr || item->parent()->type() != TextModelItemType::Group
+                    || static_cast<TextModelGroupItem*>(item->parent())->groupType()
+                        != TextGroupType::Panel) {
                     break;
                 }
 
@@ -518,12 +520,13 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
                 //
                 // При необходимости обновляем номер панели
                 //
-                if (!sourcePanelTitle.endsWith(panelItem->number().value)) {
+                const auto panelItemNumber = QString::number(panelItem->number()->value);
+                if (!sourcePanelTitle.trimmed().endsWith(panelItemNumber)) {
                     newPanelTitle.remove(QRegularExpression("\\d*$"));
                     if (!newPanelTitle.endsWith(' ')) {
                         newPanelTitle.append(' ');
                     }
-                    newPanelTitle.append(panelItem->number().value);
+                    newPanelTitle.append(panelItemNumber);
 
                     cursor.setPosition(block.position());
                     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
@@ -567,11 +570,11 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
         case TextParagraphType::Character: {
             const auto item = itemFromBlock(block);
             do {
-                if (item->type() != ComicBookTextModelItemType::Text) {
+                if (item->type() != TextModelItemType::Text) {
                     break;
                 }
 
-                const auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+                const auto textItem = static_cast<TextModelTextItem*>(item);
                 if (textItem->paragraphType() != TextParagraphType::Character) {
                     break;
                 }
@@ -582,9 +585,10 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
                 //
                 // При необходимости обновляем номер диалога
                 //
-                if (sourceDialogueNumber != textItem->number()->value) {
+                const auto textItemNumber = QString::number(textItem->number()->value);
+                if (sourceDialogueNumber != textItemNumber) {
                     const QString decoration = ". ";
-                    newDialogueNumber = textItem->number()->value + decoration;
+                    newDialogueNumber = textItemNumber + decoration;
 
                     cursor.setPosition(block.position());
                     if (!sourceDialogueNumber.isEmpty()) {

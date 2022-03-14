@@ -95,7 +95,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                                 - distanceBetweenSceneNumberAndText,
                             blockRect.height());
                         _painter->drawText(leftSceneNumberRect, Qt::AlignRight | Qt::AlignTop,
-                                           sceneItem->number().text);
+                                           sceneItem->number()->text);
                     }
 
                     if (_exportOptions.showScenesNumbersOnRight) {
@@ -110,7 +110,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                                 - distanceBetweenSceneNumberAndText,
                             blockRect.height());
                         _painter->drawText(rightSceneNumberRect, Qt::AlignLeft | Qt::AlignTop,
-                                           sceneItem->number().text);
+                                           sceneItem->number()->text);
                     }
                 }
             }
@@ -129,7 +129,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                         const auto textItem
                             = static_cast<ScreenplayTextModelTextItem*>(blockData->item());
                         if (textItem && textItem->number().has_value()) {
-                            const QString dialogueNumber = textItem->number()->displayValue;
+                            const QString dialogueNumber = textItem->number()->text;
                             const int numberDelta
                                 = _painter->fontMetrics().horizontalAdvance(dialogueNumber);
                             QRectF dialogueNumberRect;

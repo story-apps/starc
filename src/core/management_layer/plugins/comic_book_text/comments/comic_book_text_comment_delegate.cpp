@@ -2,7 +2,7 @@
 
 #include "comic_book_text_comments_model.h"
 
-#include <business_layer/model/comic_book/text/comic_book_text_model_text_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
@@ -171,9 +171,8 @@ void ComicBookTextCommentDelegate::paint(QPainter* _painter, const QStyleOptionV
     //
     // ... ответы
     //
-    const auto comments
-        = _index.data(ComicBookTextCommentsModel::ReviewMarkCommentsRole)
-              .value<QVector<BusinessLayer::ComicBookTextModelTextItem::ReviewComment>>();
+    const auto comments = _index.data(ComicBookTextCommentsModel::ReviewMarkCommentsRole)
+                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
     if (!m_isSingleCommentMode && comments.size() > 1 && !done) {
         const auto avatarSize = Ui::DesignSystem::treeOneLineItem().iconSize();
         //
@@ -324,9 +323,8 @@ QSize ComicBookTextCommentDelegate::sizeHint(const QStyleOptionViewItem& _option
     //
     const auto isDone = _index.data(ComicBookTextCommentsModel::ReviewMarkIsDoneRole).toBool();
     const auto comment = _index.data(ComicBookTextCommentsModel::ReviewMarkCommentRole).toString();
-    const auto comments
-        = _index.data(ComicBookTextCommentsModel::ReviewMarkCommentsRole)
-              .value<QVector<BusinessLayer::ComicBookTextModelTextItem::ReviewComment>>();
+    const auto comments = _index.data(ComicBookTextCommentsModel::ReviewMarkCommentsRole)
+                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
 
     //
     // ... высота заголовка: отступ сверху + высота аватара + отступ снизу

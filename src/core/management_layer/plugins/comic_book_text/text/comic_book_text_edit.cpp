@@ -10,7 +10,7 @@
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_page_item.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_text_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
@@ -926,8 +926,10 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                                     block.userData());
                                 blockData != nullptr && blockData->item()->parent() != nullptr) {
                                 const auto itemParent = blockData->item()->parent();
-                                if (itemParent->type()
-                                    == BusinessLayer::ComicBookTextModelItemType::Page) {
+                                if (itemParent->type() == BusinessLayer::TextModelItemType::Group
+                                    && static_cast<BusinessLayer::TextModelGroupItem*>(itemParent)
+                                            ->groupType()
+                                        == BusinessLayer::TextGroupType::Page) {
                                     const auto pageItem = static_cast<
                                         const BusinessLayer::ComicBookTextModelPageItem*>(
                                         itemParent);

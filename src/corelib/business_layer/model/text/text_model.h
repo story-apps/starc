@@ -7,6 +7,7 @@ class QXmlStreamReader;
 
 namespace BusinessLayer {
 
+enum class TextGroupType;
 class SimpleTextModel;
 class TextModelItem;
 class TextModelGroupItem;
@@ -30,7 +31,7 @@ public:
      */
     virtual TextModelFolderItem* createFolderItem() const = 0;
     virtual TextModelFolderItem* createFolderItem(QXmlStreamReader& _contentReader) const;
-    virtual TextModelGroupItem* createGroupItem() const = 0;
+    virtual TextModelGroupItem* createGroupItem(TextGroupType _type) const = 0;
     virtual TextModelGroupItem* createGroupItem(QXmlStreamReader& _contentReader) const;
     virtual TextModelSplitterItem* createSplitterItem() const;
     virtual TextModelSplitterItem* createSplitterItem(QXmlStreamReader& _contentReader) const;
@@ -134,6 +135,11 @@ protected:
      * @brief Инициилизировать пустой документ
      */
     virtual void initEmptyDocument() = 0;
+
+    /**
+     * @brief Финализировать инициилизацию
+     */
+    virtual void finalizeInitialization() = 0;
 
 private:
     class Implementation;

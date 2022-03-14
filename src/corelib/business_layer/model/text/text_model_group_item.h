@@ -35,7 +35,8 @@ public:
      * @brief Роли данных из модели
      */
     enum {
-        GroupNumberRole = Qt::UserRole + 1,
+        GroupTypeRole = Qt::UserRole + 1,
+        GroupNumberRole,
         GroupHeadingRole,
         GroupTextRole,
         GroupColorRole,
@@ -68,7 +69,7 @@ public:
     /**
      * @brief Номер группы
      */
-    Number number() const;
+    std::optional<Number> number() const;
     bool setNumber(int _number, const QString& _prefix);
 
     /**

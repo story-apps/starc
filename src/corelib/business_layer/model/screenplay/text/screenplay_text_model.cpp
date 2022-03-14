@@ -19,6 +19,7 @@
 #include <QStringListModel>
 #include <QXmlStreamReader>
 
+
 namespace BusinessLayer {
 
 namespace {
@@ -151,8 +152,10 @@ TextModelFolderItem* ScreenplayTextModel::createFolderItem() const
     return new ScreenplayTextModelFolderItem(this);
 }
 
-TextModelGroupItem* ScreenplayTextModel::createGroupItem() const
+TextModelGroupItem* ScreenplayTextModel::createGroupItem(TextGroupType _type) const
 {
+    Q_UNUSED(_type)
+
     return new ScreenplayTextModelSceneItem(this);
 }
 
@@ -618,6 +621,13 @@ void ScreenplayTextModel::initEmptyDocument()
     auto scene = new ScreenplayTextModelSceneItem(this);
     scene->appendItem(sceneHeading);
     appendItem(scene);
+}
+
+void ScreenplayTextModel::finalizeInitialization()
+{
+    emit rowsAboutToBeChanged();
+    d->updateNumbering();
+    emit rowsChanged();
 }
 
 } // namespace BusinessLayer

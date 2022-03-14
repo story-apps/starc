@@ -58,7 +58,7 @@ public:
     };
     struct CORE_LIBRARY_EXPORT Number {
         int value = 0;
-        QString displayValue = {};
+        QString text;
     };
     struct CORE_LIBRARY_EXPORT Bookmark {
         QColor color;

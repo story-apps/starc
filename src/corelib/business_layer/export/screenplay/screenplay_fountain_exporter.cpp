@@ -273,7 +273,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                     if (blockData != nullptr) {
                         const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(
                             blockData->item()->parent());
-                        paragraphText += QString(" #%1#").arg(sceneItem->number().text);
+                        paragraphText += QString(" #%1#").arg(sceneItem->number()->text);
                     }
                 }
 

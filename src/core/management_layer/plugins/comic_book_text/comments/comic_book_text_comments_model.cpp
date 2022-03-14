@@ -1,7 +1,7 @@
 #include "comic_book_text_comments_model.h"
 
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_text_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <utils/shugar.h>
@@ -19,8 +19,8 @@ namespace {
 /**
  * @brief Определить одинаково ли форматирование и комментарии редакторских заметок
  */
-bool isReviewMarksPartiallyEqual(const ComicBookTextModelTextItem::ReviewMark& _lhs,
-                                 const ComicBookTextModelTextItem::ReviewMark& _rhs)
+bool isReviewMarksPartiallyEqual(const TextModelTextItem::ReviewMark& _lhs,
+                                 const TextModelTextItem::ReviewMark& _rhs)
 {
     return _lhs.textColor == _rhs.textColor && _lhs.backgroundColor == _rhs.backgroundColor
         && _lhs.isDone == _rhs.isDone && _lhs.comments.first() == _rhs.comments.first();
@@ -37,8 +37,8 @@ public:
     /**
      * @brief Получить предыдущий индекс по карте textItemIndexToReviewIndex
      */
-    void saveReviewMark(ComicBookTextModelTextItem* _textItem,
-                        const ComicBookTextModelTextItem::ReviewMark& _reviewMark);
+    void saveReviewMark(TextModelTextItem* _textItem,
+                        const TextModelTextItem::ReviewMark& _reviewMark);
 
     void processSourceModelRowsInserted(const QModelIndex& _parent, int _firstRow, int _lastRow);
     void processSourceModelRowsRemoved(const QModelIndex& _parent, int _firstRow, int _lastRow);
@@ -54,7 +54,7 @@ public:
     /**
      * @brief Список всех текстовых элементов модели, для того, чтобы понимать их последовательность
      */
-    QVector<ComicBookTextModelTextItem*> modelTextItems;
+    QVector<TextModelTextItem*> modelTextItems;
 
     /**
      * @brief Вспомогательная структура для хранения заметки и группы элементов, к которой она
@@ -64,7 +64,7 @@ public:
         /**
          * @brief Сама заметка, на основе которой строится элемент
          */
-        ComicBookTextModelTextItem::ReviewMark reviewMark;
+        TextModelTextItem::ReviewMark reviewMark;
 
         /**
          * @brief Начало заметки в первом из элементов
@@ -79,7 +79,7 @@ public:
         /**
          * @brief Список абзацев, в которых находится заметка
          */
-        QVector<ComicBookTextModelTextItem*> items;
+        QVector<TextModelTextItem*> items;
 
 
         bool operator==(const ReviewMarkWrapper& _other) const;
@@ -96,8 +96,7 @@ ComicBookTextCommentsModel::Implementation::Implementation(ComicBookTextComments
 }
 
 void ComicBookTextCommentsModel::Implementation::saveReviewMark(
-    ComicBookTextModelTextItem* _textItem,
-    const ComicBookTextModelTextItem::ReviewMark& _reviewMark)
+    TextModelTextItem* _textItem, const TextModelTextItem::ReviewMark& _reviewMark)
 {
     bool reviewMarkAdded = false;
 
@@ -289,7 +288,7 @@ void ComicBookTextCommentsModel::Implementation::processSourceModelRowsInserted(
         //
         const auto itemIndex = model->index(row, 0, _parent);
         const auto item = model->itemForIndex(itemIndex);
-        if (item == nullptr || item->type() != ComicBookTextModelItemType::Text) {
+        if (item == nullptr || item->type() != TextModelItemType::Text) {
             if (item->hasChildren()) {
                 processSourceModelRowsInserted(itemIndex, 0, item->childCount() - 1);
             }
@@ -299,7 +298,7 @@ void ComicBookTextCommentsModel::Implementation::processSourceModelRowsInserted(
         //
         // Вставляем текстовый элемент в общий список на своё место
         //
-        auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+        auto textItem = static_cast<TextModelTextItem*>(item);
 
         //
         // Пропускаем корректировочные блоки
@@ -413,7 +412,7 @@ void ComicBookTextCommentsModel::Implementation::processSourceModelRowsRemoved(
         //
         const auto itemIndex = model->index(row, 0, _parent);
         const auto item = model->itemForIndex(itemIndex);
-        if (item == nullptr || item->type() != ComicBookTextModelItemType::Text) {
+        if (item == nullptr || item->type() != TextModelItemType::Text) {
             if (item->hasChildren()) {
                 processSourceModelRowsRemoved(itemIndex, 0, item->childCount() - 1);
             }
@@ -423,7 +422,7 @@ void ComicBookTextCommentsModel::Implementation::processSourceModelRowsRemoved(
         //
         // Собираем и удаляем все заметки, связанные с удаляемым элементом
         //
-        auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+        auto textItem = static_cast<TextModelTextItem*>(item);
 
         //
         // Пропускаем корректировочные блоки
@@ -518,11 +517,11 @@ void ComicBookTextCommentsModel::Implementation::processSourceModelDataChanged(
     }
 
     const auto item = model->itemForIndex(_index);
-    if (item == nullptr || item->type() != ComicBookTextModelItemType::Text) {
+    if (item == nullptr || item->type() != TextModelItemType::Text) {
         return;
     }
 
-    auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+    auto textItem = static_cast<TextModelTextItem*>(item);
 
     //
     // Пропускаем корректировочные блоки
@@ -672,8 +671,8 @@ void ComicBookTextCommentsModel::setModel(ComicBookTextModel* _model)
                 const auto itemIndex = d->model->index(itemRow, 0, _parent);
                 const auto item = d->model->itemForIndex(itemIndex);
                 switch (item->type()) {
-                case ComicBookTextModelItemType::Text: {
-                    const auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+                case TextModelItemType::Text: {
+                    const auto textItem = static_cast<TextModelTextItem*>(item);
 
                     //
                     // Пропускаем корректировочные блоки
@@ -807,11 +806,11 @@ QModelIndex ComicBookTextCommentsModel::mapFromComicBook(const QModelIndex& _ind
     }
 
     const auto item = d->model->itemForIndex(_index);
-    if (item == nullptr || item->type() != ComicBookTextModelItemType::Text) {
+    if (item == nullptr || item->type() != TextModelItemType::Text) {
         return {};
     }
 
-    auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+    auto textItem = static_cast<TextModelTextItem*>(item);
 
     //
     // Пропускаем корректировочные блоки

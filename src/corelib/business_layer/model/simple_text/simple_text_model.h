@@ -20,7 +20,7 @@ public:
      * @brief Создать элементы модели
      */
     TextModelFolderItem* createFolderItem() const override;
-    TextModelGroupItem* createGroupItem() const override;
+    TextModelGroupItem* createGroupItem(TextGroupType _type) const override;
     TextModelTextItem* createTextItem() const override;
 
     /**
@@ -46,6 +46,11 @@ protected:
      * @brief Инициилизировать пустой документ
      */
     void initEmptyDocument() override;
+
+    /**
+     * @brief Донастроить модель после её инициилизации
+     */
+    void finalizeInitialization() override;
 
 private:
     class Implementation;

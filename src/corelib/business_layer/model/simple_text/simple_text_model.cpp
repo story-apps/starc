@@ -44,6 +44,11 @@ public:
     TextModelItem* rootItem() const;
 
     /**
+     * @brief Обновить название документа
+     */
+    void updateDocumentName(const QModelIndex& _index = {});
+
+    /**
      * @brief Обновить номера глав
      */
     void updateNumbering();
@@ -69,6 +74,22 @@ TextModelItem* SimpleTextModel::Implementation::rootItem() const
 {
     return q->itemForIndex({});
 }
+
+void SimpleTextModel::Implementation::updateDocumentName(const QModelIndex& _index)
+{
+    if (_index.isValid()) {
+        return;
+    }
+
+    const auto item = firstTextItem(rootItem());
+    if (item == nullptr || item->type() != TextModelItemType::Text) {
+        q->setDocumentName({});
+    } else {
+        const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
+        q->setDocumentName(textItem->text());
+    }
+}
+
 
 void SimpleTextModel::Implementation::updateNumbering()
 {
@@ -101,20 +122,12 @@ SimpleTextModel::SimpleTextModel(QObject* _parent)
     : TextModel(_parent, createFolderItem())
     , d(new Implementation(this))
 {
-    connect(this, &SimpleTextModel::dataChanged, this, [this](const QModelIndex& _index) {
-        //
-        // Обновим название документа
-        //
-        if (!_index.isValid()) {
-            const auto item = firstTextItem(d->rootItem());
-            if (item == nullptr || item->type() != TextModelItemType::Text) {
-                setDocumentName({});
-            } else {
-                const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
-                setDocumentName(textItem->text());
-            }
-        }
-    });
+    connect(this, &SimpleTextModel::dataChanged, this,
+            [this](const QModelIndex& _index) { d->updateDocumentName(_index); });
+
+    auto updateNumbering = [this] { d->updateNumbering(); };
+    connect(this, &SimpleTextModel::rowsInserted, this, updateNumbering);
+    connect(this, &SimpleTextModel::rowsRemoved, this, updateNumbering);
 }
 
 SimpleTextModel::~SimpleTextModel() = default;
@@ -124,8 +137,10 @@ TextModelFolderItem* SimpleTextModel::createFolderItem() const
     return new TextModelFolderItem(this);
 }
 
-TextModelGroupItem* SimpleTextModel::createGroupItem() const
+TextModelGroupItem* SimpleTextModel::createGroupItem(TextGroupType _type) const
 {
+    Q_UNUSED(_type)
+
     return new SimpleTextModelChapterItem(this);
 }
 
@@ -178,6 +193,15 @@ void SimpleTextModel::initEmptyDocument()
     auto textItem = createTextItem();
     textItem->setParagraphType(TextParagraphType::Text);
     appendItem(textItem);
+}
+
+void SimpleTextModel::finalizeInitialization()
+{
+    d->updateDocumentName();
+
+    emit rowsAboutToBeChanged();
+    d->updateNumbering();
+    emit rowsChanged();
 }
 
 } // namespace BusinessLayer

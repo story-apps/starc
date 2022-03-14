@@ -134,8 +134,7 @@ void ScreenplayTextSearchManager::Implementation::findText(bool _backward)
                 cursor = textEdit->document()->find(searchText, cursor, findFlags);
                 blockType = TextBlockStyle::forBlock(cursor.block());
                 if (!cursor.isNull()) {
-                    if (searchType == TextParagraphType::Undefined
-                        || searchType == blockType) {
+                    if (searchType == TextParagraphType::Undefined || searchType == blockType) {
                         textEdit->ensureCursorVisible(cursor);
                     } else {
                         restartSearch = true;

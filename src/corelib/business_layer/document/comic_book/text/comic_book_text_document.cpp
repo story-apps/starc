@@ -5,11 +5,11 @@
 #include "comic_book_text_cursor.h"
 
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_folder_item.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_page_item.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_panel_item.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_splitter_item.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_text_item.h>
+#include <business_layer/model/text/text_model_folder_item.h>
+#include <business_layer/model/text/text_model_splitter_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -46,8 +46,8 @@ public:
     /**
      * @brief Скорректировать позиции элементов на заданную дистанцию
      */
-    void correctPositionsToItems(
-        std::map<int, BusinessLayer::ComicBookTextModelItem*>::iterator _from, int _distance);
+    void correctPositionsToItems(std::map<int, BusinessLayer::TextModelItem*>::iterator _from,
+                                 int _distance);
     void correctPositionsToItems(int _fromPosition, int _distance);
 
     /**
@@ -76,7 +76,7 @@ public:
     QString templateId;
     QPointer<BusinessLayer::ComicBookTextModel> model;
     bool canChangeModel = true;
-    std::map<int, BusinessLayer::ComicBookTextModelItem*> positionsToItems;
+    std::map<int, BusinessLayer::TextModelItem*> positionsToItems;
     ComicBookTextCorrector corrector;
 };
 
@@ -92,14 +92,14 @@ const ComicBookTemplate& ComicBookTextDocument::Implementation::documentTemplate
 }
 
 void ComicBookTextDocument::Implementation::correctPositionsToItems(
-    std::map<int, BusinessLayer::ComicBookTextModelItem*>::iterator _from, int _distance)
+    std::map<int, BusinessLayer::TextModelItem*>::iterator _from, int _distance)
 {
     if (_from == positionsToItems.end()) {
         return;
     }
 
     if (_distance > 0) {
-        auto reversed = [](std::map<int, BusinessLayer::ComicBookTextModelItem*>::iterator iter) {
+        auto reversed = [](std::map<int, BusinessLayer::TextModelItem*>::iterator iter) {
             return std::prev(std::make_reverse_iterator(iter));
         };
         for (auto iter = positionsToItems.rbegin(); iter != std::make_reverse_iterator(_from);
@@ -131,16 +131,15 @@ void ComicBookTextDocument::Implementation::readModelItemContent(int _itemRow,
     const auto itemIndex = model->index(_itemRow, 0, _parent);
     const auto item = model->itemForIndex(itemIndex);
     switch (item->type()) {
-    case ComicBookTextModelItemType::Folder:
-    case ComicBookTextModelItemType::Page:
-    case ComicBookTextModelItemType::Panel: {
+    case TextModelItemType::Folder:
+    case TextModelItemType::Group: {
         break;
     }
 
-    case ComicBookTextModelItemType::Splitter: {
-        const auto splitterItem = static_cast<ComicBookTextModelSplitterItem*>(item);
+    case TextModelItemType::Splitter: {
+        const auto splitterItem = static_cast<TextModelSplitterItem*>(item);
         switch (splitterItem->splitterType()) {
-        case ComicBookTextModelSplitterItemType::Start: {
+        case TextModelSplitterItemType::Start: {
             //
             // Если это не первый абзац, вставим блок для него
             //
@@ -209,7 +208,7 @@ void ComicBookTextDocument::Implementation::readModelItemContent(int _itemRow,
             break;
         }
 
-        case ComicBookTextModelSplitterItemType::End: {
+        case TextModelSplitterItemType::End: {
             //
             // Блок завершения таблицы уже был вставлен, при вставке начала и самой таблицы,
             // поэтому тут лишь сохраняем его в карту позиций элементов
@@ -232,8 +231,8 @@ void ComicBookTextDocument::Implementation::readModelItemContent(int _itemRow,
         break;
     }
 
-    case ComicBookTextModelItemType::Text: {
-        const auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+    case TextModelItemType::Text: {
+        const auto textItem = static_cast<TextModelTextItem*>(item);
 
         //
         // Если новый блок должен быть в другой колонке
@@ -507,11 +506,11 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
             }
 
             const auto item = d->model->itemForIndex(_topLeft);
-            if (item->type() != ComicBookTextModelItemType::Text) {
+            if (item->type() != TextModelItemType::Text) {
                 return;
             }
 
-            const auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+            const auto textItem = static_cast<TextModelTextItem*>(item);
 
             ComicBookTextCursor cursor(this);
             cursor.setPosition(position);
@@ -693,9 +692,8 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                 // Игнорируем добавление пустых сцен и папок
                 //
                 const auto item = d->model->itemForIndex(d->model->index(_from, 0, _parent));
-                if ((item->type() == ComicBookTextModelItemType::Folder
-                     || item->type() == ComicBookTextModelItemType::Page
-                     || item->type() == ComicBookTextModelItemType::Panel)
+                if ((item->type() == TextModelItemType::Folder
+                     || item->type() == TextModelItemType::Group)
                     && !item->hasChildren()) {
                     return;
                 }
@@ -715,9 +713,8 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                     // родителя
                     //
                     const auto cursorItem = d->model->itemForIndex(cursorItemIndex);
-                    if ((cursorItem->type() == ComicBookTextModelItemType::Folder
-                         || cursorItem->type() == ComicBookTextModelItemType::Page
-                         || cursorItem->type() == ComicBookTextModelItemType::Panel)
+                    if ((cursorItem->type() == TextModelItemType::Folder
+                         || cursorItem->type() == TextModelItemType::Group)
                         && !cursorItem->hasChildren()) {
                         if (_from > 1) {
                             cursorItemIndex = d->model->index(_from - 2, 0, _parent);
@@ -802,13 +799,13 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                 // а все блоки переносим за таблицу
                 //
                 if (auto item = d->model->itemForIndex(fromIndex);
-                    item->type() == ComicBookTextModelItemType::Splitter) {
-                    auto splitterItem = static_cast<ComicBookTextModelSplitterItem*>(item);
+                    item->type() == TextModelItemType::Splitter) {
+                    auto splitterItem = static_cast<TextModelSplitterItem*>(item);
 
                     //
                     // ... убираем таблицу на удалении стартового элемента
                     //
-                    if (splitterItem->splitterType() == ComicBookTextModelSplitterItemType::Start) {
+                    if (splitterItem->splitterType() == TextModelSplitterItemType::Start) {
                         //
                         // Заходим в таблицу
                         //
@@ -835,8 +832,8 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                             // ... проставим элементу блока флаг, что он теперь вне таблицы
                             //
                             auto item = d->positionsToItems[cursor.position()];
-                            if (item->type() == ComicBookTextModelItemType::Text) {
-                                auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+                            if (item->type() == TextModelItemType::Text) {
+                                auto textItem = static_cast<TextModelTextItem*>(item);
                                 textItem->setInFirstColumn({});
                             }
                             //
@@ -1072,12 +1069,13 @@ QString ComicBookTextDocument::pageNumber(const QTextBlock& _forBlock) const
     }
 
     const auto itemParent = blockData->item()->parent();
-    if (itemParent == nullptr || itemParent->type() != ComicBookTextModelItemType::Page) {
+    if (itemParent == nullptr || itemParent->type() != TextModelItemType::Group
+        || static_cast<TextModelGroupItem*>(itemParent)->groupType() != TextGroupType::Page) {
         return {};
     }
 
     const auto panelItem = static_cast<const ComicBookTextModelPageItem*>(itemParent);
-    return panelItem->number().value;
+    return panelItem->pageNumber()->text;
 }
 
 QString ComicBookTextDocument::panelNumber(const QTextBlock& _forBlock) const
@@ -1092,12 +1090,13 @@ QString ComicBookTextDocument::panelNumber(const QTextBlock& _forBlock) const
     }
 
     const auto itemParent = blockData->item()->parent();
-    if (itemParent == nullptr || itemParent->type() != ComicBookTextModelItemType::Panel) {
+    if (itemParent == nullptr || itemParent->type() != TextModelItemType::Group
+        || static_cast<TextModelGroupItem*>(itemParent)->groupType() != TextGroupType::Panel) {
         return {};
     }
 
     const auto panelItem = static_cast<const ComicBookTextModelPanelItem*>(itemParent);
-    return panelItem->number().value;
+    return panelItem->number()->text;
 }
 
 QString ComicBookTextDocument::dialogueNumber(const QTextBlock& _forBlock) const
@@ -1112,12 +1111,12 @@ QString ComicBookTextDocument::dialogueNumber(const QTextBlock& _forBlock) const
     }
 
     const auto item = blockData->item();
-    if (item == nullptr || item->type() != ComicBookTextModelItemType::Text) {
+    if (item == nullptr || item->type() != TextModelItemType::Text) {
         return {};
     }
 
-    const auto textItem = static_cast<const ComicBookTextModelTextItem*>(item);
-    return textItem->number().value_or(ComicBookTextModelTextItem::Number()).value;
+    const auto textItem = static_cast<const TextModelTextItem*>(item);
+    return textItem->number().value_or(TextModelTextItem::Number()).text;
 }
 
 QColor ComicBookTextDocument::itemColor(const QTextBlock& _forBlock) const
@@ -1136,15 +1135,12 @@ QColor ComicBookTextDocument::itemColor(const QTextBlock& _forBlock) const
         return {};
     }
     QColor color;
-    if (itemParent->type() == ComicBookTextModelItemType::Folder) {
-        const auto folderItem = static_cast<const ComicBookTextModelFolderItem*>(itemParent);
+    if (itemParent->type() == TextModelItemType::Folder) {
+        const auto folderItem = static_cast<const TextModelFolderItem*>(itemParent);
         color = folderItem->color();
-    } else if (itemParent->type() == ComicBookTextModelItemType::Page) {
-        const auto pageItem = static_cast<const ComicBookTextModelPageItem*>(itemParent);
-        color = pageItem->color();
-    } else if (itemParent->type() == ComicBookTextModelItemType::Panel) {
-        const auto panelItem = static_cast<const ComicBookTextModelPanelItem*>(itemParent);
-        color = panelItem->color();
+    } else if (itemParent->type() == TextModelItemType::Group) {
+        const auto groupItem = static_cast<const TextModelGroupItem*>(itemParent);
+        color = groupItem->color();
     }
 
     return color;
@@ -1438,8 +1434,8 @@ void ComicBookTextDocument::splitParagraph(const ComicBookTextCursor& _cursor)
         auto block = findBlock(cursor.selectionStart());
         while (block.isValid() && block.position() < cursor.selectionEnd()) {
             auto item = d->positionsToItems[block.position()];
-            if (item->type() == ComicBookTextModelItemType::Text) {
-                auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+            if (item->type() == TextModelItemType::Text) {
+                auto textItem = static_cast<TextModelTextItem*>(item);
                 textItem->setInFirstColumn(true);
             }
 
@@ -1521,8 +1517,8 @@ void ComicBookTextDocument::mergeParagraph(const ComicBookTextCursor& _cursor)
         updateCursor.movePosition(QTextCursor::NextBlock);
         while (!updateCursor.atEnd() && updateCursor.inTable()) {
             auto item = d->positionsToItems[updateCursor.position()];
-            if (item->type() == ComicBookTextModelItemType::Text) {
-                auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+            if (item->type() == TextModelItemType::Text) {
+                auto textItem = static_cast<TextModelTextItem*>(item);
                 textItem->setInFirstColumn({});
             }
 
@@ -1597,7 +1593,7 @@ void ComicBookTextDocument::addReviewMark(const QColor& _textColor, const QColor
                                           const QString& _comment,
                                           const ComicBookTextCursor& _cursor)
 {
-    ComicBookTextModelTextItem::ReviewMark reviewMark;
+    TextModelTextItem::ReviewMark reviewMark;
     if (_textColor.isValid()) {
         reviewMark.textColor = _textColor;
     }
@@ -1650,7 +1646,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
         //
         // Собираем элементы которые потенциально могут быть удалены
         //
-        std::map<ComicBookTextModelItem*, int> itemsToDelete;
+        std::map<TextModelItem*, int> itemsToDelete;
         {
             auto itemsToDeleteIter = d->positionsToItems.lower_bound(_position);
             while (itemsToDeleteIter != d->positionsToItems.end()
@@ -1668,7 +1664,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             //
             // Формируем мапу элементов со скорректированными позициями
             //
-            std::map<int, ComicBookTextModelItem*> correctedItems;
+            std::map<int, TextModelItem*> correctedItems;
             for (auto itemIter = itemToUpdateIter; itemIter != d->positionsToItems.end();
                  ++itemIter) {
                 correctedItems.emplace(itemIter->first - _charsRemoved + _charsAdded,
@@ -1713,19 +1709,19 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
         //
         // Сначала группируем и "сжимаем" блоки
         //
-        std::map<int, ComicBookTextModelItem*> itemsToDeleteSorted;
+        std::map<int, TextModelItem*> itemsToDeleteSorted;
         for (auto [item, position] : itemsToDelete) {
             itemsToDeleteSorted.emplace(position, item);
         }
         //
-        std::map<int, ComicBookTextModelItem*> itemsToDeleteCompressed;
+        std::map<int, TextModelItem*> itemsToDeleteCompressed;
         int compressionCycle = 0;
         while (!itemsToDeleteSorted.empty()) {
             //
             // Формируем список идущих подряд элементов
             //
             struct ItemToPosition {
-                ComicBookTextModelItem* item;
+                TextModelItem* item;
                 int position;
             };
             QVector<ItemToPosition> itemsGroup;
@@ -1773,7 +1769,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
         //
         // Удаляем все верхнеуровневые элементы, а так же группы сцен и папок любого уровня
         //
-        QVector<ComicBookTextModelItem*> itemsToDeleteGroup;
+        QVector<TextModelItem*> itemsToDeleteGroup;
         auto removeGroup = [this, &itemsToDeleteGroup] {
             if (itemsToDeleteGroup.isEmpty()) {
                 return;
@@ -1789,9 +1785,8 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             // Будем удалять только если элемент лежит в руте, или является папкой, или сценой
             //
             if (removeIter->second->parent()->hasParent()
-                && removeIter->second->type() != ComicBookTextModelItemType::Folder
-                && removeIter->second->type() != ComicBookTextModelItemType::Page
-                && removeIter->second->type() != ComicBookTextModelItemType::Panel) {
+                && removeIter->second->type() != TextModelItemType::Folder
+                && removeIter->second->type() != TextModelItemType::Group) {
                 removeGroup();
                 ++removeIter;
                 continue;
@@ -1822,8 +1817,8 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             // и перенести элементы к предыдущему группирующему элементу
             //
             bool needToDeleteParent = false;
-            if (item->type() == ComicBookTextModelItemType::Text) {
-                const auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+            if (item->type() == TextModelItemType::Text) {
+                const auto textItem = static_cast<TextModelTextItem*>(item);
                 //
                 // ... т.к. при удалении папки удаляются и заголовок и конец, но удаляются они
                 //     последовательно сверху вниз, то удалять непосредственно папку будем,
@@ -1847,7 +1842,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 //
                 // Определим предыдущий
                 //
-                ComicBookTextModelItem* previousItem = nullptr;
+                TextModelItem* previousItem = nullptr;
                 const int itemRow
                     = itemParent->hasParent() ? itemParent->parent()->rowOfChild(itemParent) : 0;
                 if (itemRow > 0) {
@@ -1858,7 +1853,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 //
                 // Переносим дочерние элементы на уровень родительского элемента
                 //
-                ComicBookTextModelItem* lastMovedItem = nullptr;
+                TextModelItem* lastMovedItem = nullptr;
                 while (itemParent->childCount() > 0) {
                     auto childItem = itemParent->childAt(0);
                     d->model->takeItem(childItem, itemParent);
@@ -1866,9 +1861,8 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                     //
                     // Папки и сцены переносим на один уровень с текущим элементом
                     //
-                    if (childItem->type() == ComicBookTextModelItemType::Folder
-                        || childItem->type() == ComicBookTextModelItemType::Page
-                        || childItem->type() == ComicBookTextModelItemType::Panel) {
+                    if (childItem->type() == TextModelItemType::Folder
+                        || childItem->type() == TextModelItemType::Group) {
                         if (lastMovedItem == nullptr
                             || lastMovedItem->parent() != itemParent->parent()) {
                             d->model->insertItem(childItem, itemParent);
@@ -1886,9 +1880,8 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                             // Если перед удаляемым была сцена или папка, то в её конец
                             //
                             if (previousItem != nullptr
-                                && (previousItem->type() == ComicBookTextModelItemType::Folder
-                                    || previousItem->type() == ComicBookTextModelItemType::Page
-                                    || previousItem->type() == ComicBookTextModelItemType::Panel)) {
+                                && (previousItem->type() == TextModelItemType::Folder
+                                    || previousItem->type() == TextModelItemType::Group)) {
                                 d->model->appendItem(childItem, previousItem);
                             }
                             //
@@ -1922,17 +1915,15 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в
                 // предыдущую сцену
                 //
-                if (previousItem != nullptr
-                    && (previousItem->type() == ComicBookTextModelItemType::Page
-                        || previousItem->type() == ComicBookTextModelItemType::Panel)) {
+                if (previousItem != nullptr && (previousItem->type() == TextModelItemType::Group)) {
                     const auto previousItemRow = previousItem->parent()->rowOfChild(previousItem);
                     if (previousItemRow >= 0
                         && previousItemRow < previousItem->parent()->childCount() - 1) {
                         const int nextItemRow = previousItemRow + 1;
                         auto nextItem = previousItem->parent()->childAt(nextItemRow);
                         while (nextItem != nullptr
-                               && (nextItem->type() == ComicBookTextModelItemType::Text
-                                   || nextItem->type() == ComicBookTextModelItemType::Splitter)) {
+                               && (nextItem->type() == TextModelItemType::Text
+                                   || nextItem->type() == TextModelItemType::Splitter)) {
                             d->model->takeItem(nextItem, nextItem->parent());
                             d->model->appendItem(nextItem, previousItem);
                             nextItem = previousItem->parent()->childAt(nextItemRow);
@@ -1950,7 +1941,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
     //
     // ... определим элемент модели для предыдущего блока
     //
-    auto previousItem = [block]() -> ComicBookTextModelItem* {
+    auto previousItem = [block]() -> TextModelItem* {
         if (!block.isValid()) {
             return nullptr;
         }
@@ -1996,16 +1987,16 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 //
                 // Сформируем элемент в зависимости от типа разделителя
                 //
-                ComicBookTextModelSplitterItem* splitterItem = nullptr;
+                TextModelSplitterItem* splitterItem = nullptr;
                 if (cursor.inTable() && !tableInfo.inTable) {
                     tableInfo.inTable = true;
                     tableInfo.inFirstColumn = true;
-                    splitterItem = new ComicBookTextModelSplitterItem(
-                        ComicBookTextModelSplitterItemType::Start);
+                    splitterItem = d->model->createSplitterItem();
+                    splitterItem->setSplitterType(TextModelSplitterItemType::Start);
                 } else {
                     tableInfo = {};
-                    splitterItem = new ComicBookTextModelSplitterItem(
-                        ComicBookTextModelSplitterItemType::End);
+                    splitterItem = d->model->createSplitterItem();
+                    splitterItem->setSplitterType(TextModelSplitterItemType::End);
                 }
                 if (previousItem == nullptr) {
                     d->model->prependItem(splitterItem);
@@ -2034,20 +2025,20 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             //
             // Создаём группирующий элемент, если создаётся непосредственно сцена или папка
             //
-            ComicBookTextModelItem* parentItem = nullptr;
+            TextModelItem* parentItem = nullptr;
             switch (paragraphType) {
             case TextParagraphType::SequenceHeader: {
-                parentItem = new ComicBookTextModelFolderItem;
+                parentItem = d->model->createFolderItem();
                 break;
             }
 
             case TextParagraphType::Page: {
-                parentItem = new ComicBookTextModelPageItem;
+                parentItem = d->model->createGroupItem(TextGroupType::Page);
                 break;
             }
 
             case TextParagraphType::Panel: {
-                parentItem = new ComicBookTextModelPanelItem;
+                parentItem = d->model->createGroupItem(TextGroupType::Panel);
                 break;
             }
 
@@ -2058,7 +2049,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             //
             // Создаём сам текстовый элемент
             //
-            auto textItem = new ComicBookTextModelTextItem;
+            auto textItem = d->model->createTextItem();
             textItem->setCorrection(
                 block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection));
             textItem->setCorrectionContinued(
@@ -2087,11 +2078,11 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             // Является ли предыдущий элемент футером папки
             //
             const bool previousItemIsFolderFooter = [previousItem] {
-                if (!previousItem || previousItem->type() != ComicBookTextModelItemType::Text) {
+                if (!previousItem || previousItem->type() != TextModelItemType::Text) {
                     return false;
                 }
 
-                auto textItem = static_cast<ComicBookTextModelTextItem*>(previousItem);
+                auto textItem = static_cast<TextModelTextItem*>(previousItem);
                 return textItem->paragraphType() == TextParagraphType::SequenceFooter;
             }();
 
@@ -2112,16 +2103,21 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                     // Если элемент вставляется после другого элемента того же уровня, или после
                     // окончания папки, то вставляем его на том же уровне, что и предыдущий
                     //
-                    if (previousTextItemParent->type() == parentItem->type()
+                    if ((previousTextItemParent->type() == parentItem->type()
+                         && static_cast<TextModelGroupItem*>(parentItem)->groupType()
+                             == static_cast<TextModelGroupItem*>(previousTextItemParent)
+                                    ->groupType())
                         || previousItemIsFolderFooter) {
                         d->model->insertItem(parentItem, previousTextItemParent);
                     }
                     //
                     //
                     //
-                    else if (parentItem->type() == ComicBookTextModelItemType::Page
-                             && previousTextItemParent->type()
-                                 == ComicBookTextModelItemType::Panel) {
+                    else if (parentItem->type() == TextModelItemType::Group
+                             && previousTextItemParent->type() == TextModelItemType::Group
+                             && static_cast<TextModelGroupItem*>(parentItem)->level()
+                                 < static_cast<TextModelGroupItem*>(previousTextItemParent)
+                                       ->level()) {
                         d->model->insertItem(parentItem, previousTextItemParent->parent());
                     }
                     //
@@ -2147,8 +2143,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 // Если вставляется сцена, то все текстовые элементы идущие после неё нужно
                 // положить к ней внутрь
                 //
-                if (parentItem->type() == ComicBookTextModelItemType::Page
-                    || parentItem->type() == ComicBookTextModelItemType::Panel) {
+                if (parentItem->type() == TextModelItemType::Group) {
                     //
                     // Определим родителя из которого нужно извлекать те самые текстовые элементы
                     //
@@ -2186,9 +2181,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                         if (previousItem != nullptr) {
                             if (previousItemIsFolderFooter) {
                                 return grandParentItem->rowOfChild(previousItem->parent()) + 2;
-                            } else if (grandParentItem->type() == ComicBookTextModelItemType::Page
-                                       || grandParentItem->type()
-                                           == ComicBookTextModelItemType::Panel) {
+                            } else if (grandParentItem->type() == TextModelItemType::Group) {
                                 return grandParentItem->rowOfChild(previousItem) + 1;
                             }
                         }
@@ -2201,12 +2194,12 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                     //
                     while (grandParentItem->childCount() > itemIndex) {
                         auto grandParentChildItem = grandParentItem->childAt(itemIndex);
-                        if (grandParentChildItem->type() != ComicBookTextModelItemType::Text) {
+                        if (grandParentChildItem->type() != TextModelItemType::Text) {
                             break;
                         }
 
                         auto grandParentChildTextItem
-                            = static_cast<ComicBookTextModelTextItem*>(grandParentChildItem);
+                            = static_cast<TextModelTextItem*>(grandParentChildItem);
                         if (grandParentChildTextItem->paragraphType()
                             == TextParagraphType::SequenceFooter) {
                             break;
@@ -2221,9 +2214,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 // элементы, которые идут после вставленной папки на уровень самой папки
                 //
                 else if (previousItem != nullptr
-                         && (previousItem->parent()->type() == ComicBookTextModelItemType::Page
-                             || previousItem->parent()->type()
-                                 == ComicBookTextModelItemType::Panel)) {
+                         && (previousItem->parent()->type() == TextModelItemType::Group)) {
                     auto grandParentItem = previousItem->parent();
                     const int lastItemIndex = grandParentItem->rowOfChild(previousItem) + 1;
                     //
@@ -2232,12 +2223,12 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                     while (grandParentItem->childCount() > lastItemIndex) {
                         auto grandParentChildItem
                             = grandParentItem->childAt(grandParentItem->childCount() - 1);
-                        if (grandParentChildItem->type() != ComicBookTextModelItemType::Text) {
+                        if (grandParentChildItem->type() != TextModelItemType::Text) {
                             break;
                         }
 
                         auto grandParentChildTextItem
-                            = static_cast<ComicBookTextModelTextItem*>(grandParentChildItem);
+                            = static_cast<TextModelTextItem*>(grandParentChildItem);
                         if (grandParentChildTextItem->paragraphType()
                             == TextParagraphType::SequenceFooter) {
                             break;
@@ -2291,8 +2282,8 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             auto blockData = static_cast<ComicBookTextBlockData*>(block.userData());
             auto item = blockData->item();
 
-            if (item->type() == ComicBookTextModelItemType::Text) {
-                auto textItem = static_cast<ComicBookTextModelTextItem*>(item);
+            if (item->type() == TextModelItemType::Text) {
+                auto textItem = static_cast<TextModelTextItem*>(item);
                 textItem->setCorrection(
                     block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection));
                 textItem->setCorrectionContinued(block.blockFormat().boolProperty(

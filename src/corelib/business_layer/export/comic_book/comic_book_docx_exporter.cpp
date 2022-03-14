@@ -8,7 +8,7 @@
 #include <business_layer/document/comic_book/text/comic_book_text_document.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_page_item.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_panel_item.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_splitter_item.h>
+#include <business_layer/model/text/text_model_splitter_item.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <utils/helpers/measurement_helper.h>
@@ -425,9 +425,8 @@ QString docxText(QMap<int, QStringList>& _comments, const ComicBookTextCursor& _
     else if (currentBlockType == TextParagraphType::PageSplitter) {
         const auto blockData = dynamic_cast<ComicBookTextBlockData*>(block.userData());
         if (blockData != nullptr) {
-            const auto splitterItem
-                = static_cast<ComicBookTextModelSplitterItem*>(blockData->item());
-            if (splitterItem->splitterType() == ComicBookTextModelSplitterItemType::Start) {
+            const auto splitterItem = static_cast<TextModelSplitterItem*>(blockData->item());
+            if (splitterItem->splitterType() == TextModelSplitterItemType::Start) {
                 documentXml.append("<w:tbl><w:tblPr>");
                 const auto fullTableWidth = tableWidth();
                 documentXml.append(

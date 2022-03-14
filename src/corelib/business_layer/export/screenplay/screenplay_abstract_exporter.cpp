@@ -225,7 +225,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
                 const auto sceneItem
                     = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
                 if (!_exportOptions.exportScenes.contains(
-                        QString::number(sceneItem->number().value))) {
+                        QString::number(sceneItem->number()->value))) {
                     needRemoveBlock = true;
                 }
             }

@@ -5,9 +5,9 @@
 
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_folder_item.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_page_item.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_panel_item.h>
+#include <business_layer/model/text/text_model_folder_item.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/color_picker/color_picker.h>
 #include <ui/widgets/context_menu/context_menu.h>
@@ -107,15 +107,12 @@ void ComicBookTextStructureManager::Implementation::updateContextMenu(
         const auto itemIndex = structureModel->mapToSource(_indexes.constFirst());
         std::optional<QColor> itemColor;
         const auto item = model->itemForIndex(itemIndex);
-        if (item->type() == BusinessLayer::ComicBookTextModelItemType::Folder) {
-            const auto folderItem = static_cast<BusinessLayer::ComicBookTextModelFolderItem*>(item);
+        if (item->type() == BusinessLayer::TextModelItemType::Folder) {
+            const auto folderItem = static_cast<BusinessLayer::TextModelFolderItem*>(item);
             itemColor = folderItem->color();
-        } else if (item->type() == BusinessLayer::ComicBookTextModelItemType::Page) {
-            const auto pageItem = static_cast<BusinessLayer::ComicBookTextModelPageItem*>(item);
-            itemColor = pageItem->color();
-        } else if (item->type() == BusinessLayer::ComicBookTextModelItemType::Panel) {
-            const auto panelItem = static_cast<BusinessLayer::ComicBookTextModelPanelItem*>(item);
-            itemColor = panelItem->color();
+        } else if (item->type() == BusinessLayer::TextModelItemType::Group) {
+            const auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+            itemColor = groupItem->color();
         }
         if (itemColor.has_value()) {
             auto colorMenu = new QAction;
@@ -129,26 +126,21 @@ void ComicBookTextStructureManager::Implementation::updateContextMenu(
             colorPicker->setSelectedColor(itemColor.value());
             colorPicker->setBackgroundColor(Ui::DesignSystem::color().background());
             colorPicker->setTextColor(Ui::DesignSystem::color().onBackground());
-            connect(
-                colorPicker, &ColorPicker::selectedColorChanged, view,
-                [this, itemColor, item](const QColor& _color) {
-                    if (item->type() == BusinessLayer::ComicBookTextModelItemType::Folder) {
-                        const auto folderItem
-                            = static_cast<BusinessLayer::ComicBookTextModelFolderItem*>(item);
-                        folderItem->setColor(_color);
-                    } else if (item->type() == BusinessLayer::ComicBookTextModelItemType::Page) {
-                        const auto pageItem
-                            = static_cast<BusinessLayer::ComicBookTextModelPageItem*>(item);
-                        pageItem->setColor(_color);
-                    } else if (item->type() == BusinessLayer::ComicBookTextModelItemType::Panel) {
-                        const auto panelItem
-                            = static_cast<BusinessLayer::ComicBookTextModelPanelItem*>(item);
-                        panelItem->setColor(_color);
-                    }
+            connect(colorPicker, &ColorPicker::selectedColorChanged, view,
+                    [this, itemColor, item](const QColor& _color) {
+                        if (item->type() == BusinessLayer::TextModelItemType::Folder) {
+                            const auto folderItem
+                                = static_cast<BusinessLayer::TextModelFolderItem*>(item);
+                            folderItem->setColor(_color);
+                        } else if (item->type() == BusinessLayer::TextModelItemType::Group) {
+                            const auto groupItem
+                                = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+                            groupItem->setColor(_color);
+                        }
 
-                    model->updateItem(item);
-                    contextMenu->hideContextMenu();
-                });
+                        model->updateItem(item);
+                        contextMenu->hideContextMenu();
+                    });
         }
     }
     //

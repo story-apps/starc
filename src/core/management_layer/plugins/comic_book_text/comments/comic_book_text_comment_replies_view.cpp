@@ -3,7 +3,7 @@
 #include "comic_book_text_comment_view.h"
 #include "comic_book_text_comments_model.h"
 
-#include <business_layer/model/comic_book/text/comic_book_text_model_text_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/chat/chat_message.h>
 #include <ui/widgets/chat/chat_messages_view.h>
@@ -116,9 +116,8 @@ void ComicBookTextCommentRepliesView::setCommentIndex(const QModelIndex& _index)
     //
     // Собираем ответы на комментарий и помещаем их во вьюху
     //
-    const auto comments
-        = _index.data(ComicBookTextCommentsModel::ReviewMarkCommentsRole)
-              .value<QVector<BusinessLayer::ComicBookTextModelTextItem::ReviewComment>>();
+    const auto comments = _index.data(ComicBookTextCommentsModel::ReviewMarkCommentsRole)
+                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
     QVector<ChatMessage> replies;
     for (auto comment : comments) {
         if (comment == comments.first()) {

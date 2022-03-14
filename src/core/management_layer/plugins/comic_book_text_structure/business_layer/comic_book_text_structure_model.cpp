@@ -1,8 +1,7 @@
 #include "comic_book_text_structure_model.h"
 
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_item.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_text_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/comic_book_template.h>
 
 #include <QApplication>
@@ -51,9 +50,7 @@ bool ComicBookTextStructureModel::filterAcceptsRow(int _sourceRow,
     //
     // Показываем папки, страницы и панели
     //
-    if (item->type() == ComicBookTextModelItemType::Folder
-        || item->type() == ComicBookTextModelItemType::Page
-        || item->type() == ComicBookTextModelItemType::Panel) {
+    if (item->type() == TextModelItemType::Folder || item->type() == TextModelItemType::Group) {
         return true;
     }
     //
