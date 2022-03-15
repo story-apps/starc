@@ -355,7 +355,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 break;
             }
 
-            case TextParagraphType::SequenceHeader: {
+            case TextParagraphType::SequenceHeading: {
                 //
                 // Напечатаем в начале столько #, насколько глубоко мы в директории
                 //

@@ -135,11 +135,11 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
         return d->m_unformattedTextHandler.data();
     }
 
-    case TextParagraphType::Page: {
+    case TextParagraphType::PageHeading: {
         return d->m_pageHandler.data();
     }
 
-    case TextParagraphType::Panel: {
+    case TextParagraphType::PanelHeading: {
         return d->m_panelHandler.data();
     }
 
@@ -159,7 +159,7 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
         return d->m_inlineNoteHandler.data();
     }
 
-    case TextParagraphType::SequenceHeader: {
+    case TextParagraphType::SequenceHeading: {
         return d->m_folderHeaderHandler.data();
     }
 

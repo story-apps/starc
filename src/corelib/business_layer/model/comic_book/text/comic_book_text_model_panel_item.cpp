@@ -91,7 +91,7 @@ void ComicBookTextModelPanelItem::handleChange()
         // Собираем текст
         //
         switch (childTextItem->paragraphType()) {
-        case TextParagraphType::Panel: {
+        case TextParagraphType::PanelHeading: {
             heading
                 = TextHelper::smartToUpper(ComicBookPanelParser::panelTitle(childTextItem->text()));
             const auto panelDescription

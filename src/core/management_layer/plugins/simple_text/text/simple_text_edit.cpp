@@ -484,12 +484,12 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
     //
     // ... идём до начала сцены
     //
-    while (TextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading1
-           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading2
-           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading3
-           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading4
-           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading5
-           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Heading6
+    while (TextBlockStyle::forBlock(topBlock) != TextParagraphType::ChapterHeading1
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::ChapterHeading2
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::ChapterHeading3
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::ChapterHeading4
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::ChapterHeading5
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::ChapterHeading6
            && topBlock != document()->firstBlock()) {
         topBlock = topBlock.previous();
     }

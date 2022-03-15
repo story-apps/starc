@@ -1118,12 +1118,12 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             bool needToDeleteParent = false;
             if (item->type() == TextModelItemType::Text) {
                 const auto textItem = static_cast<TextModelTextItem*>(item);
-                needToDeleteParent = textItem->paragraphType() == TextParagraphType::Heading1
-                    || textItem->paragraphType() == TextParagraphType::Heading2
-                    || textItem->paragraphType() == TextParagraphType::Heading3
-                    || textItem->paragraphType() == TextParagraphType::Heading4
-                    || textItem->paragraphType() == TextParagraphType::Heading5
-                    || textItem->paragraphType() == TextParagraphType::Heading6;
+                needToDeleteParent = textItem->paragraphType() == TextParagraphType::ChapterHeading1
+                    || textItem->paragraphType() == TextParagraphType::ChapterHeading2
+                    || textItem->paragraphType() == TextParagraphType::ChapterHeading3
+                    || textItem->paragraphType() == TextParagraphType::ChapterHeading4
+                    || textItem->paragraphType() == TextParagraphType::ChapterHeading5
+                    || textItem->paragraphType() == TextParagraphType::ChapterHeading6;
             }
 
             //
@@ -1260,12 +1260,12 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             //
             TextModelItem* parentItem = nullptr;
             switch (paragraphType) {
-            case TextParagraphType::Heading1:
-            case TextParagraphType::Heading2:
-            case TextParagraphType::Heading3:
-            case TextParagraphType::Heading4:
-            case TextParagraphType::Heading5:
-            case TextParagraphType::Heading6: {
+            case TextParagraphType::ChapterHeading1:
+            case TextParagraphType::ChapterHeading2:
+            case TextParagraphType::ChapterHeading3:
+            case TextParagraphType::ChapterHeading4:
+            case TextParagraphType::ChapterHeading5:
+            case TextParagraphType::ChapterHeading6: {
                 parentItem = d->model->createGroupItem(TextGroupType::Chapter);
                 break;
             }

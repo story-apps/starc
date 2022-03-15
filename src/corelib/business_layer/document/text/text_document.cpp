@@ -1,16 +1,15 @@
-#include "comic_book_text_document.h"
+#include "text_document.h"
 
-#include "comic_book_text_block_data.h"
-#include "comic_book_text_corrector.h"
-#include "comic_book_text_cursor.h"
+#include "abstract_text_corrector.h"
+#include "text_block_data.h"
+#include "text_cursor.h"
 
-#include <business_layer/model/comic_book/text/comic_book_text_model.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_page_item.h>
-#include <business_layer/model/comic_book/text/comic_book_text_model_panel_item.h>
+#include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_folder_item.h>
+#include <business_layer/model/text/text_model_group_item.h>
 #include <business_layer/model/text/text_model_splitter_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
-#include <business_layer/templates/comic_book_template.h>
+#include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -33,35 +32,34 @@ namespace BusinessLayer {
 enum class DocumentState { Undefined, Loading, Changing, Correcting, Ready };
 
 
-class ComicBookTextDocument::Implementation
+class TextDocument::Implementation
 {
 public:
-    explicit Implementation(ComicBookTextDocument* _document);
+    Implementation(TextDocument* _document, AbstractTextCorrector* _corrector);
 
     /**
      * @brief Получить шаблон оформления текущего документа
      */
-    const ComicBookTemplate& documentTemplate() const;
+    const TextTemplate& documentTemplate() const;
 
     /**
      * @brief Скорректировать позиции элементов на заданную дистанцию
      */
-    void correctPositionsToItems(std::map<int, BusinessLayer::TextModelItem*>::iterator _from,
-                                 int _distance);
+    void correctPositionsToItems(std::map<int, TextModelItem*>::iterator _from, int _distance);
     void correctPositionsToItems(int _fromPosition, int _distance);
 
     /**
      * @brief Считать содержимое элмента модели с заданным индексом
      *        и вставить считанные данные в текущее положение курсора
      */
-    void readModelItemContent(int _itemRow, const QModelIndex& _parent,
-                              ComicBookTextCursor& _cursor, bool& _isFirstParagraph);
+    void readModelItemContent(int _itemRow, const QModelIndex& _parent, TextCursor& _cursor,
+                              bool& _isFirstParagraph);
 
     /**
      * @brief Считать содержимое вложенных в заданный индекс элементов
      *        и вставить считанные данные в текущее положение курсора
      */
-    void readModelItemsContent(const QModelIndex& _parent, ComicBookTextCursor& _cursor,
+    void readModelItemsContent(const QModelIndex& _parent, TextCursor& _cursor,
                                bool& _isFirstParagraph);
 
     /**
@@ -70,36 +68,36 @@ public:
     void tryToCorrectDocument();
 
 
-    ComicBookTextDocument* q = nullptr;
+    TextDocument* q = nullptr;
 
     DocumentState state = DocumentState::Undefined;
-    QString templateId;
-    QPointer<BusinessLayer::ComicBookTextModel> model;
+    QPointer<BusinessLayer::TextModel> model;
     bool canChangeModel = true;
-    std::map<int, BusinessLayer::TextModelItem*> positionsToItems;
-    ComicBookTextCorrector corrector;
+    std::map<int, TextModelItem*> positionsToItems;
+    QScopedPointer<AbstractTextCorrector> corrector;
 };
 
-ComicBookTextDocument::Implementation::Implementation(ComicBookTextDocument* _document)
+TextDocument::Implementation::Implementation(TextDocument* _document,
+                                             AbstractTextCorrector* _corrector)
     : q(_document)
-    , corrector(_document)
+    , corrector(_corrector)
 {
 }
 
-const ComicBookTemplate& ComicBookTextDocument::Implementation::documentTemplate() const
+const TextTemplate& TextDocument::Implementation::documentTemplate() const
 {
-    return TemplatesFacade::comicBookTemplate(templateId);
+    return TemplatesFacade::abstractTextTemplate(model);
 }
 
-void ComicBookTextDocument::Implementation::correctPositionsToItems(
-    std::map<int, BusinessLayer::TextModelItem*>::iterator _from, int _distance)
+void TextDocument::Implementation::correctPositionsToItems(
+    std::map<int, TextModelItem*>::iterator _from, int _distance)
 {
     if (_from == positionsToItems.end()) {
         return;
     }
 
     if (_distance > 0) {
-        auto reversed = [](std::map<int, BusinessLayer::TextModelItem*>::iterator iter) {
+        auto reversed = [](std::map<int, TextModelItem*>::iterator iter) {
             return std::prev(std::make_reverse_iterator(iter));
         };
         for (auto iter = positionsToItems.rbegin(); iter != std::make_reverse_iterator(_from);
@@ -117,21 +115,22 @@ void ComicBookTextDocument::Implementation::correctPositionsToItems(
     }
 }
 
-void ComicBookTextDocument::Implementation::correctPositionsToItems(int _fromPosition,
-                                                                    int _distance)
+void TextDocument::Implementation::correctPositionsToItems(int _fromPosition, int _distance)
 {
     correctPositionsToItems(positionsToItems.lower_bound(_fromPosition), _distance);
 }
 
-void ComicBookTextDocument::Implementation::readModelItemContent(int _itemRow,
-                                                                 const QModelIndex& _parent,
-                                                                 ComicBookTextCursor& _cursor,
-                                                                 bool& _isFirstParagraph)
+void TextDocument::Implementation::readModelItemContent(int _itemRow, const QModelIndex& _parent,
+                                                        TextCursor& _cursor,
+                                                        bool& _isFirstParagraph)
 {
     const auto itemIndex = model->index(_itemRow, 0, _parent);
     const auto item = model->itemForIndex(itemIndex);
     switch (item->type()) {
-    case TextModelItemType::Folder:
+    case TextModelItemType::Folder: {
+        break;
+    }
+
     case TextModelItemType::Group: {
         break;
     }
@@ -177,7 +176,7 @@ void ComicBookTextDocument::Implementation::readModelItemContent(int _itemRow,
             //
             // ... и сохраним данные блока
             //
-            auto blockData = new ComicBookTextBlockData(splitterItem);
+            auto blockData = new TextBlockData(splitterItem);
             _cursor.block().setUserData(blockData);
 
             //
@@ -218,7 +217,7 @@ void ComicBookTextDocument::Implementation::readModelItemContent(int _itemRow,
             //
             // ... и сохраняем в блоке информацию об элементе
             //
-            auto blockData = new ComicBookTextBlockData(splitterItem);
+            auto blockData = new TextBlockData(splitterItem);
             _cursor.block().setUserData(blockData);
 
             break;
@@ -259,7 +258,7 @@ void ComicBookTextDocument::Implementation::readModelItemContent(int _itemRow,
             //
             // Зайдём внутрь таблицы
             //
-            _cursor.movePosition(ComicBookTextCursor::NextBlock);
+            _cursor.movePosition(TextCursor::NextBlock);
             //
             // ... и пометим, что вставлять новый блок нет нужны
             //
@@ -336,7 +335,7 @@ void ComicBookTextDocument::Implementation::readModelItemContent(int _itemRow,
         //
         // Вставим данные блока
         //
-        auto blockData = new ComicBookTextBlockData(textItem);
+        auto blockData = new TextBlockData(textItem);
         _cursor.block().setUserData(blockData);
 
         //
@@ -371,9 +370,9 @@ void ComicBookTextDocument::Implementation::readModelItemContent(int _itemRow,
     }
 }
 
-void ComicBookTextDocument::Implementation::readModelItemsContent(const QModelIndex& _parent,
-                                                                  ComicBookTextCursor& _cursor,
-                                                                  bool& _isFirstParagraph)
+void TextDocument::Implementation::readModelItemsContent(const QModelIndex& _parent,
+                                                         TextCursor& _cursor,
+                                                         bool& _isFirstParagraph)
 {
     for (int itemRow = 0; itemRow < model->rowCount(_parent); ++itemRow) {
         readModelItemContent(itemRow, _parent, _cursor, _isFirstParagraph);
@@ -386,46 +385,33 @@ void ComicBookTextDocument::Implementation::readModelItemsContent(const QModelIn
     }
 }
 
-void ComicBookTextDocument::Implementation::tryToCorrectDocument()
+void TextDocument::Implementation::tryToCorrectDocument()
 {
     if (state != DocumentState::Ready) {
         return;
     }
 
     QScopedValueRollback temporatryState(state, DocumentState::Correcting);
-    corrector.makePlannedCorrection();
+    corrector->makePlannedCorrection();
 }
 
 
 // ****
 
 
-ComicBookTextDocument::ComicBookTextDocument(QObject* _parent)
+TextDocument::TextDocument(QObject* _parent, AbstractTextCorrector* _corrector)
     : QTextDocument(_parent)
-    , d(new Implementation(this))
+    , d(new Implementation(this, _corrector))
 {
-    connect(this, &ComicBookTextDocument::contentsChange, this,
-            &ComicBookTextDocument::updateModelOnContentChange);
-    connect(this, &ComicBookTextDocument::contentsChange, &d->corrector,
-            &ComicBookTextCorrector::planCorrection);
-    connect(this, &ComicBookTextDocument::contentsChanged, this,
-            [this] { d->tryToCorrectDocument(); });
+    connect(this, &TextDocument::contentsChange, this, &TextDocument::updateModelOnContentChange);
+    connect(this, &TextDocument::contentsChange, d->corrector.data(),
+            &AbstractTextCorrector::planCorrection);
+    connect(this, &TextDocument::contentsChanged, this, [this] { d->tryToCorrectDocument(); });
 }
 
-ComicBookTextDocument::~ComicBookTextDocument() = default;
+TextDocument::~TextDocument() = default;
 
-void ComicBookTextDocument::setTemplateId(const QString& _templateId)
-{
-    if (d->templateId == _templateId) {
-        return;
-    }
-
-    d->templateId = _templateId;
-    d->corrector.setTemplateId(_templateId);
-}
-
-void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
-                                     bool _canChangeModel)
+void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeModel)
 {
     d->state = DocumentState::Loading;
 
@@ -440,12 +426,12 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
     //
     // Сбрасываем корректор
     //
-    d->corrector.clear();
+    d->corrector->clear();
 
     //
     // Аккуратно очищаем текст, чтобы не сломать форматирование самого документа
     //
-    ComicBookTextCursor cursor(this);
+    TextCursor cursor(this);
     cursor.beginEditBlock();
     cursor.select(QTextCursor::Document);
     cursor.deleteChar();
@@ -457,11 +443,13 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
         return;
     }
 
+    d->corrector->setTemplateId(d->documentTemplate().id());
+
     //
     // Обновим шрифт документа, в моменте когда текста нет
     //
     const auto templateDefaultFont
-        = d->documentTemplate().paragraphStyle(TextParagraphType::Description).font();
+        = d->documentTemplate().paragraphStyle(TextParagraphType::Action).font();
     if (defaultFont() != templateDefaultFont) {
         setDefaultFont(templateDefaultFont);
     }
@@ -485,12 +473,12 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
     //
     // Настроим соединения
     //
-    connect(d->model, &ComicBookTextModel::modelReset, this, [this] {
+    connect(d->model, &TextModel::modelReset, this, [this] {
         QSignalBlocker signalBlocker(this);
         setModel(d->model);
     });
     connect(
-        d->model, &ComicBookTextModel::dataChanged, this,
+        d->model, &TextModel::dataChanged, this,
         [this](const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
             if (d->state != DocumentState::Ready) {
                 return;
@@ -512,7 +500,7 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
 
             const auto textItem = static_cast<TextModelTextItem*>(item);
 
-            ComicBookTextCursor cursor(this);
+            TextCursor cursor(this);
             cursor.setPosition(position);
             cursor.beginEditBlock();
 
@@ -628,8 +616,7 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                 //
                 // ... то удалим его старую версию
                 //
-                cursor.movePosition(ComicBookTextCursor::EndOfBlock,
-                                    ComicBookTextCursor::KeepAnchor);
+                cursor.movePosition(TextCursor::EndOfBlock, TextCursor::KeepAnchor);
                 const auto positionsCorrectionDelta = cursor.selectedText().length();
                 if (cursor.hasSelection()) {
                     cursor.deleteChar();
@@ -646,10 +633,9 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                 // ... удалим сам блок и при этом нужно сохранить данные блока и его формат
                 //
                 auto block = cursor.block().previous();
-                ComicBookTextBlockData* blockData = nullptr;
+                TextBlockData* blockData = nullptr;
                 if (block.userData() != nullptr) {
-                    blockData = new ComicBookTextBlockData(
-                        static_cast<ComicBookTextBlockData*>(block.userData()));
+                    blockData = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
                 }
                 const auto blockFormat = cursor.block().previous().blockFormat();
                 cursor.deletePreviousChar();
@@ -662,13 +648,13 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                 //
                 if (*textItem->isInFirstColumn()) {
                     while (!cursor.inTable() || !cursor.inFirstColumn()) {
-                        cursor.movePosition(ComicBookTextCursor::PreviousBlock);
-                        cursor.movePosition(ComicBookTextCursor::EndOfBlock);
+                        cursor.movePosition(TextCursor::PreviousBlock);
+                        cursor.movePosition(TextCursor::EndOfBlock);
                     }
                 } else {
                     while (!cursor.inTable()) {
-                        cursor.movePosition(ComicBookTextCursor::PreviousBlock);
-                        cursor.movePosition(ComicBookTextCursor::EndOfBlock);
+                        cursor.movePosition(TextCursor::PreviousBlock);
+                        cursor.movePosition(TextCursor::EndOfBlock);
                     }
                 }
                 bool isFirstParagraph
@@ -680,7 +666,7 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
 
             cursor.endEditBlock();
         });
-    connect(d->model, &ComicBookTextModel::rowsInserted, this,
+    connect(d->model, &TextModel::rowsInserted, this,
             [this](const QModelIndex& _parent, int _from, int _to) {
                 if (d->state != DocumentState::Ready) {
                     return;
@@ -706,9 +692,9 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                     cursorItemIndex = d->model->index(_from - 1, 0, _parent);
 
                     //
-                    // В кейсе, когда вставляется новая страница/панель перед уже существующей и
+                    // В кейсе, когда вставляется новая папка/группа перед уже существующей и
                     // существующую нужно перенести после неё, добавляем дополнительное условие на
-                    // определение позиции, т.к. у новой страницы/панели ещё нет элементов и мы не
+                    // определение позиции, т.к. у новой папки/группы ещё нет элементов и мы не
                     // знаем о её позиции, поэтому берём предыдущую, либо смотрим в конец общего
                     // родителя
                     //
@@ -736,7 +722,7 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                 //
                 // Собственно вставляем контент
                 //
-                ComicBookTextCursor cursor(this);
+                TextCursor cursor(this);
                 cursor.beginEditBlock();
 
                 cursor.setPosition(cursorPosition);
@@ -744,11 +730,11 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
                     //
                     // Если первый параграф, то нужно перенести блок со своими данными дальше
                     //
-                    ComicBookTextBlockData* blockData = nullptr;
+                    TextBlockData* blockData = nullptr;
                     auto block = cursor.block();
                     if (block.userData() != nullptr) {
-                        blockData = new ComicBookTextBlockData(
-                            static_cast<ComicBookTextBlockData*>(block.userData()));
+                        blockData
+                            = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
                         block.setUserData(nullptr);
                     }
                     cursor.insertBlock();
@@ -777,244 +763,243 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
 
                 cursor.endEditBlock();
             });
-    connect(d->model, &ComicBookTextModel::rowsAboutToBeRemoved, this,
-            [this](const QModelIndex& _parent, int _from, int _to) {
-                if (d->state != DocumentState::Ready) {
-                    return;
-                }
+    connect(
+        d->model, &TextModel::rowsAboutToBeRemoved, this,
+        [this](const QModelIndex& _parent, int _from, int _to) {
+            if (d->state != DocumentState::Ready) {
+                return;
+            }
 
-                QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+            QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
 
-                const QModelIndex fromIndex = d->model->index(_from, 0, _parent);
-                if (!fromIndex.isValid()) {
-                    return;
-                }
-                auto fromPosition = itemStartPosition(fromIndex);
-                if (fromPosition < 0) {
-                    return;
-                }
+            const QModelIndex fromIndex = d->model->index(_from, 0, _parent);
+            if (!fromIndex.isValid()) {
+                return;
+            }
+            auto fromPosition = itemStartPosition(fromIndex);
+            if (fromPosition < 0) {
+                return;
+            }
+
+            //
+            // Если происходит удаление разделителя таблицы, то удаляем таблицу,
+            // а все блоки переносим за таблицу
+            //
+            if (auto item = d->model->itemForIndex(fromIndex);
+                item->type() == TextModelItemType::Splitter) {
+                auto splitterItem = static_cast<TextModelSplitterItem*>(item);
 
                 //
-                // Если происходит удаление разделителя таблицы, то удаляем таблицу,
-                // а все блоки переносим за таблицу
+                // ... убираем таблицу на удалении стартового элемента
                 //
-                if (auto item = d->model->itemForIndex(fromIndex);
-                    item->type() == TextModelItemType::Splitter) {
-                    auto splitterItem = static_cast<TextModelSplitterItem*>(item);
+                if (splitterItem->splitterType() == TextModelSplitterItemType::Start) {
+                    //
+                    // Заходим в таблицу
+                    //
+                    TextCursor cursor(this);
+                    cursor.setPosition(fromPosition);
+                    cursor.movePosition(TextCursor::NextBlock);
+                    //
+                    // Берём второй курсор, куда будем переносить блоки
+                    //
+                    int row = _from + 1;
+                    auto insertCursor = cursor;
+                    while (TextBlockStyle::forBlock(insertCursor.block())
+                           != TextParagraphType::PageSplitter) {
+                        insertCursor.movePosition(TextCursor::NextBlock);
+                    }
+                    bool isFirstParagraph = false;
 
                     //
-                    // ... убираем таблицу на удалении стартового элемента
+                    // Идём по таблице
                     //
-                    if (splitterItem->splitterType() == TextModelSplitterItemType::Start) {
+                    while (TextBlockStyle::forBlock(cursor.block())
+                           != TextParagraphType::PageSplitter) {
                         //
-                        // Заходим в таблицу
+                        // ... проставим элементу блока флаг, что он теперь вне таблицы
                         //
-                        ComicBookTextCursor cursor(this);
-                        cursor.setPosition(fromPosition);
-                        cursor.movePosition(ComicBookTextCursor::NextBlock);
-                        //
-                        // Берём второй курсор, куда будем переносить блоки
-                        //
-                        int row = _from + 1;
-                        auto insertCursor = cursor;
-                        while (TextBlockStyle::forBlock(insertCursor.block())
-                               != TextParagraphType::PageSplitter) {
-                            insertCursor.movePosition(ComicBookTextCursor::NextBlock);
+                        auto item = d->positionsToItems[cursor.position()];
+                        if (item->type() == TextModelItemType::Text) {
+                            auto textItem = static_cast<TextModelTextItem*>(item);
+                            textItem->setInFirstColumn({});
                         }
-                        bool isFirstParagraph = false;
+                        //
+                        // ... удаляем блок в таблице
+                        //
+                        cursor.movePosition(TextCursor::EndOfBlock, TextCursor::KeepAnchor);
+                        const auto positionsCorrectionDelta = cursor.selectedText().length();
+                        if (cursor.hasSelection()) {
+                            cursor.deleteChar();
+                        }
+                        //
+                        // ... удаляем блок в карте
+                        //
+                        d->positionsToItems.erase(cursor.position());
+                        //
+                        // ... и корректируем позиции элементов
+                        //
+                        d->correctPositionsToItems(cursor.position(),
+                                                   -1 * positionsCorrectionDelta);
 
                         //
-                        // Идём по таблице
+                        // ... если всё ещё в одной колонке, то удаляем текущий пустой блок
                         //
-                        while (TextBlockStyle::forBlock(cursor.block())
-                               != TextParagraphType::PageSplitter) {
-                            //
-                            // ... проставим элементу блока флаг, что он теперь вне таблицы
-                            //
-                            auto item = d->positionsToItems[cursor.position()];
-                            if (item->type() == TextModelItemType::Text) {
-                                auto textItem = static_cast<TextModelTextItem*>(item);
-                                textItem->setInFirstColumn({});
-                            }
-                            //
-                            // ... удаляем блок в таблице
-                            //
-                            cursor.movePosition(ComicBookTextCursor::EndOfBlock,
-                                                ComicBookTextCursor::KeepAnchor);
-                            const auto positionsCorrectionDelta = cursor.selectedText().length();
-                            if (cursor.hasSelection()) {
+                        const auto currentBlockInFirstColumn = cursor.inFirstColumn();
+                        if (cursor.movePosition(TextCursor::NextBlock, TextCursor::KeepAnchor)) {
+                            if (currentBlockInFirstColumn == cursor.inFirstColumn()) {
                                 cursor.deleteChar();
+                                d->correctPositionsToItems(cursor.position(), -1);
                             }
                             //
-                            // ... удаляем блок в карте
-                            //
-                            d->positionsToItems.erase(cursor.position());
-                            //
-                            // ... и корректируем позиции элементов
-                            //
-                            d->correctPositionsToItems(cursor.position(),
-                                                       -1 * positionsCorrectionDelta);
-
-                            //
-                            // ... если всё ещё в одной колонке, то удаляем текущий пустой блок
-                            //
-                            const auto currentBlockInFirstColumn = cursor.inFirstColumn();
-                            if (cursor.movePosition(ComicBookTextCursor::NextBlock,
-                                                    ComicBookTextCursor::KeepAnchor)) {
-                                if (currentBlockInFirstColumn == cursor.inFirstColumn()) {
-                                    cursor.deleteChar();
-                                    d->correctPositionsToItems(cursor.position(), -1);
-                                }
-                                //
-                                // ... если перешли в другую колонку, то сбросим выделение
-                                //
-                                else {
-                                    cursor.clearSelection();
-                                }
-                            }
-                            //
-                            // ... если дошли до конца таблицы, то переходим в следующий блок
+                            // ... если перешли в другую колонку, то сбросим выделение
                             //
                             else {
-                                cursor.movePosition(ComicBookTextCursor::NextBlock);
+                                cursor.clearSelection();
                             }
-
-                            //
-                            // ... вставляем этот же блок после таблицы
-                            //
-                            d->readModelItemContent(row++, fromIndex.parent(), insertCursor,
-                                                    isFirstParagraph);
+                        }
+                        //
+                        // ... если дошли до конца таблицы, то переходим в следующий блок
+                        //
+                        else {
+                            cursor.movePosition(TextCursor::NextBlock);
                         }
 
                         //
-                        // Удаляем саму таблицу
+                        // ... вставляем этот же блок после таблицы
                         //
-                        cursor.movePosition(QTextCursor::NextBlock);
-                        cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
-                        cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
-                        cursor.deletePreviousChar();
-
-                        //
-                        // Корректируем карту позиций блоков
-                        //
-                        auto fromIter = d->positionsToItems.lower_bound(fromPosition);
-                        auto endIter = std::next(fromIter, 2);
-                        d->positionsToItems.erase(fromIter, endIter);
-
-                        //
-                        // Корректируем позиции элементов
-                        //
-                        d->correctPositionsToItems(cursor.position(), -4);
+                        d->readModelItemContent(row++, fromIndex.parent(), insertCursor,
+                                                isFirstParagraph);
                     }
 
-                    return;
+                    //
+                    // Удаляем саму таблицу
+                    //
+                    cursor.movePosition(QTextCursor::NextBlock);
+                    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
+                    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
+                    cursor.deletePreviousChar();
+
+                    //
+                    // Корректируем карту позиций блоков
+                    //
+                    auto fromIter = d->positionsToItems.lower_bound(fromPosition);
+                    auto endIter = std::next(fromIter, 2);
+                    d->positionsToItems.erase(fromIter, endIter);
+
+                    //
+                    // Корректируем позиции элементов
+                    //
+                    d->correctPositionsToItems(cursor.position(), -4);
                 }
 
-                const QModelIndex toIndex = d->model->index(_to, 0, _parent);
-                if (!toIndex.isValid()) {
-                    return;
-                }
-                const auto toPosition = itemEndPosition(toIndex);
-                if (toPosition < 0) {
-                    return;
-                }
+                return;
+            }
 
-                ComicBookTextCursor cursor(this);
-                cursor.setPosition(fromPosition);
-                cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
-                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-                if (!cursor.hasSelection() && !cursor.block().text().isEmpty()) {
-                    return;
-                }
+            const QModelIndex toIndex = d->model->index(_to, 0, _parent);
+            if (!toIndex.isValid()) {
+                return;
+            }
+            const auto toPosition = itemEndPosition(toIndex);
+            if (toPosition < 0) {
+                return;
+            }
 
-                //
-                // Корректируем карту позиций элементов
-                //
-                auto fromIter = d->positionsToItems.lower_bound(cursor.selectionInterval().from);
-                auto endIter = d->positionsToItems.lower_bound(cursor.selectionInterval().to);
-                //
-                // ... если удаление заканчивается на пустом абзаце, берём следующий за ним элемент
-                //
-                if (cursor.block().text().isEmpty()) {
-                    endIter = std::next(endIter);
-                }
-                //
-                // ... определим дистанцию занимаемую удаляемыми элементами
-                //
-                const auto distance = endIter->first - fromIter->first;
-                //
-                // ... удаляем сами элементы из карты
-                //
-                d->positionsToItems.erase(fromIter, endIter);
-                //
-                // ... корректируем позиции остальных элементов
-                //
-                d->correctPositionsToItems(cursor.selectionInterval().to, -1 * distance);
+            TextCursor cursor(this);
+            cursor.setPosition(fromPosition);
+            cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            if (!cursor.hasSelection() && !cursor.block().text().isEmpty()) {
+                return;
+            }
 
-                cursor.beginEditBlock();
-                if (cursor.hasSelection()) {
+            //
+            // Корректируем карту позиций элементов
+            //
+            auto fromIter = d->positionsToItems.lower_bound(cursor.selectionInterval().from);
+            auto endIter = d->positionsToItems.lower_bound(cursor.selectionInterval().to);
+            //
+            // ... если удаление заканчивается на пустом абзаце, берём следующий за ним элемент
+            //
+            if (cursor.block().text().isEmpty()) {
+                endIter = std::next(endIter);
+            }
+            //
+            // ... определим дистанцию занимаемую удаляемыми элементами
+            //
+            const auto distance = endIter->first - fromIter->first;
+            //
+            // ... удаляем сами элементы из карты
+            //
+            d->positionsToItems.erase(fromIter, endIter);
+            //
+            // ... корректируем позиции остальных элементов
+            //
+            d->correctPositionsToItems(cursor.selectionInterval().to, -1 * distance);
+
+            cursor.beginEditBlock();
+            if (cursor.hasSelection()) {
+                cursor.deleteChar();
+            }
+
+            //
+            // Если это самый первый блок, то нужно удалить на один символ больше, чтобы удалить
+            // сам блок
+            //
+            if (fromPosition == 0 && toPosition != characterCount()) {
+                cursor.deleteChar();
+            }
+            //
+            // Если это не самый первый блок
+            //
+            else if (fromPosition > 0) {
+                //
+                // ... если это верхний блок в какой-либо из колонок таблицы,
+                //     то берём на один символ вперёд
+                //
+                const bool isFirstBlockOfFirstColumn = cursor.inFirstColumn()
+                    && TextBlockStyle::forBlock(cursor.block().previous())
+                        == TextParagraphType::PageSplitter;
+                auto previousBlockCursor = cursor;
+                previousBlockCursor.movePosition(QTextCursor::PreviousBlock);
+                const bool isFirstBlockOfSecondColumn
+                    = !cursor.inFirstColumn() && previousBlockCursor.inFirstColumn();
+                if (isFirstBlockOfFirstColumn || isFirstBlockOfSecondColumn) {
                     cursor.deleteChar();
                 }
-
                 //
-                // Если это самый первый блок, то нужно удалить на один символ больше, чтобы удалить
-                // сам блок
+                // ... в остальных случаях берём на один символ назад, чтобы удалить сам блок
                 //
-                if (fromPosition == 0 && toPosition != characterCount()) {
-                    cursor.deleteChar();
-                }
-                //
-                // Если это не самый первый блок
-                //
-                else if (fromPosition > 0) {
+                else {
                     //
-                    // ... если это верхний блок в какой-либо из колонок таблицы,
-                    //     то берём на один символ вперёд
+                    // ... и при этом нужно сохранить данные блока и его формат
                     //
-                    const bool isFirstBlockOfFirstColumn = cursor.inFirstColumn()
-                        && TextBlockStyle::forBlock(cursor.block().previous())
-                            == TextParagraphType::PageSplitter;
-                    auto previousBlockCursor = cursor;
-                    previousBlockCursor.movePosition(QTextCursor::PreviousBlock);
-                    const bool isFirstBlockOfSecondColumn
-                        = !cursor.inFirstColumn() && previousBlockCursor.inFirstColumn();
-                    if (isFirstBlockOfFirstColumn || isFirstBlockOfSecondColumn) {
-                        cursor.deleteChar();
+                    TextBlockData* blockData = nullptr;
+                    auto block = cursor.block().previous();
+                    if (block.userData() != nullptr) {
+                        blockData
+                            = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
                     }
-                    //
-                    // ... в остальных случаях берём на один символ назад, чтобы удалить сам блок
-                    //
-                    else {
-                        //
-                        // ... и при этом нужно сохранить данные блока и его формат
-                        //
-                        ComicBookTextBlockData* blockData = nullptr;
-                        auto block = cursor.block().previous();
-                        if (block.userData() != nullptr) {
-                            blockData = new ComicBookTextBlockData(
-                                static_cast<ComicBookTextBlockData*>(block.userData()));
-                        }
-                        const auto blockFormat = cursor.block().previous().blockFormat();
-                        cursor.deletePreviousChar();
-                        cursor.block().setUserData(blockData);
-                        cursor.setBlockFormat(blockFormat);
-                    }
+                    const auto blockFormat = cursor.block().previous().blockFormat();
+                    cursor.deletePreviousChar();
+                    cursor.block().setUserData(blockData);
+                    cursor.setBlockFormat(blockFormat);
                 }
-                cursor.endEditBlock();
-            });
+            }
+            cursor.endEditBlock();
+        });
     //
     // Группируем массовые изменения, чтобы не мелькать пользователю перед глазами
     //
-    connect(d->model, &ComicBookTextModel::rowsAboutToBeChanged, this,
-            [this] { ComicBookTextCursor(this).beginEditBlock(); });
-    connect(d->model, &ComicBookTextModel::rowsChanged, this, [this] {
+    connect(d->model, &TextModel::rowsAboutToBeChanged, this,
+            [this] { TextCursor(this).beginEditBlock(); });
+    connect(d->model, &TextModel::rowsChanged, this, [this] {
         //
         // Завершаем групповое изменение, но при этом обходим стороной корректировки документа,
         // т.к. всё это происходило в модели и документ уже находится в синхронизированном с
         // моделью состоянии
         //
         d->state = DocumentState::Changing;
-        ComicBookTextCursor(this).endEditBlock();
+        TextCursor(this).endEditBlock();
         d->state = DocumentState::Ready;
 
         //
@@ -1028,7 +1013,12 @@ void ComicBookTextDocument::setModel(BusinessLayer::ComicBookTextModel* _model,
     d->tryToCorrectDocument();
 }
 
-int ComicBookTextDocument::itemPosition(const QModelIndex& _index, bool _fromStart)
+void TextDocument::setCorrectionOptions(const QStringList& _options)
+{
+    d->corrector->setCorrectionOptions(_options);
+}
+
+int TextDocument::itemPosition(const QModelIndex& _index, bool _fromStart)
 {
     auto item = d->model->itemForIndex(_index);
     if (item == nullptr) {
@@ -1047,85 +1037,23 @@ int ComicBookTextDocument::itemPosition(const QModelIndex& _index, bool _fromSta
     return -1;
 }
 
-int ComicBookTextDocument::itemStartPosition(const QModelIndex& _index)
+int TextDocument::itemStartPosition(const QModelIndex& _index)
 {
     return itemPosition(_index, true);
 }
 
-int ComicBookTextDocument::itemEndPosition(const QModelIndex& _index)
+int TextDocument::itemEndPosition(const QModelIndex& _index)
 {
     return itemPosition(_index, false);
 }
 
-QString ComicBookTextDocument::pageNumber(const QTextBlock& _forBlock) const
+QColor TextDocument::itemColor(const QTextBlock& _forBlock) const
 {
     if (_forBlock.userData() == nullptr) {
         return {};
     }
 
-    const auto blockData = static_cast<ComicBookTextBlockData*>(_forBlock.userData());
-    if (blockData == nullptr) {
-        return {};
-    }
-
-    const auto itemParent = blockData->item()->parent();
-    if (itemParent == nullptr || itemParent->type() != TextModelItemType::Group
-        || static_cast<TextModelGroupItem*>(itemParent)->groupType() != TextGroupType::Page) {
-        return {};
-    }
-
-    const auto panelItem = static_cast<const ComicBookTextModelPageItem*>(itemParent);
-    return panelItem->pageNumber()->text;
-}
-
-QString ComicBookTextDocument::panelNumber(const QTextBlock& _forBlock) const
-{
-    if (_forBlock.userData() == nullptr) {
-        return {};
-    }
-
-    const auto blockData = static_cast<ComicBookTextBlockData*>(_forBlock.userData());
-    if (blockData == nullptr) {
-        return {};
-    }
-
-    const auto itemParent = blockData->item()->parent();
-    if (itemParent == nullptr || itemParent->type() != TextModelItemType::Group
-        || static_cast<TextModelGroupItem*>(itemParent)->groupType() != TextGroupType::Panel) {
-        return {};
-    }
-
-    const auto panelItem = static_cast<const ComicBookTextModelPanelItem*>(itemParent);
-    return panelItem->number()->text;
-}
-
-QString ComicBookTextDocument::dialogueNumber(const QTextBlock& _forBlock) const
-{
-    if (_forBlock.userData() == nullptr) {
-        return {};
-    }
-
-    const auto blockData = static_cast<ComicBookTextBlockData*>(_forBlock.userData());
-    if (blockData == nullptr) {
-        return {};
-    }
-
-    const auto item = blockData->item();
-    if (item == nullptr || item->type() != TextModelItemType::Text) {
-        return {};
-    }
-
-    const auto textItem = static_cast<const TextModelTextItem*>(item);
-    return textItem->number().value_or(TextModelTextItem::Number()).text;
-}
-
-QColor ComicBookTextDocument::itemColor(const QTextBlock& _forBlock) const
-{
-    if (_forBlock.userData() == nullptr) {
-        return {};
-    }
-
-    const auto blockData = static_cast<ComicBookTextBlockData*>(_forBlock.userData());
+    const auto blockData = static_cast<TextBlockData*>(_forBlock.userData());
     if (blockData == nullptr) {
         return {};
     }
@@ -1146,13 +1074,13 @@ QColor ComicBookTextDocument::itemColor(const QTextBlock& _forBlock) const
     return color;
 }
 
-QString ComicBookTextDocument::mimeFromSelection(int _fromPosition, int _toPosition) const
+QString TextDocument::mimeFromSelection(int _fromPosition, int _toPosition) const
 {
     const auto fromBlock = findBlock(_fromPosition);
     if (fromBlock.userData() == nullptr) {
         return {};
     }
-    auto fromBlockData = static_cast<ComicBookTextBlockData*>(fromBlock.userData());
+    auto fromBlockData = static_cast<TextBlockData*>(fromBlock.userData());
     if (fromBlockData == nullptr) {
         return {};
     }
@@ -1163,7 +1091,7 @@ QString ComicBookTextDocument::mimeFromSelection(int _fromPosition, int _toPosit
     if (toBlock.userData() == nullptr) {
         return {};
     }
-    auto toBlockData = static_cast<ComicBookTextBlockData*>(toBlock.userData());
+    auto toBlockData = static_cast<TextBlockData*>(toBlock.userData());
     if (toBlockData == nullptr) {
         return {};
     }
@@ -1175,14 +1103,14 @@ QString ComicBookTextDocument::mimeFromSelection(int _fromPosition, int _toPosit
                                        toPositionInBlock, clearUuid);
 }
 
-void ComicBookTextDocument::insertFromMime(int _position, const QString& _mimeData)
+void TextDocument::insertFromMime(int _position, const QString& _mimeData)
 {
     const auto block = findBlock(_position);
     if (block.userData() == nullptr) {
         return;
     }
 
-    auto blockData = static_cast<ComicBookTextBlockData*>(block.userData());
+    auto blockData = static_cast<TextBlockData*>(block.userData());
     if (blockData == nullptr) {
         return;
     }
@@ -1192,8 +1120,7 @@ void ComicBookTextDocument::insertFromMime(int _position, const QString& _mimeDa
     d->model->insertFromMime(itemIndex, positionInBlock, _mimeData);
 }
 
-void ComicBookTextDocument::addParagraph(BusinessLayer::TextParagraphType _type,
-                                         ComicBookTextCursor _cursor)
+void TextDocument::addParagraph(BusinessLayer::TextParagraphType _type, TextCursor _cursor)
 {
     _cursor.beginEditBlock();
 
@@ -1203,11 +1130,10 @@ void ComicBookTextDocument::addParagraph(BusinessLayer::TextParagraphType _type,
     //
     if (_cursor.block().text().left(_cursor.positionInBlock()).isEmpty()
         && !_cursor.block().text().isEmpty()) {
-        ComicBookTextBlockData* blockData = nullptr;
+        TextBlockData* blockData = nullptr;
         auto block = _cursor.block();
         if (block.userData() != nullptr) {
-            blockData = new ComicBookTextBlockData(
-                static_cast<ComicBookTextBlockData*>(block.userData()));
+            blockData = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
             block.setUserData(nullptr);
         }
 
@@ -1248,8 +1174,8 @@ void ComicBookTextDocument::addParagraph(BusinessLayer::TextParagraphType _type,
     _cursor.endEditBlock();
 }
 
-void ComicBookTextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
-                                             const ComicBookTextCursor& _cursor)
+void TextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
+                                    const TextCursor& _cursor)
 {
     const auto currentParagraphType = TextBlockStyle::forBlock(_cursor.block());
     if (currentParagraphType == _type) {
@@ -1284,7 +1210,7 @@ void ComicBookTextDocument::setParagraphType(BusinessLayer::TextParagraphType _t
     cursor.endEditBlock();
 }
 
-void ComicBookTextDocument::cleanParagraphType(const ComicBookTextCursor& _cursor)
+void TextDocument::cleanParagraphType(const TextCursor& _cursor)
 {
     const auto oldBlockType = TextBlockStyle::forBlock(_cursor.block());
     if (oldBlockType != TextParagraphType::SequenceHeading) {
@@ -1331,8 +1257,8 @@ void ComicBookTextDocument::cleanParagraphType(const ComicBookTextCursor& _curso
     } while (!isFooterUpdated);
 }
 
-void ComicBookTextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
-                                               const ComicBookTextCursor& _cursor)
+void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
+                                      const TextCursor& _cursor)
 {
     auto cursor = _cursor;
     cursor.beginEditBlock();
@@ -1398,12 +1324,12 @@ void ComicBookTextDocument::applyParagraphType(BusinessLayer::TextParagraphType 
     cursor.endEditBlock();
 }
 
-void ComicBookTextDocument::splitParagraph(const ComicBookTextCursor& _cursor)
+void TextDocument::splitParagraph(const TextCursor& _cursor)
 {
     //
     // Получим курсор для блока, который хочет разделить пользователь
     //
-    ComicBookTextCursor cursor = _cursor;
+    TextCursor cursor = _cursor;
     cursor.beginEditBlock();
 
     //
@@ -1479,7 +1405,7 @@ void ComicBookTextDocument::splitParagraph(const ComicBookTextCursor& _cursor)
     // оставался один параграф, чтобы пользователь всегда мог выйти из таблицы
     //
     if (cursor.atEnd()) {
-        addParagraph(TextParagraphType::Description, cursor);
+        addParagraph(TextParagraphType::Action, cursor);
     }
 
     //
@@ -1493,12 +1419,12 @@ void ComicBookTextDocument::splitParagraph(const ComicBookTextCursor& _cursor)
     insertFromMime(cursor.position(), mime);
 }
 
-void ComicBookTextDocument::mergeParagraph(const ComicBookTextCursor& _cursor)
+void TextDocument::mergeParagraph(const TextCursor& _cursor)
 {
     //
     // Получим курсор для блока, из которого пользователь хочет убрать разделение
     //
-    ComicBookTextCursor cursor = _cursor;
+    TextCursor cursor = _cursor;
     cursor.movePosition(QTextCursor::StartOfBlock);
     cursor.beginEditBlock();
 
@@ -1582,16 +1508,8 @@ void ComicBookTextDocument::mergeParagraph(const ComicBookTextCursor& _cursor)
     }
 }
 
-void ComicBookTextDocument::setCorrectionOptions(bool _needToCorrectCharactersNames,
-                                                 bool _needToCorrectPageBreaks)
-{
-    d->corrector.setNeedToCorrectCharactersNames(_needToCorrectCharactersNames);
-    d->corrector.setNeedToCorrectPageBreaks(_needToCorrectPageBreaks);
-}
-
-void ComicBookTextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                                          const QString& _comment,
-                                          const ComicBookTextCursor& _cursor)
+void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
+                                 const QString& _comment, const TextCursor& _cursor)
 {
     TextModelTextItem::ReviewMark reviewMark;
     if (_textColor.isValid()) {
@@ -1607,8 +1525,7 @@ void ComicBookTextDocument::addReviewMark(const QColor& _textColor, const QColor
     cursor.mergeCharFormat(reviewMark.charFormat());
 }
 
-void ComicBookTextDocument::updateModelOnContentChange(int _position, int _charsRemoved,
-                                                       int _charsAdded)
+void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded)
 {
     if (d->model == nullptr) {
         return;
@@ -1624,8 +1541,8 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
     //
     if (_position == 0
         && begin().blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
-        ComicBookTextCursor cursor(this);
-        cursor.movePosition(ComicBookTextCursor::Start);
+        TextCursor cursor(this);
+        cursor.movePosition(TextCursor::Start);
         auto blockFormat = cursor.blockFormat();
         blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
         cursor.setBlockFormat(blockFormat);
@@ -1689,7 +1606,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
         while (!itemsToDelete.empty() && block.isValid()
                && block.position() <= _position + std::max(_charsRemoved, _charsAdded)) {
             if (block.userData() != nullptr) {
-                const auto blockData = static_cast<ComicBookTextBlockData*>(block.userData());
+                const auto blockData = static_cast<TextBlockData*>(block.userData());
                 const auto notRemovedItemIter = itemsToDelete.find(blockData->item());
                 if (notRemovedItemIter != itemsToDelete.end()) {
                     //
@@ -1809,7 +1726,6 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
         //
         for (auto removeIter = itemsToDeleteCompressed.rbegin();
              removeIter != itemsToDeleteCompressed.rend(); ++removeIter) {
-
             auto item = removeIter->second;
 
             //
@@ -1824,9 +1740,17 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 //     последовательно сверху вниз, то удалять непосредственно папку будем,
                 //     когда дойдём до обработки именно конца папки
                 //
-                needToDeleteParent = textItem->paragraphType() == TextParagraphType::SequenceFooter
+                needToDeleteParent = textItem->paragraphType() == TextParagraphType::ActFooter
+                    || textItem->paragraphType() == TextParagraphType::SequenceFooter
+                    || textItem->paragraphType() == TextParagraphType::SceneHeading
                     || textItem->paragraphType() == TextParagraphType::PageHeading
-                    || textItem->paragraphType() == TextParagraphType::PanelHeading;
+                    || textItem->paragraphType() == TextParagraphType::PanelHeading
+                    || textItem->paragraphType() == TextParagraphType::ChapterHeading1
+                    || textItem->paragraphType() == TextParagraphType::ChapterHeading2
+                    || textItem->paragraphType() == TextParagraphType::ChapterHeading3
+                    || textItem->paragraphType() == TextParagraphType::ChapterHeading4
+                    || textItem->paragraphType() == TextParagraphType::ChapterHeading5
+                    || textItem->paragraphType() == TextParagraphType::ChapterHeading6;
             }
 
             //
@@ -1848,6 +1772,18 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 if (itemRow > 0) {
                     const int previousItemRow = itemRow - 1;
                     previousItem = itemParent->parent()->childAt(previousItemRow);
+                }
+                //
+                // Обработаем кейс, когда блоки находящиеся в папке в самом верху документа
+                // нужно вынести из папки -> пробуем вставить их в папку идущую после удаляемой
+                // папки
+                //
+                const bool needInsertInNextFolder = itemParent->type() == TextModelItemType::Folder
+                    && itemParent->hasParent() && itemParent->parent()->childCount() > 1
+                    && itemParent->parent()->childAt(itemRow + 1)->type()
+                        == TextModelItemType::Folder;
+                if (needInsertInNextFolder) {
+                    previousItem = itemParent->parent()->childAt(itemRow + 1);
                 }
 
                 //
@@ -1877,11 +1813,18 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                     else {
                         if (lastMovedItem == nullptr) {
                             //
+                            // Если удаляемый был в папке, которая была в самом начале
+                            // документа, то в начало последующей папки
+                            //
+                            if (needInsertInNextFolder) {
+                                d->model->prependItem(childItem, previousItem);
+                            }
+                            //
                             // Если перед удаляемым была сцена или папка, то в её конец
                             //
-                            if (previousItem != nullptr
-                                && (previousItem->type() == TextModelItemType::Folder
-                                    || previousItem->type() == TextModelItemType::Group)) {
+                            else if (previousItem != nullptr
+                                     && (previousItem->type() == TextModelItemType::Folder
+                                         || previousItem->type() == TextModelItemType::Group)) {
                                 d->model->appendItem(childItem, previousItem);
                             }
                             //
@@ -1915,18 +1858,31 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 // Если после удаляемого элемента есть текстовые элементы, пробуем их встроить в
                 // предыдущую сцену
                 //
-                if (previousItem != nullptr && (previousItem->type() == TextModelItemType::Group)) {
+                if (previousItem != nullptr && previousItem->type() == TextModelItemType::Group) {
                     const auto previousItemRow = previousItem->parent()->rowOfChild(previousItem);
                     if (previousItemRow >= 0
                         && previousItemRow < previousItem->parent()->childCount() - 1) {
                         const int nextItemRow = previousItemRow + 1;
                         auto nextItem = previousItem->parent()->childAt(nextItemRow);
-                        while (nextItem != nullptr
-                               && (nextItem->type() == TextModelItemType::Text
-                                   || nextItem->type() == TextModelItemType::Splitter)) {
-                            d->model->takeItem(nextItem, nextItem->parent());
-                            d->model->appendItem(nextItem, previousItem);
-                            nextItem = previousItem->parent()->childAt(nextItemRow);
+                        //
+                        // Подготовим элементы для переноса
+                        //
+                        QVector<TextModelItem*> itemsToMove;
+                        for (int itemRow = nextItemRow;
+                             itemRow < previousItem->parent()->childCount(); ++itemRow) {
+                            if (nextItem == nullptr
+                                || (nextItem->type() != TextModelItemType::Text
+                                    && nextItem->type() != TextModelItemType::Splitter)) {
+                                break;
+                            }
+
+                            itemsToMove.append(previousItem->parent()->childAt(itemRow));
+                            nextItem = previousItem->parent()->childAt(itemRow);
+                        }
+                        if (!itemsToMove.isEmpty()) {
+                            d->model->takeItems(itemsToMove.constFirst(), itemsToMove.constLast(),
+                                                previousItem->parent());
+                            d->model->appendItems(itemsToMove, previousItem);
                         }
                     }
                 }
@@ -1951,7 +1907,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             return nullptr;
         }
 
-        auto blockData = static_cast<ComicBookTextBlockData*>(previousBlock.userData());
+        auto blockData = static_cast<TextBlockData*>(previousBlock.userData());
         return blockData->item();
     }();
 
@@ -1963,7 +1919,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
         bool inFirstColumn = false;
     } tableInfo;
     auto updateTableInfo = [this, &tableInfo](const QTextBlock& _block) {
-        ComicBookTextCursor cursor(this);
+        TextCursor cursor(this);
         cursor.setPosition(_block.position());
         tableInfo.inTable = cursor.inTable();
         tableInfo.inFirstColumn = cursor.inFirstColumn();
@@ -1981,7 +1937,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
             // Разделитель
             //
             if (paragraphType == TextParagraphType::PageSplitter) {
-                ComicBookTextCursor cursor(this);
+                TextCursor cursor(this);
                 cursor.setPosition(block.position());
                 cursor.movePosition(QTextCursor::NextBlock);
                 //
@@ -2007,7 +1963,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 //
                 // Запомним информацию о разделителе в блоке
                 //
-                auto blockData = new ComicBookTextBlockData(splitterItem);
+                auto blockData = new TextBlockData(splitterItem);
                 block.setUserData(blockData);
                 previousItem = splitterItem;
 
@@ -2032,6 +1988,11 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 break;
             }
 
+            case TextParagraphType::SceneHeading: {
+                parentItem = d->model->createGroupItem(TextGroupType::Scene);
+                break;
+            }
+
             case TextParagraphType::PageHeading: {
                 parentItem = d->model->createGroupItem(TextGroupType::Page);
                 break;
@@ -2039,6 +2000,16 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
 
             case TextParagraphType::PanelHeading: {
                 parentItem = d->model->createGroupItem(TextGroupType::Panel);
+                break;
+            }
+
+            case TextParagraphType::ChapterHeading1:
+            case TextParagraphType::ChapterHeading2:
+            case TextParagraphType::ChapterHeading3:
+            case TextParagraphType::ChapterHeading4:
+            case TextParagraphType::ChapterHeading5:
+            case TextParagraphType::ChapterHeading6: {
+                parentItem = d->model->createGroupItem(TextGroupType::Chapter);
                 break;
             }
 
@@ -2098,6 +2069,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 if (previousItem != nullptr) {
                     auto previousTextItemParent = previousItem->parent();
                     Q_ASSERT(previousTextItemParent);
+
 
                     //
                     // Если элемент вставляется после другого элемента того же уровня, или после
@@ -2190,10 +2162,12 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                     }();
 
                     //
-                    // Собственно переносим элементы
+                    // Соберём элементы для переноса
                     //
-                    while (grandParentItem->childCount() > itemIndex) {
-                        auto grandParentChildItem = grandParentItem->childAt(itemIndex);
+                    QVector<TextModelItem*> itemsToMove;
+                    for (int childIndex = itemIndex; childIndex < grandParentItem->childCount();
+                         ++childIndex) {
+                        auto grandParentChildItem = grandParentItem->childAt(childIndex);
                         if (grandParentChildItem->type() != TextModelItemType::Text) {
                             break;
                         }
@@ -2205,8 +2179,15 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                             break;
                         }
 
-                        d->model->takeItem(grandParentChildItem, grandParentItem);
-                        d->model->appendItem(grandParentChildItem, parentItem);
+                        itemsToMove.append(grandParentChildItem);
+                    }
+                    //
+                    // ... собственно переносим элементы
+                    //
+                    if (!itemsToMove.isEmpty()) {
+                        d->model->takeItems(itemsToMove.constFirst(), itemsToMove.constLast(),
+                                            grandParentItem);
+                        d->model->appendItems(itemsToMove, parentItem);
                     }
                 }
                 //
@@ -2214,15 +2195,17 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 // элементы, которые идут после вставленной папки на уровень самой папки
                 //
                 else if (previousItem != nullptr
-                         && (previousItem->parent()->type() == TextModelItemType::Group)) {
+                         && previousItem->parent()->type() == TextModelItemType::Group) {
                     auto grandParentItem = previousItem->parent();
                     const int lastItemIndex = grandParentItem->rowOfChild(previousItem) + 1;
+
                     //
-                    // Собственно переносим элементы
+                    // Соберём элементы для переноса
                     //
-                    while (grandParentItem->childCount() > lastItemIndex) {
-                        auto grandParentChildItem
-                            = grandParentItem->childAt(grandParentItem->childCount() - 1);
+                    QVector<TextModelItem*> itemsToMove;
+                    for (int childIndex = lastItemIndex; childIndex < grandParentItem->childCount();
+                         ++childIndex) {
+                        auto grandParentChildItem = grandParentItem->childAt(childIndex);
                         if (grandParentChildItem->type() != TextModelItemType::Text) {
                             break;
                         }
@@ -2234,8 +2217,15 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                             break;
                         }
 
-                        d->model->takeItem(grandParentChildItem, grandParentItem);
-                        d->model->insertItem(grandParentChildItem, parentItem);
+                        itemsToMove.append(grandParentChildItem);
+                    }
+                    //
+                    // ... собственно переносим элементы
+                    //
+                    if (!itemsToMove.isEmpty()) {
+                        d->model->takeItems(itemsToMove.constFirst(), itemsToMove.constLast(),
+                                            grandParentItem);
+                        d->model->appendItems(itemsToMove, parentItem);
                     }
                 }
             }
@@ -2269,7 +2259,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
                 }
             }
 
-            auto blockData = new ComicBookTextBlockData(textItem);
+            auto blockData = new TextBlockData(textItem);
             block.setUserData(blockData);
 
             previousItem = textItem;
@@ -2279,7 +2269,7 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
         //
         else {
             updateTableInfo(block);
-            auto blockData = static_cast<ComicBookTextBlockData*>(block.userData());
+            auto blockData = static_cast<TextBlockData*>(block.userData());
             auto item = blockData->item();
 
             if (item->type() == TextModelItemType::Text) {
@@ -2325,9 +2315,9 @@ void ComicBookTextDocument::updateModelOnContentChange(int _position, int _chars
     }
 }
 
-void ComicBookTextDocument::insertTable(const ComicBookTextCursor& _cursor)
+void TextDocument::insertTable(const TextCursor& _cursor)
 {
-    const auto scriptTemplate = d->documentTemplate();
+    const auto& scriptTemplate = d->documentTemplate();
     const auto pageSplitterWidth = scriptTemplate.pageSplitterWidth();
     const int qtTableBorderWidth = 2; // эта однопиксельная рамка никак не убирается...
     const qreal tableWidth = pageSize().width() - rootFrame()->frameFormat().leftMargin()

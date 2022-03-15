@@ -229,7 +229,7 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
         {
             auto topBlock = document()->findBlock(topCursorPosition);
             auto bottomBlock = document()->findBlock(bottomCursorPosition);
-            if (TextBlockStyle::forBlock(topBlock) == TextParagraphType::SequenceHeader
+            if (TextBlockStyle::forBlock(topBlock) == TextParagraphType::SequenceHeading
                 && TextBlockStyle::forBlock(bottomBlock) == TextParagraphType::SequenceFooter
                 && topBlock == document()->begin() && bottomBlock.next() == document()->end()) {
                 //
@@ -324,7 +324,7 @@ void ScreenplayTextCursor::removeCharacters(bool _backward, BaseTextEdit* _edito
     //
     // Если пользователь хочет удалить пустую папку, расширим выделение, чтобы полностью её удалить
     //
-    if (topParagraphType == TextParagraphType::SequenceHeader
+    if (topParagraphType == TextParagraphType::SequenceHeading
         && bottomParagraphType == TextParagraphType::SequenceFooter
         && topBlock.next() == bottomBlock) {
         if (bottomBlock.next() == document()->end()) {
@@ -452,7 +452,7 @@ ScreenplayTextCursor::FoldersToDelete ScreenplayTextCursor::findFoldersToDelete(
         //
         // Если найден блок открывающий папку, то нужно удалить закрывающий блок
         //
-        if (currentType == TextParagraphType::SequenceHeader) {
+        if (currentType == TextParagraphType::SequenceHeading) {
             //
             // ... если все группы закрыты, нужно удалить последующую закрытую
             //
@@ -552,7 +552,7 @@ void ScreenplayTextCursor::removeGroupsPairs(
                 } else {
                     --openedGroups;
                 }
-            } else if (currentType == TextParagraphType::SequenceHeader) {
+            } else if (currentType == TextParagraphType::SequenceHeading) {
                 //
                 // ... встретилась новая группа, которую не нужно удалять
                 //
@@ -590,7 +590,7 @@ void ScreenplayTextCursor::removeGroupsPairs(
         int groupsToDeleteCount = _foldersToDelete.headers;
         do {
             const auto currentType = TextBlockStyle::forBlock(cursor.block());
-            if (currentType == TextParagraphType::SequenceHeader) {
+            if (currentType == TextParagraphType::SequenceHeading) {
                 if (openedGroups == 0) {
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);

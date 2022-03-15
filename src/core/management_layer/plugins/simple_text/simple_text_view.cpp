@@ -218,8 +218,8 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
     using namespace BusinessLayer;
     const auto usedTemplate = BusinessLayer::TemplatesFacade::simpleTextTemplate();
     const QVector<TextParagraphType> types
-        = { TextParagraphType::Heading1, TextParagraphType::Heading2,  TextParagraphType::Heading3,
-            TextParagraphType::Heading4, TextParagraphType::Heading5,  TextParagraphType::Heading6,
+        = { TextParagraphType::ChapterHeading1, TextParagraphType::ChapterHeading2,  TextParagraphType::ChapterHeading3,
+            TextParagraphType::ChapterHeading4, TextParagraphType::ChapterHeading5,  TextParagraphType::ChapterHeading6,
             TextParagraphType::Text,     TextParagraphType::InlineNote };
     for (const auto type : types) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {
@@ -340,12 +340,12 @@ void SimpleTextView::resizeEvent(QResizeEvent* _event)
 void SimpleTextView::updateTranslations()
 {
     using namespace BusinessLayer;
-    d->typesToDisplayNames = { { TextParagraphType::Heading1, tr("Heading 1") },
-                               { TextParagraphType::Heading2, tr("Heading 2") },
-                               { TextParagraphType::Heading3, tr("Heading 3") },
-                               { TextParagraphType::Heading4, tr("Heading 4") },
-                               { TextParagraphType::Heading5, tr("Heading 5") },
-                               { TextParagraphType::Heading6, tr("Heading 6") },
+    d->typesToDisplayNames = { { TextParagraphType::ChapterHeading1, tr("Heading 1") },
+                               { TextParagraphType::ChapterHeading2, tr("Heading 2") },
+                               { TextParagraphType::ChapterHeading3, tr("Heading 3") },
+                               { TextParagraphType::ChapterHeading4, tr("Heading 4") },
+                               { TextParagraphType::ChapterHeading5, tr("Heading 5") },
+                               { TextParagraphType::ChapterHeading6, tr("Heading 6") },
                                { TextParagraphType::Text, tr("Text") },
                                { TextParagraphType::InlineNote, tr("Inline note") } };
 }

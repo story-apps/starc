@@ -58,7 +58,7 @@ TextParagraphType ComicBookTextSearchManager::Implementation::searchInType() con
     default:
         return TextParagraphType::Undefined;
     case 1:
-        return TextParagraphType::Panel;
+        return TextParagraphType::PanelHeading;
     case 2:
         return TextParagraphType::Description;
     case 3:

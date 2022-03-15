@@ -149,9 +149,9 @@ TextModel::TextModel(QObject* _parent, TextModelFolderItem* _rootItem)
             toString(TextParagraphType::Transition),
             toString(TextParagraphType::Shot),
             toString(TextParagraphType::InlineNote),
-            toString(TextParagraphType::ActHeader),
+            toString(TextParagraphType::ActHeading),
             toString(TextParagraphType::ActFooter),
-            toString(TextParagraphType::SequenceHeader),
+            toString(TextParagraphType::SequenceHeading),
             toString(TextParagraphType::SequenceFooter),
             toString(TextParagraphType::PageSplitter),
         },
@@ -842,7 +842,7 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     if (fromItem->type() == TextModelItemType::Text) {
         const auto textItem = static_cast<TextModelTextItem*>(fromItem);
         if (textItem->paragraphType() == TextParagraphType::SceneHeading
-            || textItem->paragraphType() == TextParagraphType::SequenceHeader) {
+            || textItem->paragraphType() == TextParagraphType::SequenceHeading) {
             auto newFromItem = fromItemParent;
             fromItemParent = fromItemParent->parent();
             fromItemRow = fromItemParent->rowOfChild(newFromItem);
@@ -893,7 +893,7 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         // Если в заголовок папки
         //
-        if (textItem->paragraphType() == TextParagraphType::SequenceHeader) {
+        if (textItem->paragraphType() == TextParagraphType::SequenceHeading) {
             //
             // ... то вставим после него
             //

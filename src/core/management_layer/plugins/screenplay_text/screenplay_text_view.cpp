@@ -193,7 +193,7 @@ void ScreenplayTextView::Implementation::reconfigureTemplate(bool _withModelRein
         TextParagraphType::Parenthetical,   TextParagraphType::Dialogue,
         TextParagraphType::Lyrics,          TextParagraphType::Shot,
         TextParagraphType::Transition,      TextParagraphType::InlineNote,
-        TextParagraphType::UnformattedText, TextParagraphType::SequenceHeader,
+        TextParagraphType::UnformattedText, TextParagraphType::SequenceHeading,
     };
     for (const auto type : types) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {
@@ -272,7 +272,7 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
     currentParagraphType = paragraphType;
 
     if (paragraphType == BusinessLayer::TextParagraphType::SequenceFooter) {
-        paragraphType = BusinessLayer::TextParagraphType::SequenceHeader;
+        paragraphType = BusinessLayer::TextParagraphType::SequenceHeading;
         toolbar->setParagraphTypesEnabled(false);
         fastFormatWidget->setEnabled(false);
     } else {

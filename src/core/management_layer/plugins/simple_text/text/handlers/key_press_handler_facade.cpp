@@ -112,12 +112,12 @@ KeyPressHandlerFacade::KeyPressHandlerFacade(SimpleTextEdit* _editor)
 AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
 {
     switch (_type) {
-    case TextParagraphType::Heading1:
-    case TextParagraphType::Heading2:
-    case TextParagraphType::Heading3:
-    case TextParagraphType::Heading4:
-    case TextParagraphType::Heading5:
-    case TextParagraphType::Heading6: {
+    case TextParagraphType::ChapterHeading1:
+    case TextParagraphType::ChapterHeading2:
+    case TextParagraphType::ChapterHeading3:
+    case TextParagraphType::ChapterHeading4:
+    case TextParagraphType::ChapterHeading5:
+    case TextParagraphType::ChapterHeading6: {
         return d->headingHandler.data();
     }
 

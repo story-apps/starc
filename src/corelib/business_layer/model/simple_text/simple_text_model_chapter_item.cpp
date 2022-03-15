@@ -90,12 +90,12 @@ void SimpleTextModelChapterItem::handleChange()
         case TextModelItemType::Text: {
             auto childTextItem = static_cast<TextModelTextItem*>(child);
             switch (childTextItem->paragraphType()) {
-            case TextParagraphType::Heading1:
-            case TextParagraphType::Heading2:
-            case TextParagraphType::Heading3:
-            case TextParagraphType::Heading4:
-            case TextParagraphType::Heading5:
-            case TextParagraphType::Heading6: {
+            case TextParagraphType::ChapterHeading1:
+            case TextParagraphType::ChapterHeading2:
+            case TextParagraphType::ChapterHeading3:
+            case TextParagraphType::ChapterHeading4:
+            case TextParagraphType::ChapterHeading5:
+            case TextParagraphType::ChapterHeading6: {
                 level = static_cast<int>(childTextItem->paragraphType());
                 heading = childTextItem->text();
                 d->wordsCount += TextHelper::wordsCount(childTextItem->text());

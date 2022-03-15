@@ -33,7 +33,7 @@ const QVector<BusinessLayer::TextParagraphType> kParagraphTypes
         BusinessLayer::TextParagraphType::Shot,
         BusinessLayer::TextParagraphType::InlineNote,
         BusinessLayer::TextParagraphType::UnformattedText,
-        BusinessLayer::TextParagraphType::SequenceHeader,
+        BusinessLayer::TextParagraphType::SequenceHeading,
         BusinessLayer::TextParagraphType::SequenceFooter };
 }
 

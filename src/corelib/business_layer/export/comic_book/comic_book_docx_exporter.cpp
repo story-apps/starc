@@ -51,13 +51,13 @@ const QMap<int, TextParagraphType>& paragraphTypes()
         int i = 0;
         s_types.insert(i++, TextParagraphType::Undefined);
         s_types.insert(i++, TextParagraphType::UnformattedText);
-        s_types.insert(i++, TextParagraphType::Page);
-        s_types.insert(i++, TextParagraphType::Panel);
+        s_types.insert(i++, TextParagraphType::PageHeading);
+        s_types.insert(i++, TextParagraphType::PanelHeading);
         s_types.insert(i++, TextParagraphType::Description);
         s_types.insert(i++, TextParagraphType::Character);
         s_types.insert(i++, TextParagraphType::Dialogue);
         s_types.insert(i++, TextParagraphType::InlineNote);
-        s_types.insert(i++, TextParagraphType::SequenceHeader);
+        s_types.insert(i++, TextParagraphType::SequenceHeading);
         s_types.insert(i++, TextParagraphType::SequenceFooter);
     }
     return s_types;
@@ -366,7 +366,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ComicBookTextCursor& _
     const QTextBlock block = _cursor.block();
     const auto currentBlockType = TextBlockStyle::forBlock(block);
     const auto correctedBlockType = currentBlockType == TextParagraphType::PanelShadow
-        ? TextParagraphType::Panel
+        ? TextParagraphType::PanelHeading
         : currentBlockType;
 
     //

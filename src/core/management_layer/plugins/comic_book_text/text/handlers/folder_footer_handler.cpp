@@ -59,7 +59,7 @@ void FolderFooterHandler::handleEnter(QKeyEvent*)
                 //
                 // Вставить блок время и место
                 //
-                editor()->addParagraph(TextParagraphType::Page);
+                editor()->addParagraph(TextParagraphType::PageHeading);
             } else {
                 //! Текст не пуст
 
@@ -73,7 +73,7 @@ void FolderFooterHandler::handleEnter(QKeyEvent*)
                     cursor.movePosition(QTextCursor::PreviousCharacter);
                     cursor.setBlockFormat(QTextBlockFormat());
                     editor()->setTextCursor(cursor);
-                    editor()->setCurrentParagraphType(TextParagraphType::Page);
+                    editor()->setCurrentParagraphType(TextParagraphType::PageHeading);
                     editor()->moveCursor(QTextCursor::NextCharacter);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
@@ -81,14 +81,14 @@ void FolderFooterHandler::handleEnter(QKeyEvent*)
                     //
                     // Вставить блок время и место
                     //
-                    editor()->addParagraph(TextParagraphType::Page);
+                    editor()->addParagraph(TextParagraphType::PageHeading);
                 } else {
                     //! Внутри блока
 
                     //
                     // Вставить блок время и место
                     //
-                    editor()->addParagraph(TextParagraphType::Page);
+                    editor()->addParagraph(TextParagraphType::PageHeading);
                 }
             }
         }

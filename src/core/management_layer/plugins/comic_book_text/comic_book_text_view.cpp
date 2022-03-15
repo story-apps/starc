@@ -195,7 +195,7 @@ void ComicBookTextView::Implementation::updateToolBarCurrentParagraphTypeName()
     currentParagraphType = paragraphType;
 
     if (paragraphType == BusinessLayer::TextParagraphType::SequenceFooter) {
-        paragraphType = BusinessLayer::TextParagraphType::SequenceHeader;
+        paragraphType = BusinessLayer::TextParagraphType::SequenceHeading;
         toolbar->setParagraphTypesEnabled(false);
         fastFormatWidget->setEnabled(false);
     } else {
@@ -495,14 +495,14 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
     using namespace BusinessLayer;
     const auto usedTemplate = BusinessLayer::TemplatesFacade::comicBookTemplate();
     const QVector<TextParagraphType> types = {
-        TextParagraphType::Page,
-        TextParagraphType::Panel,
+        TextParagraphType::PageHeading,
+        TextParagraphType::PanelHeading,
         TextParagraphType::Description,
         TextParagraphType::Character,
         TextParagraphType::Dialogue,
         TextParagraphType::InlineNote,
         TextParagraphType::UnformattedText,
-        TextParagraphType::SequenceHeader,
+        TextParagraphType::SequenceHeading,
     };
     for (const auto type : types) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {

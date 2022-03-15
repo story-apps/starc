@@ -95,12 +95,12 @@ void SimpleTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
     //
     // Создаём шорткаты
     //
-    d->createOrUpdateShortcut(TextParagraphType::Heading1);
-    d->createOrUpdateShortcut(TextParagraphType::Heading2);
-    d->createOrUpdateShortcut(TextParagraphType::Heading3);
-    d->createOrUpdateShortcut(TextParagraphType::Heading4);
-    d->createOrUpdateShortcut(TextParagraphType::Heading5);
-    d->createOrUpdateShortcut(TextParagraphType::Heading6);
+    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading1);
+    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading2);
+    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading3);
+    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading4);
+    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading5);
+    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading6);
     d->createOrUpdateShortcut(TextParagraphType::Text);
     d->createOrUpdateShortcut(TextParagraphType::InlineNote);
 

@@ -87,13 +87,13 @@ void DescriptionHandler::handleEnter(QKeyEvent*)
                                 backwardTextCorrected)
                             || editor()->dictionaries()->multiplePageIntros().contains(
                                 backwardTextCorrected)) {
-                            editor()->setCurrentParagraphType(TextParagraphType::Page);
-                            editor()->addParagraph(jumpForEnter(TextParagraphType::Page));
+                            editor()->setCurrentParagraphType(TextParagraphType::PageHeading);
+                            editor()->addParagraph(jumpForEnter(TextParagraphType::PageHeading));
                             isHandled = true;
                         } else if (editor()->dictionaries()->panelIntros().contains(
                                        backwardTextCorrected)) {
-                            editor()->setCurrentParagraphType(TextParagraphType::Panel);
-                            editor()->addParagraph(jumpForEnter(TextParagraphType::Panel));
+                            editor()->setCurrentParagraphType(TextParagraphType::PanelHeading);
+                            editor()->addParagraph(jumpForEnter(TextParagraphType::PanelHeading));
                             isHandled = true;
                         }
                     }
@@ -209,9 +209,9 @@ void DescriptionHandler::handleOther(QKeyEvent* _event)
         }
         if (editor()->dictionaries()->singlePageIntros().contains(backwardTextCorrected)
             || editor()->dictionaries()->multiplePageIntros().contains(backwardTextCorrected)) {
-            editor()->setCurrentParagraphType(TextParagraphType::Page);
+            editor()->setCurrentParagraphType(TextParagraphType::PageHeading);
         } else if (editor()->dictionaries()->panelIntros().contains(backwardTextCorrected)) {
-            editor()->setCurrentParagraphType(TextParagraphType::Panel);
+            editor()->setCurrentParagraphType(TextParagraphType::PanelHeading);
         }
     } else {
         //! В противном случае, обрабатываем в базовом классе

@@ -301,7 +301,7 @@ QStringList ComicBookTextModel::mimeTypes() const
 void ComicBookTextModel::initEmptyDocument()
 {
     auto pageText = createTextItem();
-    pageText->setParagraphType(TextParagraphType::Page);
+    pageText->setParagraphType(TextParagraphType::PageHeading);
     auto page = createGroupItem(TextGroupType::Page);
     page->appendItem(pageText);
     appendItem(page);

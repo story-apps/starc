@@ -143,23 +143,30 @@ SettingsStorage::Implementation::Implementation()
                                                        TextParagraphType _to) {
                   addSimpleTextEditorStylesActionByEnter("jumping", _from, _to);
               };
-        addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading1,
-                                           TextParagraphType::Heading2);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading1, TextParagraphType::Text);
-        addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading2,
-                                           TextParagraphType::Heading3);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading2, TextParagraphType::Text);
-        addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading3,
-                                           TextParagraphType::Heading4);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading3, TextParagraphType::Text);
-        addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading4,
-                                           TextParagraphType::Heading5);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading4, TextParagraphType::Text);
-        addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading5,
-                                           TextParagraphType::Heading6);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading5, TextParagraphType::Text);
-        addSimpleTextEditorStylesJumpByTab(TextParagraphType::Heading6, TextParagraphType::Text);
-        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Heading6, TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByTab(TextParagraphType::ChapterHeading1,
+                                           TextParagraphType::ChapterHeading2);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::ChapterHeading1,
+                                             TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByTab(TextParagraphType::ChapterHeading2,
+                                           TextParagraphType::ChapterHeading3);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::ChapterHeading2,
+                                             TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByTab(TextParagraphType::ChapterHeading3,
+                                           TextParagraphType::ChapterHeading4);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::ChapterHeading3,
+                                             TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByTab(TextParagraphType::ChapterHeading4,
+                                           TextParagraphType::ChapterHeading5);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::ChapterHeading4,
+                                             TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByTab(TextParagraphType::ChapterHeading5,
+                                           TextParagraphType::ChapterHeading6);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::ChapterHeading5,
+                                             TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByTab(TextParagraphType::ChapterHeading6,
+                                           TextParagraphType::Text);
+        addSimpleTextEditorStylesJumpByEnter(TextParagraphType::ChapterHeading6,
+                                             TextParagraphType::Text);
         addSimpleTextEditorStylesJumpByTab(TextParagraphType::Text, TextParagraphType::Text);
         addSimpleTextEditorStylesJumpByEnter(TextParagraphType::Text, TextParagraphType::Text);
         addSimpleTextEditorStylesJumpByTab(TextParagraphType::InlineNote, TextParagraphType::Text);
@@ -175,33 +182,34 @@ SettingsStorage::Implementation::Implementation()
                                                        TextParagraphType _to) {
                   addSimpleTextEditorStylesActionByEnter("changing", _from, _to);
               };
-        addSimpleTextEditorStylesChangeByTab(TextParagraphType::Heading1,
-                                             TextParagraphType::Heading2);
-        addSimpleTextEditorStylesChangeByEnter(TextParagraphType::Heading1,
-                                               TextParagraphType::Heading1);
-        addSimpleTextEditorStylesChangeByTab(TextParagraphType::Heading2,
-                                             TextParagraphType::Heading3);
-        addSimpleTextEditorStylesChangeByEnter(TextParagraphType::Heading2,
-                                               TextParagraphType::Heading1);
-        addSimpleTextEditorStylesChangeByTab(TextParagraphType::Heading3,
-                                             TextParagraphType::Heading4);
-        addSimpleTextEditorStylesChangeByEnter(TextParagraphType::Heading3,
-                                               TextParagraphType::Heading2);
-        addSimpleTextEditorStylesChangeByTab(TextParagraphType::Heading4,
-                                             TextParagraphType::Heading5);
-        addSimpleTextEditorStylesChangeByEnter(TextParagraphType::Heading4,
-                                               TextParagraphType::Heading3);
-        addSimpleTextEditorStylesChangeByTab(TextParagraphType::Heading5,
-                                             TextParagraphType::Heading6);
-        addSimpleTextEditorStylesChangeByEnter(TextParagraphType::Heading5,
-                                               TextParagraphType::Heading4);
-        addSimpleTextEditorStylesChangeByTab(TextParagraphType::Heading6, TextParagraphType::Text);
-        addSimpleTextEditorStylesChangeByEnter(TextParagraphType::Heading6,
-                                               TextParagraphType::Heading5);
+        addSimpleTextEditorStylesChangeByTab(TextParagraphType::ChapterHeading1,
+                                             TextParagraphType::ChapterHeading2);
+        addSimpleTextEditorStylesChangeByEnter(TextParagraphType::ChapterHeading1,
+                                               TextParagraphType::ChapterHeading1);
+        addSimpleTextEditorStylesChangeByTab(TextParagraphType::ChapterHeading2,
+                                             TextParagraphType::ChapterHeading3);
+        addSimpleTextEditorStylesChangeByEnter(TextParagraphType::ChapterHeading2,
+                                               TextParagraphType::ChapterHeading1);
+        addSimpleTextEditorStylesChangeByTab(TextParagraphType::ChapterHeading3,
+                                             TextParagraphType::ChapterHeading4);
+        addSimpleTextEditorStylesChangeByEnter(TextParagraphType::ChapterHeading3,
+                                               TextParagraphType::ChapterHeading2);
+        addSimpleTextEditorStylesChangeByTab(TextParagraphType::ChapterHeading4,
+                                             TextParagraphType::ChapterHeading5);
+        addSimpleTextEditorStylesChangeByEnter(TextParagraphType::ChapterHeading4,
+                                               TextParagraphType::ChapterHeading3);
+        addSimpleTextEditorStylesChangeByTab(TextParagraphType::ChapterHeading5,
+                                             TextParagraphType::ChapterHeading6);
+        addSimpleTextEditorStylesChangeByEnter(TextParagraphType::ChapterHeading5,
+                                               TextParagraphType::ChapterHeading4);
+        addSimpleTextEditorStylesChangeByTab(TextParagraphType::ChapterHeading6,
+                                             TextParagraphType::Text);
+        addSimpleTextEditorStylesChangeByEnter(TextParagraphType::ChapterHeading6,
+                                               TextParagraphType::ChapterHeading5);
         addSimpleTextEditorStylesChangeByTab(TextParagraphType::Text,
                                              TextParagraphType::InlineNote);
         addSimpleTextEditorStylesChangeByEnter(TextParagraphType::Text,
-                                               TextParagraphType::Heading6);
+                                               TextParagraphType::ChapterHeading6);
         addSimpleTextEditorStylesChangeByTab(TextParagraphType::InlineNote,
                                              TextParagraphType::Text);
         addSimpleTextEditorStylesChangeByEnter(TextParagraphType::InlineNote,
@@ -213,12 +221,12 @@ SettingsStorage::Implementation::Implementation()
                                      .arg(kSimpleTextEditorKey, BusinessLayer::toString(_type)),
                                  QKeySequence(_shortcut).toString(QKeySequence::NativeText));
         };
-        addShortcut(BusinessLayer::TextParagraphType::Heading1, "Ctrl+1");
-        addShortcut(BusinessLayer::TextParagraphType::Heading2, "Ctrl+2");
-        addShortcut(BusinessLayer::TextParagraphType::Heading3, "Ctrl+3");
-        addShortcut(BusinessLayer::TextParagraphType::Heading4, "Ctrl+4");
-        addShortcut(BusinessLayer::TextParagraphType::Heading5, "Ctrl+5");
-        addShortcut(BusinessLayer::TextParagraphType::Heading6, "Ctrl+6");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading1, "Ctrl+1");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading2, "Ctrl+2");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading3, "Ctrl+3");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading4, "Ctrl+4");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading5, "Ctrl+5");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading6, "Ctrl+6");
         addShortcut(BusinessLayer::TextParagraphType::Text, "Ctrl+7");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
         //
@@ -300,9 +308,9 @@ SettingsStorage::Implementation::Implementation()
                                            TextParagraphType::Action);
         addScreenplayEditorStylesJumpByEnter(TextParagraphType::InlineNote,
                                              TextParagraphType::Action);
-        addScreenplayEditorStylesJumpByTab(TextParagraphType::SequenceHeader,
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::SequenceHeading,
                                            TextParagraphType::SceneHeading);
-        addScreenplayEditorStylesJumpByEnter(TextParagraphType::SequenceHeader,
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::SequenceHeading,
                                              TextParagraphType::SceneHeading);
         //
         auto addScreenplayEditorStylesChangeByTab =
@@ -356,10 +364,10 @@ SettingsStorage::Implementation::Implementation()
                                              TextParagraphType::InlineNote);
         addScreenplayEditorStylesChangeByEnter(TextParagraphType::InlineNote,
                                                TextParagraphType::InlineNote);
-        addScreenplayEditorStylesChangeByTab(TextParagraphType::SequenceHeader,
-                                             TextParagraphType::SequenceHeader);
-        addScreenplayEditorStylesChangeByEnter(TextParagraphType::SequenceHeader,
-                                               TextParagraphType::SequenceHeader);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::SequenceHeading,
+                                             TextParagraphType::SequenceHeading);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::SequenceHeading,
+                                               TextParagraphType::SequenceHeading);
         //
         auto addShortcut
             = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
@@ -379,7 +387,7 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Shot, "Ctrl+8");
         addShortcut(BusinessLayer::TextParagraphType::Transition, "Ctrl+9");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
-        addShortcut(BusinessLayer::TextParagraphType::SequenceHeader, "Ctrl+Space");
+        addShortcut(BusinessLayer::TextParagraphType::SequenceHeading, "Ctrl+Space");
         //
         defaultValues.insert(kComponentsScreenplayEditorDefaultTemplateKey, "world_cp");
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersKey, false);
@@ -439,10 +447,13 @@ SettingsStorage::Implementation::Implementation()
                                           TextParagraphType::UnformattedText);
         addComicBookEditorStylesJumpByEnter(TextParagraphType::UnformattedText,
                                             TextParagraphType::UnformattedText);
-        addComicBookEditorStylesJumpByTab(TextParagraphType::Page, TextParagraphType::Panel);
-        addComicBookEditorStylesJumpByEnter(TextParagraphType::Page, TextParagraphType::Panel);
-        addComicBookEditorStylesJumpByTab(TextParagraphType::Panel, TextParagraphType::Character);
-        addComicBookEditorStylesJumpByEnter(TextParagraphType::Panel,
+        addComicBookEditorStylesJumpByTab(TextParagraphType::PageHeading,
+                                          TextParagraphType::PanelHeading);
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::PageHeading,
+                                            TextParagraphType::PanelHeading);
+        addComicBookEditorStylesJumpByTab(TextParagraphType::PanelHeading,
+                                          TextParagraphType::Character);
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::PanelHeading,
                                             TextParagraphType::Description);
         addComicBookEditorStylesJumpByTab(TextParagraphType::Description,
                                           TextParagraphType::Character);
@@ -460,10 +471,10 @@ SettingsStorage::Implementation::Implementation()
                                           TextParagraphType::Description);
         addComicBookEditorStylesJumpByEnter(TextParagraphType::InlineNote,
                                             TextParagraphType::Description);
-        addComicBookEditorStylesJumpByTab(TextParagraphType::SequenceHeader,
-                                          TextParagraphType::Page);
-        addComicBookEditorStylesJumpByEnter(TextParagraphType::SequenceHeader,
-                                            TextParagraphType::Page);
+        addComicBookEditorStylesJumpByTab(TextParagraphType::SequenceHeading,
+                                          TextParagraphType::PageHeading);
+        addComicBookEditorStylesJumpByEnter(TextParagraphType::SequenceHeading,
+                                            TextParagraphType::PageHeading);
         //
         auto addComicBookEditorStylesChangeByTab =
             [addComicBookEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
@@ -478,15 +489,18 @@ SettingsStorage::Implementation::Implementation()
                                             TextParagraphType::UnformattedText);
         addComicBookEditorStylesChangeByEnter(TextParagraphType::UnformattedText,
                                               TextParagraphType::UnformattedText);
-        addComicBookEditorStylesChangeByTab(TextParagraphType::Page, TextParagraphType::Panel);
-        addComicBookEditorStylesChangeByEnter(TextParagraphType::Page, TextParagraphType::Page);
-        addComicBookEditorStylesChangeByTab(TextParagraphType::Panel,
+        addComicBookEditorStylesChangeByTab(TextParagraphType::PageHeading,
+                                            TextParagraphType::PanelHeading);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::PageHeading,
+                                              TextParagraphType::PageHeading);
+        addComicBookEditorStylesChangeByTab(TextParagraphType::PanelHeading,
                                             TextParagraphType::Description);
-        addComicBookEditorStylesChangeByEnter(TextParagraphType::Panel, TextParagraphType::Page);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::PanelHeading,
+                                              TextParagraphType::PageHeading);
         addComicBookEditorStylesChangeByTab(TextParagraphType::Description,
                                             TextParagraphType::Character);
         addComicBookEditorStylesChangeByEnter(TextParagraphType::Description,
-                                              TextParagraphType::Panel);
+                                              TextParagraphType::PanelHeading);
         addComicBookEditorStylesChangeByTab(TextParagraphType::Character,
                                             TextParagraphType::Description);
         addComicBookEditorStylesChangeByEnter(TextParagraphType::Character,
@@ -499,10 +513,10 @@ SettingsStorage::Implementation::Implementation()
                                             TextParagraphType::InlineNote);
         addComicBookEditorStylesChangeByEnter(TextParagraphType::InlineNote,
                                               TextParagraphType::InlineNote);
-        addComicBookEditorStylesChangeByTab(TextParagraphType::SequenceHeader,
-                                            TextParagraphType::SequenceHeader);
-        addComicBookEditorStylesChangeByEnter(TextParagraphType::SequenceHeader,
-                                              TextParagraphType::SequenceHeader);
+        addComicBookEditorStylesChangeByTab(TextParagraphType::SequenceHeading,
+                                            TextParagraphType::SequenceHeading);
+        addComicBookEditorStylesChangeByEnter(TextParagraphType::SequenceHeading,
+                                              TextParagraphType::SequenceHeading);
         //
         auto addShortcut = [this, kComicBookEditorKey](BusinessLayer::TextParagraphType _type,
                                                        const QString& _shortcut) {
@@ -511,8 +525,8 @@ SettingsStorage::Implementation::Implementation()
                 QKeySequence(_shortcut).toString(QKeySequence::NativeText));
         };
         addShortcut(BusinessLayer::TextParagraphType::UnformattedText, "Ctrl+0");
-        addShortcut(BusinessLayer::TextParagraphType::Page, "Ctrl+1");
-        addShortcut(BusinessLayer::TextParagraphType::Panel, "Ctrl+2");
+        addShortcut(BusinessLayer::TextParagraphType::PageHeading, "Ctrl+1");
+        addShortcut(BusinessLayer::TextParagraphType::PanelHeading, "Ctrl+2");
         addShortcut(BusinessLayer::TextParagraphType::Description, "Ctrl+3");
         addShortcut(BusinessLayer::TextParagraphType::Character, "Ctrl+4");
         addShortcut(BusinessLayer::TextParagraphType::Dialogue, "Ctrl+5");

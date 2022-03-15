@@ -1,9 +1,9 @@
-#include "comic_book_text_cursor.h"
+#include "text_cursor.h"
 
-#include "comic_book_text_block_data.h"
-#include "comic_book_text_document.h"
+#include "text_block_data.h"
+#include "text_document.h"
 
-#include <business_layer/templates/comic_book_template.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/base/base_text_edit.h>
 #include <utils/shugar.h>
@@ -15,39 +15,39 @@
 namespace BusinessLayer {
 
 namespace {
-ComicBookTextBlockData* cloneBlockData(const QTextBlock& _block)
+TextBlockData* cloneBlockData(const QTextBlock& _block)
 {
-    ComicBookTextBlockData* clonedBlockData = nullptr;
+    TextBlockData* clonedBlockData = nullptr;
     if (_block.userData() != nullptr) {
-        const auto blockData
-            = static_cast<BusinessLayer::ComicBookTextBlockData*>(_block.userData());
+        const auto blockData = static_cast<BusinessLayer::TextBlockData*>(_block.userData());
         if (blockData != nullptr) {
-            clonedBlockData = new ComicBookTextBlockData(blockData);
+            clonedBlockData = new TextBlockData(blockData);
         }
     }
     return clonedBlockData;
 }
+
 } // namespace
 
 
-ComicBookTextCursor::ComicBookTextCursor()
+TextCursor::TextCursor()
     : QTextCursor()
 {
 }
 
-ComicBookTextCursor::ComicBookTextCursor(const QTextCursor& _other)
+TextCursor::TextCursor(const QTextCursor& _other)
     : QTextCursor(_other)
 {
 }
 
-ComicBookTextCursor::ComicBookTextCursor(QTextDocument* _document)
+TextCursor::TextCursor(QTextDocument* _document)
     : QTextCursor(_document)
 {
 }
 
-ComicBookTextCursor::~ComicBookTextCursor() = default;
+TextCursor::~TextCursor() = default;
 
-bool ComicBookTextCursor::isInEditBlock() const
+bool TextCursor::isInEditBlock() const
 {
 #if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
     return QTextDocumentPrivate::get(document())->isInEditBlock();
@@ -56,17 +56,17 @@ bool ComicBookTextCursor::isInEditBlock() const
 #endif
 }
 
-bool ComicBookTextCursor::inTable() const
+bool TextCursor::inTable() const
 {
     return currentTable() != nullptr;
 }
 
-bool ComicBookTextCursor::inFirstColumn() const
+bool TextCursor::inFirstColumn() const
 {
     return currentTable() && currentTable()->cellAt(*this).column() == 0;
 }
 
-ComicBookTextCursor::Selection ComicBookTextCursor::selectionInterval() const
+TextCursor::Selection TextCursor::selectionInterval() const
 {
     if (!hasSelection()) {
         return { position(), position() };
@@ -79,7 +79,7 @@ ComicBookTextCursor::Selection ComicBookTextCursor::selectionInterval() const
     }
 }
 
-void ComicBookTextCursor::restartEditBlock()
+void TextCursor::restartEditBlock()
 {
     endEditBlock();
 
@@ -97,7 +97,7 @@ void ComicBookTextCursor::restartEditBlock()
     }
 }
 
-void ComicBookTextCursor::removeCharacters(BaseTextEdit* _editor)
+void TextCursor::removeCharacters(BaseTextEdit* _editor)
 {
     removeCharacters(true, _editor);
 }
@@ -106,11 +106,11 @@ void ComicBookTextCursor::removeCharacters(BaseTextEdit* _editor)
 // TODO: В нижеследующих методах сделать аккуратно через собственный курсор
 //
 
-void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
+void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
 {
     Q_ASSERT(document() == _editor->document());
 
-    ComicBookTextCursor cursor = _editor->textCursor();
+    TextCursor cursor = _editor->textCursor();
     if (!cursor.hasSelection()) {
         //
         // Если в начале документа нажат backspace
@@ -140,7 +140,7 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
             topCursorPosition = cursor.position() - (_backward ? 1 : 0);
             bottomCursorPosition = topCursorPosition + 1;
 
-            QTextCursor checkCursor = cursor;
+            TextCursor checkCursor = cursor;
             checkCursor.setPosition(topCursorPosition);
             //
             // ... переходим через корректирующие блоки блоки вперёд
@@ -240,10 +240,9 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
                 // - удаляем весь остальной контент и заодно вставленный на предыдущем шаге символ
                 //
                 cursor.movePosition(QTextCursor::Start);
-                auto comicBookDocument
-                    = dynamic_cast<BusinessLayer::ComicBookTextDocument*>(document());
-                Q_ASSERT(comicBookDocument);
-                comicBookDocument->setParagraphType(TextParagraphType::PageHeading, cursor);
+                auto textDocument = dynamic_cast<BusinessLayer::TextDocument*>(document());
+                Q_ASSERT(textDocument);
+                textDocument->setParagraphType(TextParagraphType::SceneHeading, cursor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 cursor.insertText(" ");
                 cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
@@ -257,7 +256,7 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
         // ... когда пользователь хочет удалить внутреннюю границу разделения
         //
         {
-            ComicBookTextCursor checkCursor = cursor;
+            auto checkCursor = cursor;
             checkCursor.setPosition(topCursorPosition);
             if (checkCursor.inTable() && checkCursor.inFirstColumn()) {
                 checkCursor.setPosition(bottomCursorPosition);
@@ -268,9 +267,8 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
                     //     таблицу
                     //
                     if (!cursor.hasSelection()) {
-                        auto comicBookDocument
-                            = dynamic_cast<BusinessLayer::ComicBookTextDocument*>(document());
-                        comicBookDocument->mergeParagraph(cursor);
+                        auto textDocument = dynamic_cast<BusinessLayer::TextDocument*>(document());
+                        textDocument->mergeParagraph(cursor);
                         return;
                     }
                     //
@@ -287,7 +285,7 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
         // ... запрещаем удалять пустую строку идущую после таблицы
         //
         if (topCursorPosition + 1 == bottomCursorPosition) {
-            ComicBookTextCursor checkCursor = cursor;
+            auto checkCursor = cursor;
             checkCursor.setPosition(bottomCursorPosition);
             if (checkCursor.atEnd()) {
                 checkCursor.setPosition(topCursorPosition);
@@ -306,20 +304,19 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
     //
     const auto topBlock = document()->findBlock(topCursorPosition);
     const auto topParagraphType = TextBlockStyle::forBlock(topBlock);
-    const auto topStyle = TemplatesFacade::comicBookTemplate().paragraphStyle(topParagraphType);
+    const auto topStyle = textTemplate().paragraphStyle(topParagraphType);
     //
     // ... и конца
     //
     const auto bottomBlock = document()->findBlock(bottomCursorPosition);
     const auto bottomParagraphType = TextBlockStyle::forBlock(bottomBlock);
-    const auto bottomStyle
-        = TemplatesFacade::comicBookTemplate().paragraphStyle(bottomParagraphType);
+    const auto bottomStyle = textTemplate().paragraphStyle(bottomParagraphType);
 
     //
     // Определим стиль результирующего блока и сохраним его данные
     //
     TextBlockStyle targetStyle;
-    ComicBookTextBlockData* targetBlockData = nullptr;
+    TextBlockData* targetBlockData = nullptr;
     bool isTopBlockShouldBeRemoved = false;
     //
     // Если пользователь хочет удалить пустую папку, расширим выделение, чтобы полностью её удалить
@@ -340,7 +337,7 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
         }
         const QTextBlock targetBlock = cursor.block();
         const auto targetBlockType = TextBlockStyle::forBlock(targetBlock);
-        targetStyle = TemplatesFacade::comicBookTemplate().paragraphStyle(targetBlockType);
+        targetStyle = textTemplate().paragraphStyle(targetBlockType);
         targetBlockData = cloneBlockData(targetBlock);
     }
     //
@@ -398,6 +395,7 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
         //
         if (!inblockChange) {
             cursor.setBlockFormat(targetStyle.blockFormat(cursor.inTable()));
+            cursor.setBlockCharFormat(targetStyle.charFormat());
             cursor.block().setUserData(targetBlockData);
         }
 
@@ -415,13 +413,14 @@ void ComicBookTextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor
     cursor.endEditBlock();
 }
 
-ComicBookTextCursor::FoldersToDelete ComicBookTextCursor::findFoldersToDelete(
-    int _topCursorPosition, int _bottomCursorPosition, bool isTopBlockShouldBeRemoved)
+TextCursor::FoldersToDelete TextCursor::findFoldersToDelete(int _topCursorPosition,
+                                                            int _bottomCursorPosition,
+                                                            bool isTopBlockShouldBeRemoved)
 {
     //
     // Начнём поиск с заданной позиции
     //
-    QTextCursor cursor(document());
+    TextCursor cursor(document());
     cursor.setPosition(_topCursorPosition);
 
     //
@@ -499,15 +498,15 @@ ComicBookTextCursor::FoldersToDelete ComicBookTextCursor::findFoldersToDelete(
     return foldersToDelete;
 }
 
-void ComicBookTextCursor::removeGroupsPairs(
-    int _cursorPosition, const ComicBookTextCursor::FoldersToDelete& _foldersToDelete,
-    bool isTopBlockShouldBeRemoved)
+void TextCursor::removeGroupsPairs(int _cursorPosition,
+                                   const TextCursor::FoldersToDelete& _foldersToDelete,
+                                   bool isTopBlockShouldBeRemoved)
 {
     //
     // Удалим пары из последующего текста
     //
     if (_foldersToDelete.footers > 0) {
-        QTextCursor cursor(document());
+        TextCursor cursor(document());
         cursor.setPosition(_cursorPosition);
 
         //
@@ -535,7 +534,7 @@ void ComicBookTextCursor::removeGroupsPairs(
                     //
                     // Уберём сам блок
                     //
-                    ComicBookTextBlockData* blockData = nullptr;
+                    TextBlockData* blockData = nullptr;
                     if (cursor.atEnd()) {
                         blockData = cloneBlockData(cursor.block().previous());
                         cursor.deletePreviousChar();
@@ -572,7 +571,7 @@ void ComicBookTextCursor::removeGroupsPairs(
     // Удалим пары из предшествующего текста
     //
     if (_foldersToDelete.headers > 0) {
-        QTextCursor cursor(document());
+        TextCursor cursor(document());
         cursor.setPosition(_cursorPosition);
 
         //
@@ -630,6 +629,13 @@ void ComicBookTextCursor::removeGroupsPairs(
             cursor.movePosition(QTextCursor::PreviousBlock);
         } while (groupsToDeleteCount > 0);
     }
+}
+
+const TextTemplate& TextCursor::textTemplate() const
+{
+    Q_ASSERT_X(false, Q_FUNC_INFO, "Should be reimplemented in a child class");
+
+    return TemplatesFacade::simpleTextTemplate();
 }
 
 } // namespace BusinessLayer

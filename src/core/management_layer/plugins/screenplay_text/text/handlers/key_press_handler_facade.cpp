@@ -187,7 +187,7 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
         return d->m_inlineNoteHandler.data();
     }
 
-    case TextParagraphType::SequenceHeader: {
+    case TextParagraphType::SequenceHeading: {
         return d->m_folderHeaderHandler.data();
     }
 

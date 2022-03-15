@@ -54,7 +54,7 @@ void PageHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(TextParagraphType::Page);
+            editor()->addParagraph(TextParagraphType::PageHeading);
         } else {
             //! Нет выделения
 
@@ -64,7 +64,7 @@ void PageHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль блока на описание действия
                 //
-                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Page));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::PageHeading));
             } else {
                 //! Текст не пуст
 
@@ -80,14 +80,14 @@ void PageHandler::handleEnter(QKeyEvent*)
                     //
                     // Перейдём к блоку персонажа
                     //
-                    editor()->addParagraph(jumpForEnter(TextParagraphType::Page));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::PageHeading));
                 } else {
                     //! Внутри блока
 
                     //
                     // Оставшийся текст форматируем, как "лирика"
                     //
-                    editor()->addParagraph(TextParagraphType::Page);
+                    editor()->addParagraph(TextParagraphType::PageHeading);
                 }
             }
         }
@@ -136,7 +136,7 @@ void PageHandler::handleTab(QKeyEvent*)
                 //
                 // Меняем стиль на ремарку
                 //
-                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Page));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::PageHeading));
             } else {
                 //! Текст не пуст
 
@@ -152,7 +152,7 @@ void PageHandler::handleTab(QKeyEvent*)
                     //
                     // Вставляем блок ремарки
                     //
-                    editor()->addParagraph(jumpForTab(TextParagraphType::Page));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::PageHeading));
                 } else {
                     //! Внутри блока
 

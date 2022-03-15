@@ -585,7 +585,7 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
     // Формируем блок сценария
     //
     switch (_type) {
-    case TextParagraphType::SequenceHeader: {
+    case TextParagraphType::SequenceHeading: {
         if (alreadyInScene) {
             _writer.writeEndElement(); // контент предыдущей сцены
             _writer.writeEndElement(); // предыдущая сцена
@@ -1241,9 +1241,9 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
             // И откроем новую
             //
             QString text = paragraphs[i].mid(sharpCount);
-            d->processBlock(text, TextParagraphType::SequenceHeader, writer);
+            d->processBlock(text, TextParagraphType::SequenceHeading, writer);
             dirs.push(text);
-            prevBlockType = TextParagraphType::SequenceHeader;
+            prevBlockType = TextParagraphType::SequenceHeading;
 
             //
             // Поскольку директории добавляются прямо здесь без обработки, то в конец цикла идти не

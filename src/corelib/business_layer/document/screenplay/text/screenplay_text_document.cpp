@@ -1272,7 +1272,7 @@ void ScreenplayTextDocument::setParagraphType(BusinessLayer::TextParagraphType _
 void ScreenplayTextDocument::cleanParagraphType(const ScreenplayTextCursor& _cursor)
 {
     const auto oldBlockType = TextBlockStyle::forBlock(_cursor.block());
-    if (oldBlockType != TextParagraphType::SequenceHeader) {
+    if (oldBlockType != TextParagraphType::SequenceHeading) {
         return;
     }
 
@@ -1368,7 +1368,7 @@ void ScreenplayTextDocument::applyParagraphType(BusinessLayer::TextParagraphType
     //
     // Для заголовка папки нужно создать завершение
     //
-    if (_type == TextParagraphType::SequenceHeader) {
+    if (_type == TextParagraphType::SequenceHeading) {
         const auto footerStyle
             = d->documentTemplate().paragraphStyle(TextParagraphType::SequenceFooter);
 
@@ -2035,7 +2035,7 @@ void ScreenplayTextDocument::updateModelOnContentChange(int _position, int _char
             //
             TextModelItem* parentItem = nullptr;
             switch (paragraphType) {
-            case TextParagraphType::SequenceHeader: {
+            case TextParagraphType::SequenceHeading: {
                 parentItem = d->model->createFolderItem();
                 break;
             }

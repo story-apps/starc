@@ -276,7 +276,7 @@ void ScreenplayTextEdit::setCurrentParagraphType(BusinessLayer::TextParagraphTyp
     //
     // Если вставили папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
     //
-    if (_type == TextParagraphType::SequenceHeader) {
+    if (_type == TextParagraphType::SequenceHeading) {
         moveCursor(QTextCursor::PreviousBlock);
     }
 
@@ -619,7 +619,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     // ... идём до начала сцены
     //
     while (TextBlockStyle::forBlock(topBlock) != TextParagraphType::SceneHeading
-           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::SequenceHeader
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::SequenceHeading
            && topBlock != document()->firstBlock()) {
         topBlock = topBlock.previous();
     }
@@ -701,7 +701,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 // Определим цвет сцены
                 //
                 if (blockType == TextParagraphType::SceneHeading
-                    || blockType == TextParagraphType::SequenceHeader) {
+                    || blockType == TextParagraphType::SequenceHeading) {
                     lastSceneBlockBottom = cursorR.top();
                     lastSceneColor = d->document.itemColor(block);
                 }
@@ -853,7 +853,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             int openedFolders = 0;
                             while (headerBlock.isValid()) {
                                 const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
-                                if (headerBlockType == TextParagraphType::SequenceHeader) {
+                                if (headerBlockType == TextParagraphType::SequenceHeading) {
                                     if (openedFolders > 0) {
                                         --openedFolders;
                                     } else {
@@ -929,7 +929,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Прорисовка значков папки (можно использовать для закладок)
                         //
-                        if (blockType == TextParagraphType::SequenceHeader) {
+                        if (blockType == TextParagraphType::SequenceHeading) {
                             setPainterPen(palette().text().color());
                             painter.setFont(DesignSystem::font().iconsForEditors());
 
@@ -1228,7 +1228,7 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
         const auto blockType = TextBlockStyle::forBlock(cursor.block());
         splitAction->setEnabled(blockType != TextParagraphType::SceneHeading
                                 && blockType != TextParagraphType::SceneHeadingShadow
-                                && blockType != TextParagraphType::SequenceHeader
+                                && blockType != TextParagraphType::SequenceHeading
                                 && blockType != TextParagraphType::SequenceFooter);
     }
     connect(splitAction, &QAction::triggered, this, [this] {

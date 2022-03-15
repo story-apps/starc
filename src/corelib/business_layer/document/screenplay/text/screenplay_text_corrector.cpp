@@ -310,7 +310,7 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
     // ... от начала сцены
     //
     QVector<TextParagraphType> sceneBorders
-        = { TextParagraphType::SceneHeading, TextParagraphType::SequenceHeader,
+        = { TextParagraphType::SceneHeading, TextParagraphType::SequenceHeading,
             TextParagraphType::SequenceFooter };
     QTextBlock block = document->findBlock(startPosition);
     while (block != document->begin()) {
@@ -858,7 +858,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             // Если это время и место или начало папки
             //
             case TextParagraphType::SceneHeading:
-            case TextParagraphType::SequenceHeader:
+            case TextParagraphType::SequenceHeading:
             case TextParagraphType::Shot: {
                 //
                 // Переносим на следующую страницу
@@ -1804,8 +1804,8 @@ void ScreenplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBlo
         decorationFormat.setProperty(TextBlockStyle::PropertyType,
                                      static_cast<int>(TextParagraphType::SceneHeadingShadow));
     }
-    if (paragraphType == TextParagraphType::SequenceHeader
-        || paragraphType == TextParagraphType::SequenceHeader) {
+    if (paragraphType == TextParagraphType::SequenceHeading
+        || paragraphType == TextParagraphType::SequenceHeading) {
         decorationFormat.setProperty(TextBlockStyle::PropertyType,
                                      static_cast<int>(TextParagraphType::Action));
         decorationFormat.setBackground(Qt::NoBrush);

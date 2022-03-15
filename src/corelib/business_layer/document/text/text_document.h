@@ -1,0 +1,114 @@
+#pragma once
+
+#include <QTextDocument>
+
+#include <corelib_global.h>
+
+
+namespace BusinessLayer {
+class TextModel;
+enum class TextParagraphType;
+} // namespace BusinessLayer
+
+namespace BusinessLayer {
+class TextCursor;
+class AbstractTextCorrector;
+
+/**
+ * @brief Класс документа текста
+ */
+class CORE_LIBRARY_EXPORT TextDocument : public QTextDocument
+{
+    Q_OBJECT
+
+public:
+    explicit TextDocument(QObject* _parent, AbstractTextCorrector* _corrector);
+    ~TextDocument() override;
+
+    /**
+     * @brief Задать модель текста
+     */
+    void setModel(BusinessLayer::TextModel* _model, bool _canChangeModel = true);
+
+    /**
+     * @brief Настроить необходимость корректировок (переданные параметры будут активированы)
+     */
+    void setCorrectionOptions(const QStringList& _options);
+
+    /**
+     * @brief Получить позицию элемента в заданном индексе
+     * @param _fromStart - true начальная позиция, false конечная позиция
+     * @return Позицию элемента, -1 если элемент не удалось найти
+     */
+    int itemPosition(const QModelIndex& _index, bool _fromStart);
+    int itemStartPosition(const QModelIndex& _index);
+    int itemEndPosition(const QModelIndex& _index);
+
+    /**
+     * @brief Получить цвет сцены/папки для заданного блока
+     */
+    QColor itemColor(const QTextBlock& _forBlock) const;
+
+    /**
+     * @brief Сформировать mime-данные сценария в заданном диапазоне
+     */
+    QString mimeFromSelection(int _fromPosition, int _toPosition) const;
+
+    /**
+     * @brief Вставить контент из mime-данных со сценарием в заданной позиции
+     */
+    void insertFromMime(int _position, const QString& _mimeData);
+
+    /**
+     * @brief Вставить новый блок заданного типа
+     */
+    void addParagraph(BusinessLayer::TextParagraphType _type, TextCursor _cursor);
+
+    /**
+     * @brief Установить тип блока для заданного курсора
+     */
+    void setParagraphType(BusinessLayer::TextParagraphType _type, const TextCursor& _cursor);
+
+    /**
+     * @brief Очистить текущий блок от установленного в нём типа
+     */
+    void cleanParagraphType(const TextCursor& _cursor);
+
+    /**
+     * @brief Применить заданный тип блока к тексту, на который указывает курсор
+     */
+    void applyParagraphType(BusinessLayer::TextParagraphType _type, const TextCursor& _cursor);
+
+    /**
+     * @brief Разделить параграф на два
+     */
+    void splitParagraph(const TextCursor& _cursor);
+
+    /**
+     * @brief Соединить разделённый параграф
+     */
+    void mergeParagraph(const TextCursor& _cursor);
+
+    /**
+     * @brief Добавить редакторсую заметку в текущее выделение
+     */
+    void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
+                       const QString& _comment, const TextCursor& _cursor);
+
+private:
+    /**
+     * @brief Обновить содержимое модели, при изменение текста документа
+     */
+    void updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded);
+
+    /**
+     * @brief Вставить таблицу в заданном курсоре
+     */
+    void insertTable(const TextCursor& _cursor);
+
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
+};
+
+} // namespace BusinessLayer

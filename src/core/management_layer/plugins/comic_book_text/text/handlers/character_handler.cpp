@@ -343,7 +343,7 @@ void CharacterHandler::complete(const QString& _currentBlockText,
         //
         cursor.movePosition(QTextCursor::PreviousBlock);
         while (!cursor.atStart()
-               && TextBlockStyle::forBlock(cursor.block()) != TextParagraphType::Page) {
+               && TextBlockStyle::forBlock(cursor.block()) != TextParagraphType::PageHeading) {
             if (TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::Character) {
                 const QString characterName = ComicBookCharacterParser::name(cursor.block().text());
                 if (!characterName.isEmpty() && !charactersToComplete.contains(characterName)

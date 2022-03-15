@@ -36,9 +36,9 @@ const QHash<TextParagraphType, QString> kAbstractParagraphTypeToString = {
     { TextParagraphType::Undefined, QLatin1String("undefined") },
     { TextParagraphType::UnformattedText, QLatin1String("unformatted_text") },
     { TextParagraphType::InlineNote, QLatin1String("inline_note") },
-    { TextParagraphType::ActHeader, QLatin1String("act_header") },
+    { TextParagraphType::ActHeading, QLatin1String("act_heading") },
     { TextParagraphType::ActFooter, QLatin1String("act_footer") },
-    { TextParagraphType::SequenceHeader, QLatin1String("sequence_heading") },
+    { TextParagraphType::SequenceHeading, QLatin1String("sequence_heading") },
     { TextParagraphType::SequenceFooter, QLatin1String("sequence_footer") },
     { TextParagraphType::PageSplitter, QLatin1String("page_splitter") },
     //
@@ -47,6 +47,7 @@ const QHash<TextParagraphType, QString> kAbstractParagraphTypeToString = {
     { TextParagraphType::Dialogue, QLatin1String("dialogue") },
     //
     { TextParagraphType::SceneCharacters, QLatin1String("scene_characters") },
+    { TextParagraphType::BeatHeading, QLatin1String("beat_heading") },
     { TextParagraphType::Action, QLatin1String("action") },
     { TextParagraphType::Parenthetical, QLatin1String("parenthetical") },
     { TextParagraphType::Lyrics, QLatin1String("lyrics") },
@@ -57,16 +58,16 @@ const QHash<TextParagraphType, QString> kAbstractParagraphTypeToString = {
     { TextParagraphType::Music, QLatin1String("music") },
     { TextParagraphType::Cue, QLatin1String("cue") },
     //
-    { TextParagraphType::Page, QLatin1String("page_heading") },
-    { TextParagraphType::Panel, QLatin1String("panel_heading") },
+    { TextParagraphType::PageHeading, QLatin1String("page_heading") },
+    { TextParagraphType::PanelHeading, QLatin1String("panel_heading") },
     { TextParagraphType::Description, QLatin1String("description") },
     //
-    { TextParagraphType::Heading1, QLatin1String("heading_1") },
-    { TextParagraphType::Heading2, QLatin1String("heading_2") },
-    { TextParagraphType::Heading3, QLatin1String("heading_3") },
-    { TextParagraphType::Heading4, QLatin1String("heading_4") },
-    { TextParagraphType::Heading5, QLatin1String("heading_5") },
-    { TextParagraphType::Heading6, QLatin1String("heading_6") },
+    { TextParagraphType::ChapterHeading1, QLatin1String("heading_1") },
+    { TextParagraphType::ChapterHeading2, QLatin1String("heading_2") },
+    { TextParagraphType::ChapterHeading3, QLatin1String("heading_3") },
+    { TextParagraphType::ChapterHeading4, QLatin1String("heading_4") },
+    { TextParagraphType::ChapterHeading5, QLatin1String("heading_5") },
+    { TextParagraphType::ChapterHeading6, QLatin1String("heading_6") },
     { TextParagraphType::Text, QLatin1String("text") },
 };
 
@@ -124,11 +125,11 @@ QString toDisplayString(TextParagraphType _type)
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Unformatted text");
     case TextParagraphType::InlineNote:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Inline note");
-    case TextParagraphType::ActHeader:
+    case TextParagraphType::ActHeading:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Act");
     case TextParagraphType::ActFooter:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Act footer");
-    case TextParagraphType::SequenceHeader:
+    case TextParagraphType::SequenceHeading:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Sequence");
     case TextParagraphType::SequenceFooter:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Sequence footer");
@@ -160,24 +161,24 @@ QString toDisplayString(TextParagraphType _type)
     case TextParagraphType::Cue:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Cue");
     //
-    case TextParagraphType::Page:
+    case TextParagraphType::PageHeading:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Page");
-    case TextParagraphType::Panel:
+    case TextParagraphType::PanelHeading:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Panel");
     case TextParagraphType::Description:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Description");
     //
-    case TextParagraphType::Heading1:
+    case TextParagraphType::ChapterHeading1:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Heading 1");
-    case TextParagraphType::Heading2:
+    case TextParagraphType::ChapterHeading2:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Heading 2");
-    case TextParagraphType::Heading3:
+    case TextParagraphType::ChapterHeading3:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Heading 3");
-    case TextParagraphType::Heading4:
+    case TextParagraphType::ChapterHeading4:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Heading 4");
-    case TextParagraphType::Heading5:
+    case TextParagraphType::ChapterHeading5:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Heading 5");
-    case TextParagraphType::Heading6:
+    case TextParagraphType::ChapterHeading6:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Heading 6");
     case TextParagraphType::Text:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Text");
@@ -687,12 +688,12 @@ void TextTemplate::Implementation::buildTitlePageTemplate()
     defaultBlockStyle.setAlign(textBlockStyle.align());
     //
     for (auto type : {
-             TextParagraphType::Heading1,
-             TextParagraphType::Heading2,
-             TextParagraphType::Heading3,
-             TextParagraphType::Heading4,
-             TextParagraphType::Heading5,
-             TextParagraphType::Heading6,
+             TextParagraphType::ChapterHeading1,
+             TextParagraphType::ChapterHeading2,
+             TextParagraphType::ChapterHeading3,
+             TextParagraphType::ChapterHeading4,
+             TextParagraphType::ChapterHeading5,
+             TextParagraphType::ChapterHeading6,
              TextParagraphType::Text,
              TextParagraphType::InlineNote,
          }) {
@@ -727,12 +728,12 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
     defaultBlockStyle.setAlign(textBlockStyle.align());
     //
     for (auto type : {
-             TextParagraphType::Heading1,
-             TextParagraphType::Heading2,
-             TextParagraphType::Heading3,
-             TextParagraphType::Heading4,
-             TextParagraphType::Heading5,
-             TextParagraphType::Heading6,
+             TextParagraphType::ChapterHeading1,
+             TextParagraphType::ChapterHeading2,
+             TextParagraphType::ChapterHeading3,
+             TextParagraphType::ChapterHeading4,
+             TextParagraphType::ChapterHeading5,
+             TextParagraphType::ChapterHeading6,
              TextParagraphType::Text,
              TextParagraphType::InlineNote,
          }) {
@@ -864,7 +865,8 @@ void TextTemplate::load(const QString& _fromFile)
         sceneHeadingShadowStyle.setType(TextParagraphType::SceneHeadingShadow);
         setParagraphStyle(sceneHeadingShadowStyle);
         //
-        TextBlockStyle panelShadowStyle = d->paragraphsStyles.value(TextParagraphType::Panel);
+        TextBlockStyle panelShadowStyle
+            = d->paragraphsStyles.value(TextParagraphType::PanelHeading);
         panelShadowStyle.setType(TextParagraphType::PanelShadow);
         setParagraphStyle(panelShadowStyle);
     }

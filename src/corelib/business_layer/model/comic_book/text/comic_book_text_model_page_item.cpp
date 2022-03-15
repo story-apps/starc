@@ -155,7 +155,7 @@ void ComicBookTextModelPageItem::handleChange()
 
         case TextModelItemType::Text: {
             auto childItem = static_cast<TextModelTextItem*>(child);
-            if (childItem->paragraphType() == TextParagraphType::Page) {
+            if (childItem->paragraphType() == TextParagraphType::PageHeading) {
                 heading = TextHelper::smartToUpper(childItem->text());
             }
             break;

@@ -246,7 +246,7 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::TextParagraphType
     //
     // Если вставили папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
     //
-    if (_type == TextParagraphType::SequenceHeader) {
+    if (_type == TextParagraphType::SequenceHeading) {
         moveCursor(QTextCursor::PreviousBlock);
     }
     //
@@ -615,9 +615,9 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
     //
     // ... идём до начала сцены
     //
-    while (TextBlockStyle::forBlock(topBlock) != TextParagraphType::Page
-           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::Panel
-           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::SequenceHeader
+    while (TextBlockStyle::forBlock(topBlock) != TextParagraphType::PageHeading
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::PanelHeading
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::SequenceHeading
            && topBlock != document()->firstBlock()) {
         topBlock = topBlock.previous();
     }
@@ -689,8 +689,8 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Определим цвет сцены
                 //
-                if (blockType == TextParagraphType::Page || blockType == TextParagraphType::Panel
-                    || blockType == TextParagraphType::SequenceHeader) {
+                if (blockType == TextParagraphType::PageHeading || blockType == TextParagraphType::PanelHeading
+                    || blockType == TextParagraphType::SequenceHeading) {
                     lastSceneBlockBottom = cursorR.top();
                     lastItemColor = d->document.itemColor(block);
                 }
@@ -700,7 +700,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 if (lastItemColor.isValid()) {
                     const auto isBlockSceneHeadingWithNumberAtRight
-                        = blockType == TextParagraphType::Panel && d->showSceneNumber
+                        = blockType == TextParagraphType::PanelHeading && d->showSceneNumber
                         && d->showSceneNumberOnRight;
                     if (!isBlockSceneHeadingWithNumberAtRight) {
                         const QPointF topLeft(
@@ -841,7 +841,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                             int openedFolders = 0;
                             while (headerBlock.isValid()) {
                                 const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
-                                if (headerBlockType == TextParagraphType::SequenceHeader) {
+                                if (headerBlockType == TextParagraphType::SequenceHeading) {
                                     if (openedFolders > 0) {
                                         --openedFolders;
                                     } else {
@@ -916,7 +916,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Прорисовка декораций страницы
                         //
-                        if (blockType == TextParagraphType::Page) {
+                        if (blockType == TextParagraphType::PageHeading) {
                             //
                             // Прорисовка количества панелей
                             //
@@ -1145,10 +1145,10 @@ ContextMenu* ComicBookTextEdit::createContextMenu(const QPoint& _position, QWidg
         // Запрещаем разделять некоторые блоки
         //
         const auto blockType = TextBlockStyle::forBlock(cursor.block());
-        splitAction->setEnabled(blockType != TextParagraphType::Page
-                                && blockType != TextParagraphType::Panel
+        splitAction->setEnabled(blockType != TextParagraphType::PageHeading
+                                && blockType != TextParagraphType::PanelHeading
                                 && blockType != TextParagraphType::PanelShadow
-                                && blockType != TextParagraphType::SequenceHeader
+                                && blockType != TextParagraphType::SequenceHeading
                                 && blockType != TextParagraphType::SequenceFooter);
     }
     connect(splitAction, &QAction::triggered, this, [this] {

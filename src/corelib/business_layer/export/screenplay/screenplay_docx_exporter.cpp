@@ -60,7 +60,7 @@ const QMap<int, TextParagraphType>& paragraphTypes()
         s_types.insert(i++, TextParagraphType::Transition);
         s_types.insert(i++, TextParagraphType::Shot);
         s_types.insert(i++, TextParagraphType::InlineNote);
-        s_types.insert(i++, TextParagraphType::SequenceHeader);
+        s_types.insert(i++, TextParagraphType::SequenceHeading);
         s_types.insert(i++, TextParagraphType::SequenceFooter);
     }
     return s_types;

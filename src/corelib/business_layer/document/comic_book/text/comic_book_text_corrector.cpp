@@ -317,7 +317,7 @@ void ComicBookTextCorrector::Implementation::correctCharactersNames(int _positio
     // ... от начала сцены
     //
     QVector<TextParagraphType> sceneBorders
-        = { TextParagraphType::Page, TextParagraphType::Panel, TextParagraphType::SequenceHeader,
+        = { TextParagraphType::PageHeading, TextParagraphType::PanelHeading, TextParagraphType::SequenceHeading,
             TextParagraphType::SequenceFooter };
     QTextBlock block = document->findBlock(startPosition);
     while (block != document->begin()) {
@@ -427,7 +427,7 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
     // ... от начала сцены
     //
     QVector<TextParagraphType> sceneBorders
-        = { TextParagraphType::Page, TextParagraphType::Panel, TextParagraphType::SequenceHeader,
+        = { TextParagraphType::PageHeading, TextParagraphType::PanelHeading, TextParagraphType::SequenceHeading,
             TextParagraphType::SequenceFooter };
     QTextBlock block = document->findBlock(startPosition);
     while (block != document->begin()) {
@@ -471,7 +471,7 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
         }
 
         switch (blockType) {
-        case TextParagraphType::Page: {
+        case TextParagraphType::PageHeading: {
             const auto item = itemFromBlock(block);
             do {
                 if (item->parent() == nullptr || item->parent()->type() != TextModelItemType::Group
@@ -504,7 +504,7 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
             break;
         }
 
-        case TextParagraphType::Panel: {
+        case TextParagraphType::PanelHeading: {
             const auto item = itemFromBlock(block);
             do {
                 if (item->parent() == nullptr || item->parent()->type() != TextModelItemType::Group
@@ -1041,9 +1041,9 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
             //
             // Если это время и место или начало папки
             //
-            case TextParagraphType::Page:
-            case TextParagraphType::Panel:
-            case TextParagraphType::SequenceHeader: {
+            case TextParagraphType::PageHeading:
+            case TextParagraphType::PanelHeading:
+            case TextParagraphType::SequenceHeading: {
                 //
                 // Переносим на следующую страницу
                 //
@@ -1095,7 +1095,7 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                 // Если перед ним идёт время и место, переносим его тоже
                 //
                 if (previousBlock.isValid()
-                    && TextBlockStyle::forBlock(previousBlock) == TextParagraphType::Panel) {
+                    && TextBlockStyle::forBlock(previousBlock) == TextParagraphType::PanelHeading) {
                     moveCurrentBlockWithPreviousToNextPage(previousBlock, pageHeight,
                                                            currentBlockWidth(), cursor, block,
                                                            lastBlockHeight);
@@ -1260,7 +1260,7 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                             //
                             if (prePreviousBlock.isValid()
                                 && TextBlockStyle::forBlock(prePreviousBlock)
-                                    == TextParagraphType::Panel) {
+                                    == TextParagraphType::PanelHeading) {
                                 moveCurrentBlockWithTwoPreviousToNextPage(
                                     prePreviousBlock, previousBlock, pageHeight,
                                     currentBlockWidth(), cursor, block, lastBlockHeight);
@@ -1417,7 +1417,7 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                         //
                         if (previousBlock.isValid()
                             && TextBlockStyle::forBlock(previousBlock)
-                                == TextParagraphType::Panel) {
+                                == TextParagraphType::PanelHeading) {
                             moveCurrentBlockWithPreviousToNextPage(previousBlock, pageHeight,
                                                                    currentBlockWidth(), cursor,
                                                                    block, lastBlockHeight);
@@ -1717,12 +1717,12 @@ void ComicBookTextCorrector::Implementation::moveBlockToNextPage(const QTextBloc
     //
     QTextBlockFormat decorationFormat = format;
     const auto paragraphType = TextBlockStyle::forBlock(_block);
-    if (paragraphType == TextParagraphType::Panel) {
+    if (paragraphType == TextParagraphType::PanelHeading) {
         decorationFormat.setProperty(TextBlockStyle::PropertyType,
                                      static_cast<int>(TextParagraphType::PanelShadow));
     }
-    if (paragraphType == TextParagraphType::SequenceHeader
-        || paragraphType == TextParagraphType::SequenceHeader) {
+    if (paragraphType == TextParagraphType::SequenceHeading
+        || paragraphType == TextParagraphType::SequenceHeading) {
         decorationFormat.setProperty(TextBlockStyle::PropertyType,
                                      static_cast<int>(TextParagraphType::Description));
         decorationFormat.setBackground(Qt::NoBrush);

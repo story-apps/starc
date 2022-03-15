@@ -160,7 +160,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         // Если не нужно печатать папки, то удаляем их
         //
         if (!_exportOptions.includeFolders) {
-            if (blockType == TextParagraphType::SequenceHeader
+            if (blockType == TextParagraphType::SequenceHeading
                 || blockType == TextParagraphType::SequenceFooter) {
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 if (cursor.hasSelection()) {
@@ -179,7 +179,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
                 int openedFolders = 0;
                 while (headerBlock.isValid()) {
                     const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
-                    if (headerBlockType == TextParagraphType::SequenceHeader) {
+                    if (headerBlockType == TextParagraphType::SequenceHeading) {
                         if (openedFolders > 0) {
                             --openedFolders;
                         } else {

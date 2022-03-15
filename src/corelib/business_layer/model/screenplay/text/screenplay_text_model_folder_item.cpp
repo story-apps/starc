@@ -77,7 +77,7 @@ void ScreenplayTextModelFolderItem::handleChange()
 
         case TextModelItemType::Text: {
             auto childItem = static_cast<ScreenplayTextModelTextItem*>(child);
-            if (childItem->paragraphType() == TextParagraphType::SequenceHeader) {
+            if (childItem->paragraphType() == TextParagraphType::SequenceHeading) {
                 setHeading(TextHelper::smartToUpper(childItem->text()));
             }
             d->duration += childItem->duration();

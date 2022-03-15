@@ -43,9 +43,9 @@ enum class TextParagraphType {
     Undefined,
     UnformattedText, //!< Простой текст (без особенного форматирования и отступов)
     InlineNote, //!< Заметка по тексту
-    ActHeader, //!< Заголовок акта
+    ActHeading, //!< Заголовок акта
     ActFooter, //!< Окончание акта
-    SequenceHeader, //!< Заголовок папки
+    SequenceHeading, //!< Заголовок папки
     SequenceFooter, //!< Окончание папки
     //
     PageSplitter, //!< Разделитель страницы (для блоков внутри которых находятся таблицы)
@@ -60,7 +60,7 @@ enum class TextParagraphType {
     // ... киносценарий и частично пьесы
     //
     SceneCharacters, //!< Персонажи сцены
-    Beat, //!< Бит истории
+    BeatHeading, //!< Бит истории
     Action, //!< Описание действия
     Parenthetical, //!< Ремарка в реплике персонажа
     Lyrics, //!< Песнь или стихотворения произносимые персонажем
@@ -75,19 +75,19 @@ enum class TextParagraphType {
     //
     // Комикс
     //
-    Page, //!< Страница
-    Panel, //!< Панель
+    PageHeading, //!< Страница
+    PanelHeading, //!< Панель
     PanelShadow, //!< Панель, для вспомогательных разрывов
     Description, //!< Описание поисходящего на панели
     //
     // Простой текст
     //
-    Heading1, //!< Заголовок 1
-    Heading2, //!< Заголовок 2
-    Heading3, //!< Заголовок 3
-    Heading4, //!< Заголовок 4
-    Heading5, //!< Заголовок 5
-    Heading6, //!< Заголовок 6
+    ChapterHeading1, //!< Заголовок 1
+    ChapterHeading2, //!< Заголовок 2
+    ChapterHeading3, //!< Заголовок 3
+    ChapterHeading4, //!< Заголовок 4
+    ChapterHeading5, //!< Заголовок 5
+    ChapterHeading6, //!< Заголовок 6
     Text, //!< Текст главы
 };
 
