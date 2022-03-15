@@ -1,8 +1,8 @@
 #include "simple_text_model_chapter_item.h"
 
 #include "simple_text_model.h"
-#include "simple_text_model_text_item.h"
 
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <utils/helpers/text_helper.h>
 
@@ -88,7 +88,7 @@ void SimpleTextModelChapterItem::handleChange()
         }
 
         case TextModelItemType::Text: {
-            auto childTextItem = static_cast<SimpleTextModelTextItem*>(child);
+            auto childTextItem = static_cast<TextModelTextItem*>(child);
             switch (childTextItem->paragraphType()) {
             case TextParagraphType::Heading1:
             case TextParagraphType::Heading2:
@@ -112,7 +112,7 @@ void SimpleTextModelChapterItem::handleChange()
                 d->wordsCount += TextHelper::wordsCount(childTextItem->text());
                 reviewMarksSize += std::count_if(
                     childTextItem->reviewMarks().begin(), childTextItem->reviewMarks().end(),
-                    [](const SimpleTextModelTextItem::ReviewMark& _reviewMark) {
+                    [](const TextModelTextItem::ReviewMark& _reviewMark) {
                         return !_reviewMark.isDone;
                     });
                 break;

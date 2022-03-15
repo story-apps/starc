@@ -2,7 +2,7 @@
 
 #include "comic_book_import_options.h"
 
-#include <business_layer/model/comic_book/text/comic_book_text_model_xml.h>
+#include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <domain/document_object.h>
 #include <utils/helpers/text_helper.h>

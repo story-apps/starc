@@ -7,7 +7,7 @@
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/model/simple_text/simple_text_model_chapter_item.h>
-#include <business_layer/model/simple_text/simple_text_model_text_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -130,7 +130,7 @@ void SimpleTextDocument::Implementation::readModelItemContent(int _itemRow,
     }
 
     case TextModelItemType::Text: {
-        const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
+        const auto textItem = static_cast<TextModelTextItem*>(item);
 
         //
         // При корректировке положений блоков нужно учитывать перенос строки
@@ -347,7 +347,7 @@ void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _
                     return;
                 }
 
-                const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
+                const auto textItem = static_cast<TextModelTextItem*>(item);
 
                 QTextCursor cursor(this);
                 cursor.setPosition(position);
@@ -529,7 +529,8 @@ void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _
                 SimpleTextBlockData* blockData = nullptr;
                 auto block = cursor.block();
                 if (block.userData() != nullptr) {
-                    blockData = new SimpleTextBlockData(static_cast<SimpleTextBlockData*>(block.userData()));
+                    blockData = new SimpleTextBlockData(
+                        static_cast<SimpleTextBlockData*>(block.userData()));
                     block.setUserData(nullptr);
                 }
                 cursor.insertBlock();
@@ -640,8 +641,8 @@ void SimpleTextDocument::setModel(BusinessLayer::SimpleTextModel* _model, bool _
                     SimpleTextBlockData* blockData = nullptr;
                     auto block = cursor.block().previous();
                     if (block.userData() != nullptr) {
-                        blockData
-                            = new SimpleTextBlockData(static_cast<SimpleTextBlockData*>(block.userData()));
+                        blockData = new SimpleTextBlockData(
+                            static_cast<SimpleTextBlockData*>(block.userData()));
                     }
                     const auto blockFormat = cursor.block().previous().blockFormat();
                     cursor.deletePreviousChar();
@@ -772,7 +773,8 @@ void SimpleTextDocument::addParagraph(BusinessLayer::TextParagraphType _type, QT
         SimpleTextBlockData* blockData = nullptr;
         auto block = _cursor.block();
         if (block.userData() != nullptr) {
-            blockData = new SimpleTextBlockData(static_cast<SimpleTextBlockData*>(block.userData()));
+            blockData
+                = new SimpleTextBlockData(static_cast<SimpleTextBlockData*>(block.userData()));
             block.setUserData(nullptr);
         }
 
@@ -892,7 +894,7 @@ void SimpleTextDocument::applyParagraphType(BusinessLayer::TextParagraphType _ty
 void SimpleTextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
                                        const QString& _comment, const QTextCursor& _cursor)
 {
-    SimpleTextModelTextItem::ReviewMark reviewMark;
+    TextModelTextItem::ReviewMark reviewMark;
     if (_textColor.isValid()) {
         reviewMark.textColor = _textColor;
     }
@@ -1115,7 +1117,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             //
             bool needToDeleteParent = false;
             if (item->type() == TextModelItemType::Text) {
-                const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
+                const auto textItem = static_cast<TextModelTextItem*>(item);
                 needToDeleteParent = textItem->paragraphType() == TextParagraphType::Heading1
                     || textItem->paragraphType() == TextParagraphType::Heading2
                     || textItem->paragraphType() == TextParagraphType::Heading3
@@ -1469,7 +1471,7 @@ void SimpleTextDocument::updateModelOnContentChange(int _position, int _charsRem
             auto item = blockData->item();
 
             if (item->type() == TextModelItemType::Text) {
-                auto textItem = static_cast<SimpleTextModelTextItem*>(item);
+                auto textItem = static_cast<TextModelTextItem*>(item);
                 textItem->setParagraphType(paragraphType);
                 if (d->documentTemplate().paragraphStyle(paragraphType).align()
                     != block.blockFormat().alignment()) {

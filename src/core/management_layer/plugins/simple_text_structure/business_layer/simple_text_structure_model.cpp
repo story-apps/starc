@@ -1,7 +1,7 @@
 #include "simple_text_structure_model.h"
 
 #include <business_layer/model/simple_text/simple_text_model.h>
-#include <business_layer/model/simple_text/simple_text_model_text_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 
 #include <QApplication>

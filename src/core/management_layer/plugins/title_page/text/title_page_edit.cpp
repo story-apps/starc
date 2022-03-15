@@ -10,7 +10,7 @@
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
-#include <business_layer/model/simple_text/simple_text_model_text_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/simple_text_template.h>
@@ -31,9 +31,9 @@
 #include <QScrollBar>
 #include <QTextTable>
 
+using BusinessLayer::SimpleTextCursor;
 using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextBlockStyle;
-using BusinessLayer::SimpleTextCursor;
 using BusinessLayer::TextParagraphType;
 
 namespace Ui {
@@ -156,7 +156,7 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
     if (d->model && d->model->rowCount() == 1) {
         const auto item = d->model->itemForIndex(d->model->index(0, 0));
         if (item->type() == BusinessLayer::TextModelItemType::Text) {
-            const auto textItem = static_cast<BusinessLayer::SimpleTextModelTextItem*>(item);
+            const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
             if (textItem->text().isEmpty()) {
                 restoreFromTemplate();
             }

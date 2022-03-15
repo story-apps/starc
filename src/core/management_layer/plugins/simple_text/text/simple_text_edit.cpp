@@ -7,7 +7,7 @@
 #include <business_layer/document/simple_text/simple_text_document.h>
 #include <business_layer/import/text/simple_text_markdown_importer.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
-#include <business_layer/model/simple_text/simple_text_model_text_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
@@ -25,9 +25,9 @@
 #include <QScrollBar>
 #include <QTextTable>
 
+using BusinessLayer::SimpleTextCursor;
 using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextBlockStyle;
-using BusinessLayer::SimpleTextCursor;
 using BusinessLayer::TextParagraphType;
 
 namespace Ui {

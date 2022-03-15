@@ -1,9 +1,9 @@
 #include "simple_text_model.h"
 
 #include "simple_text_model_chapter_item.h"
-#include "simple_text_model_text_item.h"
 
 #include <business_layer/model/text/text_model_folder_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <domain/document_object.h>
 
@@ -85,7 +85,7 @@ void SimpleTextModel::Implementation::updateDocumentName(const QModelIndex& _ind
     if (item == nullptr || item->type() != TextModelItemType::Text) {
         q->setDocumentName({});
     } else {
-        const auto textItem = static_cast<SimpleTextModelTextItem*>(item);
+        const auto textItem = static_cast<TextModelTextItem*>(item);
         q->setDocumentName(textItem->text());
     }
 }
@@ -146,7 +146,7 @@ TextModelGroupItem* SimpleTextModel::createGroupItem(TextGroupType _type) const
 
 TextModelTextItem* SimpleTextModel::createTextItem() const
 {
-    return new SimpleTextModelTextItem(this);
+    return new TextModelTextItem(this);
 }
 
 QString SimpleTextModel::name() const
@@ -162,7 +162,7 @@ void SimpleTextModel::setName(const QString& _name)
 
     const auto item = firstTextItem(d->rootItem());
     if (item != nullptr && item->type() == TextModelItemType::Text) {
-        auto textItem = static_cast<SimpleTextModelTextItem*>(item);
+        auto textItem = static_cast<TextModelTextItem*>(item);
         textItem->setText(_name);
     }
 
