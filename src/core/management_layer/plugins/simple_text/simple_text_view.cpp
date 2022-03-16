@@ -5,8 +5,8 @@
 #include "text/simple_text_edit_toolbar.h"
 #include "text/simple_text_search_manager.h"
 
-#include <business_layer/document/simple_text/simple_text_block_data.h>
-#include <business_layer/document/simple_text/simple_text_cursor.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -217,10 +217,14 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
 
     using namespace BusinessLayer;
     const auto usedTemplate = BusinessLayer::TemplatesFacade::simpleTextTemplate();
-    const QVector<TextParagraphType> types
-        = { TextParagraphType::ChapterHeading1, TextParagraphType::ChapterHeading2,  TextParagraphType::ChapterHeading3,
-            TextParagraphType::ChapterHeading4, TextParagraphType::ChapterHeading5,  TextParagraphType::ChapterHeading6,
-            TextParagraphType::Text,     TextParagraphType::InlineNote };
+    const QVector<TextParagraphType> types = { TextParagraphType::ChapterHeading1,
+                                               TextParagraphType::ChapterHeading2,
+                                               TextParagraphType::ChapterHeading3,
+                                               TextParagraphType::ChapterHeading4,
+                                               TextParagraphType::ChapterHeading5,
+                                               TextParagraphType::ChapterHeading6,
+                                               TextParagraphType::Text,
+                                               TextParagraphType::InlineNote };
     for (const auto type : types) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {
             continue;

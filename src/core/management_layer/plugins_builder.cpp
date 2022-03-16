@@ -70,7 +70,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         { "application/x-starc/document/locations",  { { "application/x-starc/editor/locations/map", u8"\U000F0982" } } },
         { "application/x-starc/document/location",   { { "application/x-starc/editor/location/information", u8"\U000f02fd" } } },
         { "application/x-starc/document/folder",     { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
-        { "application/x-starc/document/simple_text",       { { kSimpleTextEditorMime, u8"\U000f09ed" } } }
+        { "application/x-starc/document/text",       { { kSimpleTextEditorMime, u8"\U000f09ed" } } }
       };
 
 /**
@@ -295,7 +295,7 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
             { "application/x-starc/document/folder",
               { { kSimpleTextEditorMime,
                   QApplication::translate("ProjectPluginsBuilder", "Folder text") } } },
-            { "application/x-starc/document/simple_text",
+            { "application/x-starc/document/text",
               { { kSimpleTextEditorMime,
                   QApplication::translate("ProjectPluginsBuilder", "Document text") } } }
              };

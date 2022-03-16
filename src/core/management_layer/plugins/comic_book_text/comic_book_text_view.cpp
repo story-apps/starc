@@ -495,14 +495,10 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
     using namespace BusinessLayer;
     const auto usedTemplate = BusinessLayer::TemplatesFacade::comicBookTemplate();
     const QVector<TextParagraphType> types = {
-        TextParagraphType::PageHeading,
-        TextParagraphType::PanelHeading,
-        TextParagraphType::Description,
-        TextParagraphType::Character,
-        TextParagraphType::Dialogue,
-        TextParagraphType::InlineNote,
-        TextParagraphType::UnformattedText,
-        TextParagraphType::SequenceHeading,
+        TextParagraphType::PageHeading,     TextParagraphType::PanelHeading,
+        TextParagraphType::Description,     TextParagraphType::Character,
+        TextParagraphType::Dialogue,        TextParagraphType::InlineNote,
+        TextParagraphType::UnformattedText, TextParagraphType::SequenceHeading,
     };
     for (const auto type : types) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {

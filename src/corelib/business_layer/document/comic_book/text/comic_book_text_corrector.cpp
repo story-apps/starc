@@ -317,8 +317,8 @@ void ComicBookTextCorrector::Implementation::correctCharactersNames(int _positio
     // ... от начала сцены
     //
     QVector<TextParagraphType> sceneBorders
-        = { TextParagraphType::PageHeading, TextParagraphType::PanelHeading, TextParagraphType::SequenceHeading,
-            TextParagraphType::SequenceFooter };
+        = { TextParagraphType::PageHeading, TextParagraphType::PanelHeading,
+            TextParagraphType::SequenceHeading, TextParagraphType::SequenceFooter };
     QTextBlock block = document->findBlock(startPosition);
     while (block != document->begin()) {
         const auto blockType = TextBlockStyle::forBlock(block);
@@ -427,8 +427,8 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
     // ... от начала сцены
     //
     QVector<TextParagraphType> sceneBorders
-        = { TextParagraphType::PageHeading, TextParagraphType::PanelHeading, TextParagraphType::SequenceHeading,
-            TextParagraphType::SequenceFooter };
+        = { TextParagraphType::PageHeading, TextParagraphType::PanelHeading,
+            TextParagraphType::SequenceHeading, TextParagraphType::SequenceFooter };
     QTextBlock block = document->findBlock(startPosition);
     while (block != document->begin()) {
         const auto blockType = TextBlockStyle::forBlock(block);

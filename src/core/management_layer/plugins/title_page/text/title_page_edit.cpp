@@ -2,9 +2,9 @@
 
 #include "handlers/key_press_handler_facade.h"
 
-#include <business_layer/document/simple_text/simple_text_block_data.h>
-#include <business_layer/document/simple_text/simple_text_cursor.h>
 #include <business_layer/document/simple_text/simple_text_document.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/import/text/simple_text_markdown_importer.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
@@ -31,9 +31,9 @@
 #include <QScrollBar>
 #include <QTextTable>
 
-using BusinessLayer::SimpleTextCursor;
 using BusinessLayer::TemplatesFacade;
 using BusinessLayer::TextBlockStyle;
+using BusinessLayer::TextCursor;
 using BusinessLayer::TextParagraphType;
 
 namespace Ui {
@@ -245,7 +245,7 @@ QModelIndex TitlePageEdit::currentModelIndex() const
         return {};
     }
 
-    auto screenplayBlockData = static_cast<BusinessLayer::SimpleTextBlockData*>(userData);
+    auto screenplayBlockData = static_cast<BusinessLayer::TextBlockData*>(userData);
     return d->model->indexForItem(screenplayBlockData->item());
 }
 
@@ -435,7 +435,7 @@ QMimeData* TitlePageEdit::createMimeDataFromSelection() const
     }
 
     QMimeData* mimeData = new QMimeData;
-    SimpleTextCursor cursor = textCursor();
+    TextCursor cursor = textCursor();
     const auto selection = cursor.selectionInterval();
 
     //
@@ -483,7 +483,7 @@ void TitlePageEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Удаляем выделенный текст
     //
-    SimpleTextCursor cursor = textCursor();
+    TextCursor cursor = textCursor();
     if (cursor.hasSelection()) {
         cursor.removeSelectedText();
     }

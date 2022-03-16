@@ -2,8 +2,8 @@
 
 #include "../simple_text_edit.h"
 
-#include <business_layer/document/simple_text/simple_text_block_data.h>
-#include <business_layer/document/simple_text/simple_text_cursor.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -315,7 +315,7 @@ void StandardKeyHandler::handleOther(QKeyEvent*)
 
 void StandardKeyHandler::removeCharacters(bool _backward)
 {
-    BusinessLayer::SimpleTextCursor cursor = editor()->textCursor();
+    BusinessLayer::TextCursor cursor = editor()->textCursor();
     if (cursor.hasSelection()) {
         cursor.removeSelectedText();
     } else {

@@ -3,7 +3,7 @@
 #include "simple_text_edit.h"
 #include "simple_text_search_toolbar.h"
 
-#include <business_layer/document/simple_text/simple_text_cursor.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <utils/helpers/text_helper.h>
 
@@ -67,7 +67,7 @@ void SimpleTextSearchManager::Implementation::findText(bool _backward)
     //
     // Поиск осуществляется от позиции курсора
     //
-    SimpleTextCursor cursor = textEdit->textCursor();
+    TextCursor cursor = textEdit->textCursor();
     if (searchText != m_lastSearchText) {
         cursor.setPosition(cursor.selectionInterval().from);
     }

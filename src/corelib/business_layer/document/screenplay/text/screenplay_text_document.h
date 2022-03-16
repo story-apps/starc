@@ -4,12 +4,6 @@
 
 
 namespace BusinessLayer {
-class ScreenplayTextModel;
-enum class TextParagraphType;
-} // namespace BusinessLayer
-
-namespace BusinessLayer {
-class TextCursor;
 
 /**
  * @brief Класс документа сценария

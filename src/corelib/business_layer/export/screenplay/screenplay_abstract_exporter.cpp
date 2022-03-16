@@ -2,13 +2,14 @@
 
 #include "screenplay_export_options.h"
 
-#include <business_layer/document/text/text_block_data.h>
-#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/document/simple_text/simple_text_document.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_metrics.h>
@@ -215,8 +216,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         // Если не нужно печатать, эту сцену, то удаляем её
         //
         if (!_exportOptions.exportScenes.isEmpty()) {
-            const auto blockData
-                = dynamic_cast<TextBlockData*>(cursor.block().userData());
+            const auto blockData = dynamic_cast<TextBlockData*>(cursor.block().userData());
             bool needRemoveBlock = false;
             if (!blockData || !blockData->item() || !blockData->item()->parent()
                 || blockData->item()->parent()->type() != TextModelItemType::Group) {

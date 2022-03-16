@@ -689,7 +689,8 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Определим цвет сцены
                 //
-                if (blockType == TextParagraphType::PageHeading || blockType == TextParagraphType::PanelHeading
+                if (blockType == TextParagraphType::PageHeading
+                    || blockType == TextParagraphType::PanelHeading
                     || blockType == TextParagraphType::SequenceHeading) {
                     lastSceneBlockBottom = cursorR.top();
                     lastItemColor = d->document.itemColor(block);

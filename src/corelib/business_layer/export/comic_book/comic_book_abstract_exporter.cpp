@@ -6,6 +6,7 @@
 #include <business_layer/document/comic_book/text/comic_book_text_document.h>
 #include <business_layer/document/simple_text/simple_text_document.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_metrics.h>

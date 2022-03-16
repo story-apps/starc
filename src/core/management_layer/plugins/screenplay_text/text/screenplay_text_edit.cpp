@@ -2,10 +2,10 @@
 
 #include "handlers/key_press_handler_facade.h"
 
-#include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/screenplay/text/screenplay_text_corrector.h>
-#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/import/screenplay/screenplay_fountain_importer.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>

@@ -75,8 +75,6 @@ SOURCES += \
     business_layer/document/comic_book/text/comic_book_text_document.cpp \
     business_layer/document/screenplay/text/screenplay_text_corrector.cpp \
     business_layer/document/screenplay/text/screenplay_text_document.cpp \
-    business_layer/document/simple_text/simple_text_block_data.cpp \
-    business_layer/document/simple_text/simple_text_cursor.cpp \
     business_layer/document/simple_text/simple_text_document.cpp \
     business_layer/document/text/abstract_text_corrector.cpp \
     business_layer/document/text/text_block_data.cpp \
@@ -263,8 +261,6 @@ HEADERS += \
     business_layer/document/comic_book/text/comic_book_text_document.h \
     business_layer/document/screenplay/text/screenplay_text_corrector.h \
     business_layer/document/screenplay/text/screenplay_text_document.h \
-    business_layer/document/simple_text/simple_text_block_data.h \
-    business_layer/document/simple_text/simple_text_cursor.h \
     business_layer/document/simple_text/simple_text_document.h \
     business_layer/document/text/abstract_text_corrector.h \
     business_layer/document/text/text_block_data.h \
