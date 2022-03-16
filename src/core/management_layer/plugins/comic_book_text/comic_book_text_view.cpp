@@ -9,8 +9,8 @@
 #include "text/comic_book_text_fast_format_widget.h"
 #include "text/comic_book_text_search_manager.h"
 
-#include <business_layer/document/comic_book/text/comic_book_text_block_data.h>
-#include <business_layer/document/comic_book/text/comic_book_text_cursor.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -290,7 +290,7 @@ void ComicBookTextView::Implementation::addReviewMark(const QColor& _textColor,
     // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение
     // добавлено
     //
-    BusinessLayer::ComicBookTextCursor cursor(comicBookText->textCursor());
+    BusinessLayer::TextCursor cursor(comicBookText->textCursor());
     const auto selectionInterval = cursor.selectionInterval();
     //
     // ... делаем танец с бубном, чтобы получить сигнал об обновлении позиции курсора

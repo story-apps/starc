@@ -69,9 +69,7 @@ PRE_TARGETDEPS += $$PWD/../3rd_party/webloader
 
 SOURCES += \
     business_layer/chronometry/chronometer.cpp \
-    business_layer/document/comic_book/text/comic_book_text_block_data.cpp \
     business_layer/document/comic_book/text/comic_book_text_corrector.cpp \
-    business_layer/document/comic_book/text/comic_book_text_cursor.cpp \
     business_layer/document/comic_book/text/comic_book_text_document.cpp \
     business_layer/document/screenplay/text/screenplay_text_corrector.cpp \
     business_layer/document/screenplay/text/screenplay_text_document.cpp \
@@ -255,9 +253,7 @@ SOURCES += \
 
 HEADERS += \
     business_layer/chronometry/chronometer.h \
-    business_layer/document/comic_book/text/comic_book_text_block_data.h \
     business_layer/document/comic_book/text/comic_book_text_corrector.h \
-    business_layer/document/comic_book/text/comic_book_text_cursor.h \
     business_layer/document/comic_book/text/comic_book_text_document.h \
     business_layer/document/screenplay/text/screenplay_text_corrector.h \
     business_layer/document/screenplay/text/screenplay_text_document.h \

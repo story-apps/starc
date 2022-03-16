@@ -3,7 +3,7 @@
 #include "comic_book_text_edit.h"
 #include "comic_book_text_search_toolbar.h"
 
-#include <business_layer/document/comic_book/text/comic_book_text_cursor.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <utils/helpers/text_helper.h>
 
@@ -88,7 +88,7 @@ void ComicBookTextSearchManager::Implementation::findText(bool _backward)
     //
     // Поиск осуществляется от позиции курсора
     //
-    ComicBookTextCursor cursor = textEdit->textCursor();
+    TextCursor cursor = textEdit->textCursor();
     if (searchText != m_lastSearchText) {
         cursor.setPosition(cursor.selectionInterval().from);
     }

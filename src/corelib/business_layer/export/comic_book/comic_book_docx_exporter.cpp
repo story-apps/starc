@@ -3,9 +3,9 @@
 #include "comic_book_export_options.h"
 #include "qtzip/QtZipWriter"
 
-#include <business_layer/document/comic_book/text/comic_book_text_block_data.h>
-#include <business_layer/document/comic_book/text/comic_book_text_cursor.h>
 #include <business_layer/document/comic_book/text/comic_book_text_document.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_page_item.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_panel_item.h>
 #include <business_layer/model/text/text_model_splitter_item.h>
@@ -341,7 +341,7 @@ bool isCommentsRangeEnd(const QTextBlock& _block, const QTextLayout::FormatRange
 /**
  * @brief Сформировать текст блока документа в зависимости от его стиля и оформления
  */
-QString docxText(QMap<int, QStringList>& _comments, const ComicBookTextCursor& _cursor,
+QString docxText(QMap<int, QStringList>& _comments, const TextCursor& _cursor,
                  const ComicBookExportOptions& _exportOptions)
 {
     //
@@ -423,7 +423,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ComicBookTextCursor& _
     // ... начало и конец таблицы
     //
     else if (currentBlockType == TextParagraphType::PageSplitter) {
-        const auto blockData = dynamic_cast<ComicBookTextBlockData*>(block.userData());
+        const auto blockData = dynamic_cast<TextBlockData*>(block.userData());
         if (blockData != nullptr) {
             const auto splitterItem = static_cast<TextModelSplitterItem*>(blockData->item());
             if (splitterItem->splitterType() == TextModelSplitterItemType::Start) {
@@ -460,8 +460,8 @@ QString docxText(QMap<int, QStringList>& _comments, const ComicBookTextCursor& _
         // ... если перешли во вторую колонку таблицы, то нужно закрыть предыдущую ячейку
         //
         if (_cursor.inTable() && !_cursor.inFirstColumn()) {
-            ComicBookTextCursor cursor(_cursor);
-            cursor.movePosition(ComicBookTextCursor::PreviousBlock);
+            TextCursor cursor(_cursor);
+            cursor.movePosition(TextCursor::PreviousBlock);
             if (cursor.inFirstColumn()) {
                 documentXml.append("</w:tc><w:tc><w:tcPr>");
                 const auto fullTableWidth = tableWidth();
@@ -944,7 +944,7 @@ void writeDocument(QtZipWriter* _zip, ComicBookTextDocument* _comicBookText,
     // Данные считываются из исходного документа, определяется тип блока
     // и записываются прямо в файл
     //
-    ComicBookTextCursor documentCursor(_comicBookText);
+    TextCursor documentCursor(_comicBookText);
     while (!documentCursor.atEnd()) {
         documentXml.append(docxText(_comments, documentCursor, _exportOptions));
 

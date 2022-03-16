@@ -2,9 +2,9 @@
 
 #include "comic_book_export_options.h"
 
-#include <business_layer/document/comic_book/text/comic_book_text_block_data.h>
-#include <business_layer/document/comic_book/text/comic_book_text_cursor.h>
 #include <business_layer/document/comic_book/text/comic_book_text_document.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_page_item.h>

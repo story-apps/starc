@@ -2,8 +2,8 @@
 
 #include "../comic_book_text_edit.h"
 
-#include <business_layer/document/comic_book/text/comic_book_text_block_data.h>
-#include <business_layer/document/comic_book/text/comic_book_text_cursor.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -345,7 +345,7 @@ void StandardKeyHandler::handleOther(QKeyEvent*)
 
 void StandardKeyHandler::removeCharacters(bool _backward)
 {
-    BusinessLayer::ComicBookTextCursor cursor = editor()->textCursor();
+    BusinessLayer::TextCursor cursor = editor()->textCursor();
     cursor.removeCharacters(_backward, editor());
 }
 

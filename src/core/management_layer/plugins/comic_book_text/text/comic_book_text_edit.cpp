@@ -2,10 +2,10 @@
 
 #include "handlers/key_press_handler_facade.h"
 
-#include <business_layer/document/comic_book/text/comic_book_text_block_data.h>
 #include <business_layer/document/comic_book/text/comic_book_text_corrector.h>
-#include <business_layer/document/comic_book/text/comic_book_text_cursor.h>
 #include <business_layer/document/comic_book/text/comic_book_text_document.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/import/comic_book/comic_book_plain_text_importer.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
@@ -212,13 +212,13 @@ void ComicBookTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
         auto cursor = textCursor();
         cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
         setTextCursor(cursor);
-        cursor.movePosition(BusinessLayer::ComicBookTextCursor::NextBlock);
+        cursor.movePosition(BusinessLayer::TextCursor::NextBlock);
         d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
         //
         // Очищаем диалог, от текста, который туда добавляет корректор, пока там был блок персонажа
         //
-        if (cursor.movePosition(BusinessLayer::ComicBookTextCursor::EndOfBlock,
-                                BusinessLayer::ComicBookTextCursor::KeepAnchor)) {
+        if (cursor.movePosition(BusinessLayer::TextCursor::EndOfBlock,
+                                BusinessLayer::TextCursor::KeepAnchor)) {
             cursor.removeSelectedText();
         }
     }
@@ -235,7 +235,7 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::TextParagraphType
     //
     // Если раньше это был персонаж, то объединяем блоки, чтобы убрать лишнюю таблицу
     //
-    BusinessLayer::ComicBookTextCursor cursor = textCursor();
+    BusinessLayer::TextCursor cursor = textCursor();
     const auto needSplitParagraph
         = _type == BusinessLayer::TextParagraphType::Character && !cursor.inTable();
     const auto needMergeParagraph = currentParagraphType() == TextParagraphType::Character
@@ -259,14 +259,14 @@ void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::TextParagraphType
             d->document.splitParagraph(textCursor());
             cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
             setTextCursor(cursor);
-            cursor.movePosition(BusinessLayer::ComicBookTextCursor::NextBlock);
+            cursor.movePosition(BusinessLayer::TextCursor::NextBlock);
             d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
             //
             // Очищаем диалог, от текста, который туда добавляет корректор, пока там был блок
             // персонажа
             //
-            if (cursor.movePosition(BusinessLayer::ComicBookTextCursor::EndOfBlock,
-                                    BusinessLayer::ComicBookTextCursor::KeepAnchor)) {
+            if (cursor.movePosition(BusinessLayer::TextCursor::EndOfBlock,
+                                    BusinessLayer::TextCursor::KeepAnchor)) {
                 cursor.removeSelectedText();
             }
         } else if (needMergeParagraph) {
@@ -305,13 +305,13 @@ QModelIndex ComicBookTextEdit::currentModelIndex() const
         return {};
     }
 
-    auto comicBookBlockData = static_cast<BusinessLayer::ComicBookTextBlockData*>(userData);
+    auto comicBookBlockData = static_cast<BusinessLayer::TextBlockData*>(userData);
     return d->model->indexForItem(comicBookBlockData->item());
 }
 
 void ComicBookTextEdit::setCurrentModelIndex(const QModelIndex& _index)
 {
-    BusinessLayer::ComicBookTextCursor textCursor(document());
+    BusinessLayer::TextCursor textCursor(document());
     textCursor.setPosition(d->document.itemStartPosition(_index));
     ensureCursorVisible(textCursor);
 }
@@ -324,7 +324,7 @@ int ComicBookTextEdit::positionForModelIndex(const QModelIndex& _index)
 void ComicBookTextEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
                                       const QString& _comment)
 {
-    BusinessLayer::ComicBookTextCursor cursor(textCursor());
+    BusinessLayer::TextCursor cursor(textCursor());
     if (!cursor.hasSelection()) {
         return;
     }
@@ -423,7 +423,7 @@ bool ComicBookTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     else if (_event == QKeySequence::Cut) {
         copy();
-        BusinessLayer::ComicBookTextCursor cursor = textCursor();
+        BusinessLayer::TextCursor cursor = textCursor();
         cursor.removeCharacters(this);
         d->model->saveChanges();
     }
@@ -627,7 +627,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
     //
     QTextBlock bottomBlock = document()->firstBlock();
     {
-        BusinessLayer::ComicBookTextCursor bottomCursor;
+        BusinessLayer::TextCursor bottomCursor;
         for (int delta = viewport()->height(); delta > viewport()->height() * 3 / 4; delta -= 10) {
             bottomCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
             if (bottomBlock.blockNumber() < bottomCursor.block().blockNumber()) {
@@ -643,7 +643,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
     // ... в случае, если блок попал в таблицу, нужно дойти до конца таблицы
     //
     {
-        BusinessLayer::ComicBookTextCursor bottomCursor(document());
+        BusinessLayer::TextCursor bottomCursor(document());
         bottomCursor.setPosition(bottomBlock.position());
         while (bottomCursor.inTable() && bottomCursor.movePosition(QTextCursor::NextBlock)) {
             bottomBlock = bottomCursor.block();
@@ -672,7 +672,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
             int lastCharacterBlockBottom = 0;
             QColor lastCharacterColor;
 
-            BusinessLayer::ComicBookTextCursor cursor(document());
+            BusinessLayer::TextCursor cursor(document());
             while (block.isValid() && block != bottomBlock) {
                 //
                 // Стиль текущего блока
@@ -923,8 +923,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                             //
                             int panelsCountWidth = 0;
                             if (const auto blockData
-                                = static_cast<BusinessLayer::ComicBookTextBlockData*>(
-                                    block.userData());
+                                = static_cast<BusinessLayer::TextBlockData*>(block.userData());
                                 blockData != nullptr && blockData->item()->parent() != nullptr) {
                                 const auto itemParent = blockData->item()->parent();
                                 if (itemParent->type() == BusinessLayer::TextModelItemType::Group
@@ -1134,7 +1133,7 @@ ContextMenu* ComicBookTextEdit::createContextMenu(const QPoint& _position, QWidg
     auto menu = BaseTextEdit::createContextMenu(_position, _parent);
 
     auto splitAction = new QAction;
-    const BusinessLayer::ComicBookTextCursor cursor = textCursor();
+    const BusinessLayer::TextCursor cursor = textCursor();
     if (cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
         splitAction->setIconText(u8"\U000f10e7");
@@ -1153,7 +1152,7 @@ ContextMenu* ComicBookTextEdit::createContextMenu(const QPoint& _position, QWidg
                                 && blockType != TextParagraphType::SequenceFooter);
     }
     connect(splitAction, &QAction::triggered, this, [this] {
-        BusinessLayer::ComicBookTextCursor cursor = textCursor();
+        BusinessLayer::TextCursor cursor = textCursor();
         if (cursor.inTable()) {
             d->document.mergeParagraph(cursor);
         } else {
@@ -1189,7 +1188,7 @@ QMimeData* ComicBookTextEdit::createMimeDataFromSelection() const
     }
 
     QMimeData* mimeData = new QMimeData;
-    BusinessLayer::ComicBookTextCursor cursor = textCursor();
+    BusinessLayer::TextCursor cursor = textCursor();
     const auto selection = cursor.selectionInterval();
 
     //
@@ -1237,7 +1236,7 @@ void ComicBookTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Удаляем выделенный текст
     //
-    BusinessLayer::ComicBookTextCursor cursor = textCursor();
+    BusinessLayer::TextCursor cursor = textCursor();
     if (cursor.hasSelection()) {
         cursor.removeCharacters(this);
     }
@@ -1290,7 +1289,7 @@ void ComicBookTextEdit::dropEvent(QDropEvent* _event)
     // Если в момент вставки было выделение
     //
     if (textCursor().hasSelection()) {
-        BusinessLayer::ComicBookTextCursor cursor = textCursor();
+        BusinessLayer::TextCursor cursor = textCursor();
         //
         // ... и это перемещение содержимого внутри редактора
         //

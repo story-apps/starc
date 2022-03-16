@@ -2,9 +2,10 @@
 
 #include "comic_book_export_options.h"
 
-#include <business_layer/document/comic_book/text/comic_book_text_cursor.h>
 #include <business_layer/document/comic_book/text/comic_book_text_document.h>
 #include <business_layer/document/simple_text/simple_text_document.h>
+#include <business_layer/document/text/text_cursor.h>
+#include <business_layer/document/text/text_document.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/templates/comic_book_template.h>
@@ -40,7 +41,6 @@ ComicBookTextDocument* ComicBookAbstractExporter::prepareDocument(
     //
     // ... формируем текст сценария
     //
-    comicBookText->setTemplateId(_exportOptions.templateId);
     comicBookText->setModel(_model, false);
     //
     // ... отсоединяем документ от модели, что изменения в документе не привели к изменениям модели
@@ -49,7 +49,7 @@ ComicBookTextDocument* ComicBookAbstractExporter::prepareDocument(
     //
     // ... корректируем текст сценария
     //
-    ComicBookTextCursor cursor(comicBookText);
+    TextCursor cursor(comicBookText);
     //
     // ... вставляем титульную страницу
     //
@@ -69,7 +69,7 @@ ComicBookTextDocument* ComicBookAbstractExporter::prepareDocument(
         auto titlePageText = new SimpleTextDocument;
         titlePageText->setModel(_model->titlePageModel(), false);
         //
-        cursor.movePosition(ComicBookTextCursor::Start);
+        cursor.movePosition(TextCursor::Start);
         auto block = titlePageText->begin();
         while (block.isValid()) {
             //
@@ -127,8 +127,8 @@ ComicBookTextDocument* ComicBookAbstractExporter::prepareDocument(
         //
         // Переходим к тексту сценария
         //
-        cursor.movePosition(ComicBookTextCursor::NextBlock);
-        cursor.movePosition(ComicBookTextCursor::StartOfBlock);
+        cursor.movePosition(TextCursor::NextBlock);
+        cursor.movePosition(TextCursor::StartOfBlock);
     }
     //
     // ... для первого блока убираем принудительный перенос страницы,

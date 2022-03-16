@@ -1,22 +1,14 @@
 #pragma once
 
-#include <QObject>
-
-#include <corelib_global.h>
-
-class QTextBlock;
-class QTextBlockFormat;
-class QTextDocument;
+#include <business_layer/document/text/abstract_text_corrector.h>
 
 
 namespace BusinessLayer {
 
-class ComicBookTextCursor;
-
 /**
  * @brief Класс корректирующий текст сценария
  */
-class CORE_LIBRARY_EXPORT ComicBookTextCorrector : public QObject
+class CORE_LIBRARY_EXPORT ComicBookTextCorrector : public AbstractTextCorrector
 {
     Q_OBJECT
 
@@ -31,40 +23,19 @@ public:
     ~ComicBookTextCorrector() override;
 
     /**
-     * @brief Задать идентификатор шаблона, с которым работает корректор
-     */
-    void setTemplateId(const QString& _templateId);
-
-    /**
      * @brief Установить необходимость корректировать текст блоков имён персонажей
      */
-    void setNeedToCorrectCharactersNames(bool _need);
-
-    /**
-     * @brief Нужно ли автомматически расставлять номера блоков
-     */
-    void setNeedToCorrectBlocksNumbers(bool _need);
-
-    /**
-     * @brief Установить необходимость корректировать текст на разрывах страниц
-     */
-    void setNeedToCorrectPageBreaks(bool _need);
+    void setCorrectionOptions(const QStringList& _options) override;
 
     /**
      * @brief Очистить все сохранённые параметры
      */
-    void clear();
+    void clear() override;
 
     /**
      * @brief Выполнить корректировки
      */
-    void correct(int _position = -1, int _charsChanged = 0);
-
-    /**
-     * @brief Подготовиться к корректировке и выполнить подготовленную корректировку
-     */
-    void planCorrection(int _position, int _charsRemoved, int _charsAdded);
-    void makePlannedCorrection();
+    void correct(int _position = -1, int _charsChanged = 0) override;
 
 private:
     class Implementation;

@@ -6,7 +6,7 @@ namespace BusinessLayer {
 class CharactersModel;
 class LocationsModel;
 class ComicBookDictionariesModel;
-class ComicBookTextCursor;
+class TextCursor;
 class ComicBookTextModel;
 enum class TextParagraphType;
 } // namespace BusinessLayer

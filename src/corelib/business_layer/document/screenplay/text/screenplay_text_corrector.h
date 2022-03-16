@@ -2,14 +2,8 @@
 
 #include <business_layer/document/text/abstract_text_corrector.h>
 
-class QTextBlock;
-class QTextBlockFormat;
-class QTextDocument;
-
 
 namespace BusinessLayer {
-
-class TextCursor;
 
 /**
  * @brief Класс корректирующий текст сценария
