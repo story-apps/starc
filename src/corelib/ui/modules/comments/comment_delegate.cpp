@@ -1,8 +1,8 @@
-#include "comic_book_text_comment_delegate.h"
+#include "comment_delegate.h"
 
-#include "comic_book_text_comments_model.h"
+#include "comments_model.h"
 
-#include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
@@ -13,23 +13,23 @@
 #include <QPainter>
 #include <QPainterPath>
 
-using BusinessLayer::ComicBookTextCommentsModel;
+using BusinessLayer::CommentsModel;
 
 
 namespace Ui {
 
-ComicBookTextCommentDelegate::ComicBookTextCommentDelegate(QObject* _parent)
+CommentDelegate::CommentDelegate(QObject* _parent)
     : QStyledItemDelegate(_parent)
 {
 }
 
-void ComicBookTextCommentDelegate::setSingleCommentMode(bool _isSingleComment)
+void CommentDelegate::setSingleCommentMode(bool _isSingleComment)
 {
     m_isSingleCommentMode = _isSingleComment;
 }
 
-void ComicBookTextCommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option,
-                                         const QModelIndex& _index) const
+void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option,
+                                          const QModelIndex& _index) const
 {
     //
     // Получим настройки стиля
@@ -78,7 +78,7 @@ void ComicBookTextCommentDelegate::paint(QPainter* _painter, const QStyleOptionV
     const QRectF colorRect(QPointF(0.0, backgroundRect.top()),
                            QSizeF(Ui::DesignSystem::layout().px4(), backgroundRect.height()));
     _painter->fillRect(
-        colorRect, _index.data(ComicBookTextCommentsModel::ReviewMarkColorRole).value<QColor>());
+        colorRect, _index.data(CommentsModel::ReviewMarkColorRole).value<QColor>());
 
     //
     // ... аватар
@@ -87,14 +87,14 @@ void ComicBookTextCommentDelegate::paint(QPainter* _painter, const QStyleOptionV
                                     backgroundRect.top() + Ui::DesignSystem::layout().px16()),
                             Ui::DesignSystem::treeOneLineItem().avatarSize());
     const auto avatar = ImageHelper::makeAvatar(
-        _index.data(ComicBookTextCommentsModel::ReviewMarkAuthorEmailRole).toString(),
+        _index.data(CommentsModel::ReviewMarkAuthorEmailRole).toString(),
         Ui::DesignSystem::font().body1(), avatarRect.size().toSize(), Qt::white);
     _painter->drawPixmap(avatarRect, avatar, avatar.rect());
 
     //
     // ... галочка выполнено
     //
-    const auto done = _index.data(ComicBookTextCommentsModel::ReviewMarkIsDoneRole).toBool();
+    const auto done = _index.data(CommentsModel::ReviewMarkIsDoneRole).toBool();
     QRectF iconRect;
     if (m_isSingleCommentMode || done) {
         //
@@ -130,7 +130,7 @@ void ComicBookTextCommentDelegate::paint(QPainter* _painter, const QStyleOptionV
     const QRectF textRect(QPointF(textLeft, avatarRect.top()),
                           QSizeF(textWidth, avatarRect.height() / 2));
     const auto text = _painter->fontMetrics().elidedText(
-        _index.data(ComicBookTextCommentsModel::ReviewMarkAuthorEmailRole).toString(),
+        _index.data(CommentsModel::ReviewMarkAuthorEmailRole).toString(),
         Qt::ElideRight, static_cast<int>(textRect.width()));
     _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignBottom, text);
     //
@@ -139,15 +139,18 @@ void ComicBookTextCommentDelegate::paint(QPainter* _painter, const QStyleOptionV
     _painter->setPen(ColorHelper::transparent(textColor, Ui::DesignSystem::disabledTextOpacity()));
     const QRectF dateRect(textRect.bottomLeft(), textRect.size());
     const auto date
-        = _index.data(ComicBookTextCommentsModel::ReviewMarkCreationDateRole).toDateTime();
-    const auto dateText = _painter->fontMetrics().elidedText(
-        date.toString("HH:mm d MMM"), Qt::ElideRight, static_cast<int>(dateRect.width()));
+        = _index.data(CommentsModel::ReviewMarkCreationDateRole).toDateTime();
+    auto dateText = _painter->fontMetrics().elidedText(date.toString("HH:mm d MMM"), Qt::ElideRight,
+                                                       static_cast<int>(dateRect.width()));
+    if (_index.data(CommentsModel::ReviewMarkIsEditedRole).toBool()) {
+        dateText.append(QString(" (%1)").arg(tr("edited")));
+    }
     _painter->drawText(dateRect, Qt::AlignLeft | Qt::AlignTop, dateText);
 
     //
     // ... комментарий
     //
-    const auto comment = _index.data(ComicBookTextCommentsModel::ReviewMarkCommentRole).toString();
+    const auto comment = _index.data(CommentsModel::ReviewMarkCommentRole).toString();
     QRectF commentRect;
     if (m_isSingleCommentMode || !done) {
         const auto commentWidth = backgroundRect.right() - Ui::DesignSystem::layout().px16()
@@ -171,8 +174,9 @@ void ComicBookTextCommentDelegate::paint(QPainter* _painter, const QStyleOptionV
     //
     // ... ответы
     //
-    const auto comments = _index.data(ComicBookTextCommentsModel::ReviewMarkCommentsRole)
-                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
+    const auto comments
+        = _index.data(CommentsModel::ReviewMarkRepliesRole)
+              .value<QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>>();
     if (!m_isSingleCommentMode && comments.size() > 1 && !done) {
         const auto avatarSize = Ui::DesignSystem::treeOneLineItem().iconSize();
         //
@@ -305,8 +309,8 @@ void ComicBookTextCommentDelegate::paint(QPainter* _painter, const QStyleOptionV
     }
 }
 
-QSize ComicBookTextCommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
-                                             const QModelIndex& _index) const
+QSize CommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
+                                              const QModelIndex& _index) const
 {
     //
     // Ширина
@@ -321,10 +325,11 @@ QSize ComicBookTextCommentDelegate::sizeHint(const QStyleOptionViewItem& _option
     //
     // Считаем высоту
     //
-    const auto isDone = _index.data(ComicBookTextCommentsModel::ReviewMarkIsDoneRole).toBool();
-    const auto comment = _index.data(ComicBookTextCommentsModel::ReviewMarkCommentRole).toString();
-    const auto comments = _index.data(ComicBookTextCommentsModel::ReviewMarkCommentsRole)
-                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
+    const auto isDone = _index.data(CommentsModel::ReviewMarkIsDoneRole).toBool();
+    const auto comment = _index.data(CommentsModel::ReviewMarkCommentRole).toString();
+    const auto comments
+        = _index.data(CommentsModel::ReviewMarkRepliesRole)
+              .value<QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>>();
 
     //
     // ... высота заголовка: отступ сверху + высота аватара + отступ снизу

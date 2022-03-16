@@ -8,13 +8,13 @@ namespace Ui {
 /**
  * @brief Панель инструментов рецензирования
  */
-class ScreenplayTextCommentsToolbar : public FloatingToolBar
+class CORE_LIBRARY_EXPORT CommentsToolbar : public FloatingToolBar
 {
     Q_OBJECT
 
 public:
-    explicit ScreenplayTextCommentsToolbar(QWidget* _parent = nullptr);
-    ~ScreenplayTextCommentsToolbar() override;
+    explicit CommentsToolbar(QWidget* _parent = nullptr);
+    ~CommentsToolbar() override;
 
     /**
      * @brief Отобразить тулбар

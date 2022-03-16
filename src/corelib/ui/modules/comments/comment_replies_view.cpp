@@ -1,9 +1,9 @@
-#include "comic_book_text_comment_replies_view.h"
+#include "comment_replies_view.h"
 
-#include "comic_book_text_comment_view.h"
-#include "comic_book_text_comments_model.h"
+#include "comment_view.h"
+#include "comments_model.h"
 
-#include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/chat/chat_message.h>
 #include <ui/widgets/chat/chat_messages_view.h>
@@ -20,19 +20,19 @@
 #include <QScrollArea>
 #include <QTimer>
 
-using BusinessLayer::ComicBookTextCommentsModel;
+using BusinessLayer::CommentsModel;
 
 
 namespace Ui {
 
-class ComicBookTextCommentRepliesView::Implementation
+class CommentRepliesView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
 
     QModelIndex commentIndex;
 
-    ComicBookTextCommentView* headerView = nullptr;
+    CommentView* headerView = nullptr;
     ChatMessagesView* repliesView = nullptr;
     QScrollArea* repliesViewContainer = nullptr;
     ScrollBar* repliesViewScrollBar = nullptr;
@@ -40,8 +40,8 @@ public:
     TextField* replyTextField = nullptr;
 };
 
-ComicBookTextCommentRepliesView::Implementation::Implementation(QWidget* _parent)
-    : headerView(new ComicBookTextCommentView(_parent))
+CommentRepliesView::Implementation::Implementation(QWidget* _parent)
+    : headerView(new CommentView(_parent))
     , repliesView(new ChatMessagesView)
     , repliesViewContainer(new QScrollArea(_parent))
     , repliesViewScrollBar(new ScrollBar(repliesViewContainer))
@@ -70,7 +70,7 @@ ComicBookTextCommentRepliesView::Implementation::Implementation(QWidget* _parent
 // ****
 
 
-ComicBookTextCommentRepliesView::ComicBookTextCommentRepliesView(QWidget* _parent)
+CommentRepliesView::CommentRepliesView(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
@@ -85,24 +85,24 @@ ComicBookTextCommentRepliesView::ComicBookTextCommentRepliesView(QWidget* _paren
     layout->addWidget(d->repliesViewContainer, 1);
     layout->addWidget(d->replyTextField);
 
-    connect(d->headerView, &ComicBookTextCommentView::clicked, this,
-            &ComicBookTextCommentRepliesView::closePressed);
+    connect(d->headerView, &CommentView::clicked, this,
+            &CommentRepliesView::closePressed);
     connect(d->replyTextField, &TextField::trailingIconPressed, this,
-            &ComicBookTextCommentRepliesView::postReply);
+            &CommentRepliesView::postReply);
 
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 
-QModelIndex ComicBookTextCommentRepliesView::commentIndex() const
+QModelIndex CommentRepliesView::commentIndex() const
 {
     return d->commentIndex;
 }
 
-ComicBookTextCommentRepliesView::~ComicBookTextCommentRepliesView() = default;
+CommentRepliesView::~CommentRepliesView() = default;
 
-void ComicBookTextCommentRepliesView::setCommentIndex(const QModelIndex& _index)
+void CommentRepliesView::setCommentIndex(const QModelIndex& _index)
 {
     //
     // Если сменился индекс, отобразим вверху текущий комментарий
@@ -116,8 +116,9 @@ void ComicBookTextCommentRepliesView::setCommentIndex(const QModelIndex& _index)
     //
     // Собираем ответы на комментарий и помещаем их во вьюху
     //
-    const auto comments = _index.data(ComicBookTextCommentsModel::ReviewMarkCommentsRole)
-                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
+    const auto comments
+        = _index.data(CommentsModel::ReviewMarkRepliesRole)
+              .value<QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>>();
     QVector<ChatMessage> replies;
     for (auto comment : comments) {
         if (comment == comments.first()) {
@@ -147,7 +148,7 @@ void ComicBookTextCommentRepliesView::setCommentIndex(const QModelIndex& _index)
     });
 }
 
-bool ComicBookTextCommentRepliesView::eventFilter(QObject* _watched, QEvent* _event)
+bool CommentRepliesView::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_watched == d->replyTextField && _event->type() == QEvent::KeyPress) {
         const auto keyEvent = static_cast<QKeyEvent*>(_event);
@@ -163,7 +164,7 @@ bool ComicBookTextCommentRepliesView::eventFilter(QObject* _watched, QEvent* _ev
     return Widget::eventFilter(_watched, _event);
 }
 
-void ComicBookTextCommentRepliesView::keyPressEvent(QKeyEvent* _event)
+void CommentRepliesView::keyPressEvent(QKeyEvent* _event)
 {
     if (_event->key() == Qt::Key_Escape) {
         emit closePressed();
@@ -172,13 +173,13 @@ void ComicBookTextCommentRepliesView::keyPressEvent(QKeyEvent* _event)
     Widget::keyPressEvent(_event);
 }
 
-void ComicBookTextCommentRepliesView::updateTranslations()
+void CommentRepliesView::updateTranslations()
 {
     d->headerView->setToolTip(tr("Back to comments list"));
     d->replyTextField->setTrailingIconToolTip(tr("Add comment"));
 }
 
-void ComicBookTextCommentRepliesView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void CommentRepliesView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
@@ -199,7 +200,7 @@ void ComicBookTextCommentRepliesView::designSystemChangeEvent(DesignSystemChange
     d->replyTextField->setTextColor(Ui::DesignSystem::color().onPrimary());
 }
 
-void ComicBookTextCommentRepliesView::postReply()
+void CommentRepliesView::postReply()
 {
     if (d->replyTextField->text().isEmpty()) {
         return;

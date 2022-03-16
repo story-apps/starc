@@ -11,13 +11,13 @@ namespace Ui {
 /**
  * @brief Виджет комментариев сценария
  */
-class ComicBookTextCommentsView : public StackWidget
+class CORE_LIBRARY_EXPORT CommentsView : public StackWidget
 {
     Q_OBJECT
 
 public:
-    explicit ComicBookTextCommentsView(QWidget* _parent = nullptr);
-    ~ComicBookTextCommentsView() override;
+    explicit CommentsView(QWidget* _parent = nullptr);
+    ~CommentsView() override;
 
     /**
      * @brief Установить модель комментариев
@@ -32,7 +32,7 @@ public:
     /**
      * @brief Показать виджет добавления/редактирования комментария
      */
-    void showAddCommentView(const QColor& _withColor);
+    void showAddCommentView(const QColor& _withColor, const QString& _withText = {});
 
     /**
      * @brief Отобразить обуждение комментария
@@ -46,9 +46,14 @@ signals:
     void addReviewMarkRequested(const QColor& _color, const QString& _text);
 
     /**
+     * @brief Пользователь хочет изменить редакторскую заметку
+     */
+    void changeReviewMarkRequested(const QModelIndex& _index, const QString& _text);
+
+    /**
      * @brief Пользователь хочет комментарий к редакторской заметке
      */
-    void addReviewMarkCommentRequested(const QModelIndex& _index, const QString& _text);
+    void addReviewMarkReplyRequested(const QModelIndex& _index, const QString& _text);
 
     /**
      * @brief Пользователь выбрал комментарий

@@ -8,12 +8,12 @@ namespace Ui {
 /**
  * @brief Делегат для отрисовки комментариев
  */
-class ScreenplayTextCommentDelegate : public QStyledItemDelegate
+class CommentDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
 public:
-    explicit ScreenplayTextCommentDelegate(QObject* _parent = nullptr);
+    explicit CommentDelegate(QObject* _parent = nullptr);
 
     /**
      * @brief Установить необходимость отрисовки комментария в режиме единственного комментария

@@ -1,4 +1,4 @@
-#include "screenplay_text_comments_toolbar.h"
+#include "comments_toolbar.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/color_picker/color_picker_popup.h>
@@ -18,7 +18,7 @@ namespace {
 const QString kColorKey = QLatin1String("widgets/screenplay-text-comments-toolbar/color");
 }
 
-class ScreenplayTextCommentsToolbar::Implementation
+class CommentsToolbar::Implementation
 {
 public:
     Implementation(QWidget* _parent);
@@ -52,7 +52,7 @@ public:
     ColorPickerPopup* colorPickerPopup = nullptr;
 };
 
-ScreenplayTextCommentsToolbar::Implementation::Implementation(QWidget* _parent)
+CommentsToolbar::Implementation::Implementation(QWidget* _parent)
     : textColorAction(new QAction)
     , textBackgroundColorAction(new QAction)
     , commentAction(new QAction)
@@ -67,7 +67,7 @@ ScreenplayTextCommentsToolbar::Implementation::Implementation(QWidget* _parent)
     moveAnimation.setEasingCurve(QEasingCurve::OutQuad);
 }
 
-void ScreenplayTextCommentsToolbar::Implementation::animateShow()
+void CommentsToolbar::Implementation::animateShow()
 {
     hideTimer.stop();
 
@@ -76,7 +76,7 @@ void ScreenplayTextCommentsToolbar::Implementation::animateShow()
     opacityAnimation.start();
 }
 
-void ScreenplayTextCommentsToolbar::Implementation::animateHide()
+void CommentsToolbar::Implementation::animateHide()
 {
     opacityAnimation.setStartValue(1.0);
     opacityAnimation.setEndValue(0.0);
@@ -85,8 +85,7 @@ void ScreenplayTextCommentsToolbar::Implementation::animateHide()
     hideTimer.start();
 }
 
-void ScreenplayTextCommentsToolbar::Implementation::animateMove(const QPoint& _from,
-                                                                const QPoint& _to)
+void CommentsToolbar::Implementation::animateMove(const QPoint& _from, const QPoint& _to)
 {
     if (moveAnimation.state() == QVariantAnimation::Running) {
         if (moveAnimation.endValue().toPoint() == _to) {
@@ -105,7 +104,7 @@ void ScreenplayTextCommentsToolbar::Implementation::animateMove(const QPoint& _f
 // ****
 
 
-ScreenplayTextCommentsToolbar::ScreenplayTextCommentsToolbar(QWidget* _parent)
+CommentsToolbar::CommentsToolbar(QWidget* _parent)
     : FloatingToolBar(_parent)
     , d(new Implementation(this))
 {
@@ -161,9 +160,9 @@ ScreenplayTextCommentsToolbar::ScreenplayTextCommentsToolbar(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
-ScreenplayTextCommentsToolbar::~ScreenplayTextCommentsToolbar() = default;
+CommentsToolbar::~CommentsToolbar() = default;
 
-void ScreenplayTextCommentsToolbar::showToolbar()
+void CommentsToolbar::showToolbar()
 {
     if (parentWidget() == nullptr) {
         return;
@@ -185,7 +184,7 @@ void ScreenplayTextCommentsToolbar::showToolbar()
     show();
 }
 
-void ScreenplayTextCommentsToolbar::hideToolbar()
+void CommentsToolbar::hideToolbar()
 {
     if (isHidden()) {
         return;
@@ -199,7 +198,7 @@ void ScreenplayTextCommentsToolbar::hideToolbar()
     d->animateHide();
 }
 
-void ScreenplayTextCommentsToolbar::moveToolbar(const QPoint& _position)
+void CommentsToolbar::moveToolbar(const QPoint& _position)
 {
     if (isHidden()) {
         move(_position);
@@ -209,7 +208,7 @@ void ScreenplayTextCommentsToolbar::moveToolbar(const QPoint& _position)
     d->animateMove(pos(), _position);
 }
 
-void ScreenplayTextCommentsToolbar::paintEvent(QPaintEvent* _event)
+void CommentsToolbar::paintEvent(QPaintEvent* _event)
 {
     //
     // Если надо, анимируем появление
@@ -224,7 +223,7 @@ void ScreenplayTextCommentsToolbar::paintEvent(QPaintEvent* _event)
     FloatingToolBar::paintEvent(_event);
 }
 
-void ScreenplayTextCommentsToolbar::focusOutEvent(QFocusEvent* _event)
+void CommentsToolbar::focusOutEvent(QFocusEvent* _event)
 {
     FloatingToolBar::focusOutEvent(_event);
 
@@ -233,7 +232,7 @@ void ScreenplayTextCommentsToolbar::focusOutEvent(QFocusEvent* _event)
     }
 }
 
-void ScreenplayTextCommentsToolbar::updateTranslations()
+void CommentsToolbar::updateTranslations()
 {
     d->textColorAction->setToolTip(tr("Change text color"));
     d->textBackgroundColorAction->setToolTip(tr("Change text highlight color"));
@@ -242,7 +241,7 @@ void ScreenplayTextCommentsToolbar::updateTranslations()
     d->colorAction->setToolTip(tr("Choose color for the action"));
 }
 
-void ScreenplayTextCommentsToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void CommentsToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     FloatingToolBar::designSystemChangeEvent(_event);
 

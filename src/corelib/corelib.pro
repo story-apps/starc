@@ -160,6 +160,13 @@ SOURCES += \
     domain/objects_builder.cpp \
     ui/design_system/design_system.cpp \
     ui/layouts/flow_layout/flow_layout.cpp \
+    ui/modules/comments/add_comment_view.cpp \
+    ui/modules/comments/comment_delegate.cpp \
+    ui/modules/comments/comment_replies_view.cpp \
+    ui/modules/comments/comment_view.cpp \
+    ui/modules/comments/comments_model.cpp \
+    ui/modules/comments/comments_toolbar.cpp \
+    ui/modules/comments/comments_view.cpp \
     ui/widgets/app_bar/app_bar.cpp \
     ui/widgets/button/button.cpp \
     ui/widgets/card/card.cpp \
@@ -361,6 +368,13 @@ HEADERS += \
     ui/abstract_navigator.h \
     ui/design_system/design_system.h \
     ui/layouts/flow_layout/flow_layout.h \
+    ui/modules/comments/add_comment_view.h \
+    ui/modules/comments/comment_delegate.h \
+    ui/modules/comments/comment_replies_view.h \
+    ui/modules/comments/comment_view.h \
+    ui/modules/comments/comments_model.h \
+    ui/modules/comments/comments_toolbar.h \
+    ui/modules/comments/comments_view.h \
     ui/widgets/app_bar/app_bar.h \
     ui/widgets/button/button.h \
     ui/widgets/card/card.h \

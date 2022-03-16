@@ -1,8 +1,5 @@
 #include "screenplay_text_view.h"
 
-#include "comments/screenplay_text_comments_model.h"
-#include "comments/screenplay_text_comments_toolbar.h"
-#include "comments/screenplay_text_comments_view.h"
 #include "text/screenplay_text_edit.h"
 #include "text/screenplay_text_edit_shortcuts_manager.h"
 #include "text/screenplay_text_edit_toolbar.h"
@@ -19,6 +16,9 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/comments/comments_model.h>
+#include <ui/modules/comments/comments_toolbar.h>
+#include <ui/modules/comments/comments_view.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -100,7 +100,7 @@ public:
 
 
     QPointer<BusinessLayer::ScreenplayTextModel> model;
-    BusinessLayer::ScreenplayTextCommentsModel* commentsModel = nullptr;
+    BusinessLayer::CommentsModel* commentsModel = nullptr;
 
     ScreenplayTextEdit* screenplayText = nullptr;
     ScreenplayTextEditShortcutsManager shortcutsManager;
@@ -114,7 +114,7 @@ public:
         = BusinessLayer::TextParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
 
-    ScreenplayTextCommentsToolbar* commentsToolbar = nullptr;
+    CommentsToolbar* commentsToolbar = nullptr;
 
     Shadow* sidebarShadow = nullptr;
 
@@ -123,13 +123,13 @@ public:
     TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
     ScreenplayTextFastFormatWidget* fastFormatWidget = nullptr;
-    ScreenplayTextCommentsView* commentsView = nullptr;
+    CommentsView* commentsView = nullptr;
 
     Splitter* splitter = nullptr;
 };
 
 ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
-    : commentsModel(new BusinessLayer::ScreenplayTextCommentsModel(_parent))
+    : commentsModel(new BusinessLayer::CommentsModel(_parent))
     , screenplayText(new ScreenplayTextEdit(_parent))
     , shortcutsManager(screenplayText)
     , scalableWrapper(new ScalableWrapper(screenplayText, _parent))
@@ -138,13 +138,13 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     , searchManager(new BusinessLayer::ScreenplayTextSearchManager(scalableWrapper, screenplayText))
     , toolbarAnimation(new FloatingToolbarAnimator(_parent))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
-    , commentsToolbar(new ScreenplayTextCommentsToolbar(_parent))
+    , commentsToolbar(new CommentsToolbar(_parent))
     , sidebarShadow(new Shadow(Qt::RightEdge, scalableWrapper))
     , sidebarWidget(new Widget(_parent))
     , sidebarTabs(new TabBar(_parent))
     , sidebarContent(new StackWidget(_parent))
     , fastFormatWidget(new ScreenplayTextFastFormatWidget(_parent))
-    , commentsView(new ScreenplayTextCommentsView(_parent))
+    , commentsView(new CommentsView(_parent))
     , splitter(new Splitter(_parent))
 
 {
@@ -453,32 +453,32 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     connect(d->searchManager, &BusinessLayer::ScreenplayTextSearchManager::hideToolbarRequested,
             this, [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
-    connect(d->commentsToolbar, &ScreenplayTextCommentsToolbar::textColorChangeRequested, this,
+    connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,
             [this](const QColor& _color) { d->addReviewMark(_color, {}, {}); });
-    connect(d->commentsToolbar, &ScreenplayTextCommentsToolbar::textBackgoundColorChangeRequested,
-            this, [this](const QColor& _color) { d->addReviewMark({}, _color, {}); });
-    connect(d->commentsToolbar, &ScreenplayTextCommentsToolbar::commentAddRequested, this,
+    connect(d->commentsToolbar, &CommentsToolbar::textBackgoundColorChangeRequested, this,
+            [this](const QColor& _color) { d->addReviewMark({}, _color, {}); });
+    connect(d->commentsToolbar, &CommentsToolbar::commentAddRequested, this,
             [this](const QColor& _color) {
                 d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
                 d->commentsView->showAddCommentView(_color);
             });
-    connect(d->commentsView, &ScreenplayTextCommentsView::addReviewMarkRequested, this,
+    connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
             [this](const QColor& _color, const QString& _comment) {
                 d->addReviewMark({}, _color, _comment);
             });
-    connect(d->commentsView, &ScreenplayTextCommentsView::changeReviewMarkRequested, this,
+    connect(d->commentsView, &CommentsView::changeReviewMarkRequested, this,
             [this](const QModelIndex& _index, const QString& _comment) {
                 QSignalBlocker blocker(d->commentsView);
                 d->commentsModel->setComment(_index, _comment);
             });
-    connect(d->commentsView, &ScreenplayTextCommentsView::addReviewMarkReplyRequested, this,
+    connect(d->commentsView, &CommentsView::addReviewMarkReplyRequested, this,
             [this](const QModelIndex& _index, const QString& _reply) {
                 QSignalBlocker blocker(d->commentsView);
                 d->commentsModel->addReply(_index, _reply);
             });
-    connect(d->commentsView, &ScreenplayTextCommentsView::commentSelected, this,
+    connect(d->commentsView, &CommentsView::commentSelected, this,
             [this](const QModelIndex& _index) {
-                const auto positionHint = d->commentsModel->mapToScreenplay(_index);
+                const auto positionHint = d->commentsModel->mapToModel(_index);
                 const auto position = d->screenplayText->positionForModelIndex(positionHint.index)
                     + positionHint.blockPosition;
                 auto cursor = d->screenplayText->textCursor();
@@ -486,17 +486,17 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 d->screenplayText->ensureCursorVisible(cursor);
                 d->scalableWrapper->setFocus();
             });
-    connect(d->commentsView, &ScreenplayTextCommentsView::markAsDoneRequested, this,
+    connect(d->commentsView, &CommentsView::markAsDoneRequested, this,
             [this](const QModelIndexList& _indexes) {
                 QSignalBlocker blocker(d->commentsView);
                 d->commentsModel->markAsDone(_indexes);
             });
-    connect(d->commentsView, &ScreenplayTextCommentsView::markAsUndoneRequested, this,
+    connect(d->commentsView, &CommentsView::markAsUndoneRequested, this,
             [this](const QModelIndexList& _indexes) {
                 QSignalBlocker blocker(d->commentsView);
                 d->commentsModel->markAsUndone(_indexes);
             });
-    connect(d->commentsView, &ScreenplayTextCommentsView::removeRequested, this,
+    connect(d->commentsView, &CommentsView::removeRequested, this,
             [this](const QModelIndexList& _indexes) {
                 QSignalBlocker blocker(d->commentsView);
                 d->commentsModel->remove(_indexes);
@@ -545,7 +545,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         //
         const auto positionInBlock = d->screenplayText->textCursor().positionInBlock();
         const auto commentModelIndex
-            = d->commentsModel->mapFromScreenplay(screenplayModelIndex, positionInBlock);
+            = d->commentsModel->mapFromModel(screenplayModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
     };
     connect(d->screenplayText, &ScreenplayTextEdit::paragraphTypeChanged, this,

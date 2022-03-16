@@ -7,13 +7,13 @@ namespace Ui {
 /**
  * @brief Виджет отобразающий информацию о заголовке комментария
  */
-class ScreenplayTextCommentView : public Widget
+class CommentView : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit ScreenplayTextCommentView(QWidget* _parent = nullptr);
-    ~ScreenplayTextCommentView() override;
+    explicit CommentView(QWidget* _parent = nullptr);
+    ~CommentView() override;
 
     /**
      * @brief Задать индекс комментария, который должен быть отображён

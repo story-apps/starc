@@ -1,6 +1,6 @@
-#include "comic_book_text_comments_model.h"
+#include "comments_model.h"
 
-#include <business_layer/model/comic_book/text/comic_book_text_model.h>
+#include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -29,10 +29,10 @@ bool isReviewMarksPartiallyEqual(const TextModelTextItem::ReviewMark& _lhs,
 } // namespace
 
 
-class ComicBookTextCommentsModel::Implementation
+class CommentsModel::Implementation
 {
 public:
-    explicit Implementation(ComicBookTextCommentsModel* _q);
+    explicit Implementation(CommentsModel* _q);
 
     /**
      * @brief Получить предыдущий индекс по карте textItemIndexToReviewIndex
@@ -45,12 +45,12 @@ public:
     void processSourceModelDataChanged(const QModelIndex& _index);
 
 
-    ComicBookTextCommentsModel* q = nullptr;
+    CommentsModel* q = nullptr;
 
     /**
      * @brief Модель сценария, на основе которой строится модель заметок
      */
-    QPointer<ComicBookTextModel> model;
+    QPointer<TextModel> model;
     /**
      * @brief Список всех текстовых элементов модели, для того, чтобы понимать их последовательность
      */
@@ -90,13 +90,13 @@ public:
     QVector<ReviewMarkWrapper> reviewMarks;
 };
 
-ComicBookTextCommentsModel::Implementation::Implementation(ComicBookTextCommentsModel* _q)
+CommentsModel::Implementation::Implementation(CommentsModel* _q)
     : q(_q)
 {
 }
 
-void ComicBookTextCommentsModel::Implementation::saveReviewMark(
-    TextModelTextItem* _textItem, const TextModelTextItem::ReviewMark& _reviewMark)
+void CommentsModel::Implementation::saveReviewMark(TextModelTextItem* _textItem,
+                                                   const TextModelTextItem::ReviewMark& _reviewMark)
 {
     bool reviewMarkAdded = false;
 
@@ -274,8 +274,8 @@ void ComicBookTextCommentsModel::Implementation::saveReviewMark(
     q->endInsertRows();
 }
 
-void ComicBookTextCommentsModel::Implementation::processSourceModelRowsInserted(
-    const QModelIndex& _parent, int _firstRow, int _lastRow)
+void CommentsModel::Implementation::processSourceModelRowsInserted(const QModelIndex& _parent,
+                                                                   int _firstRow, int _lastRow)
 {
     //
     // Для каждого из вставленных
@@ -400,8 +400,8 @@ void ComicBookTextCommentsModel::Implementation::processSourceModelRowsInserted(
     }
 }
 
-void ComicBookTextCommentsModel::Implementation::processSourceModelRowsRemoved(
-    const QModelIndex& _parent, int _firstRow, int _lastRow)
+void CommentsModel::Implementation::processSourceModelRowsRemoved(const QModelIndex& _parent,
+                                                                  int _firstRow, int _lastRow)
 {
     //
     // Для каждого из удаляемых
@@ -509,8 +509,7 @@ void ComicBookTextCommentsModel::Implementation::processSourceModelRowsRemoved(
     }
 }
 
-void ComicBookTextCommentsModel::Implementation::processSourceModelDataChanged(
-    const QModelIndex& _index)
+void CommentsModel::Implementation::processSourceModelDataChanged(const QModelIndex& _index)
 {
     if (!_index.isValid()) {
         return;
@@ -632,8 +631,8 @@ void ComicBookTextCommentsModel::Implementation::processSourceModelDataChanged(
     }
 }
 
-bool ComicBookTextCommentsModel::Implementation::ReviewMarkWrapper::operator==(
-    const ComicBookTextCommentsModel::Implementation::ReviewMarkWrapper& _other) const
+bool CommentsModel::Implementation::ReviewMarkWrapper::operator==(
+    const CommentsModel::Implementation::ReviewMarkWrapper& _other) const
 {
     return reviewMark == _other.reviewMark && fromInFirstItem == _other.fromInFirstItem
         && toInLastItem == _other.toInLastItem && items == _other.items;
@@ -643,15 +642,15 @@ bool ComicBookTextCommentsModel::Implementation::ReviewMarkWrapper::operator==(
 // ****
 
 
-ComicBookTextCommentsModel::ComicBookTextCommentsModel(QObject* _parent)
+CommentsModel::CommentsModel(QObject* _parent)
     : QAbstractListModel(_parent)
     , d(new Implementation(this))
 {
 }
 
-ComicBookTextCommentsModel::~ComicBookTextCommentsModel() = default;
+CommentsModel::~CommentsModel() = default;
 
-void ComicBookTextCommentsModel::setModel(ComicBookTextModel* _model)
+void CommentsModel::setModel(TextModel* _model)
 {
     beginResetModel();
 
@@ -767,16 +766,16 @@ void ComicBookTextCommentsModel::setModel(ComicBookTextModel* _model)
         };
         readReviewMarksFromModel({});
 
-        connect(d->model, &ComicBookTextModel::modelReset, this, [this] { setModel(d->model); });
-        connect(d->model, &ComicBookTextModel::rowsInserted, this,
+        connect(d->model, &TextModel::modelReset, this, [this] { setModel(d->model); });
+        connect(d->model, &TextModel::rowsInserted, this,
                 [this](const QModelIndex& _parent, int _first, int _last) {
                     d->processSourceModelRowsInserted(_parent, _first, _last);
                 });
-        connect(d->model, &ComicBookTextModel::rowsAboutToBeRemoved, this,
+        connect(d->model, &TextModel::rowsAboutToBeRemoved, this,
                 [this](const QModelIndex& _parent, int _first, int _last) {
                     d->processSourceModelRowsRemoved(_parent, _first, _last);
                 });
-        connect(d->model, &ComicBookTextModel::dataChanged, this,
+        connect(d->model, &TextModel::dataChanged, this,
                 [this](const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
                     Q_ASSERT(_topLeft == _bottomRight);
                     d->processSourceModelDataChanged(_topLeft);
@@ -786,8 +785,7 @@ void ComicBookTextCommentsModel::setModel(ComicBookTextModel* _model)
     endResetModel();
 }
 
-ComicBookTextCommentsModel::PositionHint ComicBookTextCommentsModel::mapToComicBook(
-    const QModelIndex& _index)
+CommentsModel::PositionHint CommentsModel::mapToModel(const QModelIndex& _index)
 {
     if (!_index.isValid() || _index.row() >= d->reviewMarks.size()) {
         return {};
@@ -798,8 +796,7 @@ ComicBookTextCommentsModel::PositionHint ComicBookTextCommentsModel::mapToComicB
              reviewMarkWrapper.fromInFirstItem };
 }
 
-QModelIndex ComicBookTextCommentsModel::mapFromComicBook(const QModelIndex& _index,
-                                                         int _positionInBlock)
+QModelIndex CommentsModel::mapFromModel(const QModelIndex& _index, int _positionInBlock)
 {
     if (!_index.isValid()) {
         return {};
@@ -837,7 +834,23 @@ QModelIndex ComicBookTextCommentsModel::mapFromComicBook(const QModelIndex& _ind
     return {};
 }
 
-void ComicBookTextCommentsModel::markAsDone(const QModelIndexList& _indexes)
+void CommentsModel::setComment(const QModelIndex& _index, const QString& _comment)
+{
+    auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
+    for (auto textItem : reviewMarkWrapper.items) {
+        auto updatedReviewMarks = textItem->reviewMarks();
+        for (auto& reviewMark : updatedReviewMarks) {
+            if (isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
+                reviewMark.comments.first().text = _comment;
+                reviewMark.comments.first().isEdited = true;
+            }
+        }
+        textItem->setReviewMarks(updatedReviewMarks);
+        d->model->updateItem(textItem);
+    }
+}
+
+void CommentsModel::markAsDone(const QModelIndexList& _indexes)
 {
     for (const auto& index : _indexes) {
         const auto reviewMarkWrapper = d->reviewMarks.at(index.row());
@@ -854,7 +867,7 @@ void ComicBookTextCommentsModel::markAsDone(const QModelIndexList& _indexes)
     }
 }
 
-void ComicBookTextCommentsModel::markAsUndone(const QModelIndexList& _indexes)
+void CommentsModel::markAsUndone(const QModelIndexList& _indexes)
 {
     for (const auto& index : _indexes) {
         const auto reviewMarkWrapper = d->reviewMarks.at(index.row());
@@ -871,7 +884,7 @@ void ComicBookTextCommentsModel::markAsUndone(const QModelIndexList& _indexes)
     }
 }
 
-void ComicBookTextCommentsModel::addComment(const QModelIndex& _index, const QString& _comment)
+void CommentsModel::addReply(const QModelIndex& _index, const QString& _comment)
 {
     const auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
     for (auto textItem : reviewMarkWrapper.items) {
@@ -888,7 +901,7 @@ void ComicBookTextCommentsModel::addComment(const QModelIndex& _index, const QSt
     }
 }
 
-void ComicBookTextCommentsModel::remove(const QModelIndexList& _indexes)
+void CommentsModel::remove(const QModelIndexList& _indexes)
 {
     for (const auto& index : reversed(_indexes)) {
         const auto reviewMarkWrapper = d->reviewMarks.at(index.row());
@@ -905,14 +918,14 @@ void ComicBookTextCommentsModel::remove(const QModelIndexList& _indexes)
     }
 }
 
-int ComicBookTextCommentsModel::rowCount(const QModelIndex& _parent) const
+int CommentsModel::rowCount(const QModelIndex& _parent) const
 {
     Q_UNUSED(_parent)
 
     return d->reviewMarks.size();
 }
 
-QVariant ComicBookTextCommentsModel::data(const QModelIndex& _index, int _role) const
+QVariant CommentsModel::data(const QModelIndex& _index, int _role) const
 {
     if (!_index.isValid()) {
         return {};
@@ -936,6 +949,10 @@ QVariant ComicBookTextCommentsModel::data(const QModelIndex& _index, int _role) 
         return reviewMarkWrapper.reviewMark.comments.constFirst().text;
     }
 
+    case ReviewMarkIsEditedRole: {
+        return reviewMarkWrapper.reviewMark.comments.constFirst().isEdited;
+    }
+
     case ReviewMarkColorRole: {
         if (reviewMarkWrapper.reviewMark.backgroundColor.isValid()) {
             return reviewMarkWrapper.reviewMark.backgroundColor;
@@ -948,7 +965,7 @@ QVariant ComicBookTextCommentsModel::data(const QModelIndex& _index, int _role) 
         return reviewMarkWrapper.reviewMark.isDone;
     }
 
-    case ReviewMarkCommentsRole: {
+    case ReviewMarkRepliesRole: {
         if (reviewMarkWrapper.reviewMark.comments.isEmpty()) {
             return {};
         }

@@ -1,8 +1,5 @@
 #include "comic_book_text_view.h"
 
-#include "comments/comic_book_text_comments_model.h"
-#include "comments/comic_book_text_comments_toolbar.h"
-#include "comments/comic_book_text_comments_view.h"
 #include "text/comic_book_text_edit.h"
 #include "text/comic_book_text_edit_shortcuts_manager.h"
 #include "text/comic_book_text_edit_toolbar.h"
@@ -11,11 +8,15 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/comments/comments_model.h>
+#include <ui/modules/comments/comments_toolbar.h>
+#include <ui/modules/comments/comments_view.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -87,7 +88,7 @@ public:
                        const QString& _comment);
 
 
-    BusinessLayer::ComicBookTextCommentsModel* commentsModel = nullptr;
+    BusinessLayer::CommentsModel* commentsModel = nullptr;
 
     ComicBookTextEdit* comicBookText = nullptr;
     ComicBookTextEditShortcutsManager shortcutsManager;
@@ -100,7 +101,7 @@ public:
         = BusinessLayer::TextParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
 
-    ComicBookTextCommentsToolbar* commentsToolbar = nullptr;
+    CommentsToolbar* commentsToolbar = nullptr;
 
     Shadow* sidebarShadow = nullptr;
 
@@ -109,13 +110,13 @@ public:
     TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
     ComicBookTextFastFormatWidget* fastFormatWidget = nullptr;
-    ComicBookTextCommentsView* commentsView = nullptr;
+    CommentsView* commentsView = nullptr;
 
     Splitter* splitter = nullptr;
 };
 
 ComicBookTextView::Implementation::Implementation(QWidget* _parent)
-    : commentsModel(new BusinessLayer::ComicBookTextCommentsModel(_parent))
+    : commentsModel(new BusinessLayer::CommentsModel(_parent))
     , comicBookText(new ComicBookTextEdit(_parent))
     , shortcutsManager(comicBookText)
     , scalableWrapper(new ScalableWrapper(comicBookText, _parent))
@@ -123,13 +124,13 @@ ComicBookTextView::Implementation::Implementation(QWidget* _parent)
     , searchManager(new BusinessLayer::ComicBookTextSearchManager(scalableWrapper, comicBookText))
     , toolbarAnimation(new FloatingToolbarAnimator(_parent))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
-    , commentsToolbar(new ComicBookTextCommentsToolbar(_parent))
+    , commentsToolbar(new CommentsToolbar(_parent))
     , sidebarShadow(new Shadow(Qt::RightEdge, scalableWrapper))
     , sidebarWidget(new Widget(_parent))
     , sidebarTabs(new TabBar(_parent))
     , sidebarContent(new StackWidget(_parent))
     , fastFormatWidget(new ComicBookTextFastFormatWidget(_parent))
-    , commentsView(new ComicBookTextCommentsView(_parent))
+    , commentsView(new CommentsView(_parent))
     , splitter(new Splitter(_parent))
 
 {
@@ -373,27 +374,32 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
     connect(d->searchManager, &BusinessLayer::ComicBookTextSearchManager::hideToolbarRequested,
             this, [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
-    connect(d->commentsToolbar, &ComicBookTextCommentsToolbar::textColorChangeRequested, this,
+    connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,
             [this](const QColor& _color) { d->addReviewMark(_color, {}, {}); });
-    connect(d->commentsToolbar, &ComicBookTextCommentsToolbar::textBackgoundColorChangeRequested,
-            this, [this](const QColor& _color) { d->addReviewMark({}, _color, {}); });
-    connect(d->commentsToolbar, &ComicBookTextCommentsToolbar::commentAddRequested, this,
+    connect(d->commentsToolbar, &CommentsToolbar::textBackgoundColorChangeRequested, this,
+            [this](const QColor& _color) { d->addReviewMark({}, _color, {}); });
+    connect(d->commentsToolbar, &CommentsToolbar::commentAddRequested, this,
             [this](const QColor& _color) {
                 d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
                 d->commentsView->showAddCommentView(_color);
             });
-    connect(d->commentsView, &ComicBookTextCommentsView::addReviewMarkRequested, this,
+    connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
             [this](const QColor& _color, const QString& _comment) {
                 d->addReviewMark({}, _color, _comment);
             });
-    connect(d->commentsView, &ComicBookTextCommentsView::addReviewMarkCommentRequested, this,
+    connect(d->commentsView, &CommentsView::changeReviewMarkRequested, this,
             [this](const QModelIndex& _index, const QString& _comment) {
                 QSignalBlocker blocker(d->commentsView);
-                d->commentsModel->addComment(_index, _comment);
+                d->commentsModel->setComment(_index, _comment);
             });
-    connect(d->commentsView, &ComicBookTextCommentsView::commentSelected, this,
+    connect(d->commentsView, &CommentsView::addReviewMarkReplyRequested, this,
+            [this](const QModelIndex& _index, const QString& _reply) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->addReply(_index, _reply);
+            });
+    connect(d->commentsView, &CommentsView::commentSelected, this,
             [this](const QModelIndex& _index) {
-                const auto positionHint = d->commentsModel->mapToComicBook(_index);
+                const auto positionHint = d->commentsModel->mapToModel(_index);
                 const auto position = d->comicBookText->positionForModelIndex(positionHint.index)
                     + positionHint.blockPosition;
                 auto cursor = d->comicBookText->textCursor();
@@ -401,17 +407,17 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
                 d->comicBookText->ensureCursorVisible(cursor);
                 d->scalableWrapper->setFocus();
             });
-    connect(d->commentsView, &ComicBookTextCommentsView::markAsDoneRequested, this,
+    connect(d->commentsView, &CommentsView::markAsDoneRequested, this,
             [this](const QModelIndexList& _indexes) {
                 QSignalBlocker blocker(d->commentsView);
                 d->commentsModel->markAsDone(_indexes);
             });
-    connect(d->commentsView, &ComicBookTextCommentsView::markAsUndoneRequested, this,
+    connect(d->commentsView, &CommentsView::markAsUndoneRequested, this,
             [this](const QModelIndexList& _indexes) {
                 QSignalBlocker blocker(d->commentsView);
                 d->commentsModel->markAsUndone(_indexes);
             });
-    connect(d->commentsView, &ComicBookTextCommentsView::removeRequested, this,
+    connect(d->commentsView, &CommentsView::removeRequested, this,
             [this](const QModelIndexList& _indexes) {
                 QSignalBlocker blocker(d->commentsView);
                 d->commentsModel->remove(_indexes);
@@ -460,7 +466,7 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
         //
         const auto positionInBlock = d->comicBookText->textCursor().positionInBlock();
         const auto commentModelIndex
-            = d->commentsModel->mapFromComicBook(comicBookModelIndex, positionInBlock);
+            = d->commentsModel->mapFromModel(comicBookModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
     };
     connect(d->comicBookText, &ComicBookTextEdit::paragraphTypeChanged, this,

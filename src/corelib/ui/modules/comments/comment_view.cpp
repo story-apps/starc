@@ -1,6 +1,6 @@
-#include "screenplay_text_comment_view.h"
+#include "comment_view.h"
 
-#include "screenplay_text_comment_delegate.h"
+#include "comment_delegate.h"
 
 #include <ui/design_system/design_system.h>
 
@@ -10,16 +10,16 @@
 
 namespace Ui {
 
-class ScreenplayTextCommentView::Implementation
+class CommentView::Implementation
 {
 public:
     QStyleOptionViewItem option(const Widget* _widget) const;
 
-    ScreenplayTextCommentDelegate delegate;
+    CommentDelegate delegate;
     QModelIndex commentIndex;
 };
 
-QStyleOptionViewItem ScreenplayTextCommentView::Implementation::option(const Widget* _widget) const
+QStyleOptionViewItem CommentView::Implementation::option(const Widget* _widget) const
 {
     QStyleOptionViewItem option;
     option.widget = _widget;
@@ -33,7 +33,7 @@ QStyleOptionViewItem ScreenplayTextCommentView::Implementation::option(const Wid
 // ****
 
 
-ScreenplayTextCommentView::ScreenplayTextCommentView(QWidget* _parent)
+CommentView::CommentView(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation)
 {
@@ -43,9 +43,9 @@ ScreenplayTextCommentView::ScreenplayTextCommentView(QWidget* _parent)
     d->delegate.setSingleCommentMode(true);
 }
 
-ScreenplayTextCommentView::~ScreenplayTextCommentView() = default;
+CommentView::~CommentView() = default;
 
-void ScreenplayTextCommentView::setCommentIndex(const QModelIndex& _index)
+void CommentView::setCommentIndex(const QModelIndex& _index)
 {
     if (d->commentIndex == _index) {
         return;
@@ -56,14 +56,14 @@ void ScreenplayTextCommentView::setCommentIndex(const QModelIndex& _index)
     update();
 }
 
-int ScreenplayTextCommentView::heightForWidth(int _width) const
+int CommentView::heightForWidth(int _width) const
 {
     auto option = d->option(this);
     option.rect.setWidth(_width);
     return d->delegate.sizeHint(option, d->commentIndex).height();
 }
 
-void ScreenplayTextCommentView::paintEvent(QPaintEvent* _event)
+void CommentView::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
 
@@ -71,7 +71,7 @@ void ScreenplayTextCommentView::paintEvent(QPaintEvent* _event)
     d->delegate.paint(&painter, d->option(this), d->commentIndex);
 }
 
-void ScreenplayTextCommentView::mouseReleaseEvent(QMouseEvent* _event)
+void CommentView::mouseReleaseEvent(QMouseEvent* _event)
 {
     Widget::mouseReleaseEvent(_event);
 

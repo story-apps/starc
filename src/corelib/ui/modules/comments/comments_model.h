@@ -2,16 +2,18 @@
 
 #include <QAbstractListModel>
 
+#include <corelib_global.h>
+
 
 namespace BusinessLayer {
 
-class ScreenplayTextModel;
+class TextModel;
 
 
 /**
  * @brief Модель комментариев к тексту сценария
  */
-class ScreenplayTextCommentsModel : public QAbstractListModel
+class CORE_LIBRARY_EXPORT CommentsModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -30,13 +32,13 @@ public:
     };
 
 public:
-    explicit ScreenplayTextCommentsModel(QObject* _parent = nullptr);
-    ~ScreenplayTextCommentsModel() override;
+    explicit CommentsModel(QObject* _parent = nullptr);
+    ~CommentsModel() override;
 
     /**
      * @brief Задать модель текста сценария
      */
-    void setModel(BusinessLayer::ScreenplayTextModel* _model);
+    void setModel(BusinessLayer::TextModel* _model);
 
     /**
      * @brief Получить индекс элемента из модели сценария, в котором находится заданный комментарий,
@@ -46,12 +48,12 @@ public:
         QModelIndex index;
         int blockPosition;
     };
-    PositionHint mapToScreenplay(const QModelIndex& _index);
+    PositionHint mapToModel(const QModelIndex& _index);
 
     /**
      * @brief Получить индекс заметки из индекса элемента модели сценария и позиции в абзаце
      */
-    QModelIndex mapFromScreenplay(const QModelIndex& _index, int _positionInBlock);
+    QModelIndex mapFromModel(const QModelIndex& _index, int _positionInBlock);
 
     /**
      * @brief Задать текст комментария с заданным индексом

@@ -1,9 +1,9 @@
-#include "comic_book_text_comments_view.h"
+#include "comments_view.h"
 
-#include "comic_book_text_add_comment_view.h"
-#include "comic_book_text_comment_delegate.h"
-#include "comic_book_text_comment_replies_view.h"
-#include "comic_book_text_comments_model.h"
+#include "add_comment_view.h"
+#include "comment_delegate.h"
+#include "comment_replies_view.h"
+#include "comments_model.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
@@ -17,7 +17,7 @@
 
 namespace Ui {
 
-class ComicBookTextCommentsView::Implementation
+class CommentsView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -30,33 +30,33 @@ public:
     /**
      * @brief Обновить контекстное меню для заданного списка элементов
      */
-    void updateCommentsViewContextMenu(const QModelIndexList& _indexes,
-                                       ComicBookTextCommentsView* _view);
+    void updateCommentsViewContextMenu(const QModelIndexList& _indexes, CommentsView* _view);
 
 
     Tree* commentsView = nullptr;
     ContextMenu* commentsViewContextMenu = nullptr;
 
-    ComicBookTextAddCommentView* addCommentView = nullptr;
-    QColor addCommentColor;
+    AddCommentView* addCommentView = nullptr;
+    QModelIndex commentIndex;
+    QColor commentColor;
 
-    ComicBookTextCommentRepliesView* repliesView = nullptr;
+    CommentRepliesView* repliesView = nullptr;
 };
 
-ComicBookTextCommentsView::Implementation::Implementation(QWidget* _parent)
+CommentsView::Implementation::Implementation(QWidget* _parent)
     : commentsView(new Tree(_parent))
     , commentsViewContextMenu(new ContextMenu(commentsView))
-    , addCommentView(new ComicBookTextAddCommentView(_parent))
-    , repliesView(new ComicBookTextCommentRepliesView(_parent))
+    , addCommentView(new AddCommentView(_parent))
+    , repliesView(new CommentRepliesView(_parent))
 {
     commentsView->setAutoAdjustSize(true);
     commentsView->setContextMenuPolicy(Qt::CustomContextMenu);
-    commentsView->setItemDelegate(new ComicBookTextCommentDelegate(commentsView));
+    commentsView->setItemDelegate(new CommentDelegate(commentsView));
     commentsView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
-void ComicBookTextCommentsView::Implementation::updateCommentsViewContextMenu(
-    const QModelIndexList& _indexes, ComicBookTextCommentsView* _view)
+void CommentsView::Implementation::updateCommentsViewContextMenu(const QModelIndexList& _indexes,
+                                                                 CommentsView* _view)
 {
     if (_indexes.isEmpty()) {
         return;
@@ -68,6 +68,16 @@ void ComicBookTextCommentsView::Implementation::updateCommentsViewContextMenu(
     // Настраиваем контекстное меню для одного элемента
     //
     if (_indexes.size() == 1) {
+        auto edit = new QAction(tr("Edit"));
+        edit->setIconText(u8"\U000F03EB");
+        connect(edit, &QAction::triggered, _view, [this, _view] {
+            commentIndex = commentsView->selectedIndexes().constFirst();
+            _view->showAddCommentView(
+                commentIndex.data(BusinessLayer::CommentsModel::ReviewMarkColorRole)
+                    .value<QColor>(),
+                commentIndex.data(BusinessLayer::CommentsModel::ReviewMarkCommentRole).toString());
+        });
+        menuActions.append(edit);
         auto discuss = new QAction(tr("Discuss"));
         discuss->setIconText(u8"\U000F0860");
         connect(discuss, &QAction::triggered, _view, [this, _view] {
@@ -75,7 +85,7 @@ void ComicBookTextCommentsView::Implementation::updateCommentsViewContextMenu(
         });
         menuActions.append(discuss);
         if (_indexes.constFirst()
-                .data(BusinessLayer::ComicBookTextCommentsModel::ReviewMarkIsDoneRole)
+                .data(BusinessLayer::CommentsModel::ReviewMarkIsDoneRole)
                 .toBool()) {
             auto markAsUndone = new QAction(tr("Mark as undone"));
             markAsUndone->setIconText(u8"\U000F0131");
@@ -129,7 +139,7 @@ void ComicBookTextCommentsView::Implementation::updateCommentsViewContextMenu(
 // ****
 
 
-ComicBookTextCommentsView::ComicBookTextCommentsView(QWidget* _parent)
+CommentsView::CommentsView(QWidget* _parent)
     : StackWidget(_parent)
     , d(new Implementation(this))
 {
@@ -140,9 +150,8 @@ ComicBookTextCommentsView::ComicBookTextCommentsView(QWidget* _parent)
     addWidget(d->repliesView);
 
 
-    connect(d->commentsView, &Tree::clicked, this, &ComicBookTextCommentsView::commentSelected);
-    connect(d->commentsView, &Tree::doubleClicked, this,
-            &ComicBookTextCommentsView::showCommentRepliesView);
+    connect(d->commentsView, &Tree::clicked, this, &CommentsView::commentSelected);
+    connect(d->commentsView, &Tree::doubleClicked, this, &CommentsView::showCommentRepliesView);
     connect(d->commentsView, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
         if (d->commentsView->selectedIndexes().isEmpty()) {
             return;
@@ -151,17 +160,24 @@ ComicBookTextCommentsView::ComicBookTextCommentsView(QWidget* _parent)
         d->updateCommentsViewContextMenu(d->commentsView->selectedIndexes(), this);
         d->commentsViewContextMenu->showContextMenu(d->commentsView->mapToGlobal(_pos));
     });
-    connect(d->addCommentView, &ComicBookTextAddCommentView::savePressed, this, [this] {
-        emit addReviewMarkRequested(d->addCommentColor, d->addCommentView->comment());
+    connect(d->addCommentView, &AddCommentView::savePressed, this, [this] {
+        if (d->commentIndex.isValid()) {
+            emit changeReviewMarkRequested(d->commentIndex, d->addCommentView->comment());
+            d->commentIndex = {};
+        } else {
+            emit addReviewMarkRequested(d->commentColor, d->addCommentView->comment());
+        }
         setCurrentWidget(d->commentsView);
     });
-    connect(d->addCommentView, &ComicBookTextAddCommentView::cancelPressed, this,
-            [this] { setCurrentWidget(d->commentsView); });
-    connect(d->repliesView, &ComicBookTextCommentRepliesView::addReplyPressed, this,
+    connect(d->addCommentView, &AddCommentView::cancelPressed, this, [this] {
+        d->commentIndex = {};
+        setCurrentWidget(d->commentsView);
+    });
+    connect(d->repliesView, &CommentRepliesView::addReplyPressed, this,
             [this](const QString& _reply) {
-                emit addReviewMarkCommentRequested(d->commentsView->currentIndex(), _reply);
+                emit addReviewMarkReplyRequested(d->commentsView->currentIndex(), _reply);
             });
-    connect(d->repliesView, &ComicBookTextCommentRepliesView::closePressed, this, [this] {
+    connect(d->repliesView, &CommentRepliesView::closePressed, this, [this] {
         auto animationRect = d->commentsView->visualRect(d->commentsView->currentIndex());
         animationRect.setLeft(0);
         setAnimationRect(d->commentsView, animationRect);
@@ -174,9 +190,9 @@ ComicBookTextCommentsView::ComicBookTextCommentsView(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
-ComicBookTextCommentsView::~ComicBookTextCommentsView() = default;
+CommentsView::~CommentsView() = default;
 
-void ComicBookTextCommentsView::setModel(QAbstractItemModel* _model)
+void CommentsView::setModel(QAbstractItemModel* _model)
 {
     if (d->commentsView->model() != nullptr) {
         disconnect(d->commentsView->model());
@@ -193,22 +209,22 @@ void ComicBookTextCommentsView::setModel(QAbstractItemModel* _model)
     }
 }
 
-void ComicBookTextCommentsView::setCurrentIndex(const QModelIndex& _index)
+void CommentsView::setCurrentIndex(const QModelIndex& _index)
 {
     QSignalBlocker blocker(this);
     d->commentsView->setCurrentIndex(_index);
 }
 
-void ComicBookTextCommentsView::showAddCommentView(const QColor& _withColor)
+void CommentsView::showAddCommentView(const QColor& _withColor, const QString& _withText)
 {
-    d->addCommentColor = _withColor;
-    d->addCommentView->setComment({});
+    d->commentColor = _withColor;
+    d->addCommentView->setComment(_withText);
     setCurrentWidget(d->addCommentView);
     QTimer::singleShot(animationDuration(), d->addCommentView,
-                       qOverload<>(&ComicBookTextAddCommentView::setFocus));
+                       qOverload<>(&AddCommentView::setFocus));
 }
 
-void ComicBookTextCommentsView::showCommentRepliesView(const QModelIndex& _commentIndex)
+void CommentsView::showCommentRepliesView(const QModelIndex& _commentIndex)
 {
     d->repliesView->setCommentIndex(_commentIndex);
 
@@ -222,11 +238,11 @@ void ComicBookTextCommentsView::showCommentRepliesView(const QModelIndex& _comme
         setAnimationRect(d->commentsView, animationRect);
         setCurrentWidget(d->repliesView);
         QTimer::singleShot(animationDuration(), d->repliesView,
-                           qOverload<>(&ComicBookTextAddCommentView::setFocus));
+                           qOverload<>(&AddCommentView::setFocus));
     });
 }
 
-void ComicBookTextCommentsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void CommentsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     StackWidget::designSystemChangeEvent(_event);
 

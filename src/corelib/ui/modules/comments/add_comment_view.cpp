@@ -1,4 +1,4 @@
-#include "screenplay_text_add_comment_view.h"
+#include "add_comment_view.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -13,7 +13,7 @@
 
 namespace Ui {
 
-class ScreenplayTextAddCommentView::Implementation
+class AddCommentView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -25,7 +25,7 @@ public:
     Button* saveButton = nullptr;
 };
 
-ScreenplayTextAddCommentView::Implementation::Implementation(QWidget* _parent)
+AddCommentView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent))
     , comment(new TextField(_parent))
     , buttonsLayout(new QHBoxLayout)
@@ -54,7 +54,7 @@ ScreenplayTextAddCommentView::Implementation::Implementation(QWidget* _parent)
 // ****
 
 
-ScreenplayTextAddCommentView::ScreenplayTextAddCommentView(QWidget* _parent)
+AddCommentView::AddCommentView(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
@@ -85,27 +85,27 @@ ScreenplayTextAddCommentView::ScreenplayTextAddCommentView(QWidget* _parent)
 
         d->content->ensureVisible(0, d->comment->pos().y() + d->comment->cursorRect().bottom());
     });
-    connect(d->saveButton, &Button::clicked, this, &ScreenplayTextAddCommentView::savePressed);
-    connect(d->cancelButton, &Button::clicked, this, &ScreenplayTextAddCommentView::cancelPressed);
+    connect(d->saveButton, &Button::clicked, this, &AddCommentView::savePressed);
+    connect(d->cancelButton, &Button::clicked, this, &AddCommentView::cancelPressed);
 
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
 }
 
-ScreenplayTextAddCommentView::~ScreenplayTextAddCommentView() = default;
+AddCommentView::~AddCommentView() = default;
 
-QString ScreenplayTextAddCommentView::comment() const
+QString AddCommentView::comment() const
 {
     return d->comment->text();
 }
 
-void ScreenplayTextAddCommentView::setComment(const QString& _comment)
+void AddCommentView::setComment(const QString& _comment)
 {
     d->comment->setText(_comment);
 }
 
-bool ScreenplayTextAddCommentView::eventFilter(QObject* _watched, QEvent* _event)
+bool AddCommentView::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_watched == d->comment && _event->type() == QEvent::KeyPress) {
         const auto keyEvent = static_cast<QKeyEvent*>(_event);
@@ -121,14 +121,14 @@ bool ScreenplayTextAddCommentView::eventFilter(QObject* _watched, QEvent* _event
     return Widget::eventFilter(_watched, _event);
 }
 
-void ScreenplayTextAddCommentView::updateTranslations()
+void AddCommentView::updateTranslations()
 {
     d->comment->setLabel(tr("Add new comment"));
     d->cancelButton->setText(tr("Cancel"));
     d->saveButton->setText(tr("Save"));
 }
 
-void ScreenplayTextAddCommentView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void AddCommentView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 

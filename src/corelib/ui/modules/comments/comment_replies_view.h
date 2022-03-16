@@ -7,13 +7,13 @@ namespace Ui {
 /**
  * @brief Виджет обсуждения комментария
  */
-class ComicBookTextCommentRepliesView : public Widget
+class CommentRepliesView : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit ComicBookTextCommentRepliesView(QWidget* _parent);
-    ~ComicBookTextCommentRepliesView() override;
+    explicit CommentRepliesView(QWidget* _parent);
+    ~CommentRepliesView() override;
 
     /**
      * @brief Индекс текущего отображаемого комментария

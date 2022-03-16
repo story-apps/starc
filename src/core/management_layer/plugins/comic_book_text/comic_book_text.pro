@@ -31,13 +31,6 @@ DEPENDPATH += $$PWD/../../../../corelib
 #
 
 HEADERS += \
-    comments/comic_book_text_add_comment_view.h \
-    comments/comic_book_text_comment_delegate.h \
-    comments/comic_book_text_comment_replies_view.h \
-    comments/comic_book_text_comment_view.h \
-    comments/comic_book_text_comments_model.h \
-    comments/comic_book_text_comments_toolbar.h \
-    comments/comic_book_text_comments_view.h \
     comic_book_text_manager.h \
     comic_book_text_view.h \
     text/handlers/abstract_key_handler.h \
@@ -62,13 +55,6 @@ HEADERS += \
     text/comic_book_text_search_toolbar.h
 
 SOURCES += \
-    comments/comic_book_text_add_comment_view.cpp \
-    comments/comic_book_text_comment_delegate.cpp \
-    comments/comic_book_text_comment_replies_view.cpp \
-    comments/comic_book_text_comment_view.cpp \
-    comments/comic_book_text_comments_toolbar.cpp \
-    comments/comic_book_text_comments_model.cpp \
-    comments/comic_book_text_comments_view.cpp \
     comic_book_text_manager.cpp \
     comic_book_text_view.cpp \
     text/handlers/abstract_key_handler.cpp \
