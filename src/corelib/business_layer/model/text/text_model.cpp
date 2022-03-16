@@ -946,6 +946,10 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     TextModelItem* insertAfterItem = lastItem;
     QVector<TextModelItem*> itemsToInsert;
     auto insertCollectedItems = [this, &lastItem, &insertAfterItem, &itemsToInsert] {
+        if (itemsToInsert.isEmpty()) {
+            return;
+        }
+
         insertItems(itemsToInsert, insertAfterItem);
         lastItem = itemsToInsert.constLast();
         itemsToInsert.clear();
