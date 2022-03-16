@@ -159,6 +159,7 @@ SOURCES += \
     domain/identifier.cpp \
     domain/objects_builder.cpp \
     ui/design_system/design_system.cpp \
+    ui/layouts/flow_layout/flow_layout.cpp \
     ui/widgets/app_bar/app_bar.cpp \
     ui/widgets/button/button.cpp \
     ui/widgets/card/card.cpp \
@@ -359,6 +360,7 @@ HEADERS += \
     domain/subscription_info.h \
     ui/abstract_navigator.h \
     ui/design_system/design_system.h \
+    ui/layouts/flow_layout/flow_layout.h \
     ui/widgets/app_bar/app_bar.h \
     ui/widgets/button/button.h \
     ui/widgets/card/card.h \

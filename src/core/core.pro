@@ -61,6 +61,7 @@ SOURCES += \
     management_layer/content/settings/settings_manager.cpp \
     management_layer/content/writing_session/writing_session_manager.cpp \
     management_layer/plugins_builder.cpp \
+    ui/about_application_dialog.cpp \
     ui/account/account_navigator.cpp \
     ui/account/account_tool_bar.cpp \
     ui/account/account_view.cpp \
@@ -118,6 +119,7 @@ HEADERS += \
     management_layer/content/settings/settings_manager.h \
     management_layer/content/writing_session/writing_session_manager.h \
     management_layer/plugins_builder.h \
+    ui/about_application_dialog.h \
     ui/account/account_navigator.h \
     ui/account/account_tool_bar.h \
     ui/account/account_view.h \

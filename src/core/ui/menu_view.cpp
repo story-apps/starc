@@ -1,5 +1,7 @@
 #include "menu_view.h"
 
+#include "about_application_dialog.h"
+
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/drawer/drawer.h>
 #include <ui/widgets/label/link_label.h>
@@ -45,6 +47,8 @@ public:
 
     Subtitle2LinkLabel* appName = nullptr;
     Body2LinkLabel* appVersion = nullptr;
+    Body2Label* aboutAppSpacer = nullptr;
+    Body2LinkLabel* aboutApp = nullptr;
     QGridLayout* appInfoLayout = nullptr;
 };
 
@@ -68,6 +72,8 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     , notifications(new QAction)
     , appName(new Subtitle2LinkLabel(_parent))
     , appVersion(new Body2LinkLabel(_parent))
+    , aboutAppSpacer(new Body2Label(_parent))
+    , aboutApp(new Body2LinkLabel(_parent))
     , appInfoLayout(new QGridLayout)
 {
     //
@@ -166,11 +172,15 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     appName->setText("Story Architect");
     appName->setLink(QUrl("https://starc.app"));
     appVersion->setLink(QUrl("https://starc.app/blog/"));
+    aboutAppSpacer->setText(" - ");
 
     appInfoLayout->setContentsMargins({});
     appInfoLayout->setSpacing(0);
-    appInfoLayout->addWidget(appName, 0, 0, 1, 3);
+    appInfoLayout->addWidget(appName, 0, 0, 1, 4, Qt::AlignLeft);
     appInfoLayout->addWidget(appVersion, 1, 0);
+    appInfoLayout->addWidget(aboutAppSpacer, 1, 1);
+    appInfoLayout->addWidget(aboutApp, 1, 2);
+    appInfoLayout->setColumnStretch(3, 1);
 
     auto menuPageContentWidget = new QWidget;
     menuPage->setWidget(menuPageContentWidget);
@@ -213,6 +223,13 @@ MenuView::MenuView(QWidget* _parent)
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
     //
     connect(d->writingSprint, &QAction::triggered, this, &MenuView::writingSprintPressed);
+    //
+    connect(d->aboutApp, &Body2LinkLabel::clicked, this, [this] {
+        auto dialog = new AboutApplicationDialog(parentWidget());
+        connect(dialog, &Ui::AboutApplicationDialog::disappeared, dialog,
+                &Ui::AboutApplicationDialog::deleteLater);
+        dialog->showDialog();
+    });
 
     connect(this, &MenuView::accountPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::projectsPressed, this, &MenuView::closeMenu);
@@ -344,6 +361,7 @@ void MenuView::updateTranslations()
 
     d->appVersion->setText(
         QString("%1 %2").arg(tr("Version"), QCoreApplication::applicationVersion()));
+    d->aboutApp->setText(tr("About"));
 }
 
 void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -355,6 +373,8 @@ void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto label : std::vector<Widget*>{
              d->appName,
              d->appVersion,
+             d->aboutAppSpacer,
+             d->aboutApp,
          }) {
         label->setBackgroundColor(Ui::DesignSystem::color().primary());
         label->setTextColor(ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
