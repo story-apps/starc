@@ -2,8 +2,8 @@
 
 #include "screenplay_export_options.h"
 
-#include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
-#include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/document/simple_text/simple_text_document.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
@@ -51,7 +51,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
     //
     // ... корректируем текст сценария
     //
-    ScreenplayTextCursor cursor(screenplayText);
+    TextCursor cursor(screenplayText);
     //
     // ... вставляем титульную страницу
     //
@@ -59,12 +59,12 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         //
         // Переносим основной текст на следующую страницу
         //
-        ScreenplayTextBlockData* clonedBlockData = nullptr;
+        TextBlockData* clonedBlockData = nullptr;
         if (cursor.block().userData() != nullptr) {
             const auto blockData
-                = static_cast<BusinessLayer::ScreenplayTextBlockData*>(cursor.block().userData());
+                = static_cast<BusinessLayer::TextBlockData*>(cursor.block().userData());
             if (blockData != nullptr) {
-                clonedBlockData = new ScreenplayTextBlockData(blockData);
+                clonedBlockData = new TextBlockData(blockData);
             }
         }
         cursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
@@ -80,7 +80,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         auto titlePageText = new SimpleTextDocument;
         titlePageText->setModel(_model->titlePageModel(), false);
         //
-        cursor.movePosition(ScreenplayTextCursor::Start);
+        cursor.movePosition(TextCursor::Start);
         auto block = titlePageText->begin();
         while (block.isValid()) {
             //
@@ -138,8 +138,8 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         //
         // Переходим к тексту сценария
         //
-        cursor.movePosition(ScreenplayTextCursor::NextBlock);
-        cursor.movePosition(ScreenplayTextCursor::StartOfBlock);
+        cursor.movePosition(TextCursor::NextBlock);
+        cursor.movePosition(TextCursor::StartOfBlock);
     }
     //
     // ... для первого блока убираем принудительный перенос страницы,
@@ -216,7 +216,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         //
         if (!_exportOptions.exportScenes.isEmpty()) {
             const auto blockData
-                = dynamic_cast<ScreenplayTextBlockData*>(cursor.block().userData());
+                = dynamic_cast<TextBlockData*>(cursor.block().userData());
             bool needRemoveBlock = false;
             if (!blockData || !blockData->item() || !blockData->item()->parent()
                 || blockData->item()->parent()->type() != TextModelItemType::Group) {

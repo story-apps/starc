@@ -2,7 +2,7 @@
 
 #include "screenplay_export_options.h"
 
-#include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
+#include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -61,7 +61,7 @@ void writeLine(QXmlStreamWriter& _writer, const QTextBlock& _block,
         // ... если надо, то выводим номера сцен
         //
         if (_exportOptions.showScenesNumbers) {
-            const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(_block.userData());
+            const auto blockData = dynamic_cast<TextBlockData*>(_block.userData());
             if (blockData != nullptr) {
                 const auto sceneItem
                     = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());

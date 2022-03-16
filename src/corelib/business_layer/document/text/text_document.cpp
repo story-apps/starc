@@ -35,7 +35,7 @@ enum class DocumentState { Undefined, Loading, Changing, Correcting, Ready };
 class TextDocument::Implementation
 {
 public:
-    Implementation(TextDocument* _document, AbstractTextCorrector* _corrector);
+    explicit Implementation(TextDocument* _document);
 
     /**
      * @brief Получить шаблон оформления текущего документа
@@ -77,16 +77,14 @@ public:
     QScopedPointer<AbstractTextCorrector> corrector;
 };
 
-TextDocument::Implementation::Implementation(TextDocument* _document,
-                                             AbstractTextCorrector* _corrector)
+TextDocument::Implementation::Implementation(TextDocument* _document)
     : q(_document)
-    , corrector(_corrector)
 {
 }
 
 const TextTemplate& TextDocument::Implementation::documentTemplate() const
 {
-    return TemplatesFacade::abstractTextTemplate(model);
+    return TemplatesFacade::textTemplate(model);
 }
 
 void TextDocument::Implementation::correctPositionsToItems(
@@ -387,7 +385,7 @@ void TextDocument::Implementation::readModelItemsContent(const QModelIndex& _par
 
 void TextDocument::Implementation::tryToCorrectDocument()
 {
-    if (state != DocumentState::Ready) {
+    if (state != DocumentState::Ready || corrector.isNull()) {
         return;
     }
 
@@ -399,13 +397,11 @@ void TextDocument::Implementation::tryToCorrectDocument()
 // ****
 
 
-TextDocument::TextDocument(QObject* _parent, AbstractTextCorrector* _corrector)
+TextDocument::TextDocument(QObject* _parent)
     : QTextDocument(_parent)
-    , d(new Implementation(this, _corrector))
+    , d(new Implementation(this))
 {
     connect(this, &TextDocument::contentsChange, this, &TextDocument::updateModelOnContentChange);
-    connect(this, &TextDocument::contentsChange, d->corrector.data(),
-            &AbstractTextCorrector::planCorrection);
     connect(this, &TextDocument::contentsChanged, this, [this] { d->tryToCorrectDocument(); });
 }
 
@@ -426,7 +422,9 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     //
     // Сбрасываем корректор
     //
-    d->corrector->clear();
+    if (d->corrector) {
+        d->corrector->clear();
+    }
 
     //
     // Аккуратно очищаем текст, чтобы не сломать форматирование самого документа
@@ -443,7 +441,9 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
         return;
     }
 
-    d->corrector->setTemplateId(d->documentTemplate().id());
+    if (d->corrector) {
+        d->corrector->setTemplateId(d->documentTemplate().id());
+    }
 
     //
     // Обновим шрифт документа, в моменте когда текста нет
@@ -1013,9 +1013,16 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     d->tryToCorrectDocument();
 }
 
+TextModel* TextDocument::model() const
+{
+    return d->model;
+}
+
 void TextDocument::setCorrectionOptions(const QStringList& _options)
 {
-    d->corrector->setCorrectionOptions(_options);
+    if (d->corrector) {
+        d->corrector->setCorrectionOptions(_options);
+    }
 }
 
 int TextDocument::itemPosition(const QModelIndex& _index, bool _fromStart)
@@ -1523,6 +1530,13 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
 
     auto cursor = _cursor;
     cursor.mergeCharFormat(reviewMark.charFormat());
+}
+
+void TextDocument::setCorrector(AbstractTextCorrector* _corrector)
+{
+    d->corrector.reset(_corrector);
+    connect(this, &TextDocument::contentsChange, d->corrector.data(),
+            &AbstractTextCorrector::planCorrection);
 }
 
 void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded)

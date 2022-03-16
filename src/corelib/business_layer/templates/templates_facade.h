@@ -37,7 +37,7 @@ public:
     /**
      * @brief Получить шаблон используемый для заданной модели
      */
-    static const TextTemplate& abstractTextTemplate(const TextModel* _model);
+    static const TextTemplate& textTemplate(const TextModel* _model);
 
     /**
      * @brief Получить шаблон в соответствии с заданным идентификатором

@@ -3,7 +3,7 @@
 #include "screenplay_text_edit.h"
 #include "screenplay_text_search_toolbar.h"
 
-#include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <utils/helpers/text_helper.h>
 
@@ -88,7 +88,7 @@ void ScreenplayTextSearchManager::Implementation::findText(bool _backward)
     //
     // Поиск осуществляется от позиции курсора
     //
-    ScreenplayTextCursor cursor = textEdit->textCursor();
+    TextCursor cursor = textEdit->textCursor();
     if (searchText != m_lastSearchText) {
         cursor.setPosition(cursor.selectionInterval().from);
     }

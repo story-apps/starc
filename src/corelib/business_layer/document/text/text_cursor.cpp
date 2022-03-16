@@ -398,6 +398,12 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
             cursor.setBlockCharFormat(targetStyle.charFormat());
             cursor.block().setUserData(targetBlockData);
         }
+        //
+        // Если изменение происходит в одном блоке, то клон данных блока нам не нужен
+        //
+        else {
+            delete targetBlockData;
+        }
 
         //
         // Удалить вторые половинки группирующих элементов
@@ -599,7 +605,7 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
                     //
                     // Удалим сам блок
                     //
-                    auto blockData = cloneBlockData(cursor.block().next());
+                    TextBlockData* blockData = nullptr;
                     if (cursor.atEnd()) {
                         blockData = cloneBlockData(cursor.block().previous());
                         cursor.deletePreviousChar();
@@ -633,9 +639,16 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
 
 const TextTemplate& TextCursor::textTemplate() const
 {
-    Q_ASSERT_X(false, Q_FUNC_INFO, "Should be reimplemented in a child class");
+    if (document() == nullptr) {
+        return TemplatesFacade::simpleTextTemplate();
+    }
 
-    return TemplatesFacade::simpleTextTemplate();
+    auto textDocument = qobject_cast<TextDocument*>(document());
+    if (textDocument == nullptr) {
+        return TemplatesFacade::simpleTextTemplate();
+    }
+
+    return TemplatesFacade::textTemplate(textDocument->model());
 }
 
 } // namespace BusinessLayer

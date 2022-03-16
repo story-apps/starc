@@ -87,7 +87,7 @@ private:
     /**
      * @brief Получить шаблон оформления используемый для документа
      */
-    virtual const TextTemplate& textTemplate() const;
+    const TextTemplate& textTemplate() const;
 };
 
 } // namespace BusinessLayer

@@ -22,13 +22,14 @@ class CORE_LIBRARY_EXPORT TextDocument : public QTextDocument
     Q_OBJECT
 
 public:
-    explicit TextDocument(QObject* _parent, AbstractTextCorrector* _corrector);
+    explicit TextDocument(QObject* _parent);
     ~TextDocument() override;
 
     /**
-     * @brief Задать модель текста
+     * @brief Модель текста
      */
     void setModel(BusinessLayer::TextModel* _model, bool _canChangeModel = true);
+    BusinessLayer::TextModel* model() const;
 
     /**
      * @brief Настроить необходимость корректировок (переданные параметры будут активированы)
@@ -94,6 +95,12 @@ public:
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
                        const QString& _comment, const TextCursor& _cursor);
+
+protected:
+    /**
+     * @brief Задать корректировщик текста
+     */
+    void setCorrector(AbstractTextCorrector* _corrector);
 
 private:
     /**

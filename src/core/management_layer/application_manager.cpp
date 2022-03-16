@@ -1395,7 +1395,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     Log::init(Log::Level::Debug, FileHelper::systemSavebleFileName(logFilePath));
 
 
-    QApplication::setApplicationVersion("0.1.2");
+    QApplication::setApplicationVersion("0.1.3");
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
 
 

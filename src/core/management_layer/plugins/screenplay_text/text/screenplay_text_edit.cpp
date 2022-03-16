@@ -2,9 +2,9 @@
 
 #include "handlers/key_press_handler_facade.h"
 
-#include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
+#include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/screenplay/text/screenplay_text_corrector.h>
-#include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/import/screenplay/screenplay_fountain_importer.h>
 #include <business_layer/model/characters/character_model.h>
@@ -309,13 +309,13 @@ QModelIndex ScreenplayTextEdit::currentModelIndex() const
         return {};
     }
 
-    auto screenplayBlockData = static_cast<BusinessLayer::ScreenplayTextBlockData*>(userData);
+    auto screenplayBlockData = static_cast<BusinessLayer::TextBlockData*>(userData);
     return d->model->indexForItem(screenplayBlockData->item());
 }
 
 void ScreenplayTextEdit::setCurrentModelIndex(const QModelIndex& _index)
 {
-    BusinessLayer::ScreenplayTextCursor textCursor(document());
+    BusinessLayer::TextCursor textCursor(document());
     textCursor.setPosition(d->document.itemStartPosition(_index));
     ensureCursorVisible(textCursor);
 }
@@ -328,7 +328,7 @@ int ScreenplayTextEdit::positionForModelIndex(const QModelIndex& _index)
 void ScreenplayTextEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
                                        const QString& _comment)
 {
-    BusinessLayer::ScreenplayTextCursor cursor(textCursor());
+    BusinessLayer::TextCursor cursor(textCursor());
     if (!cursor.hasSelection()) {
         return;
     }
@@ -427,7 +427,7 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     else if (_event == QKeySequence::Cut) {
         copy();
-        BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+        BusinessLayer::TextCursor cursor = textCursor();
         cursor.removeCharacters(this);
         d->model->saveChanges();
     }
@@ -629,7 +629,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     //
     QTextBlock bottomBlock = document()->firstBlock();
     {
-        BusinessLayer::ScreenplayTextCursor bottomCursor;
+        BusinessLayer::TextCursor bottomCursor;
         for (int delta = viewport()->height(); delta > viewport()->height() * 3 / 4; delta -= 10) {
             bottomCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
             if (bottomBlock.blockNumber() < bottomCursor.block().blockNumber()) {
@@ -645,7 +645,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     // ... в случае, если блок попал в таблицу, нужно дойти до конца таблицы
     //
     {
-        BusinessLayer::ScreenplayTextCursor bottomCursor(document());
+        BusinessLayer::TextCursor bottomCursor(document());
         bottomCursor.setPosition(bottomBlock.position());
         while (bottomCursor.inTable() && bottomCursor.movePosition(QTextCursor::NextBlock)) {
             bottomBlock = bottomCursor.block();
@@ -683,7 +683,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                : 0.0)));
             };
 
-            BusinessLayer::ScreenplayTextCursor cursor(document());
+            BusinessLayer::TextCursor cursor(document());
             while (block.isValid() && block != bottomBlock) {
                 //
                 // Стиль текущего блока
@@ -1214,7 +1214,7 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     auto menu = BaseTextEdit::createContextMenu(_position, _parent);
 
     auto splitAction = new QAction;
-    const BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+    const BusinessLayer::TextCursor cursor = textCursor();
     if (cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
         splitAction->setIconText(u8"\U000f10e7");
@@ -1232,7 +1232,7 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
                                 && blockType != TextParagraphType::SequenceFooter);
     }
     connect(splitAction, &QAction::triggered, this, [this] {
-        BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+        BusinessLayer::TextCursor cursor = textCursor();
         if (cursor.inTable()) {
             d->document.mergeParagraph(cursor);
         } else {
@@ -1268,7 +1268,7 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
     }
 
     QMimeData* mimeData = new QMimeData;
-    BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+    BusinessLayer::TextCursor cursor = textCursor();
     const auto selection = cursor.selectionInterval();
 
     //
@@ -1316,7 +1316,7 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Удаляем выделенный текст
     //
-    BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+    BusinessLayer::TextCursor cursor = textCursor();
     if (cursor.hasSelection()) {
         cursor.removeCharacters(this);
     }
@@ -1371,7 +1371,7 @@ void ScreenplayTextEdit::dropEvent(QDropEvent* _event)
     // Если в момент вставки было выделение
     //
     if (textCursor().hasSelection()) {
-        BusinessLayer::ScreenplayTextCursor cursor = textCursor();
+        BusinessLayer::TextCursor cursor = textCursor();
         //
         // ... и это перемещение содержимого внутри редактора
         //

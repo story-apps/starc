@@ -4,7 +4,7 @@
 
 namespace BusinessLayer {
 class ScreenplayDictionariesModel;
-class ScreenplayTextCursor;
+class TextCursor;
 class ScreenplayTextModel;
 class ScreenplayTemplate;
 enum class TextParagraphType;

@@ -3,8 +3,8 @@
 #include "qtzip/QtZipWriter"
 #include "screenplay_export_options.h"
 
-#include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
-#include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/model/text/text_model_splitter_item.h>
@@ -344,7 +344,7 @@ bool isCommentsRangeEnd(const QTextBlock& _block, const QTextLayout::FormatRange
 /**
  * @brief Сформировать текст блока документа в зависимости от его стиля и оформления
  */
-QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& _cursor,
+QString docxText(QMap<int, QStringList>& _comments, const TextCursor& _cursor,
                  const ScreenplayExportOptions& _exportOptions)
 {
     //
@@ -426,7 +426,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
     // ... начало и конец таблицы
     //
     else if (currentBlockType == TextParagraphType::PageSplitter) {
-        const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
+        const auto blockData = dynamic_cast<TextBlockData*>(block.userData());
         if (blockData != nullptr) {
             const auto splitterItem = static_cast<TextModelSplitterItem*>(blockData->item());
             if (splitterItem->splitterType() == TextModelSplitterItemType::Start) {
@@ -463,8 +463,8 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
         // ... если перешли во вторую колонку таблицы, то нужно закрыть предыдущую ячейку
         //
         if (_cursor.inTable() && !_cursor.inFirstColumn()) {
-            ScreenplayTextCursor cursor(_cursor);
-            cursor.movePosition(ScreenplayTextCursor::PreviousBlock);
+            TextCursor cursor(_cursor);
+            cursor.movePosition(TextCursor::PreviousBlock);
             if (cursor.inFirstColumn()) {
                 documentXml.append("</w:tc><w:tc><w:tcPr>");
                 const auto fullTableWidth = tableWidth();
@@ -524,7 +524,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
         //
         if (currentBlockType == TextParagraphType::SceneHeading
             && _exportOptions.showScenesNumbers) {
-            const auto blockData = dynamic_cast<ScreenplayTextBlockData*>(block.userData());
+            const auto blockData = dynamic_cast<TextBlockData*>(block.userData());
             if (blockData != nullptr) {
                 const auto sceneItem
                     = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
@@ -557,7 +557,7 @@ QString docxText(QMap<int, QStringList>& _comments, const ScreenplayTextCursor& 
             auto cursor = _cursor;
             cursor.setPosition(block.position());
             cursor.insertText(prefix, block.charFormat());
-            cursor.movePosition(ScreenplayTextCursor::EndOfBlock);
+            cursor.movePosition(TextCursor::EndOfBlock);
             cursor.insertText(postfix, block.charFormat());
         }
 
@@ -991,7 +991,7 @@ void writeDocument(QtZipWriter* _zip, ScreenplayTextDocument* _screenplayText,
     // Данные считываются из исходного документа, определяется тип блока
     // и записываются прямо в файл
     //
-    ScreenplayTextCursor documentCursor(_screenplayText);
+    TextCursor documentCursor(_screenplayText);
     while (!documentCursor.atEnd()) {
         documentXml.append(docxText(_comments, documentCursor, _exportOptions));
 

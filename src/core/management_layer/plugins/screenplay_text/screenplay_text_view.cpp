@@ -10,8 +10,8 @@
 #include "text/screenplay_text_scrollbar_manager.h"
 #include "text/screenplay_text_search_manager.h"
 
-#include <business_layer/document/screenplay/text/screenplay_text_block_data.h>
-#include <business_layer/document/screenplay/text/screenplay_text_cursor.h>
+#include <business_layer/document/text/text_block_data.h>
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -370,7 +370,7 @@ void ScreenplayTextView::Implementation::addReviewMark(const QColor& _textColor,
     // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение
     // добавлено
     //
-    BusinessLayer::ScreenplayTextCursor cursor(screenplayText->textCursor());
+    BusinessLayer::TextCursor cursor(screenplayText->textCursor());
     const auto selectionInterval = cursor.selectionInterval();
     //
     // ... делаем танец с бубном, чтобы получить сигнал об обновлении позиции курсора
