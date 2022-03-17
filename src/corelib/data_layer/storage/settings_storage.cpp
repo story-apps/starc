@@ -238,6 +238,102 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsSimpleTextNavigatorSceneTextLinesKey, 1);
     }
     //
+    // Параметры редактора тритмента
+    //
+    {
+        auto addTreatmentEditorStylesAction
+            = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
+                     TextParagraphType _to) {
+                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                           .arg(kComponentsTreatmentEditorKey, _actionType,
+                                                toString(_from), _actionKey),
+                                       toString(_to));
+              };
+        auto addTreatmentEditorStylesActionByTab
+            = [addTreatmentEditorStylesAction](const QString& _actionType, TextParagraphType _from,
+                                               TextParagraphType _to) {
+                  addTreatmentEditorStylesAction(_actionType, "tab", _from, _to);
+              };
+        auto addTreatmentEditorStylesActionByEnter
+            = [addTreatmentEditorStylesAction](const QString& _actionType, TextParagraphType _from,
+                                               TextParagraphType _to) {
+                  addTreatmentEditorStylesAction(_actionType, "enter", _from, _to);
+              };
+        //
+        auto addTreatmentEditorStylesJumpByTab =
+            [addTreatmentEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                addTreatmentEditorStylesActionByTab("jumping", _from, _to);
+            };
+        auto addTreatmentEditorStylesJumpByEnter
+            = [addTreatmentEditorStylesActionByEnter](TextParagraphType _from,
+                                                      TextParagraphType _to) {
+                  addTreatmentEditorStylesActionByEnter("jumping", _from, _to);
+              };
+        addTreatmentEditorStylesJumpByTab(TextParagraphType::SceneHeading,
+                                          TextParagraphType::SceneCharacters);
+        addTreatmentEditorStylesJumpByEnter(TextParagraphType::SceneHeading,
+                                            TextParagraphType::BeatHeading);
+        addTreatmentEditorStylesJumpByTab(TextParagraphType::SceneCharacters,
+                                          TextParagraphType::BeatHeading);
+        addTreatmentEditorStylesJumpByEnter(TextParagraphType::SceneCharacters,
+                                            TextParagraphType::BeatHeading);
+        addTreatmentEditorStylesJumpByTab(TextParagraphType::BeatHeading,
+                                          TextParagraphType::BeatHeading);
+        addTreatmentEditorStylesJumpByEnter(TextParagraphType::BeatHeading,
+                                            TextParagraphType::BeatHeading);
+        addTreatmentEditorStylesJumpByTab(TextParagraphType::InlineNote,
+                                          TextParagraphType::BeatHeading);
+        addTreatmentEditorStylesJumpByEnter(TextParagraphType::InlineNote,
+                                            TextParagraphType::BeatHeading);
+        addTreatmentEditorStylesJumpByTab(TextParagraphType::SequenceHeading,
+                                          TextParagraphType::SceneHeading);
+        addTreatmentEditorStylesJumpByEnter(TextParagraphType::SequenceHeading,
+                                            TextParagraphType::SceneHeading);
+        //
+        auto addTreatmentEditorStylesChangeByTab =
+            [addTreatmentEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                addTreatmentEditorStylesActionByTab("changing", _from, _to);
+            };
+        auto addTreatmentEditorStylesChangeByEnter
+            = [addTreatmentEditorStylesActionByEnter](TextParagraphType _from,
+                                                      TextParagraphType _to) {
+                  addTreatmentEditorStylesActionByEnter("changing", _from, _to);
+              };
+        addTreatmentEditorStylesChangeByTab(TextParagraphType::SceneHeading,
+                                            TextParagraphType::BeatHeading);
+        addTreatmentEditorStylesChangeByEnter(TextParagraphType::SceneHeading,
+                                              TextParagraphType::SceneHeading);
+        addTreatmentEditorStylesChangeByTab(TextParagraphType::SceneCharacters,
+                                            TextParagraphType::BeatHeading);
+        addTreatmentEditorStylesChangeByEnter(TextParagraphType::SceneCharacters,
+                                              TextParagraphType::SceneCharacters);
+        addTreatmentEditorStylesChangeByTab(TextParagraphType::BeatHeading,
+                                            TextParagraphType::BeatHeading);
+        addTreatmentEditorStylesChangeByEnter(TextParagraphType::BeatHeading,
+                                              TextParagraphType::SceneHeading);
+        addTreatmentEditorStylesChangeByTab(TextParagraphType::InlineNote,
+                                            TextParagraphType::InlineNote);
+        addTreatmentEditorStylesChangeByEnter(TextParagraphType::InlineNote,
+                                              TextParagraphType::InlineNote);
+        addTreatmentEditorStylesChangeByTab(TextParagraphType::SequenceHeading,
+                                            TextParagraphType::SequenceHeading);
+        addTreatmentEditorStylesChangeByEnter(TextParagraphType::SequenceHeading,
+                                              TextParagraphType::SequenceHeading);
+        //
+        auto addShortcut
+            = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
+                  defaultValues.insert(
+                      QString("%1/shortcuts/%2")
+                          .arg(kComponentsScreenplayEditorKey, BusinessLayer::toString(_type)),
+                      QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+              };
+        addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
+        addShortcut(BusinessLayer::TextParagraphType::SceneCharacters, "Ctrl+2");
+        addShortcut(BusinessLayer::TextParagraphType::BeatHeading, "Ctrl+3");
+        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        addShortcut(BusinessLayer::TextParagraphType::SequenceHeading, "Ctrl+Space");
+    }
+    //
     // Параметры редактора сценария
     //
     {

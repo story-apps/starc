@@ -5,6 +5,92 @@
 #include <data_layer/storage/storage_facade.h>
 
 
+QString ShortcutsHelper::treatmentShortcut(BusinessLayer::TextParagraphType _type)
+{
+    return settingsValue(
+               QString("%1/%2").arg(DataStorageLayer::kComponentsTreatmentEditorShortcutsKey,
+                                    BusinessLayer::toString(_type)))
+        .toString();
+}
+
+void ShortcutsHelper::setTreatmentShortcut(BusinessLayer::TextParagraphType _type,
+                                           const QString& _shortcut)
+{
+    setSettingsValue(QString("%1/%2").arg(DataStorageLayer::kComponentsTreatmentEditorShortcutsKey,
+                                          BusinessLayer::toString(_type)),
+                     _shortcut);
+}
+
+QString ShortcutsHelper::treatmentJumpByTab(BusinessLayer::TextParagraphType _type)
+{
+    return settingsValue(QString("%1/styles-jumping/from-%2-by-tab")
+                             .arg(DataStorageLayer::kComponentsTreatmentEditorKey,
+                                  BusinessLayer::toString(_type)))
+        .toString();
+}
+
+void ShortcutsHelper::setTreatmentJumpByTab(BusinessLayer::TextParagraphType _fromType,
+                                            BusinessLayer::TextParagraphType _toType)
+{
+    setSettingsValue(QString("%1/styles-jumping/from-%2-by-tab")
+                         .arg(DataStorageLayer::kComponentsTreatmentEditorKey,
+                              BusinessLayer::toString(_fromType)),
+                     BusinessLayer::toString(_toType));
+}
+
+QString ShortcutsHelper::treatmentJumpByEnter(BusinessLayer::TextParagraphType _type)
+{
+    return settingsValue(QString("%1/styles-jumping/from-%2-by-enter")
+                             .arg(DataStorageLayer::kComponentsTreatmentEditorKey,
+                                  BusinessLayer::toString(_type)))
+        .toString();
+}
+
+void ShortcutsHelper::setTreatmentJumpByEnter(BusinessLayer::TextParagraphType _fromType,
+                                              BusinessLayer::TextParagraphType _toType)
+{
+    setSettingsValue(QString("%1/styles-jumping/from-%2-by-enter")
+                         .arg(DataStorageLayer::kComponentsTreatmentEditorKey,
+                              BusinessLayer::toString(_fromType)),
+                     BusinessLayer::toString(_toType));
+}
+
+QString ShortcutsHelper::treatmentChangeByTab(BusinessLayer::TextParagraphType _type)
+{
+    return settingsValue(QString("%1/styles-changing/from-%2-by-tab")
+                             .arg(DataStorageLayer::kComponentsTreatmentEditorKey,
+                                  BusinessLayer::toString(_type)))
+        .toString();
+}
+
+void ShortcutsHelper::setTreatmentChangeByTab(BusinessLayer::TextParagraphType _fromType,
+                                              BusinessLayer::TextParagraphType _toType)
+{
+    setSettingsValue(QString("%1/styles-changing/from-%2-by-tab")
+                         .arg(DataStorageLayer::kComponentsTreatmentEditorKey,
+                              BusinessLayer::toString(_fromType)),
+                     BusinessLayer::toString(_toType));
+}
+
+QString ShortcutsHelper::treatmentChangeByEnter(BusinessLayer::TextParagraphType _type)
+{
+    return settingsValue(QString("%1/styles-changing/from-%2-by-enter")
+                             .arg(DataStorageLayer::kComponentsTreatmentEditorKey,
+                                  BusinessLayer::toString(_type)))
+        .toString();
+}
+
+void ShortcutsHelper::setTreatmentChangeByEnter(BusinessLayer::TextParagraphType _fromType,
+                                                BusinessLayer::TextParagraphType _toType)
+{
+    setSettingsValue(QString("%1/styles-changing/from-%2-by-enter")
+                         .arg(DataStorageLayer::kComponentsTreatmentEditorKey,
+                              BusinessLayer::toString(_fromType)),
+                     BusinessLayer::toString(_toType));
+}
+
+//
+
 QString ShortcutsHelper::screenplayShortcut(BusinessLayer::TextParagraphType _type)
 {
     return settingsValue(

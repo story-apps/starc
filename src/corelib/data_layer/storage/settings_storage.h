@@ -150,7 +150,12 @@ const QString kComponentsSimpleTextNavigatorSceneTextLinesKey
 //
 // сценарий
 const QString kComponentsScreenplayKey = kComponentsGroupKey + QStringLiteral("/screenplay");
-// ... редактор
+// ... редактор тритмента
+const QString kComponentsTreatmentEditorKey
+    = kComponentsScreenplayKey + QStringLiteral("/treatment");
+const QString kComponentsTreatmentEditorShortcutsKey
+    = kComponentsTreatmentEditorKey + QStringLiteral("/shortcuts");
+// ... редактор текста
 const QString kComponentsScreenplayEditorKey = kComponentsScreenplayKey + QStringLiteral("/editor");
 const QString kComponentsScreenplayEditorDefaultTemplateKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/default-template");

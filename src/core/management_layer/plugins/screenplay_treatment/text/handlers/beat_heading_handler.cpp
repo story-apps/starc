@@ -55,7 +55,7 @@ void BeatHeadingHandler::handleEnter(QKeyEvent*)
             //
             // Удаляем всё, но оставляем стилем блока текущий
             //
-            editor()->addParagraph(TextParagraphType::Action);
+            editor()->addParagraph(TextParagraphType::BeatHeading);
         } else {
             //! Нет выделения
 
@@ -65,7 +65,7 @@ void BeatHeadingHandler::handleEnter(QKeyEvent*)
                 //
                 // Меняем стиль на место и время
                 //
-                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::Action));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::BeatHeading));
             } else {
                 //! Текст не пуст
 
@@ -83,7 +83,7 @@ void BeatHeadingHandler::handleEnter(QKeyEvent*)
                 // Вставляем блок и применяем ему стиль описания действия
                 //
                 else {
-                    editor()->addParagraph(jumpForEnter(TextParagraphType::Action));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::BeatHeading));
                 }
             }
         }
@@ -132,7 +132,7 @@ void BeatHeadingHandler::handleTab(QKeyEvent*)
                 //
                 // Если строка пуста, то сменить стиль на имя героя
                 //
-                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Action));
+                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::BeatHeading));
             } else {
                 //! Текст не пуст
 
@@ -149,7 +149,7 @@ void BeatHeadingHandler::handleTab(QKeyEvent*)
                     //
                     // Вставляем блок персонажа
                     //
-                    editor()->addParagraph(jumpForTab(TextParagraphType::Action));
+                    editor()->addParagraph(jumpForTab(TextParagraphType::BeatHeading));
                 } else {
                     //! Внутри блока
 

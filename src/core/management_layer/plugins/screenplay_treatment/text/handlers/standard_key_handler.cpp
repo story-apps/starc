@@ -26,7 +26,7 @@ static TextParagraphType actionFor(bool _tab, bool _jump, TextParagraphType _blo
 {
     const QString settingsKey
         = QString("%1/styles-%2/from-%3-by-%4")
-              .arg(DataStorageLayer::kComponentsScreenplayEditorKey,
+              .arg(DataStorageLayer::kComponentsTreatmentEditorKey,
                    (_jump ? "jumping" : "changing"), BusinessLayer::toString(_blockType),
                    (_tab ? "tab" : "enter"));
     const auto typeString = settingsValue(settingsKey).toString();
