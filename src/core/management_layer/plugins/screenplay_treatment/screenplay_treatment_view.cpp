@@ -4,7 +4,6 @@
 #include "text/screenplay_treatment_edit_shortcuts_manager.h"
 #include "text/screenplay_treatment_edit_toolbar.h"
 #include "text/screenplay_treatment_fast_format_widget.h"
-#include "text/screenplay_treatment_scrollbar_manager.h"
 #include "text/screenplay_treatment_search_manager.h"
 
 #include <business_layer/document/text/text_block_data.h>
@@ -105,7 +104,6 @@ public:
     ScreenplayTreatmentEdit* screenplayText = nullptr;
     ScreenplayTreatmentEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
-    ScreenplayTreatmentScrollBarManager* screenplayTextScrollbarManager = nullptr;
 
     ScreenplayTreatmentEditToolbar* toolbar = nullptr;
     BusinessLayer::ScreenplayTreatmentSearchManager* searchManager = nullptr;
@@ -133,7 +131,6 @@ ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
     , screenplayText(new ScreenplayTreatmentEdit(_parent))
     , shortcutsManager(screenplayText)
     , scalableWrapper(new ScalableWrapper(screenplayText, _parent))
-    , screenplayTextScrollbarManager(new ScreenplayTreatmentScrollBarManager(scalableWrapper))
     , toolbar(new ScreenplayTreatmentEditToolbar(scalableWrapper))
     , searchManager(
           new BusinessLayer::ScreenplayTreatmentSearchManager(scalableWrapper, screenplayText))
@@ -156,12 +153,9 @@ ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
     screenplayText->setVerticalScrollBar(new ScrollBar);
     screenplayText->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
-    //
-    // Вертикальный скрол настраивается менеджером screenplayTextScrollbarManager
-    //
     scalableWrapper->setHorizontalScrollBar(new ScrollBar);
+    scalableWrapper->setVerticalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
-    screenplayTextScrollbarManager->initScrollBarsSyncing();
 
     screenplayText->setUsePageMode(true);
 
@@ -570,7 +564,6 @@ QWidget* ScreenplayTreatmentView::asQWidget()
 void ScreenplayTreatmentView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
-    d->screenplayTextScrollbarManager->setScrollBarVisible(!_isFullScreen);
 }
 
 void ScreenplayTreatmentView::reconfigure(const QStringList& _changedSettingsKeys)
@@ -703,7 +696,6 @@ void ScreenplayTreatmentView::setModel(BusinessLayer::ScreenplayTextModel* _mode
     }
 
     d->screenplayText->initWithModel(d->model);
-    d->screenplayTextScrollbarManager->setModel(d->model);
     d->commentsModel->setTextModel(d->model);
 
     d->updateToolBarCurrentParagraphTypeName();
