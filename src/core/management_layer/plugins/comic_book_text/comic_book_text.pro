@@ -37,14 +37,14 @@ HEADERS += \
     text/handlers/character_handler.h \
     text/handlers/description_handler.h \
     text/handlers/dialog_handler.h \
-    text/handlers/folder_footer_handler.h \
-    text/handlers/folder_header_handler.h \
     text/handlers/inline_note_handler.h \
     text/handlers/key_press_handler_facade.h \
     text/handlers/page_handler.h \
     text/handlers/panel_handler.h \
     text/handlers/pre_handler.h \
     text/handlers/prepare_handler.h \
+    text/handlers/sequence_footer_handler.h \
+    text/handlers/sequence_heading_handler.h \
     text/handlers/standard_key_handler.h \
     text/handlers/unformatted_text_handler.h \
     text/comic_book_text_edit.h \
@@ -61,14 +61,14 @@ SOURCES += \
     text/handlers/character_handler.cpp \
     text/handlers/description_handler.cpp \
     text/handlers/dialog_handler.cpp \
-    text/handlers/folder_footer_handler.cpp \
-    text/handlers/folder_header_handler.cpp \
     text/handlers/inline_note_handler.cpp \
     text/handlers/key_press_handler_facade.cpp \
     text/handlers/page_handler.cpp \
     text/handlers/panel_handler.cpp \
     text/handlers/pre_handler.cpp \
     text/handlers/prepare_handler.cpp \
+    text/handlers/sequence_footer_handler.cpp \
+    text/handlers/sequence_heading_handler.cpp \
     text/handlers/standard_key_handler.cpp \
     text/handlers/unformatted_text_handler.cpp \
     text/comic_book_text_edit.cpp \

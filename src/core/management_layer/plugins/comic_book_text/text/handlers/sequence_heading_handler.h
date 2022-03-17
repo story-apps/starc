@@ -8,10 +8,10 @@ namespace KeyProcessingLayer {
 /**
  * @brief Класс выполняющий обработку нажатия клавиш в блоке заголовка папки
  */
-class FolderHeaderHandler : public StandardKeyHandler
+class SequenceHeadingHandler : public StandardKeyHandler
 {
 public:
-    FolderHeaderHandler(Ui::ComicBookTextEdit* _editor);
+    SequenceHeadingHandler(Ui::ComicBookTextEdit* _editor);
 
 protected:
     /**

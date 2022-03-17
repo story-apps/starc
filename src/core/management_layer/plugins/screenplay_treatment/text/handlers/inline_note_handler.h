@@ -6,12 +6,12 @@
 namespace KeyProcessingLayer {
 
 /**
- * @brief Класс выполняющий обработку нажатия клавиш в блоке завершения папки
+ * @brief Класс выполняющий обработку нажатия клавиш в блоке описание действия
  */
-class FolderFooterHandler : public StandardKeyHandler
+class InlineNoteHandler : public StandardKeyHandler
 {
 public:
-    explicit FolderFooterHandler(Ui::ComicBookTextEdit* _editor);
+    explicit InlineNoteHandler(Ui::ScreenplayTreatmentEdit* _editor);
 
 protected:
     /**

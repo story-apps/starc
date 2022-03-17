@@ -1,26 +1,23 @@
-#include "folder_header_handler.h"
+#include "sequence_footer_handler.h"
 
-#include "../screenplay_text_edit.h"
+#include "../screenplay_treatment_edit.h"
 
 #include <business_layer/templates/screenplay_template.h>
 
-#include <QCoreApplication>
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
-using Ui::ScreenplayTextEdit;
-
+using Ui::ScreenplayTreatmentEdit;
 
 namespace KeyProcessingLayer {
 
-FolderHeaderHandler::FolderHeaderHandler(ScreenplayTextEdit* _editor)
+SequenceFooterHandler::SequenceFooterHandler(ScreenplayTreatmentEdit* _editor)
     : StandardKeyHandler(_editor)
 {
 }
 
-void FolderHeaderHandler::handleEnter(QKeyEvent*)
+void SequenceFooterHandler::handleEnter(QKeyEvent*)
 {
     //
     // Получим необходимые значения
@@ -60,10 +57,9 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
                 //! Текст пуст
 
                 //
-                // Меняем стиль в соответствии с настройками
+                // Вставить блок время и место
                 //
-                editor()->setCurrentParagraphType(
-                    changeForEnter(TextParagraphType::SequenceHeading));
+                editor()->addParagraph(TextParagraphType::SceneHeading);
             } else {
                 //! Текст не пуст
 
@@ -71,16 +67,21 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
                     //! В начале блока
 
                     //
-                    // Вставка блока заголовка перед собой
+                    // Вставить блок время и место перед папкой
                     //
-                    editor()->addParagraph(TextParagraphType::SceneHeading);
+                    cursor.insertBlock();
+                    cursor.movePosition(QTextCursor::PreviousCharacter);
+                    cursor.setBlockFormat(QTextBlockFormat());
+                    editor()->setTextCursor(cursor);
+                    editor()->setCurrentParagraphType(TextParagraphType::SceneHeading);
+                    editor()->moveCursor(QTextCursor::NextCharacter);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
                     // Вставить блок время и место
                     //
-                    editor()->addParagraph(jumpForEnter(TextParagraphType::SequenceHeading));
+                    editor()->addParagraph(TextParagraphType::SceneHeading);
                 } else {
                     //! Внутри блока
 
@@ -94,7 +95,7 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
     }
 }
 
-void FolderHeaderHandler::handleTab(QKeyEvent*)
+void SequenceFooterHandler::handleTab(QKeyEvent*)
 {
     //
     // Получим необходимые значения
@@ -136,7 +137,6 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
                 //
                 // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::SequenceHeading));
             } else {
                 //! Текст не пуст
 
@@ -152,7 +152,7 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
                     //
                     // Как ENTER
                     //
-                    editor()->addParagraph(jumpForTab(TextParagraphType::SequenceHeading));
+                    handleEnter();
                 } else {
                     //! Внутри блока
 

@@ -143,6 +143,8 @@ QString toDisplayString(TextParagraphType _type)
     //
     case TextParagraphType::SceneCharacters:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Scene characters");
+    case TextParagraphType::BeatHeading:
+        return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Beat");
     case TextParagraphType::Action:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Action");
     case TextParagraphType::Parenthetical:

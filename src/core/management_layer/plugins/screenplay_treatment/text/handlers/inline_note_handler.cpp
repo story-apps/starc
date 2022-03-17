@@ -1,26 +1,24 @@
-#include "folder_header_handler.h"
+#include "inline_note_handler.h"
 
-#include "../comic_book_text_edit.h"
+#include "../screenplay_treatment_edit.h"
 
-#include <business_layer/templates/comic_book_template.h>
+#include <business_layer/templates/screenplay_template.h>
 
-#include <QCoreApplication>
 #include <QKeyEvent>
 #include <QTextBlock>
 
-using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
-using Ui::ComicBookTextEdit;
+using Ui::ScreenplayTreatmentEdit;
 
 
 namespace KeyProcessingLayer {
 
-FolderHeaderHandler::FolderHeaderHandler(ComicBookTextEdit* _editor)
+InlineNoteHandler::InlineNoteHandler(Ui::ScreenplayTreatmentEdit* _editor)
     : StandardKeyHandler(_editor)
 {
 }
 
-void FolderHeaderHandler::handleEnter(QKeyEvent*)
+void InlineNoteHandler::handleEnter(QKeyEvent*)
 {
     //
     // Получим необходимые значения
@@ -51,8 +49,9 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
             //! Есть выделение
 
             //
-            // Ни чего не делаем
+            // Удаляем всё, но оставляем стилем блока текущий
             //
+            editor()->addParagraph(TextParagraphType::InlineNote);
         } else {
             //! Нет выделения
 
@@ -60,10 +59,9 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
                 //! Текст пуст
 
                 //
-                // Меняем стиль в соответствии с настройками
+                // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(
-                    changeForEnter(TextParagraphType::SequenceHeading));
+                editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::InlineNote));
             } else {
                 //! Текст не пуст
 
@@ -71,30 +69,29 @@ void FolderHeaderHandler::handleEnter(QKeyEvent*)
                     //! В начале блока
 
                     //
-                    // Вставка блока заголовка перед собой
+                    // Ни чего не делаем
                     //
-                    editor()->addParagraph(TextParagraphType::PageHeading);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
-                    // Вставить блок время и место
+                    // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(jumpForEnter(TextParagraphType::SequenceHeading));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::InlineNote));
                 } else {
                     //! Внутри блока
 
                     //
-                    // Вставить блок время и место
+                    // Вставляем блок и применяем ему стиль описания действия
                     //
-                    editor()->addParagraph(TextParagraphType::PageHeading);
+                    editor()->addParagraph(TextParagraphType::Action);
                 }
             }
         }
     }
 }
 
-void FolderHeaderHandler::handleTab(QKeyEvent*)
+void InlineNoteHandler::handleTab(QKeyEvent*)
 {
     //
     // Получим необходимые значения
@@ -136,7 +133,6 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
                 //
                 // Ни чего не делаем
                 //
-                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::SequenceHeading));
             } else {
                 //! Текст не пуст
 
@@ -150,9 +146,9 @@ void FolderHeaderHandler::handleTab(QKeyEvent*)
                     //! В конце блока
 
                     //
-                    // Как ENTER
+                    // Действуем как нажатие клавиши ENTER
                     //
-                    editor()->addParagraph(jumpForTab(TextParagraphType::SequenceHeading));
+                    handleEnter();
                 } else {
                     //! Внутри блока
 

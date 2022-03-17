@@ -17,7 +17,6 @@
 #include <business_layer/model/screenplay/screenplay_statistics_model.h>
 #include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
-#include <business_layer/model/screenplay/screenplay_treatment_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/model/structure/structure_model.h>
@@ -25,6 +24,8 @@
 #include <data_layer/storage/document_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
+
+#include <QSet>
 
 
 namespace ManagementLayer {
@@ -68,12 +69,29 @@ ProjectModelsFacade::~ProjectModelsFacade()
 
 void ProjectModelsFacade::clear()
 {
+    //
+    // Формируем список моделей для удаления, т.к. некоторые модели являются лишь ссылками на другие
+    // модели, например модель тритмента - это ссылка на модель текста сценария
+    //
+    QSet<BusinessLayer::AbstractModel*> modelsToDelete;
     for (auto model : std::as_const(d->documentsToModels)) {
+        modelsToDelete.insert(model);
+
+        //
+        // ... а заодно отсоединяем модели от клиентов и очищаем их
+        //
         model->disconnect();
         model->clear();
     }
 
-    qDeleteAll(d->documentsToModels);
+    //
+    // Собственно удаляем модели
+    //
+    qDeleteAll(modelsToDelete);
+
+    //
+    // И очищаем список загруженных моделей
+    //
     d->documentsToModels.clear();
 }
 
@@ -92,6 +110,11 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
     if (_document == nullptr) {
         return nullptr;
     }
+
+    //
+    // Является ли документы алиасом к другому, если да, то не исопльзуем его контент
+    //
+    bool isDocumentAlias = false;
 
     if (!d->documentsToModels.contains(_document)) {
         BusinessLayer::AbstractModel* model = nullptr;
@@ -171,7 +194,22 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ScreenplayTreatment: {
-            model = new BusinessLayer::ScreenplayTreatmentModel;
+            //
+            // Модель по сути является алиасом к тексту сценария, поэтому используем модель сценария
+            //
+            isDocumentAlias = true;
+
+            const auto treatmentItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(treatmentItem);
+            Q_ASSERT(treatmentItem->parent());
+            //
+            // ... модель титульной страницы
+            //
+            const auto screenplayIndex = 3;
+            auto screenplayItem = treatmentItem->parent()->childAt(screenplayIndex);
+            Q_ASSERT(screenplayItem);
+            Q_ASSERT(screenplayItem->type() == Domain::DocumentObjectType::ScreenplayText);
+            model = modelFor(screenplayItem->uuid());
             break;
         }
 
@@ -429,7 +467,9 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
         model->setImageWrapper(d->imageWrapper);
 
-        model->setDocument(_document);
+        if (!isDocumentAlias) {
+            model->setDocument(_document);
+        }
 
         connect(model, &BusinessLayer::AbstractModel::documentNameChanged, this,
                 [this, model](const QString& _name) { emit modelNameChanged(model, _name); });

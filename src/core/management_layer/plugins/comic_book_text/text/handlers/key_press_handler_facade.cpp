@@ -4,8 +4,8 @@
 #include "character_handler.h"
 #include "description_handler.h"
 #include "dialog_handler.h"
-#include "folder_footer_handler.h"
-#include "folder_header_handler.h"
+#include "sequence_footer_handler.h"
+#include "sequence_heading_handler.h"
 #include "inline_note_handler.h"
 #include "page_handler.h"
 #include "panel_handler.h"
@@ -39,8 +39,8 @@ public:
     QScopedPointer<CharacterHandler> m_characterHandler;
     QScopedPointer<DialogHandler> m_dialogHandler;
     QScopedPointer<InlineNoteHandler> m_inlineNoteHandler;
-    QScopedPointer<FolderHeaderHandler> m_folderHeaderHandler;
-    QScopedPointer<FolderFooterHandler> m_folderFooterHandler;
+    QScopedPointer<SequenceHeadingHandler> m_sequenceHeadingHandler;
+    QScopedPointer<SequenceFooterHandler> m_sequenceFooterHandler;
 };
 
 KeyPressHandlerFacade::Implementation::Implementation(Ui::ComicBookTextEdit* _editor)
@@ -54,8 +54,8 @@ KeyPressHandlerFacade::Implementation::Implementation(Ui::ComicBookTextEdit* _ed
     , m_characterHandler(new CharacterHandler(_editor))
     , m_dialogHandler(new DialogHandler(_editor))
     , m_inlineNoteHandler(new InlineNoteHandler(_editor))
-    , m_folderHeaderHandler(new FolderHeaderHandler(_editor))
-    , m_folderFooterHandler(new FolderFooterHandler(_editor))
+    , m_sequenceHeadingHandler(new SequenceHeadingHandler(_editor))
+    , m_sequenceFooterHandler(new SequenceFooterHandler(_editor))
 {
 }
 
@@ -160,11 +160,11 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
     }
 
     case TextParagraphType::SequenceHeading: {
-        return d->m_folderHeaderHandler.data();
+        return d->m_sequenceHeadingHandler.data();
     }
 
     case TextParagraphType::SequenceFooter: {
-        return d->m_folderFooterHandler.data();
+        return d->m_sequenceFooterHandler.data();
     }
 
     default: {

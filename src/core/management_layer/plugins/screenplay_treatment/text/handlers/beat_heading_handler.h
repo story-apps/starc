@@ -4,14 +4,13 @@
 
 
 namespace KeyProcessingLayer {
-
 /**
- * @brief Класс выполняющий обработку нажатия клавиш в блоке завершения папки
+ * @brief Класс выполняющий обработку нажатия клавиш в блоке описание действия
  */
-class FolderFooterHandler : public StandardKeyHandler
+class BeatHeadingHandler : public StandardKeyHandler
 {
 public:
-    explicit FolderFooterHandler(Ui::ScreenplayTextEdit* _editor);
+    explicit BeatHeadingHandler(Ui::ScreenplayTreatmentEdit* _editor);
 
 protected:
     /**
@@ -20,7 +19,7 @@ protected:
     /** @{ */
     void handleEnter(QKeyEvent* _event = 0);
     void handleTab(QKeyEvent* _event = 0);
+    void handleOther(QKeyEvent* _event = 0);
     /** @} */
 };
-
 } // namespace KeyProcessingLayer
