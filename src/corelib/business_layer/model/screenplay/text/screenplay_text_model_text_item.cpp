@@ -41,6 +41,13 @@ std::chrono::milliseconds ScreenplayTextModelTextItem::duration() const
 
 void ScreenplayTextModelTextItem::updateDuration()
 {
+    //
+    // Не учитываем хронометраж некоторых блококв
+    //
+    if (paragraphType() == TextParagraphType::BeatHeading) {
+        return;
+    }
+
     const auto screenplayModel = qobject_cast<const ScreenplayTextModel*>(model());
     Q_ASSERT(screenplayModel);
     const auto duration = Chronometer::duration(paragraphType(), text(),

@@ -837,11 +837,12 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         if (needToCorrectPageBreaks && (atPageEnd || atPageBreak)) {
             switch (blockType) {
             //
-            // Если это время и место или начало папки
+            // Если это время и место, бит, кадр или начало папки
             //
             case TextParagraphType::SceneHeading:
-            case TextParagraphType::SequenceHeading:
-            case TextParagraphType::Shot: {
+            case TextParagraphType::BeatHeading:
+            case TextParagraphType::Shot:
+            case TextParagraphType::SequenceHeading: {
                 //
                 // Переносим на следующую страницу
                 //

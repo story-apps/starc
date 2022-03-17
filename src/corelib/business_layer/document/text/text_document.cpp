@@ -68,8 +68,14 @@ public:
     void tryToCorrectDocument();
 
 
+    /**
+     * @brief Владелец
+     */
     TextDocument* q = nullptr;
 
+    /**
+     * @brief Текущее состояние документа
+     */
     DocumentState state = DocumentState::Undefined;
     QPointer<BusinessLayer::TextModel> model;
     bool canChangeModel = true;
@@ -1757,6 +1763,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 needToDeleteParent = textItem->paragraphType() == TextParagraphType::ActFooter
                     || textItem->paragraphType() == TextParagraphType::SequenceFooter
                     || textItem->paragraphType() == TextParagraphType::SceneHeading
+                    || textItem->paragraphType() == TextParagraphType::BeatHeading
                     || textItem->paragraphType() == TextParagraphType::PageHeading
                     || textItem->paragraphType() == TextParagraphType::PanelHeading
                     || textItem->paragraphType() == TextParagraphType::ChapterHeading1
@@ -2004,6 +2011,11 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
 
             case TextParagraphType::SceneHeading: {
                 parentItem = d->model->createGroupItem(TextGroupType::Scene);
+                break;
+            }
+
+            case TextParagraphType::BeatHeading: {
+                parentItem = d->model->createGroupItem(TextGroupType::Beat);
                 break;
             }
 

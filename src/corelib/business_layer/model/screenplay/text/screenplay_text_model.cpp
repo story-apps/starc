@@ -1,6 +1,7 @@
 #include "screenplay_text_model.h"
 
 #include "screenplay_text_block_parser.h"
+#include "screenplay_text_model_beat_item.h"
 #include "screenplay_text_model_folder_item.h"
 #include "screenplay_text_model_scene_item.h"
 #include "screenplay_text_model_text_item.h"
@@ -156,7 +157,20 @@ TextModelGroupItem* ScreenplayTextModel::createGroupItem(TextGroupType _type) co
 {
     Q_UNUSED(_type)
 
-    return new ScreenplayTextModelSceneItem(this);
+    switch (_type) {
+    case TextGroupType::Scene: {
+        return new ScreenplayTextModelSceneItem(this);
+    }
+
+    case TextGroupType::Beat: {
+        return new ScreenplayTextModelBeatItem(this);
+    }
+
+    default: {
+        Q_ASSERT(false);
+        return nullptr;
+    }
+    }
 }
 
 TextModelTextItem* ScreenplayTextModel::createTextItem() const

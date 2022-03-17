@@ -141,6 +141,7 @@ TextModel::TextModel(QObject* _parent, TextModelFolderItem* _rootItem)
             toString(TextParagraphType::UnformattedText),
             toString(TextParagraphType::SceneHeading),
             toString(TextParagraphType::SceneCharacters),
+            toString(TextParagraphType::BeatHeading),
             toString(TextParagraphType::Action),
             toString(TextParagraphType::Character),
             toString(TextParagraphType::Parenthetical),
@@ -842,7 +843,11 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     if (fromItem->type() == TextModelItemType::Text) {
         const auto textItem = static_cast<TextModelTextItem*>(fromItem);
         if (textItem->paragraphType() == TextParagraphType::SceneHeading
-            || textItem->paragraphType() == TextParagraphType::SequenceHeading) {
+            || textItem->paragraphType() == TextParagraphType::BeatHeading
+            || textItem->paragraphType() == TextParagraphType::PageHeading
+            || textItem->paragraphType() == TextParagraphType::PanelHeading
+            || textItem->paragraphType() == TextParagraphType::SequenceHeading
+            || textItem->paragraphType() == TextParagraphType::ActHeading) {
             auto newFromItem = fromItemParent;
             fromItemParent = fromItemParent->parent();
             fromItemRow = fromItemParent->rowOfChild(newFromItem);

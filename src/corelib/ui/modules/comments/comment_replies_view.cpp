@@ -85,8 +85,7 @@ CommentRepliesView::CommentRepliesView(QWidget* _parent)
     layout->addWidget(d->repliesViewContainer, 1);
     layout->addWidget(d->replyTextField);
 
-    connect(d->headerView, &CommentView::clicked, this,
-            &CommentRepliesView::closePressed);
+    connect(d->headerView, &CommentView::clicked, this, &CommentRepliesView::closePressed);
     connect(d->replyTextField, &TextField::trailingIconPressed, this,
             &CommentRepliesView::postReply);
 

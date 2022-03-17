@@ -61,6 +61,7 @@ public:
 ScreenplayTextEdit::Implementation::Implementation(ScreenplayTextEdit* _q)
     : q(_q)
 {
+    document.setTreatmentVisible(false);
 }
 
 const BusinessLayer::ScreenplayTemplate& ScreenplayTextEdit::Implementation::screenplayTemplate()

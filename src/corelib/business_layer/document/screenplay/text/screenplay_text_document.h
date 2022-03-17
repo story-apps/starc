@@ -14,6 +14,12 @@ class CORE_LIBRARY_EXPORT ScreenplayTextDocument : public TextDocument
 
 public:
     explicit ScreenplayTextDocument(QObject* _parent = nullptr);
+    ~ScreenplayTextDocument() override;
+
+    /**
+     * @brief Настроить отображение поэпизодника
+     */
+    void setTreatmentVisible(bool _visible);
 
     /**
      * @brief Настроить необходимость корректировок
@@ -29,6 +35,10 @@ public:
      * @brief Получить номер реплики для заданного блока
      */
     QString dialogueNumber(const QTextBlock& _forBlock) const;
+
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 } // namespace BusinessLayer

@@ -2,13 +2,13 @@
 
 #include "../screenplay_treatment_edit.h"
 #include "beat_heading_handler.h"
-#include "sequence_footer_handler.h"
-#include "sequence_heading_handler.h"
 #include "inline_note_handler.h"
 #include "pre_handler.h"
 #include "prepare_handler.h"
 #include "scene_characters_handler.h"
 #include "scene_heading_handler.h"
+#include "sequence_footer_handler.h"
+#include "sequence_heading_handler.h"
 
 #include <business_layer/templates/screenplay_template.h>
 

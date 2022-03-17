@@ -1,4 +1,4 @@
-#include "screenplay_text_model_scene_item.h"
+#include "screenplay_text_model_beat_item.h"
 
 #include "screenplay_text_model.h"
 #include "screenplay_text_model_text_item.h"
@@ -10,20 +10,15 @@
 
 namespace BusinessLayer {
 
-class ScreenplayTextModelSceneItem::Implementation
+class ScreenplayTextModelBeatItem::Implementation
 {
 public:
-    /**
-     * @brief Запланированная длительность сцены
-     */
-    std::optional<int> plannedDuration;
-
     //
     // Ридонли свойства, которые формируются по ходу работы со сценарием
     //
 
     /**
-     * @brief Длительность сцены
+     * @brief Длительность бита
      */
     std::chrono::milliseconds duration = std::chrono::milliseconds{ 0 };
 };
@@ -32,25 +27,29 @@ public:
 // ****
 
 
-ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const ScreenplayTextModel* _model)
+ScreenplayTextModelBeatItem::ScreenplayTextModelBeatItem(const ScreenplayTextModel* _model)
     : TextModelGroupItem(_model)
     , d(new Implementation)
 {
-    setGroupType(TextGroupType::Scene);
-    setLevel(0);
+    setGroupType(TextGroupType::Beat);
+    setLevel(1);
 }
 
-ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;
+ScreenplayTextModelBeatItem::~ScreenplayTextModelBeatItem() = default;
 
-std::chrono::milliseconds ScreenplayTextModelSceneItem::duration() const
+std::chrono::milliseconds ScreenplayTextModelBeatItem::duration() const
 {
     return d->duration;
 }
 
-QVariant ScreenplayTextModelSceneItem::data(int _role) const
+QVariant ScreenplayTextModelBeatItem::data(int _role) const
 {
     switch (_role) {
-    case SceneDurationRole: {
+    case Qt::DecorationRole: {
+        return u8"\U000F0B77";
+    }
+
+    case BeatDurationRole: {
         const int duration = std::chrono::duration_cast<std::chrono::seconds>(d->duration).count();
         return duration;
     }
@@ -61,57 +60,17 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
     }
 }
 
-void ScreenplayTextModelSceneItem::copyFrom(TextModelItem* _item)
+QStringRef ScreenplayTextModelBeatItem::readCustomContent(QXmlStreamReader& _contentReader)
 {
-    if (_item == nullptr || type() != _item->type()) {
-        Q_ASSERT(false);
-        return;
-    }
-
-    auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(_item);
-    d->plannedDuration = sceneItem->d->plannedDuration;
-
-    TextModelGroupItem::copyFrom(_item);
+    return _contentReader.name();
 }
 
-bool ScreenplayTextModelSceneItem::isEqual(TextModelItem* _item) const
+QByteArray ScreenplayTextModelBeatItem::customContent() const
 {
-    if (_item == nullptr || type() != _item->type()) {
-        return false;
-    }
-
-    const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(_item);
-    return TextModelGroupItem::isEqual(_item)
-        && d->plannedDuration == sceneItem->d->plannedDuration;
+    return {};
 }
 
-QStringRef ScreenplayTextModelSceneItem::readCustomContent(QXmlStreamReader& _contentReader)
-{
-    auto currentTag = _contentReader.name();
-
-    if (currentTag == xml::kPlannedDurationTag) {
-        d->plannedDuration = xml::readContent(_contentReader).toInt();
-        xml::readNextElement(_contentReader); // end
-        currentTag = xml::readNextElement(_contentReader); // next
-    }
-
-    return currentTag;
-}
-
-QByteArray ScreenplayTextModelSceneItem::customContent() const
-{
-    QByteArray xml;
-
-    if (d->plannedDuration.has_value()) {
-        xml += QString("<%1>%2</%1>\n")
-                   .arg(xml::kPlannedDurationTag, QString::number(*d->plannedDuration))
-                   .toUtf8();
-    }
-
-    return xml;
-}
-
-void ScreenplayTextModelSceneItem::handleChange()
+void ScreenplayTextModelBeatItem::handleChange()
 {
     QString heading;
     QString text;
@@ -131,7 +90,7 @@ void ScreenplayTextModelSceneItem::handleChange()
         // Собираем текст
         //
         switch (childTextItem->paragraphType()) {
-        case TextParagraphType::SceneHeading: {
+        case TextParagraphType::BeatHeading: {
             heading = TextHelper::smartToUpper(childTextItem->text());
             break;
         }

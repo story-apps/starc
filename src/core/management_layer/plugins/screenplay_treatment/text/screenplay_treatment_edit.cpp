@@ -61,6 +61,7 @@ public:
 ScreenplayTreatmentEdit::Implementation::Implementation(ScreenplayTreatmentEdit* _q)
     : q(_q)
 {
+    document.setTreatmentVisible(true);
 }
 
 const BusinessLayer::ScreenplayTemplate& ScreenplayTreatmentEdit::Implementation::

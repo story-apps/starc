@@ -4,13 +4,13 @@
 #include "character_handler.h"
 #include "description_handler.h"
 #include "dialog_handler.h"
-#include "sequence_footer_handler.h"
-#include "sequence_heading_handler.h"
 #include "inline_note_handler.h"
 #include "page_handler.h"
 #include "panel_handler.h"
 #include "pre_handler.h"
 #include "prepare_handler.h"
+#include "sequence_footer_handler.h"
+#include "sequence_heading_handler.h"
 #include "unformatted_text_handler.h"
 
 #include <business_layer/templates/comic_book_template.h>

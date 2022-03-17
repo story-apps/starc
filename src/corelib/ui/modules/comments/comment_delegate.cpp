@@ -29,7 +29,7 @@ void CommentDelegate::setSingleCommentMode(bool _isSingleComment)
 }
 
 void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option,
-                                          const QModelIndex& _index) const
+                            const QModelIndex& _index) const
 {
     //
     // Получим настройки стиля
@@ -77,8 +77,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     //
     const QRectF colorRect(QPointF(0.0, backgroundRect.top()),
                            QSizeF(Ui::DesignSystem::layout().px4(), backgroundRect.height()));
-    _painter->fillRect(
-        colorRect, _index.data(CommentsModel::ReviewMarkColorRole).value<QColor>());
+    _painter->fillRect(colorRect, _index.data(CommentsModel::ReviewMarkColorRole).value<QColor>());
 
     //
     // ... аватар
@@ -130,16 +129,15 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     const QRectF textRect(QPointF(textLeft, avatarRect.top()),
                           QSizeF(textWidth, avatarRect.height() / 2));
     const auto text = _painter->fontMetrics().elidedText(
-        _index.data(CommentsModel::ReviewMarkAuthorEmailRole).toString(),
-        Qt::ElideRight, static_cast<int>(textRect.width()));
+        _index.data(CommentsModel::ReviewMarkAuthorEmailRole).toString(), Qt::ElideRight,
+        static_cast<int>(textRect.width()));
     _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignBottom, text);
     //
     // ... дата
     //
     _painter->setPen(ColorHelper::transparent(textColor, Ui::DesignSystem::disabledTextOpacity()));
     const QRectF dateRect(textRect.bottomLeft(), textRect.size());
-    const auto date
-        = _index.data(CommentsModel::ReviewMarkCreationDateRole).toDateTime();
+    const auto date = _index.data(CommentsModel::ReviewMarkCreationDateRole).toDateTime();
     auto dateText = _painter->fontMetrics().elidedText(date.toString("HH:mm d MMM"), Qt::ElideRight,
                                                        static_cast<int>(dateRect.width()));
     if (_index.data(CommentsModel::ReviewMarkIsEditedRole).toBool()) {
@@ -310,7 +308,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
 }
 
 QSize CommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
-                                              const QModelIndex& _index) const
+                                const QModelIndex& _index) const
 {
     //
     // Ширина
