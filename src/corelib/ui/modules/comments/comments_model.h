@@ -11,7 +11,7 @@ class TextModel;
 
 
 /**
- * @brief Модель комментариев к тексту сценария
+ * @brief Модель комментариев к тексту
  */
 class CORE_LIBRARY_EXPORT CommentsModel : public QAbstractListModel
 {
@@ -38,7 +38,7 @@ public:
     /**
      * @brief Задать модель текста сценария
      */
-    void setModel(BusinessLayer::TextModel* _model);
+    void setTextModel(BusinessLayer::TextModel* _model);
 
     /**
      * @brief Получить индекс элемента из модели сценария, в котором находится заданный комментарий,

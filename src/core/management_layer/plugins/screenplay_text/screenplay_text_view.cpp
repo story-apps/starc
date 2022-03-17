@@ -705,7 +705,7 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 
     d->screenplayText->initWithModel(d->model);
     d->screenplayTextScrollbarManager->setModel(d->model);
-    d->commentsModel->setModel(d->model);
+    d->commentsModel->setTextModel(d->model);
 
     d->updateToolBarCurrentParagraphTypeName();
 }

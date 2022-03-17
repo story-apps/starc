@@ -608,7 +608,7 @@ void ComicBookTextView::saveViewSettings()
 void ComicBookTextView::setModel(BusinessLayer::ComicBookTextModel* _model)
 {
     d->comicBookText->initWithModel(_model);
-    d->commentsModel->setModel(_model);
+    d->commentsModel->setTextModel(_model);
 
     d->updateToolBarCurrentParagraphTypeName();
 }
