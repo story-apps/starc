@@ -24,6 +24,7 @@ namespace {
 const QVector<BusinessLayer::TextParagraphType> kParagraphTypes
     = { BusinessLayer::TextParagraphType::SceneHeading,
         BusinessLayer::TextParagraphType::SceneCharacters,
+        BusinessLayer::TextParagraphType::BeatHeading,
         BusinessLayer::TextParagraphType::Action,
         BusinessLayer::TextParagraphType::Character,
         BusinessLayer::TextParagraphType::Parenthetical,
