@@ -281,10 +281,6 @@ SettingsStorage::Implementation::Implementation()
                                           TextParagraphType::BeatHeading);
         addTreatmentEditorStylesJumpByEnter(TextParagraphType::BeatHeading,
                                             TextParagraphType::BeatHeading);
-        addTreatmentEditorStylesJumpByTab(TextParagraphType::InlineNote,
-                                          TextParagraphType::BeatHeading);
-        addTreatmentEditorStylesJumpByEnter(TextParagraphType::InlineNote,
-                                            TextParagraphType::BeatHeading);
         addTreatmentEditorStylesJumpByTab(TextParagraphType::SequenceHeading,
                                           TextParagraphType::SceneHeading);
         addTreatmentEditorStylesJumpByEnter(TextParagraphType::SequenceHeading,
@@ -311,10 +307,6 @@ SettingsStorage::Implementation::Implementation()
                                             TextParagraphType::BeatHeading);
         addTreatmentEditorStylesChangeByEnter(TextParagraphType::BeatHeading,
                                               TextParagraphType::SceneHeading);
-        addTreatmentEditorStylesChangeByTab(TextParagraphType::InlineNote,
-                                            TextParagraphType::InlineNote);
-        addTreatmentEditorStylesChangeByEnter(TextParagraphType::InlineNote,
-                                              TextParagraphType::InlineNote);
         addTreatmentEditorStylesChangeByTab(TextParagraphType::SequenceHeading,
                                             TextParagraphType::SequenceHeading);
         addTreatmentEditorStylesChangeByEnter(TextParagraphType::SequenceHeading,
@@ -330,7 +322,6 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
         addShortcut(BusinessLayer::TextParagraphType::SceneCharacters, "Ctrl+2");
         addShortcut(BusinessLayer::TextParagraphType::BeatHeading, "Ctrl+3");
-        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
         addShortcut(BusinessLayer::TextParagraphType::SequenceHeading, "Ctrl+Space");
     }
     //

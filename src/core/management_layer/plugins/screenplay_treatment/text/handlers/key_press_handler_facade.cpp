@@ -2,7 +2,6 @@
 
 #include "../screenplay_treatment_edit.h"
 #include "beat_heading_handler.h"
-#include "inline_note_handler.h"
 #include "pre_handler.h"
 #include "prepare_handler.h"
 #include "scene_characters_handler.h"
@@ -32,7 +31,6 @@ public:
     QScopedPointer<SceneHeadingHandler> m_sceneHeaderHandler;
     QScopedPointer<SceneCharactersHandler> m_sceneCharactersHandler;
     QScopedPointer<BeatHeadingHandler> m_beatHeadingHandler;
-    QScopedPointer<InlineNoteHandler> m_inlineNoteHandler;
     QScopedPointer<SequenceHeadingHandler> m_sequenceHeadingHandler;
     QScopedPointer<SequenceFooterHandler> m_sequenceFooterHandler;
 };
@@ -44,7 +42,6 @@ KeyPressHandlerFacade::Implementation::Implementation(Ui::ScreenplayTreatmentEdi
     , m_sceneHeaderHandler(new SceneHeadingHandler(_editor))
     , m_sceneCharactersHandler(new SceneCharactersHandler(_editor))
     , m_beatHeadingHandler(new BeatHeadingHandler(_editor))
-    , m_inlineNoteHandler(new InlineNoteHandler(_editor))
     , m_sequenceHeadingHandler(new SequenceHeadingHandler(_editor))
     , m_sequenceFooterHandler(new SequenceFooterHandler(_editor))
 {
@@ -133,10 +130,6 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
 
     case TextParagraphType::BeatHeading: {
         return d->m_beatHeadingHandler.data();
-    }
-
-    case TextParagraphType::InlineNote: {
-        return d->m_inlineNoteHandler.data();
     }
 
     case TextParagraphType::SequenceHeading: {

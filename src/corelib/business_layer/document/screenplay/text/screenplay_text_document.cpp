@@ -77,9 +77,14 @@ void ScreenplayTextDocument::Implementation::updateBlocksVisibility(int _from, i
     //
     TextCursor cursor(q);
     cursor.setPosition(_from);
-    while (!cursor.atEnd() && cursor.position() <= _to) {
+    while (cursor.position() <= _to) {
         QTextBlock block = cursor.block();
         block.setVisible(visibleBlocksTypes.contains(TextBlockStyle::forBlock(block)));
+
+        if (cursor.atEnd()) {
+            break;
+        }
+
         cursor.movePosition(QTextCursor::EndOfBlock);
         cursor.movePosition(QTextCursor::NextBlock);
     }

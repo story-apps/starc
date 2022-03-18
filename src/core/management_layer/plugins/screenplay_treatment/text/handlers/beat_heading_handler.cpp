@@ -53,9 +53,8 @@ void BeatHeadingHandler::handleEnter(QKeyEvent*)
             //! Есть выделение
 
             //
-            // Удаляем всё, но оставляем стилем блока текущий
+            // Ничего не делаем
             //
-            editor()->addParagraph(TextParagraphType::BeatHeading);
         } else {
             //! Нет выделения
 
@@ -63,27 +62,31 @@ void BeatHeadingHandler::handleEnter(QKeyEvent*)
                 //! Текст пуст
 
                 //
-                // Меняем стиль на место и время
+                // Если строка пуста, то сменить стиль на имя героя
                 //
                 editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::BeatHeading));
             } else {
                 //! Текст не пуст
 
-                //
-                // Если введён персонаж, меняем стиль блока и переходим к реплике
-                //
-                const auto charactersModel
-                    = qobject_cast<BusinessLayer::CharactersModel*>(editor()->characters());
-                if (cursorForwardText.isEmpty() && charactersModel
-                    && charactersModel->exists(cursorBackwardText)) {
-                    editor()->setCurrentParagraphType(TextParagraphType::Character);
-                    editor()->addParagraph(TextParagraphType::Dialogue);
-                }
-                //
-                // Вставляем блок и применяем ему стиль описания действия
-                //
-                else {
-                    editor()->addParagraph(jumpForEnter(TextParagraphType::BeatHeading));
+                if (cursorBackwardText.isEmpty()) {
+                    //! В начале блока
+
+                    //
+                    // Ни чего не делаем
+                    //
+                } else if (cursorForwardText.isEmpty()) {
+                    //! В конце блока
+
+                    //
+                    // Вставляем блок персонажа
+                    //
+                    editor()->addParagraph(jumpForTab(TextParagraphType::BeatHeading));
+                } else {
+                    //! Внутри блока
+
+                    //
+                    // Ни чего не делаем
+                    //
                 }
             }
         }
@@ -140,9 +143,8 @@ void BeatHeadingHandler::handleTab(QKeyEvent*)
                     //! В начале блока
 
                     //
-                    // Меняем на блок персонажа
+                    // Ни чего не делаем
                     //
-                    editor()->setCurrentParagraphType(TextParagraphType::Character);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 

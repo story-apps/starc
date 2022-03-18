@@ -94,39 +94,42 @@ void ScreenplayTextModel::Implementation::updateNumbering()
     int sceneNumber = informationModel->scenesNumberingStartAt();
     int dialogueNumber = 1;
     std::function<void(const TextModelItem*)> updateChildNumbering;
-    updateChildNumbering = [this, &sceneNumber, &dialogueNumber,
-                            &updateChildNumbering](const TextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case TextModelItemType::Folder: {
-                updateChildNumbering(childItem);
-                break;
-            }
+    updateChildNumbering
+        = [this, &sceneNumber, &dialogueNumber, &updateChildNumbering](const TextModelItem* _item) {
+              for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+                  auto childItem = _item->childAt(childIndex);
+                  switch (childItem->type()) {
+                  case TextModelItemType::Folder: {
+                      updateChildNumbering(childItem);
+                      break;
+                  }
 
-            case TextModelItemType::Group: {
-                updateChildNumbering(childItem);
-                auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
-                if (sceneItem->setNumber(sceneNumber, informationModel->scenesNumbersPrefix())) {
-                    sceneNumber++;
-                }
-                break;
-            }
+                  case TextModelItemType::Group: {
+                      updateChildNumbering(childItem);
+                      auto groupItem = static_cast<TextModelGroupItem*>(childItem);
+                      if (groupItem->groupType() == TextGroupType::Scene) {
+                          if (groupItem->setNumber(sceneNumber,
+                                                   informationModel->scenesNumbersPrefix())) {
+                              sceneNumber++;
+                          }
+                      }
+                      break;
+                  }
 
-            case TextModelItemType::Text: {
-                auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == TextParagraphType::Character
-                    && !textItem->isCorrection()) {
-                    textItem->setNumber(dialogueNumber++);
-                }
-                break;
-            }
+                  case TextModelItemType::Text: {
+                      auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+                      if (textItem->paragraphType() == TextParagraphType::Character
+                          && !textItem->isCorrection()) {
+                          textItem->setNumber(dialogueNumber++);
+                      }
+                      break;
+                  }
 
-            default:
-                break;
-            }
-        }
-    };
+                  default:
+                      break;
+                  }
+              }
+          };
     updateChildNumbering(rootItem());
 }
 

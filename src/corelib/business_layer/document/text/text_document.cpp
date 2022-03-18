@@ -2000,7 +2000,8 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             }
 
             //
-            // Создаём группирующий элемент, если создаётся непосредственно сцена или папка
+            // Создаём группирующий элемент, если создаётся непосредственно папка, сцена, бит,
+            // страница или панель
             //
             TextModelItem* parentItem = nullptr;
             switch (paragraphType) {

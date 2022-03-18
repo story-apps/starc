@@ -183,8 +183,9 @@ void ScreenplayTreatmentView::Implementation::reconfigureTemplate(bool _withMode
     const auto& usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(
         model && model->informationModel() ? model->informationModel()->templateId() : "");
     const QVector<TextParagraphType> types = {
-        TextParagraphType::SceneHeading,    TextParagraphType::SceneCharacters,
-        TextParagraphType::BeatHeading,     TextParagraphType::InlineNote,
+        TextParagraphType::SceneHeading,
+        TextParagraphType::SceneCharacters,
+        TextParagraphType::BeatHeading,
         TextParagraphType::SequenceHeading,
     };
     for (const auto type : types) {
