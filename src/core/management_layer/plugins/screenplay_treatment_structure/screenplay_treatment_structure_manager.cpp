@@ -1,7 +1,7 @@
-#include "screenplay_text_structure_manager.h"
+#include "screenplay_treatment_structure_manager.h"
 
-#include "business_layer/screenplay_text_structure_model.h"
-#include "ui/screenplay_text_structure_view.h"
+#include "business_layer/screenplay_treatment_structure_model.h"
+#include "ui/screenplay_treatment_structure_view.h"
 
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
@@ -20,7 +20,7 @@
 
 namespace ManagementLayer {
 
-class ScreenplayTextStructureManager::Implementation
+class ScreenplayTreatmentStructureManager::Implementation
 {
 public:
     explicit Implementation();
@@ -28,7 +28,7 @@ public:
     /**
      * @brief Создать представление
      */
-    Ui::ScreenplayTextStructureView* createView();
+    Ui::ScreenplayTreatmentStructureView* createView();
 
     /**
      * @brief Настроить контекстное меню
@@ -52,12 +52,12 @@ public:
     /**
      * @brief Модель отображения структуры сценария
      */
-    BusinessLayer::ScreenplayTextStructureModel* structureModel = nullptr;
+    BusinessLayer::ScreenplayTreatmentStructureModel* structureModel = nullptr;
 
     /**
      * @brief Предаставление для основного окна
      */
-    Ui::ScreenplayTextStructureView* view = nullptr;
+    Ui::ScreenplayTreatmentStructureView* view = nullptr;
 
     /**
      * @brief Контекстное меню для элементов навигатора
@@ -67,22 +67,23 @@ public:
     /**
      * @brief Все созданные представления
      */
-    QVector<Ui::ScreenplayTextStructureView*> allViews;
+    QVector<Ui::ScreenplayTreatmentStructureView*> allViews;
 };
 
-ScreenplayTextStructureManager::Implementation::Implementation()
+ScreenplayTreatmentStructureManager::Implementation::Implementation()
 {
     view = createView();
     contextMenu = new ContextMenu(view);
 }
 
-Ui::ScreenplayTextStructureView* ScreenplayTextStructureManager::Implementation::createView()
+Ui::ScreenplayTreatmentStructureView* ScreenplayTreatmentStructureManager::Implementation::
+    createView()
 {
-    allViews.append(new Ui::ScreenplayTextStructureView);
+    allViews.append(new Ui::ScreenplayTreatmentStructureView);
     return allViews.last();
 }
 
-void ScreenplayTextStructureManager::Implementation::updateContextMenu(
+void ScreenplayTreatmentStructureManager::Implementation::updateContextMenu(
     const QModelIndexList& _indexes)
 {
     if (_indexes.isEmpty()) {
@@ -159,15 +160,15 @@ void ScreenplayTextStructureManager::Implementation::updateContextMenu(
 // ****
 
 
-ScreenplayTextStructureManager::ScreenplayTextStructureManager(QObject* _parent)
+ScreenplayTreatmentStructureManager::ScreenplayTreatmentStructureManager(QObject* _parent)
     : QObject(_parent)
     , d(new Implementation)
 {
-    connect(d->view, &Ui::ScreenplayTextStructureView::currentModelIndexChanged, this,
+    connect(d->view, &Ui::ScreenplayTreatmentStructureView::currentModelIndexChanged, this,
             [this](const QModelIndex& _index) {
                 emit currentModelIndexChanged(d->structureModel->mapToSource(_index));
             });
-    connect(d->view, &Ui::ScreenplayTextStructureView::customContextMenuRequested, this,
+    connect(d->view, &Ui::ScreenplayTreatmentStructureView::customContextMenuRequested, this,
             [this](const QPoint& _pos) {
                 if (d->view->selectedIndexes().isEmpty()) {
                     return;
@@ -178,14 +179,14 @@ ScreenplayTextStructureManager::ScreenplayTextStructureManager(QObject* _parent)
             });
 }
 
-ScreenplayTextStructureManager::~ScreenplayTextStructureManager() = default;
+ScreenplayTreatmentStructureManager::~ScreenplayTreatmentStructureManager() = default;
 
-QObject* ScreenplayTextStructureManager::asQObject()
+QObject* ScreenplayTreatmentStructureManager::asQObject()
 {
     return this;
 }
 
-void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
+void ScreenplayTreatmentStructureManager::setModel(BusinessLayer::AbstractModel* _model)
 {
     //
     // Разрываем соединения со старой моделью
@@ -203,7 +204,7 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     // Создаём прокси модель, если ещё не была создана и настриваем её
     //
     if (d->structureModel == nullptr) {
-        d->structureModel = new BusinessLayer::ScreenplayTextStructureModel(d->view);
+        d->structureModel = new BusinessLayer::ScreenplayTreatmentStructureModel(d->view);
         d->view->setModel(d->structureModel);
     }
 
@@ -217,10 +218,10 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     //
     if (d->model != nullptr) {
         d->view->setTitle(
-            QString("%1 | %2").arg(tr("Screenplay"), d->model->informationModel()->name()));
+            QString("%1 | %2").arg(tr("Treatment"), d->model->informationModel()->name()));
         connect(d->model->informationModel(),
                 &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view,
-                &Ui::ScreenplayTextStructureView::setTitle);
+                &Ui::ScreenplayTreatmentStructureView::setTitle);
     }
 
     //
@@ -231,23 +232,23 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     }
 }
 
-Ui::IDocumentView* ScreenplayTextStructureManager::view()
+Ui::IDocumentView* ScreenplayTreatmentStructureManager::view()
 {
     return d->view;
 }
 
-Ui::IDocumentView* ScreenplayTextStructureManager::createView()
+Ui::IDocumentView* ScreenplayTreatmentStructureManager::createView()
 {
     return d->createView();
 }
 
-void ScreenplayTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
+void ScreenplayTreatmentStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
 {
     Q_UNUSED(_changedSettingsKeys);
     d->view->reconfigure();
 }
 
-void ScreenplayTextStructureManager::bind(IDocumentManager* _manager)
+void ScreenplayTreatmentStructureManager::bind(IDocumentManager* _manager)
 {
     Q_ASSERT(_manager);
 
@@ -255,7 +256,7 @@ void ScreenplayTextStructureManager::bind(IDocumentManager* _manager)
             SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
 }
 
-void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
+void ScreenplayTreatmentStructureManager::setCurrentModelIndex(const QModelIndex& _index)
 {
     if (!_index.isValid()) {
         return;

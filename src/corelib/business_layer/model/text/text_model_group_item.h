@@ -90,6 +90,16 @@ public:
     QString text() const;
 
     /**
+     * @brief Количество заметок по тексту в группе
+     */
+    int inlineNotesSize() const;
+
+    /**
+     * @brief Количество редакторских заметок в группе
+     */
+    int reviewMarksSize() const;
+
+    /**
      * @brief Определяем интерфейс получения данных группы
      */
     QVariant data(int _role) const override;

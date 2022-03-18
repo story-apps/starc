@@ -9,6 +9,7 @@ SUBDIRS = \
     screenplay_information \
     screenplay_parameters \
     screenplay_treatment \
+    screenplay_treatment_structure \
     screenplay_text \
     screenplay_text_structure \
     simple_text \

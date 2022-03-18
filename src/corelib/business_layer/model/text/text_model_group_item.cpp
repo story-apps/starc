@@ -211,6 +211,16 @@ QString TextModelGroupItem::text() const
     return d->text;
 }
 
+int TextModelGroupItem::inlineNotesSize() const
+{
+    return d->inlineNotesSize;
+}
+
+int TextModelGroupItem::reviewMarksSize() const
+{
+    return d->reviewMarksSize;
+}
+
 QVariant TextModelGroupItem::data(int _role) const
 {
     switch (_role) {

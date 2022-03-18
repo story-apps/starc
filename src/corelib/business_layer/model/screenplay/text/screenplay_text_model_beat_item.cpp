@@ -91,7 +91,7 @@ void ScreenplayTextModelBeatItem::handleChange()
         //
         switch (childTextItem->paragraphType()) {
         case TextParagraphType::BeatHeading: {
-            heading = TextHelper::smartToUpper(childTextItem->text());
+            heading = childTextItem->text();
             break;
         }
 

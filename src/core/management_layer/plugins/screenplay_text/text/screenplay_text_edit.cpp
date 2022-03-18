@@ -318,6 +318,15 @@ void ScreenplayTextEdit::setCurrentModelIndex(const QModelIndex& _index)
 {
     BusinessLayer::TextCursor textCursor(document());
     textCursor.setPosition(d->document.itemStartPosition(_index));
+
+    //
+    // В кейсе с битами мы попадаем на невидимый блок, но интересует нас следующий за ним -
+    // первый параграф бита
+    //
+    if (!textCursor.block().isVisible()) {
+        textCursor.movePosition(BusinessLayer::TextCursor::NextBlock);
+    }
+
     ensureCursorVisible(textCursor);
 }
 

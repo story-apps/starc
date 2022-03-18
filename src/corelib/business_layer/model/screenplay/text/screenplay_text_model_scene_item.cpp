@@ -1,6 +1,7 @@
 #include "screenplay_text_model_scene_item.h"
 
 #include "screenplay_text_model.h"
+#include "screenplay_text_model_beat_item.h"
 #include "screenplay_text_model_text_item.h"
 
 #include <business_layer/model/text/text_model_xml.h>
@@ -120,42 +121,56 @@ void ScreenplayTextModelSceneItem::handleChange()
     d->duration = std::chrono::seconds{ 0 };
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
-        auto child = childAt(childIndex);
-        if (child->type() != TextModelItemType::Text) {
-            continue;
-        }
-
-        auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
-
-        //
-        // Собираем текст
-        //
-        switch (childTextItem->paragraphType()) {
-        case TextParagraphType::SceneHeading: {
-            heading = TextHelper::smartToUpper(childTextItem->text());
+        const auto child = childAt(childIndex);
+        switch (child->type()) {
+        case TextModelItemType::Group: {
+            auto childGroupItem = static_cast<ScreenplayTextModelBeatItem*>(child);
+            text += childGroupItem->text() + " ";
+            inlineNotesSize += childGroupItem->inlineNotesSize();
+            reviewMarksSize += childGroupItem->reviewMarksSize();
+            d->duration += childGroupItem->duration();
             break;
         }
 
-        case TextParagraphType::InlineNote: {
-            ++inlineNotesSize;
+        case TextModelItemType::Text: {
+            auto childTextItem = static_cast<ScreenplayTextModelTextItem*>(child);
+
+            //
+            // Собираем текст
+            //
+            switch (childTextItem->paragraphType()) {
+            case TextParagraphType::SceneHeading: {
+                heading = TextHelper::smartToUpper(childTextItem->text());
+                break;
+            }
+
+            case TextParagraphType::InlineNote: {
+                ++inlineNotesSize;
+                break;
+            }
+
+            default: {
+                text.append(childTextItem->text() + " ");
+                reviewMarksSize += std::count_if(
+                    childTextItem->reviewMarks().begin(), childTextItem->reviewMarks().end(),
+                    [](const ScreenplayTextModelTextItem::ReviewMark& _reviewMark) {
+                        return !_reviewMark.isDone;
+                    });
+                break;
+            }
+            }
+
+            //
+            // Собираем хронометраж
+            //
+            d->duration += childTextItem->duration();
             break;
         }
 
         default: {
-            text.append(childTextItem->text() + " ");
-            reviewMarksSize += std::count_if(
-                childTextItem->reviewMarks().begin(), childTextItem->reviewMarks().end(),
-                [](const ScreenplayTextModelTextItem::ReviewMark& _reviewMark) {
-                    return !_reviewMark.isDone;
-                });
             break;
         }
         }
-
-        //
-        // Собираем хронометраж
-        //
-        d->duration += childTextItem->duration();
     }
 
     setHeading(heading);
