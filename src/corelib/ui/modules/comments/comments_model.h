@@ -7,6 +7,7 @@
 
 namespace BusinessLayer {
 
+enum class TextParagraphType;
 class TextModel;
 
 
@@ -34,6 +35,12 @@ public:
 public:
     explicit CommentsModel(QObject* _parent = nullptr);
     ~CommentsModel() override;
+
+    /**
+     * @brief Искать комментарии только в блоках заданных в списке
+     * @note Если список пустой, то комментарии будут искаться везде
+     */
+    void setParagraphTypesFiler(const QVector<TextParagraphType>& _types);
 
     /**
      * @brief Задать модель текста сценария

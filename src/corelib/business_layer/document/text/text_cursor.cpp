@@ -102,10 +102,6 @@ void TextCursor::removeCharacters(BaseTextEdit* _editor)
     removeCharacters(true, _editor);
 }
 
-//
-// TODO: В нижеследующих методах сделать аккуратно через собственный курсор
-//
-
 void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
 {
     Q_ASSERT(document() == _editor->document());

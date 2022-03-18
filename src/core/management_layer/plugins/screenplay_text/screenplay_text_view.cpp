@@ -148,6 +148,24 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     , splitter(new Splitter(_parent))
 
 {
+    commentsModel->setParagraphTypesFiler({
+        BusinessLayer::TextParagraphType::SceneHeading,
+        BusinessLayer::TextParagraphType::SceneCharacters,
+        BusinessLayer::TextParagraphType::Action,
+        BusinessLayer::TextParagraphType::Character,
+        BusinessLayer::TextParagraphType::Parenthetical,
+        BusinessLayer::TextParagraphType::Dialogue,
+        BusinessLayer::TextParagraphType::Lyrics,
+        BusinessLayer::TextParagraphType::Shot,
+        BusinessLayer::TextParagraphType::Transition,
+        BusinessLayer::TextParagraphType::InlineNote,
+        BusinessLayer::TextParagraphType::UnformattedText,
+        BusinessLayer::TextParagraphType::ActHeading,
+        BusinessLayer::TextParagraphType::ActFooter,
+        BusinessLayer::TextParagraphType::SequenceHeading,
+        BusinessLayer::TextParagraphType::SequenceFooter,
+    });
+
     toolbar->setParagraphTypesModel(paragraphTypesModel);
 
     commentsToolbar->hide();

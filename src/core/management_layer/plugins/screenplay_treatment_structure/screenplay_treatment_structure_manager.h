@@ -12,7 +12,8 @@ namespace ManagementLayer {
 /**
  * @brief Менеджер структуры сценария
  */
-class MANAGER_PLUGIN_EXPORT ScreenplayTreatmentStructureManager : public QObject, public IDocumentManager
+class MANAGER_PLUGIN_EXPORT ScreenplayTreatmentStructureManager : public QObject,
+                                                                  public IDocumentManager
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "app.starc.ManagementLayer.IDocumentManager")

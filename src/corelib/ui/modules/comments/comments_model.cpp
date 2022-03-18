@@ -2,6 +2,7 @@
 
 #include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <utils/shugar.h>
@@ -34,9 +35,6 @@ class CommentsModel::Implementation
 public:
     explicit Implementation(CommentsModel* _q);
 
-    /**
-     * @brief Получить предыдущий индекс по карте textItemIndexToReviewIndex
-     */
     void saveReviewMark(TextModelTextItem* _textItem,
                         const TextModelTextItem::ReviewMark& _reviewMark);
 
@@ -46,6 +44,11 @@ public:
 
 
     CommentsModel* q = nullptr;
+
+    /**
+     * @brief Фильтр типов параграфов, в которых разрешён поиск заметок
+     */
+    QSet<TextParagraphType> typesFilter;
 
     /**
      * @brief Модель сценария, на основе которой строится модель заметок
@@ -307,6 +310,13 @@ void CommentsModel::Implementation::processSourceModelRowsInserted(const QModelI
             continue;
         }
 
+        //
+        // Если задан фильтр и блок не проходит его, пропускаем данный блок
+        //
+        if (!typesFilter.isEmpty() && !typesFilter.contains(textItem->paragraphType())) {
+            break;
+        }
+
         if (lastInsertPosition == invalidPosition) {
             const auto itemIndexPath = ModelIndexPath(itemIndex);
             for (int index = 0; index < modelTextItems.size(); ++index) {
@@ -412,10 +422,10 @@ void CommentsModel::Implementation::processSourceModelRowsRemoved(const QModelIn
         //
         const auto itemIndex = model->index(row, 0, _parent);
         const auto item = model->itemForIndex(itemIndex);
-        if (item == nullptr || item->type() != TextModelItemType::Text) {
-            if (item->hasChildren()) {
-                processSourceModelRowsRemoved(itemIndex, 0, item->childCount() - 1);
-            }
+        if (item == nullptr) {
+            continue;
+        } else if (item->type() != TextModelItemType::Text && item->hasChildren()) {
+            processSourceModelRowsRemoved(itemIndex, 0, item->childCount() - 1);
             continue;
         }
 
@@ -425,9 +435,10 @@ void CommentsModel::Implementation::processSourceModelRowsRemoved(const QModelIn
         auto textItem = static_cast<TextModelTextItem*>(item);
 
         //
-        // Пропускаем корректировочные блоки
+        // Пропускаем корректировочные блоки и блоки не проходящие фильтр
         //
-        if (textItem->isCorrection()) {
+        if (textItem->isCorrection()
+            || (!typesFilter.isEmpty() && !typesFilter.contains(textItem->paragraphType()))) {
             //
             // Исключим его из списка
             //
@@ -523,9 +534,10 @@ void CommentsModel::Implementation::processSourceModelDataChanged(const QModelIn
     auto textItem = static_cast<TextModelTextItem*>(item);
 
     //
-    // Пропускаем корректировочные блоки
+    // Пропускаем корректировочные блоки и блоки не проходящие фильтр
     //
-    if (textItem->isCorrection()) {
+    if (textItem->isCorrection()
+        || (!typesFilter.isEmpty() && !typesFilter.contains(textItem->paragraphType()))) {
         //
         // А если раньше блок был не корректировочным, исключим его из списка
         //
@@ -569,7 +581,6 @@ void CommentsModel::Implementation::processSourceModelDataChanged(const QModelIn
     else {
         int newReviewMarkIndex = 0;
         int oldReviewMarkIndex = 0;
-        QVector<ReviewMarkWrapper> reviewMarkWrappersToAdd;
 
         for (; newReviewMarkIndex < textItem->reviewMarks().size(); ++newReviewMarkIndex) {
             const auto newReviewMark = textItem->reviewMarks().at(newReviewMarkIndex);
@@ -595,7 +606,7 @@ void CommentsModel::Implementation::processSourceModelDataChanged(const QModelIn
                 const auto wrapperIndex = reviewMarks.indexOf(oldReviewMarkWrapper);
                 reviewMarks[wrapperIndex] = newReviewMarkWrapper;
                 const auto changedItemModelIndex = q->index(wrapperIndex, 0);
-                q->dataChanged(changedItemModelIndex, changedItemModelIndex);
+                emit q->dataChanged(changedItemModelIndex, changedItemModelIndex);
 
                 ++oldReviewMarkIndex;
             }
@@ -650,6 +661,11 @@ CommentsModel::CommentsModel(QObject* _parent)
 
 CommentsModel::~CommentsModel() = default;
 
+void CommentsModel::setParagraphTypesFiler(const QVector<TextParagraphType>& _types)
+{
+    d->typesFilter = { _types.begin(), _types.end() };
+}
+
 void CommentsModel::setTextModel(TextModel* _model)
 {
     beginResetModel();
@@ -689,6 +705,14 @@ void CommentsModel::setTextModel(TextModel* _model)
                     // Если вставился абзац без заметок, пропускаем его
                     //
                     if (textItem->reviewMarks().isEmpty()) {
+                        break;
+                    }
+
+                    //
+                    // Если задан фильтр абзац не проходит его, пропускаем абзац
+                    //
+                    if (!d->typesFilter.isEmpty()
+                        && !d->typesFilter.contains(textItem->paragraphType())) {
                         break;
                     }
 
@@ -816,7 +840,7 @@ QModelIndex CommentsModel::mapFromModel(const QModelIndex& _index, int _position
         return {};
     }
 
-    for (const auto& reviewMarkWrapper : d->reviewMarks) {
+    for (const auto& reviewMarkWrapper : std::as_const(d->reviewMarks)) {
         if (!reviewMarkWrapper.items.contains(textItem)) {
             continue;
         }
@@ -837,7 +861,7 @@ QModelIndex CommentsModel::mapFromModel(const QModelIndex& _index, int _position
 void CommentsModel::setComment(const QModelIndex& _index, const QString& _comment)
 {
     auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
-    for (auto textItem : reviewMarkWrapper.items) {
+    for (auto textItem : std::as_const(reviewMarkWrapper.items)) {
         auto updatedReviewMarks = textItem->reviewMarks();
         for (auto& reviewMark : updatedReviewMarks) {
             if (isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {

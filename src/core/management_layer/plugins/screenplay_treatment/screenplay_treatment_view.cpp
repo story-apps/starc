@@ -144,8 +144,17 @@ ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
     , fastFormatWidget(new ScreenplayTreatmentFastFormatWidget(_parent))
     , commentsView(new CommentsView(_parent))
     , splitter(new Splitter(_parent))
-
 {
+    commentsModel->setParagraphTypesFiler({
+        BusinessLayer::TextParagraphType::SceneHeading,
+        BusinessLayer::TextParagraphType::SceneCharacters,
+        BusinessLayer::TextParagraphType::BeatHeading,
+        BusinessLayer::TextParagraphType::ActHeading,
+        BusinessLayer::TextParagraphType::ActFooter,
+        BusinessLayer::TextParagraphType::SequenceHeading,
+        BusinessLayer::TextParagraphType::SequenceFooter,
+    });
+
     toolbar->setParagraphTypesModel(paragraphTypesModel);
 
     commentsToolbar->hide();
