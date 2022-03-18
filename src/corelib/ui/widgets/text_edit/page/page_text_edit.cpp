@@ -2254,30 +2254,33 @@ void PageTextEditPrivate::sendControlContextMenuEvent(QContextMenuEvent* e)
     }
 }
 
-QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos)
+QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos) const
 {
-    Q_Q(PageTextEdit);
+    Q_Q(const PageTextEdit);
 
     //
     // Улучшаем позиционирование курсора, для исправления проблем его обнаружения
-    // на разрывах страниц и внутри таблиц
+    // на разрывах страниц, внутри таблиц и с невидимыми блоками
     //
+    const auto correctedPos = cursorForPosition(_eventPos);
 
     //
-    // Если курсор не в таблице, там не запрещено отображение курсора и не на разрыве строки
-    // оставляем как есть
+    // Если курсор не в таблице, там не запрещено отображение курсора, не на разрыве строки и не в
+    // невидимом блоке, то используем собственный алгоритм поиска лучшего расположения курсора,
+    // потому что базовый алгоритм плохо работает с невидимыми блоками
     //
-    auto cursor = q->cursorForPosition(_eventPos);
+    auto cursor = q->cursorForPosition(correctedPos);
     if (cursor.currentTable() == nullptr
         && !cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor)
-        && cursor.blockFormat().pageBreakPolicy() != QTextFormat::PageBreak_AlwaysBefore) {
-        return _eventPos;
+        && cursor.blockFormat().pageBreakPolicy() != QTextFormat::PageBreak_AlwaysBefore
+        && cursor.block().isVisible()) {
+        return correctedPos;
     }
 
     //
     // В противном случае будем искать лучшую позицию курсора
     //
-    QPoint localPos = viewport->mapFromParent(_eventPos);
+    QPoint localPos = viewport->mapFromParent(correctedPos);
     const QPoint posDelta(q->viewportMargins().left(), q->viewportMargins().top());
 
     //
@@ -2401,11 +2404,159 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos)
     // Если встретился в тексте, то просто переходим к следующему блоку
     //
     while (!cursor.atEnd()
-           && cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor)) {
+           && (!cursor.block().isVisible()
+               || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
         cursor.movePosition(QTextCursor::EndOfBlock);
         cursor.movePosition(QTextCursor::NextBlock);
     }
+    //
+    // Но в случае, если в конце стоит невидимый блок, идём назад до первого видимого
+    //
+    if (cursor.atEnd() && !cursor.block().isVisible()) {
+        while (cursor.block() != q->document()->begin()
+               && (!cursor.block().isVisible()
+                   || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
+            cursor.movePosition(QTextCursor::PreviousBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock);
+        }
+    }
+
+
     localPos = viewport->mapToParent(q->cursorRect(cursor).center() - posDelta);
+    return localPos;
+}
+
+QPoint PageTextEditPrivate::cursorForPosition(const QPoint& _eventPos) const
+{
+    Q_Q(const PageTextEdit);
+
+    //
+    // Когда в документе присутствуют невидимые блоки, то при щелчке мышъю на межстрочном отступе
+    // курсор улетает далеко вниз от того места где был произведён щелчёк, по видимому это какой-то
+    // внутренний баг, исправить который можно только через QTextDocumentLayout. Сделать это малой
+    // кровью мне не удалось, поэтому пришлось придумать данную заплатку.
+    //
+    // Суть её заключается в том, чтобы найти ближайшую корректную позицию мыши.
+    //
+
+    QTextCursor cursor = q->textCursor();
+    auto findNearPosition = [&q, &cursor](bool _isForward, int _localPosY) {
+        int minSpace = INT_MAX;
+        bool firstStep = true;
+        if (_isForward) {
+            //
+            // Ищем ближайший к указателю блок
+            //
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            do {
+                //
+                // Если это не первый проход, смещаем курсор
+                //
+                if (firstStep) {
+                    firstStep = false;
+                } else {
+                    cursor.movePosition(cursor.atBlockEnd() ? QTextCursor::NextBlock
+                                                            : QTextCursor::EndOfBlock);
+                }
+
+                if (cursor.block().isVisible()) {
+                    const int space = abs(_localPosY - q->cursorRect(cursor).center().y());
+                    //
+                    // Если верхний и нижний блоки одинаково близки, используем нижний
+                    //
+                    if (minSpace >= space) {
+                        minSpace = space;
+                    } else {
+                        if (cursor.atBlockStart()) {
+                            do {
+                                cursor.movePosition(QTextCursor::PreviousBlock);
+                                cursor.movePosition(QTextCursor::StartOfBlock);
+                            } while (!cursor.atStart()
+                                     && (cursor.block().blockFormat().boolProperty(
+                                             PageTextEdit::PropertyDontShowCursor)
+                                         || !cursor.block().isVisible()));
+                        }
+                        break;
+                    }
+                }
+            } while (!cursor.atEnd());
+        } else {
+            cursor.movePosition(QTextCursor::EndOfBlock);
+            do {
+                //
+                // Если это не первый проход, смещаем курсор
+                //
+                if (firstStep) {
+                    firstStep = false;
+                } else {
+                    cursor.movePosition(cursor.atBlockStart() ? QTextCursor::PreviousCharacter
+                                                              : QTextCursor::StartOfBlock);
+                }
+
+                if (cursor.block().isVisible()) {
+                    const int space = abs(_localPosY - q->cursorRect(cursor).center().y());
+                    //
+                    // Всегда используем более низкий блок
+                    //
+                    if (minSpace >= space) {
+                        minSpace = space;
+                    } else {
+                        if (cursor.atBlockEnd()) {
+                            do {
+                                cursor.movePosition(QTextCursor::NextBlock);
+                                cursor.movePosition(QTextCursor::EndOfBlock);
+                            } while (!cursor.atEnd()
+                                     && (cursor.block().blockFormat().boolProperty(
+                                             PageTextEdit::PropertyDontShowCursor)
+                                         || !cursor.block().isVisible()));
+                        }
+                        break;
+                    }
+                }
+            } while (!cursor.atStart());
+        }
+
+        return minSpace;
+    };
+
+    QPoint localPos = viewport->mapFromParent(_eventPos);
+
+    //
+    // Определим в каком направлении нужно осуществлять поиск, если выделенный в текущий момент
+    // блок находится над курсором, то вперёд, в противном случае назад
+    //
+    const bool isForward = !cursor.isNull() && q->cursorRect(cursor).bottom() < localPos.y();
+
+    findNearPosition(isForward, localPos.y());
+
+    //
+    // Если блок не пуст
+    //
+    if (!cursor.block().text().isEmpty()) {
+        //
+        // Ищем наилучшее совпадение внутри блока, т.к. он может быть многострочным
+        //
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        int minSpace = INT_MAX;
+        do {
+            const int space = abs(localPos.y() - q->cursorRect(cursor).center().y());
+            if (minSpace >= space) {
+                minSpace = space;
+            } else {
+                if (!cursor.atBlockStart()) {
+                    cursor.movePosition(QTextCursor::PreviousCharacter);
+                }
+                break;
+            }
+            cursor.movePosition(QTextCursor::NextCharacter);
+        } while (!cursor.atBlockEnd());
+    }
+
+    //
+    // Настраиваем координаты найденной точки
+    //
+    localPos.setY(q->cursorRect(cursor).center().y());
+    localPos = viewport->mapToParent(localPos);
     return localPos;
 }
 

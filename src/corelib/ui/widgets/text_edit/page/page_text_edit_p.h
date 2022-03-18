@@ -241,5 +241,6 @@ private:
      * @note Используется в событиях связанных с мышью из-за того, что при наличии невидимых блоков
      *		 в документе, стандартная реализация иногда скачет сильно вниз
      */
-    QPoint correctMousePosition(const QPoint& _eventPos);
+    QPoint correctMousePosition(const QPoint& _eventPos) const;
+    QPoint cursorForPosition(const QPoint& _eventPos) const;
 };
