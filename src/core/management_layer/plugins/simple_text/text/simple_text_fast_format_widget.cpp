@@ -1,6 +1,6 @@
-#include "screenplay_treatment_fast_format_widget.h"
+#include "simple_text_fast_format_widget.h"
 
-#include "screenplay_treatment_edit.h"
+#include "simple_text_edit.h"
 
 #include <business_layer/templates/screenplay_template.h>
 #include <ui/design_system/design_system.h>
@@ -23,7 +23,7 @@ const char* kIsButtonCurrentTypeKey = "is-button-current-type";
 } // namespace
 
 
-class ScreenplayTreatmentFastFormatWidget::Implementation
+class SimpleTextFastFormatWidget::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -45,7 +45,7 @@ public:
     QList<Button*> buttons;
 };
 
-ScreenplayTreatmentFastFormatWidget::Implementation::Implementation(QWidget* _parent)
+SimpleTextFastFormatWidget::Implementation::Implementation(QWidget* _parent)
 {
     //
     // Создаём столько кнопок, сколько может быть стилей
@@ -55,7 +55,7 @@ ScreenplayTreatmentFastFormatWidget::Implementation::Implementation(QWidget* _pa
     }
 }
 
-void ScreenplayTreatmentFastFormatWidget::Implementation::updateButtons()
+void SimpleTextFastFormatWidget::Implementation::updateButtons()
 {
     const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
     if (!canRun) {
@@ -90,7 +90,7 @@ void ScreenplayTreatmentFastFormatWidget::Implementation::updateButtons()
 // ****
 
 
-ScreenplayTreatmentFastFormatWidget::ScreenplayTreatmentFastFormatWidget(QWidget* _parent)
+SimpleTextFastFormatWidget::SimpleTextFastFormatWidget(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
@@ -111,9 +111,9 @@ ScreenplayTreatmentFastFormatWidget::ScreenplayTreatmentFastFormatWidget(QWidget
     designSystemChangeEvent(nullptr);
 }
 
-ScreenplayTreatmentFastFormatWidget::~ScreenplayTreatmentFastFormatWidget() = default;
+SimpleTextFastFormatWidget::~SimpleTextFastFormatWidget() = default;
 
-void ScreenplayTreatmentFastFormatWidget::setParagraphTypesModel(QAbstractItemModel* _model)
+void SimpleTextFastFormatWidget::setParagraphTypesModel(QAbstractItemModel* _model)
 {
     if (d->model == _model) {
         return;
@@ -131,7 +131,7 @@ void ScreenplayTreatmentFastFormatWidget::setParagraphTypesModel(QAbstractItemMo
     connect(d->model, &QAbstractItemModel::modelReset, this, [this] { d->updateButtons(); });
 }
 
-void ScreenplayTreatmentFastFormatWidget::setCurrentParagraphType(const QModelIndex& _index)
+void SimpleTextFastFormatWidget::setCurrentParagraphType(const QModelIndex& _index)
 {
     for (auto button : std::as_const(d->buttons)) {
         const bool isCurrentType = button->property(kButtonTypeKey).toModelIndex() == _index;
@@ -141,7 +141,7 @@ void ScreenplayTreatmentFastFormatWidget::setCurrentParagraphType(const QModelIn
     }
 }
 
-void ScreenplayTreatmentFastFormatWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void SimpleTextFastFormatWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 

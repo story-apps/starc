@@ -3,10 +3,10 @@
 #include <interfaces/ui/i_document_view.h>
 #include <ui/widgets/widget/widget.h>
 
-
 namespace BusinessLayer {
 class ScreenplayTextModel;
 }
+
 
 namespace Ui {
 

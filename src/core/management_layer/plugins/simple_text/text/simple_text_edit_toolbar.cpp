@@ -86,7 +86,6 @@ SimpleTextEditToolbar::SimpleTextEditToolbar(QWidget* _parent)
         d->showPopup(this);
     });
 
-    d->fastFormatAction->setVisible(false);
     d->fastFormatAction->setIconText(u8"\U000f0328");
     d->fastFormatAction->setCheckable(true);
     addAction(d->fastFormatAction);
@@ -104,7 +103,6 @@ SimpleTextEditToolbar::SimpleTextEditToolbar(QWidget* _parent)
     addAction(d->searchAction);
     connect(d->searchAction, &QAction::triggered, this, &SimpleTextEditToolbar::searchPressed);
 
-    d->commentsAction->setVisible(false);
     d->commentsAction->setIconText(u8"\U000f0e31");
     d->commentsAction->setCheckable(true);
     addAction(d->commentsAction);

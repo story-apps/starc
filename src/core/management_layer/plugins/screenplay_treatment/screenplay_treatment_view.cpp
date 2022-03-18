@@ -45,7 +45,7 @@ const int kTypeDataRole = Qt::UserRole + 100;
 const int kFastFormatTabIndex = 0;
 const int kCommentsTabIndex = 1;
 
-const QString kSettingsKey = "screenplay-text";
+const QString kSettingsKey = "screenplay-treatment";
 const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
 const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";

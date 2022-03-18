@@ -7,6 +7,7 @@ namespace BusinessLayer {
 class SimpleTextModel;
 }
 
+
 namespace Ui {
 
 /**

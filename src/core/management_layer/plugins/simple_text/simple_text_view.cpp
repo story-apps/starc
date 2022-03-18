@@ -3,22 +3,35 @@
 #include "text/simple_text_edit.h"
 #include "text/simple_text_edit_shortcuts_manager.h"
 #include "text/simple_text_edit_toolbar.h"
+#include "text/simple_text_fast_format_widget.h"
 #include "text/simple_text_search_manager.h"
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/comments/comments_model.h>
+#include <ui/modules/comments/comments_toolbar.h>
+#include <ui/modules/comments/comments_view.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <ui/widgets/shadow/shadow.h>
+#include <ui/widgets/splitter/splitter.h>
+#include <ui/widgets/stack_widget/stack_widget.h>
+#include <ui/widgets/tab_bar/tab_bar.h>
+#include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/ui_helper.h>
 
+#include <QPointer>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QTimer>
 #include <QVBoxLayout>
 
 
@@ -35,12 +48,18 @@ const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
 const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
 const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 } // namespace
 
 class SimpleTextView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
+
+    /**
+     * @brief Переконфигурировать представление
+     */
+    void reconfigureTemplate(bool _withModelReinitialization = true);
 
     /**
      * @brief Обновить настройки UI панели инструментов
@@ -57,6 +76,26 @@ public:
      */
     void updateTextEditPageMargins();
 
+    /**
+     * @brief Обновить видимость и положение панели инструментов рецензирования
+     */
+    void updateCommentsToolBar();
+
+    /**
+     * @brief Обновить видимость боковой панели (показана, если показана хотя бы одна из вложенных
+     * панелей)
+     */
+    void updateSideBarVisibility(QWidget* _container);
+
+    /**
+     * @brief Добавить редакторскую заметку для текущего выделения
+     */
+    void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
+                       const QString& _comment);
+
+
+    QPointer<BusinessLayer::SimpleTextModel> model;
+    BusinessLayer::CommentsModel* commentsModel = nullptr;
 
     SimpleTextEdit* textEdit = nullptr;
     SimpleTextEditShortcutsManager shortcutsManager;
@@ -65,22 +104,45 @@ public:
     SimpleTextEditToolbar* toolbar = nullptr;
     BusinessLayer::SimpleTextSearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
-    QHash<BusinessLayer::TextParagraphType, QString> typesToDisplayNames;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
+
+    CommentsToolbar* commentsToolbar = nullptr;
+
+    Shadow* sidebarShadow = nullptr;
+
+    bool isSidebarShownFirstTime = true;
+    Widget* sidebarWidget = nullptr;
+    TabBar* sidebarTabs = nullptr;
+    StackWidget* sidebarContent = nullptr;
+    SimpleTextFastFormatWidget* fastFormatWidget = nullptr;
+    CommentsView* commentsView = nullptr;
+
+    Splitter* splitter = nullptr;
 };
 
 SimpleTextView::Implementation::Implementation(QWidget* _parent)
-    : textEdit(new SimpleTextEdit(_parent))
+    : commentsModel(new BusinessLayer::CommentsModel(_parent))
+    , textEdit(new SimpleTextEdit(_parent))
     , shortcutsManager(textEdit)
     , scalableWrapper(new ScalableWrapper(textEdit, _parent))
     , toolbar(new SimpleTextEditToolbar(scalableWrapper))
     , searchManager(new BusinessLayer::SimpleTextSearchManager(scalableWrapper, textEdit))
     , toolbarAnimation(new FloatingToolbarAnimator(_parent))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
+    , commentsToolbar(new CommentsToolbar(_parent))
+    , sidebarShadow(new Shadow(Qt::RightEdge, scalableWrapper))
+    , sidebarWidget(new Widget(_parent))
+    , sidebarTabs(new TabBar(_parent))
+    , sidebarContent(new StackWidget(_parent))
+    , fastFormatWidget(new SimpleTextFastFormatWidget(_parent))
+    , commentsView(new CommentsView(_parent))
+    , splitter(new Splitter(_parent))
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
+
+    commentsToolbar->hide();
 
     textEdit->setVerticalScrollBar(new ScrollBar);
     textEdit->setHorizontalScrollBar(new ScrollBar);
@@ -90,6 +152,53 @@ SimpleTextView::Implementation::Implementation(QWidget* _parent)
     scalableWrapper->initScrollBarsSyncing();
 
     textEdit->setUsePageMode(true);
+
+    sidebarWidget->hide();
+    sidebarTabs->setFixed(true);
+    sidebarTabs->addTab({}); // fastformat
+    sidebarTabs->setTabVisible(kFastFormatTabIndex, false);
+    sidebarTabs->addTab({}); // comments
+    sidebarTabs->setTabVisible(kCommentsTabIndex, false);
+    sidebarContent->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    sidebarContent->setAnimationType(StackWidget::AnimationType::Slide);
+    sidebarContent->addWidget(fastFormatWidget);
+    sidebarContent->addWidget(commentsView);
+    fastFormatWidget->hide();
+    fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
+    commentsView->setModel(commentsModel);
+    commentsView->hide();
+}
+
+void SimpleTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
+{
+    paragraphTypesModel->clear();
+
+    using namespace BusinessLayer;
+    const auto usedTemplate = BusinessLayer::TemplatesFacade::simpleTextTemplate();
+    const QVector<TextParagraphType> types = { TextParagraphType::ChapterHeading1,
+                                               TextParagraphType::ChapterHeading2,
+                                               TextParagraphType::ChapterHeading3,
+                                               TextParagraphType::ChapterHeading4,
+                                               TextParagraphType::ChapterHeading5,
+                                               TextParagraphType::ChapterHeading6,
+                                               TextParagraphType::Text,
+                                               TextParagraphType::InlineNote };
+    for (const auto type : types) {
+        if (!usedTemplate.paragraphStyle(type).isActive()) {
+            continue;
+        }
+
+        auto typeItem = new QStandardItem(toDisplayString(type));
+        typeItem->setData(shortcutsManager.shortcut(type), Qt::WhatsThisRole);
+        typeItem->setData(static_cast<int>(type), kTypeDataRole);
+        paragraphTypesModel->appendRow(typeItem);
+    }
+
+    shortcutsManager.reconfigure();
+
+    if (_withModelReinitialization) {
+        textEdit->reinit();
+    }
 }
 
 void SimpleTextView::Implementation::updateToolBarUi()
@@ -108,6 +217,11 @@ void SimpleTextView::Implementation::updateToolBarUi()
 
     toolbarAnimation->setBackgroundColor(Ui::DesignSystem::color().background());
     toolbarAnimation->setTextColor(Ui::DesignSystem::color().onBackground());
+
+    commentsToolbar->setBackgroundColor(Ui::DesignSystem::color().background());
+    commentsToolbar->setTextColor(Ui::DesignSystem::color().onBackground());
+    commentsToolbar->raise();
+    updateCommentsToolBar();
 }
 
 void SimpleTextView::Implementation::updateToolBarCurrentParagraphTypeName()
@@ -125,6 +239,7 @@ void SimpleTextView::Implementation::updateToolBarCurrentParagraphTypeName()
             = static_cast<BusinessLayer::TextParagraphType>(item->data(kTypeDataRole).toInt());
         if (itemType == paragraphType) {
             toolbar->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));
+            fastFormatWidget->setCurrentParagraphType(paragraphTypesModel->index(itemRow, 0));
             return;
         }
     }
@@ -141,6 +256,87 @@ void SimpleTextView::Implementation::updateTextEditPageMargins()
     textEdit->setPageMarginsMm(pageMargins);
 }
 
+void SimpleTextView::Implementation::updateCommentsToolBar()
+{
+    if (!toolbar->isCommentsModeEnabled() || !textEdit->textCursor().hasSelection()) {
+        commentsToolbar->hideToolbar();
+        return;
+    }
+
+    //
+    // Определяем точку на границе страницы, либо если страница не влезает в экран, то с боку экрана
+    //
+    const int x = (textEdit->width() - textEdit->viewport()->width()) / 2
+        + textEdit->viewport()->width() - commentsToolbar->width();
+    const qreal textRight = scalableWrapper->mapFromEditor(QPoint(x, 0)).x();
+    const auto cursorRect = textEdit->cursorRect();
+    const auto globalCursorCenter = textEdit->mapToGlobal(cursorRect.center());
+    const auto localCursorCenter
+        = commentsToolbar->parentWidget()->mapFromGlobal(globalCursorCenter);
+    //
+    // И смещаем панель рецензирования к этой точке
+    //
+    commentsToolbar->moveToolbar(QPoint(std::min(scalableWrapper->width() - commentsToolbar->width()
+                                                     - Ui::DesignSystem::layout().px24(),
+                                                 textRight),
+                                        localCursorCenter.y() - (commentsToolbar->height() / 3)));
+
+    //
+    // Если панель ещё не была показана, отобразим её
+    //
+    commentsToolbar->showToolbar();
+}
+
+void SimpleTextView::Implementation::updateSideBarVisibility(QWidget* _container)
+{
+    const bool isSidebarShouldBeVisible
+        = toolbar->isFastFormatPanelVisible() || toolbar->isCommentsModeEnabled();
+    if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
+        return;
+    }
+
+    sidebarShadow->setVisible(isSidebarShouldBeVisible);
+    sidebarWidget->setVisible(isSidebarShouldBeVisible);
+
+    if (isSidebarShownFirstTime && isSidebarShouldBeVisible) {
+        isSidebarShownFirstTime = false;
+        const auto sideBarWidth = sidebarContent->sizeHint().width();
+        splitter->setSizes({ _container->width() - sideBarWidth, sideBarWidth });
+    }
+}
+
+void SimpleTextView::Implementation::addReviewMark(const QColor& _textColor,
+                                                   const QColor& _backgroundColor,
+                                                   const QString& _comment)
+{
+    //
+    // Добавим заметку
+    //
+    const auto textColor
+        = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
+    textEdit->addReviewMark(textColor, _backgroundColor, _comment);
+
+    //
+    // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение
+    // добавлено
+    //
+    BusinessLayer::TextCursor cursor(textEdit->textCursor());
+    const auto selectionInterval = cursor.selectionInterval();
+    //
+    // ... делаем танец с бубном, чтобы получить сигнал об обновлении позиции курсора
+    //     и выделить новую заметку в общем списке
+    //
+    cursor.setPosition(selectionInterval.to);
+    textEdit->setTextCursorReimpl(cursor);
+    cursor.setPosition(selectionInterval.from);
+    textEdit->setTextCursorReimpl(cursor);
+
+    //
+    // Фокусируем редактор сценария, чтобы пользователь мог продолжать работать с ним
+    //
+    scalableWrapper->setFocus();
+}
+
 
 // ****
 
@@ -152,10 +348,19 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
     setFocusProxy(d->scalableWrapper);
     d->scalableWrapper->installEventFilter(this);
 
+    QVBoxLayout* sidebarLayout = new QVBoxLayout(d->sidebarWidget);
+    sidebarLayout->setContentsMargins({});
+    sidebarLayout->setSpacing(0);
+    sidebarLayout->addWidget(d->sidebarTabs);
+    sidebarLayout->addWidget(d->sidebarContent);
+
+    d->splitter->setWidgets(d->scalableWrapper, d->sidebarWidget);
+    d->splitter->setSizes({ 1, 0 });
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
     layout->setSpacing(0);
-    layout->addWidget(d->scalableWrapper);
+    layout->addWidget(d->splitter);
 
     connect(d->toolbar, &SimpleTextEditToolbar::undoPressed, d->textEdit, &SimpleTextEdit::undo);
     connect(d->toolbar, &SimpleTextEditToolbar::redoPressed, d->textEdit, &SimpleTextEdit::redo);
@@ -166,6 +371,27 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
                 d->textEdit->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();
             });
+    connect(d->toolbar, &SimpleTextEditToolbar::fastFormatPanelVisibleChanged, this,
+            [this](bool _visible) {
+                d->sidebarTabs->setTabVisible(kFastFormatTabIndex, _visible);
+                d->fastFormatWidget->setVisible(_visible);
+                if (_visible) {
+                    d->sidebarTabs->setCurrentTab(kFastFormatTabIndex);
+                    d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
+                }
+                d->updateSideBarVisibility(this);
+            });
+    connect(d->toolbar, &SimpleTextEditToolbar::commentsModeEnabledChanged, this,
+            [this](bool _enabled) {
+                d->sidebarTabs->setTabVisible(kCommentsTabIndex, _enabled);
+                d->commentsView->setVisible(_enabled);
+                if (_enabled) {
+                    d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
+                    d->sidebarContent->setCurrentWidget(d->commentsView);
+                    d->updateCommentsToolBar();
+                }
+                d->updateSideBarVisibility(this);
+            });
     connect(d->toolbar, &SimpleTextEditToolbar::searchPressed, this, [this] {
         d->toolbarAnimation->switchToolbars(d->toolbar->searchIcon(),
                                             d->toolbar->searchIconPosition(), d->toolbar,
@@ -174,6 +400,83 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
     //
     connect(d->searchManager, &BusinessLayer::SimpleTextSearchManager::hideToolbarRequested, this,
             [this] { d->toolbarAnimation->switchToolbarsBack(); });
+    //
+    connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,
+            [this](const QColor& _color) { d->addReviewMark(_color, {}, {}); });
+    connect(d->commentsToolbar, &CommentsToolbar::textBackgoundColorChangeRequested, this,
+            [this](const QColor& _color) { d->addReviewMark({}, _color, {}); });
+    connect(d->commentsToolbar, &CommentsToolbar::commentAddRequested, this,
+            [this](const QColor& _color) {
+                d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
+                d->commentsView->showAddCommentView(_color);
+            });
+    connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
+            [this](const QColor& _color, const QString& _comment) {
+                d->addReviewMark({}, _color, _comment);
+            });
+    connect(d->commentsView, &CommentsView::changeReviewMarkRequested, this,
+            [this](const QModelIndex& _index, const QString& _comment) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->setComment(_index, _comment);
+            });
+    connect(d->commentsView, &CommentsView::addReviewMarkReplyRequested, this,
+            [this](const QModelIndex& _index, const QString& _reply) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->addReply(_index, _reply);
+            });
+    connect(d->commentsView, &CommentsView::commentSelected, this,
+            [this](const QModelIndex& _index) {
+                const auto positionHint = d->commentsModel->mapToModel(_index);
+                const auto position = d->textEdit->positionForModelIndex(positionHint.index)
+                    + positionHint.blockPosition;
+                auto cursor = d->textEdit->textCursor();
+                cursor.setPosition(position);
+                d->textEdit->ensureCursorVisible(cursor);
+                d->scalableWrapper->setFocus();
+            });
+    connect(d->commentsView, &CommentsView::markAsDoneRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->markAsDone(_indexes);
+            });
+    connect(d->commentsView, &CommentsView::markAsUndoneRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->markAsUndone(_indexes);
+            });
+    connect(d->commentsView, &CommentsView::removeRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->remove(_indexes);
+            });
+    //
+    connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this](int _currentIndex) {
+        if (_currentIndex == kFastFormatTabIndex) {
+            d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
+        } else {
+            d->sidebarContent->setCurrentWidget(d->commentsView);
+        }
+    });
+    //
+    connect(d->fastFormatWidget, &SimpleTextFastFormatWidget::paragraphTypeChanged, this,
+            [this](const QModelIndex& _index) {
+                const auto type = static_cast<BusinessLayer::TextParagraphType>(
+                    _index.data(kTypeDataRole).toInt());
+                d->textEdit->setCurrentParagraphType(type);
+                d->scalableWrapper->setFocus();
+            });
+    //
+    connect(d->scalableWrapper->verticalScrollBar(), &QScrollBar::valueChanged, this,
+            [this] { d->updateCommentsToolBar(); });
+    connect(d->scalableWrapper->horizontalScrollBar(), &QScrollBar::valueChanged, this,
+            [this] { d->updateCommentsToolBar(); });
+    connect(
+        d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this,
+        [this] {
+            d->updateTextEditPageMargins();
+            d->updateCommentsToolBar();
+        },
+        Qt::QueuedConnection);
     //
     auto handleCursorPositionChanged = [this] {
         //
@@ -185,13 +488,18 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
         //
         const auto screenplayModelIndex = d->textEdit->currentModelIndex();
         emit currentModelIndexChanged(screenplayModelIndex);
+        //
+        // Если необходимо выберем соответствующий комментарий
+        //
+        const auto positionInBlock = d->textEdit->textCursor().positionInBlock();
+        const auto commentModelIndex
+            = d->commentsModel->mapFromModel(screenplayModelIndex, positionInBlock);
+        d->commentsView->setCurrentIndex(commentModelIndex);
     };
     connect(d->textEdit, &SimpleTextEdit::paragraphTypeChanged, this, handleCursorPositionChanged);
     connect(d->textEdit, &SimpleTextEdit::cursorPositionChanged, this, handleCursorPositionChanged);
-    //
-    connect(
-        d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this,
-        [this] { d->updateTextEditPageMargins(); }, Qt::QueuedConnection);
+    connect(d->textEdit, &SimpleTextEdit::selectionChanged, this,
+            [this] { d->updateCommentsToolBar(); });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -213,37 +521,18 @@ void SimpleTextView::toggleFullScreen(bool _isFullScreen)
 
 void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
-    d->paragraphTypesModel->clear();
-
-    using namespace BusinessLayer;
-    const auto usedTemplate = BusinessLayer::TemplatesFacade::simpleTextTemplate();
-    const QVector<TextParagraphType> types = { TextParagraphType::ChapterHeading1,
-                                               TextParagraphType::ChapterHeading2,
-                                               TextParagraphType::ChapterHeading3,
-                                               TextParagraphType::ChapterHeading4,
-                                               TextParagraphType::ChapterHeading5,
-                                               TextParagraphType::ChapterHeading6,
-                                               TextParagraphType::Text,
-                                               TextParagraphType::InlineNote };
-    for (const auto type : types) {
-        if (!usedTemplate.paragraphStyle(type).isActive()) {
-            continue;
-        }
-
-        auto typeItem = new QStandardItem(d->typesToDisplayNames.value(type));
-        typeItem->setData(d->shortcutsManager.shortcut(type), Qt::WhatsThisRole);
-        typeItem->setData(static_cast<int>(type), kTypeDataRole);
-        d->paragraphTypesModel->appendRow(typeItem);
-    }
-
     UiHelper::initSpellingFor(d->textEdit);
-
-    d->shortcutsManager.reconfigure();
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey)) {
-        d->textEdit->reinit();
+            DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
+        d->reconfigureTemplate();
+    }
+
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsSimpleTextEditorShortcutsKey)) {
+        d->shortcutsManager.reconfigure();
     }
 
     if (_changedSettingsKeys.isEmpty()
@@ -280,16 +569,47 @@ void SimpleTextView::loadViewSettings()
 
     const auto scaleFactor = settingsValue(kScaleFactorKey, 1.0).toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
+
+    const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
+    d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
+    const auto isFastFormatPanelVisible
+        = settingsValue(kIsFastFormatPanelVisibleKey, false).toBool();
+    d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
+    const auto sidebarPanelIndex = settingsValue(kSidebarPanelIndexKey, 0).toInt();
+    d->sidebarTabs->setCurrentTab(sidebarPanelIndex);
+
+    const auto sidebarState = settingsValue(kSidebarStateKey);
+    if (sidebarState.isValid()) {
+        d->isSidebarShownFirstTime = false;
+        d->splitter->restoreState(sidebarState.toByteArray());
+    }
 }
 
 void SimpleTextView::saveViewSettings()
 {
     setSettingsValue(kScaleFactorKey, d->scalableWrapper->zoomRange());
+
+    setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
+    setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
+    setSettingsValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab());
+
+    setSettingsValue(kSidebarStateKey, d->splitter->saveState());
 }
 
 void SimpleTextView::setModel(BusinessLayer::SimpleTextModel* _model)
 {
-    d->textEdit->initWithModel(_model);
+    d->model = _model;
+
+    //
+    // Отслеживаем изменения некоторых параметров
+    //
+    if (d->model) {
+        const bool reinitModel = true;
+        d->reconfigureTemplate(!reinitModel);
+    }
+
+    d->textEdit->initWithModel(d->model);
+    d->commentsModel->setTextModel(d->model);
 
     d->updateToolBarCurrentParagraphTypeName();
 }
@@ -319,8 +639,10 @@ void SimpleTextView::setCursorPosition(int _position)
 bool SimpleTextView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->scalableWrapper) {
-        if (_event->type() == QEvent::KeyPress && d->searchManager->toolbar()->isVisible()
-            && d->scalableWrapper->hasFocus()) {
+        if (_event->type() == QEvent::Resize) {
+            QTimer::singleShot(0, this, [this] { d->updateCommentsToolBar(); });
+        } else if (_event->type() == QEvent::KeyPress && d->searchManager->toolbar()->isVisible()
+                   && d->scalableWrapper->hasFocus()) {
             auto keyEvent = static_cast<QKeyEvent*>(_event);
             if (keyEvent->key() == Qt::Key_Escape) {
                 d->toolbarAnimation->switchToolbarsBack();
@@ -339,19 +661,13 @@ void SimpleTextView::resizeEvent(QResizeEvent* _event)
         = QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint();
     d->toolbar->move(toolbarPosition);
     d->searchManager->toolbar()->move(toolbarPosition);
+    d->updateCommentsToolBar();
 }
 
 void SimpleTextView::updateTranslations()
 {
-    using namespace BusinessLayer;
-    d->typesToDisplayNames = { { TextParagraphType::ChapterHeading1, tr("Heading 1") },
-                               { TextParagraphType::ChapterHeading2, tr("Heading 2") },
-                               { TextParagraphType::ChapterHeading3, tr("Heading 3") },
-                               { TextParagraphType::ChapterHeading4, tr("Heading 4") },
-                               { TextParagraphType::ChapterHeading5, tr("Heading 5") },
-                               { TextParagraphType::ChapterHeading6, tr("Heading 6") },
-                               { TextParagraphType::Text, tr("Text") },
-                               { TextParagraphType::InlineNote, tr("Inline note") } };
+    d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
+    d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
 }
 
 void SimpleTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -373,6 +689,14 @@ void SimpleTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->textEdit->setPalette(palette);
     palette.setColor(QPalette::Base, Qt::transparent);
     d->textEdit->viewport()->setPalette(palette);
+    d->textEdit->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->textEdit->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
+
+    d->splitter->setBackgroundColor(Ui::DesignSystem::color().background());
+
+    d->sidebarTabs->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->sidebarTabs->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->sidebarContent->setBackgroundColor(Ui::DesignSystem::color().primary());
 }
 
 } // namespace Ui

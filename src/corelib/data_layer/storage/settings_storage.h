@@ -140,6 +140,8 @@ const QString kComponentsSimpleTextKey = kComponentsGroupKey + QStringLiteral("/
 const QString kComponentsSimpleTextEditorKey = kComponentsSimpleTextKey + QStringLiteral("/editor");
 const QString kComponentsSimpleTextEditorDefaultTemplateKey
     = kComponentsSimpleTextEditorKey + QStringLiteral("/default-template");
+const QString kComponentsSimpleTextEditorShortcutsKey
+    = kComponentsSimpleTextEditorKey + QStringLiteral("/shortcuts");
 // ... навигатор
 const QString kComponentsSimpleTextNavigatorKey
     = kComponentsSimpleTextKey + QStringLiteral("/navigator");
