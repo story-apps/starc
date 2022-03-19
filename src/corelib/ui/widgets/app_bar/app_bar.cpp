@@ -15,12 +15,6 @@ class AppBar::Implementation
 public:
     explicit Implementation(AppBar* _q);
 
-
-    /**
-     * @brief Владелец данных
-     */
-    AppBar* q = nullptr;
-
     /**
      * @brief Анимировать клик
      */
@@ -31,6 +25,16 @@ public:
      */
     QAction* pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const;
 
+
+    /**
+     * @brief Владелец данных
+     */
+    AppBar* q = nullptr;
+
+    /**
+     * @brief Иконка опций тулбара
+     */
+    QAction* optionsAction = nullptr;
 
     /**
      * @brief Иконка на которой кликнули последней
@@ -87,6 +91,17 @@ QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate,
         actionLeft = q->isLeftToRight() ? actionRight : actionLeft - actionWidth;
     }
 
+    if (optionsAction != nullptr) {
+        actionLeft = q->isLeftToRight()
+            ? (q->width() - Ui::DesignSystem::appBar().iconSize().width()
+               - Ui::DesignSystem::appBar().margins().right())
+            : Ui::DesignSystem::appBar().margins().left();
+        const qreal actionRight = actionLeft + actionWidth;
+        if (actionLeft < _coordinate.x() && _coordinate.x() < actionRight) {
+            return optionsAction;
+        }
+    }
+
     return nullptr;
 }
 
@@ -106,11 +121,22 @@ AppBar::AppBar(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+void AppBar::setOptionsAction(QAction* _options)
+{
+    if (d->optionsAction == _options) {
+        return;
+    }
+
+    d->optionsAction = _options;
+    update();
+}
+
 QSize AppBar::minimumSizeHint() const
 {
+    const int actionsSize = actions().size() + (d->optionsAction != nullptr ? 1 : 0);
     const qreal width = Ui::DesignSystem::appBar().margins().left()
-        + Ui::DesignSystem::appBar().iconSize().width() * actions().size()
-        + Ui::DesignSystem::appBar().iconsSpacing() * (actions().size() - 1)
+        + Ui::DesignSystem::appBar().iconSize().width() * actionsSize
+        + Ui::DesignSystem::appBar().iconsSpacing() * (actionsSize - 1)
         + Ui::DesignSystem::appBar().margins().right();
     const qreal height = Ui::DesignSystem::appBar().margins().top()
         + Ui::DesignSystem::appBar().iconSize().height()
@@ -155,19 +181,20 @@ void AppBar::paintEvent(QPaintEvent* _event)
     const qreal actionY = Ui::DesignSystem::appBar().margins().top();
     const QSizeF actionSize = Ui::DesignSystem::appBar().iconSize();
     const QColor iconInactiveColor = ColorHelper::colorBetween(textColor(), backgroundColor());
-    for (const QAction* action : actions()) {
+    auto drawIcon = [this, &painter, &actionX, actionY, actionSize,
+                     iconInactiveColor](const QAction* _action) {
         //
         // ... сама иконка
         //
         const QRectF actionRect(QPointF(actionX, actionY), actionSize);
-        painter.setPen((!action->isCheckable() || action->isChecked()) ? textColor()
-                                                                       : iconInactiveColor);
-        painter.drawText(actionRect, Qt::AlignCenter, action->text());
+        painter.setPen((!_action->isCheckable() || _action->isChecked()) ? textColor()
+                                                                         : iconInactiveColor);
+        painter.drawText(actionRect, Qt::AlignCenter, _action->text());
 
         //
         // ... декорация
         //
-        if (action == d->lastPressedAction
+        if (_action == d->lastPressedAction
             && (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
                 || d->decorationOpacityAnimation.state() == QVariantAnimation::Running)) {
             painter.setPen(Qt::NoPen);
@@ -178,9 +205,22 @@ void AppBar::paintEvent(QPaintEvent* _event)
                                 d->decorationRadiusAnimation.currentValue().toReal());
             painter.setOpacity(1.0);
         }
+    };
+    for (const QAction* action : actions()) {
+        drawIcon(action);
 
         actionX += (isLeftToRight() ? 1 : -1)
-            * (actionRect.width() + Ui::DesignSystem::appBar().iconsSpacing());
+            * (actionSize.width() + Ui::DesignSystem::appBar().iconsSpacing());
+    }
+
+    //
+    // Иконка опций панели
+    //
+    if (d->optionsAction != nullptr) {
+        actionX = isLeftToRight() ? (width() - Ui::DesignSystem::appBar().iconSize().width()
+                                     - Ui::DesignSystem::appBar().margins().right())
+                                  : Ui::DesignSystem::appBar().margins().left();
+        drawIcon(d->optionsAction);
     }
 }
 

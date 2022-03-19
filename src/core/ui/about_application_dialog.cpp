@@ -156,7 +156,7 @@ void AboutApplicationDialog::updateTranslations()
 
     d->versionLabel->setText(
         QString("%1 %2").arg(tr("version"), QCoreApplication::applicationVersion()));
-    d->authorsLabel1->setText(tr("Designed, coded and crafted with love in "));
+    d->authorsLabel1->setText(tr("Designed, coded and crafted with love at the "));
     d->authorsLink->setText("Story Apps");
     d->authorsLabel2->setText(" company.");
     d->partnerLabel1->setText(tr("The Logline Generator is powered by "));

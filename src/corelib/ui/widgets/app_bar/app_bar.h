@@ -15,6 +15,11 @@ public:
     ~AppBar() override;
 
     /**
+     * @brief Задать действие для опций тулбара
+     */
+    void setOptionsAction(QAction* _options);
+
+    /**
      * @brief Сами определяем минимальный размер
      */
     QSize minimumSizeHint() const override;

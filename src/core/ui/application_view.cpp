@@ -2,6 +2,8 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/settings/theme_setup_view.h>
+#include <ui/widgets/app_bar/app_bar.h>
+#include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
@@ -31,6 +33,8 @@ public:
 
     Widget* navigationWidget = nullptr;
     StackWidget* toolBar = nullptr;
+    QAction* optionsAction = nullptr;
+    ContextMenu* optionsMenu = nullptr;
     StackWidget* navigator = nullptr;
     StackWidget* view = nullptr;
 
@@ -45,6 +49,8 @@ public:
 ApplicationView::Implementation::Implementation(QWidget* _parent)
     : navigationWidget(new Widget(_parent))
     , toolBar(new StackWidget(_parent))
+    , optionsAction(new QAction(toolBar))
+    , optionsMenu(new ContextMenu(toolBar))
     , navigator(new StackWidget(_parent))
     , view(new StackWidget(_parent))
     , splitter(new Splitter(_parent))
@@ -54,6 +60,8 @@ ApplicationView::Implementation::Implementation(QWidget* _parent)
     new Shadow(view);
     auto splitterTopShadow = new Shadow(Qt::TopEdge, splitter);
     splitterTopShadow->setVisibilityAnchor(themeSetupView);
+
+    optionsAction->setIconText(u8"\U000F01D9");
 
     turnOffFullScreenIcon->setIcon(u8"\U000F0294");
     turnOffFullScreenIcon->hide();
@@ -138,6 +146,14 @@ void ApplicationView::showContent(QWidget* _toolbar, QWidget* _navigator, QWidge
     Log::debug("Show content: %1, %2, %3", _toolbar->metaObject()->className(),
                _navigator->metaObject()->className(), _view->metaObject()->className());
 
+    //
+    // Для тулбара модулей редакторов добавляем иконку параметров
+    //
+    if (auto toolbar = qobject_cast<AppBar*>(_toolbar);
+        toolbar != nullptr && toolbar->actions().size() > 1) {
+        //        toolbar->setOptionsAction(d->optionsAction);
+    }
+
     d->toolBar->setCurrentWidget(_toolbar);
     d->navigator->setCurrentWidget(_navigator);
     d->view->setCurrentWidget(_view);
@@ -174,6 +190,7 @@ void ApplicationView::closeEvent(QCloseEvent* _event)
 
 void ApplicationView::updateTranslations()
 {
+    d->optionsAction->setToolTip(tr("Show module options"));
     d->turnOffFullScreenIcon->setToolTip(tr("Turn off full screen"));
 }
 
