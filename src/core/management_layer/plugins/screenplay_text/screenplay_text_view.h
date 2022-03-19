@@ -61,6 +61,11 @@ public:
     int cursorPosition() const;
     void setCursorPosition(int _position);
 
+    /**
+     * @brief Вставить заданный текст
+     */
+    void insertText(const QString& _text);
+
 signals:
     /**
      * @brief Изменился индекс текущего элемента модели в текстовом документе (перестился курсор)

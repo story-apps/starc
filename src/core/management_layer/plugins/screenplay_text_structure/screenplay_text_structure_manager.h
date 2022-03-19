@@ -40,6 +40,11 @@ signals:
      */
     void currentModelIndexChanged(const QModelIndex& _index);
 
+    /**
+     * @brief Пользователь хочет вставить текст бита в редактор
+     */
+    void pasteBeatNameToEditorRequested(const QString& _name);
+
 private:
     /**
      * @brief Выбрать в навигаторе элемент соответствующий заданному индексу в модели

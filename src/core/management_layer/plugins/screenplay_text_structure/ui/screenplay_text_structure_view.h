@@ -21,6 +21,7 @@ public:
      * @brief Реализация интерфейса IDocumentView
      */
     QWidget* asQWidget() override;
+    QVector<QAction*> options() const override;
 
     /**
      * @brief Настроить навигатор в соответствии с параметрами заданными в настройках
@@ -52,6 +53,11 @@ signals:
      * @brief Пользователь выбрал элемент в навигаторе с заданным индексом
      */
     void currentModelIndexChanged(const QModelIndex& _index);
+
+    /**
+     * @brief Пользователь кликнул на кнопке вставки текста бита
+     */
+    void pasteBeatNamePressed(const QString& _name);
 
 protected:
     /**

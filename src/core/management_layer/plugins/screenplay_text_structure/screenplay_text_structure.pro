@@ -33,12 +33,14 @@ DEPENDPATH += $$PWD/../../../../corelib
 HEADERS += \
     business_layer/screenplay_text_structure_model.h \
     screenplay_text_structure_manager.h \
+    ui/beat_name_widget.h \
     ui/screenplay_text_structure_delegate.h \
     ui/screenplay_text_structure_view.h
 
 SOURCES += \
     business_layer/screenplay_text_structure_model.cpp \
     screenplay_text_structure_manager.cpp \
+    ui/beat_name_widget.cpp \
     ui/screenplay_text_structure_delegate.cpp \
     ui/screenplay_text_structure_view.cpp
 

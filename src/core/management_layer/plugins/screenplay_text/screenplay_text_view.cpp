@@ -750,6 +750,11 @@ void ScreenplayTextView::setCursorPosition(int _position)
     d->screenplayText->ensureCursorVisible(cursor, false);
 }
 
+void ScreenplayTextView::insertText(const QString& _text)
+{
+    d->screenplayText->insertPlainText(_text);
+}
+
 bool ScreenplayTextView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->scalableWrapper) {

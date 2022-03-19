@@ -1,11 +1,14 @@
 #pragma once
 
+#include <QVector>
+
+class QAction;
 class QWidget;
 
 namespace Ui {
 
 /**
- * @brief Интерфейс менеджера документа
+ * @brief Интерфейс редактора документа
  */
 class IDocumentView
 {
@@ -22,6 +25,14 @@ public:
      */
     virtual void toggleFullScreen(bool)
     {
+    }
+
+    /**
+     * @brief Список опций редактора
+     */
+    virtual QVector<QAction*> options() const
+    {
+        return {};
     }
 };
 

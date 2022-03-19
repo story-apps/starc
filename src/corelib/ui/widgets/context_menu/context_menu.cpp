@@ -621,7 +621,7 @@ void ContextMenu::mouseReleaseEvent(QMouseEvent* _event)
     }
 
     QAction* pressedAction = d->actionForPosition(_event->pos());
-    if (pressedAction == nullptr || !pressedAction->isEnabled() || pressedAction->isChecked()) {
+    if (pressedAction == nullptr || !pressedAction->isEnabled()) {
         return;
     }
 
@@ -629,7 +629,11 @@ void ContextMenu::mouseReleaseEvent(QMouseEvent* _event)
         return;
     }
 
-    pressedAction->trigger();
+    if (pressedAction->isCheckable()) {
+        pressedAction->toggle();
+    } else {
+        pressedAction->trigger();
+    }
     hideContextMenu();
 }
 

@@ -528,7 +528,14 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
             //
             QTextBlock block = topBlock;
             const QRectF viewportGeometry = viewport()->geometry();
-            int lastSceneBlockBottom = 0;
+            auto setPainterPen = [&painter, &block, this](const QColor& _color) {
+                painter.setPen(ColorHelper::transparent(
+                    _color,
+                    1.0
+                        - (isFocusCurrentParagraph() && block != textCursor().block()
+                               ? Ui::DesignSystem::inactiveTextOpacity()
+                               : 0.0)));
+            };
 
             QTextCursor cursor(document());
             while (block.isValid() && block != bottomBlock) {
@@ -551,6 +558,12 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
                     //
                     if (block.text().simplified().isEmpty()) {
                         //
+                        // Настроим цвет
+                        //
+                        setPainterPen(ColorHelper::transparent(
+                            palette().text().color(), Ui::DesignSystem::inactiveTextOpacity()));
+
+                        //
                         // Рисуем индикатор пустой строки
                         //
                         painter.setFont(block.charFormat().font());
@@ -568,8 +581,6 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
                         painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, emptyLineMark);
                     }
                 }
-
-                lastSceneBlockBottom = cursorREnd.bottom();
 
                 block = block.next();
             }

@@ -1364,11 +1364,18 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     d->pluginsBuilder.bind(viewMimeType, navigatorMimeType);
 
     //
+    // Настроим опции редактора
+    //
+    d->toolBar->setOptions(view->options());
+
+    //
     // Настраиваем возможность перехода к навигатору проекта
     //
     auto navigatorView = qobject_cast<Ui::AbstractNavigator*>(view->asQWidget());
     connect(navigatorView, &Ui::AbstractNavigator::backPressed, d->navigator,
             &Ui::ProjectNavigator::showProjectNavigator, Qt::UniqueConnection);
+    connect(navigatorView, &Ui::AbstractNavigator::backPressed, d->toolBar,
+            &Ui::ProjectToolBar::clearOptions, Qt::UniqueConnection);
     d->navigator->setCurrentWidget(navigatorView);
 }
 

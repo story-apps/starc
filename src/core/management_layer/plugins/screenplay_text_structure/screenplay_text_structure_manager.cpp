@@ -176,6 +176,8 @@ ScreenplayTextStructureManager::ScreenplayTextStructureManager(QObject* _parent)
                 d->updateContextMenu(d->view->selectedIndexes());
                 d->contextMenu->showContextMenu(d->view->mapToGlobal(_pos));
             });
+    connect(d->view, &Ui::ScreenplayTextStructureView::pasteBeatNamePressed, this,
+            &ScreenplayTextStructureManager::pasteBeatNameToEditorRequested);
 }
 
 ScreenplayTextStructureManager::~ScreenplayTextStructureManager() = default;

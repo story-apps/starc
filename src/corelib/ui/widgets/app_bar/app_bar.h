@@ -15,9 +15,10 @@ public:
     ~AppBar() override;
 
     /**
-     * @brief Задать действие для опций тулбара
+     * @brief Задать действия для опций тулбара
      */
-    void setOptionsAction(QAction* _options);
+    void setOptions(const QVector<QAction*>& _options);
+    void clearOptions();
 
     /**
      * @brief Сами определяем минимальный размер
@@ -44,6 +45,11 @@ protected:
      * @brief Переопределяем, чтобы активировать нажатую кнопку
      */
     void mouseReleaseEvent(QMouseEvent* _event) override;
+
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
 
     /**
      * @brief Переопределяем для обработки события смены дизайн-системы

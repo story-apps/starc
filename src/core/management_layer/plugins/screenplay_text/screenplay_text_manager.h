@@ -48,6 +48,11 @@ private:
      */
     Q_SLOT void setCurrentModelIndex(const QModelIndex& _index);
 
+    /**
+     * @brief Вставить навзвание бита в текущую позицию редактора
+     */
+    Q_SLOT void pasteBeatNameToEditor(const QString& _name);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

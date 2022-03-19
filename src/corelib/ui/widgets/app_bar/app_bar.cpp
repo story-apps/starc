@@ -1,6 +1,7 @@
 #include "app_bar.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
 
 #include <QAction>
@@ -35,6 +36,7 @@ public:
      * @brief Иконка опций тулбара
      */
     QAction* optionsAction = nullptr;
+    QVector<QAction*> options;
 
     /**
      * @brief Иконка на которой кликнули последней
@@ -50,7 +52,10 @@ public:
 
 AppBar::Implementation::Implementation(AppBar* _q)
     : q(_q)
+    , optionsAction(new QAction(_q))
 {
+    optionsAction->setIconText(u8"\U000F01D9");
+
     decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
     decorationRadiusAnimation.setDuration(160);
 
@@ -91,7 +96,7 @@ QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate,
         actionLeft = q->isLeftToRight() ? actionRight : actionLeft - actionWidth;
     }
 
-    if (optionsAction != nullptr) {
+    if (!options.isEmpty()) {
         actionLeft = q->isLeftToRight()
             ? (q->width() - Ui::DesignSystem::appBar().iconSize().width()
                - Ui::DesignSystem::appBar().margins().right())
@@ -113,6 +118,19 @@ AppBar::AppBar(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
+    connect(d->optionsAction, &QAction::triggered, this, [this] {
+        if (d->options.isEmpty()) {
+            return;
+        }
+
+        auto menu = new ContextMenu(this);
+        menu->setBackgroundColor(Ui::DesignSystem::color().background());
+        menu->setTextColor(Ui::DesignSystem::color().onBackground());
+        menu->setActions(d->options);
+        connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
+
+        menu->showContextMenu(QCursor::pos());
+    });
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
@@ -121,19 +139,29 @@ AppBar::AppBar(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
-void AppBar::setOptionsAction(QAction* _options)
+void AppBar::setOptions(const QVector<QAction*>& _options)
 {
-    if (d->optionsAction == _options) {
+    if (d->options == _options) {
         return;
     }
 
-    d->optionsAction = _options;
+    d->options = _options;
+    update();
+}
+
+void AppBar::clearOptions()
+{
+    if (d->options.isEmpty()) {
+        return;
+    }
+
+    d->options.clear();
     update();
 }
 
 QSize AppBar::minimumSizeHint() const
 {
-    const int actionsSize = actions().size() + (d->optionsAction != nullptr ? 1 : 0);
+    const int actionsSize = actions().size() + (d->options.isEmpty() ? 0 : 1);
     const qreal width = Ui::DesignSystem::appBar().margins().left()
         + Ui::DesignSystem::appBar().iconSize().width() * actionsSize
         + Ui::DesignSystem::appBar().iconsSpacing() * (actionsSize - 1)
@@ -216,7 +244,7 @@ void AppBar::paintEvent(QPaintEvent* _event)
     //
     // Иконка опций панели
     //
-    if (d->optionsAction != nullptr) {
+    if (!d->options.isEmpty()) {
         actionX = isLeftToRight() ? (width() - Ui::DesignSystem::appBar().iconSize().width()
                                      - Ui::DesignSystem::appBar().margins().right())
                                   : Ui::DesignSystem::appBar().margins().left();
@@ -262,6 +290,11 @@ void AppBar::mouseReleaseEvent(QMouseEvent* _event)
     }
     pressedAction->setChecked(true);
     update();
+}
+
+void AppBar::updateTranslations()
+{
+    d->optionsAction->setToolTip(tr("Show module options"));
 }
 
 void AppBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

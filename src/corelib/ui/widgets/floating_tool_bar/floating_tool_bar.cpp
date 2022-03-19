@@ -492,7 +492,7 @@ void FloatingToolBar::mouseReleaseEvent(QMouseEvent* _event)
         return;
     }
 
-    pressedAction->setChecked(!pressedAction->isChecked());
+    pressedAction->toggle();
     update();
 }
 

@@ -1,7 +1,10 @@
 #include "screenplay_text_structure_view.h"
 
+#include "beat_name_widget.h"
 #include "screenplay_text_structure_delegate.h"
 
+#include <business_layer/model/text/text_model_group_item.h>
+#include <business_layer/templates/screenplay_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
@@ -10,6 +13,7 @@
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/tree/tree.h>
 
+#include <QAction>
 #include <QStringListModel>
 #include <QVBoxLayout>
 
@@ -21,11 +25,17 @@ class ScreenplayTextStructureView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Обновить название текущего бита
+     */
+    void updateCurrentBeatName(const QModelIndex& _index);
+
 
     IconsMidLabel* backIcon = nullptr;
     Subtitle2Label* backText = nullptr;
     Tree* content = nullptr;
     ScreenplayTextStructureDelegate* contentDelegate = nullptr;
+    BeatNameWidget* beatNameWidget = nullptr;
 };
 
 ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
@@ -33,6 +43,7 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     , backText(new Subtitle2Label(_parent))
     , content(new Tree(_parent))
     , contentDelegate(new ScreenplayTextStructureDelegate(content))
+    , beatNameWidget(new BeatNameWidget(_parent))
 {
     backIcon->setText(u8"\U000f0141");
 
@@ -42,6 +53,22 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     content->setItemDelegate(contentDelegate);
 
     new Shadow(Qt::TopEdge, content);
+    new Shadow(Qt::BottomEdge, content);
+
+    beatNameWidget->hide();
+}
+
+void ScreenplayTextStructureView::Implementation::updateCurrentBeatName(const QModelIndex& _index)
+{
+    using namespace BusinessLayer;
+    if (static_cast<TextModelItemType>(_index.data(Qt::UserRole).toInt())
+            == TextModelItemType::Group
+        && static_cast<TextGroupType>(_index.data(TextModelGroupItem::GroupTypeRole).toInt())
+            == TextGroupType::Beat) {
+        beatNameWidget->setBeatName(_index.data(TextModelGroupItem::GroupHeadingRole).toString());
+    } else {
+        beatNameWidget->setBeatName(tr("No one beat selected"));
+    }
 }
 
 
@@ -63,7 +90,9 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addLayout(topLayout);
     layout->addWidget(d->content);
+    layout->addWidget(d->beatNameWidget);
     setLayout(layout);
+
 
     connect(d->backIcon, &AbstractLabel::clicked, this, &ScreenplayTextStructureView::backPressed);
     connect(d->backText, &AbstractLabel::clicked, this, &ScreenplayTextStructureView::backPressed);
@@ -74,6 +103,11 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
     connect(d->content, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
         emit customContextMenuRequested(d->content->mapToParent(_pos));
     });
+    connect(this, &ScreenplayTextStructureView::currentModelIndexChanged, this,
+            [this](const QModelIndex& _index) { d->updateCurrentBeatName(_index); });
+    connect(d->beatNameWidget, &BeatNameWidget::pasteBeatNamePressed, this,
+            &ScreenplayTextStructureView::pasteBeatNamePressed);
+
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -86,6 +120,19 @@ ScreenplayTextStructureView::~ScreenplayTextStructureView() = default;
 QWidget* ScreenplayTextStructureView::asQWidget()
 {
     return this;
+}
+
+QVector<QAction*> ScreenplayTextStructureView::options() const
+{
+    auto showBeatText = new QAction(d->content);
+    showBeatText->setCheckable(true);
+    showBeatText->setChecked(d->beatNameWidget->isVisible());
+    showBeatText->setText("Show current beat name");
+    showBeatText->setIconText(u8"\U000F09A8");
+    connect(showBeatText, &QAction::toggled, this,
+            [this](bool _checked) { d->beatNameWidget->setVisible(_checked); });
+
+    return { showBeatText };
 }
 
 void ScreenplayTextStructureView::reconfigure()
@@ -123,6 +170,7 @@ void ScreenplayTextStructureView::setModel(QAbstractItemModel* _model)
 void ScreenplayTextStructureView::setCurrentModelIndex(const QModelIndex& _index)
 {
     d->content->setCurrentIndex(_index);
+    d->updateCurrentBeatName(_index);
 }
 
 QModelIndexList ScreenplayTextStructureView::selectedIndexes() const
@@ -142,7 +190,10 @@ void ScreenplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEven
     setBackgroundColor(DesignSystem::color().primary());
     auto backTextColor = DesignSystem::color().onPrimary();
     backTextColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
-    for (auto widget : QVector<Widget*>{ d->backIcon, d->backText }) {
+    for (auto widget : QVector<Widget*>{
+             d->backIcon,
+             d->backText,
+         }) {
         widget->setBackgroundColor(DesignSystem::color().primary());
         widget->setTextColor(backTextColor);
     }

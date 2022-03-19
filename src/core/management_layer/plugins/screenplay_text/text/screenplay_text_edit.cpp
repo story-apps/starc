@@ -686,7 +686,6 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             QString text;
             QColor color;
         } lastBeat;
-        int lastCharacterBlockBottom = 0;
         QColor lastCharacterColor;
 
         auto setPainterPen = [&painter, &block, this](const QColor& _color) {
@@ -780,7 +779,6 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             //
             if (blockType == TextParagraphType::Character && d->model
                 && d->model->charactersModel() != nullptr) {
-                lastCharacterBlockBottom = cursorR.top();
                 lastCharacterColor = QColor();
                 const QString characterName
                     = BusinessLayer::ScreenplayCharacterParser::name(block.text());
