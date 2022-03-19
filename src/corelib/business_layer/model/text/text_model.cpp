@@ -1235,6 +1235,11 @@ void TextModel::applyPatch(const QByteArray& _patch)
     // Определить область изменения в xml
     //
     auto changes = dmpController().changedXml(toXml(), _patch);
+    if (changes.first.xml.isEmpty() && changes.second.xml.isEmpty()) {
+        Log::warning("Patch don't lead to any changes");
+        return;
+    }
+
     changes.first.xml = xml::prepareXml(changes.first.xml);
     changes.second.xml = xml::prepareXml(changes.second.xml);
 

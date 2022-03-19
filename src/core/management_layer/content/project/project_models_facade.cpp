@@ -467,22 +467,26 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
         model->setImageWrapper(d->imageWrapper);
 
+        //
+        // Если документ не является алиасом, то загрузим из него модели и соединим модель со всеми
+        // необходимыми обработчиками событий модели
+        //
         if (!isDocumentAlias) {
             model->setDocument(_document);
-        }
 
-        connect(model, &BusinessLayer::AbstractModel::documentNameChanged, this,
-                [this, model](const QString& _name) { emit modelNameChanged(model, _name); });
-        connect(model, &BusinessLayer::AbstractModel::documentColorChanged, this,
-                [this, model](const QColor& _color) { emit modelColorChanged(model, _color); });
-        connect(model, &BusinessLayer::AbstractModel::contentsChanged, this,
-                [this, model](const QByteArray& _undo, const QByteArray& _redo) {
-                    emit modelContentChanged(model, _undo, _redo);
-                });
-        connect(model, &BusinessLayer::AbstractModel::undoRequested, this,
-                [this, model](int _undoStep) { emit modelUndoRequested(model, _undoStep); });
-        connect(model, &BusinessLayer::AbstractModel::removeRequested, this,
-                [this, model] { emit modelRemoveRequested(model); });
+            connect(model, &BusinessLayer::AbstractModel::documentNameChanged, this,
+                    [this, model](const QString& _name) { emit modelNameChanged(model, _name); });
+            connect(model, &BusinessLayer::AbstractModel::documentColorChanged, this,
+                    [this, model](const QColor& _color) { emit modelColorChanged(model, _color); });
+            connect(model, &BusinessLayer::AbstractModel::contentsChanged, this,
+                    [this, model](const QByteArray& _undo, const QByteArray& _redo) {
+                        emit modelContentChanged(model, _undo, _redo);
+                    });
+            connect(model, &BusinessLayer::AbstractModel::undoRequested, this,
+                    [this, model](int _undoStep) { emit modelUndoRequested(model, _undoStep); });
+            connect(model, &BusinessLayer::AbstractModel::removeRequested, this,
+                    [this, model] { emit modelRemoveRequested(model); });
+        }
 
         d->documentsToModels.insert(_document, model);
     }
