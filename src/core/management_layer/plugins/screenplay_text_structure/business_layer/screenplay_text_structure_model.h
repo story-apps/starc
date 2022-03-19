@@ -17,6 +17,11 @@ public:
     ~ScreenplayTextStructureModel() override;
 
     /**
+     * @brief Задать необходимость отображать биты
+     */
+    void showBeats(bool _show);
+
+    /**
      * @brief Переопределяем, чтобы отлавливать модель сценария и сохранять её для дальнейшей работы
      */
     void setSourceModel(QAbstractItemModel* _sourceModel) override;

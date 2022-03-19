@@ -485,6 +485,7 @@ SettingsStorage::Implementation::Implementation()
         //
         // Параметры навигатора сценария
         //
+        defaultValues.insert(kComponentsScreenplayNavigatorShowBeatsKey, true);
         defaultValues.insert(kComponentsScreenplayNavigatorShowSceneNumberKey, true);
         defaultValues.insert(kComponentsScreenplayNavigatorShowSceneTextKey, true);
         defaultValues.insert(kComponentsScreenplayNavigatorSceneTextLinesKey, 1);

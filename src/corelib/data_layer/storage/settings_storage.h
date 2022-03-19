@@ -178,6 +178,8 @@ const QString kComponentsScreenplayEditorShortcutsKey
 // ... навигатор
 const QString kComponentsScreenplayNavigatorKey
     = kComponentsScreenplayKey + QStringLiteral("/navigator");
+const QString kComponentsScreenplayNavigatorShowBeatsKey
+    = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-beats");
 const QString kComponentsScreenplayNavigatorShowSceneNumberKey
     = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-scene-number");
 const QString kComponentsScreenplayNavigatorShowSceneTextKey

@@ -111,8 +111,6 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
-
-    reconfigure();
 }
 
 ScreenplayTextStructureView::~ScreenplayTextStructureView() = default;

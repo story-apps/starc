@@ -7,6 +7,8 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_folder_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/color_picker/color_picker.h>
 #include <ui/widgets/context_menu/context_menu.h>
@@ -231,6 +233,11 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     if (d->modelIndexToSelect.isValid()) {
         setCurrentModelIndex(d->modelIndexToSelect);
     }
+
+    //
+    // Переконфигурируемся
+    //
+    reconfigure({});
 }
 
 Ui::IDocumentView* ScreenplayTextStructureManager::view()
@@ -246,6 +253,11 @@ Ui::IDocumentView* ScreenplayTextStructureManager::createView()
 void ScreenplayTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
 {
     Q_UNUSED(_changedSettingsKeys);
+
+    const bool showBeats
+        = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsKey).toBool();
+    d->structureModel->showBeats(showBeats);
+
     d->view->reconfigure();
 }
 
@@ -272,9 +284,16 @@ void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _in
 
     //
     // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
-    // сцен или папок, которые как раз и отображаются в навигаторе
+    // папок, сцен или битов, которые как раз и отображаются в навигаторе
     //
-    d->view->setCurrentModelIndex(d->structureModel->mapFromSource(_index.parent()));
+    auto indexForSelect = d->structureModel->mapFromSource(_index.parent());
+    //
+    // ... когда быти скрыты в навигаторе, берём папку или сцену, в которой они находятся
+    //
+    if (!indexForSelect.isValid()) {
+        indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());
+    }
+    d->view->setCurrentModelIndex(indexForSelect);
     d->modelIndexToSelect = {};
 }
 
