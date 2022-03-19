@@ -345,7 +345,85 @@ void StandardKeyHandler::handleOther(QKeyEvent*)
 void StandardKeyHandler::removeCharacters(bool _backward)
 {
     BusinessLayer::TextCursor cursor = editor()->textCursor();
+
+    //
+    // Бит нельзя удалить, если не стёрт весь текст его заголовка
+    //
+    if (!cursor.hasSelection()
+        && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::BeatHeading
+        && !cursor.block().text().isEmpty()
+        && ((cursor.positionInBlock() == 0 && _backward)
+            || (cursor.positionInBlock() == cursor.block().text().length() && !_backward))) {
+        return;
+    }
+
+    //
+    // Если пользователь хочет удалить бит (удаляя заголовок бита), то нужно также удалить и всё
+    // содержимое удаляемого бита, соответственно нужно выделить всё содержимое бита
+    //
+    const QSet<TextParagraphType> beatBorders = {
+        TextParagraphType::ActHeading,      TextParagraphType::ActFooter,
+        TextParagraphType::SequenceHeading, TextParagraphType::SequenceFooter,
+        TextParagraphType::SceneHeading,    TextParagraphType::BeatHeading,
+    };
+    if (!cursor.atStart() && !cursor.hasSelection()
+        && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::BeatHeading
+        && cursor.block().text().isEmpty() && cursor.positionInBlock() == 0 && _backward) {
+        //
+        // Отводим курсор на символ назад, куда будет происходить удаление и потом выделяем весь
+        // текст бита, следающий за удаляемым заголовком
+        //
+        cursor.movePosition(QTextCursor::PreviousCharacter);
+        cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+        do {
+            cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        } while (!cursor.atEnd()
+                 && !beatBorders.contains(TextBlockStyle::forBlock(cursor.block())));
+        if (beatBorders.contains(TextBlockStyle::forBlock(cursor.block()))) {
+            cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        }
+        editor()->setTextCursor(cursor);
+    } else if (!cursor.atEnd() && !cursor.hasSelection()
+               && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::BeatHeading
+               && cursor.block().text().isEmpty()
+               && cursor.positionInBlock() == cursor.block().text().length() && !_backward) {
+        //
+        // Отводим курсор на символ назад (если не в самом начале документа), куда будет происходить
+        // удаление и потом выделяем весь текст бита, следающий за удаляемым заголовком. Если
+        // удаляется бит, стоящий в самом начале документа, то по возможности выделение будет
+        // расширено до первого символа в блоке идущем после бита
+        //
+        const bool beatStartsFromBeginningOfDocument = cursor.atStart();
+        if (!beatStartsFromBeginningOfDocument) {
+            cursor.movePosition(QTextCursor::PreviousCharacter);
+            cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+        }
+        do {
+            cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        } while (!cursor.atEnd()
+                 && !beatBorders.contains(TextBlockStyle::forBlock(cursor.block())));
+        if (beatBorders.contains(TextBlockStyle::forBlock(cursor.block()))) {
+            if (beatStartsFromBeginningOfDocument) {
+                cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+            } else {
+                cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            }
+        }
+        editor()->setTextCursor(cursor);
+    }
+
     cursor.removeCharacters(_backward, editor());
+
+    //
+    // Если прям всё удалилось, то применим оставшемуся параграфу стиль заголовка сцены
+    //
+    if (cursor.document()->isEmpty()) {
+        editor()->setCurrentParagraphType(TextParagraphType::SceneHeading);
+    }
 }
 
 } // namespace KeyProcessingLayer
