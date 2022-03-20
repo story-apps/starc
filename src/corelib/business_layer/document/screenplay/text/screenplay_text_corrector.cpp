@@ -525,6 +525,17 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     bool isFirstChangedBlock = true;
     while (block.isValid()) {
         //
+        // Пропускаем невидимые блоки
+        //
+        if (!block.isVisible()) {
+            blockItems[currentBlockInfo.number] = {};
+
+            block = block.next();
+            ++currentBlockInfo.number;
+            continue;
+        }
+
+        //
         // Запомним самый нижний блок, когда находимся в таблице
         //
         if (currentBlockInfo.inTable) {
