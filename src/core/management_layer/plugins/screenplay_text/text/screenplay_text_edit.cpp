@@ -930,8 +930,10 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     }
                     //
                     // В остальных случаях рисуем индикатор пустой строки
+                    // Исключением является случай пустой строки начала бита - не рисуем индикатор
+                    // пустой строки, а рисуем индикатор бита
                     //
-                    else {
+                    else if (!lastBeat.color.isValid()) {
                         painter.setFont(block.charFormat().font());
                         const QString emptyLineMark = "» ";
                         //
@@ -978,7 +980,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             = QPoint(textRight + leftDelta - spaceBetweenSceneNumberAndText,
                                      cursorR.bottom());
                         const QRect rect(topLeft, bottomRight);
-                        painter.drawText(rect, block.blockFormat().alignment(), lastBeat.text);
+                        painter.drawText(rect, block.blockFormat().alignment(),
+                                         painter.fontMetrics().elidedText(
+                                             lastBeat.text, Qt::ElideRight, rect.width()));
                     }
                 }
                 //
@@ -1058,32 +1062,6 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         }
                     }
                     //
-                    // Нарисуем цвет бита
-                    //
-                    if (lastBeat.color.isValid()) {
-                        setPainterPen(lastBeat.color);
-                        painter.setFont(DesignSystem::font().iconsForEditors());
-
-                        //
-                        // Определим область для отрисовки и выведем номер сцены в редактор в
-                        // зависимости от стороны
-                        //
-                        QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
-                                                      : textRight + leftDelta,
-                                        cursorR.top());
-                        QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
-                                                          : pageRight + leftDelta,
-                                            cursorR.bottom());
-                        QRectF rect(topLeft, bottomRight);
-                        const auto textFontMetrics = QFontMetricsF(cursor.charFormat().font());
-                        const auto iconFontMetrics
-                            = QFontMetricsF(DesignSystem::font().iconsForEditors());
-                        const auto yDelta
-                            = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
-                        rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
-                        painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F09DE");
-                    }
-                    //
                     // Прорисовка номеров реплик, если необходимо
                     //
                     if (d->showDialogueNumber && blockType == TextParagraphType::Character) {
@@ -1155,6 +1133,32 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
                                          BusinessLayer::ScreenplayTextCorrector::continuedTerm());
                     }
+                }
+
+                //
+                // Нарисуем цвет бита
+                //
+                if (lastBeat.color.isValid()) {
+                    setPainterPen(lastBeat.color);
+                    painter.setFont(DesignSystem::font().iconsForEditors());
+
+                    //
+                    // Определим область для отрисовки и выведем номер сцены в редактор в
+                    // зависимости от стороны
+                    //
+                    QPointF topLeft(isLeftToRight ? pageLeft + leftDelta : textRight + leftDelta,
+                                    cursorR.top());
+                    QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
+                                                      : pageRight + leftDelta,
+                                        cursorR.bottom());
+                    QRectF rect(topLeft, bottomRight);
+                    const auto textFontMetrics = QFontMetricsF(cursor.charFormat().font());
+                    const auto iconFontMetrics
+                        = QFontMetricsF(DesignSystem::font().iconsForEditors());
+                    const auto yDelta
+                        = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
+                    rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
+                    painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F09DE");
                 }
 
                 //
