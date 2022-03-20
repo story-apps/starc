@@ -165,10 +165,11 @@ void ScreenplayTextStructureView::setModel(QAbstractItemModel* _model)
     d->content->setModel(_model);
 }
 
-void ScreenplayTextStructureView::setCurrentModelIndex(const QModelIndex& _index)
+void ScreenplayTextStructureView::setCurrentModelIndex(const QModelIndex& _sourceIndex,
+                                                       const QModelIndex& _mappedIndex)
 {
-    d->content->setCurrentIndex(_index);
-    d->updateCurrentBeatName(_index);
+    d->content->setCurrentIndex(_mappedIndex);
+    d->updateCurrentBeatName(_sourceIndex);
 }
 
 QModelIndexList ScreenplayTextStructureView::selectedIndexes() const

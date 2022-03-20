@@ -293,7 +293,7 @@ void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _in
     if (!indexForSelect.isValid()) {
         indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());
     }
-    d->view->setCurrentModelIndex(indexForSelect);
+    d->view->setCurrentModelIndex(_index.parent(), indexForSelect);
     d->modelIndexToSelect = {};
 }
 
