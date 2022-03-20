@@ -48,10 +48,10 @@ QSet<TextParagraphType> ScreenplayTextDocument::Implementation::visibleBlocksTyp
 {
     if (isTreatmentVisible) {
         return {
-            TextParagraphType::SceneHeading,
-            TextParagraphType::SceneCharacters,
-            TextParagraphType::BeatHeading,
-            TextParagraphType::SequenceHeading,
+            TextParagraphType::SceneHeading,   TextParagraphType::SceneCharacters,
+            TextParagraphType::BeatHeading,    TextParagraphType::ActHeading,
+            TextParagraphType::ActFooter,      TextParagraphType::SequenceHeading,
+            TextParagraphType::SequenceFooter,
         };
     } else {
         return {
@@ -60,7 +60,9 @@ QSet<TextParagraphType> ScreenplayTextDocument::Implementation::visibleBlocksTyp
             TextParagraphType::Parenthetical,   TextParagraphType::Dialogue,
             TextParagraphType::Lyrics,          TextParagraphType::Shot,
             TextParagraphType::Transition,      TextParagraphType::InlineNote,
-            TextParagraphType::UnformattedText, TextParagraphType::SequenceHeading,
+            TextParagraphType::UnformattedText, TextParagraphType::ActHeading,
+            TextParagraphType::ActFooter,       TextParagraphType::SequenceHeading,
+            TextParagraphType::SequenceFooter,
         };
     }
 }
