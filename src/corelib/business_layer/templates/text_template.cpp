@@ -862,15 +862,16 @@ void TextTemplate::load(const QString& _fromFile)
     // Копируем стили для теневых стилей из заданных в шаблоне стилей
     //
     {
-        TextBlockStyle sceneHeadingShadowStyle
-            = d->paragraphsStyles.value(TextParagraphType::SceneHeading);
+        auto sceneHeadingShadowStyle = d->paragraphsStyles.value(TextParagraphType::SceneHeading);
         sceneHeadingShadowStyle.setType(TextParagraphType::SceneHeadingShadow);
         setParagraphStyle(sceneHeadingShadowStyle);
+        auto beatHeadingShadowStyle = d->paragraphsStyles.value(TextParagraphType::BeatHeading);
+        beatHeadingShadowStyle.setType(TextParagraphType::BeatHeadingShadow);
+        setParagraphStyle(beatHeadingShadowStyle);
         //
-        TextBlockStyle panelShadowStyle
-            = d->paragraphsStyles.value(TextParagraphType::PanelHeading);
-        panelShadowStyle.setType(TextParagraphType::PanelShadow);
-        setParagraphStyle(panelShadowStyle);
+        auto panelHeadingShadowStyle = d->paragraphsStyles.value(TextParagraphType::PanelHeading);
+        panelHeadingShadowStyle.setType(TextParagraphType::PanelHeadingShadow);
+        setParagraphStyle(panelHeadingShadowStyle);
     }
 
     //

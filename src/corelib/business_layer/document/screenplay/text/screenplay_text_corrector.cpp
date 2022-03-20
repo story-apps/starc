@@ -1795,17 +1795,34 @@ void ScreenplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBlo
     // Определим формат блоков декорации
     //
     QTextBlockFormat decorationFormat = format;
-    const auto paragraphType = TextBlockStyle::forBlock(_block);
-    if (paragraphType == TextParagraphType::SceneHeading) {
-        decorationFormat.setProperty(TextBlockStyle::PropertyType,
-                                     static_cast<int>(TextParagraphType::SceneHeadingShadow));
+    auto paragraphType = TextBlockStyle::forBlock(_block);
+    switch (paragraphType) {
+    case TextParagraphType::SceneHeading: {
+        paragraphType = TextParagraphType::SceneHeadingShadow;
+        break;
     }
-    if (paragraphType == TextParagraphType::SequenceHeading
-        || paragraphType == TextParagraphType::SequenceHeading) {
-        decorationFormat.setProperty(TextBlockStyle::PropertyType,
-                                     static_cast<int>(TextParagraphType::Action));
-        decorationFormat.setBackground(Qt::NoBrush);
+    case TextParagraphType::BeatHeading: {
+        paragraphType = TextParagraphType::BeatHeadingShadow;
+        break;
     }
+    case TextParagraphType::PanelHeading: {
+        paragraphType = TextParagraphType::PanelHeadingShadow;
+        break;
+    }
+    case TextParagraphType::ActHeading:
+    case TextParagraphType::ActFooter:
+    case TextParagraphType::SequenceHeading:
+    case TextParagraphType::SequenceFooter: {
+        paragraphType = TextParagraphType::Action;
+        break;
+    }
+
+    default: {
+        break;
+    }
+    }
+    decorationFormat.setProperty(TextBlockStyle::PropertyType, static_cast<int>(paragraphType));
+    //
     decorationFormat.setProperty(TextBlockStyle::PropertyIsCorrection, true);
     decorationFormat.setProperty(PageTextEdit::PropertyDontShowCursor, true);
     //

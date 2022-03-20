@@ -1706,7 +1706,7 @@ void ComicBookTextCorrector::Implementation::moveBlockToNextPage(const QTextBloc
     const auto paragraphType = TextBlockStyle::forBlock(_block);
     if (paragraphType == TextParagraphType::PanelHeading) {
         decorationFormat.setProperty(TextBlockStyle::PropertyType,
-                                     static_cast<int>(TextParagraphType::PanelShadow));
+                                     static_cast<int>(TextParagraphType::PanelHeadingShadow));
     }
     if (paragraphType == TextParagraphType::SequenceHeading
         || paragraphType == TextParagraphType::SequenceHeading) {

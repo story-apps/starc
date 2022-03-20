@@ -61,6 +61,7 @@ enum class TextParagraphType {
     //
     SceneCharacters, //!< Персонажи сцены
     BeatHeading, //!< Бит истории
+    BeatHeadingShadow, //!< Бит истории, для вспомогательных разрывов
     Action, //!< Описание действия
     Parenthetical, //!< Ремарка в реплике персонажа
     Lyrics, //!< Песнь или стихотворения произносимые персонажем
@@ -77,7 +78,7 @@ enum class TextParagraphType {
     //
     PageHeading, //!< Страница
     PanelHeading, //!< Панель
-    PanelShadow, //!< Панель, для вспомогательных разрывов
+    PanelHeadingShadow, //!< Панель, для вспомогательных разрывов
     Description, //!< Описание поисходящего на панели
     //
     // Простой текст

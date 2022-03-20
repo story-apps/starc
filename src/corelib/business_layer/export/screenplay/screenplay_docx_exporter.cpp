@@ -370,7 +370,8 @@ QString docxText(QMap<int, QStringList>& _comments, const TextCursor& _cursor,
     const auto currentBlockType = TextBlockStyle::forBlock(block);
     const auto correctedBlockType = currentBlockType == TextParagraphType::SceneHeadingShadow
         ? TextParagraphType::SceneHeading
-        : currentBlockType;
+        : (currentBlockType == TextParagraphType::BeatHeadingShadow ? TextParagraphType::BeatHeading
+                                                                    : currentBlockType);
 
     //
     // Запишем параграф в документ

@@ -1147,7 +1147,7 @@ ContextMenu* ComicBookTextEdit::createContextMenu(const QPoint& _position, QWidg
         const auto blockType = TextBlockStyle::forBlock(cursor.block());
         splitAction->setEnabled(blockType != TextParagraphType::PageHeading
                                 && blockType != TextParagraphType::PanelHeading
-                                && blockType != TextParagraphType::PanelShadow
+                                && blockType != TextParagraphType::PanelHeadingShadow
                                 && blockType != TextParagraphType::SequenceHeading
                                 && blockType != TextParagraphType::SequenceFooter);
     }

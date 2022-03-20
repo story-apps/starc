@@ -365,7 +365,7 @@ QString docxText(QMap<int, QStringList>& _comments, const TextCursor& _cursor,
     //
     const QTextBlock block = _cursor.block();
     const auto currentBlockType = TextBlockStyle::forBlock(block);
-    const auto correctedBlockType = currentBlockType == TextParagraphType::PanelShadow
+    const auto correctedBlockType = currentBlockType == TextParagraphType::PanelHeadingShadow
         ? TextParagraphType::PanelHeading
         : currentBlockType;
 

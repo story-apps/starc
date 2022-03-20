@@ -1243,6 +1243,10 @@ ContextMenu* ScreenplayTreatmentEdit::createContextMenu(const QPoint& _position,
         const auto blockType = TextBlockStyle::forBlock(cursor.block());
         splitAction->setEnabled(blockType != TextParagraphType::SceneHeading
                                 && blockType != TextParagraphType::SceneHeadingShadow
+                                && blockType != TextParagraphType::BeatHeading
+                                && blockType != TextParagraphType::BeatHeadingShadow
+                                && blockType != TextParagraphType::ActHeading
+                                && blockType != TextParagraphType::ActFooter
                                 && blockType != TextParagraphType::SequenceHeading
                                 && blockType != TextParagraphType::SequenceFooter);
     }
