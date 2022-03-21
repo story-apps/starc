@@ -264,7 +264,7 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
     if (bookmark.has_value()) {
         xml += QString("<%1 %2=\"%3\"><![CDATA[%4]]></%1>")
                    .arg(xml::kBookmarkTag, xml::kColorAttribute, bookmark->color.name(),
-                        TextHelper::toHtmlEscaped(bookmark->text))
+                        TextHelper::toHtmlEscaped(bookmark->name))
                    .toUtf8();
     }
     xml += QString("<%1><![CDATA[%2]]></%1>")
@@ -494,12 +494,12 @@ QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const
 
 bool TextModelTextItem::Bookmark::operator==(const TextModelTextItem::Bookmark& _other) const
 {
-    return color == _other.color && text == _other.text;
+    return color == _other.color && name == _other.name && description == _other.description;
 }
 
 bool TextModelTextItem::Bookmark::isValid() const
 {
-    return color.isValid() || !text.isEmpty();
+    return color.isValid();
 }
 
 bool TextModelTextItem::Revision::operator==(const Revision& _other) const
@@ -660,7 +660,7 @@ std::optional<TextModelTextItem::Bookmark> TextModelTextItem::bookmark() const
 void TextModelTextItem::setBookmark(const TextModelTextItem::Bookmark& _bookmark)
 {
     if (d->bookmark.has_value() && d->bookmark->color == _bookmark.color
-        && d->bookmark->text == _bookmark.text) {
+        && d->bookmark->name == _bookmark.name) {
         return;
     }
 

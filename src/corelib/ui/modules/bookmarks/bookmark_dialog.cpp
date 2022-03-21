@@ -35,8 +35,10 @@ BookmarkDialog::Implementation::Implementation(QWidget* _parent)
     , cancelButton(new Button(_parent))
     , saveButton(new Button(_parent))
 {
+    bookmarkText->setTrailingIcon(u8"\U000F0765");
     bookmarkColorPopup->setColorCanBeDeselected(false);
-    bookmarkColorPopup->setSelectedColor(Qt::yellow);
+    bookmarkColorPopup->setSelectedColor(Qt::red);
+    bookmarkText->setTrailingIconColor(bookmarkColorPopup->selectedColor());
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
@@ -47,11 +49,6 @@ BookmarkDialog::Implementation::Implementation(QWidget* _parent)
 
 void BookmarkDialog::Implementation::updateBookmarkColor()
 {
-    bool isColorSet = bookmarkColorPopup->selectedColor().isValid();
-    bookmarkText->setTrailingIcon(isColorSet ? u8"\U000F0765" : u8"\U000f0766");
-    bookmarkText->setTrailingIconColor(isColorSet ? bookmarkColorPopup->selectedColor()
-                                                  : bookmarkText->textColor());
-    bookmarkText->setTrailingIconToolTip(tr("Select character color"));
 }
 
 
@@ -78,16 +75,13 @@ BookmarkDialog::BookmarkDialog(QWidget* _parent)
         d->bookmarkColorPopup->showPopup(d->bookmarkText, Qt::AlignBottom | Qt::AlignRight);
     });
     connect(d->bookmarkColorPopup, &ColorPickerPopup::selectedColorChanged, this,
-            [this] { d->updateBookmarkColor(); });
+            [this](const QColor& _color) { d->bookmarkText->setTrailingIconColor(_color); });
     connect(d->cancelButton, &Button::clicked, this, &BookmarkDialog::hideDialog);
     connect(d->saveButton, &Button::clicked, this, &BookmarkDialog::savePressed);
 
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
-
-
-    d->updateBookmarkColor();
 }
 
 BookmarkDialog::~BookmarkDialog() = default;
@@ -124,7 +118,6 @@ void BookmarkDialog::setBookmarkColor(const QColor& _color)
     }
 
     d->bookmarkColorPopup->setSelectedColor(_color);
-    d->updateBookmarkColor();
 }
 
 QWidget* BookmarkDialog::focusedWidgetAfterShow() const
@@ -141,6 +134,7 @@ void BookmarkDialog::updateTranslations()
 {
     setTitle(d->dialogType == CreateNew ? tr("Create new bookmark") : tr("Edit bookmark"));
     d->bookmarkText->setLabel(tr("Bookmark text"));
+    d->bookmarkText->setTrailingIconToolTip(tr("Select bookmark color"));
     d->cancelButton->setText(tr("Cancel"));
     d->saveButton->setText(d->dialogType == CreateNew ? tr("Create") : tr("Update"));
 }

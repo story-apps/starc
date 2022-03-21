@@ -375,7 +375,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
         painter.setBrush(color);
 
         //
-        // Рисуем линию между элементов
+        // Рисуем линию
         //
         const auto duration = iter->first;
         QPointF left(0,
@@ -385,9 +385,8 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
         const QLineF colorRect(left, right);
 
         painter.drawLine(colorRect);
-
         //
-        // Вспомогательный треугольник
+        // и наконечник
         //
         QPolygonF treangle;
         treangle << QPointF(left.x(), left.y() - Ui::DesignSystem::layout().px4())

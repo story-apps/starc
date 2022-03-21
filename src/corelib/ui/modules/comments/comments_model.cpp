@@ -292,7 +292,7 @@ void CommentsModel::Implementation::processSourceModelRowsInserted(const QModelI
         const auto itemIndex = model->index(row, 0, _parent);
         const auto item = model->itemForIndex(itemIndex);
         if (item == nullptr || item->type() != TextModelItemType::Text) {
-            if (item->hasChildren()) {
+            if (item && item->hasChildren()) {
                 processSourceModelRowsInserted(itemIndex, 0, item->childCount() - 1);
             }
             continue;
