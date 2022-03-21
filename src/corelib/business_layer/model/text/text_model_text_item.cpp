@@ -497,6 +497,11 @@ bool TextModelTextItem::Bookmark::operator==(const TextModelTextItem::Bookmark& 
     return color == _other.color && text == _other.text;
 }
 
+bool TextModelTextItem::Bookmark::isValid() const
+{
+    return color.isValid() || !text.isEmpty();
+}
+
 bool TextModelTextItem::Revision::operator==(const Revision& _other) const
 {
     return from == _other.from && length == _other.length && color == _other.color;
@@ -660,6 +665,17 @@ void TextModelTextItem::setBookmark(const TextModelTextItem::Bookmark& _bookmark
     }
 
     d->bookmark = _bookmark;
+    d->updateXml();
+    markChanged();
+}
+
+void TextModelTextItem::clearBookmark()
+{
+    if (!d->bookmark.has_value()) {
+        return;
+    }
+
+    d->bookmark.reset();
     d->updateXml();
     markChanged();
 }

@@ -3,9 +3,11 @@
 #include "screenplay_text_view.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
+#include <ui/modules/bookmarks/bookmark_dialog.h>
 
 #include <QApplication>
 #include <QFileDialog>
@@ -103,6 +105,37 @@ ScreenplayTextManager::ScreenplayTextManager(QObject* _parent)
 {
     connect(d->view, &Ui::ScreenplayTextView::currentModelIndexChanged, this,
             &ScreenplayTextManager::currentModelIndexChanged);
+    connect(d->view, &Ui::ScreenplayTextView::addBookmarkRequested, this, [this] {
+        auto item = d->model->itemForIndex(d->view->currentModelIndex());
+        if (item->type() != BusinessLayer::TextModelItemType::Text) {
+            return;
+        }
+
+        auto dialog = new Ui::BookmarkDialog(d->view->topLevelWidget());
+        connect(dialog, &Ui::BookmarkDialog::savePressed, this, [this, item, dialog] {
+            auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+            textItem->setBookmark({ dialog->bookmarkColor(), dialog->bookmarkText() });
+            d->model->updateItem(textItem);
+
+            dialog->hideDialog();
+        });
+        connect(dialog, &Ui::BookmarkDialog::disappeared, dialog, &Ui::BookmarkDialog::deleteLater);
+
+        //
+        // Отображаем диалог
+        //
+        dialog->showDialog();
+    });
+    connect(d->view, &Ui::ScreenplayTextView::removeBookmarkRequested, this, [this] {
+        auto item = d->model->itemForIndex(d->view->currentModelIndex());
+        if (item->type() != BusinessLayer::TextModelItemType::Text) {
+            return;
+        }
+
+        auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+        textItem->clearBookmark();
+        d->model->updateItem(textItem);
+    });
 }
 
 ScreenplayTextManager::~ScreenplayTextManager() = default;

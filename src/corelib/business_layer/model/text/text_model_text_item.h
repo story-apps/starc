@@ -65,6 +65,8 @@ public:
         QString text;
 
         bool operator==(const Bookmark& _other) const;
+
+        bool isValid() const;
     };
     struct CORE_LIBRARY_EXPORT Revision : TextPart {
         QColor color;
@@ -127,6 +129,7 @@ public:
      */
     std::optional<Bookmark> bookmark() const;
     void setBookmark(const Bookmark& _bookmark);
+    void clearBookmark();
 
     /**
      * @brief Текст элемента

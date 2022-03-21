@@ -600,7 +600,6 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     const qreal pageLeft = 0;
     const qreal pageRight = viewport()->width();
     const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();
-    ;
     const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
         + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
     const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
@@ -820,60 +819,46 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 // ... и выше нижней
                 && cursorR.top() < viewportGeometry.bottom()) {
 
-                //                    //
-                //                    // Прорисовка закладок
-                //                    //
-                //                    if (blockInfo != nullptr
-                //                        && blockInfo->hasBookmark()) {
-                //                        //
-                //                        // Определим область для отрисовки и выведем закладку
-                //                        в редактор
-                //                        //
-                //                        QPointF topLeft(isLeftToRight
-                //                                        ? pageLeft + leftDelta
-                //                                        : textRight + leftDelta,
-                //                                        cursorR.top());
-                //                        QPointF bottomRight(isLeftToRight
-                //                                            ? textLeft + leftDelta
-                //                                            : pageRight + leftDelta,
-                //                                            cursorR.bottom());
-                //                        QRectF rect(topLeft, bottomRight);
-                //                        painter.setBrush(blockInfo->bookmarkColor());
-                //                        setPainterPen(Qt::transparent);
-                //                        painter.drawRect(rect);
-                //                        setPainterPen(Qt::white);
-                //                    } else {
-                //                        setPainterPen(palette().text().color());
-                //                    }
+                //
+                // Прорисовка закладок
+                //
+                const auto bookmark = d->document.bookmark(block);
+                if (bookmark.isValid()) {
+                    setPainterPen(bookmark.color);
+                    painter.setFont(DesignSystem::font().iconsForEditors());
 
-                //                    //
-                //                    // Новый способ отрисовки
-                //                    //
-                //                    //
-                //                    // Определим область для отрисовки и выведем номер сцены в
-                //                    редактор в зависимости от стороны
-                //                    //
-                //                    QPointF topLeft(isLeftToRight
-                //                                    ? pageLeft + leftDelta
-                //                                    : textRight + leftDelta,
-                //                                    cursorR.top());
-                //                    QPointF bottomRight(isLeftToRight
-                //                                        ? textLeft + leftDelta
-                //                                        : pageRight + leftDelta,
-                //                                        cursorR.bottom());
-                //                    QRectF rect(topLeft, bottomRight);
-                //                    rect.adjust(38, 0, 0, 0);
-                //                    painter.setFont(DesignSystem::font().iconsMid());
-                //                    const int size = painter.fontMetrics().lineSpacing();
-                //                    QRectF circle(rect.left() - size, rect.top() - size, size
-                //                    * 3, size * 3);
-                //                    painter.setBrush(ColorHelper::transparent(palette().text().color(),
-                //                    Ui::DesignSystem::hoverBackgroundOpacity()));
-                //                    setPainterPen(Qt::NoPen);
-                //                    painter.drawRect(circle);
-                //                    setPainterPen(palette().text().color());
-                //                    painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop,
-                //                    u8"\U000F024B");
+                    //
+                    // Определим область для отрисовки
+                    //
+                    QPointF topLeft(isLeftToRight
+                                        ? (pageLeft + leftDelta
+                                           + Ui::DesignSystem::card().shadowMargins().left())
+                                        : (textRight + leftDelta),
+                                    cursorR.top());
+                    QPointF bottomRight(isLeftToRight
+                                            ? textLeft + leftDelta
+                                            : (pageRight + leftDelta
+                                               - Ui::DesignSystem::card().shadowMargins().right()),
+                                        cursorR.bottom());
+                    QRectF rect(topLeft, bottomRight);
+                    const auto yDelta = Ui::DesignSystem::layout().px(32) - rect.height() / 2.0;
+                    //
+                    // корректируем размер области, чтобы получить квадрат для отрисовки иконки
+                    // закладки
+                    //
+                    if (yDelta > 0) {
+                        rect.adjust(0, -yDelta, 0, yDelta);
+                    }
+                    if (isLeftToRight) {
+                        rect.setWidth(rect.height());
+                    } else {
+                        rect.setLeft(rect.right() - rect.height());
+                    }
+                    painter.fillRect(rect,
+                                     ColorHelper::transparent(
+                                         bookmark.color, Ui::DesignSystem::elevationEndOpacity()));
+                    painter.drawText(rect, Qt::AlignCenter, u8"\U000F00C0");
+                }
 
                 //
                 // Прорисовка декораций пустой строки
@@ -990,7 +975,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 else {
                     //
-                    // Прорисовка значков папки (можно использовать для закладок)
+                    // Прорисовка значков папки
                     //
                     if (blockType == TextParagraphType::SequenceHeading) {
                         setPainterPen(palette().text().color());
@@ -1291,10 +1276,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
 
 ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
-    auto menu = BaseTextEdit::createContextMenu(_position, _parent);
-
-    auto splitAction = new QAction;
     const BusinessLayer::TextCursor cursor = textCursor();
+
+    auto splitAction = new QAction(this);
     if (cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
         splitAction->setIconText(u8"\U000f10e7");
@@ -1332,8 +1316,26 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
         }
     });
 
+    //
+    // Работа с закладками
+    //
+    auto bookmarkAction = new QAction(this);
+    if (d->document.bookmark(cursor.block()).isValid()) {
+        bookmarkAction->setText(tr("Remove bookmark"));
+        bookmarkAction->setIconText(u8"\U000F137A");
+        connect(bookmarkAction, &QAction::triggered, this,
+                &ScreenplayTextEdit::removeBookmarkRequested);
+    } else {
+        bookmarkAction->setText(tr("Add bookmark"));
+        bookmarkAction->setIconText(u8"\U000F00C4");
+        connect(bookmarkAction, &QAction::triggered, this,
+                &ScreenplayTextEdit::addBookmarkRequested);
+    }
+
+    auto menu = BaseTextEdit::createContextMenu(_position, _parent);
     auto actions = menu->actions().toVector();
     actions.first()->setSeparator(true);
+    actions.prepend(bookmarkAction);
     actions.prepend(splitAction);
     menu->setActions(actions);
 

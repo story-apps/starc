@@ -160,6 +160,8 @@ SOURCES += \
     domain/objects_builder.cpp \
     ui/design_system/design_system.cpp \
     ui/layouts/flow_layout/flow_layout.cpp \
+    ui/modules/bookmarks/bookmark_dialog.cpp \
+    ui/modules/bookmarks/bookmarks_model.cpp \
     ui/modules/comments/add_comment_view.cpp \
     ui/modules/comments/comment_delegate.cpp \
     ui/modules/comments/comment_replies_view.cpp \
@@ -368,6 +370,8 @@ HEADERS += \
     ui/abstract_navigator.h \
     ui/design_system/design_system.h \
     ui/layouts/flow_layout/flow_layout.h \
+    ui/modules/bookmarks/bookmark_dialog.h \
+    ui/modules/bookmarks/bookmarks_model.h \
     ui/modules/comments/add_comment_view.h \
     ui/modules/comments/comment_delegate.h \
     ui/modules/comments/comment_replies_view.h \

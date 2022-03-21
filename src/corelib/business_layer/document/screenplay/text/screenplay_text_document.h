@@ -1,6 +1,7 @@
 #pragma once
 
 #include <business_layer/document/text/text_document.h>
+#include <business_layer/model/text/text_model_text_item.h>
 
 
 namespace BusinessLayer {
@@ -35,6 +36,11 @@ public:
      * @brief Получить номер реплики для заданного блока
      */
     QString dialogueNumber(const QTextBlock& _forBlock) const;
+
+    /**
+     * @brief Получить закладку блока
+     */
+    TextModelTextItem::Bookmark bookmark(const QTextBlock& _forBlock) const;
 
 private:
     class Implementation;

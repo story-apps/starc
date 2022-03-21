@@ -72,6 +72,16 @@ signals:
      */
     void currentModelIndexChanged(const QModelIndex& _index);
 
+    /**
+     * @brief Пользователь хочет добавить закладку
+     */
+    void addBookmarkRequested();
+
+    /**
+     * @brief Пользователь хочет удалить закладку
+     */
+    void removeBookmarkRequested();
+
 protected:
     /**
      * @brief Фильтруем события для корректировки панелей

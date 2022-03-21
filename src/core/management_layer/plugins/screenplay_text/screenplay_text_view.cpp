@@ -572,6 +572,10 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             handleCursorPositionChanged);
     connect(d->screenplayText, &ScreenplayTextEdit::selectionChanged, this,
             [this] { d->updateCommentsToolBar(); });
+    connect(d->screenplayText, &ScreenplayTextEdit::addBookmarkRequested, this,
+            &ScreenplayTextView::addBookmarkRequested);
+    connect(d->screenplayText, &ScreenplayTextEdit::removeBookmarkRequested, this,
+            &ScreenplayTextView::removeBookmarkRequested);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
