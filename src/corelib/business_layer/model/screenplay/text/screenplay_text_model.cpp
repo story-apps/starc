@@ -503,6 +503,40 @@ std::map<std::chrono::milliseconds, QColor> ScreenplayTextModel::itemsColors() c
     return colors;
 }
 
+std::map<std::chrono::milliseconds, QColor> ScreenplayTextModel::itemsBookmarks() const
+{
+    std::chrono::milliseconds lastItemDuration{ 0 };
+    std::map<std::chrono::milliseconds, QColor> colors;
+    std::function<void(const TextModelItem*)> collectChildColors;
+    collectChildColors = [&collectChildColors, &lastItemDuration,
+                          &colors](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case TextModelItemType::Folder:
+            case TextModelItemType::Group: {
+                collectChildColors(childItem);
+                break;
+            }
+
+            case TextModelItemType::Text: {
+                const auto textItem = static_cast<const ScreenplayTextModelTextItem*>(childItem);
+                if (textItem->bookmark().has_value() && textItem->bookmark().value().isValid()) {
+                    colors.emplace(lastItemDuration, textItem->bookmark()->color);
+                }
+                lastItemDuration += textItem->duration();
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
+    collectChildColors(d->rootItem());
+    return colors;
+}
+
 void ScreenplayTextModel::recalculateDuration()
 {
     std::function<void(const TextModelItem*)> updateChildDuration;

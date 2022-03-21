@@ -5,13 +5,6 @@
 #include <QPainter>
 #include <QStyleOption>
 
-namespace {
-qreal scaledValue(qreal _value)
-{
-    return _value * Ui::DesignSystem::scaleFactor();
-}
-} // namespace
-
 
 ApplicationStyle::ApplicationStyle(QStyle* _style)
     : QProxyStyle(_style)
@@ -75,7 +68,7 @@ void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QS
         // Кисть для рисования линий
         //
         QPen pen(indicatorColor);
-        pen.setWidthF(scaledValue(2.0));
+        pen.setWidthF(Ui::DesignSystem::layout().px(2.0));
         QBrush brush(indicatorColor);
 
         //
@@ -92,10 +85,13 @@ void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QS
             // Рисуем вспомогательный треугольник внизу виджета
             //
             const qreal x = _widget->width() / 2.0;
-            const qreal y = _widget->height() - scaledValue(16.0);
+            const qreal y = _widget->height() - Ui::DesignSystem::layout().px(16.0);
             QPolygonF treangle;
-            treangle << QPointF(x, y) << QPointF(x + scaledValue(7.0), y + scaledValue(10.0))
-                     << QPointF(x - scaledValue(7.0), y + scaledValue(10.0));
+            treangle << QPointF(x, y)
+                     << QPointF(x + Ui::DesignSystem::layout().px(7.0),
+                                y + Ui::DesignSystem::layout().px(10.0))
+                     << QPointF(x - Ui::DesignSystem::layout().px(7.0),
+                                y + Ui::DesignSystem::layout().px(10.0));
             _painter->drawPolygon(treangle);
         }
         //
@@ -105,19 +101,20 @@ void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QS
             //
             // Рисуем линию между элементов
             //
-            _painter->drawLine(QPointF(_option->rect.topLeft().x() - scaledValue(10.0),
-                                       _option->rect.topLeft().y()),
-                               _option->rect.topRight());
+            _painter->drawLine(
+                QPointF(_option->rect.topLeft().x() - Ui::DesignSystem::layout().px(10.0),
+                        _option->rect.topLeft().y()),
+                _option->rect.topRight());
             //
             // Вспомогательный треугольник
             //
             QPolygonF treangle;
-            treangle << QPointF(_option->rect.topLeft().x() - scaledValue(10.0),
-                                _option->rect.topLeft().y() - scaledValue(4.0))
-                     << QPointF(_option->rect.topLeft().x() - scaledValue(5.0),
+            treangle << QPointF(_option->rect.topLeft().x() - Ui::DesignSystem::layout().px(10.0),
+                                _option->rect.topLeft().y() - Ui::DesignSystem::layout().px(4.0))
+                     << QPointF(_option->rect.topLeft().x() - Ui::DesignSystem::layout().px(5.0),
                                 _option->rect.topLeft().y())
-                     << QPointF(_option->rect.topLeft().x() - scaledValue(10.0),
-                                _option->rect.topLeft().y() + scaledValue(4.0));
+                     << QPointF(_option->rect.topLeft().x() - Ui::DesignSystem::layout().px(10.0),
+                                _option->rect.topLeft().y() + Ui::DesignSystem::layout().px(4.0));
             _painter->drawPolygon(treangle);
         }
         //
@@ -135,8 +132,9 @@ void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QS
             // Расширим немного область, чтобы не перекрывать иконку
             //
             QRectF rect = _option->rect;
-            rect.setX(rect.topLeft().x() - scaledValue(4.0));
-            _painter->drawRoundedRect(rect, scaledValue(2.0), scaledValue(2.0));
+            rect.setX(rect.topLeft().x() - Ui::DesignSystem::layout().px(4.0));
+            _painter->drawRoundedRect(rect, Ui::DesignSystem::layout().px(2.0),
+                                      Ui::DesignSystem::layout().px(2.0));
         }
     }
     //

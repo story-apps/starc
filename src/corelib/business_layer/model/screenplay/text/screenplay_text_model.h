@@ -105,6 +105,11 @@ public:
     std::map<std::chrono::milliseconds, QColor> itemsColors() const;
 
     /**
+     * @brief Получить цвета заладок элементов сценария
+     */
+    std::map<std::chrono::milliseconds, QColor> itemsBookmarks() const;
+
+    /**
      * @brief Пересчитать хронометраж
      */
     void recalculateDuration();

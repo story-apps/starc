@@ -86,6 +86,11 @@ public:
     void setColors(const std::map<std::chrono::milliseconds, QColor>& _colors);
 
     /**
+     * @brief Задать цвета закладок
+     */
+    void setBookmarks(const std::map<std::chrono::milliseconds, QColor>& _bookmarks);
+
+    /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
      */
     QSize sizeHint() const override;

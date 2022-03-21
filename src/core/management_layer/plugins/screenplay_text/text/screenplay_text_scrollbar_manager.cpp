@@ -47,7 +47,7 @@ public:
 ScreenplayTextScrollBarManager::Implementation::Implementation(QWidget* _parent)
     : scrollbar(new QScrollBar(_parent))
     , timeline(new ScreenplayTextTimeline(_parent))
-    , itemsColorsUpdateDebouncer(300)
+    , itemsColorsUpdateDebouncer(180)
 {
     timelineHideTimer.setSingleShot(true);
     timelineHideTimer.setInterval(2000);
@@ -111,6 +111,7 @@ ScreenplayTextScrollBarManager::ScreenplayTextScrollBarManager(QAbstractScrollAr
 
         d->timeline->setMaximum(d->model->duration());
         d->timeline->setColors(d->model->itemsColors());
+        d->timeline->setBookmarks(d->model->itemsBookmarks());
     });
 }
 
@@ -219,6 +220,7 @@ public:
     std::chrono::milliseconds maximum = std::chrono::seconds{ 10 };
     std::chrono::milliseconds current = std::chrono::seconds{ 5 };
     std::map<std::chrono::milliseconds, QColor> colors;
+    std::map<std::chrono::milliseconds, QColor> bookmarks;
 };
 
 
@@ -279,6 +281,17 @@ void ScreenplayTextTimeline::setColors(const std::map<std::chrono::milliseconds,
     update();
 }
 
+void ScreenplayTextTimeline::setBookmarks(
+    const std::map<std::chrono::milliseconds, QColor>& _bookmarks)
+{
+    if (d->bookmarks == _bookmarks) {
+        return;
+    }
+
+    d->bookmarks = _bookmarks;
+    update();
+}
+
 QSize ScreenplayTextTimeline::sizeHint() const
 {
     const QSize marginsDelta = QSizeF(Ui::DesignSystem::scrollBar().margins().left()
@@ -286,7 +299,7 @@ QSize ScreenplayTextTimeline::sizeHint() const
                                       Ui::DesignSystem::scrollBar().margins().top()
                                           + Ui::DesignSystem::scrollBar().margins().bottom())
                                    .toSize();
-    return QSize(static_cast<int>(Ui::DesignSystem::layout().px48()
+    return QSize(static_cast<int>(Ui::DesignSystem::layout().px(60)
                                   + Ui::DesignSystem::layout().px16()),
                  10)
         + marginsDelta;
@@ -310,7 +323,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     // 16 - скролбар с ползунком 4 + 8 + 4
     // 48 - правая часть от скролбара с таймлайном
     //
-    const QRectF scrollbarRect(Ui::DesignSystem::layout().px4(), 0,
+    const QRectF scrollbarRect(Ui::DesignSystem::layout().px16(), 0,
                                Ui::DesignSystem::layout().px8(), contentRect.height());
     const auto scrollbarColor = ColorHelper::nearby(Ui::DesignSystem::color().textEditor());
     painter.fillRect(scrollbarRect, scrollbarColor);
@@ -351,6 +364,42 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
 
         painter.setOpacity(opacity());
     }
+
+    //
+    // Рисуем закладки
+    //
+    for (auto iter = d->bookmarks.begin(); iter != d->bookmarks.end(); ++iter) {
+        const auto color = iter->second;
+        painter.setPen(QPen(color, Ui::DesignSystem::layout().px2(), Qt::SolidLine, Qt::RoundCap,
+                            Qt::RoundJoin));
+        painter.setBrush(color);
+
+        //
+        // Рисуем линию между элементов
+        //
+        const auto duration = iter->first;
+        QPointF left(0,
+                     (height() - painter.fontMetrics().lineSpacing()) * duration / d->maximum
+                         + painter.fontMetrics().lineSpacing() / 2);
+        const QPointF right(scrollbarRect.right(), left.y());
+        const QLineF colorRect(left, right);
+
+        painter.drawLine(colorRect);
+
+        //
+        // Вспомогательный треугольник
+        //
+        QPolygonF treangle;
+        treangle << QPointF(left.x(), left.y() - Ui::DesignSystem::layout().px4())
+                 << QPointF(left.x() + Ui::DesignSystem::layout().px8(), left.y())
+                 << QPointF(left.x(), left.y() + Ui::DesignSystem::layout().px4());
+        painter.drawPolygon(treangle);
+    }
+    painter.setBrush(Qt::NoBrush);
+
+    //
+    // Заливаем правую часть фона
+    //
     const QRectF scrollbarBackgroundRect(scrollbarRect.right(), scrollbarRect.top(),
                                          Ui::DesignSystem::layout().px62(), scrollbarRect.height());
     painter.fillRect(scrollbarBackgroundRect, scrollbarColor);
