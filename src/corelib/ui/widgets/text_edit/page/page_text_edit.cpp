@@ -4010,7 +4010,8 @@ void PageTextEdit::setUseTypewriterScrolling(bool _use)
 
 ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
-    auto cursor = cursorForPosition(_position);
+    Q_D(PageTextEdit);
+    auto cursor = cursorForPosition(d->correctMousePosition(_position));
     const int startPosition = std::min(textCursor().selectionStart(), textCursor().selectionEnd());
     const int lastPosition = std::max(textCursor().selectionStart(), textCursor().selectionEnd());
     if (startPosition <= cursor.position() && cursor.position() <= lastPosition) {
