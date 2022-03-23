@@ -169,6 +169,7 @@ SOURCES += \
     ui/modules/comments/comments_model.cpp \
     ui/modules/comments/comments_toolbar.cpp \
     ui/modules/comments/comments_view.cpp \
+    ui/modules/logline_generator/logline_generator_dialog.cpp \
     ui/widgets/app_bar/app_bar.cpp \
     ui/widgets/button/button.cpp \
     ui/widgets/card/card.cpp \
@@ -200,6 +201,7 @@ SOURCES += \
     ui/widgets/label/label.cpp \
     ui/widgets/label/link_label.cpp \
     ui/widgets/pie/pie.cpp \
+    ui/widgets/progress_bar/progress_bar.cpp \
     ui/widgets/radio_button/radio_button.cpp \
     ui/widgets/radio_button/radio_button_group.cpp \
     ui/widgets/resizable_widget/resizable_widget.cpp \
@@ -379,6 +381,7 @@ HEADERS += \
     ui/modules/comments/comments_model.h \
     ui/modules/comments/comments_toolbar.h \
     ui/modules/comments/comments_view.h \
+    ui/modules/logline_generator/logline_generator_dialog.h \
     ui/widgets/app_bar/app_bar.h \
     ui/widgets/button/button.h \
     ui/widgets/card/card.h \
@@ -410,6 +413,7 @@ HEADERS += \
     ui/widgets/label/label.h \
     ui/widgets/label/link_label.h \
     ui/widgets/pie/pie.h \
+    ui/widgets/progress_bar/progress_bar.h \
     ui/widgets/radio_button/radio_button.h \
     ui/widgets/radio_button/radio_button_group.h \
     ui/widgets/resizable_widget/resizable_widget.h \

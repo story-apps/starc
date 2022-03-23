@@ -41,6 +41,7 @@ public:
      * @brief Установить текст ошибки
      */
     void setError(const QString& _text);
+    void clearError();
 
     /**
      * @brief Перекрываем собственной реализацией

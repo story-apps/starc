@@ -1,6 +1,7 @@
 #include "comic_book_information_view.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/modules/logline_generator/logline_generator_dialog.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -21,28 +22,28 @@ public:
 
     QScrollArea* content = nullptr;
 
-    Card* screenplayInfo = nullptr;
-    QGridLayout* screenplayInfoLayout = nullptr;
-    TextField* screenplayName = nullptr;
-    TextField* screenplayTagline = nullptr;
-    TextField* screenplayLogline = nullptr;
+    Card* comicBookInfo = nullptr;
+    QGridLayout* comicBookInfoLayout = nullptr;
+    TextField* comicBookName = nullptr;
+    TextField* comicBookTagline = nullptr;
+    TextField* comicBookLogline = nullptr;
     CheckBox* titlePageVisiblity = nullptr;
     CheckBox* synopsisVisiblity = nullptr;
-    CheckBox* screenplayTextVisiblity = nullptr;
-    CheckBox* screenplayStatisticsVisiblity = nullptr;
+    CheckBox* comicBookTextVisiblity = nullptr;
+    CheckBox* comicBookStatisticsVisiblity = nullptr;
 };
 
 ComicBookInformationView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent))
-    , screenplayInfo(new Card(_parent))
-    , screenplayInfoLayout(new QGridLayout)
-    , screenplayName(new TextField(screenplayInfo))
-    , screenplayTagline(new TextField(screenplayInfo))
-    , screenplayLogline(new TextField(screenplayInfo))
-    , titlePageVisiblity(new CheckBox(screenplayInfo))
-    , synopsisVisiblity(new CheckBox(screenplayInfo))
-    , screenplayTextVisiblity(new CheckBox(screenplayInfo))
-    , screenplayStatisticsVisiblity(new CheckBox(screenplayInfo))
+    , comicBookInfo(new Card(_parent))
+    , comicBookInfoLayout(new QGridLayout)
+    , comicBookName(new TextField(comicBookInfo))
+    , comicBookTagline(new TextField(comicBookInfo))
+    , comicBookLogline(new TextField(comicBookInfo))
+    , titlePageVisiblity(new CheckBox(comicBookInfo))
+    , synopsisVisiblity(new CheckBox(comicBookInfo))
+    , comicBookTextVisiblity(new CheckBox(comicBookInfo))
+    , comicBookStatisticsVisiblity(new CheckBox(comicBookInfo))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -52,24 +53,25 @@ ComicBookInformationView::Implementation::Implementation(QWidget* _parent)
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     content->setVerticalScrollBar(new ScrollBar);
 
-    screenplayInfoLayout->setContentsMargins({});
-    screenplayInfoLayout->setSpacing(0);
-    int row = 0;
-    screenplayInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку сверху
-    screenplayInfoLayout->addWidget(screenplayName, row++, 0);
-    screenplayInfoLayout->addWidget(screenplayTagline, row++, 0);
-    screenplayInfoLayout->addWidget(screenplayLogline, row++, 0);
-    screenplayInfoLayout->addWidget(titlePageVisiblity, row++, 0);
-    screenplayInfoLayout->addWidget(synopsisVisiblity, row++, 0);
-    screenplayInfoLayout->addWidget(screenplayTextVisiblity, row++, 0);
-    screenplayInfoLayout->addWidget(screenplayStatisticsVisiblity, row++, 0);
-    screenplayInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку внизу
-    screenplayInfoLayout->setColumnStretch(0, 1);
-    screenplayInfo->setLayoutReimpl(screenplayInfoLayout);
+    comicBookName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    UiHelper::initSpellingFor({ comicBookTagline, comicBookLogline });
+    comicBookLogline->setEnterMakesNewLine(true);
+    comicBookLogline->setTrailingIcon(u8"\U000F1353");
 
-    screenplayName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    UiHelper::initSpellingFor({ screenplayTagline, screenplayLogline });
-    screenplayLogline->setEnterMakesNewLine(true);
+    comicBookInfoLayout->setContentsMargins({});
+    comicBookInfoLayout->setSpacing(0);
+    int row = 0;
+    comicBookInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку сверху
+    comicBookInfoLayout->addWidget(comicBookName, row++, 0);
+    comicBookInfoLayout->addWidget(comicBookTagline, row++, 0);
+    comicBookInfoLayout->addWidget(comicBookLogline, row++, 0);
+    comicBookInfoLayout->addWidget(titlePageVisiblity, row++, 0);
+    comicBookInfoLayout->addWidget(synopsisVisiblity, row++, 0);
+    comicBookInfoLayout->addWidget(comicBookTextVisiblity, row++, 0);
+    comicBookInfoLayout->addWidget(comicBookStatisticsVisiblity, row++, 0);
+    comicBookInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку внизу
+    comicBookInfoLayout->setColumnStretch(0, 1);
+    comicBookInfo->setLayoutReimpl(comicBookInfoLayout);
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);
@@ -77,7 +79,7 @@ ComicBookInformationView::Implementation::Implementation(QWidget* _parent)
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
-    layout->addWidget(screenplayInfo);
+    layout->addWidget(comicBookInfo);
     layout->addStretch();
     contentWidget->setLayout(layout);
 }
@@ -96,19 +98,30 @@ ComicBookInformationView::ComicBookInformationView(QWidget* _parent)
     layout->addWidget(d->content);
     setLayout(layout);
 
-    connect(d->screenplayName, &TextField::textChanged, this,
-            [this] { emit nameChanged(d->screenplayName->text()); });
-    connect(d->screenplayTagline, &TextField::textChanged, this,
-            [this] { emit taglineChanged(d->screenplayTagline->text()); });
-    connect(d->screenplayLogline, &TextField::textChanged, this,
-            [this] { emit loglineChanged(d->screenplayLogline->text()); });
+    connect(d->comicBookName, &TextField::textChanged, this,
+            [this] { emit nameChanged(d->comicBookName->text()); });
+    connect(d->comicBookTagline, &TextField::textChanged, this,
+            [this] { emit taglineChanged(d->comicBookTagline->text()); });
+    connect(d->comicBookLogline, &TextField::textChanged, this,
+            [this] { emit loglineChanged(d->comicBookLogline->text()); });
+    connect(d->comicBookLogline, &TextField::trailingIconPressed, this, [this] {
+        auto dialog = new LoglineGeneratorDialog(topLevelWidget());
+        connect(dialog, &LoglineGeneratorDialog::donePressed, this, [this, dialog] {
+            d->comicBookLogline->setText(dialog->logline());
+            dialog->hideDialog();
+        });
+        connect(dialog, &LoglineGeneratorDialog::disappeared, dialog,
+                &LoglineGeneratorDialog::deleteLater);
+
+        dialog->showDialog();
+    });
     connect(d->titlePageVisiblity, &CheckBox::checkedChanged, this,
             &ComicBookInformationView::titlePageVisibleChanged);
     connect(d->synopsisVisiblity, &CheckBox::checkedChanged, this,
             &ComicBookInformationView::synopsisVisibleChanged);
-    connect(d->screenplayTextVisiblity, &CheckBox::checkedChanged, this,
+    connect(d->comicBookTextVisiblity, &CheckBox::checkedChanged, this,
             &ComicBookInformationView::comicBookTextVisibleChanged);
-    connect(d->screenplayStatisticsVisiblity, &CheckBox::checkedChanged, this,
+    connect(d->comicBookStatisticsVisiblity, &CheckBox::checkedChanged, this,
             &ComicBookInformationView::comicBookStatisticsVisibleChanged);
 
     updateTranslations();
@@ -124,29 +137,29 @@ QWidget* ComicBookInformationView::asQWidget()
 
 void ComicBookInformationView::setName(const QString& _name)
 {
-    if (d->screenplayName->text() == _name) {
+    if (d->comicBookName->text() == _name) {
         return;
     }
 
-    d->screenplayName->setText(_name);
+    d->comicBookName->setText(_name);
 }
 
 void ComicBookInformationView::setTagline(const QString& _tagline)
 {
-    if (d->screenplayTagline->text() == _tagline) {
+    if (d->comicBookTagline->text() == _tagline) {
         return;
     }
 
-    d->screenplayTagline->setText(_tagline);
+    d->comicBookTagline->setText(_tagline);
 }
 
 void ComicBookInformationView::setLogline(const QString& _logline)
 {
-    if (d->screenplayLogline->text() == _logline) {
+    if (d->comicBookLogline->text() == _logline) {
         return;
     }
 
-    d->screenplayLogline->setText(_logline);
+    d->comicBookLogline->setText(_logline);
 }
 
 void ComicBookInformationView::setTitlePageVisible(bool _visible)
@@ -161,23 +174,23 @@ void ComicBookInformationView::setSynopsisVisible(bool _visible)
 
 void ComicBookInformationView::setComicBookTextVisible(bool _visible)
 {
-    d->screenplayTextVisiblity->setChecked(_visible);
+    d->comicBookTextVisiblity->setChecked(_visible);
 }
 
 void ComicBookInformationView::setComicBookStatisticsVisible(bool _visible)
 {
-    d->screenplayStatisticsVisiblity->setChecked(_visible);
+    d->comicBookStatisticsVisiblity->setChecked(_visible);
 }
 
 void ComicBookInformationView::updateTranslations()
 {
-    d->screenplayName->setLabel(tr("Comic book name"));
-    d->screenplayTagline->setLabel(tr("Tagline"));
-    d->screenplayLogline->setLabel(tr("Logline"));
+    d->comicBookName->setLabel(tr("Comic book name"));
+    d->comicBookTagline->setLabel(tr("Tagline"));
+    d->comicBookLogline->setLabel(tr("Logline"));
     d->titlePageVisiblity->setText(tr("Title page"));
     d->synopsisVisiblity->setText(tr("Synopsis"));
-    d->screenplayTextVisiblity->setText(tr("Script"));
-    d->screenplayStatisticsVisiblity->setText(tr("Statistics"));
+    d->comicBookTextVisiblity->setText(tr("Script"));
+    d->comicBookStatisticsVisiblity->setText(tr("Statistics"));
 }
 
 void ComicBookInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -191,22 +204,21 @@ void ComicBookInformationView::designSystemChangeEvent(DesignSystemChangeEvent* 
                   Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
             .toMargins());
 
-    d->screenplayInfo->setBackgroundColor(DesignSystem::color().background());
-    for (auto textField : { d->screenplayName, d->screenplayTagline, d->screenplayLogline }) {
+    d->comicBookInfo->setBackgroundColor(DesignSystem::color().background());
+    for (auto textField : { d->comicBookName, d->comicBookTagline, d->comicBookLogline }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    for (auto checkBox : { d->titlePageVisiblity, d->synopsisVisiblity, d->screenplayTextVisiblity,
-                           d->screenplayStatisticsVisiblity }) {
+    for (auto checkBox : { d->titlePageVisiblity, d->synopsisVisiblity, d->comicBookTextVisiblity,
+                           d->comicBookStatisticsVisiblity }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->screenplayInfoLayout->setVerticalSpacing(
-        static_cast<int>(Ui::DesignSystem::layout().px16()));
-    d->screenplayInfoLayout->setRowMinimumHeight(
+    d->comicBookInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->comicBookInfoLayout->setRowMinimumHeight(
         0, static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->screenplayInfoLayout->setRowMinimumHeight(
-        d->screenplayInfoLayout->rowCount() - 1,
+    d->comicBookInfoLayout->setRowMinimumHeight(
+        d->comicBookInfoLayout->rowCount() - 1,
         static_cast<int>(Ui::DesignSystem::layout().px24()));
 }
 

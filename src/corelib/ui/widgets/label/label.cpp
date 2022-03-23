@@ -1,6 +1,7 @@
 #include "label.h"
 
 #include <ui/design_system/design_system.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QFontMetrics>
@@ -318,7 +319,68 @@ void IconsBigLabel::setIcon(const QString& _icon)
     setText(_icon);
 }
 
+void IconsBigLabel::setDecorationVisible(bool _visible)
+{
+    if (m_isDecorationVisible == _visible) {
+        return;
+    }
+
+    m_isDecorationVisible = _visible;
+    updateGeometry();
+    update();
+}
+
+QSize IconsBigLabel::sizeHint() const
+{
+    if (m_isDecorationVisible) {
+        return QSize(Ui::DesignSystem::layout().px62(), Ui::DesignSystem::layout().px62());
+    }
+
+    return AbstractLabel::sizeHint();
+}
+
+int IconsBigLabel::heightForWidth(int _width) const
+{
+    if (m_isDecorationVisible) {
+        return Ui::DesignSystem::layout().px62();
+    }
+
+    return AbstractLabel::heightForWidth(_width);
+}
+
 const QFont& IconsBigLabel::textFont() const
 {
     return Ui::DesignSystem::font().iconsBig();
+}
+
+void IconsBigLabel::paintEvent(QPaintEvent* _event)
+{
+    if (!m_isDecorationVisible) {
+        AbstractLabel::paintEvent(_event);
+        return;
+    }
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    //
+    // Рисуем фон
+    //
+    painter.fillRect(_event->rect(), backgroundColor());
+
+    //
+    // Рисуем декорацию
+    //
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(
+        ColorHelper::transparent(textColor(), Ui::DesignSystem::focusBackgroundOpacity()));
+    painter.drawEllipse(contentsRect());
+
+    //
+    // Рисуем текст
+    //
+    painter.setFont(textFont());
+    painter.setPen(textColor());
+    painter.setOpacity(isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity());
+    painter.drawText(contentsRect(), Qt::AlignCenter, text());
 }

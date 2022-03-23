@@ -298,7 +298,8 @@ QRectF TextField::Implementation::inputTextRect() const
     return QRectF(labelTopLeft,
                   QSizeF(q->width() - labelTopLeft.x() - contentMargins().left() - margins().right()
                              - (q->isRightToLeft() ? 0 : offset),
-                         q->height() - margins().top() - margins().bottom()));
+                         q->height() - contentMargins().top() - margins().top()
+                             - contentMargins().bottom() - margins().bottom()));
 }
 
 QRectF TextField::Implementation::labelRect(const qreal fontHeight) const
@@ -472,6 +473,11 @@ void TextField::setError(const QString& _text)
     d->error = _text;
     updateGeometry();
     update();
+}
+
+void TextField::clearError()
+{
+    setError({});
 }
 
 void TextField::setPlaceholderText(const QString& _placeholder)
@@ -909,7 +915,8 @@ void TextField::paintEvent(QPaintEvent* _event)
             = !d->error.isEmpty() ? Ui::DesignSystem::color().error() : d->textDisabledColor;
         painter.setPen(color);
         const QRectF textRect(d->contentMargins().left() + d->margins().left(),
-                              height() - Ui::DesignSystem::textField().helperHeight(),
+                              height() - d->contentMargins().top() - d->contentMargins().bottom()
+                                  - Ui::DesignSystem::textField().helperHeight(),
                               width() - d->contentMargins().left() - d->margins().left()
                                   - d->margins().right() - d->contentMargins().right(),
                               Ui::DesignSystem::textField().helperHeight());

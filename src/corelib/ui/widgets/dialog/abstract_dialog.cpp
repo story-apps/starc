@@ -38,6 +38,8 @@ public:
 
     QVBoxLayout* layout = nullptr;
     ResizableWidget* content = nullptr;
+    bool isContentMaximumWidthChanged = false;
+    bool isContentMinimumWidthChanged = false;
     H6Label* title = nullptr;
     QGridLayout* contentsLayout = nullptr;
     Button* acceptButton = nullptr;
@@ -198,11 +200,15 @@ void AbstractDialog::hideDialog()
 void AbstractDialog::setContentMinimumWidth(int _width)
 {
     d->content->setMinimumWidth(_width);
+    d->isContentMinimumWidthChanged = true;
+    updateGeometry();
 }
 
 void AbstractDialog::setContentMaximumWidth(int _width)
 {
     d->content->setMaximumWidth(_width);
+    d->isContentMaximumWidthChanged = true;
+    updateGeometry();
 }
 
 void AbstractDialog::setContentFixedWidth(int _width)
@@ -250,10 +256,15 @@ bool AbstractDialog::eventFilter(QObject* _watched, QEvent* _event)
     } else if (_event->type() == QEvent::FocusOut
                && (QApplication::focusWidget() == nullptr
                    || !findChildren<QWidget*>().contains(QApplication::focusWidget()))) {
+        //
+        // Устанавливаем фокус отложенно, чтобы не впасть в рекурсивный цикл
+        //
         if (_watched == lastFocusableWidget()) {
-            focusedWidgetAfterShow()->setFocus();
+            QMetaObject::invokeMethod(focusedWidgetAfterShow(), qOverload<>(&QWidget::setFocus),
+                                      Qt::QueuedConnection);
         } else if (_watched == focusedWidgetAfterShow()) {
-            lastFocusableWidget()->setFocus();
+            QMetaObject::invokeMethod(lastFocusableWidget(), qOverload<>(&QWidget::setFocus),
+                                      Qt::QueuedConnection);
         }
     }
 
@@ -315,10 +326,10 @@ void AbstractDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
 
-    if (d->content->minimumWidth() == 0) {
+    if (!d->isContentMinimumWidthChanged) {
         d->content->setMinimumWidth(static_cast<int>(Ui::DesignSystem::dialog().minimumWidth()));
     }
-    if (d->content->maximumWidth() == QWIDGETSIZE_MAX) {
+    if (!d->isContentMaximumWidthChanged) {
         d->content->setMaximumWidth(static_cast<int>(Ui::DesignSystem::dialog().maximumWidth()));
     }
     d->content->setBackgroundColor(Ui::DesignSystem::color().background());

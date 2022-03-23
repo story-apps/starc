@@ -1,6 +1,7 @@
 #include "screenplay_information_view.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/modules/logline_generator/logline_generator_dialog.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -54,6 +55,11 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     content->setVerticalScrollBar(new ScrollBar);
 
+    screenplayName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    UiHelper::initSpellingFor({ screenplayTagline, screenplayLogline });
+    screenplayLogline->setEnterMakesNewLine(true);
+    screenplayLogline->setTrailingIcon(u8"\U000F1353");
+
     screenplayInfoLayout->setContentsMargins({});
     screenplayInfoLayout->setSpacing(0);
     int row = 0;
@@ -69,10 +75,6 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
     screenplayInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку внизу
     screenplayInfoLayout->setColumnStretch(0, 1);
     screenplayInfo->setLayoutReimpl(screenplayInfoLayout);
-
-    screenplayName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    UiHelper::initSpellingFor({ screenplayTagline, screenplayLogline });
-    screenplayLogline->setEnterMakesNewLine(true);
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);
@@ -105,6 +107,17 @@ ScreenplayInformationView::ScreenplayInformationView(QWidget* _parent)
             [this] { emit taglineChanged(d->screenplayTagline->text()); });
     connect(d->screenplayLogline, &TextField::textChanged, this,
             [this] { emit loglineChanged(d->screenplayLogline->text()); });
+    connect(d->screenplayLogline, &TextField::trailingIconPressed, this, [this] {
+        auto dialog = new LoglineGeneratorDialog(topLevelWidget());
+        connect(dialog, &LoglineGeneratorDialog::donePressed, this, [this, dialog] {
+            d->screenplayLogline->setText(dialog->logline());
+            dialog->hideDialog();
+        });
+        connect(dialog, &LoglineGeneratorDialog::disappeared, dialog,
+                &LoglineGeneratorDialog::deleteLater);
+
+        dialog->showDialog();
+    });
     connect(d->titlePageVisiblity, &CheckBox::checkedChanged, this,
             &ScreenplayInformationView::titlePageVisibleChanged);
     connect(d->synopsisVisiblity, &CheckBox::checkedChanged, this,
