@@ -63,7 +63,6 @@ public:
     struct CORE_LIBRARY_EXPORT Bookmark {
         QColor color;
         QString name;
-        QString description;
 
         bool operator==(const Bookmark& _other) const;
 

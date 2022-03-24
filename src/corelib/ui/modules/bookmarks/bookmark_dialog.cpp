@@ -15,12 +15,10 @@ class BookmarkDialog::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
-    void updateBookmarkColor();
-
 
     DialogType dialogType = CreateNew;
 
-    TextField* bookmarkText = nullptr;
+    TextField* bookmarkName = nullptr;
     ColorPickerPopup* bookmarkColorPopup = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -29,26 +27,22 @@ public:
 };
 
 BookmarkDialog::Implementation::Implementation(QWidget* _parent)
-    : bookmarkText(new TextField(_parent))
+    : bookmarkName(new TextField(_parent))
     , bookmarkColorPopup(new ColorPickerPopup(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
     , saveButton(new Button(_parent))
 {
-    bookmarkText->setTrailingIcon(u8"\U000F0765");
+    bookmarkName->setTrailingIcon(u8"\U000F0765");
     bookmarkColorPopup->setColorCanBeDeselected(false);
     bookmarkColorPopup->setSelectedColor(Qt::red);
-    bookmarkText->setTrailingIconColor(bookmarkColorPopup->selectedColor());
+    bookmarkName->setTrailingIconColor(bookmarkColorPopup->selectedColor());
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton, 0, Qt::AlignVCenter);
     buttonsLayout->addWidget(saveButton, 0, Qt::AlignVCenter);
-}
-
-void BookmarkDialog::Implementation::updateBookmarkColor()
-{
 }
 
 
@@ -65,17 +59,17 @@ BookmarkDialog::BookmarkDialog(QWidget* _parent)
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
     int row = 0;
-    contentsLayout()->addWidget(d->bookmarkText, row++, 0);
+    contentsLayout()->addWidget(d->bookmarkName, row++, 0);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
 
 
-    connect(d->bookmarkText, &TextField::textChanged, this,
-            [this] { d->bookmarkText->setError({}); });
-    connect(d->bookmarkText, &TextField::trailingIconPressed, this, [this] {
-        d->bookmarkColorPopup->showPopup(d->bookmarkText, Qt::AlignBottom | Qt::AlignRight);
+    connect(d->bookmarkName, &TextField::textChanged, this,
+            [this] { d->bookmarkName->setError({}); });
+    connect(d->bookmarkName, &TextField::trailingIconPressed, this, [this] {
+        d->bookmarkColorPopup->showPopup(d->bookmarkName, Qt::AlignBottom | Qt::AlignRight);
     });
     connect(d->bookmarkColorPopup, &ColorPickerPopup::selectedColorChanged, this,
-            [this](const QColor& _color) { d->bookmarkText->setTrailingIconColor(_color); });
+            [this](const QColor& _color) { d->bookmarkName->setTrailingIconColor(_color); });
     connect(d->cancelButton, &Button::clicked, this, &BookmarkDialog::hideDialog);
     connect(d->saveButton, &Button::clicked, this, &BookmarkDialog::savePressed);
 
@@ -96,14 +90,14 @@ void BookmarkDialog::setDialogType(DialogType _type)
     updateTranslations();
 }
 
-QString BookmarkDialog::bookmarkText() const
+QString BookmarkDialog::bookmarkName() const
 {
-    return d->bookmarkText->text();
+    return d->bookmarkName->text();
 }
 
-void BookmarkDialog::setBookmarkText(const QString& _text)
+void BookmarkDialog::setBookmarkName(const QString& _text)
 {
-    d->bookmarkText->setText(_text);
+    d->bookmarkName->setText(_text);
 }
 
 QColor BookmarkDialog::bookmarkColor() const
@@ -122,7 +116,7 @@ void BookmarkDialog::setBookmarkColor(const QColor& _color)
 
 QWidget* BookmarkDialog::focusedWidgetAfterShow() const
 {
-    return d->bookmarkText;
+    return d->bookmarkName;
 }
 
 QWidget* BookmarkDialog::lastFocusableWidget() const
@@ -133,8 +127,8 @@ QWidget* BookmarkDialog::lastFocusableWidget() const
 void BookmarkDialog::updateTranslations()
 {
     setTitle(d->dialogType == CreateNew ? tr("Create new bookmark") : tr("Edit bookmark"));
-    d->bookmarkText->setLabel(tr("Bookmark text"));
-    d->bookmarkText->setTrailingIconToolTip(tr("Select bookmark color"));
+    d->bookmarkName->setLabel(tr("Bookmark text"));
+    d->bookmarkName->setTrailingIconToolTip(tr("Select bookmark color"));
     d->cancelButton->setText(tr("Cancel"));
     d->saveButton->setText(d->dialogType == CreateNew ? tr("Create") : tr("Update"));
 }
@@ -143,8 +137,8 @@ void BookmarkDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    d->bookmarkText->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->bookmarkText->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+    d->bookmarkName->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->bookmarkName->setBackgroundColor(Ui::DesignSystem::color().onBackground());
 
     d->bookmarkColorPopup->setBackgroundColor(Ui::DesignSystem::color().background());
     d->bookmarkColorPopup->setTextColor(Ui::DesignSystem::color().onBackground());

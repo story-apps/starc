@@ -215,6 +215,11 @@ void AppBar::clearOptions(AppBarOptionsLevel _level)
     update();
 }
 
+void AppBar::clearNavigatorOptions()
+{
+    clearOptions(AppBarOptionsLevel::Navigation);
+}
+
 QSize AppBar::minimumSizeHint() const
 {
     const int actionsSize = actions().size() + (d->hasOptions() ? 1 : 0);

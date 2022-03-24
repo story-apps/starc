@@ -123,7 +123,7 @@ bool AddCommentView::eventFilter(QObject* _watched, QEvent* _event)
 
 void AddCommentView::updateTranslations()
 {
-    d->comment->setLabel(tr("Add new comment"));
+    d->comment->setLabel(tr("Сomment"));
     d->cancelButton->setText(tr("Cancel"));
     d->saveButton->setText(tr("Save"));
 }

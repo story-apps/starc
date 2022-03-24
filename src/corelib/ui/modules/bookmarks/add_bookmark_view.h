@@ -6,21 +6,33 @@
 namespace Ui {
 
 /**
- * @brief Виджет добавления комментария
+ * @brief Виджет добавления закладки
  */
-class AddCommentView : public Widget
+class AddBookmarkView : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit AddCommentView(QWidget* _parent = nullptr);
-    ~AddCommentView() override;
+    explicit AddBookmarkView(QWidget* _parent = nullptr);
+    ~AddBookmarkView() override;
 
     /**
-     * @brief Текст комментария
+     * @brief Названаие закладки
      */
-    QString comment() const;
-    void setComment(const QString& _comment);
+    QString name() const;
+    void setName(const QString& _name);
+
+    /**
+     * @brief Цвет закладки
+     */
+    QColor color() const;
+    void setColor(const QColor& _color);
+
+    /**
+     * @brief Текст закладки
+     */
+    QString text() const;
+    void setText(const QString& _text);
 
 signals:
     /**

@@ -36,7 +36,12 @@ public:
      * @brief Задать действия для опций тулбара на заданном уровне
      */
     void setOptions(const QVector<QAction*>& _options, AppBarOptionsLevel _level);
+
+    /**
+     * @brief Очистить действия тулбара
+     */
     void clearOptions(AppBarOptionsLevel _level);
+    void clearNavigatorOptions();
 
     /**
      * @brief Сами определяем минимальный размер

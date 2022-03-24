@@ -693,7 +693,7 @@ void CommentsModel::setTextModel(TextModel* _model)
                     // Пропускаем корректировочные блоки
                     //
                     if (textItem->isCorrection()) {
-                        break;
+                        continue;
                     }
 
                     //
@@ -705,7 +705,7 @@ void CommentsModel::setTextModel(TextModel* _model)
                     // Если вставился абзац без заметок, пропускаем его
                     //
                     if (textItem->reviewMarks().isEmpty()) {
-                        break;
+                        continue;
                     }
 
                     //
@@ -713,7 +713,7 @@ void CommentsModel::setTextModel(TextModel* _model)
                     //
                     if (!d->typesFilter.isEmpty()
                         && !d->typesFilter.contains(textItem->paragraphType())) {
-                        break;
+                        continue;
                     }
 
                     //

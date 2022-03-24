@@ -32,12 +32,12 @@ public:
 };
 
 ScreenplayTextEditToolbar::Implementation::Implementation(QWidget* _parent)
-    : undoAction(new QAction)
-    , redoAction(new QAction)
-    , paragraphTypeAction(new QAction)
-    , fastFormatAction(new QAction)
-    , searchAction(new QAction)
-    , commentsAction(new QAction)
+    : undoAction(new QAction(_parent))
+    , redoAction(new QAction(_parent))
+    , paragraphTypeAction(new QAction(_parent))
+    , fastFormatAction(new QAction(_parent))
+    , searchAction(new QAction(_parent))
+    , commentsAction(new QAction(_parent))
     , popup(new CardPopupWithTree(_parent))
 {
 }

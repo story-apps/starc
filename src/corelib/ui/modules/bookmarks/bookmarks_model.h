@@ -23,8 +23,7 @@ public:
      */
     enum DataRole {
         BookmarkColorRole = Qt::UserRole + 1,
-        BookmarkTitleRole,
-        BookmarkTextRole,
+        BookmarkNameRole,
     };
 
 public:

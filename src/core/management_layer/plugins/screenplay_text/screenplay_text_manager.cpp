@@ -114,7 +114,7 @@ ScreenplayTextManager::ScreenplayTextManager(QObject* _parent)
         auto dialog = new Ui::BookmarkDialog(d->view->topLevelWidget());
         connect(dialog, &Ui::BookmarkDialog::savePressed, this, [this, item, dialog] {
             auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
-            textItem->setBookmark({ dialog->bookmarkColor(), dialog->bookmarkText() });
+            textItem->setBookmark({ dialog->bookmarkColor(), dialog->bookmarkName() });
             d->model->updateItem(textItem);
 
             dialog->hideDialog();

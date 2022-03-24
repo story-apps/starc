@@ -285,8 +285,8 @@ void BookmarksModel::setTextModel(TextModel* _model)
     d->model = _model;
 
     if (d->model != nullptr) {
-        std::function<void(const QModelIndex&)> readReviewMarksFromModel;
-        readReviewMarksFromModel = [this, &readReviewMarksFromModel](const QModelIndex& _parent) {
+        std::function<void(const QModelIndex&)> readBookmarksFromModel;
+        readBookmarksFromModel = [this, &readBookmarksFromModel](const QModelIndex& _parent) {
             using namespace BusinessLayer;
             for (int itemRow = 0; itemRow < d->model->rowCount(_parent); ++itemRow) {
                 const auto itemIndex = d->model->index(itemRow, 0, _parent);
@@ -298,7 +298,7 @@ void BookmarksModel::setTextModel(TextModel* _model)
                     // Пропускаем корректировочные блоки
                     //
                     if (textItem->isCorrection()) {
-                        break;
+                        continue;
                     }
 
                     //
@@ -310,7 +310,7 @@ void BookmarksModel::setTextModel(TextModel* _model)
                     // Если вставился абзац без закладок, пропускаем его
                     //
                     if (!textItem->bookmark().has_value() || !textItem->bookmark()->isValid()) {
-                        break;
+                        continue;
                     }
 
                     //
@@ -318,23 +318,22 @@ void BookmarksModel::setTextModel(TextModel* _model)
                     //
                     if (!d->typesFilter.isEmpty()
                         && !d->typesFilter.contains(textItem->paragraphType())) {
-                        break;
+                        continue;
                     }
 
                     //
                     // Если в абзаце есть закладка, сохраним
                     //
                     d->bookmarks.append(textItem);
-                    break;
                 }
 
                 //
                 // Считываем информацию о детях
                 //
-                readReviewMarksFromModel(itemIndex);
+                readBookmarksFromModel(itemIndex);
             }
         };
-        readReviewMarksFromModel({});
+        readBookmarksFromModel({});
 
         connect(d->model, &TextModel::modelReset, this, [this] { setTextModel(d->model); });
         connect(d->model, &TextModel::rowsInserted, this,
@@ -415,12 +414,8 @@ QVariant BookmarksModel::data(const QModelIndex& _index, int _role) const
         return item->bookmark()->color;
     }
 
-    case BookmarkTitleRole: {
+    case BookmarkNameRole: {
         return item->bookmark()->name;
-    }
-
-    case BookmarkTextRole: {
-        return item->bookmark()->description;
     }
 
     default: {

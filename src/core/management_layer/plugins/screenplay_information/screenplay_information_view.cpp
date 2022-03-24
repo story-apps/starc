@@ -197,6 +197,7 @@ void ScreenplayInformationView::updateTranslations()
     d->screenplayName->setLabel(tr("Screenplay name"));
     d->screenplayTagline->setLabel(tr("Tagline"));
     d->screenplayLogline->setLabel(tr("Logline"));
+    d->screenplayLogline->setTrailingIconToolTip(tr("Generate logline"));
     d->titlePageVisiblity->setText(tr("Title page"));
     d->synopsisVisiblity->setText(tr("Synopsis"));
     d->treatmentVisiblity->setText(tr("Treatment"));

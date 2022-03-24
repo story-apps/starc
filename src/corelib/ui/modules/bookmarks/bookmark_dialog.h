@@ -31,10 +31,10 @@ public:
     void setDialogType(DialogType _type);
 
     /**
-     * @brief Текст закладки
+     * @brief Название закладки
      */
-    QString bookmarkText() const;
-    void setBookmarkText(const QString& _text);
+    QString bookmarkName() const;
+    void setBookmarkName(const QString& _text);
 
     /**
      * @brief Цвет закладки

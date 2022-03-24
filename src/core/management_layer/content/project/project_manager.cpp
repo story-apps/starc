@@ -1299,6 +1299,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     d->view->setCurrentWidget(view->asQWidget());
 
     //
+    // Настроим опции редактора
+    //
+    d->toolBar->setOptions(view->options(), AppBarOptionsLevel::View);
+
+    //
     // Настроим возможность перехода в навигатор
     //
     const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(_viewMimeType);
@@ -1366,7 +1371,7 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     //
     // Настроим опции редактора
     //
-    d->toolBar->setOptions(view->options());
+    d->toolBar->setOptions(view->options(), AppBarOptionsLevel::Navigation);
 
     //
     // Настраиваем возможность перехода к навигатору проекта
@@ -1375,7 +1380,7 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     connect(navigatorView, &Ui::AbstractNavigator::backPressed, d->navigator,
             &Ui::ProjectNavigator::showProjectNavigator, Qt::UniqueConnection);
     connect(navigatorView, &Ui::AbstractNavigator::backPressed, d->toolBar,
-            &Ui::ProjectToolBar::clearOptions, Qt::UniqueConnection);
+            &Ui::ProjectToolBar::clearNavigatorOptions, Qt::UniqueConnection);
     d->navigator->setCurrentWidget(navigatorView);
 }
 

@@ -494,7 +494,7 @@ QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const
 
 bool TextModelTextItem::Bookmark::operator==(const TextModelTextItem::Bookmark& _other) const
 {
-    return color == _other.color && name == _other.name && description == _other.description;
+    return color == _other.color && name == _other.name;
 }
 
 bool TextModelTextItem::Bookmark::isValid() const

@@ -187,6 +187,7 @@ void ComicBookInformationView::updateTranslations()
     d->comicBookName->setLabel(tr("Comic book name"));
     d->comicBookTagline->setLabel(tr("Tagline"));
     d->comicBookLogline->setLabel(tr("Logline"));
+    d->comicBookLogline->setTrailingIconToolTip(tr("Generate logline"));
     d->titlePageVisiblity->setText(tr("Title page"));
     d->synopsisVisiblity->setText(tr("Synopsis"));
     d->comicBookTextVisiblity->setText(tr("Script"));
