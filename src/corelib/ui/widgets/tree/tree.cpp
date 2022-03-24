@@ -140,7 +140,8 @@ void Tree::setItemDelegateForColumn(int _column, QAbstractItemDelegate* _delegat
 
 void Tree::setCurrentIndex(const QModelIndex& _index)
 {
-    if (d->tree->selectionModel()->selectedIndexes().contains(_index)) {
+    if (d->tree->selectionModel() != nullptr
+        && d->tree->selectionModel()->selectedIndexes().contains(_index)) {
         return;
     }
 
