@@ -4,6 +4,24 @@
 
 
 /**
+ * @brief Уровень опций панели инструментов
+ */
+enum class AppBarOptionsLevel {
+    //
+    // Уровень приложения
+    //
+    App,
+    //
+    // Уровень навигатора
+    //
+    Navigation,
+    //
+    // Уровень редактора
+    //
+    View,
+};
+
+/**
  * @brief Виджет панели инструментов приложения
  */
 class CORE_LIBRARY_EXPORT AppBar : public Widget
@@ -15,10 +33,10 @@ public:
     ~AppBar() override;
 
     /**
-     * @brief Задать действия для опций тулбара
+     * @brief Задать действия для опций тулбара на заданном уровне
      */
-    void setOptions(const QVector<QAction*>& _options);
-    void clearOptions();
+    void setOptions(const QVector<QAction*>& _options, AppBarOptionsLevel _level);
+    void clearOptions(AppBarOptionsLevel _level);
 
     /**
      * @brief Сами определяем минимальный размер

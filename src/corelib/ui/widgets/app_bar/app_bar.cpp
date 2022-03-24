@@ -26,6 +26,16 @@ public:
      */
     QAction* pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const;
 
+    /**
+     * @brief Получить список опций заданного типа
+     */
+    QVector<QAction*>& options(AppBarOptionsLevel _level);
+
+    /**
+     * @brief Есть ли опции
+     */
+    bool hasOptions() const;
+
 
     /**
      * @brief Владелец данных
@@ -36,7 +46,12 @@ public:
      * @brief Иконка опций тулбара
      */
     QAction* optionsAction = nullptr;
-    QVector<QAction*> options;
+    //
+    // и сами опции
+    //
+    QVector<QAction*> appOptions;
+    QVector<QAction*> navigatorOptions;
+    QVector<QAction*> viewOptions;
 
     /**
      * @brief Иконка на которой кликнули последней
@@ -96,7 +111,7 @@ QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate,
         actionLeft = q->isLeftToRight() ? actionRight : actionLeft - actionWidth;
     }
 
-    if (!options.isEmpty()) {
+    if (hasOptions()) {
         actionLeft = q->isLeftToRight()
             ? (q->width() - Ui::DesignSystem::appBar().iconSize().width()
                - Ui::DesignSystem::appBar().margins().right())
@@ -110,6 +125,28 @@ QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate,
     return nullptr;
 }
 
+QVector<QAction*>& AppBar::Implementation::options(AppBarOptionsLevel _level)
+{
+    switch (_level) {
+    case AppBarOptionsLevel::App: {
+        return appOptions;
+    }
+
+    case AppBarOptionsLevel::Navigation: {
+        return navigatorOptions;
+    }
+
+    case AppBarOptionsLevel::View: {
+        return viewOptions;
+    }
+    }
+}
+
+bool AppBar::Implementation::hasOptions() const
+{
+    return !appOptions.isEmpty() || !navigatorOptions.isEmpty() || !viewOptions.isEmpty();
+}
+
 
 // ****
 
@@ -119,16 +156,35 @@ AppBar::AppBar(QWidget* _parent)
     , d(new Implementation(this))
 {
     connect(d->optionsAction, &QAction::triggered, this, [this] {
-        if (d->options.isEmpty()) {
+        if (!d->hasOptions()) {
             return;
         }
 
+        //
+        // Настроим список опций для меню
+        //
+        auto options = d->appOptions;
+        if (!d->navigatorOptions.isEmpty()) {
+            d->navigatorOptions.first()->setSeparator(!options.isEmpty());
+            options.append(d->navigatorOptions);
+        }
+        if (!d->viewOptions.isEmpty()) {
+            d->viewOptions.first()->setSeparator(!options.isEmpty());
+            options.append(d->viewOptions);
+        }
+
+        //
+        // Настроим меню опций
+        //
         auto menu = new ContextMenu(this);
         menu->setBackgroundColor(Ui::DesignSystem::color().background());
         menu->setTextColor(Ui::DesignSystem::color().onBackground());
-        menu->setActions(d->options);
+        menu->setActions(options);
         connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
 
+        //
+        // Покажем меню
+        //
         menu->showContextMenu(QCursor::pos());
     });
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
@@ -139,29 +195,29 @@ AppBar::AppBar(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
-void AppBar::setOptions(const QVector<QAction*>& _options)
+void AppBar::setOptions(const QVector<QAction*>& _options, AppBarOptionsLevel _level)
 {
-    if (d->options == _options) {
+    if (d->options(_level) == _options) {
         return;
     }
 
-    d->options = _options;
+    d->options(_level) = _options;
     update();
 }
 
-void AppBar::clearOptions()
+void AppBar::clearOptions(AppBarOptionsLevel _level)
 {
-    if (d->options.isEmpty()) {
+    if (d->options(_level).isEmpty()) {
         return;
     }
 
-    d->options.clear();
+    d->options(_level).clear();
     update();
 }
 
 QSize AppBar::minimumSizeHint() const
 {
-    const int actionsSize = actions().size() + (d->options.isEmpty() ? 0 : 1);
+    const int actionsSize = actions().size() + (d->hasOptions() ? 1 : 0);
     const qreal width = Ui::DesignSystem::appBar().margins().left()
         + Ui::DesignSystem::appBar().iconSize().width() * actionsSize
         + Ui::DesignSystem::appBar().iconsSpacing() * (actionsSize - 1)
@@ -244,7 +300,7 @@ void AppBar::paintEvent(QPaintEvent* _event)
     //
     // Иконка опций панели
     //
-    if (!d->options.isEmpty()) {
+    if (d->hasOptions()) {
         actionX = isLeftToRight() ? (width() - Ui::DesignSystem::appBar().iconSize().width()
                                      - Ui::DesignSystem::appBar().margins().right())
                                   : Ui::DesignSystem::appBar().margins().left();
