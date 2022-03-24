@@ -1276,6 +1276,12 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
 
 ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
+    //
+    // Сначала нужно создать контекстное меню в базовом классе, т.к. в этот момент может
+    // измениться курсор, который установлен в текстовом редакторе, и использовать его
+    //
+    auto menu = BaseTextEdit::createContextMenu(_position, _parent);
+
     const BusinessLayer::TextCursor cursor = textCursor();
 
     auto splitAction = new QAction(this);
@@ -1332,7 +1338,6 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
                 &ScreenplayTextEdit::addBookmarkRequested);
     }
 
-    auto menu = BaseTextEdit::createContextMenu(_position, _parent);
     auto actions = menu->actions().toVector();
     actions.first()->setSeparator(true);
     actions.prepend(bookmarkAction);
