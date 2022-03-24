@@ -47,6 +47,11 @@ public:
     qreal contentWidth() const;
 
     /**
+     * @brief Обновить диапазон и состояние горизонтальной прокрутки
+     */
+    void updateScrollState(int _width);
+
+    /**
      * @brief Анимировать клик
      */
     void animateClick();
@@ -130,11 +135,15 @@ qreal TabBar::Implementation::contentWidth() const
         }
         contentWidth += tabWidthHint(tab);
     }
-    if (!isFixed) {
-        contentWidth += Ui::DesignSystem::tabBar().scrollableLeftMargin();
-    }
 
     return contentWidth;
+}
+
+void TabBar::Implementation::updateScrollState(int _width)
+{
+
+    scrollState.maximum = std::max(contentWidth() - _width, 0.0);
+    scrollState.current = std::min(scrollState.current, scrollState.maximum);
 }
 
 void TabBar::Implementation::animateClick()
@@ -279,6 +288,7 @@ void TabBar::setTabVisible(int _tabIndex, bool _visible)
         setCurrentTab(_tabIndex);
     }
 
+    d->updateScrollState(width());
     updateGeometry();
     update();
 }
@@ -302,7 +312,7 @@ void TabBar::setCurrentTab(int _index)
         //
         // Определим текущее положение центра таба
         //
-        qreal tabX = Ui::DesignSystem::tabBar().scrollableLeftMargin();
+        qreal tabX = 0;
         tabX -= d->scrollState.current;
         for (int tabIndex = 0; tabIndex < _index; ++tabIndex) {
             const Tab& tab = d->tabs.at(tabIndex);
@@ -377,7 +387,7 @@ QSize TabBar::minimumSizeHint() const
     }
 
     if (!d->isFixed) {
-        sizeHint.setWidth(sizeHint.width() + Ui::DesignSystem::tabBar().scrollableLeftMargin());
+        sizeHint.setWidth(sizeHint.width());
     }
 
     return sizeHint.toSize();
@@ -418,8 +428,7 @@ void TabBar::resizeEvent(QResizeEvent* _event)
 {
     QWidget::resizeEvent(_event);
 
-    d->scrollState.maximum = std::max(d->contentWidth() - _event->size().width(), 0.0);
-    d->scrollState.current = std::min(d->scrollState.current, d->scrollState.maximum);
+    d->updateScrollState(_event->size().width());
 }
 
 void TabBar::paintEvent(QPaintEvent* _event)
@@ -437,7 +446,7 @@ void TabBar::paintEvent(QPaintEvent* _event)
     //
     // Рисуем вкладки
     //
-    qreal tabX = d->isFixed ? 0 : Ui::DesignSystem::tabBar().scrollableLeftMargin();
+    qreal tabX = 0;
     tabX -= d->scrollState.current;
     for (int tabIndex = 0; tabIndex < d->tabs.size(); ++tabIndex) {
         //
@@ -552,7 +561,7 @@ void TabBar::leaveEvent(QEvent* _event)
 
 void TabBar::mouseMoveEvent(QMouseEvent* _event)
 {
-    qreal tabX = d->isFixed ? 0 : Ui::DesignSystem::tabBar().scrollableLeftMargin();
+    qreal tabX = 0;
     tabX -= d->scrollState.current;
     for (int tabIndex = 0; tabIndex < d->tabs.size(); ++tabIndex) {
         const Tab& tab = d->tabs.at(tabIndex);
@@ -589,7 +598,7 @@ void TabBar::mousePressEvent(QMouseEvent* _event)
 
 void TabBar::mouseReleaseEvent(QMouseEvent* _event)
 {
-    qreal tabX = d->isFixed ? 0 : Ui::DesignSystem::tabBar().scrollableLeftMargin();
+    qreal tabX = 0;
     tabX -= d->scrollState.current;
     for (int tabIndex = 0; tabIndex < d->tabs.size(); ++tabIndex) {
         const Tab& tab = d->tabs.at(tabIndex);
