@@ -207,14 +207,18 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         appendItem(screenplayItem, parentItem);
         appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")),
                    screenplayItem);
-        appendItem(createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")),
-                   screenplayItem);
-        appendItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")),
-                   screenplayItem);
+        auto synopsisItem = createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis"));
+        appendItem(synopsisItem, screenplayItem);
         appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")),
                    screenplayItem);
         appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")),
                    screenplayItem);
+        //
+        // Вставляем тритмент после всех документов, т.к. он является алиасом к документу сценария
+        // и чтобы его сконструировать, нужны другие документы
+        //
+        insertItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")),
+                   synopsisItem);
         break;
     }
 
