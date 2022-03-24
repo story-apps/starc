@@ -495,6 +495,17 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
     auto actionY = Ui::DesignSystem::card().shadowMargins().top()
         + Ui::DesignSystem::contextMenu().margins().top();
 
+    auto setPen = [&painter](QAction* _action, const QColor& _color) {
+        painter.setPen(_color);
+        if (_action->isChecked()) {
+            painter.setOpacity(1.0);
+        } else if (!_action->isEnabled()) {
+            painter.setOpacity(Ui::DesignSystem::disabledTextOpacity());
+        } else {
+            painter.setOpacity(Ui::DesignSystem::inactiveTextOpacity());
+        }
+    };
+
     for (int actionIndex = 0; actionIndex < actions().size(); ++actionIndex) {
         QAction* action = actions().at(actionIndex);
         if (!action->isVisible()) {
@@ -513,15 +524,6 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
             painter.drawLine(QPointF(actionX, actionY), QPointF(actionX + actionWidth, actionY));
 
             actionY += Ui::DesignSystem::drawer().separatorSpacing();
-        }
-
-        painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
-        if (action->isChecked()) {
-            painter.setOpacity(1.0);
-        } else if (!action->isEnabled()) {
-            painter.setOpacity(Ui::DesignSystem::disabledTextOpacity());
-        } else {
-            painter.setOpacity(Ui::DesignSystem::inactiveTextOpacity());
         }
 
         //
@@ -546,12 +548,15 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
                          QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
                                 actionRect.height()));
             auto it = action->iconText(), t = action->text();
+            setPen(action,
+                   action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
             painter.setFont(Ui::DesignSystem::font().iconsMid());
             painter.drawText(iconRect, Qt::AlignCenter, action->iconText());
         }
         //
         // ... текст
         //
+        setPen(action, textColor());
         painter.setFont(Ui::DesignSystem::font().subtitle2());
         const auto textX = iconRect.isEmpty()
             ? actionX + Ui::DesignSystem::treeOneLineItem().margins().left()
