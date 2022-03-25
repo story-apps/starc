@@ -105,13 +105,19 @@ ScreenplayTextManager::ScreenplayTextManager(QObject* _parent)
 {
     connect(d->view, &Ui::ScreenplayTextView::currentModelIndexChanged, this,
             &ScreenplayTextManager::currentModelIndexChanged);
-    connect(d->view, &Ui::ScreenplayTextView::addBookmarkRequested, this, [this] {
+    auto showBookmarkDialog = [this](Ui::BookmarkDialog::DialogType _type) {
         auto item = d->model->itemForIndex(d->view->currentModelIndex());
         if (item->type() != BusinessLayer::TextModelItemType::Text) {
             return;
         }
 
         auto dialog = new Ui::BookmarkDialog(d->view->topLevelWidget());
+        dialog->setDialogType(_type);
+        if (_type == Ui::BookmarkDialog::DialogType::Edit) {
+            const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+            dialog->setBookmarkName(textItem->bookmark()->name);
+            dialog->setBookmarkColor(textItem->bookmark()->color);
+        }
         connect(dialog, &Ui::BookmarkDialog::savePressed, this, [this, item, dialog] {
             auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
             textItem->setBookmark({ dialog->bookmarkColor(), dialog->bookmarkName() });
@@ -125,7 +131,12 @@ ScreenplayTextManager::ScreenplayTextManager(QObject* _parent)
         // Отображаем диалог
         //
         dialog->showDialog();
+    };
+    connect(d->view, &Ui::ScreenplayTextView::addBookmarkRequested, this, [showBookmarkDialog] {
+        showBookmarkDialog(Ui::BookmarkDialog::DialogType::CreateNew);
     });
+    connect(d->view, &Ui::ScreenplayTextView::editBookmarkRequested, this,
+            [showBookmarkDialog] { showBookmarkDialog(Ui::BookmarkDialog::DialogType::Edit); });
     connect(d->view, &Ui::ScreenplayTextView::removeBookmarkRequested, this, [this] {
         auto item = d->model->itemForIndex(d->view->currentModelIndex());
         if (item->type() != BusinessLayer::TextModelItemType::Text) {

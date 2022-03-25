@@ -1326,17 +1326,32 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     // Работа с закладками
     //
     auto bookmarkAction = new QAction(this);
-    if (d->document.bookmark(cursor.block()).isValid()) {
-        bookmarkAction->setText(tr("Remove bookmark"));
-        bookmarkAction->setIconText(u8"\U000F137A");
-        connect(bookmarkAction, &QAction::triggered, this,
-                &ScreenplayTextEdit::removeBookmarkRequested);
-    } else {
-        bookmarkAction->setText(tr("Add bookmark"));
-        bookmarkAction->setIconText(u8"\U000F00C4");
-        connect(bookmarkAction, &QAction::triggered, this,
+    bookmarkAction->setText(tr("Bookmark"));
+    bookmarkAction->setIconText(u8"\U000F00C3");
+    if (!d->document.bookmark(cursor.block()).isValid()) {
+        auto createBookmark = new QAction(bookmarkAction);
+        createBookmark->setText(tr("Add"));
+        createBookmark->setIconText(u8"\U000F00C4");
+        connect(createBookmark, &QAction::triggered, this,
                 &ScreenplayTextEdit::addBookmarkRequested);
+    } else {
+        auto editBookmark = new QAction(bookmarkAction);
+        editBookmark->setText(tr("Edit"));
+        editBookmark->setIconText(u8"\U000F03EB");
+        connect(editBookmark, &QAction::triggered, this,
+                &ScreenplayTextEdit::editBookmarkRequested);
+        //
+        auto removeBookmark = new QAction(bookmarkAction);
+        removeBookmark->setText(tr("Remove"));
+        removeBookmark->setIconText(u8"\U000F01B4");
+        connect(removeBookmark, &QAction::triggered, this,
+                &ScreenplayTextEdit::removeBookmarkRequested);
     }
+    //
+    auto showBookmarks = new QAction(bookmarkAction);
+    showBookmarks->setText(tr("Show list"));
+    showBookmarks->setIconText(u8"\U000F0E16");
+    connect(showBookmarks, &QAction::triggered, this, &ScreenplayTextEdit::showBookmarksRequested);
 
     auto actions = menu->actions().toVector();
     actions.first()->setSeparator(true);

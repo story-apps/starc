@@ -495,7 +495,7 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
     auto actionY = Ui::DesignSystem::card().shadowMargins().top()
         + Ui::DesignSystem::contextMenu().margins().top();
 
-    auto setPen = [&painter](QAction* _action, const QColor& _color) {
+    auto configurePen = [&painter](QAction* _action, const QColor& _color) {
         painter.setPen(_color);
         if (_action->isChecked()) {
             painter.setOpacity(1.0);
@@ -548,15 +548,15 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
                          QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
                                 actionRect.height()));
             auto it = action->iconText(), t = action->text();
-            setPen(action,
-                   action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
+            configurePen(action,
+                         action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
             painter.setFont(Ui::DesignSystem::font().iconsMid());
             painter.drawText(iconRect, Qt::AlignCenter, action->iconText());
         }
         //
         // ... текст
         //
-        setPen(action, textColor());
+        configurePen(action, textColor());
         painter.setFont(Ui::DesignSystem::font().subtitle2());
         const auto textX = iconRect.isEmpty()
             ? actionX + Ui::DesignSystem::treeOneLineItem().margins().left()

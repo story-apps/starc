@@ -16,7 +16,7 @@ public:
     explicit Implementation(QWidget* _parent);
 
 
-    DialogType dialogType = CreateNew;
+    DialogType dialogType = DialogType::CreateNew;
 
     TextField* bookmarkName = nullptr;
     ColorPickerPopup* bookmarkColorPopup = nullptr;
@@ -126,11 +126,12 @@ QWidget* BookmarkDialog::lastFocusableWidget() const
 
 void BookmarkDialog::updateTranslations()
 {
-    setTitle(d->dialogType == CreateNew ? tr("Create new bookmark") : tr("Edit bookmark"));
+    setTitle(d->dialogType == DialogType::CreateNew ? tr("Create new bookmark")
+                                                    : tr("Edit bookmark"));
     d->bookmarkName->setLabel(tr("Bookmark text"));
     d->bookmarkName->setTrailingIconToolTip(tr("Select bookmark color"));
     d->cancelButton->setText(tr("Cancel"));
-    d->saveButton->setText(d->dialogType == CreateNew ? tr("Create") : tr("Update"));
+    d->saveButton->setText(d->dialogType == DialogType::CreateNew ? tr("Create") : tr("Update"));
 }
 
 void BookmarkDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)

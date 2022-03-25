@@ -79,6 +79,11 @@ signals:
     void addBookmarkRequested();
 
     /**
+     * @brief Пользователь хочет изменить закладку
+     */
+    void editBookmarkRequested();
+
+    /**
      * @brief Пользователь хочет удалить закладку
      */
     void removeBookmarkRequested();

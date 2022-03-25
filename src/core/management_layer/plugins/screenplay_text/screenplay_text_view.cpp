@@ -652,8 +652,12 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             [this] { d->updateCommentsToolBar(); });
     connect(d->screenplayText, &ScreenplayTextEdit::addBookmarkRequested, this,
             &ScreenplayTextView::addBookmarkRequested);
+    connect(d->screenplayText, &ScreenplayTextEdit::editBookmarkRequested, this,
+            &ScreenplayTextView::editBookmarkRequested);
     connect(d->screenplayText, &ScreenplayTextEdit::removeBookmarkRequested, this,
             &ScreenplayTextView::removeBookmarkRequested);
+    connect(d->screenplayText, &ScreenplayTextEdit::showBookmarksRequested, d->showBookmarksAction,
+            &QAction::toggle);
     //
     connect(d->showBookmarksAction, &QAction::toggled, this, [this](bool _checked) {
         d->sidebarTabs->setTabVisible(kBookmarksTabIndex, _checked);

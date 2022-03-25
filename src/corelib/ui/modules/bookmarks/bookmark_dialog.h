@@ -16,7 +16,7 @@ public:
     /**
      * @brief Способ отображения диалога
      */
-    enum DialogType {
+    enum class DialogType {
         CreateNew,
         Edit,
     };
