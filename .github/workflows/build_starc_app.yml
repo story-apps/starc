@@ -296,11 +296,17 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/checkout@master
 
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
           version: 5.15.2
           target: desktop
+          setup-python: false
+          py7zrversion: '==0.18.1'
 
       - name: Run QMake
         shell: bash
