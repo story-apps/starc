@@ -18,50 +18,36 @@ public:
     ~BookmarksView() override;
 
     /**
-     * @brief Установить модель комментариев
+     * @brief Установить модель закладок
      */
     void setModel(QAbstractItemModel* _model);
 
     /**
-     * @brief Установить текущим элемент для заданного индекса модели сценария и позиции в блоке
+     * @brief Установить текущим элемент для заданного индекса модели сценария
      */
     void setCurrentIndex(const QModelIndex& _index);
 
     /**
-     * @brief Показать виджет добавления/редактирования комментария
+     * @brief Показать виджет добавления/редактирования закладки
      */
-    void showAddBookmarkView(const QColor& _withColor, const QString& _withText = {});
+    void showAddBookmarkView(const QModelIndex& _index);
 
 signals:
     /**
-     * @brief Пользователь хочет добавить редакторскую заметку
+     * @brief Пользователь хочет добавить закладку
      */
-    void addReviewMarkRequested(const QColor& _color, const QString& _text);
+    void addBookmarkRequested(const QString& _text, const QColor& _color);
 
     /**
-     * @brief Пользователь хочет изменить редакторскую заметку
+     * @brief Пользователь хочет изменить закладку
      */
-    void changeReviewMarkRequested(const QModelIndex& _index, const QString& _text);
-
-    /**
-     * @brief Пользователь хочет комментарий к редакторской заметке
-     */
-    void addReviewMarkReplyRequested(const QModelIndex& _index, const QString& _text);
+    void changeBookmarkRequested(const QModelIndex& _index, const QString& _text,
+                                 const QColor& _color);
 
     /**
      * @brief Пользователь выбрал закладку
      */
     void bookmarkSelected(const QModelIndex& _index);
-
-    /**
-     * @brief Пользователь хочет пометить завершёнными выбранные заметки
-     */
-    void markAsDoneRequested(const QModelIndexList& _indexes);
-
-    /**
-     * @brief Пользователь хочет пометить незавершёнными выбранные заметки
-     */
-    void markAsUndoneRequested(const QModelIndexList& _indexes);
 
     /**
      * @brief Пользователь хочет удалить выбранные заметки

@@ -85,11 +85,13 @@ void BookmarkDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _op
     const qreal textLeft = iconRect.right() + Ui::DesignSystem::layout().px12();
     const qreal textWidth = backgroundRect.right() - textLeft - Ui::DesignSystem::layout().px12();
     const QRectF textRect(QPointF(textLeft, iconRect.top()), QSizeF(textWidth, iconRect.height()));
-    const auto bookmarkName = _index.data(BookmarksModel::BookmarkNameRole).toString();
-    const auto text
-        = _painter->fontMetrics().elidedText(bookmarkName.isEmpty() ? tr("") : bookmarkName,
-                                             Qt::ElideRight, static_cast<int>(textRect.width()));
-    _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, text);
+    auto bookmarkName = _index.data(BookmarksModel::BookmarkNameRole).toString();
+    if (bookmarkName.isEmpty()) {
+        bookmarkName = _index.data(BookmarksModel::BookmarkItemTextRole).toString();
+    }
+    bookmarkName = _painter->fontMetrics().elidedText(bookmarkName, Qt::ElideRight,
+                                                      static_cast<int>(textRect.width()));
+    _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, bookmarkName);
 }
 
 QSize BookmarkDelegate::sizeHint(const QStyleOptionViewItem& _option,

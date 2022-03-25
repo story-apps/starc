@@ -24,6 +24,7 @@ public:
     enum DataRole {
         BookmarkColorRole = Qt::UserRole + 1,
         BookmarkNameRole,
+        BookmarkItemTextRole,
     };
 
 public:
@@ -50,6 +51,16 @@ public:
      * @brief Получить индекс закладки из индекса элемента модели сценария
      */
     QModelIndex mapFromModel(const QModelIndex& _index);
+
+    /**
+     * @brief Задать название закладки
+     */
+    void setName(const QModelIndex& _index, const QString& _name);
+
+    /**
+     * @brief Задать цвет закладки
+     */
+    void setColor(const QModelIndex& _index, const QColor& _color);
 
     /**
      * @brief Удалить выбранные элементы

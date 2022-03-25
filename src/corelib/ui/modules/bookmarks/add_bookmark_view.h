@@ -19,20 +19,14 @@ public:
     /**
      * @brief Названаие закладки
      */
-    QString name() const;
-    void setName(const QString& _name);
+    QString bookmarkName() const;
+    void setBookmarkName(const QString& _name);
 
     /**
      * @brief Цвет закладки
      */
-    QColor color() const;
-    void setColor(const QColor& _color);
-
-    /**
-     * @brief Текст закладки
-     */
-    QString text() const;
-    void setText(const QString& _text);
+    QColor bookmarkColor() const;
+    void setBookmarkColor(const QColor& _color);
 
 signals:
     /**

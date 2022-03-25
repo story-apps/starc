@@ -573,6 +573,12 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 d->commentsModel->remove(_indexes);
             });
     //
+    connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
+            &ScreenplayTextView::createBookmarkRequested);
+    connect(d->bookmarksView, &BookmarksView::changeBookmarkRequested, this,
+            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
+                emit changeBookmarkRequested(d->bookmarksModel->mapToModel(_index), _text, _color);
+            });
     connect(d->bookmarksView, &BookmarksView::bookmarkSelected, this,
             [this](const QModelIndex& _index) {
                 const auto index = d->bookmarksModel->mapToModel(_index);
@@ -581,6 +587,11 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 cursor.setPosition(position);
                 d->screenplayText->ensureCursorVisible(cursor);
                 d->scalableWrapper->setFocus();
+            });
+    connect(d->bookmarksView, &BookmarksView::removeRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->bookmarksModel->remove(_indexes);
             });
     //
     connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this](int _currentIndex) {
@@ -650,10 +661,35 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             handleCursorPositionChanged);
     connect(d->screenplayText, &ScreenplayTextEdit::selectionChanged, this,
             [this] { d->updateCommentsToolBar(); });
-    connect(d->screenplayText, &ScreenplayTextEdit::addBookmarkRequested, this,
-            &ScreenplayTextView::addBookmarkRequested);
-    connect(d->screenplayText, &ScreenplayTextEdit::editBookmarkRequested, this,
-            &ScreenplayTextView::editBookmarkRequested);
+    connect(d->screenplayText, &ScreenplayTextEdit::addBookmarkRequested, this, [this] {
+        //
+        // Если список закладок показан, добавляем новую через него
+        //
+        if (d->showBookmarksAction->isChecked()) {
+            d->bookmarksView->showAddBookmarkView({});
+        }
+        //
+        // В противном случае, через диалог
+        //
+        else {
+            emit addBookmarkRequested();
+        }
+    });
+    connect(d->screenplayText, &ScreenplayTextEdit::editBookmarkRequested, this, [this] {
+        //
+        // Если список закладок показан, редактируем через него
+        //
+        if (d->showBookmarksAction->isChecked()) {
+            d->bookmarksView->showAddBookmarkView(
+                d->bookmarksModel->mapFromModel(currentModelIndex()));
+        }
+        //
+        // В противном случае, через диалог
+        //
+        else {
+            emit addBookmarkRequested();
+        }
+    });
     connect(d->screenplayText, &ScreenplayTextEdit::removeBookmarkRequested, this,
             &ScreenplayTextView::removeBookmarkRequested);
     connect(d->screenplayText, &ScreenplayTextEdit::showBookmarksRequested, d->showBookmarksAction,

@@ -137,6 +137,28 @@ ScreenplayTextManager::ScreenplayTextManager(QObject* _parent)
     });
     connect(d->view, &Ui::ScreenplayTextView::editBookmarkRequested, this,
             [showBookmarkDialog] { showBookmarkDialog(Ui::BookmarkDialog::DialogType::Edit); });
+    connect(d->view, &Ui::ScreenplayTextView::createBookmarkRequested, this,
+            [this](const QString& _text, const QColor& _color) {
+                auto item = d->model->itemForIndex(d->view->currentModelIndex());
+                if (item->type() != BusinessLayer::TextModelItemType::Text) {
+                    return;
+                }
+
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+                textItem->setBookmark({ _color, _text });
+                d->model->updateItem(textItem);
+            });
+    connect(d->view, &Ui::ScreenplayTextView::changeBookmarkRequested, this,
+            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
+                auto item = d->model->itemForIndex(_index);
+                if (item->type() != BusinessLayer::TextModelItemType::Text) {
+                    return;
+                }
+
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+                textItem->setBookmark({ _color, _text });
+                d->model->updateItem(textItem);
+            });
     connect(d->view, &Ui::ScreenplayTextView::removeBookmarkRequested, this, [this] {
         auto item = d->model->itemForIndex(d->view->currentModelIndex());
         if (item->type() != BusinessLayer::TextModelItemType::Text) {

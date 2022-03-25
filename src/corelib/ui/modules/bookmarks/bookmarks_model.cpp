@@ -378,6 +378,32 @@ QModelIndex BookmarksModel::mapFromModel(const QModelIndex& _index)
     return index(d->bookmarks.indexOf(textItem), 0);
 }
 
+void BookmarksModel::setName(const QModelIndex& _index, const QString& _name)
+{
+    auto item = d->bookmarks.at(_index.row());
+    if (!item->bookmark().has_value()) {
+        return;
+    }
+
+    auto bookmark = item->bookmark().value();
+    bookmark.name = _name;
+    item->setBookmark(bookmark);
+    d->model->updateItem(item);
+}
+
+void BookmarksModel::setColor(const QModelIndex& _index, const QColor& _color)
+{
+    auto item = d->bookmarks.at(_index.row());
+    if (!item->bookmark().has_value()) {
+        return;
+    }
+
+    auto bookmark = item->bookmark().value();
+    bookmark.color = _color;
+    item->setBookmark(bookmark);
+    d->model->updateItem(item);
+}
+
 void BookmarksModel::remove(const QModelIndexList& _indexes)
 {
     for (const auto& index : reversed(_indexes)) {
@@ -416,6 +442,10 @@ QVariant BookmarksModel::data(const QModelIndex& _index, int _role) const
 
     case BookmarkNameRole: {
         return item->bookmark()->name;
+    }
+
+    case BookmarkItemTextRole: {
+        return item->text();
     }
 
     default: {

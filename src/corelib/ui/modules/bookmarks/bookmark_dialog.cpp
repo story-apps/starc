@@ -33,9 +33,9 @@ BookmarkDialog::Implementation::Implementation(QWidget* _parent)
     , cancelButton(new Button(_parent))
     , saveButton(new Button(_parent))
 {
-    bookmarkName->setTrailingIcon(u8"\U000F0765");
     bookmarkColorPopup->setColorCanBeDeselected(false);
     bookmarkColorPopup->setSelectedColor(Qt::red);
+    bookmarkName->setTrailingIcon(u8"\U000F0765");
     bookmarkName->setTrailingIconColor(bookmarkColorPopup->selectedColor());
 
     buttonsLayout->setContentsMargins({});
@@ -107,10 +107,11 @@ QColor BookmarkDialog::bookmarkColor() const
 
 void BookmarkDialog::setBookmarkColor(const QColor& _color)
 {
-    if (d->bookmarkColorPopup->selectedColor() == _color) {
+    if (!_color.isValid() || d->bookmarkColorPopup->selectedColor() == _color) {
         return;
     }
 
+    d->bookmarkName->setTrailingIconColor(_color);
     d->bookmarkColorPopup->setSelectedColor(_color);
 }
 

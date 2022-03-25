@@ -74,14 +74,17 @@ signals:
     void currentModelIndexChanged(const QModelIndex& _index);
 
     /**
-     * @brief Пользователь хочет добавить закладку
+     * @brief Нажатия пользователя в контекстном меню для активации действия
      */
     void addBookmarkRequested();
+    void editBookmarkRequested();
 
     /**
-     * @brief Пользователь хочет изменить закладку
+     * @brief Уведомления, что пользователь осуществил действие в панели редактирования закладки
      */
-    void editBookmarkRequested();
+    void createBookmarkRequested(const QString& _text, const QColor& _color);
+    void changeBookmarkRequested(const QModelIndex& _index, const QString& _text,
+                                 const QColor& _color);
 
     /**
      * @brief Пользователь хочет удалить закладку

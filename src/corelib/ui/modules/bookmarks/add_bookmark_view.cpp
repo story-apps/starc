@@ -22,7 +22,6 @@ public:
     QScrollArea* content = nullptr;
     TextField* bookmarkName = nullptr;
     ColorPickerPopup* bookmarkColorPopup = nullptr;
-    TextField* bookmarkText = nullptr;
     QHBoxLayout* buttonsLayout = nullptr;
     Button* cancelButton = nullptr;
     Button* saveButton = nullptr;
@@ -32,7 +31,6 @@ AddBookmarkView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent))
     , bookmarkName(new TextField(_parent))
     , bookmarkColorPopup(new ColorPickerPopup(_parent))
-    , bookmarkText(new TextField(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
     , saveButton(new Button(_parent))
@@ -46,12 +44,10 @@ AddBookmarkView::Implementation::Implementation(QWidget* _parent)
     content->setVerticalScrollBar(new ScrollBar);
 
     UiHelper::initSpellingFor(bookmarkName);
-    bookmarkName->setEnterMakesNewLine(true);
-    bookmarkName->setTrailingIcon(u8"\U000F0765");
     bookmarkColorPopup->setColorCanBeDeselected(false);
     bookmarkColorPopup->setSelectedColor(Qt::red);
-    UiHelper::initSpellingFor(bookmarkText);
-    bookmarkText->setEnterMakesNewLine(true);
+    bookmarkName->setTrailingIcon(u8"\U000F0765");
+    bookmarkName->setTrailingIconColor(bookmarkColorPopup->selectedColor());
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
@@ -68,9 +64,9 @@ AddBookmarkView::AddBookmarkView(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
-    setFocusProxy(d->bookmarkText);
+    setFocusProxy(d->bookmarkName);
 
-    d->bookmarkText->installEventFilter(this);
+    d->bookmarkName->installEventFilter(this);
 
     QWidget* contentWidget = new QWidget;
     d->content->setWidgetResizable(true);
@@ -79,7 +75,6 @@ AddBookmarkView::AddBookmarkView(QWidget* _parent)
     contentLayout->setContentsMargins({});
     contentLayout->setSpacing(0);
     contentLayout->addWidget(d->bookmarkName);
-    contentLayout->addWidget(d->bookmarkText);
     contentLayout->addLayout(d->buttonsLayout);
     contentLayout->addStretch();
 
@@ -90,17 +85,17 @@ AddBookmarkView::AddBookmarkView(QWidget* _parent)
 
 
     connect(d->bookmarkName, &TextField::trailingIconPressed, this, [this] {
-        d->bookmarkColorPopup->showPopup(d->bookmarkText, Qt::AlignBottom | Qt::AlignRight);
+        d->bookmarkColorPopup->showPopup(d->bookmarkName, Qt::AlignBottom | Qt::AlignRight);
     });
     connect(d->bookmarkColorPopup, &ColorPickerPopup::selectedColorChanged, this,
             [this](const QColor& _color) { d->bookmarkName->setTrailingIconColor(_color); });
-    connect(d->bookmarkText, &TextField::cursorPositionChanged, this, [this] {
-        if (!d->bookmarkText->hasFocus()) {
+    connect(d->bookmarkName, &TextField::cursorPositionChanged, this, [this] {
+        if (!d->bookmarkName->hasFocus()) {
             return;
         }
 
         d->content->ensureVisible(
-            0, d->bookmarkText->pos().y() + d->bookmarkText->cursorRect().bottom());
+            0, d->bookmarkName->pos().y() + d->bookmarkName->cursorRect().bottom());
     });
     connect(d->saveButton, &Button::clicked, this, &AddBookmarkView::savePressed);
     connect(d->cancelButton, &Button::clicked, this, &AddBookmarkView::cancelPressed);
@@ -112,44 +107,34 @@ AddBookmarkView::AddBookmarkView(QWidget* _parent)
 
 AddBookmarkView::~AddBookmarkView() = default;
 
-QString AddBookmarkView::name() const
+QString AddBookmarkView::bookmarkName() const
 {
     return d->bookmarkName->text();
 }
 
-void AddBookmarkView::setName(const QString& _name)
+void AddBookmarkView::setBookmarkName(const QString& _name)
 {
     d->bookmarkName->setText(_name);
 }
 
-QColor AddBookmarkView::color() const
+QColor AddBookmarkView::bookmarkColor() const
 {
     return d->bookmarkColorPopup->selectedColor();
 }
 
-void AddBookmarkView::setColor(const QColor& _color)
+void AddBookmarkView::setBookmarkColor(const QColor& _color)
 {
-    if (d->bookmarkColorPopup->selectedColor() == _color) {
+    if (!_color.isValid() || d->bookmarkColorPopup->selectedColor() == _color) {
         return;
     }
 
+    d->bookmarkName->setTrailingIconColor(_color);
     d->bookmarkColorPopup->setSelectedColor(_color);
-}
-
-QString AddBookmarkView::text() const
-{
-    return d->bookmarkText->text();
-}
-
-void AddBookmarkView::setText(const QString& _text)
-{
-    d->bookmarkText->setText(_text);
 }
 
 bool AddBookmarkView::eventFilter(QObject* _watched, QEvent* _event)
 {
-    if ((_watched == d->bookmarkName || _watched == d->bookmarkText)
-        && _event->type() == QEvent::KeyPress) {
+    if ((_watched == d->bookmarkName) && _event->type() == QEvent::KeyPress) {
         const auto keyEvent = static_cast<QKeyEvent*>(_event);
         if (keyEvent->key() == Qt::Key_Escape) {
             emit cancelPressed();
@@ -167,7 +152,6 @@ void AddBookmarkView::updateTranslations()
 {
     d->bookmarkName->setLabel(tr("Bookmark name"));
     d->bookmarkName->setTrailingIconToolTip(tr("Select bookmark color"));
-    d->bookmarkText->setLabel(tr("Description"));
     d->cancelButton->setText(tr("Cancel"));
     d->saveButton->setText(tr("Save"));
 }
@@ -183,7 +167,6 @@ void AddBookmarkView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     for (auto textField : {
              d->bookmarkName,
-             d->bookmarkText,
          }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onPrimary());
         textField->setTextColor(Ui::DesignSystem::color().onPrimary());
