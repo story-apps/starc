@@ -172,9 +172,7 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     //
     // Рисуем сам переключатель
     //
-    painter.setFont(Ui::DesignSystem::font().iconsMid());
-    painter.setPen(isEnabled() && d->isChecked ? Ui::DesignSystem::color().secondary() : penColor);
-    painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? u8"\U000f043e" : u8"\U000f043d");
+    paintBox(painter, iconRect, penColor);
     //
     // Текст
     //
@@ -182,6 +180,14 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     painter.setPen(penColor);
     painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter,
                      painter.fontMetrics().elidedText(d->text, Qt::ElideRight, textRect.width()));
+}
+
+void RadioButton::paintBox(QPainter& _painter, const QRectF& _rect, const QColor& _penColor)
+{
+    _painter.setFont(Ui::DesignSystem::font().iconsMid());
+    _painter.setPen(isEnabled() && d->isChecked ? Ui::DesignSystem::color().secondary()
+                                                : _penColor);
+    _painter.drawText(_rect, Qt::AlignCenter, d->isChecked ? u8"\U000f043e" : u8"\U000f043d");
 }
 
 void RadioButton::mousePressEvent(QMouseEvent* _event)

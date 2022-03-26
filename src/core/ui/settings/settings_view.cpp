@@ -1253,6 +1253,9 @@ void SettingsView::setApplicationLanguage(int _language)
 {
     auto languageString = [_language]() -> QString {
         switch (_language) {
+        case QLocale::Arabic: {
+            return "اَلْعَرَبِيَّةُ";
+        }
         case QLocale::Azerbaijani: {
             return "Azərbaycan";
         }

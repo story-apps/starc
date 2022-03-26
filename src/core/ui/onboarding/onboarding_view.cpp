@@ -5,7 +5,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/label/link_label.h>
-#include <ui/widgets/radio_button/radio_button.h>
+#include <ui/widgets/radio_button/percent_radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
 #include <ui/widgets/slider/slider.h>
 
@@ -46,7 +46,8 @@ public:
 
     Widget* languagePage = nullptr;
     H5Label* languageTitleLabel = nullptr;
-    QVector<RadioButton*> languageButtons;
+    QVector<PercentRadioButton*> languageButtons;
+    Body1LinkLabel* languageTranslationProgressLink = nullptr;
     Body1LinkLabel* languageHowToAddLink = nullptr;
     Button* goToThemeButton = nullptr;
     Button* skipOnboardingButton = nullptr;
@@ -79,48 +80,60 @@ void OnboardingView::Implementation::initLanguagePage()
 {
     languageTitleLabel = new H5Label(languagePage);
 
-    auto initLanguageButton = [this](const QString& _name, QLocale::Language _language) {
-        RadioButton* languageButton = new RadioButton(languagePage);
+    auto initLanguageButton = [this](const QString& _name, QLocale::Language _language,
+                                     int _percent) {
+        PercentRadioButton* languageButton = new PercentRadioButton(languagePage, _percent);
         languageButton->setText(_name);
         languageButton->setChecked(QLocale().system().language() == _language);
-        QObject::connect(languageButton, &RadioButton::checkedChanged, q,
-                         [this, _language](bool _checked) {
-                             if (_checked) {
-                                 emit q->languageChanged(_language);
-                             }
-                         });
+        QObject::connect(
+            languageButton, &PercentRadioButton::checkedChanged, q,
+            [this, _language, languageButton](bool _checked) {
+                if (_checked) {
+                    emit q->languageChanged(_language);
+                    languageTranslationProgressLink->setVisible(languageButton->percents < 100);
+                    languageTranslationProgressLink->setText(
+                        tr("Translation is ready for %1%. Know how you can improve it.")
+                            .arg(languageButton->percents));
+                }
+            });
         languageButtons.append(languageButton);
         return languageButton;
     };
-    RadioButton* azerbaijaniLanguage = initLanguageButton("Azərbaycan", QLocale::Azerbaijani);
-    RadioButton* belarusianLanguage = initLanguageButton("Беларуский", QLocale::Belarusian);
-    RadioButton* catalanLanguage = initLanguageButton("Català", QLocale::Catalan);
-    RadioButton* chineseLanguage = initLanguageButton("汉语", QLocale::Chinese);
-    RadioButton* croatianLanguage = initLanguageButton("Hrvatski", QLocale::Croatian);
-    RadioButton* danishLanguage = initLanguageButton("Dansk", QLocale::Danish);
-    RadioButton* englishLanguage = initLanguageButton("English", QLocale::English);
-    RadioButton* esperantoLanguage = initLanguageButton("Esperanto", QLocale::Esperanto);
-    RadioButton* frenchLanguage = initLanguageButton("Français", QLocale::French);
-    RadioButton* galicianLanguage = initLanguageButton("Galego", QLocale::Galician);
-    RadioButton* germanLanguage = initLanguageButton("Deutsch", QLocale::German);
-    RadioButton* hebrewLanguage = initLanguageButton("עִבְרִית", QLocale::Hebrew);
-    RadioButton* hindiLanguage = initLanguageButton("हिन्दी", QLocale::Hindi);
-    RadioButton* hungarianLanguage = initLanguageButton("Magyar", QLocale::Hungarian);
-    RadioButton* indonesianLanguage = initLanguageButton("Indonesian", QLocale::Indonesian);
-    RadioButton* italianLanguage = initLanguageButton("Italiano", QLocale::Italian);
-    RadioButton* persianLanguage = initLanguageButton("فارسی", QLocale::Persian);
-    RadioButton* polishLanguage = initLanguageButton("Polski", QLocale::Polish);
-    RadioButton* portugueseLanguage = initLanguageButton(
-        "Português", static_cast<QLocale::Language>(QLocale::LastLanguage + 1));
-    RadioButton* portugueseBrazilLanguage
-        = initLanguageButton("Português Brasileiro", QLocale::Portuguese);
-    RadioButton* romanianLanguage = initLanguageButton("Română", QLocale::Romanian);
-    RadioButton* russianLanguage = initLanguageButton("Русский", QLocale::Russian);
-    RadioButton* slovenianLanguage = initLanguageButton("Slovenski", QLocale::Slovenian);
-    RadioButton* spanishLanguage = initLanguageButton("Español", QLocale::Spanish);
-    RadioButton* tagalogLanguage = initLanguageButton("Tagalog", QLocale::Filipino);
-    RadioButton* turkishLanguage = initLanguageButton("Türkçe", QLocale::Turkish);
-    RadioButton* ukrainianLanguage = initLanguageButton("Українська", QLocale::Ukrainian);
+    PercentRadioButton* arabicLanguage = initLanguageButton("اَلْعَرَبِيَّةُ", QLocale::Arabic, 24);
+    PercentRadioButton* azerbaijaniLanguage
+        = initLanguageButton("Azərbaycan", QLocale::Azerbaijani, 100);
+    PercentRadioButton* belarusianLanguage
+        = initLanguageButton("Беларуский", QLocale::Belarusian, 74);
+    PercentRadioButton* catalanLanguage = initLanguageButton("Català", QLocale::Catalan, 56);
+    PercentRadioButton* chineseLanguage = initLanguageButton("汉语", QLocale::Chinese, 8);
+    PercentRadioButton* croatianLanguage = initLanguageButton("Hrvatski", QLocale::Croatian, 96);
+    PercentRadioButton* danishLanguage = initLanguageButton("Dansk", QLocale::Danish, 63);
+    PercentRadioButton* englishLanguage = initLanguageButton("English", QLocale::English, 100);
+    PercentRadioButton* esperantoLanguage = initLanguageButton("Esperanto", QLocale::Esperanto, 13);
+    PercentRadioButton* frenchLanguage = initLanguageButton("Français", QLocale::French, 92);
+    PercentRadioButton* galicianLanguage = initLanguageButton("Galego", QLocale::Galician, 93);
+    PercentRadioButton* germanLanguage = initLanguageButton("Deutsch", QLocale::German, 100);
+    PercentRadioButton* hebrewLanguage = initLanguageButton("עִבְרִית", QLocale::Hebrew, 100);
+    PercentRadioButton* hindiLanguage = initLanguageButton("हिन्दी", QLocale::Hindi, 49);
+    PercentRadioButton* hungarianLanguage = initLanguageButton("Magyar", QLocale::Hungarian, 53);
+    PercentRadioButton* indonesianLanguage
+        = initLanguageButton("Indonesian", QLocale::Indonesian, 15);
+    PercentRadioButton* italianLanguage = initLanguageButton("Italiano", QLocale::Italian, 47);
+    PercentRadioButton* persianLanguage = initLanguageButton("فارسی", QLocale::Persian, 18);
+    PercentRadioButton* polishLanguage = initLanguageButton("Polski", QLocale::Polish, 50);
+    PercentRadioButton* portugueseLanguage = initLanguageButton(
+        "Português", static_cast<QLocale::Language>(QLocale::LastLanguage + 1), 20);
+    PercentRadioButton* portugueseBrazilLanguage
+        = initLanguageButton("Português Brasileiro", QLocale::Portuguese, 96);
+    PercentRadioButton* romanianLanguage = initLanguageButton("Română", QLocale::Romanian, 96);
+    PercentRadioButton* russianLanguage = initLanguageButton("Русский", QLocale::Russian, 100);
+    PercentRadioButton* slovenianLanguage
+        = initLanguageButton("Slovenski", QLocale::Slovenian, 100);
+    PercentRadioButton* spanishLanguage = initLanguageButton("Español", QLocale::Spanish, 96);
+    PercentRadioButton* tagalogLanguage = initLanguageButton("Tagalog", QLocale::Filipino, 25);
+    PercentRadioButton* turkishLanguage = initLanguageButton("Türkçe", QLocale::Turkish, 53);
+    PercentRadioButton* ukrainianLanguage
+        = initLanguageButton("Українська", QLocale::Ukrainian, 96);
     //
     // Если мы умеем в язык системы, то оставляем выбранным его
     //
@@ -138,7 +151,7 @@ void OnboardingView::Implementation::initLanguagePage()
         englishLanguage->setChecked(true);
     }
 
-    RadioButtonGroup* languagesGroup = new RadioButtonGroup(languagePage);
+    auto languagesGroup = new RadioButtonGroup(languagePage);
     for (auto languageButton : std::as_const(languageButtons)) {
         languagesGroup->add(languageButton);
     }
@@ -146,8 +159,8 @@ void OnboardingView::Implementation::initLanguagePage()
     //
     // Настроим цепочку переходов фокуса
     //
-    auto buildFocusChain = [](const QVector<RadioButton*>& _buttons) {
-        RadioButton* previousButton = nullptr;
+    auto buildFocusChain = [](const QVector<PercentRadioButton*>& _buttons) {
+        PercentRadioButton* previousButton = nullptr;
         for (auto button : _buttons) {
             if (previousButton != nullptr) {
                 setTabOrder(previousButton, button);
@@ -156,17 +169,17 @@ void OnboardingView::Implementation::initLanguagePage()
         }
     };
     buildFocusChain({
-        azerbaijaniLanguage, belarusianLanguage,       catalanLanguage,
-        danishLanguage,      germanLanguage,           englishLanguage,
-        spanishLanguage,     esperantoLanguage,        frenchLanguage,
-        galicianLanguage,    croatianLanguage,         indonesianLanguage,
-        italianLanguage,     hungarianLanguage,        polishLanguage,
-        portugueseLanguage,  portugueseBrazilLanguage, romanianLanguage,
-        russianLanguage,     slovenianLanguage,        tagalogLanguage,
-        turkishLanguage,     ukrainianLanguage,        hebrewLanguage,
-        hindiLanguage,       persianLanguage,          chineseLanguage,
+        azerbaijaniLanguage,      belarusianLanguage, catalanLanguage,   danishLanguage,
+        germanLanguage,           englishLanguage,    spanishLanguage,   esperantoLanguage,
+        frenchLanguage,           galicianLanguage,   croatianLanguage,  indonesianLanguage,
+        italianLanguage,          hungarianLanguage,  polishLanguage,    portugueseLanguage,
+        portugueseBrazilLanguage, romanianLanguage,   russianLanguage,   slovenianLanguage,
+        tagalogLanguage,          turkishLanguage,    ukrainianLanguage, arabicLanguage,
+        chineseLanguage,          hebrewLanguage,     hindiLanguage,     persianLanguage,
     });
 
+    languageTranslationProgressLink = new Body1LinkLabel(languagePage);
+    languageTranslationProgressLink->setLink(QUrl("https://starc.app/translate"));
     languageHowToAddLink = new Body1LinkLabel(languagePage);
     languageHowToAddLink->setLink(QUrl("https://starc.app/translate"));
 
@@ -213,12 +226,14 @@ void OnboardingView::Implementation::initLanguagePage()
     languagePageLayout->addWidget(turkishLanguage, rowForThirdColumn++, 2);
     languagePageLayout->addWidget(ukrainianLanguage, rowForThirdColumn++, 2);
     int rowForFifthColumn = 1;
+    languagePageLayout->addWidget(arabicLanguage, rowForFifthColumn++, 3);
+    languagePageLayout->addWidget(chineseLanguage, rowForFifthColumn++, 3);
     languagePageLayout->addWidget(hebrewLanguage, rowForFifthColumn++, 3);
     languagePageLayout->addWidget(hindiLanguage, rowForFifthColumn++, 3);
     languagePageLayout->addWidget(persianLanguage, rowForFifthColumn++, 3);
-    languagePageLayout->addWidget(chineseLanguage, rowForFifthColumn++, 3);
     languagePageLayout->setRowStretch(row++, 1);
     languagePageLayout->setColumnStretch(4, 1);
+    languagePageLayout->addWidget(languageTranslationProgressLink, row++, 0, 1, 5);
     languagePageLayout->addWidget(languageHowToAddLink, row++, 0, 1, 5);
     languagePageLayout->addLayout(languagePageButtonsLayout, row++, 0, 1, 5);
 
@@ -235,7 +250,15 @@ void OnboardingView::Implementation::updateLanguagePageUi()
         languageButton->setBackgroundColor(DesignSystem::color().surface());
         languageButton->setTextColor(DesignSystem::color().onSurface());
     }
-    languageHowToAddLink->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+    languageTranslationProgressLink->setContentsMargins(
+        Ui::DesignSystem::label().margins().toMargins());
+    languageTranslationProgressLink->setContentsMargins(Ui::DesignSystem::layout().px24(), 0,
+                                                        Ui::DesignSystem::layout().px24(), 0);
+    languageTranslationProgressLink->setBackgroundColor(DesignSystem::color().surface());
+    languageTranslationProgressLink->setTextColor(DesignSystem::color().secondary());
+    languageHowToAddLink->setContentsMargins(
+        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12(),
+        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24());
     languageHowToAddLink->setBackgroundColor(DesignSystem::color().surface());
     languageHowToAddLink->setTextColor(DesignSystem::color().secondary());
     goToThemeButton->setBackgroundColor(DesignSystem::color().secondary());

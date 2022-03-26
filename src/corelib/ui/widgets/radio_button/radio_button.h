@@ -41,6 +41,7 @@ protected:
      * @brief Реализуем собственную отрисовку
      */
     void paintEvent(QPaintEvent* _event) override;
+    virtual void paintBox(QPainter& _painter, const QRectF& _rect, const QColor& _penColor);
 
     /**
      * @brief Реализуем включение переключателя при клике на нём

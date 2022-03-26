@@ -282,7 +282,7 @@ jobs:
 
   build_mac:
     name: Build Mac OS X version
-    runs-on: macos-11
+    runs-on: macos-10.15
     timeout-minutes: 60
     steps:
       - name: Checkout Sources for push or create tag event
@@ -305,8 +305,7 @@ jobs:
         with:
           version: 5.15.2
           target: desktop
-          setup-python: false
-          py7zrversion: '==0.18.1'
+          setup-python: 'false'
 
       - name: Run QMake
         shell: bash

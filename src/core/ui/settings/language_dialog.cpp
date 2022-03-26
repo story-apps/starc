@@ -1,9 +1,10 @@
 #include "language_dialog.h"
 
+
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/link_label.h>
-#include <ui/widgets/radio_button/radio_button.h>
+#include <ui/widgets/radio_button/percent_radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
 
 #include <QGridLayout>
@@ -14,7 +15,7 @@ namespace Ui {
 
 namespace {
 const char* kLanguageKey = "language";
-}
+} // namespace
 
 class LanguageDialog::Implementation
 {
@@ -24,74 +25,82 @@ public:
     /**
      * @brief Получить список всех кнопок языков
      */
-    std::vector<RadioButton*> languages() const;
+    std::vector<PercentRadioButton*> languages() const;
 
 
-    RadioButton* azerbaijani = nullptr;
-    RadioButton* belarusian = nullptr;
-    RadioButton* catalan = nullptr;
-    RadioButton* chinese = nullptr;
-    RadioButton* croatian = nullptr;
-    RadioButton* danish = nullptr;
-    RadioButton* english = nullptr;
-    RadioButton* esperanto = nullptr;
-    RadioButton* french = nullptr;
-    RadioButton* galician = nullptr;
-    RadioButton* german = nullptr;
-    RadioButton* hebrew = nullptr;
-    RadioButton* hindi = nullptr;
-    RadioButton* hungarian = nullptr;
-    RadioButton* indonesian = nullptr;
-    RadioButton* italian = nullptr;
-    RadioButton* persian = nullptr;
-    RadioButton* polish = nullptr;
-    RadioButton* portuguese = nullptr;
-    RadioButton* portugueseBrazil = nullptr;
-    RadioButton* romanian = nullptr;
-    RadioButton* russian = nullptr;
-    RadioButton* slovenian = nullptr;
-    RadioButton* spanish = nullptr;
-    RadioButton* tagalog = nullptr;
-    RadioButton* turkish = nullptr;
-    RadioButton* ukrainian = nullptr;
+    PercentRadioButton* arabic = nullptr;
+    PercentRadioButton* azerbaijani = nullptr;
+    PercentRadioButton* belarusian = nullptr;
+    PercentRadioButton* catalan = nullptr;
+    PercentRadioButton* chinese = nullptr;
+    PercentRadioButton* croatian = nullptr;
+    PercentRadioButton* danish = nullptr;
+    PercentRadioButton* english = nullptr;
+    PercentRadioButton* esperanto = nullptr;
+    PercentRadioButton* french = nullptr;
+    PercentRadioButton* galician = nullptr;
+    PercentRadioButton* german = nullptr;
+    PercentRadioButton* hebrew = nullptr;
+    PercentRadioButton* hindi = nullptr;
+    PercentRadioButton* hungarian = nullptr;
+    PercentRadioButton* indonesian = nullptr;
+    PercentRadioButton* italian = nullptr;
+    PercentRadioButton* persian = nullptr;
+    PercentRadioButton* polish = nullptr;
+    PercentRadioButton* portuguese = nullptr;
+    PercentRadioButton* portugueseBrazil = nullptr;
+    PercentRadioButton* romanian = nullptr;
+    PercentRadioButton* russian = nullptr;
+    PercentRadioButton* slovenian = nullptr;
+    PercentRadioButton* spanish = nullptr;
+    PercentRadioButton* tagalog = nullptr;
+    PercentRadioButton* turkish = nullptr;
+    PercentRadioButton* ukrainian = nullptr;
 
     Body1LinkLabel* languageHowToAddLink = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
-    Button* okButton = nullptr;
+    Body2Label* translationProgressLabel = nullptr;
+    Button* improveButton = nullptr;
+    Button* closeButton = nullptr;
 };
 
 LanguageDialog::Implementation::Implementation(QWidget* _parent)
-    : azerbaijani(new RadioButton(_parent))
-    , belarusian(new RadioButton(_parent))
-    , catalan(new RadioButton(_parent))
-    , chinese(new RadioButton(_parent))
-    , croatian(new RadioButton(_parent))
-    , danish(new RadioButton(_parent))
-    , english(new RadioButton(_parent))
-    , esperanto(new RadioButton(_parent))
-    , french(new RadioButton(_parent))
-    , galician(new RadioButton(_parent))
-    , german(new RadioButton(_parent))
-    , hebrew(new RadioButton(_parent))
-    , hindi(new RadioButton(_parent))
-    , hungarian(new RadioButton(_parent))
-    , indonesian(new RadioButton(_parent))
-    , italian(new RadioButton(_parent))
-    , persian(new RadioButton(_parent))
-    , polish(new RadioButton(_parent))
-    , portuguese(new RadioButton(_parent))
-    , portugueseBrazil(new RadioButton(_parent))
-    , romanian(new RadioButton(_parent))
-    , russian(new RadioButton(_parent))
-    , slovenian(new RadioButton(_parent))
-    , spanish(new RadioButton(_parent))
-    , tagalog(new RadioButton(_parent))
-    , turkish(new RadioButton(_parent))
-    , ukrainian(new RadioButton(_parent))
+    : arabic(new PercentRadioButton(_parent, 24))
+    , azerbaijani(new PercentRadioButton(_parent, 100))
+    , belarusian(new PercentRadioButton(_parent, 74))
+    , catalan(new PercentRadioButton(_parent, 56))
+    , chinese(new PercentRadioButton(_parent, 8))
+    , croatian(new PercentRadioButton(_parent, 96))
+    , danish(new PercentRadioButton(_parent, 63))
+    , english(new PercentRadioButton(_parent, 100))
+    , esperanto(new PercentRadioButton(_parent, 13))
+    , french(new PercentRadioButton(_parent, 92))
+    , galician(new PercentRadioButton(_parent, 93))
+    , german(new PercentRadioButton(_parent, 100))
+    , hebrew(new PercentRadioButton(_parent, 100))
+    , hindi(new PercentRadioButton(_parent, 49))
+    , hungarian(new PercentRadioButton(_parent, 53))
+    , indonesian(new PercentRadioButton(_parent, 15))
+    , italian(new PercentRadioButton(_parent, 47))
+    , persian(new PercentRadioButton(_parent, 18))
+    , polish(new PercentRadioButton(_parent, 50))
+    , portuguese(new PercentRadioButton(_parent, 20))
+    , portugueseBrazil(new PercentRadioButton(_parent, 96))
+    , romanian(new PercentRadioButton(_parent, 96))
+    , russian(new PercentRadioButton(_parent, 100))
+    , slovenian(new PercentRadioButton(_parent, 100))
+    , spanish(new PercentRadioButton(_parent, 98))
+    , tagalog(new PercentRadioButton(_parent, 25))
+    , turkish(new PercentRadioButton(_parent, 53))
+    , ukrainian(new PercentRadioButton(_parent, 96))
     , languageHowToAddLink(new Body1LinkLabel(_parent))
-    , okButton(new Button(_parent))
+    , translationProgressLabel(new Body2Label(_parent))
+    , improveButton(new Button(_parent))
+    , closeButton(new Button(_parent))
 {
+    arabic->setText("اَلْعَرَبِيَّةُ");
+    arabic->setProperty(kLanguageKey, QLocale::Arabic);
     azerbaijani->setText("Azərbaycan");
     azerbaijani->setProperty(kLanguageKey, QLocale::Azerbaijani);
     belarusian->setText("Беларуский");
@@ -149,12 +158,16 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     ukrainian->setProperty(kLanguageKey, QLocale::Ukrainian);
 
     languageHowToAddLink->setLink(QUrl("https://starc.app/translate"));
+    translationProgressLabel->hide();
+    improveButton->hide();
 
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
     buttonsLayout->addStretch();
-    buttonsLayout->addWidget(okButton);
+    buttonsLayout->addWidget(translationProgressLabel, 0, Qt::AlignVCenter);
+    buttonsLayout->addWidget(improveButton);
+    buttonsLayout->addWidget(closeButton);
 
     auto projectLocationGroup = new RadioButtonGroup(_parent);
     for (auto language : languages()) {
@@ -162,14 +175,13 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     }
 }
 
-std::vector<RadioButton*> LanguageDialog::Implementation::languages() const
+std::vector<PercentRadioButton*> LanguageDialog::Implementation::languages() const
 {
     return {
-        azerbaijani, belarusian,       catalan,    chinese,  croatian,  danish,
-        english,     esperanto,        french,     galician, german,    hebrew,
-        hindi,       hungarian,        indonesian, italian,  persian,   polish,
-        portuguese,  portugueseBrazil, romanian,   russian,  slovenian, spanish,
-        tagalog,     turkish,          ukrainian,
+        arabic,    azerbaijani, belarusian, catalan,  chinese, croatian,   danish,
+        english,   esperanto,   french,     galician, german,  hebrew,     hindi,
+        hungarian, indonesian,  italian,    persian,  polish,  portuguese, portugueseBrazil,
+        romanian,  russian,     slovenian,  spanish,  tagalog, turkish,    ukrainian,
     };
 }
 
@@ -181,10 +193,10 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     : AbstractDialog(_parent)
     , d(new Implementation(this))
 {
-    setRejectButton(d->okButton);
+    setRejectButton(d->closeButton);
 
-    auto buildFocusChain = [](const QVector<RadioButton*>& _buttons) {
-        RadioButton* previousButton = nullptr;
+    auto buildFocusChain = [](const QVector<PercentRadioButton*>& _buttons) {
+        PercentRadioButton* previousButton = nullptr;
         for (auto button : _buttons) {
             if (previousButton != nullptr) {
                 setTabOrder(previousButton, button);
@@ -193,12 +205,13 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
         }
     };
     buildFocusChain({
-        d->azerbaijani, d->belarusian,       d->catalan,   d->danish,    d->german,
-        d->english,     d->spanish,          d->esperanto, d->french,    d->galician,
-        d->croatian,    d->indonesian,       d->italian,   d->hungarian, d->polish,
-        d->portuguese,  d->portugueseBrazil, d->romanian,  d->russian,   d->slovenian,
-        d->tagalog,     d->turkish,          d->ukrainian, d->hebrew,    d->hindi,
-        d->persian,     d->chinese,
+        d->azerbaijani,      d->belarusian, d->catalan,   d->danish,
+        d->german,           d->english,    d->spanish,   d->esperanto,
+        d->french,           d->galician,   d->croatian,  d->indonesian,
+        d->italian,          d->hungarian,  d->polish,    d->portuguese,
+        d->portugueseBrazil, d->romanian,   d->russian,   d->slovenian,
+        d->tagalog,          d->turkish,    d->ukrainian, d->arabic,
+        d->chinese,          d->hebrew,     d->hindi,     d->persian,
     });
 
     int row = 0;
@@ -230,10 +243,11 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->ukrainian, rowForThirdColumn++, 2);
     //
     int rowForFifthColumn = 0;
+    contentsLayout()->addWidget(d->arabic, rowForFifthColumn++, 3);
+    contentsLayout()->addWidget(d->chinese, rowForFifthColumn++, 3);
     contentsLayout()->addWidget(d->hebrew, rowForFifthColumn++, 3);
     contentsLayout()->addWidget(d->hindi, rowForFifthColumn++, 3);
     contentsLayout()->addWidget(d->persian, rowForFifthColumn++, 3);
-    contentsLayout()->addWidget(d->chinese, rowForFifthColumn++, 3);
     //
     contentsLayout()->setRowStretch(row++, 1);
     contentsLayout()->setColumnStretch(4, 1);
@@ -241,15 +255,25 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0, 1, 5);
 
     for (auto radioButton : d->languages()) {
-        connect(radioButton, &RadioButton::checkedChanged, this,
+        connect(radioButton, &PercentRadioButton::checkedChanged, this,
                 [this, radioButton](bool _checked) {
                     if (_checked) {
                         auto language = radioButton->property(kLanguageKey).toInt();
                         emit languageChanged(static_cast<QLocale::Language>(language));
+                        if (radioButton->percents == 100) {
+                            d->translationProgressLabel->hide();
+                            d->improveButton->hide();
+                        } else {
+                            d->translationProgressLabel->setText(tr("Translation is ready for %1%")
+                                                                 .arg(radioButton->percents));
+                            d->translationProgressLabel->show();
+                            d->improveButton->show();
+                        }
                     }
                 });
     }
-    connect(d->okButton, &Button::clicked, this, &LanguageDialog::hideDialog);
+    connect(d->improveButton, &Button::clicked, d->languageHowToAddLink, &Body1LinkLabel::clicked);
+    connect(d->closeButton, &Button::clicked, this, &LanguageDialog::hideDialog);
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -274,7 +298,7 @@ QWidget* LanguageDialog::focusedWidgetAfterShow() const
 
 QWidget* LanguageDialog::lastFocusableWidget() const
 {
-    return d->okButton;
+    return d->closeButton;
 }
 
 void LanguageDialog::updateTranslations()
@@ -284,7 +308,8 @@ void LanguageDialog::updateTranslations()
     d->languageHowToAddLink->setText(
         tr("Did not find your preffered language? Read how you can add it yourself."));
 
-    d->okButton->setText(tr("Close"));
+    d->improveButton->setText(tr("Improve"));
+    d->closeButton->setText(tr("Close"));
 }
 
 void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -302,9 +327,17 @@ void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->languageHowToAddLink->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     d->languageHowToAddLink->setBackgroundColor(DesignSystem::color().background());
     d->languageHowToAddLink->setTextColor(DesignSystem::color().secondary());
+    d->translationProgressLabel->setContentsMargins(0, 0, Ui::DesignSystem::layout().px24(), 0);
+    d->translationProgressLabel->setBackgroundColor(DesignSystem::color().background());
+    d->translationProgressLabel->setTextColor(DesignSystem::color().onBackground());
 
-    d->okButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->okButton->setTextColor(Ui::DesignSystem::color().secondary());
+    for (auto button : {
+             d->improveButton,
+             d->closeButton,
+         }) {
+        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
+        button->setTextColor(Ui::DesignSystem::color().secondary());
+    }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
     d->buttonsLayout->setContentsMargins(

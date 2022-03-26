@@ -205,6 +205,7 @@ SOURCES += \
     ui/widgets/label/link_label.cpp \
     ui/widgets/pie/pie.cpp \
     ui/widgets/progress_bar/progress_bar.cpp \
+    ui/widgets/radio_button/percent_radio_button.cpp \
     ui/widgets/radio_button/radio_button.cpp \
     ui/widgets/radio_button/radio_button_group.cpp \
     ui/widgets/resizable_widget/resizable_widget.cpp \
@@ -420,6 +421,7 @@ HEADERS += \
     ui/widgets/label/link_label.h \
     ui/widgets/pie/pie.h \
     ui/widgets/progress_bar/progress_bar.h \
+    ui/widgets/radio_button/percent_radio_button.h \
     ui/widgets/radio_button/radio_button.h \
     ui/widgets/radio_button/radio_button_group.h \
     ui/widgets/resizable_widget/resizable_widget.h \

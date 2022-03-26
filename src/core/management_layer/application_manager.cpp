@@ -573,6 +573,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         break;
     }
 
+    case QLocale::Arabic: {
+        translation = "ar";
+        break;
+    }
+
     case QLocale::Azerbaijani: {
         translation = "az";
         break;
@@ -728,7 +733,8 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     //
     // Для языков, которые пишутся справа-налево настроим соответствующее выравнивание интерфейса
     //
-    if (currentLanguage == QLocale::Persian || currentLanguage == QLocale::Hebrew) {
+    if (currentLanguage == QLocale::Arabic || currentLanguage == QLocale::Hebrew
+        || currentLanguage == QLocale::Persian) {
         QApplication::setLayoutDirection(Qt::RightToLeft);
     } else {
         QApplication::setLayoutDirection(Qt::LeftToRight);
