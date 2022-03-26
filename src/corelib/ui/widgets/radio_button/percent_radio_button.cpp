@@ -10,7 +10,7 @@
 namespace {
 const int kMinPercents = 0;
 const int kMaxPercents = 100;
-}
+} // namespace
 
 PercentRadioButton::PercentRadioButton(QWidget* _parent, int _percents)
     : RadioButton(_parent)
@@ -25,7 +25,8 @@ void PercentRadioButton::paintBox(QPainter& _painter, const QRectF& _rect, const
     // Рисуем фоновую подложку
     //
     _painter.setFont(Ui::DesignSystem::font().iconsMid());
-    _painter.setPen(ColorHelper::transparent(textColor(), Ui::DesignSystem::focusBackgroundOpacity()));
+    _painter.setPen(
+        ColorHelper::transparent(textColor(), Ui::DesignSystem::focusBackgroundOpacity()));
     _painter.drawText(_rect, Qt::AlignCenter, u8"\U000f043d");
 
     //
@@ -43,4 +44,3 @@ void PercentRadioButton::paintBox(QPainter& _painter, const QRectF& _rect, const
     RadioButton::paintBox(_painter, _rect, _penColor);
     _painter.setClipping(false);
 }
-

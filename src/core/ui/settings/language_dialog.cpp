@@ -264,8 +264,8 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
                             d->translationProgressLabel->hide();
                             d->improveButton->hide();
                         } else {
-                            d->translationProgressLabel->setText(tr("Translation is ready for %1%")
-                                                                 .arg(radioButton->percents));
+                            d->translationProgressLabel->setText(
+                                tr("Translation is ready for %1%").arg(radioButton->percents));
                             d->translationProgressLabel->show();
                             d->improveButton->show();
                         }
