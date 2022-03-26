@@ -236,6 +236,11 @@ LoglineGeneratorDialog::Implementation::Implementation(QWidget* _parent)
 {
     content->setAnimationType(StackWidget::AnimationType::Slide);
     characterGender->setModel(characterGenderModel);
+    theme->hide();
+    mprEvent->hide();
+    afterMprEvent->hide();
+    worldSpecialRules->hide();
+    stakes->hide();
     loglineIcon->setIcon(u8"\U000F012C");
     loglineIcon->setDecorationVisible(true);
     loglineTitle->setAlignment(Qt::AlignCenter);
@@ -527,7 +532,7 @@ QString LoglineGeneratorDialog::Implementation::buildLogline() const
 
     // Q1
     if (!majorEvent->text().isEmpty()) {
-        logline += QString("%1 %2 ").arg(tr("When"), majorEvent->text());
+        logline += QString("%1 %2, ").arg(tr("When"), majorEvent->text());
     }
     // Q8
     if (worldHasSpecialRules->isChecked()) {
@@ -568,8 +573,9 @@ QString LoglineGeneratorDialog::Implementation::buildLogline() const
         logline += QString("%1 ").arg(storyGoal->text());
         // Q7
         if (includeMpr->isChecked()) {
+            logline = logline.trimmed(); // убираем пробел в конце
             logline
-                += QString("%1 %2 %3 %4 %5 ")
+                += QString("; %1 %2 %3, %4 %5 ")
                        .arg(tr("but"), tr("when"), mprEvent->text(), characterPronoun, tr("must"));
             // Q5
             if (includeTheme->isChecked()) {
@@ -587,7 +593,7 @@ QString LoglineGeneratorDialog::Implementation::buildLogline() const
     //
     // Наводим красоту
     //
-    logline = logline.simplified().trimmed() + ".";
+    logline = logline.remove(".").simplified().trimmed() + ".";
     if (logline.length() > 0 && logline.at(0).toUpper() != logline.at(0)) {
         logline[0] = TextHelper::smartToUpper(logline.at(0));
     }
@@ -604,7 +610,7 @@ LoglineGeneratorDialog::LoglineGeneratorDialog(QWidget* _parent)
     , d(new Implementation(this))
 {
     setAcceptButton(d->continueButton);
-    setRejectButton(d->closeButton);
+    setRejectButton(d->backButton);
 
     new Shadow(Qt::TopEdge, d->content);
 
@@ -617,12 +623,18 @@ LoglineGeneratorDialog::LoglineGeneratorDialog(QWidget* _parent)
 
 
     connect(d->characterInfo, &TextField::textChanged, d->characterInfo, &TextField::clearError);
+    connect(d->includeTheme, &CheckBox::checkedChanged, d->theme, &TextField::setVisible);
     connect(d->theme, &TextField::textChanged, d->theme, &TextField::clearError);
     connect(d->storyGoal, &TextField::textChanged, d->storyGoal, &TextField::clearError);
+    connect(d->includeMpr, &CheckBox::checkedChanged, d->mprEvent, &TextField::setVisible);
+    connect(d->includeMpr, &CheckBox::checkedChanged, d->afterMprEvent, &TextField::setVisible);
     connect(d->mprEvent, &TextField::textChanged, d->mprEvent, &TextField::clearError);
     connect(d->afterMprEvent, &TextField::textChanged, d->afterMprEvent, &TextField::clearError);
+    connect(d->worldHasSpecialRules, &CheckBox::checkedChanged, d->worldSpecialRules,
+            &TextField::setVisible);
     connect(d->worldSpecialRules, &TextField::textChanged, d->worldSpecialRules,
             &TextField::clearError);
+    connect(d->includeStakes, &CheckBox::checkedChanged, d->stakes, &TextField::setVisible);
     connect(d->stakes, &TextField::textChanged, d->stakes, &TextField::clearError);
     connect(d->continueButton, &Button::clicked, this, [this] {
         if (d->currentPage == Logline) {
@@ -645,6 +657,7 @@ LoglineGeneratorDialog::LoglineGeneratorDialog(QWidget* _parent)
         }
 
         d->progressBar->setProgress(std::min(1.0, d->progressBar->progress() + 1 / 7.0));
+        d->progressBar->setFocus();
         d->content->setCurrentWidget(d->page(d->currentPage));
         QTimer::singleShot(300, this, [this] { d->pageFocus(d->currentPage)->setFocus(); });
     });
@@ -661,7 +674,9 @@ LoglineGeneratorDialog::LoglineGeneratorDialog(QWidget* _parent)
         d->backButton->setVisible(!isOnFirstPage);
 
         d->progressBar->setProgress(std::max(0.0, d->progressBar->progress() - 1 / 7.0));
+        d->progressBar->setFocus();
         d->content->setCurrentWidget(d->page(d->currentPage));
+        QTimer::singleShot(300, this, [this] { d->pageFocus(d->currentPage)->setFocus(); });
     });
     connect(d->closeButton, &Button::clicked, this, &LoglineGeneratorDialog::hideDialog);
     connect(d->doneButton, &Button::clicked, this, &LoglineGeneratorDialog::donePressed);

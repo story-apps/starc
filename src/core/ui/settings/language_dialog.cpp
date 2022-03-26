@@ -1,6 +1,5 @@
 #include "language_dialog.h"
 
-
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/link_label.h>
