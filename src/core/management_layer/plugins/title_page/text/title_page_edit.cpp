@@ -114,8 +114,7 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
 
     QMarginsF pageMargins;
     if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
-        const auto& currentTemplate
-            = TemplatesFacade::screenplayTemplate(titlePageModel->informationModel()->templateId());
+        const auto& currentTemplate = TemplatesFacade::textTemplate(titlePageModel);
         setPageFormat(currentTemplate.pageSizeId());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
         pageMargins = currentTemplate.pageMargins();

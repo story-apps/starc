@@ -6,6 +6,7 @@
 
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 
 #include <QApplication>
@@ -352,6 +353,10 @@ const TextTemplate& TemplatesFacade::textTemplate(const TextModel* _model)
         return comicBookTemplate();
     } else if (auto screenplayModel = qobject_cast<const ScreenplayTextModel*>(_model)) {
         return screenplayTemplate(screenplayModel->informationModel()->templateId());
+    } else if (auto screenplayTitlePageModel
+               = qobject_cast<const ScreenplayTitlePageModel*>(_model)) {
+        return screenplayTitlePageTemplate(
+            screenplayTitlePageModel->informationModel()->templateId());
     }
     return simpleTextTemplate();
 }
