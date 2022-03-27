@@ -56,6 +56,7 @@ public:
      * @brief Получить список загруженных моделей документов
      */
     QVector<BusinessLayer::AbstractModel*> loadedModels() const;
+    QVector<BusinessLayer::AbstractModel*> loadedModelsFor(Domain::DocumentObjectType _type) const;
 
 signals:
     /**

@@ -1228,10 +1228,11 @@ bool ProjectManager::event(QEvent* _event)
         //
         // ... для сценариев корректируем список подсказок имён персонажей
         //
-        const auto models = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
+        const auto models
+            = d->modelsFacade.loadedModelsFor(Domain::DocumentObjectType::ScreenplayText);
         for (auto model : models) {
             auto screenplay = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
-            screenplay->updateRuntimeDictionaries();
+            screenplay->updateRuntimeDictionariesIfNeeded();
         }
         break;
     }

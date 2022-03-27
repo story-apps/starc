@@ -71,7 +71,7 @@ public:
     /**
      * @brief Нужно ли обновить справочники, которые строятся в рантайме
      */
-    bool needUpdateRuntimeDictionaries = true;
+    bool needUpdateRuntimeDictionaries = false;
 
     /**
      * @brief Справочники, которые строятся в рантайме
@@ -568,12 +568,19 @@ void ScreenplayTextModel::recalculateDuration()
     emit rowsChanged();
 }
 
-void ScreenplayTextModel::updateRuntimeDictionaries()
+void ScreenplayTextModel::updateRuntimeDictionariesIfNeeded()
 {
     if (!d->needUpdateRuntimeDictionaries) {
         return;
     }
 
+    updateRuntimeDictionaries();
+
+    d->needUpdateRuntimeDictionaries = false;
+}
+
+void ScreenplayTextModel::updateRuntimeDictionaries()
+{
     const bool useCharactersFromText
         = settingsValue(DataStorageLayer::kComponentsScreenplayEditorUseCharactersFromTextKey)
               .toBool();

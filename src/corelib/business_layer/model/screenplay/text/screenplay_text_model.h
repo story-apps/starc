@@ -117,6 +117,7 @@ public:
     /**
      * @brief Настроить справочники сценария, которые собираются во время работы приложения
      */
+    void updateRuntimeDictionariesIfNeeded();
     void updateRuntimeDictionaries();
 
     /**

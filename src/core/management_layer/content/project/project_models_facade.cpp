@@ -519,7 +519,23 @@ void ProjectModelsFacade::removeModelFor(Domain::DocumentObject* _document)
 
 QVector<BusinessLayer::AbstractModel*> ProjectModelsFacade::loadedModels() const
 {
-    return d->documentsToModels.values().toVector();
+    QVector<BusinessLayer::AbstractModel*> models;
+    for (auto model : d->documentsToModels) {
+        models.append(model);
+    }
+    return models;
+}
+
+QVector<BusinessLayer::AbstractModel*> ProjectModelsFacade::loadedModelsFor(
+    Domain::DocumentObjectType _type) const
+{
+    QVector<BusinessLayer::AbstractModel*> models;
+    for (auto iter = d->documentsToModels.begin(); iter != d->documentsToModels.end(); ++iter) {
+        if (iter.key()->type() == _type) {
+            models.append(iter.value());
+        }
+    }
+    return models;
 }
 
 } // namespace ManagementLayer
