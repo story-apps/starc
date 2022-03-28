@@ -1205,13 +1205,17 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
         createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem,
         _synopsis.toUtf8());
     d->projectStructureModel->appendItem(
-        createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem,
-        _treatment.toUtf8());
-    d->projectStructureModel->appendItem(
         createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem,
         _text.toUtf8());
     d->projectStructureModel->appendItem(
         createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")), screenplayItem, {});
+    //
+    // Вставляем тритмент после всех документов, т.к. он является алиасом к документу сценария
+    // и чтобы его сконструировать, нужны другие документы
+    //
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem,
+        _treatment.toUtf8());
 }
 
 BusinessLayer::AbstractModel* ProjectManager::currentModel() const

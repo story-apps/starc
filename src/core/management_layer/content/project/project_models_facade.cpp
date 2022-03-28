@@ -203,12 +203,17 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             Q_ASSERT(treatmentItem);
             Q_ASSERT(treatmentItem->parent());
             //
-            // ... модель титульной страницы
+            // ... модель сценария
             //
-            const auto screenplayIndex = 3;
-            auto screenplayItem = treatmentItem->parent()->childAt(screenplayIndex);
+            BusinessLayer::StructureModelItem* screenplayItem = nullptr;
+            for (int index = 0; index < treatmentItem->parent()->childCount(); ++index) {
+                auto childItem = treatmentItem->parent()->childAt(index);
+                if (childItem->type() == Domain::DocumentObjectType::ScreenplayText) {
+                    screenplayItem = childItem;
+                    break;
+                }
+            }
             Q_ASSERT(screenplayItem);
-            Q_ASSERT(screenplayItem->type() == Domain::DocumentObjectType::ScreenplayText);
             model = modelFor(screenplayItem->uuid());
             break;
         }
