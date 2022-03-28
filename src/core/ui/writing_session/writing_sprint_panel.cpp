@@ -242,6 +242,7 @@ WritingSprintPanel::WritingSprintPanel(QWidget* _parent)
         if (d->isSprintActive()) {
             d->sprintDuration.pause();
             d->status.clear();
+            d->updateSprintAction();
 
             emit sprintStopped();
         }
@@ -257,11 +258,10 @@ WritingSprintPanel::WritingSprintPanel(QWidget* _parent)
                 d->sprintDuration.setDuration(d->sprintTime->text().toInt() * 60 * 1000);
                 d->sprintDuration.stop();
                 d->sprintDuration.start();
+                d->updateSprintAction();
                 emit sprintStarted();
             });
         }
-
-        d->updateSprintAction();
     });
     connect(d->shareResults, &IconButton::clicked, this, [this] {
         const auto message = QString("%1 %2").arg(
