@@ -1086,53 +1086,11 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
 
 ContextMenu* ScreenplayTreatmentEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
-    auto menu = BaseTextEdit::createContextMenu(_position, _parent);
+    //
+    // TODO: закладки
+    //
 
-    auto splitAction = new QAction;
-    const BusinessLayer::TextCursor cursor = textCursor();
-    if (cursor.inTable()) {
-        splitAction->setText(tr("Merge paragraph"));
-        splitAction->setIconText(u8"\U000f10e7");
-    } else {
-        splitAction->setText(tr("Split paragraph"));
-        splitAction->setIconText(u8"\U000f10e7");
-
-        //
-        // Запрещаем разделять некоторые блоки
-        //
-        const auto blockType = TextBlockStyle::forBlock(cursor.block());
-        splitAction->setEnabled(blockType != TextParagraphType::SceneHeading
-                                && blockType != TextParagraphType::SceneHeadingShadow
-                                && blockType != TextParagraphType::BeatHeading
-                                && blockType != TextParagraphType::BeatHeadingShadow
-                                && blockType != TextParagraphType::ActHeading
-                                && blockType != TextParagraphType::ActFooter
-                                && blockType != TextParagraphType::SequenceHeading
-                                && blockType != TextParagraphType::SequenceFooter);
-    }
-    connect(splitAction, &QAction::triggered, this, [this] {
-        BusinessLayer::TextCursor cursor = textCursor();
-        if (cursor.inTable()) {
-            d->document.mergeParagraph(cursor);
-        } else {
-            d->document.splitParagraph(cursor);
-
-            //
-            // После разделения, возвращаемся в первую ячейку таблицы
-            //
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::EndOfBlock);
-        }
-    });
-
-    auto actions = menu->actions().toVector();
-    actions.first()->setSeparator(true);
-    actions.prepend(splitAction);
-    menu->setActions(actions);
-
-    return menu;
+    return BaseTextEdit::createContextMenu(_position, _parent);
 }
 
 bool ScreenplayTreatmentEdit::canInsertFromMimeData(const QMimeData* _source) const
