@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
+#include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/resizable_widget/resizable_widget.h>
 
@@ -41,6 +42,8 @@ public:
     bool isContentMaximumWidthChanged = false;
     bool isContentMinimumWidthChanged = false;
     H6Label* title = nullptr;
+    IconButton* titleIcon = nullptr;
+    QHBoxLayout* titleLayout = nullptr;
     QGridLayout* contentsLayout = nullptr;
     Button* acceptButton = nullptr;
     Button* rejectButton = nullptr;
@@ -53,14 +56,22 @@ public:
 AbstractDialog::Implementation::Implementation(QWidget* _parent)
     : content(new ResizableWidget(_parent))
     , title(new H6Label(_parent))
+    , titleIcon(new IconButton(_parent))
+    , titleLayout(new QHBoxLayout)
     , contentsLayout(new QGridLayout)
 {
     title->hide();
+    titleIcon->hide();
+
+    titleLayout->setContentsMargins({});
+    titleLayout->setSpacing(0);
+    titleLayout->addWidget(title, 1);
+    titleLayout->addWidget(titleIcon);
 
     layout = new QVBoxLayout(content);
     layout->setContentsMargins({});
     layout->setSpacing(0);
-    layout->addWidget(title);
+    layout->addLayout(titleLayout);
     layout->addLayout(contentsLayout);
 
     content->setResizingActive(true);
@@ -243,6 +254,11 @@ void AbstractDialog::setTitle(const QString& _title)
     designSystemChangeEvent(nullptr);
 }
 
+IconButton* AbstractDialog::titleIcon() const
+{
+    return d->titleIcon;
+}
+
 QGridLayout* AbstractDialog::contentsLayout() const
 {
     return d->contentsLayout;
@@ -336,6 +352,9 @@ void AbstractDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->title->setBackgroundColor(Qt::transparent);
     d->title->setTextColor(Ui::DesignSystem::color().onBackground());
     d->title->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+    d->titleIcon->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->titleIcon->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->titleLayout->setContentsMargins(0, 0, Ui::DesignSystem::layout().px24(), 0);
 }
 
 void AbstractDialog::show()

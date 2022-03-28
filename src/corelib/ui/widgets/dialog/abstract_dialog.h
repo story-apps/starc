@@ -3,6 +3,7 @@
 #include <ui/widgets/widget/widget.h>
 
 class Button;
+class IconButton;
 class QGridLayout;
 
 
@@ -62,6 +63,11 @@ protected:
      * @brief Установить заголовок диалога
      */
     void setTitle(const QString& _title);
+
+    /**
+     * @brief Получить иконку заголовка
+     */
+    IconButton* titleIcon() const;
 
     /**
      * @brief Получить компоновщик контента
