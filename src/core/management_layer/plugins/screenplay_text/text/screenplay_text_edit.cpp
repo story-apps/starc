@@ -1029,10 +1029,10 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                 painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, sceneNumber);
                             }
                             if (d->showSceneNumberOnRight) {
-                                QPointF topLeft(isLeftToRight ? textRight - leftDelta
+                                QPointF topLeft(isLeftToRight ? textRight + leftDelta
                                                               : pageLeft - leftDelta,
                                                 cursorR.top());
-                                QPointF bottomRight(isLeftToRight ? pageRight - leftDelta
+                                QPointF bottomRight(isLeftToRight ? pageRight
                                                                   : textLeft - leftDelta,
                                                     cursorR.bottom());
                                 QRectF rect(topLeft, bottomRight);
