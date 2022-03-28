@@ -1800,7 +1800,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
 
             case TextModelItemType::Group: {
                 itemToInsert
-                    = createGroupItem(static_cast<TextModelGroupItem*>(itemToInsert)->groupType());
+                    = createGroupItem(static_cast<TextModelGroupItem*>(newItem)->groupType());
                 break;
             }
 
