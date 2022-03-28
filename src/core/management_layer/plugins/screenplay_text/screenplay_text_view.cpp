@@ -248,7 +248,7 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     bookmarksView->hide();
 
     showBookmarksAction->setCheckable(true);
-    showBookmarksAction->setIconText(u8"\U000F00C3");
+    showBookmarksAction->setIconText(u8"\U000F0E16");
 }
 
 void ScreenplayTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
