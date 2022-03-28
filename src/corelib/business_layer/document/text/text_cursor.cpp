@@ -413,6 +413,28 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
     // Завершим операцию удаления
     //
     cursor.endEditBlock();
+
+    //
+    // Если после удаления курсор встал в невидимый блок, двигем его красиво
+    //
+    if (!_editor->textCursor().block().isVisible()) {
+        //
+        // Для удаления наза ничего не делаем, кьют сам всё позиционирует нормально
+        //
+        if (_backward) {
+        }
+        //
+        // Для удаления вперёд двигаем курсор к следующему блоку
+        //
+        else {
+            auto cursor = _editor->textCursor();
+            while (!cursor.atEnd() && !cursor.block().isVisible()) {
+                cursor.movePosition(QTextCursor::EndOfBlock);
+                cursor.movePosition(QTextCursor::NextBlock);
+            }
+            _editor->setTextCursor(cursor);
+        }
+    }
 }
 
 TextCursor::FoldersToDelete TextCursor::findFoldersToDelete(int _topCursorPosition,

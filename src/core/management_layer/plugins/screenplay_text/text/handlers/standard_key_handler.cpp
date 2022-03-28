@@ -347,9 +347,8 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     BusinessLayer::TextCursor cursor = editor()->textCursor();
 
     //
-    // Если пользователь нажимает Backspace в начале первого блока бита, или Delete в конце
-    // последнего блока бита, то удаляем полностью блок с заголовком предшествующего или
-    // последующего бита
+    // Если пользователь нажимает Backspace в начале первого блока бита, то удаляем полностью блок с
+    // заголовком предшествующего бита
     //
     if (!cursor.atStart() && !cursor.hasSelection() && cursor.positionInBlock() == 0 && _backward
         && TextBlockStyle::forBlock(cursor.block().previous()) == TextParagraphType::BeatHeading) {
@@ -358,10 +357,14 @@ void StandardKeyHandler::removeCharacters(bool _backward)
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
         editor()->setTextCursor(cursor);
-    } else if (!cursor.atEnd() && !cursor.hasSelection()
-               && cursor.positionInBlock() == cursor.block().text().length() && !_backward
-               && TextBlockStyle::forBlock(cursor.block().next())
-                   == TextParagraphType::BeatHeading) {
+    }
+    //
+    // Если пользователь нажал Delete в конце непустого абзаца и при этом после текущего абзаца идёт
+    // блок с заголовком бита, то удаляем блок заголовка бита
+    //
+    else if (!cursor.atEnd() && !cursor.hasSelection() && !cursor.block().text().isEmpty()
+             && cursor.positionInBlock() == cursor.block().text().length() && !_backward
+             && TextBlockStyle::forBlock(cursor.block().next()) == TextParagraphType::BeatHeading) {
         cursor.movePosition(QTextCursor::NextBlock);
         cursor.movePosition(QTextCursor::EndOfBlock);
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
