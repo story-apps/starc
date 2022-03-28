@@ -693,8 +693,6 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
         int lastSceneBlockBottom = 0;
         QColor lastSceneColor;
         bool isLastBlockSceneHeadingWithNumberAtRight = false;
-        int lastCharacterBlockBottom = 0;
-        QColor lastCharacterColor;
 
         auto setPainterPen = [&painter, &block, this](const QColor& _color) {
             painter.setPen(ColorHelper::transparent(
@@ -707,15 +705,18 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
 
         BusinessLayer::TextCursor cursor(document());
         while (block.isValid() && block != bottomBlock) {
-            if (!block.isVisible()) {
-                block = block.next();
-                continue;
-            }
-
             //
             // Стиль текущего блока
             //
             const auto blockType = TextBlockStyle::forBlock(block);
+
+            //
+            // Пропускаем невидимые блоки
+            //
+            if (!block.isVisible()) {
+                block = block.next();
+                continue;
+            }
 
             cursor.setPosition(block.position());
             const QRect cursorR = cursorRect(cursor);
@@ -759,45 +760,6 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
             }
 
             //
-            // Определим цвет персонажа
-            //
-            if (blockType == TextParagraphType::Character && d->model
-                && d->model->charactersModel() != nullptr) {
-                lastCharacterBlockBottom = cursorR.top();
-                lastCharacterColor = QColor();
-                const QString characterName
-                    = BusinessLayer::ScreenplayCharacterParser::name(block.text());
-                if (auto character = d->model->character(characterName)) {
-                    if (character->color().isValid()) {
-                        lastCharacterColor = character->color();
-                    }
-                }
-            } else if (blockType != TextParagraphType::Parenthetical
-                       && blockType != TextParagraphType::Dialogue
-                       && blockType != TextParagraphType::Lyrics) {
-                lastCharacterColor = QColor();
-            }
-
-            //
-            // Нарисуем цвет персонажа
-            //
-            if (lastCharacterColor.isValid()) {
-                const auto isBlockCharacterWithNumber
-                    = blockType == TextParagraphType::Character && d->showDialogueNumber;
-                if (!isBlockCharacterWithNumber) {
-                    QPointF topLeft(isLeftToRight
-                                        ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                            + DesignSystem::layout().px4()
-                                        : textRight + leftDelta - spaceBetweenSceneNumberAndText,
-                                    cursorR.top());
-                    const QPointF bottomRight(topLeft.x() + DesignSystem::layout().px4(),
-                                              cursorREnd.bottom());
-                    const QRectF rect(topLeft, bottomRight);
-                    painter.fillRect(rect, lastCharacterColor);
-                }
-            }
-
-            //
             // Курсор на экране
             //
             // ... ниже верхней границы
@@ -805,60 +767,46 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
                 // ... и выше нижней
                 && cursorR.top() < viewportGeometry.bottom()) {
 
-                //                    //
-                //                    // Прорисовка закладок
-                //                    //
-                //                    if (blockInfo != nullptr
-                //                        && blockInfo->hasBookmark()) {
-                //                        //
-                //                        // Определим область для отрисовки и выведем закладку
-                //                        в редактор
-                //                        //
-                //                        QPointF topLeft(isLeftToRight
-                //                                        ? pageLeft + leftDelta
-                //                                        : textRight + leftDelta,
-                //                                        cursorR.top());
-                //                        QPointF bottomRight(isLeftToRight
-                //                                            ? textLeft + leftDelta
-                //                                            : pageRight + leftDelta,
-                //                                            cursorR.bottom());
-                //                        QRectF rect(topLeft, bottomRight);
-                //                        painter.setBrush(blockInfo->bookmarkColor());
-                //                        setPainterPen(Qt::transparent);
-                //                        painter.drawRect(rect);
-                //                        setPainterPen(Qt::white);
-                //                    } else {
-                //                        setPainterPen(palette().text().color());
-                //                    }
+                //
+                // Прорисовка закладок
+                //
+                const auto bookmark = d->document.bookmark(block);
+                if (bookmark.isValid()) {
+                    setPainterPen(bookmark.color);
+                    painter.setFont(DesignSystem::font().iconsForEditors());
 
-                //                    //
-                //                    // Новый способ отрисовки
-                //                    //
-                //                    //
-                //                    // Определим область для отрисовки и выведем номер сцены в
-                //                    редактор в зависимости от стороны
-                //                    //
-                //                    QPointF topLeft(isLeftToRight
-                //                                    ? pageLeft + leftDelta
-                //                                    : textRight + leftDelta,
-                //                                    cursorR.top());
-                //                    QPointF bottomRight(isLeftToRight
-                //                                        ? textLeft + leftDelta
-                //                                        : pageRight + leftDelta,
-                //                                        cursorR.bottom());
-                //                    QRectF rect(topLeft, bottomRight);
-                //                    rect.adjust(38, 0, 0, 0);
-                //                    painter.setFont(DesignSystem::font().iconsMid());
-                //                    const int size = painter.fontMetrics().lineSpacing();
-                //                    QRectF circle(rect.left() - size, rect.top() - size, size
-                //                    * 3, size * 3);
-                //                    painter.setBrush(ColorHelper::transparent(palette().text().color(),
-                //                    Ui::DesignSystem::hoverBackgroundOpacity()));
-                //                    setPainterPen(Qt::NoPen);
-                //                    painter.drawRect(circle);
-                //                    setPainterPen(palette().text().color());
-                //                    painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop,
-                //                    u8"\U000F024B");
+                    //
+                    // Определим область для отрисовки
+                    //
+                    QPointF topLeft(isLeftToRight
+                                        ? (pageLeft + leftDelta
+                                           + Ui::DesignSystem::card().shadowMargins().left())
+                                        : (textRight + leftDelta),
+                                    cursorR.top());
+                    QPointF bottomRight(isLeftToRight
+                                            ? textLeft + leftDelta
+                                            : (pageRight + leftDelta
+                                               - Ui::DesignSystem::card().shadowMargins().right()),
+                                        cursorR.bottom());
+                    QRectF rect(topLeft, bottomRight);
+                    const auto yDelta = Ui::DesignSystem::layout().px(32) - rect.height() / 2.0;
+                    //
+                    // корректируем размер области, чтобы получить квадрат для отрисовки иконки
+                    // закладки
+                    //
+                    if (yDelta > 0) {
+                        rect.adjust(0, -yDelta, 0, yDelta);
+                    }
+                    if (isLeftToRight) {
+                        rect.setWidth(rect.height());
+                    } else {
+                        rect.setLeft(rect.right() - rect.height());
+                    }
+                    painter.fillRect(rect,
+                                     ColorHelper::transparent(
+                                         bookmark.color, Ui::DesignSystem::elevationEndOpacity()));
+                    painter.drawText(rect, Qt::AlignCenter, u8"\U000F00C0");
+                }
 
                 //
                 // Прорисовка декораций пустой строки
@@ -1004,10 +952,10 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
                                 painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, sceneNumber);
                             }
                             if (d->showSceneNumberOnRight) {
-                                QPointF topLeft(isLeftToRight ? textRight - leftDelta
+                                QPointF topLeft(isLeftToRight ? textRight + leftDelta
                                                               : pageLeft - leftDelta,
                                                 cursorR.top());
-                                QPointF bottomRight(isLeftToRight ? pageRight - leftDelta
+                                QPointF bottomRight(isLeftToRight ? pageRight
                                                                   : textLeft - leftDelta,
                                                     cursorR.bottom());
                                 QRectF rect(topLeft, bottomRight);
@@ -1021,125 +969,37 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
                             }
                         }
                     }
-                    //
-                    // Прорисовка номеров реплик, если необходимо
-                    //
-                    if (d->showDialogueNumber && blockType == TextParagraphType::Character) {
-                        //
-                        // Определим номер реплики
-                        //
-                        const auto dialogueNumber = d->document.dialogueNumber(block);
-                        if (!dialogueNumber.isEmpty()) {
-                            setPainterPen(palette().text().color());
-                            painter.setFont(cursor.charFormat().font());
-
-                            //
-                            // Определим область для отрисовки и выведем номер реплики в
-                            // редактор
-                            //
-                            const int numberDelta
-                                = painter.fontMetrics().horizontalAdvance(dialogueNumber);
-                            QRectF rect;
-                            //
-                            // ... то поместим номер реплики внутри текстовой области,
-                            //     чтобы их было удобно отличать от номеров сцен
-                            //
-                            QPointF topLeft(isLeftToRight ? textLeft + leftDelta
-                                                    + spaceBetweenSceneNumberAndText
-                                                          : textRight + leftDelta
-                                                    - spaceBetweenSceneNumberAndText - numberDelta,
-                                            cursorR.top());
-                            QPointF bottomRight(
-                                isLeftToRight
-                                    ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                        + numberDelta
-                                    : textRight + leftDelta - spaceBetweenSceneNumberAndText,
-                                cursorR.bottom());
-                            rect = QRectF(topLeft, bottomRight);
-
-                            if (lastCharacterColor.isValid()) {
-                                setPainterPen(lastCharacterColor);
-                            }
-                            painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, dialogueNumber);
-                            if (lastCharacterColor.isValid()) {
-                                setPainterPen(palette().text().color());
-                            }
-                        }
-                    }
-
-                    //
-                    // Прорисовка автоматических (ПРОД) для реплик
-                    //
-                    if (blockType == TextParagraphType::Character
-                        && block.blockFormat().boolProperty(
-                            TextBlockStyle::PropertyIsCharacterContinued)
-                        && !block.blockFormat().boolProperty(
-                            TextBlockStyle::PropertyIsCorrection)) {
-                        setPainterPen(palette().text().color());
-                        painter.setFont(cursor.charFormat().font());
-
-                        //
-                        // Определим место положение конца имени персонажа
-                        //
-                        const int continuedTermWidth = painter.fontMetrics().horizontalAdvance(
-                            BusinessLayer::ScreenplayTextCorrector::continuedTerm());
-                        const QPoint topLeft = isLeftToRight
-                            ? cursorREnd.topLeft()
-                            : cursorREnd.topRight() - QPoint(continuedTermWidth, 0);
-                        const QPoint bottomRight = isLeftToRight
-                            ? cursorREnd.bottomRight() + QPoint(continuedTermWidth, 0)
-                            : cursorREnd.bottomLeft();
-                        const QRect rect(topLeft, bottomRight);
-                        painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
-                                         BusinessLayer::ScreenplayTextCorrector::continuedTerm());
-                    }
                 }
 
                 //
-                // Прорисовка префикса/постфикса для блока текста, если это не пустая декорация
+                // Нарисуем цвет бита
                 //
-                if (!block.text().isEmpty()
-                    || !block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
-                    setPainterPen(palette().text().color());
-                    painter.setFont(block.charFormat().font());
+
+                //
+                // ... но запоминаем информацию о бите
+                //
+                if (blockType == TextParagraphType::BeatHeading) {
+                    const auto beatColor = d->document.itemColor(block);
+                    setPainterPen(beatColor.isValid() ? beatColor : palette().text().color());
+                    painter.setFont(DesignSystem::font().iconsForEditors());
+
                     //
-                    // ... префикс
+                    // Определим область для отрисовки и выведем номер сцены в редактор в
+                    // зависимости от стороны
                     //
-                    if (block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)) {
-                        const auto prefix
-                            = block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
-                        const QPoint topLeft = block.text().isRightToLeft()
-                            ? QPoint(cursorREnd.left()
-                                         - painter.fontMetrics().horizontalAdvance(prefix),
-                                     cursorREnd.top())
-                            : QPoint(cursorR.left()
-                                         - painter.fontMetrics().horizontalAdvance(prefix),
-                                     cursorR.top());
-                        const QPoint bottomRight = block.text().isRightToLeft()
-                            ? QPoint(cursorREnd.left(), cursorREnd.bottom())
-                            : QPoint(cursorR.left(), cursorR.bottom());
-                        const QRect rect(topLeft, bottomRight);
-                        painter.drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, prefix);
-                    }
-                    //
-                    // ... постфикс
-                    //
-                    if (block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix)) {
-                        const auto postfix
-                            = block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
-                        const QPoint topLeft = block.text().isRightToLeft()
-                            ? QPoint(cursorR.left(), cursorR.top())
-                            : QPoint(cursorREnd.left(), cursorREnd.top());
-                        const QPoint bottomRight = block.text().isRightToLeft()
-                            ? QPoint(cursorR.left()
-                                         + painter.fontMetrics().horizontalAdvance(postfix),
-                                     cursorR.bottom())
-                            : QPoint(cursorREnd.left()
-                                         + painter.fontMetrics().horizontalAdvance(postfix),
-                                     cursorREnd.bottom());
-                        const QRect rect(topLeft, bottomRight);
-                        painter.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, postfix);
-                    }
+                    QPointF topLeft(isLeftToRight ? pageLeft + leftDelta : textRight + leftDelta,
+                                    cursorR.top());
+                    QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
+                                                      : pageRight + leftDelta,
+                                        cursorR.bottom());
+                    QRectF rect(topLeft, bottomRight);
+                    const auto textFontMetrics = QFontMetricsF(cursor.charFormat().font());
+                    const auto iconFontMetrics
+                        = QFontMetricsF(DesignSystem::font().iconsForEditors());
+                    const auto yDelta
+                        = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
+                    rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
+                    painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F09DE");
                 }
             }
 
