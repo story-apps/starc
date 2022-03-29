@@ -107,6 +107,11 @@ TextModelGroupItem::TextModelGroupItem(const TextModel* _model)
 
 TextModelGroupItem::~TextModelGroupItem() = default;
 
+int TextModelGroupItem::subtype() const
+{
+    return static_cast<int>(groupType());
+}
+
 const TextGroupType& TextModelGroupItem::groupType() const
 {
     return d->groupType;

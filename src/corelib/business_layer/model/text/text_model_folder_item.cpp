@@ -57,6 +57,11 @@ TextModelFolderItem::TextModelFolderItem(const TextModel* _model)
 
 TextModelFolderItem::~TextModelFolderItem() = default;
 
+int TextModelFolderItem::subtype() const
+{
+    return static_cast<int>(folderType());
+}
+
 const TextFolderType& TextModelFolderItem::folderType() const
 {
     return d->folderType;

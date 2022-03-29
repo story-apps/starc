@@ -32,6 +32,11 @@ public:
     ~TextModelFolderItem() override;
 
     /**
+     * @brief Подтип элемента
+     */
+    int subtype() const override final;
+
+    /**
      * @brief Тип группы
      */
     const TextFolderType& folderType() const;

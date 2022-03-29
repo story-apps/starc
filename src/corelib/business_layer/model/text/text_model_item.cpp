@@ -37,6 +37,11 @@ const TextModelItemType& TextModelItem::type() const
     return d->type;
 }
 
+int TextModelItem::subtype() const
+{
+    return 0;
+}
+
 const TextModel* TextModelItem::model() const
 {
     return d->model;

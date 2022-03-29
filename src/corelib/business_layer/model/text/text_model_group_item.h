@@ -51,6 +51,11 @@ public:
     ~TextModelGroupItem() override;
 
     /**
+     * @brief Подтип элемента
+     */
+    int subtype() const override final;
+
+    /**
      * @brief Тип группы
      */
     const TextGroupType& groupType() const;

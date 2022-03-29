@@ -1822,7 +1822,29 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                         || childItem->type() == TextModelItemType::Group) {
                         if (lastMovedItem == nullptr
                             || lastMovedItem->parent() != itemParent->parent()) {
-                            d->model->insertItem(childItem, itemParent);
+                            //
+                            // Если переносимый элемент ниже уровня, чем предыдущий,
+                            // то вкладываем его внутрь предыдущего
+                            //
+                            bool moved = false;
+                            if (previousItem != nullptr
+                                && previousItem->type() == TextModelItemType::Group
+                                && childItem->type() == TextModelItemType::Group) {
+                                auto previousGroupItem
+                                    = static_cast<TextModelGroupItem*>(previousItem);
+                                auto childGroupItem = static_cast<TextModelGroupItem*>(childItem);
+                                if (childGroupItem->level() > previousGroupItem->level()) {
+                                    d->model->appendItem(childItem, previousItem);
+                                    moved = true;
+                                }
+                            }
+                            //
+                            // В противном случае, если перенести не удалось, то ставим
+                            // на один уровень с текущим
+                            //
+                            if (!moved) {
+                                d->model->insertItem(childItem, itemParent);
+                            }
                         } else {
                             d->model->insertItem(childItem, lastMovedItem);
                         }

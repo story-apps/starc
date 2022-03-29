@@ -47,6 +47,11 @@ public:
     const TextModelItemType& type() const;
 
     /**
+     * @brief Подтип элемента
+     */
+    virtual int subtype() const;
+
+    /**
      * @brief Получить модель, в которой находится данный элемент
      */
     const TextModel* model() const;

@@ -16,7 +16,7 @@ namespace BusinessLayer {
  * @brief Типы папок
  */
 enum class TextFolderType {
-    Undefined,
+    Undefined = 0,
     Act,
     Sequence,
 };
@@ -25,7 +25,7 @@ enum class TextFolderType {
  * @brief Типы групп
  */
 enum class TextGroupType {
-    Undefined,
+    Undefined = 10,
     Scene,
     Beat,
     Page,
@@ -40,7 +40,7 @@ enum class TextParagraphType {
     //
     // Общие для всех стилей
     //
-    Undefined,
+    Undefined = 100,
     UnformattedText, //!< Простой текст (без особенного форматирования и отступов)
     InlineNote, //!< Заметка по тексту
     ActHeading, //!< Заголовок акта

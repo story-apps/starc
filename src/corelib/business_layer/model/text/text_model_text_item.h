@@ -79,6 +79,11 @@ public:
     ~TextModelTextItem() override;
 
     /**
+     * @brief Подтип элемента
+     */
+    int subtype() const override final;
+
+    /**
      * @brief Тип параграфа
      */
     const TextParagraphType& paragraphType() const;

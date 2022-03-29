@@ -515,6 +515,11 @@ TextModelTextItem::TextModelTextItem(const TextModel* _model)
 
 TextModelTextItem::~TextModelTextItem() = default;
 
+int TextModelTextItem::subtype() const
+{
+    return static_cast<int>(paragraphType());
+}
+
 const TextParagraphType& TextModelTextItem::paragraphType() const
 {
     return d->paragraphType;

@@ -104,7 +104,7 @@ Operation<T> replaceOperation(T* _lhs, T* _rhs)
 {
     int weight = 1;
 
-    if (_lhs->type() != _rhs->type()) {
+    if (_lhs->type() != _rhs->type() || _lhs->subtype() != _rhs->subtype()) {
         weight = std::numeric_limits<int>::max();
     }
 

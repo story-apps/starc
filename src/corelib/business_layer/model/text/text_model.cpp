@@ -1782,6 +1782,14 @@ void TextModel::applyPatch(const QByteArray& _patch)
             // ... и удаляем сам элемент
             //
             auto nextItem = findNextItem(modelItem);
+            //
+            // ... в кейсе когда удаляется группирующий элемент и его содержимое, содержимое
+            // находится во временном списке, для перемещения за пределы удаляемой группы, но если
+            // этот элемент таки нужно удалить, удалим его и из временного списка тоже
+            //
+            if (const auto index = movedSiblingItems.indexOf(modelItem); index != -1) {
+                movedSiblingItems.removeAt(index);
+            }
             removeItem(modelItem);
             modelItem = nextItem;
             break;
