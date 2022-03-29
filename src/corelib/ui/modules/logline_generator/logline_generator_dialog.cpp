@@ -751,8 +751,7 @@ LoglineGeneratorDialog::LoglineGeneratorDialog(QWidget* _parent)
                 const auto message
                     = QString("%1 '%2'").arg(tr("Check out my new logline"), d->logline->text());
                 QDesktopServices::openUrl(
-                    QUrl(QString("https://twitter.com/intent/"
-                                 "tweet?text=%1&hashtags=writesprint&via=starcapp_")
+                    QUrl(QString("https://twitter.com/intent/tweet?text=%1&via=starcapp_")
                              .arg(message)));
             });
         }
