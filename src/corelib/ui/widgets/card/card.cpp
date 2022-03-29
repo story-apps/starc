@@ -18,7 +18,7 @@ public:
     /**
      * @brief  Декорации тени при наведении
      */
-    QVariantAnimation shadowHeightAnimation;
+    QVariantAnimation shadowOpacityAnimation;
 
     /**
      * @brief Компоновщик карточки
@@ -32,8 +32,10 @@ Card::Implementation::Implementation()
     layout->setSpacing(0);
     layout->setContentsMargins({});
 
-    shadowHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    shadowHeightAnimation.setDuration(160);
+    shadowOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    shadowOpacityAnimation.setDuration(160);
+    shadowOpacityAnimation.setStartValue(0.0);
+    shadowOpacityAnimation.setEndValue(1.0);
 }
 
 
@@ -46,7 +48,7 @@ Card::Card(QWidget* _parent)
 
     ResizableWidget::setLayout(d->layout);
 
-    connect(&d->shadowHeightAnimation, &QVariantAnimation::valueChanged, this,
+    connect(&d->shadowOpacityAnimation, &QVariantAnimation::valueChanged, this,
             qOverload<>(&Card::update));
 
     designSystemChangeEvent(nullptr);
@@ -129,18 +131,27 @@ void Card::paintEvent(QPaintEvent* _event)
     //
     // ... рисуем тень
     //
-    const auto shadowHeight = std::max(Ui::DesignSystem::card().minimumShadowBlurRadius(),
-                                       d->shadowHeightAnimation.currentValue().toReal());
-    const auto cacheShadow
-        = qFuzzyCompare(shadowHeight, Ui::DesignSystem::card().minimumShadowBlurRadius());
-    const auto shadow
-        = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
-                                  shadowHeight, Ui::DesignSystem::color().shadow(), cacheShadow);
-
     QPainter painter(this);
-    painter.drawPixmap(
-        backgroundRect.marginsAdded(Ui::DesignSystem::card().shadowMargins().toMargins()).topLeft(),
-        shadow);
+    auto dropShadow = [&painter, backgroundRect, backgroundImage](qreal _radius) {
+        const auto cacheShadow = true;
+        const auto shadow
+            = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
+                                      _radius, Ui::DesignSystem::color().shadow(), cacheShadow);
+        painter.drawPixmap(
+            backgroundRect.marginsAdded(Ui::DesignSystem::card().shadowMargins().toMargins())
+                .topLeft(),
+            shadow);
+    };
+    if (d->shadowOpacityAnimation.currentValue().isValid()) {
+        const auto shadowOpacity = d->shadowOpacityAnimation.currentValue().toReal();
+        painter.setOpacity(1.0 - shadowOpacity);
+        dropShadow(Ui::DesignSystem::card().minimumShadowBlurRadius());
+        painter.setOpacity(shadowOpacity);
+        dropShadow(Ui::DesignSystem::card().maximumShadowBlurRadius());
+        painter.setOpacity(1.0);
+    } else {
+        dropShadow(Ui::DesignSystem::card().minimumShadowBlurRadius());
+    }
     //
     // ... рисуем сам фон
     //
@@ -160,14 +171,14 @@ void Card::enterEvent(QEvent* _event)
     //
     // Если карточка и так уже выла поднята, нет необходимости делать это повторно
     //
-    if (d->shadowHeightAnimation.direction() == QVariantAnimation::Forward
-        && d->shadowHeightAnimation.currentValue() == d->shadowHeightAnimation.endValue()) {
+    if (d->shadowOpacityAnimation.direction() == QVariantAnimation::Forward
+        && d->shadowOpacityAnimation.currentValue() == d->shadowOpacityAnimation.endValue()) {
         return;
     }
 
     if (testAttribute(Qt::WA_Hover)) {
-        d->shadowHeightAnimation.setDirection(QVariantAnimation::Forward);
-        d->shadowHeightAnimation.start();
+        d->shadowOpacityAnimation.setDirection(QVariantAnimation::Forward);
+        d->shadowOpacityAnimation.start();
     }
 }
 
@@ -180,17 +191,14 @@ void Card::leaveEvent(QEvent* _event)
     }
 
     if (testAttribute(Qt::WA_Hover)) {
-        d->shadowHeightAnimation.setDirection(QVariantAnimation::Backward);
-        d->shadowHeightAnimation.start();
+        d->shadowOpacityAnimation.setDirection(QVariantAnimation::Backward);
+        d->shadowOpacityAnimation.start();
     }
 }
 
 void Card::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event)
-
-    d->shadowHeightAnimation.setStartValue(Ui::DesignSystem::card().minimumShadowBlurRadius());
-    d->shadowHeightAnimation.setEndValue(Ui::DesignSystem::card().maximumShadowBlurRadius());
+    Widget::designSystemChangeEvent(_event);
 
     d->layout->setContentsMargins(Ui::DesignSystem::card().shadowMargins().toMargins());
 }
