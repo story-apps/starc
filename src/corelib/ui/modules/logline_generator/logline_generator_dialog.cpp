@@ -747,6 +747,7 @@ LoglineGeneratorDialog::LoglineGeneratorDialog(QWidget* _parent)
             titleIcon()->setChecked(false);
             titleIcon()->setCheckable(false);
             titleIcon()->setIcon(u8"\U000F0544");
+            titleIcon()->setToolTip(tr("Share your logline"));
             connect(titleIcon(), &IconButton::clicked, this, [this] {
                 const auto message
                     = QString("%1 '%2'").arg(tr("Check out my new logline"), d->logline->text());
@@ -775,6 +776,7 @@ LoglineGeneratorDialog::LoglineGeneratorDialog(QWidget* _parent)
             titleIcon()->setCheckable(true);
             titleIcon()->setChecked(d->stakesHint->width() > 1);
             titleIcon()->setIcon(u8"\U000F02D7");
+            titleIcon()->setToolTip(tr("Show help"));
             connect(titleIcon(), &IconButton::checkedChanged, this, setHintsVisibile);
         }
 
@@ -821,6 +823,7 @@ QWidget* LoglineGeneratorDialog::lastFocusableWidget() const
 void LoglineGeneratorDialog::updateTranslations()
 {
     setTitle(tr("Logline generator"));
+    titleIcon()->setToolTip(tr("Show help"));
 
     d->characterInfo->setLabel(tr("Describe your main character"));
     d->characterInfo->setHelper(tr("E.g. 'A lonesome cowboy', or 'An arrogant publicist'."));
