@@ -68,6 +68,11 @@ protected:
      */
     void resizeEvent(QResizeEvent* _event) override;
 
+    /**
+     * @brief Отлавливаем запрос на перекомпоновку и прокидываем его выше
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

@@ -62,6 +62,7 @@ AbstractDialog::Implementation::Implementation(QWidget* _parent)
 {
     title->hide();
     titleIcon->hide();
+    titleIcon->setFocusPolicy(Qt::NoFocus);
 
     titleLayout->setContentsMargins({});
     titleLayout->setSpacing(0);

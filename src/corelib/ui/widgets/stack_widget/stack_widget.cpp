@@ -344,8 +344,12 @@ void StackWidget::addWidget(QWidget* _widget)
     }
 
     d->widgets.append(_widget);
+    _widget->installEventFilter(this);
     _widget->setParent(this);
     _widget->resize(size());
+
+    updateGeometry();
+
     _widget->hide();
 }
 
@@ -369,9 +373,12 @@ void StackWidget::setCurrentWidget(QWidget* _widget)
     d->currentWidget = _widget;
     if (!d->widgets.contains(d->currentWidget)) {
         d->widgets.append(d->currentWidget);
+        d->currentWidget->installEventFilter(this);
     }
     d->currentWidget->setParent(this);
     d->currentWidget->resize(size());
+
+    updateGeometry();
 
     //
     // Если виджет не виден на экране, просто отображаем новый текущий виджет
@@ -570,7 +577,9 @@ void StackWidget::resizeEvent(QResizeEvent* _event)
         return;
     }
 
-    d->currentWidget->resize(_event->size());
+    for (auto widget : std::as_const(d->widgets)) {
+        widget->resize(_event->size());
+    }
 
     const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
     if (!canRun) {
@@ -587,4 +596,16 @@ void StackWidget::resizeEvent(QResizeEvent* _event)
         }
         d->currentWidgetImage = d->currentWidget->grab();
     }
+}
+
+bool StackWidget::eventFilter(QObject* _watched, QEvent* _event)
+{
+    if (_event->type() == QEvent::LayoutRequest) {
+        auto widget = qobject_cast<QWidget*>(_watched);
+        if (widget != nullptr && d->widgets.contains(widget)) {
+            updateGeometry();
+        }
+    }
+
+    return Widget::eventFilter(_watched, _event);
 }

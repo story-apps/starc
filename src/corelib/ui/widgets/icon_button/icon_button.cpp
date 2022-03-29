@@ -18,7 +18,7 @@ public:
     void animateClick();
 
 
-    bool isChackable = false;
+    bool isCheckable = false;
     bool isChecked = false;
     QString icon;
 
@@ -69,7 +69,12 @@ IconButton::~IconButton() = default;
 
 void IconButton::setCheckable(bool _checkable)
 {
-    d->isChackable = _checkable;
+    if (d->isCheckable == _checkable) {
+        return;
+    }
+
+    d->isCheckable = _checkable;
+    update();
 }
 
 bool IconButton::isChecked() const
@@ -79,7 +84,7 @@ bool IconButton::isChecked() const
 
 void IconButton::setChecked(bool _checked)
 {
-    if (!d->isChackable) {
+    if (!d->isCheckable) {
         return;
     }
 
