@@ -1576,6 +1576,17 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
 
     using namespace BusinessLayer;
 
+    auto isGroup = [](TextModelItem* _item) {
+        return _item != nullptr && _item->type() == TextModelItemType::Group;
+    };
+    auto toGroup = [](TextModelItem* _item) -> TextModelGroupItem* {
+        return static_cast<TextModelGroupItem*>(_item);
+    };
+    auto toText = [](TextModelItem* _item) -> TextModelTextItem* {
+        return static_cast<TextModelTextItem*>(_item);
+    };
+
+
     //
     // Удаляем из модели элементы удалённых блоков и корректируем позиции блоков идущих после правки
     //
@@ -1830,9 +1841,8 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                             if (previousItem != nullptr
                                 && previousItem->type() == TextModelItemType::Group
                                 && childItem->type() == TextModelItemType::Group) {
-                                auto previousGroupItem
-                                    = static_cast<TextModelGroupItem*>(previousItem);
-                                auto childGroupItem = static_cast<TextModelGroupItem*>(childItem);
+                                auto previousGroupItem = toGroup(previousItem);
+                                auto childGroupItem = toGroup(childItem);
                                 if (childGroupItem->level() > previousGroupItem->level()) {
                                     d->model->appendItem(childItem, previousItem);
                                     moved = true;
@@ -2109,37 +2119,57 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             //
             // Добавляем элементы в модель
             //
-            // ... в случае, когда вставляем внутрь созданной папки, или сцены
+            // ... в случае, когда вставляем внутрь созданной папки, или группы
             //
             if (parentItem != nullptr) {
                 //
                 // Если перед вставляемым элементом что-то уже есть
                 //
                 if (previousItem != nullptr) {
-                    auto previousTextItemParent = previousItem->parent();
-                    Q_ASSERT(previousTextItemParent);
+                    auto previousItemParent = previousItem->parent();
+                    Q_ASSERT(previousItemParent);
 
 
                     //
                     // Если элемент вставляется после другого элемента того же уровня, или после
                     // окончания папки, то вставляем его на том же уровне, что и предыдущий
                     //
-                    if ((previousTextItemParent->type() == parentItem->type()
-                         && static_cast<TextModelGroupItem*>(parentItem)->groupType()
-                             == static_cast<TextModelGroupItem*>(previousTextItemParent)
-                                    ->groupType())
+                    if ((previousItemParent->type() == parentItem->type()
+                         && toGroup(parentItem)->groupType()
+                             == toGroup(previousItemParent)->groupType())
                         || previousItemIsFolderFooter) {
-                        d->model->insertItem(parentItem, previousTextItemParent);
+                        d->model->insertItem(parentItem, previousItemParent);
                     }
                     //
+                    // Если вставляется группа в позицию, где находится другая группа более
+                    // низкого уровня, то вставляем новую группу в родителя более высокого уровня
                     //
-                    //
-                    else if (parentItem->type() == TextModelItemType::Group
-                             && previousTextItemParent->type() == TextModelItemType::Group
-                             && static_cast<TextModelGroupItem*>(parentItem)->level()
-                                 < static_cast<TextModelGroupItem*>(previousTextItemParent)
-                                       ->level()) {
-                        d->model->insertItem(parentItem, previousTextItemParent->parent());
+                    else if (isGroup(parentItem) && isGroup(previousItemParent)
+                             && toGroup(parentItem)->level()
+                                 < toGroup(previousItemParent)->level()) {
+                        auto targetParent = previousItemParent->parent();
+                        do {
+                            if (isGroup(targetParent)
+                                && toGroup(parentItem)->level() >= toGroup(targetParent)->level()) {
+                                break;
+                            }
+                            previousItemParent = targetParent;
+                            targetParent = targetParent->parent();
+                        } while (targetParent != nullptr
+                                 && targetParent->type() != TextModelItemType::Folder);
+                        //
+                        // Если дошли до элемента с таким же уровнем, то вставим после
+                        //
+                        if (isGroup(targetParent)
+                            && toGroup(parentItem)->level() == toGroup(targetParent)->level()) {
+                            d->model->insertItem(parentItem, targetParent);
+                        }
+                        //
+                        // а если элемента с таким же уровнем нет, то вставим внутрь родителя
+                        //
+                        else {
+                            d->model->insertItem(parentItem, previousItemParent);
+                        }
                     }
                     //
                     // В противном случае вставляем внутрь
@@ -2161,14 +2191,15 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 d->model->appendItem(textItem, parentItem);
 
                 //
-                // Если вставляется сцена, то все текстовые элементы идущие после неё нужно
+                // Если вставляется группа, то все элементы идущие после неё нужно по возможности
                 // положить к ней внутрь
                 //
                 if (parentItem->type() == TextModelItemType::Group) {
                     //
                     // Определим родителя из которого нужно извлекать те самые текстовые элементы
                     //
-                    auto grandParentItem = [previousItem, previousItemIsFolderFooter, parentItem] {
+                    auto grandParentItem = [&previousItem, previousItemIsFolderFooter, parentItem,
+                                            isGroup, toGroup] {
                         //
                         // Если есть предыдущий текстовый элемент
                         //
@@ -2180,15 +2211,27 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                                 return previousItem->parent()->parent();
                             }
                             //
-                            // В противном случае, берём родителя предыдущего текстового элемента
+                            // В противном случае, берём родителя предыдущего элемента с
+                            // уровнем не ниже вставляемой группы
                             //
                             else {
-                                return previousItem->parent();
+                                auto grandParent = previousItem->parent();
+                                do {
+                                    if (isGroup(grandParent)
+                                        && toGroup(parentItem)->level()
+                                            >= toGroup(grandParent)->level()) {
+                                        break;
+                                    }
+                                    previousItem = grandParent;
+                                    grandParent = grandParent->parent();
+                                } while (grandParent != nullptr
+                                         && grandParent->type() != TextModelItemType::Folder);
+                                return grandParent;
                             }
                         }
 
                         //
-                        // Если перед сценой ничего нет, то берём родителя самой сцены
+                        // Если перед группой ничего нет, то берём родителя самой группы
                         //
                         return parentItem->parent();
                     }();
@@ -2217,16 +2260,14 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     for (int childIndex = itemIndex; childIndex < grandParentItem->childCount();
                          ++childIndex) {
                         auto grandParentChildItem = grandParentItem->childAt(childIndex);
-                        if (grandParentChildItem->type() != TextModelItemType::Text) {
-                            break;
+                        if (grandParentChildItem->type() == TextModelItemType::Text) {
+                            const auto grandParentChildTextItem = toText(grandParentChildItem);
+                            if (grandParentChildTextItem->paragraphType()
+                                == TextParagraphType::SequenceFooter) {
+                                break;
+                            }
                         }
 
-                        auto grandParentChildTextItem
-                            = static_cast<TextModelTextItem*>(grandParentChildItem);
-                        if (grandParentChildTextItem->paragraphType()
-                            == TextParagraphType::SequenceFooter) {
-                            break;
-                        }
 
                         itemsToMove.append(grandParentChildItem);
                     }
