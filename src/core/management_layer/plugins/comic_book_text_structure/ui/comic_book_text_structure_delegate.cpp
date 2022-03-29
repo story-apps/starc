@@ -373,43 +373,46 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     //
     // ... иконки заметок
     //
-    const auto inlineNotesSize
-        = _index.data(ComicBookTextModelPanelItem::GroupInlineNotesSizeRole).toInt();
+    const auto inlineNotesSize = _index.data(TextModelGroupItem::GroupInlineNotesSizeRole).toInt();
     const qreal notesLeft = iconRect.left();
     const qreal notesTop = (panelTextRect.isValid() ? panelTextRect : panelHeadingRect).bottom()
         + Ui::DesignSystem::layout().px8();
     const qreal notesHeight = Ui::DesignSystem::layout().px16();
-    QRectF inlineNotesIconRect;
+    QRectF inlineNotesRect;
     if (inlineNotesSize > 0) {
+        _painter->setFont(Ui::DesignSystem::font().iconsSmall());
+        const QRectF inlineNotesIconRect(QPointF(notesLeft, notesTop),
+                                         QSizeF(Ui::DesignSystem::layout().px24(), notesHeight));
+        _painter->drawText(inlineNotesIconRect, Qt::AlignLeft | Qt::AlignVCenter, u8"\U000F09A8");
+        //
         _painter->setFont(Ui::DesignSystem::font().caption());
         const auto inlineNotesSizeText = QString::number(inlineNotesSize);
-        const QRectF inlineNotesRect(
-            QPointF(notesLeft, notesTop),
-            QSizeF(_painter->fontMetrics().horizontalAdvance(inlineNotesSizeText), notesHeight));
+        inlineNotesRect
+            = { QPointF(inlineNotesIconRect.right() + Ui::DesignSystem::layout().px2(),
+                        inlineNotesIconRect.top()),
+                QSizeF(TextHelper::fineTextWidthF(inlineNotesSizeText, _painter->font()),
+                       notesHeight) };
         _painter->drawText(inlineNotesRect, Qt::AlignLeft | Qt::AlignVCenter, inlineNotesSizeText);
-
-        _painter->setFont(Ui::DesignSystem::font().iconsSmall());
-        inlineNotesIconRect
-            = QRectF(inlineNotesRect.right() + Ui::DesignSystem::layout().px2(),
-                     inlineNotesRect.top(), Ui::DesignSystem::layout().px24(), notesHeight);
-        _painter->drawText(inlineNotesIconRect, Qt::AlignLeft | Qt::AlignVCenter, u8"\U000F09A8");
     }
-    const auto reviewMarksSize
-        = _index.data(ComicBookTextModelPanelItem::GroupReviewMarksSizeRole).toInt();
+    //
+    const auto reviewMarksSize = _index.data(TextModelGroupItem::GroupReviewMarksSizeRole).toInt();
     if (reviewMarksSize > 0) {
+        _painter->setFont(Ui::DesignSystem::font().iconsSmall());
+        const QRectF reviewMarksIconRect(
+            QPointF(inlineNotesRect.isValid()
+                        ? (inlineNotesRect.right() + Ui::DesignSystem::layout().px16())
+                        : notesLeft,
+                    notesTop),
+            QSizeF(Ui::DesignSystem::layout().px24(), notesHeight));
+        _painter->drawText(reviewMarksIconRect, Qt::AlignLeft | Qt::AlignVCenter, u8"\U000F0E31");
+        //
         _painter->setFont(Ui::DesignSystem::font().caption());
         const auto reviewMarksSizeText = QString::number(reviewMarksSize);
         const QRectF reviewMarksRect(
-            QPointF(inlineNotesIconRect.isValid() ? inlineNotesIconRect.right() : notesLeft,
-                    notesTop),
-            QSizeF(_painter->fontMetrics().horizontalAdvance(reviewMarksSizeText), notesHeight));
+            QPointF(reviewMarksIconRect.right() + Ui::DesignSystem::layout().px2(),
+                    reviewMarksIconRect.top()),
+            QSizeF(TextHelper::fineTextWidthF(reviewMarksSizeText, _painter->font()), notesHeight));
         _painter->drawText(reviewMarksRect, Qt::AlignLeft | Qt::AlignVCenter, reviewMarksSizeText);
-
-        _painter->setFont(Ui::DesignSystem::font().iconsSmall());
-        const QRectF reviewMarksIconRect(reviewMarksRect.right() + Ui::DesignSystem::layout().px2(),
-                                         reviewMarksRect.top(), Ui::DesignSystem::layout().px16(),
-                                         notesHeight);
-        _painter->drawText(reviewMarksIconRect, Qt::AlignLeft | Qt::AlignVCenter, u8"\U000F0E31");
     }
 }
 
