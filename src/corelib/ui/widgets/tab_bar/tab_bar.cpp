@@ -615,3 +615,26 @@ void TabBar::mouseReleaseEvent(QMouseEvent* _event)
         tabX += tabWidth;
     }
 }
+
+void TabBar::wheelEvent(QWheelEvent* _event)
+{
+    //
+    // TODO: Игнорировать вертикальную прокрутку трэкпадом
+    //
+
+    _event->accept();
+
+    const auto divider = _event->buttons().testFlag(Qt::MouseButton::MiddleButton) ? 10 : 20;
+    if (_event->angleDelta().x() < 0 || _event->angleDelta().y() < 0) {
+        d->scrollState.current
+            = std::min(d->scrollState.maximum,
+                       d->scrollState.current
+                           + std::max(_event->position().x(), _event->position().y()) / divider);
+    } else {
+        d->scrollState.current
+            = std::max(0.0,
+                       d->scrollState.current
+                           - std::max(_event->position().x(), _event->position().y()) / divider);
+    }
+    update();
+}

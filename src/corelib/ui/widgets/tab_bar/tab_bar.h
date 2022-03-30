@@ -99,6 +99,11 @@ protected:
      */
     void mouseReleaseEvent(QMouseEvent* _event) override;
 
+    /**
+     * @brief При возможности прокручиваем табы
+     */
+    void wheelEvent(QWheelEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
