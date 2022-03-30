@@ -72,8 +72,9 @@ void PageHandler::handleEnter(QKeyEvent*)
                     //! В начале блока
 
                     //
-                    // Ни чего не делаем
+                    // Вставляем блок страницы перед собой
                     //
+                    editor()->addParagraph(TextParagraphType::PageHeading);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
@@ -85,9 +86,9 @@ void PageHandler::handleEnter(QKeyEvent*)
                     //! Внутри блока
 
                     //
-                    // Оставшийся текст форматируем, как "лирика"
+                    // Оставшийся текст форматируем, как "панель"
                     //
-                    editor()->addParagraph(TextParagraphType::PageHeading);
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::PageHeading));
                 }
             }
         }

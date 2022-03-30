@@ -142,7 +142,7 @@ void SceneHeadingHandler::handleEnter(QKeyEvent* _event)
                     //
                     // Вставка блока описания действия
                     //
-                    editor()->addParagraph(TextParagraphType::Action);
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::SceneHeading));
                 }
             }
         }
