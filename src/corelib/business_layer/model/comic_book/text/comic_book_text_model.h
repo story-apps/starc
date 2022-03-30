@@ -5,6 +5,7 @@
 
 namespace BusinessLayer {
 
+class CharacterModel;
 class CharactersModel;
 class ComicBookDictionariesModel;
 class ComicBookInformationModel;
@@ -44,6 +45,11 @@ public:
      */
     void setCharactersModel(CharactersModel* _model);
     CharactersModel* charactersModel() const;
+
+    /**
+     * @brief Получить модель персонажа по заданному имени
+     */
+    BusinessLayer::CharacterModel* character(const QString& _name) const;
 
     /**
      * @brief Обновить имя персонажа

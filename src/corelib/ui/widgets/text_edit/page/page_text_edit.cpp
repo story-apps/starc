@@ -2016,38 +2016,47 @@ void PageTextEditPrivate::paintTextBlocksOverlay(QPainter* _painter)
     }
 
     Q_Q(PageTextEdit);
-    const auto overlayColor = ColorHelper::transparent(q->palette().base().color(),
-                                                       Ui::DesignSystem::inactiveTextOpacity());
 
     //
     // Идём наверх
     //
     auto cursor = q->textCursor();
+    cursor.movePosition(QTextCursor::StartOfBlock);
     auto block = q->textCursor().block();
+    const QRectF currentBlockRect(q->cursorRect(cursor).topLeft(),
+                                  block.layout()->boundingRect().size());
     QRectF topRect;
     while (block != q->document()->begin()) {
         block = block.previous();
-        cursor.setPosition(block.position());
-        const QRectF blockRect(q->cursorRect(cursor).topLeft(),
-                               block.layout()->boundingRect().size());
-        if (!topRect.isNull()) {
-            topRect = topRect.united(blockRect);
-        } else {
-            topRect = blockRect;
-        }
 
-        //
-        // ... прерываем, когда вышли за пределы экрана
-        //
-        if (blockRect.top() < 0) {
-            break;
+        if (block.isVisible()) {
+            cursor.setPosition(block.position());
+            const QRectF blockRect(q->cursorRect(cursor).topLeft(),
+                                   block.layout()->boundingRect().size());
+            if (blockRect.bottom() <= currentBlockRect.top()) {
+                if (!topRect.isNull()) {
+                    topRect = topRect.united(blockRect);
+                } else {
+                    topRect = blockRect;
+                }
+            }
+
+            //
+            // ... прерываем, когда вышли за пределы экрана
+            //
+            if (blockRect.top() < 0) {
+                break;
+            }
         }
     }
     //
     // ... закрашиваем текст
     //
     QLinearGradient topGradient(0, topRect.top(), 0, topRect.bottom());
-    topGradient.setColorAt(0, q->palette().base().color());
+    topGradient.setColorAt(
+        0,
+        ColorHelper::transparent(q->palette().base().color(),
+                                 1.0 - Ui::DesignSystem::focusBackgroundOpacity()));
     topGradient.setColorAt(0.9,
                            ColorHelper::transparent(q->palette().base().color(),
                                                     Ui::DesignSystem::inactiveTextOpacity()));
@@ -2060,20 +2069,24 @@ void PageTextEditPrivate::paintTextBlocksOverlay(QPainter* _painter)
     block = q->textCursor().block().next();
     QRectF bottomRect;
     while (block != q->document()->end()) {
-        cursor.setPosition(block.position());
-        const QRectF blockRect(q->cursorRect(cursor).topLeft(),
-                               block.layout()->boundingRect().size());
-        if (!bottomRect.isNull()) {
-            bottomRect = bottomRect.united(blockRect);
-        } else {
-            bottomRect = blockRect;
-        }
+        if (block.isVisible()) {
+            cursor.setPosition(block.position());
+            const QRectF blockRect(q->cursorRect(cursor).topLeft(),
+                                   block.layout()->boundingRect().size());
+            if (blockRect.top() >= currentBlockRect.bottom()) {
+                if (!bottomRect.isNull()) {
+                    bottomRect = bottomRect.united(blockRect);
+                } else {
+                    bottomRect = blockRect;
+                }
+            }
 
-        //
-        // ... прерываем, когда вышли за пределы экрана
-        //
-        if (blockRect.top() > q->height()) {
-            break;
+            //
+            // ... прерываем, когда вышли за пределы экрана
+            //
+            if (blockRect.top() > q->height()) {
+                break;
+            }
         }
 
         block = block.next();
@@ -2086,7 +2099,10 @@ void PageTextEditPrivate::paintTextBlocksOverlay(QPainter* _painter)
     bottomGradient.setColorAt(0.1,
                               ColorHelper::transparent(q->palette().base().color(),
                                                        Ui::DesignSystem::inactiveTextOpacity()));
-    bottomGradient.setColorAt(1, q->palette().base().color());
+    bottomGradient.setColorAt(
+        1,
+        ColorHelper::transparent(q->palette().base().color(),
+                                 1.0 - Ui::DesignSystem::focusBackgroundOpacity()));
     _painter->fillRect(bottomRect, bottomGradient);
 }
 

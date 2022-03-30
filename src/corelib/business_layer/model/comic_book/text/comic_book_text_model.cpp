@@ -4,6 +4,7 @@
 #include "comic_book_text_model_page_item.h"
 #include "comic_book_text_model_panel_item.h"
 
+#include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/comic_book/comic_book_dictionaries_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/text/text_model_folder_item.h>
@@ -202,6 +203,11 @@ void ComicBookTextModel::setCharactersModel(CharactersModel* _model)
 CharactersModel* ComicBookTextModel::charactersModel() const
 {
     return d->charactersModel;
+}
+
+CharacterModel* ComicBookTextModel::character(const QString& _name) const
+{
+    return d->charactersModel->character(_name);
 }
 
 void ComicBookTextModel::updateCharacterName(const QString& _oldName, const QString& _newName)
