@@ -54,9 +54,11 @@ SimpleTextSearchToolbar::Implementation::Implementation(QWidget* _parent)
 {
     searchText->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     searchText->setUnderlineDecorationVisible(false);
+    searchText->setWordWrapMode(QTextOption::NoWrap);
 
     replaceText->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     replaceText->setUnderlineDecorationVisible(false);
+    replaceText->setWordWrapMode(QTextOption::NoWrap);
 
     replace->setFocusPolicy(Qt::NoFocus);
     replaceAll->setFocusPolicy(Qt::NoFocus);
