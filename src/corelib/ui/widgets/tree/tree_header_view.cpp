@@ -21,6 +21,10 @@ void TreeHeaderView::paintSection(QPainter* _painter, const QRect& _rect, int _s
     const auto backgroundColor = palette().color(QPalette::Base);
     _painter->fillRect(_rect, backgroundColor);
 
+    if (model() == nullptr) {
+        return;
+    }
+
     auto textColor = palette().color(QPalette::Text);
     textColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
     _painter->setPen(textColor);
@@ -28,7 +32,7 @@ void TreeHeaderView::paintSection(QPainter* _painter, const QRect& _rect, int _s
         = _rect.adjusted(_section == 0 ? Ui::DesignSystem::tree().indicatorWidth()
                                        : Ui::DesignSystem::treeOneLineItem().margins().left(),
                          0, 0, 0);
-    if (model() && model()->headerData(_section, orientation(), Qt::DecorationRole).isValid()) {
+    if (model()->headerData(_section, orientation(), Qt::DecorationRole).isValid()) {
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
         QRectF iconRect(
             textRect.topLeft(),
