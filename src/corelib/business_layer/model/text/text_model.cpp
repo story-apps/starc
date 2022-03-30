@@ -1687,10 +1687,14 @@ void TextModel::applyPatch(const QByteArray& _patch)
                 insertItem(_item, insertAfterItem);
 
                 //
-                // И вытаскиваем все последующие элементы в модели на уровень вставки
+                // И вытаскиваем все последующие текстовые элементы в модели на уровень вставки
                 //
                 while (itemParent->childCount() > itemIndex) {
                     auto childItem = itemParent->childAt(itemParent->childCount() - 1);
+                    if (childItem->type() != TextModelItemType::Text) {
+                        break;
+                    }
+
                     takeItem(childItem, itemParent);
                     insertItem(childItem, _item);
                     movedSiblingItems.prepend(childItem);
