@@ -621,8 +621,7 @@ QString LoglineGeneratorDialog::Implementation::buildLogline() const
     } else {
         // !Q7 && Q5
         if (!includeMpr->isChecked() && includeTheme->isChecked()) {
-            logline += QString("%1 %2 %3 %4 ")
-                           .arg(text(theme), tr("in order to"), characterPronoun, tr("can"));
+            logline += QString("%1 %2 ").arg(text(theme), tr("in order to"));
         }
         //
         logline += QString("%1 ").arg(text(storyGoal));
@@ -634,8 +633,7 @@ QString LoglineGeneratorDialog::Implementation::buildLogline() const
                        .arg(tr("but"), tr("when"), text(mprEvent), characterPronoun, tr("must"));
             // Q5
             if (includeTheme->isChecked()) {
-                logline += QString("%1 %2 %3 %4 ")
-                               .arg(theme->text(), tr("in order to"), characterPronoun, tr("can"));
+                logline += QString("%1 %2 ").arg(text(theme), tr("in order to"));
             }
             logline += QString("%1 ").arg(text(afterMprEvent));
         }
