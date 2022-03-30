@@ -1950,7 +1950,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
     //
     // ... определим элемент модели для предыдущего блока
     //
-    auto previousItem = [block]() -> TextModelItem* {
+    auto previousTextItem = [block]() -> TextModelItem* {
         if (!block.isValid()) {
             return nullptr;
         }
@@ -2007,10 +2007,10 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     splitterItem = d->model->createSplitterItem();
                     splitterItem->setSplitterType(TextModelSplitterItemType::End);
                 }
-                if (previousItem == nullptr) {
+                if (previousTextItem == nullptr) {
                     d->model->prependItem(splitterItem);
                 } else {
-                    d->model->insertItem(splitterItem, previousItem);
+                    d->model->insertItem(splitterItem, previousTextItem);
                 }
 
                 //
@@ -2018,12 +2018,12 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 //
                 auto blockData = new TextBlockData(splitterItem);
                 block.setUserData(blockData);
-                previousItem = splitterItem;
+                previousTextItem = splitterItem;
 
                 //
                 // Запомним новый блок, или обновим старый
                 //
-                d->positionsToItems.insert_or_assign(block.position(), previousItem);
+                d->positionsToItems.insert_or_assign(block.position(), previousTextItem);
 
                 block = block.next();
                 continue;
@@ -2107,12 +2107,12 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             //
             // Является ли предыдущий элемент футером папки
             //
-            const bool previousItemIsFolderFooter = [previousItem] {
-                if (!previousItem || previousItem->type() != TextModelItemType::Text) {
+            const bool previousItemIsFolderFooter = [previousTextItem] {
+                if (!previousTextItem || previousTextItem->type() != TextModelItemType::Text) {
                     return false;
                 }
 
-                auto textItem = static_cast<TextModelTextItem*>(previousItem);
+                auto textItem = static_cast<TextModelTextItem*>(previousTextItem);
                 return textItem->paragraphType() == TextParagraphType::SequenceFooter;
             }();
 
@@ -2123,20 +2123,19 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             //
             if (parentItem != nullptr) {
                 //
-                // Если перед вставляемым элементом что-то уже есть
+                // Вставляем родительский элемент
                 //
-                if (previousItem != nullptr) {
-                    auto previousItemParent = previousItem->parent();
+                // ... если перед вставляемым элементом что-то уже есть
+                //
+                if (previousTextItem != nullptr) {
+                    auto previousItemParent = previousTextItem->parent();
                     Q_ASSERT(previousItemParent);
-
 
                     //
                     // Если элемент вставляется после другого элемента того же уровня, или после
                     // окончания папки, то вставляем его на том же уровне, что и предыдущий
                     //
-                    if ((previousItemParent->type() == parentItem->type()
-                         && toGroup(parentItem)->groupType()
-                             == toGroup(previousItemParent)->groupType())
+                    if (previousItemParent->subtype() == parentItem->subtype()
                         || previousItemIsFolderFooter) {
                         d->model->insertItem(parentItem, previousItemParent);
                     }
@@ -2172,21 +2171,21 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                         }
                     }
                     //
-                    // В противном случае вставляем внутрь
+                    // В противном случае вставляем после предыдущего элемента
                     //
                     else {
-                        d->model->insertItem(parentItem, previousItem);
+                        d->model->insertItem(parentItem, previousTextItem);
                     }
                 }
                 //
-                // Если перед вставляемым ничего нет, просто вставим в самое начало
+                // ... а если перед вставляемым ничего нет, просто вставим в самое начало
                 //
                 else {
                     d->model->prependItem(parentItem);
                 }
 
                 //
-                // Вставляем сам текстовый элемент в родителя
+                // Вставляем текстовый элемент в родителя
                 //
                 d->model->appendItem(textItem, parentItem);
 
@@ -2194,100 +2193,87 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 // Если вставляется группа, то все элементы идущие после неё нужно по возможности
                 // положить к ней внутрь
                 //
-                if (parentItem->type() == TextModelItemType::Group) {
+                if (isGroup(parentItem)) {
+                    TextModelItem* grandParentItem = nullptr;
+                    int startChildIndex = -1;
                     //
-                    // Определим родителя из которого нужно извлекать те самые текстовые элементы
+                    // Если группа вставлена в самое начало, или на одном уровне с предыдущим
                     //
-                    auto grandParentItem = [&previousItem, previousItemIsFolderFooter, parentItem,
-                                            isGroup, toGroup] {
+                    if (previousTextItem == nullptr
+                        || parentItem->parent() == previousTextItem->parent()->parent()) {
                         //
-                        // Если есть предыдущий текстовый элемент
+                        // Переносим все элементы идущие за вставленной группой
                         //
-                        if (previousItem != nullptr) {
-                            //
-                            // Если это конец папки, то берём родителя папки
-                            //
-                            if (previousItemIsFolderFooter) {
-                                return previousItem->parent()->parent();
-                            }
-                            //
-                            // В противном случае, берём родителя предыдущего элемента с
-                            // уровнем не ниже вставляемой группы
-                            //
-                            else {
-                                auto grandParent = previousItem->parent();
-                                do {
-                                    if (isGroup(grandParent)
-                                        && toGroup(parentItem)->level()
-                                            >= toGroup(grandParent)->level()) {
-                                        break;
-                                    }
-                                    previousItem = grandParent;
-                                    grandParent = grandParent->parent();
-                                } while (grandParent != nullptr
-                                         && grandParent->type() != TextModelItemType::Folder);
-                                return grandParent;
-                            }
-                        }
-
-                        //
-                        // Если перед группой ничего нет, то берём родителя самой группы
-                        //
-                        return parentItem->parent();
-                    }();
-                    Q_ASSERT(grandParentItem);
-
+                        grandParentItem = parentItem->parent();
+                        startChildIndex = grandParentItem->rowOfChild(parentItem);
+                    }
                     //
-                    // Определим индекс, начиная с которого нужно извлекать текстовые элементы
+                    // А если предыдущий элемент на другом уровне
                     //
-                    const int itemIndex = [previousItem, previousItemIsFolderFooter, parentItem,
-                                           grandParentItem] {
-                        if (previousItem != nullptr) {
-                            if (previousItemIsFolderFooter) {
-                                return grandParentItem->rowOfChild(previousItem->parent()) + 2;
-                            } else if (grandParentItem->type() == TextModelItemType::Group) {
-                                return grandParentItem->rowOfChild(previousItem) + 1;
-                            }
-                        }
-
-                        return grandParentItem->rowOfChild(parentItem) + 1;
-                    }();
+                    else {
+                        //
+                        // Переносим элементы идущие после предыдущего текстового
+                        //
+                        grandParentItem = previousTextItem->parent();
+                        startChildIndex = grandParentItem->rowOfChild(previousTextItem);
+                    }
 
                     //
                     // Соберём элементы для переноса
                     //
-                    QVector<TextModelItem*> itemsToMove;
-                    for (int childIndex = itemIndex; childIndex < grandParentItem->childCount();
-                         ++childIndex) {
-                        auto grandParentChildItem = grandParentItem->childAt(childIndex);
-                        if (grandParentChildItem->type() == TextModelItemType::Text) {
-                            const auto grandParentChildTextItem = toText(grandParentChildItem);
-                            if (grandParentChildTextItem->paragraphType()
-                                == TextParagraphType::SequenceFooter) {
+                    do {
+                        QVector<TextModelItem*> itemsToMove;
+                        //
+                        // +1, т.к. начинаем со следующего элемента
+                        //
+                        for (int childIndex = startChildIndex + 1;
+                             childIndex < grandParentItem->childCount(); ++childIndex) {
+                            auto grandParentChildItem = grandParentItem->childAt(childIndex);
+                            if (grandParentChildItem->type() == TextModelItemType::Text) {
+                                const auto grandParentChildTextItem = toText(grandParentChildItem);
+                                if (grandParentChildTextItem->paragraphType()
+                                    == TextParagraphType::SequenceFooter) {
+                                    break;
+                                }
+                            } else if (grandParentChildItem->type() == TextModelItemType::Group) {
+                                if (toGroup(parentItem)->level()
+                                    >= toGroup(grandParentChildItem)->level()) {
+                                    break;
+                                }
+                            } else if (grandParentChildItem->type() == TextModelItemType::Folder) {
                                 break;
                             }
+
+                            itemsToMove.append(grandParentChildItem);
                         }
 
+                        //
+                        // ... собственно переносим элементы
+                        //
+                        if (!itemsToMove.isEmpty()) {
+                            d->model->takeItems(itemsToMove.constFirst(), itemsToMove.constLast(),
+                                                grandParentItem);
+                            d->model->appendItems(itemsToMove, parentItem);
+                        }
 
-                        itemsToMove.append(grandParentChildItem);
-                    }
-                    //
-                    // ... собственно переносим элементы
-                    //
-                    if (!itemsToMove.isEmpty()) {
-                        d->model->takeItems(itemsToMove.constFirst(), itemsToMove.constLast(),
-                                            grandParentItem);
-                        d->model->appendItems(itemsToMove, parentItem);
-                    }
+                        //
+                        // Переходим на уровень выше
+                        //
+                        if (grandParentItem->parent() == nullptr) {
+                            break;
+                        }
+                        startChildIndex = grandParentItem->parent()->rowOfChild(grandParentItem);
+                        grandParentItem = grandParentItem->parent();
+                    } while (grandParentItem != parentItem->parent());
                 }
                 //
                 // А для папки, если она вставляется после сцены, то нужно перенести все текстовые
                 // элементы, которые идут после вставленной папки на уровень самой папки
                 //
-                else if (previousItem != nullptr
-                         && previousItem->parent()->type() == TextModelItemType::Group) {
-                    auto grandParentItem = previousItem->parent();
-                    const int lastItemIndex = grandParentItem->rowOfChild(previousItem) + 1;
+                else if (previousTextItem != nullptr
+                         && previousTextItem->parent()->type() == TextModelItemType::Group) {
+                    auto grandParentItem = previousTextItem->parent();
+                    const int lastItemIndex = grandParentItem->rowOfChild(previousTextItem) + 1;
 
                     //
                     // Соберём элементы для переноса
@@ -2326,7 +2312,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 //
                 // ... в самое начало документа
                 //
-                if (previousItem == nullptr) {
+                if (previousTextItem == nullptr) {
                     d->model->prependItem(textItem);
                 }
                 //
@@ -2338,13 +2324,13 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     // папкой
                     //
                     if (previousItemIsFolderFooter) {
-                        d->model->insertItem(textItem, previousItem->parent());
+                        d->model->insertItem(textItem, previousTextItem->parent());
                     }
                     //
                     // ... в противном случае ставим на уровне с предыдущим элементом
                     //
                     else {
-                        d->model->insertItem(textItem, previousItem);
+                        d->model->insertItem(textItem, previousTextItem);
                     }
                 }
             }
@@ -2352,7 +2338,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             auto blockData = new TextBlockData(textItem);
             block.setUserData(blockData);
 
-            previousItem = textItem;
+            previousTextItem = textItem;
         }
         //
         // Старый блок
@@ -2390,13 +2376,13 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             }
 
             d->model->updateItem(item);
-            previousItem = item;
+            previousTextItem = item;
         }
 
         //
         // Запомним новый блок, или обновим старый
         //
-        d->positionsToItems.insert_or_assign(block.position(), previousItem);
+        d->positionsToItems.insert_or_assign(block.position(), previousTextItem);
 
         //
         // Переходим к обработке следующего блока
