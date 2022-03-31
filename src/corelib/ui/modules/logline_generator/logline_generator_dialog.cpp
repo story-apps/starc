@@ -254,18 +254,11 @@ LoglineGeneratorDialog::Implementation::Implementation(QWidget* _parent)
 {
     content->setAnimationType(StackWidget::AnimationType::Slide);
     characterGender->setModel(characterGenderModel);
-    characterHint->setLink("https://starc.app/api/app/help/logline?type=character");
-    majorEventHint->setLink("https://starc.app/api/app/help/logline?type=major-event");
     theme->hide();
-    themeHint->setLink("https://starc.app/api/app/help/logline?type=theme");
-    storyGoalHint->setLink("https://starc.app/api/app/help/logline?type=story-goal");
     mprEvent->hide();
     afterMprEvent->hide();
-    mprHint->setLink("https://starc.app/api/app/help/logline?type=mpr");
     worldSpecialRules->hide();
-    worldHint->setLink("https://starc.app/api/app/help/logline?type=world");
     stakes->hide();
-    stakesHint->setLink("https://starc.app/api/app/help/logline?type=stakes");
     loglineIcon->setIcon(u8"\U000F012C");
     loglineIcon->setDecorationVisible(true);
     loglineTitle->setAlignment(Qt::AlignCenter);
@@ -890,6 +883,18 @@ void LoglineGeneratorDialog::updateTranslations()
                 tr("Often the stakes are clear from the Main Event. But in some cases, adding "
                    "negative stakes adds urgency to the logline, ultimately improving its "
                    "emotional impact.")));
+    //
+    auto link = [](const QString& _type) {
+        return QString("https://starc.app/api/app/help/logline?type=%1&lang=%2")
+            .arg(_type, QLocale::languageToString(QLocale().language()));
+    };
+    d->characterHint->setLink(link("character"));
+    d->majorEventHint->setLink(link("major-event"));
+    d->themeHint->setLink(link("theme"));
+    d->storyGoalHint->setLink(link("story-goal"));
+    d->mprHint->setLink(link("mpr"));
+    d->worldHint->setLink(link("world"));
+    d->stakesHint->setLink(link("stakes"));
     //
     d->loglineTitle->setText(tr("Your logline is cooked!"));
 
