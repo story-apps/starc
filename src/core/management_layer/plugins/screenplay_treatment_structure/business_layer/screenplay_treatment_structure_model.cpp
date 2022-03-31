@@ -2,6 +2,7 @@
 
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
+#include <business_layer/model/text/text_model_group_item.h>
 #include <business_layer/templates/screenplay_template.h>
 
 #include <QApplication>
@@ -13,6 +14,7 @@ class ScreenplayTreatmentStructureModel::Implementation
 {
 public:
     ScreenplayTextModel* screenplayModel = nullptr;
+    bool showBeats = true;
 };
 
 
@@ -26,6 +28,16 @@ ScreenplayTreatmentStructureModel::ScreenplayTreatmentStructureModel(QObject* _p
 }
 
 ScreenplayTreatmentStructureModel::~ScreenplayTreatmentStructureModel() = default;
+
+void ScreenplayTreatmentStructureModel::showBeats(bool _show)
+{
+    if (d->showBeats == _show) {
+        return;
+    }
+
+    d->showBeats = _show;
+    invalidate();
+}
 
 void ScreenplayTreatmentStructureModel::setSourceModel(QAbstractItemModel* _sourceModel)
 {
@@ -48,10 +60,21 @@ bool ScreenplayTreatmentStructureModel::filterAcceptsRow(int _sourceRow,
     const auto item = d->screenplayModel->itemForIndex(itemIndex);
 
     //
-    // Показываем папки и группы
+    // Показываем папки
     //
-    if (item->type() == TextModelItemType::Folder || item->type() == TextModelItemType::Group) {
+    if (item->type() == TextModelItemType::Folder) {
         return true;
+    }
+    //
+    // Показываем сцены и биты (если разрешены)
+    //
+    else if (item->type() == TextModelItemType::Group) {
+        auto groupItem = static_cast<TextModelGroupItem*>(item);
+        if (groupItem->groupType() == TextGroupType::Beat) {
+            return d->showBeats;
+        } else {
+            return true;
+        }
     }
     //
     // Остальное не показываем

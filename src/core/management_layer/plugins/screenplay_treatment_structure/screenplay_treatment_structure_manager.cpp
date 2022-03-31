@@ -7,6 +7,8 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_folder_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/color_picker/color_picker.h>
 #include <ui/widgets/context_menu/context_menu.h>
@@ -230,6 +232,11 @@ void ScreenplayTreatmentStructureManager::setModel(BusinessLayer::AbstractModel*
     if (d->modelIndexToSelect.isValid()) {
         setCurrentModelIndex(d->modelIndexToSelect);
     }
+
+    //
+    // Переконфигурируемся
+    //
+    reconfigure({});
 }
 
 Ui::IDocumentView* ScreenplayTreatmentStructureManager::view()
@@ -245,6 +252,11 @@ Ui::IDocumentView* ScreenplayTreatmentStructureManager::createView()
 void ScreenplayTreatmentStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
 {
     Q_UNUSED(_changedSettingsKeys);
+
+    const bool showBeats
+        = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsKey).toBool();
+    d->structureModel->showBeats(showBeats);
+
     d->view->reconfigure();
 }
 
@@ -252,8 +264,8 @@ void ScreenplayTreatmentStructureManager::bind(IDocumentManager* _manager)
 {
     Q_ASSERT(_manager);
 
-    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)), this,
-            SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
+    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
+            SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
 }
 
 void ScreenplayTreatmentStructureManager::setCurrentModelIndex(const QModelIndex& _index)
@@ -271,9 +283,16 @@ void ScreenplayTreatmentStructureManager::setCurrentModelIndex(const QModelIndex
 
     //
     // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
-    // сцен или папок, которые как раз и отображаются в навигаторе
+    // папок, сцен или битов, которые как раз и отображаются в навигаторе
     //
-    d->view->setCurrentModelIndex(d->structureModel->mapFromSource(_index.parent()));
+    auto indexForSelect = d->structureModel->mapFromSource(_index.parent());
+    //
+    // ... когда быти скрыты в навигаторе, берём папку или сцену, в которой они находятся
+    //
+    if (!indexForSelect.isValid()) {
+        indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());
+    }
+    d->view->setCurrentModelIndex(indexForSelect);
     d->modelIndexToSelect = {};
 }
 

@@ -265,8 +265,8 @@ void ScreenplayTextStructureManager::bind(IDocumentManager* _manager)
 {
     Q_ASSERT(_manager);
 
-    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)), this,
-            SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
+    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
+            SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
 }
 
 void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)

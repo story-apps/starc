@@ -375,11 +375,13 @@ void PluginsBuilder::reconfigureSimpleTextNavigator() const
 void PluginsBuilder::reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys) const
 {
     reconfigurePlugin(kScreenplayTitlePageEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kScreenplayTreatmentEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTextEditorMime, _changedSettingsKeys);
 }
 
 void PluginsBuilder::reconfigureScreenplayNavigator() const
 {
+    reconfigurePlugin(kScreenplayTreatmentNavigatorMime, {});
     reconfigurePlugin(kScreenplayTextNavigatorMime, {});
 }
 
