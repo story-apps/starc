@@ -59,7 +59,8 @@ public:
     /**
      * @brief Вставить элемент после родственика
      */
-    void insertItem(StructureModelItem* _item, StructureModelItem* _afterSiblingItem);
+    void insertItem(StructureModelItem* _item, StructureModelItem* _afterSiblingItem,
+                    const QByteArray& _content = {});
 
     /**
      * @brief Перенести элемент в заданного родителя

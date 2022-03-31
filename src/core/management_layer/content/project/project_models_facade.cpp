@@ -543,4 +543,13 @@ QVector<BusinessLayer::AbstractModel*> ProjectModelsFacade::loadedModelsFor(
     return models;
 }
 
+QVector<Domain::DocumentObject*> ProjectModelsFacade::loadedDocuments() const
+{
+    QVector<Domain::DocumentObject*> documents;
+    for (auto iter = d->documentsToModels.cbegin(); iter != d->documentsToModels.cend(); ++iter) {
+        documents.append(iter.key());
+    }
+    return documents;
+}
+
 } // namespace ManagementLayer

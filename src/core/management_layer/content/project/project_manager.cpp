@@ -1137,8 +1137,9 @@ void ProjectManager::saveChanges()
     //
     // Сохраняем остальные документы
     //
-    for (auto model : d->modelsFacade.loadedModels()) {
-        DataStorageLayer::StorageFacade::documentStorage()->saveDocument(model->document());
+    const auto loadedDocuments = d->modelsFacade.loadedDocuments();
+    for (auto document : loadedDocuments) {
+        DataStorageLayer::StorageFacade::documentStorage()->saveDocument(document);
     }
 
     //

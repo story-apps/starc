@@ -336,7 +336,8 @@ void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _
     emit documentAdded(_item->uuid(), _parentItem->uuid(), _item->type(), _item->name(), _content);
 }
 
-void StructureModel::insertItem(StructureModelItem* _item, StructureModelItem* _afterSiblingItem)
+void StructureModel::insertItem(StructureModelItem* _item, StructureModelItem* _afterSiblingItem,
+                                const QByteArray& _content)
 {
     if (_item == nullptr || _afterSiblingItem == nullptr
         || _afterSiblingItem->parent() == nullptr) {
@@ -354,6 +355,8 @@ void StructureModel::insertItem(StructureModelItem* _item, StructureModelItem* _
     beginInsertRows(parentIndex, itemRowIndex, itemRowIndex);
     parent->insertItem(itemRowIndex, _item);
     endInsertRows();
+
+    emit documentAdded(_item->uuid(), parent->uuid(), _item->type(), _item->name(), _content);
 }
 
 void StructureModel::moveItem(StructureModelItem* _item, StructureModelItem* _parentItem)
