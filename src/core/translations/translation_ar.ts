@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt_PT">
+<TS version="2.1" language="ar">
 <context>
     <name>AppBar</name>
     <message>
@@ -14,42 +14,42 @@
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="299"/>
         <source>Formatting</source>
-        <translation>Formatação</translation>
+        <translation>التنسيق</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="303"/>
         <source>Bold</source>
-        <translation>Negrito</translation>
+        <translation>غليظ</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="310"/>
         <source>Italic</source>
-        <translation>Itálico</translation>
+        <translation>مائل</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="317"/>
         <source>Underline</source>
-        <translation>Sublinhado</translation>
+        <translation>تسطير</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="324"/>
         <source>Strikethrough</source>
-        <translation>Rasurado</translation>
+        <translation>تشريط</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="333"/>
         <source>Align left</source>
-        <translation>Alinhar à esquerda</translation>
+        <translation>إلى اليسار</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="339"/>
         <source>Align center</source>
-        <translation>Alinhar ao centro</translation>
+        <translation>في الوسط</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="345"/>
         <source>Align right</source>
-        <translation>Alinhar à direita</translation>
+        <translation>إلى اليمين</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="351"/>
@@ -62,17 +62,17 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="123"/>
         <source>Undefined</source>
-        <translation>Indefinido</translation>
+        <translation>غير مُحَدد</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="125"/>
         <source>Unformatted text</source>
-        <translation>Texto sem formatação</translation>
+        <translation>نص غير منسق</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="127"/>
         <source>Inline note</source>
-        <translation>Nota em linha</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="129"/>
@@ -87,32 +87,32 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="133"/>
         <source>Sequence</source>
-        <translation>Sequência</translation>
+        <translation>تسلسل</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="135"/>
         <source>Sequence footer</source>
-        <translation>Rodapé de sequência</translation>
+        <translation>تذييل التسلسل</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="138"/>
         <source>Scene heading</source>
-        <translation>Cabeçalho de cena</translation>
+        <translation>عنوان المشهد</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="140"/>
         <source>Character</source>
-        <translation>Personagem</translation>
+        <translation>شخصية</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="142"/>
         <source>Dialogue</source>
-        <translation>Diálogo</translation>
+        <translation>حوار</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="145"/>
         <source>Scene characters</source>
-        <translation>Personagens da cena</translation>
+        <translation>الشخصيات في المشهد</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="147"/>
@@ -122,27 +122,27 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="149"/>
         <source>Action</source>
-        <translation>Ação</translation>
+        <translation>حدث</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="151"/>
         <source>Parenthetical</source>
-        <translation>Parênteses</translation>
+        <translation>بين قوسين</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="153"/>
         <source>Lyrics</source>
-        <translation>Letra de música</translation>
+        <translation>كلمات الأغنية</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="155"/>
         <source>Transition</source>
-        <translation>Transição</translation>
+        <translation>الانتقال</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="157"/>
         <source>Shot</source>
-        <translation type="unfinished"></translation>
+        <translation>لقطة</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="160"/>
@@ -162,57 +162,57 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="167"/>
         <source>Page</source>
-        <translation>Página</translation>
+        <translation>صفحة</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="169"/>
         <source>Panel</source>
-        <translation>Painel</translation>
+        <translation>نافذة</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="171"/>
         <source>Description</source>
-        <translation>Descrição</translation>
+        <translation>وصف</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="174"/>
         <source>Heading 1</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان 1</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="176"/>
         <source>Heading 2</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان 2</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="178"/>
         <source>Heading 3</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان 3</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="180"/>
         <source>Heading 4</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان 4</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="182"/>
         <source>Heading 5</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان 5</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="184"/>
         <source>Heading 6</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان 6</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="186"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>نص</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="885"/>
         <source>Copy of </source>
-        <translation>Cópia de</translation>
+        <translation>نسخة من</translation>
     </message>
 </context>
 <context>
@@ -220,7 +220,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/characters/characters_model.cpp" line="179"/>
         <source>New group</source>
-        <translation type="unfinished"></translation>
+        <translation>مجموعة جديدة</translation>
     </message>
 </context>
 <context>
@@ -228,59 +228,59 @@
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="107"/>
         <source>page</source>
-        <translation>página</translation>
+        <translation>صفحة</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="111"/>
         <source>pages</source>
         <extracomment>Comic book title pages</extracomment>
-        <translation>páginas</translation>
+        <translation>صفحات</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="116"/>
         <source>panel</source>
         <extracomment>Comic book panel intro</extracomment>
-        <translation>painel</translation>
+        <translation>نافذة</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
         <source>CAPTION</source>
-        <translation>LEGENDA</translation>
+        <translation>وصف</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
         <source>NARRATION</source>
-        <translation>NARRAÇÃO</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
         <source>SFX</source>
-        <translation>SFX</translation>
+        <translation>مؤثرات خاصة</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>OFF</source>
-        <translation>FORA</translation>
+        <translation>غير فعال</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>WHISPER</source>
-        <translation>SUSSURRO</translation>
+        <translation>همس</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>BURST</source>
-        <translation>GRITO</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>WEAK</source>
-        <translation>FRACO</translation>
+        <translation>ضعيف</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>SINGING</source>
-        <translation>A CANTAR</translation>
+        <translation>غناء</translation>
     </message>
 </context>
 <context>
@@ -288,22 +288,22 @@
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="211"/>
         <source>Paragraph</source>
-        <translation>Parágrafo</translation>
+        <translation>فقرة</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="215"/>
         <source>Words</source>
-        <translation>Palavras</translation>
+        <translation>كلمات</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="219"/>
         <source>Occurrences</source>
-        <translation>Ocorrências</translation>
+        <translation>تكرارات</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="223"/>
         <source>Percents</source>
-        <translation>Percentagens</translation>
+        <translation>النسب المئوية</translation>
     </message>
 </context>
 <context>
@@ -311,12 +311,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="23"/>
         <source>International template (page: A4; font: Courier Prime)</source>
-        <translation>Modelo internacional (página: A4; fonte: Courier Prime)</translation>
+        <translation>النموذج العالمي (حجم الورقة: A4 / الخطّ: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="27"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation>Template Estados Unidos (página: Carta; fonte: Courier Prime)</translation>
+        <translation>النموذج الأمريكي (حجم الورقة: A4 / الخطّ: Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -324,42 +324,42 @@
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="25"/>
         <source>INT</source>
-        <translation>INT</translation>
+        <translation>داخلي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="26"/>
         <source>EXT</source>
-        <translation>EXT</translation>
+        <translation>خارجي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="27"/>
         <source>EST</source>
-        <translation>EST</translation>
+        <translation>تأسيس</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="28"/>
         <source>INT./EXT</source>
-        <translation>INT./EXT</translation>
+        <translation>داخلي. / خارجي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="29"/>
         <source>INT/EXT</source>
-        <translation>INT/EXT</translation>
+        <translation>داخلي / خارجي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="30"/>
         <source>EXT./INT</source>
-        <translation>EXT./INT</translation>
+        <translation>خارجي. / داخلي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="31"/>
         <source>EXT/INT</source>
-        <translation>EXT/INT</translation>
+        <translation>خارجي / داخلي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="32"/>
         <source>I/E</source>
-        <translation>I/E</translation>
+        <translation>داخلي / خارجي</translation>
     </message>
 </context>
 <context>
@@ -367,42 +367,42 @@
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="30"/>
         <source>INT</source>
-        <translation>INT</translation>
+        <translation>داخلي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="31"/>
         <source>EXT</source>
-        <translation>EXT</translation>
+        <translation>خارجي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="32"/>
         <source>EST</source>
-        <translation>EST</translation>
+        <translation>تأسيس</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="33"/>
         <source>INT./EXT</source>
-        <translation>INT./EXT</translation>
+        <translation>داخلي. / خارجي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="34"/>
         <source>INT/EXT</source>
-        <translation>INT/EXT</translation>
+        <translation>داخلي / خارجي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="35"/>
         <source>EXT./INT</source>
-        <translation>EXT./INT</translation>
+        <translation>خارجي. / داخلي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="36"/>
         <source>EXT/INT</source>
-        <translation>EXT/INT</translation>
+        <translation>خارجي / داخلي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="37"/>
         <source>I/E</source>
-        <translation>I/E</translation>
+        <translation>داخلي / خارجي</translation>
     </message>
 </context>
 <context>
@@ -411,7 +411,7 @@
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_kit_scenarist_importer.cpp" line="489"/>
         <source>draft</source>
         <extracomment>Draft screenplay imported from KIT Scenarist file</extracomment>
-        <translation>rascunho</translation>
+        <translation>مسودة</translation>
     </message>
 </context>
 <context>
@@ -419,7 +419,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/locations/locations_model.cpp" line="170"/>
         <source>New group</source>
-        <translation type="unfinished"></translation>
+        <translation>مجموعة جديدة</translation>
     </message>
 </context>
 <context>
@@ -427,122 +427,122 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="158"/>
         <source>INT.</source>
-        <translation>INT.</translation>
+        <translation>داخلي.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="159"/>
         <source>EXT.</source>
-        <translation>EXT.</translation>
+        <translation>خارجي.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="160"/>
         <source>INT./EXT.</source>
-        <translation>INT./EXT.</translation>
+        <translation>داخلي. / خارجي.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="161"/>
         <source>EXT./INT.</source>
-        <translation>EXT./INT.</translation>
+        <translation>خارجي. / داخلي.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="166"/>
         <source>DAY</source>
-        <translation>DIA</translation>
+        <translation>نهارا</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="166"/>
         <source>NIGHT</source>
-        <translation>NOITE</translation>
+        <translation>ليلا</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="166"/>
         <source>MORNING</source>
-        <translation>MANHÃ</translation>
+        <translation>صباحا</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="166"/>
         <source>AFTERNOON</source>
-        <translation>TARDE</translation>
+        <translation>عصرا</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="166"/>
         <source>EVENING</source>
-        <translation>NOITE</translation>
+        <translation>مساء</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="167"/>
         <source>LATER</source>
-        <translation>MAIS TARDE</translation>
+        <translation>لاحقا</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="167"/>
         <source>MOMENTS LATER</source>
-        <translation>MOMENTOS DEPOIS</translation>
+        <translation>بعد لحظات </translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="167"/>
         <source>CONTINUOUS</source>
-        <translation>CONTÍNUO</translation>
+        <translation>مستمر</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="167"/>
         <source>THE NEXT DAY</source>
-        <translation>NO PRÓXIMO DIA</translation>
+        <translation>اليوم التالي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
         <source>V.O.</source>
-        <translation>NA</translation>
+        <translation>تعليق صوتي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
         <source>O.S.</source>
-        <translation>F.E</translation>
+        <translation>خارج الإطار</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
         <source>O.C.</source>
-        <translation>F.C</translation>
+        <translation>خارج الكاميرا</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
         <source>SUBTITLE</source>
-        <translation>LEGENDA</translation>
+        <translation>عنوان ثانوي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
         <source>CONT&apos;D</source>
-        <translation>CONT</translation>
+        <translation>مواصلا</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="179"/>
         <source>CUT TO:</source>
-        <translation>CORTAR PARA:</translation>
+        <translation>القطع إلى:</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="179"/>
         <source>FADE IN:</source>
-        <translation>FADE IN:</translation>
+        <translation>ظهور تدريجي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="179"/>
         <source>FADE OUT</source>
-        <translation>FADE OUT</translation>
+        <translation>تَلاشٍ&#xa0;تدريجي</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="180"/>
         <source>FADE TO:</source>
-        <translation type="unfinished"></translation>
+        <translation>تَلاشٍ إلى:</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="180"/>
         <source>DISSOLVE TO:</source>
-        <translation>DISSOLVER PARA:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="180"/>
         <source>BACK TO:</source>
-        <translation>VOLTAR PARA:</translation>
+        <translation>العودة إلى:</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="181"/>
@@ -557,7 +557,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="181"/>
         <source>FADE TO BLACK</source>
-        <translation type="unfinished"></translation>
+        <translation>تَلاشٍ إلى الأسود</translation>
     </message>
 </context>
 <context>
@@ -565,12 +565,12 @@
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="257"/>
         <source>Paragraph</source>
-        <translation>parágrafo</translation>
+        <translation>فقرة</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="261"/>
         <source>Words</source>
-        <translation>Palavras</translation>
+        <translation>كلمات</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="265"/>
@@ -578,7 +578,7 @@
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="387"/>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="451"/>
         <source>Occurrences</source>
-        <translation>Ocorrências</translation>
+        <translation>تكرارات</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="269"/>
@@ -586,22 +586,22 @@
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="391"/>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="455"/>
         <source>Percents</source>
-        <translation>Percentagens</translation>
+        <translation>النسب المئوية</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="322"/>
         <source>Scene time</source>
-        <translation>Tempo de cena</translation>
+        <translation>زمان المشهد</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="383"/>
         <source>Scene intro</source>
-        <translation>Introdução de cena</translation>
+        <translation>إفتتاحية المشهد</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="447"/>
         <source>Character type</source>
-        <translation>Tipo de personagem</translation>
+        <translation>نوع الشخصيّة</translation>
     </message>
 </context>
 <context>
@@ -609,7 +609,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_synopsis_model.cpp" line="9"/>
         <source>Synopsis</source>
-        <translation>Sinopse</translation>
+        <translation>الملخص</translation>
     </message>
 </context>
 <context>
@@ -617,37 +617,37 @@
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="21"/>
         <source>International template (page: A4; font: Courier Prime)</source>
-        <translation>Modelo internacional (tamanho: A4; fonte: Courier Prime)</translation>
+        <translation>النموذج العالمي (حجم الورقة: A4 / الخطّ: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="25"/>
         <source>International template (page: A4; font: Courier New)</source>
-        <translation>Modelo Internacional (página: A4; fonte: Courier New)</translation>
+        <translation>النموذج العالمي (حجم الورقة: A4 / الخطّ: Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="28"/>
         <source>Arabic template (page: A4; font: Courier New)</source>
-        <translation>Modelo Arábico (página: A4; fonte: Courier New)</translation>
+        <translation>النموذج العربي (حجم الورقة: A4 / الخطّ: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="31"/>
         <source>Hebrew template (page: A4; font: Arial)</source>
-        <translation>Modelo hebreu (tamanho: A4; fonte: Arial)</translation>
+        <translation>النموج العبري (حجم الورقة: A4 / الخطّ: Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="34"/>
         <source>Russian template (page: A4; font: Courier New)</source>
-        <translation>Modelo Russo (tamanho: A4; fonte: Courier New)</translation>
+        <translation>النموج الروسي (حجم الورقة: A4 / الخطّ: Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="37"/>
         <source>Tamil template (page: A4; font: Mukta Malar)</source>
-        <translation>Modelo tâmil (tamanho: A4; fonte: Mukta Malar)</translation>
+        <translation>النموج التاميلي (حجم الورقة: A4 / الخطّ: Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="40"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation>Template Estados Unidos (página: Carta; fonte: Courier Prime)</translation>
+        <translation>نموذج السناريو الأمريكي (حجم الورقة: A4 / الخطّ: Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -655,56 +655,56 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="200"/>
         <source>Recycle bin</source>
-        <translation>Reciclagem</translation>
+        <translation>سلة المهملات</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="206"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="212"/>
         <source>Screenplay</source>
-        <translation>Roteiro</translation>
+        <translation>سيناريو</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="208"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="229"/>
         <source>Title page</source>
-        <translation>Página de titulo</translation>
+        <translation>صفحة العنوان</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="210"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="231"/>
         <source>Synopsis</source>
-        <translation>Sinopse</translation>
+        <translation>الملخص</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="220"/>
         <source>Treatment</source>
-        <translation>Tratamento</translation>
+        <translation>المعالجة</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="214"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="234"/>
         <source>Statistics</source>
-        <translation>Estatisticas</translation>
+        <translation>الإحصائيات</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="227"/>
         <source>Comic book</source>
-        <translation>Banda desenhada</translation>
+        <translation>قصص مصوّرة</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="233"/>
         <source>Script</source>
-        <translation>Roteiro</translation>
+        <translation>النصّ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="240"/>
         <source>Characters</source>
-        <translation>Personagens</translation>
+        <translation>الشخصيات</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="251"/>
         <source>Locations</source>
-        <translation>Localizações</translation>
+        <translation>المواقع </translation>
     </message>
 </context>
 <context>
@@ -712,27 +712,27 @@
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="22"/>
         <source>Monotype template (page: A4; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>النموذج أحادي النمط (حجم الورقة: A4 / الخطّ: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="25"/>
         <source>Monotype template (page: A4; font: Courier New)</source>
-        <translation type="unfinished"></translation>
+        <translation>النموذج أحادي النمط (حجم الورقة: A4 / الخطّ: Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="28"/>
         <source>Monotype template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>النموذج أحادي النمط (حجم الورقة: Letter / الخطّ: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="31"/>
         <source>Sans serif template (page: A4; font: Roboto)</source>
-        <translation type="unfinished"></translation>
+        <translation>النموذج بدون أطراف الحروف (حجم الورقة: A4 / الخطّ: Roboto)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="34"/>
         <source>Sans serif template (page: Letter; font: Roboto)</source>
-        <translation type="unfinished"></translation>
+        <translation>النموذج بدون أطراف الحروف (حجم الورقة: Letter / الخطّ: Roboto)</translation>
     </message>
 </context>
 <context>
@@ -741,17 +741,17 @@
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="308"/>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="369"/>
         <source>[UNDEFINED]</source>
-        <translation type="unfinished"></translation>
+        <translation>[مجهول]</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="434"/>
         <source>More then 10 dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>أكثر من 10 أقوال</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="438"/>
         <source>About 10 dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>تقريبا 10 أقوال</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="442"/>
@@ -766,13 +766,13 @@
         <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="39"/>
         <source>CONT&apos;D</source>
         <extracomment>Continued</extracomment>
-        <translation>CONT</translation>
+        <translation>مواصلا</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/document/comic_book/text/comic_book_text_corrector.cpp" line="47"/>
         <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="44"/>
         <source>MORE</source>
-        <translation>MAIS</translation>
+        <translation>المزيد</translation>
     </message>
 </context>
 <context>
@@ -780,7 +780,7 @@
     <message>
         <location filename="../../corelib/ui/widgets/color_picker/color_palette.cpp" line="315"/>
         <source>User colors</source>
-        <translation type="unfinished"></translation>
+        <translation>ألوان المستخدم</translation>
     </message>
 </context>
 <context>
@@ -788,17 +788,17 @@
     <message>
         <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="151"/>
         <source>Color hex code</source>
-        <translation type="unfinished"></translation>
+        <translation>رمز اللون</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="152"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="153"/>
         <source>Add</source>
-        <translation>Adicionar</translation>
+        <translation>أضف</translation>
     </message>
 </context>
 <context>
@@ -806,7 +806,7 @@
     <message>
         <location filename="../../corelib/data_layer/database.cpp" line="73"/>
         <source>Project was modified in a newer version. Update to the latest version to open it.</source>
-        <translation type="unfinished"></translation>
+        <translation>تمّ تسيجل هذا الملف في نسخة محدّثة. قمّ بالتحديث لآخر نسخة لتفتحه. </translation>
     </message>
 </context>
 <context>
@@ -941,12 +941,12 @@
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="229"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="230"/>
         <source>Yes, delete</source>
-        <translation type="unfinished"></translation>
+        <translation>نعم, حذف</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="328"/>
@@ -979,7 +979,7 @@
     <message>
         <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="99"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="100"/>
@@ -1067,7 +1067,7 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="926"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="927"/>
@@ -1077,7 +1077,7 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="928"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>حفظ</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="987"/>
@@ -1125,12 +1125,12 @@
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="155"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="156"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>نعم</translation>
     </message>
 </context>
 <context>
@@ -1143,12 +1143,12 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="221"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="222"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>نعم</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="311"/>
@@ -1158,12 +1158,12 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="313"/>
         <source>Maybe later</source>
-        <translation type="unfinished"></translation>
+        <translation>ربما لاحقاً</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="314"/>
         <source>Upgrade</source>
-        <translation type="unfinished"></translation>
+        <translation>تحديث</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="331"/>
@@ -1234,12 +1234,12 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="145"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="146"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>نعم</translation>
     </message>
 </context>
 <context>
@@ -1252,12 +1252,12 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="215"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="216"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>نعم</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="298"/>
@@ -1267,12 +1267,12 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="300"/>
         <source>Maybe later</source>
-        <translation type="unfinished"></translation>
+        <translation>ربما لاحقاً</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="301"/>
         <source>Upgrade</source>
-        <translation type="unfinished"></translation>
+        <translation>تحديث</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="318"/>
@@ -1290,7 +1290,7 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="157"/>
         <source>Add character</source>
-        <translation type="unfinished"></translation>
+        <translation>أضف شخصية</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="162"/>
@@ -1300,7 +1300,7 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="167"/>
         <source>Add location</source>
-        <translation type="unfinished"></translation>
+        <translation>اضف موقع</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="173"/>
@@ -1326,7 +1326,7 @@
         <location filename="../management_layer/content/project/project_manager.cpp" line="311"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="563"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>لا</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="312"/>
@@ -1378,7 +1378,7 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="505"/>
         <source>Save all locations</source>
-        <translation type="unfinished"></translation>
+        <translation>احفظ جميع المواقع </translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="562"/>
@@ -1388,27 +1388,27 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1203"/>
         <source>Title page</source>
-        <translation>Página de titulo</translation>
+        <translation>صفحة العنوان</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1206"/>
         <source>Synopsis</source>
-        <translation>Sinopse</translation>
+        <translation>الملخص</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1218"/>
         <source>Treatment</source>
-        <translation>Tratamento</translation>
+        <translation>المعالجة</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1209"/>
         <source>Screenplay</source>
-        <translation>Roteiro</translation>
+        <translation>سيناريو</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1212"/>
         <source>Statistics</source>
-        <translation>Estatisticas</translation>
+        <translation>الإحصائيات</translation>
     </message>
 </context>
 <context>
@@ -1429,7 +1429,7 @@
     <message>
         <location filename="../management_layer/content/settings/screenplay_template_manager.cpp" line="288"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/screenplay_template_manager.cpp" line="289"/>
@@ -1439,7 +1439,7 @@
     <message>
         <location filename="../management_layer/content/settings/screenplay_template_manager.cpp" line="290"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>حفظ</translation>
     </message>
 </context>
 <context>
@@ -1452,7 +1452,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="224"/>
         <source>Screenplay</source>
-        <translation>Roteiro</translation>
+        <translation>سيناريو</translation>
     </message>
 </context>
 <context>
@@ -1465,7 +1465,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="223"/>
         <source>Treatment</source>
-        <translation>Tratamento</translation>
+        <translation>المعالجة</translation>
     </message>
 </context>
 <context>
@@ -1627,7 +1627,7 @@
         <location filename="../management_layer/plugins_builder.cpp" line="270"/>
         <location filename="../management_layer/plugins_builder.cpp" line="289"/>
         <source>Statistics</source>
-        <translation>Estatisticas</translation>
+        <translation>الإحصائيات</translation>
     </message>
 </context>
 <context>
@@ -1963,12 +1963,12 @@
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/add_bookmark_view.cpp" line="155"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/add_bookmark_view.cpp" line="156"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>حفظ</translation>
     </message>
 </context>
 <context>
@@ -1981,12 +1981,12 @@
     <message>
         <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="127"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="128"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>حفظ</translation>
     </message>
 </context>
 <context>
@@ -2035,7 +2035,7 @@
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="134"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="135"/>
@@ -2092,7 +2092,7 @@
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="284"/>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>أساسي</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="284"/>
@@ -2108,7 +2108,7 @@
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="284"/>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="290"/>
         <source>Undefined</source>
-        <translation>Indefinido</translation>
+        <translation>غير مُحَدد</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="286"/>
@@ -2284,7 +2284,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="797"/>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>أساسي</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="797"/>
@@ -2300,7 +2300,7 @@
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="797"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="803"/>
         <source>Undefined</source>
-        <translation>Indefinido</translation>
+        <translation>غير مُحَدد</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="799"/>
@@ -2385,7 +2385,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="270"/>
         <source>Add character</source>
-        <translation type="unfinished"></translation>
+        <translation>أضف شخصية</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="271"/>
@@ -2468,7 +2468,7 @@
     <message>
         <location filename="../ui/export/comic_book_export_dialog.cpp" line="199"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
 </context>
 <context>
@@ -2496,22 +2496,22 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="191"/>
         <source>Title page</source>
-        <translation>Página de titulo</translation>
+        <translation>صفحة العنوان</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="192"/>
         <source>Synopsis</source>
-        <translation>Sinopse</translation>
+        <translation>الملخص</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="193"/>
         <source>Script</source>
-        <translation>Roteiro</translation>
+        <translation>نص</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="194"/>
         <source>Statistics</source>
-        <translation>Estatisticas</translation>
+        <translation>الإحصائيات</translation>
     </message>
 </context>
 <context>
@@ -2552,7 +2552,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="184"/>
         <source>Words</source>
-        <translation>Palavras</translation>
+        <translation>كلمات</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="185"/>
@@ -2573,6 +2573,10 @@
         <translation type="unfinished">
             <numerusform></numerusform>
             <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -2591,7 +2595,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="81"/>
         <source>Scene heading</source>
-        <translation>Cabeçalho de cena</translation>
+        <translation>عنوان المشهد</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="224"/>
@@ -2657,12 +2661,12 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="274"/>
         <source>Exit from search</source>
-        <translation type="unfinished"></translation>
+        <translation>مغادرة البحث</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="277"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>بحث</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="278"/>
@@ -2728,6 +2732,10 @@
         <translation type="unfinished">
             <numerusform></numerusform>
             <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -2736,7 +2744,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="668"/>
         <source>Formatting</source>
-        <translation>Formatação</translation>
+        <translation>التنسيق</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="669"/>
@@ -2755,6 +2763,10 @@
         <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="240"/>
         <source>%n reply(s)</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -2946,7 +2958,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="105"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="106"/>
@@ -3009,17 +3021,17 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="218"/>
         <source>Folder</source>
-        <translation>Pasta</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="219"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>نص</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="220"/>
         <source>Character</source>
-        <translation>Personagem</translation>
+        <translation>الشخصية</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="221"/>
@@ -3029,12 +3041,12 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="222"/>
         <source>Screenplay</source>
-        <translation>Roteiro</translation>
+        <translation>سيناريو</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="223"/>
         <source>Comic book</source>
-        <translation>Banda desenhada</translation>
+        <translation>قصص مصورة</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="225"/>
@@ -3044,7 +3056,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="227"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="228"/>
@@ -3072,7 +3084,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="105"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="106"/>
@@ -3145,12 +3157,12 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
         <source>Screenplay</source>
-        <translation>Roteiro</translation>
+        <translation>سيناريو</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
         <source>Comic book</source>
-        <translation>Banda desenhada</translation>
+        <translation>قصص مصورة</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="316"/>
@@ -3195,7 +3207,7 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="325"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="326"/>
@@ -3241,7 +3253,7 @@
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="132"/>
         <source>Screenplay</source>
-        <translation>Roteiro</translation>
+        <translation>سيناريو</translation>
     </message>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="133"/>
@@ -3261,7 +3273,7 @@
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="137"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
 </context>
 <context>
@@ -3269,7 +3281,7 @@
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="267"/>
         <source>Translation is ready for %1%</source>
-        <translation>A tradução está pronta para %1%</translation>
+        <translation>الترجمة جاهزة لـ %1٪</translation>
     </message>
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="305"/>
@@ -3307,7 +3319,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="209"/>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>أساسي</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="209"/>
@@ -3322,7 +3334,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="209"/>
         <source>Undefined</source>
-        <translation>Indefinido</translation>
+        <translation>غير مُحَدد</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="211"/>
@@ -3482,7 +3494,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="721"/>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>أساسي</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="721"/>
@@ -3497,7 +3509,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="721"/>
         <source>Undefined</source>
-        <translation>Indefinido</translation>
+        <translation>غير مُحَدد</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="723"/>
@@ -3530,7 +3542,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="267"/>
         <source>Add location</source>
-        <translation type="unfinished"></translation>
+        <translation>اضف موقع</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="268"/>
@@ -3608,7 +3620,7 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="202"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
 </context>
 <context>
@@ -4008,7 +4020,7 @@
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="95"/>
         <source>Translation is ready for %1%. Know how you can improve it.</source>
-        <translation>A tradução está pronta para %1%. Saiba como você pode melhorá-lo. </translation>
+        <translation>الترجمة جاهزة لـ %1٪. اعرف كيف يمكنك تحسينه.&#xa0;</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="407"/>
@@ -4202,17 +4214,17 @@
     <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="146"/>
         <source>via PayPal</source>
-        <translation type="unfinished"></translation>
+        <translation>عن طريق PayPal</translation>
     </message>
     <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="147"/>
         <source>via bank card</source>
-        <translation type="unfinished"></translation>
+        <translation>عن طريق بطاقة بنكيّة</translation>
     </message>
     <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="148"/>
         <source>via Yandex.Money</source>
-        <translation type="unfinished"></translation>
+        <translation>عن طريق Yandex.Money</translation>
     </message>
     <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="149"/>
@@ -4222,7 +4234,7 @@
     <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="150"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
 </context>
 <context>
@@ -4285,7 +4297,7 @@
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="264"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
 </context>
 <context>
@@ -4313,27 +4325,27 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="201"/>
         <source>Title page</source>
-        <translation>Página de titulo</translation>
+        <translation>صفحة العنوان</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="202"/>
         <source>Synopsis</source>
-        <translation>Sinopse</translation>
+        <translation>الملخص</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="203"/>
         <source>Treatment</source>
-        <translation>Tratamento</translation>
+        <translation>المعالجة</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="204"/>
         <source>Screenplay</source>
-        <translation>Roteiro</translation>
+        <translation>سيناريو</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="205"/>
         <source>Statistics</source>
-        <translation>Estatisticas</translation>
+        <translation>الإحصائيات</translation>
     </message>
 </context>
 <context>
@@ -4404,7 +4416,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="246"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>المدّة</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="247"/>
@@ -4414,7 +4426,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="248"/>
         <source>Words</source>
-        <translation>Palavras</translation>
+        <translation>كلمات</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="249"/>
@@ -4496,25 +4508,25 @@
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="355"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="367"/>
         <source>Left</source>
-        <translation>Esquerda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="357"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="364"/>
         <source>Top</source>
-        <translation>Topo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="359"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="369"/>
         <source>Right</source>
-        <translation>Direita</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="361"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="365"/>
         <source>Bottom</source>
-        <translation>Fundo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="363"/>
@@ -4529,7 +4541,7 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="368"/>
         <source>Center</source>
-        <translation>Centro</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="370"/>
@@ -4557,12 +4569,12 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="570"/>
         <source>Font family</source>
-        <translation>Familia de Fontes</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="571"/>
         <source>Font size</source>
-        <translation>Tamaho de Fonte</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="572"/>
@@ -4577,41 +4589,41 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="574"/>
         <source>Bold</source>
-        <translation>Negrito</translation>
+        <translation>غليظ</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="575"/>
         <source>Italic</source>
-        <translation>Itálico</translation>
+        <translation>مائل</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="576"/>
         <source>Underline</source>
-        <translation>Sublinhado</translation>
+        <translation>تسطير</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="577"/>
         <source>Align text on the page</source>
-        <translation>Alinhar texto na página</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="578"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="588"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="594"/>
         <source>Left</source>
-        <translation>Esquerda</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="579"/>
         <source>Center</source>
-        <translation>Centro</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="580"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="590"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="596"/>
         <source>Right</source>
-        <translation>Direita</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="581"/>
@@ -4621,67 +4633,67 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="582"/>
         <source>Vertical indentation</source>
-        <translation>Indentação Vertical</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="583"/>
         <source>Top</source>
-        <translation>Topo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="584"/>
         <source>Bottom</source>
-        <translation>Fundo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="585"/>
         <source>lines</source>
-        <translation>linhas</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="587"/>
         <source>Horizontal indentation</source>
-        <translation>Indentação Horinzontal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="593"/>
         <source>Horizontal indentation (for two-column mode)</source>
-        <translation>Indentação Horinzontal (para modo de duas colunas)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="598"/>
         <source>Line spacing</source>
-        <translation>Espaçamento de linhas</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="599"/>
         <source>Type</source>
-        <translation>Tipo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="601"/>
         <source>Single</source>
-        <translation>Unico</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="601"/>
         <source>One and half</source>
-        <translation>Um e meio</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="601"/>
         <source>Double</source>
-        <translation>Duplo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="601"/>
         <source>Fixed</source>
-        <translation>Fixo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="602"/>
         <source>Value</source>
-        <translation>Valor</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4689,7 +4701,7 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_tool_bar.cpp" line="84"/>
         <source>Go back to the previous screen</source>
-        <translation>Voltar para ecrã anterior</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_tool_bar.cpp" line="85"/>
@@ -4740,7 +4752,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1333"/>
         <source>Add</source>
-        <translation>Adicionar</translation>
+        <translation>أضف</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1339"/>
@@ -4763,7 +4775,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="81"/>
         <source>Scene heading</source>
-        <translation>Cabeçalho de cena</translation>
+        <translation>عنوان المشهد</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="224"/>
@@ -4829,12 +4841,12 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="274"/>
         <source>Exit from search</source>
-        <translation type="unfinished"></translation>
+        <translation>مغادرة البحث</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="277"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>بحث</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="278"/>
@@ -4905,7 +4917,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="931"/>
         <source>Formatting</source>
-        <translation>Formatação</translation>
+        <translation>التنسيق</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="932"/>
@@ -4928,7 +4940,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="82"/>
         <source>Scene heading</source>
-        <translation>Cabeçalho de cena</translation>
+        <translation>عنوان المشهد</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="226"/>
@@ -4994,12 +5006,12 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="277"/>
         <source>Exit from search</source>
-        <translation type="unfinished"></translation>
+        <translation>مغادرة البحث</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="280"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>بحث</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="281"/>
@@ -5062,7 +5074,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="766"/>
         <source>Formatting</source>
-        <translation>Formatação</translation>
+        <translation>التنسيق</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="767"/>
@@ -5109,7 +5121,7 @@
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="152"/>
         <source>User interface</source>
-        <translation type="unfinished"></translation>
+        <translation>واجهة البرنامج</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="155"/>
@@ -5124,7 +5136,7 @@
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="159"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>العناصر</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="160"/>
@@ -5134,17 +5146,17 @@
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="161"/>
         <source>Screenplay</source>
-        <translation>Roteiro</translation>
+        <translation>سيناريو</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="162"/>
         <source>Comic book</source>
-        <translation>Banda desenhada</translation>
+        <translation>قصص مصورة</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="163"/>
         <source>Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>إختصارات</translation>
     </message>
 </context>
 <context>
@@ -5152,7 +5164,7 @@
     <message>
         <location filename="../ui/settings/settings_tool_bar.cpp" line="51"/>
         <source>Go back to the previous screen</source>
-        <translation>Voltar para ecrã anterior</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5801,7 +5813,7 @@
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1749"/>
         <source>User interface</source>
-        <translation type="unfinished"></translation>
+        <translation>واجهة البرنامج</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1750"/>
@@ -5851,7 +5863,7 @@
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1832"/>
         <source>Add paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>إضافة فقرة</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1833"/>
@@ -5888,7 +5900,7 @@
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
-        <translation type="unfinished"></translation>
+        <translation>خاصية الحفظ الآلي تقوم بحفظ المشروع كل 3 ثواني في حال لم تقم بإستخدام الفأرة أو لوحة المفاتيح وكلّ 3 دقائق إذا كنت تعمل دون إنقطاع.</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1620"/>
@@ -5913,7 +5925,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1756"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>العناصر</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1760"/>
@@ -5996,7 +6008,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1795"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>المدّة</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1796"/>
@@ -6012,19 +6024,19 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1798"/>
         <source>pages</source>
-        <translation>páginas</translation>
+        <translation>صفحات</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1799"/>
         <location filename="../ui/settings/settings_view.cpp" line="1806"/>
         <source>has duration</source>
-        <translation type="unfinished"></translation>
+        <translation>مدّته</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1800"/>
         <location filename="../ui/settings/settings_view.cpp" line="1807"/>
         <source>seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>ثانية</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1802"/>
@@ -6034,7 +6046,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1804"/>
         <source>letters</source>
-        <translation type="unfinished"></translation>
+        <translation>حروف</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1805"/>
@@ -6054,7 +6066,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1822"/>
         <source>Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>إختصارات</translation>
     </message>
 </context>
 <context>
@@ -6062,7 +6074,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="81"/>
         <source>Scene heading</source>
-        <translation>Cabeçalho de cena</translation>
+        <translation>عنوان المشهد</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="218"/>
@@ -6122,12 +6134,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="212"/>
         <source>Exit from search</source>
-        <translation type="unfinished"></translation>
+        <translation>مغادرة البحث</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="215"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>بحث</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="216"/>
@@ -6179,7 +6191,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="669"/>
         <source>Formatting</source>
-        <translation>Formatação</translation>
+        <translation>التنسيق</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="670"/>
@@ -6227,7 +6239,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="392"/>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>أساسي</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="393"/>
@@ -6237,7 +6249,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="394"/>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation>الخلفية</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="395"/>
@@ -6247,7 +6259,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="396"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>مشكل</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="397"/>
@@ -6257,12 +6269,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="399"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="400"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>حفظ</translation>
     </message>
 </context>
 <context>
@@ -6298,27 +6310,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="90"/>
         <source>via PayPal</source>
-        <translation type="unfinished"></translation>
+        <translation>عن طريق PayPal</translation>
     </message>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="91"/>
         <source>via bank card</source>
-        <translation type="unfinished"></translation>
+        <translation>عن طريق بطاقة بنكيّة</translation>
     </message>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="92"/>
         <source>via Yandex.Money</source>
-        <translation type="unfinished"></translation>
+        <translation>عن طريق Yandex.Money</translation>
     </message>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="93"/>
         <source>Upgrade</source>
-        <translation type="unfinished"></translation>
+        <translation>تحديث</translation>
     </message>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="94"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>الغاء</translation>
     </message>
 </context>
 <context>
@@ -6339,12 +6351,20 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
             <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="269"/>
         <source>in %n minute(s)</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -6380,7 +6400,8 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="311"/>
         <source>Sorry, we have some error while loading. Error is: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>للأسف، هناك مشكلة أثناء عملية التحميل.
+رمز المشكل: 1%</translation>
     </message>
 </context>
 </TS>

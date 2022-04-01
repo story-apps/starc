@@ -18,6 +18,7 @@ HEADERS += \
 
 TRANSLATIONS += \
     core/translations/_en_source.ts \
+    core/translations/translation_ar.ts \
     core/translations/translation_az.ts \
     core/translations/translation_be.ts \
     core/translations/translation_ca.ts \
