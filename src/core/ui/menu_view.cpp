@@ -8,6 +8,7 @@
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/logging.h>
 
 #include <QAction>
 #include <QActionGroup>
@@ -328,6 +329,7 @@ void MenuView::setCurrentDocumentExportAvailable(bool _available)
 
 void MenuView::closeMenu()
 {
+    Log::info("Hide menu");
     WAF::Animation::sideSlideOut(this);
 }
 

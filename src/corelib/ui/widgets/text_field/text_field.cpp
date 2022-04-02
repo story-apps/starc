@@ -2,6 +2,7 @@
 
 #include <include/custom_events.h>
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/animations/click_animation.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
@@ -51,7 +52,7 @@ public:
     QMarginsF margins() const;
 
     /**
-     * @brief Определить область декорирования для заданного размера
+     * @brief Определить область декорирования
      */
     /** @{ */
     QRectF decorationRect() const;
@@ -81,7 +82,7 @@ public:
     /**
      * @brief Определить область для отрисовки иконки
      */
-    QRectF iconRect(int _width) const;
+    QRectF trailingIconRect() const;
 
 
     TextField* q = nullptr;
@@ -113,6 +114,11 @@ public:
     QVariantAnimation labelFontSizeAnimation;
     QVariantAnimation labelTopLeftAnimation;
     QVariantAnimation decorationAnimation;
+
+    /**
+     * @brief Декорация иконки при клике
+     */
+    ClickAnimation iconDecorationAnimation;
 };
 
 TextField::Implementation::Implementation(TextField* _q)
@@ -186,6 +192,10 @@ void TextField::Implementation::reconfigure()
                 / 2);
     labelTopLeftAnimation.setStartValue(labelCurrentTopLeft);
     labelTopLeftAnimation.setEndValue(labelNewTopLeft);
+
+    iconDecorationAnimation.setRadiusInterval(Ui::DesignSystem::textField().iconSize().height()
+                                                  / 2.0,
+                                              Ui::DesignSystem::radioButton().height() / 2.0);
 }
 
 void TextField::Implementation::animateLabelToTop()
@@ -335,13 +345,13 @@ QRectF TextField::Implementation::suffixRect() const
     return QRectF(topLeft, QSizeF(suffixWidth, q->height() - margins().top() - margins().bottom()));
 }
 
-QRectF TextField::Implementation::iconRect(int _width) const
+QRectF TextField::Implementation::trailingIconRect() const
 {
     int topLeft = 0;
     if (q->isRightToLeft()) {
         topLeft = contentMargins().left() + margins().left();
     } else {
-        topLeft = _width - contentMargins().right() - margins().right()
+        topLeft = q->width() - contentMargins().right() - margins().right()
             - Ui::DesignSystem::textField().iconSize().width();
     }
     return QRectF(QPointF(topLeft, Ui::DesignSystem::textField().iconTop()),
@@ -400,12 +410,16 @@ TextField::TextField(QWidget* _parent)
         menu->setActions(actions);
         menu->showContextMenu(mapToGlobal(_position));
     });
-    connect(&d->labelColorAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+    connect(&d->labelColorAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&TextField::update));
     connect(&d->labelFontSizeAnimation, &QVariantAnimation::valueChanged, this,
-            [this] { update(); });
+            qOverload<>(&TextField::update));
     connect(&d->labelTopLeftAnimation, &QVariantAnimation::valueChanged, this,
-            [this] { update(); });
-    connect(&d->decorationAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
+            qOverload<>(&TextField::update));
+    connect(&d->decorationAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&TextField::update));
+    connect(&d->iconDecorationAnimation, &ClickAnimation::valueChanged, this,
+            qOverload<>(&TextField::update));
     connect(document(), &QTextDocument::contentsChange, this, &TextField::updateGeometry);
 }
 
@@ -764,7 +778,7 @@ bool TextField::event(QEvent* _event)
 
     case QEvent::ToolTip: {
         QHelpEvent* event = static_cast<QHelpEvent*>(_event);
-        const QRectF iconRect = d->iconRect(width());
+        const QRectF iconRect = d->trailingIconRect();
         if (iconRect.contains(event->pos())) {
             QToolTip::showText(event->globalPos(), d->trailingIconToolTip);
         } else {
@@ -878,7 +892,7 @@ void TextField::paintEvent(QPaintEvent* _event)
         painter.setFont(Ui::DesignSystem::font().iconsMid());
         painter.setPen(d->trailingIconColor.isValid() ? d->trailingIconColor
                                                       : palette().color(QPalette::Text));
-        const auto iconRect = d->iconRect(width());
+        const auto iconRect = d->trailingIconRect();
         painter.drawText(iconRect.toRect(), Qt::AlignCenter, d->trailingIcon);
     }
     //
@@ -922,6 +936,18 @@ void TextField::paintEvent(QPaintEvent* _event)
                               Ui::DesignSystem::textField().helperHeight());
         const QString text = !d->error.isEmpty() ? d->error : d->helper;
         painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, text);
+    }
+    //
+    // ... декорация нажатии на кнопке
+    //
+    if (d->iconDecorationAnimation.state() == ClickAnimation::Running) {
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(d->trailingIconColor.isValid() ? d->trailingIconColor
+                                                        : palette().color(QPalette::Text));
+        painter.setOpacity(d->iconDecorationAnimation.opacity());
+        const auto radius = d->iconDecorationAnimation.radius();
+        painter.drawEllipse(d->trailingIconRect().center(), radius, radius);
+        painter.setOpacity(1.0);
     }
     //
     painter.end();
@@ -997,9 +1023,19 @@ void TextField::focusOutEvent(QFocusEvent* _event)
     d->decorationAnimation.start();
 }
 
+void TextField::mousePressEvent(QMouseEvent* _event)
+{
+    const QRectF iconRect = d->trailingIconRect();
+    if (iconRect.contains(_event->pos())) {
+        d->iconDecorationAnimation.start();
+    }
+
+    BaseTextEdit::mousePressEvent(_event);
+}
+
 void TextField::mouseReleaseEvent(QMouseEvent* _event)
 {
-    const QRectF iconRect = d->iconRect(width());
+    const QRectF iconRect = d->trailingIconRect();
     if (iconRect.contains(_event->pos())) {
         emit trailingIconPressed();
         _event->accept();
@@ -1019,7 +1055,7 @@ void TextField::mouseMoveEvent(QMouseEvent* _event)
         return;
     }
 
-    const QRectF iconRect = d->iconRect(width());
+    const QRectF iconRect = d->trailingIconRect();
     if (iconRect.contains(_event->pos())) {
         viewport()->setCursor(Qt::ArrowCursor);
     } else {

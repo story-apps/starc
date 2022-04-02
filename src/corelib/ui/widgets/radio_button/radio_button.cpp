@@ -1,51 +1,24 @@
 #include "radio_button.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/animations/click_animation.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QPaintEvent>
 #include <QPainter>
-#include <QVariantAnimation>
 
 class RadioButton::Implementation
 {
 public:
-    Implementation();
-
-    /**
-     * @brief Анимировать клик
-     */
-    void animateClick();
-
-
     bool isChecked = false;
     QString text;
 
     /**
      * @brief  Декорации переключателя при клике
      */
-    QVariantAnimation decorationRadiusAnimation;
-    QVariantAnimation decorationOpacityAnimation;
+    ClickAnimation decorationAnimation;
 };
-
-RadioButton::Implementation::Implementation()
-{
-    decorationRadiusAnimation.setEasingCurve(QEasingCurve::InOutQuad);
-    decorationRadiusAnimation.setDuration(160);
-
-    decorationOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
-    decorationOpacityAnimation.setStartValue(0.5);
-    decorationOpacityAnimation.setEndValue(0.0);
-    decorationOpacityAnimation.setDuration(160);
-}
-
-void RadioButton::Implementation::animateClick()
-{
-    decorationOpacityAnimation.setCurrentTime(0);
-    decorationRadiusAnimation.start();
-    decorationOpacityAnimation.start();
-}
 
 
 // ****
@@ -58,10 +31,8 @@ RadioButton::RadioButton(QWidget* _parent)
     setAttribute(Qt::WA_Hover);
     setFocusPolicy(Qt::StrongFocus);
 
-    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
-            [this] { update(); });
-    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
-            [this] { update(); });
+    connect(&d->decorationAnimation, &ClickAnimation::valueChanged, this,
+            qOverload<>(&RadioButton::update));
 
     designSystemChangeEvent(nullptr);
 }
@@ -116,6 +87,9 @@ void RadioButton::paintEvent(QPaintEvent* _event)
     //
     painter.fillRect(_event->rect(), backgroundColor());
 
+    //
+    // Настраиваем размещение текста для разных языков
+    //
     qreal textRectX = 0;
     qreal textWidth = 0;
     QRectF textRect;
@@ -131,12 +105,12 @@ void RadioButton::paintEvent(QPaintEvent* _event)
         textWidth = width() - textRectX - Ui::DesignSystem::radioButton().margins().right();
         textRect.setRect(textRectX, 0, width() - textRectX, sizeHint().height());
     } else {
-        textRectX = Ui::DesignSystem::radioButton().margins().left();
         textWidth = width() - Ui::DesignSystem::radioButton().margins().left()
             - Ui::DesignSystem::radioButton().spacing()
             - Ui::DesignSystem::radioButton().iconSize().width()
             - Ui::DesignSystem::radioButton().margins().right();
 
+        textRectX = Ui::DesignSystem::radioButton().margins().left();
         textRect.setRect(textRectX, 0, textWidth, sizeHint().height());
         iconRect.setRect(textRectX + textWidth + Ui::DesignSystem::radioButton().spacing(),
                          Ui::DesignSystem::radioButton().margins().top(),
@@ -151,17 +125,16 @@ void RadioButton::paintEvent(QPaintEvent* _event)
         painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
         painter.setOpacity(hasFocus() ? Ui::DesignSystem::focusBackgroundOpacity()
                                       : Ui::DesignSystem::hoverBackgroundOpacity());
-        const auto radius = d->decorationRadiusAnimation.endValue().toReal();
+        const auto radius = d->decorationAnimation.maximumRadius();
         painter.drawEllipse(iconRect.center(), radius, radius);
         painter.setOpacity(1.0);
     }
-    if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
-        || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
+    if (d->decorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
         painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
-        painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
-        painter.drawEllipse(iconRect.center(), d->decorationRadiusAnimation.currentValue().toReal(),
-                            d->decorationRadiusAnimation.currentValue().toReal());
+        painter.setOpacity(d->decorationAnimation.opacity());
+        const auto radius = d->decorationAnimation.radius();
+        painter.drawEllipse(iconRect.center(), radius, radius);
         painter.setOpacity(1.0);
     }
 
@@ -193,7 +166,7 @@ void RadioButton::paintBox(QPainter& _painter, const QRectF& _rect, const QColor
 void RadioButton::mousePressEvent(QMouseEvent* _event)
 {
     Q_UNUSED(_event);
-    d->animateClick();
+    d->decorationAnimation.start();
 }
 
 void RadioButton::mouseReleaseEvent(QMouseEvent* _event)
@@ -209,7 +182,7 @@ void RadioButton::keyPressEvent(QKeyEvent* _event)
 {
     if (_event->key() == Qt::Key_Space) {
         _event->accept();
-        d->animateClick();
+        d->decorationAnimation.start();
         setChecked(true);
         return;
     }
@@ -221,9 +194,9 @@ void RadioButton::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
 
-    d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::radioButton().iconSize().height()
-                                               / 2.0);
-    d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::radioButton().height() / 2.5);
+    d->decorationAnimation.setRadiusInterval(Ui::DesignSystem::radioButton().iconSize().height()
+                                                 / 2.0,
+                                             Ui::DesignSystem::radioButton().height() / 2.5);
 
     updateGeometry();
     update();

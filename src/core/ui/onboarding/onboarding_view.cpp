@@ -127,8 +127,7 @@ void OnboardingView::Implementation::initLanguagePage()
         = initLanguageButton("Português Brasileiro", QLocale::Portuguese, 87);
     PercentRadioButton* romanianLanguage = initLanguageButton("Română", QLocale::Romanian, 89);
     PercentRadioButton* russianLanguage = initLanguageButton("Русский", QLocale::Russian, 100);
-    PercentRadioButton* slovenianLanguage
-        = initLanguageButton("Slovenski", QLocale::Slovenian, 96);
+    PercentRadioButton* slovenianLanguage = initLanguageButton("Slovenski", QLocale::Slovenian, 96);
     PercentRadioButton* spanishLanguage = initLanguageButton("Español", QLocale::Spanish, 92);
     PercentRadioButton* tagalogLanguage = initLanguageButton("Tagalog", QLocale::Filipino, 24);
     PercentRadioButton* turkishLanguage = initLanguageButton("Türkçe", QLocale::Turkish, 50);

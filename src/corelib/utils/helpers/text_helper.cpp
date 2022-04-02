@@ -20,7 +20,7 @@ qreal TextHelper::fineTextWidthF(const QString& _text, const QFontMetricsF& _met
     // используемые методы реализуют разные механизмы определения ширины, поэтому выбираем больший
     // и не забываем прибавить волшебную единичку, а то так не работает :)
     //
-    return qMax(_metrics.boundingRect(_text).width(), _metrics.horizontalAdvance(_text)) + 2.0;
+    return qMax(_metrics.boundingRect(_text).width(), _metrics.horizontalAdvance(_text)) + 1.0;
 }
 
 int TextHelper::fineTextWidth(const QString& _text, const QFont& _font)

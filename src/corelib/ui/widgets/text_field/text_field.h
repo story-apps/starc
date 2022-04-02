@@ -172,6 +172,7 @@ protected:
     /**
      * @brief Переопределяем для обработки нажатия на иконке вспомогательного действия
      */
+    void mousePressEvent(QMouseEvent* _event) override;
     void mouseReleaseEvent(QMouseEvent* _event) override;
 
     /**

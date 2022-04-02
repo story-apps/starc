@@ -1,23 +1,15 @@
 #include "icon_button.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/animations/click_animation.h>
 
 #include <QPaintEvent>
 #include <QPainter>
-#include <QVariantAnimation>
 
 
 class IconButton::Implementation
 {
 public:
-    Implementation();
-
-    /**
-     * @brief Анимировать клик
-     */
-    void animateClick();
-
-
     bool isCheckable = false;
     bool isChecked = false;
     QString icon;
@@ -25,30 +17,12 @@ public:
     /**
      * @brief  Декорации переключателя при клике
      */
-    QVariantAnimation decorationRadiusAnimation;
-    QVariantAnimation decorationOpacityAnimation;
+    ClickAnimation decorationAnimation;
 };
-
-IconButton::Implementation::Implementation()
-{
-    decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    decorationRadiusAnimation.setDuration(160);
-
-    decorationOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
-    decorationOpacityAnimation.setStartValue(0.5);
-    decorationOpacityAnimation.setEndValue(0.0);
-    decorationOpacityAnimation.setDuration(160);
-}
-
-void IconButton::Implementation::animateClick()
-{
-    decorationOpacityAnimation.setCurrentTime(0);
-    decorationRadiusAnimation.start();
-    decorationOpacityAnimation.start();
-}
 
 
 // ****
+
 
 IconButton::IconButton(QWidget* _parent)
     : Widget(_parent)
@@ -57,10 +31,8 @@ IconButton::IconButton(QWidget* _parent)
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
-            [this] { update(); });
-    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
-            [this] { update(); });
+    connect(&d->decorationAnimation, &ClickAnimation::valueChanged, this,
+            qOverload<>(&IconButton::update));
 
     designSystemChangeEvent(nullptr);
 }
@@ -132,13 +104,12 @@ void IconButton::paintEvent(QPaintEvent* _event)
     const QRectF iconRect(QPointF(Ui::DesignSystem::toggleButton().margins().left(),
                                   Ui::DesignSystem::toggleButton().margins().top()),
                           Ui::DesignSystem::toggleButton().iconSize());
-    if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
-        || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
+    if (d->decorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Ui::DesignSystem::color().secondary());
-        painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
-        painter.drawEllipse(iconRect.center(), d->decorationRadiusAnimation.currentValue().toReal(),
-                            d->decorationRadiusAnimation.currentValue().toReal());
+        painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
+        painter.setOpacity(d->decorationAnimation.opacity());
+        const auto radius = d->decorationAnimation.radius();
+        painter.drawEllipse(iconRect.center(), radius, radius);
         painter.setOpacity(1.0);
     }
 
@@ -159,7 +130,7 @@ void IconButton::mouseReleaseEvent(QMouseEvent* _event)
     }
 
     setChecked(!d->isChecked);
-    d->animateClick();
+    d->decorationAnimation.start();
 
     emit clicked();
 }
@@ -168,10 +139,9 @@ void IconButton::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event);
 
-    d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::toggleButton().iconSize().height()
-                                               / 2.0);
-    d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::toggleButton().size().height()
-                                             / 2.5);
+    d->decorationAnimation.setRadiusInterval(
+        Ui::DesignSystem::toggleButton().iconSize().height() / 2.0,
+        Ui::DesignSystem::toggleButton().size().height() / 2.5);
 
     updateGeometry();
     update();

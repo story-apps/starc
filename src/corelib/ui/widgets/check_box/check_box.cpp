@@ -1,52 +1,25 @@
 #include "check_box.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/animations/click_animation.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QPaintEvent>
 #include <QPainter>
-#include <QVariantAnimation>
 
 
 class CheckBox::Implementation
 {
 public:
-    Implementation();
-
-    /**
-     * @brief Анимировать клик
-     */
-    void animateClick();
-
-
     bool isChecked = false;
     QString text;
 
     /**
      * @brief  Декорации переключателя при клике
      */
-    QVariantAnimation decorationRadiusAnimation;
-    QVariantAnimation decorationOpacityAnimation;
+    ClickAnimation decorationAnimation;
 };
-
-CheckBox::Implementation::Implementation()
-{
-    decorationRadiusAnimation.setEasingCurve(QEasingCurve::InOutQuad);
-    decorationRadiusAnimation.setDuration(160);
-
-    decorationOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
-    decorationOpacityAnimation.setStartValue(0.5);
-    decorationOpacityAnimation.setEndValue(0.0);
-    decorationOpacityAnimation.setDuration(160);
-}
-
-void CheckBox::Implementation::animateClick()
-{
-    decorationOpacityAnimation.setCurrentTime(0);
-    decorationRadiusAnimation.start();
-    decorationOpacityAnimation.start();
-}
 
 
 // ****
@@ -59,10 +32,8 @@ CheckBox::CheckBox(QWidget* _parent)
     setAttribute(Qt::WA_Hover);
     setFocusPolicy(Qt::StrongFocus);
 
-    connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
-            [this] { update(); });
-    connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
-            [this] { update(); });
+    connect(&d->decorationAnimation, &ClickAnimation::valueChanged, this,
+            qOverload<>(&CheckBox::update));
 
     designSystemChangeEvent(nullptr);
 }
@@ -138,7 +109,7 @@ void CheckBox::paintEvent(QPaintEvent* _event)
 
         textRectX = iconRect.right() + Ui::DesignSystem::checkBox().spacing();
         textWidth = width() - textRectX - Ui::DesignSystem::checkBox().margins().right();
-        textRect.setRect(textRectX, Ui::DesignSystem::layout().px(14), textWidth, height());
+        textRect.setRect(textRectX, 0, width() - textRectX, sizeHint().height());
     } else {
         textWidth = width() - Ui::DesignSystem::checkBox().margins().left()
             - Ui::DesignSystem::checkBox().spacing()
@@ -146,7 +117,7 @@ void CheckBox::paintEvent(QPaintEvent* _event)
             - Ui::DesignSystem::checkBox().margins().right();
 
         textRectX = Ui::DesignSystem::checkBox().margins().left();
-        textRect.setRect(textRectX, Ui::DesignSystem::layout().px(14), textWidth, height());
+        textRect.setRect(textRectX, 0, textWidth, sizeHint().height());
         iconRect.setRect(textRectX + textWidth + Ui::DesignSystem::checkBox().spacing(),
                          Ui::DesignSystem::checkBox().margins().top(),
                          Ui::DesignSystem::checkBox().iconSize().width(),
@@ -161,16 +132,15 @@ void CheckBox::paintEvent(QPaintEvent* _event)
         painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
         painter.setOpacity(hasFocus() ? Ui::DesignSystem::focusBackgroundOpacity()
                                       : Ui::DesignSystem::hoverBackgroundOpacity());
-        const auto radius = d->decorationRadiusAnimation.endValue().toReal();
+        const auto radius = d->decorationAnimation.maximumRadius();
         painter.drawEllipse(iconRect.center(), radius, radius);
         painter.setOpacity(1.0);
     }
-    if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
-        || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
+    if (d->decorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
         painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
-        painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
-        const auto radius = d->decorationRadiusAnimation.currentValue().toReal();
+        painter.setOpacity(d->decorationAnimation.opacity());
+        const auto radius = d->decorationAnimation.radius();
         painter.drawEllipse(iconRect.center(), radius, radius);
         painter.setOpacity(1.0);
     }
@@ -192,13 +162,14 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     //
     painter.setFont(Ui::DesignSystem::font().subtitle1());
     painter.setPen(penColor);
-    painter.drawText(textRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, d->text);
+    painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter,
+                     painter.fontMetrics().elidedText(d->text, Qt::ElideRight, textRect.width()));
 }
 
 void CheckBox::mousePressEvent(QMouseEvent* _event)
 {
     Q_UNUSED(_event)
-    d->animateClick();
+    d->decorationAnimation.start();
 }
 
 void CheckBox::mouseReleaseEvent(QMouseEvent* _event)
@@ -214,7 +185,7 @@ void CheckBox::keyPressEvent(QKeyEvent* _event)
 {
     if (_event->key() == Qt::Key_Space) {
         _event->accept();
-        d->animateClick();
+        d->decorationAnimation.start();
         setChecked(!isChecked());
         return;
     }
@@ -226,9 +197,9 @@ void CheckBox::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
 
-    d->decorationRadiusAnimation.setStartValue(Ui::DesignSystem::checkBox().iconSize().height()
-                                               / 2.0);
-    d->decorationRadiusAnimation.setEndValue(Ui::DesignSystem::checkBox().height() / 2.5);
+    d->decorationAnimation.setRadiusInterval(Ui::DesignSystem::radioButton().iconSize().height()
+                                                 / 2.0,
+                                             Ui::DesignSystem::radioButton().height() / 2.5);
 
     updateGeometry();
     update();
