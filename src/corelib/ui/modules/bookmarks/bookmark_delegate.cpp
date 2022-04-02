@@ -68,30 +68,46 @@ void BookmarkDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _op
     _painter->fillRect(backgroundRect, backgroundColor);
 
     //
-    // ... иконка
+    // ... цвет закладки
     //
-    _painter->setPen(_index.data(BookmarksModel::BookmarkColorRole).value<QColor>());
-    _painter->setFont(Ui::DesignSystem::font().iconsMid());
-    const QRectF iconRect(QPointF(Ui::DesignSystem::layout().px16(),
-                                  backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-                          Ui::DesignSystem::treeOneLineItem().iconSize());
-    _painter->drawText(iconRect, Qt::AlignCenter, u8"\U000F00C0");
+    const QRectF colorRect(QPointF(0.0, backgroundRect.top()),
+                           QSizeF(Ui::DesignSystem::layout().px4(), backgroundRect.height()));
+    _painter->fillRect(colorRect, _index.data(BookmarksModel::BookmarkColorRole).value<QColor>());
 
     //
     // ... заголовок
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     _painter->setPen(textColor);
-    const qreal textLeft = iconRect.right() + Ui::DesignSystem::layout().px12();
+    const qreal textLeft = colorRect.right() + Ui::DesignSystem::layout().px16();
     const qreal textWidth = backgroundRect.right() - textLeft - Ui::DesignSystem::layout().px12();
-    const QRectF textRect(QPointF(textLeft, iconRect.top()), QSizeF(textWidth, iconRect.height()));
-    auto bookmarkName = _index.data(BookmarksModel::BookmarkNameRole).toString();
-    if (bookmarkName.isEmpty()) {
-        bookmarkName = _index.data(BookmarksModel::BookmarkItemTextRole).toString();
+    const QRectF headerRect(
+        QPointF(textLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+        QSizeF(textWidth, Ui::DesignSystem::treeOneLineItem().iconSize().height()));
+    auto header
+        = TextHelper::smartToUpper(_index.data(BookmarksModel::BookmarkItemTextRole).toString());
+    header = _painter->fontMetrics().elidedText(header, Qt::ElideRight,
+                                                static_cast<int>(headerRect.width()));
+    _painter->drawText(headerRect, Qt::AlignLeft | Qt::AlignVCenter, header);
+
+    //
+    // ... текст закладки
+    //
+    const auto bookmarkName = _index.data(BookmarksModel::BookmarkNameRole).toString();
+    if (!bookmarkName.isEmpty()) {
+        const auto bookmarkNameWidth = backgroundRect.right() - Ui::DesignSystem::layout().px16()
+            - Ui::DesignSystem::layout().px16() - Ui::DesignSystem::layout().px8();
+        const QRectF bookamrkNameRect(
+            QPointF(headerRect.left(), headerRect.bottom() + Ui::DesignSystem::layout().px4()),
+            QSizeF(bookmarkNameWidth,
+                   TextHelper::heightForWidth(bookmarkName, Ui::DesignSystem::font().body2(),
+                                              bookmarkNameWidth)));
+        _painter->setFont(Ui::DesignSystem::font().body2());
+        _painter->setPen(textColor);
+        QTextOption commentTextOption;
+        commentTextOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+        _painter->drawText(bookamrkNameRect, bookmarkName, commentTextOption);
     }
-    bookmarkName = _painter->fontMetrics().elidedText(bookmarkName, Qt::ElideRight,
-                                                      static_cast<int>(textRect.width()));
-    _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, bookmarkName);
 }
 
 QSize BookmarkDelegate::sizeHint(const QStyleOptionViewItem& _option,
@@ -112,11 +128,24 @@ QSize BookmarkDelegate::sizeHint(const QStyleOptionViewItem& _option,
     //
     // Считаем высоту
     //
+    const auto bookmarkName = _index.data(BookmarksModel::BookmarkNameRole).toString();
+    //
     // ... высота заголовка: отступ сверху + высота иконки + отступ снизу
     //
-    const int height = Ui::DesignSystem::layout().px16()
+    const int headerHeight = Ui::DesignSystem::layout().px16()
         + Ui::DesignSystem::treeOneLineItem().iconSize().height()
         + Ui::DesignSystem::layout().px16();
+    //
+    // ... высота без комментария
+    //
+    if (bookmarkName.isEmpty()) {
+        return { width, headerHeight };
+    }
+    //
+    // ... полная высота
+    //
+    int height = headerHeight + Ui::DesignSystem::layout().px12()
+        + TextHelper::heightForWidth(bookmarkName, Ui::DesignSystem::font().body2(), width);
 
     return { width, height };
 }
