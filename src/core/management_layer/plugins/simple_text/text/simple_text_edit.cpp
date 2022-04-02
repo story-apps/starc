@@ -465,7 +465,6 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
     const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
         - document()->rootFrame()->frameFormat().rightMargin() + spaceBetweenSceneNumberAndText;
     const qreal leftDelta = (isLeftToRight ? -1 : 1) * horizontalScrollBar()->value();
-    qreal verticalMargin = 0;
 
 
     //
@@ -475,7 +474,7 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
     {
         QTextCursor topCursor;
         for (int delta = 0; delta < viewport()->height() / 4; delta += 10) {
-            topCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
+            topCursor = cursorForPositionReimpl(viewport()->mapFromParent(QPoint(0, delta)));
             if (topBlock.blockNumber() > topCursor.block().blockNumber()) {
                 topBlock = topCursor.block();
             }
@@ -501,7 +500,7 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
     {
         QTextCursor bottomCursor;
         for (int delta = viewport()->height(); delta > viewport()->height() * 3 / 4; delta -= 10) {
-            bottomCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
+            bottomCursor = cursorForPositionReimpl(viewport()->mapFromParent(QPoint(0, delta)));
             if (bottomBlock.blockNumber() < bottomCursor.block().blockNumber()) {
                 bottomBlock = bottomCursor.block();
             }
@@ -542,9 +541,6 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
                 cursor.setPosition(block.position());
                 const QRect cursorR = cursorRect(cursor);
                 cursor.movePosition(QTextCursor::EndOfBlock);
-                const QRect cursorREnd = cursorRect(cursor);
-                //
-                verticalMargin = cursorR.height() / 2;
 
                 //
                 // Курсор на экране

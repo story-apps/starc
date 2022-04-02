@@ -2993,6 +2993,12 @@ QTextCursor PageTextEdit::cursorForPosition(const QPoint& pos) const
     return d->control->cursorForPosition(d->mapToContents(pos));
 }
 
+QTextCursor PageTextEdit::cursorForPositionReimpl(const QPoint& pos) const
+{
+    Q_D(const PageTextEdit);
+    return cursorForPosition(d->correctMousePosition(pos));
+}
+
 /*!
   returns a rectangle (in viewport coordinates) that includes the
   \a cursor.

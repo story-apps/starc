@@ -618,7 +618,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     {
         QTextCursor topCursor;
         for (int delta = 0; delta < viewport()->height() / 4; delta += 10) {
-            topCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
+            topCursor = cursorForPositionReimpl(viewport()->mapFromParent(QPoint(0, delta)));
             if (topBlock.blockNumber() > topCursor.block().blockNumber()) {
                 topBlock = topCursor.block();
             }
@@ -640,7 +640,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     {
         BusinessLayer::TextCursor bottomCursor;
         for (int delta = viewport()->height(); delta > viewport()->height() * 3 / 4; delta -= 10) {
-            bottomCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
+            bottomCursor = cursorForPositionReimpl(viewport()->mapFromParent(QPoint(0, delta)));
             if (bottomBlock.blockNumber() < bottomCursor.block().blockNumber()) {
                 bottomBlock = bottomCursor.block();
             }

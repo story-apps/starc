@@ -163,6 +163,7 @@ public:
 #endif
 
     QTextCursor cursorForPosition(const QPoint& pos) const;
+    QTextCursor cursorForPositionReimpl(const QPoint& pos) const;
     QRect cursorRect(const QTextCursor& cursor) const;
     QRect cursorRect() const;
 

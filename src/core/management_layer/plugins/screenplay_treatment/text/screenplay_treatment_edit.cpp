@@ -629,9 +629,9 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
     //
     QTextBlock topBlock = document()->lastBlock();
     {
-        QTextCursor topCursor;
         for (int delta = 0; delta < viewport()->height() / 4; delta += 10) {
-            topCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
+            const auto topCursor
+                = cursorForPositionReimpl(viewport()->mapFromParent(QPoint(0, delta)));
             if (topBlock.blockNumber() > topCursor.block().blockNumber()) {
                 topBlock = topCursor.block();
             }
@@ -651,9 +651,9 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
     //
     QTextBlock bottomBlock = document()->firstBlock();
     {
-        BusinessLayer::TextCursor bottomCursor;
         for (int delta = viewport()->height(); delta > viewport()->height() * 3 / 4; delta -= 10) {
-            bottomCursor = cursorForPosition(viewport()->mapFromParent(QPoint(0, delta)));
+            const auto bottomCursor
+                = cursorForPositionReimpl(viewport()->mapFromParent(QPoint(0, delta)));
             if (bottomBlock.blockNumber() < bottomCursor.block().blockNumber()) {
                 bottomBlock = bottomCursor.block();
             }
@@ -977,10 +977,6 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
 
                 //
                 // Нарисуем цвет бита
-                //
-
-                //
-                // ... но запоминаем информацию о бите
                 //
                 if (blockType == TextParagraphType::BeatHeading) {
                     const auto beatColor = d->document.itemColor(block);
