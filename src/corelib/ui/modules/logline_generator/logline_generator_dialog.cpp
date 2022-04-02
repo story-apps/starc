@@ -604,8 +604,7 @@ QString LoglineGeneratorDialog::Implementation::buildLogline() const
         //        logline += QString("%1 ").arg(tr("must"));
         // Q5
         if (includeTheme->isChecked()) {
-            logline += QString("%1 %2 %3 %4 ")
-                           .arg(text(theme), tr("in order to"), characterPronoun, tr("can"));
+            logline += QString("%1 %2 ").arg(text(theme), tr("in order to"));
         }
         //
         // Тут странно, т.к. mpr не задан (переделал на цель истории)
