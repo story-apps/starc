@@ -274,14 +274,21 @@ bool AbstractDialog::eventFilter(QObject* _watched, QEvent* _event)
                && (QApplication::focusWidget() == nullptr
                    || !findChildren<QWidget*>().contains(QApplication::focusWidget()))) {
         //
-        // Устанавливаем фокус отложенно, чтобы не впасть в рекурсивный цикл
+        // Зацикливаем фокусировку, только если диалог находится на вершине родителя
+        // -2 берётся, т.к. выше диалога есть ещё виджет статуса соединения с сервером
         //
-        if (_watched == lastFocusableWidget()) {
-            QMetaObject::invokeMethod(focusedWidgetAfterShow(), qOverload<>(&QWidget::setFocus),
-                                      Qt::QueuedConnection);
-        } else if (_watched == focusedWidgetAfterShow()) {
-            QMetaObject::invokeMethod(lastFocusableWidget(), qOverload<>(&QWidget::setFocus),
-                                      Qt::QueuedConnection);
+        const auto parentWidgetChildren = parentWidget()->children();
+        if (parentWidgetChildren.indexOf(this) == parentWidgetChildren.size() - 2) {
+            //
+            // Устанавливаем фокус отложенно, чтобы не впасть в рекурсивный цикл
+            //
+            if (_watched == lastFocusableWidget()) {
+                QMetaObject::invokeMethod(focusedWidgetAfterShow(), qOverload<>(&QWidget::setFocus),
+                                          Qt::QueuedConnection);
+            } else if (_watched == focusedWidgetAfterShow()) {
+                QMetaObject::invokeMethod(lastFocusableWidget(), qOverload<>(&QWidget::setFocus),
+                                          Qt::QueuedConnection);
+            }
         }
     }
 
