@@ -815,10 +815,15 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
                     && blockType != TextParagraphType::PageSplitter
                     && block.text().simplified().isEmpty()) {
                     //
+                    // Настроим цвет
+                    //
+                    setPainterPen(ColorHelper::transparent(
+                        palette().text().color(), Ui::DesignSystem::inactiveTextOpacity()));
+
+                    //
                     // Для пустого футера рисуем плейсхолдер
                     //
                     if (blockType == TextParagraphType::SequenceFooter) {
-                        setPainterPen(palette().text().color());
                         painter.setFont(block.charFormat().font());
 
                         //
@@ -860,7 +865,6 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
                     // В остальных случаях рисуем индикатор пустой строки
                     //
                     else {
-                        setPainterPen(palette().text().color());
                         painter.setFont(block.charFormat().font());
                         const QString emptyLineMark = "» ";
                         //
