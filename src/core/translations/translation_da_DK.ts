@@ -998,7 +998,7 @@
         <location filename="../../corelib/business_layer/export/comic_book/comic_book_abstract_exporter.cpp" line="184"/>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_abstract_exporter.cpp" line="197"/>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="816"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="848"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="853"/>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="905"/>
         <source>END OF</source>
         <translation>ENDEN AF</translation>
@@ -1497,22 +1497,22 @@
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4043"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4049"/>
         <source>Cut</source>
         <translation>Klip</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4050"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4056"/>
         <source>Copy</source>
         <translation>Kopier</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4056"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4062"/>
         <source>Paste</source>
         <translation>Indsæt</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4063"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4069"/>
         <source>Select all</source>
         <translation>Vælg alle</translation>
     </message>
@@ -1777,24 +1777,37 @@
         <translation>version</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="159"/>
         <source>Designed, coded and crafted with love at the </source>
-        <translation>Designet, kodet og lavet med kærlighed hos </translation>
+        <translation type="vanished">Designet, kodet og lavet med kærlighed hos </translation>
+    </message>
+    <message>
+        <source>The Logline Generator is powered by </source>
+        <translation type="vanished">The Logline/præmis Generator er muliggjort af</translation>
+    </message>
+    <message>
+        <location filename="../ui/about_application_dialog.cpp" line="160"/>
+        <source>Designed, coded and crafted with love at the</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="162"/>
-        <source>The Logline Generator is powered by </source>
-        <translation>The Logline/præmis Generator er muliggjort af</translation>
+        <source>company</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="166"/>
+        <location filename="../ui/about_application_dialog.cpp" line="163"/>
+        <source>The Logline Generator is powered by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/about_application_dialog.cpp" line="167"/>
         <source>Starc is being developed with strong authors’ involvement and support so we won’t waste the app performance on the features you don’t need.</source>
         <translation>Starc er udviklet af stærke forfatteres
 involvering og støtte, så vi ikke spilder
 kræfter på unyttige features. </translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="169"/>
+        <location filename="../ui/about_application_dialog.cpp" line="170"/>
         <source>Feel free to contact us at any point of your creative journey to share your thoughts about the app, suggest ideas and report issues you met.</source>
         <translation>Kontakt os gerne på ethvert tidspunkt
 i din kreative færd, og del tabker om app&apos;en.
@@ -3675,246 +3688,245 @@ Foreslå forbedringer og rapprter fejl.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="598"/>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="626"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
         <source>must</source>
         <translation>må</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="608"/>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="617"/>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="629"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="607"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="616"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="628"/>
         <source>in order to</source>
         <translation>for at</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="608"/>
         <source>can</source>
-        <translation>kan</translation>
+        <translation type="vanished">kan</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="626"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
         <source>but</source>
         <translation>men</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="626"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
         <source>when</source>
         <translation>hvornår</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="636"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="635"/>
         <source>before</source>
         <translation>før</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="741"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="740"/>
         <source>Share your logline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="744"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="743"/>
         <source>Check out my new logline</source>
         <translation>Se min nye præmis</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="770"/>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="817"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="769"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="816"/>
         <source>Show help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="816"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="815"/>
         <source>Logline generator</source>
         <translation>Præmis-generator</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="819"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="818"/>
         <source>Describe your main character</source>
         <translation>Beskriv di hovedkarakter</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="820"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="819"/>
         <source>E.g. &apos;A lonesome cowboy&apos;, or &apos;An arrogant publicist&apos;.</source>
         <translation>Fx &apos;En ensom cowboy&apos; eller &apos;En arrogant bladudgiver&apos;.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="821"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="820"/>
         <source>What is their gender?</source>
         <translation>Hvad er deres køn?</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="822"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="821"/>
         <source>Male</source>
         <translation>Mand</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="822"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="821"/>
         <source>Female</source>
         <translation>Kvinde</translation>
     </message>
     <message>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="821"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="822"/>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="823"/>
         <source>Other</source>
         <translation>Andet</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="825"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="824"/>
         <source>Typically this includes the character&apos;s function or job, and some weakness and/or strength. Loglines only have character names if the names are already a part of popular culture.</source>
         <translation>Typisk inkluderer dette karakterens funktion og job, og nogle styrker og/eller svagheder. Præmissen har kun karakterens navn hvis det allerede er en del af populærkulturen.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="829"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="828"/>
         <source>What event triggers the story&apos;s main action?</source>
         <translation>Hvilken hændelse udløser historiens primære handling?</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="831"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="830"/>
         <source>E.g. &apos;A shark kills a swimmer&apos; or &apos;her best friend shoots a man who tried to rape her&apos;.</source>
         <translation>Fx &apos;En haj dræber en svømmer&apos; eller &apos;hendes bedste ven skyder en mand som prøvede at voldtage hende&apos;.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="834"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="833"/>
         <source>Did you include a description of the main character?</source>
         <translation>Har du inkluderet en beskrivelse af din hovedkarakter?</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="836"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="835"/>
         <source>Events are things that happen to the main character, and that motivates their actions. They&apos;re never anything the character does. Here we&apos;re looking for the story&apos;s main event or Inciting Incident / Call To Adventure. This typically happens in the first 10 - 20 minutes.</source>
         <translation>Hændelser er ting der overgår hovedkarakteren og motiverer deres handlinger. Det er ikke noget karakteren gør. Her ser vi på historiens hoved-hændelse (Inciting incident), som oftest sker i løbet af de første 10-20 minutter.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="841"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="840"/>
         <source>Include a Theme or Character Arc</source>
         <translation>Inkluder et tema eller karakter-bue</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="842"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="841"/>
         <source>What do they have to learn/overcome?</source>
         <translation>Hvad må de lære/overkomme?</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="843"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="842"/>
         <source>E.g. &apos;to become less selfish&apos;, or &apos;to find purpose in life&apos;.</source>
         <translation>Fx &apos;Vær mere egoistisk&apos; eller &apos;Find en mening med livet&apos;.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="845"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="844"/>
         <source>Even if theme is important in most stories, it is not critical to a basic logline. And often theme is established further down the development process. Leave it out for now, or try something and change it later.</source>
         <translation>Selv om tema er vigtigt i de fleste historier, er det ikke kritisk i forhold til den basale præmis. Ofte kommer temaet i udviklingsfasen. Du kan lade den stå tom, eller skrive noget nu og evt ændre det senere.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="849"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="848"/>
         <source>What is the main Action / Goal?</source>
         <translation>Hvad er hovedhandlingen/målet?</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="851"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="850"/>
         <source>E.g. &apos;to close the beach&apos;, or &apos;to find her son and return him home&apos;.</source>
         <translation>Fx &apos;at lukke stranden&apos; eller &apos;finde sin søn og tage hjem&apos;.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="853"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="852"/>
         <source>The main action or goal is &apos;what the story is about&apos; for the broad audience. It is that part of the story we can visualise when we hear the logline, and which (hopefully) makes us want to see the film or show episode. It is the objective the main character will pursue for most of the time.</source>
         <translation>Hovedhandlingen eller målet er &apos;det historien handler om&apos; for publikum. Det er den del af historien vi kan se nå vi hører præmissen, og som forhåbentlig giver os lyst til at se filmen. Det er den ting hovedkarakteren vil jagte det meste af tiden.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="858"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="857"/>
         <source>Include a Mid Point Reversal (MPR)</source>
         <translation>Inkluder et Mid Point Reversal (MPR)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="859"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="858"/>
         <source>What is the MPR Event?</source>
         <translation>Hvad er en MPR hændelse?</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="861"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="860"/>
         <source>E.g. &apos;the trip to Vegas is aborted&apos;, or &apos;his employer turns out to be his nemesis&apos;.</source>
         <translation>Fx &apos;turen til Vegas er afbrudt&apos; eller &apos;hans chef viser sig at være hans modstander&apos;.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="862"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="861"/>
         <source>What is the character&apos;s new Action / Goal?</source>
         <translation>Hvad er karakterens nye handling/mål?</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="863"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="862"/>
         <source>E.g. &apos;to venture into the ocean and kill the shark&apos;</source>
         <translation>Fx &apos;at tage ud på havet og dræbe hajen&apos;</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="865"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="864"/>
         <source>This event often happens just when the goal is within reach. It flips the character&apos;s fortune, and any gains now seem lost. But it may also be the motivation for the character&apos;s change in goal or approach. After the MPR, they often change their behaviour and start doing &apos;the right thing&apos;.</source>
         <translation>Denne hændelse sker ofte når målet er indenfor rækkevidde. Det vender karakterens held, og meget der er opnået tabes. Men det kan også motivere tilat ændre mål eller tilgang. Efter MPR begynder de ofte at ændre stil og gøre det rette.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="870"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="869"/>
         <source>Is the story set in a special, future or magical world?</source>
         <translation>Foregår historien i en speciel, fremtidig eller magisk verden?</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="871"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="870"/>
         <source>How is your story world different from normal reality?</source>
         <translation>Hvordan er din virkelighed anderledes end dennormale virkelighed?</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="873"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="872"/>
         <source>E.g. &apos;it is 1920&apos;s Paris&apos;, or &apos;it is a world where pigs fly&apos;</source>
         <translation>Fx &apos;Paris i 1920.erne&apos; eller &apos;det er en verden hvor grise kan flyve&apos;</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="874"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="873"/>
         <source>Only add this if it is essential to understand the story. </source>
         <translation>Tilføj kun dette hvis deter væsentligt for at forstå historien.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="876"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="875"/>
         <source>Include a Deadline/Stakes?</source>
         <translation>Inkluder en Deadline/Risiko?</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="877"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="876"/>
         <source>What happens if the main character fails?</source>
         <translation>Hvad sker der hvis hovedkarakteren mislykkes?</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="878"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="877"/>
         <source>E.g. &apos;the police catches the girls&apos;, or &apos;the shark attacks again&apos;.</source>
         <translation>Fx &apos;politiet fanger pigerne&apos; eller &apos;hajen angriber igen.&apos;</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="882"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="881"/>
         <source>To make the logline work, write this as a full sentence like in the examples.</source>
         <translation>Skriv en hel sætning som i eksemplerne, for at få præmissen til at virke.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="883"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="882"/>
         <source>Often the stakes are clear from the Main Event. But in some cases, adding negative stakes adds urgency to the logline, ultimately improving its emotional impact.</source>
         <translation>Ofte er risici klare fra hoved-hændelsen, men nogen gange kan negative risici give stress til præmissen, og øge den følelsesmæssige involvering.</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="899"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="898"/>
         <source>Your logline is cooked!</source>
         <translation>Din præmis er færdig!</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="901"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="900"/>
         <source>Continue</source>
         <translation>Fortsæt</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="902"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="901"/>
         <source>Back</source>
         <translation>Tilnage</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="903"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="902"/>
         <source>Close</source>
         <translation>Luk</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="904"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="903"/>
         <source>Done</source>
         <translation>Færdig</translation>
     </message>
@@ -3922,76 +3934,76 @@ Foreslå forbedringer og rapprter fejl.</translation>
 <context>
     <name>Ui::MenuView</name>
     <message>
-        <location filename="../ui/menu_view.cpp" line="320"/>
-        <location filename="../ui/menu_view.cpp" line="346"/>
+        <location filename="../ui/menu_view.cpp" line="321"/>
+        <location filename="../ui/menu_view.cpp" line="348"/>
         <source>All changes saved</source>
         <translation>Alle ændringer gemt</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="320"/>
-        <location filename="../ui/menu_view.cpp" line="345"/>
+        <location filename="../ui/menu_view.cpp" line="321"/>
+        <location filename="../ui/menu_view.cpp" line="347"/>
         <source>Save changes</source>
         <translation>Gem ændringer</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="341"/>
+        <location filename="../ui/menu_view.cpp" line="343"/>
         <source>Sign in</source>
         <translation>Log in</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="342"/>
+        <location filename="../ui/menu_view.cpp" line="344"/>
         <source>Stories</source>
         <translation>Historier</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="343"/>
+        <location filename="../ui/menu_view.cpp" line="345"/>
         <source>Create story</source>
-        <translation type="unfinished"></translation>
+        <translation>Opret historie</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="344"/>
+        <location filename="../ui/menu_view.cpp" line="346"/>
         <source>Open story</source>
-        <translation type="unfinished"></translation>
+        <translation>Åbn historie</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="349"/>
+        <location filename="../ui/menu_view.cpp" line="351"/>
         <source>Save current story as...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/menu_view.cpp" line="350"/>
-        <source>Import...</source>
-        <translation type="unfinished"></translation>
+        <translation>Gem nuværende historie som...</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="352"/>
+        <source>Import...</source>
+        <translation>Importer...</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="354"/>
         <source>Export current document...</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksporter nuværende dokument...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="355"/>
+        <location filename="../ui/menu_view.cpp" line="357"/>
         <source>Toggle full screen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/menu_view.cpp" line="358"/>
-        <source>Application settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Toggle fuldskærm</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="360"/>
+        <source>Application settings</source>
+        <translation>App indstillinger</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="362"/>
         <source>Show writing sprint timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis skrivehastigheds timer</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="363"/>
+        <location filename="../ui/menu_view.cpp" line="365"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="364"/>
+        <location filename="../ui/menu_view.cpp" line="366"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Om</translation>
     </message>
 </context>
 <context>
@@ -3999,12 +4011,12 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="32"/>
         <source>Choose language</source>
-        <translation type="unfinished"></translation>
+        <translation>Vælg sprog</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="33"/>
         <source>Setup user interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Opsætning af brugergrænseflade</translation>
     </message>
 </context>
 <context>
@@ -4015,49 +4027,49 @@ Foreslå forbedringer og rapprter fejl.</translation>
         <translation>Oversættelsen er klar til %1%. Ved, hvordan du kan forbedre det. </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="407"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="406"/>
         <source>Choose preferred language</source>
-        <translation type="unfinished"></translation>
+        <translation>Vælg foretrukket sprog</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="409"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="408"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Fandt du ikke det ønskede sprog? Læs hvordan du selv kan tilføje det.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="410"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="409"/>
         <source>Continue</source>
         <translation>Fortsæt</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="411"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="410"/>
         <source>Skip initial setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Spring over indledende setup</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="412"/>
+        <source>Choose application theme</source>
+        <translation>Vælg app tema</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="413"/>
-        <source>Choose application theme</source>
-        <translation type="unfinished"></translation>
+        <source>Setup size of the user interface elements</source>
+        <translation>Vælg størrelsen af brugergrænseflade elementer</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="414"/>
-        <source>Setup size of the user interface elements</source>
-        <translation type="unfinished"></translation>
+        <source>small</source>
+        <translation>Lille</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="415"/>
-        <source>small</source>
-        <translation type="unfinished"></translation>
+        <source>big</source>
+        <translation>stor</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_view.cpp" line="416"/>
-        <source>big</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="417"/>
         <source>Start writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Begynd at skrive</translation>
     </message>
 </context>
 <context>
@@ -4065,12 +4077,12 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="130"/>
         <source>Project name</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt navn</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="131"/>
         <source>Short description</source>
-        <translation type="unfinished"></translation>
+        <translation>Kort beskrivelse</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="132"/>
@@ -4080,22 +4092,22 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="133"/>
         <source>Add cover +</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilføj omslag +</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="133"/>
         <source>Change cover...</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift omslag...</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="134"/>
         <source>Do you want to reset the story&apos;s cover?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ønsker du at nulstille historiens omslag?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="135"/>
         <source>Select an area for the cover</source>
-        <translation type="unfinished"></translation>
+        <translation>Vælg område for omslag</translation>
     </message>
 </context>
 <context>
@@ -4103,7 +4115,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/project/project_navigator.cpp" line="208"/>
         <source>Show document navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis dokument navigator</translation>
     </message>
     <message>
         <location filename="../ui/project/project_navigator.cpp" line="216"/>
@@ -4116,7 +4128,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/project/project_tool_bar.cpp" line="66"/>
         <source>Show main menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis hovedmenuen</translation>
     </message>
 </context>
 <context>
@@ -4124,27 +4136,27 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/project/project_view.cpp" line="109"/>
         <source>Here will be an editor of the document you choose in the navigator (at left).</source>
-        <translation type="unfinished"></translation>
+        <translation>Her kommer en dokument-editor du vælger i navigatoren (til venstre)</translation>
     </message>
     <message>
         <location filename="../ui/project/project_view.cpp" line="110"/>
         <source>Choose an item to edit, or</source>
-        <translation type="unfinished"></translation>
+        <translation>Vælg en ting der skal redigeres, eller </translation>
     </message>
     <message>
         <location filename="../ui/project/project_view.cpp" line="111"/>
         <source>create a new one</source>
-        <translation type="unfinished"></translation>
+        <translation>Opret an ny</translation>
     </message>
     <message>
         <location filename="../ui/project/project_view.cpp" line="114"/>
         <source>Ooops... looks like editor of this document not implemented yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ooops... det ser ikke ud som om editoren til dette dokument er lavet endnu.</translation>
     </message>
     <message>
         <location filename="../ui/project/project_view.cpp" line="116"/>
         <source>But don&apos;t worry, it will be here in one of the future updates!</source>
-        <translation type="unfinished"></translation>
+        <translation>Bare rolig, den vil komme i en fremtidig udgave!</translation>
     </message>
 </context>
 <context>
@@ -4152,17 +4164,17 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/projects/projects_navigator.cpp" line="74"/>
         <source>Create story</source>
-        <translation type="unfinished"></translation>
+        <translation>Opret historie</translation>
     </message>
     <message>
         <location filename="../ui/projects/projects_navigator.cpp" line="75"/>
         <source>Open story</source>
-        <translation type="unfinished"></translation>
+        <translation>Åbn historie</translation>
     </message>
     <message>
         <location filename="../ui/projects/projects_navigator.cpp" line="76"/>
         <source>How to use application?</source>
-        <translation type="unfinished"></translation>
+        <translation>Hvordan bruges app&apos;en?</translation>
     </message>
 </context>
 <context>
@@ -4170,7 +4182,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/projects/projects_tool_bar.cpp" line="24"/>
         <source>Show main menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis hovedmenuen</translation>
     </message>
 </context>
 <context>
@@ -4178,22 +4190,22 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/projects/projects_view.cpp" line="190"/>
         <source>Here will be a list of your stories.</source>
-        <translation type="unfinished"></translation>
+        <translation>Her kommer en liste med dine historier.</translation>
     </message>
     <message>
         <location filename="../ui/projects/projects_view.cpp" line="191"/>
         <source>It&apos;s time to create the first story!</source>
-        <translation type="unfinished"></translation>
+        <translation>Tid til at oprette din første historie!</translation>
     </message>
     <message>
         <location filename="../ui/projects/projects_view.cpp" line="188"/>
         <source>Create story</source>
-        <translation type="unfinished"></translation>
+        <translation>Opret historie</translation>
     </message>
     <message>
         <location filename="../ui/projects/projects_view.cpp" line="189"/>
         <source>Open story</source>
-        <translation type="unfinished"></translation>
+        <translation>Åbn historie</translation>
     </message>
 </context>
 <context>
@@ -4201,22 +4213,22 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="140"/>
         <source>Renew cloud service subscription for</source>
-        <translation type="unfinished"></translation>
+        <translation>Forny abonnement til sky-tjeneste</translation>
     </message>
     <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="146"/>
         <source>via PayPal</source>
-        <translation type="unfinished"></translation>
+        <translation>via PayPal</translation>
     </message>
     <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="147"/>
         <source>via bank card</source>
-        <translation type="unfinished"></translation>
+        <translation>via bank kort</translation>
     </message>
     <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="148"/>
         <source>via Yandex.Money</source>
-        <translation type="unfinished"></translation>
+        <translation>via Yandex.Money</translation>
     </message>
     <message>
         <location filename="../ui/account/renew_subscription_dialog.cpp" line="149"/>
@@ -4234,7 +4246,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="251"/>
         <source>Export screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksporter skuespil</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="253"/>
@@ -4244,32 +4256,32 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="254"/>
         <source>Include title page</source>
-        <translation type="unfinished"></translation>
+        <translation>Inkluder titelside</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="255"/>
         <source>Include sequences headers and footers</source>
-        <translation type="unfinished"></translation>
+        <translation>Inkluder sekvens headere og footere</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="256"/>
         <source>Include inline notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Inklude inline noter</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="257"/>
         <source>Include review marks</source>
-        <translation type="unfinished"></translation>
+        <translation>Inkluder gennemsynsmarkeringer</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="258"/>
         <source>Export concrete scenes</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksporter konkrete scaner</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="259"/>
         <source>Keep empty, if you want to print all scenes</source>
-        <translation type="unfinished"></translation>
+        <translation>Hold tom, hvis du ønsker at udskrive alle scener</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="260"/>
@@ -4297,7 +4309,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="197"/>
         <source>Screenplay name</source>
-        <translation type="unfinished"></translation>
+        <translation>Skuespil navn</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="198"/>
@@ -4365,17 +4377,17 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="290"/>
         <source>Scenes numbers&apos; prefix</source>
-        <translation type="unfinished"></translation>
+        <translation>Scenenummer præfiks</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="291"/>
         <source>Scenes numbering start at</source>
-        <translation type="unfinished"></translation>
+        <translation>Scenenummerering starter ved</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="292"/>
         <source>Override common settings for this screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilsidesæt almindelige indstillinger for dette skuespil</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="293"/>
@@ -4385,22 +4397,22 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="294"/>
         <source>Print scenes numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Udskriv scenenumre</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="295"/>
         <source>on the left</source>
-        <translation type="unfinished"></translation>
+        <translation>til venstre</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="296"/>
         <source>on the right</source>
-        <translation type="unfinished"></translation>
+        <translation>til højre</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="297"/>
         <source>Print dialogues numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Udskriv dialognummerering</translation>
     </message>
 </context>
 <context>
@@ -4408,7 +4420,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="246"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Varighed</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="247"/>
@@ -4433,17 +4445,17 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="252"/>
         <source>Scenes statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Scenestatistik</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="253"/>
         <source>Locations statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokationsstatistik</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="254"/>
         <source>Characters statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Karaterstatistik</translation>
     </message>
 </context>
 <context>
@@ -4451,22 +4463,22 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_navigator.cpp" line="68"/>
         <source>Edit template parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Rediger skabelonparametre</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_navigator.cpp" line="69"/>
         <source>Show template parameters in</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis skabelonparametre i</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_navigator.cpp" line="70"/>
         <source>Millimeters</source>
-        <translation type="unfinished"></translation>
+        <translation>Millimeter</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_navigator.cpp" line="71"/>
         <source>Inches</source>
-        <translation type="unfinished"></translation>
+        <translation>Inches</translation>
     </message>
 </context>
 <context>
@@ -4474,71 +4486,71 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="335"/>
         <source>mm</source>
-        <translation type="unfinished"></translation>
+        <translation>mm</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="335"/>
         <source>inch</source>
-        <translation type="unfinished"></translation>
+        <translation>Inch</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="336"/>
         <source>Template name</source>
-        <translation type="unfinished"></translation>
+        <translation>Skabelon navn</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="337"/>
         <source>Page format</source>
-        <translation type="unfinished"></translation>
+        <translation>Sideformat</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="354"/>
         <source>Page margins</source>
-        <translation type="unfinished"></translation>
+        <translation>Sidemargener</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="355"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="367"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Venstre</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="357"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="364"/>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Top</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="359"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="369"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Højre</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="361"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="365"/>
         <source>Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Bund</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="363"/>
         <source>Page numbering alignment by vertical</source>
-        <translation type="unfinished"></translation>
+        <translation>Sidenummerering justeret lodret</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="366"/>
         <source>by horizontal</source>
-        <translation type="unfinished"></translation>
+        <translation>vandret</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="368"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Centreret</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="370"/>
         <source>Split page into columns in proportion</source>
-        <translation type="unfinished"></translation>
+        <translation>Opdel side i proportionelle kolonner</translation>
     </message>
 </context>
 <context>
@@ -4546,37 +4558,37 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="565"/>
         <source>mm</source>
-        <translation type="unfinished"></translation>
+        <translation>mm</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="565"/>
         <source>inch</source>
-        <translation type="unfinished"></translation>
+        <translation>Inch</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="569"/>
         <source>Is paragraph style available</source>
-        <translation type="unfinished"></translation>
+        <translation>Er afsnitsstil tilgængelig</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="570"/>
         <source>Font family</source>
-        <translation type="unfinished"></translation>
+        <translation>Font familie</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="571"/>
         <source>Font size</source>
-        <translation type="unfinished"></translation>
+        <translation>Font størrelse</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="572"/>
         <source>Place paragraph at the top of the page</source>
-        <translation type="unfinished"></translation>
+        <translation>Placer afsnit i toppen af siden</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="573"/>
         <source>Use UPPERCASE characters for paragraph text</source>
-        <translation type="unfinished"></translation>
+        <translation>Brug STORE bogstaver til ansnit tekst</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="574"/>
@@ -4596,96 +4608,96 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="577"/>
         <source>Align text on the page</source>
-        <translation type="unfinished"></translation>
+        <translation>Juster tekst på siden</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="578"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="588"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="594"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Venstre</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="579"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Centreret</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="580"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="590"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="596"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Højre</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="581"/>
         <source>Justify</source>
-        <translation type="unfinished"></translation>
+        <translation>Juster</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="582"/>
         <source>Vertical indentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Lodret indrykning</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="583"/>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Top</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="584"/>
         <source>Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Bund</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="585"/>
         <source>lines</source>
-        <translation type="unfinished"></translation>
+        <translation>linjer</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="587"/>
         <source>Horizontal indentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Vandret indrykning</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="593"/>
         <source>Horizontal indentation (for two-column mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vandret indrykning (for to kolonner)</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="598"/>
         <source>Line spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>Linjeafstand</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="599"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="601"/>
         <source>Single</source>
-        <translation type="unfinished"></translation>
+        <translation>Enkelt</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="601"/>
         <source>One and half</source>
-        <translation type="unfinished"></translation>
+        <translation>Halvanden</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="601"/>
         <source>Double</source>
-        <translation type="unfinished"></translation>
+        <translation>Dobbelt</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="601"/>
         <source>Fixed</source>
-        <translation type="unfinished"></translation>
+        <translation>Fast</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="602"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Værdi</translation>
     </message>
 </context>
 <context>
@@ -4693,22 +4705,22 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_tool_bar.cpp" line="84"/>
         <source>Go back to the previous screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilbage til forrige skærm</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_tool_bar.cpp" line="85"/>
         <source>Template page settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Skabelon sideindstillinger</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_tool_bar.cpp" line="86"/>
         <source>Title page template</source>
-        <translation type="unfinished"></translation>
+        <translation>Titelside skabelon</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_tool_bar.cpp" line="87"/>
         <source>Template paragraphs settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Skabelon afsnitsindstillinger</translation>
     </message>
 </context>
 <context>
@@ -4716,12 +4728,12 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_view_tool_bar.cpp" line="48"/>
         <source>Save template</source>
-        <translation type="unfinished"></translation>
+        <translation>Gem skabelon</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_view_tool_bar.cpp" line="49"/>
         <source>Export template to the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksporter skabelon til filen </translation>
     </message>
 </context>
 <context>
@@ -4739,7 +4751,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1329"/>
         <source>Bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Bogmærke</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1333"/>
@@ -4759,7 +4771,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1352"/>
         <source>Show list</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis liste</translation>
     </message>
 </context>
 <context>
@@ -4901,7 +4913,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="70"/>
         <source>No one beat selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Intet beat er valgt</translation>
     </message>
 </context>
 <context>
@@ -4919,12 +4931,12 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="933"/>
         <source>Bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>Bogmærker</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="935"/>
         <source>Show bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis bogmærkeliste</translation>
     </message>
 </context>
 <context>
@@ -5079,28 +5091,28 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="124"/>
         <source>Current device</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuværende enhed</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="132"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Online</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="136"/>
         <source>was active %1 at %2</source>
         <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>var aktiv %1 kl. %2</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="140"/>
         <source>Terminate others</source>
-        <translation type="unfinished"></translation>
+        <translation>Afslut andre</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="141"/>
         <source>Terminate</source>
-        <translation type="unfinished"></translation>
+        <translation>Afslut</translation>
     </message>
 </context>
 <context>
@@ -5108,32 +5120,32 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="149"/>
         <source>Application settings</source>
-        <translation type="unfinished"></translation>
+        <translation>App indstillinger</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="152"/>
         <source>User interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Brugergrænseflade</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="155"/>
         <source>Save changes &amp; backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Gem ændringer og backups</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="158"/>
         <source>Text editing</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekstredigering</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="159"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Komponenter</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="160"/>
         <source>Simple text</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpel tekst</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="161"/>
@@ -5148,7 +5160,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="163"/>
         <source>Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Genveje</translation>
     </message>
 </context>
 <context>
@@ -5156,7 +5168,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/settings/settings_tool_bar.cpp" line="51"/>
         <source>Go back to the previous screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilbage til forrige skærm</translation>
     </message>
 </context>
 <context>
@@ -5164,7 +5176,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="875"/>
         <source>Choose the folder where backups will be saved</source>
-        <translation type="unfinished"></translation>
+        <translation>Vælg mappen hvor backups vil blive gemt</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="987"/>
@@ -5174,12 +5186,12 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="994"/>
         <source>Duplicate</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupliker</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1001"/>
         <source>Save to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Gem til fil</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1007"/>
@@ -5189,829 +5201,831 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1014"/>
         <source>Load template from file</source>
-        <translation type="unfinished"></translation>
+        <translation>Hent skabelon fra filen</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1609"/>
         <source>Application settings</source>
-        <translation type="unfinished"></translation>
+        <translation>App indstillinger</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1610"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprog</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1622"/>
         <source>Text editing</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekstredigering</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1623"/>
         <source>Show documents pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis dokument sider</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1624"/>
         <source>Use typewriter sound for keys pressing</source>
-        <translation type="unfinished"></translation>
+        <translation>Brug skrivemaskine lyd når du skriver</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1625"/>
         <source>Spell check</source>
-        <translation type="unfinished"></translation>
+        <translation>Stavekontrol</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1626"/>
         <source>Spelling dictionary</source>
-        <translation type="unfinished"></translation>
+        <translation>Stave ordbog</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1629"/>
         <source>Afrikaans</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrikaans</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1630"/>
         <source>Aragonese</source>
-        <translation type="unfinished"></translation>
+        <translation>Aragonesisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1631"/>
         <source>Arabic</source>
-        <translation type="unfinished"></translation>
+        <translation>Arabisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1632"/>
         <source>Azerbaijani</source>
-        <translation type="unfinished"></translation>
+        <translation>Azerbadjansk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1633"/>
         <source>Belarusian</source>
-        <translation type="unfinished"></translation>
+        <translation>Hviderussisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1634"/>
         <source>Bulgarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Bulgarsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1635"/>
         <source>Bengali</source>
-        <translation type="unfinished"></translation>
+        <translation>Bengalsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1636"/>
         <source>Tibetan</source>
-        <translation type="unfinished"></translation>
+        <translation>Tibetansk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1637"/>
         <source>Breton</source>
-        <translation type="unfinished"></translation>
+        <translation>Bretonsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1638"/>
         <source>Bosnian</source>
-        <translation type="unfinished"></translation>
+        <translation>Bosnisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1639"/>
         <source>Catalan (Valencian)</source>
-        <translation type="unfinished"></translation>
+        <translation>Catalansk (Valencia)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1640"/>
         <source>Catalan</source>
-        <translation type="unfinished"></translation>
+        <translation>Catalansk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1641"/>
         <source>Czech</source>
-        <translation type="unfinished"></translation>
+        <translation>Thekkisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1642"/>
         <source>Welsh</source>
-        <translation type="unfinished"></translation>
+        <translation>Walisisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1643"/>
         <source>Danish</source>
-        <translation type="unfinished"></translation>
+        <translation>Dansk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1644"/>
         <source>German (Austria)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tysk (Østrig)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1645"/>
         <source>German (Switzerland)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tysk (Schweiz)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1646"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Tysk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1647"/>
         <source>Greek (Polytonic)</source>
-        <translation type="unfinished"></translation>
+        <translation>Græsk (Polytonisk)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1648"/>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>Græsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1649"/>
         <source>English (Australia)</source>
-        <translation type="unfinished"></translation>
+        <translation>Engelsk (Australsk)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1650"/>
         <source>English (Canada)</source>
-        <translation type="unfinished"></translation>
+        <translation>Engelsk (Canada)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1651"/>
         <source>English (United Kingdom)</source>
-        <translation type="unfinished"></translation>
+        <translation>Engelsk (UK)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1652"/>
         <source>English (New Zealand)</source>
-        <translation type="unfinished"></translation>
+        <translation>Engelsk (New Zealand)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1653"/>
         <source>English (South Africa)</source>
-        <translation type="unfinished"></translation>
+        <translation>Engelsk (Sydafrika)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1654"/>
         <source>English (United States)</source>
-        <translation type="unfinished"></translation>
+        <translation>Engelsk (USA)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1655"/>
         <source>Esperanto</source>
-        <translation type="unfinished"></translation>
+        <translation>Esperanto</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1656"/>
         <source>Spanish (Argentina)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (Argentina)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1657"/>
         <source>Spanish (Bolivia)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (Bolivia)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1658"/>
         <source>Spanish (Chile)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (Chile)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1659"/>
         <source>Spanish (Colombia)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (Columbia)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1660"/>
         <source>Spanish (Costa Rica)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (Costa Rica)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1661"/>
         <source>Spanish (Cuba)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (Cuba)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1662"/>
         <source>Spanish (Dominican Republic)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (Dominikansk republik)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1663"/>
         <source>Spanish (Ecuador)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (Ecuador)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1664"/>
         <source>Spanish (Guatemala)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (Guatemala)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1665"/>
         <source>Spanish (Honduras)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spank (Honduras)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1666"/>
         <source>Spanish (Mexico)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spank (Mexico)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1667"/>
         <source>Spanish (Nicaragua)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spank (Nicaragua)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1668"/>
         <source>Spanish (Panama)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spank (Panama)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1669"/>
         <source>Spanish (Peru)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spank (Peru)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1670"/>
         <source>Spanish (Philippines)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spank (Filippinerne)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1671"/>
         <source>Spanish (Puerto Rico)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spank (Puerto Rico)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1672"/>
         <source>Spanish (Paraguay)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spank (Paraguay)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1673"/>
         <source>Spanish (El Salvador)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (El Salvador)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1674"/>
         <source>Spanish (United States)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (USA)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1675"/>
         <source>Spanish (Uruguay)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (Uruguay)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1676"/>
         <source>Spanish (Venezuela)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk (Venezuela)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1677"/>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1678"/>
         <source>Estonian</source>
-        <translation type="unfinished"></translation>
+        <translation>Estonsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1679"/>
         <source>Basque</source>
-        <translation type="unfinished"></translation>
+        <translation>Baskisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1680"/>
         <source>Persian</source>
-        <translation type="unfinished"></translation>
+        <translation>Persisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1681"/>
         <source>Faroese</source>
-        <translation type="unfinished"></translation>
+        <translation>Færøsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1682"/>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Fransk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1683"/>
         <source>Friulian</source>
-        <translation type="unfinished"></translation>
+        <translation>Friulisisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1684"/>
         <source>Western Frisian</source>
-        <translation type="unfinished"></translation>
+        <translation>Vestfrisisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1685"/>
         <source>Irish</source>
-        <translation type="unfinished"></translation>
+        <translation>Irsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1686"/>
         <source>Gaelic</source>
-        <translation type="unfinished"></translation>
+        <translation>Gælisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1687"/>
         <source>Galician</source>
-        <translation type="unfinished"></translation>
+        <translation>Galicisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1688"/>
         <source>Gujarati</source>
-        <translation type="unfinished"></translation>
+        <translation>Gujarati</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1689"/>
         <source>Guarani</source>
-        <translation type="unfinished"></translation>
+        <translation>Guaranisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1690"/>
         <source>Hebrew</source>
-        <translation type="unfinished"></translation>
+        <translation>Hebraisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1691"/>
         <source>Hindi</source>
-        <translation type="unfinished"></translation>
+        <translation>Hindi</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1692"/>
         <source>Croatian</source>
-        <translation type="unfinished"></translation>
+        <translation>Kroatisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1693"/>
         <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungarsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1694"/>
         <source>Armenian</source>
-        <translation type="unfinished"></translation>
+        <translation>Armensk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1695"/>
         <source>Armenian (Western)</source>
-        <translation type="unfinished"></translation>
+        <translation>Armensk (Vestligt)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1696"/>
         <source>Interlingua</source>
-        <translation type="unfinished"></translation>
+        <translation>Interlingua</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1697"/>
         <source>Indonesian</source>
-        <translation type="unfinished"></translation>
+        <translation>Indonesisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1698"/>
         <source>Icelandic</source>
-        <translation type="unfinished"></translation>
+        <translation>Islandsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1699"/>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>Italiensk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1700"/>
         <source>Georgian</source>
-        <translation type="unfinished"></translation>
+        <translation>Georgisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1701"/>
         <source>Kazakh</source>
-        <translation type="unfinished"></translation>
+        <translation>Kazahkstansk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1702"/>
         <source>Kurdish</source>
-        <translation type="unfinished"></translation>
+        <translation>Kurdisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1703"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Koransk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1704"/>
         <source>Latin</source>
-        <translation type="unfinished"></translation>
+        <translation>Latin</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1705"/>
         <source>Luxembourgish</source>
-        <translation type="unfinished"></translation>
+        <translation>Luxembourgsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1706"/>
         <source>Lao</source>
-        <translation type="unfinished"></translation>
+        <translation>Lao</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1707"/>
         <source>Lithuanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Lithauisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1708"/>
         <source>Latgalian</source>
-        <translation type="unfinished"></translation>
+        <translation>Latgalsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1709"/>
         <source>Latvian</source>
-        <translation type="unfinished"></translation>
+        <translation>Lettisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1710"/>
         <source>Macedonian</source>
-        <translation type="unfinished"></translation>
+        <translation>Makedonsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1711"/>
         <source>Mongolian</source>
-        <translation type="unfinished"></translation>
+        <translation>Mongolsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1712"/>
         <source>Maltese</source>
-        <translation type="unfinished"></translation>
+        <translation>Maltesisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1713"/>
         <location filename="../ui/settings/settings_view.cpp" line="1717"/>
         <source>Norwegian</source>
-        <translation type="unfinished"></translation>
+        <translation>Norsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1714"/>
         <source>Low German</source>
-        <translation type="unfinished"></translation>
+        <translation>Plattysk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1715"/>
         <source>Nepali</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepalesisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1716"/>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation>Hollandsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1718"/>
         <source>Occitan</source>
-        <translation type="unfinished"></translation>
+        <translation>Occitansk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1719"/>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Polsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1720"/>
         <source>Portuguese (Brazilian)</source>
-        <translation type="unfinished"></translation>
+        <translation>Portugisisk (Brasiliansk)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1721"/>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Portugisisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1722"/>
         <source>Quechua</source>
-        <translation type="unfinished"></translation>
+        <translation>Quechua</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1723"/>
         <source>Romanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Rumænsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1724"/>
         <source>Russian (with Yo)</source>
-        <translation type="unfinished"></translation>
+        <translation>Russisk (med Yo)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1725"/>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>Russisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1726"/>
         <source>Kinyarwanda</source>
-        <translation type="unfinished"></translation>
+        <translation>Kinyarwanda</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1727"/>
         <source>Sinhala</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinhala</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1728"/>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Slovakisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1729"/>
         <source>Slovenian</source>
-        <translation type="unfinished"></translation>
+        <translation>Slovensk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1730"/>
         <source>Albanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Albansk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1731"/>
         <source>Serbian (Latin)</source>
-        <translation type="unfinished"></translation>
+        <translation>Serbisk (Latin)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1732"/>
         <source>Serbian</source>
-        <translation type="unfinished"></translation>
+        <translation>Serbisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1733"/>
         <source>Swedish (Finland)</source>
-        <translation type="unfinished"></translation>
+        <translation>Svensk (finsk)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1734"/>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Svensk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1735"/>
         <source>Swahili</source>
-        <translation type="unfinished"></translation>
+        <translation>Swahili</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1736"/>
         <source>Tamil</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamilsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1737"/>
         <source>Telugu</source>
-        <translation type="unfinished"></translation>
+        <translation>Telugu</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1738"/>
         <source>Thai</source>
-        <translation type="unfinished"></translation>
+        <translation>Thai</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1739"/>
         <source>Turkmen</source>
-        <translation type="unfinished"></translation>
+        <translation>Turkmensk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1740"/>
         <source>Klingon (Latin)</source>
-        <translation type="unfinished"></translation>
+        <translation>Klingon (Latin)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1741"/>
         <source>Klingon</source>
-        <translation type="unfinished"></translation>
+        <translation>Klingon</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1742"/>
         <source>Turkish</source>
-        <translation type="unfinished"></translation>
+        <translation>Tyrkisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1743"/>
         <source>Ukrainian</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukrainsk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1744"/>
         <source>Vietnamese</source>
-        <translation type="unfinished"></translation>
+        <translation>Vietnamesisk</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1749"/>
         <source>User interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Brugergrænseflade</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1750"/>
         <source>Manage user dictionary</source>
-        <translation type="unfinished"></translation>
+        <translation>Administrer brugerordbog</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1785"/>
         <source>Show hints for major &amp; related to a current story characters only</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis hints for nuværende og historiekarakterer</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1786"/>
         <source>Screenplay navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>Skuespil navigator</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1787"/>
         <source>Show beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis beats</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1823"/>
         <source>Screenplay editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Skuespil editor</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1826"/>
         <source>Block name</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloker navn</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1827"/>
         <source>Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Genvej</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1828"/>
         <source>If you press in paragraphs end</source>
-        <translation type="unfinished"></translation>
+        <translation>Hvis du trykker i afsnitsendelser</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1829"/>
         <source>If you press in empty paragraphs</source>
-        <translation type="unfinished"></translation>
+        <translation>Hvis du trykker i tomme afsnit</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1832"/>
         <source>Add paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilføj afsnit</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1833"/>
         <source>Change to</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift til</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1611"/>
         <source>Size of the user interface elements:</source>
-        <translation type="unfinished"></translation>
+        <translation>Størrelsen af brugergrænsefladens elementer:</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1612"/>
         <source>small</source>
-        <translation type="unfinished"></translation>
+        <translation>Lille</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1613"/>
         <source>big</source>
-        <translation type="unfinished"></translation>
+        <translation>stor</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1614"/>
         <source>Save changes &amp; backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Gem ændringer og backups</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1615"/>
         <source>Automatically save changes as soon as possible</source>
-        <translation type="unfinished"></translation>
+        <translation>Gem automatik ændringer hurtigst muligt</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1617"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Autogem ændringer meget præcist
+Det gemmer projektet hvert 3.die sekund, hvis du ikke bruger mus eller keyboard.
+Hvis du arbejder uden afbrydelse gemmes der hvert 3.die minut.</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1620"/>
         <source>Save backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Gem backups</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1621"/>
         <source>Backups folder path</source>
-        <translation type="unfinished"></translation>
+        <translation>Sti til backup-mappe</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1752"/>
         <source>Focus current paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Fokuser nuværende afsnit</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1754"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
-        <translation type="unfinished"></translation>
+        <translation>Brug skrivemaskine scrolling (skrivning foregår midt på siden)</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1756"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Komponenter</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1760"/>
         <source>Simple text module</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpelt tekst modul</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1761"/>
         <location filename="../ui/settings/settings_view.cpp" line="1774"/>
         <location filename="../ui/settings/settings_view.cpp" line="1810"/>
         <source>Text editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst editor</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1762"/>
         <location filename="../ui/settings/settings_view.cpp" line="1775"/>
         <location filename="../ui/settings/settings_view.cpp" line="1811"/>
         <source>Default template</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard skabelon</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1764"/>
         <location filename="../ui/settings/settings_view.cpp" line="1777"/>
         <location filename="../ui/settings/settings_view.cpp" line="1813"/>
         <source>Available actions for the selected template</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilgængelige handlinger for den valgte skabelon</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1778"/>
         <location filename="../ui/settings/settings_view.cpp" line="1788"/>
         <source>Show scene number</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis scenenummer</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1779"/>
         <source>on the left</source>
-        <translation type="unfinished"></translation>
+        <translation>til venstre</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1780"/>
         <source>on the right</source>
-        <translation type="unfinished"></translation>
+        <translation>til højre</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1781"/>
         <source>Show dialogue number</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis dialognummer</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1751"/>
         <source>Highlight current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Fremhæv nuværende linje</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1765"/>
         <location filename="../ui/settings/settings_view.cpp" line="1814"/>
         <source>Navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>Navigator</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1766"/>
         <source>Show chapter text, lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Vi kapitel tekst, linjer</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1773"/>
         <source>Screenplay module</source>
-        <translation type="unfinished"></translation>
+        <translation>Skuespil modul</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1783"/>
         <source>Automatically continue same speaker&apos;s dialogue</source>
-        <translation type="unfinished"></translation>
+        <translation>Fortsæt automatisk samme speakers dialog</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1789"/>
         <source>Show scene text, lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis scene tekst, linjer</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1795"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Varighed</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1796"/>
         <source>Calculate duration based on the count of pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Udregn varighed baseret på antal sider</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1797"/>
         <location filename="../ui/settings/settings_view.cpp" line="1803"/>
         <source>at the rate of</source>
-        <translation type="unfinished"></translation>
+        <translation>med en hastighed på</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1798"/>
@@ -6022,43 +6036,43 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/settings/settings_view.cpp" line="1799"/>
         <location filename="../ui/settings/settings_view.cpp" line="1806"/>
         <source>has duration</source>
-        <translation type="unfinished"></translation>
+        <translation>er varigheden</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1800"/>
         <location filename="../ui/settings/settings_view.cpp" line="1807"/>
         <source>seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>sekunder</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1802"/>
         <source>Calculate duration based on the count of letters</source>
-        <translation type="unfinished"></translation>
+        <translation>Beregn varighed baseret på antal bogstever</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1804"/>
         <source>letters</source>
-        <translation type="unfinished"></translation>
+        <translation>bogstaver</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1805"/>
         <source>including spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Inclusiv mellemrum</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1809"/>
         <source>Comic book module</source>
-        <translation type="unfinished"></translation>
+        <translation>Tegneserie modul</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1815"/>
         <source>Show panel text, lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis panel tekst, linjer</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1822"/>
         <source>Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Genveje</translation>
     </message>
 </context>
 <context>
@@ -6175,7 +6189,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="119"/>
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="120"/>
         <source>Back to navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilbage til Navigator</translation>
     </message>
 </context>
 <context>
@@ -6196,37 +6210,37 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="294"/>
         <source>HASH copied.</source>
-        <translation type="unfinished"></translation>
+        <translation>HASH kopieret</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="299"/>
         <source>Pasted HASH has incorrect length</source>
-        <translation type="unfinished"></translation>
+        <translation>Indsatte HASH har forkert længde</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="309"/>
         <source>Pasted HASH has invalid colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Indsatte HASH har ugyldige farver</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="318"/>
         <source>Pasted HASH has too many equal colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Indsatte HASH har for mange ens farver</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="323"/>
         <source>HASH pasted.</source>
-        <translation type="unfinished"></translation>
+        <translation>HASH indsat.</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="389"/>
         <source>Copy theme HASH to share your custom theme with others</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopier HASH tea så du kan dele standard tema med andre</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="390"/>
         <source>Paste theme HASH from clipboard and apply it</source>
-        <translation type="unfinished"></translation>
+        <translation>Indsæt HASJ tema fra udklipsholderen og anvend det</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="392"/>
@@ -6236,27 +6250,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="393"/>
         <source>Accent</source>
-        <translation type="unfinished"></translation>
+        <translation>Fremhæv</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="394"/>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Baggrund</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="395"/>
         <source>Surface</source>
-        <translation type="unfinished"></translation>
+        <translation>Overflade</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="396"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fejl</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="397"/>
         <source>Text edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekstredigering</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="399"/>
@@ -6284,17 +6298,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="176"/>
         <source>Current text font family</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuværende tekst font familie</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="177"/>
         <source>Current text font size</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuværende tekst font størrelse</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="178"/>
         <source>Restore default title page</source>
-        <translation type="unfinished"></translation>
+        <translation>Genskab standard titelside</translation>
     </message>
 </context>
 <context>
@@ -6302,17 +6316,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="90"/>
         <source>via PayPal</source>
-        <translation type="unfinished"></translation>
+        <translation>via PayPal</translation>
     </message>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="91"/>
         <source>via bank card</source>
-        <translation type="unfinished"></translation>
+        <translation>via bank kort</translation>
     </message>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="92"/>
         <source>via Yandex.Money</source>
-        <translation type="unfinished"></translation>
+        <translation>via Yandex.Money</translation>
     </message>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="93"/>
@@ -6330,53 +6344,53 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="214"/>
         <source>Until the end of the sprint left</source>
-        <translation type="unfinished"></translation>
+        <translation>Indtil slutning af sprint til venstre</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="220"/>
         <source>Sprint finished!</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprint færdig!</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="268"/>
         <source>Done! I&apos;ve just written %n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Færdig! Jeg har lige skrevet  %n word(s)</numerusform>
+            <numerusform>Færdig! Jeg har lige skrevet %n ord(s)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="269"/>
         <source>in %n minute(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>in %n minute(s)</numerusform>
+            <numerusform>på %n minut(s)</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="450"/>
         <source>Sprint duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprint varighed</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="451"/>
         <source>min</source>
-        <translation type="unfinished"></translation>
+        <translation>minutter</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="453"/>
         <source>Great job</source>
-        <translation type="unfinished"></translation>
+        <translation>Godt arbejde</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="454"/>
         <source>words written</source>
-        <translation type="unfinished"></translation>
+        <translation>skrevne ord</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="455"/>
         <source>Restart sprint</source>
-        <translation type="unfinished"></translation>
+        <translation>Genstart sprint</translation>
     </message>
 </context>
 <context>
@@ -6384,7 +6398,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../../3rd_party/webloader/src/WebLoader.cpp" line="311"/>
         <source>Sorry, we have some error while loading. Error is: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Undskyld, vi har fejl ved hentnig. Fejlen er: %1</translation>
     </message>
 </context>
 </TS>
