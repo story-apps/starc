@@ -2197,15 +2197,21 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     TextModelItem* grandParentItem = nullptr;
                     int startChildIndex = -1;
                     //
-                    // Если группа вставлена в самое начало, или на одном уровне с предыдущим
+                    // Если группа вставлена в самое начало
                     //
-                    if (previousTextItem == nullptr
-                        || parentItem->parent() == previousTextItem->parent()->parent()) {
+                    if (previousTextItem == nullptr) {
+                        grandParentItem = parentItem->parent();
+                        startChildIndex = grandParentItem->rowOfChild(parentItem);
+                    }
+                    //
+                    // Если группа вставлена на одном уровне с предыдущим
+                    //
+                    else if (parentItem->parent() == previousTextItem->parent()->parent()) {
                         //
                         // Переносим все элементы идущие за вставленной группой
                         //
-                        grandParentItem = parentItem->parent();
-                        startChildIndex = grandParentItem->rowOfChild(parentItem);
+                        grandParentItem = previousTextItem->parent();
+                        startChildIndex = grandParentItem->rowOfChild(previousTextItem);
                     }
                     //
                     // А если предыдущий элемент на другом уровне
