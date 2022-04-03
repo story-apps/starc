@@ -113,7 +113,7 @@ void OnboardingView::Implementation::initLanguagePage()
     PercentRadioButton* frenchLanguage = initLanguageButton("Français", QLocale::French, 85);
     PercentRadioButton* galicianLanguage = initLanguageButton("Galego", QLocale::Galician, 86);
     PercentRadioButton* germanLanguage = initLanguageButton("Deutsch", QLocale::German, 93);
-    PercentRadioButton* hebrewLanguage = initLanguageButton("עִבְרִית", QLocale::Hebrew, 93);
+    PercentRadioButton* hebrewLanguage = initLanguageButton("עִבְרִית", QLocale::Hebrew, 100);
     PercentRadioButton* hindiLanguage = initLanguageButton("हिन्दी", QLocale::Hindi, 45);
     PercentRadioButton* hungarianLanguage = initLanguageButton("Magyar", QLocale::Hungarian, 50);
     PercentRadioButton* indonesianLanguage

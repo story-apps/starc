@@ -6,7 +6,7 @@
     <message>
         <location filename="../../corelib/ui/widgets/app_bar/app_bar.cpp" line="358"/>
         <source>Show module options</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג אפשרויות מודול</translation>
     </message>
 </context>
 <context>
@@ -77,12 +77,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="129"/>
         <source>Act</source>
-        <translation type="unfinished"></translation>
+        <translation>מערכה</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="131"/>
         <source>Act footer</source>
-        <translation type="unfinished"></translation>
+        <translation>כותרת תחתונה של מערכה</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="133"/>
@@ -117,7 +117,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="147"/>
         <source>Beat</source>
-        <translation type="unfinished"></translation>
+        <translation>ביט</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="149"/>
@@ -147,17 +147,17 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="160"/>
         <source>Sound</source>
-        <translation type="unfinished"></translation>
+        <translation>שמע</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="162"/>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation>מוזיקה</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="164"/>
         <source>Cue</source>
-        <translation type="unfinished"></translation>
+        <translation>אות</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="167"/>
@@ -1559,7 +1559,7 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="267"/>
         <source>Timeline</source>
-        <translation type="unfinished"></translation>
+        <translation>ציר זמן</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="273"/>
@@ -1774,7 +1774,15 @@
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="158"/>
         <source>version</source>
-        <translation type="unfinished"></translation>
+        <translation>גרסה</translation>
+    </message>
+    <message>
+        <source>Designed, coded and crafted with love at the </source>
+        <translation type="vanished">עוצב, תוכנת ובנוי באהבה על ידי</translation>
+    </message>
+    <message>
+        <source>The Logline Generator is powered by </source>
+        <translation type="vanished">מחולל הלוגליין מופעל על ידי</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="160"/>
@@ -1794,12 +1802,12 @@
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="167"/>
         <source>Starc is being developed with strong authors’ involvement and support so we won’t waste the app performance on the features you don’t need.</source>
-        <translation type="unfinished"></translation>
+        <translation>Starc מפותחת עם מעורבות ותמיכה של הכותבים, כך שלא נבזבז את ביצועי היישום על התכונות שאינך צריך.</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="170"/>
         <source>Feel free to contact us at any point of your creative journey to share your thoughts about the app, suggest ideas and report issues you met.</source>
-        <translation type="unfinished"></translation>
+        <translation>אל תהסס לפנות אלינו בכל שלב של המסע היצירתי שלך כדי לשתף את מחשבותך על היישום, להציע רעיונות ולדווח על בעיות שנתקלת בהן.</translation>
     </message>
 </context>
 <context>
@@ -1958,12 +1966,12 @@
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/add_bookmark_view.cpp" line="153"/>
         <source>Bookmark name</source>
-        <translation type="unfinished"></translation>
+        <translation>שם סימניה</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/add_bookmark_view.cpp" line="154"/>
         <source>Select bookmark color</source>
-        <translation type="unfinished"></translation>
+        <translation>בחר צבע סימניה</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/add_bookmark_view.cpp" line="155"/>
@@ -1981,7 +1989,7 @@
     <message>
         <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="126"/>
         <source>Сomment</source>
-        <translation type="unfinished"></translation>
+        <translation>הערה</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="127"/>
@@ -2007,12 +2015,12 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/beat_name_widget.cpp" line="72"/>
         <source>Current beat:</source>
-        <translation type="unfinished"></translation>
+        <translation>ביט נוכחי</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/beat_name_widget.cpp" line="73"/>
         <source>Copy current beat text and paste it to the document</source>
-        <translation type="unfinished"></translation>
+        <translation>העתק את טקסט הביט הנוכחי והדבק אותו במסמך</translation>
     </message>
 </context>
 <context>
@@ -2020,22 +2028,22 @@
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="130"/>
         <source>Create new bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>צור סימניה חדשה</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="131"/>
         <source>Edit bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>ערוך סימניה</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="132"/>
         <source>Bookmark text</source>
-        <translation type="unfinished"></translation>
+        <translation>טקסט הסימניה</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="133"/>
         <source>Select bookmark color</source>
-        <translation type="unfinished"></translation>
+        <translation>בחר צבע סימניה</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="134"/>
@@ -2050,7 +2058,7 @@
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="135"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>עדכן</translation>
     </message>
 </context>
 <context>
@@ -2068,7 +2076,7 @@
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmarks_view.cpp" line="84"/>
         <source>Remove selected bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>הסר סימניות שנבחרו</translation>
     </message>
 </context>
 <context>
@@ -2496,7 +2504,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="190"/>
         <source>Generate logline</source>
-        <translation type="unfinished"></translation>
+        <translation>צור לוגליין</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="191"/>
@@ -2759,9 +2767,9 @@
     <message numerus="yes">
         <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="240"/>
         <source>%n reply(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>n% תגובה(ות)</numerusform>
+            <numerusform>n% תגובה(ות)</numerusform>
         </translation>
     </message>
 </context>
@@ -3213,12 +3221,12 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="88"/>
         <source>Hint</source>
-        <translation type="unfinished"></translation>
+        <translation>רמז</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="89"/>
         <source>Read more</source>
-        <translation type="unfinished"></translation>
+        <translation>קרא עוד</translation>
     </message>
 </context>
 <context>
@@ -3289,7 +3297,7 @@
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="310"/>
         <source>Improve</source>
-        <translation type="unfinished"></translation>
+        <translation>שפר</translation>
     </message>
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="311"/>
@@ -3621,86 +3629,90 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="485"/>
         <source>Every successful screen story has a central character. Describe it!</source>
-        <translation type="unfinished"></translation>
+        <translation>לכל סיפור מצליח יש דמות מרכזית. תאר אותה!</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="495"/>
         <source>Untick if you don&apos;t want to include theme.</source>
-        <translation type="unfinished"></translation>
+        <translation>בטל את הסימון אם אינך רוצה לכלול תמה.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="505"/>
         <source>Come on! No goal, no story! Complete it, then move on.</source>
-        <translation type="unfinished"></translation>
+        <translation>בחייך! אין מטרה, אין סיפור! השלם אותה ואז תמשיך הלאה.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="516"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="521"/>
         <source>Untick if you don&apos;t want to include MPR.</source>
-        <translation type="unfinished"></translation>
+        <translation>בטל את הסימון אם אינך רוצה לכלול היפוך נקודת אמצע.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="532"/>
         <source>Untick if you don&apos;t want to include special rules.</source>
-        <translation type="unfinished"></translation>
+        <translation>בטל את הסימון אם אינך רוצה לכלול כללים מיוחדים.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="542"/>
         <source>Untick if you don&apos;t want to include stakes.</source>
-        <translation type="unfinished"></translation>
+        <translation>בטל את הסימון אם אינך רוצה לכלול סיכון.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="574"/>
         <source>he</source>
-        <translation type="unfinished"></translation>
+        <translation>הוא</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="575"/>
         <source>she</source>
-        <translation type="unfinished"></translation>
+        <translation>היא</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="575"/>
         <source>it</source>
-        <translation type="unfinished"></translation>
+        <translation>הוא</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="579"/>
         <source>When</source>
-        <translation type="unfinished"></translation>
+        <translation>כאשר</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="587"/>
         <source>in</source>
-        <translation type="unfinished"></translation>
+        <translation>ב</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="598"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
         <source>must</source>
-        <translation type="unfinished"></translation>
+        <translation>חייב</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="607"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="616"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="628"/>
         <source>in order to</source>
-        <translation type="unfinished"></translation>
+        <translation>כדי</translation>
+    </message>
+    <message>
+        <source>can</source>
+        <translation type="vanished">יכול</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
         <source>but</source>
-        <translation type="unfinished"></translation>
+        <translation>אבל</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
         <source>when</source>
-        <translation type="unfinished"></translation>
+        <translation>כאשר</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="635"/>
         <source>before</source>
-        <translation type="unfinished"></translation>
+        <translation>לפני</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="740"/>
@@ -3710,7 +3722,7 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="743"/>
         <source>Check out my new logline</source>
-        <translation type="unfinished"></translation>
+        <translation>בדוק את הלוגליין החדש שלי</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="769"/>
@@ -3721,22 +3733,22 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="815"/>
         <source>Logline generator</source>
-        <translation type="unfinished"></translation>
+        <translation>מחולל לוגליין</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="818"/>
         <source>Describe your main character</source>
-        <translation type="unfinished"></translation>
+        <translation>תאר את הדמות הראשית שלך</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="819"/>
         <source>E.g. &apos;A lonesome cowboy&apos;, or &apos;An arrogant publicist&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>לדוגמא &apos;קאובוי בודד&apos;, או &apos;יחצן יהיר&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="820"/>
         <source>What is their gender?</source>
-        <translation type="unfinished"></translation>
+        <translation>מה המגדר שלהם?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="821"/>
@@ -3757,142 +3769,142 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="824"/>
         <source>Typically this includes the character&apos;s function or job, and some weakness and/or strength. Loglines only have character names if the names are already a part of popular culture.</source>
-        <translation type="unfinished"></translation>
+        <translation>לרוב זה כולל את תפקידה או את המקצוע של הדמות, וחולשה ו/או חוזק מסויים. שמות של דמויות בלוגליין מופיעים רק אם השמות הם כבר חלק מהתרבות הפופולרית.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="828"/>
         <source>What event triggers the story&apos;s main action?</source>
-        <translation type="unfinished"></translation>
+        <translation>איזה אירוע מעורר את הפעולה ההמרכזית של הסיפור?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="830"/>
         <source>E.g. &apos;A shark kills a swimmer&apos; or &apos;her best friend shoots a man who tried to rape her&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>לדוגמא &apos;כריש הורג שחיין&apos; או &apos;החבר הכי טוב שלה יורה באדם שניסה לאנוס אותה&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="833"/>
         <source>Did you include a description of the main character?</source>
-        <translation type="unfinished"></translation>
+        <translation>האם כללת תיאור של הדמות הראשית?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="835"/>
         <source>Events are things that happen to the main character, and that motivates their actions. They&apos;re never anything the character does. Here we&apos;re looking for the story&apos;s main event or Inciting Incident / Call To Adventure. This typically happens in the first 10 - 20 minutes.</source>
-        <translation type="unfinished"></translation>
+        <translation>אירועים הם דברים שקורים לדמות הראשית, ומניעים את מעשיה. הם אף פעם לא משהו שהדמות עושה. כאן אנחנו מחפשים את האירוע המרכזי של הסיפור או את האירוע המחולל/קריאה להרפתקה. זה קורה בדרך כלל ב- 10-20 הדקות הראשונות.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="840"/>
         <source>Include a Theme or Character Arc</source>
-        <translation type="unfinished"></translation>
+        <translation>כלול תמה או קשת הדמות</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="841"/>
         <source>What do they have to learn/overcome?</source>
-        <translation type="unfinished"></translation>
+        <translation>על מה הם צריכים ללמוד/להתגבר?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="842"/>
         <source>E.g. &apos;to become less selfish&apos;, or &apos;to find purpose in life&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>לדוגמא &apos;להיות פחות אנוכי&apos;, או &apos;למצוא מטרה בחיים&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="844"/>
         <source>Even if theme is important in most stories, it is not critical to a basic logline. And often theme is established further down the development process. Leave it out for now, or try something and change it later.</source>
-        <translation type="unfinished"></translation>
+        <translation>גם אם התמה חשובה ברוב הסיפורים, היא לא קריטית ללוגליין בסיסי. ולעתים קרובות התמה נקבעת בהמשך תהליך הפיתוח. עזוב אותה לעת עתה, או נסה משהו ותשנה מאוחר יותר.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="848"/>
         <source>What is the main Action / Goal?</source>
-        <translation type="unfinished"></translation>
+        <translation>מהי הפעולה/המטרה העיקרית?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="850"/>
         <source>E.g. &apos;to close the beach&apos;, or &apos;to find her son and return him home&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>לדוגמא &apos;לסגור את החוף&apos;, או &apos;למצוא את בנה ולהחזיר אותו הביתה&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="852"/>
         <source>The main action or goal is &apos;what the story is about&apos; for the broad audience. It is that part of the story we can visualise when we hear the logline, and which (hopefully) makes us want to see the film or show episode. It is the objective the main character will pursue for most of the time.</source>
-        <translation type="unfinished"></translation>
+        <translation>הפעולה או המטרה העיקרית היא &apos;על מה הסיפור&apos; עבור הקהל הרחב. זה החלק בסיפור שאנחנו יכולים לדמיין כשאנחנו שומעים את הלוגליין, ואשר (בתקווה) גורם לנו לרצות לראות את הסרט או הפרק. זו המטרה שהדמות הראשית תרדוף אחריה רוב הזמן.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="857"/>
         <source>Include a Mid Point Reversal (MPR)</source>
-        <translation type="unfinished"></translation>
+        <translation>כלול היפוך נקודת אמצע</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="858"/>
         <source>What is the MPR Event?</source>
-        <translation type="unfinished"></translation>
+        <translation>מהו אירוע היפוך נקודת אמצע?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="860"/>
         <source>E.g. &apos;the trip to Vegas is aborted&apos;, or &apos;his employer turns out to be his nemesis&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>לדוגמא &apos;הטיול לווגאס מתבטל&apos;, או &apos;המעסיק שלו מתגלה כאויב שלו&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="861"/>
         <source>What is the character&apos;s new Action / Goal?</source>
-        <translation type="unfinished"></translation>
+        <translation>מהי הפעולה/המטרה החדשה של הדמות?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="862"/>
         <source>E.g. &apos;to venture into the ocean and kill the shark&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>לדוגמא &quot;לצאת לים ולהרוג את הכריש&quot;</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="864"/>
         <source>This event often happens just when the goal is within reach. It flips the character&apos;s fortune, and any gains now seem lost. But it may also be the motivation for the character&apos;s change in goal or approach. After the MPR, they often change their behaviour and start doing &apos;the right thing&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>אירוע זה קורה לעתים קרובות בדיוק כאשר המטרה נמצאת בהישג יד. זה הופך את מזלה של הדמות, וכל השג נראה עכשיו אבוד. אבל זה יכול להיות גם המניע לשינוי של הדמות במטרה או בגישה. לאחר היפוך נקודת האמצע, לעתים קרובות הם משנים את התנהגותם ומתחילים לעשות את &apos;הדבר הנכון&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="869"/>
         <source>Is the story set in a special, future or magical world?</source>
-        <translation type="unfinished"></translation>
+        <translation>האם הסיפור מתרחש בעולם מיוחד, עתידי או קסום?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="870"/>
         <source>How is your story world different from normal reality?</source>
-        <translation type="unfinished"></translation>
+        <translation>במה שונה עולם הסיפור שלך מהמציאות הרגילה?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="872"/>
         <source>E.g. &apos;it is 1920&apos;s Paris&apos;, or &apos;it is a world where pigs fly&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>לדוגמא &apos;זו פריז של שנות ה-20&apos;, או &apos;זה עולם שבו חזירים עפים&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="873"/>
         <source>Only add this if it is essential to understand the story. </source>
-        <translation type="unfinished"></translation>
+        <translation>הוסף זאת רק אם זה חיוני להבנת הסיפור.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="875"/>
         <source>Include a Deadline/Stakes?</source>
-        <translation type="unfinished"></translation>
+        <translation>לכלול דדליין/סיכון?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="876"/>
         <source>What happens if the main character fails?</source>
-        <translation type="unfinished"></translation>
+        <translation>מה קורה אם הדמות הראשית נכשלת?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="877"/>
         <source>E.g. &apos;the police catches the girls&apos;, or &apos;the shark attacks again&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>לדוגמא &apos;המשטרה תופסת את הבנות&apos;, או &apos;הכריש תוקף שוב&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="881"/>
         <source>To make the logline work, write this as a full sentence like in the examples.</source>
-        <translation type="unfinished"></translation>
+        <translation>כדי שהלוגליין יעבוד, כתוב את זה כמשפט שלם כמו בדוגמאות.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="882"/>
         <source>Often the stakes are clear from the Main Event. But in some cases, adding negative stakes adds urgency to the logline, ultimately improving its emotional impact.</source>
-        <translation type="unfinished"></translation>
+        <translation>לרוב הסיכון ברור מהאירוע המרכזי. אך במקרים מסוימים, הוספת סיכון מוסיפה דחיפות ללוגליין, ומשפרת את ההשפעה הרגשית שלו.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="898"/>
         <source>Your logline is cooked!</source>
-        <translation type="unfinished"></translation>
+        <translation>הלוגליין שלך מוכן!</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="900"/>
@@ -3902,7 +3914,7 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="901"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>חזרה</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="902"/>
@@ -3912,7 +3924,7 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="903"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>בוצע</translation>
     </message>
 </context>
 <context>
@@ -3987,7 +3999,7 @@
     <message>
         <location filename="../ui/menu_view.cpp" line="366"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>אודות</translation>
     </message>
 </context>
 <context>
@@ -4308,7 +4320,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="200"/>
         <source>Generate logline</source>
-        <translation type="unfinished"></translation>
+        <translation>צור לוגליין</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="201"/>
@@ -4735,7 +4747,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1329"/>
         <source>Bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>סימניה</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1333"/>
@@ -4755,7 +4767,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1352"/>
         <source>Show list</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג רשימה</translation>
     </message>
 </context>
 <context>
@@ -4897,7 +4909,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="70"/>
         <source>No one beat selected</source>
-        <translation type="unfinished"></translation>
+        <translation>אף ביט לא נבחר</translation>
     </message>
 </context>
 <context>
@@ -4915,12 +4927,12 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="933"/>
         <source>Bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>סימניות</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="935"/>
         <source>Show bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג רשימת סימניות</translation>
     </message>
 </context>
 <context>
@@ -5816,12 +5828,12 @@
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1786"/>
         <source>Screenplay navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>נווט התסריט</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1787"/>
         <source>Show beats</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג ביטים</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1823"/>
