@@ -409,6 +409,16 @@ void TextBlockStyle::setLinesAfter(int _linesAfter)
     updateBottomMargin();
 }
 
+bool TextBlockStyle::showTitle() const
+{
+    return m_showTitle;
+}
+
+void TextBlockStyle::setShowTitle(bool _show)
+{
+    m_showTitle = _show;
+}
+
 QTextBlockFormat TextBlockStyle::blockFormat(bool _onHalfPage) const
 {
     return _onHalfPage ? m_blockFormatOnHalfPage : m_blockFormat;
@@ -480,6 +490,8 @@ TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
     m_marginsOnHalfPage
         = marginsFromString(_blockAttributes.value("margins_on_half_page").toString());
     m_linesAfter = _blockAttributes.value("lines_after").toInt();
+    //
+    m_showTitle = _blockAttributes.value("show_title").toString() == "true";
 
     //
     // Настроим форматы
@@ -934,6 +946,7 @@ void TextTemplate::saveToFile(const QString& _filePath) const
         writer.writeAttribute("margins", ::toString(blockStyle.margins()));
         writer.writeAttribute("margins_on_half_page", ::toString(blockStyle.marginsOnHalfPage()));
         writer.writeAttribute("lines_after", ::toString(blockStyle.linesAfter()));
+        writer.writeAttribute("show_title", ::toString(blockStyle.showTitle()));
         writer.writeEndElement(); // block
     }
     writer.writeEndElement(); // blocks

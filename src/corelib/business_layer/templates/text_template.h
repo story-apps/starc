@@ -268,6 +268,12 @@ public:
     int linesAfter() const;
     void setLinesAfter(int _linesAfter);
 
+    /**
+     * @brief Отображать ли загаловок блока
+     */
+    bool showTitle() const;
+    void setShowTitle(bool _show);
+
 
     /**
      * @brief Настройки стиля отображения блока
@@ -372,6 +378,11 @@ private:
      * @brief Отступ снизу, линий
      */
     int m_linesAfter = 0;
+
+    /**
+     * @brief Отображать ли заголовок блока
+     */
+    bool m_showTitle = false;
 
     /**
      * @brief Формат блока

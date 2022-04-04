@@ -1,5 +1,6 @@
 #include "templates_facade.h"
 
+#include "audioplay_template.h"
 #include "comic_book_template.h"
 #include "screenplay_template.h"
 #include "simple_text_template.h"
@@ -23,6 +24,7 @@ namespace {
 const QLatin1String kTextTemplatesDirectory("templates/text");
 const QLatin1String kScreenplayTemplatesDirectory("templates/screenplay");
 const QLatin1String kComicBookTemplatesDirectory("templates/comicbook");
+const QLatin1String kAudioplayTemplatesDirectory("templates/audioplay");
 
 /**
  * @brief Параметры группы шаблонов
@@ -80,6 +82,7 @@ public:
     TemplateInfo<SimpleTextTemplate> text;
     TemplateInfo<ScreenplayTemplate> screenplay;
     TemplateInfo<ComicBookTemplate> comicBook;
+    TemplateInfo<AudioplayTemplate> audioplay;
 };
 
 template<>
@@ -98,6 +101,11 @@ template<>
 TemplateInfo<ComicBookTemplate>& TemplatesFacade::Implementation::templateInfo<ComicBookTemplate>()
 {
     return comicBook;
+}
+template<>
+TemplateInfo<AudioplayTemplate>& TemplatesFacade::Implementation::templateInfo<AudioplayTemplate>()
+{
+    return audioplay;
 }
 
 template<typename TemplateType>
@@ -341,6 +349,11 @@ QStandardItemModel* TemplatesFacade::comicBookTemplates()
     return instance().d->templatesModel<ComicBookTemplate>();
 }
 
+QStandardItemModel* TemplatesFacade::audioplayTemplates()
+{
+    return instance().d->templatesModel<AudioplayTemplate>();
+}
+
 const TextTemplate& TemplatesFacade::textTemplate(const TextModel* _model)
 {
     //
@@ -381,6 +394,11 @@ const ComicBookTemplate& TemplatesFacade::comicBookTemplate(const QString& _temp
     return instance().d->getTemplate<ComicBookTemplate>(_templateId);
 }
 
+const AudioplayTemplate& TemplatesFacade::audioplayTemplate(const QString& _templateId)
+{
+    return instance().d->getTemplate<AudioplayTemplate>(_templateId);
+}
+
 void TemplatesFacade::setDefaultSimpleTextTemplate(const QString& _templateId)
 {
     instance().d->setDefaultTemplate<SimpleTextTemplate>(_templateId);
@@ -394,6 +412,11 @@ void TemplatesFacade::setDefaultScreenplayTemplate(const QString& _templateId)
 void TemplatesFacade::setDefaultComicBookTemplate(const QString& _templateId)
 {
     instance().d->setDefaultTemplate<ComicBookTemplate>(_templateId);
+}
+
+void TemplatesFacade::setDefaultAudioplayTemplate(const QString& _templateId)
+{
+    instance().d->setDefaultTemplate<AudioplayTemplate>(_templateId);
 }
 
 void TemplatesFacade::saveScreenplayTemplate(const ScreenplayTemplate& _template)
@@ -428,6 +451,8 @@ TemplatesFacade::TemplatesFacade()
           QLatin1String("he"), QLatin1String("ru"), QLatin1String("tamil"), QLatin1String("us") });
     d->loadTemplates<ComicBookTemplate>(kComicBookTemplatesDirectory,
                                         { QLatin1String("world"), QLatin1String("us") });
+    d->loadTemplates<AudioplayTemplate>(kAudioplayTemplatesDirectory,
+                                        { QLatin1String("bbc_scene"), QLatin1String("us") });
 }
 
 TemplatesFacade& TemplatesFacade::instance()

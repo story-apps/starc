@@ -12,6 +12,7 @@ namespace BusinessLayer {
 
 class TextModel;
 class TextTemplate;
+class AudioplayTemplate;
 class ComicBookTemplate;
 class ScreenplayTemplate;
 class SimpleTextTemplate;
@@ -33,6 +34,7 @@ public:
     static QStandardItemModel* simpleTextTemplates();
     static QStandardItemModel* screenplayTemplates();
     static QStandardItemModel* comicBookTemplates();
+    static QStandardItemModel* audioplayTemplates();
 
     /**
      * @brief Получить шаблон используемый для заданной модели
@@ -47,6 +49,7 @@ public:
     static const ScreenplayTemplate& screenplayTemplate(const QString& _templateId = {});
     static const TextTemplate& screenplayTitlePageTemplate(const QString& _templateId = {});
     static const ComicBookTemplate& comicBookTemplate(const QString& _templateId = {});
+    static const AudioplayTemplate& audioplayTemplate(const QString& _templateId = {});
 
     /**
      * @brief Задать стандартный шаблон
@@ -54,6 +57,7 @@ public:
     static void setDefaultSimpleTextTemplate(const QString& _templateId);
     static void setDefaultScreenplayTemplate(const QString& _templateId);
     static void setDefaultComicBookTemplate(const QString& _templateId);
+    static void setDefaultAudioplayTemplate(const QString& _templateId);
 
     /**
      * @brief Сохранить стиль в библиотеке шаблонов

@@ -14,5 +14,7 @@
         <file>templates/text/sans_a4</file>
         <file>templates/comicbook/us</file>
         <file>templates/comicbook/world</file>
+        <file>templates/audioplay/us</file>
+        <file>templates/audioplay/bbc_scene</file>
     </qresource>
 </RCC>
