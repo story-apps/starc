@@ -1202,9 +1202,8 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     d->projectStructureModel->appendItem(
         createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")), screenplayItem,
         _titlePage.toUtf8());
-    d->projectStructureModel->appendItem(
-        createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis")), screenplayItem,
-        _synopsis.toUtf8());
+    auto synopsisItem = createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis"));
+    d->projectStructureModel->appendItem(synopsisItem, screenplayItem, _synopsis.toUtf8());
     d->projectStructureModel->appendItem(
         createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")), screenplayItem,
         _text.toUtf8());
@@ -1214,8 +1213,8 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     // Вставляем тритмент после всех документов, т.к. он является алиасом к документу сценария
     // и чтобы его сконструировать, нужны другие документы
     //
-    d->projectStructureModel->appendItem(
-        createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), screenplayItem,
+    d->projectStructureModel->insertItem(
+        createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), synopsisItem,
         _treatment.toUtf8());
 }
 
