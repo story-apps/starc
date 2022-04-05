@@ -691,11 +691,28 @@ void TextTemplate::Implementation::buildTitlePageTemplate()
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
     TextBlockStyle textBlockStyle;
+    //
+    // Сценарий
+    //
     if (paragraphsStyles.contains(TextParagraphType::Action)) {
         textBlockStyle = paragraphsStyles.value(TextParagraphType::Action);
-    } else if (paragraphsStyles.contains(TextParagraphType::Description)) {
+    }
+    //
+    // Комикс
+    //
+    else if (paragraphsStyles.contains(TextParagraphType::Description)) {
         textBlockStyle = paragraphsStyles.value(TextParagraphType::Description);
-    } else {
+    }
+    //
+    // Пьесы
+    //
+    else if (paragraphsStyles.contains(TextParagraphType::Dialogue)) {
+        textBlockStyle = paragraphsStyles.value(TextParagraphType::Dialogue);
+    }
+    //
+    // Текстовые документы
+    //
+    else {
         textBlockStyle = paragraphsStyles.value(TextParagraphType::Text);
     }
     defaultBlockStyle.setFont(textBlockStyle.font());

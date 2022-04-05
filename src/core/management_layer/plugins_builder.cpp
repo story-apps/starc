@@ -38,6 +38,7 @@ const QString kComicBookStatisticsViewMime = QStringLiteral("application/x-starc
 //
 const QString kAudioplayInformationViewMime = QStringLiteral("application/x-starc/view/audioplay/information");
 const QString kAudioplayParametersViewMime = QStringLiteral("application/x-starc/view/audioplay/parameters");
+const QString kAudioplayTitlePageEditorMime = QStringLiteral("application/x-starc/editor/audioplay/title-page");
 
 /**
  * @brief Карта соотвествия майм-типов редактора к навигатору
@@ -79,6 +80,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         //
         { "application/x-starc/document/audioplay", { { kAudioplayInformationViewMime, u8"\U000f02fd" },
                                                        { kAudioplayParametersViewMime, u8"\U000f0493" } } },
+        { "application/x-starc/document/audioplay/title-page",  { { kAudioplayTitlePageEditorMime, u8"\U000f09ed" } } },
         //
         { "application/x-starc/document/characters",  { { "application/x-starc/editor/characters/relations", u8"\U000F0D3D" } } },
         { "application/x-starc/document/character",  { { "application/x-starc/editor/character/information", u8"\U000f02fd" } } },
@@ -122,6 +124,7 @@ const QHash<QString, QString> kMimeToPlugin
         //
         { kAudioplayInformationViewMime, "*audioplayinformationplugin*" },
         { kAudioplayParametersViewMime, "*audioplayparametersplugin*" },
+        { kAudioplayTitlePageEditorMime, "*titlepageplugin*" },
         //
         { "application/x-starc/editor/characters/relations", "*charactersrelationsplugin*" },
         { "application/x-starc/editor/character/information", "*characterinformationplugin*" },
@@ -297,7 +300,7 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                 { "application/x-starc/editor/comicbook/parameters",
                   QApplication::translate("ProjectPluginsBuilder", "Comic book parameters") } } },
             { "application/x-starc/document/comicbook/title-page",
-              { { "application/x-starc/editor/comicbook/title-page",
+              { { kComicBookTitlePageEditorMime,
                   QApplication::translate("ProjectPluginsBuilder", "Title page text") } } },
             { "application/x-starc/document/comicbook/synopsis",
               { { "application/x-starc/editor/comicbook/synopsis",
@@ -316,6 +319,9 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                   QApplication::translate("ProjectPluginsBuilder", "Information about audioplay") },
                 { "application/x-starc/editor/audioplay/parameters",
                   QApplication::translate("ProjectPluginsBuilder", "Audioplay parameters") } } },
+            { "application/x-starc/document/audioplay/title-page",
+              { { kAudioplayTitlePageEditorMime,
+                  QApplication::translate("ProjectPluginsBuilder", "Title page text") } } },
             //
             { "application/x-starc/document/characters",
               { { "application/x-starc/editor/characters/relations",

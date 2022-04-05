@@ -5,6 +5,8 @@
 #include "screenplay_template.h"
 #include "simple_text_template.h"
 
+#include <business_layer/model/audioplay/audioplay_information_model.h>
+#include <business_layer/model/audioplay/audioplay_title_page_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
@@ -359,17 +361,21 @@ const TextTemplate& TemplatesFacade::textTemplate(const TextModel* _model)
     //
     // Получить шаблон в зависимости от заданной модели
     //
-    if (auto comicBookModel = qobject_cast<const ComicBookTextModel*>(_model)) {
-        //
-        // TODO: учитывать шаблон заданный для конкретного комикса
-        //
-        return comicBookTemplate();
-    } else if (auto screenplayModel = qobject_cast<const ScreenplayTextModel*>(_model)) {
+    if (auto screenplayModel = qobject_cast<const ScreenplayTextModel*>(_model)) {
         return screenplayTemplate(screenplayModel->informationModel()->templateId());
     } else if (auto screenplayTitlePageModel
                = qobject_cast<const ScreenplayTitlePageModel*>(_model)) {
         return screenplayTitlePageTemplate(
             screenplayTitlePageModel->informationModel()->templateId());
+    } else if (auto comicBookModel = qobject_cast<const ComicBookTextModel*>(_model)) {
+        //
+        // TODO: учитывать шаблон заданный для конкретного комикса
+        //
+        return comicBookTemplate();
+    } else if (auto audioplayTitlePageModel
+               = qobject_cast<const AudioplayTitlePageModel*>(_model)) {
+        return audioplayTitlePageTemplate(
+            audioplayTitlePageModel->informationModel()->templateId());
     }
     return simpleTextTemplate();
 }
@@ -397,6 +403,11 @@ const ComicBookTemplate& TemplatesFacade::comicBookTemplate(const QString& _temp
 const AudioplayTemplate& TemplatesFacade::audioplayTemplate(const QString& _templateId)
 {
     return instance().d->getTemplate<AudioplayTemplate>(_templateId);
+}
+
+const TextTemplate& TemplatesFacade::audioplayTitlePageTemplate(const QString& _templateId)
+{
+    return audioplayTemplate(_templateId).titlePageTemplate();
 }
 
 void TemplatesFacade::setDefaultSimpleTextTemplate(const QString& _templateId)
