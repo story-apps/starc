@@ -1,5 +1,10 @@
 #include "project_models_facade.h"
 
+#include <business_layer/model/audioplay/audioplay_information_model.h>
+#include <business_layer/model/audioplay/audioplay_statistics_model.h>
+#include <business_layer/model/audioplay/audioplay_synopsis_model.h>
+#include <business_layer/model/audioplay/audioplay_title_page_model.h>
+#include <business_layer/model/audioplay/text/audioplay_text_model.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/comic_book/comic_book_dictionaries_model.h>
@@ -396,6 +401,116 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             auto comicBookModel
                 = qobject_cast<BusinessLayer::ComicBookTextModel*>(modelFor(comicBookTextItemUuid));
             statisticsModel->setComicBookTextModel(comicBookModel);
+
+            model = statisticsModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::Audioplay: {
+            auto audioplayModel = new BusinessLayer::AudioplayInformationModel;
+            connect(audioplayModel,
+                    &BusinessLayer::AudioplayInformationModel::titlePageVisibleChanged, this,
+                    [this, audioplayModel](bool _visible) {
+                        emit audioplayTitlePageVisibilityChanged(audioplayModel, _visible);
+                    });
+            connect(audioplayModel,
+                    &BusinessLayer::AudioplayInformationModel::synopsisVisibleChanged, this,
+                    [this, audioplayModel](bool _visible) {
+                        emit audioplaySynopsisVisibilityChanged(audioplayModel, _visible);
+                    });
+            connect(audioplayModel,
+                    &BusinessLayer::AudioplayInformationModel::audioplayTextVisibleChanged, this,
+                    [this, audioplayModel](bool _visible) {
+                        emit audioplayTextVisibilityChanged(audioplayModel, _visible);
+                    });
+            connect(audioplayModel,
+                    &BusinessLayer::AudioplayInformationModel::audioplayStatisticsVisibleChanged,
+                    this, [this, audioplayModel](bool _visible) {
+                        emit audioplayStatisticsVisibilityChanged(audioplayModel, _visible);
+                    });
+
+            model = audioplayModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::AudioplayTitlePage: {
+            auto titlePageModel = new BusinessLayer::AudioplayTitlePageModel;
+
+            const auto titlePageItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(titlePageItem);
+            Q_ASSERT(titlePageItem->parent());
+            const auto parentUuid = titlePageItem->parent()->uuid();
+
+            //
+            // Добавляем в модель титульной страницы, модель информации о сценарие
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::AudioplayInformationModel*>(modelFor(parentUuid));
+            titlePageModel->setInformationModel(informationModel);
+
+            model = titlePageModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::AudioplaySynopsis: {
+            model = new BusinessLayer::AudioplaySynopsisModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::AudioplayText: {
+            auto audioplayModel = new BusinessLayer::AudioplayTextModel;
+
+            const auto audioplayItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(audioplayItem);
+            Q_ASSERT(audioplayItem->parent());
+            const auto parentUuid = audioplayItem->parent()->uuid();
+
+            //
+            // Добавляем в модель сценария, модель информации о сценарие
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::AudioplayInformationModel*>(modelFor(parentUuid));
+            audioplayModel->setInformationModel(informationModel);
+            //
+            // ... модель титульной страницы
+            //
+            const auto titlePageIndex = 0;
+            auto titlePageItem = audioplayItem->parent()->childAt(titlePageIndex);
+            Q_ASSERT(titlePageItem);
+            Q_ASSERT(titlePageItem->type() == Domain::DocumentObjectType::AudioplayTitlePage);
+            auto titlePageModel
+                = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(titlePageItem->uuid()));
+            audioplayModel->setTitlePageModel(titlePageModel);
+            //
+            // ... модель персонажей
+            //
+            auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
+                modelFor(Domain::DocumentObjectType::Characters));
+            audioplayModel->setCharactersModel(charactersModel);
+
+            model = audioplayModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::AudioplayStatistics: {
+            auto statisticsModel = new BusinessLayer::AudioplayStatisticsModel;
+
+            const auto statisticsItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(statisticsItem);
+            const auto audioplayItem = statisticsItem->parent();
+            Q_ASSERT(audioplayItem);
+            QUuid audioplayTextItemUuid;
+            for (int childIndex = 0; childIndex < audioplayItem->childCount(); ++childIndex) {
+                const auto childItem = audioplayItem->childAt(childIndex);
+                if (childItem->type() == Domain::DocumentObjectType::AudioplayText) {
+                    audioplayTextItemUuid = childItem->uuid();
+                    break;
+                }
+            }
+            Q_ASSERT(!audioplayTextItemUuid.isNull());
+            auto audioplayModel
+                = qobject_cast<BusinessLayer::AudioplayTextModel*>(modelFor(audioplayTextItemUuid));
+            statisticsModel->setAudioplayTextModel(audioplayModel);
 
             model = statisticsModel;
             break;

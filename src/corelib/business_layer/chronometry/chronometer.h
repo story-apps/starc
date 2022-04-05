@@ -18,14 +18,27 @@ enum class CORE_LIBRARY_EXPORT ChronometerType { Page, Characters };
 /**
  * @brief Фасад для вычисления хронометража способом, настроенным пользователем
  */
-class CORE_LIBRARY_EXPORT Chronometer
+class CORE_LIBRARY_EXPORT ScreenplayChronometer
 {
 public:
     /**
      * @brief Определить длительность заданного блока
      */
     static std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
-                                              const QString& _screenplayTemplateId);
+                                              const QString& _templateId);
+};
+
+/**
+ * @brief Фасад для вычисления хронометража способом, настроенным пользователем
+ */
+class CORE_LIBRARY_EXPORT AudioplayChronometer
+{
+public:
+    /**
+     * @brief Определить длительность заданного блока
+     */
+    static std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
+                                              const QString& _templateId);
 };
 
 } // namespace BusinessLayer

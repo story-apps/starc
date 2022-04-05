@@ -5,7 +5,6 @@
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
-#include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
 
 
@@ -169,8 +168,8 @@ QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) cons
         return {};
     }
 
-    const auto textItem = static_cast<const ScreenplayTextModelTextItem*>(item);
-    return textItem->number().value_or(ScreenplayTextModelTextItem::Number()).text;
+    const auto textItem = static_cast<const TextModelTextItem*>(item);
+    return textItem->number().value_or(TextModelTextItem::Number()).text;
 }
 
 TextModelTextItem::Bookmark ScreenplayTextDocument::bookmark(const QTextBlock& _forBlock) const
@@ -189,8 +188,8 @@ TextModelTextItem::Bookmark ScreenplayTextDocument::bookmark(const QTextBlock& _
         return {};
     }
 
-    const auto textItem = static_cast<const ScreenplayTextModelTextItem*>(item);
-    return textItem->bookmark().value_or(ScreenplayTextModelTextItem::Bookmark());
+    const auto textItem = static_cast<const TextModelTextItem*>(item);
+    return textItem->bookmark().value_or(TextModelTextItem::Bookmark());
 }
 
 } // namespace BusinessLayer

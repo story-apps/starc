@@ -236,6 +236,20 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         break;
     }
 
+    case DocumentObjectType::Audioplay: {
+        auto audioplayItem
+            = createItem(DocumentObjectType::Audioplay, !_name.isEmpty() ? _name : tr("Audioplay"));
+        appendItem(audioplayItem, parentItem);
+        appendItem(createItem(DocumentObjectType::AudioplayTitlePage, tr("Title page")),
+                   audioplayItem);
+        appendItem(createItem(DocumentObjectType::AudioplaySynopsis, tr("Synopsis")),
+                   audioplayItem);
+        appendItem(createItem(DocumentObjectType::AudioplayText, tr("Script")), audioplayItem);
+        appendItem(createItem(DocumentObjectType::AudioplayStatistics, tr("Statistics")),
+                   audioplayItem);
+        break;
+    }
+
     case DocumentObjectType::Characters: {
         appendItem(createItem(_type, tr("Characters")), parentItem, _content);
         break;
@@ -473,6 +487,7 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     //
     case Domain::DocumentObjectType::Screenplay:
     case Domain::DocumentObjectType::ComicBook:
+    case Domain::DocumentObjectType::Audioplay:
     case Domain::DocumentObjectType::Character:
     case Domain::DocumentObjectType::Location:
     case Domain::DocumentObjectType::Folder: {
@@ -507,7 +522,11 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     case Domain::DocumentObjectType::ComicBookTitlePage:
     case Domain::DocumentObjectType::ComicBookSynopsis:
     case Domain::DocumentObjectType::ComicBookText:
-    case Domain::DocumentObjectType::ComicBookStatistics: {
+    case Domain::DocumentObjectType::ComicBookStatistics:
+    case Domain::DocumentObjectType::AudioplayTitlePage:
+    case Domain::DocumentObjectType::AudioplaySynopsis:
+    case Domain::DocumentObjectType::AudioplayText:
+    case Domain::DocumentObjectType::AudioplayStatistics: {
         return defaultFlags;
     }
 

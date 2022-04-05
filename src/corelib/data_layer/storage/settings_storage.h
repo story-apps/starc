@@ -214,6 +214,39 @@ const QString kComponentsComicBookNavigatorShowSceneTextKey
 const QString kComponentsComicBookNavigatorSceneTextLinesKey
     = kComponentsComicBookNavigatorKey + QStringLiteral("/scene-text-lines");
 //
+// аудиопостановка
+const QString kComponentsAudioplayKey = kComponentsGroupKey + QStringLiteral("/audioplay");
+// ... редактор
+const QString kComponentsAudioplayEditorKey = kComponentsAudioplayKey + QStringLiteral("/editor");
+const QString kComponentsAudioplayEditorDefaultTemplateKey
+    = kComponentsAudioplayEditorKey + QStringLiteral("/default-template");
+const QString kComponentsAudioplayEditorShowBlockNumbersKey
+    = kComponentsAudioplayEditorKey + QStringLiteral("/show-block-numbers");
+const QString kComponentsAudioplayEditorContinueBlockNumbersKey
+    = kComponentsAudioplayEditorKey + QStringLiteral("/continue-block-numbers");
+const QString kComponentsAudioplayEditorUseCharactersFromTextKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/use-characters-from-text");
+// ... навигатор
+const QString kComponentsAudioplayNavigatorKey
+    = kComponentsAudioplayKey + QStringLiteral("/navigator");
+const QString kComponentsAudioplayNavigatorShowSceneTextKey
+    = kComponentsAudioplayNavigatorKey + QStringLiteral("/show-scene-text");
+const QString kComponentsAudioplayNavigatorSceneTextLinesKey
+    = kComponentsAudioplayNavigatorKey + QStringLiteral("/scene-text-lines");
+// ... хронометраж
+const QString kComponentsAudioplayDurationKey
+    = kComponentsAudioplayKey + QStringLiteral("/duration");
+const QString kComponentsAudioplayDurationTypeKey
+    = kComponentsAudioplayDurationKey + QStringLiteral("/type");
+const QString kComponentsAudioplayDurationByPageDurationKey
+    = kComponentsAudioplayDurationKey + QStringLiteral("/by-page-duration");
+const QString kComponentsAudioplayDurationByCharactersCharactersKey
+    = kComponentsAudioplayDurationKey + QStringLiteral("/by-characters-characters");
+const QString kComponentsAudioplayDurationByCharactersIncludeSpacesKey
+    = kComponentsAudioplayDurationKey + QStringLiteral("/by-characters-include-spaces");
+const QString kComponentsAudioplayDurationByCharactersDurationKey
+    = kComponentsAudioplayDurationKey + QStringLiteral("/by-characters-duration");
+//
 // редактор отношений персонажей
 const QString kComponentsCharactersRelationsKey
     = kComponentsGroupKey + QStringLiteral("/characters-relations");

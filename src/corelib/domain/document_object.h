@@ -48,9 +48,16 @@ enum class DocumentObjectType {
     ComicBookDictionaries = 10204,
     ComicBookStatistics = 10205,
     //
-    Novel = 10300,
+    Audioplay = 10300,
+    AudioplayTitlePage = 10301,
+    AudioplaySynopsis = 10302,
+    AudioplayText = 10303,
+    AudioplayDictionaries = 10304,
+    AudioplayStatistics = 10305,
     //
-    GameScript = 10400,
+    Novel = 10500,
+    //
+    GameScript = 10600,
     //
     Plots = 20000,
     Plot = 20001,

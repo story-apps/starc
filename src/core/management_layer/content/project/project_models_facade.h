@@ -136,6 +136,20 @@ signals:
     /** @} */
 
     /**
+     * @brief Сменилась видимость элемента аудиопостановки
+     */
+    /** @{ */
+    void audioplayTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
+                                             bool _visible);
+    void audioplaySynopsisVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
+                                            bool _visible);
+    void audioplayTextVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
+                                        bool _visible);
+    void audioplayStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
+                                              bool _visible);
+    /** @} */
+
+    /**
      * @brief Необходимо создать персонажа с заданным именем
      */
     void createCharacterRequested(const QString& _name, const QByteArray& _content);

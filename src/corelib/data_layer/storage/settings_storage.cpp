@@ -316,7 +316,7 @@ SettingsStorage::Implementation::Implementation()
             = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
                   defaultValues.insert(
                       QString("%1/shortcuts/%2")
-                          .arg(kComponentsScreenplayEditorKey, BusinessLayer::toString(_type)),
+                          .arg(kComponentsTreatmentEditorKey, BusinessLayer::toString(_type)),
                       QKeySequence(_shortcut).toString(QKeySequence::NativeText));
               };
         addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
@@ -626,6 +626,133 @@ SettingsStorage::Implementation::Implementation()
         //
         defaultValues.insert(kComponentsComicBookNavigatorShowSceneTextKey, true);
         defaultValues.insert(kComponentsComicBookNavigatorSceneTextLinesKey, 1);
+    }
+    //
+    // Параметры редактора аудиопостановки
+    //
+    {
+        auto addAudioplayEditorStylesAction
+            = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
+                     TextParagraphType _to) {
+                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                           .arg(kComponentsAudioplayEditorKey, _actionType,
+                                                toString(_from), _actionKey),
+                                       toString(_to));
+              };
+        auto addAudioplayEditorStylesActionByTab
+            = [addAudioplayEditorStylesAction](const QString& _actionType, TextParagraphType _from,
+                                               TextParagraphType _to) {
+                  addAudioplayEditorStylesAction(_actionType, "tab", _from, _to);
+              };
+        auto addAudioplayEditorStylesActionByEnter
+            = [addAudioplayEditorStylesAction](const QString& _actionType, TextParagraphType _from,
+                                               TextParagraphType _to) {
+                  addAudioplayEditorStylesAction(_actionType, "enter", _from, _to);
+              };
+        //
+        auto addAudioplayEditorStylesJumpByTab =
+            [addAudioplayEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                addAudioplayEditorStylesActionByTab("jumping", _from, _to);
+            };
+        auto addAudioplayEditorStylesJumpByEnter
+            = [addAudioplayEditorStylesActionByEnter](TextParagraphType _from,
+                                                      TextParagraphType _to) {
+                  addAudioplayEditorStylesActionByEnter("jumping", _from, _to);
+              };
+        addAudioplayEditorStylesJumpByTab(TextParagraphType::UnformattedText,
+                                          TextParagraphType::UnformattedText);
+        addAudioplayEditorStylesJumpByEnter(TextParagraphType::UnformattedText,
+                                            TextParagraphType::UnformattedText);
+        addAudioplayEditorStylesJumpByTab(TextParagraphType::SceneHeading, TextParagraphType::Cue);
+        addAudioplayEditorStylesJumpByEnter(TextParagraphType::SceneHeading,
+                                            TextParagraphType::Character);
+        addAudioplayEditorStylesJumpByTab(TextParagraphType::Character,
+                                          TextParagraphType::Dialogue);
+        addAudioplayEditorStylesJumpByEnter(TextParagraphType::Character,
+                                            TextParagraphType::Dialogue);
+        addAudioplayEditorStylesJumpByTab(TextParagraphType::Dialogue, TextParagraphType::Cue);
+        addAudioplayEditorStylesJumpByEnter(TextParagraphType::Dialogue,
+                                            TextParagraphType::Character);
+        addAudioplayEditorStylesJumpByTab(TextParagraphType::Sound, TextParagraphType::Music);
+        addAudioplayEditorStylesJumpByEnter(TextParagraphType::Sound, TextParagraphType::Character);
+        addAudioplayEditorStylesJumpByTab(TextParagraphType::Music, TextParagraphType::Sound);
+        addAudioplayEditorStylesJumpByEnter(TextParagraphType::Music, TextParagraphType::Character);
+        addAudioplayEditorStylesJumpByTab(TextParagraphType::Cue, TextParagraphType::SceneHeading);
+        addAudioplayEditorStylesJumpByEnter(TextParagraphType::Cue, TextParagraphType::Character);
+        addAudioplayEditorStylesJumpByTab(TextParagraphType::InlineNote,
+                                          TextParagraphType::Character);
+        addAudioplayEditorStylesJumpByEnter(TextParagraphType::InlineNote,
+                                            TextParagraphType::Character);
+        //
+        auto addAudioplayEditorStylesChangeByTab =
+            [addAudioplayEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                addAudioplayEditorStylesActionByTab("changing", _from, _to);
+            };
+        auto addAudioplayEditorStylesChangeByEnter
+            = [addAudioplayEditorStylesActionByEnter](TextParagraphType _from,
+                                                      TextParagraphType _to) {
+                  addAudioplayEditorStylesActionByEnter("changing", _from, _to);
+              };
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::UnformattedText,
+                                            TextParagraphType::UnformattedText);
+        addAudioplayEditorStylesChangeByEnter(TextParagraphType::UnformattedText,
+                                              TextParagraphType::UnformattedText);
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::SceneHeading,
+                                            TextParagraphType::SceneHeading);
+        addAudioplayEditorStylesChangeByEnter(TextParagraphType::SceneHeading,
+                                              TextParagraphType::SceneHeading);
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::Character,
+                                            TextParagraphType::Character);
+        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Character,
+                                              TextParagraphType::Character);
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::Dialogue,
+                                            TextParagraphType::Dialogue);
+        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Dialogue,
+                                              TextParagraphType::Dialogue);
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::Sound, TextParagraphType::Sound);
+        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Sound, TextParagraphType::Sound);
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::Music, TextParagraphType::Music);
+        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Music, TextParagraphType::Music);
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::Cue, TextParagraphType::Cue);
+        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Cue, TextParagraphType::Cue);
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::InlineNote,
+                                            TextParagraphType::InlineNote);
+        addAudioplayEditorStylesChangeByEnter(TextParagraphType::InlineNote,
+                                              TextParagraphType::InlineNote);
+        //
+        auto addShortcut
+            = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
+                  defaultValues.insert(
+                      QString("%1/shortcuts/%2")
+                          .arg(kComponentsAudioplayEditorKey, BusinessLayer::toString(_type)),
+                      QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+              };
+        addShortcut(BusinessLayer::TextParagraphType::UnformattedText, "Ctrl+0");
+        addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
+        addShortcut(BusinessLayer::TextParagraphType::Character, "Ctrl+2");
+        addShortcut(BusinessLayer::TextParagraphType::Dialogue, "Ctrl+3");
+        addShortcut(BusinessLayer::TextParagraphType::Sound, "Ctrl+4");
+        addShortcut(BusinessLayer::TextParagraphType::Music, "Ctrl+5");
+        addShortcut(BusinessLayer::TextParagraphType::Cue, "Ctrl+6");
+        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        //
+        defaultValues.insert(kComponentsAudioplayEditorDefaultTemplateKey, "bbc_scene");
+        defaultValues.insert(kComponentsAudioplayEditorShowBlockNumbersKey, false);
+        defaultValues.insert(kComponentsAudioplayEditorContinueBlockNumbersKey, true);
+        defaultValues.insert(kComponentsAudioplayEditorUseCharactersFromTextKey, false);
+        //
+        // Параметры навигатора сценария
+        //
+        defaultValues.insert(kComponentsAudioplayNavigatorShowSceneTextKey, true);
+        defaultValues.insert(kComponentsAudioplayNavigatorSceneTextLinesKey, 1);
+        //
+        // Параметры хронометража сценария
+        //
+        defaultValues.insert(kComponentsAudioplayDurationTypeKey, 0);
+        defaultValues.insert(kComponentsAudioplayDurationByPageDurationKey, 60);
+        defaultValues.insert(kComponentsAudioplayDurationByCharactersCharactersKey, 1350);
+        defaultValues.insert(kComponentsAudioplayDurationByCharactersIncludeSpacesKey, true);
+        defaultValues.insert(kComponentsAudioplayDurationByCharactersDurationKey, 60);
     }
 
 

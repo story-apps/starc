@@ -65,6 +65,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Location));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Screenplay));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::ComicBook));
+    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Audioplay));
 
     UiHelper::setFocusPolicyRecursively(documentType, Qt::NoFocus);
     documentType->setModel(typesModel);
@@ -98,7 +99,9 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
              "animation.") },
         { Domain::DocumentObjectType::ComicBook,
           tr("Create a document set to streamline your work on the comic book, graphic novel, or "
-             "manga.") }
+             "manga.") },
+        { Domain::DocumentObjectType::Audioplay,
+          tr("Create a document set to streamline your work on the audio drama, or podcast.") }
     };
 
     const auto documentTypeData = static_cast<Domain::DocumentObjectType>(
@@ -221,6 +224,7 @@ void CreateDocumentDialog::updateTranslations()
     d->typesModel->item(3)->setText(tr("Location"));
     d->typesModel->item(4)->setText(tr("Screenplay"));
     d->typesModel->item(5)->setText(tr("Comic book"));
+    d->typesModel->item(6)->setText(tr("Audioplay"));
 
     d->documentName->setLabel(tr("Name"));
     d->updateDocumentInfo();

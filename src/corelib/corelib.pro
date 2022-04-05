@@ -69,6 +69,8 @@ PRE_TARGETDEPS += $$PWD/../3rd_party/webloader
 
 SOURCES += \
     business_layer/chronometry/chronometer.cpp \
+    business_layer/document/audioplay/text/audioplay_text_corrector.cpp \
+    business_layer/document/audioplay/text/audioplay_text_document.cpp \
     business_layer/document/comic_book/text/comic_book_text_corrector.cpp \
     business_layer/document/comic_book/text/comic_book_text_document.cpp \
     business_layer/document/screenplay/text/screenplay_text_corrector.cpp \
@@ -97,6 +99,14 @@ SOURCES += \
     business_layer/model/abstract_model.cpp \
     business_layer/model/abstract_model_item.cpp \
     business_layer/model/abstract_model_xml.cpp \
+    business_layer/model/audioplay/audioplay_information_model.cpp \
+    business_layer/model/audioplay/audioplay_statistics_model.cpp \
+    business_layer/model/audioplay/audioplay_synopsis_model.cpp \
+    business_layer/model/audioplay/audioplay_title_page_model.cpp \
+    business_layer/model/audioplay/text/audioplay_text_model.cpp \
+    business_layer/model/audioplay/text/audioplay_text_model_folder_item.cpp \
+    business_layer/model/audioplay/text/audioplay_text_model_scene_item.cpp \
+    business_layer/model/audioplay/text/audioplay_text_model_text_item.cpp \
     business_layer/model/characters/character_model.cpp \
     business_layer/model/characters/characters_model.cpp \
     business_layer/model/comic_book/comic_book_dictionaries_model.cpp \
@@ -135,6 +145,7 @@ SOURCES += \
     business_layer/model/text/text_model_splitter_item.cpp \
     business_layer/model/text/text_model_text_item.cpp \
     business_layer/model/text/text_model_xml_writer.cpp \
+    business_layer/reports/audioplay/audioplay_summary_report.cpp \
     business_layer/reports/comic_book/comic_book_summary_report.cpp \
     business_layer/reports/screenplay/screenplay_summary_report.cpp \
     business_layer/templates/audioplay_template.cpp \
@@ -271,6 +282,8 @@ SOURCES += \
 
 HEADERS += \
     business_layer/chronometry/chronometer.h \
+    business_layer/document/audioplay/text/audioplay_text_corrector.h \
+    business_layer/document/audioplay/text/audioplay_text_document.h \
     business_layer/document/comic_book/text/comic_book_text_corrector.h \
     business_layer/document/comic_book/text/comic_book_text_document.h \
     business_layer/document/screenplay/text/screenplay_text_corrector.h \
@@ -308,6 +321,14 @@ HEADERS += \
     business_layer/model/abstract_model.h \
     business_layer/model/abstract_model_item.h \
     business_layer/model/abstract_model_xml.h \
+    business_layer/model/audioplay/audioplay_information_model.h \
+    business_layer/model/audioplay/audioplay_statistics_model.h \
+    business_layer/model/audioplay/audioplay_synopsis_model.h \
+    business_layer/model/audioplay/audioplay_title_page_model.h \
+    business_layer/model/audioplay/text/audioplay_text_model.h \
+    business_layer/model/audioplay/text/audioplay_text_model_folder_item.h \
+    business_layer/model/audioplay/text/audioplay_text_model_scene_item.h \
+    business_layer/model/audioplay/text/audioplay_text_model_text_item.h \
     business_layer/model/characters/character_model.h \
     business_layer/model/characters/characters_model.h \
     business_layer/model/comic_book/comic_book_dictionaries_model.h \
@@ -348,6 +369,7 @@ HEADERS += \
     business_layer/model/text/text_model_xml.h \
     business_layer/model/text/text_model_xml_writer.h \
     business_layer/reports/abstract_report.h \
+    business_layer/reports/audioplay/audioplay_summary_report.h \
     business_layer/reports/comic_book/comic_book_summary_report.h \
     business_layer/reports/screenplay/screenplay_summary_report.h \
     business_layer/templates/audioplay_template.h \

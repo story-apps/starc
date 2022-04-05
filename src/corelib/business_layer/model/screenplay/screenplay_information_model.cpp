@@ -32,8 +32,8 @@ const QString kScenesNumbersPrefixKey = "scenes_numbers_prefix";
 const QString kScenesNumberingStartAtKey = "scenes_numbering_start_at";
 const QString kOverrideSystemSettingsKey = "override_system_settings";
 const QString kTemplateIdKey = "template_id";
-const QString kShowScenesNumbersKey = "show_scenes_numbers";
-const QString kShowScenesNumbersOnLeftKey = "show_scenes_numbers_on_left";
+const QString kShowBlockNumbersKey = "show_scenes_numbers";
+const QString kContinueBlockNumbersKey = "show_scenes_numbers_on_left";
 const QString kShowScenesNumbersOnRightKey = "show_scenes_numbers_on_right";
 const QString kShowDialoguesNumbersKey = "show_dialogues_numbers";
 } // namespace
@@ -87,8 +87,8 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
             kScenesNumberingStartAtKey,
             kOverrideSystemSettingsKey,
             kTemplateIdKey,
-            kShowScenesNumbersKey,
-            kShowScenesNumbersOnLeftKey,
+            kShowBlockNumbersKey,
+            kContinueBlockNumbersKey,
             kShowScenesNumbersOnRightKey,
             kShowDialoguesNumbersKey,
         },
@@ -522,9 +522,9 @@ void ScreenplayInformationModel::initDocument()
     d->overrideCommonSettings
         = documentNode.firstChildElement(kOverrideSystemSettingsKey).text() == "true";
     d->templateId = documentNode.firstChildElement(kTemplateIdKey).text();
-    d->showSceneNumbers = documentNode.firstChildElement(kShowScenesNumbersKey).text() == "true";
+    d->showSceneNumbers = documentNode.firstChildElement(kShowBlockNumbersKey).text() == "true";
     d->showSceneNumbersOnLeft
-        = documentNode.firstChildElement(kShowScenesNumbersOnLeftKey).text() == "true";
+        = documentNode.firstChildElement(kContinueBlockNumbersKey).text() == "true";
     d->showSceneNumbersOnRight
         = documentNode.firstChildElement(kShowScenesNumbersOnRightKey).text() == "true";
     d->showDialoguesNumbers
@@ -568,8 +568,8 @@ QByteArray ScreenplayInformationModel::toXml() const
     writeTag(kScenesNumberingStartAtKey, QString::number(d->scenesNumberingStartAt));
     writeBoolTag(kOverrideSystemSettingsKey, d->overrideCommonSettings);
     writeTag(kTemplateIdKey, d->templateId);
-    writeBoolTag(kShowScenesNumbersKey, d->showSceneNumbers);
-    writeBoolTag(kShowScenesNumbersOnLeftKey, d->showSceneNumbersOnLeft);
+    writeBoolTag(kShowBlockNumbersKey, d->showSceneNumbers);
+    writeBoolTag(kContinueBlockNumbersKey, d->showSceneNumbersOnLeft);
     writeBoolTag(kShowScenesNumbersOnRightKey, d->showSceneNumbersOnRight);
     writeBoolTag(kShowDialoguesNumbersKey, d->showDialoguesNumbers);
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();

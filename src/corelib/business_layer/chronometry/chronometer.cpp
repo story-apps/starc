@@ -1,5 +1,6 @@
 #include "chronometer.h"
 
+#include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -23,7 +24,7 @@ class AbstractChronometer
 public:
     virtual ~AbstractChronometer() = default;
     virtual std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
-                                               const QString& _screenplayTemplateId) const = 0;
+                                               const TextTemplate& _textTemplate) const = 0;
 };
 
 /**
@@ -32,27 +33,29 @@ public:
 class PageChronometer : public AbstractChronometer
 {
 public:
-    std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
-                                       const QString& _screenplayTemplateId) const override
+    explicit PageChronometer(int _secondsPerPage)
+        : m_secondsPerPage(_secondsPerPage)
     {
-        using namespace DataStorageLayer;
-        const auto milliseconds
-            = settingsValue(kComponentsScreenplayDurationByPageDurationKey).toInt() * 1000;
+    }
 
-        const auto& currentTemplate = TemplatesFacade::screenplayTemplate(_screenplayTemplateId);
+    std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
+                                       const TextTemplate& _textTemplate) const override
+    {
+        const auto milliseconds = m_secondsPerPage * 1000;
+
         const auto mmPageSize
-            = QPageSize(currentTemplate.pageSizeId()).rect(QPageSize::Millimeter).size();
+            = QPageSize(_textTemplate.pageSizeId()).rect(QPageSize::Millimeter).size();
         const bool x = true, y = false;
         const auto pxPageSize = QSizeF(MeasurementHelper::mmToPx(mmPageSize.width(), x),
                                        MeasurementHelper::mmToPx(mmPageSize.height(), y));
-        const auto mmPageMargins = currentTemplate.pageMargins();
+        const auto mmPageMargins = _textTemplate.pageMargins();
         const auto pxPageMargins = QMarginsF(MeasurementHelper::mmToPx(mmPageMargins.left(), x),
                                              MeasurementHelper::mmToPx(mmPageMargins.top(), y),
                                              MeasurementHelper::mmToPx(mmPageMargins.right(), x),
                                              MeasurementHelper::mmToPx(mmPageMargins.bottom(), y));
         const auto pageHeight = pxPageSize.height() - pxPageMargins.top() - pxPageMargins.bottom();
 
-        const auto blockStyle = currentTemplate.paragraphStyle(_type);
+        const auto blockStyle = _textTemplate.paragraphStyle(_type);
         const auto mmBlockMargins = blockStyle.margins();
         const auto pxBlockMargins
             = QMarginsF(MeasurementHelper::mmToPx(mmBlockMargins.left(), x),
@@ -72,6 +75,12 @@ public:
         //
         return std::chrono::milliseconds{ qCeil(textHeight / pageHeight * milliseconds * 1.01) };
     }
+
+private:
+    /**
+     * @brief Секунд на страницу
+     */
+    const int m_secondsPerPage = 60;
 };
 
 /**
@@ -80,28 +89,44 @@ public:
 class CharactersChronometer : public AbstractChronometer
 {
 public:
+    CharactersChronometer(int _characters, bool _considerSpaces, int _seconds)
+        : m_characters(_characters)
+        , m_considerSpaces(_considerSpaces)
+        , m_seconds(_seconds)
+    {
+    }
+
     std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
-                                       const QString& _screenplayTemplateId) const override
+                                       const TextTemplate& _textTemplate) const override
     {
         Q_UNUSED(_type)
-        Q_UNUSED(_screenplayTemplateId)
-
-        using namespace DataStorageLayer;
-        const int characters
-            = settingsValue(kComponentsScreenplayDurationByCharactersCharactersKey).toInt();
-        const bool considerSpaces
-            = settingsValue(kComponentsScreenplayDurationByCharactersIncludeSpacesKey).toBool();
-        const int milliseconds
-            = settingsValue(kComponentsScreenplayDurationByCharactersDurationKey).toInt() * 1000;
+        Q_UNUSED(_textTemplate)
 
         auto text = _text;
-        if (!considerSpaces) {
+        if (!m_considerSpaces) {
             text.remove(' ');
         }
 
-        const auto characterDuration = static_cast<qreal>(milliseconds) / characters;
+        const int milliseconds = m_seconds * 1000;
+        const auto characterDuration = static_cast<qreal>(milliseconds) / m_characters;
         return std::chrono::milliseconds{ qCeil(text.length() * characterDuration) };
     }
+
+private:
+    /**
+     * @brief Сколько символов
+     */
+    const int m_characters = 1000;
+
+    /**
+     * @brief Включая пробелы
+     */
+    const bool m_considerSpaces = true;
+
+    /**
+     * @brief Имеют заданную длительность
+     */
+    const int m_seconds = 60;
 };
 
 /**
@@ -165,18 +190,65 @@ public:
 } // namespace
 
 
-std::chrono::milliseconds Chronometer::duration(TextParagraphType _type, const QString& _text,
-                                                const QString& _screenplayTemplateId)
+std::chrono::milliseconds ScreenplayChronometer::duration(TextParagraphType _type,
+                                                          const QString& _text,
+                                                          const QString& _templateId)
 {
-    const auto chronometerType
-        = settingsValue(DataStorageLayer::kComponentsScreenplayDurationTypeKey).toInt();
+    using namespace DataStorageLayer;
+
+    const auto chronometerType = settingsValue(kComponentsScreenplayDurationTypeKey).toInt();
+    const auto& screenplayTemplate = TemplatesFacade::screenplayTemplate(_templateId);
+
     switch (static_cast<ChronometerType>(chronometerType)) {
     case ChronometerType::Page: {
-        return PageChronometer().duration(_type, _text, _screenplayTemplateId);
+        const auto secondsPerPage
+            = settingsValue(kComponentsScreenplayDurationByPageDurationKey).toInt();
+        return PageChronometer(secondsPerPage).duration(_type, _text, screenplayTemplate);
     }
 
     case ChronometerType::Characters: {
-        return CharactersChronometer().duration(_type, _text, _screenplayTemplateId);
+        const int characters
+            = settingsValue(kComponentsScreenplayDurationByCharactersCharactersKey).toInt();
+        const bool considerSpaces
+            = settingsValue(kComponentsScreenplayDurationByCharactersIncludeSpacesKey).toBool();
+        const int seconds
+            = settingsValue(kComponentsScreenplayDurationByCharactersDurationKey).toInt();
+        return CharactersChronometer(characters, considerSpaces, seconds)
+            .duration(_type, _text, screenplayTemplate);
+    }
+
+    default: {
+        Q_ASSERT(false);
+        return {};
+    }
+    }
+}
+
+std::chrono::milliseconds AudioplayChronometer::duration(TextParagraphType _type,
+                                                         const QString& _text,
+                                                         const QString& _templateId)
+{
+    using namespace DataStorageLayer;
+
+    const auto chronometerType = settingsValue(kComponentsAudioplayDurationTypeKey).toInt();
+    const auto& audioplayTemplate = TemplatesFacade::audioplayTemplate(_templateId);
+
+    switch (static_cast<ChronometerType>(chronometerType)) {
+    case ChronometerType::Page: {
+        const auto secondsPerPage
+            = settingsValue(kComponentsAudioplayDurationByPageDurationKey).toInt();
+        return PageChronometer(secondsPerPage).duration(_type, _text, audioplayTemplate);
+    }
+
+    case ChronometerType::Characters: {
+        const int characters
+            = settingsValue(kComponentsAudioplayDurationByCharactersCharactersKey).toInt();
+        const bool considerSpaces
+            = settingsValue(kComponentsAudioplayDurationByCharactersIncludeSpacesKey).toBool();
+        const int seconds
+            = settingsValue(kComponentsAudioplayDurationByCharactersDurationKey).toInt();
+        return CharactersChronometer(characters, considerSpaces, seconds)
+            .duration(_type, _text, audioplayTemplate);
     }
 
     default: {

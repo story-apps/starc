@@ -50,7 +50,7 @@ void ScreenplayTextModelTextItem::updateDuration()
 
     const auto screenplayModel = qobject_cast<const ScreenplayTextModel*>(model());
     Q_ASSERT(screenplayModel);
-    const auto duration = Chronometer::duration(paragraphType(), text(),
+    const auto duration = ScreenplayChronometer::duration(paragraphType(), text(),
                                                 screenplayModel->informationModel()->templateId());
     if (d->duration == duration) {
         return;
