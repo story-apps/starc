@@ -22,6 +22,7 @@ namespace {
  */
 const QString kSimpleTextEditorMime = QStringLiteral("application/x-starc/editor/text/text");
 const QString kSimpleTextNavigatorMime = QStringLiteral("application/x-starc/navigator/text/text");
+//
 const QString kScreenplayTitlePageEditorMime = QStringLiteral("application/x-starc/editor/screenplay/title-page");
 const QString kScreenplayTreatmentEditorMime = QStringLiteral("application/x-starc/editor/screenplay/treatment");
 const QString kScreenplayTreatmentNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/treatment");
@@ -29,10 +30,14 @@ const QString kScreenplayTextEditorMime = QStringLiteral("application/x-starc/ed
 const QString kScreenplayTextNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/text");
 const QString kScreenplayStatisticsViewMime = QStringLiteral("application/x-starc/view/screenplay/statistics");
 const QString kScreenplayStatisticsNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/statistics");
+//
 const QString kComicBookTitlePageEditorMime = QStringLiteral("application/x-starc/editor/comicbook/title-page");
 const QString kComicBookTextEditorMime = QStringLiteral("application/x-starc/editor/comicbook/text");
 const QString kComicBookTextNavigatorMime = QStringLiteral("application/x-starc/navigator/comicbook/text");
 const QString kComicBookStatisticsViewMime = QStringLiteral("application/x-starc/view/comicbook/statistics");
+//
+const QString kAudioplayInformationViewMime = QStringLiteral("application/x-starc/view/audioplay/information");
+const QString kAudioplayParametersViewMime = QStringLiteral("application/x-starc/view/audioplay/parameters");
 
 /**
  * @brief Карта соотвествия майм-типов редактора к навигатору
@@ -52,6 +57,7 @@ const QHash<QString, QString> kEditorToNavigator
 const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
     = { { "application/x-starc/document/project",    { { "application/x-starc/editor/project/information", u8"\U000f02fd" },
                                                        { "application/x-starc/editor/project/collaborators", u8"\U000f0b58" } } },
+        //
         { "application/x-starc/document/screenplay", { { "application/x-starc/editor/screenplay/information", u8"\U000f02fd" },
                                                        { "application/x-starc/editor/screenplay/parameters", u8"\U000f0493" } } },
         { "application/x-starc/document/screenplay/title-page", { { kScreenplayTitlePageEditorMime, u8"\U000f09ed" } } },
@@ -63,16 +69,23 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
                                                                   { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" },
                                                                   { "application/x-starc/editor/screenplay/timeline", u8"\U000F066C" } } },
         { "application/x-starc/document/screenplay/statistics", { { kScreenplayStatisticsViewMime, u8"\U000f0127" } } },
+        //
         { "application/x-starc/document/comicbook",  { { "application/x-starc/editor/comicbook/information", u8"\U000f02fd" },
                                                        { "application/x-starc/editor/comicbook/parameters", u8"\U000f0493" } } },
         { "application/x-starc/document/comicbook/title-page",  { { kComicBookTitlePageEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/comicbook/synopsis",    { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/comicbook/text",        { { kComicBookTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/comicbook/statistics",  { { kComicBookStatisticsViewMime, u8"\U000f0127" } } },
+        //
+        { "application/x-starc/document/audioplay", { { kAudioplayInformationViewMime, u8"\U000f02fd" },
+                                                       { kAudioplayParametersViewMime, u8"\U000f0493" } } },
+        //
         { "application/x-starc/document/characters",  { { "application/x-starc/editor/characters/relations", u8"\U000F0D3D" } } },
         { "application/x-starc/document/character",  { { "application/x-starc/editor/character/information", u8"\U000f02fd" } } },
+        //
         { "application/x-starc/document/locations",  { { "application/x-starc/editor/locations/map", u8"\U000F0982" } } },
         { "application/x-starc/document/location",   { { "application/x-starc/editor/location/information", u8"\U000f02fd" } } },
+        //
         { "application/x-starc/document/folder",     { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/text",       { { kSimpleTextEditorMime, u8"\U000f09ed" } } }
       };
@@ -84,8 +97,10 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
  */
 const QHash<QString, QString> kMimeToPlugin
     = { { "application/x-starc/editor/project/information", "*projectinformationplugin*" },
+        //
         { kSimpleTextEditorMime, "*simpletextplugin*" },
         { kSimpleTextNavigatorMime, "*simpletextstructureplugin*" },
+        //
         { "application/x-starc/editor/screenplay/information", "*screenplayinformationplugin*" },
         { "application/x-starc/editor/screenplay/parameters", "*screenplayparametersplugin*" },
         { kScreenplayTitlePageEditorMime, "*titlepageplugin*" },
@@ -97,16 +112,22 @@ const QHash<QString, QString> kMimeToPlugin
         { "application/x-starc/editor/screenplay/cards", "*screenplaycardsplugin*" },
         { kScreenplayStatisticsViewMime, "*screenplaystatisticsplugin*" },
         { kScreenplayStatisticsNavigatorMime, "*screenplaystatisticsstructureplugin*" },
+        //
         { "application/x-starc/editor/comicbook/information", "*comicbookinformationplugin*" },
         { "application/x-starc/editor/comicbook/parameters", "*comicbookparametersplugin*" },
         { kComicBookTitlePageEditorMime, "*titlepageplugin*" },
         { kComicBookTextEditorMime, "*comicbooktextplugin*" },
         { kComicBookTextNavigatorMime, "*comicbooktextstructureplugin*" },
+        { kComicBookStatisticsViewMime, "*comicbookstatisticsplugin*" },
+        //
+        { kAudioplayInformationViewMime, "*audioplayinformationplugin*" },
+        { kAudioplayParametersViewMime, "*audioplayparametersplugin*" },
+        //
         { "application/x-starc/editor/characters/relations", "*charactersrelationsplugin*" },
         { "application/x-starc/editor/character/information", "*characterinformationplugin*" },
+        //
         { "application/x-starc/editor/locations/map", "*locationsmapplugin*" },
         { "application/x-starc/editor/location/information", "*locationinformationplugin*" },
-        { kComicBookStatisticsViewMime, "*comicbookstatisticsplugin*" },
       };
 // clang-format on
 
@@ -240,6 +261,7 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                   QApplication::translate("ProjectPluginsBuilder", "Information about project") },
                 { "application/x-starc/editor/project/collaborators",
                   QApplication::translate("ProjectPluginsBuilder", "Project collaborators") } } },
+            //
             { "application/x-starc/document/screenplay",
               { { "application/x-starc/editor/screenplay/information",
                   QApplication::translate("ProjectPluginsBuilder", "Information about screenplay") },
@@ -268,6 +290,7 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
             { "application/x-starc/document/screenplay/statistics",
               { { kScreenplayStatisticsViewMime,
                   QApplication::translate("ProjectPluginsBuilder", "Statistics") } } },
+            //
             { "application/x-starc/document/comicbook",
               { { "application/x-starc/editor/comicbook/information",
                   QApplication::translate("ProjectPluginsBuilder", "Information about comic book") },
@@ -287,18 +310,27 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
             { "application/x-starc/document/comicbook/statistics",
               { { kComicBookStatisticsViewMime,
                   QApplication::translate("ProjectPluginsBuilder", "Statistics") } } },
+            //
+            { "application/x-starc/document/audioplay",
+              { { kAudioplayInformationViewMime,
+                  QApplication::translate("ProjectPluginsBuilder", "Information about audioplay") },
+                { "application/x-starc/editor/audioplay/parameters",
+                  QApplication::translate("ProjectPluginsBuilder", "Audioplay parameters") } } },
+            //
             { "application/x-starc/document/characters",
               { { "application/x-starc/editor/characters/relations",
                   QApplication::translate("ProjectPluginsBuilder", "Characters relations") } } },
             { "application/x-starc/document/character",
               { { "application/x-starc/editor/character/information",
                   QApplication::translate("ProjectPluginsBuilder", "Character information") } } },
+            //
             { "application/x-starc/document/locations",
               { { "application/x-starc/editor/locations/map",
                   QApplication::translate("ProjectPluginsBuilder", "Locations map") } } },
             { "application/x-starc/document/location",
               { { "application/x-starc/editor/location/information",
                   QApplication::translate("ProjectPluginsBuilder", "Location information") } } },
+            //
             { "application/x-starc/document/folder",
               { { kSimpleTextEditorMime,
                   QApplication::translate("ProjectPluginsBuilder", "Folder text") } } },
