@@ -47,20 +47,29 @@ QSet<TextParagraphType> ScreenplayTextDocument::Implementation::visibleBlocksTyp
 {
     if (isTreatmentVisible) {
         return {
-            TextParagraphType::SceneHeading,   TextParagraphType::SceneCharacters,
-            TextParagraphType::BeatHeading,    TextParagraphType::ActHeading,
-            TextParagraphType::ActFooter,      TextParagraphType::SequenceHeading,
+            TextParagraphType::SceneHeading,      TextParagraphType::SceneHeadingShadow,
+            TextParagraphType::SceneCharacters,   TextParagraphType::BeatHeading,
+            TextParagraphType::BeatHeadingShadow, TextParagraphType::ActHeading,
+            TextParagraphType::ActFooter,         TextParagraphType::SequenceHeading,
             TextParagraphType::SequenceFooter,
         };
     } else {
         return {
-            TextParagraphType::SceneHeading,    TextParagraphType::SceneCharacters,
-            TextParagraphType::Action,          TextParagraphType::Character,
-            TextParagraphType::Parenthetical,   TextParagraphType::Dialogue,
-            TextParagraphType::Lyrics,          TextParagraphType::Shot,
-            TextParagraphType::Transition,      TextParagraphType::InlineNote,
-            TextParagraphType::UnformattedText, TextParagraphType::ActHeading,
-            TextParagraphType::ActFooter,       TextParagraphType::SequenceHeading,
+            TextParagraphType::SceneHeading,
+            TextParagraphType::SceneHeadingShadow,
+            TextParagraphType::SceneCharacters,
+            TextParagraphType::Action,
+            TextParagraphType::Character,
+            TextParagraphType::Parenthetical,
+            TextParagraphType::Dialogue,
+            TextParagraphType::Lyrics,
+            TextParagraphType::Shot,
+            TextParagraphType::Transition,
+            TextParagraphType::InlineNote,
+            TextParagraphType::UnformattedText,
+            TextParagraphType::ActHeading,
+            TextParagraphType::ActFooter,
+            TextParagraphType::SequenceHeading,
             TextParagraphType::SequenceFooter,
         };
     }
