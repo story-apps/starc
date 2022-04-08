@@ -3,6 +3,7 @@ TEMPLATE = subdirs
 SUBDIRS = \
     audioplay_information \
     audioplay_parameters \
+    audioplay_text \
     comic_book_information \
     comic_book_parameters \
     comic_book_text \

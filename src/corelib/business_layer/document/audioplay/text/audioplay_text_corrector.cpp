@@ -1754,6 +1754,9 @@ AudioplayTextCorrector::~AudioplayTextCorrector() = default;
 
 void AudioplayTextCorrector::setCorrectionOptions(const QStringList& _options)
 {
+    d->needToCorrectPageBreaks = false;
+    return;
+
     const auto needToCorrectPageBreaks = _options.contains("correct-page-breaks");
     if (d->needToCorrectPageBreaks == needToCorrectPageBreaks) {
         return;

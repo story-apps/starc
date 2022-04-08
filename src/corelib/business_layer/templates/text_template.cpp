@@ -207,6 +207,25 @@ TextParagraphType textParagraphTypeFromDisplayString(const QString& _text)
     return TextParagraphType::Undefined;
 }
 
+QString textParagraphTitle(TextParagraphType _type)
+{
+    switch (_type) {
+    case TextParagraphType::Sound: {
+        return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Sound");
+    }
+    case TextParagraphType::Music: {
+        return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Music");
+    }
+    case TextParagraphType::Cue: {
+        return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Cue");
+    }
+    default: {
+        Q_ASSERT(false);
+        return {};
+    }
+    }
+}
+
 
 // ****
 
@@ -605,6 +624,11 @@ public:
     Implementation();
 
     /**
+     * @brief Тип дефолтного блока
+     */
+    TextParagraphType defaultBlockType() const;
+
+    /**
      * @brief Сформировать шаблоны компаньоны
      */
     void buildTitlePageTemplate();
@@ -677,6 +701,19 @@ TextTemplate::Implementation::Implementation()
 {
 }
 
+TextParagraphType TextTemplate::Implementation::defaultBlockType() const
+{
+    if (paragraphsStyles.contains(TextParagraphType::Action)) {
+        return TextParagraphType::Action;
+    } else if (paragraphsStyles.contains(TextParagraphType::Description)) {
+        return TextParagraphType::Description;
+    } else if (paragraphsStyles.contains(TextParagraphType::Dialogue)) {
+        return TextParagraphType::Dialogue;
+    } else {
+        return TextParagraphType::Text;
+    }
+}
+
 void TextTemplate::Implementation::buildTitlePageTemplate()
 {
     if (titlePageTemplate.isNull()) {
@@ -690,31 +727,7 @@ void TextTemplate::Implementation::buildTitlePageTemplate()
     TextBlockStyle defaultBlockStyle;
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
-    TextBlockStyle textBlockStyle;
-    //
-    // Сценарий
-    //
-    if (paragraphsStyles.contains(TextParagraphType::Action)) {
-        textBlockStyle = paragraphsStyles.value(TextParagraphType::Action);
-    }
-    //
-    // Комикс
-    //
-    else if (paragraphsStyles.contains(TextParagraphType::Description)) {
-        textBlockStyle = paragraphsStyles.value(TextParagraphType::Description);
-    }
-    //
-    // Пьесы
-    //
-    else if (paragraphsStyles.contains(TextParagraphType::Dialogue)) {
-        textBlockStyle = paragraphsStyles.value(TextParagraphType::Dialogue);
-    }
-    //
-    // Текстовые документы
-    //
-    else {
-        textBlockStyle = paragraphsStyles.value(TextParagraphType::Text);
-    }
+    const auto textBlockStyle = paragraphsStyles.value(defaultBlockType());
     defaultBlockStyle.setFont(textBlockStyle.font());
     defaultBlockStyle.setAlign(textBlockStyle.align());
     //
@@ -747,14 +760,7 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
     TextBlockStyle defaultBlockStyle;
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
-    TextBlockStyle textBlockStyle;
-    if (paragraphsStyles.contains(TextParagraphType::Action)) {
-        textBlockStyle = paragraphsStyles.value(TextParagraphType::Action);
-    } else if (paragraphsStyles.contains(TextParagraphType::Description)) {
-        textBlockStyle = paragraphsStyles.value(TextParagraphType::Description);
-    } else {
-        textBlockStyle = paragraphsStyles.value(TextParagraphType::Text);
-    }
+    const auto textBlockStyle = paragraphsStyles.value(defaultBlockType());
     defaultBlockStyle.setFont(textBlockStyle.font());
     defaultBlockStyle.setAlign(textBlockStyle.align());
     //
@@ -1049,6 +1055,11 @@ qreal TextTemplate::pageSplitterWidth() const
     // TODO: вынести в параметры шаблона
     //
     return MeasurementHelper::mmToPx(5);
+}
+
+QFont TextTemplate::defaultFont() const
+{
+    return d->paragraphsStyles.value(d->defaultBlockType()).font();
 }
 
 const TextTemplate& TextTemplate::titlePageTemplate() const

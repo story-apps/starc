@@ -7,6 +7,7 @@
 
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/audioplay_title_page_model.h>
+#include <business_layer/model/audioplay/text/audioplay_text_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
@@ -361,21 +362,23 @@ const TextTemplate& TemplatesFacade::textTemplate(const TextModel* _model)
     //
     // Получить шаблон в зависимости от заданной модели
     //
-    if (auto screenplayModel = qobject_cast<const ScreenplayTextModel*>(_model)) {
-        return screenplayTemplate(screenplayModel->informationModel()->templateId());
-    } else if (auto screenplayTitlePageModel
-               = qobject_cast<const ScreenplayTitlePageModel*>(_model)) {
-        return screenplayTitlePageTemplate(
-            screenplayTitlePageModel->informationModel()->templateId());
-    } else if (auto comicBookModel = qobject_cast<const ComicBookTextModel*>(_model)) {
+    if (auto model = qobject_cast<const ScreenplayTextModel*>(_model)) {
+        return screenplayTemplate(model->informationModel()->templateId());
+    } else if (auto model = qobject_cast<const ScreenplayTitlePageModel*>(_model)) {
+        return screenplayTitlePageTemplate(model->informationModel()->templateId());
+    }
+    //
+    else if (auto model = qobject_cast<const ComicBookTextModel*>(_model)) {
         //
         // TODO: учитывать шаблон заданный для конкретного комикса
         //
         return comicBookTemplate();
-    } else if (auto audioplayTitlePageModel
-               = qobject_cast<const AudioplayTitlePageModel*>(_model)) {
-        return audioplayTitlePageTemplate(
-            audioplayTitlePageModel->informationModel()->templateId());
+    }
+    //
+    else if (auto model = qobject_cast<const AudioplayTextModel*>(_model)) {
+        return audioplayTemplate(model->informationModel()->templateId());
+    } else if (auto model = qobject_cast<const AudioplayTitlePageModel*>(_model)) {
+        return audioplayTitlePageTemplate(model->informationModel()->templateId());
     }
     return simpleTextTemplate();
 }

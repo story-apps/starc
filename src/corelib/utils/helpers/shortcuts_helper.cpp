@@ -174,3 +174,19 @@ void ShortcutsHelper::setScreenplayChangeByEnter(BusinessLayer::TextParagraphTyp
                               BusinessLayer::toString(_fromType)),
                      BusinessLayer::toString(_toType));
 }
+
+QString ShortcutsHelper::audioplayShortcut(BusinessLayer::TextParagraphType _type)
+{
+    return settingsValue(
+               QString("%1/%2").arg(DataStorageLayer::kComponentsAudioplayEditorShortcutsKey,
+                                    BusinessLayer::toString(_type)))
+        .toString();
+}
+
+void ShortcutsHelper::setAudioplayShortcut(BusinessLayer::TextParagraphType _type,
+                                           const QString& _shortcut)
+{
+    setSettingsValue(QString("%1/%2").arg(DataStorageLayer::kComponentsAudioplayEditorShortcutsKey,
+                                          BusinessLayer::toString(_type)),
+                     _shortcut);
+}

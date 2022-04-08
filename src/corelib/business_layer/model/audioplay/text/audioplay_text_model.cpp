@@ -92,8 +92,7 @@ void AudioplayTextModel::Implementation::updateNumbering()
 
             case TextModelItemType::Text: {
                 auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
-                if ((textItem->paragraphType() == TextParagraphType::SceneHeading
-                     || textItem->paragraphType() == TextParagraphType::Dialogue
+                if ((textItem->paragraphType() == TextParagraphType::Dialogue
                      || textItem->paragraphType() == TextParagraphType::Sound
                      || textItem->paragraphType() == TextParagraphType::Music
                      || textItem->paragraphType() == TextParagraphType::Cue)

@@ -140,6 +140,11 @@ CORE_LIBRARY_EXPORT QString toDisplayString(TextParagraphType _type);
 CORE_LIBRARY_EXPORT TextParagraphType textParagraphTypeFromString(const QString& _text);
 CORE_LIBRARY_EXPORT TextParagraphType textParagraphTypeFromDisplayString(const QString& _text);
 
+/**
+ * @brief Тайтл элемента заданного типа
+ */
+CORE_LIBRARY_EXPORT QString textParagraphTitle(TextParagraphType _type);
+
 
 /**
  * @brief Класс стиля блока текста
@@ -474,6 +479,11 @@ public:
      * @brief Ширина разделителя колонок
      */
     qreal pageSplitterWidth() const;
+
+    /**
+     * @brief Дефолтный шрифт шаблона
+     */
+    QFont defaultFont() const;
 
     /**
      * @brief Шаблон оформления титульной страницы

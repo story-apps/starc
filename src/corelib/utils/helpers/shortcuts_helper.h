@@ -61,4 +61,13 @@ public:
     static QString screenplayChangeByEnter(BusinessLayer::TextParagraphType _type);
     static void setScreenplayChangeByEnter(BusinessLayer::TextParagraphType _fromType,
                                            BusinessLayer::TextParagraphType _toType);
+
+    //
+    // Аудиопостановка
+    //
+    // ... текст
+    //
+    static QString audioplayShortcut(BusinessLayer::TextParagraphType _type);
+    static void setAudioplayShortcut(BusinessLayer::TextParagraphType _type,
+                                     const QString& _shortcut);
 };
