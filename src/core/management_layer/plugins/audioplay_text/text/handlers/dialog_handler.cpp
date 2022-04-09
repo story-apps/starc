@@ -52,9 +52,8 @@ void DialogHandler::handleEnter(QKeyEvent*)
             //! Есть выделение
 
             //
-            // Удаляем всё, но оставляем стилем блока текущий
+            // Ни чего не делаем
             //
-            editor()->addParagraph(TextParagraphType::Dialogue);
         } else {
             //! Нет выделения
 
@@ -85,43 +84,9 @@ void DialogHandler::handleEnter(QKeyEvent*)
                     //! Внутри блока
 
                     //
-                    // Разрываем диалог блоком персонажа, вставляя его имя
+                    // Разделим блок на две реплики
                     //
-                    {
-                        //
-                        // Найти име персонажа, кому принадлежит реплика
-                        //
-                        QString characterName;
-                        {
-                            QTextCursor cursor = editor()->textCursor();
-                            QTextBlock cursorBlock = cursor.block();
-                            while ((TextBlockStyle::forBlock(cursorBlock)
-                                        != TextParagraphType::Character
-                                    || TextBlockStyle::forBlock(cursorBlock)
-                                        == TextParagraphType::Dialogue)
-                                   && !cursor.atStart()) {
-                                cursor.movePosition(QTextCursor::PreviousBlock);
-                                cursor.movePosition(QTextCursor::StartOfBlock);
-                                cursorBlock = cursor.block();
-                            }
-
-                            if (TextBlockStyle::forBlock(cursorBlock)
-                                == TextParagraphType::Character) {
-                                characterName = cursorBlock.text().simplified();
-                            }
-                        }
-
-                        //
-                        // Вставляем блок "герой" и добавляем имя
-                        //
-                        editor()->addParagraph(TextParagraphType::Character);
-                        editor()->insertPlainText(characterName);
-
-                        //
-                        // Оставшийся текст форматируем, как "диалог"
-                        //
-                        editor()->addParagraph(TextParagraphType::Dialogue);
-                    }
+                    editor()->addParagraph(TextParagraphType::Dialogue);
                 }
             }
         }
@@ -174,13 +139,7 @@ void DialogHandler::handleTab(QKeyEvent*)
             } else {
                 //! Текст не пуст
 
-                if (cursorBackwardText.isEmpty()) {
-                    //! В начале блока
-
-                    //
-                    // Ни чего не делаем
-                    //
-                } else if (cursorForwardText.isEmpty()) {
+                if (!cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
@@ -188,29 +147,12 @@ void DialogHandler::handleTab(QKeyEvent*)
                     //
                     editor()->addParagraph(jumpForTab(TextParagraphType::Dialogue));
                 } else {
+                    //! В начале блока
                     //! Внутри блока
 
                     //
-                    // Разрываем диалог ремаркой
+                    // Ни чего не делаем
                     //
-
-                    //
-                    // ... оставляем пустой блок реплики
-                    //
-                    editor()->addParagraph(TextParagraphType::Dialogue);
-                    editor()->addParagraph(TextParagraphType::Dialogue);
-
-                    //
-                    // ... возвращаем курсор к пустому блоку
-                    //
-                    cursor = editor()->textCursor();
-                    cursor.movePosition(QTextCursor::PreviousBlock);
-                    editor()->setTextCursorReimpl(cursor);
-
-                    //
-                    // ... делаем блок под курсором ремаркой
-                    //
-                    editor()->setCurrentParagraphType(TextParagraphType::Parenthetical);
                 }
             }
         }

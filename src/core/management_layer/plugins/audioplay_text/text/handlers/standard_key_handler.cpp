@@ -205,7 +205,7 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     const QTextCursor::MoveMode cursorMoveMode
         = isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
-    QTextCursor cursor = editor()->textCursor();
+    BusinessLayer::TextCursor cursor = editor()->textCursor();
 
     //
     // Исходная позиция курсора
@@ -305,6 +305,14 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     }
 
     editor()->setTextCursor(cursor);
+
+    //
+    // Если курсор в таблице, а под таблицей ничего нет, то добавим блок вниз
+    //
+    if (cursor.atEnd()
+        && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::PageSplitter) {
+        editor()->addParagraph(TextParagraphType::Character);
+    }
 }
 
 void StandardKeyHandler::handlePageUp(QKeyEvent* _event)

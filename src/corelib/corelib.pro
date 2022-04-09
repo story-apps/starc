@@ -104,6 +104,7 @@ SOURCES += \
     business_layer/model/audioplay/audioplay_statistics_model.cpp \
     business_layer/model/audioplay/audioplay_synopsis_model.cpp \
     business_layer/model/audioplay/audioplay_title_page_model.cpp \
+    business_layer/model/audioplay/text/audioplay_text_block_parser.cpp \
     business_layer/model/audioplay/text/audioplay_text_model.cpp \
     business_layer/model/audioplay/text/audioplay_text_model_folder_item.cpp \
     business_layer/model/audioplay/text/audioplay_text_model_scene_item.cpp \
@@ -329,6 +330,7 @@ HEADERS += \
     business_layer/model/audioplay/audioplay_statistics_model.h \
     business_layer/model/audioplay/audioplay_synopsis_model.h \
     business_layer/model/audioplay/audioplay_title_page_model.h \
+    business_layer/model/audioplay/text/audioplay_text_block_parser.h \
     business_layer/model/audioplay/text/audioplay_text_model.h \
     business_layer/model/audioplay/text/audioplay_text_model_folder_item.h \
     business_layer/model/audioplay/text/audioplay_text_model_scene_item.h \

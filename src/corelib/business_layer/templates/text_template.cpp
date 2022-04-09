@@ -230,6 +230,11 @@ QString textParagraphTitle(TextParagraphType _type)
 // ****
 
 
+TextParagraphType TextBlockStyle::forBlock(const QTextCursor& _cursor)
+{
+    return forBlock(_cursor.block());
+}
+
 TextParagraphType TextBlockStyle::forBlock(const QTextBlock& _block)
 {
     TextParagraphType blockType = TextParagraphType::Undefined;

@@ -32,6 +32,11 @@ public:
     bool inTable() const;
 
     /**
+     * @brief Возвращает true, если курсор находится в таблице и в ней нет текста
+     */
+    bool isTableEmpty() const;
+
+    /**
      * @brief Находится ли блок в первой колонке
      */
     bool inFirstColumn() const;

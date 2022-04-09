@@ -2,6 +2,7 @@
 
 #include "../audioplay_text_edit.h"
 
+#include <business_layer/model/audioplay/text/audioplay_text_block_parser.h>
 #include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/locations/locations_model.h>
 #include <business_layer/templates/audioplay_template.h>
@@ -19,6 +20,22 @@ using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
 using Ui::AudioplayTextEdit;
 
+
+namespace {
+/**
+ * @brief Вставить двоеточие в конец блока
+ */
+void insertColunAtEnd(QTextCursor& _cursor)
+{
+    _cursor.movePosition(QTextCursor::EndOfBlock);
+    if (!_cursor.block().text().trimmed().endsWith(':')) {
+        while (!_cursor.block().text().isEmpty() && _cursor.block().text().endsWith(' ')) {
+            _cursor.deletePreviousChar();
+        }
+        _cursor.insertText(":");
+    }
+}
+} // namespace
 
 namespace KeyProcessingLayer {
 
@@ -81,9 +98,16 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
         // Если нужно автоматически перепрыгиваем к следующему блоку
         //
         if (_event != 0) { // ... чтобы таб не переводил на новую строку
-            cursor.movePosition(QTextCursor::EndOfBlock);
+            //
+            // Добавим двоеточие после имени
+            //
+            insertColunAtEnd(cursor);
+
+            //
+            // Переходим в следующий блок
+            //
             editor()->setTextCursor(cursor);
-            editor()->addParagraph(jumpForEnter(TextParagraphType::Character));
+            editor()->moveCursor(QTextCursor::NextBlock);
         }
     } else {
         //! Подстановщик закрыт
@@ -92,9 +116,8 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
             //! Есть выделение
 
             //
-            // Удаляем всё, но оставляем стилем блока текущий
+            // Ничего не делаем
             //
-            editor()->addParagraph(TextParagraphType::Character);
         } else {
             //! Нет выделения
 
@@ -108,32 +131,30 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
             } else {
                 //! Текст не пуст
 
-                //
-                // Сохраним имя персонажа
-                //
-                storeCharacter();
-
-                if (cursorBackwardText.isEmpty()) {
-                    //! В начале блока
-
-                    //
-                    // Вставим блок имени героя перед собой
-                    //
-                    editor()->addParagraph(TextParagraphType::Character);
-                } else if (cursorForwardText.isEmpty()) {
+                if (!cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
-                    // Вставить блок реплики героя
+                    // Сохраним имя персонажа
                     //
-                    editor()->addParagraph(jumpForEnter(TextParagraphType::Character));
+                    storeCharacter();
+
+                    //
+                    // Добавим двоеточие после имени
+                    //
+                    insertColunAtEnd(cursor);
+
+                    //
+                    // Переходим к следующему блоку, он уже отформатирован должным образом
+                    //
+                    editor()->moveCursor(QTextCursor::NextBlock);
                 } else {
+                    //! В начале блока
                     //! Внутри блока
 
                     //
-                    // Вставить блок реплики героя
+                    // Ничего не делаем
                     //
-                    editor()->addParagraph(TextParagraphType::Dialogue);
                 }
             }
         }
@@ -187,13 +208,7 @@ void CharacterHandler::handleTab(QKeyEvent*)
             } else {
                 //! Текст не пуст
 
-                if (cursorBackwardText.isEmpty()) {
-                    //! В начале блока
-
-                    //
-                    // Ни чего не делаем
-                    //
-                } else if (cursorForwardText.isEmpty()) {
+                if (!cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
@@ -202,10 +217,16 @@ void CharacterHandler::handleTab(QKeyEvent*)
                     storeCharacter();
 
                     //
-                    // Вставить блок ремарки
+                    // Добавим двоеточие после имени
                     //
-                    editor()->addParagraph(jumpForTab(TextParagraphType::Character));
+                    insertColunAtEnd(cursor);
+
+                    //
+                    // Переходим к следующему блоку, он уже отформатирован должным образом
+                    //
+                    editor()->moveCursor(QTextCursor::NextBlock);
                 } else {
+                    //! В начале блока
                     //! Внутри блока
 
                     //
@@ -297,7 +318,8 @@ void CharacterHandler::complete(const QString& _currentBlockText,
     while (!cursor.atStart()
            && TextBlockStyle::forBlock(cursor.block()) != TextParagraphType::SceneHeading) {
         if (TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::Character) {
-            const QString characterName = cursor.block().text();
+            const QString characterName
+                = BusinessLayer::AudioplayCharacterParser::name(cursor.block().text());
             if (!characterName.isEmpty() && !charactersToComplete.contains(characterName)) {
                 //
                 // Персонажа, который говорил встречный диалог ставим выше,
@@ -332,7 +354,7 @@ void CharacterHandler::complete(const QString& _currentBlockText,
 
     m_completerModel->setStringList(charactersToComplete);
     sectionModel = m_completerModel;
-    sectionText = _currentBlockText;
+    sectionText = BusinessLayer::AudioplayCharacterParser::name(_currentBlockText);
 
     //
     // Дополним текст
@@ -367,7 +389,8 @@ void CharacterHandler::storeCharacter() const
     // ... текст до курсора
     const QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
     // ... имя персонажа
-    const QString characterName = cursorBackwardText;
+    const QString characterName
+        = BusinessLayer::AudioplayCharacterParser::name(cursorBackwardText.trimmed());
 
     //
     // Сохраняем персонажа

@@ -5,6 +5,7 @@
 #include "audioplay_text_model_text_item.h"
 
 #include <business_layer/model/audioplay/audioplay_information_model.h>
+#include <business_layer/model/audioplay/text/audioplay_text_block_parser.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
 #include <business_layer/templates/audioplay_template.h>
@@ -222,7 +223,7 @@ void AudioplayTextModel::updateCharacterName(const QString& _oldName, const QStr
             case TextModelItemType::Text: {
                 auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
                 if (textItem->paragraphType() == TextParagraphType::Character
-                    && textItem->text() == oldName) {
+                    && AudioplayCharacterParser::name(textItem->text()) == oldName) {
                     auto text = textItem->text();
                     text.remove(0, oldName.length());
                     text.prepend(_newName);

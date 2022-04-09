@@ -61,6 +61,34 @@ bool TextCursor::inTable() const
     return currentTable() != nullptr;
 }
 
+bool TextCursor::isTableEmpty() const
+{
+    if (!inTable()) {
+        return false;
+    }
+
+    auto cursor = *this;
+
+    //
+    // Идём до начала таблицы
+    //
+    while (cursor.inTable()) {
+        cursor.movePosition(TextCursor::PreviousBlock);
+    }
+    cursor.movePosition(TextCursor::NextBlock);
+    //
+    // Идём до конца таблицы
+    //
+    while (cursor.inTable()) {
+        if (cursor.block() != this->block() && !cursor.block().text().isEmpty()) {
+            return false;
+        }
+        cursor.movePosition(TextCursor::NextBlock);
+    }
+
+    return true;
+}
+
 bool TextCursor::inFirstColumn() const
 {
     return currentTable() && currentTable()->cellAt(*this).column() == 0;

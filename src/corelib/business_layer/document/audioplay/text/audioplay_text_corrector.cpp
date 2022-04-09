@@ -2,6 +2,7 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/audioplay/text/audioplay_text_block_parser.h>
 #include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
@@ -1599,7 +1600,8 @@ void AudioplayTextCorrector::Implementation::breakDialogue(const QTextBlockForma
         //
         // И вставляем текст с именем персонажа
         //
-        const QString characterName = characterBlock.text();
+        const QString characterName
+            = BusinessLayer::AudioplayCharacterParser::name(characterBlock.text());
         _cursor.insertText(characterName + continuedTerm());
         _block = _cursor.block();
         //

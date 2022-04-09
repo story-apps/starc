@@ -1413,21 +1413,13 @@ void TextDocument::splitParagraph(const TextCursor& _cursor)
     setParagraphType(TextParagraphType::PageSplitter, cursor);
 
     //
-    // Вставляем параграф после таблицы - это обязательное условие, чтобы после таблицы всегда
-    // оставался один параграф, чтобы пользователь всегда мог выйти из таблицы
-    //
-    if (cursor.atEnd()) {
-        addParagraph(TextParagraphType::Action, cursor);
-    }
-
-    //
     // Завершаем редактирование
     //
     cursor.endEditBlock();
     //
     // ... и только после этого вставляем текст в первую колонку
     //
-    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor, 3);
+    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor, 2);
     insertFromMime(cursor.position(), mime);
 }
 
@@ -1438,12 +1430,13 @@ void TextDocument::mergeParagraph(const TextCursor& _cursor)
     //
     TextCursor cursor = _cursor;
     cursor.movePosition(QTextCursor::StartOfBlock);
+    const auto sourceBlockType = TextBlockStyle::forBlock(cursor);
     cursor.beginEditBlock();
 
     //
     // Идём до начала таблицы
     //
-    while (TextBlockStyle::forBlock(cursor.block()) != TextParagraphType::PageSplitter) {
+    while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter) {
         cursor.movePosition(QTextCursor::PreviousBlock);
     }
 
@@ -1500,23 +1493,34 @@ void TextDocument::mergeParagraph(const TextCursor& _cursor)
     cursor.movePosition(QTextCursor::NextBlock);
     cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
     cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     cursor.deletePreviousChar();
     cursor.endEditBlock();
 
     //
     // Вставляем текст из удалённых ячеек
     //
-    cursor.movePosition(QTextCursor::StartOfBlock);
-    cursor.movePosition(QTextCursor::PreviousCharacter);
     const int insertPosition = cursor.position();
-    if (!secondColumnData.isEmpty()) {
-        cursor.insertBlock({});
-        insertFromMime(cursor.position(), secondColumnData);
-        cursor.setPosition(insertPosition);
+    //
+    // Если таблица была пуста, то создаём пустой блок, с типом исходного блока, где был курсор
+    //
+    if (firstColumnData.isEmpty() && secondColumnData.isEmpty()) {
+        const auto blockStyle = d->documentTemplate().paragraphStyle(sourceBlockType);
+        cursor.insertBlock(blockStyle.blockFormat(), blockStyle.charFormat());
     }
-    if (!firstColumnData.isEmpty()) {
-        cursor.insertBlock({});
-        insertFromMime(cursor.position(), firstColumnData);
+    //
+    // В противном случае, вставляем тексты обеих колонок сохраняя порядок следования текста
+    //
+    else {
+        if (!secondColumnData.isEmpty()) {
+            cursor.insertBlock({});
+            insertFromMime(cursor.position(), secondColumnData);
+            cursor.setPosition(insertPosition);
+        }
+        if (!firstColumnData.isEmpty()) {
+            cursor.insertBlock({});
+            insertFromMime(cursor.position(), firstColumnData);
+        }
     }
 }
 
