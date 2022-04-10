@@ -743,6 +743,7 @@ SettingsStorage::Implementation::Implementation()
         //
         // Параметры навигатора сценария
         //
+        defaultValues.insert(kComponentsAudioplayNavigatorShowSceneNumberKey, true);
         defaultValues.insert(kComponentsAudioplayNavigatorShowSceneTextKey, true);
         defaultValues.insert(kComponentsAudioplayNavigatorSceneTextLinesKey, 1);
         //

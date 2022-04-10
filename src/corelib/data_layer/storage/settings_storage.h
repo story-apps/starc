@@ -231,6 +231,8 @@ const QString kComponentsAudioplayEditorShortcutsKey
 // ... навигатор
 const QString kComponentsAudioplayNavigatorKey
     = kComponentsAudioplayKey + QStringLiteral("/navigator");
+const QString kComponentsAudioplayNavigatorShowSceneNumberKey
+    = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-scene-number");
 const QString kComponentsAudioplayNavigatorShowSceneTextKey
     = kComponentsAudioplayNavigatorKey + QStringLiteral("/show-scene-text");
 const QString kComponentsAudioplayNavigatorSceneTextLinesKey

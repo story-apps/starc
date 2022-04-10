@@ -40,6 +40,7 @@ const QString kAudioplayInformationViewMime = QStringLiteral("application/x-star
 const QString kAudioplayParametersViewMime = QStringLiteral("application/x-starc/view/audioplay/parameters");
 const QString kAudioplayTitlePageEditorMime = QStringLiteral("application/x-starc/editor/audioplay/title-page");
 const QString kAudioplayTextEditorMime = QStringLiteral("application/x-starc/editor/audioplay/text");
+const QString kAudioplayTextNavigatorMime = QStringLiteral("application/x-starc/navigator/audioplay/text");
 
 /**
  * @brief Карта соотвествия майм-типов редактора к навигатору
@@ -51,6 +52,7 @@ const QHash<QString, QString> kEditorToNavigator
         { "application/x-starc/editor/screenplay/cards", kScreenplayTextNavigatorMime },
 //        { kScreenplayStatisticsViewMime, kScreenplayStatisticsNavigatorMime },
         { kComicBookTextEditorMime, kComicBookTextNavigatorMime },
+        { kAudioplayTextEditorMime, kAudioplayTextNavigatorMime },
       };
 
 /**
@@ -129,6 +131,7 @@ const QHash<QString, QString> kMimeToPlugin
         { kAudioplayParametersViewMime, "*audioplayparametersplugin*" },
         { kAudioplayTitlePageEditorMime, "*titlepageplugin*" },
         { kAudioplayTextEditorMime, "*audioplaytextplugin*" },
+        { kAudioplayTextNavigatorMime, "*audioplaytextstructureplugin*" },
         //
         { "application/x-starc/editor/characters/relations", "*charactersrelationsplugin*" },
         { "application/x-starc/editor/character/information", "*characterinformationplugin*" },
