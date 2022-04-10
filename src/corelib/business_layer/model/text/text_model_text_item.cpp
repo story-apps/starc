@@ -548,7 +548,7 @@ void TextModelTextItem::setNumber(int _number)
     }
 
     const auto newNumber
-        = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1:" : ":%1").arg(_number);
+        = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1." : ".%1").arg(_number);
     d->number = { _number, newNumber };
     markChanged();
 }

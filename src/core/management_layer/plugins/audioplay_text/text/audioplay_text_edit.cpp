@@ -940,6 +940,40 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
                 }
 
                 //
+                // Прорисовка тайтлов блоков
+                //
+                const auto blockStyle = audioplayTemplate().paragraphStyle(blockType);
+                if (blockStyle.showTitle()) {
+                    setPainterPen(palette().text().color());
+                    painter.setFont(cursor.charFormat().font());
+
+                    //
+                    // Определим область для отрисовки (отступы используем от стиля персонажа)
+                    //
+                    const auto characterStyle
+                        = audioplayTemplate().paragraphStyle(TextParagraphType::Character);
+                    const QPointF topLeft(
+                        isLeftToRight ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                + characterStyle.blockFormat(true).leftMargin()
+                                      : textRight + leftDelta - spaceBetweenSceneNumberAndText,
+                        cursorR.top());
+                    const QPointF bottomRight(
+                        isLeftToRight ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                + block.blockFormat().leftMargin()
+                                      : textRight + leftDelta - spaceBetweenSceneNumberAndText,
+                        cursorR.bottom());
+                    const auto rect = QRectF(topLeft, bottomRight);
+                    QString space;
+                    space.fill(' ', 100);
+                    painter.drawText(
+                        rect, Qt::AlignLeft | Qt::AlignTop,
+                        QString("%1:%2").arg(BusinessLayer::textParagraphTitle(blockType), space));
+                    if (lastCharacterColor.isValid()) {
+                        setPainterPen(palette().text().color());
+                    }
+                }
+
+                //
                 // Прорисовка декораций пустой строки
                 //
                 if (!block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
@@ -1058,7 +1092,7 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
                         painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F024B");
                     }
                     //
-                    // Прорисовка номеров сцен, если необходимо
+                    // Прорисовка номеров блоков, если необходимо
                     //
                     if (d->showBlockNumbers
                         && (blockType == TextParagraphType::Dialogue
@@ -1082,64 +1116,51 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
                             //
                             const int numberDelta
                                 = painter.fontMetrics().horizontalAdvance(dialogueNumber);
+                            QRectF numberRect;
                             //
-                            // ... то поместим номер реплики внутри текстовой области,
-                            //     чтобы их было удобно отличать от номеров сцен
+                            // ... если у стиля персонажа есть пустое пространство слева, то
+                            //     поместим номер реплики внутри текстовой области
                             //
-                            const QPointF topLeft(
-                                isLeftToRight
-                                    ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                    : textRight + leftDelta - spaceBetweenSceneNumberAndText
-                                        - numberDelta,
-                                cursorR.top());
-                            const QPointF bottomRight(
-                                isLeftToRight
-                                    ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                        + numberDelta
-                                    : textRight + leftDelta - spaceBetweenSceneNumberAndText,
-                                cursorR.bottom());
-                            const auto rect = QRectF(topLeft, bottomRight);
+                            if (d->audioplayTemplate()
+                                    .paragraphStyle(TextParagraphType::Character)
+                                    .marginsOnHalfPage()
+                                    .left()
+                                > 0) {
+                                const QPointF topLeft(
+                                    isLeftToRight
+                                        ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                        : textRight + leftDelta - spaceBetweenSceneNumberAndText
+                                            - numberDelta,
+                                    cursorR.top());
+                                const QPointF bottomRight(
+                                    isLeftToRight
+                                        ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                            + numberDelta
+                                        : textRight + leftDelta - spaceBetweenSceneNumberAndText,
+                                    cursorR.bottom());
+                                numberRect = QRectF(topLeft, bottomRight);
+                            }
+                            //
+                            // ... если нет, то рисуем на полях
+                            //
+                            else {
+                                const QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
+                                                                    : textRight + leftDelta,
+                                                      cursorR.top());
+                                const QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
+                                                                        : pageRight + leftDelta,
+                                                          cursorR.bottom());
+                                numberRect = QRectF(topLeft, bottomRight);
+                            }
 
                             if (lastCharacterColor.isValid()) {
                                 setPainterPen(lastCharacterColor);
                             }
-                            painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, dialogueNumber);
+                            painter.drawText(numberRect, Qt::AlignRight | Qt::AlignTop,
+                                             dialogueNumber);
                             if (lastCharacterColor.isValid()) {
                                 setPainterPen(palette().text().color());
                             }
-                        }
-                    }
-
-                    //
-                    // Прорисовка тайтлов блоков
-                    //
-                    const auto blockStyle = audioplayTemplate().paragraphStyle(blockType);
-                    if (blockStyle.showTitle()) {
-                        setPainterPen(palette().text().color());
-                        painter.setFont(cursor.charFormat().font());
-
-                        //
-                        // Определим область для отрисовки (отступы используем от стиля персонажа)
-                        //
-                        const auto characterStyle
-                            = audioplayTemplate().paragraphStyle(TextParagraphType::Character);
-                        const QPointF topLeft(
-                            isLeftToRight ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                    + characterStyle.blockFormat(true).leftMargin()
-                                          : textRight + leftDelta - spaceBetweenSceneNumberAndText,
-                            cursorR.top());
-                        const QPointF bottomRight(
-                            isLeftToRight ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                    + block.blockFormat().leftMargin()
-                                          : textRight + leftDelta - spaceBetweenSceneNumberAndText,
-                            cursorR.bottom());
-                        const auto rect = QRectF(topLeft, bottomRight);
-                        QString space;
-                        space.fill(' ', 100);
-                        painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop,
-                                         BusinessLayer::textParagraphTitle(blockType) + space);
-                        if (lastCharacterColor.isValid()) {
-                            setPainterPen(palette().text().color());
                         }
                     }
                 }
