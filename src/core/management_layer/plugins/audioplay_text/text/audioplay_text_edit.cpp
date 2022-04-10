@@ -1234,44 +1234,6 @@ ContextMenu* AudioplayTextEdit::createContextMenu(const QPoint& _position, QWidg
 
     const BusinessLayer::TextCursor cursor = textCursor();
 
-    auto splitAction = new QAction(this);
-    if (cursor.inTable()) {
-        splitAction->setText(tr("Merge paragraph"));
-        splitAction->setIconText(u8"\U000f10e7");
-    } else {
-        splitAction->setText(tr("Split paragraph"));
-        splitAction->setIconText(u8"\U000f10e7");
-
-        //
-        // Запрещаем разделять некоторые блоки
-        //
-        const auto blockType = TextBlockStyle::forBlock(cursor.block());
-        splitAction->setEnabled(blockType != TextParagraphType::SceneHeading
-                                && blockType != TextParagraphType::SceneHeadingShadow
-                                && blockType != TextParagraphType::BeatHeading
-                                && blockType != TextParagraphType::BeatHeadingShadow
-                                && blockType != TextParagraphType::ActHeading
-                                && blockType != TextParagraphType::ActFooter
-                                && blockType != TextParagraphType::SequenceHeading
-                                && blockType != TextParagraphType::SequenceFooter);
-    }
-    connect(splitAction, &QAction::triggered, this, [this] {
-        BusinessLayer::TextCursor cursor = textCursor();
-        if (cursor.inTable()) {
-            d->document.mergeParagraph(cursor);
-        } else {
-            d->document.splitParagraph(cursor);
-
-            //
-            // После разделения, возвращаемся в первую ячейку таблицы
-            //
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::EndOfBlock);
-        }
-    });
-
     //
     // Работа с закладками
     //
@@ -1305,7 +1267,6 @@ ContextMenu* AudioplayTextEdit::createContextMenu(const QPoint& _position, QWidg
     auto actions = menu->actions().toVector();
     actions.first()->setSeparator(true);
     actions.prepend(bookmarkAction);
-    actions.prepend(splitAction);
     menu->setActions(actions);
 
     return menu;
