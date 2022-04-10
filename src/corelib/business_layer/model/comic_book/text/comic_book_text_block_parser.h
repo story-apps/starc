@@ -10,7 +10,7 @@ class QString;
 namespace BusinessLayer {
 
 /**
- * @brief Парсер текста блока панель
+ * @brief Парсер текста блока страница
  */
 class CORE_LIBRARY_EXPORT ComicBookPageParser
 {

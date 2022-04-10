@@ -203,6 +203,40 @@ void ComicBookTextEdit::redo()
 
 void ComicBookTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
 {
+    QString mimeDataToMove;
+
+    //
+    // Выводим курсор за пределы таблицы, чтобы вставка происходила за её пределами и не создавались
+    // многоуровневые таблицы
+    //
+    if (BusinessLayer::TextCursor cursor = textCursor(); cursor.inTable()) {
+        //
+        // Курсор обязательно должен быть во второй колонке
+        //
+        Q_ASSERT(!cursor.inFirstColumn());
+
+        //
+        // Если до конца блока есть текст вырезаем его
+        //
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        if (cursor.hasSelection()) {
+            mimeDataToMove = d->document.mimeFromSelection(cursor.selectionInterval().from,
+                                                           cursor.selectionInterval().to);
+            cursor.removeSelectedText();
+        }
+
+        //
+        // Выходим из таблицы
+        //
+        cursor.movePosition(QTextCursor::NextBlock);
+        Q_ASSERT(!cursor.inTable());
+
+        setTextCursor(cursor);
+    }
+
+    //
+    // Вставляем параграф на уровне модели
+    //
     d->document.addParagraph(_type, textCursor());
 
     //
@@ -216,66 +250,131 @@ void ComicBookTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
         setTextCursor(cursor);
         cursor.movePosition(BusinessLayer::TextCursor::NextBlock);
         d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
-        //
-        // Очищаем диалог, от текста, который туда добавляет корректор, пока там был блок персонажа
-        //
-        if (cursor.movePosition(BusinessLayer::TextCursor::EndOfBlock,
-                                BusinessLayer::TextCursor::KeepAnchor)) {
-            cursor.removeSelectedText();
-        }
+    }
+    //
+    // Если вставляется реплика, то разделяем страницу и ставим курсор во вторую колонку
+    //
+    else if (_type == BusinessLayer::TextParagraphType::Dialogue) {
+        const auto cursorPosition = textCursor().position();
+        d->document.splitParagraph(textCursor());
+        auto cursor = textCursor();
+        cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
+        setTextCursor(cursor);
+        d->document.setParagraphType(BusinessLayer::TextParagraphType::Character, cursor);
+        cursor.movePosition(BusinessLayer::TextCursor::NextBlock);
+        d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
+        setTextCursor(cursor);
+    }
+
+    //
+    // Вставляем вырезанные данные
+    //
+    if (!mimeDataToMove.isEmpty()) {
+        d->document.insertFromMime(textCursor().position(), mimeDataToMove);
     }
 
     emit paragraphTypeChanged();
 }
 
-void ComicBookTextEdit::setCurrentParagraphType(BusinessLayer::TextParagraphType _type)
+void ComicBookTextEdit::setCurrentParagraphType(TextParagraphType _type)
 {
     if (currentParagraphType() == _type) {
         return;
     }
 
-    //
-    // Если раньше это был персонаж, то объединяем блоки, чтобы убрать лишнюю таблицу
-    //
     BusinessLayer::TextCursor cursor = textCursor();
-    const auto needSplitParagraph
-        = _type == BusinessLayer::TextParagraphType::Character && !cursor.inTable();
-    const auto needMergeParagraph = currentParagraphType() == TextParagraphType::Character
-        && cursor.inTable() && cursor.inFirstColumn();
 
-    d->document.setParagraphType(_type, textCursor());
+    //
+    // Меняем тип блока на персонажа
+    //
+    if (_type == TextParagraphType::Character) {
+        //
+        // Если текущий блок не в таблице, то создаём её и текущий блок помещаем в неё как персонажа
+        //
+        if (!cursor.inTable()) {
+            d->document.setParagraphType(_type, cursor);
+            const auto cursorPosition = cursor.position();
+            d->document.splitParagraph(cursor);
+            auto otherCursor = textCursor();
+            otherCursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
+            setTextCursor(otherCursor);
+            otherCursor.movePosition(QTextCursor::NextBlock);
+            d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, otherCursor);
+        }
+        //
+        //
+        //
+        else {
+            return;
+        }
+    }
+    //
+    // На реплику
+    //
+    else if (_type == TextParagraphType::Dialogue) {
+        //
+        // Если текущий блок не в таблице, то создаём её и текущий блок помещаем в неё как персонажа
+        //
+        if (!cursor.inTable()) {
+            d->document.setParagraphType(_type, cursor);
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            const auto blockMimeData = d->document.mimeFromSelection(
+                cursor.selectionInterval().from, cursor.selectionInterval().to);
+            cursor.removeSelectedText();
+
+            const auto cursorPosition = cursor.position();
+            d->document.splitParagraph(cursor);
+            auto otherCursor = textCursor();
+            otherCursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
+            d->document.setParagraphType(BusinessLayer::TextParagraphType::Character, otherCursor);
+            otherCursor.movePosition(QTextCursor::NextBlock);
+            d->document.insertFromMime(otherCursor.position(), blockMimeData);
+            setTextCursor(otherCursor);
+        }
+        //
+        //
+        //
+        else {
+            return;
+        }
+    }
+    //
+    // На любой другой
+    //
+    else {
+        //
+        // ... в таблице
+        //
+        if (cursor.inTable()) {
+            //
+            // ... если таблица пуста, то удаляем таблицу и применяем оставшемуся блоку новый тип
+            //
+            const bool skipCurrentBlockEmptynessCheck = true;
+            if (cursor.isTableEmpty(skipCurrentBlockEmptynessCheck)) {
+                d->document.mergeParagraph(cursor);
+                d->document.setParagraphType(_type, cursor);
+            }
+            //
+            // ... если таблица не пуста, ничего не делаем
+            //
+            else {
+                return;
+            }
+        }
+        //
+        // ... за пределами таблицы - устанавливаем заданный тип
+        //
+        else {
+            d->document.setParagraphType(_type, cursor);
+        }
+    }
 
     //
     // Если вставили папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
     //
     if (_type == TextParagraphType::SequenceHeading) {
         moveCursor(QTextCursor::PreviousBlock);
-    }
-    //
-    // Если вставляется персонаж, то разделяем страницу, для добавления реплики
-    //
-    else {
-        //        cursor = textCursor();
-        auto cursorPosition = cursor.position();
-        if (needSplitParagraph) {
-            d->document.splitParagraph(textCursor());
-            cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
-            setTextCursor(cursor);
-            cursor.movePosition(BusinessLayer::TextCursor::NextBlock);
-            d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
-            //
-            // Очищаем диалог, от текста, который туда добавляет корректор, пока там был блок
-            // персонажа
-            //
-            if (cursor.movePosition(BusinessLayer::TextCursor::EndOfBlock,
-                                    BusinessLayer::TextCursor::KeepAnchor)) {
-                cursor.removeSelectedText();
-            }
-        } else if (needMergeParagraph) {
-            d->document.mergeParagraph(textCursor());
-            cursor.setPosition(cursorPosition - 1); // -1 т.к. таблицы больше нет
-            setTextCursor(cursor);
-        }
     }
 
     emit paragraphTypeChanged();

@@ -86,44 +86,9 @@ void DialogHandler::handleEnter(QKeyEvent*)
                     //! Внутри блока
 
                     //
-                    // Разрываем диалог блоком персонажа, вставляя его имя
+                    // Разделим блок на две реплики
                     //
-                    {
-                        //
-                        // Найти име персонажа, кому принадлежит реплика
-                        //
-                        QString characterName;
-                        {
-                            QTextCursor cursor = editor()->textCursor();
-                            QTextBlock cursorBlock = cursor.block();
-                            while ((TextBlockStyle::forBlock(cursorBlock)
-                                        != TextParagraphType::Character
-                                    || TextBlockStyle::forBlock(cursorBlock)
-                                        == TextParagraphType::Dialogue
-                                    || TextBlockStyle::forBlock(cursorBlock)
-                                        == TextParagraphType::PageSplitter)
-                                   && !cursor.atStart()) {
-                                cursor.movePosition(QTextCursor::PreviousBlock);
-                                cursorBlock = cursor.block();
-                            }
-
-                            if (TextBlockStyle::forBlock(cursorBlock)
-                                == TextParagraphType::Character) {
-                                characterName = cursorBlock.text().simplified();
-                            }
-                        }
-
-                        //
-                        // Вставляем блок "герой" и добавляем имя
-                        //
-                        editor()->addParagraph(TextParagraphType::Character);
-                        editor()->insertPlainText(characterName);
-
-                        //
-                        // Оставшийся текст форматируем, как "диалог"
-                        //
-                        editor()->addParagraph(TextParagraphType::Dialogue);
-                    }
+                    editor()->addParagraph(TextParagraphType::Dialogue);
                 }
             }
         }

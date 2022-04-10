@@ -23,6 +23,22 @@ using BusinessLayer::TextParagraphType;
 using Ui::ComicBookTextEdit;
 
 
+namespace {
+/**
+ * @brief Вставить двоеточие в конец блока
+ */
+void insertColunAtEnd(QTextCursor& _cursor)
+{
+    _cursor.movePosition(QTextCursor::EndOfBlock);
+    if (!_cursor.block().text().trimmed().endsWith(':')) {
+        while (!_cursor.block().text().isEmpty() && _cursor.block().text().endsWith(' ')) {
+            _cursor.deletePreviousChar();
+        }
+        _cursor.insertText(":");
+    }
+}
+} // namespace
+
 namespace KeyProcessingLayer {
 
 CharacterHandler::CharacterHandler(ComicBookTextEdit* _editor)
@@ -102,10 +118,14 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
         //
         if (_event != 0 // ... чтобы таб не переводил на новую строку
             && currentSection == ComicBookCharacterParser::SectionName) {
-            cursor.movePosition(QTextCursor::EndOfBlock);
-            if (!cursor.block().text().trimmed().endsWith(":")) {
-                cursor.insertText(":");
-            }
+            //
+            // Добавим двоеточие после имени
+            //
+            insertColunAtEnd(cursor);
+
+            //
+            // Переходим в следующий блок
+            //
             editor()->setTextCursor(cursor);
             editor()->moveCursor(QTextCursor::NextBlock);
         }
@@ -116,9 +136,8 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
             //! Есть выделение
 
             //
-            // Удаляем всё, но оставляем стилем блока текущий
+            // Ничего не делаем
             //
-            editor()->addParagraph(TextParagraphType::Character);
         } else {
             //! Нет выделения
 
@@ -132,39 +151,30 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
             } else {
                 //! Текст не пуст
 
-                //
-                // Сохраним имя персонажа
-                //
-                storeCharacter();
-                //
-                // ...  добавим двоеточие после имени
-                //
-                cursor.movePosition(QTextCursor::EndOfBlock);
-                if (!cursor.block().text().trimmed().endsWith(":")) {
-                    cursor.insertText(":");
-                }
-
-                if (cursorBackwardText.isEmpty()) {
-                    //! В начале блока
-
-                    //
-                    // Вставим блок имени героя перед собой
-                    //
-                    editor()->addParagraph(TextParagraphType::Character);
-                } else if (cursorForwardText.isEmpty()) {
+                if (!cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                     //! В конце блока
+
+                    //
+                    // Сохраним имя персонажа
+                    //
+                    storeCharacter();
+
+                    //
+                    // Добавим двоеточие после имени
+                    //
+                    insertColunAtEnd(cursor);
 
                     //
                     // Переходим к следующему блоку, он уже отформатирован должным образом
                     //
                     editor()->moveCursor(QTextCursor::NextBlock);
                 } else {
+                    //! В начале блока
                     //! Внутри блока
 
                     //
-                    // Вставить блок реплики героя
+                    // Ничего не делаем
                     //
-                    editor()->addParagraph(TextParagraphType::Dialogue);
                 }
             }
         }
@@ -218,32 +228,25 @@ void CharacterHandler::handleTab(QKeyEvent*)
             } else {
                 //! Текст не пуст
 
-                if (cursorBackwardText.isEmpty()) {
-                    //! В начале блока
-
-                    //
-                    // Ни чего не делаем
-                    //
-                } else if (cursorForwardText.isEmpty()) {
+                if (!cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                     //! В конце блока
 
                     //
                     // Сохраним имя персонажа
                     //
                     storeCharacter();
+
                     //
-                    // ...  добавим двоеточие после имени
+                    // Добавим двоеточие после имени
                     //
-                    cursor.movePosition(QTextCursor::EndOfBlock);
-                    if (!cursor.block().text().trimmed().endsWith(":")) {
-                        cursor.insertText(":");
-                    }
+                    insertColunAtEnd(cursor);
 
                     //
                     // Переходим к следующему блоку
                     //
                     editor()->moveCursor(QTextCursor::NextBlock);
                 } else {
+                    //! В начале блока
                     //! Внутри блока
 
                     //
