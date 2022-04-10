@@ -34,7 +34,7 @@ public:
     /**
      * @brief Возвращает true, если курсор находится в таблице и в ней нет текста
      */
-    bool isTableEmpty() const;
+    bool isTableEmpty(bool _skipCurrentBlockEmptynessCheck = false) const;
 
     /**
      * @brief Находится ли блок в первой колонке

@@ -307,11 +307,23 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     editor()->setTextCursor(cursor);
 
     //
-    // Если курсор в таблице, а под таблицей ничего нет, то добавим блок вниз
+    // Если курсор в абзаце с таблицей, а под таблицей ничего нет, то добавим блок вниз,
     //
     if (cursor.atEnd()
         && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::PageSplitter) {
-        editor()->addParagraph(TextParagraphType::Character);
+        cursor.movePosition(QTextCursor::PreviousBlock);
+        //
+        // ... при условии, что таблица не пуста
+        //
+        if (!cursor.isTableEmpty()) {
+            editor()->addParagraph(TextParagraphType::Character);
+        }
+        //
+        // ... в противном случае, переводим курсор внутрь последней колонки
+        //
+        else {
+            editor()->setTextCursor(cursor);
+        }
     }
 }
 

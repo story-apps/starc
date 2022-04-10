@@ -61,7 +61,7 @@ bool TextCursor::inTable() const
     return currentTable() != nullptr;
 }
 
-bool TextCursor::isTableEmpty() const
+bool TextCursor::isTableEmpty(bool _skipCurrentBlockEmptynessCheck) const
 {
     if (!inTable()) {
         return false;
@@ -80,7 +80,8 @@ bool TextCursor::isTableEmpty() const
     // Идём до конца таблицы
     //
     while (cursor.inTable()) {
-        if (cursor.block() != this->block() && !cursor.block().text().isEmpty()) {
+        const bool skipBlock = _skipCurrentBlockEmptynessCheck && cursor.block() == this->block();
+        if (!skipBlock && !cursor.block().text().isEmpty()) {
             return false;
         }
         cursor.movePosition(TextCursor::NextBlock);

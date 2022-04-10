@@ -369,7 +369,8 @@ void AudioplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
             //
             // ... если таблица пуста, то удаляем таблицу и применяем оставшемуся блоку новый тип
             //
-            if (cursor.isTableEmpty()) {
+            const bool skipCurrentBlockEmptynessCheck = true;
+            if (cursor.isTableEmpty(skipCurrentBlockEmptynessCheck)) {
                 d->document.mergeParagraph(cursor);
                 d->document.setParagraphType(_type, cursor);
             }
