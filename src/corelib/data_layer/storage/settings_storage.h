@@ -240,16 +240,10 @@ const QString kComponentsAudioplayNavigatorSceneTextLinesKey
 // ... хронометраж
 const QString kComponentsAudioplayDurationKey
     = kComponentsAudioplayKey + QStringLiteral("/duration");
-const QString kComponentsAudioplayDurationTypeKey
-    = kComponentsAudioplayDurationKey + QStringLiteral("/type");
-const QString kComponentsAudioplayDurationByPageDurationKey
-    = kComponentsAudioplayDurationKey + QStringLiteral("/by-page-duration");
-const QString kComponentsAudioplayDurationByCharactersCharactersKey
-    = kComponentsAudioplayDurationKey + QStringLiteral("/by-characters-characters");
-const QString kComponentsAudioplayDurationByCharactersIncludeSpacesKey
-    = kComponentsAudioplayDurationKey + QStringLiteral("/by-characters-include-spaces");
-const QString kComponentsAudioplayDurationByCharactersDurationKey
-    = kComponentsAudioplayDurationKey + QStringLiteral("/by-characters-duration");
+const QString kComponentsAudioplayDurationByWordsCharactersKey
+    = kComponentsAudioplayDurationKey + QStringLiteral("/by-words-characters");
+const QString kComponentsAudioplayDurationByWordsDurationKey
+    = kComponentsAudioplayDurationKey + QStringLiteral("/by-words-duration");
 //
 // редактор отношений персонажей
 const QString kComponentsCharactersRelationsKey

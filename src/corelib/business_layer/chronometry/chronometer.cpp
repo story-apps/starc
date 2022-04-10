@@ -130,6 +130,42 @@ private:
 };
 
 /**
+ * @brief Расчёт хронометража по количеству слов
+ */
+class WordsChronometer : public AbstractChronometer
+{
+public:
+    WordsChronometer(int _words, int _seconds)
+        : m_words(_words)
+        , m_seconds(_seconds)
+    {
+    }
+
+    std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
+                                       const TextTemplate& _textTemplate) const override
+    {
+        Q_UNUSED(_type)
+        Q_UNUSED(_textTemplate)
+
+        const int milliseconds = m_seconds * 1000;
+        const auto characterDuration = static_cast<qreal>(milliseconds) / m_words;
+        return std::chrono::milliseconds{ qCeil(TextHelper::wordsCount(_text)
+                                                * characterDuration) };
+    }
+
+private:
+    /**
+     * @brief Сколько слов
+     */
+    const int m_words = 200;
+
+    /**
+     * @brief Имеют заданную длительность
+     */
+    const int m_seconds = 60;
+};
+
+/**
  * @brief Расчёт хронометража а-ля Софокл
  */
 // class ConfigurableChronometer : public AbstractChronometer
@@ -230,32 +266,10 @@ std::chrono::milliseconds AudioplayChronometer::duration(TextParagraphType _type
 {
     using namespace DataStorageLayer;
 
-    const auto chronometerType = settingsValue(kComponentsAudioplayDurationTypeKey).toInt();
+    const int words = settingsValue(kComponentsAudioplayDurationByWordsCharactersKey).toInt();
+    const int seconds = settingsValue(kComponentsAudioplayDurationByWordsDurationKey).toInt();
     const auto& audioplayTemplate = TemplatesFacade::audioplayTemplate(_templateId);
-
-    switch (static_cast<ChronometerType>(chronometerType)) {
-    case ChronometerType::Page: {
-        const auto secondsPerPage
-            = settingsValue(kComponentsAudioplayDurationByPageDurationKey).toInt();
-        return PageChronometer(secondsPerPage).duration(_type, _text, audioplayTemplate);
-    }
-
-    case ChronometerType::Characters: {
-        const int characters
-            = settingsValue(kComponentsAudioplayDurationByCharactersCharactersKey).toInt();
-        const bool considerSpaces
-            = settingsValue(kComponentsAudioplayDurationByCharactersIncludeSpacesKey).toBool();
-        const int seconds
-            = settingsValue(kComponentsAudioplayDurationByCharactersDurationKey).toInt();
-        return CharactersChronometer(characters, considerSpaces, seconds)
-            .duration(_type, _text, audioplayTemplate);
-    }
-
-    default: {
-        Q_ASSERT(false);
-        return {};
-    }
-    }
+    return WordsChronometer(words, seconds).duration(_type, _text, audioplayTemplate);
 }
 
 } // namespace BusinessLayer
