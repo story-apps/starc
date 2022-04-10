@@ -79,15 +79,24 @@ TextModelItem* AudioplayTextModel::Implementation::rootItem() const
 
 void AudioplayTextModel::Implementation::updateNumbering()
 {
+    int sceneNumber = 1;
     int blockNumber = 1;
     std::function<void(const TextModelItem*)> updateChildNumbering;
-    updateChildNumbering = [&blockNumber, &updateChildNumbering](const TextModelItem* _item) {
+    updateChildNumbering = [&sceneNumber, &blockNumber, &updateChildNumbering](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
-            case TextModelItemType::Folder:
+            case TextModelItemType::Folder: {
+                updateChildNumbering(childItem);
+                break;
+            }
+
             case TextModelItemType::Group: {
                 updateChildNumbering(childItem);
+                auto groupItem = static_cast<TextModelGroupItem*>(childItem);
+                if (groupItem->setNumber(sceneNumber, {})) {
+                    ++sceneNumber;
+                }
                 break;
             }
 

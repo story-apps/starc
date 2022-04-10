@@ -18,6 +18,7 @@ const int kComponentsIndex = 1;
 const int kComponentsSimpleTextIndex = 0;
 const int kComponentsScreenplayIndex = 1;
 const int kComponentsComicBookIndex = 2;
+const int kComponentsAudioplayIndex = 3;
 const int kShortcutsIndex = 2;
 } // namespace
 
@@ -49,6 +50,7 @@ SettingsNavigator::Implementation::Implementation(QWidget* _parent)
     componentsItem->appendRow(createItem(u8"\U000F021A"));
     componentsItem->appendRow(createItem(u8"\U000F0FCE"));
     componentsItem->appendRow(createItem(u8"\U000F056E"));
+    componentsItem->appendRow(createItem(u8"\U000F02CB"));
     model->appendRow(componentsItem);
     model->appendRow(createItem(u8"\U000f030c"));
     tree->setModel(model);
@@ -101,6 +103,10 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
                 }
                 case kComponentsComicBookIndex: {
                     emit componentsComicBookPressed();
+                    break;
+                }
+                case kComponentsAudioplayIndex: {
+                    emit componentsAudioplayPressed();
                     break;
                 }
                 default: {
@@ -160,6 +166,7 @@ void SettingsNavigator::updateTranslations()
     model->item(kComponentsIndex)->child(kComponentsSimpleTextIndex)->setText(tr("Simple text"));
     model->item(kComponentsIndex)->child(kComponentsScreenplayIndex)->setText(tr("Screenplay"));
     model->item(kComponentsIndex)->child(kComponentsComicBookIndex)->setText(tr("Comic book"));
+    model->item(kComponentsIndex)->child(kComponentsAudioplayIndex)->setText(tr("Audioplay"));
     model->item(kShortcutsIndex)->setText(tr("Shortcuts"));
 }
 

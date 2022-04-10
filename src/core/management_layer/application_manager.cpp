@@ -1848,6 +1848,15 @@ void ApplicationManager::initConnections()
             });
     connect(d->settingsManager.data(), &SettingsManager::comicBookNavigatorChanged, this,
             [this] { d->projectManager->reconfigureComicBookNavigator(); });
+    //
+    connect(d->settingsManager.data(), &SettingsManager::audioplayEditorChanged, this,
+            [this](const QStringList& _changedSettingsKeys) {
+                d->projectManager->reconfigureAudioplayEditor(_changedSettingsKeys);
+            });
+    connect(d->settingsManager.data(), &SettingsManager::audioplayNavigatorChanged, this,
+            [this] { d->projectManager->reconfigureAudioplayNavigator(); });
+    connect(d->settingsManager.data(), &SettingsManager::audioplayDurationChanged, this,
+            [this] { d->projectManager->reconfigureAudioplayDuration(); });
 
 #ifdef CLOUD_SERVICE_MANAGER
     //

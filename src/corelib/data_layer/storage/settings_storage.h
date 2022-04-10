@@ -240,7 +240,7 @@ const QString kComponentsAudioplayNavigatorSceneTextLinesKey
 // ... хронометраж
 const QString kComponentsAudioplayDurationKey
     = kComponentsAudioplayKey + QStringLiteral("/duration");
-const QString kComponentsAudioplayDurationByWordsCharactersKey
+const QString kComponentsAudioplayDurationByWordsWordsKey
     = kComponentsAudioplayDurationKey + QStringLiteral("/by-words-characters");
 const QString kComponentsAudioplayDurationByWordsDurationKey
     = kComponentsAudioplayDurationKey + QStringLiteral("/by-words-duration");

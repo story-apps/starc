@@ -749,7 +749,7 @@ SettingsStorage::Implementation::Implementation()
         //
         // Параметры хронометража сценария
         //
-        defaultValues.insert(kComponentsAudioplayDurationByWordsCharactersKey, 200);
+        defaultValues.insert(kComponentsAudioplayDurationByWordsWordsKey, 200);
         defaultValues.insert(kComponentsAudioplayDurationByWordsDurationKey, 60);
     }
 

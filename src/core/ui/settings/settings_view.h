@@ -37,6 +37,7 @@ public:
     void showComponentsSimpleText();
     void showComponentsScreenplay();
     void showComponentsComicBook();
+    void showComponentsAudioplay();
     void showShortcuts();
 
     //
@@ -87,6 +88,19 @@ public:
     void setComicBookEditorDefaultTemplate(const QString& _templateId);
     //
     void setComicBookNavigatorShowSceneText(bool _show, int _lines);
+
+    //
+    // Задание параметров редактора сценария
+    //
+    void setAudioplayEditorDefaultTemplate(const QString& _templateId);
+    void setAudioplayEditorShowBlockNumber(bool _show, bool _continue);
+    void setAudioplayEditorUseCharactersFromText(bool _use);
+    //
+    void setAudioplayNavigatorShowSceneNumber(bool _show);
+    void setAudioplayNavigatorShowSceneText(bool _show, int _lines);
+    //
+    void setAudioplayDurationByWordsWords(int _words);
+    void setAudioplayDurationByWordsDuration(int _duration);
 
     //
     // Задание параметров горячих клавиш
@@ -149,13 +163,36 @@ signals:
     void comicBookNavigatorShowSceneTextChanged(bool _show, int _lines);
 
     //
+    // Уведомление об изменении параметров редактора аудиопостановки
+    //
+    void audioplayEditorDefaultTemplateChanged(const QString& _templateId);
+    void audioplayEditorShowBlockNumberChanged(bool _show, bool _continue);
+    void audioplayEditorUseCharactersFromTextChanged(bool _use);
+    //
+    void audioplayNavigatorShowSceneNumberChanged(bool _show);
+    void audioplayNavigatorShowSceneTextChanged(bool _show, int _lines);
+    //
+    void audioplayDurationByWordsWordsChanged(int _words);
+    void audioplayDurationByWordsDurationChanged(int _duration);
+
+    //
     // Редактирование шаблонов
+    //
+    // ... сценарий
     //
     void editCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
     void duplicateCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
     void saveToFileCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
     void removeCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
     void loadFromFileScreenplayEditorTemplateRequested();
+    //
+    // ... аудиопостановка
+    //
+    void editCurrentAudioplayEditorTemplateRequested(const QString& _templateId);
+    void duplicateCurrentAudioplayEditorTemplateRequested(const QString& _templateId);
+    void saveToFileCurrentAudioplayEditorTemplateRequested(const QString& _templateId);
+    void removeCurrentAudioplayEditorTemplateRequested(const QString& _templateId);
+    void loadFromFileAudioplayEditorTemplateRequested();
 
     //
     // Параметры горячих клавиш

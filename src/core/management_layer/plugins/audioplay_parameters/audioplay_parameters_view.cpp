@@ -221,8 +221,8 @@ void AudioplayParametersView::updateTranslations()
     d->printFooterOnTitlePage->setText(tr("Print footer on title page"));
     d->overrideCommonSettings->setText(tr("Override common settings for this audioplay"));
     d->audioplayTemplate->setLabel(tr("Template"));
-    d->showBlockNumbers->setText(tr("Print blocks' numbers"));
-    d->continueBlockNumbers->setText(tr("Continue blocks' numbers through document"));
+    d->showBlockNumbers->setText(tr("Show block numbers"));
+    d->continueBlockNumbers->setText(tr("Continue block numbers through document"));
 }
 
 void AudioplayParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

@@ -449,6 +449,17 @@ void PluginsBuilder::reconfigureComicBookNavigator() const
     reconfigurePlugin(kComicBookTextNavigatorMime, {});
 }
 
+void PluginsBuilder::reconfigureAudioplayEditor(const QStringList& _changedSettingsKeys) const
+{
+    reconfigurePlugin(kAudioplayTitlePageEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kAudioplayTextEditorMime, _changedSettingsKeys);
+}
+
+void PluginsBuilder::reconfigureAudioplayNavigator() const
+{
+    reconfigurePlugin(kAudioplayTextNavigatorMime, {});
+}
+
 void PluginsBuilder::checkAvailabilityToEdit() const
 {
     for (auto plugin : std::as_const(d->plugins)) {

@@ -110,7 +110,7 @@ void ScreenplayTextModel::Implementation::updateNumbering()
                       if (groupItem->groupType() == TextGroupType::Scene) {
                           if (groupItem->setNumber(sceneNumber,
                                                    informationModel->scenesNumbersPrefix())) {
-                              sceneNumber++;
+                              ++sceneNumber;
                           }
                       }
                       break;

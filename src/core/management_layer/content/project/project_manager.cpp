@@ -2,6 +2,7 @@
 
 #include "project_models_facade.h"
 
+#include <business_layer/model/audioplay/text/audioplay_text_model.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
@@ -1049,6 +1050,28 @@ void ProjectManager::reconfigureComicBookEditor(const QStringList& _changedSetti
 void ProjectManager::reconfigureComicBookNavigator()
 {
     d->pluginsBuilder.reconfigureComicBookNavigator();
+}
+
+void ProjectManager::reconfigureAudioplayEditor(const QStringList& _changedSettingsKeys)
+{
+    d->pluginsBuilder.reconfigureAudioplayEditor(_changedSettingsKeys);
+}
+
+void ProjectManager::reconfigureAudioplayNavigator()
+{
+    d->pluginsBuilder.reconfigureAudioplayNavigator();
+}
+
+void ProjectManager::reconfigureAudioplayDuration()
+{
+    for (auto model : d->modelsFacade.loadedModels()) {
+        auto audioplayModel = qobject_cast<BusinessLayer::AudioplayTextModel*>(model);
+        if (audioplayModel == nullptr) {
+            continue;
+        }
+
+        audioplayModel->recalculateDuration();
+    }
 }
 
 void ProjectManager::checkAvailabilityToEdit()

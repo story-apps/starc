@@ -46,6 +46,9 @@ public:
     void reconfigureScreenplayDuration();
     void reconfigureComicBookEditor(const QStringList& _changedSettingsKeys);
     void reconfigureComicBookNavigator();
+    void reconfigureAudioplayEditor(const QStringList& _changedSettingsKeys);
+    void reconfigureAudioplayNavigator();
+    void reconfigureAudioplayDuration();
 
     /**
      * @brief Обновить информацию о том, может ли пользователь использовать платные редакторы

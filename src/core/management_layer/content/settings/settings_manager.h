@@ -70,6 +70,9 @@ signals:
     void screenplayDurationChanged();
     void comicBookEditorChanged(const QStringList& _changedSettingsKeys);
     void comicBookNavigatorChanged();
+    void audioplayEditorChanged(const QStringList& _changedSettingsKeys);
+    void audioplayNavigatorChanged();
+    void audioplayDurationChanged();
 
 protected:
     /**
@@ -132,6 +135,19 @@ private:
     void setComicBookEditorDefaultTemplate(const QString& _templateId);
     //
     void setComicBookNavigatorShowSceneText(bool _show, int _lines);
+
+    //
+    // Сохранение параметров редактора сценария
+    //
+    void setAudioplayEditorDefaultTemplate(const QString& _templateId);
+    void setAudioplayEditorShowBlockNumber(bool _show, bool _continued);
+    void setAudioplayEditorUseCharactersFromText(bool _use);
+    //
+    void setAudioplayNavigatorShowSceneNumber(bool _show);
+    void setAudioplayNavigatorShowSceneText(bool _show, int _lines);
+    //
+    void setAudioplayDurationByWordsWords(int _words);
+    void setAudioplayDurationByWordsDuration(int _duration);
 
     //
     // Сохранение параметров горячих клавиш

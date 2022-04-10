@@ -33,6 +33,7 @@ signals:
     void componentsSimpleTextPressed();
     void componentsScreenplayPressed();
     void componentsComicBookPressed();
+    void componentsAudioplayPressed();
     void shortcutsPressed();
 
 protected:

@@ -4,6 +4,7 @@
 
 #include <business_layer/chronometry/chronometer.h>
 #include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -149,6 +150,7 @@ public:
     void initSimpleTextCard();
     void initScreenplayCard();
     void initComicBookCard();
+    void initAudioplayCard();
 
     /**
      * @brief Настроить карточку горячих клавиш
@@ -315,6 +317,40 @@ public:
     RadioButton* comicBookNavigatorSceneDescriptionLines5 = nullptr;
     //
     int comicBookCardBottomSpacerIndex = 0;
+    //
+    // Audioplay
+    //
+    Card* audioplayCard = nullptr;
+    QGridLayout* audioplayCardLayout = nullptr;
+    H5Label* audioplayTitle = nullptr;
+    //
+    // ... Audioplay editor
+    //
+    H6Label* audioplayEditorTitle = nullptr;
+    ComboBox* audioplayEditorDefaultTemplate = nullptr;
+    IconButton* audioplayEditorDefaultTemplateOptions = nullptr;
+    CheckBox* audioplayEditorShowBlockNumber = nullptr;
+    CheckBox* audioplayEditorContinueBlockNumbers = nullptr;
+    CheckBox* audioplayEditorUseCharactersFromText = nullptr;
+    //
+    // ... Audioplay navigator
+    //
+    H6Label* audioplayNavigatorTitle = nullptr;
+    CheckBox* audioplayNavigatorShowSceneNumber = nullptr;
+    CheckBox* audioplayNavigatorShowSceneText = nullptr;
+    RadioButton* audioplayNavigatorSceneDescriptionLines1 = nullptr;
+    RadioButton* audioplayNavigatorSceneDescriptionLines2 = nullptr;
+    RadioButton* audioplayNavigatorSceneDescriptionLines3 = nullptr;
+    RadioButton* audioplayNavigatorSceneDescriptionLines4 = nullptr;
+    RadioButton* audioplayNavigatorSceneDescriptionLines5 = nullptr;
+    //
+    // ... Audioplay duration
+    //
+    H6Label* audioplayDurationTitle = nullptr;
+    TextField* audioplayDurationByWordsWords = nullptr;
+    TextField* audioplayDurationByWordsDuration = nullptr;
+    //
+    int audioplayCardBottomSpacerIndex = 0;
 
     Card* shortcutsCard = nullptr;
     QGridLayout* shortcutsCardLayout = nullptr;
@@ -424,6 +460,27 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , comicBookNavigatorSceneDescriptionLines4(new RadioButton(comicBookCard))
     , comicBookNavigatorSceneDescriptionLines5(new RadioButton(comicBookCard))
     //
+    , audioplayCard(new Card(content))
+    , audioplayCardLayout(new QGridLayout)
+    , audioplayTitle(new H5Label(audioplayCard))
+    , audioplayEditorTitle(new H6Label(audioplayCard))
+    , audioplayEditorDefaultTemplate(new ComboBox(audioplayCard))
+    , audioplayEditorDefaultTemplateOptions(new IconButton(audioplayCard))
+    , audioplayEditorShowBlockNumber(new CheckBox(audioplayCard))
+    , audioplayEditorContinueBlockNumbers(new CheckBox(audioplayCard))
+    , audioplayEditorUseCharactersFromText(new CheckBox(audioplayCard))
+    , audioplayNavigatorTitle(new H6Label(audioplayCard))
+    , audioplayNavigatorShowSceneNumber(new CheckBox(audioplayCard))
+    , audioplayNavigatorShowSceneText(new CheckBox(audioplayCard))
+    , audioplayNavigatorSceneDescriptionLines1(new RadioButton(audioplayCard))
+    , audioplayNavigatorSceneDescriptionLines2(new RadioButton(audioplayCard))
+    , audioplayNavigatorSceneDescriptionLines3(new RadioButton(audioplayCard))
+    , audioplayNavigatorSceneDescriptionLines4(new RadioButton(audioplayCard))
+    , audioplayNavigatorSceneDescriptionLines5(new RadioButton(audioplayCard))
+    , audioplayDurationTitle(new H6Label(audioplayCard))
+    , audioplayDurationByWordsWords(new TextField(audioplayCard))
+    , audioplayDurationByWordsDuration(new TextField(audioplayCard))
+    //
     , shortcutsCard(new Card(content))
     , shortcutsCardLayout(new QGridLayout)
     , shortcutsTitle(new H5Label(shortcutsCard))
@@ -451,6 +508,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     initSimpleTextCard();
     initScreenplayCard();
     initComicBookCard();
+    initAudioplayCard();
     initShortcutsCard();
 
     QWidget* contentWidget = new QWidget;
@@ -464,6 +522,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     layout->addWidget(simpleTextCard);
     layout->addWidget(screenplayCard);
     layout->addWidget(comicBookCard);
+    layout->addWidget(audioplayCard);
     layout->addWidget(shortcutsCard);
     layout->addStretch();
 }
@@ -787,6 +846,87 @@ void SettingsView::Implementation::initComicBookCard()
     //
     comicBookCardBottomSpacerIndex = itemIndex;
     comicBookCard->setLayoutReimpl(comicBookCardLayout);
+}
+
+void SettingsView::Implementation::initAudioplayCard()
+{
+    audioplayEditorDefaultTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    audioplayEditorDefaultTemplate->setModel(BusinessLayer::TemplatesFacade::audioplayTemplates());
+    audioplayEditorDefaultTemplateOptions->setIcon(u8"\U000F01D9");
+    audioplayEditorContinueBlockNumbers->hide();
+    //
+    auto linesGroup = new RadioButtonGroup(audioplayCard);
+    linesGroup->add(audioplayNavigatorSceneDescriptionLines1);
+    linesGroup->add(audioplayNavigatorSceneDescriptionLines2);
+    linesGroup->add(audioplayNavigatorSceneDescriptionLines3);
+    linesGroup->add(audioplayNavigatorSceneDescriptionLines4);
+    linesGroup->add(audioplayNavigatorSceneDescriptionLines5);
+    audioplayNavigatorSceneDescriptionLines1->setEnabled(false);
+    audioplayNavigatorSceneDescriptionLines1->setChecked(true);
+    audioplayNavigatorSceneDescriptionLines2->setEnabled(false);
+    audioplayNavigatorSceneDescriptionLines3->setEnabled(false);
+    audioplayNavigatorSceneDescriptionLines4->setEnabled(false);
+    audioplayNavigatorSceneDescriptionLines5->setEnabled(false);
+    //
+    audioplayDurationByWordsWords->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    audioplayDurationByWordsDuration->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+
+
+    //
+    // Компоновка
+    //
+    audioplayCardLayout->setContentsMargins({});
+    audioplayCardLayout->setSpacing(0);
+    int itemIndex = 0;
+    audioplayCardLayout->addWidget(audioplayTitle, itemIndex++, 0);
+    //
+    // ... редактор сценария
+    //
+    audioplayCardLayout->addWidget(audioplayEditorTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(audioplayEditorDefaultTemplate, 1);
+        layout->addWidget(audioplayEditorDefaultTemplateOptions);
+        audioplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    {
+        auto layout = makeLayout();
+        layout->addWidget(audioplayEditorShowBlockNumber);
+        layout->addWidget(audioplayEditorContinueBlockNumbers);
+        layout->addStretch();
+        audioplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    audioplayCardLayout->addWidget(audioplayEditorUseCharactersFromText, itemIndex++, 0);
+    //
+    // ... навигатор сценария
+    //
+    audioplayCardLayout->addWidget(audioplayNavigatorTitle, itemIndex++, 0);
+    audioplayCardLayout->addWidget(audioplayNavigatorShowSceneNumber, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(audioplayNavigatorShowSceneText);
+        layout->addWidget(audioplayNavigatorSceneDescriptionLines1);
+        layout->addWidget(audioplayNavigatorSceneDescriptionLines2);
+        layout->addWidget(audioplayNavigatorSceneDescriptionLines3);
+        layout->addWidget(audioplayNavigatorSceneDescriptionLines4);
+        layout->addWidget(audioplayNavigatorSceneDescriptionLines5);
+        layout->addStretch();
+        audioplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    //
+    // ... счётчики хронометража
+    //
+    audioplayCardLayout->addWidget(audioplayDurationTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(audioplayDurationByWordsWords);
+        layout->addWidget(audioplayDurationByWordsDuration);
+        layout->addStretch();
+        audioplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    //
+    audioplayCardBottomSpacerIndex = itemIndex;
+    audioplayCard->setLayoutReimpl(audioplayCardLayout);
 }
 
 void SettingsView::Implementation::initShortcutsCard()
@@ -1190,6 +1330,126 @@ SettingsView::SettingsView(QWidget* _parent)
             notifycomicBookNavigatorShowSceneTextChanged);
     connect(d->comicBookNavigatorSceneDescriptionLines5, &RadioButton::checkedChanged, this,
             notifycomicBookNavigatorShowSceneTextChanged);
+    //
+    // ... Редактор аудиопостановки
+    //
+    connect(d->audioplayEditorDefaultTemplateOptions, &IconButton::clicked, this, [this] {
+        QVector<QAction*> actions;
+        const auto templateIndex = d->audioplayEditorDefaultTemplate->currentIndex();
+        const auto templateId
+            = templateIndex.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString();
+        const auto isDefaultTemplate
+            = BusinessLayer::TemplatesFacade::audioplayTemplate(templateId).isDefault();
+        //
+        if (!isDefaultTemplate) {
+            auto editAction = new QAction(tr("Edit"), d->contextMenu);
+            connect(editAction, &QAction::triggered, this, [this, templateId] {
+                emit editCurrentAudioplayEditorTemplateRequested(templateId);
+            });
+            actions.append(editAction);
+        }
+        //
+        auto duplicateAction = new QAction(tr("Duplicate"), d->contextMenu);
+        connect(duplicateAction, &QAction::triggered, this, [this, templateId] {
+            emit duplicateCurrentAudioplayEditorTemplateRequested(templateId);
+        });
+        actions.append(duplicateAction);
+        //
+        if (!isDefaultTemplate) {
+            auto saveToFileAction = new QAction(tr("Save to file"), d->contextMenu);
+            connect(saveToFileAction, &QAction::triggered, this, [this, templateId] {
+                emit saveToFileCurrentAudioplayEditorTemplateRequested(templateId);
+            });
+            actions.append(saveToFileAction);
+            //
+            auto removeAction = new QAction(tr("Remove"), d->contextMenu);
+            connect(removeAction, &QAction::triggered, this, [this, templateId] {
+                emit removeCurrentAudioplayEditorTemplateRequested(templateId);
+            });
+            actions.append(removeAction);
+        }
+        //
+        auto loadFromFileAction = new QAction(tr("Load template from file"), d->contextMenu);
+        loadFromFileAction->setSeparator(true);
+        connect(loadFromFileAction, &QAction::triggered, this,
+                &SettingsView::loadFromFileAudioplayEditorTemplateRequested);
+        actions.append(loadFromFileAction);
+        //
+        d->contextMenu->setActions(actions);
+        d->contextMenu->showContextMenu(QCursor::pos());
+    });
+    connect(d->audioplayEditorShowBlockNumber, &CheckBox::checkedChanged,
+            d->audioplayEditorContinueBlockNumbers, &CheckBox::setEnabled);
+    //
+    connect(d->audioplayEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
+            [this](const QModelIndex& _index) {
+                emit audioplayEditorDefaultTemplateChanged(
+                    _index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
+            });
+    auto notifyAudioplayEditorShowSceneNumbersChanged = [this] {
+        emit audioplayEditorShowBlockNumberChanged(
+            d->audioplayEditorShowBlockNumber->isChecked(),
+            d->audioplayEditorContinueBlockNumbers->isChecked());
+    };
+    connect(d->audioplayEditorShowBlockNumber, &CheckBox::checkedChanged, this,
+            notifyAudioplayEditorShowSceneNumbersChanged);
+    connect(d->audioplayEditorContinueBlockNumbers, &CheckBox::checkedChanged, this,
+            notifyAudioplayEditorShowSceneNumbersChanged);
+    connect(d->audioplayEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
+            &SettingsView::audioplayEditorUseCharactersFromTextChanged);
+    //
+    // ... навигатор сценария
+    //
+    connect(d->audioplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->audioplayNavigatorSceneDescriptionLines1, &RadioButton::setEnabled);
+    connect(d->audioplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->audioplayNavigatorSceneDescriptionLines2, &RadioButton::setEnabled);
+    connect(d->audioplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->audioplayNavigatorSceneDescriptionLines3, &RadioButton::setEnabled);
+    connect(d->audioplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->audioplayNavigatorSceneDescriptionLines4, &RadioButton::setEnabled);
+    connect(d->audioplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->audioplayNavigatorSceneDescriptionLines5, &RadioButton::setEnabled);
+    //
+    connect(d->audioplayNavigatorShowSceneNumber, &CheckBox::checkedChanged, this,
+            &SettingsView::audioplayNavigatorShowSceneNumberChanged);
+    auto notifyAudioplayNavigatorShowSceneTextChanged = [this] {
+        int sceneTextLines = 1;
+        if (d->audioplayNavigatorSceneDescriptionLines2->isChecked()) {
+            sceneTextLines = 2;
+        } else if (d->audioplayNavigatorSceneDescriptionLines3->isChecked()) {
+            sceneTextLines = 3;
+        } else if (d->audioplayNavigatorSceneDescriptionLines4->isChecked()) {
+            sceneTextLines = 4;
+        } else if (d->audioplayNavigatorSceneDescriptionLines5->isChecked()) {
+            sceneTextLines = 5;
+        }
+        emit audioplayNavigatorShowSceneTextChanged(
+            d->audioplayNavigatorShowSceneText->isChecked(), sceneTextLines);
+    };
+    connect(d->audioplayNavigatorShowSceneText, &CheckBox::checkedChanged, this,
+            notifyAudioplayNavigatorShowSceneTextChanged);
+    connect(d->audioplayNavigatorSceneDescriptionLines1, &RadioButton::checkedChanged, this,
+            notifyAudioplayNavigatorShowSceneTextChanged);
+    connect(d->audioplayNavigatorSceneDescriptionLines2, &RadioButton::checkedChanged, this,
+            notifyAudioplayNavigatorShowSceneTextChanged);
+    connect(d->audioplayNavigatorSceneDescriptionLines3, &RadioButton::checkedChanged, this,
+            notifyAudioplayNavigatorShowSceneTextChanged);
+    connect(d->audioplayNavigatorSceneDescriptionLines4, &RadioButton::checkedChanged, this,
+            notifyAudioplayNavigatorShowSceneTextChanged);
+    connect(d->audioplayNavigatorSceneDescriptionLines5, &RadioButton::checkedChanged, this,
+            notifyAudioplayNavigatorShowSceneTextChanged);
+    //
+    // ... хронометраж
+    //
+    connect(d->audioplayDurationByWordsWords, &TextField::textChanged, this, [this] {
+        emit audioplayDurationByWordsWordsChanged(
+            d->audioplayDurationByWordsWords->text().toInt());
+    });
+    connect(d->audioplayDurationByWordsDuration, &TextField::textChanged, this, [this] {
+        emit audioplayDurationByWordsDurationChanged(
+            d->audioplayDurationByWordsDuration->text().toInt());
+    });
 
     //
     // Соединения шорткатов настраиваются в момент установки моделей с данными о них в представление
@@ -1242,6 +1502,11 @@ void SettingsView::showComponentsScreenplay()
 void SettingsView::showComponentsComicBook()
 {
     d->scrollToTitle(d->comicBookTitle);
+}
+
+void SettingsView::showComponentsAudioplay()
+{
+    d->scrollToTitle(d->audioplayTitle);
 }
 
 void SettingsView::showShortcuts()
@@ -1550,6 +1815,60 @@ void SettingsView::setComicBookNavigatorShowSceneText(bool _show, int _lines)
     }
 }
 
+void SettingsView::setAudioplayEditorDefaultTemplate(const QString& _templateId)
+{
+    using namespace BusinessLayer;
+    for (int row = 0; row < TemplatesFacade::audioplayTemplates()->rowCount(); ++row) {
+        auto item = TemplatesFacade::audioplayTemplates()->item(row);
+        if (item->data(TemplatesFacade::kTemplateIdRole).toString() != _templateId) {
+            continue;
+        }
+
+        d->audioplayEditorDefaultTemplate->setCurrentIndex(item->index());
+        break;
+    }
+}
+
+void SettingsView::setAudioplayEditorShowBlockNumber(bool _show, bool _continue)
+{
+    Q_UNUSED(_continue)
+    d->audioplayEditorShowBlockNumber->setChecked(_show);
+}
+
+void SettingsView::setAudioplayEditorUseCharactersFromText(bool _use)
+{
+    d->audioplayEditorUseCharactersFromText->setChecked(_use);
+}
+
+void SettingsView::setAudioplayNavigatorShowSceneNumber(bool _show)
+{
+    d->audioplayNavigatorShowSceneNumber->setChecked(_show);
+}
+
+void SettingsView::setAudioplayNavigatorShowSceneText(bool _show, int _lines)
+{
+    d->audioplayNavigatorShowSceneText->setChecked(_show);
+    if (_show) {
+        const QHash<int, RadioButton*> buttons
+            = { { 1, d->audioplayNavigatorSceneDescriptionLines1 },
+                { 2, d->audioplayNavigatorSceneDescriptionLines2 },
+                { 3, d->audioplayNavigatorSceneDescriptionLines3 },
+                { 4, d->audioplayNavigatorSceneDescriptionLines4 },
+                { 5, d->audioplayNavigatorSceneDescriptionLines5 } };
+        buttons[_lines]->setChecked(true);
+    }
+}
+
+void SettingsView::setAudioplayDurationByWordsWords(int _words)
+{
+    d->audioplayDurationByWordsWords->setText(QString::number(_words));
+}
+
+void SettingsView::setAudioplayDurationByWordsDuration(int _duration)
+{
+    d->audioplayDurationByWordsDuration->setText(QString::number(_duration));
+}
+
 void SettingsView::setShortcutsForScreenplayModel(HierarchicalModel* _model)
 {
     if (d->shortcutsForScreenplayModel) {
@@ -1806,6 +2125,29 @@ void SettingsView::updateTranslations()
     d->screenplayDurationByCharactersDuration->setLabel(tr("has duration"));
     d->screenplayDurationByCharactersDuration->setSuffix(tr("seconds"));
     //
+    d->audioplayTitle->setText(tr("Audioplay module"));
+    d->audioplayEditorTitle->setText(tr("Text editor"));
+    d->audioplayEditorDefaultTemplate->setLabel(tr("Default template"));
+    d->audioplayEditorDefaultTemplateOptions->setToolTip(
+        tr("Available actions for the selected template"));
+    d->audioplayEditorShowBlockNumber->setText(tr("Show block numbers"));
+    d->audioplayEditorContinueBlockNumbers->setText(tr("Continue block numbers through document"));
+    d->audioplayEditorUseCharactersFromText->setText(
+        tr("Show hints for major & related to a current story characters only"));
+    d->audioplayNavigatorTitle->setText(tr("Audioplay navigator"));
+    d->audioplayNavigatorShowSceneNumber->setText(tr("Show scene number"));
+    d->audioplayNavigatorShowSceneText->setText(tr("Show scene text, lines"));
+    d->audioplayNavigatorSceneDescriptionLines1->setText("1");
+    d->audioplayNavigatorSceneDescriptionLines2->setText("2");
+    d->audioplayNavigatorSceneDescriptionLines3->setText("3");
+    d->audioplayNavigatorSceneDescriptionLines4->setText("4");
+    d->audioplayNavigatorSceneDescriptionLines5->setText("5");
+    d->audioplayDurationTitle->setText(tr("Duration"));
+    d->audioplayDurationByWordsWords->setLabel(tr("at the rate of"));
+    d->audioplayDurationByWordsWords->setSuffix(tr("words"));
+    d->audioplayDurationByWordsDuration->setLabel(tr("has duration"));
+    d->audioplayDurationByWordsDuration->setSuffix(tr("seconds"));
+    //
     d->comicBookTitle->setText(tr("Comic book module"));
     d->comicBookEditorTitle->setText(tr("Text editor"));
     d->comicBookEditorDefaultTemplate->setLabel(tr("Default template"));
@@ -1849,8 +2191,14 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->colorAnimation.setStartValue(Ui::DesignSystem::color().secondary());
 
-    for (auto card : { d->applicationCard, d->simpleTextCard, d->screenplayCard, d->comicBookCard,
-                       d->shortcutsCard }) {
+    for (auto card : {
+             d->applicationCard,
+             d->simpleTextCard,
+             d->screenplayCard,
+             d->comicBookCard,
+             d->audioplayCard,
+             d->shortcutsCard,
+         }) {
         card->setBackgroundColor(DesignSystem::color().background());
     }
 
@@ -1873,6 +2221,10 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->comicBookTitle,
              d->comicBookEditorTitle,
              d->comicBookNavigatorTitle,
+             d->audioplayTitle,
+             d->audioplayEditorTitle,
+             d->audioplayNavigatorTitle,
+             d->audioplayDurationTitle,
              d->shortcutsTitle,
              d->shortcutsForScreenplayTitle,
          }) {
@@ -1903,10 +2255,13 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     auto iconLabelMargins = labelMargins;
     iconLabelMargins.setLeft(0);
-    for (auto iconLabel : std::vector<Widget*>{ d->spellCheckerUserDictionary,
-                                                d->simpleTextEditorDefaultTemplateOptions,
-                                                d->screenplayEditorDefaultTemplateOptions,
-                                                d->comicBookEditorDefaultTemplateOptions }) {
+    for (auto iconLabel : std::vector<Widget*>{
+             d->spellCheckerUserDictionary,
+             d->simpleTextEditorDefaultTemplateOptions,
+             d->screenplayEditorDefaultTemplateOptions,
+             d->comicBookEditorDefaultTemplateOptions,
+             d->audioplayEditorDefaultTemplateOptions,
+         }) {
         iconLabel->setBackgroundColor(DesignSystem::color().background());
         iconLabel->setTextColor(DesignSystem::color().onBackground());
         iconLabel->setContentsMargins(iconLabelMargins);
@@ -1937,6 +2292,12 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayDurationByCharactersIncludingSpaces,
              //
              d->comicBookNavigatorShowSceneText,
+             //
+             d->audioplayEditorShowBlockNumber,
+             d->audioplayEditorContinueBlockNumbers,
+             d->audioplayEditorUseCharactersFromText,
+             d->audioplayNavigatorShowSceneNumber,
+             d->audioplayNavigatorShowSceneText,
          }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());
@@ -1948,6 +2309,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->simpleTextNavigatorSceneDescriptionLines3,
              d->simpleTextNavigatorSceneDescriptionLines4,
              d->simpleTextNavigatorSceneDescriptionLines5,
+             //
              d->screenplayNavigatorSceneDescriptionLines1,
              d->screenplayNavigatorSceneDescriptionLines2,
              d->screenplayNavigatorSceneDescriptionLines3,
@@ -1955,27 +2317,45 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayNavigatorSceneDescriptionLines5,
              d->screenplayDurationByPage,
              d->screenplayDurationByCharacters,
+             //
              d->comicBookNavigatorSceneDescriptionLines1,
              d->comicBookNavigatorSceneDescriptionLines2,
              d->comicBookNavigatorSceneDescriptionLines3,
              d->comicBookNavigatorSceneDescriptionLines4,
              d->comicBookNavigatorSceneDescriptionLines5,
+             //
+             d->audioplayNavigatorSceneDescriptionLines1,
+             d->audioplayNavigatorSceneDescriptionLines2,
+             d->audioplayNavigatorSceneDescriptionLines3,
+             d->audioplayNavigatorSceneDescriptionLines4,
+             d->audioplayNavigatorSceneDescriptionLines5,
          }) {
         radioButton->setBackgroundColor(DesignSystem::color().background());
         radioButton->setTextColor(DesignSystem::color().onBackground());
     }
 
     for (auto textField : QVector<TextField*>{
-             d->backupsFolderPath, d->spellCheckerLanguage, d->simpleTextEditorDefaultTemplate,
-             d->screenplayEditorDefaultTemplate, d->screenplayDurationByPagePage,
-             d->screenplayDurationByPageDuration, d->screenplayDurationByCharactersCharacters,
-             d->screenplayDurationByCharactersDuration, d->comicBookEditorDefaultTemplate }) {
+             d->backupsFolderPath,
+             d->spellCheckerLanguage,
+             d->simpleTextEditorDefaultTemplate,
+             d->screenplayEditorDefaultTemplate,
+             d->screenplayDurationByPagePage,
+             d->screenplayDurationByPageDuration,
+             d->screenplayDurationByCharactersCharacters,
+             d->screenplayDurationByCharactersDuration,
+             //
+             d->comicBookEditorDefaultTemplate,
+             //
+             d->audioplayEditorDefaultTemplate,
+             d->audioplayDurationByWordsWords,
+             d->audioplayDurationByWordsDuration,
+         }) {
         textField->setBackgroundColor(DesignSystem::color().onBackground());
         textField->setTextColor(DesignSystem::color().onBackground());
     }
     for (auto textField :
          { /*d->simpleTextEditorDefaultTemplate,*/ d->screenplayEditorDefaultTemplate,
-           /*d->comicBookEditorDefaultTemplate*/ }) {
+           /*d->comicBookEditorDefaultTemplate*/ d->audioplayEditorDefaultTemplate, }) {
         textField->setCustomMargins({ isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0, 0,
                                       isLeftToRight() ? 0 : Ui::DesignSystem::layout().px24(), 0 });
     }
@@ -1984,12 +2364,13 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->simpleTextEditorDefaultTemplate,
              d->screenplayEditorDefaultTemplate,
              d->comicBookEditorDefaultTemplate,
+             d->audioplayEditorDefaultTemplate,
          }) {
         combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
     }
     for (auto icon :
          { d->simpleTextEditorDefaultTemplateOptions, d->screenplayEditorDefaultTemplateOptions,
-           d->comicBookEditorDefaultTemplateOptions }) {
+           d->comicBookEditorDefaultTemplateOptions, d->audioplayEditorDefaultTemplateOptions, }) {
         icon->setContentsMargins(isLeftToRight() ? 0 : Ui::DesignSystem::layout().px16(), 0,
                                  isLeftToRight() ? Ui::DesignSystem::layout().px16() : 0, 0);
     }
@@ -2032,6 +2413,9 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     //
     d->comicBookCardLayout->setRowMinimumHeight(
         d->comicBookCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    //
+    d->audioplayCardLayout->setRowMinimumHeight(
+        d->audioplayCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
     //
     d->shortcutsCardLayout->setRowMinimumHeight(
         d->shortcutsCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));

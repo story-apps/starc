@@ -266,7 +266,7 @@ std::chrono::milliseconds AudioplayChronometer::duration(TextParagraphType _type
 {
     using namespace DataStorageLayer;
 
-    const int words = settingsValue(kComponentsAudioplayDurationByWordsCharactersKey).toInt();
+    const int words = settingsValue(kComponentsAudioplayDurationByWordsWordsKey).toInt();
     const int seconds = settingsValue(kComponentsAudioplayDurationByWordsDurationKey).toInt();
     const auto& audioplayTemplate = TemplatesFacade::audioplayTemplate(_templateId);
     return WordsChronometer(words, seconds).duration(_type, _text, audioplayTemplate);

@@ -60,6 +60,7 @@ public:
     void loadSimpleTextSettings();
     void loadScreenplaySettings();
     void loadComicBookSettings();
+    void loadAudioplaySettings();
     void loadShortcutsSettings();
 
 
@@ -116,6 +117,7 @@ void SettingsManager::Implementation::loadComponentsSettings()
     loadSimpleTextSettings();
     loadScreenplaySettings();
     loadComicBookSettings();
+    loadAudioplaySettings();
 }
 
 void SettingsManager::Implementation::loadSimpleTextSettings()
@@ -183,7 +185,35 @@ void SettingsManager::Implementation::loadComicBookSettings()
     //
     view->setComicBookNavigatorShowSceneText(
         settingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneTextKey).toBool(),
-        settingsValue(DataStorageLayer::kComponentsComicBookNavigatorSceneTextLinesKey).toInt());
+                settingsValue(DataStorageLayer::kComponentsComicBookNavigatorSceneTextLinesKey).toInt());
+}
+
+void SettingsManager::Implementation::loadAudioplaySettings()
+{
+    const auto defaultTemplate
+        = settingsValue(DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey).toString();
+    view->setAudioplayEditorDefaultTemplate(defaultTemplate);
+    BusinessLayer::TemplatesFacade::setDefaultAudioplayTemplate(defaultTemplate);
+    view->setAudioplayEditorShowBlockNumber(
+        settingsValue(DataStorageLayer::kComponentsAudioplayEditorShowBlockNumbersKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsAudioplayEditorContinueBlockNumbersKey)
+            .toBool());
+    view->setAudioplayEditorUseCharactersFromText(
+        settingsValue(DataStorageLayer::kComponentsAudioplayEditorUseCharactersFromTextKey)
+            .toBool());
+    //
+    view->setAudioplayNavigatorShowSceneNumber(
+        settingsValue(DataStorageLayer::kComponentsAudioplayNavigatorShowSceneNumberKey).toBool());
+    view->setAudioplayNavigatorShowSceneText(
+        settingsValue(DataStorageLayer::kComponentsAudioplayNavigatorShowSceneTextKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsAudioplayNavigatorSceneTextLinesKey).toInt());
+    //
+    view->setAudioplayDurationByWordsWords(
+        settingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsWordsKey)
+            .toInt());
+    view->setAudioplayDurationByWordsDuration(
+        settingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsDurationKey)
+            .toInt());
 }
 
 void SettingsManager::Implementation::loadShortcutsSettings()
@@ -298,6 +328,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &Ui::SettingsView::showComponentsScreenplay);
     connect(d->navigator, &Ui::SettingsNavigator::componentsComicBookPressed, d->view,
             &Ui::SettingsView::showComponentsComicBook);
+    connect(d->navigator, &Ui::SettingsNavigator::componentsAudioplayPressed, d->view,
+            &Ui::SettingsView::showComponentsAudioplay);
     connect(d->navigator, &Ui::SettingsNavigator::shortcutsPressed, d->view,
             &Ui::SettingsView::showShortcuts);
 
@@ -366,6 +398,7 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->view, &Ui::SettingsView::applicationUseTypewriterScrollingChanged, this,
             &SettingsManager::setApplicationUseTypewriterScrolling);
     //
+    // ... простой редактор текста
     //
     connect(d->view, &Ui::SettingsView::simpleTextEditorDefaultTemplateChanged, this,
             &SettingsManager::setSimpleTextEditorDefaultTemplate);
@@ -373,6 +406,7 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->view, &Ui::SettingsView::simpleTextNavigatorShowSceneTextChanged, this,
             &SettingsManager::setSimpleTextNavigatorShowSceneText);
     //
+    // ... сценарий
     //
     connect(d->view, &Ui::SettingsView::screenplayEditorDefaultTemplateChanged, this,
             &SettingsManager::setScreenplayEditorDefaultTemplate);
@@ -403,12 +437,32 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersDurationChanged, this,
             &SettingsManager::setScreenplayDurationByCharactersDuration);
     //
+    // ... комиксы
     //
     connect(d->view, &Ui::SettingsView::comicBookEditorDefaultTemplateChanged, this,
             &SettingsManager::setComicBookEditorDefaultTemplate);
     //
     connect(d->view, &Ui::SettingsView::comicBookNavigatorShowSceneTextChanged, this,
             &SettingsManager::setComicBookNavigatorShowSceneText);
+    //
+    // ... аудиопостановка
+    //
+    connect(d->view, &Ui::SettingsView::audioplayEditorDefaultTemplateChanged, this,
+            &SettingsManager::setAudioplayEditorDefaultTemplate);
+    connect(d->view, &Ui::SettingsView::audioplayEditorShowBlockNumberChanged, this,
+            &SettingsManager::setAudioplayEditorShowBlockNumber);
+    connect(d->view, &Ui::SettingsView::audioplayEditorUseCharactersFromTextChanged, this,
+            &SettingsManager::setAudioplayEditorUseCharactersFromText);
+    //
+    connect(d->view, &Ui::SettingsView::audioplayNavigatorShowSceneNumberChanged, this,
+            &SettingsManager::setAudioplayNavigatorShowSceneNumber);
+    connect(d->view, &Ui::SettingsView::audioplayNavigatorShowSceneTextChanged, this,
+            &SettingsManager::setAudioplayNavigatorShowSceneText);
+    //
+    connect(d->view, &Ui::SettingsView::audioplayDurationByWordsWordsChanged, this,
+            &SettingsManager::setAudioplayDurationByWordsWords);
+    connect(d->view, &Ui::SettingsView::audioplayDurationByWordsDurationChanged, this,
+            &SettingsManager::setAudioplayDurationByWordsDuration);
 
     //
     // Работа с библиотекой шаблонов сценария
@@ -913,6 +967,58 @@ void SettingsManager::setComicBookNavigatorShowSceneText(bool _show, int _lines)
     setSettingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneTextKey, _show);
     setSettingsValue(DataStorageLayer::kComponentsComicBookNavigatorSceneTextLinesKey, _lines);
     emit comicBookNavigatorChanged();
+}
+
+void SettingsManager::setAudioplayEditorDefaultTemplate(const QString& _templateId)
+{
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey, _templateId);
+    BusinessLayer::TemplatesFacade::setDefaultAudioplayTemplate(_templateId);
+    emit audioplayEditorChanged(
+        { DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey });
+}
+
+void SettingsManager::setAudioplayEditorShowBlockNumber(bool _show, bool _continued)
+{
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorShowBlockNumbersKey, _show);
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorContinueBlockNumbersKey,
+                     _continued);
+    emit audioplayEditorChanged(
+        { DataStorageLayer::kComponentsAudioplayEditorShowBlockNumbersKey,
+          DataStorageLayer::kComponentsAudioplayEditorContinueBlockNumbersKey });
+}
+
+void SettingsManager::setAudioplayEditorUseCharactersFromText(bool _use)
+{
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorUseCharactersFromTextKey, _use);
+    emit audioplayEditorChanged(
+        { DataStorageLayer::kComponentsAudioplayEditorUseCharactersFromTextKey });
+}
+
+void SettingsManager::setAudioplayNavigatorShowSceneNumber(bool _show)
+{
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayNavigatorShowSceneNumberKey, _show);
+    emit audioplayNavigatorChanged();
+}
+
+void SettingsManager::setAudioplayNavigatorShowSceneText(bool _show, int _lines)
+{
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayNavigatorShowSceneTextKey, _show);
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayNavigatorSceneTextLinesKey, _lines);
+    emit audioplayNavigatorChanged();
+}
+
+void SettingsManager::setAudioplayDurationByWordsWords(int _words)
+{
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsWordsKey,
+                     _words);
+    emit audioplayDurationChanged();
+}
+
+void SettingsManager::setAudioplayDurationByWordsDuration(int _duration)
+{
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsDurationKey,
+                     _duration);
+    emit audioplayDurationChanged();
 }
 
 void SettingsManager::setShortcutsForScreenplayEdit(
