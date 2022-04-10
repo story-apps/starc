@@ -289,6 +289,8 @@ void AudioplayTextCorrector::Implementation::clearCharacterNamesCorrections()
 
 void AudioplayTextCorrector::Implementation::correctPageBreaks(int _position)
 {
+    return;
+
     //
     // Определим высоту страницы
     //
@@ -1756,9 +1758,6 @@ AudioplayTextCorrector::~AudioplayTextCorrector() = default;
 
 void AudioplayTextCorrector::setCorrectionOptions(const QStringList& _options)
 {
-    d->needToCorrectPageBreaks = false;
-    return;
-
     const auto needToCorrectPageBreaks = _options.contains("correct-page-breaks");
     if (d->needToCorrectPageBreaks == needToCorrectPageBreaks) {
         return;

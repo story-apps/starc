@@ -605,6 +605,8 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
 
 void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
 {
+    return;
+
     //
     // Определим высоту страницы
     //
