@@ -943,7 +943,7 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
                 // Прорисовка тайтлов блоков
                 //
                 const auto blockStyle = audioplayTemplate().paragraphStyle(blockType);
-                if (blockStyle.showTitle()) {
+                if (blockStyle.isTitleVisible()) {
                     setPainterPen(palette().text().color());
                     painter.setFont(cursor.charFormat().font());
 

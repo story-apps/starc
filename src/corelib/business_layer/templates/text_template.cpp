@@ -433,12 +433,12 @@ void TextBlockStyle::setLinesAfter(int _linesAfter)
     updateBottomMargin();
 }
 
-bool TextBlockStyle::showTitle() const
+bool TextBlockStyle::isTitleVisible() const
 {
     return m_showTitle;
 }
 
-void TextBlockStyle::setShowTitle(bool _show)
+void TextBlockStyle::setTitleVisible(bool _show)
 {
     m_showTitle = _show;
 }
@@ -974,7 +974,7 @@ void TextTemplate::saveToFile(const QString& _filePath) const
         writer.writeAttribute("margins", ::toString(blockStyle.margins()));
         writer.writeAttribute("margins_on_half_page", ::toString(blockStyle.marginsOnHalfPage()));
         writer.writeAttribute("lines_after", ::toString(blockStyle.linesAfter()));
-        writer.writeAttribute("show_title", ::toString(blockStyle.showTitle()));
+        writer.writeAttribute("show_title", ::toString(blockStyle.isTitleVisible()));
         writer.writeEndElement(); // block
     }
     writer.writeEndElement(); // blocks

@@ -80,6 +80,12 @@ SOURCES += \
     business_layer/document/text/text_block_data.cpp \
     business_layer/document/text/text_cursor.cpp \
     business_layer/document/text/text_document.cpp \
+    business_layer/export/abstract_docx_exporter.cpp \
+    business_layer/export/abstract_exporter.cpp \
+    business_layer/export/abstract_pdf_exporter.cpp \
+    business_layer/export/audioplay/audioplay_docx_exporter.cpp \
+    business_layer/export/audioplay/audioplay_exporter.cpp \
+    business_layer/export/audioplay/audioplay_pdf_exporter.cpp \
     business_layer/export/comic_book/comic_book_abstract_exporter.cpp \
     business_layer/export/comic_book/comic_book_docx_exporter.cpp \
     business_layer/export/comic_book/comic_book_pdf_exporter.cpp \
@@ -295,10 +301,18 @@ HEADERS += \
     business_layer/document/text/text_block_data.h \
     business_layer/document/text/text_cursor.h \
     business_layer/document/text/text_document.h \
+    business_layer/export/abstract_docx_exporter.h \
+    business_layer/export/abstract_exporter.h \
+    business_layer/export/abstract_pdf_exporter.h \
+    business_layer/export/audioplay/audioplay_docx_exporter.h \
+    business_layer/export/audioplay/audioplay_export_options.h \
+    business_layer/export/audioplay/audioplay_exporter.h \
+    business_layer/export/audioplay/audioplay_pdf_exporter.h \
     business_layer/export/comic_book/comic_book_abstract_exporter.h \
     business_layer/export/comic_book/comic_book_docx_exporter.h \
     business_layer/export/comic_book/comic_book_export_options.h \
     business_layer/export/comic_book/comic_book_pdf_exporter.h \
+    business_layer/export/export_options.h \
     business_layer/export/screenplay/screenplay_abstract_exporter.h \
     business_layer/export/screenplay/screenplay_docx_exporter.h \
     business_layer/export/screenplay/screenplay_export_options.h \

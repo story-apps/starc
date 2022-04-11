@@ -277,8 +277,8 @@ public:
     /**
      * @brief Отображать ли загаловок блока
      */
-    bool showTitle() const;
-    void setShowTitle(bool _show);
+    bool isTitleVisible() const;
+    void setTitleVisible(bool _show);
 
 
     /**

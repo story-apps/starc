@@ -22,7 +22,7 @@ class CORE_LIBRARY_EXPORT TextDocument : public QTextDocument
     Q_OBJECT
 
 public:
-    explicit TextDocument(QObject* _parent);
+    explicit TextDocument(QObject* _parent = nullptr);
     ~TextDocument() override;
 
     /**
