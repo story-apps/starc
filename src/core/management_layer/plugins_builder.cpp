@@ -41,6 +41,7 @@ const QString kAudioplayParametersViewMime = QStringLiteral("application/x-starc
 const QString kAudioplayTitlePageEditorMime = QStringLiteral("application/x-starc/editor/audioplay/title-page");
 const QString kAudioplayTextEditorMime = QStringLiteral("application/x-starc/editor/audioplay/text");
 const QString kAudioplayTextNavigatorMime = QStringLiteral("application/x-starc/navigator/audioplay/text");
+const QString kAudioplayStatisticsViewMime = QStringLiteral("application/x-starc/view/audioplay/statistics");
 
 /**
  * @brief Карта соотвествия майм-типов редактора к навигатору
@@ -86,6 +87,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         { "application/x-starc/document/audioplay/title-page",  { { kAudioplayTitlePageEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/audioplay/synopsis",    { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/audioplay/text",        { { kAudioplayTextEditorMime, u8"\U000f09ed" } } },
+        { "application/x-starc/document/audioplay/statistics", { { kAudioplayStatisticsViewMime, u8"\U000f0127" } } },
         //
         { "application/x-starc/document/characters",  { { "application/x-starc/editor/characters/relations", u8"\U000F0D3D" } } },
         { "application/x-starc/document/character",  { { "application/x-starc/editor/character/information", u8"\U000f02fd" } } },
@@ -132,6 +134,7 @@ const QHash<QString, QString> kMimeToPlugin
         { kAudioplayTitlePageEditorMime, "*titlepageplugin*" },
         { kAudioplayTextEditorMime, "*audioplaytextplugin*" },
         { kAudioplayTextNavigatorMime, "*audioplaytextstructureplugin*" },
+        { kAudioplayStatisticsViewMime, "*audioplaystatisticsplugin*" },
         //
         { "application/x-starc/editor/characters/relations", "*charactersrelationsplugin*" },
         { "application/x-starc/editor/character/information", "*characterinformationplugin*" },
@@ -337,6 +340,9 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                   QApplication::translate("ProjectPluginsBuilder", "Audioplay text") },
                 { "application/x-starc/editor/audioplay/cards",
                     QApplication::translate("ProjectPluginsBuilder", "Cards") } } },
+            { "application/x-starc/document/audioplay/statistics",
+              { { kAudioplayStatisticsViewMime,
+                  QApplication::translate("ProjectPluginsBuilder", "Statistics") } } },
             //
             { "application/x-starc/document/characters",
               { { "application/x-starc/editor/characters/relations",

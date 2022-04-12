@@ -43,3 +43,8 @@ exists (screenplay_statistics/screenplay_statistics.pro) {
 exists (comic_book_statistics/comic_book_statistics.pro) {
     SUBDIRS += comic_book_statistics
 }
+
+exists (audioplay_statistics/audioplay_statistics.pro) {
+    SUBDIRS += audioplay_statistics
+}
+

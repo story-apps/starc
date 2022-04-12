@@ -88,12 +88,10 @@ void AudioplaySummaryReport::build(QAbstractItemModel* _model)
         int words = 0;
     };
     QHash<TextParagraphType, Counters> paragraphsToCounters;
-    const QVector<TextParagraphType> paragraphTypes
-        = { TextParagraphType::SceneHeading,  TextParagraphType::SceneCharacters,
-            TextParagraphType::Action,        TextParagraphType::Character,
-            TextParagraphType::Parenthetical, TextParagraphType::Dialogue,
-            TextParagraphType::Lyrics,        TextParagraphType::Transition,
-            TextParagraphType::Shot };
+    const QVector<TextParagraphType> paragraphTypes = {
+        TextParagraphType::SceneHeading, TextParagraphType::Character, TextParagraphType::Dialogue,
+        TextParagraphType::Sound,        TextParagraphType::Music,     TextParagraphType::Cue,
+    };
     for (const auto type : paragraphTypes) {
         paragraphsToCounters.insert(type, {});
     }
