@@ -24,7 +24,6 @@ namespace {
 const QString kGroupKey = "widgets/audioplay-export-dialog/";
 const QString kFormatKey = kGroupKey + "format";
 const QString kIncludeTitlePageKey = kGroupKey + "include-title-page";
-const QString kIncludeSequencesKey = kGroupKey + "include-sequences";
 const QString kIncludeInlineNotesKey = kGroupKey + "include-inline-notes";
 const QString kIncludeReviewMarksKey = kGroupKey + "include-review-marks";
 const QString kOpenDocumentAfterExportKey = kGroupKey + "open-document-after-export";
@@ -38,7 +37,6 @@ public:
 
     ComboBox* fileFormat = nullptr;
     CheckBox* includeTitlePage = nullptr;
-    CheckBox* includeSequences = nullptr;
     CheckBox* includeInlineNotes = nullptr;
     CheckBox* includeReviewMarks = nullptr;
     TextField* watermark = nullptr;
@@ -52,7 +50,6 @@ public:
 AudioplayExportDialog::Implementation::Implementation(QWidget* _parent)
     : fileFormat(new ComboBox(_parent))
     , includeTitlePage(new CheckBox(_parent))
-    , includeSequences(new CheckBox(_parent))
     , includeInlineNotes(new CheckBox(_parent))
     , includeReviewMarks(new CheckBox(_parent))
     , watermark(new TextField(_parent))
@@ -92,15 +89,7 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
     int row = 0;
     contentsLayout()->addWidget(d->fileFormat, row++, 0);
     contentsLayout()->addWidget(d->includeTitlePage, row++, 0);
-    {
-        auto layout = new QHBoxLayout;
-        layout->setContentsMargins({});
-        layout->setSpacing(0);
-        layout->addWidget(d->includeSequences);
-        layout->addWidget(d->includeInlineNotes);
-        layout->addStretch();
-        contentsLayout()->addLayout(layout, row++, 0);
-    }
+    contentsLayout()->addWidget(d->includeInlineNotes, row++, 0);
     contentsLayout()->addWidget(d->includeReviewMarks, row++, 0);
     contentsLayout()->addWidget(d->watermark, row++, 0);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
@@ -130,7 +119,6 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
             break;
         }
         }
-        d->includeSequences->setVisible(isPrintFoldersVisible);
         d->includeInlineNotes->setVisible(isPrintInlineNotesVisible);
         d->includeReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->watermark->setVisible(isWatermarkVisible);
@@ -144,7 +132,6 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
         = d->fileFormat->model()->index(settings.value(kFormatKey, 0).toInt(), 0);
     d->fileFormat->setCurrentIndex(fileFormatIndex);
     d->includeTitlePage->setChecked(settings.value(kIncludeTitlePageKey, true).toBool());
-    d->includeSequences->setChecked(settings.value(kIncludeSequencesKey, true).toBool());
     d->includeInlineNotes->setChecked(settings.value(kIncludeInlineNotesKey, false).toBool());
     d->includeReviewMarks->setChecked(settings.value(kIncludeReviewMarksKey, true).toBool());
     d->openDocumentAfterExport->setChecked(
@@ -159,7 +146,6 @@ AudioplayExportDialog::~AudioplayExportDialog()
     QSettings settings;
     settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
     settings.setValue(kIncludeTitlePageKey, d->includeTitlePage->isChecked());
-    settings.setValue(kIncludeSequencesKey, d->includeSequences->isChecked());
     settings.setValue(kIncludeInlineNotesKey, d->includeInlineNotes->isChecked());
     settings.setValue(kIncludeReviewMarksKey, d->includeReviewMarks->isChecked());
     settings.setValue(kOpenDocumentAfterExportKey, d->openDocumentAfterExport->isChecked());
@@ -171,7 +157,6 @@ BusinessLayer::AudioplayExportOptions AudioplayExportDialog::exportOptions() con
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
     options.includeTiltePage = d->includeTitlePage->isChecked();
-    options.includeFolders = d->includeSequences->isChecked();
     options.includeInlineNotes = d->includeInlineNotes->isChecked();
     options.includeReviewMarks = d->includeReviewMarks->isChecked();
     options.watermark = d->watermark->text();
@@ -200,7 +185,6 @@ void AudioplayExportDialog::updateTranslations()
 
     d->fileFormat->setLabel(tr("Format"));
     d->includeTitlePage->setText(tr("Include title page"));
-    d->includeSequences->setText(tr("Include sequences headers and footers"));
     d->includeInlineNotes->setText(tr("Include inline notes"));
     d->includeReviewMarks->setText(tr("Include review marks"));
     d->watermark->setLabel(tr("Watermark"));
@@ -233,7 +217,6 @@ void AudioplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
 
     for (auto checkBox : {
              d->includeTitlePage,
-             d->includeSequences,
              d->includeInlineNotes,
              d->includeReviewMarks,
              d->openDocumentAfterExport,
