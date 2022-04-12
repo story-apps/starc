@@ -3,8 +3,8 @@
 #include "widgets/theme_preview.h"
 
 #include <business_layer/chronometry/chronometer.h>
-#include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/audioplay_template.h>
+#include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -1427,8 +1427,8 @@ SettingsView::SettingsView(QWidget* _parent)
         } else if (d->audioplayNavigatorSceneDescriptionLines5->isChecked()) {
             sceneTextLines = 5;
         }
-        emit audioplayNavigatorShowSceneTextChanged(
-            d->audioplayNavigatorShowSceneText->isChecked(), sceneTextLines);
+        emit audioplayNavigatorShowSceneTextChanged(d->audioplayNavigatorShowSceneText->isChecked(),
+                                                    sceneTextLines);
     };
     connect(d->audioplayNavigatorShowSceneText, &CheckBox::checkedChanged, this,
             notifyAudioplayNavigatorShowSceneTextChanged);
@@ -1446,8 +1446,7 @@ SettingsView::SettingsView(QWidget* _parent)
     // ... хронометраж
     //
     connect(d->audioplayDurationByWordsWords, &TextField::textChanged, this, [this] {
-        emit audioplayDurationByWordsWordsChanged(
-            d->audioplayDurationByWordsWords->text().toInt());
+        emit audioplayDurationByWordsWordsChanged(d->audioplayDurationByWordsWords->text().toInt());
     });
     connect(d->audioplayDurationByWordsDuration, &TextField::textChanged, this, [this] {
         emit audioplayDurationByWordsDurationChanged(
@@ -2358,9 +2357,10 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         textField->setBackgroundColor(DesignSystem::color().onBackground());
         textField->setTextColor(DesignSystem::color().onBackground());
     }
-    for (auto textField :
-         { /*d->simpleTextEditorDefaultTemplate,*/ d->screenplayEditorDefaultTemplate,
-           /*d->comicBookEditorDefaultTemplate*/ d->audioplayEditorDefaultTemplate, }) {
+    for (auto textField : {
+             /*d->simpleTextEditorDefaultTemplate,*/ d->screenplayEditorDefaultTemplate,
+             /*d->comicBookEditorDefaultTemplate*/ d->audioplayEditorDefaultTemplate,
+         }) {
         textField->setCustomMargins({ isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0, 0,
                                       isLeftToRight() ? 0 : Ui::DesignSystem::layout().px24(), 0 });
     }
@@ -2373,9 +2373,12 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
          }) {
         combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
     }
-    for (auto icon :
-         { d->simpleTextEditorDefaultTemplateOptions, d->screenplayEditorDefaultTemplateOptions,
-           d->comicBookEditorDefaultTemplateOptions, d->audioplayEditorDefaultTemplateOptions, }) {
+    for (auto icon : {
+             d->simpleTextEditorDefaultTemplateOptions,
+             d->screenplayEditorDefaultTemplateOptions,
+             d->comicBookEditorDefaultTemplateOptions,
+             d->audioplayEditorDefaultTemplateOptions,
+         }) {
         icon->setContentsMargins(isLeftToRight() ? 0 : Ui::DesignSystem::layout().px16(), 0,
                                  isLeftToRight() ? Ui::DesignSystem::layout().px16() : 0, 0);
     }

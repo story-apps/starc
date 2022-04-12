@@ -50,8 +50,7 @@ public:
     /**
      * @brief Импорт сценариев из заданного документа
      */
-    virtual QVector<Audioplay> importAudioplays(
-        const AudioplayImportOptions& _options) const = 0;
+    virtual QVector<Audioplay> importAudioplays(const AudioplayImportOptions& _options) const = 0;
 };
 
 } // namespace BusinessLayer

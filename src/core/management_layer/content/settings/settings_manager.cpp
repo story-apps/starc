@@ -185,7 +185,7 @@ void SettingsManager::Implementation::loadComicBookSettings()
     //
     view->setComicBookNavigatorShowSceneText(
         settingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneTextKey).toBool(),
-                settingsValue(DataStorageLayer::kComponentsComicBookNavigatorSceneTextLinesKey).toInt());
+        settingsValue(DataStorageLayer::kComponentsComicBookNavigatorSceneTextLinesKey).toInt());
 }
 
 void SettingsManager::Implementation::loadAudioplaySettings()
@@ -209,11 +209,9 @@ void SettingsManager::Implementation::loadAudioplaySettings()
         settingsValue(DataStorageLayer::kComponentsAudioplayNavigatorSceneTextLinesKey).toInt());
     //
     view->setAudioplayDurationByWordsWords(
-        settingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsWordsKey)
-            .toInt());
+        settingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsWordsKey).toInt());
     view->setAudioplayDurationByWordsDuration(
-        settingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsDurationKey)
-            .toInt());
+        settingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsDurationKey).toInt());
 }
 
 void SettingsManager::Implementation::loadShortcutsSettings()
@@ -973,8 +971,7 @@ void SettingsManager::setAudioplayEditorDefaultTemplate(const QString& _template
 {
     setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey, _templateId);
     BusinessLayer::TemplatesFacade::setDefaultAudioplayTemplate(_templateId);
-    emit audioplayEditorChanged(
-        { DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey });
+    emit audioplayEditorChanged({ DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey });
 }
 
 void SettingsManager::setAudioplayEditorShowBlockNumber(bool _show, bool _continued)
@@ -1009,15 +1006,13 @@ void SettingsManager::setAudioplayNavigatorShowSceneText(bool _show, int _lines)
 
 void SettingsManager::setAudioplayDurationByWordsWords(int _words)
 {
-    setSettingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsWordsKey,
-                     _words);
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsWordsKey, _words);
     emit audioplayDurationChanged();
 }
 
 void SettingsManager::setAudioplayDurationByWordsDuration(int _duration)
 {
-    setSettingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsDurationKey,
-                     _duration);
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsDurationKey, _duration);
     emit audioplayDurationChanged();
 }
 

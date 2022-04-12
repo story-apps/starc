@@ -82,41 +82,42 @@ void AudioplayTextModel::Implementation::updateNumbering()
     int sceneNumber = 1;
     int blockNumber = 1;
     std::function<void(const TextModelItem*)> updateChildNumbering;
-    updateChildNumbering = [&sceneNumber, &blockNumber, &updateChildNumbering](const TextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case TextModelItemType::Folder: {
-                updateChildNumbering(childItem);
-                break;
-            }
+    updateChildNumbering
+        = [&sceneNumber, &blockNumber, &updateChildNumbering](const TextModelItem* _item) {
+              for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+                  auto childItem = _item->childAt(childIndex);
+                  switch (childItem->type()) {
+                  case TextModelItemType::Folder: {
+                      updateChildNumbering(childItem);
+                      break;
+                  }
 
-            case TextModelItemType::Group: {
-                updateChildNumbering(childItem);
-                auto groupItem = static_cast<TextModelGroupItem*>(childItem);
-                if (groupItem->setNumber(sceneNumber, {})) {
-                    ++sceneNumber;
-                }
-                break;
-            }
+                  case TextModelItemType::Group: {
+                      updateChildNumbering(childItem);
+                      auto groupItem = static_cast<TextModelGroupItem*>(childItem);
+                      if (groupItem->setNumber(sceneNumber, {})) {
+                          ++sceneNumber;
+                      }
+                      break;
+                  }
 
-            case TextModelItemType::Text: {
-                auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
-                if ((textItem->paragraphType() == TextParagraphType::Dialogue
-                     || textItem->paragraphType() == TextParagraphType::Sound
-                     || textItem->paragraphType() == TextParagraphType::Music
-                     || textItem->paragraphType() == TextParagraphType::Cue)
-                    && !textItem->isCorrection()) {
-                    textItem->setNumber(blockNumber++);
-                }
-                break;
-            }
+                  case TextModelItemType::Text: {
+                      auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
+                      if ((textItem->paragraphType() == TextParagraphType::Dialogue
+                           || textItem->paragraphType() == TextParagraphType::Sound
+                           || textItem->paragraphType() == TextParagraphType::Music
+                           || textItem->paragraphType() == TextParagraphType::Cue)
+                          && !textItem->isCorrection()) {
+                          textItem->setNumber(blockNumber++);
+                      }
+                      break;
+                  }
 
-            default:
-                break;
-            }
-        }
-    };
+                  default:
+                      break;
+                  }
+              }
+          };
     updateChildNumbering(rootItem());
 }
 

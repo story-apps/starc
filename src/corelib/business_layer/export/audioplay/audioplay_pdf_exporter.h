@@ -22,8 +22,9 @@ protected:
     /**
      * @brief Нарисовать декорацию блока
      */
-    void printBlockDecorations(QPainter* _painter,
-                               qreal _pageYPos, const QRectF& _body, TextParagraphType _paragraphType, const QRectF& _blockRect, const QTextBlock& _block,
+    void printBlockDecorations(QPainter* _painter, qreal _pageYPos, const QRectF& _body,
+                               TextParagraphType _paragraphType, const QRectF& _blockRect,
+                               const QTextBlock& _block,
                                const ExportOptions& _exportOptions) const override;
 };
 
