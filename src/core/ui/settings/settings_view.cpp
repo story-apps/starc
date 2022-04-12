@@ -347,6 +347,7 @@ public:
     // ... Audioplay duration
     //
     H6Label* audioplayDurationTitle = nullptr;
+    Body1Label* audioplayDurationByWordsTitle = nullptr;
     TextField* audioplayDurationByWordsWords = nullptr;
     TextField* audioplayDurationByWordsDuration = nullptr;
     //
@@ -478,6 +479,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , audioplayNavigatorSceneDescriptionLines4(new RadioButton(audioplayCard))
     , audioplayNavigatorSceneDescriptionLines5(new RadioButton(audioplayCard))
     , audioplayDurationTitle(new H6Label(audioplayCard))
+    , audioplayDurationByWordsTitle(new Body1Label(audioplayCard))
     , audioplayDurationByWordsWords(new TextField(audioplayCard))
     , audioplayDurationByWordsDuration(new TextField(audioplayCard))
     //
@@ -917,6 +919,7 @@ void SettingsView::Implementation::initAudioplayCard()
     // ... счётчики хронометража
     //
     audioplayCardLayout->addWidget(audioplayDurationTitle, itemIndex++, 0);
+    audioplayCardLayout->addWidget(audioplayDurationByWordsTitle, itemIndex++, 0);
     {
         auto layout = makeLayout();
         layout->addWidget(audioplayDurationByWordsWords);
@@ -2143,6 +2146,7 @@ void SettingsView::updateTranslations()
     d->audioplayNavigatorSceneDescriptionLines4->setText("4");
     d->audioplayNavigatorSceneDescriptionLines5->setText("5");
     d->audioplayDurationTitle->setText(tr("Duration"));
+    d->audioplayDurationByWordsTitle->setText(tr("Calculate duration based on the count of words"));
     d->audioplayDurationByWordsWords->setLabel(tr("at the rate of"));
     d->audioplayDurationByWordsWords->setSuffix(tr("words"));
     d->audioplayDurationByWordsDuration->setLabel(tr("has duration"));
@@ -2247,6 +2251,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->scaleFactorTitle,
              d->scaleFactorSmallInfo,
              d->scaleFactorBigInfo,
+             d->audioplayDurationByWordsTitle,
          }) {
         label->setBackgroundColor(DesignSystem::color().background());
         label->setTextColor(DesignSystem::color().onBackground());
