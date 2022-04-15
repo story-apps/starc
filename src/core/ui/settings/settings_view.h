@@ -59,12 +59,16 @@ public:
     //
     // Задание параметров редактора текста
     //
+    void setSimpleTextAvailable(bool _available);
+    //
     void setSimpleTextEditorDefaultTemplate(const QString& _templateId);
     //
     void setSimpleTextNavigatorShowSceneText(bool _show, int _lines);
 
     //
     // Задание параметров редактора сценария
+    //
+    void setScreenplayAvailable(bool _available);
     //
     void setScreenplayEditorDefaultTemplate(const QString& _templateId);
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
@@ -85,12 +89,16 @@ public:
     //
     // Задание параметров редактора комикса
     //
+    void setComicBookAvailable(bool _available);
+    //
     void setComicBookEditorDefaultTemplate(const QString& _templateId);
     //
     void setComicBookNavigatorShowSceneText(bool _show, int _lines);
 
     //
-    // Задание параметров редактора сценария
+    // Задание параметров редактора подкаста
+    //
+    void setAudioplayAvailable(bool _available);
     //
     void setAudioplayEditorDefaultTemplate(const QString& _templateId);
     void setAudioplayEditorShowBlockNumber(bool _show, bool _continue);
@@ -132,12 +140,16 @@ signals:
     //
     // Уведомление об изменении параметров редактора текста
     //
+    void simpleTextAvailableChanged(bool _available);
+    //
     void simpleTextEditorDefaultTemplateChanged(const QString& _templateId);
     //
     void simpleTextNavigatorShowSceneTextChanged(bool _show, int _lines);
 
     //
     // Уведомление об изменении параметров редактора сценария
+    //
+    void screenplayAvailableChanged(bool _available);
     //
     void screenplayEditorDefaultTemplateChanged(const QString& _templateId);
     void screenplayEditorShowSceneNumberChanged(bool _show, bool _atLeft, bool _atRight);
@@ -158,12 +170,16 @@ signals:
     //
     // Уведомление об изменении параметров редактора комикса
     //
+    void comicBookAvailableChanged(bool _available);
+    //
     void comicBookEditorDefaultTemplateChanged(const QString& _templateId);
     //
     void comicBookNavigatorShowSceneTextChanged(bool _show, int _lines);
 
     //
     // Уведомление об изменении параметров редактора аудиопостановки
+    //
+    void audioplayAvailableChanged(bool _available);
     //
     void audioplayEditorDefaultTemplateChanged(const QString& _templateId);
     void audioplayEditorShowBlockNumberChanged(bool _show, bool _continue);

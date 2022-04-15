@@ -65,6 +65,8 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     content->setVerticalScrollBar(new ScrollBar);
 
+    screenplayInfo->setResizingActive(false);
+
     header->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     footer->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     scenesNumbersPrefix->setSpellCheckPolicy(SpellCheckPolicy::Manual);

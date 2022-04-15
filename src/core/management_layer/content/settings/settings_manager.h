@@ -106,12 +106,16 @@ private:
     //
     // Сохранение параметров редактора сценария
     //
+    void setSimpleTextAvailable(bool _available);
+    //
     void setSimpleTextEditorDefaultTemplate(const QString& _templateId);
     //
     void setSimpleTextNavigatorShowSceneText(bool _show, int _lines);
 
     //
     // Сохранение параметров редактора сценария
+    //
+    void setScreenplayAvailable(bool _available);
     //
     void setScreenplayEditorDefaultTemplate(const QString& _templateId);
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
@@ -132,12 +136,16 @@ private:
     //
     // Сохранение параметров редактора комикса
     //
+    void setComicBookAvailable(bool _available);
+    //
     void setComicBookEditorDefaultTemplate(const QString& _templateId);
     //
     void setComicBookNavigatorShowSceneText(bool _show, int _lines);
 
     //
-    // Сохранение параметров редактора сценария
+    // Сохранение параметров редактора подкастов
+    //
+    void setAudioplayAvailable(bool _available);
     //
     void setAudioplayEditorDefaultTemplate(const QString& _templateId);
     void setAudioplayEditorShowBlockNumber(bool _show, bool _continued);

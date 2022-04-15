@@ -1,5 +1,7 @@
 #include "create_project_dialog.h"
 
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -15,11 +17,15 @@
 
 #include <QFileDialog>
 #include <QGridLayout>
-#include <QStringListModel>
+#include <QStandardItemModel>
 #include <QTimer>
 
 
 namespace Ui {
+
+namespace {
+const int kTypeRole = Qt::UserRole + 1;
+}
 
 class CreateProjectDialog::Implementation
 {
@@ -27,7 +33,7 @@ public:
     explicit Implementation(QWidget* _parent);
 
     ComboBox* projectType = nullptr;
-    QStringListModel* projectTypeModel = nullptr;
+    QStandardItemModel* projectTypeModel = nullptr;
     TextField* projectName = nullptr;
     RadioButton* localProject = nullptr;
     RadioButton* cloudProject = nullptr;
@@ -46,7 +52,7 @@ public:
 
 CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     : projectType(new ComboBox(_parent))
-    , projectTypeModel(new QStringListModel(projectType))
+    , projectTypeModel(new QStandardItemModel(projectType))
     , projectName(new TextField(_parent))
     , localProject(new RadioButton(_parent))
     , cloudProject(new RadioButton(_parent))
@@ -61,6 +67,24 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     , createButton(new Button(_parent))
 {
     projectName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+
+    auto makeItem = [](Domain::DocumentObjectType _type) {
+        auto item = new QStandardItem;
+        item->setData(static_cast<int>(_type), kTypeRole);
+        item->setEditable(false);
+        return item;
+    };
+
+    projectTypeModel->appendRow(makeItem(Domain::DocumentObjectType::Undefined));
+    if (settingsValue(DataStorageLayer::kComponentsScreenplayAvailableKey).toBool()) {
+        projectTypeModel->appendRow(makeItem(Domain::DocumentObjectType::Screenplay));
+    }
+    if (settingsValue(DataStorageLayer::kComponentsComicBookAvailableKey).toBool()) {
+        projectTypeModel->appendRow(makeItem(Domain::DocumentObjectType::ComicBook));
+    }
+    if (settingsValue(DataStorageLayer::kComponentsAudioplayAvailableKey).toBool()) {
+        projectTypeModel->appendRow(makeItem(Domain::DocumentObjectType::Audioplay));
+    }
 
     localProject->setChecked(true);
 
@@ -175,40 +199,17 @@ CreateProjectDialog::~CreateProjectDialog() = default;
 
 int CreateProjectDialog::projectType() const
 {
-    Domain::DocumentObjectType type = Domain::DocumentObjectType::Undefined;
-    switch (d->projectType->currentIndex().row()) {
-    case 1: {
-        type = Domain::DocumentObjectType::Screenplay;
-        break;
-    }
-
-    case 2: {
-        type = Domain::DocumentObjectType::ComicBook;
-        break;
-    }
-    }
-    return static_cast<int>(type);
+    return d->projectType->currentIndex().data(kTypeRole).toInt();
 }
 
 void CreateProjectDialog::setProjectType(int _type)
 {
-    int row = 0;
-    switch (static_cast<Domain::DocumentObjectType>(_type)) {
-    case Domain::DocumentObjectType::Screenplay: {
-        row = 1;
-        break;
+    for (int row = 0; row < d->projectTypeModel->rowCount(); ++row) {
+        if (d->projectTypeModel->index(row, 0).data(kTypeRole).toInt() == _type) {
+            d->projectType->setCurrentIndex(d->projectTypeModel->index(row, 0));
+            break;
+        }
     }
-
-    case Domain::DocumentObjectType::ComicBook: {
-        row = 2;
-        break;
-    }
-
-    default: {
-        break;
-    }
-    }
-    d->projectType->setCurrentIndex(d->projectTypeModel->index(row, 0));
 }
 
 QString CreateProjectDialog::projectName() const
@@ -312,7 +313,32 @@ void CreateProjectDialog::updateTranslations()
     setTitle(tr("Create new story"));
 
     d->projectType->setLabel(tr("Type of the story"));
-    d->projectTypeModel->setStringList({ tr("Not set"), tr("Screenplay"), tr("Comic book") });
+    for (int row = 0; row < d->projectTypeModel->rowCount(); ++row) {
+        auto item = d->projectTypeModel->item(row);
+        switch (static_cast<Domain::DocumentObjectType>(item->data(kTypeRole).toInt())) {
+        default:
+        case Domain::DocumentObjectType::Undefined: {
+            item->setText(tr("Not set"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::Screenplay: {
+            item->setText(tr("Screenplay"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::ComicBook: {
+            item->setText(tr("Comic book"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::Audioplay: {
+            item->setText(tr("Audioplay"));
+            break;
+        }
+        }
+    }
+
     d->projectName->setLabel(tr("Name of the story"));
     d->localProject->setText(tr("Save story in the local computer"));
     d->cloudProject->setText(tr("Save story in the cloud"));

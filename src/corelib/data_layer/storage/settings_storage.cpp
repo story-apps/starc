@@ -230,9 +230,11 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Text, "Ctrl+7");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
         //
+        defaultValues.insert(kComponentsSimpleTextAvailableKey, true);
+        //
         defaultValues.insert(kComponentsSimpleTextEditorDefaultTemplateKey, "mono_cp_a4");
         //
-        // Параметры навигатора сценария
+        // Параметры навигатора простого текстового документа
         //
         defaultValues.insert(kComponentsSimpleTextNavigatorShowSceneTextKey, true);
         defaultValues.insert(kComponentsSimpleTextNavigatorSceneTextLinesKey, 1);
@@ -476,6 +478,8 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
         addShortcut(BusinessLayer::TextParagraphType::SequenceHeading, "Ctrl+Space");
         //
+        defaultValues.insert(kComponentsScreenplayAvailableKey, true);
+        //
         defaultValues.insert(kComponentsScreenplayEditorDefaultTemplateKey, "world_cp");
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersKey, false);
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersOnLeftKey, true);
@@ -620,6 +624,8 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Dialogue, "Ctrl+5");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
         //
+        defaultValues.insert(kComponentsComicBookAvailableKey, true);
+        //
         defaultValues.insert(kComponentsComicBookEditorDefaultTemplateKey, "world");
         //
         // Параметры навигатора сценария
@@ -735,6 +741,8 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Music, "Ctrl+5");
         addShortcut(BusinessLayer::TextParagraphType::Cue, "Ctrl+6");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        //
+        defaultValues.insert(kComponentsAudioplayAvailableKey, true);
         //
         defaultValues.insert(kComponentsAudioplayEditorDefaultTemplateKey, "bbc_scene");
         defaultValues.insert(kComponentsAudioplayEditorShowBlockNumbersKey, false);

@@ -44,10 +44,14 @@ Toggle::Implementation::Implementation(Toggle* _q)
 
 QSizeF Toggle::Implementation::contentSize() const
 {
-    return QSizeF(Ui::DesignSystem::layout().px24() + Ui::DesignSystem::toggle().trackSize().width()
-                      + Ui::DesignSystem::toggle().tumblerOverflow() * 2,
-                  Ui::DesignSystem::layout().px24()
-                      + Ui::DesignSystem::toggle().tumblerSize().height());
+    return QSizeF(q->contentsMargins().left() + Ui::DesignSystem::layout().px12()
+                      + Ui::DesignSystem::toggle().tumblerOverflow()
+                      + Ui::DesignSystem::toggle().trackSize().width()
+                      + Ui::DesignSystem::toggle().tumblerOverflow()
+                      + Ui::DesignSystem::layout().px12() + q->contentsMargins().right(),
+                  q->contentsMargins().top() + Ui::DesignSystem::layout().px12()
+                      + Ui::DesignSystem::toggle().tumblerSize().height()
+                      + Ui::DesignSystem::layout().px12() + q->contentsMargins().bottom());
 }
 
 void Toggle::Implementation::animateToggle()
@@ -56,15 +60,15 @@ void Toggle::Implementation::animateToggle()
     // Определим крайние положения переключателя
     //
 
-    const QRectF toggleLeftRect(
-        { Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12() },
-        Ui::DesignSystem::toggle().tumblerSize());
-    const QRectF toggleRightRect({ Ui::DesignSystem::layout().px12()
+    const QRectF toggleLeftRect({ q->contentsMargins().left() + Ui::DesignSystem::layout().px12(),
+                                  q->contentsMargins().top() + Ui::DesignSystem::layout().px12() },
+                                Ui::DesignSystem::toggle().tumblerSize());
+    const QRectF toggleRightRect({ q->contentsMargins().left() + Ui::DesignSystem::layout().px12()
                                        + Ui::DesignSystem::toggle().tumblerOverflow() * 2
                                        + Ui::DesignSystem::toggle().trackSize().width()
                                        - Ui::DesignSystem::toggle().tumblerSize().width(),
-                                   Ui::DesignSystem::layout().px12() },
-                                 Ui::DesignSystem::toggle().tumblerSize());
+                                   toggleLeftRect.top() },
+                                 toggleLeftRect.size());
     if (isChecked) {
         tumblerAnimation.setStartValue(toggleLeftRect);
         tumblerAnimation.setEndValue(toggleRightRect);
@@ -99,6 +103,11 @@ Toggle::Toggle(QWidget* _parent)
             qOverload<>(&Toggle::update));
 }
 
+bool Toggle::isChecked() const
+{
+    return d->isChecked;
+}
+
 Toggle::~Toggle() = default;
 
 void Toggle::setChecked(bool _checked)
@@ -109,6 +118,7 @@ void Toggle::setChecked(bool _checked)
 
     d->isChecked = _checked;
     d->animateToggle();
+    emit checkedChanged(d->isChecked);
 }
 
 QSize Toggle::minimumSizeHint() const
@@ -116,10 +126,17 @@ QSize Toggle::minimumSizeHint() const
     return d->contentSize().toSize();
 }
 
+bool Toggle::event(QEvent* _event)
+{
+    if (_event->type() == QEvent::ContentsRectChange) {
+        d->animateToggle();
+    }
+
+    return Widget::event(_event);
+}
+
 void Toggle::paintEvent(QPaintEvent* _event)
 {
-    Q_UNUSED(_event);
-
     QPainter painter(this);
     painter.setPen(Qt::NoPen);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -135,10 +152,11 @@ void Toggle::paintEvent(QPaintEvent* _event)
     // Трэк
     //
     painter.setBrush(trackColor);
-    const QRectF trackRect(
-        { Ui::DesignSystem::layout().px12() + Ui::DesignSystem::toggle().tumblerOverflow(),
-          Ui::DesignSystem::layout().px12() + Ui::DesignSystem::toggle().tumblerOverflow() },
-        Ui::DesignSystem::toggle().trackSize());
+    const QRectF trackRect({ contentsMargins().left() + Ui::DesignSystem::layout().px12()
+                                 + Ui::DesignSystem::toggle().tumblerOverflow(),
+                             contentsMargins().top() + Ui::DesignSystem::layout().px12()
+                                 + Ui::DesignSystem::toggle().tumblerOverflow() },
+                           Ui::DesignSystem::toggle().trackSize());
 
     painter.drawRoundedRect(trackRect, trackRect.height() / 2.0, trackRect.height() / 2.0);
 
@@ -188,8 +206,5 @@ void Toggle::mouseReleaseEvent(QMouseEvent* _event)
 {
     Widget::mouseReleaseEvent(_event);
 
-    d->isChecked = !d->isChecked;
-    d->animateToggle();
-
-    emit checkedChanged(d->isChecked);
+    setChecked(!d->isChecked);
 }

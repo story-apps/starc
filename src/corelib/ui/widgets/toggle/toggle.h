@@ -33,6 +33,11 @@ signals:
 
 protected:
     /**
+     * @brief Переопределяем, чтобы корректно отрисовать при смене геометрии
+     */
+    bool event(QEvent* _event) override;
+
+    /**
      * @brief Реализуем собственную отрисовку
      */
     void paintEvent(QPaintEvent* _event) override;

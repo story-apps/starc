@@ -19,6 +19,7 @@
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/slider/slider.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <ui/widgets/toggle/toggle.h>
 #include <ui/widgets/tree/tree.h>
 #include <ui/widgets/tree/tree_delegate.h>
 #include <ui/widgets/tree/tree_header_view.h>
@@ -232,6 +233,7 @@ public:
     Card* simpleTextCard = nullptr;
     QGridLayout* simpleTextCardLayout = nullptr;
     H5Label* simpleTextTitle = nullptr;
+    Toggle* simpleTextAvailable = nullptr;
     //
     // ... Simple text editor
     //
@@ -256,6 +258,7 @@ public:
     Card* screenplayCard = nullptr;
     QGridLayout* screenplayCardLayout = nullptr;
     H5Label* screenplayTitle = nullptr;
+    Toggle* screenplayAvailable = nullptr;
     //
     // ... Screenplay editor
     //
@@ -299,6 +302,7 @@ public:
     Card* comicBookCard = nullptr;
     QGridLayout* comicBookCardLayout = nullptr;
     H5Label* comicBookTitle = nullptr;
+    Toggle* comicBookAvailable = nullptr;
     //
     // ... Comic book editor
     //
@@ -323,6 +327,7 @@ public:
     Card* audioplayCard = nullptr;
     QGridLayout* audioplayCardLayout = nullptr;
     H5Label* audioplayTitle = nullptr;
+    Toggle* audioplayAvailable = nullptr;
     //
     // ... Audioplay editor
     //
@@ -406,6 +411,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , simpleTextCard(new Card(content))
     , simpleTextCardLayout(new QGridLayout)
     , simpleTextTitle(new H5Label(simpleTextCard))
+    , simpleTextAvailable(new Toggle(simpleTextCard))
     , simpleTextEditorTitle(new H6Label(simpleTextCard))
     , simpleTextEditorDefaultTemplate(new ComboBox(simpleTextCard))
     , simpleTextEditorDefaultTemplateOptions(new IconButton(simpleTextCard))
@@ -420,6 +426,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayCard(new Card(content))
     , screenplayCardLayout(new QGridLayout)
     , screenplayTitle(new H5Label(screenplayCard))
+    , screenplayAvailable(new Toggle(screenplayCard))
     , screenplayEditorTitle(new H6Label(screenplayCard))
     , screenplayEditorDefaultTemplate(new ComboBox(screenplayCard))
     , screenplayEditorDefaultTemplateOptions(new IconButton(screenplayCard))
@@ -450,6 +457,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , comicBookCard(new Card(content))
     , comicBookCardLayout(new QGridLayout)
     , comicBookTitle(new H5Label(comicBookCard))
+    , comicBookAvailable(new Toggle(comicBookCard))
     , comicBookEditorTitle(new H6Label(comicBookCard))
     , comicBookEditorDefaultTemplate(new ComboBox(comicBookCard))
     , comicBookEditorDefaultTemplateOptions(new IconButton(comicBookCard))
@@ -464,6 +472,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , audioplayCard(new Card(content))
     , audioplayCardLayout(new QGridLayout)
     , audioplayTitle(new H5Label(audioplayCard))
+    , audioplayAvailable(new Toggle(audioplayCard))
     , audioplayEditorTitle(new H6Label(audioplayCard))
     , audioplayEditorDefaultTemplate(new ComboBox(audioplayCard))
     , audioplayEditorDefaultTemplateOptions(new IconButton(audioplayCard))
@@ -651,7 +660,13 @@ void SettingsView::Implementation::initSimpleTextCard()
     simpleTextCardLayout->setContentsMargins({});
     simpleTextCardLayout->setSpacing(0);
     int itemIndex = 0;
-    simpleTextCardLayout->addWidget(simpleTextTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(simpleTextTitle);
+        layout->addStretch();
+        layout->addWidget(simpleTextAvailable, 0, Qt::AlignVCenter);
+        simpleTextCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     //
     // ... редактор текста
     //
@@ -726,7 +741,13 @@ void SettingsView::Implementation::initScreenplayCard()
     screenplayCardLayout->setContentsMargins({});
     screenplayCardLayout->setSpacing(0);
     int itemIndex = 0;
-    screenplayCardLayout->addWidget(screenplayTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(screenplayTitle);
+        layout->addStretch();
+        layout->addWidget(screenplayAvailable, 0, Qt::AlignVCenter);
+        screenplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     //
     // ... редактор сценария
     //
@@ -819,7 +840,13 @@ void SettingsView::Implementation::initComicBookCard()
     comicBookCardLayout->setContentsMargins({});
     comicBookCardLayout->setSpacing(0);
     int itemIndex = 0;
-    comicBookCardLayout->addWidget(comicBookTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(comicBookTitle);
+        layout->addStretch();
+        layout->addWidget(comicBookAvailable, 0, Qt::AlignVCenter);
+        comicBookCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     //
     // ... редактор текста
     //
@@ -880,7 +907,13 @@ void SettingsView::Implementation::initAudioplayCard()
     audioplayCardLayout->setContentsMargins({});
     audioplayCardLayout->setSpacing(0);
     int itemIndex = 0;
-    audioplayCardLayout->addWidget(audioplayTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(audioplayTitle);
+        layout->addStretch();
+        layout->addWidget(audioplayAvailable, 0, Qt::AlignVCenter);
+        audioplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     //
     // ... редактор сценария
     //
@@ -1023,7 +1056,6 @@ SettingsView::SettingsView(QWidget* _parent)
     });
     //
     connect(d->changeLanuage, &Button::clicked, this, &SettingsView::applicationLanguagePressed);
-    //    connect(d->changeTheme, &Button::clicked, this, &SettingsView::applicationThemePressed);
     for (auto theme : {
              d->lightTheme,
              d->darkAndLightTheme,
@@ -1070,6 +1102,27 @@ SettingsView::SettingsView(QWidget* _parent)
     //
     // ... Редактор текста
     //
+    connect(d->simpleTextAvailable, &Toggle::checkedChanged, this, [this](bool _available) {
+        for (auto widget : std::vector<QWidget*>{
+                 d->simpleTextEditorTitle,
+                 d->simpleTextEditorDefaultTemplate,
+                 d->simpleTextEditorDefaultTemplateOptions,
+                 d->simpleTextNavigatorTitle,
+                 d->simpleTextNavigatorShowSceneText,
+                 d->simpleTextNavigatorSceneDescriptionLines1,
+                 d->simpleTextNavigatorSceneDescriptionLines2,
+                 d->simpleTextNavigatorSceneDescriptionLines3,
+                 d->simpleTextNavigatorSceneDescriptionLines4,
+                 d->simpleTextNavigatorSceneDescriptionLines5,
+             }) {
+            widget->setVisible(_available);
+            d->simpleTextCardLayout->setRowMinimumHeight(
+                d->simpleTextCardBottomSpacerIndex,
+                _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
+        }
+
+        emit simpleTextAvailableChanged(_available);
+    });
     connect(d->simpleTextEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
             [this](const QModelIndex& _index) {
                 emit simpleTextEditorDefaultTemplateChanged(
@@ -1118,6 +1171,50 @@ SettingsView::SettingsView(QWidget* _parent)
     //
     // ... Редактор сценария
     //
+    connect(d->screenplayAvailable, &Toggle::checkedChanged, this, [this](bool _available) {
+        for (auto widget : std::vector<QWidget*>{
+                 d->screenplayEditorTitle,
+                 d->screenplayEditorDefaultTemplate,
+                 d->screenplayEditorDefaultTemplateOptions,
+                 d->screenplayEditorShowSceneNumber,
+                 d->screenplayEditorShowSceneNumberOnLeft,
+                 d->screenplayEditorShowSceneNumberOnRight,
+                 d->screenplayEditorShowDialogueNumber,
+                 d->screenplayEditorContinueDialogue,
+                 d->screenplayEditorUseCharactersFromText,
+                 d->screenplayNavigatorTitle,
+                 d->screenplayNavigatorShowBeats,
+                 d->screenplayNavigatorShowSceneNumber,
+                 d->screenplayNavigatorShowSceneText,
+                 d->screenplayNavigatorSceneDescriptionLines1,
+                 d->screenplayNavigatorSceneDescriptionLines2,
+                 d->screenplayNavigatorSceneDescriptionLines3,
+                 d->screenplayNavigatorSceneDescriptionLines4,
+                 d->screenplayNavigatorSceneDescriptionLines5,
+                 d->screenplayDurationTitle,
+                 d->screenplayDurationByPage,
+                 d->screenplayDurationByPagePage,
+                 d->screenplayDurationByPageDuration,
+                 d->screenplayDurationByCharacters,
+                 d->screenplayDurationByCharactersCharacters,
+                 d->screenplayDurationByCharactersIncludingSpaces,
+                 d->screenplayDurationByCharactersDuration,
+                 d->shortcutsForScreenplayTitle,
+                 d->shortcutsForScreenplay,
+             }) {
+            widget->setVisible(_available);
+            d->screenplayCardLayout->setRowMinimumHeight(
+                d->screenplayCardBottomSpacerIndex,
+                _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
+            const auto screenplayDurationByCharactersRow
+                = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
+            d->screenplayCardLayout->setRowMinimumHeight(
+                screenplayDurationByCharactersRow,
+                _available ? Ui::DesignSystem::layout().px62() : 0.0);
+        }
+
+        emit screenplayAvailableChanged(_available);
+    });
     connect(d->screenplayEditorDefaultTemplateOptions, &IconButton::clicked, this, [this] {
         QVector<QAction*> actions;
         const auto templateIndex = d->screenplayEditorDefaultTemplate->currentIndex();
@@ -1288,6 +1385,27 @@ SettingsView::SettingsView(QWidget* _parent)
     //
     // ... Редактор комикса
     //
+    connect(d->comicBookAvailable, &Toggle::checkedChanged, this, [this](bool _available) {
+        for (auto widget : std::vector<QWidget*>{
+                 d->comicBookEditorTitle,
+                 d->comicBookEditorDefaultTemplate,
+                 d->comicBookEditorDefaultTemplateOptions,
+                 d->comicBookNavigatorTitle,
+                 d->comicBookNavigatorShowSceneText,
+                 d->comicBookNavigatorSceneDescriptionLines1,
+                 d->comicBookNavigatorSceneDescriptionLines2,
+                 d->comicBookNavigatorSceneDescriptionLines3,
+                 d->comicBookNavigatorSceneDescriptionLines4,
+                 d->comicBookNavigatorSceneDescriptionLines5,
+             }) {
+            widget->setVisible(_available);
+            d->comicBookCardLayout->setRowMinimumHeight(
+                d->comicBookCardBottomSpacerIndex,
+                _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
+        }
+
+        emit comicBookAvailableChanged(_available);
+    });
     connect(d->comicBookEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
             [this](const QModelIndex& _index) {
                 emit comicBookEditorDefaultTemplateChanged(
@@ -1336,6 +1454,35 @@ SettingsView::SettingsView(QWidget* _parent)
     //
     // ... Редактор аудиопостановки
     //
+    connect(d->audioplayAvailable, &Toggle::checkedChanged, this, [this](bool _available) {
+        for (auto widget : std::vector<QWidget*>{
+                 d->audioplayEditorTitle,
+                 d->audioplayEditorDefaultTemplate,
+                 d->audioplayEditorDefaultTemplateOptions,
+                 d->audioplayEditorShowBlockNumber,
+                 d->audioplayEditorContinueBlockNumbers,
+                 d->audioplayEditorUseCharactersFromText,
+                 d->audioplayNavigatorTitle,
+                 d->audioplayNavigatorShowSceneNumber,
+                 d->audioplayNavigatorShowSceneText,
+                 d->audioplayNavigatorSceneDescriptionLines1,
+                 d->audioplayNavigatorSceneDescriptionLines2,
+                 d->audioplayNavigatorSceneDescriptionLines3,
+                 d->audioplayNavigatorSceneDescriptionLines4,
+                 d->audioplayNavigatorSceneDescriptionLines5,
+                 d->audioplayDurationTitle,
+                 d->audioplayDurationByWordsTitle,
+                 d->audioplayDurationByWordsWords,
+                 d->audioplayDurationByWordsDuration,
+             }) {
+            widget->setVisible(_available);
+            d->audioplayCardLayout->setRowMinimumHeight(
+                d->audioplayCardBottomSpacerIndex,
+                _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
+        }
+
+        emit audioplayAvailableChanged(_available);
+    });
     connect(d->audioplayEditorDefaultTemplateOptions, &IconButton::clicked, this, [this] {
         QVector<QAction*> actions;
         const auto templateIndex = d->audioplayEditorDefaultTemplate->currentIndex();
@@ -1663,6 +1810,11 @@ void SettingsView::setApplicationUseTypewriterScrolling(bool _use)
     d->useTypewriterScrolling->setChecked(_use);
 }
 
+void SettingsView::setSimpleTextAvailable(bool _available)
+{
+    d->simpleTextAvailable->setChecked(_available);
+}
+
 void SettingsView::setSimpleTextEditorDefaultTemplate(const QString& _templateId)
 {
     using namespace BusinessLayer;
@@ -1689,6 +1841,11 @@ void SettingsView::setSimpleTextNavigatorShowSceneText(bool _show, int _lines)
                 { 5, d->simpleTextNavigatorSceneDescriptionLines5 } };
         buttons[_lines]->setChecked(true);
     }
+}
+
+void SettingsView::setScreenplayAvailable(bool _available)
+{
+    d->screenplayAvailable->setChecked(_available);
 }
 
 void SettingsView::setScreenplayEditorDefaultTemplate(const QString& _templateId)
@@ -1789,6 +1946,11 @@ void SettingsView::setScreenplayDurationByCharactersDuration(int _duration)
     d->screenplayDurationByCharactersDuration->setText(QString::number(_duration));
 }
 
+void SettingsView::setComicBookAvailable(bool _available)
+{
+    d->comicBookAvailable->setChecked(_available);
+}
+
 void SettingsView::setComicBookEditorDefaultTemplate(const QString& _templateId)
 {
     using namespace BusinessLayer;
@@ -1815,6 +1977,11 @@ void SettingsView::setComicBookNavigatorShowSceneText(bool _show, int _lines)
                 { 5, d->comicBookNavigatorSceneDescriptionLines5 } };
         buttons[_lines]->setChecked(true);
     }
+}
+
+void SettingsView::setAudioplayAvailable(bool _available)
+{
+    d->audioplayAvailable->setChecked(_available);
 }
 
 void SettingsView::setAudioplayEditorDefaultTemplate(const QString& _templateId)
@@ -2079,6 +2246,7 @@ void SettingsView::updateTranslations()
     BusinessLayer::TemplatesFacade::updateTranslations();
     //
     d->simpleTextTitle->setText(tr("Simple text module"));
+    d->simpleTextAvailable->setToolTip(tr("Turn on/off text and folders module"));
     d->simpleTextEditorTitle->setText(tr("Text editor"));
     d->simpleTextEditorDefaultTemplate->setLabel(tr("Default template"));
     d->simpleTextEditorDefaultTemplateOptions->setToolTip(
@@ -2092,6 +2260,7 @@ void SettingsView::updateTranslations()
     d->simpleTextNavigatorSceneDescriptionLines5->setText("5");
     //
     d->screenplayTitle->setText(tr("Screenplay module"));
+    d->screenplayAvailable->setToolTip(tr("Turn on/off screenplay module"));
     d->screenplayEditorTitle->setText(tr("Text editor"));
     d->screenplayEditorDefaultTemplate->setLabel(tr("Default template"));
     d->screenplayEditorDefaultTemplateOptions->setToolTip(
@@ -2127,7 +2296,22 @@ void SettingsView::updateTranslations()
     d->screenplayDurationByCharactersDuration->setLabel(tr("has duration"));
     d->screenplayDurationByCharactersDuration->setSuffix(tr("seconds"));
     //
+    d->comicBookTitle->setText(tr("Comic book module"));
+    d->comicBookAvailable->setToolTip(tr("Turn on/off comic book module"));
+    d->comicBookEditorTitle->setText(tr("Text editor"));
+    d->comicBookEditorDefaultTemplate->setLabel(tr("Default template"));
+    d->comicBookEditorDefaultTemplateOptions->setToolTip(
+        tr("Available actions for the selected template"));
+    d->comicBookNavigatorTitle->setText(tr("Navigator"));
+    d->comicBookNavigatorShowSceneText->setText(tr("Show panel text, lines"));
+    d->comicBookNavigatorSceneDescriptionLines1->setText("1");
+    d->comicBookNavigatorSceneDescriptionLines2->setText("2");
+    d->comicBookNavigatorSceneDescriptionLines3->setText("3");
+    d->comicBookNavigatorSceneDescriptionLines4->setText("4");
+    d->comicBookNavigatorSceneDescriptionLines5->setText("5");
+    //
     d->audioplayTitle->setText(tr("Audioplay module"));
+    d->audioplayAvailable->setToolTip(tr("Turn on/off audioplay module"));
     d->audioplayEditorTitle->setText(tr("Text editor"));
     d->audioplayEditorDefaultTemplate->setLabel(tr("Default template"));
     d->audioplayEditorDefaultTemplateOptions->setToolTip(
@@ -2150,19 +2334,6 @@ void SettingsView::updateTranslations()
     d->audioplayDurationByWordsWords->setSuffix(tr("words"));
     d->audioplayDurationByWordsDuration->setLabel(tr("has duration"));
     d->audioplayDurationByWordsDuration->setSuffix(tr("seconds"));
-    //
-    d->comicBookTitle->setText(tr("Comic book module"));
-    d->comicBookEditorTitle->setText(tr("Text editor"));
-    d->comicBookEditorDefaultTemplate->setLabel(tr("Default template"));
-    d->comicBookEditorDefaultTemplateOptions->setToolTip(
-        tr("Available actions for the selected template"));
-    d->comicBookNavigatorTitle->setText(tr("Navigator"));
-    d->comicBookNavigatorShowSceneText->setText(tr("Show panel text, lines"));
-    d->comicBookNavigatorSceneDescriptionLines1->setText("1");
-    d->comicBookNavigatorSceneDescriptionLines2->setText("2");
-    d->comicBookNavigatorSceneDescriptionLines3->setText("3");
-    d->comicBookNavigatorSceneDescriptionLines4->setText("4");
-    d->comicBookNavigatorSceneDescriptionLines5->setText("5");
 
     d->shortcutsTitle->setText(tr("Shortcuts"));
     d->shortcutsForScreenplayTitle->setText(tr("Screenplay editor"));
@@ -2240,6 +2411,16 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         title->setBackgroundColor(DesignSystem::color().surface());
         title->setTextColor(titleColor);
         title->setContentsMargins(titleMargins);
+    }
+    for (auto toggle : std::vector<Widget*>{
+             d->simpleTextAvailable,
+             d->screenplayAvailable,
+             d->comicBookAvailable,
+             d->audioplayAvailable,
+         }) {
+        toggle->setBackgroundColor(DesignSystem::color().background());
+        toggle->setTextColor(DesignSystem::color().onBackground());
+        toggle->setContentsMargins(0, Ui::DesignSystem::layout().px16(), 0, 0);
     }
 
     auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
@@ -2410,20 +2591,29 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px16()));
     //
     d->simpleTextCardLayout->setRowMinimumHeight(
-        d->simpleTextCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
+        d->simpleTextCardBottomSpacerIndex,
+        d->simpleTextAvailable->isChecked() ? Ui::DesignSystem::layout().px24()
+                                            : Ui::DesignSystem::layout().px12());
     //
     d->screenplayCardLayout->setRowMinimumHeight(
-        d->screenplayCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
+        d->screenplayCardBottomSpacerIndex,
+        d->screenplayAvailable->isChecked() ? Ui::DesignSystem::layout().px24()
+                                            : Ui::DesignSystem::layout().px12());
     const auto screenplayDurationByCharactersRow
         = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
     d->screenplayCardLayout->setRowMinimumHeight(
-        screenplayDurationByCharactersRow, static_cast<int>(Ui::DesignSystem::layout().px62()));
+        screenplayDurationByCharactersRow,
+        d->screenplayAvailable->isChecked() ? Ui::DesignSystem::layout().px62() : 0.0);
     //
     d->comicBookCardLayout->setRowMinimumHeight(
-        d->comicBookCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
+        d->comicBookCardBottomSpacerIndex,
+        d->comicBookAvailable->isChecked() ? Ui::DesignSystem::layout().px24()
+                                           : Ui::DesignSystem::layout().px12());
     //
     d->audioplayCardLayout->setRowMinimumHeight(
-        d->audioplayCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
+        d->audioplayCardBottomSpacerIndex,
+        d->audioplayAvailable->isChecked() ? Ui::DesignSystem::layout().px24()
+                                           : Ui::DesignSystem::layout().px12());
     //
     d->shortcutsCardLayout->setRowMinimumHeight(
         d->shortcutsCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));

@@ -136,6 +136,8 @@ const QString kComponentsGroupKey = QStringLiteral("components");
 //
 // текст
 const QString kComponentsSimpleTextKey = kComponentsGroupKey + QStringLiteral("/simple-text");
+const QString kComponentsSimpleTextAvailableKey
+    = kComponentsSimpleTextKey + QStringLiteral("/available");
 // ... редактор
 const QString kComponentsSimpleTextEditorKey = kComponentsSimpleTextKey + QStringLiteral("/editor");
 const QString kComponentsSimpleTextEditorDefaultTemplateKey
@@ -152,6 +154,8 @@ const QString kComponentsSimpleTextNavigatorSceneTextLinesKey
 //
 // сценарий
 const QString kComponentsScreenplayKey = kComponentsGroupKey + QStringLiteral("/screenplay");
+const QString kComponentsScreenplayAvailableKey
+    = kComponentsScreenplayKey + QStringLiteral("/available");
 // ... редактор тритмента
 const QString kComponentsTreatmentEditorKey
     = kComponentsScreenplayKey + QStringLiteral("/treatment");
@@ -202,6 +206,8 @@ const QString kComponentsScreenplayDurationByCharactersDurationKey
 //
 // комикс
 const QString kComponentsComicBookKey = kComponentsGroupKey + QStringLiteral("/comicbook");
+const QString kComponentsComicBookAvailableKey
+    = kComponentsComicBookKey + QStringLiteral("/available");
 // ... редактор
 const QString kComponentsComicBookEditorKey = kComponentsComicBookKey + QStringLiteral("/editor");
 const QString kComponentsComicBookEditorDefaultTemplateKey
@@ -216,6 +222,8 @@ const QString kComponentsComicBookNavigatorSceneTextLinesKey
 //
 // аудиопостановка
 const QString kComponentsAudioplayKey = kComponentsGroupKey + QStringLiteral("/audioplay");
+const QString kComponentsAudioplayAvailableKey
+    = kComponentsAudioplayKey + QStringLiteral("/available");
 // ... редактор
 const QString kComponentsAudioplayEditorKey = kComponentsAudioplayKey + QStringLiteral("/editor");
 const QString kComponentsAudioplayEditorDefaultTemplateKey

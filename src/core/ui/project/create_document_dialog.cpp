@@ -1,5 +1,7 @@
 #include "create_document_dialog.h"
 
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -17,7 +19,7 @@
 namespace Ui {
 
 namespace {
-const int kMimeTypeRole = Qt::UserRole + 1;
+const int kTypeRole = Qt::UserRole + 1;
 }
 
 class CreateDocumentDialog::Implementation
@@ -54,18 +56,26 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     auto makeItem = [](Domain::DocumentObjectType _type) {
         auto item = new QStandardItem;
         item->setData(Domain::iconForType(_type), Qt::DecorationRole);
-        item->setData(static_cast<int>(_type), kMimeTypeRole);
+        item->setData(static_cast<int>(_type), kTypeRole);
         item->setEditable(false);
         return item;
     };
 
-    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Folder));
-    typesModel->appendRow(makeItem(Domain::DocumentObjectType::SimpleText));
+    if (settingsValue(DataStorageLayer::kComponentsSimpleTextAvailableKey).toBool()) {
+        typesModel->appendRow(makeItem(Domain::DocumentObjectType::Folder));
+        typesModel->appendRow(makeItem(Domain::DocumentObjectType::SimpleText));
+    }
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Character));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Location));
-    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Screenplay));
-    typesModel->appendRow(makeItem(Domain::DocumentObjectType::ComicBook));
-    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Audioplay));
+    if (settingsValue(DataStorageLayer::kComponentsScreenplayAvailableKey).toBool()) {
+        typesModel->appendRow(makeItem(Domain::DocumentObjectType::Screenplay));
+    }
+    if (settingsValue(DataStorageLayer::kComponentsComicBookAvailableKey).toBool()) {
+        typesModel->appendRow(makeItem(Domain::DocumentObjectType::ComicBook));
+    }
+    if (settingsValue(DataStorageLayer::kComponentsAudioplayAvailableKey).toBool()) {
+        typesModel->appendRow(makeItem(Domain::DocumentObjectType::Audioplay));
+    }
 
     UiHelper::setFocusPolicyRecursively(documentType, Qt::NoFocus);
     documentType->setModel(typesModel);
@@ -105,7 +115,7 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
     };
 
     const auto documentTypeData = static_cast<Domain::DocumentObjectType>(
-        documentType->currentIndex().data(kMimeTypeRole).toInt());
+        documentType->currentIndex().data(kTypeRole).toInt());
     documentInfo->setText(documenTypeToInfo.value(documentTypeData));
     if (documentTypeData == Domain::DocumentObjectType::Character
         || documentTypeData == Domain::DocumentObjectType::Location) {
@@ -143,7 +153,7 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
     connect(d->documentName, &TextField::textChanged, this,
             [this] { d->documentName->setError({}); });
     connect(d->createButton, &Button::clicked, this, [this] {
-        const auto documentTypeData = d->documentType->currentIndex().data(kMimeTypeRole);
+        const auto documentTypeData = d->documentType->currentIndex().data(kTypeRole);
         Q_ASSERT(documentTypeData.isValid());
         const auto documentType = static_cast<Domain::DocumentObjectType>(documentTypeData.toInt());
 
@@ -178,8 +188,8 @@ void CreateDocumentDialog::setDocumentType(Domain::DocumentObjectType _type)
     const auto typesModel = d->documentType->model();
     for (int row = 0; row < typesModel->rowCount(); ++row) {
         const auto typeIndex = typesModel->index(row, 0);
-        if (typeIndex.data(kMimeTypeRole).isValid()
-            && typeIndex.data(kMimeTypeRole).toInt() == static_cast<int>(_type)) {
+        if (typeIndex.data(kTypeRole).isValid()
+            && typeIndex.data(kTypeRole).toInt() == static_cast<int>(_type)) {
             d->documentType->setCurrentIndex(typeIndex);
             return;
         }
@@ -218,13 +228,50 @@ void CreateDocumentDialog::updateTranslations()
 {
     setTitle(tr("Add document to the story"));
 
-    d->typesModel->item(0)->setText(tr("Folder"));
-    d->typesModel->item(1)->setText(tr("Text"));
-    d->typesModel->item(2)->setText(tr("Character"));
-    d->typesModel->item(3)->setText(tr("Location"));
-    d->typesModel->item(4)->setText(tr("Screenplay"));
-    d->typesModel->item(5)->setText(tr("Comic book"));
-    d->typesModel->item(6)->setText(tr("Audioplay"));
+    for (int row = 0; row < d->typesModel->rowCount(); ++row) {
+        auto item = d->typesModel->item(row);
+        switch (static_cast<Domain::DocumentObjectType>(item->data(kTypeRole).toInt())) {
+        case Domain::DocumentObjectType::Folder: {
+            item->setText(tr("Folder"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::SimpleText: {
+            item->setText(tr("Text"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::Character: {
+            item->setText(tr("Character"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::Location: {
+            item->setText(tr("Location"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::Screenplay: {
+            item->setText(tr("Screenplay"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::ComicBook: {
+            item->setText(tr("Comic book"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::Audioplay: {
+            item->setText(tr("Audioplay"));
+            break;
+        }
+
+        default: {
+            Q_ASSERT(false);
+            break;
+        }
+        }
+    }
 
     d->documentName->setLabel(tr("Name"));
     d->updateDocumentInfo();

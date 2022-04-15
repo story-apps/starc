@@ -126,6 +126,8 @@ void SettingsManager::Implementation::loadComponentsSettings()
 
 void SettingsManager::Implementation::loadSimpleTextSettings()
 {
+    view->setSimpleTextAvailable(
+        settingsValue(DataStorageLayer::kComponentsSimpleTextAvailableKey).toBool());
     const auto defaultTemplate
         = settingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey).toString();
     view->setSimpleTextEditorDefaultTemplate(defaultTemplate);
@@ -138,6 +140,8 @@ void SettingsManager::Implementation::loadSimpleTextSettings()
 
 void SettingsManager::Implementation::loadScreenplaySettings()
 {
+    view->setScreenplayAvailable(
+        settingsValue(DataStorageLayer::kComponentsScreenplayAvailableKey).toBool());
     const auto defaultTemplate
         = settingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey).toString();
     view->setScreenplayEditorDefaultTemplate(defaultTemplate);
@@ -182,6 +186,8 @@ void SettingsManager::Implementation::loadScreenplaySettings()
 
 void SettingsManager::Implementation::loadComicBookSettings()
 {
+    view->setComicBookAvailable(
+        settingsValue(DataStorageLayer::kComponentsComicBookAvailableKey).toBool());
     const auto defaultTemplate
         = settingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey).toString();
     view->setComicBookEditorDefaultTemplate(defaultTemplate);
@@ -194,6 +200,8 @@ void SettingsManager::Implementation::loadComicBookSettings()
 
 void SettingsManager::Implementation::loadAudioplaySettings()
 {
+    view->setAudioplayAvailable(
+        settingsValue(DataStorageLayer::kComponentsAudioplayAvailableKey).toBool());
     const auto defaultTemplate
         = settingsValue(DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey).toString();
     view->setAudioplayEditorDefaultTemplate(defaultTemplate);
@@ -402,6 +410,9 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     //
     // ... простой редактор текста
     //
+    connect(d->view, &Ui::SettingsView::simpleTextAvailableChanged, this,
+            &SettingsManager::setSimpleTextAvailable);
+    //
     connect(d->view, &Ui::SettingsView::simpleTextEditorDefaultTemplateChanged, this,
             &SettingsManager::setSimpleTextEditorDefaultTemplate);
     //
@@ -409,6 +420,9 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setSimpleTextNavigatorShowSceneText);
     //
     // ... сценарий
+    //
+    connect(d->view, &Ui::SettingsView::screenplayAvailableChanged, this,
+            &SettingsManager::setScreenplayAvailable);
     //
     connect(d->view, &Ui::SettingsView::screenplayEditorDefaultTemplateChanged, this,
             &SettingsManager::setScreenplayEditorDefaultTemplate);
@@ -441,6 +455,9 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     //
     // ... комиксы
     //
+    connect(d->view, &Ui::SettingsView::comicBookAvailableChanged, this,
+            &SettingsManager::setComicBookAvailable);
+    //
     connect(d->view, &Ui::SettingsView::comicBookEditorDefaultTemplateChanged, this,
             &SettingsManager::setComicBookEditorDefaultTemplate);
     //
@@ -448,6 +465,9 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setComicBookNavigatorShowSceneText);
     //
     // ... аудиопостановка
+    //
+    connect(d->view, &Ui::SettingsView::audioplayAvailableChanged, this,
+            &SettingsManager::setAudioplayAvailable);
     //
     connect(d->view, &Ui::SettingsView::audioplayEditorDefaultTemplateChanged, this,
             &SettingsManager::setAudioplayEditorDefaultTemplate);
@@ -908,6 +928,11 @@ void SettingsManager::setApplicationUseTypewriterScrolling(bool _use)
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
 }
 
+void SettingsManager::setSimpleTextAvailable(bool _available)
+{
+    setSettingsValue(DataStorageLayer::kComponentsSimpleTextAvailableKey, _available);
+}
+
 void SettingsManager::setSimpleTextEditorDefaultTemplate(const QString& _templateId)
 {
     setSettingsValue(DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey, _templateId);
@@ -921,6 +946,11 @@ void SettingsManager::setSimpleTextNavigatorShowSceneText(bool _show, int _lines
     setSettingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorShowSceneTextKey, _show);
     setSettingsValue(DataStorageLayer::kComponentsSimpleTextNavigatorSceneTextLinesKey, _lines);
     emit simpleTextNavigatorChanged();
+}
+
+void SettingsManager::setScreenplayAvailable(bool _available)
+{
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayAvailableKey, _available);
 }
 
 void SettingsManager::setScreenplayEditorDefaultTemplate(const QString& _templateId)
@@ -1017,6 +1047,11 @@ void SettingsManager::setScreenplayDurationByCharactersDuration(int _duration)
     emit screenplayDurationChanged();
 }
 
+void SettingsManager::setComicBookAvailable(bool _available)
+{
+    setSettingsValue(DataStorageLayer::kComponentsComicBookAvailableKey, _available);
+}
+
 void SettingsManager::setComicBookEditorDefaultTemplate(const QString& _templateId)
 {
     setSettingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey, _templateId);
@@ -1030,6 +1065,11 @@ void SettingsManager::setComicBookNavigatorShowSceneText(bool _show, int _lines)
     setSettingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneTextKey, _show);
     setSettingsValue(DataStorageLayer::kComponentsComicBookNavigatorSceneTextLinesKey, _lines);
     emit comicBookNavigatorChanged();
+}
+
+void SettingsManager::setAudioplayAvailable(bool _available)
+{
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayAvailableKey, _available);
 }
 
 void SettingsManager::setAudioplayEditorDefaultTemplate(const QString& _templateId)
