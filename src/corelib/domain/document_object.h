@@ -72,7 +72,7 @@ enum class DocumentObjectType {
     World = 50001,
     //
     Folder = 100001,
-    Text = 100002,
+    SimpleText = 100002,
     MindMap = 100003,
     Image = 100004,
     Link = 100005,

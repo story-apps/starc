@@ -967,7 +967,10 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
                     space.fill(' ', 100);
                     painter.drawText(
                         rect, Qt::AlignLeft | Qt::AlignTop,
-                        QString("%1:%2").arg(BusinessLayer::textParagraphTitle(blockType), space));
+                        QString("%1:%2").arg(!blockStyle.title().isEmpty()
+                                                 ? blockStyle.title()
+                                                 : BusinessLayer::textParagraphTitle(blockType),
+                                             space));
                     if (lastCharacterColor.isValid()) {
                         setPainterPen(palette().text().color());
                     }

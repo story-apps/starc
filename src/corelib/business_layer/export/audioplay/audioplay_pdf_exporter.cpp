@@ -132,8 +132,8 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
     //
     // Прорисовка заголовков блоков
     //
-    if (!_block.text().isEmpty()
-        && exportTemplate.paragraphStyle(_paragraphType).isTitleVisible()) {
+    const auto paragraphStyle = exportTemplate.paragraphStyle(_paragraphType);
+    if (!_block.text().isEmpty() && paragraphStyle.isTitleVisible()) {
         _painter->setFont(_block.charFormat().font());
 
         //
@@ -162,7 +162,10 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
         space.fill(' ', 100);
         _painter->drawText(
             dialogueNumberRect, Qt::AlignLeft | Qt::AlignTop,
-            QString("%1:%2").arg(BusinessLayer::textParagraphTitle(_paragraphType), space));
+            QString("%1:%2").arg(!paragraphStyle.title().isEmpty()
+                                     ? paragraphStyle.title()
+                                     : BusinessLayer::textParagraphTitle(_paragraphType),
+                                 space));
     }
 }
 

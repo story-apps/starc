@@ -24,7 +24,7 @@ namespace BusinessLayer {
 
 namespace {
 
-const QLatin1String kTextTemplatesDirectory("templates/text");
+const QLatin1String kSimpleTextTemplatesDirectory("templates/text");
 const QLatin1String kScreenplayTemplatesDirectory("templates/screenplay");
 const QLatin1String kComicBookTemplatesDirectory("templates/comicbook");
 const QLatin1String kAudioplayTemplatesDirectory("templates/audioplay");
@@ -433,14 +433,44 @@ void TemplatesFacade::setDefaultAudioplayTemplate(const QString& _templateId)
     instance().d->setDefaultTemplate<AudioplayTemplate>(_templateId);
 }
 
+void TemplatesFacade::saveSimpleTextTemplate(const SimpleTextTemplate& _template)
+{
+    instance().d->saveTemplate<SimpleTextTemplate>(kSimpleTextTemplatesDirectory, _template);
+}
+
 void TemplatesFacade::saveScreenplayTemplate(const ScreenplayTemplate& _template)
 {
     instance().d->saveTemplate<ScreenplayTemplate>(kScreenplayTemplatesDirectory, _template);
 }
 
+void TemplatesFacade::saveComicBookTemplate(const ComicBookTemplate& _template)
+{
+    instance().d->saveTemplate<ComicBookTemplate>(kComicBookTemplatesDirectory, _template);
+}
+
+void TemplatesFacade::saveAudioplayTemplate(const AudioplayTemplate& _template)
+{
+    instance().d->saveTemplate<AudioplayTemplate>(kAudioplayTemplatesDirectory, _template);
+}
+
+void TemplatesFacade::removeSimpleTextTemplate(const QString& _templateId)
+{
+    instance().d->removeTemplate<SimpleTextTemplate>(kSimpleTextTemplatesDirectory, _templateId);
+}
+
 void TemplatesFacade::removeScreenplayTemplate(const QString& _templateId)
 {
     instance().d->removeTemplate<ScreenplayTemplate>(kScreenplayTemplatesDirectory, _templateId);
+}
+
+void TemplatesFacade::removeComicBookTemplate(const QString& _templateId)
+{
+    instance().d->removeTemplate<ComicBookTemplate>(kComicBookTemplatesDirectory, _templateId);
+}
+
+void TemplatesFacade::removeAudioplayTemplate(const QString& _templateId)
+{
+    instance().d->removeTemplate<AudioplayTemplate>(kAudioplayTemplatesDirectory, _templateId);
 }
 
 void TemplatesFacade::updateTranslations()
@@ -456,7 +486,7 @@ TemplatesFacade::TemplatesFacade()
     : d(new Implementation)
 {
     d->loadTemplates<SimpleTextTemplate>(
-        kTextTemplatesDirectory,
+        kSimpleTextTemplatesDirectory,
         { QLatin1String("mono_cp_a4"), QLatin1String("mono_cn_a4"), QLatin1String("mono_cp_letter"),
           QLatin1String("sans_a4"), QLatin1String("sans_letter") });
     d->loadTemplates<ScreenplayTemplate>(

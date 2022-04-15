@@ -63,12 +63,18 @@ public:
     /**
      * @brief Сохранить стиль в библиотеке шаблонов
      */
+    static void saveSimpleTextTemplate(const SimpleTextTemplate& _template);
     static void saveScreenplayTemplate(const ScreenplayTemplate& _template);
+    static void saveComicBookTemplate(const ComicBookTemplate& _template);
+    static void saveAudioplayTemplate(const AudioplayTemplate& _template);
 
     /**
      * @brief Удалить шаблон по заданному имены
      */
+    static void removeSimpleTextTemplate(const QString& _templateId);
     static void removeScreenplayTemplate(const QString& _templateId);
+    static void removeComicBookTemplate(const QString& _templateId);
+    static void removeAudioplayTemplate(const QString& _templateId);
 
     /**
      * @brief Обновить переводы

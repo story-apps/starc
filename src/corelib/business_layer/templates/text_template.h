@@ -278,7 +278,13 @@ public:
      * @brief Отображать ли загаловок блока
      */
     bool isTitleVisible() const;
-    void setTitleVisible(bool _show);
+    void setTitleVisible(bool _visible);
+
+    /**
+     * @brief Кастомный заголовок блока
+     */
+    QString title() const;
+    void setTitle(const QString& _title);
 
 
     /**
@@ -388,7 +394,12 @@ private:
     /**
      * @brief Отображать ли заголовок блока
      */
-    bool m_showTitle = false;
+    bool m_isTitleVisible = false;
+
+    /**
+     * @brief Кастомный заголовок блока. Если не задан, то используется дефолтный
+     */
+    QString m_title;
 
     /**
      * @brief Формат блока
@@ -434,6 +445,11 @@ public:
      * @brief Идентификатор шаблона
      */
     QString id() const;
+
+    /**
+     * @brief Валиден ли шаблон
+     */
+    bool isValid() const;
 
     /**
      * @brief Является ли шаблон умолчальным

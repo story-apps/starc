@@ -79,6 +79,11 @@ void ScreenplayTemplateToolBar::checkPageSettings()
     d->pageSettingsAction->setChecked(true);
 }
 
+void ScreenplayTemplateToolBar::setTitlePageVisible(bool _visible)
+{
+    d->titlePageAction->setVisible(_visible);
+}
+
 void ScreenplayTemplateToolBar::updateTranslations()
 {
     d->backAction->setToolTip(tr("Go back to the previous screen"));

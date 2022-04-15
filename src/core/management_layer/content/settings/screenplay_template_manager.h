@@ -2,28 +2,36 @@
 
 #include <QObject>
 
+namespace Domain {
+enum class DocumentObjectType;
+}
+
 
 namespace ManagementLayer {
 
 class PluginsBuilder;
 
-
 /**
- * @brief Менеджер экрана параметров шаблона сценария
+ * @brief Менеджер экрана параметров шаблона документа
  */
-class ScreenplayTemplateManager : public QObject
+class TemplateOptionsManager : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit ScreenplayTemplateManager(QObject* _parent, QWidget* _parentWidget,
+    explicit TemplateOptionsManager(QObject* _parent, QWidget* _parentWidget,
                                        const PluginsBuilder& _pluginsBuilder);
-    ~ScreenplayTemplateManager() override;
+    ~TemplateOptionsManager() override;
 
     QWidget* toolBar() const;
     QWidget* navigator() const;
     QWidget* view() const;
     QWidget* viewToolBar() const;
+
+    /**
+     * @brief Задать текущий тим шаблона
+     */
+    void setCurrentDocumentType(Domain::DocumentObjectType _type);
 
     /**
      * @brief Редактировать заданный шаблон

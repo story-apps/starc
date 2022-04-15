@@ -34,7 +34,7 @@ QString SimpleTextTemplate::name() const
         return QCoreApplication::translate("BusinessLayer::TextTemplate",
                                            "Sans serif template (page: Letter; font: Roboto)");
     } else {
-        return name();
+        return TextTemplate::name();
     }
 }
 

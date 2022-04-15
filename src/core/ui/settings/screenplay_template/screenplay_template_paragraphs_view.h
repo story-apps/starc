@@ -6,6 +6,10 @@ namespace BusinessLayer {
 enum class TextParagraphType;
 }
 
+namespace Domain {
+enum class DocumentObjectType;
+}
+
 
 namespace Ui {
 
@@ -26,14 +30,19 @@ public:
     void setUseMm(bool _mm);
 
     /**
+     * @brief  Сконфигурировать параметры редактора для шаблона заданного типа документа
+     */
+    void configureTemplateFor(Domain::DocumentObjectType _type);
+
+    /**
      * @brief Текущий выбранный тип параграфа
      */
     BusinessLayer::TextParagraphType currentParagraphType() const;
 
     /**
-     * @brief Выбрать заданный тип параграфа
+     * @brief Выбрать первую вкладку списка типов
      */
-    void setCurrentParagraphType(BusinessLayer::TextParagraphType _type);
+    void selectFirstParagraphTypeTab();
 
     //
     // Параметры параграфа
@@ -74,6 +83,10 @@ public:
     void setLineSpacingType(int _type);
     qreal lineSpacingValue() const;
     void setLineSpacingValue(qreal _value);
+    bool showParagraphTitle() const;
+    void setShowParagraphTitle(bool _show);
+    QString customParagraphTitle() const;
+    void setCustomParagraphTitle(const QString& _title);
 
 signals:
     /**

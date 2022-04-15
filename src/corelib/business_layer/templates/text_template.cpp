@@ -435,12 +435,22 @@ void TextBlockStyle::setLinesAfter(int _linesAfter)
 
 bool TextBlockStyle::isTitleVisible() const
 {
-    return m_showTitle;
+    return m_isTitleVisible;
 }
 
-void TextBlockStyle::setTitleVisible(bool _show)
+void TextBlockStyle::setTitleVisible(bool _visible)
 {
-    m_showTitle = _show;
+    m_isTitleVisible = _visible;
+}
+
+QString TextBlockStyle::title() const
+{
+    return m_title;
+}
+
+void TextBlockStyle::setTitle(const QString& _title)
+{
+    m_title = _title;
 }
 
 QTextBlockFormat TextBlockStyle::blockFormat(bool _onHalfPage) const
@@ -515,7 +525,8 @@ TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
         = marginsFromString(_blockAttributes.value("margins_on_half_page").toString());
     m_linesAfter = _blockAttributes.value("lines_after").toInt();
     //
-    m_showTitle = _blockAttributes.value("show_title").toString() == "true";
+    m_isTitleVisible = _blockAttributes.value("show_title").toString() == "true";
+    m_title = _blockAttributes.value("title").toString();
 
     //
     // Настроим форматы
@@ -975,6 +986,7 @@ void TextTemplate::saveToFile(const QString& _filePath) const
         writer.writeAttribute("margins_on_half_page", ::toString(blockStyle.marginsOnHalfPage()));
         writer.writeAttribute("lines_after", ::toString(blockStyle.linesAfter()));
         writer.writeAttribute("show_title", ::toString(blockStyle.isTitleVisible()));
+        writer.writeAttribute("title", blockStyle.title());
         writer.writeEndElement(); // block
     }
     writer.writeEndElement(); // blocks
@@ -987,6 +999,11 @@ void TextTemplate::saveToFile(const QString& _filePath) const
 QString TextTemplate::id() const
 {
     return d->id;
+}
+
+bool TextTemplate::isValid() const
+{
+    return !d->paragraphsStyles.isEmpty();
 }
 
 bool TextTemplate::isDefault() const

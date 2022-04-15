@@ -60,7 +60,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     };
 
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Folder));
-    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Text));
+    typesModel->appendRow(makeItem(Domain::DocumentObjectType::SimpleText));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Character));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Location));
     typesModel->appendRow(makeItem(Domain::DocumentObjectType::Screenplay));
@@ -87,7 +87,7 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
     const QHash<Domain::DocumentObjectType, QString> documenTypeToInfo = {
         { Domain::DocumentObjectType::Folder,
           tr("Create a folder to group documents inside the story.") },
-        { Domain::DocumentObjectType::Text,
+        { Domain::DocumentObjectType::SimpleText,
           tr("Create a plain text document to write out ideas and notes.") },
         { Domain::DocumentObjectType::Character,
           tr("Create a document with full character's description to track his relations and "

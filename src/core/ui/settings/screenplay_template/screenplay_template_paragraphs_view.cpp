@@ -1,6 +1,7 @@
 #include "screenplay_template_paragraphs_view.h"
 
 #include <business_layer/templates/screenplay_template.h>
+#include <domain/document_object.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -20,28 +21,15 @@
 
 namespace Ui {
 
-namespace {
-const QVector<BusinessLayer::TextParagraphType> kParagraphTypes
-    = { BusinessLayer::TextParagraphType::SceneHeading,
-        BusinessLayer::TextParagraphType::SceneCharacters,
-        BusinessLayer::TextParagraphType::BeatHeading,
-        BusinessLayer::TextParagraphType::Action,
-        BusinessLayer::TextParagraphType::Character,
-        BusinessLayer::TextParagraphType::Parenthetical,
-        BusinessLayer::TextParagraphType::Dialogue,
-        BusinessLayer::TextParagraphType::Lyrics,
-        BusinessLayer::TextParagraphType::Transition,
-        BusinessLayer::TextParagraphType::Shot,
-        BusinessLayer::TextParagraphType::InlineNote,
-        BusinessLayer::TextParagraphType::UnformattedText,
-        BusinessLayer::TextParagraphType::SequenceHeading,
-        BusinessLayer::TextParagraphType::SequenceFooter };
-}
-
 class ScreenplayTemplateParagraphsView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
+
+    /**
+     * @brief Обновить внешний вид в соответствии с заданным типом блока
+     */
+    void updateParagraphOptions(BusinessLayer::TextParagraphType _type);
 
 
     bool useMm = true;
@@ -81,7 +69,13 @@ public:
     ComboBox* lineSpacing = nullptr;
     QStringListModel* lineSpacingModel = nullptr;
     TextField* lineSpacingValue = nullptr;
+    CheckBox* showParagraphTitle = nullptr;
+    CheckBox* showCustomParagraphTitle = nullptr;
+    TextField* customParagraphTitle = nullptr;
     QVector<int> additionalSpacingRows;
+
+    Domain::DocumentObjectType documentType = Domain::DocumentObjectType::Undefined;
+    QVector<BusinessLayer::TextParagraphType> paragraphTypes;
 };
 
 ScreenplayTemplateParagraphsView::Implementation::Implementation(QWidget* _parent)
@@ -119,12 +113,11 @@ ScreenplayTemplateParagraphsView::Implementation::Implementation(QWidget* _paren
     , lineSpacing(new ComboBox(card))
     , lineSpacingModel(new QStringListModel(lineSpacing))
     , lineSpacingValue(new TextField(card))
+    , showParagraphTitle(new CheckBox(card))
+    , showCustomParagraphTitle(new CheckBox(card))
+    , customParagraphTitle(new TextField(card))
 
 {
-    for (int i = 0; i < kParagraphTypes.size(); ++i) {
-        paragraphs->addTab({});
-    }
-
     fontFamily->setModel(fontFamilyModel);
     fontFamilyModel->setStringList(QFontDatabase().families());
     fontSize->setModel(fontSizeModel);
@@ -143,6 +136,9 @@ ScreenplayTemplateParagraphsView::Implementation::Implementation(QWidget* _paren
 
     lineSpacing->setModel(lineSpacingModel);
     lineSpacingValue->setEnabled(false);
+
+    showCustomParagraphTitle->setEnabled(false);
+    customParagraphTitle->setEnabled(false);
 
     cardLayout->setContentsMargins({});
     cardLayout->setSpacing(0);
@@ -228,9 +224,82 @@ ScreenplayTemplateParagraphsView::Implementation::Implementation(QWidget* _paren
         layout->addStretch();
         cardLayout->addLayout(layout);
     }
+    additionalSpacingRows.append(cardLayout->count());
+    cardLayout->addSpacing(0);
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(showParagraphTitle, 0, Qt::AlignVCenter);
+        layout->addWidget(showCustomParagraphTitle, 0, Qt::AlignVCenter);
+        layout->addWidget(customParagraphTitle);
+        layout->addStretch();
+        cardLayout->addLayout(layout);
+    }
     card->setLayoutReimpl(cardLayout);
 
     qobject_cast<QVBoxLayout*>(content->widget()->layout())->insertWidget(0, card);
+}
+
+void ScreenplayTemplateParagraphsView::Implementation::updateParagraphOptions(
+    BusinessLayer::TextParagraphType _type)
+{
+    auto setIndentationVisible = [this](bool _visible, bool _visibleInTable) {
+        leftIndent->setVisible(_visible);
+        rightIndent->setVisible(_visible);
+        horizontalIndentationInTableTitle->setVisible(_visible && _visibleInTable);
+        leftIndentInTable->setVisible(_visibleInTable);
+        rightIndentInTable->setVisible(_visibleInTable);
+    };
+    auto setBlockTitleVisible = [this](bool _visible) {
+        showParagraphTitle->setVisible(_visible);
+        showCustomParagraphTitle->setVisible(_visible);
+        customParagraphTitle->setVisible(_visible);
+    };
+    auto resetDefaultState = [setIndentationVisible, setBlockTitleVisible] {
+        setIndentationVisible(true, true);
+        setBlockTitleVisible(false);
+    };
+
+    switch (documentType) {
+    case Domain::DocumentObjectType::SimpleText: {
+        setIndentationVisible(true, false);
+        break;
+    }
+
+    case Domain::DocumentObjectType::Screenplay: {
+        resetDefaultState();
+        break;
+    }
+
+    case Domain::DocumentObjectType::ComicBook: {
+        resetDefaultState();
+        break;
+    }
+
+    case Domain::DocumentObjectType::Audioplay: {
+        //
+        // Для персонажа и реплики отображаем отступы в таблице,
+        // а для всех остальных обычные отступы блоков
+        //
+        const auto showIndentationInTable = _type == BusinessLayer::TextParagraphType::Character
+            || _type == BusinessLayer::TextParagraphType::Dialogue;
+        setIndentationVisible(!showIndentationInTable, showIndentationInTable);
+
+        //
+        // Для звуков, музыки и сигналов отображаем параметры заголовка блока
+        //
+        setBlockTitleVisible(_type == BusinessLayer::TextParagraphType::Sound
+                             || _type == BusinessLayer::TextParagraphType::Music
+                             || _type == BusinessLayer::TextParagraphType::Cue);
+
+        break;
+    }
+
+    default: {
+        break;
+    }
+    }
 }
 
 
@@ -248,8 +317,9 @@ ScreenplayTemplateParagraphsView::ScreenplayTemplateParagraphsView(QWidget* _par
 
     connect(d->paragraphs, &TabBar::currentIndexChanged, this,
             [this](int _currentIndex, int _previousIndex) {
-                emit currentParagraphTypeChanged(kParagraphTypes.at(_currentIndex),
-                                                 kParagraphTypes.at(_previousIndex));
+                d->updateParagraphOptions(d->paragraphTypes.at(_currentIndex));
+                emit currentParagraphTypeChanged(d->paragraphTypes.at(_currentIndex),
+                                                 d->paragraphTypes.at(_previousIndex));
             });
     connect(d->paragraphEnabled, &CheckBox::checkedChanged, this, [this](bool _enabled) {
         for (auto widget : std::vector<QWidget*>{
@@ -291,6 +361,13 @@ ScreenplayTemplateParagraphsView::ScreenplayTemplateParagraphsView(QWidget* _par
                     d->paragraphEnabled->isChecked()
                     && (_index.row() == (d->lineSpacingModel->rowCount() - 1)));
             });
+    auto updateTitleAvailability = [this] {
+        d->showCustomParagraphTitle->setEnabled(d->showParagraphTitle->isChecked());
+        d->customParagraphTitle->setEnabled(d->showParagraphTitle->isChecked()
+                                            && d->showCustomParagraphTitle->isChecked());
+    };
+    connect(d->showParagraphTitle, &CheckBox::checkedChanged, this, updateTitleAvailability);
+    connect(d->showCustomParagraphTitle, &CheckBox::checkedChanged, this, updateTitleAvailability);
 
     for (auto checkBox : std::vector<CheckBox*>{
              d->paragraphEnabled,
@@ -299,6 +376,8 @@ ScreenplayTemplateParagraphsView::ScreenplayTemplateParagraphsView(QWidget* _par
              d->bold,
              d->italic,
              d->underline,
+             d->showParagraphTitle,
+             d->showCustomParagraphTitle,
          }) {
         connect(checkBox, &CheckBox::checkedChanged, this,
                 &ScreenplayTemplateParagraphsView::currentParagraphChanged);
@@ -325,6 +404,7 @@ ScreenplayTemplateParagraphsView::ScreenplayTemplateParagraphsView(QWidget* _par
              d->rightIndentInTable,
              d->lineSpacing,
              d->lineSpacingValue,
+             d->customParagraphTitle,
          }) {
         connect(textField, &TextField::textChanged, this,
                 &ScreenplayTemplateParagraphsView::currentParagraphChanged);
@@ -347,15 +427,93 @@ void ScreenplayTemplateParagraphsView::setUseMm(bool _mm)
     updateTranslations();
 }
 
-BusinessLayer::TextParagraphType ScreenplayTemplateParagraphsView::currentParagraphType() const
+void ScreenplayTemplateParagraphsView::configureTemplateFor(Domain::DocumentObjectType _type)
 {
-    return kParagraphTypes.at(d->paragraphs->currentTab());
+    if (d->documentType == _type) {
+        return;
+    }
+
+    d->documentType = _type;
+    switch (d->documentType) {
+    default:
+    case Domain::DocumentObjectType::SimpleText: {
+        d->paragraphTypes = {
+            BusinessLayer::TextParagraphType::ChapterHeading1,
+            BusinessLayer::TextParagraphType::ChapterHeading2,
+            BusinessLayer::TextParagraphType::ChapterHeading3,
+            BusinessLayer::TextParagraphType::ChapterHeading4,
+            BusinessLayer::TextParagraphType::ChapterHeading5,
+            BusinessLayer::TextParagraphType::ChapterHeading6,
+            BusinessLayer::TextParagraphType::Text,
+            BusinessLayer::TextParagraphType::InlineNote,
+        };
+        break;
+    }
+
+    case Domain::DocumentObjectType::Screenplay: {
+        d->paragraphTypes = {
+            BusinessLayer::TextParagraphType::SceneHeading,
+            BusinessLayer::TextParagraphType::SceneCharacters,
+            BusinessLayer::TextParagraphType::BeatHeading,
+            BusinessLayer::TextParagraphType::Action,
+            BusinessLayer::TextParagraphType::Character,
+            BusinessLayer::TextParagraphType::Parenthetical,
+            BusinessLayer::TextParagraphType::Dialogue,
+            BusinessLayer::TextParagraphType::Lyrics,
+            BusinessLayer::TextParagraphType::Transition,
+            BusinessLayer::TextParagraphType::Shot,
+            BusinessLayer::TextParagraphType::InlineNote,
+            BusinessLayer::TextParagraphType::UnformattedText,
+            BusinessLayer::TextParagraphType::SequenceHeading,
+            BusinessLayer::TextParagraphType::SequenceFooter,
+        };
+        break;
+    }
+
+    case Domain::DocumentObjectType::ComicBook: {
+        d->paragraphTypes = {
+            BusinessLayer::TextParagraphType::PageHeading,
+            BusinessLayer::TextParagraphType::PanelHeading,
+            BusinessLayer::TextParagraphType::Description,
+            BusinessLayer::TextParagraphType::Character,
+            BusinessLayer::TextParagraphType::Dialogue,
+            BusinessLayer::TextParagraphType::InlineNote,
+            BusinessLayer::TextParagraphType::UnformattedText,
+        };
+        break;
+    }
+
+    case Domain::DocumentObjectType::Audioplay: {
+        d->paragraphTypes = {
+            BusinessLayer::TextParagraphType::SceneHeading,
+            BusinessLayer::TextParagraphType::Character,
+            BusinessLayer::TextParagraphType::Dialogue,
+            BusinessLayer::TextParagraphType::Sound,
+            BusinessLayer::TextParagraphType::Music,
+            BusinessLayer::TextParagraphType::Cue,
+            BusinessLayer::TextParagraphType::InlineNote,
+            BusinessLayer::TextParagraphType::UnformattedText,
+        };
+        break;
+    }
+    }
+
+    d->paragraphs->removeAllTabs();
+    for (int tab = 0; tab < d->paragraphTypes.size(); ++tab) {
+        d->paragraphs->addTab(BusinessLayer::toDisplayString(d->paragraphTypes.at(tab)));
+    }
+
+    d->updateParagraphOptions(d->paragraphTypes.constFirst());
 }
 
-void ScreenplayTemplateParagraphsView::setCurrentParagraphType(
-    BusinessLayer::TextParagraphType _type)
+BusinessLayer::TextParagraphType ScreenplayTemplateParagraphsView::currentParagraphType() const
 {
-    d->paragraphs->setCurrentTab(kParagraphTypes.indexOf(_type));
+    return d->paragraphTypes.at(d->paragraphs->currentTab());
+}
+
+void ScreenplayTemplateParagraphsView::selectFirstParagraphTypeTab()
+{
+    d->paragraphs->setCurrentTab(0);
 }
 
 bool ScreenplayTemplateParagraphsView::isParagraphEnabled() const
@@ -560,11 +718,32 @@ void ScreenplayTemplateParagraphsView::setLineSpacingValue(qreal _value)
     d->lineSpacingValue->setText(QString::number(_value));
 }
 
+bool ScreenplayTemplateParagraphsView::showParagraphTitle() const
+{
+    return d->showParagraphTitle->isChecked();
+}
+
+void ScreenplayTemplateParagraphsView::setShowParagraphTitle(bool _show)
+{
+    d->showParagraphTitle->setChecked(_show);
+}
+
+QString ScreenplayTemplateParagraphsView::customParagraphTitle() const
+{
+    return d->customParagraphTitle->text();
+}
+
+void ScreenplayTemplateParagraphsView::setCustomParagraphTitle(const QString& _title)
+{
+    d->showCustomParagraphTitle->setChecked(!_title.isEmpty());
+    d->customParagraphTitle->setText(_title);
+}
+
 void ScreenplayTemplateParagraphsView::updateTranslations()
 {
     const auto metricSystem = d->useMm ? tr("mm") : tr("inch");
-    for (int tab = 0; tab < kParagraphTypes.size(); ++tab) {
-        d->paragraphs->setTabName(tab, BusinessLayer::toDisplayString(kParagraphTypes.at(tab)));
+    for (int tab = 0; tab < d->paragraphTypes.size(); ++tab) {
+        d->paragraphs->setTabName(tab, BusinessLayer::toDisplayString(d->paragraphTypes.at(tab)));
     }
     d->paragraphEnabled->setText(tr("Is paragraph style available"));
     d->fontFamily->setLabel(tr("Font family"));
@@ -601,6 +780,9 @@ void ScreenplayTemplateParagraphsView::updateTranslations()
         { tr("Single"), tr("One and half"), tr("Double"), tr("Fixed") });
     d->lineSpacingValue->setLabel(tr("Value"));
     d->lineSpacingValue->setSuffix(metricSystem);
+    d->showParagraphTitle->setText(tr("Show paragraph's title"));
+    d->showCustomParagraphTitle->setText(tr("Use custom title"));
+    d->customParagraphTitle->setLabel(tr("Title"));
 }
 
 void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -616,22 +798,41 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
     d->card->setContentsMargins(0, Ui::DesignSystem::layout().px24(), 0,
                                 Ui::DesignSystem::layout().px24());
 
-    for (auto row : d->additionalSpacingRows) {
+    for (auto row : std::as_const(d->additionalSpacingRows)) {
         d->cardLayout->itemAt(row)->spacerItem()->changeSize(0, Ui::DesignSystem::layout().px8());
     }
 
     for (auto widget : std::vector<Widget*>{
-             d->paragraphs, d->paragraphEnabled, d->startsFromNewPage, d->uppercase, d->bold,
-             d->italic, d->underline, d->textAlignmentTitle, d->alignLeft, d->alignCenter,
-             d->alignRight, d->alignJustify, d->verticalIndentationTitle,
-             d->verticalIndentationInLines, d->verticalIndentationInMm,
-             d->horizontalIndentationTitle, d->horizontalIndentationInTableTitle,
-             d->lineSpacingTitle }) {
+             d->paragraphs,
+             d->paragraphEnabled,
+             d->startsFromNewPage,
+             d->uppercase,
+             d->bold,
+             d->italic,
+             d->underline,
+             d->textAlignmentTitle,
+             d->alignLeft,
+             d->alignCenter,
+             d->alignRight,
+             d->alignJustify,
+             d->verticalIndentationTitle,
+             d->verticalIndentationInLines,
+             d->verticalIndentationInMm,
+             d->horizontalIndentationTitle,
+             d->horizontalIndentationInTableTitle,
+             d->lineSpacingTitle,
+             d->showParagraphTitle,
+             d->showCustomParagraphTitle,
+         }) {
         widget->setBackgroundColor(Ui::DesignSystem::color().background());
         widget->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    for (auto title : { d->textAlignmentTitle, d->verticalIndentationTitle,
-                        d->horizontalIndentationTitle, d->lineSpacingTitle }) {
+    for (auto title : {
+             d->textAlignmentTitle,
+             d->verticalIndentationTitle,
+             d->horizontalIndentationTitle,
+             d->lineSpacingTitle,
+         }) {
         title->setTextColor(ColorHelper::transparent(DesignSystem::color().onBackground(),
                                                      Ui::DesignSystem::inactiveTextOpacity()));
     }
@@ -651,17 +852,34 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
         Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
         Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12());
 
-    for (auto textField :
-         std::vector<TextField*>{ d->fontFamily, d->fontSize, d->topIndent, d->bottomIndent,
-                                  d->leftIndent, d->rightIndent, d->leftIndentInTable,
-                                  d->rightIndentInTable, d->lineSpacing, d->lineSpacingValue }) {
+    for (auto textField : std::vector<TextField*>{
+             d->fontFamily,
+             d->fontSize,
+             d->topIndent,
+             d->bottomIndent,
+             d->leftIndent,
+             d->rightIndent,
+             d->leftIndentInTable,
+             d->rightIndentInTable,
+             d->lineSpacing,
+             d->lineSpacingValue,
+             d->customParagraphTitle,
+         }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
         textField->setMinimumWidth(Ui::DesignSystem::layout().px62() * 3);
     }
     for (auto textField : std::vector<TextField*>{
-             d->fontFamily, d->topIndent, d->bottomIndent, d->leftIndent, d->rightIndent,
-             d->leftIndentInTable, d->rightIndentInTable, d->lineSpacing, d->lineSpacingValue }) {
+             d->fontFamily,
+             d->topIndent,
+             d->bottomIndent,
+             d->leftIndent,
+             d->rightIndent,
+             d->leftIndentInTable,
+             d->rightIndentInTable,
+             d->lineSpacing,
+             d->lineSpacingValue,
+         }) {
         textField->setCustomMargins(
             { isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0.0, 0.0,
               isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px24(), 0.0 });

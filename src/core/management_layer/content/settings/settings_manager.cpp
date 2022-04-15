@@ -1,8 +1,12 @@
 #include "settings_manager.h"
+#include <domain/document_object.h>
 
 #include "screenplay_template_manager.h"
 
 #include <3rd_party/webloader/src/NetworkRequest.h>
+#include <business_layer/templates/audioplay_template.h>
+#include <business_layer/templates/simple_text_template.h>
+#include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -69,7 +73,7 @@ public:
     Ui::SettingsView* view = nullptr;
     Ui::ThemeSetupView* themeSetupView = nullptr;
 
-    ScreenplayTemplateManager* screenplayTemplateManager = nullptr;
+    TemplateOptionsManager* templateOptionsManager = nullptr;
 };
 
 SettingsManager::Implementation::Implementation(QObject* _parent, QWidget* _parentWidget,
@@ -77,8 +81,8 @@ SettingsManager::Implementation::Implementation(QObject* _parent, QWidget* _pare
     : toolBar(new Ui::SettingsToolBar(_parentWidget))
     , navigator(new Ui::SettingsNavigator(_parentWidget))
     , view(new Ui::SettingsView(_parentWidget))
-    , screenplayTemplateManager(
-          new ScreenplayTemplateManager(_parent, _parentWidget, _pluginsBuilder))
+    , templateOptionsManager(
+          new TemplateOptionsManager(_parent, _parentWidget, _pluginsBuilder))
 {
     toolBar->hide();
     navigator->hide();
@@ -465,22 +469,29 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     //
     // Работа с библиотекой шаблонов сценария
     //
-    auto showScreenplayTemplateEditor = [this] {
-        d->toolBar->setCurrentWidget(d->screenplayTemplateManager->toolBar());
-        d->navigator->setCurrentWidget(d->screenplayTemplateManager->navigator());
-        d->view->setCurrentWidget(d->screenplayTemplateManager->view());
-        d->screenplayTemplateManager->viewToolBar()->setParent(d->view);
-        d->screenplayTemplateManager->viewToolBar()->show();
+    auto showTemplateOptionsEditor = [this] {
+        d->toolBar->setCurrentWidget(d->templateOptionsManager->toolBar());
+        d->navigator->setCurrentWidget(d->templateOptionsManager->navigator());
+        d->view->setCurrentWidget(d->templateOptionsManager->view());
+        d->templateOptionsManager->viewToolBar()->setParent(d->view);
+        d->templateOptionsManager->viewToolBar()->show();
     };
+    //
+    // ... сценарий
+    //
     connect(d->view, &Ui::SettingsView::editCurrentScreenplayEditorTemplateRequested, this,
-            [this, showScreenplayTemplateEditor](const QString& _templateId) {
-                d->screenplayTemplateManager->editTemplate(_templateId);
-                showScreenplayTemplateEditor();
+            [this, showTemplateOptionsEditor](const QString& _templateId) {
+                d->templateOptionsManager->setCurrentDocumentType(
+                    Domain::DocumentObjectType::Screenplay);
+                d->templateOptionsManager->editTemplate(_templateId);
+                showTemplateOptionsEditor();
             });
     connect(d->view, &Ui::SettingsView::duplicateCurrentScreenplayEditorTemplateRequested, this,
-            [this, showScreenplayTemplateEditor](const QString& _templateId) {
-                d->screenplayTemplateManager->duplicateTemplate(_templateId);
-                showScreenplayTemplateEditor();
+            [this, showTemplateOptionsEditor](const QString& _templateId) {
+                d->templateOptionsManager->setCurrentDocumentType(
+                    Domain::DocumentObjectType::Screenplay);
+                d->templateOptionsManager->duplicateTemplate(_templateId);
+                showTemplateOptionsEditor();
             });
     connect(d->view, &Ui::SettingsView::saveToFileCurrentScreenplayEditorTemplateRequested, this,
             [this](const QString& _templateId) {
@@ -516,11 +527,65 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
                 const BusinessLayer::ScreenplayTemplate screenplayTemplate(templateFilePath);
                 BusinessLayer::TemplatesFacade::saveScreenplayTemplate(screenplayTemplate);
             });
-    connect(d->screenplayTemplateManager, &ScreenplayTemplateManager::closeRequested, this, [this] {
+    //
+    // ... аудиопостановка
+    //
+    connect(d->view, &Ui::SettingsView::editCurrentAudioplayEditorTemplateRequested, this,
+            [this, showTemplateOptionsEditor](const QString& _templateId) {
+                d->templateOptionsManager->setCurrentDocumentType(
+                    Domain::DocumentObjectType::Audioplay);
+                d->templateOptionsManager->editTemplate(_templateId);
+                showTemplateOptionsEditor();
+            });
+    connect(d->view, &Ui::SettingsView::duplicateCurrentAudioplayEditorTemplateRequested, this,
+            [this, showTemplateOptionsEditor](const QString& _templateId) {
+                d->templateOptionsManager->setCurrentDocumentType(
+                    Domain::DocumentObjectType::Audioplay);
+                d->templateOptionsManager->duplicateTemplate(_templateId);
+                showTemplateOptionsEditor();
+            });
+    connect(d->view, &Ui::SettingsView::saveToFileCurrentAudioplayEditorTemplateRequested, this,
+            [this](const QString& _templateId) {
+                auto saveToFilePath = QFileDialog::getSaveFileName(
+                    d->view->topLevelWidget(), tr("Choose the file to save template"),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    DialogHelper::starcTemplateFilter());
+                if (saveToFilePath.isEmpty()) {
+                    return;
+                }
+
+                if (!saveToFilePath.endsWith(ExtensionHelper::starct())) {
+                    saveToFilePath.append(QString(".%1").arg(ExtensionHelper::starct()));
+                }
+                const auto audioplayTemplate
+                    = BusinessLayer::TemplatesFacade::audioplayTemplate(_templateId);
+                audioplayTemplate.saveToFile(saveToFilePath);
+            });
+    connect(d->view, &Ui::SettingsView::removeCurrentAudioplayEditorTemplateRequested, this,
+            [](const QString& _templateId) {
+                BusinessLayer::TemplatesFacade::removeAudioplayTemplate(_templateId);
+            });
+    connect(d->view, &Ui::SettingsView::loadFromFileAudioplayEditorTemplateRequested, this,
+            [this] {
+                const auto templateFilePath = QFileDialog::getOpenFileName(
+                    d->view->topLevelWidget(), tr("Choose the file with template to load"),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    DialogHelper::starcTemplateFilter());
+                if (templateFilePath.isEmpty()) {
+                    return;
+                }
+
+                const BusinessLayer::AudioplayTemplate audioplayTemplate(templateFilePath);
+                BusinessLayer::TemplatesFacade::saveAudioplayTemplate(audioplayTemplate);
+            });
+    //
+    // ... сам менеджер шаблона
+    //
+    connect(d->templateOptionsManager, &TemplateOptionsManager::closeRequested, this, [this] {
         d->toolBar->showDefaultPage();
         d->navigator->showDefaultPage();
         d->view->showDefaultPage();
-        d->screenplayTemplateManager->viewToolBar()->hide();
+        d->templateOptionsManager->viewToolBar()->hide();
 
         //
         // После закрытия уведомляем клиентов о том, что текущий шаблон обновился
@@ -528,10 +593,10 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
         emit screenplayEditorChanged(
             { DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey });
     });
-    connect(d->screenplayTemplateManager, &ScreenplayTemplateManager::showViewRequested, this,
+    connect(d->templateOptionsManager, &TemplateOptionsManager::showViewRequested, this,
             [this](QWidget* _view) {
                 d->view->setCurrentWidget(_view);
-                d->screenplayTemplateManager->viewToolBar()->raise();
+                d->templateOptionsManager->viewToolBar()->raise();
             });
 
     //

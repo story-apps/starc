@@ -21,6 +21,11 @@ public:
      */
     void checkPageSettings();
 
+    /**
+     * @brief Настроить видимость иконки отображения редактора титульной страницы
+     */
+    void setTitlePageVisible(bool _visible);
+
 signals:
     /**
      * @brief Пользователь хочет выйти из параметров шаблона

@@ -273,7 +273,7 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
     }
 
     case DocumentObjectType::Folder:
-    case DocumentObjectType::Text: {
+    case DocumentObjectType::SimpleText: {
         appendItem(createItem(_type, _name), parentItem, _content);
         break;
     }
@@ -507,7 +507,7 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     //
     // Элемент можно только перемещать
     //
-    case Domain::DocumentObjectType::Text: {
+    case Domain::DocumentObjectType::SimpleText: {
         return defaultFlags | Qt::ItemIsDragEnabled;
     }
 

@@ -102,6 +102,10 @@ QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate,
     const qreal actionWidth
         = Ui::DesignSystem::appBar().iconSize().width() + Ui::DesignSystem::appBar().iconsSpacing();
     for (QAction* action : _actions) {
+        if (!action->isVisible()) {
+            continue;
+        }
+
         const qreal actionRight = actionLeft + actionWidth;
 
         if (actionLeft < _coordinate.x() && _coordinate.x() < actionRight) {
@@ -296,6 +300,10 @@ void AppBar::paintEvent(QPaintEvent* _event)
         }
     };
     for (const QAction* action : actions()) {
+        if (!action->isVisible()) {
+            continue;
+        }
+
         drawIcon(action);
 
         actionX += (isLeftToRight() ? 1 : -1)

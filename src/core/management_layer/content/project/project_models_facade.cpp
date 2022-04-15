@@ -575,7 +575,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::Folder:
-        case Domain::DocumentObjectType::Text: {
+        case Domain::DocumentObjectType::SimpleText: {
             model = new BusinessLayer::SimpleTextModel;
             break;
         }

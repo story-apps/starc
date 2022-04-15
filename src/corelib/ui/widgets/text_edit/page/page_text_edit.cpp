@@ -2457,7 +2457,11 @@ QPoint PageTextEditPrivate::cursorForPosition(const QPoint& _eventPos) const
 
     QTextCursor cursor = q->textCursor();
     auto findNearPosition = [&q, &cursor](bool _isForward, int _localPosY) {
+        int bestPosition = cursor.position();
         int minSpace = INT_MAX;
+        int lastTrySpace = minSpace;
+        const int maxBadTries = 2;
+        int badTries = 0;
         bool firstStep = true;
         if (_isForward) {
             //
@@ -2516,23 +2520,46 @@ QPoint PageTextEditPrivate::cursorForPosition(const QPoint& _eventPos) const
                     //
                     if (minSpace >= space) {
                         minSpace = space;
-                    } else {
-                        if (cursor.atBlockEnd()) {
-                            do {
-                                cursor.movePosition(QTextCursor::NextBlock);
-                                cursor.movePosition(QTextCursor::EndOfBlock);
-                            } while (!cursor.atEnd()
-                                     && (cursor.block().blockFormat().boolProperty(
-                                             PageTextEdit::PropertyDontShowCursor)
-                                         || !cursor.block().isVisible()));
-                        }
-                        break;
+                        badTries = 0;
+                        bestPosition = cursor.position();
                     }
+                    //
+                    // Если расстояние стало больше, значит, либо мы вошли в соседнюю ячейку
+                    // таблицы, либо ушли наверх за пределы лучшего попадания
+                    //
+                    else {
+                        //
+                        // ... если было сделано много плохих ошибок, завершаем поиск
+                        //
+                        if (badTries == maxBadTries) {
+                            break;
+                        }
+
+                        //
+                        // ... если в текущей попытке мы улучшаем результат (хоть он и плохой)
+                        //
+                        if (lastTrySpace >= space) {
+                            //
+                            // ... то продолжаем поиск
+                            //
+                        }
+                        //
+                        // ... если результат ухудшается
+                        //
+                        else {
+                            //
+                            // ... то записываем ещё одну плохую попытку
+                            //
+                            ++badTries;
+                        }
+                    }
+
+                    lastTrySpace = space;
                 }
             } while (!cursor.atStart());
+            cursor.setPosition(bestPosition);
         }
 
-        return minSpace;
     };
 
     QPoint localPos = viewport->mapFromParent(_eventPos);

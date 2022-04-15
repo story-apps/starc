@@ -52,7 +52,7 @@ SimpleTextAbstractImporter::Document SimpleTextMarkdownImporter::importDocument(
     writer.writeStartDocument();
     writer.writeStartElement(xml::kDocumentTag);
     writer.writeAttribute(xml::kMimeTypeAttribute,
-                          Domain::mimeTypeFor(Domain::DocumentObjectType::Text));
+                          Domain::mimeTypeFor(Domain::DocumentObjectType::SimpleText));
     writer.writeAttribute(xml::kVersionAttribute, "1.0");
 
     const QStringList paragraphs = QString(_text).remove('\r').split('\n');

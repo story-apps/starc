@@ -45,6 +45,16 @@ public:
     int currentTab() const;
 
     /**
+     * @brief Удалить вкладку
+     */
+    void removeTab(int _tabIndex);
+
+    /**
+     * @brief rУдалить все вкладки
+     */
+    void removeAllTabs();
+
+    /**
      * @brief Вычисляем идеальный размер в зависимости от контента
      */
     /** @{ */

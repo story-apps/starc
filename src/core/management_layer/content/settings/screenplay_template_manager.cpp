@@ -2,7 +2,10 @@
 
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
+#include <business_layer/templates/audioplay_template.h>
+#include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
@@ -20,13 +23,20 @@
 
 #include <QTimer>
 
+#include <variant>
+
 
 namespace ManagementLayer {
 
-class ScreenplayTemplateManager::Implementation
+class TemplateOptionsManager::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent, const PluginsBuilder& _pluginsBuilder);
+
+    /**
+     * @brief Подготовить представление к редактированию заданного шаблона
+     */
+    void prepareViewToEdit(const QString& _templateId, bool _isNewTemplate);
 
     /**
      * @brief Получить заданное значение в текущей метрике
@@ -79,7 +89,30 @@ public:
     /**
      * @brief Редактируемый шаблон
      */
-    BusinessLayer::ScreenplayTemplate currentTemplate;
+    struct {
+        void clear()
+        {
+            *this = {};
+        }
+
+        BusinessLayer::TextTemplate& get()
+        {
+            if (screenplay.isValid()) {
+                return screenplay;
+            } else if (comicBook.isValid()) {
+                return comicBook;
+            } else if (audioplay.isValid()) {
+                return audioplay;
+            } else {
+                return simpleText;
+            }
+        }
+
+        BusinessLayer::SimpleTextTemplate simpleText;
+        BusinessLayer::ScreenplayTemplate screenplay;
+        BusinessLayer::ComicBookTemplate comicBook;
+        BusinessLayer::AudioplayTemplate audioplay;
+    } currentTemplate;
 
     /**
      * @brief Изменён ли текущий шаблон
@@ -97,6 +130,8 @@ public:
     Ui::ScreenplayTemplateParagraphsView* paragraphsView = nullptr;
     Ui::ScreenplayTemplateViewToolBar* viewToolBar = nullptr;
 
+    Domain::DocumentObjectType currentDocumentType = Domain::DocumentObjectType::Undefined;
+
     const PluginsBuilder& pluginsBuilder;
     BusinessLayer::ScreenplayInformationModel informationModel;
     BusinessLayer::ScreenplayTitlePageModel titlePageModel;
@@ -104,8 +139,8 @@ public:
     QWidget* titlePageView = nullptr;
 };
 
-ScreenplayTemplateManager::Implementation::Implementation(QWidget* _parent,
-                                                          const PluginsBuilder& _pluginsBuilder)
+TemplateOptionsManager::Implementation::Implementation(QWidget* _parent,
+                                                       const PluginsBuilder& _pluginsBuilder)
     : toolBar(new Ui::ScreenplayTemplateToolBar(_parent))
     , navigator(new Ui::ScreenplayTemplateNavigator(_parent))
     , pageView(new Ui::ScreenplayTemplatePageView(_parent))
@@ -124,68 +159,109 @@ ScreenplayTemplateManager::Implementation::Implementation(QWidget* _parent,
     viewToolBar->hide();
 }
 
-qreal ScreenplayTemplateManager::Implementation::mmToCurrentMetrics(qreal _value) const
+void TemplateOptionsManager::Implementation::prepareViewToEdit(const QString& _templateId,
+                                                               bool _isNewTemplate)
+{
+    toolBar->checkPageSettings();
+    navigator->checkMm();
+    paragraphsView->selectFirstParagraphTypeTab();
+
+    currentTemplate.clear();
+    switch (currentDocumentType) {
+    default:
+    case Domain::DocumentObjectType::SimpleText: {
+        currentTemplate.simpleText
+            = BusinessLayer::TemplatesFacade::simpleTextTemplate(_templateId);
+        break;
+    }
+
+    case Domain::DocumentObjectType::Screenplay: {
+        currentTemplate.screenplay
+            = BusinessLayer::TemplatesFacade::screenplayTemplate(_templateId);
+        break;
+    }
+
+    case Domain::DocumentObjectType::ComicBook: {
+        currentTemplate.comicBook = BusinessLayer::TemplatesFacade::comicBookTemplate(_templateId);
+        break;
+    }
+
+    case Domain::DocumentObjectType::Audioplay: {
+        currentTemplate.audioplay = BusinessLayer::TemplatesFacade::audioplayTemplate(_templateId);
+        break;
+    }
+    }
+    if (_isNewTemplate) {
+        currentTemplate.get().setIsNew();
+    }
+
+    updatePageParameters();
+    updateTitlePageParameters();
+    updateParagraphParameters(paragraphsView->currentParagraphType());
+}
+
+qreal TemplateOptionsManager::Implementation::mmToCurrentMetrics(qreal _value) const
 {
     return useMm ? _value : MeasurementHelper::mmToInch(_value);
 }
 
-QMarginsF ScreenplayTemplateManager::Implementation::mmMarginsToCurrentMetrics(
+QMarginsF TemplateOptionsManager::Implementation::mmMarginsToCurrentMetrics(
     const QMarginsF& _margins) const
 {
     return { mmToCurrentMetrics(_margins.left()), mmToCurrentMetrics(_margins.top()),
              mmToCurrentMetrics(_margins.right()), mmToCurrentMetrics(_margins.bottom()) };
 }
 
-qreal ScreenplayTemplateManager::Implementation::mmFromCurrentMetrics(qreal _value) const
+qreal TemplateOptionsManager::Implementation::mmFromCurrentMetrics(qreal _value) const
 {
     return useMm ? _value : MeasurementHelper::inchToMm(_value);
 }
 
-QMarginsF ScreenplayTemplateManager::Implementation::mmMarginsFromCurrentMetrics(
+QMarginsF TemplateOptionsManager::Implementation::mmMarginsFromCurrentMetrics(
     const QMarginsF& _margins) const
 {
     return { mmFromCurrentMetrics(_margins.left()), mmFromCurrentMetrics(_margins.top()),
              mmFromCurrentMetrics(_margins.right()), mmFromCurrentMetrics(_margins.bottom()) };
 }
 
-void ScreenplayTemplateManager::Implementation::updatePageParameters()
+void TemplateOptionsManager::Implementation::updatePageParameters()
 {
-    pageView->setTemplateName(currentTemplate.name());
-    pageView->setPageSize(currentTemplate.pageSizeId());
-    pageView->setPageMargins(mmMarginsToCurrentMetrics(currentTemplate.pageMargins()));
-    pageView->setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
-    pageView->setLeftHalfOfPage(currentTemplate.leftHalfOfPageWidthPercents());
+    pageView->setTemplateName(currentTemplate.get().name());
+    pageView->setPageSize(currentTemplate.get().pageSizeId());
+    pageView->setPageMargins(mmMarginsToCurrentMetrics(currentTemplate.get().pageMargins()));
+    pageView->setPageNumbersAlignment(currentTemplate.get().pageNumbersAlignment());
+    pageView->setLeftHalfOfPage(currentTemplate.get().leftHalfOfPageWidthPercents());
 }
 
-void ScreenplayTemplateManager::Implementation::savePageParameters()
+void TemplateOptionsManager::Implementation::savePageParameters()
 {
-    currentTemplate.setName(pageView->templateName());
-    currentTemplate.setPageSizeId(pageView->pageSizeId());
-    currentTemplate.setPageMargins(mmMarginsFromCurrentMetrics(pageView->pageMargins()));
-    currentTemplate.setPageNumbersAlignment(pageView->pageNumbersAlignment());
-    currentTemplate.setLeftHalfOfPageWidthPercents(pageView->leftHalfOfPageWidthPercents());
+    currentTemplate.get().setName(pageView->templateName());
+    currentTemplate.get().setPageSizeId(pageView->pageSizeId());
+    currentTemplate.get().setPageMargins(mmMarginsFromCurrentMetrics(pageView->pageMargins()));
+    currentTemplate.get().setPageNumbersAlignment(pageView->pageNumbersAlignment());
+    currentTemplate.get().setLeftHalfOfPageWidthPercents(pageView->leftHalfOfPageWidthPercents());
 }
 
-void ScreenplayTemplateManager::Implementation::updateTitlePageParameters()
+void TemplateOptionsManager::Implementation::updateTitlePageParameters()
 {
     titlePageModel.setDocument(nullptr);
     informationModel.setOverrideCommonSettings(true);
-    informationModel.setTemplateId(currentTemplate.id());
-    titlePageDocument->setContent(currentTemplate.titlePage().toUtf8());
+    informationModel.setTemplateId(currentTemplate.get().id());
+    titlePageDocument->setContent(currentTemplate.get().titlePage().toUtf8());
     titlePageModel.setDocument(titlePageDocument.data());
 }
 
-void ScreenplayTemplateManager::Implementation::saveTitlePage()
+void TemplateOptionsManager::Implementation::saveTitlePage()
 {
     QString titlePageXml = titlePageDocument->content();
     titlePageXml.remove(QLatin1String("<?xml version=\"1.0\"?>"));
-    currentTemplate.setTitlePage(titlePageXml);
+    currentTemplate.get().setTitlePage(titlePageXml);
 }
 
-void ScreenplayTemplateManager::Implementation::updateParagraphParameters(
+void TemplateOptionsManager::Implementation::updateParagraphParameters(
     BusinessLayer::TextParagraphType _paragraphType)
 {
-    const auto paragraphStyle = currentTemplate.paragraphStyle(_paragraphType);
+    const auto paragraphStyle = currentTemplate.get().paragraphStyle(_paragraphType);
     paragraphsView->setParagraphEnabled(paragraphStyle.isActive());
     paragraphsView->setFontFamily(paragraphStyle.font().family());
     paragraphsView->setFontSize(MeasurementHelper::pxToPt(paragraphStyle.font().pixelSize()));
@@ -212,12 +288,14 @@ void ScreenplayTemplateManager::Implementation::updateParagraphParameters(
         mmToCurrentMetrics(paragraphStyle.marginsOnHalfPage().right()));
     paragraphsView->setLineSpacingType(static_cast<int>(paragraphStyle.lineSpacingType()));
     paragraphsView->setLineSpacingValue(mmToCurrentMetrics(paragraphStyle.lineSpacingValue()));
+    paragraphsView->setShowParagraphTitle(paragraphStyle.isTitleVisible());
+    paragraphsView->setCustomParagraphTitle(paragraphStyle.title());
 }
 
-void ScreenplayTemplateManager::Implementation::saveParagraphParameters(
+void TemplateOptionsManager::Implementation::saveParagraphParameters(
     BusinessLayer::TextParagraphType _paragraphType)
 {
-    auto paragraphStyle = currentTemplate.paragraphStyle(_paragraphType);
+    auto paragraphStyle = currentTemplate.get().paragraphStyle(_paragraphType);
     paragraphStyle.setActive(paragraphsView->isParagraphEnabled());
     paragraphStyle.setStartFromNewPage(paragraphsView->isStartsFromNewPage());
     QFont font(paragraphsView->fontFamily());
@@ -248,16 +326,41 @@ void ScreenplayTemplateManager::Implementation::saveParagraphParameters(
     paragraphStyle.setLineSpacingType(static_cast<BusinessLayer::TextBlockStyle::LineSpacingType>(
         paragraphsView->lineSpacingType()));
     paragraphStyle.setLineSpacingValue(mmFromCurrentMetrics(paragraphsView->lineSpacingValue()));
+    paragraphStyle.setTitleVisible(paragraphsView->showParagraphTitle());
+    paragraphStyle.setTitle(paragraphsView->customParagraphTitle());
 
-    currentTemplate.setParagraphStyle(paragraphStyle);
+    currentTemplate.get().setParagraphStyle(paragraphStyle);
 }
 
-void ScreenplayTemplateManager::Implementation::saveTemplate()
+void TemplateOptionsManager::Implementation::saveTemplate()
 {
     savePageParameters();
     saveTitlePage();
     saveParagraphParameters(paragraphsView->currentParagraphType());
-    BusinessLayer::TemplatesFacade::saveScreenplayTemplate(currentTemplate);
+
+    switch (currentDocumentType) {
+    default:
+    case Domain::DocumentObjectType::SimpleText: {
+        BusinessLayer::TemplatesFacade::saveSimpleTextTemplate(currentTemplate.simpleText);
+        break;
+    }
+
+    case Domain::DocumentObjectType::Screenplay: {
+        BusinessLayer::TemplatesFacade::saveScreenplayTemplate(currentTemplate.screenplay);
+        break;
+    }
+
+    case Domain::DocumentObjectType::ComicBook: {
+        BusinessLayer::TemplatesFacade::saveComicBookTemplate(currentTemplate.comicBook);
+        break;
+    }
+
+    case Domain::DocumentObjectType::Audioplay: {
+        BusinessLayer::TemplatesFacade::saveAudioplayTemplate(currentTemplate.audioplay);
+        break;
+    }
+    }
+
 
     currentTemplateChanged = false;
 }
@@ -266,8 +369,8 @@ void ScreenplayTemplateManager::Implementation::saveTemplate()
 // ****
 
 
-ScreenplayTemplateManager::ScreenplayTemplateManager(QObject* _parent, QWidget* _parentWidget,
-                                                     const PluginsBuilder& _pluginsBuilder)
+TemplateOptionsManager::TemplateOptionsManager(QObject* _parent, QWidget* _parentWidget,
+                                               const PluginsBuilder& _pluginsBuilder)
     : QObject(_parent)
     , d(new Implementation(_parentWidget, _pluginsBuilder))
 {
@@ -398,39 +501,43 @@ ScreenplayTemplateManager::ScreenplayTemplateManager(QObject* _parent, QWidget* 
             markChanged);
 }
 
-ScreenplayTemplateManager::~ScreenplayTemplateManager() = default;
+TemplateOptionsManager::~TemplateOptionsManager() = default;
 
-QWidget* ScreenplayTemplateManager::toolBar() const
+QWidget* TemplateOptionsManager::toolBar() const
 {
     return d->toolBar;
 }
 
-QWidget* ScreenplayTemplateManager::navigator() const
+QWidget* TemplateOptionsManager::navigator() const
 {
     return d->navigator;
 }
 
-QWidget* ScreenplayTemplateManager::view() const
+QWidget* TemplateOptionsManager::view() const
 {
     return d->pageView;
 }
 
-QWidget* ScreenplayTemplateManager::viewToolBar() const
+QWidget* TemplateOptionsManager::viewToolBar() const
 {
     return d->viewToolBar;
 }
 
-void ScreenplayTemplateManager::editTemplate(const QString& _templateId)
+void TemplateOptionsManager::setCurrentDocumentType(Domain::DocumentObjectType _type)
 {
-    d->toolBar->checkPageSettings();
-    d->navigator->checkMm();
-    d->paragraphsView->setCurrentParagraphType(BusinessLayer::TextParagraphType::SceneHeading);
+    if (d->currentDocumentType == _type) {
+        return;
+    }
 
-    d->currentTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(_templateId);
+    d->currentDocumentType = _type;
+    d->toolBar->setTitlePageVisible(_type != Domain::DocumentObjectType::SimpleText);
+    d->paragraphsView->configureTemplateFor(d->currentDocumentType);
+}
 
-    d->updatePageParameters();
-    d->updateTitlePageParameters();
-    d->updateParagraphParameters(d->paragraphsView->currentParagraphType());
+void TemplateOptionsManager::editTemplate(const QString& _templateId)
+{
+    const bool isNewTemplate = false;
+    d->prepareViewToEdit(_templateId, isNewTemplate);
 
     //
     // Пометим что шаблон не был изменён отложенно, т.к. в редакторе текста стоит дебаунсинг на
@@ -439,18 +546,10 @@ void ScreenplayTemplateManager::editTemplate(const QString& _templateId)
     QTimer::singleShot(300, this, [this] { d->currentTemplateChanged = false; });
 }
 
-void ScreenplayTemplateManager::duplicateTemplate(const QString& _templateId)
+void TemplateOptionsManager::duplicateTemplate(const QString& _templateId)
 {
-    d->toolBar->checkPageSettings();
-    d->navigator->checkMm();
-    d->paragraphsView->setCurrentParagraphType(BusinessLayer::TextParagraphType::SceneHeading);
-
-    d->currentTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(_templateId);
-    d->currentTemplate.setIsNew();
-
-    d->updatePageParameters();
-    d->updateTitlePageParameters();
-    d->updateParagraphParameters(d->paragraphsView->currentParagraphType());
+    const bool isNewTemplate = true;
+    d->prepareViewToEdit(_templateId, isNewTemplate);
 
     d->currentTemplateChanged = true;
 }

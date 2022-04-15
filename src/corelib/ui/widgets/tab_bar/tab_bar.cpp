@@ -369,6 +369,20 @@ int TabBar::currentTab() const
     return d->currentTabIndex;
 }
 
+void TabBar::removeTab(int _tabIndex)
+{
+    if (0 <= _tabIndex && _tabIndex < d->tabs.size()) {
+        d->tabs.remove(_tabIndex);
+    }
+}
+
+void TabBar::removeAllTabs()
+{
+    while (!d->tabs.isEmpty()) {
+        removeTab(0);
+    }
+}
+
 QSize TabBar::minimumSizeHint() const
 {
     QSizeF sizeHint;

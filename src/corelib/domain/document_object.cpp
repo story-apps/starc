@@ -42,7 +42,7 @@ const QHash<DocumentObjectType, QByteArray> kDocumentObjectTypeToMimeType = {
     { DocumentObjectType::Locations, "application/x-starc/document/locations" },
     { DocumentObjectType::Location, "application/x-starc/document/location" },
     { DocumentObjectType::Folder, "application/x-starc/document/folder" },
-    { DocumentObjectType::Text, "application/x-starc/document/text" }
+    { DocumentObjectType::SimpleText, "application/x-starc/document/text" }
 };
 const QHash<DocumentObjectType, QString> kDocumentObjectTypeToIcon
     = { { DocumentObjectType::Undefined, u8"\U000f078b" },
@@ -70,7 +70,7 @@ const QHash<DocumentObjectType, QString> kDocumentObjectTypeToIcon
         { DocumentObjectType::Locations, u8"\U000f0d15" },
         { DocumentObjectType::Location, u8"\U000f02dc" },
         { DocumentObjectType::Folder, u8"\U000F024B" },
-        { DocumentObjectType::Text, u8"\U000F021A" } };
+        { DocumentObjectType::SimpleText, u8"\U000F021A" } };
 } // namespace
 
 QByteArray mimeTypeFor(DocumentObjectType _type)
