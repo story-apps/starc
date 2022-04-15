@@ -37,9 +37,9 @@ QColor ColorHelper::inverted(const QColor& _color)
     return _color.rgb() ^ 0xffffff;
 }
 
-QColor ColorHelper::nearby(const QColor& _color)
+QColor ColorHelper::nearby(const QColor& _color, int _f)
 {
-    return isColorLight(_color) ? _color.darker(110) : _color.lighter(130);
+    return isColorLight(_color) ? _color.darker(_f) : _color.lighter(_f + 20);
 }
 
 QString ColorHelper::toString(const QColor& _color)

@@ -38,7 +38,7 @@ public:
     /**
      * @brief Получить цвет рядом с заданым
      */
-    static QColor nearby(const QColor& _color);
+    static QColor nearby(const QColor& _color, int _f = 110);
 
     /**
      * @brief Сформировать строку из цвета

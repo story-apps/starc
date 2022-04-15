@@ -237,6 +237,7 @@ SOURCES += \
     ui/widgets/splitter/splitter.cpp \
     ui/widgets/stack_widget/stack_widget.cpp \
     ui/widgets/stepper/stepper.cpp \
+    ui/widgets/toggle/toggle.cpp \
     ui/widgets/tab_bar/tab_bar.cpp \
     ui/widgets/task_bar/task_bar.cpp \
     ui/widgets/text_edit/base/base_text_edit.cpp \
@@ -478,6 +479,7 @@ HEADERS += \
     ui/widgets/splitter/splitter.h \
     ui/widgets/stack_widget/stack_widget.h \
     ui/widgets/stepper/stepper.h \
+    ui/widgets/toggle/toggle.h \
     ui/widgets/tab_bar/tab_bar.h \
     ui/widgets/task_bar/task_bar.h \
     ui/widgets/text_edit/base/base_text_edit.h \

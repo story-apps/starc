@@ -462,6 +462,37 @@ public:
     };
 
     /**
+     * @brief Параметры виджета переключателя
+     */
+    class CORE_LIBRARY_EXPORT Toggle
+    {
+    public:
+        ~Toggle();
+
+        /**
+         * @brief Размер трека
+         */
+        QSizeF trackSize() const;
+
+        /**
+         * @brief Размер пипки
+         */
+        QSizeF tumblerSize() const;
+
+        /**
+         * @brief На сколько тумблер выходит на пределы трека
+         */
+        qreal tumblerOverflow() const;
+
+    private:
+        explicit Toggle(qreal _scaleFactor);
+        friend class DesignSystemPrivate;
+        //
+        class Implementation;
+        QScopedPointer<Implementation> d;
+    };
+
+    /**
      * @brief Параметры виджета слайдера
      */
     class CORE_LIBRARY_EXPORT Slider
@@ -1281,6 +1312,11 @@ public:
      * @brief Параметры флажка
      */
     static const CheckBox& checkBox();
+
+    /**
+     * @brief Параметры переключателя
+     */
+    static const Toggle& toggle();
 
     /**
      * @brief Параметры слайдера

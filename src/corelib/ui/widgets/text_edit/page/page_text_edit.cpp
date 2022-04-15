@@ -1821,7 +1821,6 @@ void PageTextEditPrivate::paintPagesView(QPainter* _painter)
         const QPixmap shadow
             = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
                                       shadowHeight, Ui::DesignSystem::color().shadow(), useCache);
-
         _painter->drawPixmap(pageRect.topLeft(), shadow);
         //
         // ... рисуем сам фон
@@ -2559,7 +2558,6 @@ QPoint PageTextEditPrivate::cursorForPosition(const QPoint& _eventPos) const
             } while (!cursor.atStart());
             cursor.setPosition(bestPosition);
         }
-
     };
 
     QPoint localPos = viewport->mapFromParent(_eventPos);

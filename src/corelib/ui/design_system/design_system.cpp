@@ -963,6 +963,51 @@ DesignSystem::CheckBox::CheckBox(qreal _scaleFactor)
 // ****
 
 
+class DesignSystem::Toggle::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor);
+
+    QSizeF trackSize = { 32.0, 14.0 };
+    QSizeF tumblerSize = { 22.0, 22.0 };
+    qreal tumblerOverflow = 4.0;
+};
+
+DesignSystem::Toggle::Implementation::Implementation(qreal _scaleFactor)
+{
+    trackSize *= _scaleFactor;
+    tumblerSize *= _scaleFactor;
+    tumblerOverflow *= _scaleFactor;
+}
+
+// **
+
+DesignSystem::Toggle::~Toggle() = default;
+
+QSizeF DesignSystem::Toggle::trackSize() const
+{
+    return d->trackSize;
+}
+
+QSizeF DesignSystem::Toggle::tumblerSize() const
+{
+    return d->tumblerSize;
+}
+
+qreal DesignSystem::Toggle::tumblerOverflow() const
+{
+    return d->tumblerOverflow;
+}
+
+DesignSystem::Toggle::Toggle(qreal _scaleFactor)
+    : d(new Implementation(_scaleFactor))
+{
+}
+
+
+// ****
+
+
 class DesignSystem::Slider::Implementation
 {
 public:
@@ -2061,6 +2106,7 @@ public:
     DesignSystem::ToggleButton toggleButton;
     DesignSystem::RadioButton radioButton;
     DesignSystem::CheckBox checkBox;
+    DesignSystem::Toggle toggle;
     DesignSystem::Slider slider;
     DesignSystem::ProgressBar progressBar;
     DesignSystem::TextField textField;
@@ -2094,6 +2140,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
     , toggleButton(_scaleFactor)
     , radioButton(_scaleFactor)
     , checkBox(_scaleFactor)
+    , toggle(_scaleFactor)
     , slider(_scaleFactor)
     , progressBar(_scaleFactor)
     , textField(_scaleFactor)
@@ -2356,6 +2403,11 @@ const DesignSystem::RadioButton& DesignSystem::radioButton()
 const DesignSystem::CheckBox& DesignSystem::checkBox()
 {
     return instance()->d->checkBox;
+}
+
+const DesignSystem::Toggle& DesignSystem::toggle()
+{
+    return instance()->d->toggle;
 }
 
 const DesignSystem::Slider& DesignSystem::slider()
