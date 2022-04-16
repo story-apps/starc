@@ -2,6 +2,7 @@
 
 #include "../widgets/page_layout.h"
 
+#include <domain/document_object.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/label/label.h>
@@ -90,6 +91,8 @@ ScreenplayTemplatePageView::Implementation::Implementation(QWidget* _parent)
     , pageSplitterRight(new CaptionLabel(card))
     , pageLayoutPreview(new PageLayout(card))
 {
+    card->setResizingActive(false);
+
     auto pageFormatGroup = new RadioButtonGroup(card);
     pageFormatGroup->add(pageFormatA4);
     pageFormatGroup->add(pageFormatLetter);
@@ -230,6 +233,18 @@ void ScreenplayTemplatePageView::setUseMm(bool _mm)
     // Обновим переводы
     //
     updateTranslations();
+}
+
+void ScreenplayTemplatePageView::configureTemplateFor(Domain::DocumentObjectType _type)
+{
+    for (auto widget : std::vector<Widget*>{
+             d->pageSplitter,
+             d->pageSplitterTitle,
+             d->pageSplitterLeft,
+             d->pageSplitterRight,
+         }) {
+        widget->setVisible(_type != Domain::DocumentObjectType::SimpleText);
+    }
 }
 
 QString ScreenplayTemplatePageView::templateName() const

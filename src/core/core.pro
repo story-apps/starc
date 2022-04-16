@@ -57,8 +57,8 @@ SOURCES += \
     management_layer/content/project/project_models_facade.cpp \
     management_layer/content/projects/project.cpp \
     management_layer/content/projects/projects_manager.cpp \
-    management_layer/content/settings/screenplay_template_manager.cpp \
     management_layer/content/settings/settings_manager.cpp \
+    management_layer/content/settings/template_options_manager.cpp \
     management_layer/content/writing_session/writing_session_manager.cpp \
     management_layer/plugins_builder.cpp \
     ui/about_application_dialog.cpp \
@@ -116,8 +116,8 @@ HEADERS += \
     management_layer/content/project/project_models_facade.h \
     management_layer/content/projects/project.h \
     management_layer/content/projects/projects_manager.h \
-    management_layer/content/settings/screenplay_template_manager.h \
     management_layer/content/settings/settings_manager.h \
+    management_layer/content/settings/template_options_manager.h \
     management_layer/content/writing_session/writing_session_manager.h \
     management_layer/plugins_builder.h \
     ui/about_application_dialog.h \

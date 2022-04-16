@@ -194,6 +194,14 @@ signals:
     //
     // Редактирование шаблонов
     //
+    // ... простой текстовый документ
+    //
+    void editCurrentSimpleTextEditorTemplateRequested(const QString& _templateId);
+    void duplicateCurrentSimpleTextEditorTemplateRequested(const QString& _templateId);
+    void saveToFileCurrentSimpleTextEditorTemplateRequested(const QString& _templateId);
+    void removeCurrentSimpleTextEditorTemplateRequested(const QString& _templateId);
+    void loadFromFileSimpleTextEditorTemplateRequested();
+    //
     // ... сценарий
     //
     void editCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
@@ -201,6 +209,14 @@ signals:
     void saveToFileCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
     void removeCurrentScreenplayEditorTemplateRequested(const QString& _templateId);
     void loadFromFileScreenplayEditorTemplateRequested();
+    //
+    // ... комикс
+    //
+    void editCurrentComicBookEditorTemplateRequested(const QString& _templateId);
+    void duplicateCurrentComicBookEditorTemplateRequested(const QString& _templateId);
+    void saveToFileCurrentComicBookEditorTemplateRequested(const QString& _templateId);
+    void removeCurrentComicBookEditorTemplateRequested(const QString& _templateId);
+    void loadFromFileComicBookEditorTemplateRequested();
     //
     // ... аудиопостановка
     //

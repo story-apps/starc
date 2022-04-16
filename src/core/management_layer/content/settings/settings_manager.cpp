@@ -1,6 +1,6 @@
 #include "settings_manager.h"
 
-#include "screenplay_template_manager.h"
+#include "template_options_manager.h"
 
 #include <3rd_party/webloader/src/NetworkRequest.h>
 #include <business_layer/templates/audioplay_template.h>
@@ -496,6 +496,57 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
         d->templateOptionsManager->viewToolBar()->show();
     };
     //
+    // ... простой текстовый документ
+    //
+    connect(d->view, &Ui::SettingsView::editCurrentSimpleTextEditorTemplateRequested, this,
+            [this, showTemplateOptionsEditor](const QString& _templateId) {
+                d->templateOptionsManager->setCurrentDocumentType(
+                    Domain::DocumentObjectType::SimpleText);
+                d->templateOptionsManager->editTemplate(_templateId);
+                showTemplateOptionsEditor();
+            });
+    connect(d->view, &Ui::SettingsView::duplicateCurrentSimpleTextEditorTemplateRequested, this,
+            [this, showTemplateOptionsEditor](const QString& _templateId) {
+                d->templateOptionsManager->setCurrentDocumentType(
+                    Domain::DocumentObjectType::SimpleText);
+                d->templateOptionsManager->duplicateTemplate(_templateId);
+                showTemplateOptionsEditor();
+            });
+    connect(d->view, &Ui::SettingsView::saveToFileCurrentSimpleTextEditorTemplateRequested, this,
+            [this](const QString& _templateId) {
+                auto saveToFilePath = QFileDialog::getSaveFileName(
+                    d->view->topLevelWidget(), tr("Choose the file to save template"),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    DialogHelper::starcTemplateFilter());
+                if (saveToFilePath.isEmpty()) {
+                    return;
+                }
+
+                if (!saveToFilePath.endsWith(ExtensionHelper::starct())) {
+                    saveToFilePath.append(QString(".%1").arg(ExtensionHelper::starct()));
+                }
+                const auto simpleTextTemplate
+                    = BusinessLayer::TemplatesFacade::simpleTextTemplate(_templateId);
+                simpleTextTemplate.saveToFile(saveToFilePath);
+            });
+    connect(d->view, &Ui::SettingsView::removeCurrentSimpleTextEditorTemplateRequested, this,
+            [](const QString& _templateId) {
+                BusinessLayer::TemplatesFacade::removeSimpleTextTemplate(_templateId);
+            });
+    connect(d->view, &Ui::SettingsView::loadFromFileSimpleTextEditorTemplateRequested, this,
+            [this] {
+                const auto templateFilePath = QFileDialog::getOpenFileName(
+                    d->view->topLevelWidget(), tr("Choose the file with template to load"),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    DialogHelper::starcTemplateFilter());
+                if (templateFilePath.isEmpty()) {
+                    return;
+                }
+
+                const BusinessLayer::SimpleTextTemplate simpleTextTemplate(templateFilePath);
+                BusinessLayer::TemplatesFacade::saveSimpleTextTemplate(simpleTextTemplate);
+            });
+    //
     // ... сценарий
     //
     connect(d->view, &Ui::SettingsView::editCurrentScreenplayEditorTemplateRequested, this,
@@ -545,6 +596,57 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
 
                 const BusinessLayer::ScreenplayTemplate screenplayTemplate(templateFilePath);
                 BusinessLayer::TemplatesFacade::saveScreenplayTemplate(screenplayTemplate);
+            });
+    //
+    // ... комикс
+    //
+    connect(d->view, &Ui::SettingsView::editCurrentComicBookEditorTemplateRequested, this,
+            [this, showTemplateOptionsEditor](const QString& _templateId) {
+                d->templateOptionsManager->setCurrentDocumentType(
+                    Domain::DocumentObjectType::ComicBook);
+                d->templateOptionsManager->editTemplate(_templateId);
+                showTemplateOptionsEditor();
+            });
+    connect(d->view, &Ui::SettingsView::duplicateCurrentComicBookEditorTemplateRequested, this,
+            [this, showTemplateOptionsEditor](const QString& _templateId) {
+                d->templateOptionsManager->setCurrentDocumentType(
+                    Domain::DocumentObjectType::ComicBook);
+                d->templateOptionsManager->duplicateTemplate(_templateId);
+                showTemplateOptionsEditor();
+            });
+    connect(d->view, &Ui::SettingsView::saveToFileCurrentComicBookEditorTemplateRequested, this,
+            [this](const QString& _templateId) {
+                auto saveToFilePath = QFileDialog::getSaveFileName(
+                    d->view->topLevelWidget(), tr("Choose the file to save template"),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    DialogHelper::starcTemplateFilter());
+                if (saveToFilePath.isEmpty()) {
+                    return;
+                }
+
+                if (!saveToFilePath.endsWith(ExtensionHelper::starct())) {
+                    saveToFilePath.append(QString(".%1").arg(ExtensionHelper::starct()));
+                }
+                const auto comicBookTemplate
+                    = BusinessLayer::TemplatesFacade::comicBookTemplate(_templateId);
+                comicBookTemplate.saveToFile(saveToFilePath);
+            });
+    connect(d->view, &Ui::SettingsView::removeCurrentComicBookEditorTemplateRequested, this,
+            [](const QString& _templateId) {
+                BusinessLayer::TemplatesFacade::removeComicBookTemplate(_templateId);
+            });
+    connect(d->view, &Ui::SettingsView::loadFromFileComicBookEditorTemplateRequested, this,
+            [this] {
+                const auto templateFilePath = QFileDialog::getOpenFileName(
+                    d->view->topLevelWidget(), tr("Choose the file with template to load"),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    DialogHelper::starcTemplateFilter());
+                if (templateFilePath.isEmpty()) {
+                    return;
+                }
+
+                const BusinessLayer::ComicBookTemplate comicBookTemplate(templateFilePath);
+                BusinessLayer::TemplatesFacade::saveComicBookTemplate(comicBookTemplate);
             });
     //
     // ... аудиопостановка

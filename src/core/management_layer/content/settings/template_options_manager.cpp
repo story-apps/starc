@@ -1,4 +1,4 @@
-#include "screenplay_template_manager.h"
+#include "template_options_manager.h"
 
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
@@ -531,6 +531,7 @@ void TemplateOptionsManager::setCurrentDocumentType(Domain::DocumentObjectType _
 
     d->currentDocumentType = _type;
     d->toolBar->setTitlePageVisible(_type != Domain::DocumentObjectType::SimpleText);
+    d->pageView->configureTemplateFor(d->currentDocumentType);
     d->paragraphsView->configureTemplateFor(d->currentDocumentType);
 }
 

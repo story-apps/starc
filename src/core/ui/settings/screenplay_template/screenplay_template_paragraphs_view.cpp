@@ -118,6 +118,8 @@ ScreenplayTemplateParagraphsView::Implementation::Implementation(QWidget* _paren
     , customParagraphTitle(new TextField(card))
 
 {
+    card->setResizingActive(false);
+
     fontFamily->setModel(fontFamilyModel);
     fontFamilyModel->setStringList(QFontDatabase().families());
     fontSize->setModel(fontSizeModel);

@@ -4,7 +4,9 @@
 
 #include <business_layer/chronometry/chronometer.h>
 #include <business_layer/templates/audioplay_template.h>
+#include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -638,7 +640,6 @@ void SettingsView::Implementation::initSimpleTextCard()
     simpleTextEditorDefaultTemplate->setModel(
         BusinessLayer::TemplatesFacade::simpleTextTemplates());
     simpleTextEditorDefaultTemplateOptions->setIcon(u8"\U000F01D9");
-    simpleTextEditorDefaultTemplateOptions->hide();
     //
     auto linesGroup = new RadioButtonGroup(simpleTextCard);
     linesGroup->add(simpleTextNavigatorSceneDescriptionLines1);
@@ -1123,6 +1124,51 @@ SettingsView::SettingsView(QWidget* _parent)
 
         emit simpleTextAvailableChanged(_available);
     });
+    connect(d->simpleTextEditorDefaultTemplateOptions, &IconButton::clicked, this, [this] {
+        QVector<QAction*> actions;
+        const auto templateIndex = d->simpleTextEditorDefaultTemplate->currentIndex();
+        const auto templateId
+            = templateIndex.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString();
+        const auto isDefaultTemplate
+            = BusinessLayer::TemplatesFacade::simpleTextTemplate(templateId).isDefault();
+        //
+        if (!isDefaultTemplate) {
+            auto editAction = new QAction(tr("Edit"), d->contextMenu);
+            connect(editAction, &QAction::triggered, this, [this, templateId] {
+                emit editCurrentSimpleTextEditorTemplateRequested(templateId);
+            });
+            actions.append(editAction);
+        }
+        //
+        auto duplicateAction = new QAction(tr("Duplicate"), d->contextMenu);
+        connect(duplicateAction, &QAction::triggered, this, [this, templateId] {
+            emit duplicateCurrentSimpleTextEditorTemplateRequested(templateId);
+        });
+        actions.append(duplicateAction);
+        //
+        if (!isDefaultTemplate) {
+            auto saveToFileAction = new QAction(tr("Save to file"), d->contextMenu);
+            connect(saveToFileAction, &QAction::triggered, this, [this, templateId] {
+                emit saveToFileCurrentSimpleTextEditorTemplateRequested(templateId);
+            });
+            actions.append(saveToFileAction);
+            //
+            auto removeAction = new QAction(tr("Remove"), d->contextMenu);
+            connect(removeAction, &QAction::triggered, this, [this, templateId] {
+                emit removeCurrentSimpleTextEditorTemplateRequested(templateId);
+            });
+            actions.append(removeAction);
+        }
+        //
+        auto loadFromFileAction = new QAction(tr("Load template from file"), d->contextMenu);
+        loadFromFileAction->setSeparator(true);
+        connect(loadFromFileAction, &QAction::triggered, this,
+                &SettingsView::loadFromFileSimpleTextEditorTemplateRequested);
+        actions.append(loadFromFileAction);
+        //
+        d->contextMenu->setActions(actions);
+        d->contextMenu->showContextMenu(QCursor::pos());
+    });
     connect(d->simpleTextEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
             [this](const QModelIndex& _index) {
                 emit simpleTextEditorDefaultTemplateChanged(
@@ -1405,6 +1451,51 @@ SettingsView::SettingsView(QWidget* _parent)
         }
 
         emit comicBookAvailableChanged(_available);
+    });
+    connect(d->comicBookEditorDefaultTemplateOptions, &IconButton::clicked, this, [this] {
+        QVector<QAction*> actions;
+        const auto templateIndex = d->comicBookEditorDefaultTemplate->currentIndex();
+        const auto templateId
+            = templateIndex.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString();
+        const auto isDefaultTemplate
+            = BusinessLayer::TemplatesFacade::comicBookTemplate(templateId).isDefault();
+        //
+        if (!isDefaultTemplate) {
+            auto editAction = new QAction(tr("Edit"), d->contextMenu);
+            connect(editAction, &QAction::triggered, this, [this, templateId] {
+                emit editCurrentComicBookEditorTemplateRequested(templateId);
+            });
+            actions.append(editAction);
+        }
+        //
+        auto duplicateAction = new QAction(tr("Duplicate"), d->contextMenu);
+        connect(duplicateAction, &QAction::triggered, this, [this, templateId] {
+            emit duplicateCurrentComicBookEditorTemplateRequested(templateId);
+        });
+        actions.append(duplicateAction);
+        //
+        if (!isDefaultTemplate) {
+            auto saveToFileAction = new QAction(tr("Save to file"), d->contextMenu);
+            connect(saveToFileAction, &QAction::triggered, this, [this, templateId] {
+                emit saveToFileCurrentComicBookEditorTemplateRequested(templateId);
+            });
+            actions.append(saveToFileAction);
+            //
+            auto removeAction = new QAction(tr("Remove"), d->contextMenu);
+            connect(removeAction, &QAction::triggered, this, [this, templateId] {
+                emit removeCurrentComicBookEditorTemplateRequested(templateId);
+            });
+            actions.append(removeAction);
+        }
+        //
+        auto loadFromFileAction = new QAction(tr("Load template from file"), d->contextMenu);
+        loadFromFileAction->setSeparator(true);
+        connect(loadFromFileAction, &QAction::triggered, this,
+                &SettingsView::loadFromFileComicBookEditorTemplateRequested);
+        actions.append(loadFromFileAction);
+        //
+        d->contextMenu->setActions(actions);
+        d->contextMenu->showContextMenu(QCursor::pos());
     });
     connect(d->comicBookEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
             [this](const QModelIndex& _index) {
@@ -2539,8 +2630,10 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         textField->setTextColor(DesignSystem::color().onBackground());
     }
     for (auto textField : {
-             /*d->simpleTextEditorDefaultTemplate,*/ d->screenplayEditorDefaultTemplate,
-             /*d->comicBookEditorDefaultTemplate*/ d->audioplayEditorDefaultTemplate,
+             d->simpleTextEditorDefaultTemplate,
+             d->screenplayEditorDefaultTemplate,
+             d->comicBookEditorDefaultTemplate,
+             d->audioplayEditorDefaultTemplate,
          }) {
         textField->setCustomMargins({ isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0, 0,
                                       isLeftToRight() ? 0 : Ui::DesignSystem::layout().px24(), 0 });

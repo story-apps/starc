@@ -4,6 +4,10 @@
 
 #include <QPageSize>
 
+namespace Domain {
+enum class DocumentObjectType;
+}
+
 
 namespace Ui {
 
@@ -22,6 +26,11 @@ public:
      * @brief Использовать миллиметры (true) ли дюймы (false) для отображения параметров
      */
     void setUseMm(bool _mm);
+
+    /**
+     * @brief  Сконфигурировать параметры редактора для шаблона заданного типа документа
+     */
+    void configureTemplateFor(Domain::DocumentObjectType _type);
 
     //
     // Параметры шаблона
