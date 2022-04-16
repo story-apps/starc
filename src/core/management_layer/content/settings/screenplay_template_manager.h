@@ -20,7 +20,7 @@ class TemplateOptionsManager : public QObject
 
 public:
     explicit TemplateOptionsManager(QObject* _parent, QWidget* _parentWidget,
-                                       const PluginsBuilder& _pluginsBuilder);
+                                    const PluginsBuilder& _pluginsBuilder);
     ~TemplateOptionsManager() override;
 
     QWidget* toolBar() const;

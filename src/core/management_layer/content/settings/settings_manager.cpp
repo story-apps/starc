@@ -1,16 +1,16 @@
 #include "settings_manager.h"
-#include <domain/document_object.h>
 
 #include "screenplay_template_manager.h"
 
 #include <3rd_party/webloader/src/NetworkRequest.h>
 #include <business_layer/templates/audioplay_template.h>
-#include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/document_object.h>
 #include <ui/settings/language_dialog.h>
 #include <ui/settings/settings_navigator.h>
 #include <ui/settings/settings_tool_bar.h>
@@ -81,8 +81,7 @@ SettingsManager::Implementation::Implementation(QObject* _parent, QWidget* _pare
     : toolBar(new Ui::SettingsToolBar(_parentWidget))
     , navigator(new Ui::SettingsNavigator(_parentWidget))
     , view(new Ui::SettingsView(_parentWidget))
-    , templateOptionsManager(
-          new TemplateOptionsManager(_parent, _parentWidget, _pluginsBuilder))
+    , templateOptionsManager(new TemplateOptionsManager(_parent, _parentWidget, _pluginsBuilder))
 {
     toolBar->hide();
     navigator->hide();
@@ -585,19 +584,18 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             [](const QString& _templateId) {
                 BusinessLayer::TemplatesFacade::removeAudioplayTemplate(_templateId);
             });
-    connect(d->view, &Ui::SettingsView::loadFromFileAudioplayEditorTemplateRequested, this,
-            [this] {
-                const auto templateFilePath = QFileDialog::getOpenFileName(
-                    d->view->topLevelWidget(), tr("Choose the file with template to load"),
-                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
-                    DialogHelper::starcTemplateFilter());
-                if (templateFilePath.isEmpty()) {
-                    return;
-                }
+    connect(d->view, &Ui::SettingsView::loadFromFileAudioplayEditorTemplateRequested, this, [this] {
+        const auto templateFilePath = QFileDialog::getOpenFileName(
+            d->view->topLevelWidget(), tr("Choose the file with template to load"),
+            QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+            DialogHelper::starcTemplateFilter());
+        if (templateFilePath.isEmpty()) {
+            return;
+        }
 
-                const BusinessLayer::AudioplayTemplate audioplayTemplate(templateFilePath);
-                BusinessLayer::TemplatesFacade::saveAudioplayTemplate(audioplayTemplate);
-            });
+        const BusinessLayer::AudioplayTemplate audioplayTemplate(templateFilePath);
+        BusinessLayer::TemplatesFacade::saveAudioplayTemplate(audioplayTemplate);
+    });
     //
     // ... сам менеджер шаблона
     //

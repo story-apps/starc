@@ -2590,30 +2590,30 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         QMargins(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12(),
                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px16()));
     //
-    d->simpleTextCardLayout->setRowMinimumHeight(
-        d->simpleTextCardBottomSpacerIndex,
-        d->simpleTextAvailable->isChecked() ? Ui::DesignSystem::layout().px24()
-                                            : Ui::DesignSystem::layout().px12());
+    d->simpleTextCardLayout->setRowMinimumHeight(d->simpleTextCardBottomSpacerIndex,
+                                                 d->simpleTextAvailable->isChecked()
+                                                     ? Ui::DesignSystem::layout().px24()
+                                                     : Ui::DesignSystem::layout().px12());
     //
-    d->screenplayCardLayout->setRowMinimumHeight(
-        d->screenplayCardBottomSpacerIndex,
-        d->screenplayAvailable->isChecked() ? Ui::DesignSystem::layout().px24()
-                                            : Ui::DesignSystem::layout().px12());
+    d->screenplayCardLayout->setRowMinimumHeight(d->screenplayCardBottomSpacerIndex,
+                                                 d->screenplayAvailable->isChecked()
+                                                     ? Ui::DesignSystem::layout().px24()
+                                                     : Ui::DesignSystem::layout().px12());
     const auto screenplayDurationByCharactersRow
         = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
     d->screenplayCardLayout->setRowMinimumHeight(
         screenplayDurationByCharactersRow,
         d->screenplayAvailable->isChecked() ? Ui::DesignSystem::layout().px62() : 0.0);
     //
-    d->comicBookCardLayout->setRowMinimumHeight(
-        d->comicBookCardBottomSpacerIndex,
-        d->comicBookAvailable->isChecked() ? Ui::DesignSystem::layout().px24()
-                                           : Ui::DesignSystem::layout().px12());
+    d->comicBookCardLayout->setRowMinimumHeight(d->comicBookCardBottomSpacerIndex,
+                                                d->comicBookAvailable->isChecked()
+                                                    ? Ui::DesignSystem::layout().px24()
+                                                    : Ui::DesignSystem::layout().px12());
     //
-    d->audioplayCardLayout->setRowMinimumHeight(
-        d->audioplayCardBottomSpacerIndex,
-        d->audioplayAvailable->isChecked() ? Ui::DesignSystem::layout().px24()
-                                           : Ui::DesignSystem::layout().px12());
+    d->audioplayCardLayout->setRowMinimumHeight(d->audioplayCardBottomSpacerIndex,
+                                                d->audioplayAvailable->isChecked()
+                                                    ? Ui::DesignSystem::layout().px24()
+                                                    : Ui::DesignSystem::layout().px12());
     //
     d->shortcutsCardLayout->setRowMinimumHeight(
         d->shortcutsCardBottomSpacerIndex, static_cast<int>(Ui::DesignSystem::layout().px24()));
