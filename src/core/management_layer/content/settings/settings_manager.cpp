@@ -635,19 +635,18 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             [](const QString& _templateId) {
                 BusinessLayer::TemplatesFacade::removeComicBookTemplate(_templateId);
             });
-    connect(d->view, &Ui::SettingsView::loadFromFileComicBookEditorTemplateRequested, this,
-            [this] {
-                const auto templateFilePath = QFileDialog::getOpenFileName(
-                    d->view->topLevelWidget(), tr("Choose the file with template to load"),
-                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
-                    DialogHelper::starcTemplateFilter());
-                if (templateFilePath.isEmpty()) {
-                    return;
-                }
+    connect(d->view, &Ui::SettingsView::loadFromFileComicBookEditorTemplateRequested, this, [this] {
+        const auto templateFilePath = QFileDialog::getOpenFileName(
+            d->view->topLevelWidget(), tr("Choose the file with template to load"),
+            QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+            DialogHelper::starcTemplateFilter());
+        if (templateFilePath.isEmpty()) {
+            return;
+        }
 
-                const BusinessLayer::ComicBookTemplate comicBookTemplate(templateFilePath);
-                BusinessLayer::TemplatesFacade::saveComicBookTemplate(comicBookTemplate);
-            });
+        const BusinessLayer::ComicBookTemplate comicBookTemplate(templateFilePath);
+        BusinessLayer::TemplatesFacade::saveComicBookTemplate(comicBookTemplate);
+    });
     //
     // ... аудиопостановка
     //

@@ -242,5 +242,4 @@ private:
      *		 в документе, стандартная реализация иногда скачет сильно вниз
      */
     QPoint correctMousePosition(const QPoint& _eventPos) const;
-    QPoint cursorForPosition(const QPoint& _eventPos) const;
 };

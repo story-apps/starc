@@ -150,7 +150,7 @@ AudioplayParametersView::AudioplayParametersView(QWidget* _parent)
     connect(d->overrideCommonSettings, &CheckBox::checkedChanged, this, [this](bool _checked) {
         d->audioplayTemplate->setVisible(_checked);
         d->showBlockNumbers->setVisible(_checked);
-//        d->continueBlockNumbers->setVisible(_checked);
+        // d->continueBlockNumbers->setVisible(_checked);
     });
     connect(d->showBlockNumbers, &CheckBox::checkedChanged, d->continueBlockNumbers,
             &CheckBox::setEnabled);
