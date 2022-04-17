@@ -2511,8 +2511,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
          }) {
         toggle->setBackgroundColor(DesignSystem::color().background());
         toggle->setTextColor(DesignSystem::color().onBackground());
-        toggle->setContentsMargins(
-            0, Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16(), 0);
+        toggle->setContentsMargins(0, Ui::DesignSystem::layout().px16(),
+                                   Ui::DesignSystem::layout().px16(), 0);
     }
 
     auto labelMargins = Ui::DesignSystem::label().margins().toMargins();

@@ -714,6 +714,7 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     //
     // Подключим файл переводов программы
     //
+    Log::info("Setup translation for %1", translation);
     static QTranslator* appTranslator = [] {
         //
         // ... небольшой workaround для того, чтобы при запуске приложения кинуть событие о смене
