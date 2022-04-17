@@ -2289,10 +2289,12 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos) const
     //
     // Обработка попадания в невидимый блок
     //
-    int movementDelta = 5;
-    while (!cursor.block().isVisible()) {
-        cursor = q->cursorForPosition(_eventPos + QPoint(0, movementDelta));
-        movementDelta += 5;
+    const int maxMovement = 100;
+    const int movementDelta = 5;
+    int currentMovement = movementDelta;
+    while (!cursor.block().isVisible() && currentMovement < maxMovement) {
+        cursor = q->cursorForPosition(_eventPos + QPoint(0, currentMovement));
+        currentMovement += movementDelta;
     }
 
     //
