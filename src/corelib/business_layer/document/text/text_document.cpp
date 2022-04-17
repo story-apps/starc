@@ -2325,7 +2325,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     if (!itemsToMove.isEmpty()) {
                         d->model->takeItems(itemsToMove.constFirst(), itemsToMove.constLast(),
                                             grandParentItem);
-                        d->model->appendItems(itemsToMove, parentItem);
+                        d->model->insertItems(itemsToMove, parentItem);
                     }
                 }
             }
