@@ -707,14 +707,12 @@ SettingsStorage::Implementation::Implementation()
                                             TextParagraphType::SceneHeading);
         addAudioplayEditorStylesChangeByEnter(TextParagraphType::SceneHeading,
                                               TextParagraphType::SceneHeading);
-        addAudioplayEditorStylesChangeByTab(TextParagraphType::Character,
-                                            TextParagraphType::Character);
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::Character, TextParagraphType::Sound);
         addAudioplayEditorStylesChangeByEnter(TextParagraphType::Character,
-                                              TextParagraphType::Character);
-        addAudioplayEditorStylesChangeByTab(TextParagraphType::Dialogue,
-                                            TextParagraphType::Dialogue);
+                                              TextParagraphType::SceneHeading);
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::Dialogue, TextParagraphType::Sound);
         addAudioplayEditorStylesChangeByEnter(TextParagraphType::Dialogue,
-                                              TextParagraphType::Dialogue);
+                                              TextParagraphType::SceneHeading);
         addAudioplayEditorStylesChangeByTab(TextParagraphType::Sound, TextParagraphType::Sound);
         addAudioplayEditorStylesChangeByEnter(TextParagraphType::Sound, TextParagraphType::Sound);
         addAudioplayEditorStylesChangeByTab(TextParagraphType::Music, TextParagraphType::Music);
