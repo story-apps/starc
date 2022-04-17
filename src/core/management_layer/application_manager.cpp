@@ -1399,7 +1399,13 @@ ApplicationManager::ApplicationManager(QObject* _parent)
         = QString("%1/logs/%2.log")
               .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
                    QDateTime::currentDateTime().toString(Qt::ISODateWithMs));
-    Log::init(Log::Level::Debug, FileHelper::systemSavebleFileName(logFilePath));
+    const auto loggingLevel =
+#ifdef QT_DEBUG
+        Log::Level::Trace;
+#else
+        Log::Level::Debug;
+#endif
+    Log::init(loggingLevel, FileHelper::systemSavebleFileName(logFilePath));
 
 
     QApplication::setApplicationVersion("0.1.4-dev");
@@ -1865,6 +1871,7 @@ void ApplicationManager::initConnections()
     //
 
     auto configureConnectionStatus = [this](bool _connected) {
+        Log::trace("Connection status changed. %1.", _connected ? "Conected" : "Disconnected");
         d->accountManager->setConnected(_connected);
         d->connectionStatus->setConnectionAvailable(_connected);
     };

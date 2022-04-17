@@ -53,11 +53,10 @@ void Log::message(const QString& _message, Level _logLevel)
     }
 
     const QString time = QDateTime::currentDateTime().toString("yyyy.MM.dd HH:mm:ss.zzz");
-    const std::map<Log::Level, QString> level2String = { { Log::Level::Debug, "D" },
-                                                         { Log::Level::Info, "I" },
-                                                         { Log::Level::Warning, "W" },
-                                                         { Log::Level::Critical, "C" },
-                                                         { Log::Level::Fatal, "F" } };
+    const std::map<Log::Level, QString> level2String = {
+        { Log::Level::Trace, "T" },   { Log::Level::Debug, "D" },    { Log::Level::Info, "I" },
+        { Log::Level::Warning, "W" }, { Log::Level::Critical, "C" }, { Log::Level::Fatal, "F" },
+    };
     const auto logEntry = QString("%1 [%2] %3").arg(time, level2String.at(_logLevel), _message);
 
     std::cout << logEntry.toStdString() << std::endl;
