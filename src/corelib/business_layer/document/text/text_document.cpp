@@ -1817,7 +1817,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 // папки
                 //
                 const bool needInsertInNextFolder = itemParent->type() == TextModelItemType::Folder
-                    && itemParent->hasParent() && itemParent->parent()->childCount() > 1
+                    && itemParent->hasParent() && itemParent->parent()->childCount() > itemRow + 1
                     && itemParent->parent()->childAt(itemRow + 1)->type()
                         == TextModelItemType::Folder;
                 if (needInsertInNextFolder) {
@@ -2295,8 +2295,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 // А для папки, если она вставляется после сцены, то нужно перенести все текстовые
                 // элементы, которые идут после вставленной папки на уровень самой папки
                 //
-                else if (previousTextItem != nullptr
-                         && previousTextItem->parent()->type() == TextModelItemType::Group) {
+                else if (previousTextItem != nullptr && isGroup(previousTextItem->parent())) {
                     auto grandParentItem = previousTextItem->parent();
                     const int lastItemIndex = grandParentItem->rowOfChild(previousTextItem) + 1;
 
