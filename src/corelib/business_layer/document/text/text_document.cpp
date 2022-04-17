@@ -2246,7 +2246,20 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     //
                     // Соберём элементы для переноса
                     //
+                    bool firstTry = true;
                     do {
+                        //
+                        // Элементы для первого прохода уже настроены, поэтому переходим в поиске
+                        // на уровень выше только со второго прохода
+                        //
+                        if (!firstTry) {
+                            startChildIndex
+                                = grandParentItem->parent()->rowOfChild(grandParentItem);
+                            grandParentItem = grandParentItem->parent();
+                        } else {
+                            firstTry = false;
+                        }
+
                         QVector<TextModelItem*> itemsToMove;
                         //
                         // +1, т.к. начинаем со следующего элемента
@@ -2254,6 +2267,14 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                         for (int childIndex = startChildIndex + 1;
                              childIndex < grandParentItem->childCount(); ++childIndex) {
                             auto grandParentChildItem = grandParentItem->childAt(childIndex);
+                            //
+                            // В моменте, когда дошли до максимального родителя первоначальный
+                            // индекс будет указывать на вставляемый элемент, поэтому пропускаем его
+                            //
+                            if (grandParentChildItem == parentItem) {
+                                continue;
+                            }
+
                             if (grandParentChildItem->type() == TextModelItemType::Text) {
                                 const auto grandParentChildTextItem = toText(grandParentChildItem);
                                 if (grandParentChildTextItem->paragraphType()
@@ -2287,8 +2308,6 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                         if (grandParentItem->parent() == nullptr) {
                             break;
                         }
-                        startChildIndex = grandParentItem->parent()->rowOfChild(grandParentItem);
-                        grandParentItem = grandParentItem->parent();
                     } while (grandParentItem != parentItem->parent());
                 }
                 //
