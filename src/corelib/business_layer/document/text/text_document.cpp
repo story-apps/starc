@@ -1579,6 +1579,9 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
 
     using namespace BusinessLayer;
 
+    auto isFolder = [](TextModelItem* _item) {
+        return _item != nullptr && _item->type() == TextModelItemType::Folder;
+    };
     auto isGroup = [](TextModelItem* _item) {
         return _item != nullptr && _item->type() == TextModelItemType::Group;
     };
@@ -2141,6 +2144,19 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     if (previousItemParent->subtype() == parentItem->subtype()
                         || previousItemIsFolderFooter) {
                         d->model->insertItem(parentItem, previousItemParent);
+                    }
+                    //
+                    // Если вставляется папка на уровне группы, то вставим в родителя более высокого
+                    // уровня
+                    //
+                    else if (isFolder(parentItem) && !isFolder(previousItemParent)) {
+                        auto targetParent = previousItemParent;
+                        while (targetParent != nullptr
+                               && targetParent->parent()->type() != TextModelItemType::Folder) {
+                            targetParent = targetParent->parent();
+                        };
+                        Q_ASSERT(targetParent);
+                        d->model->insertItem(parentItem, targetParent);
                     }
                     //
                     // Если вставляется группа в позицию, где находится другая группа более
