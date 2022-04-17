@@ -41,10 +41,6 @@ void ScreenplayTextStructureModel::showBeats(bool _show)
 
 void ScreenplayTextStructureModel::setSourceModel(QAbstractItemModel* _sourceModel)
 {
-    if (d->screenplayModel) {
-        d->screenplayModel->disconnect(this);
-    }
-
     d->screenplayModel = qobject_cast<ScreenplayTextModel*>(_sourceModel);
     QSortFilterProxyModel::setSourceModel(_sourceModel);
 }

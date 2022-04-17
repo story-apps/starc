@@ -194,7 +194,9 @@ void ScreenplayTreatmentStructureManager::setModel(BusinessLayer::AbstractModel*
     // Разрываем соединения со старой моделью
     //
     if (d->model != nullptr) {
-        d->view->disconnect(d->model);
+        disconnect(d->model->informationModel(),
+                   &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view,
+                   &Ui::ScreenplayTreatmentStructureView::setTitle);
     }
 
     //
