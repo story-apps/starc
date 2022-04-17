@@ -83,13 +83,19 @@ void CardPopup::showPopup(const QPoint& _position, int _parentHeight, const QSiz
     const auto screenGeometry = screen->geometry();
     auto position = _position;
     //
-    // ... если попап не вмещается в нижнюю часть экрана
+    // ... если попап не вмещается в нижнюю часть экрана и при этом сверху больше места,
+    //     то показываем попап вверх
     //
-    if (position.y() + finalHeight > screenGeometry.bottom()) {
+    if (position.y() + finalHeight > screenGeometry.bottom()
+        && screenGeometry.bottom() - position.y() < position.y() - screenGeometry.top()) {
         position.setY(position.y() - _parentHeight);
         d->positionAnimation.setStartValue(position.y());
         d->positionAnimation.setEndValue(position.y() - static_cast<int>(finalHeight));
-    } else {
+    }
+    //
+    // ... в остальных случаях показываем попап вниз
+    //
+    else {
         d->positionAnimation.setStartValue(position.y());
         d->positionAnimation.setEndValue(position.y());
     }
