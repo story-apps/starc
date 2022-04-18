@@ -25,7 +25,6 @@ public:
 
 
     ComboBox* fileFormat = nullptr;
-    ComboBox* comicBookTemplate = nullptr;
     CheckBox* printTitlePage = nullptr;
     CheckBox* useWordsInPageHeadings = nullptr;
     CheckBox* printInlineNotes = nullptr;
@@ -40,7 +39,6 @@ public:
 
 ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     : fileFormat(new ComboBox(_parent))
-    , comicBookTemplate(new ComboBox(_parent))
     , printTitlePage(new CheckBox(_parent))
     , useWordsInPageHeadings(new CheckBox(_parent))
     , printInlineNotes(new CheckBox(_parent))
@@ -57,19 +55,6 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     auto formatsModel = new QStringListModel({ "PDF", "DOCX" });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
-
-    comicBookTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    comicBookTemplate->setModel(TemplatesFacade::comicBookTemplates());
-    for (int row = 0; row < TemplatesFacade::comicBookTemplates()->rowCount(); ++row) {
-        auto item = TemplatesFacade::comicBookTemplates()->item(row);
-        if (item->data(TemplatesFacade::kTemplateIdRole).toString()
-            != TemplatesFacade::comicBookTemplate().id()) {
-            continue;
-        }
-
-        comicBookTemplate->setCurrentIndex(item->index());
-        break;
-    }
 
     useWordsInPageHeadings->hide();
 
@@ -101,7 +86,6 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
 
     int row = 0;
     contentsLayout()->addWidget(d->fileFormat, row++, 0);
-    contentsLayout()->addWidget(d->comicBookTemplate, row++, 0);
     contentsLayout()->addWidget(d->printTitlePage, row++, 0);
     contentsLayout()->addWidget(d->useWordsInPageHeadings, row++, 0);
     contentsLayout()->addWidget(d->printInlineNotes, row++, 0);
@@ -134,7 +118,6 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
             break;
         }
         }
-        d->comicBookTemplate->setVisible(isComicBookTemplateVisible);
         d->printInlineNotes->setVisible(isPrintInlineNotesVisible);
         d->printReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->watermark->setVisible(isWatermarkVisible);
@@ -154,9 +137,6 @@ BusinessLayer::ComicBookExportOptions ComicBookExportDialog::exportOptions() con
     BusinessLayer::ComicBookExportOptions options;
     options.fileFormat = static_cast<BusinessLayer::ComicBookExportFileFormat>(
         d->fileFormat->currentIndex().row());
-    options.templateId = d->comicBookTemplate->currentIndex()
-                             .data(BusinessLayer::TemplatesFacade::kTemplateIdRole)
-                             .toString();
     options.printTiltePage = d->printTitlePage->isChecked();
     options.printFolders = false;
     options.useWordsInPageHeadings = d->useWordsInPageHeadings->isChecked();
@@ -187,7 +167,6 @@ void ComicBookExportDialog::updateTranslations()
     setTitle(tr("Export comic book"));
 
     d->fileFormat->setLabel(tr("Format"));
-    d->comicBookTemplate->setLabel(tr("Template"));
     d->printTitlePage->setText(tr("Print title page"));
     d->useWordsInPageHeadings->setText(tr("Print panels numbers in form of words"));
     d->printInlineNotes->setText(tr("Print inline notes"));
@@ -207,14 +186,15 @@ void ComicBookExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
     titleMargins.setTop(Ui::DesignSystem::layout().px8());
     titleMargins.setBottom(0);
 
-    for (auto textField :
-         QVector<TextField*>{ d->fileFormat, d->comicBookTemplate, d->watermark }) {
+    for (auto textField : std::vector<TextField*>{
+             d->fileFormat,
+             d->watermark,
+         }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
     for (auto combobox : {
              d->fileFormat,
-             d->comicBookTemplate,
          }) {
         combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
     }
