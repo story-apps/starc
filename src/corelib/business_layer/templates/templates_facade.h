@@ -49,6 +49,7 @@ public:
     static const ScreenplayTemplate& screenplayTemplate(const QString& _templateId = {});
     static const TextTemplate& screenplayTitlePageTemplate(const QString& _templateId = {});
     static const ComicBookTemplate& comicBookTemplate(const QString& _templateId = {});
+    static const TextTemplate& comicBookTitlePageTemplate(const QString& _templateId = {});
     static const AudioplayTemplate& audioplayTemplate(const QString& _templateId = {});
     static const TextTemplate& audioplayTitlePageTemplate(const QString& _templateId = {});
 

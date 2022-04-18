@@ -31,6 +31,12 @@ public:
     void setPrintFooterOnTitlePage(bool _print);
     Q_SIGNAL void printFooterOnTitlePageChanged(bool _print);
 
+    void setOverrideCommonSettings(bool _override);
+    Q_SIGNAL void overrideCommonSettingsChanged(bool _override);
+
+    void setComicBookTemplate(const QString& _templateId);
+    Q_SIGNAL void comicBookTemplateChanged(const QString& _templateId);
+
 protected:
     /**
      * @brief Обновить переводы

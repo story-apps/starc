@@ -3,9 +3,11 @@
 #include "comic_book_text_view.h"
 
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
+#include <ui/modules/bookmarks/bookmark_dialog.h>
 
 #include <QApplication>
 #include <QFileDialog>
@@ -14,7 +16,7 @@
 namespace ManagementLayer {
 
 namespace {
-const QString kSettingsKey = "screenplay-text";
+const QString kSettingsKey = "comic-book-text";
 QString cursorPositionFor(Domain::DocumentObject* _item)
 {
     return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
@@ -104,6 +106,70 @@ ComicBookTextManager::ComicBookTextManager(QObject* _parent)
 {
     connect(d->view, &Ui::ComicBookTextView::currentModelIndexChanged, this,
             &ComicBookTextManager::currentModelIndexChanged);
+    auto showBookmarkDialog = [this](Ui::BookmarkDialog::DialogType _type) {
+        auto item = d->model->itemForIndex(d->view->currentModelIndex());
+        if (item->type() != BusinessLayer::TextModelItemType::Text) {
+            return;
+        }
+
+        auto dialog = new Ui::BookmarkDialog(d->view->topLevelWidget());
+        dialog->setDialogType(_type);
+        if (_type == Ui::BookmarkDialog::DialogType::Edit) {
+            const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+            dialog->setBookmarkName(textItem->bookmark()->name);
+            dialog->setBookmarkColor(textItem->bookmark()->color);
+        }
+        connect(dialog, &Ui::BookmarkDialog::savePressed, this, [this, item, dialog] {
+            auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+            textItem->setBookmark({ dialog->bookmarkColor(), dialog->bookmarkName() });
+            d->model->updateItem(textItem);
+
+            dialog->hideDialog();
+        });
+        connect(dialog, &Ui::BookmarkDialog::disappeared, dialog, &Ui::BookmarkDialog::deleteLater);
+
+        //
+        // Отображаем диалог
+        //
+        dialog->showDialog();
+    };
+    connect(d->view, &Ui::ComicBookTextView::addBookmarkRequested, this, [showBookmarkDialog] {
+        showBookmarkDialog(Ui::BookmarkDialog::DialogType::CreateNew);
+    });
+    connect(d->view, &Ui::ComicBookTextView::editBookmarkRequested, this,
+            [showBookmarkDialog] { showBookmarkDialog(Ui::BookmarkDialog::DialogType::Edit); });
+    connect(d->view, &Ui::ComicBookTextView::createBookmarkRequested, this,
+            [this](const QString& _text, const QColor& _color) {
+                auto item = d->model->itemForIndex(d->view->currentModelIndex());
+                if (item->type() != BusinessLayer::TextModelItemType::Text) {
+                    return;
+                }
+
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+                textItem->setBookmark({ _color, _text });
+                d->model->updateItem(textItem);
+            });
+    connect(d->view, &Ui::ComicBookTextView::changeBookmarkRequested, this,
+            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
+                auto item = d->model->itemForIndex(_index);
+                if (item->type() != BusinessLayer::TextModelItemType::Text) {
+                    return;
+                }
+
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+                textItem->setBookmark({ _color, _text });
+                d->model->updateItem(textItem);
+            });
+    connect(d->view, &Ui::ComicBookTextView::removeBookmarkRequested, this, [this] {
+        auto item = d->model->itemForIndex(d->view->currentModelIndex());
+        if (item->type() != BusinessLayer::TextModelItemType::Text) {
+            return;
+        }
+
+        auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+        textItem->clearBookmark();
+        d->model->updateItem(textItem);
+    });
 }
 
 ComicBookTextManager::~ComicBookTextManager() = default;
@@ -150,18 +216,6 @@ void ComicBookTextManager::setModel(BusinessLayer::AbstractModel* _model)
         //
         // ... настраиваем соединения
         //
-        //        d->view->setName(d->model->name());
-        //        d->view->setText(d->model->text());
-
-        //        connect(d->model, &BusinessLayer::ComicBookTextModel::nameChanged,
-        //                d->view, &Ui::ComicBookTextView::setName);
-        //        connect(d->model, &BusinessLayer::ComicBookTextModel::textChanged,
-        //                d->view, &Ui::ComicBookTextView::setText);
-        //        //
-        //        connect(d->view, &Ui::ComicBookTextView::nameChanged,
-        //                d->model, &BusinessLayer::ComicBookTextModel::setName);
-        //        connect(d->view, &Ui::ComicBookTextView::textChanged,
-        //                d->model, &BusinessLayer::ComicBookTextModel::setText);
     }
 }
 

@@ -93,4 +93,24 @@ QString ComicBookTextDocument::dialogueNumber(const QTextBlock& _forBlock) const
     return textItem->number().value_or(TextModelTextItem::Number()).text;
 }
 
+TextModelTextItem::Bookmark ComicBookTextDocument::bookmark(const QTextBlock& _forBlock) const
+{
+    if (_forBlock.userData() == nullptr) {
+        return {};
+    }
+
+    const auto blockData = static_cast<TextBlockData*>(_forBlock.userData());
+    if (blockData == nullptr) {
+        return {};
+    }
+
+    const auto item = blockData->item();
+    if (item == nullptr || item->type() != TextModelItemType::Text) {
+        return {};
+    }
+
+    const auto textItem = static_cast<const TextModelTextItem*>(item);
+    return textItem->bookmark().value_or(TextModelTextItem::Bookmark());
+}
+
 } // namespace BusinessLayer

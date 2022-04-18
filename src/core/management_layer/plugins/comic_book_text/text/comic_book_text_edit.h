@@ -7,6 +7,7 @@ class CharactersModel;
 class LocationsModel;
 class ComicBookDictionariesModel;
 class TextCursor;
+class ComicBookTemplate;
 class ComicBookTextModel;
 enum class TextParagraphType;
 } // namespace BusinessLayer
@@ -36,6 +37,11 @@ public:
     void setShowDialogueNumber(bool _show);
 
     /**
+     * @brief Настроить необходимость корректировок
+     */
+    void setCorrectionOptions(bool _needToCorrectCharactersNames, bool _needToCorrectPageBreaks);
+
+    /**
      * @brief Задать модель текста сценария
      */
     void initWithModel(BusinessLayer::ComicBookTextModel* _model);
@@ -45,6 +51,11 @@ public:
      * @note Например в случае смены шаблона оформления сценария
      */
     void reinit();
+
+    /**
+     * @brief Текущий используемый шаблон оформления
+     */
+    const BusinessLayer::ComicBookTemplate& comicBookTemplate() const;
 
     /**
      * @brief Получить модель справочников сценария
@@ -114,6 +125,26 @@ signals:
      * @brief Изменён тип абзаца
      */
     void paragraphTypeChanged();
+
+    /**
+     * @brief Пользователь хочет добавить закладку
+     */
+    void addBookmarkRequested();
+
+    /**
+     * @brief Пользователь хочет изменить закладку
+     */
+    void editBookmarkRequested();
+
+    /**
+     * @brief Пользователь хочет удалить закладку
+     */
+    void removeBookmarkRequested();
+
+    /**
+     * @brief Пользователь хочет показать/скрыть список закладок
+     */
+    void showBookmarksRequested();
 
 protected:
     /**

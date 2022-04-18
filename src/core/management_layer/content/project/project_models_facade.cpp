@@ -327,7 +327,21 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ComicBookTitlePage: {
-            model = new BusinessLayer::ComicBookTitlePageModel;
+            auto titlePageModel = new BusinessLayer::ComicBookTitlePageModel;
+
+            const auto titlePageItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(titlePageItem);
+            Q_ASSERT(titlePageItem->parent());
+            const auto parentUuid = titlePageItem->parent()->uuid();
+
+            //
+            // Добавляем в модель титульной страницы, модель информации о комиксе
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::ComicBookInformationModel*>(modelFor(parentUuid));
+            titlePageModel->setInformationModel(informationModel);
+
+            model = titlePageModel;
             break;
         }
 

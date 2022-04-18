@@ -942,7 +942,7 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Прорисовка тайтлов блоков
                 //
-                const auto blockStyle = audioplayTemplate().paragraphStyle(blockType);
+                const auto blockStyle = d->audioplayTemplate().paragraphStyle(blockType);
                 if (blockStyle.isTitleVisible()) {
                     setPainterPen(palette().text().color());
                     painter.setFont(cursor.charFormat().font());
@@ -951,7 +951,7 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
                     // Определим область для отрисовки (отступы используем от стиля персонажа)
                     //
                     const auto characterStyle
-                        = audioplayTemplate().paragraphStyle(TextParagraphType::Character);
+                        = d->audioplayTemplate().paragraphStyle(TextParagraphType::Character);
                     const QPointF topLeft(
                         isLeftToRight ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
                                 + characterStyle.blockFormat(true).leftMargin()

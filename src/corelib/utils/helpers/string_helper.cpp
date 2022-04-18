@@ -16,6 +16,7 @@ const QHash<Qt::Alignment, QString> kAlignmentToString = {
 
 const QHash<QPageSize::PageSizeId, QString> kPageSizeIdToString = {
     { QPageSize::A4, QLatin1String("A4") },
+    { QPageSize::A5, QLatin1String("A5") },
     { QPageSize::Letter, QLatin1String("Letter") },
 };
 

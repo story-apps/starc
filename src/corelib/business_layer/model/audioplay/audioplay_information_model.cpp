@@ -15,22 +15,22 @@
 namespace BusinessLayer {
 
 namespace {
-const QString kDocumentKey = "document";
-const QString kNameKey = "name";
-const QString kTaglineKey = "tagline";
-const QString kLoglineKey = "logline";
-const QString kTitlePageVisibleKey = "title_page_visible";
-const QString kSynopsisVisibleKey = "synopsis_visible";
-const QString kAudioplayTextVisibleKey = "audioplay_text_visible";
-const QString kAudioplayStatisticsVisibleKey = "audioplay_statistics_visible";
-const QString kHeaderKey = "header";
-const QString kPrintHeaderOnTitlePageKey = "print_header_on_title";
-const QString kFooterKey = "footer";
-const QString kPrintFooterOnTitlePageKey = "print_footer_on_title";
-const QString kOverrideSystemSettingsKey = "override_system_settings";
-const QString kTemplateIdKey = "template_id";
-const QString kShowBlockNumbersKey = "show_block_numbers";
-const QString kContinueBlockNumbersKey = "continue_block_numbers";
+const QLatin1String kDocumentKey("document");
+const QLatin1String kNameKey("name");
+const QLatin1String kTaglineKey("tagline");
+const QLatin1String kLoglineKey("logline");
+const QLatin1String kTitlePageVisibleKey("title_page_visible");
+const QLatin1String kSynopsisVisibleKey("synopsis_visible");
+const QLatin1String kAudioplayTextVisibleKey("audioplay_text_visible");
+const QLatin1String kAudioplayStatisticsVisibleKey("audioplay_statistics_visible");
+const QLatin1String kHeaderKey("header");
+const QLatin1String kPrintHeaderOnTitlePageKey("print_header_on_title");
+const QLatin1String kFooterKey("footer");
+const QLatin1String kPrintFooterOnTitlePageKey("print_footer_on_title");
+const QLatin1String kOverrideSystemSettingsKey("override_system_settings");
+const QLatin1String kTemplateIdKey("template_id");
+const QLatin1String kShowBlockNumbersKey("show_block_numbers");
+const QLatin1String kContinueBlockNumbersKey("continue_block_numbers");
 } // namespace
 
 class AudioplayInformationModel::Implementation
@@ -47,6 +47,7 @@ public:
     bool printHeaderOnTitlePage = false;
     QString footer;
     bool printFooterOnTitlePage = false;
+
     bool overrideCommonSettings = false;
     QString templateId;
     bool showBlockNumbers = false;

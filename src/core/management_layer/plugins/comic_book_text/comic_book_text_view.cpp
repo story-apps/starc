@@ -8,12 +8,15 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/bookmarks/bookmarks_model.h>
+#include <ui/modules/bookmarks/bookmarks_view.h>
 #include <ui/modules/comments/comments_model.h>
 #include <ui/modules/comments/comments_toolbar.h>
 #include <ui/modules/comments/comments_view.h>
@@ -26,9 +29,11 @@
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/ui_helper.h>
 
 #include <QAction>
+#include <QPointer>
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QTimer>
@@ -41,12 +46,14 @@ const int kTypeDataRole = Qt::UserRole + 100;
 
 const int kFastFormatTabIndex = 0;
 const int kCommentsTabIndex = 1;
+const int kBookmarksTabIndex = 2;
 
 const QString kSettingsKey = "comicBook-text";
 const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
 const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
 const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+const QString kIsBookmarksListVisibleKey = kSettingsKey + "/is-bookmarks-list-visible";
 const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 } // namespace
 
@@ -54,6 +61,12 @@ class ComicBookTextView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
+
+    /**
+     * @brief Переконфигурировать представление
+     */
+    void reconfigureTemplate(bool _withModelReinitialization = true);
+    void reconfigureBlockNumbersVisibility();
 
     /**
      * @brief Обновить настройки UI панели инструментов
@@ -88,35 +101,56 @@ public:
                        const QString& _comment);
 
 
+    //
+    // Модели
+    //
+    QPointer<BusinessLayer::ComicBookTextModel> model;
     BusinessLayer::CommentsModel* commentsModel = nullptr;
+    BusinessLayer::BookmarksModel* bookmarksModel = nullptr;
 
+    //
+    // Редактор текста
+    //
     ComicBookTextEdit* comicBookText = nullptr;
     ComicBookTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
 
+    //
+    // Панели инструментов
+    //
     ComicBookTextEditToolbar* toolbar = nullptr;
     BusinessLayer::ComicBookTextSearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
-
+    //
     CommentsToolbar* commentsToolbar = nullptr;
 
+    //
+    // Сайдбар
+    //
     Shadow* sidebarShadow = nullptr;
-
+    //
     bool isSidebarShownFirstTime = true;
     Widget* sidebarWidget = nullptr;
     TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
     ComicBookTextFastFormatWidget* fastFormatWidget = nullptr;
     CommentsView* commentsView = nullptr;
-
+    BookmarksView* bookmarksView = nullptr;
+    //
     Splitter* splitter = nullptr;
+
+    //
+    // Действия опций редактора
+    //
+    QAction* showBookmarksAction = nullptr;
 };
 
 ComicBookTextView::Implementation::Implementation(QWidget* _parent)
     : commentsModel(new BusinessLayer::CommentsModel(_parent))
+    , bookmarksModel(new BusinessLayer::BookmarksModel(_parent))
     , comicBookText(new ComicBookTextEdit(_parent))
     , shortcutsManager(comicBookText)
     , scalableWrapper(new ScalableWrapper(comicBookText, _parent))
@@ -131,7 +165,10 @@ ComicBookTextView::Implementation::Implementation(QWidget* _parent)
     , sidebarContent(new StackWidget(_parent))
     , fastFormatWidget(new ComicBookTextFastFormatWidget(_parent))
     , commentsView(new CommentsView(_parent))
+    , bookmarksView(new BookmarksView(_parent))
     , splitter(new Splitter(_parent))
+    //
+    , showBookmarksAction(new QAction(_parent))
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
@@ -140,27 +177,79 @@ ComicBookTextView::Implementation::Implementation(QWidget* _parent)
 
     comicBookText->setVerticalScrollBar(new ScrollBar);
     comicBookText->setHorizontalScrollBar(new ScrollBar);
+    shortcutsManager.setShortcutsContext(scalableWrapper);
     scalableWrapper->setVerticalScrollBar(new ScrollBar);
     scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
-    shortcutsManager.setShortcutsContext(scalableWrapper);
 
     comicBookText->setUsePageMode(true);
 
     sidebarWidget->hide();
-    sidebarTabs->setFixed(true);
+    sidebarTabs->setFixed(false);
     sidebarTabs->addTab({}); // fastformat
     sidebarTabs->setTabVisible(kFastFormatTabIndex, false);
     sidebarTabs->addTab({}); // comments
     sidebarTabs->setTabVisible(kCommentsTabIndex, false);
+    sidebarTabs->addTab({}); // bookmarks
+    sidebarTabs->setTabVisible(kBookmarksTabIndex, false);
     sidebarContent->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     sidebarContent->setAnimationType(StackWidget::AnimationType::Slide);
     sidebarContent->addWidget(fastFormatWidget);
     sidebarContent->addWidget(commentsView);
+    sidebarContent->addWidget(bookmarksView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
     commentsView->setModel(commentsModel);
     commentsView->hide();
+    bookmarksView->setModel(bookmarksModel);
+    bookmarksView->hide();
+
+    showBookmarksAction->setCheckable(true);
+    showBookmarksAction->setIconText(u8"\U000F0E16");
+}
+
+void ComicBookTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
+{
+    paragraphTypesModel->clear();
+
+    using namespace BusinessLayer;
+    const auto& usedTemplate = BusinessLayer::TemplatesFacade::comicBookTemplate(
+        model && model->informationModel() ? model->informationModel()->templateId() : "");
+    const QVector<TextParagraphType> types = {
+        TextParagraphType::PageHeading,     TextParagraphType::PanelHeading,
+        TextParagraphType::Description,     TextParagraphType::Character,
+        TextParagraphType::Dialogue,        TextParagraphType::InlineNote,
+        TextParagraphType::UnformattedText, TextParagraphType::SequenceHeading,
+    };
+    for (const auto type : types) {
+        if (!usedTemplate.paragraphStyle(type).isActive()) {
+            continue;
+        }
+
+        auto typeItem = new QStandardItem(toDisplayString(type));
+        typeItem->setData(shortcutsManager.shortcut(type), Qt::WhatsThisRole);
+        typeItem->setData(static_cast<int>(type), kTypeDataRole);
+        paragraphTypesModel->appendRow(typeItem);
+    }
+
+    shortcutsManager.reconfigure();
+
+    if (_withModelReinitialization) {
+        comicBookText->reinit();
+    }
+}
+
+void ComicBookTextView::Implementation::reconfigureBlockNumbersVisibility()
+{
+    //    if (model && model->informationModel()) {
+    //        comicBookText->setShowBlockNumbers(model->informationModel()->showBlockNumbers(),
+    //                                           model->informationModel()->continueBlockNumbers());
+    //    } else {
+    //        comicBookText->setShowBlockNumbers(
+    //            settingsValue(DataStorageLayer::kComponentsComicBookEditorShowBlockNumbersKey).toBool(),
+    //            settingsValue(DataStorageLayer::kComponentsComicBookEditorContinueBlockNumbersKey)
+    //                .toBool());
+    //    }
 }
 
 void ComicBookTextView::Implementation::updateToolBarUi()
@@ -223,7 +312,10 @@ void ComicBookTextView::Implementation::updateTextEditPageMargins()
     }
 
     const QMarginsF pageMargins
-        = QMarginsF{ 15, 20 / scalableWrapper->zoomRange(), 12 / scalableWrapper->zoomRange(), 5 };
+        = QMarginsF{ 15, 20 / scalableWrapper->zoomRange(),
+                     12 / scalableWrapper->zoomRange()
+                         + MeasurementHelper::pxToMm(scalableWrapper->verticalScrollBar()->width()),
+                     5 };
     comicBookText->setPageMarginsMm(pageMargins);
 }
 
@@ -423,11 +515,42 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
                 d->commentsModel->remove(_indexes);
             });
     //
+    connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
+            &ComicBookTextView::createBookmarkRequested);
+    connect(d->bookmarksView, &BookmarksView::changeBookmarkRequested, this,
+            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
+                emit changeBookmarkRequested(d->bookmarksModel->mapToModel(_index), _text, _color);
+            });
+    connect(d->bookmarksView, &BookmarksView::bookmarkSelected, this,
+            [this](const QModelIndex& _index) {
+                const auto index = d->bookmarksModel->mapToModel(_index);
+                const auto position = d->comicBookText->positionForModelIndex(index);
+                auto cursor = d->comicBookText->textCursor();
+                cursor.setPosition(position);
+                d->comicBookText->ensureCursorVisible(cursor);
+                d->scalableWrapper->setFocus();
+            });
+    connect(d->bookmarksView, &BookmarksView::removeRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->bookmarksModel->remove(_indexes);
+            });
+    //
     connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this](int _currentIndex) {
-        if (_currentIndex == kFastFormatTabIndex) {
+        switch (_currentIndex) {
+        case kFastFormatTabIndex: {
             d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
-        } else {
+            break;
+        }
+        case kCommentsTabIndex: {
             d->sidebarContent->setCurrentWidget(d->commentsView);
+            break;
+        }
+
+        case kBookmarksTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->bookmarksView);
+            break;
+        }
         }
     });
     //
@@ -468,6 +591,11 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
         const auto commentModelIndex
             = d->commentsModel->mapFromModel(comicBookModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
+        //
+        // Выберем закладку, если курсор в блоке с закладкой
+        //
+        const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(comicBookModelIndex);
+        d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
     };
     connect(d->comicBookText, &ComicBookTextEdit::paragraphTypeChanged, this,
             handleCursorPositionChanged);
@@ -475,6 +603,49 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
             handleCursorPositionChanged);
     connect(d->comicBookText, &ComicBookTextEdit::selectionChanged, this,
             [this] { d->updateCommentsToolBar(); });
+    connect(d->comicBookText, &ComicBookTextEdit::addBookmarkRequested, this, [this] {
+        //
+        // Если список закладок показан, добавляем новую через него
+        //
+        if (d->showBookmarksAction->isChecked()) {
+            d->bookmarksView->showAddBookmarkView({});
+        }
+        //
+        // В противном случае, через диалог
+        //
+        else {
+            emit addBookmarkRequested();
+        }
+    });
+    connect(d->comicBookText, &ComicBookTextEdit::editBookmarkRequested, this, [this] {
+        //
+        // Если список закладок показан, редактируем через него
+        //
+        if (d->showBookmarksAction->isChecked()) {
+            d->bookmarksView->showAddBookmarkView(
+                d->bookmarksModel->mapFromModel(currentModelIndex()));
+        }
+        //
+        // В противном случае, через диалог
+        //
+        else {
+            emit addBookmarkRequested();
+        }
+    });
+    connect(d->comicBookText, &ComicBookTextEdit::removeBookmarkRequested, this,
+            &ComicBookTextView::removeBookmarkRequested);
+    connect(d->comicBookText, &ComicBookTextEdit::showBookmarksRequested, d->showBookmarksAction,
+            &QAction::toggle);
+    //
+    connect(d->showBookmarksAction, &QAction::toggled, this, [this](bool _checked) {
+        d->sidebarTabs->setTabVisible(kBookmarksTabIndex, _checked);
+        d->bookmarksView->setVisible(_checked);
+        if (_checked) {
+            d->sidebarTabs->setCurrentTab(kBookmarksTabIndex);
+            d->sidebarContent->setCurrentWidget(d->bookmarksView);
+        }
+        d->updateSideBarVisibility(this);
+    });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -494,37 +665,21 @@ void ComicBookTextView::toggleFullScreen(bool _isFullScreen)
     d->toolbar->setVisible(!_isFullScreen);
 }
 
+QVector<QAction*> ComicBookTextView::options() const
+{
+    return {
+        d->showBookmarksAction,
+    };
+}
+
 void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
-    d->paragraphTypesModel->clear();
-
-    using namespace BusinessLayer;
-    const auto usedTemplate = BusinessLayer::TemplatesFacade::comicBookTemplate();
-    const QVector<TextParagraphType> types = {
-        TextParagraphType::PageHeading,     TextParagraphType::PanelHeading,
-        TextParagraphType::Description,     TextParagraphType::Character,
-        TextParagraphType::Dialogue,        TextParagraphType::InlineNote,
-        TextParagraphType::UnformattedText, TextParagraphType::SequenceHeading,
-    };
-    for (const auto type : types) {
-        if (!usedTemplate.paragraphStyle(type).isActive()) {
-            continue;
-        }
-
-        auto typeItem = new QStandardItem(toDisplayString(type));
-        typeItem->setData(d->shortcutsManager.shortcut(type), Qt::WhatsThisRole);
-        typeItem->setData(static_cast<int>(type), kTypeDataRole);
-        d->paragraphTypesModel->appendRow(typeItem);
-    }
-
     UiHelper::initSpellingFor(d->comicBookText);
-
-    d->shortcutsManager.reconfigure();
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey)) {
-        d->comicBookText->reinit();
+        d->reconfigureTemplate();
     }
 
     //    if (_changedSettingsKeys.isEmpty()
@@ -544,6 +699,17 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
     //            settingsValue(DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey)
     //                .toBool());
     //    }
+    // d->reconfigureBlockNumbersVisiblity();
+
+    if (_changedSettingsKeys.isEmpty()) {
+        d->comicBookText->setCorrectionOptions(true, true);
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsComicBookEditorShortcutsKey)) {
+        d->shortcutsManager.reconfigure();
+    }
+
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationShowDocumentsPagesKey)) {
         const auto usePageMode
@@ -579,6 +745,8 @@ void ComicBookTextView::loadViewSettings()
     const auto scaleFactor = settingsValue(kScaleFactorKey, 1.0).toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 
+    const auto isBookmarksListVisible = settingsValue(kIsBookmarksListVisibleKey, false).toBool();
+    d->showBookmarksAction->setChecked(isBookmarksListVisible);
     const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
     const auto isFastFormatPanelVisible
@@ -600,6 +768,7 @@ void ComicBookTextView::saveViewSettings()
 
     setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
     setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
+    setSettingsValue(kIsBookmarksListVisibleKey, d->showBookmarksAction->isChecked());
     setSettingsValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab());
 
     setSettingsValue(kSidebarStateKey, d->splitter->saveState());
@@ -607,8 +776,34 @@ void ComicBookTextView::saveViewSettings()
 
 void ComicBookTextView::setModel(BusinessLayer::ComicBookTextModel* _model)
 {
-    d->comicBookText->initWithModel(_model);
-    d->commentsModel->setTextModel(_model);
+    if (d->model && d->model->informationModel()) {
+        disconnect(d->model->informationModel());
+    }
+
+    d->model = _model;
+
+    //
+    // Отслеживаем изменения некоторых параметров
+    //
+    if (d->model && d->model->informationModel()) {
+        const bool reinitModel = true;
+        d->reconfigureTemplate(!reinitModel);
+        d->reconfigureBlockNumbersVisibility();
+
+        connect(d->model->informationModel(),
+                &BusinessLayer::ComicBookInformationModel::templateIdChanged, this,
+                [this] { d->reconfigureTemplate(); });
+        //        connect(d->model->informationModel(),
+        //                &BusinessLayer::ComicBookInformationModel::showBlockNumbersChanged, this,
+        //                [this] { d->reconfigureBlockNumbersVisibility(); });
+        //        connect(d->model->informationModel(),
+        //                &BusinessLayer::ComicBookInformationModel::continueBlockNumbersChanged,
+        //                this, [this] { d->reconfigureBlockNumbersVisibility(); });
+    }
+
+    d->comicBookText->initWithModel(d->model);
+    d->commentsModel->setTextModel(d->model);
+    d->bookmarksModel->setTextModel(d->model);
 
     d->updateToolBarCurrentParagraphTypeName();
 }
@@ -667,6 +862,9 @@ void ComicBookTextView::updateTranslations()
 {
     d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
+    d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
+
+    d->showBookmarksAction->setText(tr("Show bookmarks list"));
 }
 
 void ComicBookTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

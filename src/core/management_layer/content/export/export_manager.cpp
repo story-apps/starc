@@ -293,8 +293,10 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                 //
                 // ... донастроим параметры экспорта
                 //
-                exportOptions.header = comicBookTextModel->informationModel()->header();
-                exportOptions.footer = comicBookTextModel->informationModel()->footer();
+                const auto comicBookInformation = comicBookTextModel->informationModel();
+                exportOptions.templateId = comicBookInformation->templateId();
+                exportOptions.header = comicBookInformation->header();
+                exportOptions.footer = comicBookInformation->footer();
                 //
                 // ... обновим папку, куда в следующий раз он предположительно опять будет
                 //     экспортировать

@@ -82,6 +82,8 @@ void ComicBookParametersManager::setModel(BusinessLayer::AbstractModel* _model)
         d->view->setPrintHeaderOnTitlePage(d->model->printHeaderOnTitlePage());
         d->view->setFooter(d->model->footer());
         d->view->setPrintFooterOnTitlePage(d->model->printFooterOnTitlePage());
+        d->view->setOverrideCommonSettings(d->model->overrideCommonSettings());
+        d->view->setComicBookTemplate(d->model->templateId());
 
         connect(d->model, &BusinessLayer::ComicBookInformationModel::headerChanged, d->view,
                 &Ui::ComicBookParametersView::setHeader);
@@ -91,6 +93,10 @@ void ComicBookParametersManager::setModel(BusinessLayer::AbstractModel* _model)
                 &Ui::ComicBookParametersView::setFooter);
         connect(d->model, &BusinessLayer::ComicBookInformationModel::printFooterOnTitlePageChanged,
                 d->view, &Ui::ComicBookParametersView::setPrintFooterOnTitlePage);
+        connect(d->model, &BusinessLayer::ComicBookInformationModel::overrideCommonSettingsChanged,
+                d->view, &Ui::ComicBookParametersView::setOverrideCommonSettings);
+        connect(d->model, &BusinessLayer::ComicBookInformationModel::templateIdChanged, d->view,
+                &Ui::ComicBookParametersView::setComicBookTemplate);
         //
         connect(d->view, &Ui::ComicBookParametersView::headerChanged, d->model,
                 &BusinessLayer::ComicBookInformationModel::setHeader);
@@ -100,6 +106,10 @@ void ComicBookParametersManager::setModel(BusinessLayer::AbstractModel* _model)
                 &BusinessLayer::ComicBookInformationModel::setFooter);
         connect(d->view, &Ui::ComicBookParametersView::printFooterOnTitlePageChanged, d->model,
                 &BusinessLayer::ComicBookInformationModel::setPrintFooterOnTitlePage);
+        connect(d->view, &Ui::ComicBookParametersView::overrideCommonSettingsChanged, d->model,
+                &BusinessLayer::ComicBookInformationModel::setOverrideCommonSettings);
+        connect(d->view, &Ui::ComicBookParametersView::comicBookTemplateChanged, d->model,
+                &BusinessLayer::ComicBookInformationModel::setTemplateId);
     }
 }
 

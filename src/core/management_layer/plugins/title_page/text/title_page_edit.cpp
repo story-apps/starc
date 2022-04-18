@@ -8,6 +8,7 @@
 #include <business_layer/import/text/simple_text_markdown_importer.h>
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/audioplay_title_page_model.h>
+#include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
@@ -148,15 +149,48 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
                 updateFooter);
         connect(titlePageModel->informationModel(),
                 &BusinessLayer::ScreenplayInformationModel::footerChanged, this, updateFooter);
+
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::templateIdChanged, this,
+                &TitlePageEdit::reinit);
     }
     //
     // Комикс
     //
-    else if (qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
-        const auto& currentTemplate = TemplatesFacade::comicBookTemplate();
+    else if (auto titlePageModel
+             = qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
+        const auto& currentTemplate = TemplatesFacade::textTemplate(titlePageModel);
         setPageFormat(currentTemplate.pageSizeId());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
         pageMargins = currentTemplate.pageMargins();
+
+        auto updateHeader = [this, titlePageModel] {
+            setHeader(titlePageModel->informationModel()->printHeaderOnTitlePage()
+                          ? titlePageModel->informationModel()->header()
+                          : QString());
+        };
+        updateHeader();
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::ComicBookInformationModel::printHeaderOnTitlePageChanged, this,
+                updateHeader);
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::ComicBookInformationModel::headerChanged, this, updateHeader);
+
+        auto updateFooter = [this, titlePageModel] {
+            setFooter(titlePageModel->informationModel()->printFooterOnTitlePage()
+                          ? titlePageModel->informationModel()->footer()
+                          : QString());
+        };
+        updateFooter();
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::ComicBookInformationModel::printFooterOnTitlePageChanged, this,
+                updateFooter);
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::ComicBookInformationModel::footerChanged, this, updateFooter);
+
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::ComicBookInformationModel::templateIdChanged, this,
+                &TitlePageEdit::reinit);
     }
     //
     // Аудиопостановка
@@ -191,6 +225,10 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
                 updateFooter);
         connect(titlePageModel->informationModel(),
                 &BusinessLayer::AudioplayInformationModel::footerChanged, this, updateFooter);
+
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::AudioplayInformationModel::templateIdChanged, this,
+                &TitlePageEdit::reinit);
     }
 
     //
@@ -255,10 +293,9 @@ void TitlePageEdit::restoreFromTemplate()
                   .titlePage();
     } else if (auto titlePageModel
                = qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
-        //        titlePage
-        //            =
-        //            TemplatesFacade::comicBookTemplate(titlePageModel->informationModel()->templateId())
-        //                  .titlePage();
+        titlePage
+            = TemplatesFacade::comicBookTemplate(titlePageModel->informationModel()->templateId())
+                  .titlePage();
     } else if (auto titlePageModel
                = qobject_cast<BusinessLayer::AudioplayTitlePageModel*>(d->model)) {
         titlePage

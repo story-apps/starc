@@ -1,6 +1,10 @@
 #include "comic_book_information_model.h"
 
 #include <business_layer/model/abstract_image_wrapper.h>
+#include <business_layer/templates/comic_book_template.h>
+#include <business_layer/templates/templates_facade.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -11,18 +15,20 @@
 namespace BusinessLayer {
 
 namespace {
-const QString kDocumentKey = "document";
-const QString kNameKey = "name";
-const QString kTaglineKey = "tagline";
-const QString kLoglineKey = "logline";
-const QString kTitlePageVisibleKey = "title_page_visible";
-const QString kSynopsisVisibleKey = "synopsis_visible";
-const QString kComicBookTextVisibleKey = "comicBook_text_visible";
-const QString kComicBookStatisticsVisibleKey = "comicBook_statistics_visible";
-const QString kHeaderKey = "header";
-const QString kPrintHeaderOnTitlePageKey = "print_header_on_title";
-const QString kFooterKey = "footer";
-const QString kPrintFooterOnTitlePageKey = "print_footer_on_title";
+const QLatin1String kDocumentKey("document");
+const QLatin1String kNameKey("name");
+const QLatin1String kTaglineKey("tagline");
+const QLatin1String kLoglineKey("logline");
+const QLatin1String kTitlePageVisibleKey("title_page_visible");
+const QLatin1String kSynopsisVisibleKey("synopsis_visible");
+const QLatin1String kComicBookTextVisibleKey("comicBook_text_visible");
+const QLatin1String kComicBookStatisticsVisibleKey("comicBook_statistics_visible");
+const QLatin1String kHeaderKey("header");
+const QLatin1String kPrintHeaderOnTitlePageKey("print_header_on_title");
+const QLatin1String kFooterKey("footer");
+const QLatin1String kPrintFooterOnTitlePageKey("print_footer_on_title");
+const QLatin1String kOverrideSystemSettingsKey("override_system_settings");
+const QLatin1String kTemplateIdKey("template_id");
 } // namespace
 
 class ComicBookInformationModel::Implementation
@@ -39,6 +45,9 @@ public:
     bool printHeaderOnTitlePage = true;
     QString footer;
     bool printFooterOnTitlePage = true;
+
+    bool overrideCommonSettings = false;
+    QString templateId;
 };
 
 
@@ -46,9 +55,19 @@ public:
 
 
 ComicBookInformationModel::ComicBookInformationModel(QObject* _parent)
-    : AbstractModel({ kDocumentKey, kNameKey, kLoglineKey, kHeaderKey, kPrintHeaderOnTitlePageKey,
-                      kFooterKey, kPrintFooterOnTitlePageKey },
-                    _parent)
+    : AbstractModel(
+        {
+            kDocumentKey,
+            kNameKey,
+            kLoglineKey,
+            kHeaderKey,
+            kPrintHeaderOnTitlePageKey,
+            kFooterKey,
+            kPrintFooterOnTitlePageKey,
+            kOverrideSystemSettingsKey,
+            kTemplateIdKey,
+        },
+        _parent)
     , d(new Implementation)
 {
     connect(this, &ComicBookInformationModel::nameChanged, this,
@@ -72,6 +91,10 @@ ComicBookInformationModel::ComicBookInformationModel(QObject* _parent)
     connect(this, &ComicBookInformationModel::footerChanged, this,
             &ComicBookInformationModel::updateDocumentContent);
     connect(this, &ComicBookInformationModel::printFooterOnTitlePageChanged, this,
+            &ComicBookInformationModel::updateDocumentContent);
+    connect(this, &ComicBookInformationModel::overrideCommonSettingsChanged, this,
+            &ComicBookInformationModel::updateDocumentContent);
+    connect(this, &ComicBookInformationModel::templateIdChanged, this,
             &ComicBookInformationModel::updateDocumentContent);
 }
 
@@ -248,6 +271,45 @@ void ComicBookInformationModel::setPrintFooterOnTitlePage(bool _print)
     emit printFooterOnTitlePageChanged(d->printFooterOnTitlePage);
 }
 
+bool ComicBookInformationModel::overrideCommonSettings() const
+{
+    return d->overrideCommonSettings;
+}
+
+void ComicBookInformationModel::setOverrideCommonSettings(bool _override)
+{
+    if (d->overrideCommonSettings == _override) {
+        return;
+    }
+
+    d->overrideCommonSettings = _override;
+    emit overrideCommonSettingsChanged(d->overrideCommonSettings);
+
+    //
+    // При включении/выключении кастомных параметров, сбрасываем до стандартных
+    //
+    setTemplateId(TemplatesFacade::comicBookTemplate().id());
+}
+
+QString ComicBookInformationModel::templateId() const
+{
+    if (d->overrideCommonSettings) {
+        return d->templateId;
+    }
+
+    return TemplatesFacade::comicBookTemplate().id();
+}
+
+void ComicBookInformationModel::setTemplateId(const QString& _templateId)
+{
+    if (d->templateId == _templateId) {
+        return;
+    }
+
+    d->templateId = _templateId;
+    emit templateIdChanged(d->templateId);
+}
+
 void ComicBookInformationModel::initDocument()
 {
     if (document() == nullptr) {
@@ -276,22 +338,14 @@ void ComicBookInformationModel::initDocument()
     d->footer = documentNode.firstChildElement(kFooterKey).text();
     d->printFooterOnTitlePage
         = documentNode.firstChildElement(kPrintFooterOnTitlePageKey).text() == "true";
+    d->overrideCommonSettings
+        = documentNode.firstChildElement(kOverrideSystemSettingsKey).text() == "true";
+    d->templateId = documentNode.firstChildElement(kTemplateIdKey).text();
 }
 
 void ComicBookInformationModel::clearDocument()
 {
-    QSignalBlocker signalBlocker(this);
-
-    setName({});
-    setLogline({});
-    setTitlePageVisible({});
-    setSynopsisVisible({});
-    setComicBookTextVisible({});
-    setComicBookStatisticsVisible({});
-    setHeader({});
-    setPrintHeaderOnTitlePage({});
-    setFooter({});
-    setPrintFooterOnTitlePage({});
+    d.reset(new Implementation);
 }
 
 QByteArray ComicBookInformationModel::toXml() const
@@ -304,30 +358,25 @@ QByteArray ComicBookInformationModel::toXml() const
     xml += QString("<%1 mime-type=\"%2\" version=\"1.0\">\n")
                .arg(kDocumentKey, Domain::mimeTypeFor(document()->type()))
                .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kNameKey, d->name).toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kTaglineKey, d->tagline).toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kLoglineKey, d->logline).toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kTitlePageVisibleKey, d->titlePageVisible ? "true" : "false")
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kSynopsisVisibleKey, d->synopsisVisible ? "true" : "false")
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kComicBookTextVisibleKey, d->comicBookTextVisible ? "true" : "false")
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kComicBookStatisticsVisibleKey,
-                    d->comicBookStatisticsVisible ? "true" : "false")
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kHeaderKey, d->header).toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kPrintHeaderOnTitlePageKey, d->printHeaderOnTitlePage ? "true" : "false")
-               .toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kFooterKey, d->footer).toUtf8();
-    xml += QString("<%1><![CDATA[%2]]></%1>\n")
-               .arg(kPrintFooterOnTitlePageKey, d->printFooterOnTitlePage ? "true" : "false")
-               .toUtf8();
+    auto writeTag = [&xml](const QString& _key, const QString& _value) {
+        xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(_key, _value).toUtf8();
+    };
+    auto writeBoolTag = [&writeTag](const QString& _key, bool _value) {
+        writeTag(_key, _value ? "true" : "false");
+    };
+    writeTag(kNameKey, d->name);
+    writeTag(kTaglineKey, d->tagline);
+    writeTag(kLoglineKey, d->logline);
+    writeBoolTag(kTitlePageVisibleKey, d->titlePageVisible);
+    writeBoolTag(kSynopsisVisibleKey, d->synopsisVisible);
+    writeBoolTag(kComicBookTextVisibleKey, d->comicBookTextVisible);
+    writeBoolTag(kComicBookStatisticsVisibleKey, d->comicBookStatisticsVisible);
+    writeTag(kHeaderKey, d->header);
+    writeBoolTag(kPrintHeaderOnTitlePageKey, d->printHeaderOnTitlePage);
+    writeTag(kFooterKey, d->footer);
+    writeBoolTag(kPrintFooterOnTitlePageKey, d->printFooterOnTitlePage);
+    writeBoolTag(kOverrideSystemSettingsKey, d->overrideCommonSettings);
+    writeTag(kTemplateIdKey, d->templateId);
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }

@@ -8,6 +8,8 @@
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/audioplay_title_page_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
+#include <business_layer/model/comic_book/comic_book_information_model.h>
+#include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
@@ -369,10 +371,9 @@ const TextTemplate& TemplatesFacade::textTemplate(const TextModel* _model)
     }
     //
     else if (auto model = qobject_cast<const ComicBookTextModel*>(_model)) {
-        //
-        // TODO: учитывать шаблон заданный для конкретного комикса
-        //
-        return comicBookTemplate();
+        return comicBookTemplate(model->informationModel()->templateId());
+    } else if (auto model = qobject_cast<const ComicBookTitlePageModel*>(_model)) {
+        return comicBookTitlePageTemplate(model->informationModel()->templateId());
     }
     //
     else if (auto model = qobject_cast<const AudioplayTextModel*>(_model)) {
@@ -401,6 +402,11 @@ const TextTemplate& TemplatesFacade::screenplayTitlePageTemplate(const QString& 
 const ComicBookTemplate& TemplatesFacade::comicBookTemplate(const QString& _templateId)
 {
     return instance().d->getTemplate<ComicBookTemplate>(_templateId);
+}
+
+const TextTemplate& TemplatesFacade::comicBookTitlePageTemplate(const QString& _templateId)
+{
+    return comicBookTemplate(_templateId).titlePageTemplate();
 }
 
 const AudioplayTemplate& TemplatesFacade::audioplayTemplate(const QString& _templateId)

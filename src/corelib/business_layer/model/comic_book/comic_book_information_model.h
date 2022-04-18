@@ -61,6 +61,14 @@ public:
     void setPrintFooterOnTitlePage(bool _print);
     Q_SIGNAL void printFooterOnTitlePageChanged(bool _print);
 
+    bool overrideCommonSettings() const;
+    void setOverrideCommonSettings(bool _override);
+    Q_SIGNAL void overrideCommonSettingsChanged(bool _override);
+
+    QString templateId() const;
+    void setTemplateId(const QString& _templateId);
+    Q_SIGNAL void templateIdChanged(const QString& _templateId);
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

@@ -212,6 +212,8 @@ const QString kComponentsComicBookAvailableKey
 const QString kComponentsComicBookEditorKey = kComponentsComicBookKey + QStringLiteral("/editor");
 const QString kComponentsComicBookEditorDefaultTemplateKey
     = kComponentsComicBookEditorKey + QStringLiteral("/default-template");
+const QString kComponentsComicBookEditorShortcutsKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/shortcuts");
 // ... навигатор
 const QString kComponentsComicBookNavigatorKey
     = kComponentsComicBookKey + QStringLiteral("/navigator");

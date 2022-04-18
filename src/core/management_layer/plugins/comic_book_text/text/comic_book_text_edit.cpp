@@ -41,6 +41,8 @@ class ComicBookTextEdit::Implementation
 public:
     explicit Implementation(ComicBookTextEdit* _q);
 
+    const BusinessLayer::ComicBookTemplate& comicBookTemplate() const;
+
     void revertAction(bool previous);
 
 
@@ -58,6 +60,13 @@ public:
 ComicBookTextEdit::Implementation::Implementation(ComicBookTextEdit* _q)
     : q(_q)
 {
+}
+
+const BusinessLayer::ComicBookTemplate& ComicBookTextEdit::Implementation::comicBookTemplate() const
+{
+    const auto currentTemplateId
+        = model && model->informationModel() ? model->informationModel()->templateId() : "";
+    return TemplatesFacade::comicBookTemplate(currentTemplateId);
 }
 
 void ComicBookTextEdit::Implementation::revertAction(bool previous)
@@ -121,6 +130,12 @@ void ComicBookTextEdit::setShowDialogueNumber(bool _show)
     update();
 }
 
+void ComicBookTextEdit::setCorrectionOptions(bool _needToCorrectCharactersNames,
+                                             bool _needToCorrectPageBreaks)
+{
+    d->document.setCorrectionOptions(_needToCorrectCharactersNames, _needToCorrectPageBreaks);
+}
+
 void ComicBookTextEdit::initWithModel(BusinessLayer::ComicBookTextModel* _model)
 {
     if (d->model && d->model->informationModel()) {
@@ -137,7 +152,7 @@ void ComicBookTextEdit::initWithModel(BusinessLayer::ComicBookTextModel* _model)
     // Обновляем параметры страницы из шаблона
     //
     if (usePageMode()) {
-        const auto currentTemplate = TemplatesFacade::comicBookTemplate();
+        const auto currentTemplate = d->comicBookTemplate();
         setPageFormat(currentTemplate.pageSizeId());
         setPageMarginsMm(currentTemplate.pageMargins());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
@@ -171,6 +186,11 @@ void ComicBookTextEdit::reinit()
     // Перенастроим всё, что зависит от шаблона
     //
     initWithModel(d->model);
+}
+
+const BusinessLayer::ComicBookTemplate& ComicBookTextEdit::comicBookTemplate() const
+{
+    return d->comicBookTemplate();
 }
 
 BusinessLayer::ComicBookDictionariesModel* ComicBookTextEdit::dictionaries() const
@@ -687,7 +707,6 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
     const qreal pageLeft = 0;
     const qreal pageRight = viewport()->width();
     const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();
-    ;
     const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
         + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
     const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
@@ -695,7 +714,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
     const qreal leftDelta = (isLeftToRight ? -1 : 1) * horizontalScrollBar()->value();
     //    int colorRectWidth = 0;
     qreal verticalMargin = 0;
-    const auto currentTemplate = TemplatesFacade::comicBookTemplate();
+    const auto currentTemplate = d->comicBookTemplate();
     const qreal splitterX = leftDelta + textLeft
         + (textRight - textLeft) * currentTemplate.leftHalfOfPageWidthPercents() / 100;
 
@@ -876,6 +895,48 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                 if ((cursorR.top() > 0 || cursorR.bottom() > 0)
                     // ... и выше нижней
                     && cursorR.top() < viewportGeometry.bottom()) {
+                    //
+                    // Прорисовка закладок
+                    //
+                    const auto bookmark = d->document.bookmark(block);
+                    if (bookmark.isValid()) {
+                        setPainterPen(bookmark.color);
+                        painter.setFont(DesignSystem::font().iconsForEditors());
+
+                        //
+                        // Определим область для отрисовки
+                        //
+                        QPointF topLeft(isLeftToRight
+                                            ? (pageLeft + leftDelta
+                                               + Ui::DesignSystem::card().shadowMargins().left())
+                                            : (textRight + leftDelta),
+                                        cursorR.top());
+                        QPointF bottomRight(
+                            isLeftToRight ? textLeft + leftDelta
+                                          : (pageRight + leftDelta
+                                             - Ui::DesignSystem::card().shadowMargins().right()),
+                            cursorR.bottom());
+                        QRectF rect(topLeft, bottomRight);
+                        const auto yDelta = Ui::DesignSystem::layout().px(32) - rect.height() / 2.0;
+                        //
+                        // корректируем размер области, чтобы получить квадрат для отрисовки иконки
+                        // закладки
+                        //
+                        if (yDelta > 0) {
+                            rect.adjust(0, -yDelta, 0, yDelta);
+                        }
+                        if (isLeftToRight) {
+                            rect.setWidth(rect.height());
+                        } else {
+                            rect.setLeft(rect.right() - rect.height());
+                        }
+                        painter.fillRect(
+                            rect,
+                            ColorHelper::transparent(bookmark.color,
+                                                     Ui::DesignSystem::elevationEndOpacity()));
+                        painter.drawText(rect, Qt::AlignCenter, u8"\U000F00C0");
+                    }
+
                     //
                     // Прорисовка декораций пустой строки
                     //
@@ -1184,47 +1245,47 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
 
 ContextMenu* ComicBookTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
+    //
+    // Сначала нужно создать контекстное меню в базовом классе, т.к. в этот момент может
+    // измениться курсор, который установлен в текстовом редакторе, и использовать его
+    //
     auto menu = BaseTextEdit::createContextMenu(_position, _parent);
 
-    auto splitAction = new QAction;
     const BusinessLayer::TextCursor cursor = textCursor();
-    if (cursor.inTable()) {
-        splitAction->setText(tr("Merge paragraph"));
-        splitAction->setIconText(u8"\U000f10e7");
+
+    //
+    // Работа с закладками
+    //
+    auto bookmarkAction = new QAction(this);
+    bookmarkAction->setText(tr("Bookmark"));
+    bookmarkAction->setIconText(u8"\U000F00C3");
+    if (!d->document.bookmark(cursor.block()).isValid()) {
+        auto createBookmark = new QAction(bookmarkAction);
+        createBookmark->setText(tr("Add"));
+        createBookmark->setIconText(u8"\U000F00C4");
+        connect(createBookmark, &QAction::triggered, this,
+                &ComicBookTextEdit::addBookmarkRequested);
     } else {
-        splitAction->setText(tr("Split paragraph"));
-        splitAction->setIconText(u8"\U000f10e7");
-
+        auto editBookmark = new QAction(bookmarkAction);
+        editBookmark->setText(tr("Edit"));
+        editBookmark->setIconText(u8"\U000F03EB");
+        connect(editBookmark, &QAction::triggered, this, &ComicBookTextEdit::editBookmarkRequested);
         //
-        // Запрещаем разделять некоторые блоки
-        //
-        const auto blockType = TextBlockStyle::forBlock(cursor.block());
-        splitAction->setEnabled(blockType != TextParagraphType::PageHeading
-                                && blockType != TextParagraphType::PanelHeading
-                                && blockType != TextParagraphType::PanelHeadingShadow
-                                && blockType != TextParagraphType::SequenceHeading
-                                && blockType != TextParagraphType::SequenceFooter);
+        auto removeBookmark = new QAction(bookmarkAction);
+        removeBookmark->setText(tr("Remove"));
+        removeBookmark->setIconText(u8"\U000F01B4");
+        connect(removeBookmark, &QAction::triggered, this,
+                &ComicBookTextEdit::removeBookmarkRequested);
     }
-    connect(splitAction, &QAction::triggered, this, [this] {
-        BusinessLayer::TextCursor cursor = textCursor();
-        if (cursor.inTable()) {
-            d->document.mergeParagraph(cursor);
-        } else {
-            d->document.splitParagraph(cursor);
-
-            //
-            // После разделения, возвращаемся в первую ячейку таблицы
-            //
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::EndOfBlock);
-        }
-    });
+    //
+    auto showBookmarks = new QAction(bookmarkAction);
+    showBookmarks->setText(tr("Show list"));
+    showBookmarks->setIconText(u8"\U000F0E16");
+    connect(showBookmarks, &QAction::triggered, this, &ComicBookTextEdit::showBookmarksRequested);
 
     auto actions = menu->actions().toVector();
     actions.first()->setSeparator(true);
-    actions.prepend(splitAction);
+    actions.prepend(bookmarkAction);
     menu->setActions(actions);
 
     return menu;
