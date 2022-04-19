@@ -1,18 +1,12 @@
 <RCC>
     <qresource prefix="/fonts">
         <file alias="materialdesignicons">fonts/materialdesignicons-webfont.ttf</file>
-        <file alias="roboto-black">fonts/roboto-black.ttf</file>
-        <file alias="roboto-bold">fonts/roboto-bold.ttf</file>
         <file alias="roboto-medium">fonts/roboto-medium.ttf</file>
         <file alias="roboto-regular">fonts/roboto-regular.ttf</file>
-        <file alias="roboto-thin">fonts/roboto-thin.ttf</file>
         <file alias="courier-prime-bold-italic">fonts/courier-prime-bold-italic.ttf</file>
         <file alias="courier-prime-bold">fonts/courier-prime-bold.ttf</file>
         <file alias="courier-prime-italic">fonts/courier-prime-italic.ttf</file>
         <file alias="courier-prime">fonts/courier-prime.ttf</file>
-        <file alias="noto-sans-bold">fonts/noto-sans-bold.ttf</file>
-        <file alias="noto-sans-bold-italic">fonts/noto-sans-bold-italic.ttf</file>
-        <file alias="noto-sans-italic">fonts/noto-sans-italic.ttf</file>
         <file alias="noto-sans">fonts/noto-sans-regular.ttf</file>
         <file alias="courier-new">fonts/courier-new.ttf</file>
         <file alias="courier-new-bold">fonts/courier-new-bold.ttf</file>
@@ -24,5 +18,17 @@
         <file alias="arial-bold">fonts/arial-bold.ttf</file>
         <file alias="arial-bold-italic">fonts/arial-bold-italic.ttf</file>
         <file alias="arial-italic">fonts/arial-italic.ttf</file>
+        <file alias="noto-sans-arabic-light">fonts/noto-sans-arabic-light.ttf</file>
+        <file alias="noto-sans-arabic-medium">fonts/noto-sans-arabic-medium.ttf</file>
+        <file alias="noto-sans-arabic-regular">fonts/noto-sans-arabic-regular.ttf</file>
+        <file alias="noto-sans-hebrew-light">fonts/noto-sans-hebrew-light.ttf</file>
+        <file alias="noto-sans-hebrew-medium">fonts/noto-sans-hebrew-medium.ttf</file>
+        <file alias="noto-sans-hebrew-regular">fonts/noto-sans-hebrew-regular.ttf</file>
+        <file alias="noto-sans-light">fonts/noto-sans-light.ttf</file>
+        <file alias="noto-sans-medium">fonts/noto-sans-medium.ttf</file>
+        <file alias="noto-sans-tamil-light">fonts/noto-sans-tamil-light.ttf</file>
+        <file alias="noto-sans-tamil-medium">fonts/noto-sans-tamil-medium.ttf</file>
+        <file alias="noto-sans-tamil-regular">fonts/noto-sans-tamil-regular.ttf</file>
+        <file alias="roboto-light">fonts/roboto-light.ttf</file>
     </qresource>
 </RCC>

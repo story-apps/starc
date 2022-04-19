@@ -29,5 +29,6 @@
         <file>translations/translation_tl_PH.qm</file>
         <file>translations/translation_zh_CN.qm</file>
         <file>translations/translation_ar.qm</file>
+        <file>translations/translation_ta.qm</file>
     </qresource>
 </RCC>

@@ -43,6 +43,7 @@ TRANSLATIONS += \
     core/translations/translation_ro_RO.ts \
     core/translations/translation_ru.ts \
     core/translations/translation_sl.ts \
+    core/translations/translation_ta.ts \
     core/translations/translation_tl_PH.ts \
     core/translations/translation_tr.ts \
     core/translations/translation_uk.ts \

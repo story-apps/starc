@@ -130,6 +130,7 @@ void OnboardingView::Implementation::initLanguagePage()
     PercentRadioButton* slovenianLanguage = initLanguageButton("Slovenski", QLocale::Slovenian, 96);
     PercentRadioButton* spanishLanguage = initLanguageButton("Español", QLocale::Spanish, 92);
     PercentRadioButton* tagalogLanguage = initLanguageButton("Tagalog", QLocale::Filipino, 24);
+    PercentRadioButton* tamilLanguage = initLanguageButton("தமிழ்", QLocale::Tamil, 24);
     PercentRadioButton* turkishLanguage = initLanguageButton("Türkçe", QLocale::Turkish, 50);
     PercentRadioButton* ukrainianLanguage
         = initLanguageButton("Українська", QLocale::Ukrainian, 89);
@@ -168,13 +169,35 @@ void OnboardingView::Implementation::initLanguagePage()
         }
     };
     buildFocusChain({
-        azerbaijaniLanguage,      belarusianLanguage, catalanLanguage,   danishLanguage,
-        germanLanguage,           englishLanguage,    spanishLanguage,   esperantoLanguage,
-        frenchLanguage,           galicianLanguage,   croatianLanguage,  indonesianLanguage,
-        italianLanguage,          hungarianLanguage,  polishLanguage,    portugueseLanguage,
-        portugueseBrazilLanguage, romanianLanguage,   russianLanguage,   slovenianLanguage,
-        tagalogLanguage,          turkishLanguage,    ukrainianLanguage, arabicLanguage,
-        chineseLanguage,          hebrewLanguage,     hindiLanguage,     persianLanguage,
+        azerbaijaniLanguage,
+        belarusianLanguage,
+        catalanLanguage,
+        danishLanguage,
+        germanLanguage,
+        englishLanguage,
+        spanishLanguage,
+        esperantoLanguage,
+        frenchLanguage,
+        galicianLanguage,
+        croatianLanguage,
+        indonesianLanguage,
+        italianLanguage,
+        hungarianLanguage,
+        polishLanguage,
+        portugueseLanguage,
+        portugueseBrazilLanguage,
+        romanianLanguage,
+        russianLanguage,
+        slovenianLanguage,
+        tagalogLanguage,
+        turkishLanguage,
+        ukrainianLanguage,
+        arabicLanguage,
+        chineseLanguage,
+        hebrewLanguage,
+        hindiLanguage,
+        persianLanguage,
+        tamilLanguage,
     });
 
     languageTranslationProgressLink = new Body1LinkLabel(languagePage);
@@ -230,6 +253,7 @@ void OnboardingView::Implementation::initLanguagePage()
     languagePageLayout->addWidget(hebrewLanguage, rowForFifthColumn++, 3);
     languagePageLayout->addWidget(hindiLanguage, rowForFifthColumn++, 3);
     languagePageLayout->addWidget(persianLanguage, rowForFifthColumn++, 3);
+    languagePageLayout->addWidget(tamilLanguage, rowForFifthColumn++, 3);
     languagePageLayout->setRowStretch(row++, 1);
     languagePageLayout->setColumnStretch(4, 1);
     languagePageLayout->addWidget(languageTranslationProgressLink, row++, 0, 1, 5);

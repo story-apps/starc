@@ -1770,6 +1770,12 @@ void SettingsView::setApplicationLanguage(int _language)
         case QLocale::Catalan: {
             return "Català";
         }
+        case QLocale::Chinese: {
+            return "汉语";
+        }
+        case QLocale::Croatian: {
+            return "Hrvatski";
+        }
         case QLocale::Danish: {
             return "Dansk";
         }
@@ -1809,6 +1815,9 @@ void SettingsView::setApplicationLanguage(int _language)
         case QLocale::Polish: {
             return "Polski";
         }
+        case QLocale::LastLanguage + 1: {
+            return "Português";
+        }
         case QLocale::Portuguese: {
             return "Português Brasileiro";
         }
@@ -1823,6 +1832,12 @@ void SettingsView::setApplicationLanguage(int _language)
         }
         case QLocale::Spanish: {
             return "Español";
+        }
+        case QLocale::Filipino: {
+            return "Tagalog";
+        }
+        case QLocale::Tamil: {
+            return "தமிழ்";
         }
         case QLocale::Turkish: {
             return "Türkçe";

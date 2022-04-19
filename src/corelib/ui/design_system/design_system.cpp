@@ -333,17 +333,49 @@ public:
 
 DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
 {
-    QString fontFamily = QLatin1String("Roboto");
-    const QSet<QLocale::Language> notoLanguages = {
-        QLocale::Arabic, QLocale::Chinese, QLocale::Hebrew, QLocale::Hindi, QLocale::Persian,
-    };
-    if (notoLanguages.contains(QLocale().language())) {
-        fontFamily = QLatin1String("Noto Sans");
+    QStringList fontFamilies = { QLatin1String("Roboto") };
+    switch (QLocale().language()) {
+    case QLocale::Arabic:
+    case QLocale::Persian: {
+        fontFamilies.prepend(QLatin1String("Noto Sans"));
+        fontFamilies.prepend(QLatin1String("Noto Sans Arabic"));
+        break;
     }
+
+    case QLocale::Chinese: {
+        //
+        // TODO: Noto Sans Chinese (очень жирный, пока решил не добавлять его)
+        //
+        fontFamilies.prepend(QLatin1String("Noto Sans"));
+        break;
+    }
+
+    case QLocale::Hebrew: {
+        fontFamilies.prepend(QLatin1String("Noto Sans"));
+        fontFamilies.prepend(QLatin1String("Noto Sans Hebrew"));
+        break;
+    }
+
+    case QLocale::Hindi: {
+        fontFamilies.prepend(QLatin1String("Noto Sans"));
+        break;
+    }
+
+    case QLocale::Tamil: {
+        fontFamilies.prepend(QLatin1String("Noto Sans"));
+        fontFamilies.prepend(QLatin1String("Noto Sans Tamil"));
+        break;
+    }
+
+    default: {
+        break;
+    }
+    }
+
     auto initFont
-        = [_scaleFactor, fontFamily](QFont::Weight _weight, QFont::Capitalization _capitalization,
-                                     int _pixelSize, qreal _letterSpacing, QFont& _font) {
-              _font.setFamily(fontFamily);
+        = [_scaleFactor, fontFamilies](QFont::Weight _weight, QFont::Capitalization _capitalization,
+                                       int _pixelSize, qreal _letterSpacing, QFont& _font) {
+              _font.setFamilies(fontFamilies);
               _font.setWeight(_weight);
               _font.setCapitalization(_capitalization);
               _font.setPixelSize(static_cast<int>(_pixelSize * _scaleFactor));
