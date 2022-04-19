@@ -223,29 +223,29 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="240"/>
         <source>Paragraph</source>
-        <translation type="unfinished">Absatz</translation>
+        <translation>Absatz</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="244"/>
         <source>Words</source>
-        <translation type="unfinished">Wörter</translation>
+        <translation>Wörter</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="248"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="311"/>
         <source>Occurrences</source>
-        <translation type="unfinished">Auftreten</translation>
+        <translation>Auftreten</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="252"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="315"/>
         <source>Percents</source>
-        <translation type="unfinished">Prozent</translation>
+        <translation>Prozent</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="307"/>
         <source>Character type</source>
-        <translation type="unfinished">Charaktertyp</translation>
+        <translation>Charaktertyp</translation>
     </message>
 </context>
 <context>
@@ -253,7 +253,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/audioplay/audioplay_synopsis_model.cpp" line="9"/>
         <source>Synopsis</source>
-        <translation type="unfinished">Kurzzusammenfassung</translation>
+        <translation>Kurzzusammenfassung</translation>
     </message>
 </context>
 <context>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="24"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished">US-amerikanische Formatvorlage (Seitenformat: Letter; Schriftart: Courier Prime)</translation>
+        <translation>US-amerikanische Formatvorlage (Seitenformat: Letter; Schriftart: Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -742,7 +742,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="220"/>
         <source>Treatment</source>
-        <translation>Exposee</translation>
+        <translation>Exposé</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="214"/>
@@ -811,17 +811,17 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="295"/>
         <source>More then 10 dialogues</source>
-        <translation type="unfinished">Mehr als 10 Aussagen</translation>
+        <translation>Mehr als 10 Aussagen</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="298"/>
         <source>About 10 dialogues</source>
-        <translation type="unfinished">Ungefähr 10 Aussagen</translation>
+        <translation>Ungefähr 10 Aussagen</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="302"/>
         <source>Nonspeaking</source>
-        <translation type="unfinished">Spricht nicht</translation>
+        <translation>Spricht nicht</translation>
     </message>
 </context>
 <context>
@@ -1090,7 +1090,7 @@
         <location filename="../../corelib/business_layer/export/comic_book/comic_book_abstract_exporter.cpp" line="184"/>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_abstract_exporter.cpp" line="197"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1021"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="915"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="976"/>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="853"/>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="905"/>
         <source>END OF</source>
@@ -1131,79 +1131,79 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="798"/>
+        <location filename="../management_layer/application_manager.cpp" line="799"/>
         <source> - changed</source>
         <translation>- geändert</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="854"/>
-        <location filename="../management_layer/application_manager.cpp" line="873"/>
-        <location filename="../management_layer/application_manager.cpp" line="1025"/>
+        <location filename="../management_layer/application_manager.cpp" line="855"/>
+        <location filename="../management_layer/application_manager.cpp" line="874"/>
+        <location filename="../management_layer/application_manager.cpp" line="1026"/>
         <source>Saving error</source>
         <translation>Speicherfehler</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="855"/>
+        <location filename="../management_layer/application_manager.cpp" line="856"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Die Änderungen können nicht geschrieben werden. Es gibt einen internen Datenbasis-Error: &quot;%1&quot; Bitte überprüfen Sie, ob Ihre Datei existiert und Sie die Berechtigung zum Schreiben haben.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="874"/>
+        <location filename="../management_layer/application_manager.cpp" line="875"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Die Änderungen können nicht niedergeschrieben werden, weil die Geschichte in &quot;%1&quot; nicht existiert. Bitte schieben Sie die Datei zurück, versuchen Sie dann erneut, die Datei zu speichern.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="925"/>
+        <location filename="../management_layer/application_manager.cpp" line="926"/>
         <source>Project was modified. Save changes?</source>
         <translation>Das Projekt wurde geändert. Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="926"/>
+        <location filename="../management_layer/application_manager.cpp" line="927"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="927"/>
+        <location filename="../management_layer/application_manager.cpp" line="928"/>
         <source>Don&apos;t save</source>
         <translation>Nicht speichern</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="928"/>
+        <location filename="../management_layer/application_manager.cpp" line="929"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="987"/>
+        <location filename="../management_layer/application_manager.cpp" line="988"/>
         <source>Choose file to save story</source>
         <translation>Wählen Sie eine Datei, um die Geschichte zu speichern</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1026"/>
+        <location filename="../management_layer/application_manager.cpp" line="1027"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Die Geschichte kann nicht in die Datei %1 gespeichert werden. Bitte überprüfen Sie Ihre Berechtigungen und versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1076"/>
+        <location filename="../management_layer/application_manager.cpp" line="1077"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Sie haben versucht, ein Projekt im nicht existenten Ordner &amp;1 zu erstellen. Bitte wählen Sie einen anderen Speicherort für das neue Projekt.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1081"/>
+        <location filename="../management_layer/application_manager.cpp" line="1082"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Die Datei kann nicht bearbeitet werden. Es sieht so aus, als ob sie von einer anderen Applikation geöffnet ist. Bitte schließen Sie es und versuchen Sie erneut, ein neues Projekt zu erstellen.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1085"/>
+        <location filename="../management_layer/application_manager.cpp" line="1086"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Die Datei kann nicht bearbeitet werden. Bitte überprüfen Sie, ob die Applikation die Rechte hat, den ausgewählten Ordner zu bearbeiten, und geben Sie ihr diese Rechte gegebenfalls, oder wählen Sie einen anderen Speicherort zum Speichern eines neuen Projekts.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1089"/>
+        <location filename="../management_layer/application_manager.cpp" line="1090"/>
         <source>Create project error</source>
         <translation>Projekt-Error erstellen</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1169"/>
+        <location filename="../management_layer/application_manager.cpp" line="1170"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>Diese Datei kann gegenwärtig nicht geöffnet werden, da sie bereits in einer anderen Kopie der Anwendung geöffnet ist.</translation>
     </message>
@@ -1213,7 +1213,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="120"/>
         <source>Color</source>
-        <translation type="unfinished">Farbe</translation>
+        <translation>Farbe</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="221"/>
@@ -1290,28 +1290,28 @@
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="115"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="261"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="385"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="387"/>
         <source>Choose the file to export</source>
         <translation>Wählen Sie die zu exportierende Datei</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="138"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="284"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="408"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="410"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation>Dieses Dokument kann nicht bearbeitet werden. Es scheint, dass das Dokument von einer anderen Applikation verwendet wird. Bitte schließen Sie es und versuchen Sie den Export erneut.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="141"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="287"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="411"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="413"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation>Dieses Dokument kann nicht bearbeitet werden. Überprüfen Sie Ihre Befugnisse, den Ordner zu bearbeiten, oder wählen sie einen anderen Ordner aus.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="144"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="290"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="414"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="416"/>
         <source>Export error</source>
         <translation>Exportier-Error</translation>
     </message>
@@ -1508,7 +1508,7 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1257"/>
         <source>Treatment</source>
-        <translation>Exposee</translation>
+        <translation>Exposé</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1248"/>
@@ -1530,25 +1530,6 @@
     </message>
 </context>
 <context>
-    <name>ManagementLayer::ScreenplayTemplateManager</name>
-    <message>
-        <source>Template was modified. Save changes?</source>
-        <translation type="vanished">Designvorlage wurde bearbeitet. Änderungen speichern?</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Abbrechen</translation>
-    </message>
-    <message>
-        <source>Don&apos;t save</source>
-        <translation type="vanished">Nicht speichern</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Speichern</translation>
-    </message>
-</context>
-<context>
     <name>ManagementLayer::ScreenplayTextStructureManager</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="121"/>
@@ -1556,7 +1537,7 @@
         <translation>Farbe</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="224"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="226"/>
         <source>Screenplay</source>
         <translation>Drehbuch</translation>
     </message>
@@ -1569,9 +1550,9 @@
         <translation>Farbe</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="223"/>
+        <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="225"/>
         <source>Treatment</source>
-        <translation>Exposee</translation>
+        <translation>Exposé</translation>
     </message>
 </context>
 <context>
@@ -1580,20 +1561,20 @@
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="518"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="569"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="620"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="671"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="670"/>
         <source>Choose the file to save template</source>
         <translation>Datei zum Speichern der Designvorlage auswählen</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="539"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="590"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="641"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="691"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="640"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="690"/>
         <source>Choose the file with template to load</source>
         <translation>Datei zum Laden einer Designvorlage auswählen</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="873"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="872"/>
         <source>Spelling dictionary loading</source>
         <translation>Wörterbuch wird geladen</translation>
     </message>
@@ -1603,22 +1584,22 @@
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="390"/>
         <source>Template was modified. Save changes?</source>
-        <translation type="unfinished">Designvorlage wurde bearbeitet. Änderungen speichern?</translation>
+        <translation>Designvorlage wurde bearbeitet. Änderungen speichern?</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="391"/>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="392"/>
         <source>Don&apos;t save</source>
-        <translation type="unfinished">Nicht speichern</translation>
+        <translation>Nicht speichern</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="393"/>
         <source>Save</source>
-        <translation type="unfinished">Speichern</translation>
+        <translation>Speichern</translation>
     </message>
 </context>
 <context>
@@ -1632,22 +1613,22 @@
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4074"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3816"/>
         <source>Cut</source>
         <translation>Ausschneiden</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4081"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3823"/>
         <source>Copy</source>
         <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4087"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3829"/>
         <source>Paste</source>
         <translation>Einfügen</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4094"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3836"/>
         <source>Select all</source>
         <translation>Alles auswählen</translation>
     </message>
@@ -1761,7 +1742,7 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="291"/>
         <source>Treatment text</source>
-        <translation>Exposeetext</translation>
+        <translation>Exposétext</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="298"/>
@@ -2166,42 +2147,42 @@
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="186"/>
         <source>Format</source>
-        <translation type="unfinished">Format</translation>
+        <translation>Format</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="187"/>
         <source>Include title page</source>
-        <translation type="unfinished">Titelseite einschließen</translation>
+        <translation>Titelseite einschließen</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="188"/>
         <source>Include inline notes</source>
-        <translation type="unfinished">Inlinenotizen einschließen</translation>
+        <translation>Inlinenotizen einschließen</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="189"/>
         <source>Include review marks</source>
-        <translation type="unfinished">Anmerkungen einschließen</translation>
+        <translation>Anmerkungen einschließen</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="190"/>
         <source>Watermark</source>
-        <translation type="unfinished">Wasserzeichen</translation>
+        <translation>Wasserzeichen</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="192"/>
         <source>Open document after export</source>
-        <translation type="unfinished">Dokument nach dem Export öffnen</translation>
+        <translation>Dokument nach dem Export öffnen</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="193"/>
         <source>Export</source>
-        <translation type="unfinished">Exportieren</translation>
+        <translation>Exportieren</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="194"/>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
@@ -2214,12 +2195,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="188"/>
         <source>Tagline</source>
-        <translation type="unfinished">Tagline</translation>
+        <translation>Tagline</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="189"/>
         <source>Logline</source>
-        <translation type="unfinished">Logline</translation>
+        <translation>Logline</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="190"/>
@@ -2229,12 +2210,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="191"/>
         <source>Title page</source>
-        <translation type="unfinished">Titelseite</translation>
+        <translation>Titelseite</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="192"/>
         <source>Synopsis</source>
-        <translation type="unfinished">Kurzzusammenfassung</translation>
+        <translation>Kurzzusammenfassung</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="193"/>
@@ -2244,7 +2225,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="194"/>
         <source>Statistics</source>
-        <translation type="unfinished">Statistiken</translation>
+        <translation>Statistiken</translation>
     </message>
 </context>
 <context>
@@ -2252,22 +2233,22 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="220"/>
         <source>Header</source>
-        <translation type="unfinished">Kopfzeile</translation>
+        <translation>Kopfzeile</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="221"/>
         <source>Print header on title page</source>
-        <translation type="unfinished">Kopfzeile auf der Titelseite drucken</translation>
+        <translation>Kopfzeile auf der Titelseite drucken</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="222"/>
         <source>Footer</source>
-        <translation type="unfinished">Fußzeile</translation>
+        <translation>Fußzeile</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="223"/>
         <source>Print footer on title page</source>
-        <translation type="unfinished">Fußzeile auf der Titelseite drucken</translation>
+        <translation>Fußzeile auf der Titelseite drucken</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="224"/>
@@ -2277,7 +2258,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="225"/>
         <source>Template</source>
-        <translation type="unfinished">Formatvorlage</translation>
+        <translation>Formatvorlage</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="226"/>
@@ -2295,32 +2276,32 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="201"/>
         <source>Duration</source>
-        <translation type="unfinished">Dauer</translation>
+        <translation>Dauer</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="202"/>
         <source>Pages</source>
-        <translation type="unfinished">Seiten</translation>
+        <translation>Seiten</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="203"/>
         <source>Words</source>
-        <translation type="unfinished">Wörter</translation>
+        <translation>Wörter</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="204"/>
         <source>Characters with/without spaces</source>
-        <translation type="unfinished">Zeichen mit/ohne Leerzeichen</translation>
+        <translation>Zeichen mit/ohne Leerzeichen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="206"/>
         <source>Text statistics</source>
-        <translation type="unfinished">Textstatistiken</translation>
+        <translation>Textstatistiken</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="207"/>
         <source>Characters statistics</source>
-        <translation type="unfinished">Charakterstatistiken</translation>
+        <translation>Charakterstatistiken</translation>
     </message>
 </context>
 <context>
@@ -2333,17 +2314,17 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1270"/>
         <source>Add</source>
-        <translation type="unfinished">Hinzufügen</translation>
+        <translation>Hinzufügen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1276"/>
         <source>Edit</source>
-        <translation type="unfinished">Bearbeiten</translation>
+        <translation>Bearbeiten</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1281"/>
         <source>Remove</source>
-        <translation type="unfinished">Entfernen</translation>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1288"/>
@@ -2356,47 +2337,47 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="81"/>
         <source>Scene heading</source>
-        <translation type="unfinished">Szenenüberschrift</translation>
+        <translation>Szenenüberschrift</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="224"/>
         <source>Undo last action</source>
-        <translation type="unfinished">Letzte Aktion rückgängig machen</translation>
+        <translation>Letzte Aktion rückgängig machen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="228"/>
         <source>Redo last action</source>
-        <translation type="unfinished">Letzte Aktion erneut machen</translation>
+        <translation>Letzte Aktion erneut machen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="231"/>
         <source>Current paragraph format</source>
-        <translation type="unfinished">Aktuelles Absatzformat</translation>
+        <translation>Aktuelles Absatzformat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="233"/>
         <source>Hide fast format panel</source>
-        <translation type="unfinished">Schnellformatierpanel verstecken</translation>
+        <translation>Schnellformatierpanel verstecken</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="234"/>
         <source>Show fast format panel</source>
-        <translation type="unfinished">Schnellformatierpanel anzeigen</translation>
+        <translation>Schnellformatierpanel anzeigen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="236"/>
         <source>Search text</source>
-        <translation type="unfinished">Text suchen</translation>
+        <translation>Text suchen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="239"/>
         <source>Disable review mode</source>
-        <translation type="unfinished">Besprechungsmodus ausschalten</translation>
+        <translation>Besprechungsmodus ausschalten</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="240"/>
         <source>Enable review mode</source>
-        <translation type="unfinished">Besprechungsmodus anschalten</translation>
+        <translation>Besprechungsmodus anschalten</translation>
     </message>
 </context>
 <context>
@@ -2405,79 +2386,79 @@
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="150"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="297"/>
         <source>Search without case sensitive</source>
-        <translation type="unfinished">Bei der Suche Groß- und Kleinschreibung nicht beachten</translation>
+        <translation>Bei der Suche Groß- und Kleinschreibung nicht beachten</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="151"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="298"/>
         <source>Search with case sensitive</source>
-        <translation type="unfinished">Bei der Suche Groß- und Kleinschreibung beachten</translation>
+        <translation>Bei der Suche Groß- und Kleinschreibung beachten</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="156"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="281"/>
         <source>In the whole text</source>
-        <translation type="unfinished">Im gesamten Texten</translation>
+        <translation>Im gesamten Texten</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="274"/>
         <source>Exit from search</source>
-        <translation type="unfinished">Suche verlassen</translation>
+        <translation>Suche verlassen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="277"/>
         <source>Search</source>
-        <translation type="unfinished">Suchen</translation>
+        <translation>Suchen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="278"/>
         <source>Enter search phrase here</source>
-        <translation type="unfinished">Suchphrase hier eingeben</translation>
+        <translation>Suchphrase hier eingeben</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="282"/>
         <source>In scene heading</source>
-        <translation type="unfinished">In der Szenenüberschrift</translation>
+        <translation>In der Szenenüberschrift</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="283"/>
         <source>In character</source>
-        <translation type="unfinished">In Charakteren</translation>
+        <translation>In Charakteren</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="284"/>
         <source>In dialogue</source>
-        <translation type="unfinished">Im Dialog</translation>
+        <translation>Im Dialog</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="289"/>
         <source>Go to the next search result</source>
-        <translation type="unfinished">Zum nächsten Suchergebnis springen</translation>
+        <translation>Zum nächsten Suchergebnis springen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="293"/>
         <source>Go to the previous search result</source>
-        <translation type="unfinished">Zum letzten Suchergebnis springen</translation>
+        <translation>Zum letzten Suchergebnis springen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="300"/>
         <source>Replace with</source>
-        <translation type="unfinished">Ersetzen durch</translation>
+        <translation>Ersetzen durch</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="301"/>
         <source>Enter phrase to replace</source>
-        <translation type="unfinished">Phrase zum Ersetzen eingeben</translation>
+        <translation>Phrase zum Ersetzen eingeben</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="302"/>
         <source>Replace</source>
-        <translation type="unfinished">Ersetzen</translation>
+        <translation>Ersetzen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="303"/>
         <source>All</source>
-        <translation type="unfinished">Alles</translation>
+        <translation>Alles</translation>
     </message>
 </context>
 <context>
@@ -2485,12 +2466,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="859"/>
         <source>Formatting</source>
-        <translation type="unfinished"></translation>
+        <translation>Formatierung</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="860"/>
         <source>Comments</source>
-        <translation type="unfinished">Kommentare</translation>
+        <translation>Kommentare</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="861"/>
@@ -2922,57 +2903,56 @@
 <context>
     <name>Ui::ComicBookExportDialog</name>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="187"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="167"/>
         <source>Export comic book</source>
         <translation>Comicbch exportieren</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="189"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="169"/>
         <source>Format</source>
         <translation>Format</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="190"/>
         <source>Template</source>
-        <translation>Formatvorlage</translation>
+        <translation type="vanished">Formatvorlage</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="191"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="170"/>
         <source>Print title page</source>
         <translation>Titelseite drucken</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="192"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="171"/>
         <source>Print panels numbers in form of words</source>
         <translation>Panelnummern als Wörter ausgeben</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="193"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="172"/>
         <source>Print inline notes</source>
         <translation>Inlinenotizen drucken</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="194"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="173"/>
         <source>Print review marks</source>
         <translation>Anmerkungen drucken</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="195"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="174"/>
         <source>Watermark</source>
         <translation>Wasserzeichen</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="197"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="176"/>
         <source>Open document after export</source>
         <translation>Dokument nach dem Export öffnen</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="198"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="177"/>
         <source>Export</source>
         <translation>Exportieren</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="199"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="178"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
@@ -3023,24 +3003,34 @@
 <context>
     <name>Ui::ComicBookParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="146"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="191"/>
         <source>Header</source>
         <translation>Kopfzeile</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="147"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="192"/>
         <source>Print header on title page</source>
         <translation>Kopfzeile auf der Titelseite drucken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="148"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="193"/>
         <source>Footer</source>
         <translation>Fußzeile</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="149"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="194"/>
         <source>Print footer on title page</source>
         <translation>Fußzeile auf der Titelseite drucken</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="195"/>
+        <source>Override common settings for this comic book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="196"/>
+        <source>Template</source>
+        <translation type="unfinished">Formatvorlage</translation>
     </message>
 </context>
 <context>
@@ -3074,7 +3064,7 @@
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="998"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1059"/>
         <source>%n panels</source>
         <translation>
             <numerusform>%n panele</numerusform>
@@ -3082,14 +3072,37 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1192"/>
-        <source>Merge paragraph</source>
-        <translation>Absätze zusammenlegen</translation>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1260"/>
+        <source>Bookmark</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1195"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1264"/>
+        <source>Add</source>
+        <translation type="unfinished">Hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1270"/>
+        <source>Edit</source>
+        <translation type="unfinished">Bearbeiten</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1275"/>
+        <source>Remove</source>
+        <translation type="unfinished">Entfernen</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1282"/>
+        <source>Show list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge paragraph</source>
+        <translation type="vanished">Absätze zusammenlegen</translation>
+    </message>
+    <message>
         <source>Split paragraph</source>
-        <translation>Absatz teilen</translation>
+        <translation type="vanished">Absatz teilen</translation>
     </message>
 </context>
 <context>
@@ -3240,14 +3253,24 @@
 <context>
     <name>Ui::ComicBookTextView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="668"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="863"/>
         <source>Formatting</source>
         <translation>Formatiert</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="669"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="864"/>
         <source>Comments</source>
         <translation>Kommentare</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="865"/>
+        <source>Bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="867"/>
+        <source>Show bookmarks list</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4839,7 +4862,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="203"/>
         <source>Treatment</source>
-        <translation>Exposee</translation>
+        <translation>Exposé</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="204"/>

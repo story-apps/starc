@@ -223,29 +223,29 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="240"/>
         <source>Paragraph</source>
-        <translation type="unfinished">Paraqraf</translation>
+        <translation>Paraqraf</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="244"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>Söz sayı</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="248"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="311"/>
         <source>Occurrences</source>
-        <translation type="unfinished">Hesabat</translation>
+        <translation>Hesabat</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="252"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="315"/>
         <source>Percents</source>
-        <translation type="unfinished">Faiz</translation>
+        <translation>Faiz</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="307"/>
         <source>Character type</source>
-        <translation type="unfinished">Personaj tipi</translation>
+        <translation>Personaj tipi</translation>
     </message>
 </context>
 <context>
@@ -253,7 +253,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/audioplay/audioplay_synopsis_model.cpp" line="9"/>
         <source>Synopsis</source>
-        <translation type="unfinished">Sinopsis</translation>
+        <translation>Sinopsis</translation>
     </message>
 </context>
 <context>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="24"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished">ABŞ şablonu (vərəq: Letter; şrift: Courier Prime)</translation>
+        <translation>ABŞ şablonu (vərəq: Letter; şrift: Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -811,17 +811,17 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="295"/>
         <source>More then 10 dialogues</source>
-        <translation type="unfinished">10 replikadan artıq</translation>
+        <translation>10 replikadan artıq</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="298"/>
         <source>About 10 dialogues</source>
-        <translation type="unfinished">10 replikaya yaxın</translation>
+        <translation>10 replikaya yaxın</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="302"/>
         <source>Nonspeaking</source>
-        <translation type="unfinished">Sözsüz</translation>
+        <translation>Sözsüz</translation>
     </message>
 </context>
 <context>
@@ -1090,7 +1090,7 @@
         <location filename="../../corelib/business_layer/export/comic_book/comic_book_abstract_exporter.cpp" line="184"/>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_abstract_exporter.cpp" line="197"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1021"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="915"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="976"/>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="853"/>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="905"/>
         <source>END OF</source>
@@ -1131,79 +1131,79 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="798"/>
+        <location filename="../management_layer/application_manager.cpp" line="799"/>
         <source> - changed</source>
         <translation>- dəyişdirilmişdir</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="854"/>
-        <location filename="../management_layer/application_manager.cpp" line="873"/>
-        <location filename="../management_layer/application_manager.cpp" line="1025"/>
+        <location filename="../management_layer/application_manager.cpp" line="855"/>
+        <location filename="../management_layer/application_manager.cpp" line="874"/>
+        <location filename="../management_layer/application_manager.cpp" line="1026"/>
         <source>Saving error</source>
         <translation>Yaddaşda saxlamaqda xəta</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="855"/>
+        <location filename="../management_layer/application_manager.cpp" line="856"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Dəyişiklilər qəbulolunmur. Daxili xəta başverib: &quot;%1&quot; Zəhmət olmasa, sizin faylın mövcud olduğunu və onu yaddaşda saxlamaq icazənizin olduğunu yoxlayın.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="874"/>
+        <location filename="../management_layer/application_manager.cpp" line="875"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Dəyişiklilər qəbul olunmur, çünki &quot;%1&quot; -də yerləşdirilən hekayə mövcud deyil. Zəhmət olmasa, faylı geri qaytarın və yenidən yaddaşda saxlamağa cəhd edin.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="925"/>
+        <location filename="../management_layer/application_manager.cpp" line="926"/>
         <source>Project was modified. Save changes?</source>
         <translation>Layihədə dəyişikliklər edilib. Bu dəyişikliklər saxlanılsın?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="926"/>
+        <location filename="../management_layer/application_manager.cpp" line="927"/>
         <source>Cancel</source>
         <translation>İmtina</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="927"/>
+        <location filename="../management_layer/application_manager.cpp" line="928"/>
         <source>Don&apos;t save</source>
         <translation>Yaddaşda saxlama</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="928"/>
+        <location filename="../management_layer/application_manager.cpp" line="929"/>
         <source>Save</source>
         <translation>Yaddaşda saxla</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="987"/>
+        <location filename="../management_layer/application_manager.cpp" line="988"/>
         <source>Choose file to save story</source>
         <translation>Əhvalatı yaddaşda saxlamaq üçün faylı seç</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1026"/>
+        <location filename="../management_layer/application_manager.cpp" line="1027"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Əhvalatı yaddaşda saxlamaq alınmır %1. İcazə səviyyəsini yoxlayın və bir daha cəhd edin.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1076"/>
+        <location filename="../management_layer/application_manager.cpp" line="1077"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Siz mövcud olmayan %1 qovluqda layihə yaratmağa çalışırsınız. Zəhmət olmasa, yeni layihən üçün digər qovluğu seçin. </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1081"/>
+        <location filename="../management_layer/application_manager.cpp" line="1082"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Fayl yazıla bilmir. Görünür ki, o, başqa proqramda açılmışdır. Zəhmət olmasa, o proqramı bağlayın və  layihəni yenidən yaratmağa cəhd edin.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1085"/>
+        <location filename="../management_layer/application_manager.cpp" line="1086"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Fayl yazıla bilmir. Zəhmət olmasa, proqramın seçilmiş qovluqda saxlanılmasını yoxlayın və buna icazə verin və ya yeni layihəni saxlamaq üçün digər qovluğu seçin. </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1089"/>
+        <location filename="../management_layer/application_manager.cpp" line="1090"/>
         <source>Create project error</source>
         <translation>Layihənin yaradılmasında xəta</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1169"/>
+        <location filename="../management_layer/application_manager.cpp" line="1170"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>Bu fayl indi açıla bilməz, çünki o, artıq proqramın başqa surətində açılıb.</translation>
     </message>
@@ -1213,7 +1213,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="120"/>
         <source>Color</source>
-        <translation type="unfinished">Rəng</translation>
+        <translation>Rəng</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="221"/>
@@ -1290,28 +1290,28 @@
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="115"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="261"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="385"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="387"/>
         <source>Choose the file to export</source>
         <translation>İxrac üçün faylı seç</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="138"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="284"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="408"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="410"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation>Faylı yazmaq mümkün deyil. Görünür ki, o, başqa proqramda açılmışdır. Zəhmət olmasa, onu bağlayın və bir daha ixrac etməyə çalışın.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="141"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="287"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="411"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="413"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation>Faylı yazmaq mümkün deyil. Seçilmiş qovluqda yazmağa icazənizin olduğunu yoxlayın və ya başqa qovluğu seçin.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="144"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="290"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="414"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="416"/>
         <source>Export error</source>
         <translation>İxrac etmədə səhv</translation>
     </message>
@@ -1530,25 +1530,6 @@
     </message>
 </context>
 <context>
-    <name>ManagementLayer::ScreenplayTemplateManager</name>
-    <message>
-        <source>Template was modified. Save changes?</source>
-        <translation type="vanished">Şablon dəyişdirilmişdi. Dəyişiklikləri yaddaşda saxlamaq istəyirsiz?</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">İmtina</translation>
-    </message>
-    <message>
-        <source>Don&apos;t save</source>
-        <translation type="vanished">Yaddaşda saxlama</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Yaddaşda saxlamaq</translation>
-    </message>
-</context>
-<context>
     <name>ManagementLayer::ScreenplayTextStructureManager</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="121"/>
@@ -1556,7 +1537,7 @@
         <translation>Rəng</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="224"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="226"/>
         <source>Screenplay</source>
         <translation>Ssenari</translation>
     </message>
@@ -1569,7 +1550,7 @@
         <translation>Rəng</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="223"/>
+        <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="225"/>
         <source>Treatment</source>
         <translation>Tritment</translation>
     </message>
@@ -1580,20 +1561,20 @@
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="518"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="569"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="620"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="671"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="670"/>
         <source>Choose the file to save template</source>
         <translation>Şablonu yaddaşda saxlamaq üçün fayl seçin</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="539"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="590"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="641"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="691"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="640"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="690"/>
         <source>Choose the file with template to load</source>
         <translation>Şablonla bir yerdə yüklənməli olan faylı seçin</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="873"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="872"/>
         <source>Spelling dictionary loading</source>
         <translation>Orfoqrafiya lüğətinin yüklənməsi</translation>
     </message>
@@ -1603,22 +1584,22 @@
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="390"/>
         <source>Template was modified. Save changes?</source>
-        <translation type="unfinished">Şablon dəyişdirilmişdi. Dəyişiklikləri yaddaşda saxlamaq istəyirsiz?</translation>
+        <translation>Şablon dəyişdirilmişdi. Dəyişiklikləri yaddaşda saxlamaq istəyirsiz?</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="391"/>
         <source>Cancel</source>
-        <translation type="unfinished">İmtina</translation>
+        <translation>İmtina</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="392"/>
         <source>Don&apos;t save</source>
-        <translation type="unfinished">Yaddaşda saxlama</translation>
+        <translation>Yaddaşda saxlama</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="393"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Yaddaşda saxlamaq</translation>
     </message>
 </context>
 <context>
@@ -1632,22 +1613,22 @@
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4074"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3816"/>
         <source>Cut</source>
         <translation>Kəs</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4081"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3823"/>
         <source>Copy</source>
         <translation>Köçür</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4087"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3829"/>
         <source>Paste</source>
         <translation>Daxil et</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4094"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3836"/>
         <source>Select all</source>
         <translation>Hamısını seç</translation>
     </message>
@@ -2166,42 +2147,42 @@
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="186"/>
         <source>Format</source>
-        <translation type="unfinished">Format</translation>
+        <translation>Format</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="187"/>
         <source>Include title page</source>
-        <translation type="unfinished">Titul vərəqini daxil et</translation>
+        <translation>Titul vərəqini daxil et</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="188"/>
         <source>Include inline notes</source>
-        <translation type="unfinished">Mətn üzrə qeydləri daxil etmək</translation>
+        <translation>Mətn üzrə qeydləri daxil etmək</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="189"/>
         <source>Include review marks</source>
-        <translation type="unfinished">Redaktə qeydlərini daxil etmək</translation>
+        <translation>Redaktə qeydlərini daxil etmək</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="190"/>
         <source>Watermark</source>
-        <translation type="unfinished">Su nişanı</translation>
+        <translation>Su nişanı</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="192"/>
         <source>Open document after export</source>
-        <translation type="unfinished">İxracdan sonra sənədi aç</translation>
+        <translation>İxracdan sonra sənədi aç</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="193"/>
         <source>Export</source>
-        <translation type="unfinished">İxrac</translation>
+        <translation>İxrac</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="194"/>
         <source>Cancel</source>
-        <translation type="unfinished">İmtina</translation>
+        <translation>İmtina</translation>
     </message>
 </context>
 <context>
@@ -2214,12 +2195,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="188"/>
         <source>Tagline</source>
-        <translation type="unfinished">Teqlayn</translation>
+        <translation>Teqlayn</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="189"/>
         <source>Logline</source>
-        <translation type="unfinished">Loqlayn</translation>
+        <translation>Loqlayn</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="190"/>
@@ -2229,12 +2210,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="191"/>
         <source>Title page</source>
-        <translation type="unfinished">Titul vərəqi</translation>
+        <translation>Titul vərəqi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="192"/>
         <source>Synopsis</source>
-        <translation type="unfinished">Sinopsis</translation>
+        <translation>Sinopsis</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="193"/>
@@ -2244,7 +2225,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="194"/>
         <source>Statistics</source>
-        <translation type="unfinished">Statistika</translation>
+        <translation>Statistika</translation>
     </message>
 </context>
 <context>
@@ -2252,22 +2233,22 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="220"/>
         <source>Header</source>
-        <translation type="unfinished">Başlıq</translation>
+        <translation>Başlıq</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="221"/>
         <source>Print header on title page</source>
-        <translation type="unfinished">Başlığın titul vərəqində çapı</translation>
+        <translation>Başlığın titul vərəqində çapı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="222"/>
         <source>Footer</source>
-        <translation type="unfinished">Qeyd hissəsi</translation>
+        <translation>Qeyd hissəsi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="223"/>
         <source>Print footer on title page</source>
-        <translation type="unfinished">Qeyd hissəsinin titul vərəqində çapı</translation>
+        <translation>Qeyd hissəsinin titul vərəqində çapı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="224"/>
@@ -2277,7 +2258,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="225"/>
         <source>Template</source>
-        <translation type="unfinished">Şablon</translation>
+        <translation>Şablon</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="226"/>
@@ -2295,32 +2276,32 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="201"/>
         <source>Duration</source>
-        <translation type="unfinished">Müddət</translation>
+        <translation>Müddət</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="202"/>
         <source>Pages</source>
-        <translation type="unfinished">Səhifələr</translation>
+        <translation>Səhifələr</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="203"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>Söz sayı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="204"/>
         <source>Characters with/without spaces</source>
-        <translation type="unfinished">Simvolların ara ilə/arasız sayı</translation>
+        <translation>Simvolların ara ilə/arasız sayı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="206"/>
         <source>Text statistics</source>
-        <translation type="unfinished">Mətnin statistikası</translation>
+        <translation>Mətnin statistikası</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="207"/>
         <source>Characters statistics</source>
-        <translation type="unfinished">Personajların statistikası</translation>
+        <translation>Personajların statistikası</translation>
     </message>
 </context>
 <context>
@@ -2333,17 +2314,17 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1270"/>
         <source>Add</source>
-        <translation type="unfinished">Əlavə et</translation>
+        <translation>Əlavə et</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1276"/>
         <source>Edit</source>
-        <translation type="unfinished">Redaktə</translation>
+        <translation>Redaktə</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1281"/>
         <source>Remove</source>
-        <translation type="unfinished">Poz</translation>
+        <translation>Poz</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1288"/>
@@ -2356,47 +2337,47 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="81"/>
         <source>Scene heading</source>
-        <translation type="unfinished">Səhnə başlığı</translation>
+        <translation>Səhnə başlığı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="224"/>
         <source>Undo last action</source>
-        <translation type="unfinished">Son əməldən imtina</translation>
+        <translation>Son əməldən imtina</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="228"/>
         <source>Redo last action</source>
-        <translation type="unfinished">Son əməli yenidən et</translation>
+        <translation>Son əməli yenidən et</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="231"/>
         <source>Current paragraph format</source>
-        <translation type="unfinished">Cari paraqrafın formatı</translation>
+        <translation>Cari paraqrafın formatı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="233"/>
         <source>Hide fast format panel</source>
-        <translation type="unfinished">Çevik format panelini gizlət</translation>
+        <translation>Çevik format panelini gizlət</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="234"/>
         <source>Show fast format panel</source>
-        <translation type="unfinished">Çevik format panelini göstər</translation>
+        <translation>Çevik format panelini göstər</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="236"/>
         <source>Search text</source>
-        <translation type="unfinished">Mətni axtar</translation>
+        <translation>Mətni axtar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="239"/>
         <source>Disable review mode</source>
-        <translation type="unfinished">Baxış rejimini söndür</translation>
+        <translation>Baxış rejimini söndür</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="240"/>
         <source>Enable review mode</source>
-        <translation type="unfinished">Baxış rejimini işə sal</translation>
+        <translation>Baxış rejimini işə sal</translation>
     </message>
 </context>
 <context>
@@ -2405,79 +2386,79 @@
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="150"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="297"/>
         <source>Search without case sensitive</source>
-        <translation type="unfinished">Qeyri-dəqiq axtarış</translation>
+        <translation>Qeyri-dəqiq axtarış</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="151"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="298"/>
         <source>Search with case sensitive</source>
-        <translation type="unfinished">Dəqiq axtarış</translation>
+        <translation>Dəqiq axtarış</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="156"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="281"/>
         <source>In the whole text</source>
-        <translation type="unfinished">Bütün mətndə</translation>
+        <translation>Bütün mətndə</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="274"/>
         <source>Exit from search</source>
-        <translation type="unfinished">Axtarışdan çıxmaq</translation>
+        <translation>Axtarışdan çıxmaq</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="277"/>
         <source>Search</source>
-        <translation type="unfinished">Axtarış</translation>
+        <translation>Axtarış</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="278"/>
         <source>Enter search phrase here</source>
-        <translation type="unfinished">Axtarış ifadəsini bura daxil et</translation>
+        <translation>Axtarış ifadəsini bura daxil et</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="282"/>
         <source>In scene heading</source>
-        <translation type="unfinished">Səhnə başlığında</translation>
+        <translation>Səhnə başlığında</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="283"/>
         <source>In character</source>
-        <translation type="unfinished">Personajda</translation>
+        <translation>Personajda</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="284"/>
         <source>In dialogue</source>
-        <translation type="unfinished">Replikada</translation>
+        <translation>Replikada</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="289"/>
         <source>Go to the next search result</source>
-        <translation type="unfinished">Axtarışın növbəti nəticəsinə keçid</translation>
+        <translation>Axtarışın növbəti nəticəsinə keçid</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="293"/>
         <source>Go to the previous search result</source>
-        <translation type="unfinished">Axtarışın əvvəlki nəticəsinə keçid</translation>
+        <translation>Axtarışın əvvəlki nəticəsinə keçid</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="300"/>
         <source>Replace with</source>
-        <translation type="unfinished">Nə ilə dəyişmək</translation>
+        <translation>Nə ilə dəyişmək</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="301"/>
         <source>Enter phrase to replace</source>
-        <translation type="unfinished">Dəyişmək üçün ifadəni daxil et</translation>
+        <translation>Dəyişmək üçün ifadəni daxil et</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="302"/>
         <source>Replace</source>
-        <translation type="unfinished">Dəyişmək</translation>
+        <translation>Dəyişmək</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="303"/>
         <source>All</source>
-        <translation type="unfinished">Hamısı</translation>
+        <translation>Hamısı</translation>
     </message>
 </context>
 <context>
@@ -2485,12 +2466,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="859"/>
         <source>Formatting</source>
-        <translation type="unfinished">Formatlanma</translation>
+        <translation>Formatlanma</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="860"/>
         <source>Comments</source>
-        <translation type="unfinished">Şərhlər</translation>
+        <translation>Şərhlər</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="861"/>
@@ -2922,57 +2903,56 @@
 <context>
     <name>Ui::ComicBookExportDialog</name>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="187"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="167"/>
         <source>Export comic book</source>
         <translation>Komiksin ixracı</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="189"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="169"/>
         <source>Format</source>
         <translation>Format</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="190"/>
         <source>Template</source>
-        <translation>Şablon</translation>
+        <translation type="vanished">Şablon</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="191"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="170"/>
         <source>Print title page</source>
         <translation>Titul səhifəni çap et</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="192"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="171"/>
         <source>Print panels numbers in form of words</source>
         <translation>Panel nömrələrinin söz formasında çapı</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="193"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="172"/>
         <source>Print inline notes</source>
         <translation>Qeydləri çap et</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="194"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="173"/>
         <source>Print review marks</source>
         <translation>Redaktor qeydlərinin çapı</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="195"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="174"/>
         <source>Watermark</source>
         <translation>Su nişanı</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="197"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="176"/>
         <source>Open document after export</source>
         <translation>İxracdan sonra sənədi aç</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="198"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="177"/>
         <source>Export</source>
         <translation>İxrac</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="199"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="178"/>
         <source>Cancel</source>
         <translation>İmtina</translation>
     </message>
@@ -3023,24 +3003,34 @@
 <context>
     <name>Ui::ComicBookParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="146"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="191"/>
         <source>Header</source>
         <translation>Başlıq</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="147"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="192"/>
         <source>Print header on title page</source>
         <translation>Başlığın titul vərəqində çapı</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="148"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="193"/>
         <source>Footer</source>
         <translation>Qeyd hissəsi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="149"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="194"/>
         <source>Print footer on title page</source>
         <translation>Qeyd hissəsinin titul vərəqində çapı</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="195"/>
+        <source>Override common settings for this comic book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="196"/>
+        <source>Template</source>
+        <translation type="unfinished">Şablon</translation>
     </message>
 </context>
 <context>
@@ -3074,7 +3064,7 @@
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="998"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1059"/>
         <source>%n panels</source>
         <translation>
             <numerusform>%n panellər</numerusform>
@@ -3082,14 +3072,37 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1192"/>
-        <source>Merge paragraph</source>
-        <translation>Paraqrafı birləşdirmək</translation>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1260"/>
+        <source>Bookmark</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1195"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1264"/>
+        <source>Add</source>
+        <translation type="unfinished">Əlavə et</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1270"/>
+        <source>Edit</source>
+        <translation type="unfinished">Redaktə</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1275"/>
+        <source>Remove</source>
+        <translation type="unfinished">Poz</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1282"/>
+        <source>Show list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge paragraph</source>
+        <translation type="vanished">Paraqrafı birləşdirmək</translation>
+    </message>
+    <message>
         <source>Split paragraph</source>
-        <translation>Paraqrafı ayırmaq</translation>
+        <translation type="vanished">Paraqrafı ayırmaq</translation>
     </message>
 </context>
 <context>
@@ -3240,14 +3253,24 @@
 <context>
     <name>Ui::ComicBookTextView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="668"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="863"/>
         <source>Formatting</source>
         <translation>Formatlanma</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="669"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="864"/>
         <source>Comments</source>
         <translation>Şərhlər</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="865"/>
+        <source>Bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="867"/>
+        <source>Show bookmarks list</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

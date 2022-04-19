@@ -223,29 +223,29 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="240"/>
         <source>Paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>AfsnitAfsnit</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="244"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>OrdOrd</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="248"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="311"/>
         <source>Occurrences</source>
-        <translation type="unfinished">Forekomster</translation>
+        <translation>Forekomster</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="252"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="315"/>
         <source>Percents</source>
-        <translation type="unfinished">Procent</translation>
+        <translation>Procent</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="307"/>
         <source>Character type</source>
-        <translation type="unfinished">Karakter type</translation>
+        <translation>Karakter type</translation>
     </message>
 </context>
 <context>
@@ -253,7 +253,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/audioplay/audioplay_synopsis_model.cpp" line="9"/>
         <source>Synopsis</source>
-        <translation type="unfinished">Synopsis</translation>
+        <translation>Synopsis</translation>
     </message>
 </context>
 <context>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="24"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished">USA skabelon (side: Letter; font: Courier Prime)</translation>
+        <translation>USA skabelon (side: Letter; font: Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -811,17 +811,17 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="295"/>
         <source>More then 10 dialogues</source>
-        <translation type="unfinished">Mere end 10 dialoger</translation>
+        <translation>Mere end 10 dialoger</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="298"/>
         <source>About 10 dialogues</source>
-        <translation type="unfinished">Omkring 10 dialoger</translation>
+        <translation>Omkring 10 dialoger</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="302"/>
         <source>Nonspeaking</source>
-        <translation type="unfinished">Umælende</translation>
+        <translation>Umælende</translation>
     </message>
 </context>
 <context>
@@ -1090,7 +1090,7 @@
         <location filename="../../corelib/business_layer/export/comic_book/comic_book_abstract_exporter.cpp" line="184"/>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_abstract_exporter.cpp" line="197"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1021"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="915"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="976"/>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="853"/>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="905"/>
         <source>END OF</source>
@@ -1131,79 +1131,79 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="798"/>
+        <location filename="../management_layer/application_manager.cpp" line="799"/>
         <source> - changed</source>
         <translation>- ændret</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="854"/>
-        <location filename="../management_layer/application_manager.cpp" line="873"/>
-        <location filename="../management_layer/application_manager.cpp" line="1025"/>
+        <location filename="../management_layer/application_manager.cpp" line="855"/>
+        <location filename="../management_layer/application_manager.cpp" line="874"/>
+        <location filename="../management_layer/application_manager.cpp" line="1026"/>
         <source>Saving error</source>
         <translation>Fejl under gemning</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="855"/>
+        <location filename="../management_layer/application_manager.cpp" line="856"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Ændringer kan ikke skrives. Der er en intern databasefejl: &quot;%1&quot; Kontroller venligst om filen eksisterer og om du har tilladelse til at gemme.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="874"/>
+        <location filename="../management_layer/application_manager.cpp" line="875"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Ændringer kan ikke skrives fordi historien på &quot;%1&quot; ikke eksisterer Flyt venligst filen tilbage og prøv at gemme igen.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="925"/>
+        <location filename="../management_layer/application_manager.cpp" line="926"/>
         <source>Project was modified. Save changes?</source>
         <translation>Projektet er ændret. Skal ændringerne gemmes?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="926"/>
+        <location filename="../management_layer/application_manager.cpp" line="927"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="927"/>
+        <location filename="../management_layer/application_manager.cpp" line="928"/>
         <source>Don&apos;t save</source>
         <translation>Gem ikke</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="928"/>
+        <location filename="../management_layer/application_manager.cpp" line="929"/>
         <source>Save</source>
         <translation>Gem</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="987"/>
+        <location filename="../management_layer/application_manager.cpp" line="988"/>
         <source>Choose file to save story</source>
         <translation>Vælg fil til at gemme historien</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1026"/>
+        <location filename="../management_layer/application_manager.cpp" line="1027"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Kan ikke gemme historien til filn %1. Kontroller venligst tilladelser og prøv igen.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1076"/>
+        <location filename="../management_layer/application_manager.cpp" line="1077"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Du prøvede at oprette et projekt i en ikke-eksisterende mappe %1. Vælg venligst en anden mappe til det nye projekt.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1081"/>
+        <location filename="../management_layer/application_manager.cpp" line="1082"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Filen kan ikke skrives. Det ser ud som om den er åben i et andet program. Luk det venligst, og prøv at oprette det nye projekt igen.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1085"/>
+        <location filename="../management_layer/application_manager.cpp" line="1086"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Filen kan ikke skrives. Giv venligst tilladelse til at app&apos;en kan skrive til den valgte mappe, eller vælg en anden mappe til projektet.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1089"/>
+        <location filename="../management_layer/application_manager.cpp" line="1090"/>
         <source>Create project error</source>
         <translation>Fejl ved oprettelse af projekt</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1169"/>
+        <location filename="../management_layer/application_manager.cpp" line="1170"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>Denne fil kan ikke åbnes lige nu, da den er åben i en anden version af dette program.</translation>
     </message>
@@ -1213,7 +1213,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="120"/>
         <source>Color</source>
-        <translation type="unfinished">Farve</translation>
+        <translation>Farve</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="221"/>
@@ -1290,28 +1290,28 @@
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="115"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="261"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="385"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="387"/>
         <source>Choose the file to export</source>
         <translation>Vælg fil at eksportere</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="138"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="284"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="408"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="410"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation>Kan ikke skrive til fil. Ser ud som om den er åben i et andet program. Luk det venligst og prøv at eksportere igen.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="141"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="287"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="411"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="413"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation>Kan ikke skrive til fil. Kontroller tilladelser i den valgte mappe eller vælg en anden mappe.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="144"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="290"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="414"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="416"/>
         <source>Export error</source>
         <translation>Fejl ved eksport.</translation>
     </message>
@@ -1530,25 +1530,6 @@
     </message>
 </context>
 <context>
-    <name>ManagementLayer::ScreenplayTemplateManager</name>
-    <message>
-        <source>Template was modified. Save changes?</source>
-        <translation type="vanished">Skabelonen blev ændret. Gem ændringer?</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Annuller</translation>
-    </message>
-    <message>
-        <source>Don&apos;t save</source>
-        <translation type="vanished">Gem ikke</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Gem</translation>
-    </message>
-</context>
-<context>
     <name>ManagementLayer::ScreenplayTextStructureManager</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="121"/>
@@ -1556,7 +1537,7 @@
         <translation>Farve</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="224"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="226"/>
         <source>Screenplay</source>
         <translation>Manuskript</translation>
     </message>
@@ -1569,7 +1550,7 @@
         <translation>Farve</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="223"/>
+        <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="225"/>
         <source>Treatment</source>
         <translation>Treatment</translation>
     </message>
@@ -1580,20 +1561,20 @@
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="518"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="569"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="620"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="671"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="670"/>
         <source>Choose the file to save template</source>
         <translation>Vælg fil til at gemme skabelon</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="539"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="590"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="641"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="691"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="640"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="690"/>
         <source>Choose the file with template to load</source>
         <translation>Vælg fil til at hente skabelon</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="873"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="872"/>
         <source>Spelling dictionary loading</source>
         <translation>Stavekontrol hentes</translation>
     </message>
@@ -1603,22 +1584,22 @@
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="390"/>
         <source>Template was modified. Save changes?</source>
-        <translation type="unfinished">Skabelonen blev ændret. Gem ændringer?</translation>
+        <translation>Skabelonen blev ændret. Gem ændringer?</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="391"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuller</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="392"/>
         <source>Don&apos;t save</source>
-        <translation type="unfinished">Gem ikke</translation>
+        <translation>Gem ikke</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="393"/>
         <source>Save</source>
-        <translation type="unfinished">Gem</translation>
+        <translation>Gem</translation>
     </message>
 </context>
 <context>
@@ -1632,22 +1613,22 @@
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4074"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3816"/>
         <source>Cut</source>
         <translation>Klip</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4081"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3823"/>
         <source>Copy</source>
         <translation>Kopier</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4087"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3829"/>
         <source>Paste</source>
         <translation>Indsæt</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4094"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3836"/>
         <source>Select all</source>
         <translation>Vælg alle</translation>
     </message>
@@ -1931,14 +1912,6 @@
         <translation>version</translation>
     </message>
     <message>
-        <source>Designed, coded and crafted with love at the </source>
-        <translation type="vanished">Designet, kodet og lavet med kærlighed hos </translation>
-    </message>
-    <message>
-        <source>The Logline Generator is powered by </source>
-        <translation type="vanished">The Logline/præmis Generator er muliggjort af</translation>
-    </message>
-    <message>
         <location filename="../ui/about_application_dialog.cpp" line="160"/>
         <source>Designed, coded and crafted with love at the</source>
         <translation type="unfinished"></translation>
@@ -2178,42 +2151,42 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="186"/>
         <source>Format</source>
-        <translation type="unfinished">Formater</translation>
+        <translation>Formater</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="187"/>
         <source>Include title page</source>
-        <translation type="unfinished">Inkluder titelside</translation>
+        <translation>Inkluder titelside</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="188"/>
         <source>Include inline notes</source>
-        <translation type="unfinished">Inklude inline noter</translation>
+        <translation>Inklude inline noter</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="189"/>
         <source>Include review marks</source>
-        <translation type="unfinished">Inkluder gennemsynsmarkeringer</translation>
+        <translation>Inkluder gennemsynsmarkeringer</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="190"/>
         <source>Watermark</source>
-        <translation type="unfinished">Vandmærke</translation>
+        <translation>Vandmærke</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="192"/>
         <source>Open document after export</source>
-        <translation type="unfinished">Åbn dokument efter eksport</translation>
+        <translation>Åbn dokument efter eksport</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="193"/>
         <source>Export</source>
-        <translation type="unfinished">Eksporter</translation>
+        <translation>Eksporter</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="194"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuller</translation>
     </message>
 </context>
 <context>
@@ -2226,27 +2199,27 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="188"/>
         <source>Tagline</source>
-        <translation type="unfinished">Tagline</translation>
+        <translation>Tagline</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="189"/>
         <source>Logline</source>
-        <translation type="unfinished">Præmis</translation>
+        <translation>Præmis</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="190"/>
         <source>Generate logline</source>
-        <translation type="unfinished">Generer præmis</translation>
+        <translation>Generer præmis</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="191"/>
         <source>Title page</source>
-        <translation type="unfinished">Titelside</translation>
+        <translation>Titelside</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="192"/>
         <source>Synopsis</source>
-        <translation type="unfinished">Synopsis</translation>
+        <translation>Synopsis</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="193"/>
@@ -2256,7 +2229,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="194"/>
         <source>Statistics</source>
-        <translation type="unfinished">Statistik</translation>
+        <translation>Statistik</translation>
     </message>
 </context>
 <context>
@@ -2264,22 +2237,22 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="220"/>
         <source>Header</source>
-        <translation type="unfinished">Header</translation>
+        <translation>Header</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="221"/>
         <source>Print header on title page</source>
-        <translation type="unfinished">Udskriv header på titelside</translation>
+        <translation>Udskriv header på titelside</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="222"/>
         <source>Footer</source>
-        <translation type="unfinished">Footer</translation>
+        <translation>Footer</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="223"/>
         <source>Print footer on title page</source>
-        <translation type="unfinished">Udskriv footer på titelside</translation>
+        <translation>Udskriv footer på titelside</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="224"/>
@@ -2289,7 +2262,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="225"/>
         <source>Template</source>
-        <translation type="unfinished">Skabelon</translation>
+        <translation>Skabelon</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="226"/>
@@ -2307,32 +2280,32 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="201"/>
         <source>Duration</source>
-        <translation type="unfinished">Varighed</translation>
+        <translation>Varighed</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="202"/>
         <source>Pages</source>
-        <translation type="unfinished">Sider</translation>
+        <translation>Sider</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="203"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>OrdOrd</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="204"/>
         <source>Characters with/without spaces</source>
-        <translation type="unfinished">Karakterer med/uden mellemrum</translation>
+        <translation>Karakterer med/uden mellemrum</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="206"/>
         <source>Text statistics</source>
-        <translation type="unfinished">Tekst statistik</translation>
+        <translation>Tekst statistik</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="207"/>
         <source>Characters statistics</source>
-        <translation type="unfinished">Karaterstatistik</translation>
+        <translation>Karaterstatistik</translation>
     </message>
 </context>
 <context>
@@ -2340,27 +2313,27 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1266"/>
         <source>Bookmark</source>
-        <translation type="unfinished">Bogmærke</translation>
+        <translation>Bogmærke</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1270"/>
         <source>Add</source>
-        <translation type="unfinished">Tilføj</translation>
+        <translation>Tilføj</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1276"/>
         <source>Edit</source>
-        <translation type="unfinished">Rediger</translation>
+        <translation>Rediger</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1281"/>
         <source>Remove</source>
-        <translation type="unfinished">Fjern</translation>
+        <translation>Fjern</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1288"/>
         <source>Show list</source>
-        <translation type="unfinished">Vis liste</translation>
+        <translation>Vis liste</translation>
     </message>
 </context>
 <context>
@@ -2368,47 +2341,47 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="81"/>
         <source>Scene heading</source>
-        <translation type="unfinished">Sceneoverskrift</translation>
+        <translation>Sceneoverskrift</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="224"/>
         <source>Undo last action</source>
-        <translation type="unfinished">Fortryd seneste handling</translation>
+        <translation>Fortryd seneste handling</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="228"/>
         <source>Redo last action</source>
-        <translation type="unfinished">Genskab seneste handling</translation>
+        <translation>Genskab seneste handling</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="231"/>
         <source>Current paragraph format</source>
-        <translation type="unfinished">Nuværende afsnitsformattering</translation>
+        <translation>Nuværende afsnitsformattering</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="233"/>
         <source>Hide fast format panel</source>
-        <translation type="unfinished">Skjul hurtigformatteringspanel</translation>
+        <translation>Skjul hurtigformatteringspanel</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="234"/>
         <source>Show fast format panel</source>
-        <translation type="unfinished">Vis hurtigformatteringspanel</translation>
+        <translation>Vis hurtigformatteringspanel</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="236"/>
         <source>Search text</source>
-        <translation type="unfinished">Søg tekst</translation>
+        <translation>Søg tekst</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="239"/>
         <source>Disable review mode</source>
-        <translation type="unfinished">Deaktiver gennemsyns mode</translation>
+        <translation>Deaktiver gennemsyns mode</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="240"/>
         <source>Enable review mode</source>
-        <translation type="unfinished">Aktiver gennemsyns mode</translation>
+        <translation>Aktiver gennemsyns mode</translation>
     </message>
 </context>
 <context>
@@ -2417,79 +2390,79 @@ Foreslå forbedringer og rapprter fejl.</translation>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="150"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="297"/>
         <source>Search without case sensitive</source>
-        <translation type="unfinished">Søg uden forskel på små/store bogstaver</translation>
+        <translation>Søg uden forskel på små/store bogstaver</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="151"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="298"/>
         <source>Search with case sensitive</source>
-        <translation type="unfinished">Søg med forskel på små/store bogstaver</translation>
+        <translation>Søg med forskel på små/store bogstaver</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="156"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="281"/>
         <source>In the whole text</source>
-        <translation type="unfinished">I hele teksten</translation>
+        <translation>I hele teksten</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="274"/>
         <source>Exit from search</source>
-        <translation type="unfinished">Stop søgning</translation>
+        <translation>Stop søgning</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="277"/>
         <source>Search</source>
-        <translation type="unfinished">Søg</translation>
+        <translation>Søg</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="278"/>
         <source>Enter search phrase here</source>
-        <translation type="unfinished">Indtast søgning her</translation>
+        <translation>Indtast søgning her</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="282"/>
         <source>In scene heading</source>
-        <translation type="unfinished">I scene header</translation>
+        <translation>I scene header</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="283"/>
         <source>In character</source>
-        <translation type="unfinished">I karakter</translation>
+        <translation>I karakter</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="284"/>
         <source>In dialogue</source>
-        <translation type="unfinished">I dialog</translation>
+        <translation>I dialog</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="289"/>
         <source>Go to the next search result</source>
-        <translation type="unfinished">Gå til næste søgeresultat</translation>
+        <translation>Gå til næste søgeresultat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="293"/>
         <source>Go to the previous search result</source>
-        <translation type="unfinished">Gå til forrige søgeresultat</translation>
+        <translation>Gå til forrige søgeresultat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="300"/>
         <source>Replace with</source>
-        <translation type="unfinished">Erstat med</translation>
+        <translation>Erstat med</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="301"/>
         <source>Enter phrase to replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv udtryk der skal erstattes</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="302"/>
         <source>Replace</source>
-        <translation type="unfinished">Erstat</translation>
+        <translation>Erstat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="303"/>
         <source>All</source>
-        <translation type="unfinished">Alle</translation>
+        <translation>Alle</translation>
     </message>
 </context>
 <context>
@@ -2497,22 +2470,22 @@ Foreslå forbedringer og rapprter fejl.</translation>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="859"/>
         <source>Formatting</source>
-        <translation type="unfinished">Formatterer</translation>
+        <translation>Formatterer</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="860"/>
         <source>Comments</source>
-        <translation type="unfinished">Kommentarer</translation>
+        <translation>Kommentarer</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="861"/>
         <source>Bookmarks</source>
-        <translation type="unfinished">Bogmærker</translation>
+        <translation>Bogmærker</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="863"/>
         <source>Show bookmarks list</source>
-        <translation type="unfinished">Vis bogmærkeliste</translation>
+        <translation>Vis bogmærkeliste</translation>
     </message>
 </context>
 <context>
@@ -2934,57 +2907,56 @@ Foreslå forbedringer og rapprter fejl.</translation>
 <context>
     <name>Ui::ComicBookExportDialog</name>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="187"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="167"/>
         <source>Export comic book</source>
         <translation>Eksporter tegneserie</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="189"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="169"/>
         <source>Format</source>
         <translation>Formater</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="190"/>
         <source>Template</source>
-        <translation>Skabelon</translation>
+        <translation type="vanished">Skabelon</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="191"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="170"/>
         <source>Print title page</source>
         <translation>Udskriv titelside</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="192"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="171"/>
         <source>Print panels numbers in form of words</source>
         <translation>Udskriv panalnumre som ord</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="193"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="172"/>
         <source>Print inline notes</source>
         <translation>Udskriv inline noter</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="194"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="173"/>
         <source>Print review marks</source>
         <translation>Udskriv anmeldelsesmærker</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="195"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="174"/>
         <source>Watermark</source>
         <translation>Vandmærke</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="197"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="176"/>
         <source>Open document after export</source>
         <translation>Åbn dokument efter eksport</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="198"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="177"/>
         <source>Export</source>
         <translation>Eksporter</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="199"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="178"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
@@ -3035,24 +3007,34 @@ Foreslå forbedringer og rapprter fejl.</translation>
 <context>
     <name>Ui::ComicBookParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="146"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="191"/>
         <source>Header</source>
         <translation>Header</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="147"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="192"/>
         <source>Print header on title page</source>
         <translation>Udskriv header på titelside</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="148"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="193"/>
         <source>Footer</source>
         <translation>Footer</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="149"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="194"/>
         <source>Print footer on title page</source>
         <translation>Udskriv footer på titelside</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="195"/>
+        <source>Override common settings for this comic book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="196"/>
+        <source>Template</source>
+        <translation type="unfinished">Skabelon</translation>
     </message>
 </context>
 <context>
@@ -3086,7 +3068,7 @@ Foreslå forbedringer og rapprter fejl.</translation>
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="998"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1059"/>
         <source>%n panels</source>
         <translation>
             <numerusform>%n paneler</numerusform>
@@ -3094,14 +3076,37 @@ Foreslå forbedringer og rapprter fejl.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1192"/>
-        <source>Merge paragraph</source>
-        <translation>Læg afsnit sammen</translation>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1260"/>
+        <source>Bookmark</source>
+        <translation type="unfinished">Bogmærke</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1195"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1264"/>
+        <source>Add</source>
+        <translation type="unfinished">Tilføj</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1270"/>
+        <source>Edit</source>
+        <translation type="unfinished">Rediger</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1275"/>
+        <source>Remove</source>
+        <translation type="unfinished">Fjern</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1282"/>
+        <source>Show list</source>
+        <translation type="unfinished">Vis liste</translation>
+    </message>
+    <message>
+        <source>Merge paragraph</source>
+        <translation type="vanished">Læg afsnit sammen</translation>
+    </message>
+    <message>
         <source>Split paragraph</source>
-        <translation>Opdel afsnit</translation>
+        <translation type="vanished">Opdel afsnit</translation>
     </message>
 </context>
 <context>
@@ -3252,14 +3257,24 @@ Foreslå forbedringer og rapprter fejl.</translation>
 <context>
     <name>Ui::ComicBookTextView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="668"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="863"/>
         <source>Formatting</source>
         <translation>Formatterer</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="669"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="864"/>
         <source>Comments</source>
         <translation>Kommentarer</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="865"/>
+        <source>Bookmarks</source>
+        <translation type="unfinished">Bogmærker</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="867"/>
+        <source>Show bookmarks list</source>
+        <translation type="unfinished">Vis bogmærkeliste</translation>
     </message>
 </context>
 <context>
@@ -4214,10 +4229,6 @@ Foreslå forbedringer og rapprter fejl.</translation>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="628"/>
         <source>in order to</source>
         <translation>for at</translation>
-    </message>
-    <message>
-        <source>can</source>
-        <translation type="vanished">kan</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>

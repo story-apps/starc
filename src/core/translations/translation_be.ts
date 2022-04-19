@@ -223,29 +223,29 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="240"/>
         <source>Paragraph</source>
-        <translation type="unfinished">Параграф</translation>
+        <translation>Параграф</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="244"/>
         <source>Words</source>
-        <translation type="unfinished">Словы</translation>
+        <translation>Словы</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="248"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="311"/>
         <source>Occurrences</source>
-        <translation type="unfinished">Колькасць параграфаў</translation>
+        <translation>Колькасць параграфаў</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="252"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="315"/>
         <source>Percents</source>
-        <translation type="unfinished">Працэнты</translation>
+        <translation>Працэнты</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="307"/>
         <source>Character type</source>
-        <translation type="unfinished">Тып персанажа</translation>
+        <translation>Тып персанажа</translation>
     </message>
 </context>
 <context>
@@ -253,7 +253,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/audioplay/audioplay_synopsis_model.cpp" line="9"/>
         <source>Synopsis</source>
-        <translation type="unfinished">Сінопсіс</translation>
+        <translation>Сінопсіс</translation>
     </message>
 </context>
 <context>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="24"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished">Амерыканскі шаблон (старонка: Ліст; шрыфт: Courier Prime)</translation>
+        <translation>Амерыканскі шаблон (старонка: Ліст; шрыфт: Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -811,17 +811,17 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="295"/>
         <source>More then 10 dialogues</source>
-        <translation type="unfinished">Больш за 10 дыялогаў</translation>
+        <translation>Больш за 10 дыялогаў</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="298"/>
         <source>About 10 dialogues</source>
-        <translation type="unfinished">Каля 10 дыялогаў</translation>
+        <translation>Каля 10 дыялогаў</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="302"/>
         <source>Nonspeaking</source>
-        <translation type="unfinished">Негаворачы</translation>
+        <translation>Негаворачы</translation>
     </message>
 </context>
 <context>
@@ -1090,7 +1090,7 @@
         <location filename="../../corelib/business_layer/export/comic_book/comic_book_abstract_exporter.cpp" line="184"/>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_abstract_exporter.cpp" line="197"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1021"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="915"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="976"/>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="853"/>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="905"/>
         <source>END OF</source>
@@ -1131,79 +1131,79 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="798"/>
+        <location filename="../management_layer/application_manager.cpp" line="799"/>
         <source> - changed</source>
         <translation>- зменена</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="854"/>
-        <location filename="../management_layer/application_manager.cpp" line="873"/>
-        <location filename="../management_layer/application_manager.cpp" line="1025"/>
+        <location filename="../management_layer/application_manager.cpp" line="855"/>
+        <location filename="../management_layer/application_manager.cpp" line="874"/>
+        <location filename="../management_layer/application_manager.cpp" line="1026"/>
         <source>Saving error</source>
         <translation>Абмыла захавання</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="855"/>
+        <location filename="../management_layer/application_manager.cpp" line="856"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Змены не могуць быць запісаны. Існуе ўнутраная абмыла базы дадзеных: &quot;%1&quot; Калі ласка, праверце, ці існуе ваш файл і ці ёсць у вас дазвол на запіс.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="874"/>
+        <location filename="../management_layer/application_manager.cpp" line="875"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Змены не могуць быць запісаны, таму што гісторыя, змесцаваная ў &quot;%1&quot;, не існуе. Калі ласка, перасуньце файл назад і паўтарыце спробу захавання.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="925"/>
+        <location filename="../management_layer/application_manager.cpp" line="926"/>
         <source>Project was modified. Save changes?</source>
         <translation>Праект быў зменены. Захаваць змены?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="926"/>
+        <location filename="../management_layer/application_manager.cpp" line="927"/>
         <source>Cancel</source>
         <translation>Скасаваць</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="927"/>
+        <location filename="../management_layer/application_manager.cpp" line="928"/>
         <source>Don&apos;t save</source>
         <translation>Не захоўваць</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="928"/>
+        <location filename="../management_layer/application_manager.cpp" line="929"/>
         <source>Save</source>
         <translation>Захаваць</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="987"/>
+        <location filename="../management_layer/application_manager.cpp" line="988"/>
         <source>Choose file to save story</source>
         <translation>Выберыце файл для захавання гісторыі</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1026"/>
+        <location filename="../management_layer/application_manager.cpp" line="1027"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Не атрымалася захаваць гісторыю ў файл %1. Калі ласка, праверце дазволы і паўтарыце спробу.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1076"/>
+        <location filename="../management_layer/application_manager.cpp" line="1077"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Вы спрабавалі стварыць праект у няіснай тэчцы %1. Калі ласка, выберыце іншае месца для новага праекта.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1081"/>
+        <location filename="../management_layer/application_manager.cpp" line="1082"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Файл не можа быць запісаны. Здаецца, што ён адкрыты іншай праграмай. Калі ласка, зачыніце яго і паўтарыце спробу стварыць новы праект.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1085"/>
+        <location filename="../management_layer/application_manager.cpp" line="1086"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Файл не можа быць запісаны. Калі ласка, праверце і дайце вырашэнне дадатку на запіс у абраную тэчку або выберыце іншую тэчку для захавання новага праекта.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1089"/>
+        <location filename="../management_layer/application_manager.cpp" line="1090"/>
         <source>Create project error</source>
         <translation>Абмыла стварэння праекта</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1169"/>
+        <location filename="../management_layer/application_manager.cpp" line="1170"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1213,7 +1213,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="120"/>
         <source>Color</source>
-        <translation type="unfinished">Колер</translation>
+        <translation>Колер</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="221"/>
@@ -1290,28 +1290,28 @@
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="115"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="261"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="385"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="387"/>
         <source>Choose the file to export</source>
         <translation>Выберыце файл для экспарту</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="138"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="284"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="408"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="410"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="141"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="287"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="411"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="413"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="144"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="290"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="414"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="416"/>
         <source>Export error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1530,21 +1530,6 @@
     </message>
 </context>
 <context>
-    <name>ManagementLayer::ScreenplayTemplateManager</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Скасаваць</translation>
-    </message>
-    <message>
-        <source>Don&apos;t save</source>
-        <translation type="vanished">Не захоўваць</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Захаваць</translation>
-    </message>
-</context>
-<context>
     <name>ManagementLayer::ScreenplayTextStructureManager</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="121"/>
@@ -1552,7 +1537,7 @@
         <translation>Колер</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="224"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="226"/>
         <source>Screenplay</source>
         <translation>Сцэнар</translation>
     </message>
@@ -1565,7 +1550,7 @@
         <translation>Колер</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="223"/>
+        <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="225"/>
         <source>Treatment</source>
         <translation>Паэпізоднік</translation>
     </message>
@@ -1576,20 +1561,20 @@
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="518"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="569"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="620"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="671"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="670"/>
         <source>Choose the file to save template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="539"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="590"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="641"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="691"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="640"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="690"/>
         <source>Choose the file with template to load</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="873"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="872"/>
         <source>Spelling dictionary loading</source>
         <translation>Загрузка арфаграфічнага слоўніка</translation>
     </message>
@@ -1604,17 +1589,17 @@
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="391"/>
         <source>Cancel</source>
-        <translation type="unfinished">Скасаваць</translation>
+        <translation>Скасаваць</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="392"/>
         <source>Don&apos;t save</source>
-        <translation type="unfinished">Не захоўваць</translation>
+        <translation>Не захоўваць</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="393"/>
         <source>Save</source>
-        <translation type="unfinished">Захаваць</translation>
+        <translation>Захаваць</translation>
     </message>
 </context>
 <context>
@@ -1628,22 +1613,22 @@
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4074"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3816"/>
         <source>Cut</source>
         <translation>Выразаць</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4081"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3823"/>
         <source>Copy</source>
         <translation>Капіяваць</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4087"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3829"/>
         <source>Paste</source>
         <translation>Уставіць</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4094"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3836"/>
         <source>Select all</source>
         <translation>Выбраць усё</translation>
     </message>
@@ -2162,7 +2147,7 @@
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="186"/>
         <source>Format</source>
-        <translation type="unfinished">Фармат</translation>
+        <translation>Фармат</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="187"/>
@@ -2182,22 +2167,22 @@
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="190"/>
         <source>Watermark</source>
-        <translation type="unfinished">Вадзяны знак</translation>
+        <translation>Вадзяны знак</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="192"/>
         <source>Open document after export</source>
-        <translation type="unfinished">Адкрыць дакумент пасля экспарту</translation>
+        <translation>Адкрыць дакумент пасля экспарту</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="193"/>
         <source>Export</source>
-        <translation type="unfinished">Экспарт</translation>
+        <translation>Экспарт</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="194"/>
         <source>Cancel</source>
-        <translation type="unfinished">Скасаваць</translation>
+        <translation>Скасаваць</translation>
     </message>
 </context>
 <context>
@@ -2210,12 +2195,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="188"/>
         <source>Tagline</source>
-        <translation type="unfinished">Слоган</translation>
+        <translation>Слоган</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="189"/>
         <source>Logline</source>
-        <translation type="unfinished">Логлайн</translation>
+        <translation>Логлайн</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="190"/>
@@ -2225,12 +2210,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="191"/>
         <source>Title page</source>
-        <translation type="unfinished">Тытульны ліст</translation>
+        <translation>Тытульны ліст</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="192"/>
         <source>Synopsis</source>
-        <translation type="unfinished">Сінопсіс</translation>
+        <translation>Сінопсіс</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="193"/>
@@ -2240,7 +2225,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="194"/>
         <source>Statistics</source>
-        <translation type="unfinished">Статыстыка</translation>
+        <translation>Статыстыка</translation>
     </message>
 </context>
 <context>
@@ -2248,22 +2233,22 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="220"/>
         <source>Header</source>
-        <translation type="unfinished">Калантытул</translation>
+        <translation>Калантытул</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="221"/>
         <source>Print header on title page</source>
-        <translation type="unfinished">Друкаваць калантытул на тытульным лісце</translation>
+        <translation>Друкаваць калантытул на тытульным лісце</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="222"/>
         <source>Footer</source>
-        <translation type="unfinished">Ніжні калантытул</translation>
+        <translation>Ніжні калантытул</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="223"/>
         <source>Print footer on title page</source>
-        <translation type="unfinished">Друкаваць ніжні калантытул на тытульным лісце</translation>
+        <translation>Друкаваць ніжні калантытул на тытульным лісце</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="224"/>
@@ -2273,7 +2258,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="225"/>
         <source>Template</source>
-        <translation type="unfinished">Шаблон</translation>
+        <translation>Шаблон</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="226"/>
@@ -2291,32 +2276,32 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="201"/>
         <source>Duration</source>
-        <translation type="unfinished">Працягласць</translation>
+        <translation>Працягласць</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="202"/>
         <source>Pages</source>
-        <translation type="unfinished">Старонкі</translation>
+        <translation>Старонкі</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="203"/>
         <source>Words</source>
-        <translation type="unfinished">Словы</translation>
+        <translation>Словы</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="204"/>
         <source>Characters with/without spaces</source>
-        <translation type="unfinished">Сімвалы з/без прабелаў</translation>
+        <translation>Сімвалы з/без прабелаў</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="206"/>
         <source>Text statistics</source>
-        <translation type="unfinished">Статыстыка тэксту</translation>
+        <translation>Статыстыка тэксту</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="207"/>
         <source>Characters statistics</source>
-        <translation type="unfinished">Статыстыка персанажаў</translation>
+        <translation>Статыстыка персанажаў</translation>
     </message>
 </context>
 <context>
@@ -2329,17 +2314,17 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1270"/>
         <source>Add</source>
-        <translation type="unfinished">Дадаць</translation>
+        <translation>Дадаць</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1276"/>
         <source>Edit</source>
-        <translation type="unfinished">Рэдагаваць</translation>
+        <translation>Рэдагаваць</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1281"/>
         <source>Remove</source>
-        <translation type="unfinished">Выдаліць</translation>
+        <translation>Выдаліць</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1288"/>
@@ -2352,47 +2337,47 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="81"/>
         <source>Scene heading</source>
-        <translation type="unfinished">Загаловак сцэны</translation>
+        <translation>Загаловак сцэны</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="224"/>
         <source>Undo last action</source>
-        <translation type="unfinished">Скасаваць апошняе дзеянне</translation>
+        <translation>Скасаваць апошняе дзеянне</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="228"/>
         <source>Redo last action</source>
-        <translation type="unfinished">Паўтарыць апошняе дзеянне</translation>
+        <translation>Паўтарыць апошняе дзеянне</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="231"/>
         <source>Current paragraph format</source>
-        <translation type="unfinished">Бягучы фармат абзаца</translation>
+        <translation>Бягучы фармат абзаца</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="233"/>
         <source>Hide fast format panel</source>
-        <translation type="unfinished">Схаваць панэль хуткага фарматавання</translation>
+        <translation>Схаваць панэль хуткага фарматавання</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="234"/>
         <source>Show fast format panel</source>
-        <translation type="unfinished">Паказаць панэль хуткага фарматавання</translation>
+        <translation>Паказаць панэль хуткага фарматавання</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="236"/>
         <source>Search text</source>
-        <translation type="unfinished">Шукаць тэкст</translation>
+        <translation>Шукаць тэкст</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="239"/>
         <source>Disable review mode</source>
-        <translation type="unfinished">Адключыць рэжым рэцэнзавання</translation>
+        <translation>Адключыць рэжым рэцэнзавання</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="240"/>
         <source>Enable review mode</source>
-        <translation type="unfinished">Уключыць рэжым рэцэнзавання</translation>
+        <translation>Уключыць рэжым рэцэнзавання</translation>
     </message>
 </context>
 <context>
@@ -2401,79 +2386,79 @@
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="150"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="297"/>
         <source>Search without case sensitive</source>
-        <translation type="unfinished">Шукаць без уліку рэгістра</translation>
+        <translation>Шукаць без уліку рэгістра</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="151"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="298"/>
         <source>Search with case sensitive</source>
-        <translation type="unfinished">Шукаць з улікам рэгістра</translation>
+        <translation>Шукаць з улікам рэгістра</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="156"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="281"/>
         <source>In the whole text</source>
-        <translation type="unfinished">Ва ўсім тэксце</translation>
+        <translation>Ва ўсім тэксце</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="274"/>
         <source>Exit from search</source>
-        <translation type="unfinished">Выйсці з пошуку</translation>
+        <translation>Выйсці з пошуку</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="277"/>
         <source>Search</source>
-        <translation type="unfinished">Пошук</translation>
+        <translation>Пошук</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="278"/>
         <source>Enter search phrase here</source>
-        <translation type="unfinished">Увядзіце сюды пошукавую фразу</translation>
+        <translation>Увядзіце сюды пошукавую фразу</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="282"/>
         <source>In scene heading</source>
-        <translation type="unfinished">У загалоўку сцэны</translation>
+        <translation>У загалоўку сцэны</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="283"/>
         <source>In character</source>
-        <translation type="unfinished">Па персанажах</translation>
+        <translation>Па персанажах</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="284"/>
         <source>In dialogue</source>
-        <translation type="unfinished">У дыялогу</translation>
+        <translation>У дыялогу</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="289"/>
         <source>Go to the next search result</source>
-        <translation type="unfinished">Перайсці да наступнага выніку пошуку</translation>
+        <translation>Перайсці да наступнага выніку пошуку</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="293"/>
         <source>Go to the previous search result</source>
-        <translation type="unfinished">Перайсці да папярэдняга выніку пошуку</translation>
+        <translation>Перайсці да папярэдняга выніку пошуку</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="300"/>
         <source>Replace with</source>
-        <translation type="unfinished">Замяніць на</translation>
+        <translation>Замяніць на</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="301"/>
         <source>Enter phrase to replace</source>
-        <translation type="unfinished">Увядзіце фразу для замены</translation>
+        <translation>Увядзіце фразу для замены</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="302"/>
         <source>Replace</source>
-        <translation type="unfinished">Замяніць</translation>
+        <translation>Замяніць</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="303"/>
         <source>All</source>
-        <translation type="unfinished">Усё</translation>
+        <translation>Усё</translation>
     </message>
 </context>
 <context>
@@ -2481,12 +2466,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="859"/>
         <source>Formatting</source>
-        <translation type="unfinished">Фарматаванне</translation>
+        <translation>Фарматаванне</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="860"/>
         <source>Comments</source>
-        <translation type="unfinished">Каментары</translation>
+        <translation>Каментары</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="861"/>
@@ -2918,57 +2903,56 @@
 <context>
     <name>Ui::ComicBookExportDialog</name>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="187"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="167"/>
         <source>Export comic book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="189"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="169"/>
         <source>Format</source>
         <translation>Фармат</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="190"/>
         <source>Template</source>
-        <translation>Шаблон</translation>
+        <translation type="vanished">Шаблон</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="191"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="170"/>
         <source>Print title page</source>
         <translation>Друкаваць тытульную старонку</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="192"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="171"/>
         <source>Print panels numbers in form of words</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="193"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="172"/>
         <source>Print inline notes</source>
         <translation>Друкаваць убудаваныя нататкі</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="194"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="173"/>
         <source>Print review marks</source>
         <translation>Друкаваць аглядныя пазнакі</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="195"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="174"/>
         <source>Watermark</source>
         <translation>Вадзяны знак</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="197"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="176"/>
         <source>Open document after export</source>
         <translation>Адкрыць дакумент пасля экспарту</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="198"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="177"/>
         <source>Export</source>
         <translation>Экспарт</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="199"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="178"/>
         <source>Cancel</source>
         <translation>Скасаваць</translation>
     </message>
@@ -3019,24 +3003,34 @@
 <context>
     <name>Ui::ComicBookParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="146"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="191"/>
         <source>Header</source>
         <translation>Калантытул</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="147"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="192"/>
         <source>Print header on title page</source>
         <translation>Друкаваць калантытул на тытульным лісце</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="148"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="193"/>
         <source>Footer</source>
         <translation>Ніжні калантытул</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="149"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="194"/>
         <source>Print footer on title page</source>
         <translation>Друкаваць ніжні калантытул на тытульным лісце</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="195"/>
+        <source>Override common settings for this comic book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="196"/>
+        <source>Template</source>
+        <translation type="unfinished">Шаблон</translation>
     </message>
 </context>
 <context>
@@ -3070,7 +3064,7 @@
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="998"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1059"/>
         <source>%n panels</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3079,14 +3073,37 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1192"/>
-        <source>Merge paragraph</source>
-        <translation>З&apos;яднаць абзац</translation>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1260"/>
+        <source>Bookmark</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1195"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1264"/>
+        <source>Add</source>
+        <translation type="unfinished">Дадаць</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1270"/>
+        <source>Edit</source>
+        <translation type="unfinished">Рэдагаваць</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1275"/>
+        <source>Remove</source>
+        <translation type="unfinished">Выдаліць</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1282"/>
+        <source>Show list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge paragraph</source>
+        <translation type="vanished">З&apos;яднаць абзац</translation>
+    </message>
+    <message>
         <source>Split paragraph</source>
-        <translation>Падзяліць абзац</translation>
+        <translation type="vanished">Падзяліць абзац</translation>
     </message>
 </context>
 <context>
@@ -3238,14 +3255,24 @@
 <context>
     <name>Ui::ComicBookTextView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="668"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="863"/>
         <source>Formatting</source>
         <translation>Фарматаванне</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="669"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="864"/>
         <source>Comments</source>
         <translation>Каментары</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="865"/>
+        <source>Bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="867"/>
+        <source>Show bookmarks list</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

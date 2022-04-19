@@ -223,29 +223,29 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="240"/>
         <source>Paragraph</source>
-        <translation type="unfinished">پاراگراف</translation>
+        <translation>پاراگراف</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="244"/>
         <source>Words</source>
-        <translation type="unfinished">کلمه</translation>
+        <translation>کلمه</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="248"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="311"/>
         <source>Occurrences</source>
-        <translation type="unfinished">تکرار</translation>
+        <translation>تکرار</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="252"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="315"/>
         <source>Percents</source>
-        <translation type="unfinished">درصد</translation>
+        <translation>درصد</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="307"/>
         <source>Character type</source>
-        <translation type="unfinished">نوع شخصیت</translation>
+        <translation>نوع شخصیت</translation>
     </message>
 </context>
 <context>
@@ -253,7 +253,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/audioplay/audioplay_synopsis_model.cpp" line="9"/>
         <source>Synopsis</source>
-        <translation type="unfinished">سیناپس</translation>
+        <translation>سیناپس</translation>
     </message>
 </context>
 <context>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="24"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished">قالب آمریکایی (صفحه ساز Letter، فونت: Courier Prime)</translation>
+        <translation>قالب آمریکایی (صفحه ساز Letter، فونت: Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -388,7 +388,7 @@
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="27"/>
         <source>EST</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد شده</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="28"/>
@@ -403,17 +403,17 @@
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="30"/>
         <source>EXT./INT</source>
-        <translation type="unfinished"></translation>
+        <translation>خارجی./داخلی</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="31"/>
         <source>EXT/INT</source>
-        <translation type="unfinished"></translation>
+        <translation>خارجی/داخلی</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="32"/>
         <source>I/E</source>
-        <translation type="unfinished"></translation>
+        <translation>د/خ</translation>
     </message>
 </context>
 <context>
@@ -434,7 +434,7 @@
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="31"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="32"/>
         <source>EST</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد شده</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="32"/>
@@ -452,19 +452,19 @@
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="34"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="35"/>
         <source>EXT./INT</source>
-        <translation type="unfinished"></translation>
+        <translation>خارجی./داخلی</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="35"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="36"/>
         <source>EXT/INT</source>
-        <translation type="unfinished"></translation>
+        <translation>خارجی/داخلی</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="36"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="37"/>
         <source>I/E</source>
-        <translation type="unfinished"></translation>
+        <translation>د/خ</translation>
     </message>
 </context>
 <context>
@@ -554,17 +554,17 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
         <source>V.O.</source>
-        <translation type="unfinished"></translation>
+        <translation>صداگذاری</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
         <source>O.S.</source>
-        <translation type="unfinished"></translation>
+        <translation>خارج از صحنه </translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
         <source>O.C.</source>
-        <translation type="unfinished"></translation>
+        <translation>خارج از دوربین</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
@@ -574,7 +574,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
         <source>CONT&apos;D</source>
-        <translation type="unfinished"></translation>
+        <translation>ادامه</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="179"/>
@@ -811,17 +811,17 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="295"/>
         <source>More then 10 dialogues</source>
-        <translation type="unfinished">بیش از 10 دیالوگ</translation>
+        <translation>بیش از 10 دیالوگ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="298"/>
         <source>About 10 dialogues</source>
-        <translation type="unfinished">حدود 10 دیالوگ</translation>
+        <translation>حدود 10 دیالوگ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="302"/>
         <source>Nonspeaking</source>
-        <translation type="unfinished"></translation>
+        <translation>بی‌کلام</translation>
     </message>
 </context>
 <context>
@@ -845,7 +845,7 @@
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="442"/>
         <source>Nonspeaking</source>
-        <translation type="unfinished"></translation>
+        <translation>بی‌کلام</translation>
     </message>
 </context>
 <context>
@@ -856,7 +856,7 @@
         <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="39"/>
         <source>CONT&apos;D</source>
         <extracomment>Continued</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>ادامه</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/document/audioplay/text/audioplay_text_corrector.cpp" line="43"/>
@@ -1090,7 +1090,7 @@
         <location filename="../../corelib/business_layer/export/comic_book/comic_book_abstract_exporter.cpp" line="184"/>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_abstract_exporter.cpp" line="197"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1021"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="915"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="976"/>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="853"/>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="905"/>
         <source>END OF</source>
@@ -1131,79 +1131,79 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="798"/>
+        <location filename="../management_layer/application_manager.cpp" line="799"/>
         <source> - changed</source>
         <translation>- تغییر کرد</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="854"/>
-        <location filename="../management_layer/application_manager.cpp" line="873"/>
-        <location filename="../management_layer/application_manager.cpp" line="1025"/>
+        <location filename="../management_layer/application_manager.cpp" line="855"/>
+        <location filename="../management_layer/application_manager.cpp" line="874"/>
+        <location filename="../management_layer/application_manager.cpp" line="1026"/>
         <source>Saving error</source>
         <translation>خطای ذخیره</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="855"/>
+        <location filename="../management_layer/application_manager.cpp" line="856"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>امکان نوشتن تغییرات نیست. یک خطای داخلی پایگاه داده رخ داده است: &quot;%1&quot; لطفاً بررسی کنید که فایل موجود است و شما اجازه نوشتن بر روی آن را دارید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="874"/>
+        <location filename="../management_layer/application_manager.cpp" line="875"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>امکان نوشتن تغییرات نیست زیرا داستان در آدرس &quot;%1&quot; وجود ندارد. لطفاً فایل را به آدرس درست برگردانید و دوباره ذخیره کنید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="925"/>
+        <location filename="../management_layer/application_manager.cpp" line="926"/>
         <source>Project was modified. Save changes?</source>
         <translation>پروژه ویرایش شده است. تغییرات ذخیره شوند؟</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="926"/>
+        <location filename="../management_layer/application_manager.cpp" line="927"/>
         <source>Cancel</source>
         <translation>بی‌خیال</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="927"/>
+        <location filename="../management_layer/application_manager.cpp" line="928"/>
         <source>Don&apos;t save</source>
         <translation>ذخیره نکن</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="928"/>
+        <location filename="../management_layer/application_manager.cpp" line="929"/>
         <source>Save</source>
         <translation>ذخیره</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="987"/>
+        <location filename="../management_layer/application_manager.cpp" line="988"/>
         <source>Choose file to save story</source>
         <translation>برای ذخیره داستان یک فایل انتخاب کنید</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1026"/>
+        <location filename="../management_layer/application_manager.cpp" line="1027"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>امکان ذخیره فایل داستان %1 وجود ندارد. لطفاً اجازه دستری را بررسی و دوباره امتحان کنید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1076"/>
+        <location filename="../management_layer/application_manager.cpp" line="1077"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>شما اقدام به ساخت پروژه در پوشه %1 که وجود ندارد کردید. لطفاً یک پوشه جدید برای پروژه جدید انتخاب کنید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1081"/>
+        <location filename="../management_layer/application_manager.cpp" line="1082"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>امکان نوشتن روی فایل نیست. به نظر می‌رسد که این فایل توسط برنامه دیگری باز شده است. لطفاً آن را ببندید و دوباره اقدام به ساخت پروژه جدید کنید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1085"/>
+        <location filename="../management_layer/application_manager.cpp" line="1086"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>امکان نوشتن روی فایل نیست. لطفاً به برنامه اجازه دسترسی برای نوشتن در پوشه مورده نظر را بدهید یا یک پوشه دیگر را برای پروژه جدید انتخاب کنید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1089"/>
+        <location filename="../management_layer/application_manager.cpp" line="1090"/>
         <source>Create project error</source>
         <translation>خطای ایجاد پروژه</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1169"/>
+        <location filename="../management_layer/application_manager.cpp" line="1170"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>در حال حاضر امکان باز کردن فایل نیست. این فایل در کپی دیگری از این برنامه قبلاً باز شده است.</translation>
     </message>
@@ -1213,7 +1213,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="120"/>
         <source>Color</source>
-        <translation type="unfinished">رنگ</translation>
+        <translation>رنگ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="221"/>
@@ -1290,28 +1290,28 @@
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="115"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="261"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="385"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="387"/>
         <source>Choose the file to export</source>
         <translation>انتخاب فایل برای خروجی</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="138"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="284"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="408"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="410"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation>امکان نوشتن روی فایل نیست. به نظر می‌رسد که این فایل توسط برنامه دیگری باز شده است. لطفاً آن را ببندید و دوباره اقدام به ساخت پروژه جدید کنید.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="141"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="287"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="411"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="413"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation>امکان نوشتن روی فایل نیست. اجازه دسترسی برای نوشتن در پوشه انتخابی را بررسی کنید یا پوشه دیگری انتخاب نمایید.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="144"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="290"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="414"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="416"/>
         <source>Export error</source>
         <translation>خطای خروجی</translation>
     </message>
@@ -1530,21 +1530,6 @@
     </message>
 </context>
 <context>
-    <name>ManagementLayer::ScreenplayTemplateManager</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">بی‌خیال</translation>
-    </message>
-    <message>
-        <source>Don&apos;t save</source>
-        <translation type="vanished">ذخیره نکن</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">ذخیره</translation>
-    </message>
-</context>
-<context>
     <name>ManagementLayer::ScreenplayTextStructureManager</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="121"/>
@@ -1552,7 +1537,7 @@
         <translation>رنگ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="224"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="226"/>
         <source>Screenplay</source>
         <translation>فیلمنامه</translation>
     </message>
@@ -1565,7 +1550,7 @@
         <translation>رنگ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="223"/>
+        <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="225"/>
         <source>Treatment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1576,20 +1561,20 @@
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="518"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="569"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="620"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="671"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="670"/>
         <source>Choose the file to save template</source>
         <translation>یک فایل برای ذخیره قالب انتخاب کنید.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="539"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="590"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="641"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="691"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="640"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="690"/>
         <source>Choose the file with template to load</source>
         <translation>فایل قالب را برای بارگذاری انتخاب کنید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="873"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="872"/>
         <source>Spelling dictionary loading</source>
         <translation>لغتنامه املایی در حال بارگذاری</translation>
     </message>
@@ -1599,22 +1584,22 @@
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="390"/>
         <source>Template was modified. Save changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>قالب ویرایش شده است. تغییرات ذخیره شوند؟</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="391"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>بی‌خیال</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="392"/>
         <source>Don&apos;t save</source>
-        <translation type="unfinished">ذخیره نکن</translation>
+        <translation>ذخیره نکن</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="393"/>
         <source>Save</source>
-        <translation type="unfinished">ذخیره</translation>
+        <translation>ذخیره</translation>
     </message>
 </context>
 <context>
@@ -1628,22 +1613,22 @@
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4074"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3816"/>
         <source>Cut</source>
         <translation>بریدن</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4081"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3823"/>
         <source>Copy</source>
         <translation>کپی</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4087"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3829"/>
         <source>Paste</source>
         <translation>چسباندن</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4094"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3836"/>
         <source>Select all</source>
         <translation>انتخاب همه</translation>
     </message>
@@ -1927,14 +1912,6 @@
         <translation>نسخه</translation>
     </message>
     <message>
-        <source>Designed, coded and crafted with love at the </source>
-        <translation type="vanished">طراحی شده، کدنویسی شده و تولید شده با عشق در</translation>
-    </message>
-    <message>
-        <source>The Logline Generator is powered by </source>
-        <translation type="vanished">تولید کننده لاگ لاین توسط</translation>
-    </message>
-    <message>
         <location filename="../ui/about_application_dialog.cpp" line="160"/>
         <source>Designed, coded and crafted with love at the</source>
         <translation type="unfinished"></translation>
@@ -1985,7 +1962,7 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="247"/>
         <source>Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست‌ها</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="248"/>
@@ -2108,7 +2085,7 @@
     <message>
         <location filename="../ui/account/account_view.cpp" line="362"/>
         <source>Active sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>نشست‌های فعال</translation>
     </message>
 </context>
 <context>
@@ -2170,42 +2147,42 @@
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="186"/>
         <source>Format</source>
-        <translation type="unfinished">فرمت</translation>
+        <translation>فرمت</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="187"/>
         <source>Include title page</source>
-        <translation type="unfinished">شامل عنوان صفحه</translation>
+        <translation>شامل عنوان صفحه</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="188"/>
         <source>Include inline notes</source>
-        <translation type="unfinished">شامل یادداشت‌های کنار متن</translation>
+        <translation>شامل یادداشت‌های کنار متن</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="189"/>
         <source>Include review marks</source>
-        <translation type="unfinished">شامل نشان‌های بازبینی</translation>
+        <translation>شامل نشان‌های بازبینی</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="190"/>
         <source>Watermark</source>
-        <translation type="unfinished">واترمارک</translation>
+        <translation>واترمارک</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="192"/>
         <source>Open document after export</source>
-        <translation type="unfinished">بازکردن فایل بعد از خروجی</translation>
+        <translation>بازکردن فایل بعد از خروجی</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="193"/>
         <source>Export</source>
-        <translation type="unfinished">خروجی</translation>
+        <translation>خروجی</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="194"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>بی‌خیال</translation>
     </message>
 </context>
 <context>
@@ -2223,22 +2200,22 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="189"/>
         <source>Logline</source>
-        <translation type="unfinished">لاگ لاین</translation>
+        <translation>لاگ لاین</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="190"/>
         <source>Generate logline</source>
-        <translation type="unfinished">تولید لاگ لاین</translation>
+        <translation>تولید لاگ لاین</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="191"/>
         <source>Title page</source>
-        <translation type="unfinished">صفحه عنوان</translation>
+        <translation>صفحه عنوان</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="192"/>
         <source>Synopsis</source>
-        <translation type="unfinished">سیناپس</translation>
+        <translation>سیناپس</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="193"/>
@@ -2248,7 +2225,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="194"/>
         <source>Statistics</source>
-        <translation type="unfinished">آمار</translation>
+        <translation>آمار</translation>
     </message>
 </context>
 <context>
@@ -2256,22 +2233,22 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="220"/>
         <source>Header</source>
-        <translation type="unfinished">سربرگ</translation>
+        <translation>سربرگ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="221"/>
         <source>Print header on title page</source>
-        <translation type="unfinished">چاپ سربرگ روی صفحه عنوان</translation>
+        <translation>چاپ سربرگ روی صفحه عنوان</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="222"/>
         <source>Footer</source>
-        <translation type="unfinished">پانویس</translation>
+        <translation>پانویس</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="223"/>
         <source>Print footer on title page</source>
-        <translation type="unfinished">چاپ پانویس روی صفحه عنوان</translation>
+        <translation>چاپ پانویس روی صفحه عنوان</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="224"/>
@@ -2281,7 +2258,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="225"/>
         <source>Template</source>
-        <translation type="unfinished">قالب</translation>
+        <translation>قالب</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="226"/>
@@ -2299,32 +2276,32 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="201"/>
         <source>Duration</source>
-        <translation type="unfinished">مدت</translation>
+        <translation>مدت</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="202"/>
         <source>Pages</source>
-        <translation type="unfinished">صفحه</translation>
+        <translation>صفحه</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="203"/>
         <source>Words</source>
-        <translation type="unfinished">کلمه</translation>
+        <translation>کلمه</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="204"/>
         <source>Characters with/without spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>تعداد کاراکترهای فیلمنامه همراه/بدون فاصله</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="206"/>
         <source>Text statistics</source>
-        <translation type="unfinished">اطلاعات آماری متن</translation>
+        <translation>اطلاعات آماری متن</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="207"/>
         <source>Characters statistics</source>
-        <translation type="unfinished">اطلاعات آماری شخصیت‌ها</translation>
+        <translation>اطلاعات آماری شخصیت‌ها</translation>
     </message>
 </context>
 <context>
@@ -2332,27 +2309,27 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1266"/>
         <source>Bookmark</source>
-        <translation type="unfinished">بوک‌مارک</translation>
+        <translation>بوک‌مارک</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1270"/>
         <source>Add</source>
-        <translation type="unfinished">افزودن</translation>
+        <translation>افزودن</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1276"/>
         <source>Edit</source>
-        <translation type="unfinished">ویرایش</translation>
+        <translation>ویرایش</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1281"/>
         <source>Remove</source>
-        <translation type="unfinished">پاک‌کردن</translation>
+        <translation>پاک‌کردن</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1288"/>
         <source>Show list</source>
-        <translation type="unfinished">نمایش فهرست</translation>
+        <translation>نمایش فهرست</translation>
     </message>
 </context>
 <context>
@@ -2360,47 +2337,47 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="81"/>
         <source>Scene heading</source>
-        <translation type="unfinished">سرتیتر پلان</translation>
+        <translation>سرتیتر پلان</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="224"/>
         <source>Undo last action</source>
-        <translation type="unfinished">لغو انجام آخرین کار</translation>
+        <translation>لغو انجام آخرین کار</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="228"/>
         <source>Redo last action</source>
-        <translation type="unfinished">انجام دوباره آخرین کار</translation>
+        <translation>انجام دوباره آخرین کار</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="231"/>
         <source>Current paragraph format</source>
-        <translation type="unfinished">فرمت پاراگراف فعلی</translation>
+        <translation>فرمت پاراگراف فعلی</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="233"/>
         <source>Hide fast format panel</source>
-        <translation type="unfinished">پنهان کردن پنل فرمت سریع</translation>
+        <translation>پنهان کردن پنل فرمت سریع</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="234"/>
         <source>Show fast format panel</source>
-        <translation type="unfinished">نمایش پنل فرمت سریع</translation>
+        <translation>نمایش پنل فرمت سریع</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="236"/>
         <source>Search text</source>
-        <translation type="unfinished">عنوان جستجو</translation>
+        <translation>عنوان جستجو</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="239"/>
         <source>Disable review mode</source>
-        <translation type="unfinished">غیرفعال‌کردن حالت بازبینی</translation>
+        <translation>غیرفعال‌کردن حالت بازبینی</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="240"/>
         <source>Enable review mode</source>
-        <translation type="unfinished">فعالسازی حالت بازبینی</translation>
+        <translation>فعالسازی حالت بازبینی</translation>
     </message>
 </context>
 <context>
@@ -2409,79 +2386,79 @@
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="150"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="297"/>
         <source>Search without case sensitive</source>
-        <translation type="unfinished">جستجوی همه حروف انگلیسی</translation>
+        <translation>جستجوی همه حروف انگلیسی</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="151"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="298"/>
         <source>Search with case sensitive</source>
-        <translation type="unfinished">جستجوی حساس به بزرگی و کوچکی حروف انگلیسی</translation>
+        <translation>جستجوی حساس به بزرگی و کوچکی حروف انگلیسی</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="156"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="281"/>
         <source>In the whole text</source>
-        <translation type="unfinished">در همه متن</translation>
+        <translation>در همه متن</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="274"/>
         <source>Exit from search</source>
-        <translation type="unfinished">خروج از جستجو</translation>
+        <translation>خروج از جستجو</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="277"/>
         <source>Search</source>
-        <translation type="unfinished">جستجو</translation>
+        <translation>جستجو</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="278"/>
         <source>Enter search phrase here</source>
-        <translation type="unfinished">عبارت جستجو را وارد کنی</translation>
+        <translation>عبارت جستجو را وارد کنی</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="282"/>
         <source>In scene heading</source>
-        <translation type="unfinished">در سرتیتر پلان</translation>
+        <translation>در سرتیتر پلان</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="283"/>
         <source>In character</source>
-        <translation type="unfinished">در شخصیت</translation>
+        <translation>در شخصیت</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="284"/>
         <source>In dialogue</source>
-        <translation type="unfinished">در دیالوگ</translation>
+        <translation>در دیالوگ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="289"/>
         <source>Go to the next search result</source>
-        <translation type="unfinished">رفتن به نتایج جستجوی بعدی</translation>
+        <translation>رفتن به نتایج جستجوی بعدی</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="293"/>
         <source>Go to the previous search result</source>
-        <translation type="unfinished">رفتن به نتایج جستجوی قبلی</translation>
+        <translation>رفتن به نتایج جستجوی قبلی</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="300"/>
         <source>Replace with</source>
-        <translation type="unfinished">جایگزینی با</translation>
+        <translation>جایگزینی با</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="301"/>
         <source>Enter phrase to replace</source>
-        <translation type="unfinished"></translation>
+        <translation>عبارت را برای جایگزینی وارد کنید</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="302"/>
         <source>Replace</source>
-        <translation type="unfinished">جایگزینی</translation>
+        <translation>جایگزینی</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="303"/>
         <source>All</source>
-        <translation type="unfinished">همه</translation>
+        <translation>همه</translation>
     </message>
 </context>
 <context>
@@ -2489,22 +2466,22 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="859"/>
         <source>Formatting</source>
-        <translation type="unfinished">فرمت متن</translation>
+        <translation>فرمت متن</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="860"/>
         <source>Comments</source>
-        <translation type="unfinished">دیدگاه‌ها</translation>
+        <translation>دیدگاه‌ها</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="861"/>
         <source>Bookmarks</source>
-        <translation type="unfinished">بوک‌مارک‌ها</translation>
+        <translation>بوک‌مارک‌ها</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="863"/>
         <source>Show bookmarks list</source>
-        <translation type="unfinished">نمایش فهرست بوک‌مارک‌ها</translation>
+        <translation>نمایش فهرست بوک‌مارک‌ها</translation>
     </message>
 </context>
 <context>
@@ -2597,7 +2574,7 @@
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="281"/>
         <source>Story role</source>
-        <translation type="unfinished"></translation>
+        <translation>نقش در داستان</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="284"/>
@@ -2790,7 +2767,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="794"/>
         <source>Story role</source>
-        <translation type="unfinished"></translation>
+        <translation>نقش در داستان</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="797"/>
@@ -2891,7 +2868,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="269"/>
         <source>Unlock ability to edit characters relations</source>
-        <translation type="unfinished"></translation>
+        <translation>باز کردن قابلیت ویرایش نسبت شخصیت‌ها</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="270"/>
@@ -2911,73 +2888,72 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="275"/>
         <source>Show relations titles only for the selected characters</source>
-        <translation type="unfinished"></translation>
+        <translation>فقط نمایش عنوان نسبت برای شخصیت‌های انتخابی</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="277"/>
         <source>Here will be a characters relations scheme.</source>
-        <translation type="unfinished"></translation>
+        <translation>اینجا نقشه نسبت شخصیت‌ها قرار خواهد گرفت.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="278"/>
         <source>It&apos;s time to create the first character!</source>
-        <translation type="unfinished"></translation>
+        <translation>الان وقت ایجاد اولین شخصیت هست!</translation>
     </message>
 </context>
 <context>
     <name>Ui::ComicBookExportDialog</name>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="187"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="167"/>
         <source>Export comic book</source>
         <translation>خروجی کامیک‌بوک</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="189"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="169"/>
         <source>Format</source>
         <translation>فرمت</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="190"/>
         <source>Template</source>
-        <translation>قالب</translation>
+        <translation type="vanished">قالب</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="191"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="170"/>
         <source>Print title page</source>
         <translation>چاپ عنوان صفحه</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="192"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="171"/>
         <source>Print panels numbers in form of words</source>
         <translation>چاپ شماره پنل‌ها در حالت کلمه</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="193"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="172"/>
         <source>Print inline notes</source>
         <translation>چاپ یادداشت‌های کنار متن</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="194"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="173"/>
         <source>Print review marks</source>
         <translation>چاپ نشان‌های بازبینی</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="195"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="174"/>
         <source>Watermark</source>
         <translation>واترمارک</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="197"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="176"/>
         <source>Open document after export</source>
         <translation>بازکردن فایل بعد از خروجی</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="198"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="177"/>
         <source>Export</source>
         <translation>خروجی</translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="199"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="178"/>
         <source>Cancel</source>
         <translation>بی‌خیال</translation>
     </message>
@@ -3028,24 +3004,34 @@
 <context>
     <name>Ui::ComicBookParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="146"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="191"/>
         <source>Header</source>
         <translation>سربرگ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="147"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="192"/>
         <source>Print header on title page</source>
         <translation>چاپ سربرگ روی صفحه عنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="148"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="193"/>
         <source>Footer</source>
         <translation>پانویس</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="149"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="194"/>
         <source>Print footer on title page</source>
         <translation>چاپ پانویس روی صفحه عنوان</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="195"/>
+        <source>Override common settings for this comic book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="196"/>
+        <source>Template</source>
+        <translation type="unfinished">قالب</translation>
     </message>
 </context>
 <context>
@@ -3068,7 +3054,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="185"/>
         <source>Characters with/without spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>تعداد کاراکترهای فیلمنامه همراه/بدون فاصله</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="187"/>
@@ -3079,21 +3065,44 @@
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="998"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1059"/>
         <source>%n panels</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1192"/>
-        <source>Merge paragraph</source>
-        <translation>ادغام پاراگراف</translation>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1260"/>
+        <source>Bookmark</source>
+        <translation type="unfinished">بوک‌مارک</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1195"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1264"/>
+        <source>Add</source>
+        <translation type="unfinished">افزودن</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1270"/>
+        <source>Edit</source>
+        <translation type="unfinished">ویرایش</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1275"/>
+        <source>Remove</source>
+        <translation type="unfinished">پاک‌کردن</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1282"/>
+        <source>Show list</source>
+        <translation type="unfinished">نمایش فهرست</translation>
+    </message>
+    <message>
+        <source>Merge paragraph</source>
+        <translation type="vanished">ادغام پاراگراف</translation>
+    </message>
+    <message>
         <source>Split paragraph</source>
-        <translation>تقسیم پاراگراف</translation>
+        <translation type="vanished">تقسیم پاراگراف</translation>
     </message>
 </context>
 <context>
@@ -3243,14 +3252,24 @@
 <context>
     <name>Ui::ComicBookTextView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="668"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="863"/>
         <source>Formatting</source>
         <translation>فرمت متن</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="669"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="864"/>
         <source>Comments</source>
         <translation>دیدگاه‌ها</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="865"/>
+        <source>Bookmarks</source>
+        <translation type="unfinished">بوک‌مارک‌ها</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="867"/>
+        <source>Show bookmarks list</source>
+        <translation type="unfinished">نمایش فهرست بوک‌مارک‌ها</translation>
     </message>
 </context>
 <context>
@@ -3353,7 +3372,7 @@
     <message>
         <location filename="../ui/account/connection_status_tool_bar.cpp" line="232"/>
         <source>Connection with server lost. Automatic reconnection enabled. Press, to try to reconnect right now.</source>
-        <translation type="unfinished"></translation>
+        <translation>ارتباط با سرور قطع شد. ارتباط خودکار فعال است. برای تلاش مجدد برای ارتباط انتخاب کنید.</translation>
     </message>
 </context>
 <context>
@@ -3361,17 +3380,17 @@
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="191"/>
         <source>Oops.. looks like a crash has happened</source>
-        <translation type="unfinished"></translation>
+        <translation>ای داد... مثل اینکه اپ خراب شد</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="193"/>
         <source>We are sorry that someting went wrong. Please help us fix this issue and share some details so it&apos;ll never bother you again.</source>
-        <translation type="unfinished"></translation>
+        <translation>متاسفیم که یک جای کار خراب شد. لطفاً با اشتراک جزییات به ما کمک کنید این مشکل را رفع کنیم تا در آینده مجدد این اتفاق برای شما نیافتد.</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="195"/>
         <source>How often do crashes happen?</source>
-        <translation type="unfinished"></translation>
+        <translation>خراب شدن اپ چقدر متداول است؟</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="196"/>
@@ -3396,7 +3415,7 @@
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="202"/>
         <source>Does the issue happen within all projects or with the last edited project?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا این مشکل در همه پروژه‌ها اتفاق می‌افتد یا فقط در آخرین پروژه‌ای که ویرایش می‌کردید اتفاق افتاد؟</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="203"/>
@@ -3416,7 +3435,7 @@
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="206"/>
         <source>What did you do when this issue happened?</source>
-        <translation type="unfinished"></translation>
+        <translation>وقتی که این مشکل اتفاق افتاد شما داشتید چه کاری انجام می‌دادید؟</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="207"/>
@@ -3439,7 +3458,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="66"/>
         <source>The character should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>باید برای شخصیت یک اسم انتخاب کنید</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="103"/>
@@ -3467,32 +3486,32 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="99"/>
         <source>Create a folder to group documents inside the story.</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد یک پوشه برای گروه‌بندی مستندات داخل داستان</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="101"/>
         <source>Create a plain text document to write out ideas and notes.</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد یک مستند متنی ساده برای نوشتن ایده‌ها و یادداشت‌ها</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="103"/>
         <source>Create a document with full character&apos;s description to track his relations and follow his journey within the story.</source>
-        <translation type="unfinished"></translation>
+        <translation>ساخت یکمستند با توضیحات کامل شخصیت برای بررسی نسبت‌های او با دیگر عوامل داستان و برای دنبال کردن مسیر او در داستان</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="106"/>
         <source>Create a document to note down the location&apos;s description and keep the details.</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد یک مستند برای یادداشت‌برداری توضیحات لوکیشن و ذخیره جزییات</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="108"/>
         <source>Create a document set to streamline your work on the feature film, series, or animation.</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد دسته‌ای از مستندات برای ساده کردن کارتان در فیلم، سریال یا انیمیشن بعدی</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="111"/>
         <source>Create a document set to streamline your work on the comic book, graphic novel, or manga.</source>
-        <translation type="unfinished"></translation>
+        <translation>ایجاد دسته‌ای از مستندات برای ساده کردن کارتان در کامیک بوک، رمان تصویری یا منگا بعدی</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="114"/>
@@ -3502,12 +3521,12 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="166"/>
         <source>The character should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>باید برای شخصیت یک اسم وارد کنید</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="168"/>
         <source>The location should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>باید برای لوکیشن یک اسم وارد کنید</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="208"/>
@@ -3517,7 +3536,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="229"/>
         <source>Add document to the story</source>
-        <translation type="unfinished"></translation>
+        <translation>افزودن مستند به داستان</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="235"/>
@@ -3575,7 +3594,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="66"/>
         <source>The location should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>باید برای لوکیشن یک اسم وارد کنید</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="103"/>
@@ -3603,7 +3622,7 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="153"/>
         <source>Choose the folder where new story will be saved</source>
-        <translation type="unfinished"></translation>
+        <translation>انتخاب پوشه برای ذخیره داستان جدید</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="160"/>
@@ -3623,17 +3642,17 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="186"/>
         <source>The story&apos;s name can&apos;t be empty. Fill it, please.</source>
-        <translation type="unfinished"></translation>
+        <translation>نام داستان نمی‌تواند خالی باشد، لطفاً یک نام وارد کنید</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="275"/>
         <source>The story will be created on the local computer.</source>
-        <translation type="unfinished"></translation>
+        <translation>داستان در کامپیوتر شما ایجاد خواهد شد.</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="276"/>
         <source>to create stories on the cloud.</source>
-        <translation type="unfinished"></translation>
+        <translation>برای ایجاد داستان‌ها در فضای ابری.</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="278"/>
@@ -3658,7 +3677,7 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="321"/>
         <source>Not set</source>
-        <translation type="unfinished"></translation>
+        <translation>وارد نشده</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="326"/>
@@ -3678,37 +3697,37 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="342"/>
         <source>Name of the story</source>
-        <translation type="unfinished"></translation>
+        <translation>نام داستان</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="343"/>
         <source>Save story in the local computer</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره داستان در کامپیوتر </translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="344"/>
         <source>Save story in the cloud</source>
-        <translation type="unfinished"></translation>
+        <translation>ذخیره داستان در فضای ابری</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="345"/>
         <source>Location of the new story file</source>
-        <translation type="unfinished"></translation>
+        <translation>محل فایل داستان جدید</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="347"/>
         <source>Choose the folder where the new story will be placed</source>
-        <translation type="unfinished"></translation>
+        <translation>انتخاب پوشه‌ای که داستان جدید در آن قرار خواهد گرفت</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="348"/>
         <source>Choose file with story to import</source>
-        <translation type="unfinished"></translation>
+        <translation>انتخاب فایل داستان برای درون‌ریزی</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="349"/>
         <source>Choose file for importing</source>
-        <translation type="unfinished"></translation>
+        <translation>انتخاب فایل برای درون‌ریزی </translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="350"/>
@@ -3736,7 +3755,7 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="89"/>
         <source>Read more</source>
-        <translation type="unfinished"></translation>
+        <translation>بیشتر بخوانید</translation>
     </message>
 </context>
 <context>
@@ -3749,7 +3768,7 @@
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="129"/>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>مستندات</translation>
     </message>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="130"/>
@@ -3797,7 +3816,7 @@
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="305"/>
         <source>Change application language</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر زبان برنامه</translation>
     </message>
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="308"/>
@@ -3825,7 +3844,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="206"/>
         <source>Story role</source>
-        <translation type="unfinished"></translation>
+        <translation>نقش در داستان</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="209"/>
@@ -3871,12 +3890,12 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="214"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا می‌خواهید عکس اصلی لوکیشن را حذف کنید؟</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="215"/>
         <source>Select an area for the location main photo</source>
-        <translation type="unfinished"></translation>
+        <translation>یک ناحیه را برای محل عکس اصلی انتخاب کنید</translation>
     </message>
 </context>
 <context>
@@ -3884,7 +3903,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="329"/>
         <source>Apply new location name</source>
-        <translation type="unfinished"></translation>
+        <translation>تغییر اسم جدید لوکیشن</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="568"/>
@@ -3986,12 +4005,12 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="715"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>آیا می‌خواهید عکس اصلی لوکیشن را حذف کنید؟</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="716"/>
         <source>Select an area for the location main photo</source>
-        <translation type="unfinished"></translation>
+        <translation>یک ناحیه را برای محل عکس اصلی انتخاب کنید</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="717"/>
@@ -4002,7 +4021,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="718"/>
         <source>Story role</source>
-        <translation type="unfinished"></translation>
+        <translation>نقش در داستان</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="721"/>
@@ -4206,10 +4225,6 @@
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="628"/>
         <source>in order to</source>
         <translation>برای</translation>
-    </message>
-    <message>
-        <source>can</source>
-        <translation type="vanished">می‌تواند</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
@@ -4943,7 +4958,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="249"/>
         <source>Characters with/without spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>تعداد کاراکترهای فیلمنامه همراه/بدون فاصله</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="251"/>

@@ -6,7 +6,7 @@
     <message>
         <location filename="../../corelib/ui/widgets/app_bar/app_bar.cpp" line="366"/>
         <source>Show module options</source>
-        <translation type="unfinished"></translation>
+        <translation>मॉड्यूल विकल्प दिखाएं</translation>
     </message>
 </context>
 <context>
@@ -19,42 +19,42 @@
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="303"/>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>बोल्ड</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="310"/>
         <source>Italic</source>
-        <translation type="unfinished"></translation>
+        <translation>इटैलिक</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="317"/>
         <source>Underline</source>
-        <translation type="unfinished"></translation>
+        <translation>अंडरलाइन </translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="324"/>
         <source>Strikethrough</source>
-        <translation type="unfinished"></translation>
+        <translation>स्ट्राइक-थ्रू</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="333"/>
         <source>Align left</source>
-        <translation type="unfinished"></translation>
+        <translation>बाएं अलाइन</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="339"/>
         <source>Align center</source>
-        <translation type="unfinished"></translation>
+        <translation>केंद्र अलाइन</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="345"/>
         <source>Align right</source>
-        <translation type="unfinished"></translation>
+        <translation>दाएं अलाइन</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="351"/>
         <source>Align justify</source>
-        <translation type="unfinished"></translation>
+        <translation>जस्टिफाए अलाइन</translation>
     </message>
 </context>
 <context>
@@ -62,7 +62,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="123"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>अपरिभाषित</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="125"/>
@@ -77,37 +77,37 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="129"/>
         <source>Act</source>
-        <translation type="unfinished"></translation>
+        <translation>एक्ट</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="131"/>
         <source>Act footer</source>
-        <translation type="unfinished"></translation>
+        <translation>एक्ट फुटर</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="133"/>
         <source>Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>सीकुऐंस</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="135"/>
         <source>Sequence footer</source>
-        <translation type="unfinished"></translation>
+        <translation>सीकुऐंस फुटर</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="138"/>
         <source>Scene heading</source>
-        <translation>सीन हेड्डिंग या स्लग लाइन</translation>
+        <translation>सीन हैडिंग</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="140"/>
         <source>Character</source>
-        <translation>केरेक्टर</translation>
+        <translation>पात्र</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="142"/>
         <source>Dialogue</source>
-        <translation>डॅयेलॉग</translation>
+        <translation>डायलॉग</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="145"/>
@@ -117,7 +117,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="147"/>
         <source>Beat</source>
-        <translation type="unfinished"></translation>
+        <translation>बीट</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="149"/>
@@ -127,17 +127,17 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="151"/>
         <source>Parenthetical</source>
-        <translation>परेनथेटिकल</translation>
+        <translation>पैरेंथेटिकल</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="153"/>
         <source>Lyrics</source>
-        <translation>लीरिक्स</translation>
+        <translation>लिरिक्ज़</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="155"/>
         <source>Transition</source>
-        <translation>ट्रॅन्ज़िशन</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="157"/>
@@ -148,74 +148,74 @@
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="160"/>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="214"/>
         <source>Sound</source>
-        <translation type="unfinished"></translation>
+        <translation>साउंड</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="162"/>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="217"/>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation>संगीत</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="164"/>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="220"/>
         <source>Cue</source>
-        <translation type="unfinished"></translation>
+        <translation>किउ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="167"/>
         <source>Page</source>
-        <translation type="unfinished"></translation>
+        <translation>पन्ना</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="169"/>
         <source>Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>पैनल</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="171"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>विवरण</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="174"/>
         <source>Heading 1</source>
-        <translation type="unfinished"></translation>
+        <translation>हैडिंग 1</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="176"/>
         <source>Heading 2</source>
-        <translation type="unfinished"></translation>
+        <translation>हैडिंग 2</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="178"/>
         <source>Heading 3</source>
-        <translation type="unfinished"></translation>
+        <translation>हैडिंग 3</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="180"/>
         <source>Heading 4</source>
-        <translation type="unfinished"></translation>
+        <translation>हैडिंग 4</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="182"/>
         <source>Heading 5</source>
-        <translation type="unfinished"></translation>
+        <translation>हैडिंग 5</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="184"/>
         <source>Heading 6</source>
-        <translation type="unfinished"></translation>
+        <translation>हैडिंग 6</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="186"/>
         <source>Text</source>
-        <translation>अक्षर</translation>
+        <translation>टैक्स्ट</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="936"/>
         <source>Copy of </source>
-        <translation>इस भाग कि कौपी</translation>
+        <translation>की प्रति</translation>
     </message>
 </context>
 <context>
@@ -223,12 +223,12 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="240"/>
         <source>Paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>अनुच्छेद</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="244"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>शब्द</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="248"/>
@@ -240,12 +240,12 @@
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="252"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="315"/>
         <source>Percents</source>
-        <translation type="unfinished"></translation>
+        <translation>प्रतिशत</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="307"/>
         <source>Character type</source>
-        <translation type="unfinished"></translation>
+        <translation>पात्र प्रकार</translation>
     </message>
 </context>
 <context>
@@ -253,7 +253,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/audioplay/audioplay_synopsis_model.cpp" line="9"/>
         <source>Synopsis</source>
-        <translation type="unfinished">सार</translation>
+        <translation>सार</translation>
     </message>
 </context>
 <context>
@@ -261,12 +261,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="21"/>
         <source>BBC scene style template (page: A4; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>बी बी सी सीन स्टाइल टेम्पलेट (पन्ना: ए4; फ़ॉन्ट: एरिअल)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="24"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>अमेरिकी टैम्प्लेट (पन्ना: लैटर; फ़ॉन्ट कोरिअर प्राइम)</translation>
     </message>
 </context>
 <context>
@@ -274,7 +274,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/characters/characters_model.cpp" line="179"/>
         <source>New group</source>
-        <translation type="unfinished"></translation>
+        <translation>नया समूह</translation>
     </message>
 </context>
 <context>
@@ -282,7 +282,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="107"/>
         <source>page</source>
-        <translation type="unfinished"></translation>
+        <translation>पन्ना</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="111"/>
@@ -294,47 +294,47 @@
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="116"/>
         <source>panel</source>
         <extracomment>Comic book panel intro</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>पैनल</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
         <source>CAPTION</source>
-        <translation type="unfinished"></translation>
+        <translation>कैपचन</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
         <source>NARRATION</source>
-        <translation type="unfinished"></translation>
+        <translation>नैरेशन</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
         <source>SFX</source>
-        <translation type="unfinished"></translation>
+        <translation>ऐस ऐफ ऐक्स</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>ओ ऐफ ऐफ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>WHISPER</source>
-        <translation type="unfinished"></translation>
+        <translation>विस्पर</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>BURST</source>
-        <translation type="unfinished"></translation>
+        <translation>बर्स्ट</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>WEAK</source>
-        <translation type="unfinished"></translation>
+        <translation>कमज़ोर</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>SINGING</source>
-        <translation type="unfinished"></translation>
+        <translation>गाते हुए</translation>
     </message>
 </context>
 <context>
@@ -342,12 +342,12 @@
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="211"/>
         <source>Paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>अनुच्छेद</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="215"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>शब्द</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="219"/>
@@ -357,7 +357,7 @@
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="223"/>
         <source>Percents</source>
-        <translation type="unfinished"></translation>
+        <translation>प्रतिशत</translation>
     </message>
 </context>
 <context>
@@ -365,12 +365,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="23"/>
         <source>International template (page: A4; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>अंतराष्ट्रीय टैम्प्लेट (पन्ना: ए4 ; फ़ॉन्ट: कोरिअर प्राइम)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="27"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>अमेरिकी टैम्प्लेट (पन्ना: लैटर; फ़ॉन्ट कोरिअर प्राइम)</translation>
     </message>
 </context>
 <context>
@@ -403,12 +403,12 @@
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="30"/>
         <source>EXT./INT</source>
-        <translation type="unfinished"></translation>
+        <translation>अंदर./बाहर</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="31"/>
         <source>EXT/INT</source>
-        <translation type="unfinished"></translation>
+        <translation>बाहर/.अंदर</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="32"/>
@@ -434,7 +434,7 @@
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="31"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="32"/>
         <source>EST</source>
-        <translation>एस्टॅब्लिश कीजिए</translation>
+        <translation>एस्टैब्लिश</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="32"/>
@@ -452,13 +452,13 @@
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="34"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="35"/>
         <source>EXT./INT</source>
-        <translation type="unfinished"></translation>
+        <translation>अंदर./बाहर</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="35"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="36"/>
         <source>EXT/INT</source>
-        <translation type="unfinished"></translation>
+        <translation>बाहर/.अंदर</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="36"/>
@@ -473,7 +473,7 @@
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_kit_scenarist_importer.cpp" line="489"/>
         <source>draft</source>
         <extracomment>Draft screenplay imported from KIT Scenarist file</extracomment>
-        <translation>ढांचा</translation>
+        <translation>ड्राफ्ट</translation>
     </message>
 </context>
 <context>
@@ -481,7 +481,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/locations/locations_model.cpp" line="170"/>
         <source>New group</source>
-        <translation type="unfinished"></translation>
+        <translation>नया समूह</translation>
     </message>
 </context>
 <context>
@@ -504,7 +504,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="161"/>
         <source>EXT./INT.</source>
-        <translation type="unfinished"></translation>
+        <translation>बाहर./अंदर.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="166"/>
@@ -539,12 +539,12 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="167"/>
         <source>MOMENTS LATER</source>
-        <translation>कुछ क्षणों बाद</translation>
+        <translation>कुछ पल बाद</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="167"/>
         <source>CONTINUOUS</source>
-        <translation>लगातार</translation>
+        <translation>जारी</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="167"/>
@@ -554,7 +554,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
         <source>V.O.</source>
-        <translation>व्ही. ओ.</translation>
+        <translation>वी. ओ.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
@@ -574,7 +574,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="174"/>
         <source>CONT&apos;D</source>
-        <translation>निरंतर</translation>
+        <translation>जारी</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="179"/>
@@ -627,12 +627,12 @@
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="257"/>
         <source>Paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>अनुच्छेद</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="261"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>शब्द</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="265"/>
@@ -648,22 +648,22 @@
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="391"/>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="455"/>
         <source>Percents</source>
-        <translation type="unfinished"></translation>
+        <translation>प्रतिशत</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="322"/>
         <source>Scene time</source>
-        <translation type="unfinished"></translation>
+        <translation>सीन समय</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="383"/>
         <source>Scene intro</source>
-        <translation type="unfinished"></translation>
+        <translation>सीन इंट्रो</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="447"/>
         <source>Character type</source>
-        <translation type="unfinished"></translation>
+        <translation>पात्र प्रकार</translation>
     </message>
 </context>
 <context>
@@ -679,37 +679,37 @@
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="21"/>
         <source>International template (page: A4; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>अंतराष्ट्रीय टैम्प्लेट (पन्ना: ए4; फ़ॉन्ट: कोरिअर प्राइम)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="25"/>
         <source>International template (page: A4; font: Courier New)</source>
-        <translation type="unfinished"></translation>
+        <translation>अंतराष्ट्रीय टैम्प्लेट (पन्ना: ए4; फ़ॉन्ट: कोरिअर न्यू)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="28"/>
         <source>Arabic template (page: A4; font: Courier New)</source>
-        <translation type="unfinished"></translation>
+        <translation>अरबी टैम्प्लेट (पन्ना: ए4; फ़ॉन्ट: कोरिअर न्यू)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="31"/>
         <source>Hebrew template (page: A4; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>हिब्रू टैम्प्लेट (पन्ना: ए4; फ़ॉन्ट: एरिअल)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="34"/>
         <source>Russian template (page: A4; font: Courier New)</source>
-        <translation type="unfinished"></translation>
+        <translation>रूसी टैम्प्लेट (पन्ना: ए4; फ़ॉन्ट: कोरियर न्यू)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="37"/>
         <source>Tamil template (page: A4; font: Mukta Malar)</source>
-        <translation type="unfinished"></translation>
+        <translation>तमिल टैम्प्लेट (पन्ना: ए4; फ़ॉन्ट: मुक्ता मलार)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="40"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>अमेरिकी टैम्प्लेट (पन्ना: लैटर; फ़ॉन्ट: कोरिअर प्राइम)</translation>
     </message>
 </context>
 <context>
@@ -717,20 +717,20 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="200"/>
         <source>Recycle bin</source>
-        <translation>सेफ़ डिलीट</translation>
+        <translation>रिसाइकल बिन</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="206"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="212"/>
         <source>Screenplay</source>
-        <translation>चलचित्र</translation>
+        <translation>पटकथा</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="208"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="229"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="243"/>
         <source>Title page</source>
-        <translation>मुखपृष्ठ</translation>
+        <translation>मुख्य-पन्ना</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="210"/>
@@ -742,7 +742,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="220"/>
         <source>Treatment</source>
-        <translation>सींच-लेखी</translation>
+        <translation>ट्रीटमैंट</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="214"/>
@@ -754,28 +754,28 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="227"/>
         <source>Comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>कॉमिक-बुक</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="233"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="247"/>
         <source>Script</source>
-        <translation type="unfinished"></translation>
+        <translation>पटकथा</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="241"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>ऑडिओ-प्ले</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="254"/>
         <source>Characters</source>
-        <translation>किरदार</translation>
+        <translation>पात्र</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="265"/>
         <source>Locations</source>
-        <translation>अन्य स्थान</translation>
+        <translation>स्थान</translation>
     </message>
 </context>
 <context>
@@ -783,27 +783,27 @@
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="22"/>
         <source>Monotype template (page: A4; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>मोनोटाइप टेम्पलेट (पन्ना: ए4; फ़ॉन्ट: कोरियर प्राइम)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="25"/>
         <source>Monotype template (page: A4; font: Courier New)</source>
-        <translation type="unfinished"></translation>
+        <translation>मोनोटाइप टेम्पलेट (पन्ना: ए4; फ़ॉन्ट: कोरियर न्यू)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="28"/>
         <source>Monotype template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>मोनोटाइप टेम्पलेट (पन्ना: लैटर; फ़ॉन्ट: कोरियर प्राइम)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="31"/>
         <source>Sans serif template (page: A4; font: Roboto)</source>
-        <translation type="unfinished"></translation>
+        <translation>सान सेरिफ टेम्पलेट (पन्ना: ए4; फ़ॉन्ट: रोबोटो)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="34"/>
         <source>Sans serif template (page: Letter; font: Roboto)</source>
-        <translation type="unfinished"></translation>
+        <translation>सान सेरिफ टेम्पलेट (पन्ना: लैटर; फ़ॉन्ट: रोबोटो)</translation>
     </message>
 </context>
 <context>
@@ -811,17 +811,17 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="295"/>
         <source>More then 10 dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>100 से अधिक डायलॉग</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="298"/>
         <source>About 10 dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>लगभग 10 डायलॉग</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="302"/>
         <source>Nonspeaking</source>
-        <translation type="unfinished"></translation>
+        <translation>मूक</translation>
     </message>
 </context>
 <context>
@@ -835,17 +835,17 @@
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="434"/>
         <source>More then 10 dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>100 से अधिक डायलॉग</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="438"/>
         <source>About 10 dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>लगभग 10 डायलॉग</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="442"/>
         <source>Nonspeaking</source>
-        <translation type="unfinished"></translation>
+        <translation>मूक</translation>
     </message>
 </context>
 <context>
@@ -871,7 +871,7 @@
     <message>
         <location filename="../../corelib/ui/widgets/color_picker/color_palette.cpp" line="315"/>
         <source>User colors</source>
-        <translation>अन्य रंग उपयोग करें</translation>
+        <translation>यूज़र के रंग</translation>
     </message>
 </context>
 <context>
@@ -1014,7 +1014,7 @@
     <message>
         <location filename="../../3rd_party/fileformats/format_manager.cpp" line="105"/>
         <source>All Supported Files</source>
-        <translation>सभी सपोर्टेड फ़ाइल फोर्मट्स</translation>
+        <translation>सभी सपोर्टेड फ़ाइल</translation>
     </message>
 </context>
 <context>
@@ -1090,7 +1090,7 @@
         <location filename="../../corelib/business_layer/export/comic_book/comic_book_abstract_exporter.cpp" line="184"/>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_abstract_exporter.cpp" line="197"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1021"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="915"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="976"/>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="853"/>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="905"/>
         <source>END OF</source>
@@ -1131,79 +1131,79 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="798"/>
+        <location filename="../management_layer/application_manager.cpp" line="799"/>
         <source> - changed</source>
         <translation>- परिवर्तन क्रिया सफ़ल</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="854"/>
-        <location filename="../management_layer/application_manager.cpp" line="873"/>
-        <location filename="../management_layer/application_manager.cpp" line="1025"/>
+        <location filename="../management_layer/application_manager.cpp" line="855"/>
+        <location filename="../management_layer/application_manager.cpp" line="874"/>
+        <location filename="../management_layer/application_manager.cpp" line="1026"/>
         <source>Saving error</source>
         <translation>फ़ाइल सेव एरर</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="855"/>
+        <location filename="../management_layer/application_manager.cpp" line="856"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>किये गए परिवर्तन दर्ज नहीं हुए. ये एक अंदरूनी डेटाबेस एरर है. &quot;1%&quot; कृपया जांच करें, अगर आपकी फ़ाइल मौजूद है और अगर आपके पास इसे दर्ज करने की अनुमति है.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="874"/>
+        <location filename="../management_layer/application_manager.cpp" line="875"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>किये गए परिवर्तन दर्ज नहीं हुए क्यूंकि आपकी कहानी जो &quot;%1&quot; स्थान पे मौजूद नहीं है. कृपया फ़ाइल को वही स्थान पे लाएं और फ़िर से सेव करने का प्रयास करें.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="925"/>
+        <location filename="../management_layer/application_manager.cpp" line="926"/>
         <source>Project was modified. Save changes?</source>
         <translation> प्रोजेक्ट मॉडिफाई हुआ है... सेव करें?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="926"/>
+        <location filename="../management_layer/application_manager.cpp" line="927"/>
         <source>Cancel</source>
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="927"/>
+        <location filename="../management_layer/application_manager.cpp" line="928"/>
         <source>Don&apos;t save</source>
         <translation>सेव न करें</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="928"/>
+        <location filename="../management_layer/application_manager.cpp" line="929"/>
         <source>Save</source>
         <translation>फ़ाइल सेव करें</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="987"/>
+        <location filename="../management_layer/application_manager.cpp" line="988"/>
         <source>Choose file to save story</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1026"/>
+        <location filename="../management_layer/application_manager.cpp" line="1027"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1076"/>
+        <location filename="../management_layer/application_manager.cpp" line="1077"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>आपने कोशिश की है, एक प्रोजेक्ट बनाने की, किसी नॉन एक्सिस्टिंग फोल्डर/लोकेशन में %1. कृपया, कोई और लोकेशन चुने, इस नए प्रोजेक्ट के लिए.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1081"/>
+        <location filename="../management_layer/application_manager.cpp" line="1082"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>ये फाइल सेव करने के लिए, लिखी नहीं जा पा रही है.&#xa0; लगता है ये फाइल अभी कोई और एप्लीकेशन में खुली है. कृपया उसे वहां से बंद करें और फिर फाइल सेव करने की कोशिश करें. </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1085"/>
+        <location filename="../management_layer/application_manager.cpp" line="1086"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>ये फाइल सेव करने के लिए, लिखी नहीं जा पा रही है.&#xa0; कृपया चेक करें और हमारी ऍप को सिलेक्टेड फोल्डर में फाइल लिखने कि परमिशन अदा करें. करें. या फ़िर, इसे एक नए प्रोजेक्ट की तरह सेव करने के लिए, कोई और फोल्डर चुने. </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1089"/>
+        <location filename="../management_layer/application_manager.cpp" line="1090"/>
         <source>Create project error</source>
         <translation>प्रोजेक्ट क्रिएट करने में एरर</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1169"/>
+        <location filename="../management_layer/application_manager.cpp" line="1170"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1218,7 +1218,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="221"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>ऑडिओ-प्ले</translation>
     </message>
 </context>
 <context>
@@ -1290,28 +1290,28 @@
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="115"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="261"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="385"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="387"/>
         <source>Choose the file to export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="138"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="284"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="408"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="410"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="141"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="287"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="411"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="413"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="144"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="290"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="414"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="416"/>
         <source>Export error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1530,21 +1530,6 @@
     </message>
 </context>
 <context>
-    <name>ManagementLayer::ScreenplayTemplateManager</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">ख़ारिज करें</translation>
-    </message>
-    <message>
-        <source>Don&apos;t save</source>
-        <translation type="vanished">सेव न करें</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">फाइल सेव करें</translation>
-    </message>
-</context>
-<context>
     <name>ManagementLayer::ScreenplayTextStructureManager</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="121"/>
@@ -1552,7 +1537,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="224"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="226"/>
         <source>Screenplay</source>
         <translation>चलचित्र</translation>
     </message>
@@ -1565,7 +1550,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="223"/>
+        <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="225"/>
         <source>Treatment</source>
         <translation>सींच-लेखी</translation>
     </message>
@@ -1576,20 +1561,20 @@
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="518"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="569"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="620"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="671"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="670"/>
         <source>Choose the file to save template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="539"/>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="590"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="641"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="691"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="640"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="690"/>
         <source>Choose the file with template to load</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="873"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="872"/>
         <source>Spelling dictionary loading</source>
         <translation>स्पेलिंग डिक्शनरी हो रही है</translation>
     </message>
@@ -1604,17 +1589,17 @@
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="391"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>ख़ारिज करें</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="392"/>
         <source>Don&apos;t save</source>
-        <translation type="unfinished">सेव न करें</translation>
+        <translation>सेव न करें</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="393"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>फाइल सेव करें</translation>
     </message>
 </context>
 <context>
@@ -1628,22 +1613,22 @@
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4074"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3816"/>
         <source>Cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4081"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3823"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4087"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3829"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="4094"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3836"/>
         <source>Select all</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2197,7 +2182,7 @@
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="194"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>ख़ारिज करें</translation>
     </message>
 </context>
 <context>
@@ -2215,7 +2200,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="189"/>
         <source>Logline</source>
-        <translation type="unfinished">लॉग लाइन</translation>
+        <translation>लॉग लाइन</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="190"/>
@@ -2225,22 +2210,22 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="191"/>
         <source>Title page</source>
-        <translation type="unfinished"></translation>
+        <translation>टाइटल पेज</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="192"/>
         <source>Synopsis</source>
-        <translation type="unfinished">सार</translation>
+        <translation>सार</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="193"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>ऑडिओ-प्ले</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="194"/>
         <source>Statistics</source>
-        <translation type="unfinished">आँकड़े</translation>
+        <translation>आँकड़े</translation>
     </message>
 </context>
 <context>
@@ -2248,22 +2233,22 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="220"/>
         <source>Header</source>
-        <translation type="unfinished">हेडर</translation>
+        <translation>हेडर</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="221"/>
         <source>Print header on title page</source>
-        <translation type="unfinished">हेडर को टाइटल पेज पर प्रिंट कीजिए</translation>
+        <translation>हेडर को टाइटल पेज पर प्रिंट कीजिए</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="222"/>
         <source>Footer</source>
-        <translation type="unfinished">फुटर</translation>
+        <translation>फुटर</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="223"/>
         <source>Print footer on title page</source>
-        <translation type="unfinished">फुटर को टाइटल पेज पर प्रिंट कीजिए</translation>
+        <translation>फुटर को टाइटल पेज पर प्रिंट कीजिए</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="224"/>
@@ -2291,7 +2276,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="201"/>
         <source>Duration</source>
-        <translation type="unfinished">ड्यूरेशन</translation>
+        <translation>ड्यूरेशन</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="202"/>
@@ -2301,7 +2286,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="203"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>शब्द</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="204"/>
@@ -2329,7 +2314,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1270"/>
         <source>Add</source>
-        <translation type="unfinished">शामिल करें</translation>
+        <translation>शामिल करें</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1276"/>
@@ -2339,7 +2324,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1281"/>
         <source>Remove</source>
-        <translation type="unfinished">रिमूव कीजिए</translation>
+        <translation>रिमूव कीजिए</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1288"/>
@@ -2352,47 +2337,47 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="81"/>
         <source>Scene heading</source>
-        <translation type="unfinished">सीन हेड्डिंग या स्लग लाइन</translation>
+        <translation>सीन हैडिंग</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="224"/>
         <source>Undo last action</source>
-        <translation type="unfinished">लास्ट एक्शन अंडू कीजिए</translation>
+        <translation>लास्ट एक्शन अंडू कीजिए</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="228"/>
         <source>Redo last action</source>
-        <translation type="unfinished">लास्ट एक्शन रिडू कीजिए</translation>
+        <translation>लास्ट एक्शन रिडू कीजिए</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="231"/>
         <source>Current paragraph format</source>
-        <translation type="unfinished">करेंट पेराग्राफ़ का फ़ॉर्मट</translation>
+        <translation>करेंट पेराग्राफ़ का फ़ॉर्मट</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="233"/>
         <source>Hide fast format panel</source>
-        <translation type="unfinished">फ़ास्ट फ़ॉर्मट पॅनल हाइड कीजिए</translation>
+        <translation>फ़ास्ट फ़ॉर्मट पॅनल हाइड कीजिए</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="234"/>
         <source>Show fast format panel</source>
-        <translation type="unfinished">फ़ास्ट फ़ॉर्मट पॅनल दिखाइए</translation>
+        <translation>फ़ास्ट फ़ॉर्मट पॅनल दिखाइए</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="236"/>
         <source>Search text</source>
-        <translation type="unfinished">टेक्स्ट सर्च कीजिए</translation>
+        <translation>टेक्स्ट सर्च कीजिए</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="239"/>
         <source>Disable review mode</source>
-        <translation type="unfinished">रिव्यू मोड डिसेबल कीजिए</translation>
+        <translation>रिव्यू मोड डिसेबल कीजिए</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="240"/>
         <source>Enable review mode</source>
-        <translation type="unfinished">रिव्यू मोड एनेबल कीजिए</translation>
+        <translation>रिव्यू मोड एनेबल कीजिए</translation>
     </message>
 </context>
 <context>
@@ -2481,12 +2466,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="859"/>
         <source>Formatting</source>
-        <translation type="unfinished">फ़ॉर्मेटिंग</translation>
+        <translation>फ़ॉर्मेटिंग</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="860"/>
         <source>Comments</source>
-        <translation type="unfinished">कॉमेंट्स</translation>
+        <translation>कॉमेंट्स</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="861"/>
@@ -2610,7 +2595,7 @@
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="284"/>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="290"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>अपरिभाषित</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="286"/>
@@ -2802,7 +2787,7 @@
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="797"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="803"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>अपरिभाषित</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="799"/>
@@ -2918,57 +2903,52 @@
 <context>
     <name>Ui::ComicBookExportDialog</name>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="187"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="167"/>
         <source>Export comic book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="189"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="169"/>
         <source>Format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="190"/>
-        <source>Template</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="191"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="170"/>
         <source>Print title page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="192"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="171"/>
         <source>Print panels numbers in form of words</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="193"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="172"/>
         <source>Print inline notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="194"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="173"/>
         <source>Print review marks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="195"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="174"/>
         <source>Watermark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="197"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="176"/>
         <source>Open document after export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="198"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="177"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="199"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="178"/>
         <source>Cancel</source>
         <translation>ख़ारिज करें</translation>
     </message>
@@ -3008,7 +2988,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="193"/>
         <source>Script</source>
-        <translation type="unfinished"></translation>
+        <translation>पटकथा</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="194"/>
@@ -3019,24 +2999,34 @@
 <context>
     <name>Ui::ComicBookParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="146"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="191"/>
         <source>Header</source>
         <translation>हेडर</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="147"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="192"/>
         <source>Print header on title page</source>
         <translation>हेडर को टाइटल पेज पर प्रिंट कीजिए</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="148"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="193"/>
         <source>Footer</source>
         <translation>फुटर</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="149"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="194"/>
         <source>Print footer on title page</source>
         <translation>फुटर को टाइटल पेज पर प्रिंट कीजिए</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="195"/>
+        <source>Override common settings for this comic book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="196"/>
+        <source>Template</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3054,7 +3044,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="184"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>शब्द</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="185"/>
@@ -3070,7 +3060,7 @@
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="998"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1059"/>
         <source>%n panels</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3078,14 +3068,37 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1192"/>
-        <source>Merge paragraph</source>
-        <translation>पेराग्राफ़ मर्ज कीजिए</translation>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1260"/>
+        <source>Bookmark</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1195"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1264"/>
+        <source>Add</source>
+        <translation type="unfinished">शामिल करें</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1270"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1275"/>
+        <source>Remove</source>
+        <translation type="unfinished">रिमूव कीजिए</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1282"/>
+        <source>Show list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge paragraph</source>
+        <translation type="vanished">पेराग्राफ़ मर्ज कीजिए</translation>
+    </message>
+    <message>
         <source>Split paragraph</source>
-        <translation>पेराग्राफ़ स्प्लिट कीजिए</translation>
+        <translation type="vanished">पेराग्राफ़ स्प्लिट कीजिए</translation>
     </message>
 </context>
 <context>
@@ -3236,14 +3249,24 @@
 <context>
     <name>Ui::ComicBookTextView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="668"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="863"/>
         <source>Formatting</source>
         <translation>फ़ॉर्मेटिंग</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="669"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="864"/>
         <source>Comments</source>
         <translation>कॉमेंट्स</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="865"/>
+        <source>Bookmarks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="867"/>
+        <source>Show bookmarks list</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3541,12 +3564,12 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="260"/>
         <source>Comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>कॉमिक-बुक</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="265"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>ऑडिओ-प्ले</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="276"/>
@@ -3662,12 +3685,12 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="331"/>
         <source>Comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>कॉमिक-बुक</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="336"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>ऑडिओ-प्ले</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="342"/>
@@ -3839,7 +3862,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="209"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>अपरिभाषित</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="211"/>
@@ -4014,7 +4037,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="721"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>अपरिभाषित</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="723"/>
@@ -4926,7 +4949,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="248"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>शब्द</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="249"/>
@@ -5089,17 +5112,17 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="755"/>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>बोल्ड</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="756"/>
         <source>Italic</source>
-        <translation type="unfinished"></translation>
+        <translation>इटैलिक</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="757"/>
         <source>Underline</source>
-        <translation type="unfinished"></translation>
+        <translation>अंडरलाइन </translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="758"/>
@@ -5666,12 +5689,12 @@
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="168"/>
         <source>Comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>कॉमिक-बुक</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="169"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>ऑडिओ-प्ले</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="170"/>
@@ -6869,7 +6892,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="400"/>
         <source>Save</source>
-        <translation>फाइल सेव करें</translation>
+        <translation>सेव</translation>
     </message>
 </context>
 <context>
@@ -6905,7 +6928,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="90"/>
         <source>via PayPal</source>
-        <translation>पे पाल के ज़रिये</translation>
+        <translation>पे-पाल के ज़रिये</translation>
     </message>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="91"/>
@@ -6920,7 +6943,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="93"/>
         <source>Upgrade</source>
-        <translation>ख़ाता परिवर्तित करें</translation>
+        <translation>ख़ाता अपग्रेड करें</translation>
     </message>
     <message>
         <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="94"/>
