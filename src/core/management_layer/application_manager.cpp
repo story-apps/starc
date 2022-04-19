@@ -698,6 +698,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         break;
     }
 
+    case QLocale::Tamil: {
+        translation = "ta";
+        break;
+    }
+
     case QLocale::Turkish: {
         translation = "tr";
         break;
@@ -1408,7 +1413,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     Log::init(loggingLevel, FileHelper::systemSavebleFileName(logFilePath));
 
 
-    QApplication::setApplicationVersion("0.1.4-dev");
+    QApplication::setApplicationVersion("0.1.4");
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
 
 
@@ -1417,15 +1422,21 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     QFontDatabase fontDatabase;
     fontDatabase.addApplicationFont(":/fonts/materialdesignicons");
-    fontDatabase.addApplicationFont(":/fonts/roboto-black");
-    fontDatabase.addApplicationFont(":/fonts/roboto-bold");
+    fontDatabase.addApplicationFont(":/fonts/roboto-light");
     fontDatabase.addApplicationFont(":/fonts/roboto-medium");
     fontDatabase.addApplicationFont(":/fonts/roboto-regular");
-    fontDatabase.addApplicationFont(":/fonts/roboto-thin");
     fontDatabase.addApplicationFont(":/fonts/noto-sans");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-bold");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-bold-italic");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-italic");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-light");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-medium");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-arabic-light");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-arabic-medium");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-arabic-regular");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-hebrew-light");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-hebrew-medium");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-hebrew-regular");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-tamil-light");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-tamil-medium");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-tamil-regular");
     //
     fontDatabase.addApplicationFont(":/fonts/arial");
     fontDatabase.addApplicationFont(":/fonts/arial-bold");
