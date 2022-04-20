@@ -305,21 +305,6 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                 }
             }
         }
-
-        //
-        // ... запрещаем удалять пустую строку идущую после таблицы
-        //
-        if (topCursorPosition + 1 == bottomCursorPosition) {
-            auto checkCursor = cursor;
-            checkCursor.setPosition(bottomCursorPosition);
-            if (checkCursor.atEnd()) {
-                checkCursor.setPosition(topCursorPosition);
-                if (TextBlockStyle::forBlock(checkCursor.block())
-                    == TextParagraphType::PageSplitter) {
-                    return;
-                }
-            }
-        }
     }
 
     //
@@ -446,9 +431,10 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
     //
     // Если после удаления курсор встал в невидимый блок, двигем его красиво
     //
-    if (!_editor->textCursor().block().isVisible()) {
+    cursor = _editor->textCursor();
+    if (!cursor.block().isVisible()) {
         //
-        // Для удаления наза ничего не делаем, кьют сам всё позиционирует нормально
+        // Для удаления назад ничего не делаем, кьют сам всё позиционирует нормально
         //
         if (_backward) {
         }
@@ -456,14 +442,27 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
         // Для удаления вперёд двигаем курсор к следующему блоку
         //
         else {
-            auto cursor = _editor->textCursor();
             while (!cursor.atEnd() && !cursor.block().isVisible()) {
                 cursor.movePosition(QTextCursor::EndOfBlock);
                 cursor.movePosition(QTextCursor::NextBlock);
             }
-            _editor->setTextCursor(cursor);
         }
     }
+
+    //
+    // Если после удаления курсор встал в блок, в котором запрещено позиционирование курсора,
+    // корректируем его позицию
+    //
+    if (cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor)) {
+        //
+        // Т.к. это актуально только для таблиц, корректируем лишь на один абзац, чтобы не городить
+        // сложную логику по охвату всех видимых и невидимых кейсов
+        //
+        cursor.movePosition(cursor.atStart() ? TextCursor::NextCharacter
+                                             : TextCursor::PreviousCharacter);
+    }
+
+    _editor->setTextCursor(cursor);
 }
 
 TextCursor::FoldersToDelete TextCursor::findFoldersToDelete(int _topCursorPosition,
