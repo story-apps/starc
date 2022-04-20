@@ -700,29 +700,31 @@ SettingsStorage::Implementation::Implementation()
                   addAudioplayEditorStylesActionByEnter("changing", _from, _to);
               };
         addAudioplayEditorStylesChangeByTab(TextParagraphType::UnformattedText,
-                                            TextParagraphType::UnformattedText);
+                                            TextParagraphType::Character);
         addAudioplayEditorStylesChangeByEnter(TextParagraphType::UnformattedText,
-                                              TextParagraphType::UnformattedText);
+                                              TextParagraphType::Character);
         addAudioplayEditorStylesChangeByTab(TextParagraphType::SceneHeading,
-                                            TextParagraphType::SceneHeading);
+                                            TextParagraphType::Character);
         addAudioplayEditorStylesChangeByEnter(TextParagraphType::SceneHeading,
-                                              TextParagraphType::SceneHeading);
+                                              TextParagraphType::Character);
         addAudioplayEditorStylesChangeByTab(TextParagraphType::Character, TextParagraphType::Sound);
         addAudioplayEditorStylesChangeByEnter(TextParagraphType::Character,
                                               TextParagraphType::SceneHeading);
         addAudioplayEditorStylesChangeByTab(TextParagraphType::Dialogue, TextParagraphType::Sound);
         addAudioplayEditorStylesChangeByEnter(TextParagraphType::Dialogue,
                                               TextParagraphType::SceneHeading);
-        addAudioplayEditorStylesChangeByTab(TextParagraphType::Sound, TextParagraphType::Sound);
-        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Sound, TextParagraphType::Sound);
-        addAudioplayEditorStylesChangeByTab(TextParagraphType::Music, TextParagraphType::Music);
-        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Music, TextParagraphType::Music);
-        addAudioplayEditorStylesChangeByTab(TextParagraphType::Cue, TextParagraphType::Cue);
-        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Cue, TextParagraphType::Cue);
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::Sound, TextParagraphType::Music);
+        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Sound,
+                                              TextParagraphType::SceneHeading);
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::Music, TextParagraphType::Cue);
+        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Music,
+                                              TextParagraphType::SceneHeading);
+        addAudioplayEditorStylesChangeByTab(TextParagraphType::Cue, TextParagraphType::Character);
+        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Cue, TextParagraphType::Character);
         addAudioplayEditorStylesChangeByTab(TextParagraphType::InlineNote,
-                                            TextParagraphType::InlineNote);
+                                            TextParagraphType::Character);
         addAudioplayEditorStylesChangeByEnter(TextParagraphType::InlineNote,
-                                              TextParagraphType::InlineNote);
+                                              TextParagraphType::Character);
         //
         auto addShortcut
             = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
