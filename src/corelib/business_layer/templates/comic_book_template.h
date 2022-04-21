@@ -29,6 +29,11 @@ public:
      * @brief Название
      */
     QString name() const override;
+
+    /**
+     * @brief Можно ли обхединять таблицы в данном шаблоне
+     */
+    bool canMergeParagraph() const override;
 };
 
 } // namespace BusinessLayer

@@ -265,8 +265,11 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                 // - удаляем весь остальной контент и заодно вставленный на предыдущем шаге символ
                 //
                 cursor.movePosition(QTextCursor::Start);
-                auto textDocument = dynamic_cast<BusinessLayer::TextDocument*>(document());
+                auto textDocument = static_cast<BusinessLayer::TextDocument*>(document());
                 Q_ASSERT(textDocument);
+                //
+                // TODO: Сделать универсально
+                //
                 textDocument->setParagraphType(TextParagraphType::SceneHeading, cursor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 cursor.insertText(" ");
@@ -278,36 +281,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
         }
 
         //
-        // ... когда пользователь хочет удалить внутреннюю границу разделения
-        //
-        {
-            auto checkCursor = cursor;
-            checkCursor.setPosition(topCursorPosition);
-            if (checkCursor.inTable() && checkCursor.inFirstColumn()) {
-                checkCursor.setPosition(bottomCursorPosition);
-                if (checkCursor.inTable() && !checkCursor.inFirstColumn()) {
-                    //
-                    // ... если нет выделения, значит нажат делит в конце последней ячейки левой
-                    //     колонки, или бекспейс в начале первой ячейки правой колонки - удалим
-                    //     таблицу
-                    //
-                    if (!cursor.hasSelection()) {
-                        auto textDocument = dynamic_cast<BusinessLayer::TextDocument*>(document());
-                        textDocument->mergeParagraph(cursor);
-                        return;
-                    }
-                    //
-                    // ... в остальных случаях ничего не делаем
-                    //
-                    else {
-                        return;
-                    }
-                }
-            }
-        }
-
-        //
-        // Когда пользователь нажал делит в блоке идущем перед таблицей
+        // ... когда пользователь нажал делит в блоке идущем перед таблицей
         //
         {
             auto checkCursor = cursor;
@@ -316,15 +290,99 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                 const bool isTopBlockEmpty = checkCursor.block().text().isEmpty();
                 checkCursor.setPosition(bottomCursorPosition);
                 if (TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter) {
+                    //
+                    // ... если блок пуст, то удалим блок, пододвинув таблицу наверх
+                    //
                     if (isTopBlockEmpty) {
                         cursor.setPosition(topCursorPosition);
                         cursor.movePosition(TextCursor::NextCharacter, TextCursor::KeepAnchor);
                         cursor.deleteChar();
                         cursor.movePosition(TextCursor::NextCharacter);
                         _editor->setTextCursor(cursor);
+                    }
+                    //
+                    // ... в противном случае, игнорируем изменение
+                    //
+                    return;
+                }
+            }
+        }
+
+        //
+        // ... когда пользователь нажал бэкспейс в блоке идущем после таблицы
+        //
+        {
+            auto checkCursor = cursor;
+            checkCursor.setPosition(topCursorPosition);
+            if (TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter) {
+                checkCursor.setPosition(bottomCursorPosition);
+                if (!checkCursor.inTable()) {
+                    //
+                    // ... если блок не пуст, то игнорируем нажатие
+                    //
+                    if (!checkCursor.block().text().isEmpty()) {
                         return;
                     }
+                    //
+                    // ... в противном случае, работаем по общему алгоритму
+                    //
                 }
+            }
+        }
+
+        //
+        // ... когда пользователь хочет удалить контент внутри таблицы
+        //
+        {
+            auto checkCursor = cursor;
+            checkCursor.setPosition(topCursorPosition);
+            const auto topCursorInTable = checkCursor.inTable();
+            const auto topCursorInFirstColumn = checkCursor.inFirstColumn();
+            checkCursor.setPosition(bottomCursorPosition);
+            const auto bottomCursorInTable = checkCursor.inTable();
+            const auto bottomCursorInFirstColumn = checkCursor.inFirstColumn();
+            if (topCursorInTable || bottomCursorInTable) {
+                //
+                // ... удаление полностью внутри таблицы
+                //
+                if (topCursorInTable && topCursorInFirstColumn && bottomCursorInTable
+                    && !bottomCursorInFirstColumn) {
+                    //
+                    // ... если нет выделения, значит нажат делит в конце последней ячейки левой
+                    //     колонки, или бекспейс в начале первой ячейки правой колонки
+                    //
+                    if (!cursor.hasSelection()) {
+                        //
+                        // ... удалим таблицу, если разрешено в шаблоне
+                        //
+                        if (textTemplate().canMergeParagraph()) {
+                            auto textDocument
+                                = static_cast<BusinessLayer::TextDocument*>(document());
+                            textDocument->mergeParagraph(cursor);
+                        }
+                    }
+                    //
+                    // ... если есть выделение, удаляем таблицу к херам, т.к. выделена может быть
+                    //     только вся таблица целиком
+                    //
+                    else {
+                        cursor.removeSelectedText();
+                        auto textDocument = qobject_cast<BusinessLayer::TextDocument*>(document());
+                        textDocument->mergeParagraph(cursor);
+                        cursor.deletePreviousChar();
+                    }
+                    return;
+                }
+                //
+                // ... попытки удаления через границу таблицы оставляем без исполнения
+                //
+                else if ((!topCursorInTable && bottomCursorInTable)
+                         || (topCursorInTable && !bottomCursorInTable)) {
+                    return;
+                }
+                //
+                // ... во всех остальных случаях работаем по общей схеме
+                //
             }
         }
     }

@@ -28,4 +28,9 @@ QString AudioplayTemplate::name() const
     }
 }
 
+bool AudioplayTemplate::canMergeParagraph() const
+{
+    return false;
+}
+
 } // namespace BusinessLayer

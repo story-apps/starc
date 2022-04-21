@@ -31,4 +31,9 @@ QString ComicBookTemplate::name() const
     }
 }
 
+bool ComicBookTemplate::canMergeParagraph() const
+{
+    return false;
+}
+
 } // namespace BusinessLayer

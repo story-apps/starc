@@ -498,6 +498,11 @@ public:
     qreal pageSplitterWidth() const;
 
     /**
+     * @brief Можно ли обхединять таблицы в данном шаблоне
+     */
+    virtual bool canMergeParagraph() const;
+
+    /**
      * @brief Дефолтный шрифт шаблона
      */
     QFont defaultFont() const;

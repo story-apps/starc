@@ -1079,6 +1079,11 @@ qreal TextTemplate::pageSplitterWidth() const
     return MeasurementHelper::mmToPx(5);
 }
 
+bool TextTemplate::canMergeParagraph() const
+{
+    return true;
+}
+
 QFont TextTemplate::defaultFont() const
 {
     return d->paragraphsStyles.value(d->defaultBlockType()).font();
