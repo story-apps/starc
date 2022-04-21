@@ -305,6 +305,28 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                 }
             }
         }
+
+        //
+        // Когда пользователь нажал делит в блоке идущем перед таблицей
+        //
+        {
+            auto checkCursor = cursor;
+            checkCursor.setPosition(topCursorPosition);
+            if (!checkCursor.inTable()) {
+                const bool isTopBlockEmpty = checkCursor.block().text().isEmpty();
+                checkCursor.setPosition(bottomCursorPosition);
+                if (TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter) {
+                    if (isTopBlockEmpty) {
+                        cursor.setPosition(topCursorPosition);
+                        cursor.movePosition(TextCursor::NextCharacter, TextCursor::KeepAnchor);
+                        cursor.deleteChar();
+                        cursor.movePosition(TextCursor::NextCharacter);
+                        _editor->setTextCursor(cursor);
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     //
