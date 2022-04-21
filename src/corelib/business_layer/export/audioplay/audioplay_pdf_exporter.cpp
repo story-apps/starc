@@ -64,7 +64,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
             || _paragraphType == TextParagraphType::Music
             || _paragraphType == TextParagraphType::Cue)) {
 
-        const auto blockData = dynamic_cast<TextBlockData*>(_block.userData());
+        const auto blockData = static_cast<TextBlockData*>(_block.userData());
         if (blockData != nullptr) {
             QFont font = _block.charFormat().font();
             font.setBold(false);

@@ -216,7 +216,7 @@ ScreenplayTextDocument* ScreenplayAbstractExporter::prepareDocument(
         // Если не нужно печатать, эту сцену, то удаляем её
         //
         if (!_exportOptions.exportScenes.isEmpty()) {
-            const auto blockData = dynamic_cast<TextBlockData*>(cursor.block().userData());
+            const auto blockData = static_cast<TextBlockData*>(cursor.block().userData());
             bool needRemoveBlock = false;
             if (!blockData || !blockData->item() || !blockData->item()->parent()
                 || blockData->item()->parent()->type() != TextModelItemType::Group) {

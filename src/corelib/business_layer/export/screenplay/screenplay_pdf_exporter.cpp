@@ -77,7 +77,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
             const auto paragraphType = TextBlockStyle::forBlock(block);
             if (paragraphType == TextParagraphType::SceneHeading && !block.text().isEmpty()
                 && _exportOptions.showScenesNumbers) {
-                const auto blockData = dynamic_cast<TextBlockData*>(block.userData());
+                const auto blockData = static_cast<TextBlockData*>(block.userData());
                 if (blockData != nullptr) {
                     _painter->setFont(block.charFormat().font());
                     //
@@ -122,7 +122,7 @@ static void printPage(int _pageNumber, QPainter* _painter, const QTextDocument* 
                 // Номера реплик
                 //
                 if (_exportOptions.showDialoguesNumbers) {
-                    const auto blockData = dynamic_cast<TextBlockData*>(block.userData());
+                    const auto blockData = static_cast<TextBlockData*>(block.userData());
                     if (blockData != nullptr) {
                         _painter->setFont(block.charFormat().font());
                         //

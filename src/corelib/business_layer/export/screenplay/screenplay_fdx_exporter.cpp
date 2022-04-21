@@ -61,7 +61,7 @@ void writeLine(QXmlStreamWriter& _writer, const QTextBlock& _block,
         // ... если надо, то выводим номера сцен
         //
         if (_exportOptions.showScenesNumbers) {
-            const auto blockData = dynamic_cast<TextBlockData*>(_block.userData());
+            const auto blockData = static_cast<TextBlockData*>(_block.userData());
             if (blockData != nullptr) {
                 const auto sceneItem
                     = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());

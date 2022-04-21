@@ -30,7 +30,7 @@ QString typeFilter(Domain::DocumentObjectType _type)
 
 DocumentObject* DocumentMapper::find(const Identifier& _id)
 {
-    return dynamic_cast<DocumentObject*>(abstractFind(_id));
+    return static_cast<DocumentObject*>(abstractFind(_id));
 }
 
 DocumentObject* DocumentMapper::find(const QUuid& _uuid)
@@ -40,7 +40,7 @@ DocumentObject* DocumentMapper::find(const QUuid& _uuid)
         return nullptr;
     }
 
-    return dynamic_cast<DocumentObject*>(domainObjects.first());
+    return static_cast<DocumentObject*>(domainObjects.first());
 }
 
 Domain::DocumentObject* DocumentMapper::findFirst(Domain::DocumentObjectType _type)
@@ -50,7 +50,7 @@ Domain::DocumentObject* DocumentMapper::findFirst(Domain::DocumentObjectType _ty
         return nullptr;
     }
 
-    return dynamic_cast<DocumentObject*>(domainObjects.first());
+    return static_cast<DocumentObject*>(domainObjects.first());
 }
 
 QVector<Domain::DocumentObject*> DocumentMapper::findAll(Domain::DocumentObjectType _type)
@@ -62,7 +62,7 @@ QVector<Domain::DocumentObject*> DocumentMapper::findAll(Domain::DocumentObjectT
 
     QVector<Domain::DocumentObject*> documentObjects;
     for (auto domainObject : domainObjects) {
-        documentObjects.append(dynamic_cast<DocumentObject*>(domainObject));
+        documentObjects.append(static_cast<DocumentObject*>(domainObject));
     }
     return documentObjects;
 }
@@ -109,7 +109,7 @@ QString DocumentMapper::insertStatement(DomainObject* _object, QVariantList& _in
                                             + ") "
                                               " VALUES(?, ?, ?, ?) ");
 
-    const auto documentObject = dynamic_cast<DocumentObject*>(_object);
+    const auto documentObject = static_cast<DocumentObject*>(_object);
     _insertValues.clear();
     _insertValues.append(documentObject->id().value());
     _insertValues.append(documentObject->uuid().toString());
@@ -127,7 +127,7 @@ QString DocumentMapper::updateStatement(DomainObject* _object, QVariantList& _up
                                               " content = ? "
                                               " WHERE id = ? ");
 
-    const auto documentObject = dynamic_cast<DocumentObject*>(_object);
+    const auto documentObject = static_cast<DocumentObject*>(_object);
     _updateValues.clear();
     _updateValues.append(documentObject->uuid().toString());
     _updateValues.append(static_cast<int>(documentObject->type()));
@@ -158,7 +158,7 @@ DomainObject* DocumentMapper::doLoad(const Identifier& _id, const QSqlRecord& _r
 
 void DocumentMapper::doLoad(DomainObject* _object, const QSqlRecord& _record)
 {
-    auto documentObject = dynamic_cast<DocumentObject*>(_object);
+    auto documentObject = static_cast<DocumentObject*>(_object);
     if (documentObject == nullptr) {
         return;
     }

@@ -423,7 +423,7 @@ QString docxText(QMap<int, QStringList>& _comments, const TextCursor& _cursor,
     // ... начало и конец таблицы
     //
     else if (currentBlockType == TextParagraphType::PageSplitter) {
-        const auto blockData = dynamic_cast<TextBlockData*>(block.userData());
+        const auto blockData = static_cast<TextBlockData*>(block.userData());
         if (blockData != nullptr) {
             const auto splitterItem = static_cast<TextModelSplitterItem*>(blockData->item());
             if (splitterItem->splitterType() == TextModelSplitterItemType::Start) {

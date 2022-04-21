@@ -40,7 +40,7 @@ QString documentFilter(const QUuid& _documentUuid, int _changeIndex)
 
 DocumentChangeObject* DocumentChangeMapper::find(const Domain::Identifier& _id)
 {
-    return dynamic_cast<DocumentChangeObject*>(abstractFind(_id));
+    return static_cast<DocumentChangeObject*>(abstractFind(_id));
 }
 
 DocumentChangeObject* DocumentChangeMapper::find(const QUuid& _uuid)
@@ -50,7 +50,7 @@ DocumentChangeObject* DocumentChangeMapper::find(const QUuid& _uuid)
         return nullptr;
     }
 
-    return dynamic_cast<DocumentChangeObject*>(domainObjects.first());
+    return static_cast<DocumentChangeObject*>(domainObjects.first());
 }
 
 Domain::DocumentChangeObject* DocumentChangeMapper::find(const QUuid& _documentUuid,
@@ -61,7 +61,7 @@ Domain::DocumentChangeObject* DocumentChangeMapper::find(const QUuid& _documentU
         return nullptr;
     }
 
-    return dynamic_cast<DocumentChangeObject*>(domainObjects.first());
+    return static_cast<DocumentChangeObject*>(domainObjects.first());
 }
 
 void DocumentChangeMapper::insert(DocumentChangeObject* _object)
@@ -107,7 +107,7 @@ QString DocumentChangeMapper::insertStatement(Domain::DomainObject* _object,
                                             + ") "
                                               " VALUES(?, ?, ?, ?, ?, ?, ?, ?) ");
 
-    const auto documentChangeObject = dynamic_cast<DocumentChangeObject*>(_object);
+    const auto documentChangeObject = static_cast<DocumentChangeObject*>(_object);
     _insertValues.clear();
     _insertValues.append(documentChangeObject->id().value());
     _insertValues.append(documentChangeObject->documentUuid().toString());
@@ -134,7 +134,7 @@ QString DocumentChangeMapper::updateStatement(Domain::DomainObject* _object,
                                               " user_email = ? "
                                               " WHERE id = ? ");
 
-    const auto documentChangeObject = dynamic_cast<DocumentChangeObject*>(_object);
+    const auto documentChangeObject = static_cast<DocumentChangeObject*>(_object);
     _updateValues.clear();
     _updateValues.append(documentChangeObject->documentUuid().toString());
     _updateValues.append(documentChangeObject->uuid().toString());
@@ -177,7 +177,7 @@ Domain::DomainObject* DocumentChangeMapper::doLoad(const Domain::Identifier& _id
 
 void DocumentChangeMapper::doLoad(Domain::DomainObject* _object, const QSqlRecord& _record)
 {
-    auto documentChangeObject = dynamic_cast<DocumentChangeObject*>(_object);
+    auto documentChangeObject = static_cast<DocumentChangeObject*>(_object);
     if (documentChangeObject == nullptr) {
         return;
     }

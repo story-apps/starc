@@ -269,7 +269,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 // А если печатаем номера сцен, то добавим в конец этот номер, окруженный #
                 //
                 if (_exportOptions.showScenesNumbers) {
-                    const auto blockData = dynamic_cast<TextBlockData*>(block.userData());
+                    const auto blockData = static_cast<TextBlockData*>(block.userData());
                     if (blockData != nullptr) {
                         const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(
                             blockData->item()->parent());
