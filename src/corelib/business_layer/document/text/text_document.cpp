@@ -1489,12 +1489,12 @@ void TextDocument::mergeParagraph(const TextCursor& _cursor)
     //
     // NOTE: Делается это только таким костылём, как удалить таблицу по-человечески я не нашёл...
     //
+    //    cursor.movePosition(QTextCursor::NextBlock);
+    // ... page splitter после таблицы
     cursor.movePosition(QTextCursor::NextBlock);
-    cursor.movePosition(QTextCursor::NextBlock);
+    // ... page splitter перед таблицей
     cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
-    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
-    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    cursor.deletePreviousChar();
+    cursor.removeSelectedText();
     cursor.endEditBlock();
 
     //
@@ -1522,6 +1522,12 @@ void TextDocument::mergeParagraph(const TextCursor& _cursor)
             insertFromMime(cursor.position(), firstColumnData);
         }
     }
+
+    //
+    // Удаляем оставшийся от таблицы блок
+    //
+    cursor.setPosition(insertPosition);
+    cursor.deleteChar();
 }
 
 void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
