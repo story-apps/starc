@@ -819,6 +819,13 @@ void PageTextEdit::setDocument(QTextDocument* document)
 
     setCursorWidth(lastCursorWidth);
     if (document) {
+        connect(document, &QTextDocument::contentsChange, this,
+                [d](int _position, int _removed, int _added) {
+                    Q_UNUSED(_position)
+                    if (_removed != _added) {
+                        d->needUpdateBlockWithCursorPlacement = true;
+                    }
+                });
         connect(document, &QTextDocument::contentsChanged, this,
                 [d] { d->updateBlockWithCursorPlacement(); });
     }
@@ -2187,6 +2194,7 @@ void PageTextEditPrivate::prepareBlockWithCursorPlacementUpdate(QKeyEvent* _even
 
 void PageTextEditPrivate::updateBlockWithCursorPlacement()
 {
+    qDebug("1");
     if (!useTypewriterScrolling) {
         return;
     }
@@ -2197,6 +2205,7 @@ void PageTextEditPrivate::updateBlockWithCursorPlacement()
         return;
     }
     needUpdateBlockWithCursorPlacement = false;
+    qDebug("11111");
 
     //
     // Определить центр виджета
