@@ -1413,10 +1413,10 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     Log::init(loggingLevel, FileHelper::systemSavebleFileName(logFilePath));
 
 
-    QString applicationVersion = "0.1.4";
-#if defined(DEV_BUILD) && DEV_BUILD > 0
-    applicationVersion += QString(" dev %1").arg(DEV_BUILD);
-#endif
+    QString applicationVersion = "0.1.5";
+    if (auto devBuild = qgetenv("DEV_BUILD"); !devBuild.isEmpty()) {
+        applicationVersion += QString(" dev %1").arg(devBuild.constData());
+    }
     QApplication::setApplicationVersion(applicationVersion);
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
 
