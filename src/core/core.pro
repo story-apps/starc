@@ -13,6 +13,8 @@ QT += concurrent widgets multimedia network
 
 TARGET = coreplugin
 
+DEFINES += DEV_BUILD=$$system(git rev-list  `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
+
 exists("../cloud/cloud.pri") {
     include(../cloud/cloud.pri)
 }
