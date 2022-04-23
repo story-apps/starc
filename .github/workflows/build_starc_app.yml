@@ -1,7 +1,7 @@
 name: Build Starc
 
 env:
-  APP_VERSION: 0.1.2
+  APP_VERSION: 0.1.4
 
 on:
   push:
@@ -65,7 +65,7 @@ jobs:
           name: linux packages
           path: build/linux/starc-setup.AppImage
 
-      - name: Publish artifacts
+      - name: Publish artifacts to GitHub releases
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
@@ -75,6 +75,8 @@ jobs:
         shell: bash
         run: |
           curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "name_for_file=starc-setup.AppImage" -F "file_bin=@build/linux/starc-setup.AppImage" https://starc.app/api/app/updates/publish
+          DEV_BUILD=$(git rev-list  `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=linux" -F "version=${{env.APP_VERSION}} dev ${{DEV_BUILD}}" https://starc.app/api/app/updates/notify
 
   build_windows_64:
     name: Build Windows 64 version
@@ -165,7 +167,7 @@ jobs:
             build/windows/starc-setup-64.exe
             build/windows/starc-64.zip
 
-      - name: Publish artifacts
+      - name: Publish artifacts to GitHub releases
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
@@ -177,6 +179,8 @@ jobs:
         shell: bash
         run: |
           curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "name_for_file=starc-setup-64.exe" -F "file_bin=@build/windows/starc-setup-64.exe" https://starc.app/api/app/updates/publish
+          DEV_BUILD=$(git rev-list  `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows64" -F "version=${{env.APP_VERSION}} dev ${{DEV_BUILD}}" https://starc.app/api/app/updates/notify
 
   build_windows_32:
     name: Build Windows 32 version
@@ -267,7 +271,7 @@ jobs:
             build/windows/starc-setup-32.exe
             build/windows/starc-32.zip
 
-      - name: Publish artifacts
+      - name: Publish artifacts to GitHub releases
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
@@ -279,6 +283,8 @@ jobs:
         shell: bash
         run: |
           curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "name_for_file=starc-setup-32.exe" -F "file_bin=@build/windows/starc-setup-32.exe" https://starc.app/api/app/updates/publish
+          DEV_BUILD=$(git rev-list  `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows32" -F "version=${{env.APP_VERSION}} dev ${{DEV_BUILD}}" https://starc.app/api/app/updates/notify
 
   build_mac:
     name: Build Mac OS X version
@@ -335,7 +341,7 @@ jobs:
           name: mac packages
           path: build/mac/starc-setup.dmg
 
-      - name: Publish artifacts
+      - name: Publish artifacts to GitHub releases
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
@@ -345,3 +351,5 @@ jobs:
         shell: bash
         run: |
           curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "name_for_file=starc-setup.dmg" -F "file_bin=@build/mac/starc-setup.dmg" https://starc.app/api/app/updates/publish
+          DEV_BUILD=$(git rev-list  `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=mac" -F "version=${{env.APP_VERSION}} dev ${{DEV_BUILD}}" https://starc.app/api/app/updates/notify
