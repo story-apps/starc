@@ -51,12 +51,11 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro
+          qmake starc.pro DEFINES+="DEV_BUILD=$DEV_BUILD"
 
       - name: Build
         shell: bash
         run: |
-          export DEV_BUILD=${{env.DEV_BUILD}}
           cd src
           make -j$(nproc)
 
@@ -127,7 +126,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
 
       - name: Build
         run: |
@@ -236,7 +235,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
 
       - name: Build
         run: |
@@ -335,7 +334,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          qmake starc.pro
+          qmake starc.pro DEFINES+="DEV_BUILD=$DEV_BUILD"
 
       - name: Build
         shell: bash

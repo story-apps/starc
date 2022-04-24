@@ -1414,9 +1414,9 @@ ApplicationManager::ApplicationManager(QObject* _parent)
 
 
     QString applicationVersion = "0.1.5";
-    if (auto devBuild = qgetenv("DEV_BUILD"); !devBuild.isEmpty()) {
-        applicationVersion += QString(" dev %1").arg(devBuild.constData());
-    }
+#if defined(DEV_BUILD) && DEV_BUILD > 0
+    applicationVersion += QString(" dev %1").arg(DEV_BUILD);
+#endif
     QApplication::setApplicationVersion(applicationVersion);
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
 
