@@ -53,26 +53,27 @@ QSet<TextParagraphType> ScreenplayTextDocument::Implementation::visibleBlocksTyp
             TextParagraphType::ActFooter,         TextParagraphType::SequenceHeading,
             TextParagraphType::SequenceFooter,
         };
-    } else {
-        return {
-            TextParagraphType::SceneHeading,
-            TextParagraphType::SceneHeadingShadow,
-            TextParagraphType::SceneCharacters,
-            TextParagraphType::Action,
-            TextParagraphType::Character,
-            TextParagraphType::Parenthetical,
-            TextParagraphType::Dialogue,
-            TextParagraphType::Lyrics,
-            TextParagraphType::Shot,
-            TextParagraphType::Transition,
-            TextParagraphType::InlineNote,
-            TextParagraphType::UnformattedText,
-            TextParagraphType::ActHeading,
-            TextParagraphType::ActFooter,
-            TextParagraphType::SequenceHeading,
-            TextParagraphType::SequenceFooter,
-        };
     }
+
+    return {
+        TextParagraphType::SceneHeading,
+        TextParagraphType::SceneHeadingShadow,
+        TextParagraphType::SceneCharacters,
+        TextParagraphType::Action,
+        TextParagraphType::Character,
+        TextParagraphType::Parenthetical,
+        TextParagraphType::Dialogue,
+        TextParagraphType::Lyrics,
+        TextParagraphType::Shot,
+        TextParagraphType::Transition,
+        TextParagraphType::InlineNote,
+        TextParagraphType::UnformattedText,
+        TextParagraphType::ActHeading,
+        TextParagraphType::ActFooter,
+        TextParagraphType::SequenceHeading,
+        TextParagraphType::SequenceFooter,
+        TextParagraphType::PageSplitter,
+    };
 }
 
 void ScreenplayTextDocument::Implementation::updateBlocksVisibility(int _from, int _to)
@@ -88,8 +89,18 @@ void ScreenplayTextDocument::Implementation::updateBlocksVisibility(int _from, i
     TextCursor cursor(q);
     cursor.setPosition(_from);
     while (cursor.position() <= _to) {
-        QTextBlock block = cursor.block();
-        block.setVisible(visibleBlocksTypes.contains(TextBlockStyle::forBlock(block)));
+        auto block = cursor.block();
+        const auto blockType = TextBlockStyle::forBlock(block);
+        block.setVisible(visibleBlocksTypes.contains(blockType));
+        //
+        // ... уберём отступы у скрытых блоков, чтобы они не ломали компановку документа
+        //
+        if (!block.isVisible()) {
+            auto blockFormat = cursor.blockFormat();
+            blockFormat.setTopMargin(0);
+            blockFormat.setBottomMargin(0);
+            cursor.setBlockFormat(blockFormat);
+        }
 
         if (cursor.atEnd()) {
             break;

@@ -2194,7 +2194,6 @@ void PageTextEditPrivate::prepareBlockWithCursorPlacementUpdate(QKeyEvent* _even
 
 void PageTextEditPrivate::updateBlockWithCursorPlacement()
 {
-    qDebug("1");
     if (!useTypewriterScrolling) {
         return;
     }
@@ -2205,7 +2204,6 @@ void PageTextEditPrivate::updateBlockWithCursorPlacement()
         return;
     }
     needUpdateBlockWithCursorPlacement = false;
-    qDebug("11111");
 
     //
     // Определить центр виджета
