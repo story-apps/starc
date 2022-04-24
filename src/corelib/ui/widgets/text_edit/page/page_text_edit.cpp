@@ -2289,20 +2289,25 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos) const
     // - при клике на разрыве между двух страниц
     //
     auto cursor = q->cursorForPosition(_eventPos);
-    if (cursor.block().isVisible()
-        && !cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor)
-        && cursor.blockFormat().pageBreakPolicy() != QTextFormat::PageBreak_AlwaysBefore) {
-        return _eventPos;
-    }
 
     //
-    // Обработка попадания в невидимый блок
+    // Обработка попадания в кривой (невидимый) блок
+    // NOTE: Тут кьют кидает курсор в самый конец документа, поэтому проверяем эту ситуацию, и
+    // корректируем положение на ближайший блок, в который должен встать курсор около клика мыши
     //
     const int maxMovement = 100;
     const int movementDelta = 5;
+    int distance = q->cursorRect(cursor).center().y() - _eventPos.y();
     int currentMovement = movementDelta;
-    while (!cursor.block().isVisible() && currentMovement < maxMovement) {
-        cursor = q->cursorForPosition(_eventPos + QPoint(0, currentMovement));
+    while (currentMovement < maxMovement) {
+        const auto nextCursor = q->cursorForPosition(_eventPos + QPoint(0, currentMovement));
+        const auto nextDistance = q->cursorRect(nextCursor).center().y() - _eventPos.y();
+        if (nextDistance > distance) {
+            break;
+        }
+
+        cursor = nextCursor;
+        distance = nextDistance;
         currentMovement += movementDelta;
     }
 
