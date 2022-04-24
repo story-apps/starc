@@ -2393,6 +2393,20 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
         // Старый блок
         //
         else {
+            //
+            // ... если блок, который был вначале документа и поэтому был лишён переноса страницы
+            //     был перемещён в другое место, то возвращаем ему перенос
+            //
+            if (d->documentTemplate().paragraphStyle(paragraphType).isStartFromNewPage()
+                && block.position() > 0
+                && block.blockFormat().pageBreakPolicy() != QTextFormat::PageBreak_AlwaysBefore) {
+                TextCursor cursor(this);
+                cursor.setPosition(block.position());
+                auto blockFormat = cursor.blockFormat();
+                blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+                cursor.setBlockFormat(blockFormat);
+            }
+
             updateTableInfo(block);
             auto blockData = static_cast<TextBlockData*>(block.userData());
             auto item = blockData->item();
