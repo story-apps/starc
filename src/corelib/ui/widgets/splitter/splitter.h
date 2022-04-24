@@ -20,8 +20,9 @@ public:
     void setWidgets(QWidget* _first, QWidget* _second);
 
     /**
-     * @brief Установить пропорции вложенных виджетов
+     * @brief Пропорции вложенных виджетов
      */
+    QVector<int> sizes() const;
     void setSizes(const QVector<int>& _sizes);
 
     /**

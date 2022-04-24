@@ -134,7 +134,6 @@ public:
     //
     Shadow* sidebarShadow = nullptr;
     //
-    bool isSidebarShownFirstTime = true;
     Widget* sidebarWidget = nullptr;
     TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
@@ -367,8 +366,7 @@ void AudioplayTextView::Implementation::updateSideBarVisibility(QWidget* _contai
     sidebarShadow->setVisible(isSidebarShouldBeVisible);
     sidebarWidget->setVisible(isSidebarShouldBeVisible);
 
-    if (isSidebarShownFirstTime && isSidebarShouldBeVisible) {
-        isSidebarShownFirstTime = false;
+    if (isSidebarShouldBeVisible && splitter->sizes().constLast() == 0) {
         const auto sideBarWidth = sidebarContent->sizeHint().width();
         splitter->setSizes({ _container->width() - sideBarWidth, sideBarWidth });
     }
@@ -752,7 +750,6 @@ void AudioplayTextView::loadViewSettings()
 
     const auto sidebarState = settingsValue(kSidebarStateKey);
     if (sidebarState.isValid()) {
-        d->isSidebarShownFirstTime = false;
         d->splitter->restoreState(sidebarState.toByteArray());
     }
 }

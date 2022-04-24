@@ -214,6 +214,15 @@ void Splitter::setWidgets(QWidget* _first, QWidget* _second)
     d->showHiddenPanelToolbar->raise();
 }
 
+QVector<int> Splitter::sizes() const
+{
+    QVector<int> sizes;
+    for (auto size : std::as_const(d->sizes)) {
+        sizes.append(size * 1000);
+    }
+    return sizes;
+}
+
 void Splitter::setSizes(const QVector<int>& _sizes)
 {
     if (topLevelWidget()->isMinimized()) {
@@ -322,7 +331,7 @@ void Splitter::restoreState(const QByteArray& _state)
     QVector<qreal> sizes;
     while (!stream.atEnd()) {
         stream >> size;
-        sizes.append(size);
+        sizes.append(std::min(1.0, std::max(0.0, size)));
     }
 
     //
@@ -347,15 +356,6 @@ bool Splitter::event(QEvent* _event)
     switch (_event->type()) {
     case QEvent::LayoutDirectionChange: {
         setSizes(d->widgetsSizes());
-        break;
-    }
-
-    //
-    // TODO: Что это планировалось?
-    //
-    case QEvent::WindowStateChange: {
-        const auto event = static_cast<QWindowStateChangeEvent*>(_event);
-        //            event->
         break;
     }
 
@@ -418,12 +418,7 @@ bool Splitter::eventFilter(QObject* _watched, QEvent* _event)
             break;
         }
 
-        int widgetSize = widget->property(lastSizeKey).toInt();
-        if (widgetSize <= 0) {
-            const auto widgetSizeHint = widget->sizeHint();
-            widgetSize = d->orientation == Qt::Horizontal ? widgetSizeHint.width()
-                                                          : widgetSizeHint.height();
-        }
+        const auto widgetSize = widget->property(lastSizeKey).toInt();
         const auto maxSize = d->orientation == Qt::Horizontal ? width() : height();
         if (widget == d->widgets.constFirst()) {
             setSizes({ widgetSize, maxSize - widgetSize });
