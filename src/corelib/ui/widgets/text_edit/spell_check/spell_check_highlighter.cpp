@@ -150,7 +150,7 @@ void SpellCheckHighlighter::highlightBlock(const QString& _text)
             //
             // Не проверяем слово, которое сейчас пишется
             //
-            if (isChanged() && positionInText <= d->cursorPosition.inBlock
+            if (positionInText <= d->cursorPosition.inBlock
                 && positionInText + wordToCheck.length() > d->cursorPosition.inBlock) {
                 continue;
             }
