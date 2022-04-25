@@ -602,7 +602,6 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             d->sidebarContent->setCurrentWidget(d->commentsView);
             break;
         }
-
         case kBookmarksTabIndex: {
             d->sidebarContent->setCurrentWidget(d->bookmarksView);
             break;

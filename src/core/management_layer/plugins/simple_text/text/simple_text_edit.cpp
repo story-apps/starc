@@ -592,6 +592,49 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
                 if ((cursorR.top() > 0 || cursorR.bottom() > 0)
                     // ... и выше нижней
                     && cursorR.top() < viewportGeometry.bottom()) {
+
+                    //
+                    // Прорисовка закладок
+                    //
+                    const auto bookmark = d->document.bookmark(block);
+                    if (bookmark.isValid()) {
+                        setPainterPen(bookmark.color);
+                        painter.setFont(DesignSystem::font().iconsForEditors());
+
+                        //
+                        // Определим область для отрисовки
+                        //
+                        QPointF topLeft(isLeftToRight
+                                            ? (pageLeft + leftDelta
+                                               + Ui::DesignSystem::card().shadowMargins().left())
+                                            : (textRight + leftDelta),
+                                        cursorR.top());
+                        QPointF bottomRight(
+                            isLeftToRight ? textLeft + leftDelta
+                                          : (pageRight + leftDelta
+                                             - Ui::DesignSystem::card().shadowMargins().right()),
+                            cursorR.bottom());
+                        QRectF rect(topLeft, bottomRight);
+                        const auto yDelta = Ui::DesignSystem::layout().px(32) - rect.height() / 2.0;
+                        //
+                        // корректируем размер области, чтобы получить квадрат для отрисовки иконки
+                        // закладки
+                        //
+                        if (yDelta > 0) {
+                            rect.adjust(0, -yDelta, 0, yDelta);
+                        }
+                        if (isLeftToRight) {
+                            rect.setWidth(rect.height());
+                        } else {
+                            rect.setLeft(rect.right() - rect.height());
+                        }
+                        painter.fillRect(
+                            rect,
+                            ColorHelper::transparent(bookmark.color,
+                                                     Ui::DesignSystem::elevationEndOpacity()));
+                        painter.drawText(rect, Qt::AlignCenter, u8"\U000F00C0");
+                    }
+
                     //
                     // Прорисовка декораций пустой строки
                     //
@@ -625,6 +668,53 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
             }
         }
     }
+}
+
+ContextMenu* SimpleTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
+{
+    //
+    // Сначала нужно создать контекстное меню в базовом классе, т.к. в этот момент может
+    // измениться курсор, который установлен в текстовом редакторе, и использовать его
+    //
+    auto menu = BaseTextEdit::createContextMenu(_position, _parent);
+
+    const BusinessLayer::TextCursor cursor = textCursor();
+
+    //
+    // Работа с закладками
+    //
+    auto bookmarkAction = new QAction(this);
+    bookmarkAction->setText(tr("Bookmark"));
+    bookmarkAction->setIconText(u8"\U000F00C3");
+    if (!d->document.bookmark(cursor.block()).isValid()) {
+        auto createBookmark = new QAction(bookmarkAction);
+        createBookmark->setText(tr("Add"));
+        createBookmark->setIconText(u8"\U000F00C4");
+        connect(createBookmark, &QAction::triggered, this, &SimpleTextEdit::addBookmarkRequested);
+    } else {
+        auto editBookmark = new QAction(bookmarkAction);
+        editBookmark->setText(tr("Edit"));
+        editBookmark->setIconText(u8"\U000F03EB");
+        connect(editBookmark, &QAction::triggered, this, &SimpleTextEdit::editBookmarkRequested);
+        //
+        auto removeBookmark = new QAction(bookmarkAction);
+        removeBookmark->setText(tr("Remove"));
+        removeBookmark->setIconText(u8"\U000F01B4");
+        connect(removeBookmark, &QAction::triggered, this,
+                &SimpleTextEdit::removeBookmarkRequested);
+    }
+    //
+    auto showBookmarks = new QAction(bookmarkAction);
+    showBookmarks->setText(tr("Show/hide list"));
+    showBookmarks->setIconText(u8"\U000F0E16");
+    connect(showBookmarks, &QAction::triggered, this, &SimpleTextEdit::showBookmarksRequested);
+
+    auto actions = menu->actions().toVector();
+    actions.first()->setSeparator(true);
+    actions.prepend(bookmarkAction);
+    menu->setActions(actions);
+
+    return menu;
 }
 
 bool SimpleTextEdit::canInsertFromMimeData(const QMimeData* _source) const

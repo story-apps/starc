@@ -91,6 +91,26 @@ signals:
      */
     void paragraphTypeChanged();
 
+    /**
+     * @brief Пользователь хочет добавить закладку
+     */
+    void addBookmarkRequested();
+
+    /**
+     * @brief Пользователь хочет изменить закладку
+     */
+    void editBookmarkRequested();
+
+    /**
+     * @brief Пользователь хочет удалить закладку
+     */
+    void removeBookmarkRequested();
+
+    /**
+     * @brief Пользователь хочет показать/скрыть список закладок
+     */
+    void showBookmarksRequested();
+
 protected:
     /**
      * @brief Нажатия многих клавиш обрабатываются вручную
@@ -109,6 +129,11 @@ protected:
      * @brief Реализуем отрисовку дополнительных элементов
      */
     void paintEvent(QPaintEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для добавления в меню собственных пунктов
+     */
+    ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr) override;
 
     /**
      * @brief Переопределяем работу с буфером обмена для использования собственного майм типа данных

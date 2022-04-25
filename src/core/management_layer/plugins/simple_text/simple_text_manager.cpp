@@ -3,9 +3,11 @@
 #include "simple_text_view.h"
 
 #include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
+#include <ui/modules/bookmarks/bookmark_dialog.h>
 
 #include <QApplication>
 #include <QFileDialog>
@@ -104,6 +106,70 @@ SimpleTextManager::SimpleTextManager(QObject* _parent)
 {
     connect(d->view, &Ui::SimpleTextView::currentModelIndexChanged, this,
             &SimpleTextManager::currentModelIndexChanged);
+    auto showBookmarkDialog = [this](Ui::BookmarkDialog::DialogType _type) {
+        auto item = d->model->itemForIndex(d->view->currentModelIndex());
+        if (item->type() != BusinessLayer::TextModelItemType::Text) {
+            return;
+        }
+
+        auto dialog = new Ui::BookmarkDialog(d->view->topLevelWidget());
+        dialog->setDialogType(_type);
+        if (_type == Ui::BookmarkDialog::DialogType::Edit) {
+            const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+            dialog->setBookmarkName(textItem->bookmark()->name);
+            dialog->setBookmarkColor(textItem->bookmark()->color);
+        }
+        connect(dialog, &Ui::BookmarkDialog::savePressed, this, [this, item, dialog] {
+            auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+            textItem->setBookmark({ dialog->bookmarkColor(), dialog->bookmarkName() });
+            d->model->updateItem(textItem);
+
+            dialog->hideDialog();
+        });
+        connect(dialog, &Ui::BookmarkDialog::disappeared, dialog, &Ui::BookmarkDialog::deleteLater);
+
+        //
+        // Отображаем диалог
+        //
+        dialog->showDialog();
+    };
+    connect(d->view, &Ui::SimpleTextView::addBookmarkRequested, this, [showBookmarkDialog] {
+        showBookmarkDialog(Ui::BookmarkDialog::DialogType::CreateNew);
+    });
+    connect(d->view, &Ui::SimpleTextView::editBookmarkRequested, this,
+            [showBookmarkDialog] { showBookmarkDialog(Ui::BookmarkDialog::DialogType::Edit); });
+    connect(d->view, &Ui::SimpleTextView::createBookmarkRequested, this,
+            [this](const QString& _text, const QColor& _color) {
+                auto item = d->model->itemForIndex(d->view->currentModelIndex());
+                if (item->type() != BusinessLayer::TextModelItemType::Text) {
+                    return;
+                }
+
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+                textItem->setBookmark({ _color, _text });
+                d->model->updateItem(textItem);
+            });
+    connect(d->view, &Ui::SimpleTextView::changeBookmarkRequested, this,
+            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
+                auto item = d->model->itemForIndex(_index);
+                if (item->type() != BusinessLayer::TextModelItemType::Text) {
+                    return;
+                }
+
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+                textItem->setBookmark({ _color, _text });
+                d->model->updateItem(textItem);
+            });
+    connect(d->view, &Ui::SimpleTextView::removeBookmarkRequested, this, [this] {
+        auto item = d->model->itemForIndex(d->view->currentModelIndex());
+        if (item->type() != BusinessLayer::TextModelItemType::Text) {
+            return;
+        }
+
+        auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+        textItem->clearBookmark();
+        d->model->updateItem(textItem);
+    });
 }
 
 SimpleTextManager::~SimpleTextManager() = default;

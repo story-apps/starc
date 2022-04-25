@@ -1,5 +1,7 @@
 #pragma once
 
+#include <business_layer/model/text/text_model_text_item.h>
+
 #include <QTextDocument>
 
 #include <corelib_global.h>
@@ -95,6 +97,11 @@ public:
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
                        const QString& _comment, const TextCursor& _cursor);
+
+    /**
+     * @brief Получить закладку блока
+     */
+    TextModelTextItem::Bookmark bookmark(const QTextBlock& _forBlock) const;
 
 protected:
     /**

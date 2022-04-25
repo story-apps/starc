@@ -1285,7 +1285,7 @@ ContextMenu* AudioplayTextEdit::createContextMenu(const QPoint& _position, QWidg
     }
     //
     auto showBookmarks = new QAction(bookmarkAction);
-    showBookmarks->setText(tr("Show list"));
+    showBookmarks->setText(tr("Show/hide list"));
     showBookmarks->setIconText(u8"\U000F0E16");
     connect(showBookmarks, &QAction::triggered, this, &AudioplayTextEdit::showBookmarksRequested);
 

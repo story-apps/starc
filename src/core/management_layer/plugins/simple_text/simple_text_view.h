@@ -27,6 +27,7 @@ public:
     /** @{ */
     QWidget* asQWidget() override;
     void toggleFullScreen(bool _isFullScreen) override;
+    QVector<QAction*> options() const override;
     /** @{ */
 
     /**
@@ -66,6 +67,24 @@ signals:
      * @brief Изменился индекс текущего элемента модели в текстовом документе (перестился курсор)
      */
     void currentModelIndexChanged(const QModelIndex& _index);
+
+    /**
+     * @brief Нажатия пользователя в контекстном меню для активации действия
+     */
+    void addBookmarkRequested();
+    void editBookmarkRequested();
+
+    /**
+     * @brief Уведомления, что пользователь осуществил действие в панели редактирования закладки
+     */
+    void createBookmarkRequested(const QString& _text, const QColor& _color);
+    void changeBookmarkRequested(const QModelIndex& _index, const QString& _text,
+                                 const QColor& _color);
+
+    /**
+     * @brief Пользователь хочет удалить закладку
+     */
+    void removeBookmarkRequested();
 
 protected:
     /**

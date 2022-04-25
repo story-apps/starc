@@ -14,6 +14,8 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/bookmarks/bookmarks_model.h>
+#include <ui/modules/bookmarks/bookmarks_view.h>
 #include <ui/modules/comments/comments_model.h>
 #include <ui/modules/comments/comments_toolbar.h>
 #include <ui/modules/comments/comments_view.h>
@@ -28,6 +30,7 @@
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/ui_helper.h>
 
+#include <QAction>
 #include <QPointer>
 #include <QStandardItem>
 #include <QStandardItemModel>
@@ -42,12 +45,14 @@ const int kTypeDataRole = Qt::UserRole + 100;
 
 const int kFastFormatTabIndex = 0;
 const int kCommentsTabIndex = 1;
+const int kBookmarksTabIndex = 2;
 
 const QString kSettingsKey = "simple-text";
 const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
 const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
 const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+const QString kIsBookmarksListVisibleKey = kSettingsKey + "/is-bookmarks-list-visible";
 const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 } // namespace
 
@@ -94,35 +99,55 @@ public:
                        const QString& _comment);
 
 
+    //
+    //  Модели
+    //
     QPointer<BusinessLayer::SimpleTextModel> model;
     BusinessLayer::CommentsModel* commentsModel = nullptr;
+    BusinessLayer::BookmarksModel* bookmarksModel = nullptr;
 
+    //
+    // Редактор текста
+    //
     SimpleTextEdit* textEdit = nullptr;
     SimpleTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
 
+    //
+    // Панели инструментов
+    //
     SimpleTextEditToolbar* toolbar = nullptr;
     BusinessLayer::SimpleTextSearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
-
+    //
     CommentsToolbar* commentsToolbar = nullptr;
 
+    //
+    // Сайдбар
+    //
     Shadow* sidebarShadow = nullptr;
-
+    //
     Widget* sidebarWidget = nullptr;
     TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
     SimpleTextFastFormatWidget* fastFormatWidget = nullptr;
     CommentsView* commentsView = nullptr;
-
+    BookmarksView* bookmarksView = nullptr;
+    //
     Splitter* splitter = nullptr;
+
+    //
+    // Действия опций редактора
+    //
+    QAction* showBookmarksAction = nullptr;
 };
 
 SimpleTextView::Implementation::Implementation(QWidget* _parent)
     : commentsModel(new BusinessLayer::CommentsModel(_parent))
+    , bookmarksModel(new BusinessLayer::BookmarksModel(_parent))
     , textEdit(new SimpleTextEdit(_parent))
     , shortcutsManager(textEdit)
     , scalableWrapper(new ScalableWrapper(textEdit, _parent))
@@ -137,7 +162,9 @@ SimpleTextView::Implementation::Implementation(QWidget* _parent)
     , sidebarContent(new StackWidget(_parent))
     , fastFormatWidget(new SimpleTextFastFormatWidget(_parent))
     , commentsView(new CommentsView(_parent))
+    , bookmarksView(new BookmarksView(_parent))
     , splitter(new Splitter(_parent))
+    , showBookmarksAction(new QAction(_parent))
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
 
@@ -153,19 +180,27 @@ SimpleTextView::Implementation::Implementation(QWidget* _parent)
     textEdit->setUsePageMode(true);
 
     sidebarWidget->hide();
-    sidebarTabs->setFixed(true);
+    sidebarTabs->setFixed(false);
     sidebarTabs->addTab({}); // fastformat
     sidebarTabs->setTabVisible(kFastFormatTabIndex, false);
     sidebarTabs->addTab({}); // comments
     sidebarTabs->setTabVisible(kCommentsTabIndex, false);
+    sidebarTabs->addTab({}); // bookmarks
+    sidebarTabs->setTabVisible(kBookmarksTabIndex, false);
     sidebarContent->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     sidebarContent->setAnimationType(StackWidget::AnimationType::Slide);
     sidebarContent->addWidget(fastFormatWidget);
     sidebarContent->addWidget(commentsView);
+    sidebarContent->addWidget(bookmarksView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
     commentsView->setModel(commentsModel);
     commentsView->hide();
+    bookmarksView->setModel(bookmarksModel);
+    bookmarksView->hide();
+
+    showBookmarksAction->setCheckable(true);
+    showBookmarksAction->setIconText(u8"\U000F0E16");
 }
 
 void SimpleTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
@@ -288,8 +323,8 @@ void SimpleTextView::Implementation::updateCommentsToolBar()
 
 void SimpleTextView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
-    const bool isSidebarShouldBeVisible
-        = toolbar->isFastFormatPanelVisible() || toolbar->isCommentsModeEnabled();
+    const bool isSidebarShouldBeVisible = toolbar->isFastFormatPanelVisible()
+        || toolbar->isCommentsModeEnabled() || showBookmarksAction->isChecked();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
@@ -448,11 +483,41 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
                 d->commentsModel->remove(_indexes);
             });
     //
+    connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
+            &SimpleTextView::createBookmarkRequested);
+    connect(d->bookmarksView, &BookmarksView::changeBookmarkRequested, this,
+            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
+                emit changeBookmarkRequested(d->bookmarksModel->mapToModel(_index), _text, _color);
+            });
+    connect(d->bookmarksView, &BookmarksView::bookmarkSelected, this,
+            [this](const QModelIndex& _index) {
+                const auto index = d->bookmarksModel->mapToModel(_index);
+                const auto position = d->textEdit->positionForModelIndex(index);
+                auto cursor = d->textEdit->textCursor();
+                cursor.setPosition(position);
+                d->textEdit->ensureCursorVisible(cursor);
+                d->scalableWrapper->setFocus();
+            });
+    connect(d->bookmarksView, &BookmarksView::removeRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->bookmarksModel->remove(_indexes);
+            });
+    //
     connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this](int _currentIndex) {
-        if (_currentIndex == kFastFormatTabIndex) {
+        switch (_currentIndex) {
+        case kFastFormatTabIndex: {
             d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
-        } else {
+            break;
+        }
+        case kCommentsTabIndex: {
             d->sidebarContent->setCurrentWidget(d->commentsView);
+            break;
+        }
+        case kBookmarksTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->bookmarksView);
+            break;
+        }
         }
     });
     //
@@ -493,11 +558,59 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
         const auto commentModelIndex
             = d->commentsModel->mapFromModel(screenplayModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
+        //
+        // Выберем закладку, если курсор в блоке с закладкой
+        //
+        const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(screenplayModelIndex);
+        d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
     };
     connect(d->textEdit, &SimpleTextEdit::paragraphTypeChanged, this, handleCursorPositionChanged);
     connect(d->textEdit, &SimpleTextEdit::cursorPositionChanged, this, handleCursorPositionChanged);
     connect(d->textEdit, &SimpleTextEdit::selectionChanged, this,
             [this] { d->updateCommentsToolBar(); });
+    connect(d->textEdit, &SimpleTextEdit::addBookmarkRequested, this, [this] {
+        //
+        // Если список закладок показан, добавляем новую через него
+        //
+        if (d->showBookmarksAction->isChecked()) {
+            d->bookmarksView->showAddBookmarkView({});
+        }
+        //
+        // В противном случае, через диалог
+        //
+        else {
+            emit addBookmarkRequested();
+        }
+    });
+    connect(d->textEdit, &SimpleTextEdit::editBookmarkRequested, this, [this] {
+        //
+        // Если список закладок показан, редактируем через него
+        //
+        if (d->showBookmarksAction->isChecked()) {
+            d->bookmarksView->showAddBookmarkView(
+                d->bookmarksModel->mapFromModel(currentModelIndex()));
+        }
+        //
+        // В противном случае, через диалог
+        //
+        else {
+            emit addBookmarkRequested();
+        }
+    });
+    connect(d->textEdit, &SimpleTextEdit::removeBookmarkRequested, this,
+            &SimpleTextView::removeBookmarkRequested);
+    connect(d->textEdit, &SimpleTextEdit::showBookmarksRequested, d->showBookmarksAction,
+            &QAction::toggle);
+    //
+    connect(d->showBookmarksAction, &QAction::toggled, this, [this](bool _checked) {
+        d->sidebarTabs->setTabVisible(kBookmarksTabIndex, _checked);
+        d->bookmarksView->setVisible(_checked);
+        if (_checked) {
+            d->sidebarTabs->setCurrentTab(kBookmarksTabIndex);
+            d->sidebarContent->setCurrentWidget(d->bookmarksView);
+        }
+        d->updateSideBarVisibility(this);
+    });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -515,6 +628,13 @@ QWidget* SimpleTextView::asQWidget()
 void SimpleTextView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
+}
+
+QVector<QAction*> SimpleTextView::options() const
+{
+    return {
+        d->showBookmarksAction,
+    };
 }
 
 void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
@@ -568,6 +688,8 @@ void SimpleTextView::loadViewSettings()
     const auto scaleFactor = settingsValue(kScaleFactorKey, 1.0).toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 
+    const auto isBookmarksListVisible = settingsValue(kIsBookmarksListVisibleKey, false).toBool();
+    d->showBookmarksAction->setChecked(isBookmarksListVisible);
     const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
     const auto isFastFormatPanelVisible
@@ -588,6 +710,7 @@ void SimpleTextView::saveViewSettings()
 
     setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
     setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
+    setSettingsValue(kIsBookmarksListVisibleKey, d->showBookmarksAction->isChecked());
     setSettingsValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab());
 
     setSettingsValue(kSidebarStateKey, d->splitter->saveState());
@@ -607,6 +730,7 @@ void SimpleTextView::setModel(BusinessLayer::SimpleTextModel* _model)
 
     d->textEdit->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
+    d->bookmarksModel->setTextModel(d->model);
 
     d->updateToolBarCurrentParagraphTypeName();
 }
@@ -665,6 +789,9 @@ void SimpleTextView::updateTranslations()
 {
     d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
+    d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
+
+    d->showBookmarksAction->setText(tr("Show bookmarks list"));
 }
 
 void SimpleTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

@@ -26,11 +26,6 @@ public:
      * @brief Получить номер заданного блока
      */
     QString blockNumber(const QTextBlock& _forBlock) const;
-
-    /**
-     * @brief Получить закладку блока
-     */
-    TextModelTextItem::Bookmark bookmark(const QTextBlock& _forBlock) const;
 };
 
 } // namespace BusinessLayer
