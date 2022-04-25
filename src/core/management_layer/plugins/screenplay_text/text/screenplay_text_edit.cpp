@@ -686,7 +686,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             QColor color;
         } lastBeat;
         QColor lastCharacterColor;
-
+        //
         auto setPainterPen = [&painter, &block, this](const QColor& _color) {
             painter.setPen(ColorHelper::transparent(
                 _color,

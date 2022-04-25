@@ -459,12 +459,12 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
     const qreal pageLeft = 0;
     const qreal pageRight = viewport()->width();
     const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();
-    ;
     const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
         + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
     const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
         - document()->rootFrame()->frameFormat().rightMargin() + spaceBetweenSceneNumberAndText;
     const qreal leftDelta = (isLeftToRight ? -1 : 1) * horizontalScrollBar()->value();
+    qreal verticalMargin = 0;
 
 
     //
@@ -527,6 +527,10 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
             //
             QTextBlock block = topBlock;
             const QRectF viewportGeometry = viewport()->geometry();
+            int lastSceneBlockBottom = 0;
+            QColor lastSceneColor;
+            bool isLastBlockSceneHeadingWithNumberAtRight = false;
+            //
             auto setPainterPen = [&painter, &block, this](const QColor& _color) {
                 painter.setPen(ColorHelper::transparent(
                     _color,
@@ -538,9 +542,48 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
 
             QTextCursor cursor(document());
             while (block.isValid() && block != bottomBlock) {
+                //
+                // Стиль текущего блока
+                //
+                const auto blockType = TextBlockStyle::forBlock(block);
+
                 cursor.setPosition(block.position());
                 const QRect cursorR = cursorRect(cursor);
                 cursor.movePosition(QTextCursor::EndOfBlock);
+                const QRect cursorREnd = cursorRect(cursor);
+                //
+                verticalMargin = cursorR.height() / 2;
+
+                //
+                // Определим цвет главы
+                //
+                if (blockType == TextParagraphType::ChapterHeading1
+                    || blockType == TextParagraphType::ChapterHeading2
+                    || blockType == TextParagraphType::ChapterHeading3
+                    || blockType == TextParagraphType::ChapterHeading4
+                    || blockType == TextParagraphType::ChapterHeading5
+                    || blockType == TextParagraphType::ChapterHeading6) {
+                    lastSceneBlockBottom = cursorR.top();
+                    lastSceneColor = d->document.itemColor(block);
+                }
+
+                //
+                // Нарисуем цвет главы
+                //
+                if (lastSceneColor.isValid()) {
+                    const QPointF topLeft(
+                        isLeftToRight ? textRight + leftDelta + DesignSystem::layout().px8()
+                                      : (textLeft - DesignSystem::layout().px4() + leftDelta),
+                        isLastBlockSceneHeadingWithNumberAtRight
+                            ? cursorR.top() - verticalMargin
+                            : lastSceneBlockBottom - verticalMargin);
+                    const QPointF bottomRight(isLeftToRight ? textRight
+                                                      + DesignSystem::layout().px4() + leftDelta
+                                                            : textLeft + leftDelta,
+                                              cursorREnd.bottom() + verticalMargin);
+                    const QRectF rect(topLeft, bottomRight);
+                    painter.fillRect(rect, lastSceneColor);
+                }
 
                 //
                 // Курсор на экране
