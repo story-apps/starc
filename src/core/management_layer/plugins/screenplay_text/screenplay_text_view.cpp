@@ -71,6 +71,11 @@ public:
     void reconfigureDialoguesNumbersVisibility();
 
     /**
+     * @brief Обновить переводы дополнительных действий
+     */
+    void updateOptionsTranslations();
+
+    /**
      * @brief Обновить настройки UI панели инструментов
      */
     void updateToolBarUi();
@@ -307,6 +312,12 @@ void ScreenplayTextView::Implementation::reconfigureDialoguesNumbersVisibility()
             ? model->informationModel()->showDialoguesNumbers()
             : settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
                   .toBool());
+}
+
+void ScreenplayTextView::Implementation::updateOptionsTranslations()
+{
+    showBookmarksAction->setText(showBookmarksAction->isChecked() ? tr("Hide bookmarks list")
+                                                                  : tr("Show bookmarks list"));
 }
 
 void ScreenplayTextView::Implementation::updateToolBarUi()
@@ -693,6 +704,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             &QAction::toggle);
     //
     connect(d->showBookmarksAction, &QAction::toggled, this, [this](bool _checked) {
+        d->updateOptionsTranslations();
         d->sidebarTabs->setTabVisible(kBookmarksTabIndex, _checked);
         d->bookmarksView->setVisible(_checked);
         if (_checked) {
@@ -928,7 +940,7 @@ void ScreenplayTextView::updateTranslations()
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
     d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
 
-    d->showBookmarksAction->setText(tr("Show bookmarks list"));
+    d->updateOptionsTranslations();
 }
 
 void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
