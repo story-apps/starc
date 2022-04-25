@@ -139,6 +139,26 @@ signals:
      */
     void paragraphTypeChanged();
 
+    /**
+     * @brief Пользователь хочет добавить закладку
+     */
+    void addBookmarkRequested();
+
+    /**
+     * @brief Пользователь хочет изменить закладку
+     */
+    void editBookmarkRequested();
+
+    /**
+     * @brief Пользователь хочет удалить закладку
+     */
+    void removeBookmarkRequested();
+
+    /**
+     * @brief Пользователь хочет показать/скрыть список закладок
+     */
+    void showBookmarksRequested();
+
 protected:
     /**
      * @brief Нажатия многих клавиш обрабатываются вручную

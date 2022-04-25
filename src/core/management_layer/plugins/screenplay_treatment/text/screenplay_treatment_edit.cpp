@@ -1087,10 +1087,51 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
 ContextMenu* ScreenplayTreatmentEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
     //
-    // TODO: закладки
+    // Сначала нужно создать контекстное меню в базовом классе, т.к. в этот момент может
+    // измениться курсор, который установлен в текстовом редакторе, и использовать его
     //
+    auto menu = BaseTextEdit::createContextMenu(_position, _parent);
 
-    return BaseTextEdit::createContextMenu(_position, _parent);
+    const BusinessLayer::TextCursor cursor = textCursor();
+
+    //
+    // Работа с закладками
+    //
+    auto bookmarkAction = new QAction(this);
+    bookmarkAction->setText(tr("Bookmark"));
+    bookmarkAction->setIconText(u8"\U000F00C3");
+    if (!d->document.bookmark(cursor.block()).isValid()) {
+        auto createBookmark = new QAction(bookmarkAction);
+        createBookmark->setText(tr("Add"));
+        createBookmark->setIconText(u8"\U000F00C4");
+        connect(createBookmark, &QAction::triggered, this,
+                &ScreenplayTreatmentEdit::addBookmarkRequested);
+    } else {
+        auto editBookmark = new QAction(bookmarkAction);
+        editBookmark->setText(tr("Edit"));
+        editBookmark->setIconText(u8"\U000F03EB");
+        connect(editBookmark, &QAction::triggered, this,
+                &ScreenplayTreatmentEdit::editBookmarkRequested);
+        //
+        auto removeBookmark = new QAction(bookmarkAction);
+        removeBookmark->setText(tr("Remove"));
+        removeBookmark->setIconText(u8"\U000F01B4");
+        connect(removeBookmark, &QAction::triggered, this,
+                &ScreenplayTreatmentEdit::removeBookmarkRequested);
+    }
+    //
+    auto showBookmarks = new QAction(bookmarkAction);
+    showBookmarks->setText(tr("Show/hide list"));
+    showBookmarks->setIconText(u8"\U000F0E16");
+    connect(showBookmarks, &QAction::triggered, this,
+            &ScreenplayTreatmentEdit::showBookmarksRequested);
+
+    auto actions = menu->actions().toVector();
+    actions.first()->setSeparator(true);
+    actions.prepend(bookmarkAction);
+    menu->setActions(actions);
+
+    return menu;
 }
 
 bool ScreenplayTreatmentEdit::canInsertFromMimeData(const QMimeData* _source) const

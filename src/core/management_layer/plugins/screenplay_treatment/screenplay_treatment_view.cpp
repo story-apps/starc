@@ -15,6 +15,8 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/bookmarks/bookmarks_model.h>
+#include <ui/modules/bookmarks/bookmarks_view.h>
 #include <ui/modules/comments/comments_model.h>
 #include <ui/modules/comments/comments_toolbar.h>
 #include <ui/modules/comments/comments_view.h>
@@ -44,12 +46,14 @@ const int kTypeDataRole = Qt::UserRole + 100;
 
 const int kFastFormatTabIndex = 0;
 const int kCommentsTabIndex = 1;
+const int kBookmarksTabIndex = 2;
 
 const QString kSettingsKey = "screenplay-treatment";
 const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
 const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
 const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+const QString kIsBookmarksListVisibleKey = kSettingsKey + "/is-bookmarks-list-visible";
 const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 } // namespace
 
@@ -64,6 +68,11 @@ public:
     void reconfigureTemplate(bool _withModelReinitialization = true);
     void reconfigureSceneNumbersVisibility();
     void reconfigureDialoguesNumbersVisibility();
+
+    /**
+     * @brief Обновить переводы дополнительных действий
+     */
+    void updateOptionsTranslations();
 
     /**
      * @brief Обновить настройки UI панели инструментов
@@ -98,35 +107,55 @@ public:
                        const QString& _comment);
 
 
+    //
+    // Модели
+    //
     QPointer<BusinessLayer::ScreenplayTextModel> model;
     BusinessLayer::CommentsModel* commentsModel = nullptr;
+    BusinessLayer::BookmarksModel* bookmarksModel = nullptr;
 
+    //
+    // Редактор поэпизодника
+    //
     ScreenplayTreatmentEdit* screenplayText = nullptr;
     ScreenplayTreatmentEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
 
+    //
+    // Панели инструментов
+    //
     ScreenplayTreatmentEditToolbar* toolbar = nullptr;
     BusinessLayer::ScreenplayTreatmentSearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
     QStandardItemModel* paragraphTypesModel = nullptr;
-
+    //
     CommentsToolbar* commentsToolbar = nullptr;
 
+    //
+    // Сайдбар
+    //
     Shadow* sidebarShadow = nullptr;
-
+    //
     Widget* sidebarWidget = nullptr;
     TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
     ScreenplayTreatmentFastFormatWidget* fastFormatWidget = nullptr;
     CommentsView* commentsView = nullptr;
-
+    BookmarksView* bookmarksView = nullptr;
+    //
     Splitter* splitter = nullptr;
+
+    //
+    // Действия опций редактора
+    //
+    QAction* showBookmarksAction = nullptr;
 };
 
 ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
     : commentsModel(new BusinessLayer::CommentsModel(_parent))
+    , bookmarksModel(new BusinessLayer::BookmarksModel(_parent))
     , screenplayText(new ScreenplayTreatmentEdit(_parent))
     , shortcutsManager(screenplayText)
     , scalableWrapper(new ScalableWrapper(screenplayText, _parent))
@@ -142,7 +171,10 @@ ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
     , sidebarContent(new StackWidget(_parent))
     , fastFormatWidget(new ScreenplayTreatmentFastFormatWidget(_parent))
     , commentsView(new CommentsView(_parent))
+    , bookmarksView(new BookmarksView(_parent))
     , splitter(new Splitter(_parent))
+    //
+    , showBookmarksAction(new QAction(_parent))
 {
     commentsModel->setParagraphTypesFiler({
         BusinessLayer::TextParagraphType::SceneHeading,
@@ -168,19 +200,27 @@ ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
     screenplayText->setUsePageMode(true);
 
     sidebarWidget->hide();
-    sidebarTabs->setFixed(true);
+    sidebarTabs->setFixed(false);
     sidebarTabs->addTab({}); // fastformat
     sidebarTabs->setTabVisible(kFastFormatTabIndex, false);
     sidebarTabs->addTab({}); // comments
     sidebarTabs->setTabVisible(kCommentsTabIndex, false);
+    sidebarTabs->addTab({}); // bookmarks
+    sidebarTabs->setTabVisible(kBookmarksTabIndex, false);
     sidebarContent->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     sidebarContent->setAnimationType(StackWidget::AnimationType::Slide);
     sidebarContent->addWidget(fastFormatWidget);
     sidebarContent->addWidget(commentsView);
+    sidebarContent->addWidget(bookmarksView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
     commentsView->setModel(commentsModel);
     commentsView->hide();
+    bookmarksView->setModel(bookmarksModel);
+    bookmarksView->hide();
+
+    showBookmarksAction->setCheckable(true);
+    showBookmarksAction->setIconText(u8"\U000F0E16");
 }
 
 void ScreenplayTreatmentView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
@@ -238,6 +278,12 @@ void ScreenplayTreatmentView::Implementation::reconfigureDialoguesNumbersVisibil
             ? model->informationModel()->showDialoguesNumbers()
             : settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
                   .toBool());
+}
+
+void ScreenplayTreatmentView::Implementation::updateOptionsTranslations()
+{
+    showBookmarksAction->setText(showBookmarksAction->isChecked() ? tr("Hide bookmarks list")
+                                                                  : tr("Show bookmarks list"));
 }
 
 void ScreenplayTreatmentView::Implementation::updateToolBarUi()
@@ -340,8 +386,8 @@ void ScreenplayTreatmentView::Implementation::updateCommentsToolBar()
 
 void ScreenplayTreatmentView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
-    const bool isSidebarShouldBeVisible
-        = toolbar->isFastFormatPanelVisible() || toolbar->isCommentsModeEnabled();
+    const bool isSidebarShouldBeVisible = toolbar->isFastFormatPanelVisible()
+        || toolbar->isCommentsModeEnabled() || showBookmarksAction->isChecked();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
@@ -503,11 +549,41 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
                 d->commentsModel->remove(_indexes);
             });
     //
+    connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
+            &ScreenplayTreatmentView::createBookmarkRequested);
+    connect(d->bookmarksView, &BookmarksView::changeBookmarkRequested, this,
+            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
+                emit changeBookmarkRequested(d->bookmarksModel->mapToModel(_index), _text, _color);
+            });
+    connect(d->bookmarksView, &BookmarksView::bookmarkSelected, this,
+            [this](const QModelIndex& _index) {
+                const auto index = d->bookmarksModel->mapToModel(_index);
+                const auto position = d->screenplayText->positionForModelIndex(index);
+                auto cursor = d->screenplayText->textCursor();
+                cursor.setPosition(position);
+                d->screenplayText->ensureCursorVisible(cursor);
+                d->scalableWrapper->setFocus();
+            });
+    connect(d->bookmarksView, &BookmarksView::removeRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->bookmarksModel->remove(_indexes);
+            });
+    //
     connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this](int _currentIndex) {
-        if (_currentIndex == kFastFormatTabIndex) {
+        switch (_currentIndex) {
+        case kFastFormatTabIndex: {
             d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
-        } else {
+            break;
+        }
+        case kCommentsTabIndex: {
             d->sidebarContent->setCurrentWidget(d->commentsView);
+            break;
+        }
+        case kBookmarksTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->bookmarksView);
+            break;
+        }
         }
     });
     //
@@ -548,6 +624,11 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
         const auto commentModelIndex
             = d->commentsModel->mapFromModel(screenplayModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
+        //
+        // Выберем закладку, если курсор в блоке с закладкой
+        //
+        const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(screenplayModelIndex);
+        d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
     };
     connect(d->screenplayText, &ScreenplayTreatmentEdit::paragraphTypeChanged, this,
             handleCursorPositionChanged);
@@ -555,6 +636,50 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
             handleCursorPositionChanged);
     connect(d->screenplayText, &ScreenplayTreatmentEdit::selectionChanged, this,
             [this] { d->updateCommentsToolBar(); });
+    connect(d->screenplayText, &ScreenplayTreatmentEdit::addBookmarkRequested, this, [this] {
+        //
+        // Если список закладок показан, добавляем новую через него
+        //
+        if (d->showBookmarksAction->isChecked()) {
+            d->bookmarksView->showAddBookmarkView({});
+        }
+        //
+        // В противном случае, через диалог
+        //
+        else {
+            emit addBookmarkRequested();
+        }
+    });
+    connect(d->screenplayText, &ScreenplayTreatmentEdit::editBookmarkRequested, this, [this] {
+        //
+        // Если список закладок показан, редактируем через него
+        //
+        if (d->showBookmarksAction->isChecked()) {
+            d->bookmarksView->showAddBookmarkView(
+                d->bookmarksModel->mapFromModel(currentModelIndex()));
+        }
+        //
+        // В противном случае, через диалог
+        //
+        else {
+            emit addBookmarkRequested();
+        }
+    });
+    connect(d->screenplayText, &ScreenplayTreatmentEdit::removeBookmarkRequested, this,
+            &ScreenplayTreatmentView::removeBookmarkRequested);
+    connect(d->screenplayText, &ScreenplayTreatmentEdit::showBookmarksRequested,
+            d->showBookmarksAction, &QAction::toggle);
+    //
+    connect(d->showBookmarksAction, &QAction::toggled, this, [this](bool _checked) {
+        d->updateOptionsTranslations();
+        d->sidebarTabs->setTabVisible(kBookmarksTabIndex, _checked);
+        d->bookmarksView->setVisible(_checked);
+        if (_checked) {
+            d->sidebarTabs->setCurrentTab(kBookmarksTabIndex);
+            d->sidebarContent->setCurrentWidget(d->bookmarksView);
+        }
+        d->updateSideBarVisibility(this);
+    });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -572,6 +697,13 @@ QWidget* ScreenplayTreatmentView::asQWidget()
 void ScreenplayTreatmentView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
+}
+
+QVector<QAction*> ScreenplayTreatmentView::options() const
+{
+    return {
+        d->showBookmarksAction,
+    };
 }
 
 void ScreenplayTreatmentView::reconfigure(const QStringList& _changedSettingsKeys)
@@ -643,6 +775,8 @@ void ScreenplayTreatmentView::loadViewSettings()
     const auto scaleFactor = settingsValue(kScaleFactorKey, 1.0).toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 
+    const auto isBookmarksListVisible = settingsValue(kIsBookmarksListVisibleKey, false).toBool();
+    d->showBookmarksAction->setChecked(isBookmarksListVisible);
     const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
     const auto isFastFormatPanelVisible
@@ -663,6 +797,7 @@ void ScreenplayTreatmentView::saveViewSettings()
 
     setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
     setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
+    setSettingsValue(kIsBookmarksListVisibleKey, d->showBookmarksAction->isChecked());
     setSettingsValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab());
 
     setSettingsValue(kSidebarStateKey, d->splitter->saveState());
@@ -704,6 +839,7 @@ void ScreenplayTreatmentView::setModel(BusinessLayer::ScreenplayTextModel* _mode
 
     d->screenplayText->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
+    d->bookmarksModel->setTextModel(d->model);
 
     d->updateToolBarCurrentParagraphTypeName();
 }
@@ -762,6 +898,9 @@ void ScreenplayTreatmentView::updateTranslations()
 {
     d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
+    d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
+
+    d->updateOptionsTranslations();
 }
 
 void ScreenplayTreatmentView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

@@ -2298,11 +2298,12 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos) const
     int xDistance = q->cursorRect(cursor).center().x() - _eventPos.x();
     int yDistance = q->cursorRect(cursor).center().y() - _eventPos.y();
     int currentMovement = movementDelta;
-    while (currentMovement < maxMovement) {
+    while (!cursor.block().isVisible() && currentMovement < maxMovement) {
         const auto nextCursor = q->cursorForPosition(_eventPos + QPoint(0, currentMovement));
         const auto nextXDistance = q->cursorRect(nextCursor).center().x() - _eventPos.x();
         const auto nextYDistance = q->cursorRect(nextCursor).center().y() - _eventPos.y();
-        if (nextYDistance > yDistance || nextXDistance > xDistance) {
+        if (cursor.block().isVisible()
+            && (nextYDistance > yDistance || nextXDistance > xDistance)) {
             break;
         }
 
