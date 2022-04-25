@@ -4,6 +4,17 @@
 #include "ui/simple_text_structure_view.h"
 
 #include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/model/text/text_model_group_item.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
+#include <ui/design_system/design_system.h>
+#include <ui/widgets/color_picker/color_picker.h>
+#include <ui/widgets/context_menu/context_menu.h>
+
+#include <QAction>
+#include <QWidgetAction>
+
+#include <optional>
 
 
 namespace ManagementLayer {
@@ -17,6 +28,11 @@ public:
      * @brief Создать представление
      */
     Ui::SimpleTextStructureView* createView();
+
+    /**
+     * @brief Настроить контекстное меню
+     */
+    void updateContextMenu(const QModelIndexList& _indexes);
 
 
     /**
@@ -43,6 +59,11 @@ public:
     Ui::SimpleTextStructureView* view = nullptr;
 
     /**
+     * @brief Контекстное меню для элементов навигатора
+     */
+    ContextMenu* contextMenu = nullptr;
+
+    /**
      * @brief Все созданные представления
      */
     QVector<Ui::SimpleTextStructureView*> allViews;
@@ -51,12 +72,77 @@ public:
 SimpleTextStructureManager::Implementation::Implementation()
 {
     view = createView();
+    contextMenu = new ContextMenu(view);
 }
 
 Ui::SimpleTextStructureView* SimpleTextStructureManager::Implementation::createView()
 {
     allViews.append(new Ui::SimpleTextStructureView);
     return allViews.last();
+}
+
+void SimpleTextStructureManager::Implementation::updateContextMenu(const QModelIndexList& _indexes)
+{
+    if (_indexes.isEmpty()) {
+        return;
+    }
+
+    //
+    // Настроим внешний вид меню
+    //
+    contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
+    contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
+
+    //
+    // Настроим действия меню
+    //
+    QVector<QAction*> actions;
+    //
+    // ... для одного элемента
+    //
+    if (_indexes.size() == 1) {
+        const auto itemIndex = structureModel->mapToSource(_indexes.constFirst());
+        std::optional<QColor> itemColor;
+        const auto item = model->itemForIndex(itemIndex);
+        if (item->type() == BusinessLayer::TextModelItemType::Group) {
+            const auto sceneItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+            itemColor = sceneItem->color();
+        }
+        if (itemColor.has_value()) {
+            auto colorMenu = new QAction;
+            colorMenu->setText(tr("Color"));
+            actions.append(colorMenu);
+
+            auto colorAction = new QWidgetAction(colorMenu);
+            auto colorPicker = new ColorPicker;
+            colorAction->setDefaultWidget(colorPicker);
+            colorPicker->setColorCanBeDeselected(true);
+            colorPicker->setSelectedColor(itemColor.value());
+            colorPicker->setBackgroundColor(Ui::DesignSystem::color().background());
+            colorPicker->setTextColor(Ui::DesignSystem::color().onBackground());
+            connect(colorPicker, &ColorPicker::selectedColorChanged, view,
+                    [this, itemColor, item](const QColor& _color) {
+                        if (item->type() == BusinessLayer::TextModelItemType::Group) {
+                            const auto sceneItem
+                                = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+                            sceneItem->setColor(_color);
+                        }
+
+                        model->updateItem(item);
+                        contextMenu->hideContextMenu();
+                    });
+        }
+    }
+    //
+    // ... для нескольких
+    //
+    else {
+        //
+        // Цвета показываем только для папок и сцен
+        //
+    }
+
+    contextMenu->setActions(actions);
 }
 
 
@@ -70,6 +156,15 @@ SimpleTextStructureManager::SimpleTextStructureManager(QObject* _parent)
     connect(d->view, &Ui::SimpleTextStructureView::currentModelIndexChanged, this,
             [this](const QModelIndex& _index) {
                 emit currentModelIndexChanged(d->structureModel->mapToSource(_index));
+            });
+    connect(d->view, &Ui::SimpleTextStructureView::customContextMenuRequested, this,
+            [this](const QPoint& _pos) {
+                if (d->view->selectedIndexes().isEmpty()) {
+                    return;
+                }
+
+                d->updateContextMenu(d->view->selectedIndexes());
+                d->contextMenu->showContextMenu(d->view->mapToGlobal(_pos));
             });
 }
 

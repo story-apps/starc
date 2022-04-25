@@ -35,6 +35,7 @@ SimpleTextStructureView::Implementation::Implementation(QWidget* _parent)
 {
     backIcon->setText(u8"\U000f0141");
 
+    content->setContextMenuPolicy(Qt::CustomContextMenu);
     content->setDragDropEnabled(true);
     content->setSelectionMode(QAbstractItemView::ContiguousSelection);
     content->setItemDelegate(contentDelegate);
@@ -68,6 +69,9 @@ SimpleTextStructureView::SimpleTextStructureView(QWidget* _parent)
     connect(d->content, &Tree::clicked, this, &SimpleTextStructureView::currentModelIndexChanged);
     connect(d->content, &Tree::doubleClicked, this,
             &SimpleTextStructureView::currentModelIndexChanged);
+    connect(d->content, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
+        emit customContextMenuRequested(d->content->mapToParent(_pos));
+    });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -112,6 +116,11 @@ void SimpleTextStructureView::setModel(QAbstractItemModel* _model)
 void SimpleTextStructureView::setCurrentModelIndex(const QModelIndex& _index)
 {
     d->content->setCurrentIndex(_index);
+}
+
+QModelIndexList SimpleTextStructureView::selectedIndexes() const
+{
+    return d->content->selectedIndexes();
 }
 
 void SimpleTextStructureView::updateTranslations()

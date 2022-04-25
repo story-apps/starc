@@ -14,7 +14,6 @@
 #include <ui/widgets/context_menu/context_menu.h>
 
 #include <QAction>
-#include <QTimer>
 #include <QWidgetAction>
 
 #include <optional>

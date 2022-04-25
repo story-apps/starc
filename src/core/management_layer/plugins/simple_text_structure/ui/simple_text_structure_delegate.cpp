@@ -70,8 +70,19 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     _painter->fillRect(backgroundRect, backgroundColor);
 
     //
-    // ... TODO: цвет главы
+    // ... цвет главы
     //
+    const auto chapterColor = _index.data(TextModelGroupItem::GroupColorRole);
+    if (!chapterColor.isNull() && chapterColor.canConvert<QColor>()) {
+        const QColor color = chapterColor.value<QColor>();
+        if (color.isValid()) {
+            const auto backgroundRect = _option.rect;
+            const QRectF chapterColorRect(0.0, backgroundRect.top(),
+                                          Ui::DesignSystem::layout().px4(),
+                                          backgroundRect.height());
+            _painter->fillRect(chapterColorRect, color);
+        }
+    }
 
     //
     // ... иконка
