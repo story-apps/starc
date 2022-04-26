@@ -131,6 +131,7 @@ QSize ContextMenu::Implementation::sizeHint() const
         + Ui::DesignSystem::card().shadowMargins().right();
     height += Ui::DesignSystem::card().shadowMargins().bottom()
         + Ui::DesignSystem::contextMenu().margins().top();
+    height = std::min(height, static_cast<qreal>(q->screen()->availableSize().height()));
 
     return QSizeF(width, height).toSize();
 }
@@ -395,8 +396,7 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
         - QPointF(Ui::DesignSystem::card().shadowMargins().left(),
                   Ui::DesignSystem::card().shadowMargins().top());
     auto endPosition = position;
-    const auto screen = QApplication::screenAt(position.toPoint());
-    Q_ASSERT(screen);
+    const auto screen = this->screen();
     const auto screenGeometry = screen->geometry();
     //
     // Если контекстное меню не помещается на экране справа от указателя
@@ -638,8 +638,8 @@ void ContextMenu::mouseReleaseEvent(QMouseEvent* _event)
         pressedAction->toggle();
     } else {
         pressedAction->trigger();
+        hideContextMenu();
     }
-    hideContextMenu();
 }
 
 void ContextMenu::mouseMoveEvent(QMouseEvent* _event)
@@ -689,9 +689,12 @@ bool ContextMenu::eventFilter(QObject* _watched, QEvent* _event)
         case QEvent::MouseButtonRelease: {
             const auto event = static_cast<QMouseEvent*>(_event);
             const auto triggeredAction = contextMenu->d->actionForPosition(event->pos());
-            if (qobject_cast<const QWidgetAction*>(triggeredAction) == nullptr) {
+            if (!triggeredAction->isCheckable()
+                && qobject_cast<const QWidgetAction*>(triggeredAction) == nullptr) {
                 QMetaObject::invokeMethod(this, &ContextMenu::hideContextMenu,
                                           Qt::QueuedConnection);
+            } else {
+                update();
             }
             break;
         }

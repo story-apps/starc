@@ -12,4 +12,7 @@
         <file alias="return">resources/audio/return.wav</file>
         <file alias="space">resources/audio/space.wav</file>
     </qresource>
+    <qresource prefix="/data">
+        <file alias="names_database">resources/data/names_database</file>
+    </qresource>
 </RCC>

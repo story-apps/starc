@@ -168,11 +168,11 @@ void TextField::Implementation::reconfigure()
         labelColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
     } else {
         labelColorAnimation.setEndValue(textDisabledColor);
-    }
-    if (q->text().isEmpty() && q->placeholderText().isEmpty()) {
-        animateLabelToBottom();
-    } else {
-        animateLabelToTop();
+        if (q->text().isEmpty() && q->placeholderText().isEmpty()) {
+            animateLabelToBottom();
+        } else {
+            animateLabelToTop();
+        }
     }
     finishAnimationIfInvisible();
 
@@ -347,6 +347,10 @@ QRectF TextField::Implementation::suffixRect() const
 
 QRectF TextField::Implementation::trailingIconRect() const
 {
+    if (trailingIcon.isEmpty()) {
+        return {};
+    }
+
     int topLeft = 0;
     if (q->isRightToLeft()) {
         topLeft = contentMargins().left() + margins().left();
@@ -761,6 +765,17 @@ int TextField::heightForWidth(int _width) const
     return qCeil(height);
 }
 
+ContextMenu* TextField::createContextMenu(const QPoint& _position, QWidget* _parent)
+{
+    const QRectF iconRect = d->trailingIconRect();
+    if (iconRect.contains(mapFromGlobal(QCursor::pos()))) {
+        emit trailingIconContextMenuRequested();
+        return nullptr;
+    }
+
+    return BaseTextEdit::createContextMenu(_position, _parent);
+}
+
 void TextField::reconfigure()
 {
     d->reconfigure();
@@ -1036,7 +1051,7 @@ void TextField::mousePressEvent(QMouseEvent* _event)
 void TextField::mouseReleaseEvent(QMouseEvent* _event)
 {
     const QRectF iconRect = d->trailingIconRect();
-    if (iconRect.contains(_event->pos())) {
+    if (_event->button() != Qt::RightButton && iconRect.contains(_event->pos())) {
         emit trailingIconPressed();
         _event->accept();
     } else {

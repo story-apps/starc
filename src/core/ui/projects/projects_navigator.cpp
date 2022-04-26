@@ -4,7 +4,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
 #include <utils/helpers/color_helper.h>
-#include <utils/helpers/quotes_helper.h>
+#include <utils/helpers/quotes_generator.h>
 
 #include <QVBoxLayout>
 
@@ -17,7 +17,7 @@ public:
     explicit Implementation(QWidget* _parent);
 
 
-    QuotesHelper::Quote quote;
+    QuotesGenerator::Quote quote;
 
     QVBoxLayout* layout = nullptr;
     H6Label* quoteLabel = nullptr;
@@ -67,7 +67,7 @@ ProjectsNavigator::ProjectsNavigator(QWidget* _parent)
 
 void ProjectsNavigator::updateTranslations()
 {
-    d->quote = QuotesHelper::generateQuote(d->quote.index);
+    d->quote = QuotesGenerator::generate(d->quote.index);
     d->quoteLabel->setText(d->quote.text);
     d->quoteAuthorLabel->setText(d->quote.author);
 

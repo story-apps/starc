@@ -1,11 +1,11 @@
-#include "quotes_helper.h"
+#include "quotes_generator.h"
 
 #include <QApplication>
 #include <QRandomGenerator>
 #include <QVector>
 
 
-QuotesHelper::Quote QuotesHelper::generateQuote(int _index)
+QuotesGenerator::Quote QuotesGenerator::generate(int _index)
 {
     int index = 0;
     const QVector<Quote> quotes

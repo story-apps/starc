@@ -19,7 +19,7 @@ https://www.la-screenwriter.com/screenwriting-quotes/
 /**
  * @brief Генератор цитат великих
  */
-class CORE_LIBRARY_EXPORT QuotesHelper
+class CORE_LIBRARY_EXPORT QuotesGenerator
 {
 public:
     /**
@@ -46,7 +46,7 @@ public:
      * @brief Сформировать цитату, или извлечь цитату под заданным индексом (необходимо при
      * изменении языка)
      */
-    static Quote generateQuote(int _index = kInvalidIndex);
+    static Quote generate(int _index = kInvalidIndex);
 
 private:
     static const int kInvalidIndex = -1;

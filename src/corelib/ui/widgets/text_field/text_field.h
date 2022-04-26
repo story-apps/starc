@@ -128,6 +128,11 @@ public:
     int heightForWidth(int _width) const override;
     /** @} */
 
+    /**
+     * @brief Переопределяем, чтобы отлавливать событие контекстного меню вспомогательного действия
+     */
+    ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr) override;
+
 signals:
     /**
      * @brief Был нажат энтер
@@ -139,6 +144,11 @@ signals:
      * @brief Была нажата иконка вспомогательного действия
      */
     void trailingIconPressed();
+
+    /**
+     * @brief Запрос на отображение контекстного меню вспомогательного действия
+     */
+    void trailingIconContextMenuRequested();
 
 protected:
     /**

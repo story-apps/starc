@@ -275,11 +275,12 @@ SOURCES += \
     utils/helpers/file_helper.cpp \
     utils/helpers/image_helper.cpp \
     utils/helpers/measurement_helper.cpp \
+    utils/helpers/names_generator.cpp \
+    utils/helpers/quotes_generator.cpp \
     utils/helpers/scroller_helper.cpp \
     utils/helpers/shortcuts_helper.cpp \
     utils/helpers/string_helper.cpp \
     utils/helpers/text_helper.cpp \
-    utils/helpers/quotes_helper.cpp \
     utils/helpers/time_helper.cpp \
     utils/helpers/ui_helper.cpp \
     utils/logging.cpp \
@@ -521,11 +522,12 @@ HEADERS += \
     utils/helpers/file_helper.h \
     utils/helpers/image_helper.h \
     utils/helpers/measurement_helper.h \
+    utils/helpers/names_generator.h \
+    utils/helpers/quotes_generator.h \
     utils/helpers/scroller_helper.h \
     utils/helpers/shortcuts_helper.h \
     utils/helpers/string_helper.h \
     utils/helpers/text_helper.h \
-    utils/helpers/quotes_helper.h \
     utils/helpers/time_helper.h \
     utils/helpers/ui_helper.h \
     utils/logging.h \

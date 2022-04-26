@@ -6,14 +6,17 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
+#include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <ui/widgets/tree/tree.h>
+#include <utils/helpers/names_generator.h>
 #include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
 #include <QStandardItemModel>
+#include <QWidgetAction>
 
 
 namespace Ui {
@@ -29,7 +32,12 @@ public:
 
     void updateDocumentInfo();
 
+
     QStandardItemModel* typesModel = nullptr;
+    struct {
+        QString type;
+        int gender = 0;
+    } characterNameGeneratorOptions;
 
     Tree* documentType = nullptr;
     Body1Label* documentInfo = nullptr;
@@ -149,6 +157,107 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
     connect(d->documentType, &Tree::currentIndexChanged, this, [this] {
         d->documentName->setFocus();
         d->updateDocumentInfo();
+
+        const auto documentType = static_cast<Domain::DocumentObjectType>(
+            d->documentType->currentIndex().data(kTypeRole).toInt());
+        if (documentType == Domain::DocumentObjectType::Character) {
+            d->documentName->setTrailingIcon(u8"\U000F076E");
+            connect(d->documentName, &TextField::trailingIconPressed, this, [this] {
+                d->documentName->setText(
+                    NamesGenerator::generate(d->characterNameGeneratorOptions.type,
+                                            d->characterNameGeneratorOptions.gender));
+            });
+            connect(d->documentName, &TextField::trailingIconContextMenuRequested, this, [this] {
+                auto menu = new ContextMenu(this);
+                QVector<QAction*> actions;
+
+                //
+                // Действия для выбора пола
+                //
+                {
+                    auto genderGroup = new QActionGroup(menu);
+                    const auto genderIdKey = "gender-id";
+                    auto buildGenderAction = [this, &actions, genderGroup,
+                                              genderIdKey](const QString& _name, int _gender) {
+                        auto action = new QAction;
+                        action->setText(_name);
+                        action->setProperty(genderIdKey, _gender);
+                        action->setCheckable(true);
+                        action->setChecked(d->characterNameGeneratorOptions.gender == _gender);
+                        action->setIconText(action->isChecked() ? u8"\U000F012C" : u8"\U000F68c0");
+                        genderGroup->addAction(action);
+                        actions.append(action);
+                        return action;
+                    };
+                    //
+                    auto maleAction = buildGenderAction(tr("Male names"), 1);
+                    //
+                    auto femaleAction = buildGenderAction(tr("Female names"), 2);
+                    //
+                    auto bothAction = buildGenderAction(tr("Both names"), 0);
+                    //
+                    for (auto genderAction : {
+                             maleAction,
+                             femaleAction,
+                             bothAction,
+                         }) {
+                        connect(genderAction, &QAction::toggled, genderAction,
+                                [this, genderAction, genderIdKey] {
+                                    genderAction->setIconText(genderAction->isChecked()
+                                                                  ? u8"\U000F012C"
+                                                                  : u8"\U000F68c0");
+                                    if (genderAction->isChecked()) {
+                                        d->characterNameGeneratorOptions.gender
+                                            = genderAction->property(genderIdKey).toInt();
+                                    }
+                                });
+                    }
+                }
+
+                //
+                // Выбор типа имени
+                //
+                {
+                    auto typeAction = new QAction;
+                    typeAction->setText(d->characterNameGeneratorOptions.type.isEmpty()
+                                            ? tr("Type of name")
+                                            : d->characterNameGeneratorOptions.type);
+                    typeAction->setSeparator(true);
+                    actions.append(typeAction);
+
+                    auto typesGroup = new QActionGroup(menu);
+                    for (const auto& type : NamesGenerator::types()) {
+                        auto action = new QAction(typeAction);
+                        action->setText(type);
+                        action->setCheckable(true);
+                        action->setChecked(d->characterNameGeneratorOptions.type == type);
+                        action->setIconText(action->isChecked() ? u8"\U000F012C" : u8"\U000F68c0");
+                        typesGroup->addAction(action);
+                        connect(action, &QAction::toggled, action, [this, typeAction, action] {
+                            action->setIconText(action->isChecked() ? u8"\U000F012C"
+                                                                    : u8"\U000F68c0");
+                            d->characterNameGeneratorOptions.type = action->text();
+                            typeAction->setText(action->text());
+                        });
+                    }
+                }
+
+                menu->setBackgroundColor(Ui::DesignSystem::color().background());
+                menu->setTextColor(Ui::DesignSystem::color().onBackground());
+                menu->setActions(actions);
+                connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
+
+                //
+                // Покажем меню
+                //
+                menu->showContextMenu(QCursor::pos());
+            });
+        } else {
+            d->documentName->setTrailingIcon({});
+            disconnect(d->documentName, &TextField::trailingIconPressed, nullptr, nullptr);
+            disconnect(d->documentName, &TextField::trailingIconContextMenuRequested, nullptr,
+                       nullptr);
+        }
     });
     connect(d->documentName, &TextField::textChanged, this,
             [this] { d->documentName->setError({}); });
