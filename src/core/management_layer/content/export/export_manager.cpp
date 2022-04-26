@@ -240,12 +240,12 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                 QString exportExtension;
                 switch (exportOptions.fileFormat) {
                 default:
-                case ComicBookExportFileFormat::Pdf: {
+                case ExportFileFormat::Pdf: {
                     exportFilter = DialogHelper::pdfFilter();
                     exportExtension = ExtensionHelper::pdf();
                     break;
                 }
-                case ComicBookExportFileFormat::Docx: {
+                case ExportFileFormat::Docx: {
                     exportFilter = DialogHelper::msWordFilter();
                     exportExtension = ExtensionHelper::msOfficeOpenXml();
                     break;
@@ -306,14 +306,14 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                 //
                 // ... и экспортируем документ
                 //
-                QScopedPointer<BusinessLayer::ComicBookAbstractExporter> exporter;
+                QScopedPointer<BusinessLayer::ComicBookExporter> exporter;
                 switch (exportOptions.fileFormat) {
                 default:
-                case ComicBookExportFileFormat::Pdf: {
+                case ExportFileFormat::Pdf: {
                     exporter.reset(new BusinessLayer::ComicBookPdfExporter);
                     break;
                 }
-                case ComicBookExportFileFormat::Docx: {
+                case ExportFileFormat::Docx: {
                     exporter.reset(new BusinessLayer::ComicBookDocxExporter);
                     break;
                 }

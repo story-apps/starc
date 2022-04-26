@@ -24,8 +24,8 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
     PageTextEdit textEdit;
     textEdit.setUsePageMode(true);
     textEdit.setPageSpacing(0);
-    auto audioplayText = createDocument();
-    textEdit.setDocument(audioplayText);
+    auto textDocument = createDocument();
+    textEdit.setDocument(textDocument);
     //
     // ... параметры страницы
     //
@@ -36,15 +36,15 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
     //
     // ... формируем текст сценария
     //
-    audioplayText->setModel(_model, false);
+    textDocument->setModel(_model, false);
     //
     // ... отсоединяем документ от модели, что изменения в документе не привели к изменениям модели
     //
-    audioplayText->disconnect();
+    textDocument->disconnect();
     //
     // ... корректируем текст сценария
     //
-    TextCursor cursor(audioplayText);
+    TextCursor cursor(textDocument);
     //
     // ... вставляем титульную страницу
     //
@@ -198,7 +198,7 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
         cursor.movePosition(QTextCursor::NextBlock);
     } while (!cursor.atEnd());
 
-    return audioplayText;
+    return textDocument;
 }
 
 } // namespace BusinessLayer

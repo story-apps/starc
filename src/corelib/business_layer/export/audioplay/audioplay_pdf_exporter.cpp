@@ -2,30 +2,15 @@
 
 #include "audioplay_export_options.h"
 
-#include <business_layer/document/audioplay/text/audioplay_text_corrector.h>
-#include <business_layer/document/audioplay/text/audioplay_text_document.h>
 #include <business_layer/document/text/text_block_data.h>
-#include <business_layer/document/text/text_cursor.h>
-#include <business_layer/export/export_options.h>
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
-#include <business_layer/model/audioplay/text/audioplay_text_model_scene_item.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model_text_item.h>
 #include <business_layer/templates/audioplay_template.h>
-#include <business_layer/templates/templates_facade.h>
-#include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <utils/helpers/measurement_helper.h>
-#include <utils/helpers/text_helper.h>
 
-#include <QAbstractTextDocumentLayout>
-#include <QApplication>
 #include <QLocale>
 #include <QPainter>
-#include <QPdfWriter>
-#include <QTextBlock>
-#include <QtMath>
-
-#include <cmath>
 
 
 namespace BusinessLayer {

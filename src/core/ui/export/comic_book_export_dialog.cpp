@@ -135,13 +135,13 @@ ComicBookExportDialog::~ComicBookExportDialog() = default;
 BusinessLayer::ComicBookExportOptions ComicBookExportDialog::exportOptions() const
 {
     BusinessLayer::ComicBookExportOptions options;
-    options.fileFormat = static_cast<BusinessLayer::ComicBookExportFileFormat>(
-        d->fileFormat->currentIndex().row());
-    options.printTiltePage = d->printTitlePage->isChecked();
-    options.printFolders = false;
+    options.fileFormat
+        = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
+    options.includeTiltePage = d->printTitlePage->isChecked();
+    options.includeFolders = false;
     options.useWordsInPageHeadings = d->useWordsInPageHeadings->isChecked();
-    options.printInlineNotes = d->printInlineNotes->isChecked();
-    options.printReviewMarks = d->printReviewMarks->isChecked();
+    options.includeInlineNotes = d->printInlineNotes->isChecked();
+    options.includeReviewMarks = d->printReviewMarks->isChecked();
     options.watermark = d->watermark->text();
     options.watermarkColor = QColor(100, 100, 100, 30);
     return options;

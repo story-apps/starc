@@ -9,7 +9,9 @@ namespace BusinessLayer {
 
 TextDocument* AudioplayExporter::createDocument() const
 {
-    return new AudioplayTextDocument;
+    auto document = new AudioplayTextDocument;
+    document->setCorrectionOptions(true);
+    return document;
 }
 
 const TextTemplate& AudioplayExporter::documentTemplate(const ExportOptions& _exportOptions) const
