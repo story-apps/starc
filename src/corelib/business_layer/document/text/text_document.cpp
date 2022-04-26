@@ -1015,7 +1015,13 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
 
     d->state = DocumentState::Ready;
 
-    d->tryToCorrectDocument();
+    //
+    // Корректируем документ после загрузки
+    //
+    if (d->corrector != nullptr) {
+        d->corrector->planCorrection(0, 0, characterCount());
+        d->tryToCorrectDocument();
+    }
 }
 
 TextModel* TextDocument::model() const

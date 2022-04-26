@@ -84,7 +84,7 @@ void AbstractTextCorrector::planCorrection(int _position, int _charsRemoved, int
     //
     // А если уже была запланирована, то расширим выделение
     //
-    else if (d->plannedCorrection.position > _position) {
+    else if (d->plannedCorrection.position >= _position) {
         const auto newPosition = _position;
         const auto newLenght = std::max(_charsRemoved, _charsAdded);
         if (newPosition < d->plannedCorrection.position) {
