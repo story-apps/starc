@@ -194,11 +194,30 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
             continue;
         }
 
+        //
+        // Обрабатываем блок в наследниках
+        //
+        const auto skipMovement = prepareBlock(_exportOptions, cursor);
+        if (skipMovement) {
+            continue;
+        }
+
+        //
+        // Переходим к следующему блоку
+        //
         cursor.movePosition(QTextCursor::EndOfBlock);
         cursor.movePosition(QTextCursor::NextBlock);
     } while (!cursor.atEnd());
 
     return textDocument;
+}
+
+bool AbstractExporter::prepareBlock(const ExportOptions& _exportOptions, TextCursor& _cursor) const
+{
+    Q_UNUSED(_exportOptions)
+    Q_UNUSED(_cursor)
+
+    return false;
 }
 
 } // namespace BusinessLayer

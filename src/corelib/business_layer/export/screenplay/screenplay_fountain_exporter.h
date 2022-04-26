@@ -1,11 +1,11 @@
 #pragma once
 
-#include "screenplay_abstract_exporter.h"
+#include "screenplay_exporter.h"
 
 
 namespace BusinessLayer {
 
-class CORE_LIBRARY_EXPORT ScreenplayFountainExporter : public ScreenplayAbstractExporter
+class CORE_LIBRARY_EXPORT ScreenplayFountainExporter : public ScreenplayExporter
 {
 public:
     ScreenplayFountainExporter() = default;
@@ -13,8 +13,7 @@ public:
     /**
      * @brief Экспортировать сценарий
      */
-    void exportTo(ScreenplayTextModel* _model,
-                  const ScreenplayExportOptions& _exportOptions) const override;
+    void exportTo(TextModel* _model, ExportOptions& _exportOptions) const override;
 };
 
 } // namespace BusinessLayer

@@ -66,6 +66,16 @@ struct CORE_LIBRARY_EXPORT ExportOptions {
      */
     QColor watermarkColor;
 
+    /**
+     * @brief Песонаж, чьи реплики нужно выделить
+     */
+    QString highlightCharacter;
+
+    /**
+     * @brief Цвет для выделения реплик персонажа
+     */
+    QColor highlightCharacterColor;
+
 
     //
     // Параметры самого документа

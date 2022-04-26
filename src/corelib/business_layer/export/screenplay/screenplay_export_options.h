@@ -1,63 +1,10 @@
 #pragma once
 
-#include <QColor>
-#include <QString>
-
-#include <corelib_global.h>
-
+#include <business_layer/export/export_options.h>
 
 namespace BusinessLayer {
 
-/**
- * @brief Формат экспортируемого файла
- */
-enum class ScreenplayExportFileFormat {
-    Pdf,
-    Docx,
-    Fdx,
-    Fountain,
-};
-
-/**
- * @brief Опции экспорта
- */
-struct CORE_LIBRARY_EXPORT ScreenplayExportOptions {
-    /**
-     * @brief Путь к файлу
-     */
-    QString filePath;
-
-    /**
-     * @brief Формат файла
-     */
-    ScreenplayExportFileFormat fileFormat = ScreenplayExportFileFormat::Pdf;
-
-    /**
-     * @brief Идентификатор шаблона экспорта
-     */
-    QString templateId;
-
-    /**
-     * @brief Печатать титульную страницу
-     */
-    bool includeTiltePage = true;
-
-    /**
-     * @brief Печатать ли блоки папок
-     */
-    bool includeFolders = true;
-
-    /**
-     * @brief Печатать ли комментарии по тексту
-     */
-    bool includeInlineNotes = false;
-
-    /**
-     * @brief Список сцен для печати
-     * @note Если пустое, значит печатаются все сцены
-     */
-    QVector<QString> exportScenes;
-
+struct CORE_LIBRARY_EXPORT ScreenplayExportOptions : public ExportOptions {
     /**
      * @brief Печатать номера сцен
      */
@@ -71,53 +18,10 @@ struct CORE_LIBRARY_EXPORT ScreenplayExportOptions {
     bool showDialoguesNumbers = false;
 
     /**
-     * @brief Печатать редакторские пометки
+     * @brief Список сцен для печати
+     * @note Если пустое, значит печатаются все сцены
      */
-    bool includeReviewMarks = true;
-
-    /**
-     * @brief Водяной знак
-     */
-    QString watermark;
-    /**
-     * @brief Цвет водяного знака
-     */
-    QColor watermarkColor;
-
-    /**
-     * @brief Песонаж, чьи реплики нужно выделить
-     */
-    QString highlightCharacter;
-
-    /**
-     * @brief Цвет для выделения реплик персонажа
-     */
-    QColor highlightCharacterColor;
-
-
-    //
-    // Параметры самого документа
-    //
-
-    /**
-     * @brief Верхний колонтитул
-     */
-    QString header;
-
-    /**
-     * @brief Печатать верхний колонтитул на титульной странице
-     */
-    bool printHeaderOnTitlePage = false;
-
-    /**
-     * @brief Нижний колонтитул
-     */
-    QString footer;
-
-    /**
-     * @brief Печатать нижий колонтитул на титульной странице
-     */
-    bool printFooterOnTitlePage = false;
+    QVector<QString> exportScenes;
 };
 
 } // namespace BusinessLayer

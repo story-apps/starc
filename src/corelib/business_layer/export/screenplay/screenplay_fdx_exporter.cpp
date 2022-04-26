@@ -183,7 +183,7 @@ void writeLine(QXmlStreamWriter& _writer, const QTextBlock& _block,
 /**
  * @brief Записать текст документа без титульной страницы
  */
-void writeContent(QXmlStreamWriter& _writer, ScreenplayTextDocument* _screenplayText,
+void writeContent(QXmlStreamWriter& _writer, TextDocument* _screenplayText,
                   const ScreenplayExportOptions& _exportOptions)
 {
     _writer.writeStartElement("Content");
@@ -261,7 +261,7 @@ void writeSettings(QXmlStreamWriter& _writer, const ScreenplayExportOptions& _ex
 /**
  * @brief Записать титульную страницу
  */
-void writeTitlePage(QXmlStreamWriter& _writer, ScreenplayTextDocument* _screenplayText,
+void writeTitlePage(QXmlStreamWriter& _writer, TextDocument* _screenplayText,
                     const ScreenplayExportOptions& _exportOptions)
 {
     if (!_exportOptions.includeTiltePage) {
@@ -287,8 +287,8 @@ void writeTitlePage(QXmlStreamWriter& _writer, ScreenplayTextDocument* _screenpl
 
 } // namespace
 
-void ScreenplayFdxExporter::exportTo(ScreenplayTextModel* _model,
-                                     const ScreenplayExportOptions& _exportOptions) const
+
+void ScreenplayFdxExporter::exportTo(TextModel* _model, ExportOptions& _exportOptions) const
 {
     //
     // Открываем документ на запись
@@ -308,10 +308,11 @@ void ScreenplayFdxExporter::exportTo(ScreenplayTextModel* _model,
     writer.writeAttribute("Template", "No");
     writer.writeAttribute("Version", "1");
     //
-    QScopedPointer<ScreenplayTextDocument> document(prepareDocument(_model, _exportOptions));
-    writeContent(writer, document.data(), _exportOptions);
-    writeSettings(writer, _exportOptions);
-    writeTitlePage(writer, document.data(), _exportOptions);
+    QScopedPointer<TextDocument> document(prepareDocument(_model, _exportOptions));
+    const auto& exportOptions = static_cast<const ScreenplayExportOptions&>(_exportOptions);
+    writeContent(writer, document.data(), exportOptions);
+    writeSettings(writer, exportOptions);
+    writeTitlePage(writer, document.data(), exportOptions);
     //
     // Конец документа
     //

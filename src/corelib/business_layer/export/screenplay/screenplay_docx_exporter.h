@@ -1,20 +1,31 @@
 #pragma once
 
-#include "screenplay_abstract_exporter.h"
+#include "screenplay_exporter.h"
+
+#include <business_layer/export/abstract_docx_exporter.h>
+
+#include <QScopedPointer>
 
 
 namespace BusinessLayer {
 
-class CORE_LIBRARY_EXPORT ScreenplayDocxExporter : public ScreenplayAbstractExporter
+class CORE_LIBRARY_EXPORT ScreenplayDocxExporter : public ScreenplayExporter,
+                                                   public AbstractDocxExporter
 {
 public:
-    ScreenplayDocxExporter() = default;
+    ScreenplayDocxExporter();
+
+protected:
+    /**
+     * @brief Определить список стилей для экспорта
+     */
+    QVector<TextParagraphType> paragraphTypes() const override;
 
     /**
-     * @brief Экспортировать сценарий
+     * @brief Обработать блок
      */
-    void exportTo(ScreenplayTextModel* _model,
-                  const ScreenplayExportOptions& _exportOptions) const override;
+    void processBlock(const TextCursor& _cursor, const ExportOptions& _exportOptions,
+                      QString& _documentXml) const override;
 };
 
 } // namespace BusinessLayer

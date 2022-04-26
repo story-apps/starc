@@ -196,6 +196,7 @@ public:
 
     /**
      * @brief Получить тип параграфа для заданного блока
+     * TODO: Для курсора стоит переименовать метод
      */
     static TextParagraphType forBlock(const QTextCursor& _cursor);
     static TextParagraphType forBlock(const QTextBlock& _block);

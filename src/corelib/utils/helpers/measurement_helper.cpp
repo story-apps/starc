@@ -66,3 +66,13 @@ qreal MeasurementHelper::inchToMm(qreal _inch)
 {
     return _inch * 25.4;
 }
+
+int MeasurementHelper::mmToTwips(qreal _mm)
+{
+    return 56.692913386 * _mm;
+}
+
+int MeasurementHelper::pxToTwips(qreal _px)
+{
+    return mmToTwips(pxToMm(_px));
+}

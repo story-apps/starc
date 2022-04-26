@@ -6,6 +6,7 @@
 namespace BusinessLayer {
 
 struct ExportOptions;
+class TextCursor;
 class TextDocument;
 class TextModel;
 class TextTemplate;
@@ -41,6 +42,11 @@ protected:
      * @note Владение документом передаётся клиенту
      */
     TextDocument* prepareDocument(TextModel* _model, const ExportOptions& _exportOptions) const;
+
+    /**
+     * @brief Обработать блок необходимым образом в наследнике
+     */
+    virtual bool prepareBlock(const ExportOptions& _exportOptions, TextCursor& _cursor) const;
 };
 
 } // namespace BusinessLayer

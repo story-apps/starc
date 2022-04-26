@@ -14,7 +14,6 @@ class CORE_LIBRARY_EXPORT ComicBookDocxExporter : public ComicBookExporter,
 {
 public:
     ComicBookDocxExporter();
-    ~ComicBookDocxExporter() override;
 
 protected:
     /**

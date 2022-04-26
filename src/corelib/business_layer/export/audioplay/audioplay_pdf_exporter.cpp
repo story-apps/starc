@@ -24,11 +24,11 @@ AudioplayPdfExporter::AudioplayPdfExporter()
 void AudioplayPdfExporter::updateExportOptions(TextModel* _model,
                                                ExportOptions& _exportOptions) const
 {
-    const auto audioplayModel = qobject_cast<AudioplayTextModel*>(_model);
-    Q_ASSERT(audioplayModel);
+    const auto textModel = qobject_cast<AudioplayTextModel*>(_model);
+    Q_ASSERT(textModel);
 
-    _exportOptions.header = audioplayModel->informationModel()->header();
-    _exportOptions.footer = audioplayModel->informationModel()->footer();
+    _exportOptions.header = textModel->informationModel()->header();
+    _exportOptions.footer = textModel->informationModel()->footer();
 }
 
 void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _pageYPos,

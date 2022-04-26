@@ -11,8 +11,6 @@ AudioplayDocxExporter::AudioplayDocxExporter()
 {
 }
 
-AudioplayDocxExporter::~AudioplayDocxExporter() = default;
-
 QVector<TextParagraphType> AudioplayDocxExporter::paragraphTypes() const
 {
     return {

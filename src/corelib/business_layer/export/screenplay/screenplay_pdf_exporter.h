@@ -1,20 +1,31 @@
 #pragma once
 
-#include "screenplay_abstract_exporter.h"
+#include "screenplay_exporter.h"
+
+#include <business_layer/export/abstract_pdf_exporter.h>
 
 
 namespace BusinessLayer {
 
-class CORE_LIBRARY_EXPORT ScreenplayPdfExporter : public ScreenplayAbstractExporter
+class CORE_LIBRARY_EXPORT ScreenplayPdfExporter : public ScreenplayExporter,
+                                                  public AbstractPdfExporter
 {
 public:
-    ScreenplayPdfExporter() = default;
+    ScreenplayPdfExporter();
+
+protected:
+    /**
+     * @brief Дописать в параметры экспорта данные зависящие от модели
+     */
+    void updateExportOptions(TextModel* _model, ExportOptions& _exportOptions) const override;
 
     /**
-     * @brief Экспортировать сценарий
+     * @brief Нарисовать декорацию блока
      */
-    void exportTo(ScreenplayTextModel* _model,
-                  const ScreenplayExportOptions& _exportOptions) const override;
+    void printBlockDecorations(QPainter* _painter, qreal _pageYPos, const QRectF& _body,
+                               TextParagraphType _paragraphType, const QRectF& _blockRect,
+                               const QTextBlock& _block,
+                               const ExportOptions& _exportOptions) const override;
 };
 
 } // namespace BusinessLayer

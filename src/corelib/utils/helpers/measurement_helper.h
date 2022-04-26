@@ -38,4 +38,10 @@ public:
      */
     static qreal mmToInch(qreal _mm);
     static qreal inchToMm(qreal _inch);
+
+    /**
+     * @brief Перевести миллиметры/пиксели в твипсы (мера длины в формате RTF)
+     */
+    static int mmToTwips(qreal _mm);
+    static int pxToTwips(qreal _px);
 };

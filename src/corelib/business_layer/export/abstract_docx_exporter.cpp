@@ -29,7 +29,7 @@ namespace {
  */
 int mmToTwips(qreal _mm)
 {
-    return 56.692913386 * _mm;
+    return MeasurementHelper::mmToTwips(_mm);
 }
 
 /**
@@ -37,7 +37,7 @@ int mmToTwips(qreal _mm)
  */
 int pxToTwips(qreal _px)
 {
-    return mmToTwips(MeasurementHelper::pxToMm(_px));
+    return MeasurementHelper::pxToTwips(_px);
 }
 
 } // namespace
@@ -536,6 +536,10 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
             documentXml.append(docxAlignment(block.blockFormat().alignment()));
         }
 
+        //
+        // ... обработаем блок в наследнике
+        //
+        q->processBlock(_cursor, _exportOptions, documentXml);
 
         //
         //  ... текст абзаца
@@ -1127,6 +1131,15 @@ void AbstractDocxExporter::exportTo(TextModel* _model, ExportOptions& _exportOpt
     }
     zip.close();
     docxFile.close();
+}
+
+void AbstractDocxExporter::processBlock(const TextCursor& _cursor,
+                                        const ExportOptions& _exportOptions,
+                                        QString& _documentXml) const
+{
+    Q_UNUSED(_cursor)
+    Q_UNUSED(_exportOptions)
+    Q_UNUSED(_documentXml)
 }
 
 } // namespace BusinessLayer

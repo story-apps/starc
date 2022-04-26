@@ -14,7 +14,6 @@ class CORE_LIBRARY_EXPORT AudioplayDocxExporter : public AudioplayExporter,
 {
 public:
     AudioplayDocxExporter();
-    ~AudioplayDocxExporter() override;
 
 protected:
     /**

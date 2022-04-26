@@ -356,7 +356,7 @@ void AbstractPdfExporter::exportTo(TextModel* _model, ExportOptions& _exportOpti
     //
     // Настраиваем документ
     //
-    QScopedPointer<TextDocument> audioplayText(prepareDocument(_model, _exportOptions));
+    QScopedPointer<TextDocument> textDocument(prepareDocument(_model, _exportOptions));
 
     //
     // Настраиваем принтер
@@ -374,7 +374,7 @@ void AbstractPdfExporter::exportTo(TextModel* _model, ExportOptions& _exportOpti
     //
     // Печатаем документ
     //
-    d->printDocument(audioplayText.data(), &printer, exportTemplate, _exportOptions);
+    d->printDocument(textDocument.data(), &printer, exportTemplate, _exportOptions);
 }
 
 } // namespace BusinessLayer

@@ -84,22 +84,22 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                 QString exportExtension;
                 switch (exportOptions.fileFormat) {
                 default:
-                case ScreenplayExportFileFormat::Pdf: {
+                case ExportFileFormat::Pdf: {
                     exportFilter = DialogHelper::pdfFilter();
                     exportExtension = ExtensionHelper::pdf();
                     break;
                 }
-                case ScreenplayExportFileFormat::Docx: {
+                case ExportFileFormat::Docx: {
                     exportFilter = DialogHelper::msWordFilter();
                     exportExtension = ExtensionHelper::msOfficeOpenXml();
                     break;
                 }
-                case ScreenplayExportFileFormat::Fdx: {
+                case ExportFileFormat::Fdx: {
                     exportFilter = DialogHelper::finalDraftFilter();
                     exportExtension = ExtensionHelper::finalDraft();
                     break;
                 }
-                case ScreenplayExportFileFormat::Fountain: {
+                case ExportFileFormat::Fountain: {
                     exportFilter = DialogHelper::fountainFilter();
                     exportExtension = ExtensionHelper::fountain();
                     break;
@@ -171,22 +171,22 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                 //
                 // ... и экспортируем документ
                 //
-                QScopedPointer<BusinessLayer::ScreenplayAbstractExporter> exporter;
+                QScopedPointer<BusinessLayer::ScreenplayExporter> exporter;
                 switch (exportOptions.fileFormat) {
                 default:
-                case ScreenplayExportFileFormat::Pdf: {
+                case ExportFileFormat::Pdf: {
                     exporter.reset(new BusinessLayer::ScreenplayPdfExporter);
                     break;
                 }
-                case ScreenplayExportFileFormat::Docx: {
+                case ExportFileFormat::Docx: {
                     exporter.reset(new BusinessLayer::ScreenplayDocxExporter);
                     break;
                 }
-                case ScreenplayExportFileFormat::Fdx: {
+                case ExportFileFormat::Fdx: {
                     exporter.reset(new BusinessLayer::ScreenplayFdxExporter);
                     break;
                 }
-                case ScreenplayExportFileFormat::Fountain: {
+                case ExportFileFormat::Fountain: {
                     exporter.reset(new BusinessLayer::ScreenplayFountainExporter);
                     break;
                 }

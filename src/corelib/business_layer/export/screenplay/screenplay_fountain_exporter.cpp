@@ -64,8 +64,7 @@ static QString formatsDiffToString(const QTextCharFormat& _current, const QTextC
 
 } // namespace
 
-void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
-                                          const ScreenplayExportOptions& _exportOptions) const
+void ScreenplayFountainExporter::exportTo(TextModel* _model, ExportOptions& _exportOptions) const
 {
     //
     // Открываем документ на запись
@@ -75,7 +74,8 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
         return;
     }
 
-    QScopedPointer<ScreenplayTextDocument> document(prepareDocument(_model, _exportOptions));
+    QScopedPointer<TextDocument> document(prepareDocument(_model, _exportOptions));
+    const auto& exportOptions = static_cast<const ScreenplayExportOptions&>(_exportOptions);
 
     //
     // TODO: Реализовать экспорт титульной страницы
@@ -268,7 +268,7 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 //
                 // А если печатаем номера сцен, то добавим в конец этот номер, окруженный #
                 //
-                if (_exportOptions.showScenesNumbers) {
+                if (exportOptions.showScenesNumbers) {
                     const auto blockData = static_cast<TextBlockData*>(block.userData());
                     if (blockData != nullptr) {
                         const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(
@@ -374,9 +374,15 @@ void ScreenplayFountainExporter::exportTo(ScreenplayTextModel* _model,
                 break;
             }
 
-            case TextParagraphType::Dialogue:
-            case TextParagraphType::Parenthetical:
+            case TextParagraphType::Parenthetical: {
+                paragraphText = "(" + paragraphText + ")";
                 break;
+            }
+
+            case TextParagraphType::Dialogue: {
+                break;
+            }
+
             default: {
                 //
                 // Игнорируем неизвестные блоки

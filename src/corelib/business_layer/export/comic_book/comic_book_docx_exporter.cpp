@@ -11,8 +11,6 @@ ComicBookDocxExporter::ComicBookDocxExporter()
 {
 }
 
-ComicBookDocxExporter::~ComicBookDocxExporter() = default;
-
 QVector<TextParagraphType> ComicBookDocxExporter::paragraphTypes() const
 {
     return {

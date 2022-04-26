@@ -26,6 +26,12 @@ protected:
      */
     virtual QVector<TextParagraphType> paragraphTypes() const = 0;
 
+    /**
+     * @brief Обработать блок
+     */
+    virtual void processBlock(const TextCursor& _cursor, const ExportOptions& _exportOptions,
+                              QString& _documentXml) const;
+
 private:
     class Implementation;
     friend class Implementation;
