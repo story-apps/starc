@@ -2,11 +2,13 @@
 
 #include <QScopedPointer>
 
+#include <corelib_global.h>
+
 
 /**
  * @brief Генератор имён персонажей
  */
-class NamesGenerator
+class CORE_LIBRARY_EXPORT NamesGenerator
 {
 public:
     /**

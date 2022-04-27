@@ -165,7 +165,7 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
             connect(d->documentName, &TextField::trailingIconPressed, this, [this] {
                 d->documentName->setText(
                     NamesGenerator::generate(d->characterNameGeneratorOptions.type,
-                                            d->characterNameGeneratorOptions.gender));
+                                             d->characterNameGeneratorOptions.gender));
             });
             connect(d->documentName, &TextField::trailingIconContextMenuRequested, this, [this] {
                 auto menu = new ContextMenu(this);
