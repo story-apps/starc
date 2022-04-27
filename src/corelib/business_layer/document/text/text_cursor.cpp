@@ -303,6 +303,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                     //
                     // ... в противном случае, игнорируем изменение
                     //
+
                     return;
                 }
             }
@@ -338,9 +339,16 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
             checkCursor.setPosition(topCursorPosition);
             const auto topCursorInTable = checkCursor.inTable();
             const auto topCursorInFirstColumn = checkCursor.inFirstColumn();
+            bool isTableEmpty = false;
+            if (topCursorInTable) {
+                isTableEmpty = checkCursor.isTableEmpty();
+            }
             checkCursor.setPosition(bottomCursorPosition);
             const auto bottomCursorInTable = checkCursor.inTable();
             const auto bottomCursorInFirstColumn = checkCursor.inFirstColumn();
+            if (bottomCursorInTable) {
+                isTableEmpty = checkCursor.isTableEmpty();
+            }
             if (topCursorInTable || bottomCursorInTable) {
                 //
                 // ... удаление полностью внутри таблицы
@@ -353,9 +361,9 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                     //
                     if (!cursor.hasSelection()) {
                         //
-                        // ... удалим таблицу, если разрешено в шаблоне
+                        // ... удалим таблицу, если она пустая, или разрешено в шаблоне
                         //
-                        if (textTemplate().canMergeParagraph()) {
+                        if (isTableEmpty || textTemplate().canMergeParagraph()) {
                             auto textDocument
                                 = static_cast<BusinessLayer::TextDocument*>(document());
                             textDocument->mergeParagraph(cursor);
@@ -374,10 +382,66 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                     return;
                 }
                 //
-                // ... попытки удаления через границу таблицы оставляем без исполнения
+                // ... при попытке удаления через границу таблицы
                 //
                 else if ((!topCursorInTable && bottomCursorInTable)
                          || (topCursorInTable && !bottomCursorInTable)) {
+                    //
+                    // ... если таблица пуста, то удаляем
+                    //
+                    if (isTableEmpty) {
+                        cursor.setPosition(topCursorInTable ? topCursorPosition
+                                                            : bottomCursorPosition);
+                        //
+                        // Идём до конца таблицы
+                        //
+                        while (!cursor.atEnd()
+                               && TextBlockStyle::forBlock(cursor)
+                                   != TextParagraphType::PageSplitter) {
+                            cursor.movePosition(TextCursor::EndOfBlock);
+                            cursor.movePosition(TextCursor::NextBlock);
+                        }
+
+                        //
+                        // Выделяем таблицу
+                        //
+                        cursor.movePosition(TextCursor::PreviousBlock, TextCursor::KeepAnchor);
+                        //
+                        // ... и заходим в конец предыдущего блока
+                        //
+                        cursor.movePosition(TextCursor::PreviousCharacter, TextCursor::KeepAnchor);
+
+                        //
+                        // Удаляем таблицу
+                        //
+                        cursor.removeSelectedText();
+
+                        //
+                        // Если попали в конец предыдущей таблицы, то зайдём в неё
+                        //
+                        if (TextBlockStyle::forBlock(cursor) == TextParagraphType::PageSplitter) {
+                            cursor.movePosition(TextCursor::PreviousCharacter);
+                            _editor->setTextCursor(cursor);
+                        }
+                    }
+                    //
+                    // ... если не пуста, то оставляем как есть
+                    //
+                    else {
+                        //
+                        // ... лишь сдвинув курсор по направлению удаления
+                        //     добавляем смещение, чтобы покинуть блок разделителя страницы
+                        //
+                        int delta = 1;
+                        do {
+                            cursor.setPosition(_backward ? topCursorPosition - delta
+                                                         : bottomCursorPosition + delta);
+                            ++delta;
+                        } while (TextBlockStyle::forBlock(cursor)
+                                 == TextParagraphType::PageSplitter);
+                        _editor->setTextCursor(cursor);
+                    }
+
                     return;
                 }
                 //
