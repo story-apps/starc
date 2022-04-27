@@ -135,7 +135,7 @@ void DialogHandler::handleTab(QKeyEvent*)
                 //
                 // Меняем стиль на ремарку
                 //
-                editor()->setCurrentParagraphType(changeForTab(TextParagraphType::Dialogue));
+                editor()->addParagraph(changeForTab(TextParagraphType::Dialogue));
             } else {
                 //! Текст не пуст
 
