@@ -20,6 +20,7 @@ protected:
     /** @{ */
     void handleEnter(QKeyEvent* _event = 0);
     void handleTab(QKeyEvent* _event = 0);
+    void handleBackspace(QKeyEvent* _event = 0) override;
     /** @} */
 };
 

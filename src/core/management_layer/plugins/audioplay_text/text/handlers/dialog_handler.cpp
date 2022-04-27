@@ -159,4 +159,16 @@ void DialogHandler::handleTab(QKeyEvent*)
     }
 }
 
+void DialogHandler::handleBackspace(QKeyEvent* _event)
+{
+    auto cursor = editor()->textCursor();
+    if (cursor.atBlockStart() && !cursor.hasSelection()) {
+        cursor.movePosition(QTextCursor::PreviousCharacter);
+        editor()->setTextCursor(cursor);
+        return;
+    }
+
+    StandardKeyHandler::handleBackspace(_event);
+}
+
 } // namespace KeyProcessingLayer
