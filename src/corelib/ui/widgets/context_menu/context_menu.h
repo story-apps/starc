@@ -57,6 +57,11 @@ protected:
     void leaveEvent(QEvent* _event) override;
 
     /**
+     * @brief Прокидываем событие в скролбар
+     */
+    void wheelEvent(QWheelEvent* _event) override;
+
+    /**
      * @brief Отлавливаем события курсора, когда отображено подменю
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;

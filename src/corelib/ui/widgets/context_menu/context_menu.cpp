@@ -1,6 +1,7 @@
 #include "context_menu.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -18,8 +19,9 @@ public:
     explicit Implementation(ContextMenu* _q);
 
     /**
-     * @brief Определить идеальный размер меню
+     * @brief Определить полный/идеальный размер меню
      */
+    QSize fullSize() const;
     QSize sizeHint() const;
 
     /**
@@ -51,6 +53,11 @@ public:
     ContextMenu* q = nullptr;
 
     /**
+     * @brief Полоса прокрутки
+     */
+    ScrollBar* scrollBar = nullptr;
+
+    /**
      * @brief Действие над которым сейчас мышка
      */
     QAction* hoveredAction = nullptr;
@@ -77,7 +84,10 @@ public:
 
 ContextMenu::Implementation::Implementation(ContextMenu* _q)
     : q(_q)
+    , scrollBar(new ScrollBar(_q))
 {
+    scrollBar->hide();
+
     positionAnimation.setEasingCurve(QEasingCurve::OutQuint);
     //
     sizeAnimation.setEasingCurve(QEasingCurve::OutQuint);
@@ -93,7 +103,7 @@ ContextMenu::Implementation::Implementation(ContextMenu* _q)
     decorationOpacityAnimation.setDuration(420);
 }
 
-QSize ContextMenu::Implementation::sizeHint() const
+QSize ContextMenu::Implementation::fullSize() const
 {
     auto width = 0.0;
     auto height = Ui::DesignSystem::card().shadowMargins().top()
@@ -131,15 +141,24 @@ QSize ContextMenu::Implementation::sizeHint() const
         + Ui::DesignSystem::card().shadowMargins().right();
     height += Ui::DesignSystem::card().shadowMargins().bottom()
         + Ui::DesignSystem::contextMenu().margins().top();
-    height = std::min(height, static_cast<qreal>(q->screen()->availableSize().height()));
 
     return QSizeF(width, height).toSize();
+}
+
+QSize ContextMenu::Implementation::sizeHint() const
+{
+    auto size = fullSize();
+    const auto screenHeight = q->screen()->size().height();
+    if (size.height() > screenHeight) {
+        size.setHeight(screenHeight);
+    }
+    return size;
 }
 
 void ContextMenu::Implementation::relayoutWidgetActions() const
 {
     auto y = Ui::DesignSystem::card().shadowMargins().top()
-        + Ui::DesignSystem::contextMenu().margins().top();
+        + Ui::DesignSystem::contextMenu().margins().top() - scrollBar->value();
     for (auto action : q->actions()) {
         if (auto widgetAction = qobject_cast<QWidgetAction*>(action)) {
             auto widget = widgetAction->defaultWidget();
@@ -158,7 +177,7 @@ void ContextMenu::Implementation::relayoutWidgetActions() const
 QAction* ContextMenu::Implementation::actionForPosition(const QPoint& _coordinate) const
 {
     auto actionTop = Ui::DesignSystem::card().shadowMargins().top()
-        + Ui::DesignSystem::contextMenu().margins().top();
+        + Ui::DesignSystem::contextMenu().margins().top() - scrollBar->value();
     for (auto action : q->actions()) {
         if (!action->isVisible()) {
             continue;
@@ -187,7 +206,7 @@ QAction* ContextMenu::Implementation::actionForPosition(const QPoint& _coordinat
 QRectF ContextMenu::Implementation::actionRect(const QAction* _action) const
 {
     auto actionTop = Ui::DesignSystem::card().shadowMargins().top()
-        + Ui::DesignSystem::contextMenu().margins().top();
+        + Ui::DesignSystem::contextMenu().margins().top() - scrollBar->value();
     for (auto action : q->actions()) {
         if (!action->isVisible()) {
             continue;
@@ -266,6 +285,8 @@ ContextMenu::ContextMenu(QWidget* _parent)
     setMouseTracking(true);
     hide();
 
+    connect(d->scrollBar, &ScrollBar::valueChanged, this, qOverload<>(&ContextMenu::update));
+    //
     connect(&d->positionAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) { move(_value.toPoint()); });
     connect(&d->sizeAnimation, &QVariantAnimation::valueChanged, this,
@@ -389,6 +410,21 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
     d->sizeAnimation.setEndValue(sizeHint);
     resize(1, 1);
     //
+    // Настраиваем полосу прокрутки
+    //
+    if (sizeHint.height() < d->fullSize().height()) {
+        d->scrollBar->resize(d->scrollBar->sizeHint().width(),
+                             sizeHint.height() - Ui::DesignSystem::card().shadowMargins().top()
+                                 - Ui::DesignSystem::card().shadowMargins().bottom());
+        d->scrollBar->move(sizeHint.width() - d->scrollBar->width()
+                               - Ui::DesignSystem::card().shadowMargins().right(),
+                           Ui::DesignSystem::card().shadowMargins().top());
+        d->scrollBar->setMaximum(d->fullSize().height() - sizeHint.height());
+        d->scrollBar->show();
+    } else {
+        d->scrollBar->hide();
+    }
+    //
     d->positionAnimation.stop();
     d->positionAnimation.setDirection(QVariantAnimation::Forward);
     d->positionAnimation.setDuration(240);
@@ -461,6 +497,7 @@ void ContextMenu::hideContextMenu()
 
 void ContextMenu::processBackgroundColorChange()
 {
+    d->scrollBar->setBackgroundColor(backgroundColor());
     for (auto submenu : std::as_const(d->actionToSubmenu)) {
         submenu->setBackgroundColor(backgroundColor());
     }
@@ -493,7 +530,7 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
     const auto actionWidth = width() - Ui::DesignSystem::card().shadowMargins().left()
         - Ui::DesignSystem::card().shadowMargins().right();
     auto actionY = Ui::DesignSystem::card().shadowMargins().top()
-        + Ui::DesignSystem::contextMenu().margins().top();
+        + Ui::DesignSystem::contextMenu().margins().top() - d->scrollBar->value();
 
     auto configurePen = [&painter](QAction* _action, const QColor& _color) {
         painter.setPen(_color);
@@ -652,6 +689,19 @@ void ContextMenu::leaveEvent(QEvent* _event)
     Card::leaveEvent(_event);
 
     d->processMouseMove(mapFromGlobal(QCursor::pos()));
+}
+
+void ContextMenu::wheelEvent(QWheelEvent* _event)
+{
+    Card::wheelEvent(_event);
+
+    if (d->scrollBar->isVisible()) {
+        QCoreApplication::postEvent(
+            d->scrollBar,
+            new QWheelEvent(_event->position(), _event->globalPosition(), _event->pixelDelta(),
+                            _event->angleDelta(), _event->buttons(), _event->modifiers(),
+                            _event->phase(), _event->inverted(), _event->source()));
+    }
 }
 
 bool ContextMenu::eventFilter(QObject* _watched, QEvent* _event)
