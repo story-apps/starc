@@ -358,8 +358,9 @@ QRectF TextField::Implementation::trailingIconRect() const
         topLeft = q->width() - contentMargins().right() - margins().right()
             - Ui::DesignSystem::textField().iconSize().width();
     }
-    return QRectF(QPointF(topLeft, Ui::DesignSystem::textField().iconTop()),
-                  Ui::DesignSystem::textField().iconSize());
+    return QRectF(
+        QPointF(topLeft, contentMargins().top() + Ui::DesignSystem::textField().iconTop()),
+        Ui::DesignSystem::textField().iconSize());
 }
 
 

@@ -9,6 +9,7 @@ class ScreenplayTextModel;
 }
 
 namespace Ui {
+class DictionariesView;
 
 /**
  * @brief Представление редактора документа сценария
@@ -29,6 +30,11 @@ public:
     void toggleFullScreen(bool _isFullScreen) override;
     QVector<QAction*> options() const override;
     /** @{ */
+
+    /**
+     * @brief Представление редактора справочников
+     */
+    DictionariesView* dictionariesView() const;
 
     /**
      * @brief Настроить редактор сценария в соответствии с параметрами заданными в настройках

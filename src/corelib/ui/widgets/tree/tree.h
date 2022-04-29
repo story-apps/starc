@@ -131,6 +131,11 @@ public:
     QHeaderView* headerView() const;
 
     /**
+     * @brief Активировать редактирование заданного элемента
+     */
+    void edit(const QModelIndex& _index);
+
+    /**
      * @brief Загрузить состояние дерева
      */
     void restoreState(const QVariant& _state);
@@ -139,6 +144,11 @@ public:
      * @brief Сохранить состояние дерева
      */
     QVariant saveState() const;
+
+    /**
+     * @brief Определить, находится ли заданная позиция над иконкой в конце элемента
+     */
+    bool isOnItemTrilingIcon(const QPoint& _position) const;
 
 signals:
     /**

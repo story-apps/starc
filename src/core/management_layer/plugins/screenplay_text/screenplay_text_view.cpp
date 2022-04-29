@@ -6,6 +6,7 @@
 #include "text/screenplay_text_fast_format_widget.h"
 #include "text/screenplay_text_scrollbar_manager.h"
 #include "text/screenplay_text_search_manager.h"
+#include "ui/dictionaries_view.h"
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
@@ -48,6 +49,7 @@ const int kTypeDataRole = Qt::UserRole + 100;
 const int kFastFormatTabIndex = 0;
 const int kCommentsTabIndex = 1;
 const int kBookmarksTabIndex = 2;
+const int kDictionariesTabIndex = 3;
 
 const QString kSettingsKey = "screenplay-text";
 const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
@@ -55,6 +57,7 @@ const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
 const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
 const QString kIsBookmarksListVisibleKey = kSettingsKey + "/is-bookmarks-list-visible";
+const QString kIsDictionariesVisibleKey = kSettingsKey + "/is-dictionaries-visible";
 const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 } // namespace
 
@@ -146,6 +149,7 @@ public:
     ScreenplayTextFastFormatWidget* fastFormatWidget = nullptr;
     CommentsView* commentsView = nullptr;
     BookmarksView* bookmarksView = nullptr;
+    DictionariesView* dictionariesView = nullptr;
     //
     Splitter* splitter = nullptr;
 
@@ -153,6 +157,7 @@ public:
     // Действия опций редактора
     //
     QAction* showBookmarksAction = nullptr;
+    QAction* showDictionariesAction = nullptr;
 };
 
 ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
@@ -174,9 +179,11 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     , fastFormatWidget(new ScreenplayTextFastFormatWidget(_parent))
     , commentsView(new CommentsView(_parent))
     , bookmarksView(new BookmarksView(_parent))
+    , dictionariesView(new DictionariesView(_parent))
     , splitter(new Splitter(_parent))
     //
     , showBookmarksAction(new QAction(_parent))
+    , showDictionariesAction(new QAction(_parent))
 
 {
     commentsModel->setParagraphTypesFiler({
@@ -239,20 +246,26 @@ ScreenplayTextView::Implementation::Implementation(QWidget* _parent)
     sidebarTabs->setTabVisible(kCommentsTabIndex, false);
     sidebarTabs->addTab({}); // bookmarks
     sidebarTabs->setTabVisible(kBookmarksTabIndex, false);
+    sidebarTabs->addTab({}); // dictionaries
+    sidebarTabs->setTabVisible(kDictionariesTabIndex, false);
     sidebarContent->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     sidebarContent->setAnimationType(StackWidget::AnimationType::Slide);
     sidebarContent->addWidget(fastFormatWidget);
     sidebarContent->addWidget(commentsView);
     sidebarContent->addWidget(bookmarksView);
+    sidebarContent->addWidget(dictionariesView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
     commentsView->setModel(commentsModel);
     commentsView->hide();
     bookmarksView->setModel(bookmarksModel);
     bookmarksView->hide();
+    dictionariesView->hide();
 
     showBookmarksAction->setCheckable(true);
     showBookmarksAction->setIconText(u8"\U000F0E16");
+    showDictionariesAction->setCheckable(true);
+    showDictionariesAction->setIconText(u8"\U000F0EBF");
 }
 
 void ScreenplayTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
@@ -318,6 +331,9 @@ void ScreenplayTextView::Implementation::updateOptionsTranslations()
 {
     showBookmarksAction->setText(showBookmarksAction->isChecked() ? tr("Hide bookmarks list")
                                                                   : tr("Show bookmarks list"));
+    showDictionariesAction->setText(showDictionariesAction->isChecked()
+                                        ? tr("Hide screenplay dictionaries")
+                                        : tr("Show screenplay dictionaries"));
 }
 
 void ScreenplayTextView::Implementation::updateToolBarUi()
@@ -421,7 +437,8 @@ void ScreenplayTextView::Implementation::updateCommentsToolBar()
 void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
     const bool isSidebarShouldBeVisible = toolbar->isFastFormatPanelVisible()
-        || toolbar->isCommentsModeEnabled() || showBookmarksAction->isChecked();
+        || toolbar->isCommentsModeEnabled() || showBookmarksAction->isChecked()
+        || showDictionariesAction->isChecked();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
@@ -609,12 +626,19 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
             break;
         }
+
         case kCommentsTabIndex: {
             d->sidebarContent->setCurrentWidget(d->commentsView);
             break;
         }
+
         case kBookmarksTabIndex: {
             d->sidebarContent->setCurrentWidget(d->bookmarksView);
+            break;
+        }
+
+        case kDictionariesTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->dictionariesView);
             break;
         }
         }
@@ -713,6 +737,17 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         }
         d->updateSideBarVisibility(this);
     });
+    //
+    connect(d->showDictionariesAction, &QAction::toggled, this, [this](bool _checked) {
+        d->updateOptionsTranslations();
+        d->sidebarTabs->setTabVisible(kDictionariesTabIndex, _checked);
+        d->dictionariesView->setVisible(_checked);
+        if (_checked) {
+            d->sidebarTabs->setCurrentTab(kDictionariesTabIndex);
+            d->sidebarContent->setCurrentWidget(d->dictionariesView);
+        }
+        d->updateSideBarVisibility(this);
+    });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -737,7 +772,13 @@ QVector<QAction*> ScreenplayTextView::options() const
 {
     return {
         d->showBookmarksAction,
+        d->showDictionariesAction,
     };
+}
+
+DictionariesView* ScreenplayTextView::dictionariesView() const
+{
+    return d->dictionariesView;
 }
 
 void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
@@ -809,13 +850,15 @@ void ScreenplayTextView::loadViewSettings()
     const auto scaleFactor = settingsValue(kScaleFactorKey, 1.0).toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 
-    const auto isBookmarksListVisible = settingsValue(kIsBookmarksListVisibleKey, false).toBool();
-    d->showBookmarksAction->setChecked(isBookmarksListVisible);
     const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
     const auto isFastFormatPanelVisible
         = settingsValue(kIsFastFormatPanelVisibleKey, false).toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
+    const auto isBookmarksListVisible = settingsValue(kIsBookmarksListVisibleKey, false).toBool();
+    d->showBookmarksAction->setChecked(isBookmarksListVisible);
+    const auto isDictionariesVisible = settingsValue(kIsDictionariesVisibleKey, false).toBool();
+    d->showDictionariesAction->setChecked(isDictionariesVisible);
     const auto sidebarPanelIndex = settingsValue(kSidebarPanelIndexKey, 0).toInt();
     d->sidebarTabs->setCurrentTab(sidebarPanelIndex);
 
@@ -832,6 +875,7 @@ void ScreenplayTextView::saveViewSettings()
     setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
     setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
     setSettingsValue(kIsBookmarksListVisibleKey, d->showBookmarksAction->isChecked());
+    setSettingsValue(kIsDictionariesVisibleKey, d->showDictionariesAction->isChecked());
     setSettingsValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab());
 
     setSettingsValue(kSidebarStateKey, d->splitter->saveState());
@@ -939,6 +983,7 @@ void ScreenplayTextView::updateTranslations()
     d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
     d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
+    d->sidebarTabs->setTabName(kDictionariesTabIndex, tr("Dictionaries"));
 
     d->updateOptionsTranslations();
 }

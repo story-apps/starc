@@ -41,6 +41,12 @@ signals:
      */
     void currentModelIndexChanged(const QModelIndex& _index);
 
+protected:
+    /**
+     * @brief Переопределяем, чтобы отслеживать событие смены языка
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
 private:
     /**
      * @brief Установить в редакторе курсор на позицию соответствующую элементу с заданным индексом

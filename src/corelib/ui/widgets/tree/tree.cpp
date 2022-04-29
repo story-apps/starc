@@ -210,6 +210,11 @@ QHeaderView* Tree::headerView() const
     return d->tree->header();
 }
 
+void Tree::edit(const QModelIndex& _index)
+{
+    d->tree->edit(_index);
+}
+
 void Tree::restoreState(const QVariant& _state)
 {
     d->tree->restoreState(_state);
@@ -218,6 +223,27 @@ void Tree::restoreState(const QVariant& _state)
 QVariant Tree::saveState() const
 {
     return d->tree->saveState();
+}
+
+bool Tree::isOnItemTrilingIcon(const QPoint& _position) const
+{
+    const auto currentIndex = indexAt(_position);
+    if (this->currentIndex() != currentIndex) {
+        return false;
+    }
+
+    if (parentWidget() == nullptr) {
+        return false;
+    }
+
+    if (_position.x() < parentWidget()->width() - verticalScrollBar()->width()
+                - Ui::DesignSystem::treeOneLineItem().spacing()
+                - Ui::DesignSystem::treeOneLineItem().iconSize().width()
+        || _position.x() > parentWidget()->width() - verticalScrollBar()->width()) {
+        return false;
+    }
+
+    return true;
 }
 
 void Tree::processBackgroundColorChange()

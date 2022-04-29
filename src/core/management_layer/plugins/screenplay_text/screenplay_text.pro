@@ -57,7 +57,8 @@ HEADERS += \
     text/screenplay_text_fast_format_widget.h \
     text/screenplay_text_scrollbar_manager.h \
     text/screenplay_text_search_manager.h \
-    text/screenplay_text_search_toolbar.h
+    text/screenplay_text_search_toolbar.h \
+    ui/dictionaries_view.h
 
 SOURCES += \
     screenplay_text_manager.cpp \
@@ -86,7 +87,8 @@ SOURCES += \
     text/screenplay_text_fast_format_widget.cpp \
     text/screenplay_text_scrollbar_manager.cpp \
     text/screenplay_text_search_manager.cpp \
-    text/screenplay_text_search_toolbar.cpp
+    text/screenplay_text_search_toolbar.cpp \
+    ui/dictionaries_view.cpp
 
 mac {
     load(resolve_target)

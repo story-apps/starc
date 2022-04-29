@@ -50,6 +50,8 @@ ScreenplayDictionariesModel::ScreenplayDictionariesModel(QObject* _parent)
             &ScreenplayDictionariesModel::updateDocumentContent);
 }
 
+ScreenplayDictionariesModel::~ScreenplayDictionariesModel() = default;
+
 const QVector<QString>& ScreenplayDictionariesModel::sceneIntros() const
 {
     return d->sceneIntros;
@@ -63,6 +65,31 @@ void ScreenplayDictionariesModel::addSceneIntro(const QString& _intro)
     }
 
     d->sceneIntros.append(introCorrected);
+    emit sceneIntrosChanged();
+}
+
+void ScreenplayDictionariesModel::setSceneIntro(int _index, const QString& _intro)
+{
+    const auto introCorrected = TextHelper::smartToUpper(_intro);
+    if (d->sceneIntros.contains(introCorrected)) {
+        return;
+    }
+
+    if (_index < 0 || d->sceneIntros.size() <= _index) {
+        return;
+    }
+
+    d->sceneIntros[_index] = introCorrected;
+    emit sceneIntrosChanged();
+}
+
+void ScreenplayDictionariesModel::removeSceneIntro(int _index)
+{
+    if (_index < 0 || d->sceneIntros.size() <= _index) {
+        return;
+    }
+
+    d->sceneIntros.removeAt(_index);
     emit sceneIntrosChanged();
 }
 
@@ -82,6 +109,31 @@ void ScreenplayDictionariesModel::addSceneTime(const QString& _time)
     emit sceneTimesChanged();
 }
 
+void ScreenplayDictionariesModel::setSceneTime(int _index, const QString& _time)
+{
+    const auto timeCorrected = TextHelper::smartToUpper(_time);
+    if (d->sceneTimes.contains(timeCorrected)) {
+        return;
+    }
+
+    if (_index < 0 || d->sceneTimes.size() <= _index) {
+        return;
+    }
+
+    d->sceneTimes[_index] = timeCorrected;
+    emit sceneTimesChanged();
+}
+
+void ScreenplayDictionariesModel::removeSceneTime(int _index)
+{
+    if (_index < 0 || d->sceneTimes.size() <= _index) {
+        return;
+    }
+
+    d->sceneTimes.removeAt(_index);
+    emit sceneTimesChanged();
+}
+
 const QVector<QString>& ScreenplayDictionariesModel::storyDays() const
 {
     return d->storyDays;
@@ -95,6 +147,31 @@ void ScreenplayDictionariesModel::addStoryDay(const QString& _day)
     }
 
     d->storyDays.append(dayCorrected);
+    emit storyDaysChanged();
+}
+
+void ScreenplayDictionariesModel::setStoryDay(int _index, const QString& _day)
+{
+    const auto dayCorrected = TextHelper::smartToUpper(_day);
+    if (d->storyDays.contains(dayCorrected)) {
+        return;
+    }
+
+    if (_index < 0 || d->storyDays.size() <= _index) {
+        return;
+    }
+
+    d->storyDays[_index] = dayCorrected;
+    emit storyDaysChanged();
+}
+
+void ScreenplayDictionariesModel::removeStoryDay(int _index)
+{
+    if (_index < 0 || d->storyDays.size() <= _index) {
+        return;
+    }
+
+    d->storyDays.removeAt(_index);
     emit storyDaysChanged();
 }
 
@@ -114,6 +191,31 @@ void ScreenplayDictionariesModel::addCharacterExtension(const QString& _extensio
     emit charactersExtensionsChanged();
 }
 
+void ScreenplayDictionariesModel::setCharacterExtension(int _index, const QString& _extension)
+{
+    const auto extensionCorrected = TextHelper::smartToUpper(_extension);
+    if (d->characterExtensions.contains(extensionCorrected)) {
+        return;
+    }
+
+    if (_index < 0 || d->characterExtensions.size() <= _index) {
+        return;
+    }
+
+    d->characterExtensions[_index] = extensionCorrected;
+    emit charactersExtensionsChanged();
+}
+
+void ScreenplayDictionariesModel::removeCharacterExtension(int _index)
+{
+    if (_index < 0 || d->characterExtensions.size() <= _index) {
+        return;
+    }
+
+    d->characterExtensions.removeAt(_index);
+    emit charactersExtensionsChanged();
+}
+
 const QVector<QString>& ScreenplayDictionariesModel::transitions() const
 {
     return d->transitions;
@@ -130,7 +232,30 @@ void ScreenplayDictionariesModel::addTransition(const QString& _transition)
     emit transitionsChanged();
 }
 
-ScreenplayDictionariesModel::~ScreenplayDictionariesModel() = default;
+void ScreenplayDictionariesModel::setTransition(int _index, const QString& _transition)
+{
+    const auto transitionCorrected = TextHelper::smartToUpper(_transition);
+    if (d->transitions.contains(transitionCorrected)) {
+        return;
+    }
+
+    if (_index < 0 || d->transitions.size() <= _index) {
+        return;
+    }
+
+    d->transitions[_index] = transitionCorrected;
+    emit transitionsChanged();
+}
+
+void ScreenplayDictionariesModel::removeTransition(int _index)
+{
+    if (_index < 0 || d->transitions.size() <= _index) {
+        return;
+    }
+
+    d->transitions.removeAt(_index);
+    emit transitionsChanged();
+}
 
 void ScreenplayDictionariesModel::initDocument()
 {

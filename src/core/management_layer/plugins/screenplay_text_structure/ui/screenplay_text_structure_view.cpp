@@ -125,7 +125,8 @@ QVector<QAction*> ScreenplayTextStructureView::options() const
     auto showBeatText = new QAction(d->content);
     showBeatText->setCheckable(true);
     showBeatText->setChecked(d->beatNameWidget->isVisible());
-    showBeatText->setText("Show current beat name");
+    showBeatText->setText(showBeatText->isChecked() ? "Hide current beat name"
+                                                    : "Show current beat name");
     showBeatText->setIconText(u8"\U000F09A8");
     connect(showBeatText, &QAction::toggled, this,
             [this](bool _checked) { d->beatNameWidget->setVisible(_checked); });

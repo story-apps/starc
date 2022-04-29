@@ -69,27 +69,15 @@ ProjectNavigator::Implementation::Implementation(ProjectNavigator* _parent)
 
 bool ProjectNavigator::Implementation::isOnDocumentNavigatorButton(const QPoint& _position) const
 {
-    const auto currentIndex = tree->indexAt(_position);
-    if (q->currentIndex() != currentIndex) {
-        return false;
-    }
-
     const auto isNavigatorAvailable
-        = currentIndex
+        = q->currentIndex()
               .data(static_cast<int>(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable))
               .toBool();
     if (!isNavigatorAvailable) {
         return false;
     }
 
-    if (_position.x() < q->width() - tree->verticalScrollBar()->width()
-                - Ui::DesignSystem::treeOneLineItem().spacing()
-                - Ui::DesignSystem::treeOneLineItem().iconSize().width()
-        || _position.x() > q->width() - tree->verticalScrollBar()->width()) {
-        return false;
-    }
-
-    return true;
+    return tree->isOnItemTrilingIcon(_position);
 }
 
 

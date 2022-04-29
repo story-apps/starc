@@ -13,6 +13,16 @@ TreeDelegate::TreeDelegate(QObject* _parent)
 {
 }
 
+void TreeDelegate::setAdditionalLeftMargin(qreal _margin)
+{
+    m_additionalLeftMargin = _margin;
+}
+
+void TreeDelegate::setHoverTrailingIcon(const QString _icon)
+{
+    m_hoverTrailingIcon = _icon;
+}
+
 void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option,
                          const QModelIndex& _index) const
 {
@@ -75,7 +85,8 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
         }
 
         iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
-                                           Ui::DesignSystem::treeOneLineItem().margins().left()),
+                                           Ui::DesignSystem::treeOneLineItem().margins().left())
+                                      + m_additionalLeftMargin,
                                   backgroundRect.top()),
                           QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
                                  backgroundRect.height()));
@@ -90,14 +101,33 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     const qreal textLeft = iconRect.isValid()
         ? iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing()
-        : backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
-    const QRectF textRect(QPointF(textLeft, backgroundRect.top()),
-                          QSizeF(backgroundRect.right() - textLeft
-                                     - Ui::DesignSystem::treeOneLineItem().margins().right(),
-                                 backgroundRect.height()));
+        : backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left()
+            + m_additionalLeftMargin;
+    QRectF textRect(QPointF(textLeft, backgroundRect.top()),
+                    QSizeF(backgroundRect.right() - textLeft
+                               - Ui::DesignSystem::treeOneLineItem().margins().right(),
+                           backgroundRect.height()));
+    if (!m_hoverTrailingIcon.isEmpty() && opt.state.testFlag(QStyle::State_MouseOver)) {
+        textRect = textRect.adjusted(
+            0, 0, -1 * Ui::DesignSystem::treeOneLineItem().iconSize().width(), 0);
+    }
     const auto text = _painter->fontMetrics().elidedText(_index.data().toString(), Qt::ElideRight,
                                                          static_cast<int>(textRect.width()));
     _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, text);
+
+    //
+    // Рисуем декорацию
+    //
+    if (!m_hoverTrailingIcon.isEmpty() && opt.state.testFlag(QStyle::State_MouseOver)) {
+        auto iconRect = QRectF(QPointF(backgroundRect.right()
+                                           - Ui::DesignSystem::treeOneLineItem().iconSize().width()
+                                           - Ui::DesignSystem::treeOneLineItem().margins().right(),
+                                       backgroundRect.top()),
+                               QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                      backgroundRect.height()));
+        _painter->setFont(Ui::DesignSystem::font().iconsMid());
+        _painter->drawText(iconRect, Qt::AlignCenter, m_hoverTrailingIcon);
+    }
 }
 
 QSize TreeDelegate::sizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const
@@ -179,6 +209,53 @@ void KeySequenceDelegate::setModelData(QWidget* _editor, QAbstractItemModel* _mo
 // ****
 
 
+TextFieldItemDelegate::TextFieldItemDelegate(QObject* _parent)
+    : TreeDelegate(_parent)
+{
+}
+
+void TextFieldItemDelegate::setLabel(const QString& _label)
+{
+    m_label = _label;
+}
+
+QWidget* TextFieldItemDelegate::createEditor(QWidget* _parent, const QStyleOptionViewItem& _option,
+                                             const QModelIndex& _index) const
+{
+    Q_UNUSED(_option);
+    Q_UNUSED(_index);
+
+    auto editor = new TextField(_parent);
+    editor->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+    editor->setTextColor(Ui::DesignSystem::color().onBackground());
+    editor->setDefaultMarginsEnabled(false);
+    editor->setLabel(m_label);
+    editor->setPlaceholderText(" ");
+    return editor;
+}
+
+void TextFieldItemDelegate::setEditorData(QWidget* _editor, const QModelIndex& _index) const
+{
+    TreeDelegate::setEditorData(_editor, _index);
+
+    const QString value = _index.model()->data(_index, Qt::EditRole).toString();
+
+    auto textField = qobject_cast<TextField*>(_editor);
+    textField->setText(value);
+}
+
+void TextFieldItemDelegate::setModelData(QWidget* _editor, QAbstractItemModel* _model,
+                                         const QModelIndex& _index) const
+{
+    auto textField = qobject_cast<TextField*>(_editor);
+    const QString value = textField->text();
+    _model->setData(_index, value, Qt::EditRole);
+}
+
+
+// ****
+
+
 ComboBoxItemDelegate::ComboBoxItemDelegate(QObject* _parent, QAbstractItemModel* _model)
     : TreeDelegate(_parent)
     , m_model(_model)
@@ -190,13 +267,13 @@ void ComboBoxItemDelegate::setLabel(const QString& _label)
     m_label = _label;
 }
 
-QWidget* ComboBoxItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option,
+QWidget* ComboBoxItemDelegate::createEditor(QWidget* _parent, const QStyleOptionViewItem& _option,
                                             const QModelIndex& _index) const
 {
-    Q_UNUSED(option);
+    Q_UNUSED(_option);
     Q_UNUSED(_index);
 
-    auto editor = new ComboBox(parent);
+    auto editor = new ComboBox(_parent);
     editor->setModel(m_model);
     editor->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     editor->setTextColor(Ui::DesignSystem::color().onBackground());
