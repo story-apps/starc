@@ -172,15 +172,15 @@ KeySequenceDelegate::KeySequenceDelegate(QObject* _parent)
 {
 }
 
-QWidget* KeySequenceDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option,
+QWidget* KeySequenceDelegate::createEditor(QWidget* _parent, const QStyleOptionViewItem& _option,
                                            const QModelIndex& _index) const
 {
-    Q_UNUSED(option);
+    Q_UNUSED(_option);
     Q_UNUSED(_index);
 
-    auto editor = new KeySequenceEdit(parent);
-    editor->setBackgroundColor(Ui::DesignSystem::color().background());
-    editor->setTextColor(Ui::DesignSystem::color().onBackground());
+    auto editor = new KeySequenceEdit(_parent);
+    editor->setBackgroundColor(_parent->palette().text().color());
+    editor->setTextColor(_parent->palette().text().color());
     editor->setDefaultMarginsEnabled(false);
     editor->setLabel(tr("Press shortcut"));
 
@@ -226,8 +226,8 @@ QWidget* TextFieldItemDelegate::createEditor(QWidget* _parent, const QStyleOptio
     Q_UNUSED(_index);
 
     auto editor = new TextField(_parent);
-    editor->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-    editor->setTextColor(Ui::DesignSystem::color().onBackground());
+    editor->setBackgroundColor(_parent->palette().text().color());
+    editor->setTextColor(_parent->palette().text().color());
     editor->setDefaultMarginsEnabled(false);
     editor->setLabel(m_label);
     editor->setPlaceholderText(" ");
@@ -275,8 +275,8 @@ QWidget* ComboBoxItemDelegate::createEditor(QWidget* _parent, const QStyleOption
 
     auto editor = new ComboBox(_parent);
     editor->setModel(m_model);
-    editor->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-    editor->setTextColor(Ui::DesignSystem::color().onBackground());
+    editor->setBackgroundColor(_parent->palette().text().color());
+    editor->setTextColor(_parent->palette().text().color());
     editor->setPopupBackgroundColor(Ui::DesignSystem::color().background());
     editor->setDefaultMarginsEnabled(false);
     editor->setUseContentsWidth(true);
