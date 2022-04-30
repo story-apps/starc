@@ -30,12 +30,22 @@ public:
      */
     void updateCurrentBeatName(const QModelIndex& _index);
 
+    /**
+     * @brief Обновить переводы дополнительных действий
+     */
+    void updateOptionsTranslations();
+
 
     IconsMidLabel* backIcon = nullptr;
     Subtitle2Label* backText = nullptr;
     Tree* content = nullptr;
     ScreenplayTextStructureDelegate* contentDelegate = nullptr;
     BeatNameWidget* beatNameWidget = nullptr;
+
+    //
+    // Действия опций редактора
+    //
+    QAction* showBeatTextAction = nullptr;
 };
 
 ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
@@ -44,6 +54,7 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     , content(new Tree(_parent))
     , contentDelegate(new ScreenplayTextStructureDelegate(content))
     , beatNameWidget(new BeatNameWidget(_parent))
+    , showBeatTextAction(new QAction(_parent))
 {
     backIcon->setText(u8"\U000f0141");
 
@@ -56,6 +67,9 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     new Shadow(Qt::BottomEdge, content);
 
     beatNameWidget->hide();
+
+    showBeatTextAction->setCheckable(true);
+    showBeatTextAction->setIconText(u8"\U000F09A8");
 }
 
 void ScreenplayTextStructureView::Implementation::updateCurrentBeatName(const QModelIndex& _index)
@@ -69,6 +83,12 @@ void ScreenplayTextStructureView::Implementation::updateCurrentBeatName(const QM
     } else {
         beatNameWidget->setBeatName(tr("No one beat selected"));
     }
+}
+
+void ScreenplayTextStructureView::Implementation::updateOptionsTranslations()
+{
+    showBeatTextAction->setText(showBeatTextAction->isChecked() ? "Hide current beat name"
+                                                                : "Show current beat name");
 }
 
 
@@ -107,6 +127,10 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
             [this](const QModelIndex& _index) { d->updateCurrentBeatName(_index); });
     connect(d->beatNameWidget, &BeatNameWidget::pasteBeatNamePressed, this,
             &ScreenplayTextStructureView::pasteBeatNamePressed);
+    connect(d->showBeatTextAction, &QAction::toggled, this, [this](bool _checked) {
+        d->updateOptionsTranslations();
+        d->beatNameWidget->setVisible(_checked);
+    });
 
 
     updateTranslations();
@@ -122,16 +146,9 @@ QWidget* ScreenplayTextStructureView::asQWidget()
 
 QVector<QAction*> ScreenplayTextStructureView::options() const
 {
-    auto showBeatText = new QAction(d->content);
-    showBeatText->setCheckable(true);
-    showBeatText->setChecked(d->beatNameWidget->isVisible());
-    showBeatText->setText(showBeatText->isChecked() ? "Hide current beat name"
-                                                    : "Show current beat name");
-    showBeatText->setIconText(u8"\U000F09A8");
-    connect(showBeatText, &QAction::toggled, this,
-            [this](bool _checked) { d->beatNameWidget->setVisible(_checked); });
-
-    return { showBeatText };
+    return {
+        d->showBeatTextAction,
+    };
 }
 
 void ScreenplayTextStructureView::reconfigure()
@@ -181,6 +198,7 @@ QModelIndexList ScreenplayTextStructureView::selectedIndexes() const
 void ScreenplayTextStructureView::updateTranslations()
 {
     d->backText->setText("Back to navigator");
+    d->updateOptionsTranslations();
 }
 
 void ScreenplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
