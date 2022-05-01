@@ -416,6 +416,7 @@ HEADERS += \
     domain/document_object.h \
     domain/domain_object.h \
     domain/identifier.h \
+    domain/notification.h \
     domain/objects_builder.h \
     domain/payent_info.h \
     domain/session_info.h \
