@@ -1,14 +1,20 @@
 #include "menu_view.h"
 
 #include "about_application_dialog.h"
+#include "notifications/release_view.h"
 
+#include <domain/notification.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/drawer/drawer.h>
+#include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/link_label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <ui/widgets/shadow/shadow.h>
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/ui_helper.h>
 #include <utils/logging.h>
+#include <utils/shugar.h>
 
 #include <QAction>
 #include <QActionGroup>
@@ -51,10 +57,21 @@ public:
     Body2Label* aboutAppSpacer = nullptr;
     Body2LinkLabel* aboutApp = nullptr;
     QGridLayout* appInfoLayout = nullptr;
+
+    //
+
+    Widget* notificationsPage = nullptr;
+
+    IconButton* notificationsBackButton = nullptr;
+    ButtonLabel* notificationsTitle = nullptr;
+    IconButton* notificationsFilterButton = nullptr;
+
+    QScrollArea* notificationsViewport = nullptr;
+    QVBoxLayout* notificationsLayout = nullptr;
 };
 
 MenuView::Implementation::Implementation(QWidget* _parent)
-    : menuPage(new QScrollArea(_parent))
+    : menuPage(UiHelper::createScrollArea(_parent))
     , drawer(new Drawer(_parent))
     , signIn(new QAction)
     , projects(new QAction)
@@ -76,123 +93,142 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     , aboutAppSpacer(new Body2Label(_parent))
     , aboutApp(new Body2LinkLabel(_parent))
     , appInfoLayout(new QGridLayout)
+    , notificationsPage(new Widget(_parent))
+    , notificationsBackButton(new IconButton(_parent))
+    , notificationsTitle(new ButtonLabel(_parent))
+    , notificationsFilterButton(new IconButton(_parent))
+    , notificationsViewport(UiHelper::createScrollArea(_parent))
+    , notificationsLayout(new QVBoxLayout)
 {
     //
     // Настроим страницу меню
     //
-    QPalette palette;
-    palette.setColor(QPalette::Base, Qt::transparent);
-    palette.setColor(QPalette::Window, Qt::transparent);
-    menuPage->setPalette(palette);
-    menuPage->setFrameShape(QFrame::NoFrame);
-    menuPage->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    menuPage->setVerticalScrollBar(new ScrollBar);
+    {
+        drawer->addAction(signIn);
+        drawer->addAction(projects);
+        drawer->addAction(createProject);
+        drawer->addAction(openProject);
+        drawer->addAction(project);
+        drawer->addAction(saveProject);
+        drawer->addAction(saveProjectAs);
+        drawer->addAction(importProject);
+        drawer->addAction(exportCurrentDocument);
+        drawer->addAction(fullScreen);
+        drawer->addAction(settings);
 
-    drawer->addAction(signIn);
-    drawer->addAction(projects);
-    drawer->addAction(createProject);
-    drawer->addAction(openProject);
-    drawer->addAction(project);
-    drawer->addAction(saveProject);
-    drawer->addAction(saveProjectAs);
-    drawer->addAction(importProject);
-    drawer->addAction(exportCurrentDocument);
-    drawer->addAction(fullScreen);
-    drawer->addAction(settings);
+        drawer->setAccountActions({
+            writingStatistics,
+            writingSprint,
+            chat,
+            notifications,
+        });
 
-    drawer->setAccountActions({
-        writingStatistics,
-        writingSprint,
-        chat,
-        notifications,
-    });
+        signIn->setIconText(u8"\U000F0004");
+        signIn->setCheckable(false);
+        signIn->setVisible(false);
+        //
+        projects->setIconText(u8"\U000f024b");
+        projects->setCheckable(true);
+        projects->setChecked(true);
+        //
+        createProject->setIconText(u8"\U000f0415");
+        createProject->setCheckable(false);
+        //
+        openProject->setIconText(u8"\U000f0770");
+        openProject->setCheckable(false);
+        //
+        project->setIconText(u8"\U000f00be");
+        project->setCheckable(true);
+        project->setVisible(false);
+        project->setSeparator(true);
+        //
+        saveProject->setIconText(u8"\U000f0193");
+        saveProject->setCheckable(false);
+        saveProject->setEnabled(false);
+        saveProject->setVisible(false);
+        //
+        saveProjectAs->setIconText(" ");
+        saveProjectAs->setCheckable(false);
+        saveProjectAs->setVisible(false);
+        //
+        exportCurrentDocument->setIconText(u8"\U000f0207");
+        exportCurrentDocument->setCheckable(false);
+        exportCurrentDocument->setEnabled(false);
+        exportCurrentDocument->setVisible(false);
+        //
+        importProject->setIconText(u8"\U000f02fa");
+        importProject->setCheckable(false);
+        importProject->setVisible(false);
+        //
+        fullScreen->setIconText(u8"\U000F0293");
+        fullScreen->setCheckable(false);
+        fullScreen->setVisible(false);
+        fullScreen->setSeparator(true);
+        //
+        settings->setIconText(u8"\U000f0493");
+        settings->setCheckable(false);
+        settings->setVisible(true);
+        settings->setSeparator(true);
 
-    signIn->setIconText(u8"\U000F0004");
-    signIn->setCheckable(false);
-    signIn->setVisible(false);
-    //
-    projects->setIconText(u8"\U000f024b");
-    projects->setCheckable(true);
-    projects->setChecked(true);
-    //
-    createProject->setIconText(u8"\U000f0415");
-    createProject->setCheckable(false);
-    //
-    openProject->setIconText(u8"\U000f0770");
-    openProject->setCheckable(false);
-    //
-    project->setIconText(u8"\U000f00be");
-    project->setCheckable(true);
-    project->setVisible(false);
-    project->setSeparator(true);
-    //
-    saveProject->setIconText(u8"\U000f0193");
-    saveProject->setCheckable(false);
-    saveProject->setEnabled(false);
-    saveProject->setVisible(false);
-    //
-    saveProjectAs->setIconText(" ");
-    saveProjectAs->setCheckable(false);
-    saveProjectAs->setVisible(false);
-    //
-    exportCurrentDocument->setIconText(u8"\U000f0207");
-    exportCurrentDocument->setCheckable(false);
-    exportCurrentDocument->setEnabled(false);
-    exportCurrentDocument->setVisible(false);
-    //
-    importProject->setIconText(u8"\U000f02fa");
-    importProject->setCheckable(false);
-    importProject->setVisible(false);
-    //
-    fullScreen->setIconText(u8"\U000F0293");
-    fullScreen->setCheckable(false);
-    fullScreen->setVisible(false);
-    fullScreen->setSeparator(true);
-    //
-    settings->setIconText(u8"\U000f0493");
-    settings->setCheckable(false);
-    settings->setVisible(true);
-    settings->setSeparator(true);
+        QActionGroup* actions = new QActionGroup(_parent);
+        actions->addAction(projects);
+        actions->addAction(project);
+        actions->addAction(settings);
 
-    QActionGroup* actions = new QActionGroup(_parent);
-    actions->addAction(projects);
-    actions->addAction(project);
-    actions->addAction(settings);
+        writingStatistics->setIconText(u8"\U000F0127");
+        writingStatistics->setVisible(false);
+        //
+        writingSprint->setIconText(u8"\U000F13AB");
+        //
+        chat->setIconText(u8"\U000F0368");
+        chat->setVisible(false);
+        //
+        notifications->setIconText(u8"\U000F009A");
 
-    writingStatistics->setIconText(u8"\U000F0127");
-    writingStatistics->setVisible(false);
+        appName->setText("Story Architect");
+        appName->setLink(QUrl("https://starc.app"));
+        appVersion->setLink(QUrl("https://starc.app/blog/"));
+        aboutAppSpacer->setText(" - ");
+
+        appInfoLayout->setContentsMargins({});
+        appInfoLayout->setSpacing(0);
+        appInfoLayout->addWidget(appName, 0, 0, 1, 4, Qt::AlignLeft);
+        appInfoLayout->addWidget(appVersion, 1, 0);
+        appInfoLayout->addWidget(aboutAppSpacer, 1, 1);
+        appInfoLayout->addWidget(aboutApp, 1, 2);
+        appInfoLayout->setColumnStretch(3, 1);
+
+        auto layout = static_cast<QVBoxLayout*>(menuPage->widget()->layout());
+        layout->insertWidget(0, drawer);
+        layout->addStretch();
+        layout->addLayout(appInfoLayout);
+    }
+
     //
-    writingSprint->setIconText(u8"\U000F13AB");
+    // Настроим страницу уведомлений
     //
-    chat->setIconText(u8"\U000F0368");
-    chat->setVisible(false);
-    //
-    notifications->setIconText(u8"\U000F009A");
-    notifications->setVisible(false);
+    {
+        notificationsBackButton->setIcon(u8"\U000F004D");
+        notificationsFilterButton->setIcon(u8"\U000F1542");
 
-    appName->setText("Story Architect");
-    appName->setLink(QUrl("https://starc.app"));
-    appVersion->setLink(QUrl("https://starc.app/blog/"));
-    aboutAppSpacer->setText(" - ");
+        new Shadow(Qt::TopEdge, notificationsViewport);
 
-    appInfoLayout->setContentsMargins({});
-    appInfoLayout->setSpacing(0);
-    appInfoLayout->addWidget(appName, 0, 0, 1, 4, Qt::AlignLeft);
-    appInfoLayout->addWidget(appVersion, 1, 0);
-    appInfoLayout->addWidget(aboutAppSpacer, 1, 1);
-    appInfoLayout->addWidget(aboutApp, 1, 2);
-    appInfoLayout->setColumnStretch(3, 1);
+        auto topLayout = new QHBoxLayout;
+        topLayout->setContentsMargins({});
+        topLayout->setSpacing(0);
+        topLayout->addWidget(notificationsBackButton);
+        topLayout->addWidget(notificationsTitle, 1, Qt::AlignVCenter);
+        topLayout->addWidget(notificationsFilterButton);
 
-    auto menuPageContentWidget = new QWidget;
-    menuPage->setWidget(menuPageContentWidget);
-    menuPage->setWidgetResizable(true);
-    auto layout = new QVBoxLayout;
-    layout->setContentsMargins({});
-    layout->setSpacing(0);
-    layout->addWidget(drawer);
-    layout->addStretch();
-    layout->addLayout(appInfoLayout);
-    menuPageContentWidget->setLayout(layout);
+        notificationsLayout = static_cast<QVBoxLayout*>(notificationsViewport->widget()->layout());
+
+        auto layout = new QVBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addLayout(topLayout);
+        layout->addWidget(notificationsViewport);
+        notificationsPage->setLayout(layout);
+    }
 }
 
 // ****
@@ -206,7 +242,9 @@ MenuView::MenuView(QWidget* _parent)
     d->signIn->setVisible(true);
     d->projects->setSeparator(true);
 #endif
+    setAnimationType(StackWidget::AnimationType::Slide);
     setCurrentWidget(d->menuPage);
+    addWidget(d->notificationsPage);
 
 
     connect(d->drawer, &Drawer::accountPressed, this, &MenuView::accountPressed);
@@ -224,6 +262,8 @@ MenuView::MenuView(QWidget* _parent)
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
     //
     connect(d->writingSprint, &QAction::triggered, this, &MenuView::writingSprintPressed);
+    connect(d->notifications, &QAction::triggered, this,
+            [this] { setCurrentWidget(d->notificationsPage); });
     //
     connect(d->aboutApp, &Body2LinkLabel::clicked, this, [this] {
         auto dialog = new AboutApplicationDialog(parentWidget());
@@ -231,6 +271,9 @@ MenuView::MenuView(QWidget* _parent)
                 &Ui::AboutApplicationDialog::deleteLater);
         dialog->showDialog();
     });
+    //
+    connect(d->notificationsBackButton, &IconButton::clicked, this,
+            [this] { setCurrentWidget(d->menuPage); });
 
     connect(this, &MenuView::accountPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::projectsPressed, this, &MenuView::closeMenu);
@@ -248,10 +291,6 @@ MenuView::MenuView(QWidget* _parent)
 
 
     setVisible(false);
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 MenuView::~MenuView() = default;
@@ -327,6 +366,19 @@ void MenuView::setCurrentDocumentExportAvailable(bool _available)
     d->exportCurrentDocument->setEnabled(_available);
 }
 
+void MenuView::setNotifications(const QVector<Domain::Notification>& _notifications)
+{
+    //
+    // Т.к. уведомления приходят упорядоченными от новых к старым, разворачиваем список, чтобы
+    // просто вставлять уведомления в начало списка
+    //
+    for (const auto& notification : reversed(_notifications)) {
+        auto releaseView = new ReleaseView(this);
+        releaseView->setNotification(notification);
+        d->notificationsLayout->insertWidget(0, releaseView);
+    }
+}
+
 void MenuView::closeMenu()
 {
     Log::info("Hide menu");
@@ -336,6 +388,15 @@ void MenuView::closeMenu()
 QSize MenuView::sizeHint() const
 {
     return d->drawer->sizeHint();
+}
+
+void MenuView::keyPressEvent(QKeyEvent* _event)
+{
+    if (_event->key() == Qt::Key_Escape) {
+        closeMenu();
+    }
+
+    StackWidget::keyPressEvent(_event);
 }
 
 void MenuView::updateTranslations()
@@ -360,10 +421,15 @@ void MenuView::updateTranslations()
     d->settings->setText(tr("Application settings"));
 
     d->writingSprint->setToolTip(tr("Show writing sprint timer"));
+    d->notifications->setToolTip(tr("Show notifications"));
 
     d->appVersion->setText(
         QString("%1 %2").arg(tr("Version"), QCoreApplication::applicationVersion()));
     d->aboutApp->setText(tr("About"));
+
+    d->notificationsBackButton->setToolTip(tr("Back to main menu"));
+    d->notificationsTitle->setText(tr("Notifications"));
+    d->notificationsFilterButton->setToolTip(tr("Notifications preferences"));
 }
 
 void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -386,15 +452,21 @@ void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px24(),
         Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
     d->appInfoLayout->setVerticalSpacing(Ui::DesignSystem::layout().px8());
-}
 
-void MenuView::keyPressEvent(QKeyEvent* _event)
-{
-    if (_event->key() == Qt::Key_Escape) {
-        closeMenu();
+    d->notificationsPage->setBackgroundColor(Ui::DesignSystem::color().primary());
+    for (auto label : std::vector<Widget*>{
+             d->notificationsBackButton,
+             d->notificationsTitle,
+             d->notificationsFilterButton,
+         }) {
+        label->setBackgroundColor(Ui::DesignSystem::color().primary());
+        label->setTextColor(Ui::DesignSystem::color().onPrimary());
     }
-
-    StackWidget::keyPressEvent(_event);
+    d->notificationsBackButton->setContentsMargins(Ui::DesignSystem::layout().px4(),
+                                                   Ui::DesignSystem::layout().px4(), 0, 0);
+    d->notificationsTitle->setContentsMargins(0, Ui::DesignSystem::layout().px4(), 0, 0);
+    d->notificationsFilterButton->setContentsMargins(0, Ui::DesignSystem::layout().px4(),
+                                                     Ui::DesignSystem::layout().px4(), 0);
 }
 
 } // namespace Ui

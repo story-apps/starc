@@ -420,6 +420,7 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
                                - Ui::DesignSystem::card().shadowMargins().right(),
                            Ui::DesignSystem::card().shadowMargins().top());
         d->scrollBar->setMaximum(d->fullSize().height() - sizeHint.height());
+        d->scrollBar->setPageStep(sizeHint.height());
         d->scrollBar->show();
     } else {
         d->scrollBar->hide();
@@ -696,11 +697,7 @@ void ContextMenu::wheelEvent(QWheelEvent* _event)
     Card::wheelEvent(_event);
 
     if (d->scrollBar->isVisible()) {
-        QCoreApplication::postEvent(
-            d->scrollBar,
-            new QWheelEvent(_event->position(), _event->globalPosition(), _event->pixelDelta(),
-                            _event->angleDelta(), _event->buttons(), _event->modifiers(),
-                            _event->phase(), _event->inverted(), _event->source()));
+        QCoreApplication::sendEvent(d->scrollBar, _event);
     }
 }
 

@@ -78,6 +78,7 @@ SOURCES += \
     ui/export/screenplay_export_dialog.cpp \
     ui/import/import_dialog.cpp \
     ui/menu_view.cpp \
+    ui/notifications/release_view.cpp \
     ui/onboarding/onboarding_navigator.cpp \
     ui/onboarding/onboarding_tool_bar.cpp \
     ui/onboarding/onboarding_view.cpp \
@@ -137,6 +138,7 @@ HEADERS += \
     ui/export/screenplay_export_dialog.h \
     ui/import/import_dialog.h \
     ui/menu_view.h \
+    ui/notifications/release_view.h \
     ui/onboarding/onboarding_navigator.h \
     ui/onboarding/onboarding_tool_bar.h \
     ui/onboarding/onboarding_view.h \

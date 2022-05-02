@@ -1896,6 +1896,11 @@ void ApplicationManager::initConnections()
             [configureConnectionStatus] { configureConnectionStatus(false); });
     connect(d->connectionStatus, &Ui::ConnectionStatusToolBar::checkConnectionPressed,
             d->cloudServiceManager.data(), &CloudServiceManager::start);
+    //
+    // Уведомления
+    //
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::notificationsReceived, d->menuView,
+            &Ui::MenuView::setNotifications);
 
     //
     // Проверка регистрация или вход

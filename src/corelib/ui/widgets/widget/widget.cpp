@@ -13,10 +13,43 @@ const QColor kDefaultWidgetColor = Qt::red;
 class Widget::Implementation
 {
 public:
+    /**
+     * @brief Инициилизировать виджет при первом отображении
+     */
+    void initialize(Widget* _widget);
+
+
+    /**
+     * @brief Инициилизирован ли виджет
+     */
+    bool isInitialized = false;
+
+    /**
+     * @brief Цвет фона
+     */
     QColor backgroundColor = kDefaultWidgetColor;
+
+    /**
+     * @brief Цвет текста
+     */
     QColor textColor = kDefaultWidgetColor;
+
+    /**
+     * @brief Прозрачность
+     */
     qreal opacity = 1.0;
 };
+
+void Widget::Implementation::initialize(Widget* _widget)
+{
+    if (isInitialized) {
+        return;
+    }
+
+    isInitialized = true;
+    _widget->updateTranslations();
+    _widget->designSystemChangeEvent(nullptr);
+}
 
 
 // ****
@@ -97,6 +130,11 @@ bool Widget::event(QEvent* _event)
         DesignSystemChangeEvent* event = static_cast<DesignSystemChangeEvent*>(_event);
         designSystemChangeEvent(event);
         return false;
+    }
+
+    case QEvent::PolishRequest: {
+        d->initialize(this);
+        Q_FALLTHROUGH();
     }
 
     default: {

@@ -275,3 +275,33 @@ private:
      */
     bool m_isDecorationVisible = false;
 };
+
+/**
+ * @brief Виджет для отображения изображения
+ */
+class CORE_LIBRARY_EXPORT ImageLabel : public Widget
+{
+public:
+    explicit ImageLabel(QWidget* _parent = nullptr);
+    ~ImageLabel() override;
+
+    /**
+     * @brief Задать изображение для отрисовки
+     */
+    void setImage(const QPixmap& _image);
+
+protected:
+    /**
+     * @brief Реализуем собственную отрисовку
+     */
+    void paintEvent(QPaintEvent* _event) override;
+
+    /**
+     * @brief Обновляем закешированную картинку, чтобы она соответствовала актуальному размеру
+     */
+    void resizeEvent(QResizeEvent* _event) override;
+
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
+};

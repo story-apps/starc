@@ -2,6 +2,10 @@
 
 #include <ui/widgets/stack_widget/stack_widget.h>
 
+namespace Domain {
+struct Notification;
+}
+
 
 namespace Ui {
 
@@ -67,6 +71,11 @@ public:
      * @brief Установить возможность экспортирования текущего документа
      */
     void setCurrentDocumentExportAvailable(bool _available);
+
+    /**
+     * @brief Задать список уведомлений
+     */
+    void setNotifications(const QVector<Domain::Notification>& _notifications);
 
     /**
      * @brief Закрытие меню
@@ -152,6 +161,11 @@ signals:
 
 protected:
     /**
+     * @brief Обработка нажатия клавиатуры (Закрытие при нажатии esc)
+     */
+    void keyPressEvent(QKeyEvent* _event) override;
+
+    /**
      * @brief Обновить переводы
      */
     void updateTranslations() override;
@@ -160,11 +174,6 @@ protected:
      * @brief Настроить внешний вид
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
-
-    /**
-     * @brief Обработка нажатия клавиатуры (Закрытие при нажатии esc)
-     */
-    void keyPressEvent(QKeyEvent* _event) override;
 
 private:
     class Implementation;

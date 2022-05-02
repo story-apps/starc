@@ -384,3 +384,47 @@ void IconsBigLabel::paintEvent(QPaintEvent* _event)
     painter.setOpacity(isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity());
     painter.drawText(contentsRect(), Qt::AlignCenter, text());
 }
+
+
+// ****
+
+
+class ImageLabel::Implementation
+{
+public:
+    QPixmap sourceImage;
+    QPixmap displayImage;
+};
+
+// **
+
+ImageLabel::ImageLabel(QWidget* _parent)
+    : Widget(_parent)
+    , d(new Implementation)
+{
+}
+
+ImageLabel::~ImageLabel() = default;
+
+void ImageLabel::setImage(const QPixmap& _image)
+{
+    d->sourceImage = _image;
+    d->displayImage = d->sourceImage.scaled(contentsRect().size(), Qt::IgnoreAspectRatio,
+                                            Qt::SmoothTransformation);
+    update();
+}
+
+void ImageLabel::paintEvent(QPaintEvent* _event)
+{
+    QPainter painter(this);
+    painter.fillRect(_event->rect(), backgroundColor());
+    painter.drawPixmap(contentsRect(), d->displayImage);
+}
+
+void ImageLabel::resizeEvent(QResizeEvent* _event)
+{
+    d->displayImage = d->sourceImage.scaled(contentsRect().size(), Qt::IgnoreAspectRatio,
+                                            Qt::SmoothTransformation);
+
+    Widget::resizeEvent(_event);
+}
