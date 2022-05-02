@@ -78,6 +78,11 @@ public:
     void setNotifications(const QVector<Domain::Notification>& _notifications);
 
     /**
+     * @brief Открыть меню
+     */
+    void openMenu();
+
+    /**
      * @brief Закрытие меню
      */
     void closeMenu();

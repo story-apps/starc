@@ -506,11 +506,10 @@ void ApplicationManager::Implementation::showContent()
 
 void ApplicationManager::Implementation::showMenu()
 {
-    Log::info("Show menu");
     menuView->setFocus();
     menuView->setFixedWidth(std::max(menuView->sizeHint().width(),
                                      static_cast<int>(Ui::DesignSystem::drawer().width())));
-    WAF::Animation::sideSlideIn(menuView);
+    menuView->openMenu();
 }
 
 void ApplicationManager::Implementation::showAccount()

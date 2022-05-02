@@ -93,10 +93,27 @@ void ReleaseView::updateTranslations()
 {
     const auto json = QJsonDocument::fromJson(d->notification.notification.toUtf8()).object();
     d->dateTimeLabel->setText(d->notification.dateTime.toString("dd.MM.yyyy"));
-    d->titleLabel->setText(tr("Version %1 published").arg(json.value("version").toString()));
-    d->bodyLabel->setText(json.value("info").toString());
-    d->bodyLabel->setVisible(!d->bodyLabel->text().isEmpty());
-    d->readMoreLink->setText(tr("Read more"));
+    const auto version = json.value("version").toString();
+    //
+    // Dev версия
+    //
+    if (d->notification.type == Domain::NotificationType::UpdateDevLinux
+        || d->notification.type == Domain::NotificationType::UpdateDevMac
+        || d->notification.type == Domain::NotificationType::UpdateDevWindows32
+        || d->notification.type == Domain::NotificationType::UpdateDevWindows64) {
+        d->titleLabel->setText(tr("Dev version updated"));
+        d->bodyLabel->setText(
+            tr("Story Architect version %1 was published for testing.").arg(version));
+        d->readMoreLink->setText(tr("Check out what's changed"));
+    }
+    //
+    // Стабильная версия
+    //
+    else {
+        d->titleLabel->setText(tr("Version %1 published").arg(version));
+        d->bodyLabel->setText(json.value("info").toString());
+        d->readMoreLink->setText(tr("Read more about release"));
+    }
     d->readMoreLink->setLink(json.value("read_more_link").toString());
     d->installButton->setText(tr("Install"));
 }

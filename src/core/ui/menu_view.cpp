@@ -368,15 +368,72 @@ void MenuView::setCurrentDocumentExportAvailable(bool _available)
 
 void MenuView::setNotifications(const QVector<Domain::Notification>& _notifications)
 {
+    QVector<Domain::NotificationType> irrelevantNotificationTypes =
+#if defined(Q_OS_LINUX)
+    { Domain::NotificationType::UpdateDevMac,
+      Domain::NotificationType::UpdateDevWindows32,
+      Domain::NotificationType::UpdateDevWindows64,
+      Domain::NotificationType::UpdateStableMac,
+      Domain::NotificationType::UpdateStableWindows32,
+      Domain::NotificationType::UpdateStableWindows64,
+    }
+#elif defined(Q_OS_MACOS)
+    { Domain::NotificationType::UpdateDevLinux,
+      Domain::NotificationType::UpdateDevWindows32,
+      Domain::NotificationType::UpdateDevWindows64,
+      Domain::NotificationType::UpdateStableLinux,
+      Domain::NotificationType::UpdateStableWindows32,
+      Domain::NotificationType::UpdateStableWindows64,
+    }
+#elif defined(Q_OS_WIN64)
+    { Domain::NotificationType::UpdateDevLinux,
+      Domain::NotificationType::UpdateDevMac,
+      Domain::NotificationType::UpdateDevWindows32,
+      Domain::NotificationType::UpdateStableLinux,
+      Domain::NotificationType::UpdateStableMac,
+      Domain::NotificationType::UpdateStableWindows32,
+    }
+#elif defined(Q_OS_WIN32)
+    { Domain::NotificationType::UpdateDevLinux,
+      Domain::NotificationType::UpdateDevMac,
+      Domain::NotificationType::UpdateDevWindows64,
+      Domain::NotificationType::UpdateStableLinux,
+      Domain::NotificationType::UpdateStableMac,
+      Domain::NotificationType::UpdateStableWindows64,
+    }
+#endif
+    ;
+
     //
     // Т.к. уведомления приходят упорядоченными от новых к старым, разворачиваем список, чтобы
     // просто вставлять уведомления в начало списка
     //
     for (const auto& notification : reversed(_notifications)) {
+        //
+        // Пропускаем уведомления нерелевантные для текущего устройства
+        //
+        if (irrelevantNotificationTypes.contains(notification.type)) {
+            continue;
+        }
+
         auto releaseView = new ReleaseView(this);
         releaseView->setNotification(notification);
         d->notificationsLayout->insertWidget(0, releaseView);
     }
+}
+
+void MenuView::openMenu()
+{
+    Log::info("Show menu");
+
+    //
+    // Скрываем, переключаем и показываем, чтобы виджет просто переключился, без анимации
+    //
+    hide();
+    setCurrentWidget(d->menuPage);
+    show();
+
+    WAF::Animation::sideSlideIn(this);
 }
 
 void MenuView::closeMenu()

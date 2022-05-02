@@ -32,6 +32,11 @@ public:
     void setAccountActions(const QVector<QAction*>& _actions);
 
     /**
+     * @brief Настроить отображение красной точки у дополнительного действия
+     */
+    void setAccountActionBadgeVisible(QAction* _action, bool _visible);
+
+    /**
      * @brief Определяем идеальный размер
      */
     QSize sizeHint() const override;

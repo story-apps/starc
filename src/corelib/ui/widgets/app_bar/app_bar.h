@@ -33,6 +33,11 @@ public:
     ~AppBar() override;
 
     /**
+     * @brief Задать видимость красной точки для действия
+     */
+    void setBadgeVisible(QAction* _action, bool _visible);
+
+    /**
      * @brief Задать действия для опций тулбара на заданном уровне
      */
     void setOptions(const QVector<QAction*>& _options, AppBarOptionsLevel _level);

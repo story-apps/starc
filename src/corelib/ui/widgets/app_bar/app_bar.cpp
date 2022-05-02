@@ -10,6 +10,10 @@
 #include <QToolTip>
 #include <QVariantAnimation>
 
+namespace {
+const char* kBadgeVisibleKey = "is-badge-visible";
+}
+
 
 class AppBar::Implementation
 {
@@ -199,6 +203,16 @@ AppBar::AppBar(QWidget* _parent)
     designSystemChangeEvent(nullptr);
 }
 
+void AppBar::setBadgeVisible(QAction* _action, bool _visible)
+{
+    if (!actions().contains(_action)) {
+        return;
+    }
+
+    _action->setProperty(kBadgeVisibleKey, _visible);
+    update();
+}
+
 void AppBar::setOptions(const QVector<QAction*>& _options, AppBarOptionsLevel _level)
 {
     if (d->options(_level) == _options) {
@@ -283,6 +297,17 @@ void AppBar::paintEvent(QPaintEvent* _event)
         painter.setPen((!_action->isCheckable() || _action->isChecked()) ? textColor()
                                                                          : iconInactiveColor);
         painter.drawText(actionRect, Qt::AlignCenter, _action->text());
+
+        //
+        // ... красная точка
+        //
+        if (_action->property(kBadgeVisibleKey).toBool()) {
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(Ui::DesignSystem::color().error());
+            painter.drawEllipse(actionRect.right() - Ui::DesignSystem::layout().px4(),
+                                actionRect.top(), Ui::DesignSystem::layout().px8(),
+                                Ui::DesignSystem::layout().px8());
+        }
 
         //
         // ... декорация

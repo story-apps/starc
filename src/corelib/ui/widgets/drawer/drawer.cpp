@@ -11,6 +11,10 @@
 #include <QPainter>
 #include <QVariantAnimation>
 
+namespace {
+const char* kBadgeVisibleKey = "is-badge-visible";
+}
+
 
 class Drawer::Implementation
 {
@@ -284,6 +288,16 @@ void Drawer::setAccountActions(const QVector<QAction*>& _actions)
     update();
 }
 
+void Drawer::setAccountActionBadgeVisible(QAction* _action, bool _visible)
+{
+    if (!actions().contains(_action)) {
+        return;
+    }
+
+    _action->setProperty(kBadgeVisibleKey, _visible);
+    update();
+}
+
 QSize Drawer::sizeHint() const
 {
     qreal width = 0.0;
@@ -388,7 +402,24 @@ void Drawer::paintEvent(QPaintEvent* _event)
                     continue;
                 }
 
+                //
+                // ... иконка
+                //
                 painter.drawText(actionRect, Qt::AlignCenter, action->iconText());
+
+                //
+                // ... красная точка
+                //
+                if (action->property(kBadgeVisibleKey).toBool()) {
+                    painter.save();
+                    painter.setPen(Qt::NoPen);
+                    painter.setBrush(Ui::DesignSystem::color().error());
+                    painter.drawEllipse(actionRect.right() - Ui::DesignSystem::layout().px12(),
+                                        actionRect.top(), Ui::DesignSystem::layout().px8(),
+                                        Ui::DesignSystem::layout().px8());
+                    painter.restore();
+                }
+
                 actionRect.moveRight(actionRect.right() - Ui::DesignSystem::layout().px(52));
             }
         }
