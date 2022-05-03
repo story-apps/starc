@@ -29,4 +29,10 @@ struct Notification {
     QDateTime dateTime;
 };
 
+inline bool operator==(const Notification& _lhs, const Notification& _rhs)
+{
+    return _lhs.type == _rhs.type && _lhs.notification == _rhs.notification
+        && _lhs.dateTime == _rhs.dateTime;
+}
+
 } // namespace Domain

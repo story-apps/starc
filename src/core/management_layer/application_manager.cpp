@@ -3,6 +3,7 @@
 #include "content/account/account_manager.h"
 #include "content/export/export_manager.h"
 #include "content/import/import_manager.h"
+#include "content/notifications/notifications_manager.h"
 #include "content/onboarding/onboarding_manager.h"
 #include "content/project/project_manager.h"
 #include "content/projects/project.h"
@@ -277,6 +278,7 @@ public:
     QScopedPointer<ExportManager> exportManager;
     QScopedPointer<SettingsManager> settingsManager;
     QScopedPointer<WritingSessionManager> writingSessionManager;
+    QScopedPointer<NotificationsManager> notificationsManager;
 #ifdef CLOUD_SERVICE_MANAGER
     QScopedPointer<CloudServiceManager> cloudServiceManager;
 #endif
@@ -312,6 +314,7 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     , exportManager(new ExportManager(nullptr, applicationView))
     , settingsManager(new SettingsManager(nullptr, applicationView, pluginsBuilder))
     , writingSessionManager(new WritingSessionManager(nullptr, applicationView->view()))
+    , notificationsManager(new NotificationsManager)
 #ifdef CLOUD_SERVICE_MANAGER
     , cloudServiceManager(new CloudServiceManager)
 #endif
@@ -1898,9 +1901,18 @@ void ApplicationManager::initConnections()
     //
     // Уведомления
     //
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::notificationsReceived, d->menuView,
-            &Ui::MenuView::setNotifications);
-
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::notificationsReceived,
+            d->notificationsManager.data(), &NotificationsManager::processNotifications);
+    connect(d->notificationsManager.data(), &NotificationsManager::showNotificationsRequested,
+            d->menuView, &Ui::MenuView::setNotifications);
+    connect(d->notificationsManager.data(), &NotificationsManager::hasUnreadNotificationsChanged,
+            this, [this](bool _hasUnreadNotifications) {
+                d->projectsManager->setHasUnreadNotifications(_hasUnreadNotifications);
+                d->projectManager->setHasUnreadNotifications(_hasUnreadNotifications);
+                d->menuView->setHasUnreadNotifications(_hasUnreadNotifications);
+            });
+    connect(d->menuView, &Ui::MenuView::notificationsPressed, d->notificationsManager.data(),
+            &NotificationsManager::markAllRead);
     //
     // Проверка регистрация или вход
     //

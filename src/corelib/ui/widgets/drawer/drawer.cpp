@@ -290,7 +290,7 @@ void Drawer::setAccountActions(const QVector<QAction*>& _actions)
 
 void Drawer::setAccountActionBadgeVisible(QAction* _action, bool _visible)
 {
-    if (!actions().contains(_action)) {
+    if (!d->accountActions.contains(_action)) {
         return;
     }
 

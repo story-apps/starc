@@ -1000,6 +1000,11 @@ QWidget* ProjectManager::view() const
     return d->view;
 }
 
+void ProjectManager::setHasUnreadNotifications(bool _hasUnreadNotifications)
+{
+    d->toolBar->setBadgeVisible(d->toolBar->actions().constFirst(), _hasUnreadNotifications);
+}
+
 void ProjectManager::toggleFullScreen(bool _isFullScreen)
 {
     d->pluginsBuilder.toggleFullScreen(_isFullScreen, d->currentDocument.viewMimeType);

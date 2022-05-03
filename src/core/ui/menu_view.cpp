@@ -262,8 +262,10 @@ MenuView::MenuView(QWidget* _parent)
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
     //
     connect(d->writingSprint, &QAction::triggered, this, &MenuView::writingSprintPressed);
-    connect(d->notifications, &QAction::triggered, this,
-            [this] { setCurrentWidget(d->notificationsPage); });
+    connect(d->notifications, &QAction::triggered, this, [this] {
+        setCurrentWidget(d->notificationsPage);
+        emit notificationsPressed();
+    });
     //
     connect(d->aboutApp, &Body2LinkLabel::clicked, this, [this] {
         auto dialog = new AboutApplicationDialog(parentWidget());
@@ -366,60 +368,35 @@ void MenuView::setCurrentDocumentExportAvailable(bool _available)
     d->exportCurrentDocument->setEnabled(_available);
 }
 
+void MenuView::setHasUnreadNotifications(bool _hasUnreadNotifications)
+{
+    d->drawer->setAccountActionBadgeVisible(d->notifications, _hasUnreadNotifications);
+}
+
 void MenuView::setNotifications(const QVector<Domain::Notification>& _notifications)
 {
-    QVector<Domain::NotificationType> irrelevantNotificationTypes =
-#if defined(Q_OS_LINUX)
-    { Domain::NotificationType::UpdateDevMac,
-      Domain::NotificationType::UpdateDevWindows32,
-      Domain::NotificationType::UpdateDevWindows64,
-      Domain::NotificationType::UpdateStableMac,
-      Domain::NotificationType::UpdateStableWindows32,
-      Domain::NotificationType::UpdateStableWindows64,
+    //
+    // Удаляем старые уведомления
+    //
+    while (d->notificationsLayout->count() > 0) {
+        auto item = d->notificationsLayout->takeAt(0);
+        if (item->widget() == nullptr) {
+            break;
+        }
+
+        item->widget()->deleteLater();
     }
-#elif defined(Q_OS_MACOS)
-    { Domain::NotificationType::UpdateDevLinux,
-      Domain::NotificationType::UpdateDevWindows32,
-      Domain::NotificationType::UpdateDevWindows64,
-      Domain::NotificationType::UpdateStableLinux,
-      Domain::NotificationType::UpdateStableWindows32,
-      Domain::NotificationType::UpdateStableWindows64,
-    }
-#elif defined(Q_OS_WIN64)
-    { Domain::NotificationType::UpdateDevLinux,
-      Domain::NotificationType::UpdateDevMac,
-      Domain::NotificationType::UpdateDevWindows32,
-      Domain::NotificationType::UpdateStableLinux,
-      Domain::NotificationType::UpdateStableMac,
-      Domain::NotificationType::UpdateStableWindows32,
-    }
-#elif defined(Q_OS_WIN32)
-    { Domain::NotificationType::UpdateDevLinux,
-      Domain::NotificationType::UpdateDevMac,
-      Domain::NotificationType::UpdateDevWindows64,
-      Domain::NotificationType::UpdateStableLinux,
-      Domain::NotificationType::UpdateStableMac,
-      Domain::NotificationType::UpdateStableWindows64,
-    }
-#endif
-    ;
 
     //
     // Т.к. уведомления приходят упорядоченными от новых к старым, разворачиваем список, чтобы
     // просто вставлять уведомления в начало списка
     //
     for (const auto& notification : reversed(_notifications)) {
-        //
-        // Пропускаем уведомления нерелевантные для текущего устройства
-        //
-        if (irrelevantNotificationTypes.contains(notification.type)) {
-            continue;
-        }
-
         auto releaseView = new ReleaseView(this);
         releaseView->setNotification(notification);
         d->notificationsLayout->insertWidget(0, releaseView);
     }
+    d->notificationsLayout->addStretch();
 }
 
 void MenuView::openMenu()

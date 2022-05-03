@@ -52,6 +52,7 @@ SOURCES += \
     management_layer/content/account/account_manager.cpp \
     management_layer/content/export/export_manager.cpp \
     management_layer/content/import/import_manager.cpp \
+    management_layer/content/notifications/notifications_manager.cpp \
     management_layer/content/onboarding/onboarding_manager.cpp \
     management_layer/content/project/project_manager.cpp \
     management_layer/content/project/project_models_facade.cpp \
@@ -112,6 +113,7 @@ HEADERS += \
     management_layer/content/account/account_manager.h \
     management_layer/content/export/export_manager.h \
     management_layer/content/import/import_manager.h \
+    management_layer/content/notifications/notifications_manager.h \
     management_layer/content/onboarding/onboarding_manager.h \
     management_layer/content/project/project_manager.h \
     management_layer/content/project/project_models_facade.h \

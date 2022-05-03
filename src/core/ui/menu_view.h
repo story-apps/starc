@@ -73,6 +73,11 @@ public:
     void setCurrentDocumentExportAvailable(bool _available);
 
     /**
+     * @brief Показать/скрыть наличие непрочитанных комментариев
+     */
+    void setHasUnreadNotifications(bool _hasUnreadNotifications);
+
+    /**
      * @brief Задать список уведомлений
      */
     void setNotifications(const QVector<Domain::Notification>& _notifications);
@@ -163,6 +168,11 @@ signals:
      * @brief Нажата кнопка отображения таймера писательского спринта
      */
     void writingSprintPressed();
+
+    /**
+     * @brief Нажата кнопка отображения списка уведомлений
+     */
+    void notificationsPressed();
 
 protected:
     /**
