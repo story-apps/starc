@@ -931,11 +931,13 @@ void CommentsModel::remove(const QModelIndexList& _indexes)
         const auto reviewMarkWrapper = d->reviewMarks.at(index.row());
         for (auto textItem : reviewMarkWrapper.items) {
             auto updatedReviewMarks = textItem->reviewMarks();
-            updatedReviewMarks.erase(std::remove_if(
-                updatedReviewMarks.begin(), updatedReviewMarks.end(),
-                [reviewMarkWrapper](const auto& _reviewMark) {
-                    return isReviewMarksPartiallyEqual(_reviewMark, reviewMarkWrapper.reviewMark);
-                }));
+            updatedReviewMarks.erase(
+                std::remove_if(updatedReviewMarks.begin(), updatedReviewMarks.end(),
+                               [reviewMarkWrapper](const auto& _reviewMark) {
+                                   return isReviewMarksPartiallyEqual(_reviewMark,
+                                                                      reviewMarkWrapper.reviewMark);
+                               }),
+                updatedReviewMarks.end());
             textItem->setReviewMarks(updatedReviewMarks);
             d->model->updateItem(textItem);
         }

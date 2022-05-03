@@ -51,11 +51,15 @@ QString NamesGenerator::generate(const QString& _type, int _gender)
 
     auto names = database.value(type);
     if (_gender == 1) {
-        std::remove_if(names.begin(), names.end(),
-                       [](const Implementation::NameInfo& _info) { return !_info.isMale; });
+        names.erase(
+            std::remove_if(names.begin(), names.end(),
+                           [](const Implementation::NameInfo& _info) { return !_info.isMale; }),
+            names.end());
     } else if (_gender == 2) {
-        std::remove_if(names.begin(), names.end(),
-                       [](const Implementation::NameInfo& _info) { return _info.isMale; });
+        names.erase(
+            std::remove_if(names.begin(), names.end(),
+                           [](const Implementation::NameInfo& _info) { return _info.isMale; }),
+            names.end());
     }
     return names.value(QRandomGenerator::global()->bounded(0, names.size())).name;
 }
