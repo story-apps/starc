@@ -63,7 +63,8 @@ const QString kApplicationUseTypewriterSoundKey = kApplicationGroupKey + "/typew
 // включена ли проверка орфографии
 const QString kApplicationUseSpellCheckerKey = kApplicationGroupKey + "/use-spell-checker";
 // словарь для проверки орфографии
-const QString kApplicationSpellCheckerLanguageKey = kApplicationGroupKey + "/use-spell-checker";
+const QString kApplicationSpellCheckerLanguageKey
+    = kApplicationGroupKey + "/spell-checker-language";
 // включена ли подсветка текущей строки для текстовых редакторов
 const QString kApplicationHighlightCurrentLineKey
     = kApplicationGroupKey + "/highlight-current-line";
