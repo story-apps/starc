@@ -107,11 +107,6 @@ void NotificationsManager::processNotifications(const QVector<Domain::Notificati
         }
 
         d->notifications.prepend(notification);
-
-        if (!lastReadNotificationDateTime.isValid()
-            || lastReadNotificationDateTime < notification.dateTime) {
-            hasUnreadNotifications = true;
-        }
     }
 
     QVector<Domain::Notification> notificationsToShow;
@@ -128,6 +123,11 @@ void NotificationsManager::processNotifications(const QVector<Domain::Notificati
         }
 
         notificationsToShow.append(notification);
+
+        if (!lastReadNotificationDateTime.isValid()
+            || lastReadNotificationDateTime < notification.dateTime) {
+            hasUnreadNotifications = true;
+        }
     }
 
     emit showNotificationsRequested(notificationsToShow);
