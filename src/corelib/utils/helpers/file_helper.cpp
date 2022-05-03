@@ -1,6 +1,7 @@
 #include "file_helper.h"
 
 #include <QDesktopServices>
+#include <QDir>
 #include <QFileInfo>
 #include <QProcess>
 #include <QString>
@@ -39,7 +40,7 @@ bool FileHelper::showInGraphicalShell(const QString& _path)
     param += QDir::toNativeSeparators(fileInfo.canonicalFilePath());
     return QProcess::startDetached(explorer, param);
 #elif defined(Q_OS_MACOS)
-    return QProcess::startDetached({ "/usr/bin/open", { "-R", fileInfo.canonicalFilePath() } });
+    return QProcess::startDetached("/usr/bin/open", { "-R", fileInfo.canonicalFilePath() });
 #else
     if (fileInfo.exists()) {
         QProcess process;
