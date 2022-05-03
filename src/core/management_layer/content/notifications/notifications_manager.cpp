@@ -7,15 +7,17 @@
 
 
 namespace {
+const char* kShowDevVersionsKey = "/managers/notifications/show-dev-versions";
 const char* kLastReadNotificationDateTimeKey
     = "/managers/notifications/last-read-notification-datetime";
-}
+} // namespace
 
 namespace ManagementLayer {
 
 class NotificationsManager::Implementation
 {
 public:
+    bool showDevVersions = false;
     QVector<Domain::Notification> notifications;
 };
 
@@ -27,9 +29,26 @@ NotificationsManager::NotificationsManager(QObject* _parent)
     : QObject(_parent)
     , d(new Implementation)
 {
+    d->showDevVersions = QSettings().value(kShowDevVersionsKey).toBool();
 }
 
 NotificationsManager::~NotificationsManager() = default;
+
+bool NotificationsManager::showDevversions() const
+{
+    return d->showDevVersions;
+}
+
+void NotificationsManager::setShowDevVersions(bool _show)
+{
+    if (d->showDevVersions == _show) {
+        return;
+    }
+
+    d->showDevVersions = _show;
+    QSettings().setValue(kShowDevVersionsKey, d->showDevVersions);
+    processNotifications({});
+}
 
 void NotificationsManager::processNotifications(const QVector<Domain::Notification>& _notifications)
 {
@@ -95,7 +114,23 @@ void NotificationsManager::processNotifications(const QVector<Domain::Notificati
         }
     }
 
-    emit showNotificationsRequested(d->notifications);
+    QVector<Domain::Notification> notificationsToShow;
+    for (const auto& notification : std::as_const(d->notifications)) {
+        //
+        // Пропускаем уведомления о дев-версиях, если они отключены
+        //
+        if (!d->showDevVersions
+            && (notification.type == Domain::NotificationType::UpdateDevLinux
+                || notification.type == Domain::NotificationType::UpdateDevMac
+                || notification.type == Domain::NotificationType::UpdateDevWindows32
+                || notification.type == Domain::NotificationType::UpdateDevWindows64)) {
+            continue;
+        }
+
+        notificationsToShow.append(notification);
+    }
+
+    emit showNotificationsRequested(notificationsToShow);
     emit hasUnreadNotificationsChanged(hasUnreadNotifications);
 }
 
@@ -105,7 +140,14 @@ void NotificationsManager::markAllRead()
         return;
     }
 
-    QSettings().setValue(kLastReadNotificationDateTimeKey, d->notifications.first().dateTime);
+    const auto lastReadNotificationDateTime
+        = QSettings().value(kLastReadNotificationDateTimeKey).toDateTime();
+    if (lastReadNotificationDateTime.isValid()
+        && lastReadNotificationDateTime >= d->notifications.constFirst().dateTime) {
+        return;
+    }
+
+    QSettings().setValue(kLastReadNotificationDateTimeKey, d->notifications.constFirst().dateTime);
     emit hasUnreadNotificationsChanged(false);
 }
 

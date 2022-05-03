@@ -5,6 +5,7 @@
 
 #include <domain/notification.h>
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/drawer/drawer.h>
 #include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/link_label.h>
@@ -68,6 +69,8 @@ public:
 
     QScrollArea* notificationsViewport = nullptr;
     QVBoxLayout* notificationsLayout = nullptr;
+
+    QAction* showDevVersions = nullptr;
 };
 
 MenuView::Implementation::Implementation(QWidget* _parent)
@@ -99,6 +102,7 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     , notificationsFilterButton(new IconButton(_parent))
     , notificationsViewport(UiHelper::createScrollArea(_parent))
     , notificationsLayout(new QVBoxLayout)
+    , showDevVersions(new QAction(_parent))
 {
     //
     // Настроим страницу меню
@@ -211,6 +215,9 @@ MenuView::Implementation::Implementation(QWidget* _parent)
         notificationsBackButton->setIcon(u8"\U000F004D");
         notificationsFilterButton->setIcon(u8"\U000F1542");
 
+        showDevVersions->setIconText(u8"\U000F1323");
+        showDevVersions->setCheckable(true);
+
         new Shadow(Qt::TopEdge, notificationsViewport);
 
         auto topLayout = new QHBoxLayout;
@@ -273,9 +280,6 @@ MenuView::MenuView(QWidget* _parent)
                 &Ui::AboutApplicationDialog::deleteLater);
         dialog->showDialog();
     });
-    //
-    connect(d->notificationsBackButton, &IconButton::clicked, this,
-            [this] { setCurrentWidget(d->menuPage); });
 
     connect(this, &MenuView::accountPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::projectsPressed, this, &MenuView::closeMenu);
@@ -290,7 +294,31 @@ MenuView::MenuView(QWidget* _parent)
     connect(this, &MenuView::helpPressed, this, &MenuView::closeMenu);
     //
     connect(this, &MenuView::writingSprintPressed, this, &MenuView::closeMenu);
+    //
+    connect(d->notificationsBackButton, &IconButton::clicked, this,
+            [this] { setCurrentWidget(d->menuPage); });
+    connect(d->notificationsFilterButton, &IconButton::clicked, this, [this] {
+        //
+        // Настроим меню опций
+        //
+        auto menu = new ContextMenu(this);
+        menu->setBackgroundColor(Ui::DesignSystem::color().background());
+        menu->setTextColor(Ui::DesignSystem::color().onBackground());
+        menu->setActions({
+            d->showDevVersions,
+        });
+        connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
 
+        //
+        // Покажем меню
+        //
+        menu->showContextMenu(QCursor::pos());
+    });
+    connect(d->showDevVersions, &QAction::toggled, this, [this](bool _checked) {
+        d->showDevVersions->setText(_checked ? tr("Hide developers version")
+                                             : tr("Show developers version"));
+        emit showDevVersionsChanged(_checked);
+    });
 
     setVisible(false);
 }
@@ -371,6 +399,11 @@ void MenuView::setCurrentDocumentExportAvailable(bool _available)
 void MenuView::setHasUnreadNotifications(bool _hasUnreadNotifications)
 {
     d->drawer->setAccountActionBadgeVisible(d->notifications, _hasUnreadNotifications);
+}
+
+void MenuView::setShowDevVersions(bool _show)
+{
+    d->showDevVersions->setChecked(_show);
 }
 
 void MenuView::setNotifications(const QVector<Domain::Notification>& _notifications)
@@ -464,6 +497,9 @@ void MenuView::updateTranslations()
     d->notificationsBackButton->setToolTip(tr("Back to main menu"));
     d->notificationsTitle->setText(tr("Notifications"));
     d->notificationsFilterButton->setToolTip(tr("Notifications preferences"));
+
+    d->showDevVersions->setText(d->showDevVersions->isChecked() ? tr("Hide developers version")
+                                                                : tr("Show developers version"));
 }
 
 void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

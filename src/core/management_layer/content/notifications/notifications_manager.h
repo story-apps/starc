@@ -21,6 +21,12 @@ public:
     ~NotificationsManager() override;
 
     /**
+     * @brief Необходимо ли отображения дев-версий
+     */
+    bool showDevversions() const;
+    void setShowDevVersions(bool _show);
+
+    /**
      * @brief Обработать уведомления поступившие с сервера
      */
     void processNotifications(const QVector<Domain::Notification>& _notifications);

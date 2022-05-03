@@ -319,6 +319,8 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     , cloudServiceManager(new CloudServiceManager)
 #endif
 {
+    menuView->setShowDevVersions(notificationsManager->showDevversions());
+
     settingsManager->setThemeSetupView(applicationView->themeSetupView());
 }
 
@@ -1911,6 +1913,8 @@ void ApplicationManager::initConnections()
                 d->projectManager->setHasUnreadNotifications(_hasUnreadNotifications);
                 d->menuView->setHasUnreadNotifications(_hasUnreadNotifications);
             });
+    connect(d->menuView, &Ui::MenuView::showDevVersionsChanged, d->notificationsManager.data(),
+            &NotificationsManager::setShowDevVersions);
     connect(d->menuView, &Ui::MenuView::notificationsPressed, d->notificationsManager.data(),
             &NotificationsManager::markAllRead);
     //

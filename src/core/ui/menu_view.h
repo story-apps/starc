@@ -78,6 +78,11 @@ public:
     void setHasUnreadNotifications(bool _hasUnreadNotifications);
 
     /**
+     * @brief Задать необходимость отображать дев-версии
+     */
+    void setShowDevVersions(bool _show);
+
+    /**
      * @brief Задать список уведомлений
      */
     void setNotifications(const QVector<Domain::Notification>& _notifications);
@@ -173,6 +178,11 @@ signals:
      * @brief Нажата кнопка отображения списка уведомлений
      */
     void notificationsPressed();
+
+    /**
+     * @brief Пользователь включил/отключил отображение дев-версий
+     */
+    void showDevVersionsChanged(bool _show);
 
 protected:
     /**
