@@ -1,6 +1,12 @@
 #include "names_generator.h"
 
+#include <ui/design_system/design_system.h>
+#include <ui/widgets/context_menu/context_menu.h>
+#include <ui/widgets/text_field/text_field.h>
+
+#include <QActionGroup>
 #include <QBuffer>
+#include <QCoreApplication>
 #include <QHash>
 #include <QRandomGenerator>
 #include <QSet>
@@ -19,6 +25,14 @@ public:
      * @brief <Country, NameInfo>
      */
     QHash<QString, QVector<NameInfo>> database;
+
+    /**
+     * @brief Опции генератора
+     */
+    struct {
+        QString type;
+        int gender = 0;
+    } options;
 };
 
 
@@ -62,6 +76,110 @@ QString NamesGenerator::generate(const QString& _type, int _gender)
             names.end());
     }
     return names.value(QRandomGenerator::global()->bounded(0, names.size())).name;
+}
+
+void NamesGenerator::bind(TextField* _textField)
+{
+    _textField->setTrailingIcon(u8"\U000F076E");
+    QObject::connect(_textField, &TextField::trailingIconPressed, _textField, [_textField] {
+        _textField->setText(
+            NamesGenerator::generate(instance().d->options.type, instance().d->options.gender));
+    });
+    QObject::connect(
+        _textField, &TextField::trailingIconContextMenuRequested, _textField, [_textField] {
+            auto menu = new ContextMenu(_textField);
+            QVector<QAction*> actions;
+
+            //
+            // Действия для выбора пола
+            //
+            {
+                auto genderGroup = new QActionGroup(menu);
+                const auto genderIdKey = "gender-id";
+                auto buildGenderAction = [&actions, genderGroup, genderIdKey](const QString& _name,
+                                                                              int _gender) {
+                    auto action = new QAction;
+                    action->setText(_name);
+                    action->setProperty(genderIdKey, _gender);
+                    action->setCheckable(true);
+                    action->setChecked(instance().d->options.gender == _gender);
+                    action->setIconText(action->isChecked() ? u8"\U000F012C" : u8"\U000F68c0");
+                    genderGroup->addAction(action);
+                    actions.append(action);
+                    return action;
+                };
+                //
+                auto maleAction = buildGenderAction(
+                    QCoreApplication::translate("NamesGenerator", "Male names"), 1);
+                //
+                auto femaleAction = buildGenderAction(
+                    QCoreApplication::translate("NamesGenerator", "Female names"), 2);
+                //
+                auto bothAction = buildGenderAction(
+                    QCoreApplication::translate("NamesGenerator", "Both names"), 0);
+                //
+                for (auto genderAction : {
+                         maleAction,
+                         femaleAction,
+                         bothAction,
+                     }) {
+                    QObject::connect(
+                        genderAction, &QAction::toggled, genderAction, [genderAction, genderIdKey] {
+                            genderAction->setIconText(genderAction->isChecked() ? u8"\U000F012C"
+                                                                                : u8"\U000F68c0");
+                            if (genderAction->isChecked()) {
+                                instance().d->options.gender
+                                    = genderAction->property(genderIdKey).toInt();
+                            }
+                        });
+                }
+            }
+
+            //
+            // Выбор типа имени
+            //
+            {
+                auto typeAction = new QAction;
+                typeAction->setText(
+                    instance().d->options.type.isEmpty()
+                        ? QCoreApplication::translate("NamesGenerator", "Type of name")
+                        : instance().d->options.type);
+                typeAction->setSeparator(true);
+                actions.append(typeAction);
+
+                auto typesGroup = new QActionGroup(menu);
+                for (const auto& type : NamesGenerator::types()) {
+                    auto action = new QAction(typeAction);
+                    action->setText(type);
+                    action->setCheckable(true);
+                    action->setChecked(instance().d->options.type == type);
+                    action->setIconText(action->isChecked() ? u8"\U000F012C" : u8"\U000F68c0");
+                    typesGroup->addAction(action);
+                    QObject::connect(action, &QAction::toggled, action, [typeAction, action] {
+                        action->setIconText(action->isChecked() ? u8"\U000F012C" : u8"\U000F68c0");
+                        instance().d->options.type = action->text();
+                        typeAction->setText(action->text());
+                    });
+                }
+            }
+
+            menu->setBackgroundColor(Ui::DesignSystem::color().background());
+            menu->setTextColor(Ui::DesignSystem::color().onBackground());
+            menu->setActions(actions);
+            QObject::connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
+
+            //
+            // Покажем меню
+            //
+            menu->showContextMenu(QCursor::pos());
+        });
+}
+
+void NamesGenerator::unbind(TextField* _textField)
+{
+    _textField->setTrailingIcon({});
+    QObject::disconnect(_textField, &TextField::trailingIconPressed, nullptr, nullptr);
+    QObject::disconnect(_textField, &TextField::trailingIconContextMenuRequested, nullptr, nullptr);
 }
 
 NamesGenerator::~NamesGenerator() = default;

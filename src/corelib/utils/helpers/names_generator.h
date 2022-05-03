@@ -4,6 +4,8 @@
 
 #include <corelib_global.h>
 
+class TextField;
+
 
 /**
  * @brief Генератор имён персонажей
@@ -23,6 +25,12 @@ public:
      * @return
      */
     static QString generate(const QString& _type, int _gender = 0);
+
+    /**
+     * @brief Связать с текстовым болем
+     */
+    static void bind(TextField* _textField);
+    static void unbind(TextField* _textField);
 
 public:
     ~NamesGenerator();
