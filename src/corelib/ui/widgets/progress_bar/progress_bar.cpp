@@ -1,6 +1,7 @@
 #include "progress_bar.h"
 
 #include <ui/design_system/design_system.h>
+#include <utils/helpers/color_helper.h>
 
 #include <QPaintEvent>
 #include <QPainter>
@@ -43,13 +44,29 @@ qreal ProgressBar::progress() const
 
 void ProgressBar::setProgress(qreal _progress)
 {
+    if (_progress < 0 || _progress > 1.0) {
+        return;
+    }
+
     if (qFuzzyCompare(d->progress, _progress)) {
         return;
     }
 
-    d->progressAnimation.setStartValue(d->progress);
-    d->progressAnimation.setEndValue(_progress);
-    d->progressAnimation.start();
+    if (!isVisible()) {
+        d->progressAnimation.setEndValue(_progress);
+        d->progressAnimation.setCurrentTime(d->progressAnimation.duration());
+        return;
+    }
+
+    if (d->progressAnimation.state() == QVariantAnimation::Stopped) {
+        d->progressAnimation.setStartValue(d->progress);
+        d->progressAnimation.setEndValue(_progress);
+        d->progressAnimation.start();
+    } else {
+        d->progressAnimation.pause();
+        d->progressAnimation.setEndValue(_progress);
+        d->progressAnimation.resume();
+    }
 }
 
 QSize ProgressBar::sizeHint() const
@@ -62,6 +79,10 @@ void ProgressBar::paintEvent(QPaintEvent* _event)
     QPainter painter(this);
     painter.fillRect(_event->rect(), backgroundColor());
 
-    const QRectF progressRect(0, 0, width() * d->progress, height());
+    painter.fillRect(contentsRect(),
+                     ColorHelper::transparent(Ui::DesignSystem::color().secondary(),
+                                              Ui::DesignSystem::hoverBackgroundOpacity()));
+    const QRectF progressRect(contentsRect().x(), contentsRect().y(),
+                              contentsRect().width() * d->progress, contentsRect().height());
     painter.fillRect(progressRect, Ui::DesignSystem::color().secondary());
 }

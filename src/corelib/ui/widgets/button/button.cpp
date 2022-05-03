@@ -184,14 +184,16 @@ QSize Button::sizeHint() const
             + Ui::DesignSystem::button().shadowMargins().bottom()
         : 0.0;
     const qreal height = Ui::DesignSystem::button().height() + shadowMarginsHeight;
-    return QSize(static_cast<int>(width), static_cast<int>(height));
+    return QSize(static_cast<int>(width) + contentsMargins().left() + contentsMargins().right(),
+                 static_cast<int>(height) + contentsMargins().top() + contentsMargins().bottom());
 }
 
 void Button::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
 
-    const QRect backgroundRect = contentsRect();
+    const QRect backgroundRect = contentsRect().marginsRemoved(
+        d->isContained ? Ui::DesignSystem::button().shadowMargins().toMargins() : QMargins());
     if (!backgroundRect.isValid()) {
         return;
     }
@@ -401,8 +403,6 @@ void Button::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
 
-    setContentsMargins(d->isContained ? Ui::DesignSystem::button().shadowMargins().toMargins()
-                                      : QMargins());
     d->shadowBlurRadiusAnimation.setStartValue(
         Ui::DesignSystem::button().minimumShadowBlurRadius());
     d->shadowBlurRadiusAnimation.setEndValue(Ui::DesignSystem::button().maximumShadowBlurRadius());
