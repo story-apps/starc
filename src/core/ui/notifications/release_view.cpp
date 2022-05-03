@@ -178,7 +178,7 @@ void ReleaseView::Implementation::installUpdate()
 void ReleaseView::Implementation::updateState()
 {
     const auto json = QJsonDocument::fromJson(notification.notification.toUtf8()).object();
-    dateTimeLabel->setText(notification.dateTime.toString("dd.MM.yyyy"));
+    dateTimeLabel->setText(notification.dateTime.toLocalTime().toString("dd.MM.yyyy hh:mm"));
     const auto version = json.value("version").toString();
     //
     // Dev версия
