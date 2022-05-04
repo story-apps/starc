@@ -68,7 +68,6 @@ QByteArray SimpleTextModelChapterItem::customContent() const
 
 void SimpleTextModelChapterItem::handleChange()
 {
-    int level = 0;
     QString heading;
     QString text;
     int inlineNotesSize = 0;
@@ -98,7 +97,6 @@ void SimpleTextModelChapterItem::handleChange()
             case TextParagraphType::ChapterHeading4:
             case TextParagraphType::ChapterHeading5:
             case TextParagraphType::ChapterHeading6: {
-                level = static_cast<int>(childTextItem->paragraphType());
                 heading = childTextItem->text();
                 d->wordsCount += TextHelper::wordsCount(childTextItem->text());
                 break;
@@ -130,7 +128,6 @@ void SimpleTextModelChapterItem::handleChange()
         }
     }
 
-    setLevel(level);
     setHeading(heading);
     setText(text);
     setInlineNotesSize(inlineNotesSize);

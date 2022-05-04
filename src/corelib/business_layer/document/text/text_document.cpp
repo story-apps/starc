@@ -2214,14 +2214,14 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                                  < toGroup(previousItemParent)->level()) {
                         auto targetParent = previousItemParent->parent();
                         do {
-                            if (isGroup(targetParent)
-                                && toGroup(parentItem)->level() >= toGroup(targetParent)->level()) {
+                            if ((isGroup(targetParent)
+                                 && toGroup(parentItem)->level() >= toGroup(targetParent)->level())
+                                || isFolder(targetParent)) {
                                 break;
                             }
                             previousItemParent = targetParent;
                             targetParent = targetParent->parent();
-                        } while (targetParent != nullptr
-                                 && targetParent->type() != TextModelItemType::Folder);
+                        } while (targetParent != nullptr);
                         //
                         // Если дошли до элемента с таким же уровнем, то вставим после
                         //
