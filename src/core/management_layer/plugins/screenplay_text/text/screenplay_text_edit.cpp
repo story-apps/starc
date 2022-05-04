@@ -799,14 +799,35 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 const auto isBlockCharacterWithNumber
                     = blockType == TextParagraphType::Character && d->showDialogueNumber;
                 if (!isBlockCharacterWithNumber) {
-                    QPointF topLeft(isLeftToRight
-                                        ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                            + DesignSystem::layout().px4()
-                                        : textRight + leftDelta - spaceBetweenSceneNumberAndText,
-                                    cursorR.top());
-                    const QPointF bottomRight(topLeft.x() + DesignSystem::layout().px4(),
-                                              cursorREnd.bottom());
-                    const QRectF rect(topLeft, bottomRight);
+                    QRectF rect;
+                    if (cursor.inTable() && cursor.inFirstColumn()) {
+                        QPointF topLeft(
+                            isLeftToRight ? textLeft + leftDelta - spaceBetweenSceneNumberAndText
+                                    + DesignSystem::layout().px4()
+                                          : textRight + leftDelta - spaceBetweenSceneNumberAndText,
+                            cursorR.top());
+                        const QPointF bottomRight(topLeft.x() + DesignSystem::layout().px4(),
+                                                  cursorREnd.bottom());
+                        rect = QRectF(topLeft, bottomRight);
+                    } else if (cursor.inTable() && !cursor.inFirstColumn()) {
+                        QPointF topLeft(isLeftToRight ? splitterX - spaceBetweenSceneNumberAndText
+                                                + DesignSystem::layout().px4()
+                                                      : textRight + leftDelta
+                                                - spaceBetweenSceneNumberAndText,
+                                        cursorR.top());
+                        const QPointF bottomRight(topLeft.x() + DesignSystem::layout().px4(),
+                                                  cursorREnd.bottom());
+                        rect = QRectF(topLeft, bottomRight);
+                    } else {
+                        QPointF topLeft(
+                            isLeftToRight ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                    + DesignSystem::layout().px4()
+                                          : textRight + leftDelta - spaceBetweenSceneNumberAndText,
+                            cursorR.top());
+                        const QPointF bottomRight(topLeft.x() + DesignSystem::layout().px4(),
+                                                  cursorREnd.bottom());
+                        rect = QRectF(topLeft, bottomRight);
+                    }
                     painter.fillRect(rect, lastCharacterColor);
                 }
             }
@@ -1089,8 +1110,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             // ... во второй колонке таблички
                             //
                             else {
-                                const qreal x = splitterX + leftDelta
-                                    + spaceBetweenSceneNumberAndText
+                                const qreal x = splitterX + spaceBetweenSceneNumberAndText
                                     + cursor.currentTable()->format().border();
                                 const int numberDelta
                                     = painter.fontMetrics().horizontalAdvance(dialogueNumber);
