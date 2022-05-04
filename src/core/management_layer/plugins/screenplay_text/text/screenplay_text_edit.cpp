@@ -1059,28 +1059,45 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             painter.setFont(cursor.charFormat().font());
 
                             //
-                            // Определим область для отрисовки и выведем номер реплики в
-                            // редактор
+                            // Определим область для отрисовки и выведем номер реплики в редактор
                             //
-                            const int numberDelta
-                                = painter.fontMetrics().horizontalAdvance(dialogueNumber);
+                            // ... в тексте или в первой колоке таблички
+                            //
                             QRectF rect;
+                            if (!cursor.inTable() || cursor.inFirstColumn()) {
+                                const int numberDelta
+                                    = painter.fontMetrics().horizontalAdvance(dialogueNumber);
+                                //
+                                // ... поместим номер реплики внутри текстовой области,
+                                //     чтобы их было удобно отличать от номеров сцен
+                                //
+                                QPointF topLeft(
+                                    isLeftToRight
+                                        ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                        : textRight + leftDelta - spaceBetweenSceneNumberAndText
+                                            - numberDelta,
+                                    cursorR.top());
+                                QPointF bottomRight(
+                                    isLeftToRight
+                                        ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                            + numberDelta
+                                        : textRight + leftDelta - spaceBetweenSceneNumberAndText,
+                                    cursorR.bottom());
+                                rect = QRectF(topLeft, bottomRight);
+                            }
                             //
-                            // ... то поместим номер реплики внутри текстовой области,
-                            //     чтобы их было удобно отличать от номеров сцен
+                            // ... во второй колонке таблички
                             //
-                            QPointF topLeft(isLeftToRight ? textLeft + leftDelta
-                                                    + spaceBetweenSceneNumberAndText
-                                                          : textRight + leftDelta
-                                                    - spaceBetweenSceneNumberAndText - numberDelta,
-                                            cursorR.top());
-                            QPointF bottomRight(
-                                isLeftToRight
-                                    ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                        + numberDelta
-                                    : textRight + leftDelta - spaceBetweenSceneNumberAndText,
-                                cursorR.bottom());
-                            rect = QRectF(topLeft, bottomRight);
+                            else {
+                                const qreal x = splitterX + leftDelta
+                                    + spaceBetweenSceneNumberAndText
+                                    + cursor.currentTable()->format().border();
+                                const int numberDelta
+                                    = painter.fontMetrics().horizontalAdvance(dialogueNumber);
+                                const QPointF topLeft(x, cursorR.top());
+                                const QPointF bottomRight(x + numberDelta, cursorR.bottom());
+                                rect = QRectF(topLeft, bottomRight);
+                            }
 
                             if (lastCharacterColor.isValid()) {
                                 setPainterPen(lastCharacterColor);
