@@ -178,6 +178,7 @@ void ScreenplayTextScrollBarManager::setScrollBarVisible(bool _visible)
     if (_visible) {
         d->needAnimateTimelineOpacity = false;
         d->showTimelineAnimated();
+        d->timelineHideTimer.stop();
     } else {
         d->needAnimateTimelineOpacity = true;
         d->timelineHideTimer.start();
