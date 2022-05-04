@@ -30,7 +30,13 @@ enum class TextGroupType {
     Beat,
     Page,
     Panel,
-    Chapter,
+    Chapter, //!< FIXME: Выпилить в 0.2.0, пока оставим для обратной совместимости
+    Chapter1,
+    Chapter2,
+    Chapter3,
+    Chapter4,
+    Chapter5,
+    Chapter6,
 };
 
 /**

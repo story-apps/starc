@@ -29,7 +29,13 @@ const QHash<TextGroupType, QString> kAbstractParagraphGroupToString = {
     { TextGroupType::Beat, QLatin1String("beat") },
     { TextGroupType::Page, QLatin1String("page") },
     { TextGroupType::Panel, QLatin1String("panel") },
-    { TextGroupType::Chapter, QLatin1String("chapter") },
+    { TextGroupType::Chapter, QLatin1String("chapter") }, // FIXME: выпилить в 0.2.0
+    { TextGroupType::Chapter1, QLatin1String("chapter1") },
+    { TextGroupType::Chapter2, QLatin1String("chapter2") },
+    { TextGroupType::Chapter3, QLatin1String("chapter3") },
+    { TextGroupType::Chapter4, QLatin1String("chapter4") },
+    { TextGroupType::Chapter5, QLatin1String("chapter5") },
+    { TextGroupType::Chapter6, QLatin1String("chapter6") },
 };
 
 const QHash<TextParagraphType, QString> kAbstractParagraphTypeToString = {

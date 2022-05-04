@@ -27,11 +27,13 @@ public:
 // ****
 
 
-SimpleTextModelChapterItem::SimpleTextModelChapterItem(const SimpleTextModel* _model)
+SimpleTextModelChapterItem::SimpleTextModelChapterItem(const SimpleTextModel* _model,
+                                                       TextGroupType _type)
     : TextModelGroupItem(_model)
     , d(new Implementation)
 {
-    setGroupType(TextGroupType::Chapter);
+    setGroupType(_type);
+    setLevel(static_cast<int>(_type));
 }
 
 SimpleTextModelChapterItem::~SimpleTextModelChapterItem() = default;

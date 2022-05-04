@@ -2100,13 +2100,28 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 break;
             }
 
-            case TextParagraphType::ChapterHeading1:
-            case TextParagraphType::ChapterHeading2:
-            case TextParagraphType::ChapterHeading3:
-            case TextParagraphType::ChapterHeading4:
-            case TextParagraphType::ChapterHeading5:
+            case TextParagraphType::ChapterHeading1: {
+                parentItem = d->model->createGroupItem(TextGroupType::Chapter1);
+                break;
+            }
+            case TextParagraphType::ChapterHeading2: {
+                parentItem = d->model->createGroupItem(TextGroupType::Chapter2);
+                break;
+            }
+            case TextParagraphType::ChapterHeading3: {
+                parentItem = d->model->createGroupItem(TextGroupType::Chapter3);
+                break;
+            }
+            case TextParagraphType::ChapterHeading4: {
+                parentItem = d->model->createGroupItem(TextGroupType::Chapter4);
+                break;
+            }
+            case TextParagraphType::ChapterHeading5: {
+                parentItem = d->model->createGroupItem(TextGroupType::Chapter5);
+                break;
+            }
             case TextParagraphType::ChapterHeading6: {
-                parentItem = d->model->createGroupItem(TextGroupType::Chapter);
+                parentItem = d->model->createGroupItem(TextGroupType::Chapter6);
                 break;
             }
 

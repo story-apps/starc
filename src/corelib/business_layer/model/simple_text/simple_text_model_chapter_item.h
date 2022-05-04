@@ -18,7 +18,7 @@ public:
     };
 
 public:
-    explicit SimpleTextModelChapterItem(const SimpleTextModel* _model);
+    explicit SimpleTextModelChapterItem(const SimpleTextModel* _model, TextGroupType _type);
     ~SimpleTextModelChapterItem() override;
 
     /**
