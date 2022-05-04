@@ -421,6 +421,7 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
                            Ui::DesignSystem::card().shadowMargins().top());
         d->scrollBar->setMaximum(d->fullSize().height() - sizeHint.height());
         d->scrollBar->setPageStep(sizeHint.height());
+        d->scrollBar->setSingleStep(sizeHint.height() / 20);
         d->scrollBar->show();
     } else {
         d->scrollBar->hide();
