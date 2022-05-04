@@ -16,6 +16,9 @@ class Tree::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+
+    QModelIndex lastClickedIndex;
+
     TreeView* tree = nullptr;
     QHeaderView* header = nullptr;
     TreeDelegate* delegate = nullptr;
@@ -55,10 +58,12 @@ Tree::Tree(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->tree);
 
-    connect(d->tree, &QTreeView::clicked, this, &Tree::clicked);
-    connect(d->tree, &QTreeView::doubleClicked, this, &Tree::doubleClicked);
-
-    designSystemChangeEvent(nullptr);
+    connect(d->tree, &TreeView::clicked, this, [this](const QModelIndex& _index) {
+        const bool firstClick = d->lastClickedIndex != _index;
+        d->lastClickedIndex = _index;
+        emit clicked(_index, firstClick);
+    });
+    connect(d->tree, &TreeView::doubleClicked, this, &Tree::doubleClicked);
 }
 
 Tree::~Tree() = default;
@@ -147,6 +152,8 @@ void Tree::setCurrentIndex(const QModelIndex& _index)
 
     d->tree->clearSelection();
     d->tree->setCurrentIndex(_index);
+
+    d->lastClickedIndex = _index;
 }
 
 QModelIndex Tree::currentIndex() const
@@ -218,6 +225,8 @@ void Tree::edit(const QModelIndex& _index)
 void Tree::restoreState(const QVariant& _state)
 {
     d->tree->restoreState(_state);
+
+    d->lastClickedIndex = currentIndex();
 }
 
 QVariant Tree::saveState() const

@@ -104,10 +104,10 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
     showProjectNavigator();
 
     connect(d->tree, &Tree::currentIndexChanged, this, &ProjectNavigator::itemSelected);
-    connect(d->tree, &Tree::clicked, this, [this] {
+    connect(d->tree, &Tree::clicked, this, [this](const QModelIndex& _index, bool _firstClick) {
         const auto clickPosition = d->tree->mapFromGlobal(QCursor::pos());
-        if (d->isOnDocumentNavigatorButton(clickPosition)) {
-            emit itemNavigationRequested(currentIndex());
+        if (!_firstClick && d->isOnDocumentNavigatorButton(clickPosition)) {
+            emit itemNavigationRequested(_index);
         }
     });
     connect(d->tree, &Tree::doubleClicked, this, [this](const QModelIndex& _index) {

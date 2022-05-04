@@ -159,7 +159,7 @@ signals:
     /**
      * @brief Пользователь кликнул на заданном элементе
      */
-    void clicked(const QModelIndex& _index);
+    void clicked(const QModelIndex& _index, bool _firstClick);
 
     /**
      * @brief Пользователь сделал двойной клик на элемента
