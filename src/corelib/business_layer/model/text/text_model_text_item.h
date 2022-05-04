@@ -54,6 +54,11 @@ public:
 
         bool operator==(const ReviewMark& _other) const;
 
+        /**
+         * @brief Определить одинаково ли форматирование и комментарии редакторских заметок
+         */
+        bool isPartiallyEqual(const ReviewMark& _other) const;
+
         QTextCharFormat charFormat() const;
     };
     struct CORE_LIBRARY_EXPORT Number {

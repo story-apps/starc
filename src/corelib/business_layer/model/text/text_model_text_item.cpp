@@ -467,6 +467,12 @@ bool TextModelTextItem::ReviewMark::operator==(const TextModelTextItem::ReviewMa
         && comments == _other.comments;
 }
 
+bool TextModelTextItem::ReviewMark::isPartiallyEqual(const ReviewMark& _other) const
+{
+    return textColor == _other.textColor && backgroundColor == _other.backgroundColor
+        && isDone == _other.isDone && comments == _other.comments;
+}
+
 QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const
 {
     QTextCharFormat format;

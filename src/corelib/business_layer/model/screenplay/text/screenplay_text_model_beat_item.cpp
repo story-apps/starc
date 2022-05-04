@@ -75,7 +75,7 @@ void ScreenplayTextModelBeatItem::handleChange()
     QString heading;
     QString text;
     int inlineNotesSize = 0;
-    int reviewMarksSize = 0;
+    QVector<TextModelTextItem::ReviewMark> reviewMarks;
     d->duration = std::chrono::seconds{ 0 };
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
@@ -101,15 +101,23 @@ void ScreenplayTextModelBeatItem::handleChange()
         }
 
         default: {
-            text.append(childTextItem->text() + " ");
-            reviewMarksSize += std::count_if(
-                childTextItem->reviewMarks().begin(), childTextItem->reviewMarks().end(),
-                [](const ScreenplayTextModelTextItem::ReviewMark& _reviewMark) {
-                    return !_reviewMark.isDone;
-                });
+            if (!text.isEmpty() && !childTextItem->text().isEmpty()) {
+                text.append(" ");
+            }
+            text.append(childTextItem->text());
             break;
         }
         }
+
+        //
+        // Собираем редакторские заметки
+        //
+        if (!reviewMarks.isEmpty() && !childTextItem->reviewMarks().isEmpty()
+            && reviewMarks.constLast().isPartiallyEqual(
+                childTextItem->reviewMarks().constFirst())) {
+            reviewMarks.removeLast();
+        }
+        reviewMarks.append(childTextItem->reviewMarks());
 
         //
         // Собираем хронометраж
@@ -120,7 +128,9 @@ void ScreenplayTextModelBeatItem::handleChange()
     setHeading(heading);
     setText(text);
     setInlineNotesSize(inlineNotesSize);
-    setReviewMarksSize(reviewMarksSize);
+    setReviewMarksSize(std::count_if(
+        reviewMarks.begin(), reviewMarks.end(),
+        [](const TextModelTextItem::ReviewMark& _reviewMark) { return !_reviewMark.isDone; }));
 }
 
 } // namespace BusinessLayer

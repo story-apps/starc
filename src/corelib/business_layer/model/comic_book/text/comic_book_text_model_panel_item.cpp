@@ -76,7 +76,7 @@ void ComicBookTextModelPanelItem::handleChange()
     QString heading;
     QString text;
     int inlineNotesSize = 0;
-    int reviewMarksSize = 0;
+    QVector<TextModelTextItem::ReviewMark> reviewMarks;
     d->dialoguesWordsCount = 0;
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
@@ -115,20 +115,27 @@ void ComicBookTextModelPanelItem::handleChange()
                 text.append(" ");
             }
             text.append(childTextItem->text());
-            reviewMarksSize += std::count_if(childTextItem->reviewMarks().begin(),
-                                             childTextItem->reviewMarks().end(),
-                                             [](const TextModelTextItem::ReviewMark& _reviewMark) {
-                                                 return !_reviewMark.isDone;
-                                             });
             break;
         }
         }
+
+        //
+        // Собираем редакторские заметки
+        //
+        if (!reviewMarks.isEmpty() && !childTextItem->reviewMarks().isEmpty()
+            && reviewMarks.constLast().isPartiallyEqual(
+                childTextItem->reviewMarks().constFirst())) {
+            reviewMarks.removeLast();
+        }
+        reviewMarks.append(childTextItem->reviewMarks());
     }
 
     setHeading(heading);
     setText(text);
     setInlineNotesSize(inlineNotesSize);
-    setReviewMarksSize(reviewMarksSize);
+    setReviewMarksSize(std::count_if(
+        reviewMarks.begin(), reviewMarks.end(),
+        [](const TextModelTextItem::ReviewMark& _reviewMark) { return !_reviewMark.isDone; }));
 }
 
 } // namespace BusinessLayer

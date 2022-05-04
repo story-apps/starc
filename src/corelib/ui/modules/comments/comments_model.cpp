@@ -15,21 +15,6 @@
 
 namespace BusinessLayer {
 
-namespace {
-
-/**
- * @brief Определить одинаково ли форматирование и комментарии редакторских заметок
- */
-bool isReviewMarksPartiallyEqual(const TextModelTextItem::ReviewMark& _lhs,
-                                 const TextModelTextItem::ReviewMark& _rhs)
-{
-    return _lhs.textColor == _rhs.textColor && _lhs.backgroundColor == _rhs.backgroundColor
-        && _lhs.isDone == _rhs.isDone && _lhs.comments.first() == _rhs.comments.first();
-}
-
-} // namespace
-
-
 class CommentsModel::Implementation
 {
 public:
@@ -145,8 +130,7 @@ void CommentsModel::Implementation::saveReviewMark(TextModelTextItem* _textItem,
             // ... присовокупляем, если она имеет аналогичное форматирование и заканчивается в конце
             // абзаца
             //
-            if (isReviewMarksPartiallyEqual(previousTextItemLastReviewMarkWrapper.reviewMark,
-                                            _reviewMark)
+            if (previousTextItemLastReviewMarkWrapper.reviewMark.isPartiallyEqual(_reviewMark)
                 && previousTextItemLastReviewMarkWrapper.toInLastItem
                     == previousTextItem->text().length()) {
                 auto& reviewMarkWrapper
@@ -187,8 +171,7 @@ void CommentsModel::Implementation::saveReviewMark(TextModelTextItem* _textItem,
                 // ... присовокупляем, если она имеет аналогичное форматирование и заканчивается в
                 // конце абзаца
                 //
-                if (isReviewMarksPartiallyEqual(textItemReviewMarkWrapper.reviewMark,
-                                                _reviewMark)) {
+                if (textItemReviewMarkWrapper.reviewMark.isPartiallyEqual(_reviewMark)) {
                     auto& reviewMarkWrapper
                         = reviewMarks[reviewMarks.indexOf(textItemReviewMarkWrapper)];
                     //
@@ -588,7 +571,7 @@ void CommentsModel::Implementation::processSourceModelDataChanged(const QModelIn
             //
             // Обновим заметку, если она осталась на месте
             //
-            if (isReviewMarksPartiallyEqual(newReviewMark, oldReviewMarkWrapper.reviewMark)) {
+            if (newReviewMark.isPartiallyEqual(oldReviewMarkWrapper.reviewMark)) {
                 auto newReviewMarkWrapper = oldReviewMarkWrapper;
                 newReviewMarkWrapper.reviewMark = newReviewMark;
                 if (newReviewMarkWrapper.items.size() == 1) {
@@ -733,8 +716,7 @@ void CommentsModel::setTextModel(TextModel* _model)
                                 //
                                 if (lastReviewMarkWrapper.items.last()
                                         == d->modelTextItems.at(d->modelTextItems.size() - 2)
-                                    && isReviewMarksPartiallyEqual(lastReviewMarkWrapper.reviewMark,
-                                                                   reviewMark)
+                                    && lastReviewMarkWrapper.reviewMark.isPartiallyEqual(reviewMark)
                                     && lastReviewMarkWrapper.toInLastItem
                                         == lastReviewMarkWrapper.items.constLast()
                                                ->text()
@@ -755,8 +737,7 @@ void CommentsModel::setTextModel(TextModel* _model)
                                 // заканчивается она в конце абзаца
                                 //
                                 if (lastReviewMarkWrapper.items.last() == textItem
-                                    && isReviewMarksPartiallyEqual(lastReviewMarkWrapper.reviewMark,
-                                                                   reviewMark)
+                                    && lastReviewMarkWrapper.reviewMark.isPartiallyEqual(reviewMark)
                                     && lastReviewMarkWrapper.toInLastItem == reviewMark.from) {
                                     lastReviewMarkWrapper.items.append(textItem);
                                     lastReviewMarkWrapper.toInLastItem = reviewMark.end();
@@ -846,7 +827,7 @@ QModelIndex CommentsModel::mapFromModel(const QModelIndex& _index, int _position
         }
 
         for (const auto& reviewMark : textItem->reviewMarks()) {
-            if (!isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
+            if (!reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
                 continue;
             }
 
@@ -864,7 +845,7 @@ void CommentsModel::setComment(const QModelIndex& _index, const QString& _commen
     for (auto textItem : std::as_const(reviewMarkWrapper.items)) {
         auto updatedReviewMarks = textItem->reviewMarks();
         for (auto& reviewMark : updatedReviewMarks) {
-            if (isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
+            if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
                 reviewMark.comments.first().text = _comment;
                 reviewMark.comments.first().isEdited = true;
             }
@@ -881,7 +862,7 @@ void CommentsModel::markAsDone(const QModelIndexList& _indexes)
         for (auto textItem : reviewMarkWrapper.items) {
             auto updatedReviewMarks = textItem->reviewMarks();
             for (auto& reviewMark : updatedReviewMarks) {
-                if (isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
+                if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
                     reviewMark.isDone = true;
                 }
             }
@@ -898,7 +879,7 @@ void CommentsModel::markAsUndone(const QModelIndexList& _indexes)
         for (auto textItem : reviewMarkWrapper.items) {
             auto updatedReviewMarks = textItem->reviewMarks();
             for (auto& reviewMark : updatedReviewMarks) {
-                if (isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
+                if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
                     reviewMark.isDone = false;
                 }
             }
@@ -914,7 +895,7 @@ void CommentsModel::addReply(const QModelIndex& _index, const QString& _comment)
     for (auto textItem : reviewMarkWrapper.items) {
         auto updatedReviewMarks = textItem->reviewMarks();
         for (auto& reviewMark : updatedReviewMarks) {
-            if (isReviewMarksPartiallyEqual(reviewMark, reviewMarkWrapper.reviewMark)) {
+            if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
                 reviewMark.comments.append(
                     { DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
                       QDateTime::currentDateTime().toString(Qt::ISODate), _comment });
@@ -931,13 +912,13 @@ void CommentsModel::remove(const QModelIndexList& _indexes)
         const auto reviewMarkWrapper = d->reviewMarks.at(index.row());
         for (auto textItem : reviewMarkWrapper.items) {
             auto updatedReviewMarks = textItem->reviewMarks();
-            updatedReviewMarks.erase(
-                std::remove_if(updatedReviewMarks.begin(), updatedReviewMarks.end(),
-                               [reviewMarkWrapper](const auto& _reviewMark) {
-                                   return isReviewMarksPartiallyEqual(_reviewMark,
-                                                                      reviewMarkWrapper.reviewMark);
-                               }),
-                updatedReviewMarks.end());
+            updatedReviewMarks.erase(std::remove_if(updatedReviewMarks.begin(),
+                                                    updatedReviewMarks.end(),
+                                                    [reviewMarkWrapper](const auto& _reviewMark) {
+                                                        return _reviewMark.isPartiallyEqual(
+                                                            reviewMarkWrapper.reviewMark);
+                                                    }),
+                                     updatedReviewMarks.end());
             textItem->setReviewMarks(updatedReviewMarks);
             d->model->updateItem(textItem);
         }

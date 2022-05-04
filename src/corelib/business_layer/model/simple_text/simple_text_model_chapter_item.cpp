@@ -71,7 +71,9 @@ void SimpleTextModelChapterItem::handleChange()
     QString heading;
     QString text;
     int inlineNotesSize = 0;
-    int reviewMarksSize = 0;
+    int childGroupsReviewMarksSize = 0;
+    QVector<TextModelTextItem::ReviewMark> reviewMarks;
+    d->wordsCount = 0;
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -84,6 +86,7 @@ void SimpleTextModelChapterItem::handleChange()
             } else if (text.length() > maxTextLength) {
                 text = text.left(maxTextLength);
             }
+            childGroupsReviewMarksSize += childChapterItem->reviewMarksSize();
             d->wordsCount += childChapterItem->wordsCount();
             break;
         }
@@ -98,7 +101,6 @@ void SimpleTextModelChapterItem::handleChange()
             case TextParagraphType::ChapterHeading5:
             case TextParagraphType::ChapterHeading6: {
                 heading = childTextItem->text();
-                d->wordsCount += TextHelper::wordsCount(childTextItem->text());
                 break;
             }
 
@@ -108,16 +110,28 @@ void SimpleTextModelChapterItem::handleChange()
             }
 
             default: {
-                text.append(childTextItem->text() + " ");
-                d->wordsCount += TextHelper::wordsCount(childTextItem->text());
-                reviewMarksSize += std::count_if(
-                    childTextItem->reviewMarks().begin(), childTextItem->reviewMarks().end(),
-                    [](const TextModelTextItem::ReviewMark& _reviewMark) {
-                        return !_reviewMark.isDone;
-                    });
+                if (!text.isEmpty() && !childTextItem->text().isEmpty()) {
+                    text.append(" ");
+                }
+                text.append(childTextItem->text());
                 break;
             }
             }
+
+            //
+            // Собираем редакторские заметки
+            //
+            if (!reviewMarks.isEmpty() && !childTextItem->reviewMarks().isEmpty()
+                && reviewMarks.constLast().isPartiallyEqual(
+                    childTextItem->reviewMarks().constFirst())) {
+                reviewMarks.removeLast();
+            }
+            reviewMarks.append(childTextItem->reviewMarks());
+
+            //
+            // Собираем количество слов
+            //
+            d->wordsCount += TextHelper::wordsCount(childTextItem->text());
 
             break;
         }
@@ -131,7 +145,11 @@ void SimpleTextModelChapterItem::handleChange()
     setHeading(heading);
     setText(text);
     setInlineNotesSize(inlineNotesSize);
-    setReviewMarksSize(reviewMarksSize);
+    setReviewMarksSize(childGroupsReviewMarksSize
+                       + std::count_if(reviewMarks.begin(), reviewMarks.end(),
+                                       [](const TextModelTextItem::ReviewMark& _reviewMark) {
+                                           return !_reviewMark.isDone;
+                                       }));
 }
 
 } // namespace BusinessLayer

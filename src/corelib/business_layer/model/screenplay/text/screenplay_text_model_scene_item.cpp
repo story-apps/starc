@@ -117,7 +117,8 @@ void ScreenplayTextModelSceneItem::handleChange()
     QString heading;
     QString text;
     int inlineNotesSize = 0;
-    int reviewMarksSize = 0;
+    int childGroupsReviewMarksSize = 0;
+    QVector<TextModelTextItem::ReviewMark> reviewMarks;
     d->duration = std::chrono::seconds{ 0 };
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
@@ -127,7 +128,7 @@ void ScreenplayTextModelSceneItem::handleChange()
             auto childGroupItem = static_cast<ScreenplayTextModelBeatItem*>(child);
             text += childGroupItem->text() + " ";
             inlineNotesSize += childGroupItem->inlineNotesSize();
-            reviewMarksSize += childGroupItem->reviewMarksSize();
+            childGroupsReviewMarksSize += childGroupItem->reviewMarksSize();
             d->duration += childGroupItem->duration();
             break;
         }
@@ -150,15 +151,23 @@ void ScreenplayTextModelSceneItem::handleChange()
             }
 
             default: {
-                text.append(childTextItem->text() + " ");
-                reviewMarksSize += std::count_if(
-                    childTextItem->reviewMarks().begin(), childTextItem->reviewMarks().end(),
-                    [](const ScreenplayTextModelTextItem::ReviewMark& _reviewMark) {
-                        return !_reviewMark.isDone;
-                    });
+                if (!text.isEmpty() && !childTextItem->text().isEmpty()) {
+                    text.append(" ");
+                }
+                text.append(childTextItem->text());
                 break;
             }
             }
+
+            //
+            // Собираем редакторские заметки
+            //
+            if (!reviewMarks.isEmpty() && !childTextItem->reviewMarks().isEmpty()
+                && reviewMarks.constLast().isPartiallyEqual(
+                    childTextItem->reviewMarks().constFirst())) {
+                reviewMarks.removeLast();
+            }
+            reviewMarks.append(childTextItem->reviewMarks());
 
             //
             // Собираем хронометраж
@@ -176,7 +185,11 @@ void ScreenplayTextModelSceneItem::handleChange()
     setHeading(heading);
     setText(text);
     setInlineNotesSize(inlineNotesSize);
-    setReviewMarksSize(reviewMarksSize);
+    setReviewMarksSize(childGroupsReviewMarksSize
+                       + std::count_if(reviewMarks.begin(), reviewMarks.end(),
+                                       [](const TextModelTextItem::ReviewMark& _reviewMark) {
+                                           return !_reviewMark.isDone;
+                                       }));
 }
 
 } // namespace BusinessLayer
