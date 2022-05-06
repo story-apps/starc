@@ -1424,6 +1424,15 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
         cursor.setPosition(selection.from);
         do {
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+
+            //
+            // Для текстового представления не копируем невидимые блоки с содержанием текста сцен
+            // т.к. пользователи этого не ожидают
+            //
+            if (!cursor.block().isVisible()) {
+                continue;
+            }
+
             if (cursor.position() > selection.to) {
                 cursor.setPosition(selection.to, QTextCursor::KeepAnchor);
             }
@@ -1443,8 +1452,12 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
     // Поместим в буфер данные о тексте в специальном формате
     //
     {
-        mimeData->setData(d->model->mimeTypes().first(),
-                          d->document.mimeFromSelection(selection.from, selection.to).toUtf8());
+        //
+        // При работе со внутренним форматом, копируем все блоки, включая текст сценария,
+        // т.к. пользователь может захотеть перенести блоки вырезав и вставив их в другое место
+        //
+        const auto mime = d->document.mimeFromSelection(selection.from, selection.to);
+        mimeData->setData(d->model->mimeTypes().first(), mime.toUtf8());
     }
 
     return mimeData;
