@@ -975,8 +975,8 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
 
         TextModelItem* newItem = nullptr;
         //
-        // При входе в папку или сцену, если предыдущий текстовый элемент был в сцене,
-        // то вставлять их будем не после текстового элемента, а после сцены
+        // При входе в папку или группу, если предыдущий текстовый элемент был в группе,
+        // то вставлять их будем не после текстового элемента, а после группы
         //
         if ((textFolderTypeFromString(currentTag) != TextFolderType::Undefined
              || textGroupTypeFromString(currentTag) != TextGroupType::Undefined)
@@ -988,12 +988,12 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             insertCollectedItems();
 
             //
-            // ... родитель предыдущего элемента должен существовать и это должна быть сцена
+            // ... родитель предыдущего элемента должен существовать и это должна быть группа
             //
             if (lastItem && lastItem->parent() != nullptr
                 && lastItem->parent()->type() == TextModelItemType::Group) {
                 //
-                // ... и при этом вырезаем из него все текстовые блоки, идущие до конца сцены/папки
+                // ... и при этом вырезаем из него все текстовые блоки, идущие до конца группы/папки
                 //
                 auto lastItemParent = lastItem->parent();
                 int movedItemIndex = lastItemParent->rowOfChild(lastItem) + 1;
@@ -1013,7 +1013,26 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
             newItem = createFolderItem(contentReader);
         } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
-            newItem = createGroupItem(contentReader);
+            auto newGroupItem = createGroupItem(contentReader);
+
+            //
+            // Если группа вставляется после группы, учитываем уровень группы, и при необходимости
+            // поднимаемся ещё на уровень выше
+            //
+            if (insertAfterItem->type() == TextModelItemType::Group) {
+                auto groupItem = static_cast<TextModelGroupItem*>(insertAfterItem);
+                while (groupItem != nullptr && groupItem->level() > newGroupItem->level()) {
+                    insertAfterItem = insertAfterItem->parent();
+                    if (insertAfterItem != nullptr
+                        && insertAfterItem->type() != TextModelItemType::Group) {
+                        break;
+                    }
+
+                    groupItem = static_cast<TextModelGroupItem*>(insertAfterItem);
+                };
+            }
+
+            newItem = newGroupItem;
         } else if (currentTag == xml::kSplitterTag) {
             newItem = createSplitterItem(contentReader);
         } else {
