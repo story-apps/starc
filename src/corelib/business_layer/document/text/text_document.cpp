@@ -795,19 +795,30 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                 auto splitterItem = static_cast<TextModelSplitterItem*>(item);
 
                 //
-                // ... убираем таблицу на удалении стартового элемента
+                // ... убираем таблицу, если она ещё не была удалена
                 //
-                if (splitterItem->splitterType() == TextModelSplitterItemType::Start) {
+                TextCursor cursor(this);
+                cursor.setPosition(fromPosition);
+                if (TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::PageSplitter) {
+                    int row = _from + 1;
+                    if (splitterItem->splitterType() == TextModelSplitterItemType::End) {
+                        //
+                        // ... идём в начало таблицы
+                        //
+                        do {
+                            cursor.movePosition(TextCursor::PreviousBlock);
+                            --row;
+                        } while (TextBlockStyle::forBlock(cursor)
+                                 != TextParagraphType::PageSplitter);
+                    }
                     //
-                    // Заходим в таблицу
+                    // ... заходим в таблицу
                     //
-                    TextCursor cursor(this);
-                    cursor.setPosition(fromPosition);
                     cursor.movePosition(TextCursor::NextBlock);
+
                     //
                     // Берём второй курсор, куда будем переносить блоки
                     //
-                    int row = _from + 1;
                     auto insertCursor = cursor;
                     while (TextBlockStyle::forBlock(insertCursor.block())
                            != TextParagraphType::PageSplitter) {
@@ -1146,7 +1157,7 @@ void TextDocument::addParagraph(BusinessLayer::TextParagraphType _type, TextCurs
     // Если параграф целиком переносится (энтер нажат перед всем текстом блока),
     // необходимо перенести данные блока с текущего на следующий
     //
-    if (_cursor.block().text().left(_cursor.positionInBlock()).isEmpty()
+    if (_cursor.block().text().leftRef(_cursor.positionInBlock()).isEmpty()
         && !_cursor.block().text().isEmpty()) {
         TextBlockData* blockData = nullptr;
         auto block = _cursor.block();
@@ -1495,12 +1506,12 @@ void TextDocument::mergeParagraph(const TextCursor& _cursor)
     //
     // NOTE: Делается это только таким костылём, как удалить таблицу по-человечески я не нашёл...
     //
-    //    cursor.movePosition(QTextCursor::NextBlock);
     // ... page splitter после таблицы
     cursor.movePosition(QTextCursor::NextBlock);
     // ... page splitter перед таблицей
     cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
     cursor.removeSelectedText();
+    cursor.block().setUserData(nullptr);
     cursor.endEditBlock();
 
     //
