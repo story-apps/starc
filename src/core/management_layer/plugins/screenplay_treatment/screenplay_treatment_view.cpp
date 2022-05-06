@@ -866,6 +866,16 @@ void ScreenplayTreatmentView::setCursorPosition(int _position)
     d->screenplayText->ensureCursorVisible(cursor, false);
 }
 
+int ScreenplayTreatmentView::verticalScroll() const
+{
+    return d->screenplayText->verticalScrollBar()->value();
+}
+
+void ScreenplayTreatmentView::setverticalScroll(int _value)
+{
+    d->screenplayText->verticalScrollBar()->setValue(_value);
+}
+
 bool ScreenplayTreatmentView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->scalableWrapper) {

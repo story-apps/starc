@@ -839,6 +839,16 @@ void ComicBookTextView::setCursorPosition(int _position)
     d->comicBookText->ensureCursorVisible(cursor, false);
 }
 
+int ComicBookTextView::verticalScroll() const
+{
+    return d->comicBookText->verticalScrollBar()->value();
+}
+
+void ComicBookTextView::setverticalScroll(int _value)
+{
+    d->comicBookText->verticalScrollBar()->setValue(_value);
+}
+
 bool ComicBookTextView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->scalableWrapper) {

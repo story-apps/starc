@@ -21,6 +21,10 @@ QString cursorPositionFor(Domain::DocumentObject* _item)
 {
     return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
 }
+QString verticalScrollFor(Domain::DocumentObject* _item)
+{
+    return QString("%1/%2/vertical-scroll").arg(kSettingsKey, _item->uuid().toString());
+}
 } // namespace
 
 class SimpleTextManager::Implementation
@@ -86,14 +90,16 @@ void SimpleTextManager::Implementation::saveViewSettings()
 
 void SimpleTextManager::Implementation::loadModelSettings()
 {
-    using namespace DataStorageLayer;
     const auto cursorPosition = settingsValue(cursorPositionFor(model->document()), 0).toInt();
     view->setCursorPosition(cursorPosition);
+    const auto verticalScroll = settingsValue(verticalScrollFor(model->document()), 0).toInt();
+    view->setverticalScroll(verticalScroll);
 }
 
 void SimpleTextManager::Implementation::saveModelSettings()
 {
     setSettingsValue(cursorPositionFor(model->document()), view->cursorPosition());
+    setSettingsValue(verticalScrollFor(model->document()), view->verticalScroll());
 }
 
 

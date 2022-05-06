@@ -835,6 +835,16 @@ void AudioplayTextView::setCursorPosition(int _position)
     d->audioplayText->ensureCursorVisible(cursor, false);
 }
 
+int AudioplayTextView::verticalScroll() const
+{
+    return d->audioplayText->verticalScrollBar()->value();
+}
+
+void AudioplayTextView::setverticalScroll(int _value)
+{
+    d->audioplayText->verticalScrollBar()->setValue(_value);
+}
+
 bool AudioplayTextView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->scalableWrapper) {

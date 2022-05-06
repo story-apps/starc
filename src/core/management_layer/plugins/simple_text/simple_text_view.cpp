@@ -769,6 +769,16 @@ void SimpleTextView::setCursorPosition(int _position)
     d->textEdit->ensureCursorVisible(cursor, false);
 }
 
+int SimpleTextView::verticalScroll() const
+{
+    return d->textEdit->verticalScrollBar()->value();
+}
+
+void SimpleTextView::setverticalScroll(int _value)
+{
+    d->textEdit->verticalScrollBar()->setValue(_value);
+}
+
 bool SimpleTextView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->scalableWrapper) {

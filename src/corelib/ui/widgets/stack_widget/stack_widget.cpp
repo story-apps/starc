@@ -377,6 +377,7 @@ void StackWidget::setCurrentWidget(QWidget* _widget)
     }
     d->currentWidget->setParent(this);
     d->currentWidget->resize(size());
+    setFocusProxy(d->currentWidget);
 
     updateGeometry();
 

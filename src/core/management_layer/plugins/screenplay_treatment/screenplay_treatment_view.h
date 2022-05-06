@@ -62,6 +62,12 @@ public:
     int cursorPosition() const;
     void setCursorPosition(int _position);
 
+    /**
+     * @brief Положение прокрутки
+     */
+    int verticalScroll() const;
+    void setverticalScroll(int _value);
+
 signals:
     /**
      * @brief Изменился индекс текущего элемента модели в текстовом документе (перестился курсор)

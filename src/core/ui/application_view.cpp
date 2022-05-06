@@ -12,6 +12,7 @@
 
 #include <QCloseEvent>
 #include <QPainter>
+#include <QTimer>
 #include <QToolTip>
 #include <QVBoxLayout>
 
@@ -141,6 +142,11 @@ void ApplicationView::showContent(QWidget* _toolbar, QWidget* _navigator, QWidge
     d->toolBar->setCurrentWidget(_toolbar);
     d->navigator->setCurrentWidget(_navigator);
     d->view->setCurrentWidget(_view);
+
+    //
+    // Фокусируем представление, после того, как оно будет отображено пользователю
+    //
+    QTimer::singleShot(d->view->animationDuration() * 1.3, this, [this] { d->view->setFocus(); });
 }
 
 void ApplicationView::toggleFullScreen(bool _isFullScreen)

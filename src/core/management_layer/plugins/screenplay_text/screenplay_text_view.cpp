@@ -945,6 +945,16 @@ void ScreenplayTextView::setCursorPosition(int _position)
     d->screenplayText->ensureCursorVisible(cursor, false);
 }
 
+int ScreenplayTextView::verticalScroll() const
+{
+    return d->screenplayText->verticalScrollBar()->value();
+}
+
+void ScreenplayTextView::setverticalScroll(int _value)
+{
+    d->screenplayText->verticalScrollBar()->setValue(_value);
+}
+
 void ScreenplayTextView::insertText(const QString& _text)
 {
     d->screenplayText->insertPlainText(_text);

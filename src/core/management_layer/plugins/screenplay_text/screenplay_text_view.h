@@ -69,6 +69,12 @@ public:
     void setCursorPosition(int _position);
 
     /**
+     * @brief Положение прокрутки
+     */
+    int verticalScroll() const;
+    void setverticalScroll(int _value);
+
+    /**
      * @brief Вставить заданный текст
      */
     void insertText(const QString& _text);

@@ -38,6 +38,7 @@
 #include <QDateTime>
 #include <QHBoxLayout>
 #include <QSet>
+#include <QTimer>
 #include <QUuid>
 #include <QVariantAnimation>
 
@@ -1380,6 +1381,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
                     Qt::UniqueConnection);
         }
     }
+
+    //
+    // Фокусируем представление
+    //
+    QTimer::singleShot(d->view->animationDuration() * 1.3, this, [this] { d->view->setFocus(); });
 }
 
 void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType)
