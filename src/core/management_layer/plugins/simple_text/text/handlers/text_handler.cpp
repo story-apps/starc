@@ -71,6 +71,7 @@ void TextHandler::handleEnter(QKeyEvent*)
                     //
                     // Ни чего не делаем
                     //
+                    editor()->addParagraph(jumpForEnter(editor()->currentParagraphType()));
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
