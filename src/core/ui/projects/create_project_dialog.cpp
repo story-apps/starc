@@ -312,7 +312,7 @@ void CreateProjectDialog::updateTranslations()
 {
     setTitle(tr("Create new story"));
 
-    d->projectType->setLabel(tr("Type of the story"));
+    d->projectType->setLabel(tr("Type of story"));
     for (int row = 0; row < d->projectTypeModel->rowCount(); ++row) {
         auto item = d->projectTypeModel->item(row);
         switch (static_cast<Domain::DocumentObjectType>(item->data(kTypeRole).toInt())) {
