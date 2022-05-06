@@ -263,6 +263,14 @@ void ScreenplayTreatmentEdit::redo()
 void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
 {
     //
+    // При позиционировании курсора в невидимый блок, Qt откидывает прокрутку в самый верх, поэтому
+    // перед редактированием документа запомним прокрутку, а после завершения редактирования
+    // восстановим значения полос прокрутки
+    //
+    const auto verticalScrollValue = verticalScrollBar()->value();
+    const auto horizontalScrollValue = horizontalScrollBar()->value();
+
+    //
     // Добавляем новый блок после всех невидимых блоков идущих за текущим
     //
     auto cursor = textCursor();
@@ -286,6 +294,12 @@ void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
         textCursor().block().setVisible(false);
         moveCursor(QTextCursor::PreviousCharacter);
     }
+
+    //
+    // Восстанавливаем значения полос прокрутки
+    //
+    verticalScrollBar()->setValue(verticalScrollValue);
+    horizontalScrollBar()->setValue(horizontalScrollValue);
 }
 
 void ScreenplayTreatmentEdit::setCurrentParagraphType(TextParagraphType _type)
