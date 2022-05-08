@@ -72,9 +72,25 @@ Operation<T> skipOperation(T* _item)
 }
 
 template<typename T>
-Operation<T> insertOperation(T* _item)
+Operation<T> insertOperation(const QVector<Operation<T>>& _operations, T* _item)
 {
-    return { OperationType::Insert, _item, 1 };
+    int weight = 1;
+
+    //
+    // FIXME: придумать, как это более изящно обыграть (перенести в элемент модели)
+    //
+    if (_item->toXml() == "<splitter type=\"end\"/>\n") {
+        weight = 100;
+        for (const auto& operation : reversed(_operations)) {
+            if (operation.type == OperationType::Insert
+                && operation.value->toXml() == "<splitter type=\"start\"/>\n") {
+                weight = 1;
+                break;
+            }
+        }
+    }
+
+    return { OperationType::Insert, _item, weight };
 }
 
 template<typename T>
@@ -104,6 +120,9 @@ Operation<T> replaceOperation(T* _lhs, T* _rhs)
 {
     int weight = 1;
 
+    if (_lhs->toXml().startsWith("<splitter type=") || _rhs->toXml().startsWith("<splitter type=")) {
+        weight = 100;
+    }
     if (_lhs->type() != _rhs->type() || _lhs->subtype() != _rhs->subtype()) {
         weight = std::numeric_limits<int>::max();
     }
@@ -147,7 +166,7 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
             //
             if (j == 0) {
                 auto operations = opertionsCache[(i - 1) % 2][j];
-                operations.append(insertOperation(_target[i - 1]));
+                operations.append(insertOperation(operations, _target[i - 1]));
                 opertionsCache[i % 2][j] = operations;
             }
             //
@@ -162,7 +181,7 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
             //
             else if (isItemsEqual(_source[j - 1], _target[i - 1])) {
                 auto operationsWithInsert = opertionsCache[(i - 1) % 2][j];
-                operationsWithInsert.append(insertOperation(_target[i - 1]));
+                operationsWithInsert.append(insertOperation(operationsWithInsert, _target[i - 1]));
                 //
                 auto operationsWithRemove = opertionsCache[i % 2][j - 1];
                 operationsWithRemove.append(removeOperation(operationsWithRemove, _source[j - 1]));
@@ -181,7 +200,7 @@ QVector<Operation<T>> editDistance(const QVector<T*>& _source, const QVector<T*>
             //
             else {
                 auto operationsWithInsert = opertionsCache[(i - 1) % 2][j];
-                operationsWithInsert.append(insertOperation(_target[i - 1]));
+                operationsWithInsert.append(insertOperation(operationsWithInsert, _target[i - 1]));
                 //
                 auto operationsWithRemove = opertionsCache[i % 2][j - 1];
                 operationsWithRemove.append(removeOperation(operationsWithRemove, _source[j - 1]));

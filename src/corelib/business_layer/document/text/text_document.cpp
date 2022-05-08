@@ -43,6 +43,12 @@ public:
     const TextTemplate& documentTemplate() const;
 
     /**
+     * @brief Получить элемент блока
+     */
+    TextModelItem* itemFor(const QTextBlock& _block) const;
+    TextModelItem* itemFor(const TextCursor& _cursor) const;
+
+    /**
      * @brief Скорректировать позиции элементов на заданную дистанцию
      */
     void correctPositionsToItems(std::map<int, TextModelItem*>::iterator _from, int _distance);
@@ -91,6 +97,25 @@ TextDocument::Implementation::Implementation(TextDocument* _document)
 const TextTemplate& TextDocument::Implementation::documentTemplate() const
 {
     return TemplatesFacade::textTemplate(model);
+}
+
+TextModelItem* TextDocument::Implementation::itemFor(const QTextBlock& _block) const
+{
+    if (_block.userData() == nullptr) {
+        return {};
+    }
+
+    const auto blockData = static_cast<TextBlockData*>(_block.userData());
+    if (blockData == nullptr) {
+        return {};
+    }
+
+    return blockData->item();
+}
+
+TextModelItem* TextDocument::Implementation::itemFor(const TextCursor& _cursor) const
+{
+    return itemFor(_cursor.block());
 }
 
 void TextDocument::Implementation::correctPositionsToItems(
@@ -257,16 +282,20 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
         //
         // Если вставляемый элемент должен быть в таблице, а курсор стоит на разделителе
         //
-        if (TextBlockStyle::forBlock(_cursor.block()) == TextParagraphType::PageSplitter
-            && textItem->isInFirstColumn().has_value()) {
-            //
-            // Зайдём внутрь таблицы
-            //
-            _cursor.movePosition(TextCursor::NextBlock);
-            //
-            // ... и пометим, что вставлять новый блок нет нужны
-            //
-            _isFirstParagraph = true;
+        if (auto item = itemFor(_cursor);
+            item != nullptr && item->type() == TextModelItemType::Splitter) {
+            const auto splitterItem = static_cast<TextModelSplitterItem*>(item);
+            if (splitterItem->splitterType() == TextModelSplitterItemType::Start
+                && textItem->isInFirstColumn().has_value()) {
+                //
+                // Зайдём внутрь таблицы
+                //
+                _cursor.movePosition(TextCursor::NextBlock);
+                //
+                // ... и пометим, что вставлять новый блок нет нужны
+                //
+                _isFirstParagraph = true;
+            }
         }
 
         //
@@ -810,6 +839,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                             --row;
                         } while (TextBlockStyle::forBlock(cursor)
                                  != TextParagraphType::PageSplitter);
+                        fromPosition = cursor.position();
                     }
                     //
                     // ... заходим в таблицу
@@ -831,14 +861,6 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                     //
                     while (TextBlockStyle::forBlock(cursor.block())
                            != TextParagraphType::PageSplitter) {
-                        //
-                        // ... проставим элементу блока флаг, что он теперь вне таблицы
-                        //
-                        auto item = d->positionsToItems[cursor.position()];
-                        if (item->type() == TextModelItemType::Text) {
-                            auto textItem = static_cast<TextModelTextItem*>(item);
-                            textItem->setInFirstColumn({});
-                        }
                         //
                         // ... удаляем блок в таблице
                         //
