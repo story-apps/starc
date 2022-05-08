@@ -322,6 +322,12 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     menuView->setShowDevVersions(notificationsManager->showDevversions());
 
     settingsManager->setThemeSetupView(applicationView->themeSetupView());
+
+#ifdef Q_OS_MACOS
+    new QShortcut(
+        QKeySequence("Ctrl+M"), applicationView, [this] { applicationView->showMinimized(); },
+        Qt::ApplicationShortcut);
+#endif
 }
 
 ApplicationManager::Implementation::~Implementation()
