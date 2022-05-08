@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corelib_global.h>
+
 class QString;
 
 
@@ -8,7 +10,7 @@ namespace BusinessLayer {
 /**
  * @brief Специальный обработчик майм данных с текстом сценария
  */
-class ScreenplayTextMimeHandler
+class CORE_LIBRARY_EXPORT ScreenplayTextMimeHandler
 {
 public:
     /**
