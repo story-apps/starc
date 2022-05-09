@@ -91,11 +91,23 @@ void ScreenplayTextDocument::Implementation::updateBlocksVisibility(int _from, i
     while (cursor.position() <= _to) {
         auto block = cursor.block();
         const auto blockType = TextBlockStyle::forBlock(block);
-        block.setVisible(visibleBlocksTypes.contains(blockType));
+
+        //
+        // В некоторых случаях, мы попадаем сюда, когда документ не до конца настроен, поэтому
+        // когда обнаруживается такая ситация, завершаем выполнение
+        //
+        if (blockType == TextParagraphType::Undefined) {
+            break;
+        }
+
         //
         // ... уберём отступы у скрытых блоков, чтобы они не ломали компановку документа
         //
+        block.setVisible(visibleBlocksTypes.contains(blockType));
         if (!block.isVisible()) {
+            if (!cursor.isInEditBlock()) {
+                cursor.beginEditBlock();
+            }
             auto blockFormat = cursor.blockFormat();
             blockFormat.setTopMargin(0);
             blockFormat.setBottomMargin(0);
@@ -108,6 +120,10 @@ void ScreenplayTextDocument::Implementation::updateBlocksVisibility(int _from, i
 
         cursor.movePosition(QTextCursor::EndOfBlock);
         cursor.movePosition(QTextCursor::NextBlock);
+    }
+
+    if (cursor.isInEditBlock()) {
+        cursor.endEditBlock();
     }
 }
 

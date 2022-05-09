@@ -913,9 +913,23 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                     // Удаляем саму таблицу
                     //
                     cursor.movePosition(QTextCursor::NextBlock);
+                    //
+                    // ... и при этом нужно сохранить данные блока и его формат
+                    //
+                    TextBlockData* blockData = nullptr;
+                    Q_ASSERT(cursor.block().userData());
+                    if (cursor.block().userData() != nullptr) {
+                        blockData = new TextBlockData(
+                            static_cast<TextBlockData*>(cursor.block().userData()));
+                    }
+                    const auto blockFormat = cursor.block().blockFormat();
+                    //
                     cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
                     cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
                     cursor.deletePreviousChar();
+                    //
+                    cursor.block().setUserData(blockData);
+                    cursor.setBlockFormat(blockFormat);
 
                     //
                     // Корректируем карту позиций блоков
@@ -983,7 +997,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
             // Если это самый первый блок, то нужно удалить на один символ больше, чтобы удалить
             // сам блок
             //
-            if (fromPosition == 0 && toPosition != characterCount()) {
+            if (fromPosition == 0 && !cursor.atEnd()) {
                 cursor.deleteChar();
             }
             //
