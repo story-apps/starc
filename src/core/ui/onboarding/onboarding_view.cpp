@@ -101,39 +101,40 @@ void OnboardingView::Implementation::initLanguagePage()
     };
     PercentRadioButton* arabicLanguage = initLanguageButton("اَلْعَرَبِيَّةُ", QLocale::Arabic, 22);
     PercentRadioButton* azerbaijaniLanguage
-        = initLanguageButton("Azərbaycan", QLocale::Azerbaijani, 92);
+        = initLanguageButton("Azərbaycan", QLocale::Azerbaijani, 100);
     PercentRadioButton* belarusianLanguage
-        = initLanguageButton("Беларуский", QLocale::Belarusian, 69);
-    PercentRadioButton* catalanLanguage = initLanguageButton("Català", QLocale::Catalan, 54);
+        = initLanguageButton("Беларуский", QLocale::Belarusian, 66);
+    PercentRadioButton* catalanLanguage = initLanguageButton("Català", QLocale::Catalan, 70);
     PercentRadioButton* chineseLanguage = initLanguageButton("汉语", QLocale::Chinese, 8);
-    PercentRadioButton* croatianLanguage = initLanguageButton("Hrvatski", QLocale::Croatian, 88);
-    PercentRadioButton* danishLanguage = initLanguageButton("Dansk", QLocale::Danish, 100);
+    PercentRadioButton* croatianLanguage = initLanguageButton("Hrvatski", QLocale::Croatian, 84);
+    PercentRadioButton* danishLanguage = initLanguageButton("Dansk", QLocale::Danish, 98);
     PercentRadioButton* englishLanguage = initLanguageButton("English", QLocale::English, 100);
     PercentRadioButton* esperantoLanguage = initLanguageButton("Esperanto", QLocale::Esperanto, 12);
-    PercentRadioButton* frenchLanguage = initLanguageButton("Français", QLocale::French, 85);
-    PercentRadioButton* galicianLanguage = initLanguageButton("Galego", QLocale::Galician, 86);
-    PercentRadioButton* germanLanguage = initLanguageButton("Deutsch", QLocale::German, 93);
-    PercentRadioButton* hebrewLanguage = initLanguageButton("עִבְרִית", QLocale::Hebrew, 100);
-    PercentRadioButton* hindiLanguage = initLanguageButton("हिन्दी", QLocale::Hindi, 45);
-    PercentRadioButton* hungarianLanguage = initLanguageButton("Magyar", QLocale::Hungarian, 50);
+    PercentRadioButton* frenchLanguage = initLanguageButton("Français", QLocale::French, 80);
+    PercentRadioButton* galicianLanguage = initLanguageButton("Galego", QLocale::Galician, 82);
+    PercentRadioButton* germanLanguage = initLanguageButton("Deutsch", QLocale::German, 87);
+    PercentRadioButton* hebrewLanguage = initLanguageButton("עִבְרִית", QLocale::Hebrew, 95);
+    PercentRadioButton* hindiLanguage = initLanguageButton("हिन्दी", QLocale::Hindi, 50);
+    PercentRadioButton* hungarianLanguage = initLanguageButton("Magyar", QLocale::Hungarian, 48);
     PercentRadioButton* indonesianLanguage
-        = initLanguageButton("Indonesian", QLocale::Indonesian, 14);
-    PercentRadioButton* italianLanguage = initLanguageButton("Italiano", QLocale::Italian, 43);
-    PercentRadioButton* persianLanguage = initLanguageButton("فارسی", QLocale::Persian, 84);
-    PercentRadioButton* polishLanguage = initLanguageButton("Polski", QLocale::Polish, 45);
+        = initLanguageButton("Indonesian", QLocale::Indonesian, 13);
+    PercentRadioButton* italianLanguage = initLanguageButton("Italiano", QLocale::Italian, 40);
+    PercentRadioButton* persianLanguage = initLanguageButton("فارسی", QLocale::Persian, 85);
+    PercentRadioButton* polishLanguage = initLanguageButton("Polski", QLocale::Polish, 43);
     PercentRadioButton* portugueseLanguage = initLanguageButton(
-        "Português", static_cast<QLocale::Language>(QLocale::LastLanguage + 1), 18);
+        "Português", static_cast<QLocale::Language>(QLocale::LastLanguage + 1), 17);
     PercentRadioButton* portugueseBrazilLanguage
-        = initLanguageButton("Português Brasileiro", QLocale::Portuguese, 87);
-    PercentRadioButton* romanianLanguage = initLanguageButton("Română", QLocale::Romanian, 89);
+        = initLanguageButton("Português Brasileiro", QLocale::Portuguese, 91);
+    PercentRadioButton* romanianLanguage = initLanguageButton("Română", QLocale::Romanian, 84);
     PercentRadioButton* russianLanguage = initLanguageButton("Русский", QLocale::Russian, 100);
-    PercentRadioButton* slovenianLanguage = initLanguageButton("Slovenski", QLocale::Slovenian, 96);
-    PercentRadioButton* spanishLanguage = initLanguageButton("Español", QLocale::Spanish, 92);
+    PercentRadioButton* slovenianLanguage
+        = initLanguageButton("Slovenski", QLocale::Slovenian, 100);
+    PercentRadioButton* spanishLanguage = initLanguageButton("Español", QLocale::Spanish, 87);
     PercentRadioButton* tagalogLanguage = initLanguageButton("Tagalog", QLocale::Filipino, 24);
-    PercentRadioButton* tamilLanguage = initLanguageButton("தமிழ்", QLocale::Tamil, 24);
-    PercentRadioButton* turkishLanguage = initLanguageButton("Türkçe", QLocale::Turkish, 50);
+    PercentRadioButton* tamilLanguage = initLanguageButton("தமிழ்", QLocale::Tamil, 61);
+    PercentRadioButton* turkishLanguage = initLanguageButton("Türkçe", QLocale::Turkish, 48);
     PercentRadioButton* ukrainianLanguage
-        = initLanguageButton("Українська", QLocale::Ukrainian, 89);
+        = initLanguageButton("Українська", QLocale::Ukrainian, 100);
     //
     // Если мы умеем в язык системы, то оставляем выбранным его
     //

@@ -516,7 +516,7 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     }
     // ... перевод курсора к следующему символу
     //
-    else if (_event == QKeySequence::MoveToNextChar || _event->key() == Qt::Key_Right) {
+    else if (_event == QKeySequence::MoveToNextChar) {
         const bool isShiftPressed = _event->modifiers().testFlag(Qt::ShiftModifier);
         auto cursor = textCursor();
         if (textCursor().block().textDirection() == Qt::LeftToRight) {
@@ -531,7 +531,7 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     // ... перевод курсора к предыдущему символу
     //
-    else if (_event == QKeySequence::MoveToPreviousChar || _event->key() == Qt::Key_Left) {
+    else if (_event == QKeySequence::MoveToPreviousChar) {
         const bool isShiftPressed = _event->modifiers().testFlag(Qt::ShiftModifier);
         auto cursor = textCursor();
         if (textCursor().block().textDirection() == Qt::LeftToRight) {
