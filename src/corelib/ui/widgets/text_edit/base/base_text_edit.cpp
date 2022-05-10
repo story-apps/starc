@@ -516,22 +516,32 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     }
     // ... перевод курсора к следующему символу
     //
-    else if (_event == QKeySequence::MoveToNextChar) {
+    else if (_event == QKeySequence::MoveToNextChar || _event->key() == Qt::Key_Right) {
+        const bool isShiftPressed = _event->modifiers().testFlag(Qt::ShiftModifier);
+        auto cursor = textCursor();
         if (textCursor().block().textDirection() == Qt::LeftToRight) {
-            moveCursor(QTextCursor::NextCharacter);
+            cursor.movePosition(QTextCursor::NextCharacter,
+                                isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         } else {
-            moveCursor(QTextCursor::PreviousCharacter);
+            cursor.movePosition(QTextCursor::PreviousCharacter,
+                                isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         }
+        setTextCursor(cursor);
     }
     //
     // ... перевод курсора к предыдущему символу
     //
-    else if (_event == QKeySequence::MoveToPreviousChar) {
+    else if (_event == QKeySequence::MoveToPreviousChar || _event->key() == Qt::Key_Left) {
+        const bool isShiftPressed = _event->modifiers().testFlag(Qt::ShiftModifier);
+        auto cursor = textCursor();
         if (textCursor().block().textDirection() == Qt::LeftToRight) {
-            moveCursor(QTextCursor::PreviousCharacter);
+            cursor.movePosition(QTextCursor::PreviousCharacter,
+                                isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         } else {
-            moveCursor(QTextCursor::NextCharacter);
+            cursor.movePosition(QTextCursor::NextCharacter,
+                                isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         }
+        setTextCursor(cursor);
     }
     //
     // ... перевод курсора к концу строки
@@ -571,6 +581,17 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
             }
         }
         setTextCursor(cursor);
+    } else if (_event == QKeySequence::SelectAll) {
+        auto cursor = textCursor();
+        cursor.select(QTextCursor::Document);
+        setTextCursor(cursor);
+    }
+    //
+    // ... вставим перенос строки внутри абзаца
+    //
+    else if ((_event->key() == Qt::Key_Enter || _event->key() == Qt::Key_Return)
+             && _event->modifiers().testFlag(Qt::ShiftModifier)) {
+        textCursor().insertText(QChar(QChar::LineSeparator));
     }
 #ifdef Q_OS_MAC
     //
@@ -769,4 +790,70 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     }
 
     return false;
+}
+
+void BaseTextEdit::doSetTextCursor(const QTextCursor& _cursor)
+{
+    QTextCursor cursor = _cursor;
+    const auto sourceSelectionStart = _cursor.selectionStart() != _cursor.position()
+        ? _cursor.selectionStart()
+        : _cursor.selectionEnd();
+    const auto sourceSelectionEnd = _cursor.selectionStart() != _cursor.position()
+        ? _cursor.selectionEnd()
+        : _cursor.selectionStart();
+    const bool isSelectionForward = sourceSelectionStart < sourceSelectionEnd;
+    cursor.setPosition(sourceSelectionStart);
+    while ((isSelectionForward ? !cursor.atEnd() : !cursor.atStart())
+           && !cursor.block().isVisible()) {
+        const auto isCursorMoved = cursor.movePosition(
+            isSelectionForward ? QTextCursor::NextBlock : QTextCursor::PreviousBlock);
+        if (isCursorMoved) {
+            cursor.movePosition(isSelectionForward ? QTextCursor::StartOfBlock
+                                                   : QTextCursor::EndOfBlock);
+        } else {
+            cursor.movePosition(isSelectionForward ? QTextCursor::EndOfBlock
+                                                   : QTextCursor::StartOfBlock);
+        }
+    }
+    const int selectionsStart = cursor.position();
+
+    //
+    // Если естьв ыделение, определим и завершающую позицию курсора
+    //
+    if (_cursor.hasSelection()) {
+        cursor.setPosition(sourceSelectionEnd);
+        while ((isSelectionForward ? !cursor.atStart() : !cursor.atEnd())
+               && !cursor.block().isVisible()) {
+            const auto isCursorMoved = cursor.movePosition(
+                isSelectionForward ? QTextCursor::PreviousBlock : QTextCursor::NextBlock);
+            if (isCursorMoved) {
+                cursor.movePosition(isSelectionForward ? QTextCursor::EndOfBlock
+                                                       : QTextCursor::StartOfBlock);
+            } else {
+                cursor.movePosition(isSelectionForward ? QTextCursor::StartOfBlock
+                                                       : QTextCursor::EndOfBlock);
+            }
+        }
+        const int selectionEnd = cursor.position();
+        cursor.setPosition(selectionsStart);
+        cursor.setPosition(selectionEnd, QTextCursor::KeepAnchor);
+    }
+    //
+    // А если выделения нет, то проверим кейс, когда пользователь нажимает влево находять в описании
+    // самого первого бита истории
+    //
+    else {
+        if (!cursor.block().isVisible()) {
+            while (!cursor.atEnd() && !cursor.block().isVisible()) {
+                const auto isCursorMoved = cursor.movePosition(QTextCursor::NextBlock);
+                if (isCursorMoved) {
+                    cursor.movePosition(QTextCursor::StartOfBlock);
+                } else {
+                    cursor.movePosition(QTextCursor::EndOfBlock);
+                }
+            }
+        }
+    }
+
+    CompleterTextEdit::doSetTextCursor(cursor);
 }

@@ -84,6 +84,12 @@ protected:
      */
     virtual bool updateEnteredText(const QString& _eventText);
 
+    /**
+     * @brief Переопределяем, чтобы обработать кейс с установкой курсора, начало, или конец
+     * выделения в котором находится в невидимом блоке
+     */
+    void doSetTextCursor(const QTextCursor& _cursor) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

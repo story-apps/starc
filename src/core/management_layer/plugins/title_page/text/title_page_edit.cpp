@@ -464,45 +464,6 @@ bool TitlePageEdit::keyPressEventReimpl(QKeyEvent* _event)
         d->model->saveChanges();
     }
     //
-    // ... перевод курсора к следующему символу
-    //
-    else if (_event == QKeySequence::MoveToNextChar) {
-        if (textCursor().block().textDirection() == Qt::LeftToRight) {
-            moveCursor(QTextCursor::NextCharacter);
-        } else {
-            moveCursor(QTextCursor::PreviousCharacter);
-        }
-
-        while (!textCursor().atEnd() && !textCursor().block().isVisible()) {
-            moveCursor(QTextCursor::NextBlock);
-        }
-    }
-    //
-    // ... перевод курсора к предыдущему символу
-    //
-    else if (_event == QKeySequence::MoveToPreviousChar) {
-        if (textCursor().block().textDirection() == Qt::LeftToRight) {
-            moveCursor(QTextCursor::PreviousCharacter);
-        } else {
-            moveCursor(QTextCursor::NextCharacter);
-        }
-        while (!textCursor().atStart() && !textCursor().block().isVisible()) {
-            moveCursor(QTextCursor::StartOfBlock);
-            if (textCursor().block().textDirection() == Qt::LeftToRight) {
-                moveCursor(QTextCursor::PreviousCharacter);
-            } else {
-                moveCursor(QTextCursor::NextCharacter);
-            }
-        }
-    }
-    //
-    // ... вставим перенос строки внутри абзаца
-    //
-    else if ((_event->key() == Qt::Key_Enter || _event->key() == Qt::Key_Return)
-             && _event->modifiers().testFlag(Qt::ShiftModifier)) {
-        textCursor().insertText(QChar(QChar::LineSeparator));
-    }
-    //
     // Обрабатываем в базовом классе
     //
     else {
