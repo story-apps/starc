@@ -767,8 +767,8 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                     // и заголовок сцены меняется на бит, что приводит как бы к удалению блоков из
                     // сцены и их вставке в бит), то нужно перенести блок со своими данными дальше
                     //
-                    if (begin().userData() == nullptr
-                        || static_cast<TextBlockData*>(begin().userData())->item() != item) {
+                    if (begin().userData() != nullptr
+                        && static_cast<TextBlockData*>(begin().userData())->item() != item) {
                         TextBlockData* blockData = nullptr;
                         auto block = cursor.block();
                         if (block.userData() != nullptr) {
@@ -1003,8 +1003,19 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
             // Если это самый первый блок, то нужно удалить на один символ больше, чтобы удалить
             // сам блок
             //
-            if (fromPosition == 0 && !cursor.atEnd()) {
-                cursor.deleteChar();
+            if (fromPosition == 0) {
+                //
+                // Если это не конец документа, удалим перенос строки
+                //
+                if (!cursor.atEnd()) {
+                    cursor.deleteChar();
+                }
+                //
+                // А если конец (документ остаётся пустым), то затрём данные блока
+                //
+                else {
+                    cursor.block().setUserData(nullptr);
+                }
             }
             //
             // Если это не самый первый блок
