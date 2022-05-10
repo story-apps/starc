@@ -120,7 +120,8 @@ Operation<T> replaceOperation(T* _lhs, T* _rhs)
 {
     int weight = 1;
 
-    if (_lhs->toXml().startsWith("<splitter type=") || _rhs->toXml().startsWith("<splitter type=")) {
+    if (_lhs->toXml().startsWith("<splitter type=")
+        || _rhs->toXml().startsWith("<splitter type=")) {
         weight = 100;
     }
     if (_lhs->type() != _rhs->type() || _lhs->subtype() != _rhs->subtype()) {
