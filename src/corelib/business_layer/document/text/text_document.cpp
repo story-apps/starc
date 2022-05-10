@@ -762,25 +762,31 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                 cursor.setPosition(cursorPosition);
                 if (isFirstParagraph) {
                     //
-                    // Если первый параграф, то нужно перенести блок со своими данными дальше
+                    // Если первый параграф и это не вставка блока в самого себя (а такое возможно
+                    // как минимум в кейсе, когда в сценарии два блока - заголовок сцены и действие
+                    // и заголовок сцены меняется на бит, что приводит как бы к удалению блоков из
+                    // сцены и их вставке в бит), то нужно перенести блок со своими данными дальше
                     //
-                    TextBlockData* blockData = nullptr;
-                    auto block = cursor.block();
-                    if (block.userData() != nullptr) {
-                        blockData
-                            = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
-                        block.setUserData(nullptr);
+                    if (begin().userData() == nullptr
+                        || static_cast<TextBlockData*>(begin().userData())->item() != item) {
+                        TextBlockData* blockData = nullptr;
+                        auto block = cursor.block();
+                        if (block.userData() != nullptr) {
+                            blockData
+                                = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
+                            block.setUserData(nullptr);
+                        }
+                        cursor.insertBlock();
+                        cursor.block().setUserData(blockData);
+                        //
+                        // И вернуться назад, для вставки данныхшт
+                        //
+                        cursor.movePosition(QTextCursor::PreviousBlock);
+                        //
+                        // Корректируем позиции всех блоков на один символ
+                        //
+                        d->correctPositionsToItems(0, 1);
                     }
-                    cursor.insertBlock();
-                    cursor.block().setUserData(blockData);
-                    //
-                    // И вернуться назад, для вставки данныхшт
-                    //
-                    cursor.movePosition(QTextCursor::PreviousBlock);
-                    //
-                    // Корректируем позиции всех блоков на один символ
-                    //
-                    d->correctPositionsToItems(0, 1);
                 } else {
                     cursor.movePosition(QTextCursor::EndOfBlock);
                 }
