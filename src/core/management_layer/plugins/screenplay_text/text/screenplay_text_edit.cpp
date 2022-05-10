@@ -13,6 +13,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
+#include <business_layer/model/text/text_model_group_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
@@ -42,9 +43,20 @@ class ScreenplayTextEdit::Implementation
 public:
     explicit Implementation(ScreenplayTextEdit* _q);
 
+    /**
+     * @brief Текущий шаблон документа
+     */
     const BusinessLayer::ScreenplayTemplate& screenplayTemplate() const;
 
+    /**
+     * @brief Отменить/повторить последнее действие
+     */
     void revertAction(bool previous);
+
+    /**
+     * @brief Получить текстовый элемент в текущем курсоре
+     */
+    BusinessLayer::TextModelItem* currentItem() const;
 
 
     ScreenplayTextEdit* q = nullptr;
@@ -99,6 +111,21 @@ void ScreenplayTextEdit::Implementation::revertAction(bool previous)
         //
         emit q->cursorPositionChanged();
     }
+}
+
+BusinessLayer::TextModelItem* ScreenplayTextEdit::Implementation::currentItem() const
+{
+    if (model == nullptr) {
+        return nullptr;
+    }
+
+    auto userData = q->textCursor().block().userData();
+    if (userData == nullptr) {
+        return {};
+    }
+
+    auto screenplayBlockData = static_cast<BusinessLayer::TextBlockData*>(userData);
+    return screenplayBlockData->item();
 }
 
 
@@ -259,17 +286,38 @@ void ScreenplayTextEdit::redo()
     d->revertAction(false);
 }
 
-void ScreenplayTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
+void ScreenplayTextEdit::addParagraph(TextParagraphType _type)
 {
     d->document.addParagraph(_type, textCursor());
 
     emit paragraphTypeChanged();
 }
 
-void ScreenplayTextEdit::setCurrentParagraphType(BusinessLayer::TextParagraphType _type)
+void ScreenplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
 {
     if (currentParagraphType() == _type) {
         return;
+    }
+
+    //
+    // Если тип блока меняется на заголовок сцены, но это единственный текстовый блок бита, то
+    // добавим сцену отдельным блоком после него, т.к. бит не может включать в себя сцену
+    //
+    if (_type == TextParagraphType::SceneHeading) {
+        const auto item = d->currentItem();
+        Q_ASSERT(item);
+        if (item->parent() != nullptr
+            && item->parent()->type() == BusinessLayer::TextModelItemType::Group) {
+            const auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item->parent());
+            //
+            // 2, т.к. у нас всегда есть ещё заголовок самого бита
+            //
+            if (groupItem->groupType() == BusinessLayer::TextGroupType::Beat
+                && groupItem->childCount() == 2) {
+                addParagraph(_type);
+                return;
+            }
+        }
     }
 
     d->document.setParagraphType(_type, textCursor());
