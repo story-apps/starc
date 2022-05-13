@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style id="us" default="true" page_format="Letter" page_margins="25,25,20,15" page_numbers_alignment="top,right" left_half_of_page_width="36">
+    <titlepage>
+        <document mime-type="application/x-starc/document/stageplay/title-page" version="1.0">
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><params align="hcenter"/><v><![CDATA[SCRIPT TITLE]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><params align="hcenter"/><v><![CDATA[Written by]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><params align="hcenter"/><v><![CDATA[Name of first author]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[Address]]></v></text>
+            <text><v><![CDATA[Phone number]]></v></text>
+        </document>
+    </titlepage>
+    <blocks>
+        <block id="unformatted_text" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
+        <block id="scene_heading" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="true" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,16,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
+        <block id="character" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="true" alignment="left" lines_before="0" lines_after="0" margins="0,12,0,0" margins_on_half_page="10.5,12,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
+        <block id="dialogue" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,12,0,0" margins_on_half_page="0,12,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
+        <block id="sound" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="true" uppercase="true" alignment="left" lines_before="0" lines_after="0" margins="64,12,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0" show_title="true"/>
+        <block id="music" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="true" uppercase="true" alignment="left" lines_before="0" lines_after="0" margins="64,12,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0" show_title="true"/>
+        <block id="cue" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="true" uppercase="true" alignment="left" lines_before="0" lines_after="0" margins="64,12,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0" show_title="true"/>
+        <block id="inline_note" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="true" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="64,12,0,0" margins_on_half_page="33,0,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
+        <block id="page_splitter" active="false" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,12,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
+    </blocks>
+</style>

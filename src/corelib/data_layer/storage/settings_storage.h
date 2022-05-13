@@ -256,6 +256,39 @@ const QString kComponentsAudioplayDurationByWordsWordsKey
 const QString kComponentsAudioplayDurationByWordsDurationKey
     = kComponentsAudioplayDurationKey + QStringLiteral("/by-words-duration");
 //
+// пьеса
+const QString kComponentsStageplayKey = kComponentsGroupKey + QStringLiteral("/stageplay");
+const QString kComponentsStageplayAvailableKey
+    = kComponentsStageplayKey + QStringLiteral("/available");
+// ... редактор
+const QString kComponentsStageplayEditorKey = kComponentsStageplayKey + QStringLiteral("/editor");
+const QString kComponentsStageplayEditorDefaultTemplateKey
+    = kComponentsStageplayEditorKey + QStringLiteral("/default-template");
+const QString kComponentsStageplayEditorShowBlockNumbersKey
+    = kComponentsStageplayEditorKey + QStringLiteral("/show-block-numbers");
+const QString kComponentsStageplayEditorContinueBlockNumbersKey
+    = kComponentsStageplayEditorKey + QStringLiteral("/continue-block-numbers");
+const QString kComponentsStageplayEditorUseCharactersFromTextKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/use-characters-from-text");
+const QString kComponentsStageplayEditorShortcutsKey
+    = kComponentsStageplayEditorKey + QStringLiteral("/shortcuts");
+// ... навигатор
+const QString kComponentsStageplayNavigatorKey
+    = kComponentsStageplayKey + QStringLiteral("/navigator");
+const QString kComponentsStageplayNavigatorShowSceneNumberKey
+    = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-scene-number");
+const QString kComponentsStageplayNavigatorShowSceneTextKey
+    = kComponentsStageplayNavigatorKey + QStringLiteral("/show-scene-text");
+const QString kComponentsStageplayNavigatorSceneTextLinesKey
+    = kComponentsStageplayNavigatorKey + QStringLiteral("/scene-text-lines");
+// ... хронометраж
+const QString kComponentsStageplayDurationKey
+    = kComponentsStageplayKey + QStringLiteral("/duration");
+const QString kComponentsStageplayDurationByWordsWordsKey
+    = kComponentsStageplayDurationKey + QStringLiteral("/by-words-characters");
+const QString kComponentsStageplayDurationByWordsDurationKey
+    = kComponentsStageplayDurationKey + QStringLiteral("/by-words-duration");
+//
 // редактор отношений персонажей
 const QString kComponentsCharactersRelationsKey
     = kComponentsGroupKey + QStringLiteral("/characters-relations");

@@ -15,7 +15,7 @@ class QXmlStreamAttributes;
 namespace BusinessLayer {
 
 /**
- * @brief Класс шаблона сценария
+ * @brief Класс шаблона аудиопостановки
  */
 class CORE_LIBRARY_EXPORT AudioplayTemplate : public TextTemplate
 {
@@ -31,7 +31,7 @@ public:
     QString name() const override;
 
     /**
-     * @brief Можно ли обхединять таблицы в данном шаблоне
+     * @brief Можно ли объединять таблицы в данном шаблоне
      */
     bool canMergeParagraph() const override;
 };

@@ -76,6 +76,8 @@ SOURCES += \
     business_layer/document/screenplay/text/screenplay_text_corrector.cpp \
     business_layer/document/screenplay/text/screenplay_text_document.cpp \
     business_layer/document/simple_text/simple_text_document.cpp \
+    business_layer/document/stageplay/text/stageplay_text_corrector.cpp \
+    business_layer/document/stageplay/text/stageplay_text_document.cpp \
     business_layer/document/text/abstract_text_corrector.cpp \
     business_layer/document/text/text_block_data.cpp \
     business_layer/document/text/text_cursor.cpp \
@@ -144,6 +146,14 @@ SOURCES += \
     business_layer/model/screenplay/screenplay_title_page_model.cpp \
     business_layer/model/simple_text/simple_text_model.cpp \
     business_layer/model/simple_text/simple_text_model_chapter_item.cpp \
+    business_layer/model/stageplay/stageplay_information_model.cpp \
+    business_layer/model/stageplay/stageplay_statistics_model.cpp \
+    business_layer/model/stageplay/stageplay_synopsis_model.cpp \
+    business_layer/model/stageplay/stageplay_title_page_model.cpp \
+    business_layer/model/stageplay/text/stageplay_text_block_parser.cpp \
+    business_layer/model/stageplay/text/stageplay_text_model.cpp \
+    business_layer/model/stageplay/text/stageplay_text_model_folder_item.cpp \
+    business_layer/model/stageplay/text/stageplay_text_model_scene_item.cpp \
     business_layer/model/structure/structure_model.cpp \
     business_layer/model/structure/structure_model_item.cpp \
     business_layer/model/structure/structure_proxy_model.cpp \
@@ -157,10 +167,12 @@ SOURCES += \
     business_layer/reports/audioplay/audioplay_summary_report.cpp \
     business_layer/reports/comic_book/comic_book_summary_report.cpp \
     business_layer/reports/screenplay/screenplay_summary_report.cpp \
+    business_layer/reports/stageplay/stageplay_summary_report.cpp \
     business_layer/templates/audioplay_template.cpp \
     business_layer/templates/comic_book_template.cpp \
     business_layer/templates/screenplay_template.cpp \
     business_layer/templates/simple_text_template.cpp \
+    business_layer/templates/stageplay_template.cpp \
     business_layer/templates/templates_facade.cpp \
     business_layer/templates/text_template.cpp \
     data_layer/database.cpp \
@@ -300,6 +312,8 @@ HEADERS += \
     business_layer/document/screenplay/text/screenplay_text_corrector.h \
     business_layer/document/screenplay/text/screenplay_text_document.h \
     business_layer/document/simple_text/simple_text_document.h \
+    business_layer/document/stageplay/text/stageplay_text_corrector.h \
+    business_layer/document/stageplay/text/stageplay_text_document.h \
     business_layer/document/text/abstract_text_corrector.h \
     business_layer/document/text/text_block_data.h \
     business_layer/document/text/text_cursor.h \
@@ -381,6 +395,14 @@ HEADERS += \
     business_layer/model/screenplay/screenplay_title_page_model.h \
     business_layer/model/simple_text/simple_text_model.h \
     business_layer/model/simple_text/simple_text_model_chapter_item.h \
+    business_layer/model/stageplay/stageplay_information_model.h \
+    business_layer/model/stageplay/stageplay_statistics_model.h \
+    business_layer/model/stageplay/stageplay_synopsis_model.h \
+    business_layer/model/stageplay/stageplay_title_page_model.h \
+    business_layer/model/stageplay/text/stageplay_text_block_parser.h \
+    business_layer/model/stageplay/text/stageplay_text_model.h \
+    business_layer/model/stageplay/text/stageplay_text_model_folder_item.h \
+    business_layer/model/stageplay/text/stageplay_text_model_scene_item.h \
     business_layer/model/structure/structure_model.h \
     business_layer/model/structure/structure_model_item.h \
     business_layer/model/structure/structure_proxy_model.h \
@@ -396,10 +418,12 @@ HEADERS += \
     business_layer/reports/audioplay/audioplay_summary_report.h \
     business_layer/reports/comic_book/comic_book_summary_report.h \
     business_layer/reports/screenplay/screenplay_summary_report.h \
+    business_layer/reports/stageplay/stageplay_summary_report.h \
     business_layer/templates/audioplay_template.h \
     business_layer/templates/comic_book_template.h \
     business_layer/templates/screenplay_template.h \
     business_layer/templates/simple_text_template.h \
+    business_layer/templates/stageplay_template.h \
     business_layer/templates/templates_facade.h \
     business_layer/templates/text_template.h \
     corelib_global.h \

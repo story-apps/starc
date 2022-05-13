@@ -16,6 +16,7 @@ class AudioplayTemplate;
 class ComicBookTemplate;
 class ScreenplayTemplate;
 class SimpleTextTemplate;
+class StageplayTemplate;
 
 /**
  * @brief Фасад доступа к шаблонам текстовых редакторов
@@ -35,6 +36,7 @@ public:
     static QStandardItemModel* screenplayTemplates();
     static QStandardItemModel* comicBookTemplates();
     static QStandardItemModel* audioplayTemplates();
+    static QStandardItemModel* stageplayTemplates();
 
     /**
      * @brief Получить шаблон используемый для заданной модели
@@ -52,6 +54,8 @@ public:
     static const TextTemplate& comicBookTitlePageTemplate(const QString& _templateId = {});
     static const AudioplayTemplate& audioplayTemplate(const QString& _templateId = {});
     static const TextTemplate& audioplayTitlePageTemplate(const QString& _templateId = {});
+    static const StageplayTemplate& stageplayTemplate(const QString& _templateId = {});
+    static const TextTemplate& stageplayTitlePageTemplate(const QString& _templateId = {});
 
     /**
      * @brief Задать стандартный шаблон
@@ -60,6 +64,7 @@ public:
     static void setDefaultScreenplayTemplate(const QString& _templateId);
     static void setDefaultComicBookTemplate(const QString& _templateId);
     static void setDefaultAudioplayTemplate(const QString& _templateId);
+    static void setDefaultStageplayTemplate(const QString& _templateId);
 
     /**
      * @brief Сохранить стиль в библиотеке шаблонов
@@ -68,6 +73,7 @@ public:
     static void saveScreenplayTemplate(const ScreenplayTemplate& _template);
     static void saveComicBookTemplate(const ComicBookTemplate& _template);
     static void saveAudioplayTemplate(const AudioplayTemplate& _template);
+    static void saveStageplayTemplate(const StageplayTemplate& _template);
 
     /**
      * @brief Удалить шаблон по заданному имены
@@ -76,6 +82,7 @@ public:
     static void removeScreenplayTemplate(const QString& _templateId);
     static void removeComicBookTemplate(const QString& _templateId);
     static void removeAudioplayTemplate(const QString& _templateId);
+    static void removeStageplayTemplate(const QString& _templateId);
 
     /**
      * @brief Обновить переводы

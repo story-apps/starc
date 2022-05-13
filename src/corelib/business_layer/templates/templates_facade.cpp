@@ -4,6 +4,7 @@
 #include "comic_book_template.h"
 #include "screenplay_template.h"
 #include "simple_text_template.h"
+#include "stageplay_template.h"
 
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/audioplay_title_page_model.h>
@@ -14,6 +15,9 @@
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/stageplay/stageplay_information_model.h>
+#include <business_layer/model/stageplay/stageplay_title_page_model.h>
+#include <business_layer/model/stageplay/text/stageplay_text_model.h>
 
 #include <QApplication>
 #include <QDir>
@@ -30,6 +34,7 @@ const QLatin1String kSimpleTextTemplatesDirectory("templates/text");
 const QLatin1String kScreenplayTemplatesDirectory("templates/screenplay");
 const QLatin1String kComicBookTemplatesDirectory("templates/comicbook");
 const QLatin1String kAudioplayTemplatesDirectory("templates/audioplay");
+const QLatin1String kStageplayTemplatesDirectory("templates/stageplay");
 
 /**
  * @brief Параметры группы шаблонов
@@ -88,6 +93,7 @@ public:
     TemplateInfo<ScreenplayTemplate> screenplay;
     TemplateInfo<ComicBookTemplate> comicBook;
     TemplateInfo<AudioplayTemplate> audioplay;
+    TemplateInfo<StageplayTemplate> stageplay;
 };
 
 template<>
@@ -111,6 +117,11 @@ template<>
 TemplateInfo<AudioplayTemplate>& TemplatesFacade::Implementation::templateInfo<AudioplayTemplate>()
 {
     return audioplay;
+}
+template<>
+TemplateInfo<StageplayTemplate>& TemplatesFacade::Implementation::templateInfo<StageplayTemplate>()
+{
+    return stageplay;
 }
 
 template<typename TemplateType>
@@ -359,6 +370,11 @@ QStandardItemModel* TemplatesFacade::audioplayTemplates()
     return instance().d->templatesModel<AudioplayTemplate>();
 }
 
+QStandardItemModel* TemplatesFacade::stageplayTemplates()
+{
+    return instance().d->templatesModel<StageplayTemplate>();
+}
+
 const TextTemplate& TemplatesFacade::textTemplate(const TextModel* _model)
 {
     //
@@ -380,6 +396,12 @@ const TextTemplate& TemplatesFacade::textTemplate(const TextModel* _model)
         return audioplayTemplate(model->informationModel()->templateId());
     } else if (auto model = qobject_cast<const AudioplayTitlePageModel*>(_model)) {
         return audioplayTitlePageTemplate(model->informationModel()->templateId());
+    }
+    //
+    else if (auto model = qobject_cast<const StageplayTextModel*>(_model)) {
+        return stageplayTemplate(model->informationModel()->templateId());
+    } else if (auto model = qobject_cast<const StageplayTitlePageModel*>(_model)) {
+        return stageplayTitlePageTemplate(model->informationModel()->templateId());
     }
     return simpleTextTemplate();
 }
@@ -419,6 +441,16 @@ const TextTemplate& TemplatesFacade::audioplayTitlePageTemplate(const QString& _
     return audioplayTemplate(_templateId).titlePageTemplate();
 }
 
+const StageplayTemplate& TemplatesFacade::stageplayTemplate(const QString& _templateId)
+{
+    return instance().d->getTemplate<StageplayTemplate>(_templateId);
+}
+
+const TextTemplate& TemplatesFacade::stageplayTitlePageTemplate(const QString& _templateId)
+{
+    return stageplayTemplate(_templateId).titlePageTemplate();
+}
+
 void TemplatesFacade::setDefaultSimpleTextTemplate(const QString& _templateId)
 {
     instance().d->setDefaultTemplate<SimpleTextTemplate>(_templateId);
@@ -437,6 +469,11 @@ void TemplatesFacade::setDefaultComicBookTemplate(const QString& _templateId)
 void TemplatesFacade::setDefaultAudioplayTemplate(const QString& _templateId)
 {
     instance().d->setDefaultTemplate<AudioplayTemplate>(_templateId);
+}
+
+void TemplatesFacade::setDefaultStageplayTemplate(const QString& _templateId)
+{
+    instance().d->setDefaultTemplate<StageplayTemplate>(_templateId);
 }
 
 void TemplatesFacade::saveSimpleTextTemplate(const SimpleTextTemplate& _template)
@@ -459,6 +496,11 @@ void TemplatesFacade::saveAudioplayTemplate(const AudioplayTemplate& _template)
     instance().d->saveTemplate<AudioplayTemplate>(kAudioplayTemplatesDirectory, _template);
 }
 
+void TemplatesFacade::saveStageplayTemplate(const StageplayTemplate& _template)
+{
+    instance().d->saveTemplate<StageplayTemplate>(kStageplayTemplatesDirectory, _template);
+}
+
 void TemplatesFacade::removeSimpleTextTemplate(const QString& _templateId)
 {
     instance().d->removeTemplate<SimpleTextTemplate>(kSimpleTextTemplatesDirectory, _templateId);
@@ -479,11 +521,18 @@ void TemplatesFacade::removeAudioplayTemplate(const QString& _templateId)
     instance().d->removeTemplate<AudioplayTemplate>(kAudioplayTemplatesDirectory, _templateId);
 }
 
+void TemplatesFacade::removeStageplayTemplate(const QString& _templateId)
+{
+    instance().d->removeTemplate<StageplayTemplate>(kStageplayTemplatesDirectory, _templateId);
+}
+
 void TemplatesFacade::updateTranslations()
 {
     instance().d->updateTranslations<SimpleTextTemplate>();
     instance().d->updateTranslations<ScreenplayTemplate>();
     instance().d->updateTranslations<ComicBookTemplate>();
+    instance().d->updateTranslations<AudioplayTemplate>();
+    instance().d->updateTranslations<StageplayTemplate>();
 }
 
 TemplatesFacade::~TemplatesFacade() = default;
@@ -491,18 +540,40 @@ TemplatesFacade::~TemplatesFacade() = default;
 TemplatesFacade::TemplatesFacade()
     : d(new Implementation)
 {
-    d->loadTemplates<SimpleTextTemplate>(
-        kSimpleTextTemplatesDirectory,
-        { QLatin1String("mono_cp_a4"), QLatin1String("mono_cn_a4"), QLatin1String("mono_cp_letter"),
-          QLatin1String("sans_a4"), QLatin1String("sans_letter") });
-    d->loadTemplates<ScreenplayTemplate>(
-        kScreenplayTemplatesDirectory,
-        { QLatin1String("world_cp"), QLatin1String("world_cn"), QLatin1String("ar"),
-          QLatin1String("he"), QLatin1String("ru"), QLatin1String("tamil"), QLatin1String("us") });
+    d->loadTemplates<SimpleTextTemplate>(kSimpleTextTemplatesDirectory,
+                                         {
+                                             QLatin1String("mono_cp_a4"),
+                                             QLatin1String("mono_cn_a4"),
+                                             QLatin1String("mono_cp_letter"),
+                                             QLatin1String("sans_a4"),
+                                             QLatin1String("sans_letter"),
+                                         });
+    d->loadTemplates<ScreenplayTemplate>(kScreenplayTemplatesDirectory,
+                                         {
+                                             QLatin1String("world_cp"),
+                                             QLatin1String("world_cn"),
+                                             QLatin1String("ar"),
+                                             QLatin1String("he"),
+                                             QLatin1String("ru"),
+                                             QLatin1String("tamil"),
+                                             QLatin1String("us"),
+                                         });
     d->loadTemplates<ComicBookTemplate>(kComicBookTemplatesDirectory,
-                                        { QLatin1String("world"), QLatin1String("us") });
+                                        {
+                                            QLatin1String("world"),
+                                            QLatin1String("us"),
+                                        });
     d->loadTemplates<AudioplayTemplate>(kAudioplayTemplatesDirectory,
-                                        { QLatin1String("bbc_scene"), QLatin1String("us") });
+                                        {
+                                            QLatin1String("bbc_scene"),
+                                            QLatin1String("us"),
+                                        });
+    d->loadTemplates<AudioplayTemplate>(kStageplayTemplatesDirectory,
+                                        {
+                                            QLatin1String("bbc"),
+                                            QLatin1String("ru"),
+                                            QLatin1String("us"),
+                                        });
 }
 
 TemplatesFacade& TemplatesFacade::instance()

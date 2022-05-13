@@ -505,7 +505,7 @@ public:
     qreal pageSplitterWidth() const;
 
     /**
-     * @brief Можно ли обхединять таблицы в данном шаблоне
+     * @brief Можно ли объединять таблицы в данном шаблоне
      */
     virtual bool canMergeParagraph() const;
 
