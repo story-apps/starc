@@ -55,6 +55,13 @@ enum class DocumentObjectType {
     AudioplayDictionaries = 10304,
     AudioplayStatistics = 10305,
     //
+    Stageplay = 10400,
+    StageplayTitlePage = 10401,
+    StageplaySynopsis = 10402,
+    StageplayText = 10403,
+    StageplayDictionaries = 10404,
+    StageplayStatistics = 10405,
+    //
     Novel = 10500,
     //
     GameScript = 10600,

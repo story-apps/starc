@@ -24,6 +24,11 @@
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/model/stageplay/stageplay_information_model.h>
+#include <business_layer/model/stageplay/stageplay_statistics_model.h>
+#include <business_layer/model/stageplay/stageplay_synopsis_model.h>
+#include <business_layer/model/stageplay/stageplay_title_page_model.h>
+#include <business_layer/model/stageplay/text/stageplay_text_model.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
 #include <data_layer/storage/document_storage.h>
@@ -525,6 +530,116 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             auto audioplayModel
                 = qobject_cast<BusinessLayer::AudioplayTextModel*>(modelFor(audioplayTextItemUuid));
             statisticsModel->setAudioplayTextModel(audioplayModel);
+
+            model = statisticsModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::Stageplay: {
+            auto stageplayModel = new BusinessLayer::StageplayInformationModel;
+            connect(stageplayModel,
+                    &BusinessLayer::StageplayInformationModel::titlePageVisibleChanged, this,
+                    [this, stageplayModel](bool _visible) {
+                        emit stageplayTitlePageVisibilityChanged(stageplayModel, _visible);
+                    });
+            connect(stageplayModel,
+                    &BusinessLayer::StageplayInformationModel::synopsisVisibleChanged, this,
+                    [this, stageplayModel](bool _visible) {
+                        emit stageplaySynopsisVisibilityChanged(stageplayModel, _visible);
+                    });
+            connect(stageplayModel,
+                    &BusinessLayer::StageplayInformationModel::stageplayTextVisibleChanged, this,
+                    [this, stageplayModel](bool _visible) {
+                        emit stageplayTextVisibilityChanged(stageplayModel, _visible);
+                    });
+            connect(stageplayModel,
+                    &BusinessLayer::StageplayInformationModel::stageplayStatisticsVisibleChanged,
+                    this, [this, stageplayModel](bool _visible) {
+                        emit stageplayStatisticsVisibilityChanged(stageplayModel, _visible);
+                    });
+
+            model = stageplayModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::StageplayTitlePage: {
+            auto titlePageModel = new BusinessLayer::StageplayTitlePageModel;
+
+            const auto titlePageItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(titlePageItem);
+            Q_ASSERT(titlePageItem->parent());
+            const auto parentUuid = titlePageItem->parent()->uuid();
+
+            //
+            // Добавляем в модель титульной страницы, модель информации о сценарие
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::StageplayInformationModel*>(modelFor(parentUuid));
+            titlePageModel->setInformationModel(informationModel);
+
+            model = titlePageModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::StageplaySynopsis: {
+            model = new BusinessLayer::StageplaySynopsisModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::StageplayText: {
+            auto stageplayModel = new BusinessLayer::StageplayTextModel;
+
+            const auto stageplayItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(stageplayItem);
+            Q_ASSERT(stageplayItem->parent());
+            const auto parentUuid = stageplayItem->parent()->uuid();
+
+            //
+            // Добавляем в модель сценария, модель информации о сценарие
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::StageplayInformationModel*>(modelFor(parentUuid));
+            stageplayModel->setInformationModel(informationModel);
+            //
+            // ... модель титульной страницы
+            //
+            const auto titlePageIndex = 0;
+            auto titlePageItem = stageplayItem->parent()->childAt(titlePageIndex);
+            Q_ASSERT(titlePageItem);
+            Q_ASSERT(titlePageItem->type() == Domain::DocumentObjectType::StageplayTitlePage);
+            auto titlePageModel
+                = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(titlePageItem->uuid()));
+            stageplayModel->setTitlePageModel(titlePageModel);
+            //
+            // ... модель персонажей
+            //
+            auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
+                modelFor(Domain::DocumentObjectType::Characters));
+            stageplayModel->setCharactersModel(charactersModel);
+
+            model = stageplayModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::StageplayStatistics: {
+            auto statisticsModel = new BusinessLayer::StageplayStatisticsModel;
+
+            const auto statisticsItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(statisticsItem);
+            const auto stageplayItem = statisticsItem->parent();
+            Q_ASSERT(stageplayItem);
+            QUuid stageplayTextItemUuid;
+            for (int childIndex = 0; childIndex < stageplayItem->childCount(); ++childIndex) {
+                const auto childItem = stageplayItem->childAt(childIndex);
+                if (childItem->type() == Domain::DocumentObjectType::StageplayText) {
+                    stageplayTextItemUuid = childItem->uuid();
+                    break;
+                }
+            }
+            Q_ASSERT(!stageplayTextItemUuid.isNull());
+            auto stageplayModel
+                = qobject_cast<BusinessLayer::StageplayTextModel*>(modelFor(stageplayTextItemUuid));
+            statisticsModel->setStageplayTextModel(stageplayModel);
 
             model = statisticsModel;
             break;

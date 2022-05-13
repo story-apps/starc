@@ -83,6 +83,8 @@ public:
     void reconfigureComicBookNavigator() const;
     void reconfigureAudioplayEditor(const QStringList& _changedSettingsKeys) const;
     void reconfigureAudioplayNavigator() const;
+    void reconfigureStageplayEditor(const QStringList& _changedSettingsKeys) const;
+    void reconfigureStageplayNavigator() const;
 
     /**
      * @brief Обновить информацию о том, может ли пользователь использовать платные редакторы

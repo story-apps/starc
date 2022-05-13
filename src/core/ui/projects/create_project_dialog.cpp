@@ -85,6 +85,9 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     if (settingsValue(DataStorageLayer::kComponentsAudioplayAvailableKey).toBool()) {
         projectTypeModel->appendRow(makeItem(Domain::DocumentObjectType::Audioplay));
     }
+    if (settingsValue(DataStorageLayer::kComponentsStageplayAvailableKey).toBool()) {
+        projectTypeModel->appendRow(makeItem(Domain::DocumentObjectType::Stageplay));
+    }
 
     localProject->setChecked(true);
 
@@ -334,6 +337,11 @@ void CreateProjectDialog::updateTranslations()
 
         case Domain::DocumentObjectType::Audioplay: {
             item->setText(tr("Audioplay"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::Stageplay: {
+            item->setText(tr("Stageplay"));
             break;
         }
         }

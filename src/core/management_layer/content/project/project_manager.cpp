@@ -201,6 +201,14 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
             Domain::DocumentObjectType::ComicBookSynopsis,
             Domain::DocumentObjectType::ComicBookText,
             Domain::DocumentObjectType::ComicBookStatistics,
+            Domain::DocumentObjectType::AudioplayTitlePage,
+            Domain::DocumentObjectType::AudioplaySynopsis,
+            Domain::DocumentObjectType::AudioplayText,
+            Domain::DocumentObjectType::AudioplayStatistics,
+            Domain::DocumentObjectType::StageplayTitlePage,
+            Domain::DocumentObjectType::StageplaySynopsis,
+            Domain::DocumentObjectType::StageplayText,
+            Domain::DocumentObjectType::StageplayStatistics,
         };
         if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
             auto removeDocument = new QAction(tr("Remove document"));

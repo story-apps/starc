@@ -159,8 +159,6 @@ AbstractDialog::AbstractDialog(QWidget* _parent)
         d->content->show();
         focusedWidgetAfterShow()->setFocus();
     });
-
-    designSystemChangeEvent(nullptr);
 }
 
 AbstractDialog::~AbstractDialog() = default;
@@ -172,29 +170,40 @@ void AbstractDialog::showDialog()
     }
 
     //
-    // Установим обрабочик событий, чтобы перехватывать потерю фокуса и возвращать его в диалог
+    // Ставим отображение диалога в очередь событий, т.к. имеет место кейс, когда диалог был создан,
+    // но ещё не был до конца инициилизрован (по событию PolishRequest, которое также кладётся в
+    // очередь в момент создания виджета)
     //
-    focusedWidgetAfterShow()->installEventFilter(this);
-    lastFocusableWidget()->installEventFilter(this);
+    QMetaObject::invokeMethod(
+        this,
+        [this] {
+            //
+            // Установим обрабочик событий, чтобы перехватывать потерю фокуса и возвращать его в
+            // диалог
+            //
+            focusedWidgetAfterShow()->installEventFilter(this);
+            lastFocusableWidget()->installEventFilter(this);
 
-    //
-    // Конфигурируем геометрию диалога
-    //
-    move(0, 0);
-    resize(parentWidget()->size());
+            //
+            // Конфигурируем геометрию диалога
+            //
+            move(0, 0);
+            resize(parentWidget()->size());
 
-    //
-    // Сохраняем изображение контента и прячем сам виджет
-    //
-    d->contentPixmap = d->content->grab();
-    d->content->hide();
+            //
+            // Сохраняем изображение контента и прячем сам виджет
+            //
+            d->contentPixmap = d->content->grab();
+            d->content->hide();
 
-    //
-    // Запускаем отображение
-    //
-    d->animateShow(d->content->pos());
-    setFocus();
-    show();
+            //
+            // Запускаем отображение
+            //
+            d->animateShow(d->content->pos());
+            setFocus();
+            show();
+        },
+        Qt::QueuedConnection);
 }
 
 void AbstractDialog::hideDialog()

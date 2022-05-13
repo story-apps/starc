@@ -109,44 +109,41 @@ signals:
      * @brief Сменилась видимость элемента сценария
      */
     /** @{ */
-    void screenplayTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
-                                              bool _visible);
-    void screenplaySynopsisVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
-                                             bool _visible);
-    void screenplayTreatmentVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
-                                              bool _visible);
-    void screenplayTextVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
-                                         bool _visible);
-    void screenplayStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
-                                               bool _visible);
+    void screenplayTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void screenplaySynopsisVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void screenplayTreatmentVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void screenplayTextVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void screenplayStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
     /** @} */
 
     /**
      * @brief Сменилась видимость элемента комикса
      */
     /** @{ */
-    void comicBookTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _comicBookModel,
-                                             bool _visible);
-    void comicBookSynopsisVisibilityChanged(BusinessLayer::AbstractModel* _comicookModel,
-                                            bool _visible);
-    void comicBookTextVisibilityChanged(BusinessLayer::AbstractModel* _comicBookModel,
-                                        bool _visible);
-    void comicBookStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _comicBookModel,
-                                              bool _visible);
+    void comicBookTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void comicBookSynopsisVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void comicBookTextVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void comicBookStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
     /** @} */
 
     /**
      * @brief Сменилась видимость элемента аудиопостановки
      */
     /** @{ */
-    void audioplayTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
-                                             bool _visible);
-    void audioplaySynopsisVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
-                                            bool _visible);
-    void audioplayTextVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
-                                        bool _visible);
-    void audioplayStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _screenplayModel,
-                                              bool _visible);
+    void audioplayTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void audioplaySynopsisVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void audioplayTextVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void audioplayStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    /** @} */
+
+    /**
+     * @brief Сменилась видимость элемента аудиопостановки
+     */
+    /** @{ */
+    void stageplayTitlePageVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void stageplaySynopsisVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void stageplayTextVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
+    void stageplayStatisticsVisibilityChanged(BusinessLayer::AbstractModel* _model, bool _visible);
     /** @} */
 
     /**

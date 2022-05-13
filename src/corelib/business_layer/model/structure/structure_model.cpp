@@ -250,6 +250,20 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         break;
     }
 
+    case DocumentObjectType::Stageplay: {
+        auto audioplayItem
+            = createItem(DocumentObjectType::Stageplay, !_name.isEmpty() ? _name : tr("Stageplay"));
+        appendItem(audioplayItem, parentItem);
+        appendItem(createItem(DocumentObjectType::StageplayTitlePage, tr("Title page")),
+                   audioplayItem);
+        appendItem(createItem(DocumentObjectType::StageplaySynopsis, tr("Synopsis")),
+                   audioplayItem);
+        appendItem(createItem(DocumentObjectType::StageplayText, tr("Script")), audioplayItem);
+        appendItem(createItem(DocumentObjectType::StageplayStatistics, tr("Statistics")),
+                   audioplayItem);
+        break;
+    }
+
     case DocumentObjectType::Characters: {
         appendItem(createItem(_type, tr("Characters")), parentItem, _content);
         break;
@@ -488,6 +502,7 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     case Domain::DocumentObjectType::Screenplay:
     case Domain::DocumentObjectType::ComicBook:
     case Domain::DocumentObjectType::Audioplay:
+    case Domain::DocumentObjectType::Stageplay:
     case Domain::DocumentObjectType::Character:
     case Domain::DocumentObjectType::Location:
     case Domain::DocumentObjectType::Folder: {
@@ -523,10 +538,10 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     case Domain::DocumentObjectType::ComicBookSynopsis:
     case Domain::DocumentObjectType::ComicBookText:
     case Domain::DocumentObjectType::ComicBookStatistics:
-    case Domain::DocumentObjectType::AudioplayTitlePage:
-    case Domain::DocumentObjectType::AudioplaySynopsis:
-    case Domain::DocumentObjectType::AudioplayText:
-    case Domain::DocumentObjectType::AudioplayStatistics: {
+    case Domain::DocumentObjectType::StageplayTitlePage:
+    case Domain::DocumentObjectType::StageplaySynopsis:
+    case Domain::DocumentObjectType::StageplayText:
+    case Domain::DocumentObjectType::StageplayStatistics: {
         return defaultFlags;
     }
 

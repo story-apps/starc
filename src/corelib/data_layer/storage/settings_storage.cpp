@@ -760,6 +760,125 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsAudioplayDurationByWordsWordsKey, 160);
         defaultValues.insert(kComponentsAudioplayDurationByWordsDurationKey, 60);
     }
+    //
+    // Параметры редактора пьес
+    //
+    {
+        auto addStageplayEditorStylesAction
+            = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
+                     TextParagraphType _to) {
+                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                           .arg(kComponentsStageplayEditorKey, _actionType,
+                                                toString(_from), _actionKey),
+                                       toString(_to));
+              };
+        auto addStageplayEditorStylesActionByTab
+            = [addStageplayEditorStylesAction](const QString& _actionType, TextParagraphType _from,
+                                               TextParagraphType _to) {
+                  addStageplayEditorStylesAction(_actionType, "tab", _from, _to);
+              };
+        auto addStageplayEditorStylesActionByEnter
+            = [addStageplayEditorStylesAction](const QString& _actionType, TextParagraphType _from,
+                                               TextParagraphType _to) {
+                  addStageplayEditorStylesAction(_actionType, "enter", _from, _to);
+              };
+        //
+        auto addStageplayEditorStylesJumpByTab =
+            [addStageplayEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                addStageplayEditorStylesActionByTab("jumping", _from, _to);
+            };
+        auto addStageplayEditorStylesJumpByEnter
+            = [addStageplayEditorStylesActionByEnter](TextParagraphType _from,
+                                                      TextParagraphType _to) {
+                  addStageplayEditorStylesActionByEnter("jumping", _from, _to);
+              };
+        addStageplayEditorStylesJumpByTab(TextParagraphType::UnformattedText,
+                                          TextParagraphType::UnformattedText);
+        addStageplayEditorStylesJumpByEnter(TextParagraphType::UnformattedText,
+                                            TextParagraphType::UnformattedText);
+        addStageplayEditorStylesJumpByTab(TextParagraphType::SceneHeading, TextParagraphType::Cue);
+        addStageplayEditorStylesJumpByEnter(TextParagraphType::SceneHeading,
+                                            TextParagraphType::Character);
+        addStageplayEditorStylesJumpByTab(TextParagraphType::Character,
+                                          TextParagraphType::Dialogue);
+        addStageplayEditorStylesJumpByEnter(TextParagraphType::Character,
+                                            TextParagraphType::Dialogue);
+        addStageplayEditorStylesJumpByTab(TextParagraphType::Dialogue, TextParagraphType::Cue);
+        addStageplayEditorStylesJumpByEnter(TextParagraphType::Dialogue,
+                                            TextParagraphType::Character);
+        addStageplayEditorStylesJumpByTab(TextParagraphType::Sound, TextParagraphType::Music);
+        addStageplayEditorStylesJumpByEnter(TextParagraphType::Sound, TextParagraphType::Character);
+        addStageplayEditorStylesJumpByTab(TextParagraphType::Music, TextParagraphType::Sound);
+        addStageplayEditorStylesJumpByEnter(TextParagraphType::Music, TextParagraphType::Character);
+        addStageplayEditorStylesJumpByTab(TextParagraphType::Cue, TextParagraphType::SceneHeading);
+        addStageplayEditorStylesJumpByEnter(TextParagraphType::Cue, TextParagraphType::Character);
+        addStageplayEditorStylesJumpByTab(TextParagraphType::InlineNote,
+                                          TextParagraphType::Character);
+        addStageplayEditorStylesJumpByEnter(TextParagraphType::InlineNote,
+                                            TextParagraphType::Character);
+        //
+        auto addStageplayEditorStylesChangeByTab =
+            [addStageplayEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                addStageplayEditorStylesActionByTab("changing", _from, _to);
+            };
+        auto addStageplayEditorStylesChangeByEnter
+            = [addStageplayEditorStylesActionByEnter](TextParagraphType _from,
+                                                      TextParagraphType _to) {
+                  addStageplayEditorStylesActionByEnter("changing", _from, _to);
+              };
+        addStageplayEditorStylesChangeByTab(TextParagraphType::UnformattedText,
+                                            TextParagraphType::Character);
+        addStageplayEditorStylesChangeByEnter(TextParagraphType::UnformattedText,
+                                              TextParagraphType::Character);
+        addStageplayEditorStylesChangeByTab(TextParagraphType::SceneHeading,
+                                            TextParagraphType::Character);
+        addStageplayEditorStylesChangeByEnter(TextParagraphType::SceneHeading,
+                                              TextParagraphType::Character);
+        addStageplayEditorStylesChangeByTab(TextParagraphType::Character, TextParagraphType::Sound);
+        addStageplayEditorStylesChangeByEnter(TextParagraphType::Character,
+                                              TextParagraphType::SceneHeading);
+        addStageplayEditorStylesChangeByTab(TextParagraphType::Dialogue, TextParagraphType::Sound);
+        addStageplayEditorStylesChangeByEnter(TextParagraphType::Dialogue,
+                                              TextParagraphType::SceneHeading);
+        addStageplayEditorStylesChangeByTab(TextParagraphType::Sound, TextParagraphType::Music);
+        addStageplayEditorStylesChangeByEnter(TextParagraphType::Sound,
+                                              TextParagraphType::SceneHeading);
+        addStageplayEditorStylesChangeByTab(TextParagraphType::Music, TextParagraphType::Cue);
+        addStageplayEditorStylesChangeByEnter(TextParagraphType::Music,
+                                              TextParagraphType::SceneHeading);
+        addStageplayEditorStylesChangeByTab(TextParagraphType::Cue, TextParagraphType::Character);
+        addStageplayEditorStylesChangeByEnter(TextParagraphType::Cue, TextParagraphType::Character);
+        addStageplayEditorStylesChangeByTab(TextParagraphType::InlineNote,
+                                            TextParagraphType::Character);
+        addStageplayEditorStylesChangeByEnter(TextParagraphType::InlineNote,
+                                              TextParagraphType::Character);
+        //
+        auto addShortcut
+            = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
+                  defaultValues.insert(
+                      QString("%1/shortcuts/%2")
+                          .arg(kComponentsStageplayEditorKey, BusinessLayer::toString(_type)),
+                      QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+              };
+        addShortcut(BusinessLayer::TextParagraphType::UnformattedText, "Ctrl+0");
+        addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
+        addShortcut(BusinessLayer::TextParagraphType::Character, "Ctrl+2");
+        addShortcut(BusinessLayer::TextParagraphType::Dialogue, "Ctrl+3");
+        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        //
+        defaultValues.insert(kComponentsStageplayAvailableKey, true);
+        //
+        defaultValues.insert(kComponentsStageplayEditorDefaultTemplateKey, "bbc");
+        defaultValues.insert(kComponentsStageplayEditorShowBlockNumbersKey, false);
+        defaultValues.insert(kComponentsStageplayEditorContinueBlockNumbersKey, true);
+        defaultValues.insert(kComponentsStageplayEditorUseCharactersFromTextKey, false);
+        //
+        // Параметры навигатора сценария
+        //
+        defaultValues.insert(kComponentsStageplayNavigatorShowSceneNumberKey, true);
+        defaultValues.insert(kComponentsStageplayNavigatorShowSceneTextKey, true);
+        defaultValues.insert(kComponentsStageplayNavigatorSceneTextLinesKey, 1);
+    }
 
 
     defaultValues.insert(kSystemUsernameKey, systemUserName());

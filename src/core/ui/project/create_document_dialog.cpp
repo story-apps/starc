@@ -80,6 +80,9 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     if (settingsValue(DataStorageLayer::kComponentsAudioplayAvailableKey).toBool()) {
         typesModel->appendRow(makeItem(Domain::DocumentObjectType::Audioplay));
     }
+    if (settingsValue(DataStorageLayer::kComponentsStageplayAvailableKey).toBool()) {
+        typesModel->appendRow(makeItem(Domain::DocumentObjectType::Stageplay));
+    }
 
     UiHelper::setFocusPolicyRecursively(documentType, Qt::NoFocus);
     documentType->setModel(typesModel);
@@ -115,7 +118,9 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
           tr("Create a document set to streamline your work on the comic book, graphic novel, or "
              "manga.") },
         { Domain::DocumentObjectType::Audioplay,
-          tr("Create a document set to streamline your work on the audio drama, or podcast.") }
+          tr("Create a document set to streamline your work on the audio drama, or podcast.") },
+        { Domain::DocumentObjectType::Stageplay,
+          tr("Create a document set to streamline your work on the stage play, or musical.") },
     };
 
     const auto documentTypeData = static_cast<Domain::DocumentObjectType>(
@@ -188,9 +193,6 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
         emit createPressed(documentType, d->documentName->text());
     });
     connect(d->cancelButton, &Button::clicked, this, &CreateDocumentDialog::hideDialog);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 CreateDocumentDialog::~CreateDocumentDialog() = default;
@@ -275,6 +277,11 @@ void CreateDocumentDialog::updateTranslations()
 
         case Domain::DocumentObjectType::Audioplay: {
             item->setText(tr("Audioplay"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::Stageplay: {
+            item->setText(tr("Stageplay"));
             break;
         }
 
