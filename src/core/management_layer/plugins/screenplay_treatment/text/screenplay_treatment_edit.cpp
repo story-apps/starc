@@ -302,10 +302,10 @@ void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
     auto cursor = textCursor();
     if (cursor.positionInBlock() == cursor.block().text().length()) {
         while (cursor.block().next().isValid() && !cursor.block().next().isVisible()) {
-            cursor.movePosition(QTextCursor::NextBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock);
+            moveCursor(QTextCursor::NextBlock);
+            moveCursor(QTextCursor::EndOfBlock);
+            cursor = textCursor();
         }
-        setTextCursor(cursor);
     }
 
     d->document.addParagraph(_type, textCursor());
@@ -367,11 +367,23 @@ BusinessLayer::TextParagraphType ScreenplayTreatmentEdit::currentParagraphType()
 void ScreenplayTreatmentEdit::setTextCursorReimpl(const QTextCursor& _cursor)
 {
     //
-    // TODO: пояснить зачем это необходимо делать?
+    // При позиционировании курсора в невидимый блок, Qt откидывает прокрутку в самый верх, поэтому
+    // перед редактированием документа запомним прокрутку, а после завершения редактирования
+    // восстановим значения полос прокрутки
     //
-    const int verticalScrollValue = verticalScrollBar()->value();
+    const auto verticalScrollValue = verticalScrollBar()->value();
+    const auto horizontalScrollValue = horizontalScrollBar()->value();
+
+    //
+    // Задаём курсор
+    //
     setTextCursor(_cursor);
+
+    //
+    // Восстанавливаем значения полос прокрутки
+    //
     verticalScrollBar()->setValue(verticalScrollValue);
+    horizontalScrollBar()->setValue(horizontalScrollValue);
 }
 
 QModelIndex ScreenplayTreatmentEdit::currentModelIndex() const
@@ -569,7 +581,7 @@ bool ScreenplayTreatmentEdit::updateEnteredText(const QString& _eventText)
         // Выводим необходимый
         //
         cursor.insertText(correctedText);
-        setTextCursor(cursor);
+        setTextCursorReimpl(cursor);
 
         return true;
     }
@@ -600,7 +612,7 @@ bool ScreenplayTreatmentEdit::updateEnteredText(const QString& _eventText)
         // Выводим необходимый
         //
         cursor.insertText(correctedText);
-        setTextCursor(cursor);
+        setTextCursorReimpl(cursor);
 
         return true;
     }
