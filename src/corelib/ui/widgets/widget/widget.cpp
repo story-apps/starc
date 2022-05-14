@@ -132,6 +132,8 @@ bool Widget::event(QEvent* _event)
         return false;
     }
 
+    case QEvent::Paint:
+    case QEvent::Resize:
     case QEvent::PolishRequest: {
         d->initialize(this);
         Q_FALLTHROUGH();

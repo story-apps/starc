@@ -538,6 +538,10 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     case Domain::DocumentObjectType::ComicBookSynopsis:
     case Domain::DocumentObjectType::ComicBookText:
     case Domain::DocumentObjectType::ComicBookStatistics:
+    case Domain::DocumentObjectType::AudioplayTitlePage:
+    case Domain::DocumentObjectType::AudioplaySynopsis:
+    case Domain::DocumentObjectType::AudioplayText:
+    case Domain::DocumentObjectType::AudioplayStatistics:
     case Domain::DocumentObjectType::StageplayTitlePage:
     case Domain::DocumentObjectType::StageplaySynopsis:
     case Domain::DocumentObjectType::StageplayText:

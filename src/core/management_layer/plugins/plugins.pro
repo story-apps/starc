@@ -50,3 +50,6 @@ exists (audioplay_statistics/audioplay_statistics.pro) {
     SUBDIRS += audioplay_statistics
 }
 
+exists (stageplay_statistics/stageplay_statistics.pro) {
+    SUBDIRS += stageplay_statistics
+}

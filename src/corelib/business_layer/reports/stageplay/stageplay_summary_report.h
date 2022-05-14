@@ -28,11 +28,6 @@ public:
     int pagesCount() const;
 
     /**
-     * @brief Количество панелей
-     */
-    int panelsCount() const;
-
-    /**
      * @brief Количество слов
      */
     int wordsCount() const;
@@ -52,6 +47,11 @@ public:
      * @brief Получить информацию о тексте
      */
     QAbstractItemModel* textInfoModel() const;
+
+    /**
+     * @brief Получить информацию о персонажах
+     */
+    QAbstractItemModel* charactersInfoModel() const;
 
 private:
     class Implementation;
