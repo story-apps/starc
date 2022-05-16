@@ -819,7 +819,6 @@ void SettingsView::Implementation::initComicBookCard()
     comicBookEditorDefaultTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     comicBookEditorDefaultTemplate->setModel(BusinessLayer::TemplatesFacade::comicBookTemplates());
     comicBookEditorDefaultTemplateOptions->setIcon(u8"\U000F01D9");
-    comicBookEditorDefaultTemplateOptions->hide();
     //
     auto linesGroup = new RadioButtonGroup(comicBookCard);
     linesGroup->add(comicBookNavigatorSceneDescriptionLines1);
@@ -2530,7 +2529,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
          }) {
         toggle->setBackgroundColor(DesignSystem::color().background());
         toggle->setTextColor(DesignSystem::color().onBackground());
-        toggle->setContentsMargins(0, Ui::DesignSystem::layout().px16(),
+        toggle->setContentsMargins(Ui::DesignSystem::layout().px16(),
+                                   Ui::DesignSystem::layout().px16(),
                                    Ui::DesignSystem::layout().px16(), 0);
     }
 
