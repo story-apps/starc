@@ -25,7 +25,7 @@ ScreenplayTemplateToolBar::Implementation::Implementation(QObject* _parent)
     , titlePageAction(new QAction(_parent))
     , paragraphAction(new QAction(_parent))
 {
-    backAction->setIconText(u8"\U000f004d");
+    backAction->setIconText(u8"\U000F004D");
 
     pageSettingsAction->setIconText(u8"\U000F0224");
     pageSettingsAction->setCheckable(true);

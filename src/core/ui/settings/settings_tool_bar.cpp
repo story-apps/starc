@@ -32,7 +32,7 @@ SettingsToolBar::SettingsToolBar(QWidget* _parent)
     showDefaultPage();
 
     QAction* backAction = new QAction(this);
-    backAction->setIconText(u8"\U000f004d");
+    backAction->setIconText(u8"\U000F004D");
     d->toolBar->addAction(backAction);
     connect(backAction, &QAction::triggered, this, &SettingsToolBar::backPressed);
 

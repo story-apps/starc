@@ -56,7 +56,7 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     , beatNameWidget(new BeatNameWidget(_parent))
     , showBeatTextAction(new QAction(_parent))
 {
-    backIcon->setText(u8"\U000f0141");
+    backIcon->setText(u8"\U000F0141");
 
     content->setContextMenuPolicy(Qt::CustomContextMenu);
     content->setDragDropEnabled(true);

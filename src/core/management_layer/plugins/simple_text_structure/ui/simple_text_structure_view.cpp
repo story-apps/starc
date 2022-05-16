@@ -33,7 +33,7 @@ SimpleTextStructureView::Implementation::Implementation(QWidget* _parent)
     , content(new Tree(_parent))
     , contentDelegate(new SimpleTextStructureDelegate(content))
 {
-    backIcon->setText(u8"\U000f0141");
+    backIcon->setText(u8"\U000F0141");
 
     content->setContextMenuPolicy(Qt::CustomContextMenu);
     content->setDragDropEnabled(true);

@@ -84,12 +84,20 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
             _painter->setPen(_index.data(Qt::DecorationPropertyRole).value<QColor>());
         }
 
-        iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
-                                           Ui::DesignSystem::treeOneLineItem().margins().left())
-                                      + m_additionalLeftMargin,
-                                  backgroundRect.top()),
-                          QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                                 backgroundRect.height()));
+        if (QLocale().textDirection() == Qt::LeftToRight) {
+            iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
+                                               Ui::DesignSystem::treeOneLineItem().margins().left())
+                                          + m_additionalLeftMargin,
+                                      backgroundRect.top()),
+                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                     backgroundRect.height()));
+        } else {
+            iconRect = QRectF(QPointF(backgroundRect.right() - m_additionalLeftMargin
+                                          - Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                      backgroundRect.top()),
+                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                     backgroundRect.height()));
+        }
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
         _painter->drawText(iconRect, Qt::AlignCenter, _index.data(Qt::DecorationRole).toString());
     }
@@ -99,17 +107,33 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     //
     _painter->setPen(textColor);
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
-    const qreal textLeft = iconRect.isValid()
-        ? iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing()
-        : backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left()
-            + m_additionalLeftMargin;
-    QRectF textRect(QPointF(textLeft, backgroundRect.top()),
-                    QSizeF(backgroundRect.right() - textLeft
-                               - Ui::DesignSystem::treeOneLineItem().margins().right(),
-                           backgroundRect.height()));
-    if (!m_hoverTrailingIcon.isEmpty() && opt.state.testFlag(QStyle::State_MouseOver)) {
-        textRect = textRect.adjusted(
-            0, 0, -1 * Ui::DesignSystem::treeOneLineItem().iconSize().width(), 0);
+    QRectF textRect;
+    if (QLocale().textDirection() == Qt::LeftToRight) {
+        const qreal textLeft = iconRect.isValid()
+            ? iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing()
+            : backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left()
+                + m_additionalLeftMargin;
+        textRect = QRectF(QPointF(textLeft, backgroundRect.top()),
+                          QSizeF(backgroundRect.right() - textLeft
+                                     - Ui::DesignSystem::treeOneLineItem().margins().right(),
+                                 backgroundRect.height()));
+        if (!m_hoverTrailingIcon.isEmpty() && opt.state.testFlag(QStyle::State_MouseOver)) {
+            textRect = textRect.adjusted(
+                0, 0, -1 * Ui::DesignSystem::treeOneLineItem().iconSize().width(), 0);
+        }
+    } else {
+        const qreal textRight = iconRect.isValid()
+            ? iconRect.left() - Ui::DesignSystem::treeOneLineItem().spacing()
+            : backgroundRect.right() - Ui::DesignSystem::treeOneLineItem().margins().right()
+                - m_additionalLeftMargin;
+        const auto textLeft
+            = backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
+        textRect = QRectF(QPointF(textLeft, backgroundRect.top()),
+                          QSizeF(textRight - textLeft, backgroundRect.height()));
+        if (!m_hoverTrailingIcon.isEmpty() && opt.state.testFlag(QStyle::State_MouseOver)) {
+            textRect = textRect.adjusted(Ui::DesignSystem::treeOneLineItem().iconSize().width(), 0,
+                                         0, 0);
+        }
     }
     const auto text = _painter->fontMetrics().elidedText(_index.data().toString(), Qt::ElideRight,
                                                          static_cast<int>(textRect.width()));

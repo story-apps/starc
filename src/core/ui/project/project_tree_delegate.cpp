@@ -65,7 +65,7 @@ void ProjectTreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& 
                                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
                                       backgroundRect.height()));
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
-        _painter->drawText(iconRect, Qt::AlignCenter, u8"\U000f0142");
+        _painter->drawText(iconRect, Qt::AlignCenter, u8"\U000F0142");
     }
 }
 

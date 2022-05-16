@@ -111,7 +111,7 @@ ScreenplayTreatmentSearchToolbar::ScreenplayTreatmentSearchToolbar(QWidget* _par
     d->replaceText->installEventFilter(this);
     setFocusProxy(d->searchText);
 
-    d->closeAction->setIconText(u8"\U000f004d");
+    d->closeAction->setIconText(u8"\U000F004D");
     d->closeAction->setShortcut(QKeySequence::Find);
     addAction(d->closeAction);
     connect(d->closeAction, &QAction::triggered, this, [this] {

@@ -3,6 +3,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/icon_helper.h>
 
 #include <QAction>
 #include <QPaintEvent>
@@ -296,7 +297,7 @@ void AppBar::paintEvent(QPaintEvent* _event)
         const QRectF actionRect(QPointF(actionX, actionY), actionSize);
         painter.setPen((!_action->isCheckable() || _action->isChecked()) ? textColor()
                                                                          : iconInactiveColor);
-        painter.drawText(actionRect, Qt::AlignCenter, _action->text());
+        painter.drawText(actionRect, Qt::AlignCenter, IconHelper::directedIcon(_action->text()));
 
         //
         // ... красная точка

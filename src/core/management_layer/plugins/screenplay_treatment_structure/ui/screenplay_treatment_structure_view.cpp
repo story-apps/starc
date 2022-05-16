@@ -34,7 +34,7 @@ ScreenplayTreatmentStructureView::Implementation::Implementation(QWidget* _paren
     , content(new Tree(_parent))
     , contentDelegate(new ScreenplayTreatmentStructureDelegate(content))
 {
-    backIcon->setText(u8"\U000f0141");
+    backIcon->setText(u8"\U000F0141");
 
     content->setContextMenuPolicy(Qt::CustomContextMenu);
     content->setDragDropEnabled(true);
