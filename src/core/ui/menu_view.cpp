@@ -23,6 +23,7 @@
 #include <QBoxLayout>
 #include <QKeyEvent>
 #include <QScrollArea>
+#include <QTimer>
 
 
 namespace Ui {
@@ -449,7 +450,8 @@ void MenuView::openMenu()
 void MenuView::closeMenu()
 {
     Log::info("Hide menu");
-    WAF::Animation::sideSlideOut(this);
+    const auto duration = WAF::Animation::sideSlideOut(this);
+    QTimer::singleShot(duration, this, &MenuView::hide);
 }
 
 QSize MenuView::sizeHint() const
