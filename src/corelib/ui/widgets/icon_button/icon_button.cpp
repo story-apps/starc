@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/animations/click_animation.h>
+#include <utils/helpers/icon_helper.h>
 
 #include <QPaintEvent>
 #include <QPainter>
@@ -118,7 +119,7 @@ void IconButton::paintEvent(QPaintEvent* _event)
     //
     painter.setFont(Ui::DesignSystem::font().iconsMid());
     painter.setPen(d->isChecked ? Ui::DesignSystem::color().secondary() : textColor());
-    painter.drawText(iconRect, Qt::AlignCenter, d->icon);
+    painter.drawText(iconRect, Qt::AlignCenter, IconHelper::directedIcon(d->icon));
 }
 
 void IconButton::mouseReleaseEvent(QMouseEvent* _event)

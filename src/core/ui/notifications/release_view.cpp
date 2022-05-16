@@ -345,32 +345,37 @@ void ReleaseView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->avatarLabel->setFixedSize(Ui::DesignSystem::layout().px(72),
                                  Ui::DesignSystem::layout().px(72));
-    d->avatarLabel->setContentsMargins(
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
-        Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12());
+    const auto leftMargin
+        = isLeftToRight() ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12();
+    const auto rightMargin
+        = isLeftToRight() ? Ui::DesignSystem::layout().px12() : Ui::DesignSystem::layout().px24();
+    d->avatarLabel->setContentsMargins(leftMargin, Ui::DesignSystem::layout().px24(), rightMargin,
+                                       Ui::DesignSystem::layout().px12());
     d->dateTimeLabel->setTextColor(ColorHelper::transparent(
         Ui::DesignSystem::color().onPrimary(), Ui::DesignSystem::disabledTextOpacity()));
+    d->dateTimeLabel->setAlignment(isLeftToRight() ? Qt::AlignLeft : Qt::AlignRight);
     d->dateTimeLabel->setContentsMargins(0, Ui::DesignSystem::layout().px24(), 0, 0);
     d->titleLabel->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->titleLabel->setContentsMargins(0, 0, 0, Ui::DesignSystem::layout().px12());
     d->bodyLabel->setTextColor(Ui::DesignSystem::color().onPrimary());
-    d->bodyLabel->setContentsMargins(Ui::DesignSystem::layout().px24(), 0,
-                                     Ui::DesignSystem::layout().px12(),
-                                     Ui::DesignSystem::layout().px12());
+    d->bodyLabel->setContentsMargins(leftMargin, 0, rightMargin, Ui::DesignSystem::layout().px12());
     d->readMoreLink->setTextColor(ColorHelper::transparent(
         Ui::DesignSystem::color().onPrimary(), Ui::DesignSystem::disabledTextOpacity()));
-    d->readMoreLink->setContentsMargins(Ui::DesignSystem::layout().px24(), 0,
-                                        Ui::DesignSystem::layout().px12(), 0);
+    d->readMoreLink->setContentsMargins(leftMargin, 0, rightMargin, 0);
     d->installedIcon->setTextColor(Ui::DesignSystem::color().secondary());
     d->installedIcon->setContentsMargins(
-        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px(17),
-        Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px(11));
+        isLeftToRight() ? Ui::DesignSystem::layout().px16() : Ui::DesignSystem::layout().px8(),
+        Ui::DesignSystem::layout().px(17),
+        isLeftToRight() ? Ui::DesignSystem::layout().px8() : Ui::DesignSystem::layout().px16(),
+        Ui::DesignSystem::layout().px(11));
     d->installedLabel->setTextColor(Ui::DesignSystem::color().onPrimary());
-    d->installedLabel->setContentsMargins(0, Ui::DesignSystem::layout().px(15),
-                                          Ui::DesignSystem::layout().px8(),
-                                          Ui::DesignSystem::layout().px(9));
+    d->installedLabel->setContentsMargins(
+        isLeftToRight() ? 0 : Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px(15),
+        isLeftToRight() ? Ui::DesignSystem::layout().px8() : 0, Ui::DesignSystem::layout().px(9));
     d->downloadingAction->setTextColor(Ui::DesignSystem::color().onPrimary());
-    d->downloadingProgress->setContentsMargins(Ui::DesignSystem::layout().px16(), 0, 0, 0);
+    d->downloadingProgress->setContentsMargins(
+        isLeftToRight() ? Ui::DesignSystem::layout().px16() : 0, 0,
+        isLeftToRight() ? 0 : Ui::DesignSystem::layout().px16(), 0);
     d->installButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
     d->installButton->setTextColor(Ui::DesignSystem::color().secondary());
     d->installButton->setContentsMargins(0, Ui::DesignSystem::layout().px(6), 0,

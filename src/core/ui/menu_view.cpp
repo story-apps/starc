@@ -534,11 +534,13 @@ void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         label->setBackgroundColor(Ui::DesignSystem::color().primary());
         label->setTextColor(Ui::DesignSystem::color().onPrimary());
     }
-    d->notificationsBackButton->setContentsMargins(Ui::DesignSystem::layout().px4(),
-                                                   Ui::DesignSystem::layout().px4(), 0, 0);
+    d->notificationsBackButton->setContentsMargins(
+        isLeftToRight() ? Ui::DesignSystem::layout().px4() : 0, Ui::DesignSystem::layout().px4(),
+        isLeftToRight() ? 0 : Ui::DesignSystem::layout().px4(), 0);
     d->notificationsTitle->setContentsMargins(0, Ui::DesignSystem::layout().px4(), 0, 0);
-    d->notificationsFilterButton->setContentsMargins(0, Ui::DesignSystem::layout().px4(),
-                                                     Ui::DesignSystem::layout().px4(), 0);
+    d->notificationsFilterButton->setContentsMargins(
+        isLeftToRight() ? 0 : Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4(),
+        isLeftToRight() ? Ui::DesignSystem::layout().px4() : 0, 0);
 }
 
 } // namespace Ui

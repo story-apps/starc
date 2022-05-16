@@ -82,7 +82,9 @@ void ProgressBar::paintEvent(QPaintEvent* _event)
     painter.fillRect(contentsRect(),
                      ColorHelper::transparent(Ui::DesignSystem::color().secondary(),
                                               Ui::DesignSystem::hoverBackgroundOpacity()));
-    const QRectF progressRect(contentsRect().x(), contentsRect().y(),
-                              contentsRect().width() * d->progress, contentsRect().height());
+    const QRectF progressRect(
+        contentsRect().x()
+            + (isLeftToRight() ? 0 : contentsRect().width() - contentsRect().width() * d->progress),
+        contentsRect().y(), contentsRect().width() * d->progress, contentsRect().height());
     painter.fillRect(progressRect, Ui::DesignSystem::color().secondary());
 }
