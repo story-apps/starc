@@ -21,3 +21,8 @@ QString IconHelper::directedIcon(const QString& _icon)
 
     return iconsMapping.value(_icon, _icon);
 }
+
+QString IconHelper::chevronRight()
+{
+    return directedIcon(u8"\U000F0142");
+}

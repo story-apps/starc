@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/icon_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/shugar.h>
@@ -19,7 +20,7 @@ const char* kBadgeVisibleKey = "is-badge-visible";
 class Drawer::Implementation
 {
 public:
-    Implementation();
+    explicit Implementation(Drawer* _q);
 
     /**
      * @brief Высота панели аккаунта
@@ -34,10 +35,10 @@ public:
     /**
      * @brief Получить информацию о дополнительном действии аккаунта в заданной координате
      */
-    bool isAccountActionClicked(const QPoint& _coordinate, int _width) const;
-    QPair<QAction*, QRectF> pressedAccountActionInfo(const QPoint& _coordinate, int _width) const;
-    QAction* pressedAccountAction(const QPoint& _coordinate, int _width) const;
-    QRectF pressedAccountActionRect(const QPoint& _coordinate, int _width) const;
+    bool isAccountActionClicked(const QPoint& _coordinate) const;
+    QPair<QAction*, QRectF> pressedAccountActionInfo(const QPoint& _coordinate) const;
+    QAction* pressedAccountAction(const QPoint& _coordinate) const;
+    QRectF pressedAccountActionRect(const QPoint& _coordinate) const;
 
     /**
      * @brief Получить пункт меню по координате
@@ -47,13 +48,15 @@ public:
     /**
      * @brief Определить область действия
      */
-    QRectF actionRect(const QAction* _action, const QList<QAction*>& _actions, int _width) const;
+    QRectF actionRect(const QAction* _action, const QList<QAction*>& _actions) const;
 
     /**
      * @brief Анимировать клик
      */
     void animateClick();
 
+
+    Drawer* q = nullptr;
 
     /**
      * @brief Параметры панели информации о пользователе
@@ -77,7 +80,8 @@ public:
     QVariantAnimation decorationOpacityAnimation;
 };
 
-Drawer::Implementation::Implementation()
+Drawer::Implementation::Implementation(Drawer* _q)
+    : q(_q)
 {
     decorationRadiusAnimation.setEasingCurve(QEasingCurve::InQuad);
     decorationRadiusAnimation.setStartValue(1.0);
@@ -110,23 +114,24 @@ bool Drawer::Implementation::isAccountPanelClicked(const QPoint& _coordinate) co
     return _coordinate.y() < accountPanelHeight();
 }
 
-bool Drawer::Implementation::isAccountActionClicked(const QPoint& _coordinate, int _width) const
+bool Drawer::Implementation::isAccountActionClicked(const QPoint& _coordinate) const
 {
-    return pressedAccountActionInfo(_coordinate, _width).first != nullptr;
+    return pressedAccountActionInfo(_coordinate).first != nullptr;
 }
 
-QPair<QAction*, QRectF> Drawer::Implementation::pressedAccountActionInfo(const QPoint& _coordinate,
-                                                                         int _width) const
+QPair<QAction*, QRectF> Drawer::Implementation::pressedAccountActionInfo(
+    const QPoint& _coordinate) const
 {
     if (!isAccountVisible || accountActions.isEmpty()) {
         return {};
     }
 
     const auto top = Ui::DesignSystem::drawer().margins().top() + Ui::DesignSystem::layout().px2();
-    QRectF actionRect(QPointF(_width - Ui::DesignSystem::layout().px48(), top),
-                      QPointF(_width - Ui::DesignSystem::layout().px4(),
-                              top + Ui::DesignSystem::layout().px24()));
-
+    QRectF actionRect(
+        QPointF(q->isLeftToRight() ? q->width() - Ui::DesignSystem::layout().px48() : 0, top),
+        QPointF(q->isLeftToRight() ? q->width() - Ui::DesignSystem::layout().px4()
+                                   : Ui::DesignSystem::layout().px(44),
+                top + Ui::DesignSystem::layout().px24()));
     for (auto action : reversed(accountActions)) {
         if (!action->isVisible()) {
             continue;
@@ -136,20 +141,21 @@ QPair<QAction*, QRectF> Drawer::Implementation::pressedAccountActionInfo(const Q
             return { action, actionRect };
         }
 
-        actionRect.moveRight(actionRect.right() - Ui::DesignSystem::layout().px(52));
+        actionRect.moveRight(actionRect.right()
+                             + (q->isLeftToRight() ? -1 : 1) * Ui::DesignSystem::layout().px(52));
     }
 
     return {};
 }
 
-QAction* Drawer::Implementation::pressedAccountAction(const QPoint& _coordinate, int _width) const
+QAction* Drawer::Implementation::pressedAccountAction(const QPoint& _coordinate) const
 {
-    return pressedAccountActionInfo(_coordinate, _width).first;
+    return pressedAccountActionInfo(_coordinate).first;
 }
 
-QRectF Drawer::Implementation::pressedAccountActionRect(const QPoint& _coordinate, int _width) const
+QRectF Drawer::Implementation::pressedAccountActionRect(const QPoint& _coordinate) const
 {
-    return pressedAccountActionInfo(_coordinate, _width).second;
+    return pressedAccountActionInfo(_coordinate).second;
 }
 
 QAction* Drawer::Implementation::pressedAction(const QPoint& _coordinate,
@@ -176,8 +182,8 @@ QAction* Drawer::Implementation::pressedAction(const QPoint& _coordinate,
     return nullptr;
 }
 
-QRectF Drawer::Implementation::actionRect(const QAction* _action, const QList<QAction*>& _actions,
-                                          int _width) const
+QRectF Drawer::Implementation::actionRect(const QAction* _action,
+                                          const QList<QAction*>& _actions) const
 {
     qreal actionTop = accountPanelHeight();
     for (QAction* action : _actions) {
@@ -191,7 +197,7 @@ QRectF Drawer::Implementation::actionRect(const QAction* _action, const QList<QA
 
         const qreal actionBottom = actionTop + Ui::DesignSystem::drawer().actionHeight();
         if (action == _action) {
-            return QRectF(0.0, actionTop, _width, Ui::DesignSystem::drawer().actionHeight());
+            return QRectF(0.0, actionTop, q->width(), Ui::DesignSystem::drawer().actionHeight());
         }
 
         actionTop = actionBottom;
@@ -213,7 +219,7 @@ void Drawer::Implementation::animateClick()
 
 Drawer::Drawer(QWidget* _parent)
     : Widget(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
     setAttribute(Qt::WA_Hover);
     setFocusPolicy(Qt::StrongFocus);
@@ -352,9 +358,10 @@ void Drawer::paintEvent(QPaintEvent* _event)
         //
         // Аватар
         //
-        const QRectF avatarRect(left, y + Ui::DesignSystem::layout().px2(),
-                                Ui::DesignSystem::layout().px48(),
-                                Ui::DesignSystem::layout().px48());
+        const QRectF avatarRect(
+            isLeftToRight() ? left : width() - left - Ui::DesignSystem::layout().px48(),
+            y + Ui::DesignSystem::layout().px2(), Ui::DesignSystem::layout().px48(),
+            Ui::DesignSystem::layout().px48());
         if (!d->avatar.isNull()) {
             painter.drawPixmap(avatarRect.topLeft(),
                                ImageHelper::makeAvatar(d->avatar, avatarRect.size().toSize()));
@@ -371,7 +378,7 @@ void Drawer::paintEvent(QPaintEvent* _event)
         painter.setPen(Ui::DesignSystem::color().onPrimary());
         painter.setFont(Ui::DesignSystem::font().h6());
         const QRectF userNameRect(left, avatarRect.bottom() + Ui::DesignSystem::layout().px24(),
-                                  width(), Ui::DesignSystem::layout().px24());
+                                  width() - left * 2, Ui::DesignSystem::layout().px24());
         painter.drawText(userNameRect, Qt::AlignBottom | Qt::AlignLeft, d->accountName);
 
         //
@@ -380,7 +387,7 @@ void Drawer::paintEvent(QPaintEvent* _event)
         painter.setPen(ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
                                                 Ui::DesignSystem::inactiveTextOpacity()));
         painter.setFont(Ui::DesignSystem::font().subtitle1());
-        const QRectF userEmailRect(left, userNameRect.bottom(), width(),
+        const QRectF userEmailRect(left, userNameRect.bottom(), userNameRect.width(),
                                    Ui::DesignSystem::layout().px24());
         painter.drawText(userEmailRect, Qt::AlignTop | Qt::AlignLeft, d->accountEmail);
 
@@ -393,10 +400,11 @@ void Drawer::paintEvent(QPaintEvent* _event)
         //
         {
             QRectF actionRect(
-                QPointF(width() - Ui::DesignSystem::layout().px48(), avatarRect.top()),
-                QPointF(width() - Ui::DesignSystem::layout().px4(),
+                QPointF(isLeftToRight() ? width() - Ui::DesignSystem::layout().px48() : 0,
+                        avatarRect.top()),
+                QPointF(isLeftToRight() ? width() - Ui::DesignSystem::layout().px4()
+                                        : Ui::DesignSystem::layout().px(44),
                         avatarRect.top() + Ui::DesignSystem::layout().px24()));
-
             for (auto action : reversed(d->accountActions)) {
                 if (!action->isVisible()) {
                     continue;
@@ -420,7 +428,9 @@ void Drawer::paintEvent(QPaintEvent* _event)
                     painter.restore();
                 }
 
-                actionRect.moveRight(actionRect.right() - Ui::DesignSystem::layout().px(52));
+                actionRect.moveRight(actionRect.right()
+                                     + (isLeftToRight() ? -1 : 1)
+                                         * Ui::DesignSystem::layout().px(52));
             }
         }
         //
@@ -429,9 +439,11 @@ void Drawer::paintEvent(QPaintEvent* _event)
         painter.setPen(Ui::DesignSystem::color().onPrimary());
         painter.setFont(Ui::DesignSystem::font().iconsMid());
         const QRectF iconRect(
-            QPointF(width() - Ui::DesignSystem::layout().px48(), userNameRect.top()),
-            QPointF(width(), userEmailRect.bottom()));
-        painter.drawText(iconRect, Qt::AlignCenter, u8"\U000F0142");
+            QPointF(isLeftToRight() ? width() - Ui::DesignSystem::layout().px48() : 0,
+                    userNameRect.top()),
+            QPointF(isLeftToRight() ? width() : Ui::DesignSystem::layout().px48(),
+                    userEmailRect.bottom()));
+        painter.drawText(iconRect, Qt::AlignCenter, IconHelper::chevronRight());
 
         y = userEmailRect.bottom() + Ui::DesignSystem::layout().px8();
     }
@@ -488,7 +500,9 @@ void Drawer::paintEvent(QPaintEvent* _event)
         // ... иконка
         //
         const QRectF iconRect(
-            QPointF(Ui::DesignSystem::drawer().actionMargins().left(),
+            QPointF(isLeftToRight() ? Ui::DesignSystem::drawer().actionMargins().left()
+                                    : (width() - Ui::DesignSystem::drawer().iconSize().width()
+                                       - Ui::DesignSystem::drawer().actionMargins().left()),
                     actionRect.top() + Ui::DesignSystem::drawer().actionMargins().top()),
             Ui::DesignSystem::drawer().iconSize());
         if (action->iconText() != action->text()) {
@@ -499,9 +513,12 @@ void Drawer::paintEvent(QPaintEvent* _event)
         // ... текст
         //
         painter.setFont(Ui::DesignSystem::font().subtitle2());
-        const QRectF textRect(iconRect.right() + Ui::DesignSystem::drawer().spacing(),
+        const QRectF textRect(isLeftToRight()
+                                  ? (iconRect.right() + Ui::DesignSystem::drawer().spacing())
+                                  : Ui::DesignSystem::drawer().actionMargins().left(),
                               iconRect.top(),
-                              width() - iconRect.right() - Ui::DesignSystem::drawer().spacing()
+                              width() - Ui::DesignSystem::drawer().actionMargins().left()
+                                  - iconRect.width() - Ui::DesignSystem::drawer().spacing()
                                   - Ui::DesignSystem::drawer().actionMargins().right(),
                               Ui::DesignSystem::drawer().actionHeight()
                                   - Ui::DesignSystem::drawer().actionMargins().top()
@@ -512,8 +529,10 @@ void Drawer::paintEvent(QPaintEvent* _event)
         // ... горячие клавиши
         //
         if (!action->whatsThis().isEmpty()) {
-            painter.drawText(textRect.adjusted(0, 0, -1 * Ui::DesignSystem::layout().px4(), 0),
-                             Qt::AlignRight | Qt::AlignVCenter, action->whatsThis());
+            const auto shortcutRect
+                = textRect.adjusted(isLeftToRight() ? 0 : Ui::DesignSystem::layout().px4(), 0,
+                                    isLeftToRight() ? -1 * Ui::DesignSystem::layout().px4() : 0, 0);
+            painter.drawText(shortcutRect, Qt::AlignRight | Qt::AlignVCenter, action->whatsThis());
         }
 
         y += Ui::DesignSystem::drawer().actionHeight();
@@ -538,8 +557,8 @@ void Drawer::paintEvent(QPaintEvent* _event)
 
 void Drawer::mousePressEvent(QMouseEvent* _event)
 {
-    if (d->isAccountActionClicked(_event->pos(), width())) {
-        d->decorationRect = d->pressedAccountActionRect(_event->pos(), width())
+    if (d->isAccountActionClicked(_event->pos())) {
+        d->decorationRect = d->pressedAccountActionRect(_event->pos())
                                 .adjusted(0, -Ui::DesignSystem::layout().px12(), 0,
                                           Ui::DesignSystem::layout().px12());
         d->decorationCenterPosition = d->decorationRect.center();
@@ -563,7 +582,7 @@ void Drawer::mousePressEvent(QMouseEvent* _event)
     }
 
     d->decorationCenterPosition = _event->pos();
-    d->decorationRect = d->actionRect(pressedAction, actions(), width());
+    d->decorationRect = d->actionRect(pressedAction, actions());
     d->decorationRadiusAnimation.setEndValue(d->decorationRect.width());
     d->animateClick();
 }
@@ -574,8 +593,8 @@ void Drawer::mouseReleaseEvent(QMouseEvent* _event)
         return;
     }
 
-    if (d->isAccountActionClicked(_event->pos(), width())) {
-        auto pressedAction = d->pressedAccountAction(_event->pos(), width());
+    if (d->isAccountActionClicked(_event->pos())) {
+        auto pressedAction = d->pressedAccountAction(_event->pos());
         pressedAction->trigger();
         update();
         return;

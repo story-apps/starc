@@ -13,4 +13,9 @@ public:
      * @brief Получить иконку в зависимости от направления лейаута приложения
      */
     static QString directedIcon(const QString& _icon);
+
+    /**
+     * @brief Конекретные иконки
+     */
+    static QString chevronRight();
 };
