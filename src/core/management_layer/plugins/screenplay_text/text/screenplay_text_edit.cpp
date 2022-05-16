@@ -1500,13 +1500,28 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
         textToInsert = _source->data(d->model->mimeTypes().constFirst());
     }
     //
-    // Если простой текст, то вставляем его, импортировав с фонтана
-    // NOTE: Перед текстом нужно обязательно добавить перенос строки, чтобы он
-    //       не воспринимался как титульная страница
+    // Если простой текст
     //
     else if (_source->hasText()) {
+        const auto text = _source->text();
+
+        //
+        // ... если в тексте всего одна строка и вставка происходит в пустой абзац, то вставим в
+        // него пробел, чтобы его стиль не изменился, а сам текст будем вставлять в начало абзаца
+        //
+        if (!text.contains('\n') && cursor.block().text().isEmpty()) {
+            cursor.insertText(" ");
+            cursor.movePosition(QTextCursor::PreviousCharacter);
+            setTextCursor(cursor);
+        }
+
+        //
+        // ... если строк несколько, то вставляем его, импортировав с фонтана
+        // NOTE: Перед текстом нужно обязательно добавить перенос строки, чтобы он
+        //       не воспринимался как титульная страница
+        //
         BusinessLayer::ScreenplayFountainImporter fountainImporter;
-        textToInsert = fountainImporter.importScreenplay("\n" + _source->text()).text;
+        textToInsert = fountainImporter.importScreenplay("\n" + text).text;
     }
 
     //
