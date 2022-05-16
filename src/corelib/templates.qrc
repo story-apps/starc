@@ -17,7 +17,6 @@
         <file>templates/audioplay/us</file>
         <file>templates/audioplay/bbc_scene</file>
         <file>templates/stageplay/bbc</file>
-        <file>templates/stageplay/ru</file>
         <file>templates/stageplay/us</file>
     </qresource>
 </RCC>

@@ -70,4 +70,13 @@ public:
     static QString audioplayShortcut(BusinessLayer::TextParagraphType _type);
     static void setAudioplayShortcut(BusinessLayer::TextParagraphType _type,
                                      const QString& _shortcut);
+
+    //
+    // Пьеса
+    //
+    // ... текст
+    //
+    static QString stageplayShortcut(BusinessLayer::TextParagraphType _type);
+    static void setStageplayShortcut(BusinessLayer::TextParagraphType _type,
+                                     const QString& _shortcut);
 };

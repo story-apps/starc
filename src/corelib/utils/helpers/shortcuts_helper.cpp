@@ -190,3 +190,19 @@ void ShortcutsHelper::setAudioplayShortcut(BusinessLayer::TextParagraphType _typ
                                           BusinessLayer::toString(_type)),
                      _shortcut);
 }
+
+QString ShortcutsHelper::stageplayShortcut(BusinessLayer::TextParagraphType _type)
+{
+    return settingsValue(
+               QString("%1/%2").arg(DataStorageLayer::kComponentsStageplayEditorShortcutsKey,
+                                    BusinessLayer::toString(_type)))
+        .toString();
+}
+
+void ShortcutsHelper::setStageplayShortcut(BusinessLayer::TextParagraphType _type,
+                                           const QString& _shortcut)
+{
+    setSettingsValue(QString("%1/%2").arg(DataStorageLayer::kComponentsStageplayEditorShortcutsKey,
+                                          BusinessLayer::toString(_type)),
+                     _shortcut);
+}

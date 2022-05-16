@@ -104,6 +104,7 @@ SOURCES += \
     business_layer/import/screenplay/screenplay_fountain_importer.cpp \
     business_layer/import/screenplay/screenplay_kit_scenarist_importer.cpp \
     business_layer/import/screenplay/screenplay_trelby_importer.cpp \
+    business_layer/import/stageplay/stageplay_fountain_importer.cpp \
     business_layer/import/text/simple_text_markdown_importer.cpp \
     business_layer/model/abstract_model.cpp \
     business_layer/model/abstract_model_item.cpp \
@@ -350,6 +351,9 @@ HEADERS += \
     business_layer/import/screenplay/screenplay_fountain_importer.h \
     business_layer/import/screenplay/screenplay_kit_scenarist_importer.h \
     business_layer/import/screenplay/screenplay_trelby_importer.h \
+    business_layer/import/stageplay/stageplay_abstract_importer.h \
+    business_layer/import/stageplay/stageplay_fountain_importer.h \
+    business_layer/import/stageplay/stageplay_import_options.h \
     business_layer/import/text/simple_text_abstract_importer.h \
     business_layer/import/text/simple_text_import_options.h \
     business_layer/import/text/simple_text_markdown_importer.h \

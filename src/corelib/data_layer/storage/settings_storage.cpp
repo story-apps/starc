@@ -864,6 +864,7 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
         addShortcut(BusinessLayer::TextParagraphType::Character, "Ctrl+2");
         addShortcut(BusinessLayer::TextParagraphType::Dialogue, "Ctrl+3");
+        addShortcut(BusinessLayer::TextParagraphType::Action, "Ctrl+4");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
         //
         defaultValues.insert(kComponentsStageplayAvailableKey, true);

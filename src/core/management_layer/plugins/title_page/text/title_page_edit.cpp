@@ -13,11 +13,14 @@
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/model/stageplay/stageplay_information_model.h>
+#include <business_layer/model/stageplay/stageplay_title_page_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/simple_text_template.h>
+#include <business_layer/templates/stageplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <domain/document_object.h>
 #include <ui/design_system/design_system.h>
@@ -230,6 +233,44 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
                 &BusinessLayer::AudioplayInformationModel::templateIdChanged, this,
                 &TitlePageEdit::reinit);
     }
+    //
+    // Пьеса
+    //
+    else if (auto titlePageModel
+             = qobject_cast<BusinessLayer::StageplayTitlePageModel*>(d->model)) {
+        const auto& currentTemplate = TemplatesFacade::textTemplate(titlePageModel);
+        setPageFormat(currentTemplate.pageSizeId());
+        setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+        pageMargins = currentTemplate.pageMargins();
+
+        auto updateHeader = [this, titlePageModel] {
+            setHeader(titlePageModel->informationModel()->printHeaderOnTitlePage()
+                          ? titlePageModel->informationModel()->header()
+                          : QString());
+        };
+        updateHeader();
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::StageplayInformationModel::printHeaderOnTitlePageChanged, this,
+                updateHeader);
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::StageplayInformationModel::headerChanged, this, updateHeader);
+
+        auto updateFooter = [this, titlePageModel] {
+            setFooter(titlePageModel->informationModel()->printFooterOnTitlePage()
+                          ? titlePageModel->informationModel()->footer()
+                          : QString());
+        };
+        updateFooter();
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::StageplayInformationModel::printFooterOnTitlePageChanged, this,
+                updateFooter);
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::StageplayInformationModel::footerChanged, this, updateFooter);
+
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::StageplayInformationModel::templateIdChanged, this,
+                &TitlePageEdit::reinit);
+    }
 
     //
     // Если в модели всего один пустой элемент, значит нужно заменить титульной страницей из шаблона
@@ -300,6 +341,11 @@ void TitlePageEdit::restoreFromTemplate()
                = qobject_cast<BusinessLayer::AudioplayTitlePageModel*>(d->model)) {
         titlePage
             = TemplatesFacade::audioplayTemplate(titlePageModel->informationModel()->templateId())
+                  .titlePage();
+    } else if (auto titlePageModel
+               = qobject_cast<BusinessLayer::StageplayTitlePageModel*>(d->model)) {
+        titlePage
+            = TemplatesFacade::stageplayTemplate(titlePageModel->informationModel()->templateId())
                   .titlePage();
     }
 

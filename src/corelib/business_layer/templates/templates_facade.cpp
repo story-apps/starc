@@ -568,10 +568,9 @@ TemplatesFacade::TemplatesFacade()
                                             QLatin1String("bbc_scene"),
                                             QLatin1String("us"),
                                         });
-    d->loadTemplates<AudioplayTemplate>(kStageplayTemplatesDirectory,
+    d->loadTemplates<StageplayTemplate>(kStageplayTemplatesDirectory,
                                         {
                                             QLatin1String("bbc"),
-                                            QLatin1String("ru"),
                                             QLatin1String("us"),
                                         });
 }

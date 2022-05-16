@@ -5,8 +5,10 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/audioplay/audioplay_title_page_model.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
+#include <business_layer/model/stageplay/stageplay_title_page_model.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -160,10 +162,32 @@ void TitlePageView::reconfigure(const QStringList& _changedSettingsKeys)
 
     UiHelper::initSpellingFor(d->textEdit);
 
-    const auto defaultTemplateKey
-        = d->currentModelType == Domain::DocumentObjectType::ComicBookTitlePage
-        ? DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey
-        : DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey;
+    QString defaultTemplateKey;
+    switch (d->currentModelType) {
+    case Domain::DocumentObjectType::ComicBookTitlePage: {
+        defaultTemplateKey = DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey;
+        break;
+    }
+
+    case Domain::DocumentObjectType::ScreenplayTitlePage: {
+        defaultTemplateKey = DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey;
+        break;
+    }
+
+    case Domain::DocumentObjectType::AudioplayTitlePage: {
+        defaultTemplateKey = DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey;
+        break;
+    }
+
+    case Domain::DocumentObjectType::StageplayTitlePage: {
+        defaultTemplateKey = DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey;
+        break;
+    }
+
+    default: {
+        break;
+    }
+    }
     if (_changedSettingsKeys.isEmpty() || _changedSettingsKeys.contains(defaultTemplateKey)) {
         d->textEdit->reinit();
     }
@@ -204,6 +228,10 @@ void TitlePageView::setModel(BusinessLayer::SimpleTextModel* _model)
         d->currentModelType = Domain::DocumentObjectType::ComicBookTitlePage;
     } else if (qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(_model)) {
         d->currentModelType = Domain::DocumentObjectType::ScreenplayTitlePage;
+    } else if (qobject_cast<BusinessLayer::AudioplayTitlePageModel*>(_model)) {
+        d->currentModelType = Domain::DocumentObjectType::AudioplayTitlePage;
+    } else if (qobject_cast<BusinessLayer::StageplayTitlePageModel*>(_model)) {
+        d->currentModelType = Domain::DocumentObjectType::StageplayTitlePage;
     } else {
         d->currentModelType = Domain::DocumentObjectType::Undefined;
     }

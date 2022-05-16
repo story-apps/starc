@@ -20,6 +20,7 @@ SUBDIRS = \
     simple_text_structure \
     stageplay_information \
     stageplay_parameters \
+    stageplay_text \
     title_page
 
 exists (characters_relations/characters_relations.pro) {
