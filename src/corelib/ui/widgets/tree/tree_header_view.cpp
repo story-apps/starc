@@ -28,23 +28,44 @@ void TreeHeaderView::paintSection(QPainter* _painter, const QRect& _rect, int _s
     auto textColor = palette().color(QPalette::Text);
     textColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
     _painter->setPen(textColor);
-    auto textRect
-        = _rect.adjusted(_section == 0 ? Ui::DesignSystem::tree().indicatorWidth()
-                                       : Ui::DesignSystem::treeOneLineItem().margins().left(),
-                         0, 0, 0);
+
+    auto textRect = _rect;
+    const auto adjustmentDelta = _section == 0
+        ? Ui::DesignSystem::tree().indicatorWidth() + Ui::DesignSystem::treeOneLineItem().spacing()
+        : Ui::DesignSystem::treeOneLineItem().margins().left();
+    if (QLocale().textDirection() == Qt::LeftToRight) {
+        textRect.adjust(adjustmentDelta, 0, 0, 0);
+    } else {
+        textRect.adjust(0, 0, -adjustmentDelta, 0);
+    }
+
     if (model()->headerData(_section, orientation(), Qt::DecorationRole).isValid()) {
+        QRectF iconRect;
+        if (QLocale().textDirection() == Qt::LeftToRight) {
+            iconRect = QRectF(
+                textRect.topLeft(),
+                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(), textRect.height()));
+            textRect.adjust(Ui::DesignSystem::treeOneLineItem().iconSize().width()
+                                + Ui::DesignSystem::treeOneLineItem().spacing(),
+                            0, 0, 0);
+        } else {
+            iconRect = QRectF(
+                textRect.topRight()
+                    - QPointF(Ui::DesignSystem::treeOneLineItem().iconSize().width(), 0),
+                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(), textRect.height()));
+            textRect.adjust(0, 0,
+                            -1
+                                * (Ui::DesignSystem::treeOneLineItem().iconSize().width()
+                                   + Ui::DesignSystem::treeOneLineItem().spacing()),
+                            0);
+        }
+
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
-        QRectF iconRect(
-            textRect.topLeft(),
-            QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(), textRect.height()));
         _painter->drawText(
             iconRect, Qt::AlignCenter,
             model()->headerData(_section, orientation(), Qt::DecorationRole).toString());
-
-        textRect.adjust(Ui::DesignSystem::treeOneLineItem().iconSize().width()
-                            + Ui::DesignSystem::treeOneLineItem().spacing(),
-                        0, 0, 0);
     }
+
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter,
                        model()->headerData(_section, orientation()).toString());
@@ -323,23 +344,43 @@ int HierarchicalHeaderView::Implementation::paintHorizontalCell(
     auto textColor = q->palette().color(QPalette::Text);
     textColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
     _painter->setPen(textColor);
-    auto textRect = rect.adjusted(logicalLeafIndex == 0
-                                      ? Ui::DesignSystem::tree().indicatorWidth()
-                                          + Ui::DesignSystem::treeOneLineItem().spacing()
-                                      : Ui::DesignSystem::treeOneLineItem().margins().left(),
-                                  0, 0, 0);
+
+    auto textRect = rect;
+    const auto adjustmentDelta = logicalLeafIndex == 0
+        ? Ui::DesignSystem::tree().indicatorWidth() + Ui::DesignSystem::treeOneLineItem().spacing()
+        : Ui::DesignSystem::treeOneLineItem().margins().left();
+    if (QLocale().textDirection() == Qt::LeftToRight) {
+        textRect.adjust(adjustmentDelta, 0, 0, 0);
+    } else {
+        textRect.adjust(0, 0, -adjustmentDelta, 0);
+    }
+
     if (q->model() && cellIndex.data(Qt::DecorationRole).isValid()) {
+        QRectF iconRect;
+        if (QLocale().textDirection() == Qt::LeftToRight) {
+            iconRect = QRectF(
+                textRect.topLeft(),
+                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(), textRect.height()));
+            textRect.adjust(Ui::DesignSystem::treeOneLineItem().iconSize().width()
+                                + Ui::DesignSystem::treeOneLineItem().spacing(),
+                            0, 0, 0);
+        } else {
+            iconRect = QRectF(
+                textRect.topRight()
+                    - QPointF(Ui::DesignSystem::treeOneLineItem().iconSize().width(), 0),
+                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(), textRect.height()));
+            textRect.adjust(0, 0,
+                            -1
+                                * (Ui::DesignSystem::treeOneLineItem().iconSize().width()
+                                   + Ui::DesignSystem::treeOneLineItem().spacing()),
+                            0);
+        }
+
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
-        QRectF iconRect(
-            textRect.topLeft(),
-            QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(), textRect.height()));
         _painter->drawText(iconRect, Qt::AlignCenter,
                            cellIndex.data(Qt::DecorationRole).toString());
-
-        textRect.adjust(Ui::DesignSystem::treeOneLineItem().iconSize().width()
-                            + Ui::DesignSystem::treeOneLineItem().spacing(),
-                        0, 0, 0);
     }
+
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, cellIndex.data().toString());
 
