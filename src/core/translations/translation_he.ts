@@ -4,7 +4,7 @@
 <context>
     <name>AppBar</name>
     <message>
-        <location filename="../../corelib/ui/widgets/app_bar/app_bar.cpp" line="391"/>
+        <location filename="../../corelib/ui/widgets/app_bar/app_bar.cpp" line="392"/>
         <source>Show module options</source>
         <translation>הצג אפשרויות מודול</translation>
     </message>
@@ -261,7 +261,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="21"/>
         <source>BBC scene style template (page: A4; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>טמפלט BBC scene style (עמוד: A4; גופן: Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="24"/>
@@ -421,48 +421,56 @@
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="29"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="30"/>
+        <location filename="../../corelib/business_layer/import/stageplay/stageplay_fountain_importer.cpp" line="29"/>
         <source>INT</source>
         <translation>פנים</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="30"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="31"/>
+        <location filename="../../corelib/business_layer/import/stageplay/stageplay_fountain_importer.cpp" line="30"/>
         <source>EXT</source>
         <translation>חוץ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="31"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="32"/>
+        <location filename="../../corelib/business_layer/import/stageplay/stageplay_fountain_importer.cpp" line="31"/>
         <source>EST</source>
         <translation>חוץ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="32"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="33"/>
+        <location filename="../../corelib/business_layer/import/stageplay/stageplay_fountain_importer.cpp" line="32"/>
         <source>INT./EXT</source>
         <translation>פנים./חוץ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="33"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="34"/>
+        <location filename="../../corelib/business_layer/import/stageplay/stageplay_fountain_importer.cpp" line="33"/>
         <source>INT/EXT</source>
         <translation>פנים/חוץ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="34"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="35"/>
+        <location filename="../../corelib/business_layer/import/stageplay/stageplay_fountain_importer.cpp" line="34"/>
         <source>EXT./INT</source>
         <translation>חוץ./פנים</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="35"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="36"/>
+        <location filename="../../corelib/business_layer/import/stageplay/stageplay_fountain_importer.cpp" line="35"/>
         <source>EXT/INT</source>
         <translation>חוץ/פנים</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="36"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="37"/>
+        <location filename="../../corelib/business_layer/import/stageplay/stageplay_fountain_importer.cpp" line="36"/>
         <source>I/E</source>
         <translation>פ/ח</translation>
     </message>
@@ -713,6 +721,62 @@
     </message>
 </context>
 <context>
+    <name>BusinessLayer::StageplaySummaryReport</name>
+    <message>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="240"/>
+        <source>Paragraph</source>
+        <translation type="unfinished">פסקה</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="244"/>
+        <source>Words</source>
+        <translation type="unfinished">מילים</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="248"/>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="311"/>
+        <source>Occurrences</source>
+        <translation type="unfinished">הופעות</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="252"/>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="315"/>
+        <source>Percents</source>
+        <translation type="unfinished">אחוזים</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="307"/>
+        <source>Character type</source>
+        <translation type="unfinished">סוג דמות</translation>
+    </message>
+</context>
+<context>
+    <name>BusinessLayer::StageplaySynopsisModel</name>
+    <message>
+        <location filename="../../corelib/business_layer/model/stageplay/stageplay_synopsis_model.cpp" line="9"/>
+        <source>Synopsis</source>
+        <translation type="unfinished">סינופסיס</translation>
+    </message>
+</context>
+<context>
+    <name>BusinessLayer::StageplayTemplate</name>
+    <message>
+        <location filename="../../corelib/business_layer/templates/stageplay_template.cpp" line="21"/>
+        <source>BBC template (page: A4; font: Arial)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/templates/stageplay_template.cpp" line="24"/>
+        <source>Russian template (page: A4; font: Arial)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/templates/stageplay_template.cpp" line="27"/>
+        <source>US template (page: Letter; font: Courier Prime)</source>
+        <translation type="unfinished">טמפלט ארה&quot;ב (עמוד: Letter; גופן: Courier Prime)</translation>
+    </message>
+</context>
+<context>
     <name>BusinessLayer::StructureModel</name>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="200"/>
@@ -729,6 +793,7 @@
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="208"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="229"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="243"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="257"/>
         <source>Title page</source>
         <translation>עמוד שער</translation>
     </message>
@@ -736,6 +801,7 @@
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="210"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="231"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="245"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="259"/>
         <source>Synopsis</source>
         <translation>סינופסיס</translation>
     </message>
@@ -748,6 +814,7 @@
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="214"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="234"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="248"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="262"/>
         <source>Statistics</source>
         <translation>סטטיסטיקה</translation>
     </message>
@@ -759,21 +826,27 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="233"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="247"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="261"/>
         <source>Script</source>
         <translation>תסריט</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="241"/>
         <source>Audioplay</source>
+        <translation>הצגה קולית</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="255"/>
+        <source>Stageplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="254"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="268"/>
         <source>Characters</source>
         <translation>דמויות</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="265"/>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="279"/>
         <source>Locations</source>
         <translation>לוקיישנים</translation>
     </message>
@@ -854,6 +927,7 @@
         <location filename="../../corelib/business_layer/document/audioplay/text/audioplay_text_corrector.cpp" line="38"/>
         <location filename="../../corelib/business_layer/document/comic_book/text/comic_book_text_corrector.cpp" line="42"/>
         <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="39"/>
+        <location filename="../../corelib/business_layer/document/stageplay/text/stageplay_text_corrector.cpp" line="38"/>
         <source>CONT&apos;D</source>
         <extracomment>Continued</extracomment>
         <translation>ממשיך</translation>
@@ -862,8 +936,27 @@
         <location filename="../../corelib/business_layer/document/audioplay/text/audioplay_text_corrector.cpp" line="43"/>
         <location filename="../../corelib/business_layer/document/comic_book/text/comic_book_text_corrector.cpp" line="47"/>
         <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="44"/>
+        <location filename="../../corelib/business_layer/document/stageplay/text/stageplay_text_corrector.cpp" line="43"/>
         <source>MORE</source>
         <translation>עוד</translation>
+    </message>
+</context>
+<context>
+    <name>BusinessLogic::StageplaySummaryReport</name>
+    <message>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="295"/>
+        <source>More then 10 dialogues</source>
+        <translation type="unfinished">יותר מ10 דיאלוגים</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="298"/>
+        <source>About 10 dialogues</source>
+        <translation type="unfinished">בערך 10 דיאלוגים</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="302"/>
+        <source>Nonspeaking</source>
+        <translation type="unfinished">לא מדבר</translation>
     </message>
 </context>
 <context>
@@ -1089,8 +1182,9 @@
         <location filename="../../corelib/business_layer/export/abstract_exporter.cpp" line="179"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="974"/>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="929"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="860"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="872"/>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="927"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="973"/>
         <source>END OF</source>
         <translation>סוף של</translation>
     </message>
@@ -1098,7 +1192,7 @@
 <context>
     <name>KeySequenceDelegate</name>
     <message>
-        <location filename="../../corelib/ui/widgets/tree/tree_delegate.cpp" line="185"/>
+        <location filename="../../corelib/ui/widgets/tree/tree_delegate.cpp" line="209"/>
         <source>Press shortcut</source>
         <translation>לחץ על קיצור דרך</translation>
     </message>
@@ -1216,7 +1310,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="221"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>הצגה קולית</translation>
     </message>
 </context>
 <context>
@@ -1421,100 +1515,100 @@
         <translation>הוסף מסמך</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="206"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="214"/>
         <source>Remove document</source>
         <translation>הסר מסמך</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="312"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="320"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>האם ברצונך להסיר לצמיתות את המסמך?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="313"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="565"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="321"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="573"/>
         <source>No</source>
         <translation>לא</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="314"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="566"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="322"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="574"/>
         <source>Yes, remove</source>
         <translation>כן, הסר</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="381"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="389"/>
         <source>Characters from the text</source>
         <translation>דמויות מהטקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="391"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="399"/>
         <source>Characters that are not found in the text</source>
         <translation>דמויות שאינן נמצאות בטקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="404"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="412"/>
         <source>Save only characters from the text</source>
         <translation>שמור רק דמויות מהטקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="405"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="413"/>
         <source>Save all characters</source>
         <translation>שמור את כל הדמויות</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="406"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="508"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="414"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="516"/>
         <source>Change nothing</source>
         <translation>אל תשנה כלום</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="483"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="491"/>
         <source>Locations from the text</source>
         <translation>לוקיישנים מהטקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="493"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="501"/>
         <source>Locations that are not found in the text</source>
         <translation>לוקיישנים שאינם נמצאים בטקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="506"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="514"/>
         <source>Save only locations from the text</source>
         <translation>שמור רק לוקיישנים מהטקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="507"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="515"/>
         <source>Save all locations</source>
         <translation>שמור את כל הלוקיישנים</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="564"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="572"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>האם ברצונך להסיר לצמיתות את כל המסמכים מסל המיחזור?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1249"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1257"/>
         <source>Title page</source>
         <translation>עמוד שער</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1251"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1259"/>
         <source>Synopsis</source>
         <translation>סינופסיס</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1263"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1271"/>
         <source>Treatment</source>
         <translation>טריטמנט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1254"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1262"/>
         <source>Screenplay</source>
         <translation>תסריט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1257"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1265"/>
         <source>Statistics</source>
         <translation>סטטיסטיקה</translation>
     </message>
@@ -1542,7 +1636,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="147"/>
         <source>Character extension</source>
-        <translation type="unfinished"></translation>
+        <translation>מצב הדמות</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="148"/>
@@ -1636,22 +1730,22 @@
     <message>
         <location filename="../../corelib/utils/helpers/names_generator.cpp" line="113"/>
         <source>Male names</source>
-        <translation type="unfinished"></translation>
+        <translation>שמות גברים</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/names_generator.cpp" line="116"/>
         <source>Female names</source>
-        <translation type="unfinished"></translation>
+        <translation>שמות נשים</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/names_generator.cpp" line="119"/>
         <source>Both names</source>
-        <translation type="unfinished"></translation>
+        <translation>שמות שני המינים</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/names_generator.cpp" line="145"/>
         <source>Type of name</source>
-        <translation type="unfinished"></translation>
+        <translation>סוג שם</translation>
     </message>
 </context>
 <context>
@@ -1688,131 +1782,150 @@
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="274"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="296"/>
         <source>Information about project</source>
         <translation>מידע על הפרויקט</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="276"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="298"/>
         <source>Project collaborators</source>
         <translation>שותפים בפרויקט</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="280"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="302"/>
         <source>Information about screenplay</source>
         <translation>מידע על התסריט</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="282"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="304"/>
         <source>Screenplay parameters</source>
         <translation>הגדרות תסריט</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="285"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="314"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="334"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="307"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="336"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="356"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="376"/>
         <source>Title page text</source>
         <translation>טקסט עמוד שער</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="288"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="317"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="337"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="310"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="339"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="359"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="379"/>
         <source>Synopsis text</source>
         <translation>טקסט סינופסיס</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="293"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="315"/>
         <source>Beats</source>
         <translation>ביטים</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="302"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="324"/>
         <source>Timeline</source>
         <translation>ציר זמן</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="309"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="331"/>
         <source>Information about comic book</source>
         <translation>מידע על ספר קומיקס</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="311"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="333"/>
         <source>Comic book parameters</source>
         <translation>הגדרות ספר קומיקס</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="320"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="342"/>
         <source>Comic book text</source>
         <translation>טקסט ספר קומיקס</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="329"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="351"/>
         <source>Information about audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>מידע על הצגה קולית</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="331"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="353"/>
         <source>Audioplay parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>הגדרות הצגה קולית</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="340"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="362"/>
         <source>Audioplay text</source>
+        <translation>טקסט הצגה קולית</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins_builder.cpp" line="371"/>
+        <source>Information about stageplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="349"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="373"/>
+        <source>Stageplay parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins_builder.cpp" line="382"/>
+        <source>Stageplay text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins_builder.cpp" line="391"/>
         <source>Characters relations</source>
         <translation>קשרי דמויות</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="352"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="394"/>
         <source>Character information</source>
         <translation>מידע על הדמות</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="356"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="398"/>
         <source>Locations map</source>
         <translation>מפת לוקיישנים</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="359"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="401"/>
         <source>Location information</source>
         <translation>מידע על הלוקיישן</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="363"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="405"/>
         <source>Folder text</source>
         <translation>טקסט תיקיה</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="366"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="408"/>
         <source>Document text</source>
         <translation>טקסט מסמך</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="291"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="313"/>
         <source>Treatment text</source>
         <translation>טקסט טריטמנט</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="298"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="320"/>
         <source>Screenplay text</source>
         <translation>טקסט תסריט</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="295"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="300"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="317"/>
         <location filename="../management_layer/plugins_builder.cpp" line="322"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="342"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="344"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="364"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="384"/>
         <source>Cards</source>
         <translation>כרטיסיות</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="305"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="325"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="345"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="327"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="347"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="367"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="387"/>
         <source>Statistics</source>
         <translation>סטטיסטיקה</translation>
     </message>
@@ -1966,17 +2079,17 @@
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="160"/>
         <source>Designed, coded and crafted with love at the</source>
-        <translation type="unfinished"></translation>
+        <translation>עוצב, תוכנת ובנוי באהבה על ידי</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="162"/>
         <source>company</source>
-        <translation type="unfinished"></translation>
+        <translation>חברה</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="163"/>
         <source>The Logline Generator is powered by</source>
-        <translation type="unfinished"></translation>
+        <translation>מחולל הלוגליין מופעל על ידי</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="167"/>
@@ -2194,7 +2307,7 @@
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="184"/>
         <source>Export audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>ייצא הצגה קולית</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="186"/>
@@ -2242,7 +2355,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="187"/>
         <source>Audioplay name</source>
-        <translation type="unfinished"></translation>
+        <translation>שם הצגה קולית</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="188"/>
@@ -2272,7 +2385,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="193"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>הצגה קולית</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="194"/>
@@ -2305,7 +2418,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="224"/>
         <source>Override common settings for this audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>שנה הגדרות נפוצות עבור הצגה קולית זו</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="225"/>
@@ -2315,12 +2428,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="226"/>
         <source>Show block numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג מספרי בלוקים</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="227"/>
         <source>Continue block numbers through document</source>
-        <translation type="unfinished"></translation>
+        <translation>המשך מספרי בלוקים במסמך</translation>
     </message>
 </context>
 <context>
@@ -2381,7 +2494,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1241"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג/הסתר רשימה</translation>
     </message>
 </context>
 <context>
@@ -2518,7 +2631,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="267"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>הסתר רשימת סימניות</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="878"/>
@@ -3078,7 +3191,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="195"/>
         <source>Override common settings for this comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>שנה הגדרות נפוצות עבור ספר קומיקס זה</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="196"/>
@@ -3147,7 +3260,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1235"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג/הסתר רשימה</translation>
     </message>
 </context>
 <context>
@@ -3300,7 +3413,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="261"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>הסתר רשימת סימניות</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="882"/>
@@ -3536,107 +3649,117 @@
 <context>
     <name>Ui::CreateDocumentDialog</name>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="103"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="106"/>
         <source>Create a folder to group documents inside the story.</source>
         <translation>צור תיקיה כדי לקבץ מסמכים בתוך הסיפור.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="105"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="108"/>
         <source>Create a plain text document to write out ideas and notes.</source>
         <translation>צור מסמך טקסט כדי לכתוב רעיונות והערות.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="107"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="110"/>
         <source>Create a document with full character&apos;s description to track his relations and follow his journey within the story.</source>
         <translation>צור מסמך עם תיאור מלא של הדמות כדי לעקוב אחר מערכות היחסים שלו והמסע שלו בתוך הסיפור.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="110"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="113"/>
         <source>Create a document to note down the location&apos;s description and keep the details.</source>
         <translation>צור מסמך כדי לרשום את התיאור הלוקיישן ולשמור את הפרטים.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="112"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="115"/>
         <source>Create a document set to streamline your work on the feature film, series, or animation.</source>
         <translation>צור ערכת מסמכים לייעול עבודה על סרט עלילתי, סדרה או אנימציה.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="115"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="118"/>
         <source>Create a document set to streamline your work on the comic book, graphic novel, or manga.</source>
         <translation>צור מסמך כדי לייעל את העבודה על ספר קומיקס, רומן גרפי, או המנגה.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="118"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="121"/>
         <source>Create a document set to streamline your work on the audio drama, or podcast.</source>
+        <translation>צור ערכת מסמכים לייעול עבודה על הצגה קולית, או פודקאסט.</translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_document_dialog.cpp" line="123"/>
+        <source>Create a document set to streamline your work on the stage play, or musical.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="178"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="183"/>
         <source>The character should have a name</source>
         <translation>הדמות צריכה להיות בעלת שם</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="180"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="185"/>
         <source>The location should have a name</source>
         <translation>ללוקיישן צריך להיות שם</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="220"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="222"/>
         <source>Insert into</source>
         <translation>הכנס לתוך</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="241"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="243"/>
         <source>Add document to the story</source>
         <translation>הוסף מסמך לסיפור</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="247"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="249"/>
         <source>Folder</source>
         <translation>תיקיה</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="252"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="254"/>
         <source>Text</source>
         <translation>טקסט</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="257"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="259"/>
         <source>Character</source>
         <translation>דמות</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="262"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="264"/>
         <source>Location</source>
         <translation>לוקיישן</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="267"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="269"/>
         <source>Screenplay</source>
         <translation>תסריט</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="272"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="274"/>
         <source>Comic book</source>
         <translation>ספר קומיקס</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="277"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="279"/>
         <source>Audioplay</source>
+        <translation>הצגה קולית</translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_document_dialog.cpp" line="284"/>
+        <source>Stageplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="288"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="295"/>
         <source>Name</source>
         <translation>שם</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="290"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="297"/>
         <source>Cancel</source>
         <translation>בטל</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="291"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="298"/>
         <source>Create</source>
         <translation>צור</translation>
     </message>
@@ -3672,127 +3795,132 @@
 <context>
     <name>Ui::CreateProjectDialog</name>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="153"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="156"/>
         <source>Choose the folder where new story will be saved</source>
         <translation>בחר תיקיה בה ישמר סיפור חדש</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="160"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="163"/>
         <source>Choose the file to import</source>
         <translation>בחר קובץ לייבוא</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="169"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="172"/>
         <source>File format not supported</source>
         <translation>פורמט קובץ לא נתמך</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="170"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="173"/>
         <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
         <translation>יבוא קבצי DOC אינו נתמך. עליך לשמור את הקובץ בפורמט DOCX ולנסות שוב.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="186"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="189"/>
         <source>The story&apos;s name can&apos;t be empty. Fill it, please.</source>
         <translation>שם הסיפור לא יכול להיות ריק, אנא מלאו אותו.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="275"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="278"/>
         <source>The story will be created on the local computer.</source>
         <translation>הסיפור ייווצר במחשב לוקאלי.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="276"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="279"/>
         <source>to create stories on the cloud.</source>
         <translation>לייצירת סיפורים בענן.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="278"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="281"/>
         <source>Renew subscription</source>
         <translation>חדש מינוי</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="282"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="285"/>
         <source>Sign in</source>
         <translation>התחבר</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="313"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="316"/>
         <source>Create new story</source>
         <translation>צור סיפור חדש</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="315"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="318"/>
         <source>Type of story</source>
-        <translation type="unfinished"></translation>
+        <translation>סוג סיפור</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="321"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="324"/>
         <source>Not set</source>
         <translation>לא מוגדר</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="326"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="329"/>
         <source>Screenplay</source>
         <translation>תסריט</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="331"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="334"/>
         <source>Comic book</source>
         <translation>ספר קומיקס</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="336"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="339"/>
         <source>Audioplay</source>
+        <translation>הצגה קולית</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="344"/>
+        <source>Stageplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="342"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="350"/>
         <source>Name of the story</source>
         <translation>שם הסיפור</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="343"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="351"/>
         <source>Save story in the local computer</source>
         <translation>שמור סיפור במחשב לוקאלי</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="344"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="352"/>
         <source>Save story in the cloud</source>
         <translation>שמור סיפור בענן</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="345"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="353"/>
         <source>Location of the new story file</source>
         <translation>מיקום קובץ הסיפור החדש</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="347"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="355"/>
         <source>Choose the folder where the new story will be placed</source>
         <translation>בחר תיקיה בה ימוקם סיפור חדש</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="348"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="356"/>
         <source>Choose file with story to import</source>
         <translation>בחר קובץ סיפור ליבוא</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="349"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="357"/>
         <source>Choose file for importing</source>
         <translation>בחר קובץ לייבוא</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="350"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="358"/>
         <source>Advanced options</source>
         <translation>אפשרויות מתקדמות</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="351"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="359"/>
         <source>Cancel</source>
         <translation>בטל</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="352"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="360"/>
         <source>Create</source>
         <translation>צור</translation>
     </message>
@@ -3802,12 +3930,12 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/ui/dictionaries_view.cpp" line="136"/>
         <source>Dictionary type</source>
-        <translation type="unfinished"></translation>
+        <translation>סוג מילון</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/ui/dictionaries_view.cpp" line="137"/>
         <source>Add new item to the current dictionary</source>
-        <translation type="unfinished"></translation>
+        <translation>הוסף פריט חדש למילון הנוכחי</translation>
     </message>
 </context>
 <context>
@@ -4307,7 +4435,7 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="740"/>
         <source>Share your logline</source>
-        <translation type="unfinished"></translation>
+        <translation>שתף את הלוגליין שלך</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="743"/>
@@ -4318,7 +4446,7 @@
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="769"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="816"/>
         <source>Show help</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג עזרה</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="815"/>
@@ -4520,108 +4648,108 @@
 <context>
     <name>Ui::MenuView</name>
     <message>
-        <location filename="../ui/menu_view.cpp" line="318"/>
-        <location filename="../ui/menu_view.cpp" line="501"/>
-        <source>Hide developers version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/menu_view.cpp" line="319"/>
-        <location filename="../ui/menu_view.cpp" line="502"/>
-        <source>Show developers version</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/menu_view.cpp" line="503"/>
+        <source>Hide developers version</source>
+        <translation>הסתר גרסת מפתחים</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="390"/>
-        <location filename="../ui/menu_view.cpp" line="476"/>
+        <location filename="../ui/menu_view.cpp" line="320"/>
+        <location filename="../ui/menu_view.cpp" line="504"/>
+        <source>Show developers version</source>
+        <translation>הצג גרסת מפתחים</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="391"/>
+        <location filename="../ui/menu_view.cpp" line="478"/>
         <source>All changes saved</source>
         <translation>כל השינויים נשמרו</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="390"/>
-        <location filename="../ui/menu_view.cpp" line="475"/>
+        <location filename="../ui/menu_view.cpp" line="391"/>
+        <location filename="../ui/menu_view.cpp" line="477"/>
         <source>Save changes</source>
         <translation>שמור שינויים</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="471"/>
+        <location filename="../ui/menu_view.cpp" line="473"/>
         <source>Sign in</source>
         <translation>התחבר</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="472"/>
+        <location filename="../ui/menu_view.cpp" line="474"/>
         <source>Stories</source>
         <translation>סיפורים</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="473"/>
+        <location filename="../ui/menu_view.cpp" line="475"/>
         <source>Create story</source>
         <translation>צור סיפור</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="474"/>
+        <location filename="../ui/menu_view.cpp" line="476"/>
         <source>Open story</source>
         <translation>פתח סיפור</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="479"/>
+        <location filename="../ui/menu_view.cpp" line="481"/>
         <source>Save current story as...</source>
         <translation>שמור סיפור נוכחי כ...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="480"/>
+        <location filename="../ui/menu_view.cpp" line="482"/>
         <source>Import...</source>
         <translation>יבוא...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="482"/>
+        <location filename="../ui/menu_view.cpp" line="484"/>
         <source>Export current document...</source>
         <translation>ייצא מסמך נוכחי...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="485"/>
+        <location filename="../ui/menu_view.cpp" line="487"/>
         <source>Toggle full screen</source>
         <translation>החלף מסך מלא</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="488"/>
+        <location filename="../ui/menu_view.cpp" line="490"/>
         <source>Application settings</source>
         <translation>הגדרות יישום</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="490"/>
+        <location filename="../ui/menu_view.cpp" line="492"/>
         <source>Show writing sprint timer</source>
         <translation>הצג טיימר לספרינט כתיבה</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="491"/>
+        <location filename="../ui/menu_view.cpp" line="493"/>
         <source>Show notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג התראות</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="494"/>
+        <location filename="../ui/menu_view.cpp" line="496"/>
         <source>Version</source>
         <translation>גרסה</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="495"/>
+        <location filename="../ui/menu_view.cpp" line="497"/>
         <source>About</source>
         <translation>אודות</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="497"/>
-        <source>Back to main menu</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/menu_view.cpp" line="498"/>
-        <source>Notifications</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/menu_view.cpp" line="499"/>
+        <source>Back to main menu</source>
+        <translation>חזרה לתפריט הראשי</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="500"/>
+        <source>Notifications</source>
+        <translation>התראות</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="501"/>
         <source>Notifications preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>הגדרת התראות</translation>
     </message>
 </context>
 <context>
@@ -4645,47 +4773,47 @@
         <translation>התרגום מוכן ל-%1%. תדע איך אתה יכול לשפר את זה. </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="430"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="431"/>
         <source>Choose preferred language</source>
         <translation>בחר שפה מועדפת</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="432"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="433"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>לא מצאת את השפה המועדפת עליך? קרא כיצד תוכל להוסיף אותו בעצמך.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="433"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="434"/>
         <source>Continue</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="434"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="435"/>
         <source>Skip initial setup</source>
         <translation>דלג על הגדרה ראשונית</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="436"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="437"/>
         <source>Choose application theme</source>
         <translation>בחר ממשק יישום</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="437"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
         <source>Setup size of the user interface elements</source>
         <translation>הגדר גודל ממשק משתמש</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
         <source>small</source>
         <translation>קטן</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
         <source>big</source>
         <translation>גדול</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="441"/>
         <source>Start writing</source>
         <translation>התחל לכתוב</translation>
     </message>
@@ -4831,52 +4959,52 @@
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="190"/>
         <source>Dev version updated</source>
-        <translation type="unfinished"></translation>
+        <translation>גרסת מפתחים עודכנה</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="192"/>
         <source>Story Architect version %1 was published for testing.</source>
-        <translation type="unfinished"></translation>
+        <translation>גרסת Story Architect %1 פורסמה לבדיקה</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="193"/>
         <source>Check out what&apos;s changed</source>
-        <translation type="unfinished"></translation>
+        <translation>בדוק מה השתנה</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="199"/>
         <source>Version %1 published</source>
-        <translation type="unfinished"></translation>
+        <translation>גרסה %1 פורסמה</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="201"/>
         <source>Read more about release</source>
-        <translation type="unfinished"></translation>
+        <translation>קרא עוד על הגרסה</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="208"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>הורד</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="209"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>הותקן</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="228"/>
         <source>Cancel downloading</source>
-        <translation type="unfinished"></translation>
+        <translation>בטל הורדה</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="247"/>
         <source>Downloaded</source>
-        <translation type="unfinished"></translation>
+        <translation>הורד</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="248"/>
         <source>Install</source>
-        <translation type="unfinished"></translation>
+        <translation>התקן</translation>
     </message>
 </context>
 <context>
@@ -5373,17 +5501,17 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="785"/>
         <source>Show paragraph&apos;s title</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג את כותרת הפסקה</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="786"/>
         <source>Use custom title</source>
-        <translation type="unfinished"></translation>
+        <translation>השתמש בכותרת מותאמת אישית</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="787"/>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>כותרת</translation>
     </message>
 </context>
 <context>
@@ -5457,7 +5585,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1390"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג/הסתר רשימה</translation>
     </message>
 </context>
 <context>
@@ -5607,17 +5735,17 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="332"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>הסתר רשימת סימניות</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="335"/>
         <source>Hide screenplay dictionaries</source>
-        <translation type="unfinished"></translation>
+        <translation>הסתר מילוני תסריט</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="336"/>
         <source>Show screenplay dictionaries</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג מילוני תסריט</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="993"/>
@@ -5637,7 +5765,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="996"/>
         <source>Dictionaries</source>
-        <translation type="unfinished"></translation>
+        <translation>מילונים</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="333"/>
@@ -5648,29 +5776,29 @@
 <context>
     <name>Ui::ScreenplayTreatmentEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1108"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1120"/>
         <source>Bookmark</source>
         <translation>סימניה</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1112"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1124"/>
         <source>Add</source>
         <translation>הוסף</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1118"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1130"/>
         <source>Edit</source>
         <translation>ערוך</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1124"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1136"/>
         <source>Remove</source>
         <translation>הסר</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1131"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1143"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג/הסתר רשימה</translation>
     </message>
 </context>
 <context>
@@ -5812,7 +5940,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="285"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>הסתר רשימת סימניות</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="286"/>
@@ -5909,7 +6037,7 @@
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="169"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>הצגה קולית</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="170"/>
@@ -5928,799 +6056,799 @@
 <context>
     <name>Ui::SettingsView</name>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1052"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1051"/>
         <source>Choose the folder where backups will be saved</source>
         <translation>בחר תיקיה בה יישמרו הגיבויים</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1136"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1273"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1464"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1586"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1135"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1272"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1463"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1585"/>
         <source>Edit</source>
         <translation>ערוך</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1143"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1280"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1471"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1593"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1142"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1279"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1470"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1592"/>
         <source>Duplicate</source>
         <translation>שכפל</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1150"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1287"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1478"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1600"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1149"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1286"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1477"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1599"/>
         <source>Save to file</source>
         <translation>שמור לקובץ</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1156"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1293"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1484"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1606"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1155"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1292"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1483"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1605"/>
         <source>Remove</source>
         <translation>הסר</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1163"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1300"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1491"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1613"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1162"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1299"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1490"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1612"/>
         <source>Load template from file</source>
         <translation>טען טמפלט מקובץ</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2203"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2202"/>
         <source>Application settings</source>
         <translation>הגדרות יישום</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2204"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2203"/>
         <source>Language</source>
         <translation>שפה</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2216"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2215"/>
         <source>Text editing</source>
         <translation>עריכת טקסט</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2217"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2216"/>
         <source>Show documents pages</source>
         <translation>הצג עמודי מסמכים</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2218"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2217"/>
         <source>Use typewriter sound for keys pressing</source>
         <translation>השתמש בצליל מכונת כתיבה בלחיצה על מקשים</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2219"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2218"/>
         <source>Spell check</source>
         <translation>בדיקת איות</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2220"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2219"/>
         <source>Spelling dictionary</source>
         <translation>מילון איות</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2222"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2221"/>
         <source>Afrikaans</source>
         <translation>Afrikaans</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2223"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2222"/>
         <source>Aragonese</source>
         <translation>Aragonese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2224"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2223"/>
         <source>Arabic</source>
         <translation>Arabic</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2225"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2224"/>
         <source>Azerbaijani</source>
         <translation>Azerbaijani</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2226"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2225"/>
         <source>Belarusian</source>
         <translation>Belarusian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2227"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2226"/>
         <source>Bulgarian</source>
         <translation>Bulgarian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2228"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2227"/>
         <source>Bengali</source>
         <translation>Bengali</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2229"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2228"/>
         <source>Tibetan</source>
         <translation>Tibetan</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2230"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2229"/>
         <source>Breton</source>
         <translation>Breton</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2231"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2230"/>
         <source>Bosnian</source>
         <translation>Bosnian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2232"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2231"/>
         <source>Catalan (Valencian)</source>
         <translation>Catalan (Valencian)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2233"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2232"/>
         <source>Catalan</source>
         <translation>Catalan</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2234"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2233"/>
         <source>Czech</source>
         <translation>Czech</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2235"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2234"/>
         <source>Welsh</source>
         <translation>Welsh</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2236"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2235"/>
         <source>Danish</source>
         <translation>Danish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2237"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2236"/>
         <source>German (Austria)</source>
         <translation>German (Austria)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2238"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2237"/>
         <source>German (Switzerland)</source>
         <translation>German (Switzerland)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2239"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2238"/>
         <source>German</source>
         <translation>German</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2240"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2239"/>
         <source>Greek (Polytonic)</source>
         <translation>Greek (Polytonic)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2241"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2240"/>
         <source>Greek</source>
         <translation>Greek</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2242"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2241"/>
         <source>English (Australia)</source>
         <translation>English (Australia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2243"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2242"/>
         <source>English (Canada)</source>
         <translation>English (Canada)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2244"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2243"/>
         <source>English (United Kingdom)</source>
         <translation>English (United Kingdom)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2245"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2244"/>
         <source>English (New Zealand)</source>
         <translation>English (New Zealand)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2246"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2245"/>
         <source>English (South Africa)</source>
         <translation>English (South Africa)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2247"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2246"/>
         <source>English (United States)</source>
         <translation>English (United States)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2248"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2247"/>
         <source>Esperanto</source>
         <translation>Esperanto</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2249"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2248"/>
         <source>Spanish (Argentina)</source>
         <translation>Spanish (Argentina)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2250"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2249"/>
         <source>Spanish (Bolivia)</source>
         <translation>Spanish (Bolivia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2251"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2250"/>
         <source>Spanish (Chile)</source>
         <translation>Spanish (Chile)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2252"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2251"/>
         <source>Spanish (Colombia)</source>
         <translation>Spanish (Colombia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2253"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2252"/>
         <source>Spanish (Costa Rica)</source>
         <translation>Spanish (Costa Rica)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2254"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2253"/>
         <source>Spanish (Cuba)</source>
         <translation>Spanish (Cuba)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2255"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2254"/>
         <source>Spanish (Dominican Republic)</source>
         <translation>Spanish (Dominican Republic)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2256"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2255"/>
         <source>Spanish (Ecuador)</source>
         <translation>Spanish (Ecuador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2257"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2256"/>
         <source>Spanish (Guatemala)</source>
         <translation>Spanish (Guatemala)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2258"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2257"/>
         <source>Spanish (Honduras)</source>
         <translation>Spanish (Honduras)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2259"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2258"/>
         <source>Spanish (Mexico)</source>
         <translation>Spanish (Mexico)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2260"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2259"/>
         <source>Spanish (Nicaragua)</source>
         <translation>Spanish (Nicaragua)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2261"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2260"/>
         <source>Spanish (Panama)</source>
         <translation>Spanish (Panama)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2262"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2261"/>
         <source>Spanish (Peru)</source>
         <translation>Spanish (Peru)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2263"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2262"/>
         <source>Spanish (Philippines)</source>
         <translation>Spanish (Philippines)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2264"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2263"/>
         <source>Spanish (Puerto Rico)</source>
         <translation>Spanish (Puerto Rico)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2265"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2264"/>
         <source>Spanish (Paraguay)</source>
         <translation>Spanish (Paraguay)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2266"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2265"/>
         <source>Spanish (El Salvador)</source>
         <translation>Spanish (El Salvador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2267"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2266"/>
         <source>Spanish (United States)</source>
         <translation>Spanish (United States)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2268"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2267"/>
         <source>Spanish (Uruguay)</source>
         <translation>Spanish (Uruguay)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2269"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2268"/>
         <source>Spanish (Venezuela)</source>
         <translation>Spanish (Venezuela)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2270"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2269"/>
         <source>Spanish</source>
         <translation>Spanish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2271"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2270"/>
         <source>Estonian</source>
         <translation>Estonian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2272"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2271"/>
         <source>Basque</source>
         <translation>Basque</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2273"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2272"/>
         <source>Persian</source>
         <translation>Persian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2274"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2273"/>
         <source>Faroese</source>
         <translation>Faroese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2275"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2274"/>
         <source>French</source>
         <translation>French</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2276"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2275"/>
         <source>Friulian</source>
         <translation>Friulian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2277"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2276"/>
         <source>Western Frisian</source>
         <translation>Western Frisian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2278"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2277"/>
         <source>Irish</source>
         <translation>Irish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2279"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2278"/>
         <source>Gaelic</source>
         <translation>Gaelic</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2280"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2279"/>
         <source>Galician</source>
         <translation>Galician</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2281"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2280"/>
         <source>Gujarati</source>
         <translation>Gujarati</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2282"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2281"/>
         <source>Guarani</source>
         <translation>Guarani</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2283"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2282"/>
         <source>Hebrew</source>
         <translation>עברית</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2284"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2283"/>
         <source>Hindi</source>
         <translation>Hindi</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2285"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2284"/>
         <source>Croatian</source>
         <translation>Croatian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2286"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2285"/>
         <source>Hungarian</source>
         <translation>Hungarian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2287"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2286"/>
         <source>Armenian</source>
         <translation>Armenian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2288"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2287"/>
         <source>Armenian (Western)</source>
         <translation>Armenian (Western)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2289"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2288"/>
         <source>Interlingua</source>
         <translation>Interlingua</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2290"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2289"/>
         <source>Indonesian</source>
         <translation>Indonesian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2291"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2290"/>
         <source>Icelandic</source>
         <translation>Icelandic</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2292"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2291"/>
         <source>Italian</source>
         <translation>Italian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2293"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2292"/>
         <source>Georgian</source>
         <translation>Georgian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2294"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2293"/>
         <source>Kazakh</source>
         <translation>Kazakh</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2295"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2294"/>
         <source>Kurdish</source>
         <translation>Kurdish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2296"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2295"/>
         <source>Korean</source>
         <translation>Korean</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2297"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2296"/>
         <source>Latin</source>
         <translation>Latin</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2298"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2297"/>
         <source>Luxembourgish</source>
         <translation>Luxembourgish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2299"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2298"/>
         <source>Lao</source>
         <translation>Lao</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2300"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2299"/>
         <source>Lithuanian</source>
         <translation>Lithuanian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2301"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2300"/>
         <source>Latgalian</source>
         <translation>Latgalian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2302"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2301"/>
         <source>Latvian</source>
         <translation>Latvian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2303"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2302"/>
         <source>Macedonian</source>
         <translation>Macedonian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2304"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2303"/>
         <source>Mongolian</source>
         <translation>Mongolian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2305"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2304"/>
         <source>Maltese</source>
         <translation>Maltese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2306"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2310"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2305"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2309"/>
         <source>Norwegian</source>
         <translation>Norwegian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2307"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2306"/>
         <source>Low German</source>
         <translation>Low German</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2308"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2307"/>
         <source>Nepali</source>
         <translation>Nepali</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2309"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2308"/>
         <source>Dutch</source>
         <translation>Dutch</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2311"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2310"/>
         <source>Occitan</source>
         <translation>Occitan</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2312"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2311"/>
         <source>Polish</source>
         <translation>Polish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2313"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2312"/>
         <source>Portuguese (Brazilian)</source>
         <translation>Portuguese (Brazilian)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2314"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2313"/>
         <source>Portuguese</source>
         <translation>Portuguese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2315"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2314"/>
         <source>Quechua</source>
         <translation>Quechua</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2316"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2315"/>
         <source>Romanian</source>
         <translation>Romanian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2317"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2316"/>
         <source>Russian (with Yo)</source>
         <translation>Русский (с Ё)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2318"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2317"/>
         <source>Russian</source>
         <translation>Русский</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2319"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2318"/>
         <source>Kinyarwanda</source>
         <translation>Kinyarwanda</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2320"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2319"/>
         <source>Sinhala</source>
         <translation>Sinhala</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2321"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2320"/>
         <source>Slovak</source>
         <translation>Slovak</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2322"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2321"/>
         <source>Slovenian</source>
         <translation>Slovenian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2323"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2322"/>
         <source>Albanian</source>
         <translation>Albanian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2324"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2323"/>
         <source>Serbian (Latin)</source>
         <translation>Serbian (Latin)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2325"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2324"/>
         <source>Serbian</source>
         <translation>Serbian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2326"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2325"/>
         <source>Swedish (Finland)</source>
         <translation>Swedish (Finland)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2327"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2326"/>
         <source>Swedish</source>
         <translation>Swedish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2328"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2327"/>
         <source>Swahili</source>
         <translation>Swahili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2329"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2328"/>
         <source>Tamil</source>
         <translation>Tamil</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2330"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2329"/>
         <source>Telugu</source>
         <translation>Telugu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2331"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2330"/>
         <source>Thai</source>
         <translation>Thai</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2332"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2331"/>
         <source>Turkmen</source>
         <translation>Turkmen</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2333"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2332"/>
         <source>Klingon (Latin)</source>
         <translation>Klingon (Latin)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2334"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2333"/>
         <source>Klingon</source>
         <translation>Klingon</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2335"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2334"/>
         <source>Turkish</source>
         <translation>Turkish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2336"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2335"/>
         <source>Ukrainian</source>
         <translation>Ukrainian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2337"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2336"/>
         <source>Vietnamese</source>
         <translation>Vietnamese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2347"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2346"/>
         <source>User interface</source>
         <translation>ממשק משתמש</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2348"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2347"/>
         <source>Manage user dictionary</source>
         <translation>נהל את מילון המשתמש</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2359"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2358"/>
         <source>Turn on/off text and folders module</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג/הסתר את מודול הטקסט והתיקיות</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2373"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2372"/>
         <source>Turn on/off screenplay module</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג/הסתר את מודול התסריט</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2385"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2432"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2384"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2431"/>
         <source>Show hints for major &amp; related to a current story characters only</source>
         <translation>הצג רמזים עבור דמויות מרכזיות וקשורות לדמויות הסיפור הנוכחי בלבד</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2386"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2385"/>
         <source>Screenplay navigator</source>
         <translation>נווט התסריט</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2387"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2386"/>
         <source>Show beats</source>
         <translation>הצג ביטים</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2410"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2409"/>
         <source>Turn on/off comic book module</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג/הסתר את מודול ספר קומיקס</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="2422"/>
+        <source>Audioplay module</source>
+        <translation>מודול הצגה קולית</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2423"/>
-        <source>Audioplay module</source>
-        <translation type="unfinished"></translation>
+        <source>Turn on/off audioplay module</source>
+        <translation>הצג/הסתר את מודול הצגה קולית</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2424"/>
-        <source>Turn on/off audioplay module</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/settings/settings_view.cpp" line="2428"/>
+        <source>Show block numbers</source>
+        <translation>הצג מספרי בלוקים</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2429"/>
-        <source>Show block numbers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2430"/>
         <source>Continue block numbers through document</source>
-        <translation type="unfinished"></translation>
+        <translation>המשך מספרי בלוקים במסמך</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2433"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2432"/>
         <source>Audioplay navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>נווט הצגה קולית</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2442"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2441"/>
         <source>Calculate duration based on the count of words</source>
-        <translation type="unfinished"></translation>
+        <translation>חישוב משך הזמן על בסיס ספירת מילים</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2444"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2443"/>
         <source>words</source>
-        <translation type="unfinished"></translation>
+        <translation>מילים</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2449"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2448"/>
         <source>Screenplay editor</source>
         <translation>עורך תסריט</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2452"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2451"/>
         <source>Block name</source>
         <translation>שם בלוק</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2453"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2452"/>
         <source>Shortcut</source>
         <translation>קיצור דרך</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2454"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2453"/>
         <source>If you press in paragraphs end</source>
         <translation>אם תלחץ בסוף הפסקה</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2455"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2454"/>
         <source>If you press in empty paragraphs</source>
         <translation>אם תלחץ בפסקה ריקה</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2458"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2457"/>
         <source>Add paragraph</source>
         <translation>הוסף פסקה</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2459"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2458"/>
         <source>Change to</source>
         <translation>שנה ל</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2205"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2204"/>
         <source>Size of the user interface elements:</source>
         <translation>גודל ממשק משתמש:</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2206"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2205"/>
         <source>small</source>
         <translation>קטן</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2207"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2206"/>
         <source>big</source>
         <translation>גדול</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2208"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2207"/>
         <source>Save changes &amp; backups</source>
         <translation>שמור שינויים וגיבויים</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2209"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2208"/>
         <source>Automatically save changes as soon as possible</source>
         <translation>שמור שינויים בצורה אוטומטית</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2211"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2210"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
@@ -6729,177 +6857,177 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 אם אתה עובד ללא הפרעות הפרויקט נשמר כל 3 דקות.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2214"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2213"/>
         <source>Save backups</source>
         <translation>שמור גיבויים</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2215"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2214"/>
         <source>Backups folder path</source>
         <translation>נתיב תיקיית גיבויים</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2350"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2349"/>
         <source>Focus current paragraph</source>
         <translation>התמקד בפסקה הנוכחית</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2352"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2351"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
         <translation>השתמש בגלילת מכונת כתיבה (שומר על קו הסמן במרכז המסך)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2354"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2353"/>
         <source>Components</source>
         <translation>רכיבים</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2358"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2357"/>
         <source>Simple text module</source>
         <translation>מודול טקסט פשוט</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="2359"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2373"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2410"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2424"/>
+        <source>Text editor</source>
+        <translation>עורך טקסט</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2360"/>
         <location filename="../ui/settings/settings_view.cpp" line="2374"/>
         <location filename="../ui/settings/settings_view.cpp" line="2411"/>
         <location filename="../ui/settings/settings_view.cpp" line="2425"/>
-        <source>Text editor</source>
-        <translation>עורך טקסט</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2361"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2375"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2412"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2426"/>
         <source>Default template</source>
         <translation>טמפלט ברירת מחדל</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2363"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2377"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2414"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2428"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2362"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2376"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2413"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2427"/>
         <source>Available actions for the selected template</source>
         <translation>פעולות זמינות עבור הטמפלט הנבחר</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2378"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2388"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2434"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2377"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2387"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2433"/>
         <source>Show scene number</source>
         <translation>הצג מספרי סצנות</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2379"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2378"/>
         <source>on the left</source>
         <translation>משמאל</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2380"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2379"/>
         <source>on the right</source>
         <translation>מימין</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2381"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2380"/>
         <source>Show dialogue number</source>
         <translation>הצג מספרי דיאלוג</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2349"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2348"/>
         <source>Highlight current line</source>
         <translation>הדגש שורה נוכחית</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2364"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2415"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2363"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2414"/>
         <source>Navigator</source>
         <translation>נווט</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2365"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2364"/>
         <source>Show chapter text, lines</source>
         <translation>הצג טקסט פרק בשורות</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2372"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2371"/>
         <source>Screenplay module</source>
         <translation>מודול תסריט</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2383"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2382"/>
         <source>Automatically continue same speaker&apos;s dialogue</source>
         <translation>המשך אוטומטית בדיאלוג של אותה דמות</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2389"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2435"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2388"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2434"/>
         <source>Show scene text, lines</source>
         <translation>הצג טקסט סצנה בשורות</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2395"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2441"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2394"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2440"/>
         <source>Duration</source>
         <translation>משך הזמן</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2396"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2395"/>
         <source>Calculate duration based on the count of pages</source>
         <translation>חישוב משך הזמן על בסיס ספירת עמודים</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2397"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2403"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2443"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2396"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2402"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2442"/>
         <source>at the rate of</source>
         <translation>בקצב של</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2398"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2397"/>
         <source>pages</source>
         <translation>עמודים</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="2398"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2405"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2444"/>
+        <source>has duration</source>
+        <translation>יש משך</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2399"/>
         <location filename="../ui/settings/settings_view.cpp" line="2406"/>
         <location filename="../ui/settings/settings_view.cpp" line="2445"/>
-        <source>has duration</source>
-        <translation>יש משך</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2400"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2407"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2446"/>
         <source>seconds</source>
         <translation>שניות</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2402"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2401"/>
         <source>Calculate duration based on the count of letters</source>
         <translation>חישוב משך הזמן על בסיס ספירת אותיות</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2404"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2403"/>
         <source>letters</source>
         <translation>אותיות</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2405"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2404"/>
         <source>including spaces</source>
         <translation>כולל רווחים</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2409"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2408"/>
         <source>Comic book module</source>
         <translation>מודול ספר קומיקס</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2416"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2415"/>
         <source>Show panel text, lines</source>
         <translation>הצג חלונית טקסט בשורות</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2448"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2447"/>
         <source>Shortcuts</source>
         <translation>קיצורי דרך</translation>
     </message>
@@ -6929,7 +7057,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="669"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>הצג/הסתר רשימה</translation>
     </message>
 </context>
 <context>
@@ -7054,7 +7182,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="245"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>הסתר רשימת סימניות</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="246"/>
@@ -7075,6 +7203,305 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="814"/>
         <source>Bookmarks</source>
         <translation>סימניות</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::StageplayInformationView</name>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="187"/>
+        <source>Stageplay name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="188"/>
+        <source>Tagline</source>
+        <translation type="unfinished">סלוגן (טאגליין)</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="189"/>
+        <source>Logline</source>
+        <translation type="unfinished">לוגליין</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="190"/>
+        <source>Generate logline</source>
+        <translation type="unfinished">צור לוגליין</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="191"/>
+        <source>Title page</source>
+        <translation type="unfinished">עמוד שער</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="192"/>
+        <source>Synopsis</source>
+        <translation type="unfinished">סינופסיס</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="193"/>
+        <source>Stageplay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="194"/>
+        <source>Statistics</source>
+        <translation type="unfinished">סטטיסטיקה</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::StageplayParametersView</name>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="220"/>
+        <source>Header</source>
+        <translation type="unfinished">כותרת עליונה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="221"/>
+        <source>Print header on title page</source>
+        <translation type="unfinished">הדפס כותרת עליונה בעמוד השער</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="222"/>
+        <source>Footer</source>
+        <translation type="unfinished">כותרת תחתונה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="223"/>
+        <source>Print footer on title page</source>
+        <translation type="unfinished">הדפס כותרת תחתונה בעמוד השער</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="224"/>
+        <source>Override common settings for this stageplay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="225"/>
+        <source>Template</source>
+        <translation type="unfinished">טמפלט</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="226"/>
+        <source>Show block numbers</source>
+        <translation type="unfinished">הצג מספרי בלוקים</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="227"/>
+        <source>Continue block numbers through document</source>
+        <translation type="unfinished">המשך מספרי בלוקים במסמך</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::StageplayStatisticsView</name>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="198"/>
+        <source>Pages</source>
+        <translation type="unfinished">עמודים</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="199"/>
+        <source>Words</source>
+        <translation type="unfinished">מילים</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="200"/>
+        <source>Characters with/without spaces</source>
+        <translation type="unfinished">אותיות עם/בלי מרווחים</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="202"/>
+        <source>Text statistics</source>
+        <translation type="unfinished">סטטיסטיקת טקסט</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="203"/>
+        <source>Characters statistics</source>
+        <translation type="unfinished">סטטיסטיקת דמויות</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::StageplayTextEdit</name>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1218"/>
+        <source>Bookmark</source>
+        <translation type="unfinished">סימניה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1222"/>
+        <source>Add</source>
+        <translation type="unfinished">הוסף</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1228"/>
+        <source>Edit</source>
+        <translation type="unfinished">ערוך</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1233"/>
+        <source>Remove</source>
+        <translation type="unfinished">הסר</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1240"/>
+        <source>Show/hide list</source>
+        <translation type="unfinished">הצג/הסתר רשימה</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::StageplayTextEditToolbar</name>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="81"/>
+        <source>Scene heading</source>
+        <translation type="unfinished">כותרת סצנה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="224"/>
+        <source>Undo last action</source>
+        <translation type="unfinished">בטל פעולה אחרונה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="228"/>
+        <source>Redo last action</source>
+        <translation type="unfinished">בצע שוב פעולה אחרונה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="231"/>
+        <source>Current paragraph format</source>
+        <translation type="unfinished">הגדרת פסקה נוכחית</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="233"/>
+        <source>Hide fast format panel</source>
+        <translation type="unfinished">הסתר חלונית פורמט מהיר</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="234"/>
+        <source>Show fast format panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="236"/>
+        <source>Search text</source>
+        <translation type="unfinished">חפש טקסט</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="239"/>
+        <source>Disable review mode</source>
+        <translation type="unfinished">כבה מצב עריכת הערות</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="240"/>
+        <source>Enable review mode</source>
+        <translation type="unfinished">אפשר מצב עריכת הערות</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::StageplayTextSearchToolbar</name>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="150"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="297"/>
+        <source>Search without case sensitive</source>
+        <translation type="unfinished">חפש בלי אותיות רישיות</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="151"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="298"/>
+        <source>Search with case sensitive</source>
+        <translation type="unfinished">חפש עם אותיות רישיות</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="156"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="281"/>
+        <source>In the whole text</source>
+        <translation type="unfinished">בכל הטקסט</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="274"/>
+        <source>Exit from search</source>
+        <translation type="unfinished">צא מהחיפוש</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="277"/>
+        <source>Search</source>
+        <translation type="unfinished">חפש</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="278"/>
+        <source>Enter search phrase here</source>
+        <translation type="unfinished">הזן את ביטוי החיפוש כאן</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="282"/>
+        <source>In scene heading</source>
+        <translation type="unfinished">בכותרת סצנה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="283"/>
+        <source>In character</source>
+        <translation type="unfinished">בדמות</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="284"/>
+        <source>In dialogue</source>
+        <translation type="unfinished">בדיאלוג</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="289"/>
+        <source>Go to the next search result</source>
+        <translation type="unfinished">עבור לתוצאת החיפוש הבאה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="293"/>
+        <source>Go to the previous search result</source>
+        <translation type="unfinished">עבור לתוצאת החיפוש הקודמת</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="300"/>
+        <source>Replace with</source>
+        <translation type="unfinished">החלף ב</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="301"/>
+        <source>Enter phrase to replace</source>
+        <translation type="unfinished">הזן ביטוי להחלפה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="302"/>
+        <source>Replace</source>
+        <translation type="unfinished">החלף</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="303"/>
+        <source>All</source>
+        <translation type="unfinished">הכל</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::StageplayTextView</name>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="260"/>
+        <source>Hide bookmarks list</source>
+        <translation type="unfinished">הסתר רשימת סימניות</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="261"/>
+        <source>Show bookmarks list</source>
+        <translation type="unfinished">הצג רשימת סימניות</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="869"/>
+        <source>Formatting</source>
+        <translation type="unfinished">עיצוב טקסט</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="870"/>
+        <source>Comments</source>
+        <translation type="unfinished">הערות</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="871"/>
+        <source>Bookmarks</source>
+        <translation type="unfinished">סימניות</translation>
     </message>
 </context>
 <context>
