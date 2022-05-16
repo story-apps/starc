@@ -69,7 +69,7 @@ void Toggle::Implementation::animateToggle()
                                        - Ui::DesignSystem::toggle().tumblerSize().width(),
                                    toggleLeftRect.top() },
                                  toggleLeftRect.size());
-    if (isChecked) {
+    if ((isChecked && q->isLeftToRight()) || (!isChecked && q->isRightToLeft())) {
         tumblerAnimation.setStartValue(toggleLeftRect);
         tumblerAnimation.setEndValue(toggleRightRect);
     } else {
@@ -128,7 +128,8 @@ QSize Toggle::minimumSizeHint() const
 
 bool Toggle::event(QEvent* _event)
 {
-    if (_event->type() == QEvent::ContentsRectChange) {
+    if (_event->type() == QEvent::ContentsRectChange
+        || _event->type() == QEvent::LayoutDirectionChange) {
         d->animateToggle();
     }
 
