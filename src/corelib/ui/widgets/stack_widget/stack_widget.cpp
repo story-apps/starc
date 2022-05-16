@@ -416,7 +416,8 @@ void StackWidget::setCurrentWidget(QWidget* _widget)
         const int previousIndex = d->widgets.indexOf(d->previousWidget);
         const int currentIndex = d->widgets.indexOf(d->currentWidget);
         const qreal delta = 30 * Ui::DesignSystem::scaleFactor();
-        if (currentIndex > previousIndex) {
+        if ((currentIndex > previousIndex && isLeftToRight())
+            || (currentIndex < previousIndex && isRightToLeft())) {
             d->slideAnimation.outgoingContentPosition->setEndValue(-delta);
             d->slideAnimation.incomingContentPosition->setStartValue(delta);
         } else {
