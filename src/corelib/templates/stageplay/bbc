@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<style id="bbc" default="true" page_format="A4" page_margins="25,25,20,25" page_numbers_alignment="bottom,hcenter" left_half_of_page_width="30">
+<style id="bbc" default="true" page_format="A4" page_margins="24,25,17,25" page_numbers_alignment="bottom,hcenter" left_half_of_page_width="23">
     <titlepage>
         <document mime-type="application/x-starc/document/stageplay/title-page" version="1.0">
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
             <text><v><![CDATA[]]></v></text>
             <text><v><![CDATA[]]></v></text>
             <text><v><![CDATA[]]></v></text>
@@ -49,17 +51,23 @@
             <text><v><![CDATA[]]></v></text>
             <text><v><![CDATA[]]></v></text>
             <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
+            <text><v><![CDATA[]]></v></text>
             <text><v><![CDATA[Phone number]]></v></text>
             <text><v><![CDATA[E-mail]]></v></text>
         </document>
     </titlepage>
     <blocks>
-        <block id="unformatted_text" active="true" starts_from_new_page="false" font_family="Arial" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
-        <block id="scene_heading" active="true" starts_from_new_page="false" font_family="Arial" font_size="12" bold="false" italic="false" underline="true" uppercase="true" alignment="left" lines_before="0" lines_after="0" margins="64,12,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
-        <block id="character" active="true" starts_from_new_page="false" font_family="Arial" font_size="12" bold="false" italic="false" underline="false" uppercase="true" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
-        <block id="dialogue" active="true" starts_from_new_page="false" font_family="Arial" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
-        <block id="action" active="true" starts_from_new_page="false" font_family="Arial" font_size="12" bold="false" italic="false" underline="true" uppercase="true" alignment="left" lines_before="0" lines_after="0" margins="64,5,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
-        <block id="inline_note" active="true" starts_from_new_page="false" font_family="Arial" font_size="12" bold="false" italic="true" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="64,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
-        <block id="page_splitter" active="false" starts_from_new_page="false" font_family="Arial" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="oneandhalf" line_spacing_value="0"/>
+        <block id="unformatted_text" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="scene_heading" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="true" alignment="left" lines_before="0" lines_after="0" margins="0,12,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="character" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="true" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="dialogue" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="action" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="true" alignment="left" lines_before="0" lines_after="0" margins="66,5,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="inline_note" active="true" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="true" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="66,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
+        <block id="page_splitter" active="false" starts_from_new_page="false" font_family="Courier Prime" font_size="12" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,0" margins_on_half_page="0,0,0,0" line_spacing="single" line_spacing_value="0"/>
     </blocks>
 </style>

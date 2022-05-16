@@ -651,6 +651,11 @@ public:
     TextParagraphType defaultBlockType() const;
 
     /**
+     * @brief Дефолтный шрифт
+     */
+    QFont defaultFont() const;
+
+    /**
      * @brief Сформировать шаблоны компаньоны
      */
     void buildTitlePageTemplate();
@@ -736,6 +741,16 @@ TextParagraphType TextTemplate::Implementation::defaultBlockType() const
     }
 }
 
+QFont TextTemplate::Implementation::defaultFont() const
+{
+    auto font = paragraphsStyles.value(defaultBlockType()).font();
+    font.setCapitalization(QFont::MixedCase);
+    font.setBold(false);
+    font.setItalic(false);
+    font.setUnderline(false);
+    return font;
+}
+
 void TextTemplate::Implementation::buildTitlePageTemplate()
 {
     if (titlePageTemplate.isNull()) {
@@ -749,9 +764,8 @@ void TextTemplate::Implementation::buildTitlePageTemplate()
     TextBlockStyle defaultBlockStyle;
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
-    const auto textBlockStyle = paragraphsStyles.value(defaultBlockType());
-    defaultBlockStyle.setFont(textBlockStyle.font());
-    defaultBlockStyle.setAlign(textBlockStyle.align());
+    defaultBlockStyle.setFont(defaultFont());
+    defaultBlockStyle.setAlign(paragraphsStyles.value(defaultBlockType()).align());
     //
     for (auto type : {
              TextParagraphType::ChapterHeading1,
@@ -782,9 +796,8 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
     TextBlockStyle defaultBlockStyle;
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
-    const auto textBlockStyle = paragraphsStyles.value(defaultBlockType());
-    defaultBlockStyle.setFont(textBlockStyle.font());
-    defaultBlockStyle.setAlign(textBlockStyle.align());
+    defaultBlockStyle.setFont(defaultFont());
+    defaultBlockStyle.setAlign(paragraphsStyles.value(defaultBlockType()).align());
     //
     for (auto type : {
              TextParagraphType::ChapterHeading1,
@@ -1092,7 +1105,7 @@ bool TextTemplate::canMergeParagraph() const
 
 QFont TextTemplate::defaultFont() const
 {
-    return d->paragraphsStyles.value(d->defaultBlockType()).font();
+    return d->defaultFont();
 }
 
 const TextTemplate& TextTemplate::titlePageTemplate() const

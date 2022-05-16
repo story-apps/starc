@@ -328,25 +328,18 @@ void TitlePageEdit::restoreFromTemplate()
     }
 
     QString titlePage;
-    if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
-        titlePage
-            = TemplatesFacade::screenplayTemplate(titlePageModel->informationModel()->templateId())
-                  .titlePage();
-    } else if (auto titlePageModel
-               = qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
-        titlePage
-            = TemplatesFacade::comicBookTemplate(titlePageModel->informationModel()->templateId())
-                  .titlePage();
-    } else if (auto titlePageModel
-               = qobject_cast<BusinessLayer::AudioplayTitlePageModel*>(d->model)) {
-        titlePage
-            = TemplatesFacade::audioplayTemplate(titlePageModel->informationModel()->templateId())
-                  .titlePage();
-    } else if (auto titlePageModel
-               = qobject_cast<BusinessLayer::StageplayTitlePageModel*>(d->model)) {
-        titlePage
-            = TemplatesFacade::stageplayTemplate(titlePageModel->informationModel()->templateId())
-                  .titlePage();
+    if (auto model = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
+        titlePage = TemplatesFacade::screenplayTemplate(model->informationModel()->templateId())
+                        .titlePage();
+    } else if (auto model = qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
+        titlePage = TemplatesFacade::comicBookTemplate(model->informationModel()->templateId())
+                        .titlePage();
+    } else if (auto model = qobject_cast<BusinessLayer::AudioplayTitlePageModel*>(d->model)) {
+        titlePage = TemplatesFacade::audioplayTemplate(model->informationModel()->templateId())
+                        .titlePage();
+    } else if (auto model = qobject_cast<BusinessLayer::StageplayTitlePageModel*>(d->model)) {
+        titlePage = TemplatesFacade::stageplayTemplate(model->informationModel()->templateId())
+                        .titlePage();
     }
 
     d->model->setDocumentContent(titlePage.toUtf8());

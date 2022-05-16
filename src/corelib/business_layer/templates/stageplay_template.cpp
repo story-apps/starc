@@ -19,10 +19,7 @@ QString StageplayTemplate::name() const
 {
     if (id() == "bbc") {
         return QCoreApplication::translate("BusinessLayer::StageplayTemplate",
-                                           "BBC template (page: A4; font: Arial)");
-    } else if (id() == "ru") {
-        return QCoreApplication::translate("BusinessLayer::StageplayTemplate",
-                                           "Russian template (page: A4; font: Arial)");
+                                           "BBC stage template (page: A4; font: Arial)");
     } else if (id() == "us") {
         return QCoreApplication::translate("BusinessLayer::StageplayTemplate",
                                            "US template (page: Letter; font: Courier Prime)");
