@@ -1,8 +1,8 @@
-#include "audioplay_export_dialog.h"
+#include "stageplay_export_dialog.h"
 
-#include <business_layer/export/audioplay/audioplay_export_options.h>
 #include <business_layer/export/export_options.h>
-#include <business_layer/templates/audioplay_template.h>
+#include <business_layer/export/stageplay/stageplay_export_options.h>
+#include <business_layer/templates/stageplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -21,7 +21,7 @@
 namespace Ui {
 
 namespace {
-const QString kGroupKey = "widgets/audioplay-export-dialog/";
+const QString kGroupKey = "widgets/stageplay-export-dialog/";
 const QString kFormatKey = kGroupKey + "format";
 const QString kIncludeTitlePageKey = kGroupKey + "include-title-page";
 const QString kIncludeInlineNotesKey = kGroupKey + "include-inline-notes";
@@ -29,7 +29,7 @@ const QString kIncludeReviewMarksKey = kGroupKey + "include-review-marks";
 const QString kOpenDocumentAfterExportKey = kGroupKey + "open-document-after-export";
 } // namespace
 
-class AudioplayExportDialog::Implementation
+class StageplayExportDialog::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -47,7 +47,7 @@ public:
     Button* exportButton = nullptr;
 };
 
-AudioplayExportDialog::Implementation::Implementation(QWidget* _parent)
+StageplayExportDialog::Implementation::Implementation(QWidget* _parent)
     : fileFormat(new ComboBox(_parent))
     , includeTitlePage(new CheckBox(_parent))
     , includeInlineNotes(new CheckBox(_parent))
@@ -79,7 +79,7 @@ AudioplayExportDialog::Implementation::Implementation(QWidget* _parent)
 // ****
 
 
-AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
+StageplayExportDialog::StageplayExportDialog(QWidget* _parent)
     : AbstractDialog(_parent)
     , d(new Implementation(this))
 {
@@ -123,8 +123,8 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
         d->watermark->setVisible(isWatermarkVisible);
     });
     //
-    connect(d->exportButton, &Button::clicked, this, &AudioplayExportDialog::exportRequested);
-    connect(d->cancelButton, &Button::clicked, this, &AudioplayExportDialog::canceled);
+    connect(d->exportButton, &Button::clicked, this, &StageplayExportDialog::exportRequested);
+    connect(d->cancelButton, &Button::clicked, this, &StageplayExportDialog::canceled);
 
     QSettings settings;
     const auto fileFormatIndex
@@ -137,7 +137,7 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
         settings.value(kOpenDocumentAfterExportKey, true).toBool());
 }
 
-AudioplayExportDialog::~AudioplayExportDialog()
+StageplayExportDialog::~StageplayExportDialog()
 {
     QSettings settings;
     settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
@@ -147,9 +147,9 @@ AudioplayExportDialog::~AudioplayExportDialog()
     settings.setValue(kOpenDocumentAfterExportKey, d->openDocumentAfterExport->isChecked());
 }
 
-BusinessLayer::AudioplayExportOptions AudioplayExportDialog::exportOptions() const
+BusinessLayer::StageplayExportOptions StageplayExportDialog::exportOptions() const
 {
-    BusinessLayer::AudioplayExportOptions options;
+    BusinessLayer::StageplayExportOptions options;
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
     options.includeTiltePage = d->includeTitlePage->isChecked();
@@ -160,24 +160,24 @@ BusinessLayer::AudioplayExportOptions AudioplayExportDialog::exportOptions() con
     return options;
 }
 
-bool AudioplayExportDialog::openDocumentAfterExport() const
+bool StageplayExportDialog::openDocumentAfterExport() const
 {
     return d->openDocumentAfterExport->isChecked();
 }
 
-QWidget* AudioplayExportDialog::focusedWidgetAfterShow() const
+QWidget* StageplayExportDialog::focusedWidgetAfterShow() const
 {
     return d->fileFormat;
 }
 
-QWidget* AudioplayExportDialog::lastFocusableWidget() const
+QWidget* StageplayExportDialog::lastFocusableWidget() const
 {
     return d->exportButton;
 }
 
-void AudioplayExportDialog::updateTranslations()
+void StageplayExportDialog::updateTranslations()
 {
-    setTitle(tr("Export audioplay"));
+    setTitle(tr("Export stageplay"));
 
     d->fileFormat->setLabel(tr("Format"));
     d->includeTitlePage->setText(tr("Include title page"));
@@ -190,7 +190,7 @@ void AudioplayExportDialog::updateTranslations()
     d->cancelButton->setText(tr("Cancel"));
 }
 
-void AudioplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void StageplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 

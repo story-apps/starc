@@ -12,18 +12,24 @@
 #include <business_layer/export/screenplay/screenplay_fdx_exporter.h>
 #include <business_layer/export/screenplay/screenplay_fountain_exporter.h>
 #include <business_layer/export/screenplay/screenplay_pdf_exporter.h>
+#include <business_layer/export/stageplay/stageplay_docx_exporter.h>
+#include <business_layer/export/stageplay/stageplay_export_options.h>
+#include <business_layer/export/stageplay/stageplay_pdf_exporter.h>
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/stageplay/stageplay_information_model.h>
+#include <business_layer/model/stageplay/text/stageplay_text_model.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <ui/export/audioplay_export_dialog.h>
 #include <ui/export/comic_book_export_dialog.h>
 #include <ui/export/screenplay_export_dialog.h>
+#include <ui/export/stageplay_export_dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/extension_helper.h>
@@ -44,6 +50,7 @@ public:
     void exportScreenplay(BusinessLayer::AbstractModel* _model);
     void exportComicBook(BusinessLayer::AbstractModel* _model);
     void exportAudioplay(BusinessLayer::AbstractModel* _model);
+    void exportStageplay(BusinessLayer::AbstractModel* _model);
 
     //
     // Данные
@@ -56,6 +63,7 @@ public:
     Ui::ScreenplayExportDialog* screenplayExportDialog = nullptr;
     Ui::ComicBookExportDialog* comicBookExportDialog = nullptr;
     Ui::AudioplayExportDialog* audioplayExportDialog = nullptr;
+    Ui::StageplayExportDialog* stageplayExportDialog = nullptr;
 };
 
 ExportManager::Implementation::Implementation(ExportManager* _parent, QWidget* _topLevelWidget)
@@ -478,6 +486,138 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
     audioplayExportDialog->showDialog();
 }
 
+void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel* _model)
+{
+    using namespace BusinessLayer;
+
+    if (stageplayExportDialog == nullptr) {
+        stageplayExportDialog = new Ui::StageplayExportDialog(topLevelWidget);
+        connect(
+            stageplayExportDialog, &Ui::StageplayExportDialog::exportRequested,
+            stageplayExportDialog, [this, _model] {
+                auto exportOptions = stageplayExportDialog->exportOptions();
+
+                //
+                // Предоставим пользователю возможность выбрать файл, куда он будет экспортировать
+                //
+                const auto projectExportFolder
+                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                QString exportFilter;
+                QString exportExtension;
+                switch (exportOptions.fileFormat) {
+                default:
+                case ExportFileFormat::Pdf: {
+                    exportFilter = DialogHelper::pdfFilter();
+                    exportExtension = ExtensionHelper::pdf();
+                    break;
+                }
+                case ExportFileFormat::Docx: {
+                    exportFilter = DialogHelper::msWordFilter();
+                    exportExtension = ExtensionHelper::msOfficeOpenXml();
+                    break;
+                }
+                }
+                const auto stageplayTextModel
+                    = qobject_cast<BusinessLayer::StageplayTextModel*>(_model);
+                const auto projectExportFile
+                    = QString("%1/%2.%3")
+                          .arg(projectExportFolder, stageplayTextModel->informationModel()->name(),
+                               exportExtension);
+                auto exportFilePath
+                    = QFileDialog::getSaveFileName(topLevelWidget, tr("Choose the file to export"),
+                                                   projectExportFile, exportFilter);
+                if (exportFilePath.isEmpty()) {
+                    return;
+                }
+
+                //
+                // Если файл был выбран
+                //
+                exportOptions.filePath = exportFilePath;
+                //
+                // ... проверяем возможность записи в файл
+                //
+                QFile file(exportFilePath);
+                const bool canWrite = file.open(QIODevice::WriteOnly);
+                file.close();
+                if (!canWrite) {
+                    //
+                    // ... предупреждаем
+                    //
+                    QString errorMessage;
+                    const QFileInfo fileInfo(exportFilePath);
+                    if (fileInfo.exists()) {
+                        errorMessage = tr("Can't write to file. Looks like it's opened by another "
+                                          "application. Please close it and retry the export.");
+                    } else {
+                        errorMessage = tr("Can't write to file. Check permissions to write in the "
+                                          "chosen folder or choose another folder.");
+                    }
+                    StandardDialog::information(topLevelWidget, tr("Export error"), errorMessage);
+                    return;
+                }
+
+                //
+                // ... донастроим параметры экспорта
+                //
+                const auto stageplayInformation = stageplayTextModel->informationModel();
+                exportOptions.templateId = stageplayInformation->templateId();
+                exportOptions.showBlockNumbers = stageplayInformation->showBlockNumbers();
+                exportOptions.header = stageplayInformation->header();
+                exportOptions.printHeaderOnTitlePage
+                    = stageplayInformation->printHeaderOnTitlePage();
+                exportOptions.footer = stageplayInformation->footer();
+                exportOptions.printFooterOnTitlePage
+                    = stageplayInformation->printFooterOnTitlePage();
+                //
+                // ... обновим папку, куда в следующий раз он предположительно опять будет
+                //     экспортировать
+                //
+                setSettingsValue(DataStorageLayer::kProjectExportFolderKey,
+                                 QFileInfo(exportFilePath).dir().absolutePath());
+                //
+                // ... и экспортируем документ
+                //
+                QScopedPointer<BusinessLayer::AbstractExporter> exporter;
+                switch (exportOptions.fileFormat) {
+                default:
+                case ExportFileFormat::Pdf: {
+                    exporter.reset(new BusinessLayer::StageplayPdfExporter);
+                    break;
+                }
+                case ExportFileFormat::Docx: {
+                    exporter.reset(new BusinessLayer::StageplayDocxExporter);
+                    break;
+                }
+                }
+                if (exporter.isNull()) {
+                    return;
+                }
+                exporter->exportTo(stageplayTextModel, exportOptions);
+
+                //
+                // Если необходимо, откроем экспортированный документ
+                //
+                if (stageplayExportDialog->openDocumentAfterExport()) {
+                    QDesktopServices::openUrl(QUrl::fromLocalFile(exportOptions.filePath));
+                }
+                //
+                // ... и закрываем диалог экспорта
+                //
+                stageplayExportDialog->hideDialog();
+            });
+        connect(stageplayExportDialog, &Ui::StageplayExportDialog::canceled, stageplayExportDialog,
+                &Ui::StageplayExportDialog::hideDialog);
+        connect(stageplayExportDialog, &Ui::StageplayExportDialog::disappeared,
+                stageplayExportDialog, [this] {
+                    stageplayExportDialog->deleteLater();
+                    stageplayExportDialog = nullptr;
+                });
+    }
+
+    stageplayExportDialog->showDialog();
+}
+
 
 // ****
 
@@ -500,6 +640,7 @@ bool ExportManager::canExportDocument(BusinessLayer::AbstractModel* _model) cons
     case Domain::DocumentObjectType::ScreenplayText:
     case Domain::DocumentObjectType::ComicBookText:
     case Domain::DocumentObjectType::AudioplayText:
+    case Domain::DocumentObjectType::StageplayText:
         return true;
 
     default:
@@ -526,6 +667,11 @@ void ExportManager::exportDocument(BusinessLayer::AbstractModel* _model)
 
     case Domain::DocumentObjectType::AudioplayText: {
         d->exportAudioplay(_model);
+        break;
+    }
+
+    case Domain::DocumentObjectType::StageplayText: {
+        d->exportStageplay(_model);
         break;
     }
 
