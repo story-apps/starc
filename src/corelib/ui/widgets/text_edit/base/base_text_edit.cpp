@@ -804,7 +804,8 @@ void BaseTextEdit::doSetTextCursor(const QTextCursor& _cursor)
     const bool isSelectionForward = sourceSelectionStart < sourceSelectionEnd;
     cursor.setPosition(sourceSelectionStart);
     while ((isSelectionForward ? !cursor.atEnd() : !cursor.atStart())
-           && !cursor.block().isVisible()) {
+           && (!cursor.block().isVisible()
+               || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
         const auto isCursorMoved = cursor.movePosition(
             isSelectionForward ? QTextCursor::NextBlock : QTextCursor::PreviousBlock);
         if (isCursorMoved) {
@@ -823,7 +824,8 @@ void BaseTextEdit::doSetTextCursor(const QTextCursor& _cursor)
     if (_cursor.hasSelection()) {
         cursor.setPosition(sourceSelectionEnd);
         while ((isSelectionForward ? !cursor.atStart() : !cursor.atEnd())
-               && !cursor.block().isVisible()) {
+               && (!cursor.block().isVisible()
+                   || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
             const auto isCursorMoved = cursor.movePosition(
                 isSelectionForward ? QTextCursor::PreviousBlock : QTextCursor::NextBlock);
             if (isCursorMoved) {
@@ -844,7 +846,10 @@ void BaseTextEdit::doSetTextCursor(const QTextCursor& _cursor)
     //
     else {
         if (!cursor.block().isVisible()) {
-            while (!cursor.atEnd() && !cursor.block().isVisible()) {
+            while (
+                !cursor.atEnd()
+                && (!cursor.block().isVisible()
+                    || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
                 const auto isCursorMoved = cursor.movePosition(QTextCursor::NextBlock);
                 if (isCursorMoved) {
                     cursor.movePosition(QTextCursor::StartOfBlock);
