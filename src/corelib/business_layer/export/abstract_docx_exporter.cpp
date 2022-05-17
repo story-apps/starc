@@ -975,15 +975,13 @@ void AbstractDocxExporter::Implementation::writeDocument(QtZipWriter* _zip,
     // и записываются прямо в файл
     //
     TextCursor documentCursor(_audioplayText);
-    while (!documentCursor.atEnd()) {
+    do {
         documentXml.append(docxText(_comments, documentCursor, _exportOptions));
 
         //
         // Переходим к следующему параграфу
         //
-        documentCursor.movePosition(QTextCursor::EndOfBlock);
-        documentCursor.movePosition(QTextCursor::NextBlock);
-    }
+    } while (documentCursor.movePosition(QTextCursor::NextBlock));
 
     //
     // В конце идёт блок настроек страницы
