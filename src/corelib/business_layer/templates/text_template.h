@@ -500,6 +500,12 @@ public:
     void setLeftHalfOfPageWidthPercents(int _width);
 
     /**
+     * @brief Помещать диалоги в таблицу
+     */
+    bool placeDialoguesInTable() const;
+    void setPlaceDdialoguesInTable(bool _place);
+
+    /**
      * @brief Ширина разделителя колонок
      */
     qreal pageSplitterWidth() const;

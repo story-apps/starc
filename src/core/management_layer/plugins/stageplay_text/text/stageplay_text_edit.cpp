@@ -258,30 +258,35 @@ void StageplayTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
     d->document.addParagraph(_type, textCursor());
 
     //
-    // Если вставляется персонаж, то разделяем страницу, для добавления реплики
+    // Если диалоги нужно размещать в таблице, переметим добавляемый диалог в таблицу
     //
-    if (_type == BusinessLayer::TextParagraphType::Character) {
-        const auto cursorPosition = textCursor().position();
-        d->document.splitParagraph(textCursor());
-        auto cursor = textCursor();
-        cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
-        setTextCursor(cursor);
-        cursor.movePosition(QTextCursor::NextBlock);
-        d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
-    }
-    //
-    // Если вставляется реплика, то разделяем страницу и ставим курсор во вторую колонку
-    //
-    else if (_type == BusinessLayer::TextParagraphType::Dialogue) {
-        const auto cursorPosition = textCursor().position();
-        d->document.splitParagraph(textCursor());
-        auto cursor = textCursor();
-        cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
-        setTextCursor(cursor);
-        d->document.setParagraphType(BusinessLayer::TextParagraphType::Character, cursor);
-        cursor.movePosition(QTextCursor::NextBlock);
-        d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
-        setTextCursor(cursor);
+    if (d->stageplayTemplate().placeDialoguesInTable()) {
+        //
+        // Если вставляется персонаж, то разделяем страницу, для добавления реплики
+        //
+        if (_type == BusinessLayer::TextParagraphType::Character) {
+            const auto cursorPosition = textCursor().position();
+            d->document.splitParagraph(textCursor());
+            auto cursor = textCursor();
+            cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
+            setTextCursor(cursor);
+            cursor.movePosition(QTextCursor::NextBlock);
+            d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
+        }
+        //
+        // Если вставляется реплика, то разделяем страницу и ставим курсор во вторую колонку
+        //
+        else if (_type == BusinessLayer::TextParagraphType::Dialogue) {
+            const auto cursorPosition = textCursor().position();
+            d->document.splitParagraph(textCursor());
+            auto cursor = textCursor();
+            cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
+            setTextCursor(cursor);
+            d->document.setParagraphType(BusinessLayer::TextParagraphType::Character, cursor);
+            cursor.movePosition(QTextCursor::NextBlock);
+            d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
+            setTextCursor(cursor);
+        }
     }
 
     //
@@ -305,7 +310,7 @@ void StageplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
     //
     // Меняем тип блока на персонажа
     //
-    if (_type == TextParagraphType::Character) {
+    if (d->stageplayTemplate().placeDialoguesInTable() && _type == TextParagraphType::Character) {
         //
         // Если текущий блок не в таблице, то создаём её и текущий блок помещаем в неё как персонажа
         //
@@ -329,7 +334,8 @@ void StageplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
     //
     // На реплику
     //
-    else if (_type == TextParagraphType::Dialogue) {
+    else if (d->stageplayTemplate().placeDialoguesInTable()
+             && _type == TextParagraphType::Dialogue) {
         //
         // Если текущий блок не в таблице, то создаём её и текущий блок помещаем в неё как персонажа
         //
@@ -1118,6 +1124,51 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                             }
                         }
                     }
+                }
+            }
+
+            //
+            // Прорисовка префикса/постфикса для блока текста, если это не пустая декорация
+            //
+            if (!block.text().isEmpty()
+                || !block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
+                setPainterPen(palette().text().color());
+                painter.setFont(block.charFormat().font());
+                //
+                // ... префикс
+                //
+                if (block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)) {
+                    const auto prefix
+                        = block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
+                    const QPoint topLeft = block.text().isRightToLeft()
+                        ? QPoint(cursorREnd.left()
+                                     - painter.fontMetrics().horizontalAdvance(prefix),
+                                 cursorREnd.top())
+                        : QPoint(cursorR.left() - painter.fontMetrics().horizontalAdvance(prefix),
+                                 cursorR.top());
+                    const QPoint bottomRight = block.text().isRightToLeft()
+                        ? QPoint(cursorREnd.left(), cursorREnd.bottom())
+                        : QPoint(cursorR.left(), cursorR.bottom());
+                    const QRect rect(topLeft, bottomRight);
+                    painter.drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, prefix);
+                }
+                //
+                // ... постфикс
+                //
+                if (block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix)) {
+                    const auto postfix
+                        = block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
+                    const QPoint topLeft = block.text().isRightToLeft()
+                        ? QPoint(cursorR.left(), cursorR.top())
+                        : QPoint(cursorREnd.left(), cursorREnd.top());
+                    const QPoint bottomRight = block.text().isRightToLeft()
+                        ? QPoint(cursorR.left() + painter.fontMetrics().horizontalAdvance(postfix),
+                                 cursorR.bottom())
+                        : QPoint(cursorREnd.left()
+                                     + painter.fontMetrics().horizontalAdvance(postfix),
+                                 cursorREnd.bottom());
+                    const QRect rect(topLeft, bottomRight);
+                    painter.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, postfix);
                 }
             }
 

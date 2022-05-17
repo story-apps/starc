@@ -107,7 +107,22 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
             // Переходим в следующий блок
             //
             editor()->setTextCursor(cursor);
-            editor()->moveCursor(QTextCursor::NextBlock);
+
+            //
+            // Если диалоги располагаются в таблице
+            //
+            if (editor()->stageplayTemplate().placeDialoguesInTable()) {
+                //
+                // ... то переходим к следующему блоку, он уже отформатирован
+                //
+                editor()->moveCursor(QTextCursor::NextBlock);
+            }
+            //
+            // В противном случае, добавляем новый абзац
+            //
+            else {
+                editor()->addParagraph(jumpForEnter(TextParagraphType::Character));
+            }
         }
     } else {
         //! Подстановщик закрыт
@@ -145,9 +160,20 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                     insertColunAtEnd(cursor);
 
                     //
-                    // Переходим к следующему блоку, он уже отформатирован должным образом
+                    // Если диалоги располагаются в таблице
                     //
-                    editor()->moveCursor(QTextCursor::NextBlock);
+                    if (editor()->stageplayTemplate().placeDialoguesInTable()) {
+                        //
+                        // ... то переходим к следующему блоку, он уже отформатирован
+                        //
+                        editor()->moveCursor(QTextCursor::NextBlock);
+                    }
+                    //
+                    // В противном случае, добавляем новый абзац
+                    //
+                    else {
+                        editor()->addParagraph(jumpForEnter(TextParagraphType::Character));
+                    }
                 } else {
                     //! В начале блока
                     //! Внутри блока
@@ -222,9 +248,20 @@ void CharacterHandler::handleTab(QKeyEvent*)
                     insertColunAtEnd(cursor);
 
                     //
-                    // Переходим к следующему блоку, он уже отформатирован должным образом
+                    // Если диалоги располагаются в таблице
                     //
-                    editor()->moveCursor(QTextCursor::NextBlock);
+                    if (editor()->stageplayTemplate().placeDialoguesInTable()) {
+                        //
+                        // ... то переходим к следующему блоку, он уже отформатирован
+                        //
+                        editor()->moveCursor(QTextCursor::NextBlock);
+                    }
+                    //
+                    // В противном случае, добавляем новый абзац
+                    //
+                    else {
+                        editor()->addParagraph(jumpForTab(TextParagraphType::Character));
+                    }
                 } else {
                     //! В начале блока
                     //! Внутри блока

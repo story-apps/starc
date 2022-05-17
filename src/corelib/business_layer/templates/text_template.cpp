@@ -703,6 +703,11 @@ public:
     int leftHalfOfPageWidthPercents = 50;
 
     /**
+     * @brief Помещать диалоги в таблицу
+     */
+    bool placeDialoguesInTable = false;
+
+    /**
      * @brief Шаблон-компаньён, используемый для титульной страницы
      */
     QScopedPointer<TextTemplate> titlePageTemplate;
@@ -839,6 +844,7 @@ TextTemplate::TextTemplate(const TextTemplate& _other)
     d->pageMargins = _other.d->pageMargins;
     d->pageNumbersAlignment = _other.d->pageNumbersAlignment;
     d->leftHalfOfPageWidthPercents = _other.d->leftHalfOfPageWidthPercents;
+    d->placeDialoguesInTable = _other.d->placeDialoguesInTable;
     d->titlePage = _other.d->titlePage;
     d->paragraphsStyles = _other.d->paragraphsStyles;
 }
@@ -854,6 +860,7 @@ TextTemplate& TextTemplate::operator=(const TextTemplate& _other)
         d->pageMargins = _other.d->pageMargins;
         d->pageNumbersAlignment = _other.d->pageNumbersAlignment;
         d->leftHalfOfPageWidthPercents = _other.d->leftHalfOfPageWidthPercents;
+        d->placeDialoguesInTable = _other.d->placeDialoguesInTable;
         d->titlePage = _other.d->titlePage;
         d->paragraphsStyles = _other.d->paragraphsStyles;
     }
@@ -893,6 +900,8 @@ void TextTemplate::load(const QString& _fromFile)
     d->pageNumbersAlignment
         = alignmentFromString(templateAttributes.value("page_numbers_alignment").toString());
     d->leftHalfOfPageWidthPercents = templateAttributes.value("left_half_of_page_width").toInt();
+    d->placeDialoguesInTable
+        = templateAttributes.value("place_dialogues_in_table").toString() == "true";
 
     //
     // Считываем титульную страницу
@@ -975,6 +984,7 @@ void TextTemplate::saveToFile(const QString& _filePath) const
     writer.writeAttribute("page_margins", ::toString(d->pageMargins));
     writer.writeAttribute("page_numbers_alignment", ::toString(d->pageNumbersAlignment));
     writer.writeAttribute("left_half_of_page_width", ::toString(d->leftHalfOfPageWidthPercents));
+    writer.writeAttribute("place_dialogues_in_table", ::toString(d->placeDialoguesInTable));
     writer.writeStartElement("titlepage");
     writer.writeCharacters(""); // это нужно, чтобы корректно записался открывающий тэг титула
     writer.device()->write(d->titlePage.toUtf8());
@@ -1088,6 +1098,16 @@ int TextTemplate::leftHalfOfPageWidthPercents() const
 void TextTemplate::setLeftHalfOfPageWidthPercents(int _width)
 {
     d->leftHalfOfPageWidthPercents = _width;
+}
+
+bool TextTemplate::placeDialoguesInTable() const
+{
+    return d->placeDialoguesInTable;
+}
+
+void TextTemplate::setPlaceDdialoguesInTable(bool _place)
+{
+    d->placeDialoguesInTable = _place;
 }
 
 qreal TextTemplate::pageSplitterWidth() const

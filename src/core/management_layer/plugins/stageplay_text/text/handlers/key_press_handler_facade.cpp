@@ -5,6 +5,7 @@
 #include "character_handler.h"
 #include "dialog_handler.h"
 #include "inline_note_handler.h"
+#include "parenthetical_handler.h"
 #include "pre_handler.h"
 #include "prepare_handler.h"
 #include "scene_heading_handler.h"
@@ -33,6 +34,7 @@ public:
     QScopedPointer<SceneHeadingHandler> m_sceneHeaderHandler;
     QScopedPointer<CharacterHandler> m_characterHandler;
     QScopedPointer<DialogHandler> m_dialogHandler;
+    QScopedPointer<ParentheticalHandler> m_parentheticalHandler;
     QScopedPointer<ActionHandler> m_actionHandler;
     QScopedPointer<InlineNoteHandler> m_inlineNoteHandler;
 };
@@ -45,6 +47,7 @@ KeyPressHandlerFacade::Implementation::Implementation(Ui::StageplayTextEdit* _ed
     , m_sceneHeaderHandler(new SceneHeadingHandler(_editor))
     , m_characterHandler(new CharacterHandler(_editor))
     , m_dialogHandler(new DialogHandler(_editor))
+    , m_parentheticalHandler(new ParentheticalHandler(_editor))
     , m_actionHandler(new ActionHandler(_editor))
     , m_inlineNoteHandler(new InlineNoteHandler(_editor))
 {
@@ -136,6 +139,10 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
 
     case TextParagraphType::Dialogue: {
         return d->m_dialogHandler.data();
+    }
+
+    case TextParagraphType::Parenthetical: {
+        return d->m_parentheticalHandler.data();
     }
 
     case TextParagraphType::Action: {

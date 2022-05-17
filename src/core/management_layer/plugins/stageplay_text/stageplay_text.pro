@@ -39,6 +39,7 @@ HEADERS += \
     text/handlers/dialog_handler.h \
     text/handlers/inline_note_handler.h \
     text/handlers/key_press_handler_facade.h \
+    text/handlers/parenthetical_handler.h \
     text/handlers/pre_handler.h \
     text/handlers/prepare_handler.h \
     text/handlers/scene_heading_handler.h \
@@ -60,6 +61,7 @@ SOURCES += \
     text/handlers/dialog_handler.cpp \
     text/handlers/inline_note_handler.cpp \
     text/handlers/key_press_handler_facade.cpp \
+    text/handlers/parenthetical_handler.cpp \
     text/handlers/pre_handler.cpp \
     text/handlers/prepare_handler.cpp \
     text/handlers/scene_heading_handler.cpp \

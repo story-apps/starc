@@ -220,9 +220,10 @@ void StageplayTextView::Implementation::reconfigureTemplate(bool _withModelReini
     const auto& usedTemplate = BusinessLayer::TemplatesFacade::stageplayTemplate(
         model && model->informationModel() ? model->informationModel()->templateId() : "");
     const QVector<TextParagraphType> types = {
-        TextParagraphType::SceneHeading, TextParagraphType::Character,
-        TextParagraphType::Dialogue,     TextParagraphType::Action,
-        TextParagraphType::InlineNote,   TextParagraphType::UnformattedText,
+        TextParagraphType::SceneHeading,    TextParagraphType::Character,
+        TextParagraphType::Parenthetical,   TextParagraphType::Dialogue,
+        TextParagraphType::Action,          TextParagraphType::InlineNote,
+        TextParagraphType::UnformattedText,
     };
     for (const auto type : types) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {

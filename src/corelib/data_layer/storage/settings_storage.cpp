@@ -796,22 +796,26 @@ SettingsStorage::Implementation::Implementation()
                                           TextParagraphType::UnformattedText);
         addStageplayEditorStylesJumpByEnter(TextParagraphType::UnformattedText,
                                             TextParagraphType::UnformattedText);
-        addStageplayEditorStylesJumpByTab(TextParagraphType::SceneHeading, TextParagraphType::Cue);
+        addStageplayEditorStylesJumpByTab(TextParagraphType::SceneHeading,
+                                          TextParagraphType::Action);
         addStageplayEditorStylesJumpByEnter(TextParagraphType::SceneHeading,
                                             TextParagraphType::Character);
         addStageplayEditorStylesJumpByTab(TextParagraphType::Character,
-                                          TextParagraphType::Dialogue);
+                                          TextParagraphType::Parenthetical);
         addStageplayEditorStylesJumpByEnter(TextParagraphType::Character,
                                             TextParagraphType::Dialogue);
-        addStageplayEditorStylesJumpByTab(TextParagraphType::Dialogue, TextParagraphType::Cue);
+        addStageplayEditorStylesJumpByTab(TextParagraphType::Parenthetical,
+                                          TextParagraphType::Dialogue);
+        addStageplayEditorStylesJumpByEnter(TextParagraphType::Parenthetical,
+                                            TextParagraphType::Dialogue);
+        addStageplayEditorStylesJumpByTab(TextParagraphType::Dialogue,
+                                          TextParagraphType::Parenthetical);
         addStageplayEditorStylesJumpByEnter(TextParagraphType::Dialogue,
                                             TextParagraphType::Character);
-        addStageplayEditorStylesJumpByTab(TextParagraphType::Sound, TextParagraphType::Music);
-        addStageplayEditorStylesJumpByEnter(TextParagraphType::Sound, TextParagraphType::Character);
-        addStageplayEditorStylesJumpByTab(TextParagraphType::Music, TextParagraphType::Sound);
-        addStageplayEditorStylesJumpByEnter(TextParagraphType::Music, TextParagraphType::Character);
-        addStageplayEditorStylesJumpByTab(TextParagraphType::Cue, TextParagraphType::SceneHeading);
-        addStageplayEditorStylesJumpByEnter(TextParagraphType::Cue, TextParagraphType::Character);
+        addStageplayEditorStylesJumpByTab(TextParagraphType::Action,
+                                          TextParagraphType::SceneHeading);
+        addStageplayEditorStylesJumpByEnter(TextParagraphType::Action,
+                                            TextParagraphType::Character);
         addStageplayEditorStylesJumpByTab(TextParagraphType::InlineNote,
                                           TextParagraphType::Character);
         addStageplayEditorStylesJumpByEnter(TextParagraphType::InlineNote,
@@ -834,20 +838,21 @@ SettingsStorage::Implementation::Implementation()
                                             TextParagraphType::Character);
         addStageplayEditorStylesChangeByEnter(TextParagraphType::SceneHeading,
                                               TextParagraphType::Character);
-        addStageplayEditorStylesChangeByTab(TextParagraphType::Character, TextParagraphType::Sound);
+        addStageplayEditorStylesChangeByTab(TextParagraphType::Character,
+                                            TextParagraphType::Action);
         addStageplayEditorStylesChangeByEnter(TextParagraphType::Character,
                                               TextParagraphType::SceneHeading);
-        addStageplayEditorStylesChangeByTab(TextParagraphType::Dialogue, TextParagraphType::Sound);
+        addStageplayEditorStylesChangeByTab(TextParagraphType::Parenthetical,
+                                            TextParagraphType::Dialogue);
+        addStageplayEditorStylesChangeByEnter(TextParagraphType::Parenthetical,
+                                              TextParagraphType::Dialogue);
+        addStageplayEditorStylesChangeByTab(TextParagraphType::Dialogue, TextParagraphType::Action);
         addStageplayEditorStylesChangeByEnter(TextParagraphType::Dialogue,
                                               TextParagraphType::SceneHeading);
-        addStageplayEditorStylesChangeByTab(TextParagraphType::Sound, TextParagraphType::Music);
-        addStageplayEditorStylesChangeByEnter(TextParagraphType::Sound,
-                                              TextParagraphType::SceneHeading);
-        addStageplayEditorStylesChangeByTab(TextParagraphType::Music, TextParagraphType::Cue);
-        addStageplayEditorStylesChangeByEnter(TextParagraphType::Music,
-                                              TextParagraphType::SceneHeading);
-        addStageplayEditorStylesChangeByTab(TextParagraphType::Cue, TextParagraphType::Character);
-        addStageplayEditorStylesChangeByEnter(TextParagraphType::Cue, TextParagraphType::Character);
+        addStageplayEditorStylesChangeByTab(TextParagraphType::Action,
+                                            TextParagraphType::Character);
+        addStageplayEditorStylesChangeByEnter(TextParagraphType::Action,
+                                              TextParagraphType::Character);
         addStageplayEditorStylesChangeByTab(TextParagraphType::InlineNote,
                                             TextParagraphType::Character);
         addStageplayEditorStylesChangeByEnter(TextParagraphType::InlineNote,
@@ -863,8 +868,9 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::UnformattedText, "Ctrl+0");
         addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
         addShortcut(BusinessLayer::TextParagraphType::Character, "Ctrl+2");
-        addShortcut(BusinessLayer::TextParagraphType::Dialogue, "Ctrl+3");
-        addShortcut(BusinessLayer::TextParagraphType::Action, "Ctrl+4");
+        addShortcut(BusinessLayer::TextParagraphType::Parenthetical, "Ctrl+3");
+        addShortcut(BusinessLayer::TextParagraphType::Dialogue, "Ctrl+4");
+        addShortcut(BusinessLayer::TextParagraphType::Action, "Ctrl+5");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
         //
         defaultValues.insert(kComponentsStageplayAvailableKey, true);
