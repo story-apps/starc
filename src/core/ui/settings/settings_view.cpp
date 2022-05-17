@@ -7,6 +7,7 @@
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/simple_text_template.h>
+#include <business_layer/templates/stageplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -154,6 +155,7 @@ public:
     void initScreenplayCard();
     void initComicBookCard();
     void initAudioplayCard();
+    void initStageplayCard();
 
     /**
      * @brief Настроить карточку горячих клавиш
@@ -359,7 +361,37 @@ public:
     TextField* audioplayDurationByWordsDuration = nullptr;
     //
     int audioplayCardBottomSpacerIndex = 0;
+    //
+    // Audioplay
+    //
+    Card* stageplayCard = nullptr;
+    QGridLayout* stageplayCardLayout = nullptr;
+    H5Label* stageplayTitle = nullptr;
+    Toggle* stageplayAvailable = nullptr;
+    //
+    // ... Stageplay editor
+    //
+    H6Label* stageplayEditorTitle = nullptr;
+    ComboBox* stageplayEditorDefaultTemplate = nullptr;
+    IconButton* stageplayEditorDefaultTemplateOptions = nullptr;
+    CheckBox* stageplayEditorUseCharactersFromText = nullptr;
+    //
+    // ... Stageplay navigator
+    //
+    H6Label* stageplayNavigatorTitle = nullptr;
+    CheckBox* stageplayNavigatorShowSceneNumber = nullptr;
+    CheckBox* stageplayNavigatorShowSceneText = nullptr;
+    RadioButton* stageplayNavigatorSceneDescriptionLines1 = nullptr;
+    RadioButton* stageplayNavigatorSceneDescriptionLines2 = nullptr;
+    RadioButton* stageplayNavigatorSceneDescriptionLines3 = nullptr;
+    RadioButton* stageplayNavigatorSceneDescriptionLines4 = nullptr;
+    RadioButton* stageplayNavigatorSceneDescriptionLines5 = nullptr;
+    //
+    int stageplayCardBottomSpacerIndex = 0;
 
+    //
+    // Shortcuts
+    //
     Card* shortcutsCard = nullptr;
     QGridLayout* shortcutsCardLayout = nullptr;
     //
@@ -494,6 +526,23 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , audioplayDurationByWordsWords(new TextField(audioplayCard))
     , audioplayDurationByWordsDuration(new TextField(audioplayCard))
     //
+    , stageplayCard(new Card(content))
+    , stageplayCardLayout(new QGridLayout)
+    , stageplayTitle(new H5Label(stageplayCard))
+    , stageplayAvailable(new Toggle(stageplayCard))
+    , stageplayEditorTitle(new H6Label(stageplayCard))
+    , stageplayEditorDefaultTemplate(new ComboBox(stageplayCard))
+    , stageplayEditorDefaultTemplateOptions(new IconButton(stageplayCard))
+    , stageplayEditorUseCharactersFromText(new CheckBox(stageplayCard))
+    , stageplayNavigatorTitle(new H6Label(stageplayCard))
+    , stageplayNavigatorShowSceneNumber(new CheckBox(stageplayCard))
+    , stageplayNavigatorShowSceneText(new CheckBox(stageplayCard))
+    , stageplayNavigatorSceneDescriptionLines1(new RadioButton(stageplayCard))
+    , stageplayNavigatorSceneDescriptionLines2(new RadioButton(stageplayCard))
+    , stageplayNavigatorSceneDescriptionLines3(new RadioButton(stageplayCard))
+    , stageplayNavigatorSceneDescriptionLines4(new RadioButton(stageplayCard))
+    , stageplayNavigatorSceneDescriptionLines5(new RadioButton(stageplayCard))
+    //
     , shortcutsCard(new Card(content))
     , shortcutsCardLayout(new QGridLayout)
     , shortcutsTitle(new H5Label(shortcutsCard))
@@ -522,6 +571,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     initScreenplayCard();
     initComicBookCard();
     initAudioplayCard();
+    initStageplayCard();
     initShortcutsCard();
 
     QWidget* contentWidget = new QWidget;
@@ -536,6 +586,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     layout->addWidget(screenplayCard);
     layout->addWidget(comicBookCard);
     layout->addWidget(audioplayCard);
+    layout->addWidget(stageplayCard);
     layout->addWidget(shortcutsCard);
     layout->addStretch();
 }
@@ -963,6 +1014,71 @@ void SettingsView::Implementation::initAudioplayCard()
     //
     audioplayCardBottomSpacerIndex = itemIndex;
     audioplayCard->setLayoutReimpl(audioplayCardLayout);
+}
+
+void SettingsView::Implementation::initStageplayCard()
+{
+    stageplayEditorDefaultTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    stageplayEditorDefaultTemplate->setModel(BusinessLayer::TemplatesFacade::stageplayTemplates());
+    stageplayEditorDefaultTemplateOptions->setIcon(u8"\U000F01D9");
+    //
+    auto linesGroup = new RadioButtonGroup(stageplayCard);
+    linesGroup->add(stageplayNavigatorSceneDescriptionLines1);
+    linesGroup->add(stageplayNavigatorSceneDescriptionLines2);
+    linesGroup->add(stageplayNavigatorSceneDescriptionLines3);
+    linesGroup->add(stageplayNavigatorSceneDescriptionLines4);
+    linesGroup->add(stageplayNavigatorSceneDescriptionLines5);
+    stageplayNavigatorSceneDescriptionLines1->setEnabled(false);
+    stageplayNavigatorSceneDescriptionLines1->setChecked(true);
+    stageplayNavigatorSceneDescriptionLines2->setEnabled(false);
+    stageplayNavigatorSceneDescriptionLines3->setEnabled(false);
+    stageplayNavigatorSceneDescriptionLines4->setEnabled(false);
+    stageplayNavigatorSceneDescriptionLines5->setEnabled(false);
+
+
+    //
+    // Компоновка
+    //
+    stageplayCardLayout->setContentsMargins({});
+    stageplayCardLayout->setSpacing(0);
+    int itemIndex = 0;
+    {
+        auto layout = makeLayout();
+        layout->addWidget(stageplayTitle);
+        layout->addStretch();
+        layout->addWidget(stageplayAvailable, 0, Qt::AlignVCenter);
+        stageplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    //
+    // ... редактор сценария
+    //
+    stageplayCardLayout->addWidget(stageplayEditorTitle, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(stageplayEditorDefaultTemplate, 1);
+        layout->addWidget(stageplayEditorDefaultTemplateOptions);
+        stageplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    stageplayCardLayout->addWidget(stageplayEditorUseCharactersFromText, itemIndex++, 0);
+    //
+    // ... навигатор сценария
+    //
+    stageplayCardLayout->addWidget(stageplayNavigatorTitle, itemIndex++, 0);
+    stageplayCardLayout->addWidget(stageplayNavigatorShowSceneNumber, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(stageplayNavigatorShowSceneText);
+        layout->addWidget(stageplayNavigatorSceneDescriptionLines1);
+        layout->addWidget(stageplayNavigatorSceneDescriptionLines2);
+        layout->addWidget(stageplayNavigatorSceneDescriptionLines3);
+        layout->addWidget(stageplayNavigatorSceneDescriptionLines4);
+        layout->addWidget(stageplayNavigatorSceneDescriptionLines5);
+        layout->addStretch();
+        stageplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    //
+    stageplayCardBottomSpacerIndex = itemIndex;
+    stageplayCard->setLayoutReimpl(stageplayCardLayout);
 }
 
 void SettingsView::Implementation::initShortcutsCard()
@@ -1689,13 +1805,131 @@ SettingsView::SettingsView(QWidget* _parent)
         emit audioplayDurationByWordsDurationChanged(
             d->audioplayDurationByWordsDuration->text().toInt());
     });
+    //
+    // ... Редактор пьесы
+    //
+    connect(d->stageplayAvailable, &Toggle::checkedChanged, this, [this](bool _available) {
+        for (auto widget : std::vector<QWidget*>{
+                 d->stageplayEditorTitle,
+                 d->stageplayEditorDefaultTemplate,
+                 d->stageplayEditorDefaultTemplateOptions,
+                 d->stageplayEditorUseCharactersFromText,
+                 d->stageplayNavigatorTitle,
+                 d->stageplayNavigatorShowSceneNumber,
+                 d->stageplayNavigatorShowSceneText,
+                 d->stageplayNavigatorSceneDescriptionLines1,
+                 d->stageplayNavigatorSceneDescriptionLines2,
+                 d->stageplayNavigatorSceneDescriptionLines3,
+                 d->stageplayNavigatorSceneDescriptionLines4,
+                 d->stageplayNavigatorSceneDescriptionLines5,
+             }) {
+            widget->setVisible(_available);
+            d->stageplayCardLayout->setRowMinimumHeight(
+                d->stageplayCardBottomSpacerIndex,
+                _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
+        }
+
+        emit stageplayAvailableChanged(_available);
+    });
+    connect(d->stageplayEditorDefaultTemplateOptions, &IconButton::clicked, this, [this] {
+        QVector<QAction*> actions;
+        const auto templateIndex = d->stageplayEditorDefaultTemplate->currentIndex();
+        const auto templateId
+            = templateIndex.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString();
+        const auto isDefaultTemplate
+            = BusinessLayer::TemplatesFacade::stageplayTemplate(templateId).isDefault();
+        //
+        if (!isDefaultTemplate) {
+            auto editAction = new QAction(tr("Edit"), d->contextMenu);
+            connect(editAction, &QAction::triggered, this, [this, templateId] {
+                emit editCurrentStageplayEditorTemplateRequested(templateId);
+            });
+            actions.append(editAction);
+        }
+        //
+        auto duplicateAction = new QAction(tr("Duplicate"), d->contextMenu);
+        connect(duplicateAction, &QAction::triggered, this, [this, templateId] {
+            emit duplicateCurrentStageplayEditorTemplateRequested(templateId);
+        });
+        actions.append(duplicateAction);
+        //
+        if (!isDefaultTemplate) {
+            auto saveToFileAction = new QAction(tr("Save to file"), d->contextMenu);
+            connect(saveToFileAction, &QAction::triggered, this, [this, templateId] {
+                emit saveToFileCurrentStageplayEditorTemplateRequested(templateId);
+            });
+            actions.append(saveToFileAction);
+            //
+            auto removeAction = new QAction(tr("Remove"), d->contextMenu);
+            connect(removeAction, &QAction::triggered, this, [this, templateId] {
+                emit removeCurrentStageplayEditorTemplateRequested(templateId);
+            });
+            actions.append(removeAction);
+        }
+        //
+        auto loadFromFileAction = new QAction(tr("Load template from file"), d->contextMenu);
+        loadFromFileAction->setSeparator(true);
+        connect(loadFromFileAction, &QAction::triggered, this,
+                &SettingsView::loadFromFileStageplayEditorTemplateRequested);
+        actions.append(loadFromFileAction);
+        //
+        d->contextMenu->setActions(actions);
+        d->contextMenu->showContextMenu(QCursor::pos());
+    });
+    //
+    connect(d->stageplayEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
+            [this](const QModelIndex& _index) {
+                emit stageplayEditorDefaultTemplateChanged(
+                    _index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
+            });
+    connect(d->stageplayEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
+            &SettingsView::stageplayEditorUseCharactersFromTextChanged);
+    //
+    // ... навигатор пьесы
+    //
+    connect(d->stageplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->stageplayNavigatorSceneDescriptionLines1, &RadioButton::setEnabled);
+    connect(d->stageplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->stageplayNavigatorSceneDescriptionLines2, &RadioButton::setEnabled);
+    connect(d->stageplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->stageplayNavigatorSceneDescriptionLines3, &RadioButton::setEnabled);
+    connect(d->stageplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->stageplayNavigatorSceneDescriptionLines4, &RadioButton::setEnabled);
+    connect(d->stageplayNavigatorShowSceneText, &CheckBox::checkedChanged,
+            d->stageplayNavigatorSceneDescriptionLines5, &RadioButton::setEnabled);
+    //
+    connect(d->stageplayNavigatorShowSceneNumber, &CheckBox::checkedChanged, this,
+            &SettingsView::stageplayNavigatorShowSceneNumberChanged);
+    auto notifyStageplayNavigatorShowSceneTextChanged = [this] {
+        int sceneTextLines = 1;
+        if (d->stageplayNavigatorSceneDescriptionLines2->isChecked()) {
+            sceneTextLines = 2;
+        } else if (d->stageplayNavigatorSceneDescriptionLines3->isChecked()) {
+            sceneTextLines = 3;
+        } else if (d->stageplayNavigatorSceneDescriptionLines4->isChecked()) {
+            sceneTextLines = 4;
+        } else if (d->stageplayNavigatorSceneDescriptionLines5->isChecked()) {
+            sceneTextLines = 5;
+        }
+        emit stageplayNavigatorShowSceneTextChanged(d->stageplayNavigatorShowSceneText->isChecked(),
+                                                    sceneTextLines);
+    };
+    connect(d->stageplayNavigatorShowSceneText, &CheckBox::checkedChanged, this,
+            notifyStageplayNavigatorShowSceneTextChanged);
+    connect(d->stageplayNavigatorSceneDescriptionLines1, &RadioButton::checkedChanged, this,
+            notifyStageplayNavigatorShowSceneTextChanged);
+    connect(d->stageplayNavigatorSceneDescriptionLines2, &RadioButton::checkedChanged, this,
+            notifyStageplayNavigatorShowSceneTextChanged);
+    connect(d->stageplayNavigatorSceneDescriptionLines3, &RadioButton::checkedChanged, this,
+            notifyStageplayNavigatorShowSceneTextChanged);
+    connect(d->stageplayNavigatorSceneDescriptionLines4, &RadioButton::checkedChanged, this,
+            notifyStageplayNavigatorShowSceneTextChanged);
+    connect(d->stageplayNavigatorSceneDescriptionLines5, &RadioButton::checkedChanged, this,
+            notifyStageplayNavigatorShowSceneTextChanged);
 
     //
     // Соединения шорткатов настраиваются в момент установки моделей с данными о них в представление
     //
-
-
-    designSystemChangeEvent(nullptr);
 }
 
 void SettingsView::showDefaultPage()
@@ -1746,6 +1980,11 @@ void SettingsView::showComponentsComicBook()
 void SettingsView::showComponentsAudioplay()
 {
     d->scrollToTitle(d->audioplayTitle);
+}
+
+void SettingsView::showComponentsStageplay()
+{
+    d->scrollToTitle(d->stageplayTitle);
 }
 
 void SettingsView::showShortcuts()
@@ -2143,6 +2382,49 @@ void SettingsView::setAudioplayDurationByWordsDuration(int _duration)
     d->audioplayDurationByWordsDuration->setText(QString::number(_duration));
 }
 
+void SettingsView::setStageplayAvailable(bool _available)
+{
+    d->stageplayAvailable->setChecked(_available);
+}
+
+void SettingsView::setStageplayEditorDefaultTemplate(const QString& _templateId)
+{
+    using namespace BusinessLayer;
+    for (int row = 0; row < TemplatesFacade::stageplayTemplates()->rowCount(); ++row) {
+        auto item = TemplatesFacade::stageplayTemplates()->item(row);
+        if (item->data(TemplatesFacade::kTemplateIdRole).toString() != _templateId) {
+            continue;
+        }
+
+        d->stageplayEditorDefaultTemplate->setCurrentIndex(item->index());
+        break;
+    }
+}
+
+void SettingsView::setStageplayEditorUseCharactersFromText(bool _use)
+{
+    d->stageplayEditorUseCharactersFromText->setChecked(_use);
+}
+
+void SettingsView::setStageplayNavigatorShowSceneNumber(bool _show)
+{
+    d->stageplayNavigatorShowSceneNumber->setChecked(_show);
+}
+
+void SettingsView::setStageplayNavigatorShowSceneText(bool _show, int _lines)
+{
+    d->stageplayNavigatorShowSceneText->setChecked(_show);
+    if (_show) {
+        const QHash<int, RadioButton*> buttons
+            = { { 1, d->stageplayNavigatorSceneDescriptionLines1 },
+                { 2, d->stageplayNavigatorSceneDescriptionLines2 },
+                { 3, d->stageplayNavigatorSceneDescriptionLines3 },
+                { 4, d->stageplayNavigatorSceneDescriptionLines4 },
+                { 5, d->stageplayNavigatorSceneDescriptionLines5 } };
+        buttons[_lines]->setChecked(true);
+    }
+}
+
 void SettingsView::setShortcutsForScreenplayModel(HierarchicalModel* _model)
 {
     if (d->shortcutsForScreenplayModel) {
@@ -2443,6 +2725,23 @@ void SettingsView::updateTranslations()
     d->audioplayDurationByWordsWords->setSuffix(tr("words"));
     d->audioplayDurationByWordsDuration->setLabel(tr("has duration"));
     d->audioplayDurationByWordsDuration->setSuffix(tr("seconds"));
+    //
+    d->stageplayTitle->setText(tr("Stageplay module"));
+    d->stageplayAvailable->setToolTip(tr("Turn on/off stageplay module"));
+    d->stageplayEditorTitle->setText(tr("Text editor"));
+    d->stageplayEditorDefaultTemplate->setLabel(tr("Default template"));
+    d->stageplayEditorDefaultTemplateOptions->setToolTip(
+        tr("Available actions for the selected template"));
+    d->stageplayEditorUseCharactersFromText->setText(
+        tr("Show hints for major & related to a current story characters only"));
+    d->stageplayNavigatorTitle->setText(tr("Stageplay navigator"));
+    d->stageplayNavigatorShowSceneNumber->setText(tr("Show scene number"));
+    d->stageplayNavigatorShowSceneText->setText(tr("Show scene text, lines"));
+    d->stageplayNavigatorSceneDescriptionLines1->setText("1");
+    d->stageplayNavigatorSceneDescriptionLines2->setText("2");
+    d->stageplayNavigatorSceneDescriptionLines3->setText("3");
+    d->stageplayNavigatorSceneDescriptionLines4->setText("4");
+    d->stageplayNavigatorSceneDescriptionLines5->setText("5");
 
     d->shortcutsTitle->setText(tr("Shortcuts"));
     d->shortcutsForScreenplayTitle->setText(tr("Screenplay editor"));
@@ -2480,6 +2779,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayCard,
              d->comicBookCard,
              d->audioplayCard,
+             d->stageplayCard,
              d->shortcutsCard,
          }) {
         card->setBackgroundColor(DesignSystem::color().background());
@@ -2508,6 +2808,9 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->audioplayEditorTitle,
              d->audioplayNavigatorTitle,
              d->audioplayDurationTitle,
+             d->stageplayTitle,
+             d->stageplayEditorTitle,
+             d->stageplayNavigatorTitle,
              d->shortcutsTitle,
              d->shortcutsForScreenplayTitle,
          }) {
@@ -2526,6 +2829,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayAvailable,
              d->comicBookAvailable,
              d->audioplayAvailable,
+             d->stageplayAvailable,
          }) {
         toggle->setBackgroundColor(DesignSystem::color().background());
         toggle->setTextColor(DesignSystem::color().onBackground());
@@ -2557,6 +2861,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayEditorDefaultTemplateOptions,
              d->comicBookEditorDefaultTemplateOptions,
              d->audioplayEditorDefaultTemplateOptions,
+             d->stageplayEditorDefaultTemplateOptions,
          }) {
         iconLabel->setBackgroundColor(DesignSystem::color().background());
         iconLabel->setTextColor(DesignSystem::color().onBackground());
@@ -2594,6 +2899,10 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->audioplayEditorUseCharactersFromText,
              d->audioplayNavigatorShowSceneNumber,
              d->audioplayNavigatorShowSceneText,
+             //
+             d->stageplayEditorUseCharactersFromText,
+             d->stageplayNavigatorShowSceneNumber,
+             d->stageplayNavigatorShowSceneText,
          }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());
@@ -2625,6 +2934,12 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->audioplayNavigatorSceneDescriptionLines3,
              d->audioplayNavigatorSceneDescriptionLines4,
              d->audioplayNavigatorSceneDescriptionLines5,
+             //
+             d->stageplayNavigatorSceneDescriptionLines1,
+             d->stageplayNavigatorSceneDescriptionLines2,
+             d->stageplayNavigatorSceneDescriptionLines3,
+             d->stageplayNavigatorSceneDescriptionLines4,
+             d->stageplayNavigatorSceneDescriptionLines5,
          }) {
         radioButton->setBackgroundColor(DesignSystem::color().background());
         radioButton->setTextColor(DesignSystem::color().onBackground());
@@ -2645,6 +2960,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->audioplayEditorDefaultTemplate,
              d->audioplayDurationByWordsWords,
              d->audioplayDurationByWordsDuration,
+             //
+             d->stageplayEditorDefaultTemplate,
          }) {
         textField->setBackgroundColor(DesignSystem::color().onBackground());
         textField->setTextColor(DesignSystem::color().onBackground());
@@ -2654,6 +2971,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayEditorDefaultTemplate,
              d->comicBookEditorDefaultTemplate,
              d->audioplayEditorDefaultTemplate,
+             d->stageplayEditorDefaultTemplate,
          }) {
         textField->setCustomMargins({ isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0, 0,
                                       isLeftToRight() ? 0 : Ui::DesignSystem::layout().px24(), 0 });
@@ -2664,6 +2982,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayEditorDefaultTemplate,
              d->comicBookEditorDefaultTemplate,
              d->audioplayEditorDefaultTemplate,
+             d->stageplayEditorDefaultTemplate,
          }) {
         combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
     }
@@ -2672,6 +2991,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayEditorDefaultTemplateOptions,
              d->comicBookEditorDefaultTemplateOptions,
              d->audioplayEditorDefaultTemplateOptions,
+             d->stageplayEditorDefaultTemplateOptions,
          }) {
         icon->setContentsMargins(isLeftToRight() ? 0 : Ui::DesignSystem::layout().px16(), 0,
                                  isLeftToRight() ? Ui::DesignSystem::layout().px16() : 0, 0);
@@ -2725,6 +3045,11 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     //
     d->audioplayCardLayout->setRowMinimumHeight(d->audioplayCardBottomSpacerIndex,
                                                 d->audioplayAvailable->isChecked()
+                                                    ? Ui::DesignSystem::layout().px24()
+                                                    : Ui::DesignSystem::layout().px12());
+    //
+    d->stageplayCardLayout->setRowMinimumHeight(d->stageplayCardBottomSpacerIndex,
+                                                d->stageplayAvailable->isChecked()
                                                     ? Ui::DesignSystem::layout().px24()
                                                     : Ui::DesignSystem::layout().px12());
     //

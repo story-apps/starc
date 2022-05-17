@@ -1088,6 +1088,16 @@ void ProjectManager::reconfigureAudioplayDuration()
     }
 }
 
+void ProjectManager::reconfigureStageplayEditor(const QStringList& _changedSettingsKeys)
+{
+    d->pluginsBuilder.reconfigureStageplayEditor(_changedSettingsKeys);
+}
+
+void ProjectManager::reconfigureStageplayNavigator()
+{
+    d->pluginsBuilder.reconfigureStageplayNavigator();
+}
+
 void ProjectManager::checkAvailabilityToEdit()
 {
     d->pluginsBuilder.checkAvailabilityToEdit();

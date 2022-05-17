@@ -40,12 +40,6 @@ public:
     void setStageplayTemplate(const QString& _templateId);
     Q_SIGNAL void stageplayTemplateChanged(const QString& _templateId);
 
-    void setShowBlockNumbers(bool _show);
-    Q_SIGNAL void showBlockNumbersChanged(bool _show);
-
-    void setContinueBlockNumbers(bool _continue);
-    Q_SIGNAL void continueBlockNumbersChanged(bool _continue);
-
 protected:
     /**
      * @brief Обновить переводы

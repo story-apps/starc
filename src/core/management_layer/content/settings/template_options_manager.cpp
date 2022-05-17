@@ -6,6 +6,7 @@
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/simple_text_template.h>
+#include <business_layer/templates/stageplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
@@ -103,6 +104,8 @@ public:
                 return comicBook;
             } else if (audioplay.isValid()) {
                 return audioplay;
+            } else if (stageplay.isValid()) {
+                return stageplay;
             } else {
                 return simpleText;
             }
@@ -112,6 +115,7 @@ public:
         BusinessLayer::ScreenplayTemplate screenplay;
         BusinessLayer::ComicBookTemplate comicBook;
         BusinessLayer::AudioplayTemplate audioplay;
+        BusinessLayer::StageplayTemplate stageplay;
     } currentTemplate;
 
     /**
@@ -188,6 +192,11 @@ void TemplateOptionsManager::Implementation::prepareViewToEdit(const QString& _t
 
     case Domain::DocumentObjectType::Audioplay: {
         currentTemplate.audioplay = BusinessLayer::TemplatesFacade::audioplayTemplate(_templateId);
+        break;
+    }
+
+    case Domain::DocumentObjectType::Stageplay: {
+        currentTemplate.stageplay = BusinessLayer::TemplatesFacade::stageplayTemplate(_templateId);
         break;
     }
     }
@@ -357,6 +366,11 @@ void TemplateOptionsManager::Implementation::saveTemplate()
 
     case Domain::DocumentObjectType::Audioplay: {
         BusinessLayer::TemplatesFacade::saveAudioplayTemplate(currentTemplate.audioplay);
+        break;
+    }
+
+    case Domain::DocumentObjectType::Stageplay: {
+        BusinessLayer::TemplatesFacade::saveStageplayTemplate(currentTemplate.stageplay);
         break;
     }
     }

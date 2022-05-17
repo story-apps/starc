@@ -66,7 +66,6 @@ public:
      * @brief Переконфигурировать представление
      */
     void reconfigureTemplate(bool _withModelReinitialization = true);
-    void reconfigureBlockNumbersVisibility();
 
     /**
      * @brief Обновить переводы дополнительных действий
@@ -240,19 +239,6 @@ void StageplayTextView::Implementation::reconfigureTemplate(bool _withModelReini
 
     if (_withModelReinitialization) {
         stageplayText->reinit();
-    }
-}
-
-void StageplayTextView::Implementation::reconfigureBlockNumbersVisibility()
-{
-    if (model && model->informationModel()) {
-        stageplayText->setShowBlockNumbers(model->informationModel()->showBlockNumbers(),
-                                           model->informationModel()->continueBlockNumbers());
-    } else {
-        stageplayText->setShowBlockNumbers(
-            settingsValue(DataStorageLayer::kComponentsStageplayEditorShowBlockNumbersKey).toBool(),
-            settingsValue(DataStorageLayer::kComponentsStageplayEditorContinueBlockNumbersKey)
-                .toBool());
     }
 }
 
@@ -692,13 +678,6 @@ void StageplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->reconfigureTemplate();
     }
 
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsStageplayEditorShowBlockNumbersKey)
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsStageplayEditorContinueBlockNumbersKey)) {
-        d->reconfigureBlockNumbersVisibility();
-    }
     if (_changedSettingsKeys.isEmpty()) {
         d->stageplayText->setCorrectionOptions(true);
     }
@@ -785,17 +764,10 @@ void StageplayTextView::setModel(BusinessLayer::StageplayTextModel* _model)
     if (d->model && d->model->informationModel()) {
         const bool reinitModel = true;
         d->reconfigureTemplate(!reinitModel);
-        d->reconfigureBlockNumbersVisibility();
 
         connect(d->model->informationModel(),
                 &BusinessLayer::StageplayInformationModel::templateIdChanged, this,
                 [this] { d->reconfigureTemplate(); });
-        connect(d->model->informationModel(),
-                &BusinessLayer::StageplayInformationModel::showBlockNumbersChanged, this,
-                [this] { d->reconfigureBlockNumbersVisibility(); });
-        connect(d->model->informationModel(),
-                &BusinessLayer::StageplayInformationModel::continueBlockNumbersChanged, this,
-                [this] { d->reconfigureBlockNumbersVisibility(); });
     }
 
     d->stageplayText->initWithModel(d->model);

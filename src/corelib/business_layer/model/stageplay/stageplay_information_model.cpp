@@ -29,8 +29,6 @@ const QLatin1String kFooterKey("footer");
 const QLatin1String kPrintFooterOnTitlePageKey("print_footer_on_title");
 const QLatin1String kOverrideSystemSettingsKey("override_system_settings");
 const QLatin1String kTemplateIdKey("template_id");
-const QLatin1String kShowBlockNumbersKey("show_block_numbers");
-const QLatin1String kContinueBlockNumbersKey("continue_block_numbers");
 } // namespace
 
 class StageplayInformationModel::Implementation
@@ -50,8 +48,6 @@ public:
 
     bool overrideCommonSettings = false;
     QString templateId;
-    bool showBlockNumbers = false;
-    bool continueBlockNumbers = false;
 };
 
 
@@ -75,8 +71,6 @@ StageplayInformationModel::StageplayInformationModel(QObject* _parent)
             kPrintFooterOnTitlePageKey,
             kOverrideSystemSettingsKey,
             kTemplateIdKey,
-            kShowBlockNumbersKey,
-            kContinueBlockNumbersKey,
         },
         _parent)
     , d(new Implementation)
@@ -106,10 +100,6 @@ StageplayInformationModel::StageplayInformationModel(QObject* _parent)
     connect(this, &StageplayInformationModel::overrideCommonSettingsChanged, this,
             &StageplayInformationModel::updateDocumentContent);
     connect(this, &StageplayInformationModel::templateIdChanged, this,
-            &StageplayInformationModel::updateDocumentContent);
-    connect(this, &StageplayInformationModel::showBlockNumbersChanged, this,
-            &StageplayInformationModel::updateDocumentContent);
-    connect(this, &StageplayInformationModel::continueBlockNumbersChanged, this,
             &StageplayInformationModel::updateDocumentContent);
 }
 
@@ -304,11 +294,6 @@ void StageplayInformationModel::setOverrideCommonSettings(bool _override)
     // При включении/выключении кастомных параметров, сбрасываем до стандартных
     //
     setTemplateId(TemplatesFacade::stageplayTemplate().id());
-    setShowBlockNumbers(
-        settingsValue(DataStorageLayer::kComponentsStageplayEditorShowBlockNumbersKey).toBool());
-    setContinueBlockNumbers(
-        settingsValue(DataStorageLayer::kComponentsStageplayEditorContinueBlockNumbersKey)
-            .toBool());
 }
 
 QString StageplayInformationModel::templateId() const
@@ -328,45 +313,6 @@ void StageplayInformationModel::setTemplateId(const QString& _templateId)
 
     d->templateId = _templateId;
     emit templateIdChanged(d->templateId);
-}
-
-bool StageplayInformationModel::showBlockNumbers() const
-{
-    if (d->overrideCommonSettings) {
-        return d->showBlockNumbers;
-    }
-
-    return settingsValue(DataStorageLayer::kComponentsStageplayEditorShowBlockNumbersKey).toBool();
-}
-
-void StageplayInformationModel::setShowBlockNumbers(bool _show)
-{
-    if (d->showBlockNumbers == _show) {
-        return;
-    }
-
-    d->showBlockNumbers = _show;
-    emit showBlockNumbersChanged(d->showBlockNumbers);
-}
-
-bool StageplayInformationModel::continueBlockNumbers() const
-{
-    if (d->overrideCommonSettings) {
-        return d->continueBlockNumbers;
-    }
-
-    return settingsValue(DataStorageLayer::kComponentsStageplayEditorContinueBlockNumbersKey)
-        .toBool();
-}
-
-void StageplayInformationModel::setContinueBlockNumbers(bool _continue)
-{
-    if (d->continueBlockNumbers == _continue) {
-        return;
-    }
-
-    d->continueBlockNumbers = _continue;
-    emit continueBlockNumbersChanged(d->continueBlockNumbers);
 }
 
 void StageplayInformationModel::initDocument()
@@ -400,9 +346,6 @@ void StageplayInformationModel::initDocument()
     d->overrideCommonSettings
         = documentNode.firstChildElement(kOverrideSystemSettingsKey).text() == "true";
     d->templateId = documentNode.firstChildElement(kTemplateIdKey).text();
-    d->showBlockNumbers = documentNode.firstChildElement(kShowBlockNumbersKey).text() == "true";
-    d->continueBlockNumbers
-        = documentNode.firstChildElement(kContinueBlockNumbersKey).text() == "true";
 }
 
 void StageplayInformationModel::clearDocument()
@@ -439,8 +382,6 @@ QByteArray StageplayInformationModel::toXml() const
     writeBoolTag(kPrintFooterOnTitlePageKey, d->printFooterOnTitlePage);
     writeBoolTag(kOverrideSystemSettingsKey, d->overrideCommonSettings);
     writeTag(kTemplateIdKey, d->templateId);
-    writeBoolTag(kShowBlockNumbersKey, d->showBlockNumbers);
-    writeBoolTag(kContinueBlockNumbersKey, d->continueBlockNumbers);
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }

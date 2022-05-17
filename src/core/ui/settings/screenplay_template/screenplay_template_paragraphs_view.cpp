@@ -498,6 +498,19 @@ void ScreenplayTemplateParagraphsView::configureTemplateFor(Domain::DocumentObje
         };
         break;
     }
+
+    case Domain::DocumentObjectType::Stageplay: {
+        d->paragraphTypes = {
+            BusinessLayer::TextParagraphType::SceneHeading,
+            BusinessLayer::TextParagraphType::Character,
+            BusinessLayer::TextParagraphType::Parenthetical,
+            BusinessLayer::TextParagraphType::Dialogue,
+            BusinessLayer::TextParagraphType::Action,
+            BusinessLayer::TextParagraphType::InlineNote,
+            BusinessLayer::TextParagraphType::UnformattedText,
+        };
+        break;
+    }
     }
 
     d->paragraphs->removeAllTabs();

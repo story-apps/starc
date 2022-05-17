@@ -876,8 +876,6 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsStageplayAvailableKey, true);
         //
         defaultValues.insert(kComponentsStageplayEditorDefaultTemplateKey, "bbc");
-        defaultValues.insert(kComponentsStageplayEditorShowBlockNumbersKey, false);
-        defaultValues.insert(kComponentsStageplayEditorContinueBlockNumbersKey, true);
         defaultValues.insert(kComponentsStageplayEditorUseCharactersFromTextKey, false);
         //
         // Параметры навигатора сценария

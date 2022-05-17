@@ -54,6 +54,8 @@ public:
     void reconfigureAudioplayEditor(const QStringList& _changedSettingsKeys);
     void reconfigureAudioplayNavigator();
     void reconfigureAudioplayDuration();
+    void reconfigureStageplayEditor(const QStringList& _changedSettingsKeys);
+    void reconfigureStageplayNavigator();
 
     /**
      * @brief Обновить информацию о том, может ли пользователь использовать платные редакторы

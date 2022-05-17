@@ -264,10 +264,6 @@ const QString kComponentsStageplayAvailableKey
 const QString kComponentsStageplayEditorKey = kComponentsStageplayKey + QStringLiteral("/editor");
 const QString kComponentsStageplayEditorDefaultTemplateKey
     = kComponentsStageplayEditorKey + QStringLiteral("/default-template");
-const QString kComponentsStageplayEditorShowBlockNumbersKey
-    = kComponentsStageplayEditorKey + QStringLiteral("/show-block-numbers");
-const QString kComponentsStageplayEditorContinueBlockNumbersKey
-    = kComponentsStageplayEditorKey + QStringLiteral("/continue-block-numbers");
 const QString kComponentsStageplayEditorUseCharactersFromTextKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/use-characters-from-text");
 const QString kComponentsStageplayEditorShortcutsKey

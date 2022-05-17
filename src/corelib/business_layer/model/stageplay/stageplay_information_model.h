@@ -69,14 +69,6 @@ public:
     void setTemplateId(const QString& _templateId);
     Q_SIGNAL void templateIdChanged(const QString& _templateId);
 
-    bool showBlockNumbers() const;
-    void setShowBlockNumbers(bool _show);
-    Q_SIGNAL void showBlockNumbersChanged(bool _show);
-
-    bool continueBlockNumbers() const;
-    void setContinueBlockNumbers(bool _continue);
-    Q_SIGNAL void continueBlockNumbersChanged(bool _continue);
-
 protected:
     /**
      * @brief Реализация модели для работы с документами

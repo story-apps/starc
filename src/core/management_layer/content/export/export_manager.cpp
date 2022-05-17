@@ -562,7 +562,6 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
                 //
                 const auto stageplayInformation = stageplayTextModel->informationModel();
                 exportOptions.templateId = stageplayInformation->templateId();
-                exportOptions.showBlockNumbers = stageplayInformation->showBlockNumbers();
                 exportOptions.header = stageplayInformation->header();
                 exportOptions.printHeaderOnTitlePage
                     = stageplayInformation->printHeaderOnTitlePage();

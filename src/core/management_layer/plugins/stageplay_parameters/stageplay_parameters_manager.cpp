@@ -84,8 +84,6 @@ void StageplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
         d->view->setPrintFooterOnTitlePage(d->model->printFooterOnTitlePage());
         d->view->setOverrideCommonSettings(d->model->overrideCommonSettings());
         d->view->setStageplayTemplate(d->model->templateId());
-        d->view->setShowBlockNumbers(d->model->showBlockNumbers());
-        d->view->setContinueBlockNumbers(d->model->continueBlockNumbers());
 
         connect(d->model, &BusinessLayer::StageplayInformationModel::headerChanged, d->view,
                 &Ui::StageplayParametersView::setHeader);
@@ -99,10 +97,6 @@ void StageplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
                 d->view, &Ui::StageplayParametersView::setOverrideCommonSettings);
         connect(d->model, &BusinessLayer::StageplayInformationModel::templateIdChanged, d->view,
                 &Ui::StageplayParametersView::setStageplayTemplate);
-        connect(d->model, &BusinessLayer::StageplayInformationModel::showBlockNumbersChanged,
-                d->view, &Ui::StageplayParametersView::setShowBlockNumbers);
-        connect(d->model, &BusinessLayer::StageplayInformationModel::continueBlockNumbersChanged,
-                d->view, &Ui::StageplayParametersView::setContinueBlockNumbers);
         //
         connect(d->view, &Ui::StageplayParametersView::headerChanged, d->model,
                 &BusinessLayer::StageplayInformationModel::setHeader);
@@ -116,10 +110,6 @@ void StageplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
                 &BusinessLayer::StageplayInformationModel::setOverrideCommonSettings);
         connect(d->view, &Ui::StageplayParametersView::stageplayTemplateChanged, d->model,
                 &BusinessLayer::StageplayInformationModel::setTemplateId);
-        connect(d->view, &Ui::StageplayParametersView::showBlockNumbersChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setShowBlockNumbers);
-        connect(d->view, &Ui::StageplayParametersView::continueBlockNumbersChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setContinueBlockNumbers);
     }
 }
 

@@ -7,6 +7,7 @@
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/simple_text_template.h>
+#include <business_layer/templates/stageplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -65,6 +66,7 @@ public:
     void loadScreenplaySettings();
     void loadComicBookSettings();
     void loadAudioplaySettings();
+    void loadStageplaySettings();
     void loadShortcutsSettings();
 
 
@@ -121,6 +123,7 @@ void SettingsManager::Implementation::loadComponentsSettings()
     loadScreenplaySettings();
     loadComicBookSettings();
     loadAudioplaySettings();
+    loadStageplaySettings();
 }
 
 void SettingsManager::Implementation::loadSimpleTextSettings()
@@ -223,6 +226,25 @@ void SettingsManager::Implementation::loadAudioplaySettings()
         settingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsWordsKey).toInt());
     view->setAudioplayDurationByWordsDuration(
         settingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsDurationKey).toInt());
+}
+
+void SettingsManager::Implementation::loadStageplaySettings()
+{
+    view->setAudioplayAvailable(
+        settingsValue(DataStorageLayer::kComponentsStageplayAvailableKey).toBool());
+    const auto defaultTemplate
+        = settingsValue(DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey).toString();
+    view->setStageplayEditorDefaultTemplate(defaultTemplate);
+    BusinessLayer::TemplatesFacade::setDefaultStageplayTemplate(defaultTemplate);
+    view->setStageplayEditorUseCharactersFromText(
+        settingsValue(DataStorageLayer::kComponentsStageplayEditorUseCharactersFromTextKey)
+            .toBool());
+    //
+    view->setStageplayNavigatorShowSceneNumber(
+        settingsValue(DataStorageLayer::kComponentsStageplayNavigatorShowSceneNumberKey).toBool());
+    view->setStageplayNavigatorShowSceneText(
+        settingsValue(DataStorageLayer::kComponentsStageplayNavigatorShowSceneTextKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsStageplayNavigatorSceneTextLinesKey).toInt());
 }
 
 void SettingsManager::Implementation::loadShortcutsSettings()
@@ -339,6 +361,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &Ui::SettingsView::showComponentsComicBook);
     connect(d->navigator, &Ui::SettingsNavigator::componentsAudioplayPressed, d->view,
             &Ui::SettingsView::showComponentsAudioplay);
+    connect(d->navigator, &Ui::SettingsNavigator::componentsStageplayPressed, d->view,
+            &Ui::SettingsView::showComponentsStageplay);
     connect(d->navigator, &Ui::SettingsNavigator::shortcutsPressed, d->view,
             &Ui::SettingsView::showShortcuts);
 
@@ -484,6 +508,21 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setAudioplayDurationByWordsWords);
     connect(d->view, &Ui::SettingsView::audioplayDurationByWordsDurationChanged, this,
             &SettingsManager::setAudioplayDurationByWordsDuration);
+    //
+    // ... пьеса
+    //
+    connect(d->view, &Ui::SettingsView::stageplayAvailableChanged, this,
+            &SettingsManager::setStageplayAvailable);
+    //
+    connect(d->view, &Ui::SettingsView::stageplayEditorDefaultTemplateChanged, this,
+            &SettingsManager::setStageplayEditorDefaultTemplate);
+    connect(d->view, &Ui::SettingsView::stageplayEditorUseCharactersFromTextChanged, this,
+            &SettingsManager::setStageplayEditorUseCharactersFromText);
+    //
+    connect(d->view, &Ui::SettingsView::stageplayNavigatorShowSceneNumberChanged, this,
+            &SettingsManager::setStageplayNavigatorShowSceneNumber);
+    connect(d->view, &Ui::SettingsView::stageplayNavigatorShowSceneTextChanged, this,
+            &SettingsManager::setStageplayNavigatorShowSceneText);
 
     //
     // Работа с библиотекой шаблонов сценария
@@ -696,6 +735,56 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
 
         const BusinessLayer::AudioplayTemplate audioplayTemplate(templateFilePath);
         BusinessLayer::TemplatesFacade::saveAudioplayTemplate(audioplayTemplate);
+    });
+    //
+    // ... пьеса
+    //
+    connect(d->view, &Ui::SettingsView::editCurrentStageplayEditorTemplateRequested, this,
+            [this, showTemplateOptionsEditor](const QString& _templateId) {
+                d->templateOptionsManager->setCurrentDocumentType(
+                    Domain::DocumentObjectType::Stageplay);
+                d->templateOptionsManager->editTemplate(_templateId);
+                showTemplateOptionsEditor();
+            });
+    connect(d->view, &Ui::SettingsView::duplicateCurrentStageplayEditorTemplateRequested, this,
+            [this, showTemplateOptionsEditor](const QString& _templateId) {
+                d->templateOptionsManager->setCurrentDocumentType(
+                    Domain::DocumentObjectType::Stageplay);
+                d->templateOptionsManager->duplicateTemplate(_templateId);
+                showTemplateOptionsEditor();
+            });
+    connect(d->view, &Ui::SettingsView::saveToFileCurrentStageplayEditorTemplateRequested, this,
+            [this](const QString& _templateId) {
+                auto saveToFilePath = QFileDialog::getSaveFileName(
+                    d->view->topLevelWidget(), tr("Choose the file to save template"),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    DialogHelper::starcTemplateFilter());
+                if (saveToFilePath.isEmpty()) {
+                    return;
+                }
+
+                if (!saveToFilePath.endsWith(ExtensionHelper::starct())) {
+                    saveToFilePath.append(QString(".%1").arg(ExtensionHelper::starct()));
+                }
+                const auto stageplayTemplate
+                    = BusinessLayer::TemplatesFacade::stageplayTemplate(_templateId);
+                stageplayTemplate.saveToFile(saveToFilePath);
+            });
+    connect(d->view, &Ui::SettingsView::removeCurrentStageplayEditorTemplateRequested, this,
+            [](const QString& _templateId) {
+                BusinessLayer::TemplatesFacade::removeStageplayTemplate(_templateId);
+            });
+    connect(d->view, &Ui::SettingsView::loadFromFileStageplayEditorTemplateRequested, this, [this] {
+        const auto templateFilePath = QFileDialog::getOpenFileName(
+            d->view->topLevelWidget(), tr("Choose the file with template to load"),
+            QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+            DialogHelper::starcTemplateFilter());
+        if (templateFilePath.isEmpty()) {
+            return;
+        }
+
+        const BusinessLayer::StageplayTemplate stageplayTemplate(templateFilePath);
+        BusinessLayer::TemplatesFacade::saveStageplayTemplate(stageplayTemplate);
     });
     //
     // ... сам менеджер шаблона
@@ -1218,6 +1307,38 @@ void SettingsManager::setAudioplayDurationByWordsDuration(int _duration)
 {
     setSettingsValue(DataStorageLayer::kComponentsAudioplayDurationByWordsDurationKey, _duration);
     emit audioplayDurationChanged();
+}
+
+void SettingsManager::setStageplayAvailable(bool _available)
+{
+    setSettingsValue(DataStorageLayer::kComponentsStageplayAvailableKey, _available);
+}
+
+void SettingsManager::setStageplayEditorDefaultTemplate(const QString& _templateId)
+{
+    setSettingsValue(DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey, _templateId);
+    BusinessLayer::TemplatesFacade::setDefaultStageplayTemplate(_templateId);
+    emit stageplayEditorChanged({ DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey });
+}
+
+void SettingsManager::setStageplayEditorUseCharactersFromText(bool _use)
+{
+    setSettingsValue(DataStorageLayer::kComponentsStageplayEditorUseCharactersFromTextKey, _use);
+    emit stageplayEditorChanged(
+        { DataStorageLayer::kComponentsStageplayEditorUseCharactersFromTextKey });
+}
+
+void SettingsManager::setStageplayNavigatorShowSceneNumber(bool _show)
+{
+    setSettingsValue(DataStorageLayer::kComponentsStageplayNavigatorShowSceneNumberKey, _show);
+    emit stageplayNavigatorChanged();
+}
+
+void SettingsManager::setStageplayNavigatorShowSceneText(bool _show, int _lines)
+{
+    setSettingsValue(DataStorageLayer::kComponentsStageplayNavigatorShowSceneTextKey, _show);
+    setSettingsValue(DataStorageLayer::kComponentsStageplayNavigatorSceneTextLinesKey, _lines);
+    emit stageplayNavigatorChanged();
 }
 
 void SettingsManager::setShortcutsForScreenplayEdit(

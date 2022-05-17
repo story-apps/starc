@@ -1889,6 +1889,13 @@ void ApplicationManager::initConnections()
             [this] { d->projectManager->reconfigureAudioplayNavigator(); });
     connect(d->settingsManager.data(), &SettingsManager::audioplayDurationChanged, this,
             [this] { d->projectManager->reconfigureAudioplayDuration(); });
+    //
+    connect(d->settingsManager.data(), &SettingsManager::stageplayEditorChanged, this,
+            [this](const QStringList& _changedSettingsKeys) {
+                d->projectManager->reconfigureStageplayEditor(_changedSettingsKeys);
+            });
+    connect(d->settingsManager.data(), &SettingsManager::stageplayNavigatorChanged, this,
+            [this] { d->projectManager->reconfigureStageplayNavigator(); });
 
 #ifdef CLOUD_SERVICE_MANAGER
     //

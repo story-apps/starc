@@ -73,6 +73,8 @@ signals:
     void audioplayEditorChanged(const QStringList& _changedSettingsKeys);
     void audioplayNavigatorChanged();
     void audioplayDurationChanged();
+    void stageplayEditorChanged(const QStringList& _changedSettingsKeys);
+    void stageplayNavigatorChanged();
 
 protected:
     /**
@@ -156,6 +158,17 @@ private:
     //
     void setAudioplayDurationByWordsWords(int _words);
     void setAudioplayDurationByWordsDuration(int _duration);
+
+    //
+    // Сохранение параметров редактора пьес
+    //
+    void setStageplayAvailable(bool _available);
+    //
+    void setStageplayEditorDefaultTemplate(const QString& _templateId);
+    void setStageplayEditorUseCharactersFromText(bool _use);
+    //
+    void setStageplayNavigatorShowSceneNumber(bool _show);
+    void setStageplayNavigatorShowSceneText(bool _show, int _lines);
 
     //
     // Сохранение параметров горячих клавиш

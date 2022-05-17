@@ -32,8 +32,6 @@ public:
     CheckBox* printFooterOnTitlePage = nullptr;
     CheckBox* overrideCommonSettings = nullptr;
     ComboBox* stageplayTemplate = nullptr;
-    CheckBox* showBlockNumbers = nullptr;
-    CheckBox* continueBlockNumbers = nullptr;
 };
 
 StageplayParametersView::Implementation::Implementation(QWidget* _parent)
@@ -46,8 +44,6 @@ StageplayParametersView::Implementation::Implementation(QWidget* _parent)
     , printFooterOnTitlePage(new CheckBox(stageplayInfo))
     , overrideCommonSettings(new CheckBox(stageplayInfo))
     , stageplayTemplate(new ComboBox(_parent))
-    , showBlockNumbers(new CheckBox(_parent))
-    , continueBlockNumbers(new CheckBox(_parent))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -66,10 +62,6 @@ StageplayParametersView::Implementation::Implementation(QWidget* _parent)
     stageplayTemplate->setModel(BusinessLayer::TemplatesFacade::stageplayTemplates());
     stageplayTemplate->hide();
 
-    showBlockNumbers->hide();
-    continueBlockNumbers->setEnabled(false);
-    continueBlockNumbers->hide();
-
     infoLayout->setDirection(QBoxLayout::TopToBottom);
     infoLayout->setContentsMargins({});
     infoLayout->setSpacing(0);
@@ -79,15 +71,6 @@ StageplayParametersView::Implementation::Implementation(QWidget* _parent)
     infoLayout->addWidget(printFooterOnTitlePage);
     infoLayout->addWidget(overrideCommonSettings, 1, Qt::AlignTop);
     infoLayout->addWidget(stageplayTemplate);
-    {
-        auto layout = new QHBoxLayout;
-        layout->setContentsMargins({});
-        layout->setSpacing(0);
-        layout->addWidget(showBlockNumbers);
-        layout->addWidget(continueBlockNumbers);
-        layout->addStretch();
-        infoLayout->addLayout(layout);
-    }
     stageplayInfo->setLayoutReimpl(infoLayout);
 
     //
@@ -142,21 +125,9 @@ StageplayParametersView::StageplayParametersView(QWidget* _parent)
                     = _index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString();
                 emit stageplayTemplateChanged(templateId);
             });
-    connect(d->showBlockNumbers, &CheckBox::checkedChanged, this,
-            &StageplayParametersView::showBlockNumbersChanged);
-    connect(d->continueBlockNumbers, &CheckBox::checkedChanged, this,
-            &StageplayParametersView::continueBlockNumbersChanged);
 
-    connect(d->overrideCommonSettings, &CheckBox::checkedChanged, this, [this](bool _checked) {
-        d->stageplayTemplate->setVisible(_checked);
-        d->showBlockNumbers->setVisible(_checked);
-        // d->continueBlockNumbers->setVisible(_checked);
-    });
-    connect(d->showBlockNumbers, &CheckBox::checkedChanged, d->continueBlockNumbers,
-            &CheckBox::setEnabled);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
+    connect(d->overrideCommonSettings, &CheckBox::checkedChanged, this,
+            [this](bool _checked) { d->stageplayTemplate->setVisible(_checked); });
 }
 
 StageplayParametersView::~StageplayParametersView() = default;
@@ -205,16 +176,6 @@ void StageplayParametersView::setStageplayTemplate(const QString& _templateId)
     }
 }
 
-void StageplayParametersView::setShowBlockNumbers(bool _show)
-{
-    d->showBlockNumbers->setChecked(_show);
-}
-
-void StageplayParametersView::setContinueBlockNumbers(bool _continue)
-{
-    d->continueBlockNumbers->setChecked(_continue);
-}
-
 void StageplayParametersView::updateTranslations()
 {
     d->header->setLabel(tr("Header"));
@@ -223,8 +184,6 @@ void StageplayParametersView::updateTranslations()
     d->printFooterOnTitlePage->setText(tr("Print footer on title page"));
     d->overrideCommonSettings->setText(tr("Override common settings for this stageplay"));
     d->stageplayTemplate->setLabel(tr("Template"));
-    d->showBlockNumbers->setText(tr("Show block numbers"));
-    d->continueBlockNumbers->setText(tr("Continue block numbers through document"));
 }
 
 void StageplayParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -256,8 +215,6 @@ void StageplayParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _
              d->printHeaderOnTitlePage,
              d->printFooterOnTitlePage,
              d->overrideCommonSettings,
-             d->showBlockNumbers,
-             d->continueBlockNumbers,
          }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());

@@ -38,6 +38,7 @@ public:
     void showComponentsScreenplay();
     void showComponentsComicBook();
     void showComponentsAudioplay();
+    void showComponentsStageplay();
     void showShortcuts();
 
     //
@@ -109,6 +110,17 @@ public:
     //
     void setAudioplayDurationByWordsWords(int _words);
     void setAudioplayDurationByWordsDuration(int _duration);
+
+    //
+    // Задание параметров редактора пьесы
+    //
+    void setStageplayAvailable(bool _available);
+    //
+    void setStageplayEditorDefaultTemplate(const QString& _templateId);
+    void setStageplayEditorUseCharactersFromText(bool _use);
+    //
+    void setStageplayNavigatorShowSceneNumber(bool _show);
+    void setStageplayNavigatorShowSceneText(bool _show, int _lines);
 
     //
     // Задание параметров горячих клавиш
@@ -192,6 +204,18 @@ signals:
     void audioplayDurationByWordsDurationChanged(int _duration);
 
     //
+    // Уведомление об изменении параметров редактора пьес
+    //
+    void stageplayAvailableChanged(bool _available);
+    //
+    void stageplayEditorDefaultTemplateChanged(const QString& _templateId);
+    void stageplayEditorShowBlockNumberChanged(bool _show, bool _continue);
+    void stageplayEditorUseCharactersFromTextChanged(bool _use);
+    //
+    void stageplayNavigatorShowSceneNumberChanged(bool _show);
+    void stageplayNavigatorShowSceneTextChanged(bool _show, int _lines);
+
+    //
     // Редактирование шаблонов
     //
     // ... простой текстовый документ
@@ -225,6 +249,14 @@ signals:
     void saveToFileCurrentAudioplayEditorTemplateRequested(const QString& _templateId);
     void removeCurrentAudioplayEditorTemplateRequested(const QString& _templateId);
     void loadFromFileAudioplayEditorTemplateRequested();
+    //
+    // ... пьеса
+    //
+    void editCurrentStageplayEditorTemplateRequested(const QString& _templateId);
+    void duplicateCurrentStageplayEditorTemplateRequested(const QString& _templateId);
+    void saveToFileCurrentStageplayEditorTemplateRequested(const QString& _templateId);
+    void removeCurrentStageplayEditorTemplateRequested(const QString& _templateId);
+    void loadFromFileStageplayEditorTemplateRequested();
 
     //
     // Параметры горячих клавиш
