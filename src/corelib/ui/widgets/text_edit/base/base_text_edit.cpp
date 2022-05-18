@@ -4,6 +4,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/tools/run_once.h>
 
 #include <QAction>
 #include <QApplication>
@@ -102,16 +103,25 @@ QString localCloseQuote()
 class BaseTextEdit::Implementation
 {
 public:
+    explicit Implementation(BaseTextEdit* _q);
+
     /**
      * @brief Перенастроить редактор в соответствии с актуальной дизайн системой
      */
-    void reconfigure(BaseTextEdit* _textEdit);
+    void reconfigure();
 
     /**
      * @brief Выделить блок при тройном клике
      */
-    bool selectBlockOnTripleClick(QMouseEvent* _event, BaseTextEdit* _textEdit);
+    bool selectBlockOnTripleClick(QMouseEvent* _event);
 
+    /**
+     * @brief Обновить выравнивание в текущем блоке
+     */
+    void updateCurrentBlockAlignment();
+
+
+    BaseTextEdit* q = nullptr;
 
     bool capitalizeWords = true;
     bool correctDoubleCapitals = true;
@@ -128,15 +138,24 @@ public:
      * @brief Время последнего клика мышки, мс
      */
     qint64 lastMouseClickTime = 0;
+
+    /**
+     * @brief Изначальное выравнивание блока
+     */
+    QHash<int, Qt::Alignment> blockNumberToSourceAlignment;
 };
 
-void BaseTextEdit::Implementation::reconfigure(BaseTextEdit* _textEdit)
+BaseTextEdit::Implementation::Implementation(BaseTextEdit* _q)
+    : q(_q)
 {
-    _textEdit->setCursorWidth(Ui::DesignSystem::layout().px2());
 }
 
-bool BaseTextEdit::Implementation::selectBlockOnTripleClick(QMouseEvent* _event,
-                                                            BaseTextEdit* _textEdit)
+void BaseTextEdit::Implementation::reconfigure()
+{
+    q->setCursorWidth(Ui::DesignSystem::layout().px2());
+}
+
+bool BaseTextEdit::Implementation::selectBlockOnTripleClick(QMouseEvent* _event)
 {
     if (_event->button() == Qt::RightButton) {
         return false;
@@ -156,15 +175,52 @@ bool BaseTextEdit::Implementation::selectBlockOnTripleClick(QMouseEvent* _event,
     //
     if (mouseClicks > 2) {
         mouseClicks = 1;
-        QTextCursor cursor = _textEdit->textCursor();
+        QTextCursor cursor = q->textCursor();
         cursor.movePosition(QTextCursor::StartOfBlock);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        _textEdit->setTextCursor(cursor);
+        q->setTextCursor(cursor);
         _event->accept();
         return true;
     }
 
     return false;
+}
+
+void BaseTextEdit::Implementation::updateCurrentBlockAlignment()
+{
+    //
+    // Корректировки выполняются только для RTL, т.к. кьют не умеет рисовать курсор в правильном
+    // изначальном положении для RTL
+    //
+    if (q->isLeftToRight()) {
+        return;
+    }
+
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
+        return;
+    }
+
+    auto cursor = q->textCursor();
+    cursor.beginEditBlock();
+    do {
+        if (cursor.block().text().isEmpty()) {
+            if (!blockNumberToSourceAlignment.contains(cursor.blockNumber())) {
+                blockNumberToSourceAlignment[cursor.blockNumber()]
+                    = cursor.blockFormat().alignment();
+
+                auto blockFormat = cursor.blockFormat();
+                blockFormat.setAlignment(q->isLeftToRight() ? Qt::AlignLeft : Qt::AlignRight);
+                cursor.setBlockFormat(blockFormat);
+            }
+            continue;
+        }
+
+        auto blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(blockNumberToSourceAlignment.take(cursor.blockNumber()));
+        cursor.setBlockFormat(blockFormat);
+    } while (cursor.movePosition(QTextCursor::NextBlock));
+    cursor.endEditBlock();
 }
 
 
@@ -173,9 +229,11 @@ bool BaseTextEdit::Implementation::selectBlockOnTripleClick(QMouseEvent* _event,
 
 BaseTextEdit::BaseTextEdit(QWidget* _parent)
     : CompleterTextEdit(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
-    d->reconfigure(this);
+    d->reconfigure();
+
+    connect(this, &BaseTextEdit::textChanged, this, [this] { d->updateCurrentBlockAlignment(); });
 }
 
 BaseTextEdit::~BaseTextEdit() = default;
@@ -373,10 +431,15 @@ bool BaseTextEdit::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {
     case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
-        d->reconfigure(this);
+        d->reconfigure();
         updateGeometry();
         update();
         return true;
+    }
+
+    case QEvent::LayoutDirectionChange: {
+        d->updateCurrentBlockAlignment();
+        Q_FALLTHROUGH();
     }
 
     default: {
@@ -387,7 +450,7 @@ bool BaseTextEdit::event(QEvent* _event)
 
 void BaseTextEdit::mousePressEvent(QMouseEvent* _event)
 {
-    const auto isHandled = d->selectBlockOnTripleClick(_event, this);
+    const auto isHandled = d->selectBlockOnTripleClick(_event);
     if (isHandled) {
         return;
     }
@@ -397,7 +460,7 @@ void BaseTextEdit::mousePressEvent(QMouseEvent* _event)
 
 void BaseTextEdit::mouseDoubleClickEvent(QMouseEvent* _event)
 {
-    const auto isHandled = d->selectBlockOnTripleClick(_event, this);
+    const auto isHandled = d->selectBlockOnTripleClick(_event);
     if (isHandled) {
         return;
     }
