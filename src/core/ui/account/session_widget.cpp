@@ -40,7 +40,7 @@ SessionWidget::Implementation::Implementation(QWidget* _parent)
     , terinateSession(new Button(_parent))
     , layout(new QVBoxLayout)
 {
-    lastUsedIcon->setText(u8"\U000F05E0");
+    lastUsedIcon->setIcon(u8"\U000F05E0");
 }
 
 

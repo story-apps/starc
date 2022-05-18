@@ -22,7 +22,7 @@ public:
     /**
      * @brief Задать текст
      */
-    void setText(const QString& _text);
+    virtual void setText(const QString& _text);
 
     /**
      * @brief Задать выравнивание текста
@@ -197,19 +197,42 @@ protected:
     const QFont& textFont() const override;
 };
 
-
-/**
- * @brief Текстовая метка со шрифтом iconSmall
- */
-class CORE_LIBRARY_EXPORT IconsSmallLabel : public AbstractLabel
+class CORE_LIBRARY_EXPORT AbstractIconsLabel : public AbstractLabel
 {
 public:
-    explicit IconsSmallLabel(QWidget* _parent = nullptr);
+    explicit AbstractIconsLabel(QWidget* _parent = nullptr);
 
     /**
      * @brief Установить иконку
      */
     void setIcon(const QString& _icon);
+
+protected:
+    /**
+     * @brief Корректируем иконку при смене направления расположения текста
+     */
+    bool event(QEvent* _event) override;
+
+private:
+    /**
+     * @brief Закрываем метод, чтобы клиенты не могли использовать неверный способ задания иконки
+     */
+    void setText(const QString& _text) override;
+
+    /**
+     * @brief Исходная иконка
+     */
+    QString m_icon;
+};
+
+
+/**
+ * @brief Текстовая метка со шрифтом iconSmall
+ */
+class CORE_LIBRARY_EXPORT IconsSmallLabel : public AbstractIconsLabel
+{
+public:
+    explicit IconsSmallLabel(QWidget* _parent = nullptr);
 
 protected:
     const QFont& textFont() const override;
@@ -219,15 +242,10 @@ protected:
 /**
  * @brief Текстовая метка со шрифтом iconMid
  */
-class CORE_LIBRARY_EXPORT IconsMidLabel : public AbstractLabel
+class CORE_LIBRARY_EXPORT IconsMidLabel : public AbstractIconsLabel
 {
 public:
     explicit IconsMidLabel(QWidget* _parent = nullptr);
-
-    /**
-     * @brief Установить иконку
-     */
-    void setIcon(const QString& _icon);
 
 protected:
     const QFont& textFont() const override;
@@ -237,15 +255,10 @@ protected:
 /**
  * @brief Текстовая метка со шрифтом iconBig
  */
-class CORE_LIBRARY_EXPORT IconsBigLabel : public AbstractLabel
+class CORE_LIBRARY_EXPORT IconsBigLabel : public AbstractIconsLabel
 {
 public:
     explicit IconsBigLabel(QWidget* _parent = nullptr);
-
-    /**
-     * @brief Установить иконку
-     */
-    void setIcon(const QString& _icon);
 
     /**
      * @brief Необходимо ли рисовать декорацию

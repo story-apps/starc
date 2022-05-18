@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/icon_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QFontMetrics>
@@ -271,14 +272,42 @@ const QFont& OverlineLabel::textFont() const
 // ****
 
 
-IconsSmallLabel::IconsSmallLabel(QWidget* _parent)
+AbstractIconsLabel::AbstractIconsLabel(QWidget* _parent)
     : AbstractLabel(_parent)
 {
 }
 
-void IconsSmallLabel::setIcon(const QString& _icon)
+void AbstractIconsLabel::setIcon(const QString& _icon)
 {
-    setText(_icon);
+    if (m_icon == _icon) {
+        return;
+    }
+
+    m_icon = _icon;
+    setText(IconHelper::directedIcon(m_icon));
+}
+
+bool AbstractIconsLabel::event(QEvent* _event)
+{
+    if (_event->type() == QEvent::LayoutDirectionChange) {
+        setText(IconHelper::directedIcon(m_icon));
+    }
+
+    return AbstractLabel::event(_event);
+}
+
+void AbstractIconsLabel::setText(const QString& _text)
+{
+    AbstractLabel::setText(_text);
+}
+
+
+// ****
+
+
+IconsSmallLabel::IconsSmallLabel(QWidget* _parent)
+    : AbstractIconsLabel(_parent)
+{
 }
 
 const QFont& IconsSmallLabel::textFont() const
@@ -291,13 +320,8 @@ const QFont& IconsSmallLabel::textFont() const
 
 
 IconsMidLabel::IconsMidLabel(QWidget* _parent)
-    : AbstractLabel(_parent)
+    : AbstractIconsLabel(_parent)
 {
-}
-
-void IconsMidLabel::setIcon(const QString& _icon)
-{
-    setText(_icon);
 }
 
 const QFont& IconsMidLabel::textFont() const
@@ -310,13 +334,8 @@ const QFont& IconsMidLabel::textFont() const
 
 
 IconsBigLabel::IconsBigLabel(QWidget* _parent)
-    : AbstractLabel(_parent)
+    : AbstractIconsLabel(_parent)
 {
-}
-
-void IconsBigLabel::setIcon(const QString& _icon)
-{
-    setText(_icon);
 }
 
 void IconsBigLabel::setDecorationVisible(bool _visible)
@@ -336,7 +355,7 @@ QSize IconsBigLabel::sizeHint() const
         return QSize(Ui::DesignSystem::layout().px62(), Ui::DesignSystem::layout().px62());
     }
 
-    return AbstractLabel::sizeHint();
+    return AbstractIconsLabel::sizeHint();
 }
 
 int IconsBigLabel::heightForWidth(int _width) const
@@ -345,7 +364,7 @@ int IconsBigLabel::heightForWidth(int _width) const
         return Ui::DesignSystem::layout().px62();
     }
 
-    return AbstractLabel::heightForWidth(_width);
+    return AbstractIconsLabel::heightForWidth(_width);
 }
 
 const QFont& IconsBigLabel::textFont() const
@@ -356,7 +375,7 @@ const QFont& IconsBigLabel::textFont() const
 void IconsBigLabel::paintEvent(QPaintEvent* _event)
 {
     if (!m_isDecorationVisible) {
-        AbstractLabel::paintEvent(_event);
+        AbstractIconsLabel::paintEvent(_event);
         return;
     }
 

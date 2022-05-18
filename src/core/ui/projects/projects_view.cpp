@@ -42,13 +42,13 @@ public:
     /**
      * @brief Обновить настройки UI панели инструментов
      */
-    void updateToolBarsUi();
-    void updateToolBarsPositon();
+    void updateToolbarUi();
+    void updateToolbarPositon();
 
 
     ProjectsView* q = nullptr;
 
-    FloatingToolBar* toolBar = nullptr;
+    FloatingToolBar* toolbar = nullptr;
 
     Widget* emptyPage = nullptr;
     H6Label* emptyPageTitleLabel = nullptr;
@@ -59,7 +59,7 @@ public:
 
 ProjectsView::Implementation::Implementation(ProjectsView* _parent)
     : q(_parent)
-    , toolBar(new FloatingToolBar(_parent))
+    , toolbar(new FloatingToolBar(_parent))
     , emptyPage(new Widget(_parent))
     , emptyPageTitleLabel(new H6Label(emptyPage))
     , emptyPageCreateProjectButton(new Button(emptyPage))
@@ -103,20 +103,20 @@ void ProjectsView::Implementation::updateProjectsPageUi()
     projectsPage->setBackgroundColor(Ui::DesignSystem::color().surface());
 }
 
-void ProjectsView::Implementation::updateToolBarsUi()
+void ProjectsView::Implementation::updateToolbarUi()
 {
-    toolBar->resize(toolBar->sizeHint());
-    updateToolBarsPositon();
-    toolBar->setBackgroundColor(Ui::DesignSystem::color().background());
-    toolBar->setTextColor(Ui::DesignSystem::color().onBackground());
-    toolBar->raise();
+    toolbar->resize(toolbar->sizeHint());
+    updateToolbarPositon();
+    toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
+    toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
+    toolbar->raise();
 }
 
-void ProjectsView::Implementation::updateToolBarsPositon()
+void ProjectsView::Implementation::updateToolbarPositon()
 {
-    toolBar->move(QPointF(q->isLeftToRight()
+    toolbar->move(QPointF(q->isLeftToRight()
                               ? Ui::DesignSystem::layout().px24()
-                              : q->width() - toolBar->width() - Ui::DesignSystem::layout().px24(),
+                              : q->width() - toolbar->width() - Ui::DesignSystem::layout().px24(),
                           Ui::DesignSystem::layout().px24())
                       .toPoint());
 }
@@ -131,11 +131,11 @@ ProjectsView::ProjectsView(QWidget* _parent)
 {
     QAction* createProjectAction = new QAction;
     createProjectAction->setIconText(u8"\U000f0415");
-    d->toolBar->addAction(createProjectAction);
+    d->toolbar->addAction(createProjectAction);
     connect(createProjectAction, &QAction::triggered, this, &ProjectsView::createProjectPressed);
     QAction* openProjectAction = new QAction;
     openProjectAction->setIconText(u8"\U000f0256");
-    d->toolBar->addAction(openProjectAction);
+    d->toolbar->addAction(openProjectAction);
     connect(openProjectAction, &QAction::triggered, this, &ProjectsView::openProjectPressed);
 
     connect(d->emptyPageCreateProjectButton, &Button::clicked, this,
@@ -180,13 +180,13 @@ void ProjectsView::resizeEvent(QResizeEvent* _event)
 {
     StackWidget::resizeEvent(_event);
 
-    d->updateToolBarsPositon();
+    d->updateToolbarPositon();
 }
 
 void ProjectsView::updateTranslations()
 {
-    d->toolBar->actions().at(0)->setToolTip(tr("Create story"));
-    d->toolBar->actions().at(1)->setToolTip(tr("Open story"));
+    d->toolbar->actions().at(0)->setToolTip(tr("Create story"));
+    d->toolbar->actions().at(1)->setToolTip(tr("Open story"));
     d->emptyPageTitleLabel->setText(tr("Here will be a list of your stories."));
     d->emptyPageCreateProjectButton->setText(tr("It's time to create the first story!"));
 }
@@ -199,7 +199,7 @@ void ProjectsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->updateEmptyPageUi();
     d->updateProjectsPageUi();
-    d->updateToolBarsUi();
+    d->updateToolbarUi();
 }
 
 } // namespace Ui
