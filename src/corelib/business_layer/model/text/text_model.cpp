@@ -1084,7 +1084,13 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         contentReader.clear();
         contentReader.addData(sourceBlockEndContent);
         contentReader.readNextStartElement(); // document
-        contentReader.readNextStartElement(); // text node
+        contentReader.readNextStartElement(); // potential text node
+        if (textFolderTypeFromString(contentReader.name().toString()) != TextFolderType::Undefined
+            || textGroupTypeFromString(contentReader.name().toString())
+                != TextGroupType::Undefined) {
+            contentReader.readNextStartElement(); // content
+            contentReader.readNextStartElement(); // text node
+        }
         auto item = createTextItem(contentReader);
         //
         // ... и последний вставленный элемент был текстовым
