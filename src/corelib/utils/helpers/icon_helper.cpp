@@ -19,6 +19,8 @@ QString IconHelper::directedIcon(const QString& _icon)
         { u8"\U000F0142", u8"\U000F0141" }, // chevron right
         { u8"\U000F035F", u8"\U000F035E" }, // menu left
         { u8"\U000F035E", u8"\U000F035F" }, // menu right
+        { u8"\U000F054C", u8"\U000F044E" }, // undo
+        { u8"\U000F044E", u8"\U000F054C" }, // redo
     };
 
     return iconsMapping.value(_icon, _icon);

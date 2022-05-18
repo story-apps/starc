@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/icon_helper.h>
 #include <utils/helpers/image_helper.h>
 
 #include <QAction>
@@ -18,7 +19,7 @@ const char* kActionWidthKey = "action-width";
 class FloatingToolBar::Implementation
 {
 public:
-    Implementation();
+    explicit Implementation(FloatingToolBar* _q);
 
     /**
      * @brief Анимировать клик
@@ -34,8 +35,15 @@ public:
     /**
      * @brief Получить пункт меню по координате
      */
-    QAction* actionAt(const QPoint& _coordinate, const QList<QAction*>& _actions) const;
+    QAction* actionAt(const QPoint& _coordinate) const;
 
+    /**
+     * @brief Ширина действия
+     */
+    qreal actionWidth(QAction* _action) const;
+
+
+    FloatingToolBar* q = nullptr;
 
     /**
      * @brief Ориентация панели
@@ -65,7 +73,8 @@ public:
     QVariantAnimation shadowBlurRadiusAnimation;
 };
 
-FloatingToolBar::Implementation::Implementation()
+FloatingToolBar::Implementation::Implementation(FloatingToolBar* _q)
+    : q(_q)
 {
     decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
     decorationRadiusAnimation.setDuration(160);
@@ -113,22 +122,34 @@ void FloatingToolBar::Implementation::animateHoverOut()
     shadowBlurRadiusAnimation.start();
 }
 
-QAction* FloatingToolBar::Implementation::actionAt(const QPoint& _coordinate,
-                                                   const QList<QAction*>& _actions) const
+QAction* FloatingToolBar::Implementation::actionAt(const QPoint& _coordinate) const
 {
-    qreal actionLeft = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-        + Ui::DesignSystem::floatingToolBar().margins().left()
-        - (Ui::DesignSystem::floatingToolBar().spacing() / 2.0);
-    for (QAction* action : _actions) {
+    qreal actionLeft = q->isLeftToRight() || orientation == Qt::Vertical
+        ? Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+            + Ui::DesignSystem::floatingToolBar().margins().left()
+            - (Ui::DesignSystem::floatingToolBar().spacing() / 2.0)
+        : 0.0;
+    for (QAction* action : q->actions()) {
         if (!action->isVisible() || action->isSeparator()) {
             continue;
         }
 
-        const qreal actionRight = actionLeft
-            + (!action->property(kActionWidthKey).isNull()
-                   ? action->property(kActionWidthKey).toReal()
-                   : Ui::DesignSystem::floatingToolBar().iconSize().width())
-            + Ui::DesignSystem::floatingToolBar().spacing();
+        //
+        // Для RTL определяем левую позицию действия на проходе с этим действием
+        //
+        if (q->isRightToLeft() && orientation != Qt::Vertical) {
+            if (qFuzzyCompare(actionLeft, 0.0)) {
+                actionLeft = q->width() - actionWidth(action)
+                    - Ui::DesignSystem::floatingToolBar().margins().right()
+                    - Ui::DesignSystem::floatingToolBar().shadowMargins().right()
+                    - (Ui::DesignSystem::floatingToolBar().spacing() / 2.0);
+            } else {
+                actionLeft -= actionWidth(action) + Ui::DesignSystem::floatingToolBar().spacing();
+            }
+        }
+
+        const qreal actionRight
+            = actionLeft + actionWidth(action) + Ui::DesignSystem::floatingToolBar().spacing();
 
         if (orientation == Qt::Horizontal) {
             if (actionLeft < _coordinate.x() && _coordinate.x() < actionRight) {
@@ -140,10 +161,25 @@ QAction* FloatingToolBar::Implementation::actionAt(const QPoint& _coordinate,
             }
         }
 
-        actionLeft = actionRight;
+        //
+        // Для LTR определяем левую позицию следующего элемента
+        //
+        if (q->isLeftToRight() || orientation == Qt::Vertical) {
+            actionLeft = actionRight;
+        }
     }
 
     return nullptr;
+}
+
+qreal FloatingToolBar::Implementation::actionWidth(QAction* _action) const
+{
+    const auto actionWidth = _action->property(kActionWidthKey);
+    if (actionWidth.isNull()) {
+        return Ui::DesignSystem::floatingToolBar().iconSize().width();
+    }
+
+    return actionWidth.toReal();
 }
 
 
@@ -152,7 +188,7 @@ QAction* FloatingToolBar::Implementation::actionAt(const QPoint& _coordinate,
 
 FloatingToolBar::FloatingToolBar(QWidget* _parent)
     : Widget(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
     setFocusPolicy(Qt::StrongFocus);
     setOpacity(d->opacityAnimation.startValue().toDouble());
@@ -278,7 +314,7 @@ bool FloatingToolBar::event(QEvent* _event)
 {
     if (_event->type() == QEvent::ToolTip) {
         QHelpEvent* event = static_cast<QHelpEvent*>(_event);
-        QAction* action = d->actionAt(event->pos(), actions());
+        QAction* action = d->actionAt(event->pos());
         if (action != nullptr && action->toolTip() != action->iconText()) {
             QToolTip::showText(event->globalPos(), action->toolTip());
         } else {
@@ -334,8 +370,12 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     //
     // Рисуем иконки
     //
-    qreal actionIconX = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-        + Ui::DesignSystem::floatingToolBar().margins().left();
+    qreal actionIconX = isLeftToRight() || d->orientation == Qt::Vertical
+        ? Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+            + Ui::DesignSystem::floatingToolBar().margins().left()
+        : width() - d->actionWidth(actions().constFirst())
+            - Ui::DesignSystem::floatingToolBar().margins().right()
+            - Ui::DesignSystem::floatingToolBar().shadowMargins().right();
     const qreal actionIconY = Ui::DesignSystem::floatingToolBar().shadowMargins().top()
         + Ui::DesignSystem::floatingToolBar().margins().top();
     const QSizeF actionIconSize = Ui::DesignSystem::floatingToolBar().iconSize();
@@ -348,8 +388,10 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         // Рисуем разделитель
         //
         if (action->isSeparator()) {
-            const auto separatorX
-                = actionIconX - Ui::DesignSystem::floatingToolBar().spacing() / 2.0;
+            const auto separatorX = isLeftToRight() || d->orientation == Qt::Vertical
+                ? actionIconX - Ui::DesignSystem::floatingToolBar().spacing() / 2.0
+                : actionIconX + actionIconSize.width()
+                    + Ui::DesignSystem::floatingToolBar().spacing() / 2.0;
             painter.setPen(
                 QPen(ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()),
                      Ui::DesignSystem::scaleFactor()));
@@ -378,7 +420,12 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         if (!action->property(kActionWidthKey).isNull()) {
             painter.setFont(Ui::DesignSystem::font().subtitle2());
             const QRectF actionRect = d->orientation == Qt::Horizontal
-                ? QRectF(actionIconX, actionIconY, action->property(kActionWidthKey).toReal(),
+                ? QRectF(actionIconX
+                             - (isLeftToRight()
+                                    ? 0.0
+                                    : (action->property(kActionWidthKey).toReal()
+                                       - Ui::DesignSystem::floatingToolBar().spacing())),
+                         actionIconY, action->property(kActionWidthKey).toReal(),
                          actionIconSize.height())
                 : QRectF(actionIconY, actionIconX, actionIconSize.width(),
                          action->property(kActionWidthKey).toReal());
@@ -395,7 +442,8 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
                 painter.drawText(actionRect, Qt::AlignRight | Qt::AlignVCenter, action->iconText());
             }
 
-            actionIconX += actionRect.width() + Ui::DesignSystem::floatingToolBar().spacing();
+            actionIconX += (isLeftToRight() || d->orientation == Qt::Vertical ? 1 : -1)
+                * (actionRect.width() + Ui::DesignSystem::floatingToolBar().spacing());
         }
         //
         // Рисуем действие с одной лишь иконкой
@@ -412,7 +460,8 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
             }
 
             painter.setFont(Ui::DesignSystem::font().iconsMid());
-            painter.drawText(actionRect, Qt::AlignCenter, action->iconText());
+            painter.drawText(actionRect, Qt::AlignCenter,
+                             IconHelper::directedIcon(action->iconText()));
 
             //
             // ... декорация
@@ -429,7 +478,8 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
                 painter.setOpacity(1.0);
             }
 
-            actionIconX += actionRect.width() + Ui::DesignSystem::floatingToolBar().spacing();
+            actionIconX += (isLeftToRight() || d->orientation == Qt::Vertical ? 1 : -1)
+                * (actionRect.width() + Ui::DesignSystem::floatingToolBar().spacing());
         }
     }
 }
@@ -463,7 +513,7 @@ void FloatingToolBar::leaveEvent(QEvent* _event)
 
 void FloatingToolBar::mousePressEvent(QMouseEvent* _event)
 {
-    QAction* pressedAction = d->actionAt(_event->pos(), actions());
+    QAction* pressedAction = d->actionAt(_event->pos());
     if (pressedAction == nullptr) {
         return;
     }
@@ -478,7 +528,7 @@ void FloatingToolBar::mousePressEvent(QMouseEvent* _event)
 
 void FloatingToolBar::mouseReleaseEvent(QMouseEvent* _event)
 {
-    QAction* pressedAction = d->actionAt(_event->pos(), actions());
+    QAction* pressedAction = d->actionAt(_event->pos());
     if (pressedAction == nullptr || pressedAction != d->lastPressedAction) {
         return;
     }
