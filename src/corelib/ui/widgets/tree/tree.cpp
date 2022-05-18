@@ -245,10 +245,16 @@ bool Tree::isOnItemTrilingIcon(const QPoint& _position) const
         return false;
     }
 
-    if (_position.x() < parentWidget()->width() - verticalScrollBar()->width()
-                - Ui::DesignSystem::treeOneLineItem().spacing()
-                - Ui::DesignSystem::treeOneLineItem().iconSize().width()
-        || _position.x() > parentWidget()->width() - verticalScrollBar()->width()) {
+    if ((isLeftToRight()
+         && (_position.x() < parentWidget()->width() - verticalScrollBar()->width()
+                     - Ui::DesignSystem::treeOneLineItem().spacing()
+                     - Ui::DesignSystem::treeOneLineItem().iconSize().width()
+             || _position.x() > parentWidget()->width() - verticalScrollBar()->width()))
+        || (isRightToLeft()
+            && (_position.x() < verticalScrollBar()->width()
+                || _position.x() > verticalScrollBar()->width()
+                        + Ui::DesignSystem::treeOneLineItem().spacing()
+                        + Ui::DesignSystem::treeOneLineItem().iconSize().width()))) {
         return false;
     }
 
