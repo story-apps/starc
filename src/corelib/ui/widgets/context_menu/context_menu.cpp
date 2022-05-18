@@ -3,6 +3,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/icon_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QApplication>
@@ -363,14 +364,31 @@ void ContextMenu::setActions(const QVector<QAction*>& _actions)
                 const auto screen = QApplication::screenAt(submenuPosition);
                 Q_ASSERT(screen);
                 const auto screenGeometry = screen->geometry();
-                //
-                // ... обработать случай, если не влезаем по ширине
-                //
-                if (submenuPosition.x() + submenuSizeHint.width() > screenGeometry.right()) {
-                    submenuPosition.setX(submenuPosition.x() - actionRect.width()
-                                         - submenuSizeHint.width()
-                                         + Ui::DesignSystem::card().shadowMargins().left()
-                                         + Ui::DesignSystem::card().shadowMargins().right());
+                if (isRightToLeft()) {
+                    //
+                    // Обычный случай, когда всё влезает
+                    //
+                    if (submenuPosition.x() - submenuSizeHint.width() - actionRect.width() > 0) {
+                        submenuPosition.setX(submenuPosition.x() - actionRect.width());
+                    }
+                    //
+                    // ... не влезаем справа
+                    //
+                    else {
+                        submenuPosition.setX(submenuPosition.x() + submenuSizeHint.width()
+                                             - Ui::DesignSystem::card().shadowMargins().left()
+                                             - Ui::DesignSystem::card().shadowMargins().right());
+                    }
+                } else {
+                    //
+                    // ... обработать случай, если не влезаем по ширине, а также для RTL
+                    //
+                    if (submenuPosition.x() + submenuSizeHint.width() > screenGeometry.right()) {
+                        submenuPosition.setX(submenuPosition.x() - actionRect.width()
+                                             - submenuSizeHint.width()
+                                             + Ui::DesignSystem::card().shadowMargins().left()
+                                             + Ui::DesignSystem::card().shadowMargins().right());
+                    }
                 }
                 //
                 // ... обработать случай, если не влезаем по высоте
@@ -437,9 +455,11 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
     const auto screen = this->screen();
     const auto screenGeometry = screen->geometry();
     //
-    // Если контекстное меню не помещается на экране справа от указателя
+    // Если контекстное меню не помещается на экране справа от указателя,
+    // а также по-умолчанию для RTL компоновки
     //
-    if (endPosition.x() + sizeHint.width() > screenGeometry.right()) {
+    if ((endPosition.x() + sizeHint.width() > screenGeometry.right())
+        || (isRightToLeft() && (endPosition.x() - sizeHint.width() > 0))) {
         position.setX(position.x() - this->width());
         endPosition.setX(endPosition.x() - sizeHint.width()
                          + Ui::DesignSystem::card().shadowMargins().left()
@@ -581,11 +601,15 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         //
         QRectF iconRect;
         if (action->iconText() != action->text()) {
-            iconRect
-                = QRectF(QPointF(actionX + Ui::DesignSystem::treeOneLineItem().margins().left(),
-                                 actionRect.top()),
-                         QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                                actionRect.height()));
+            iconRect = QRectF(
+                QPointF(isLeftToRight()
+                            ? (actionX + Ui::DesignSystem::treeOneLineItem().margins().left())
+                            : (actionX + actionWidth
+                               - Ui::DesignSystem::treeOneLineItem().iconSize().width()
+                               - Ui::DesignSystem::treeOneLineItem().margins().right()),
+                        actionRect.top()),
+                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                       actionRect.height()));
             auto it = action->iconText(), t = action->text();
             configurePen(action,
                          action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
@@ -599,8 +623,13 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         painter.setFont(Ui::DesignSystem::font().subtitle2());
         const auto textX = iconRect.isEmpty()
             ? actionX + Ui::DesignSystem::treeOneLineItem().margins().left()
-            : iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing();
-        const QRectF textRect(textX, actionRect.top(), actionWidth - textX, actionRect.height());
+            : (isLeftToRight() ? (iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing())
+                               : (actionX + Ui::DesignSystem::treeOneLineItem().margins().left()));
+        const auto textWidth = actionWidth - textX
+            - (isRightToLeft() && !iconRect.isEmpty()
+                   ? iconRect.width() + Ui::DesignSystem::treeOneLineItem().spacing()
+                   : 0.0);
+        const QRectF textRect(textX, actionRect.top(), textWidth, actionRect.height());
         painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, action->text());
         //
         // ... горячие клавиши
@@ -613,7 +642,7 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         //
         if (!action->children().isEmpty()) {
             painter.setFont(Ui::DesignSystem::font().iconsMid());
-            painter.drawText(textRect, Qt::AlignRight | Qt::AlignVCenter, u8"\U000F035F");
+            painter.drawText(textRect, Qt::AlignRight | Qt::AlignVCenter, IconHelper::menuRight());
         }
 
         actionY += Ui::DesignSystem::treeOneLineItem().height();

@@ -18,4 +18,5 @@ public:
      * @brief Конекретные иконки
      */
     static QString chevronRight();
+    static QString menuRight();
 };
