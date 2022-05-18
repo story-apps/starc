@@ -5,6 +5,7 @@
 #include <ui/widgets/animations/click_animation.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/icon_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -909,7 +910,8 @@ void TextField::paintEvent(QPaintEvent* _event)
         painter.setPen(d->trailingIconColor.isValid() ? d->trailingIconColor
                                                       : palette().color(QPalette::Text));
         const auto iconRect = d->trailingIconRect();
-        painter.drawText(iconRect.toRect(), Qt::AlignCenter, d->trailingIcon);
+        painter.drawText(iconRect.toRect(), Qt::AlignCenter,
+                         IconHelper::directedIcon(d->trailingIcon));
     }
     //
     // ... подчёркивание
