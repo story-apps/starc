@@ -209,6 +209,8 @@ SOURCES += \
     ui/modules/comments/comments_model.cpp \
     ui/modules/comments/comments_toolbar.cpp \
     ui/modules/comments/comments_view.cpp \
+    ui/modules/cover_generator/cover_generator_sidebar.cpp \
+    ui/modules/cover_generator/cover_generator_view.cpp \
     ui/modules/logline_generator/logline_generator_dialog.cpp \
     ui/widgets/animations/click_animation.cpp \
     ui/widgets/app_bar/app_bar.cpp \
@@ -474,6 +476,8 @@ HEADERS += \
     ui/modules/comments/comments_model.h \
     ui/modules/comments/comments_toolbar.h \
     ui/modules/comments/comments_view.h \
+    ui/modules/cover_generator/cover_generator_sidebar.h \
+    ui/modules/cover_generator/cover_generator_view.h \
     ui/modules/logline_generator/logline_generator_dialog.h \
     ui/widgets/animations/click_animation.h \
     ui/widgets/app_bar/app_bar.h \

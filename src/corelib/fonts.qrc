@@ -30,5 +30,10 @@
         <file alias="noto-sans-tamil-medium">fonts/noto-sans-tamil-medium.ttf</file>
         <file alias="noto-sans-tamil-regular">fonts/noto-sans-tamil-regular.ttf</file>
         <file alias="roboto-light">fonts/roboto-light.ttf</file>
+        <file alias="montserrat-bold">fonts/montserrat-bold.ttf</file>
+        <file alias="montserrat-bold-italic">fonts/montserrat-bold-italic.ttf</file>
+        <file alias="montserrat-italic">fonts/montserrat-italic.ttf</file>
+        <file alias="montserrat-regular">fonts/montserrat-regular.ttf</file>
+        <file alias="sf-movie-poster">fonts/sf-movie-poster.ttf</file>
     </qresource>
 </RCC>
