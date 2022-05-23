@@ -16,6 +16,16 @@ struct Tab {
     QString name;
     QPixmap icon;
     bool visible;
+
+    bool isValid() const
+    {
+        return !name.isEmpty() && visible;
+    }
+
+    bool operator==(const Tab& _other) const
+    {
+        return name == _other.name && icon == _other.icon && visible == _other.visible;
+    }
 };
 
 } // namespace
@@ -50,7 +60,12 @@ public:
     /**
      * @brief Список видимых табов
      */
-    QVector<Tab> visibleTabs() const;
+    const QVector<Tab> visibleTabs() const;
+
+    /**
+     * @brief Получить таб в заданной позиции
+     */
+    Tab tabAt(const QPointF& _position) const;
 
     /**
      * @brief Обновить диапазон и состояние горизонтальной прокрутки
@@ -150,12 +165,32 @@ qreal TabBar::Implementation::contentWidth() const
     return contentWidth;
 }
 
-QVector<Tab> TabBar::Implementation::visibleTabs() const
+const QVector<Tab> TabBar::Implementation::visibleTabs() const
 {
     QVector<Tab> visibleTabs;
     std::copy_if(tabs.begin(), tabs.end(), std::back_inserter(visibleTabs),
                  [](const Tab& _tab) { return _tab.visible; });
     return visibleTabs;
+}
+
+Tab TabBar::Implementation::tabAt(const QPointF& _position) const
+{
+    qreal tabX
+        = q->isLeftToRight() ? 0.0 : std::max(static_cast<qreal>(q->width()), contentWidth());
+    tabX -= scrollState.current;
+    for (const auto& tab : visibleTabs()) {
+        const auto tabWidth = tabWidthHint(tab);
+        const QRectF tabBoundingRect
+            = QRectF(QPointF(q->isLeftToRight() ? tabX : tabX - tabWidth, 0.0),
+                     QSizeF(tabWidth, q->height()));
+        if (tabBoundingRect.left() < _position.x() && _position.x() < tabBoundingRect.right()) {
+            return tab;
+        }
+
+        tabX += (q->isLeftToRight() ? 1 : -1) * tabWidth;
+    }
+
+    return {};
 }
 
 void TabBar::Implementation::updateScrollState()
@@ -331,7 +366,8 @@ void TabBar::setCurrentTab(int _index)
         //
         // Определим текущее положение центра таба
         //
-        qreal tabX = 0;
+        qreal tabX
+            = isLeftToRight() ? 0.0 : std::max(static_cast<qreal>(width()), d->contentWidth());
         tabX -= d->scrollState.current;
         for (int tabIndex = 0; tabIndex < _index; ++tabIndex) {
             const Tab& tab = d->tabs.at(tabIndex);
@@ -339,20 +375,30 @@ void TabBar::setCurrentTab(int _index)
                 continue;
             }
             const qreal tabWidth = d->tabWidthHintForScrollable(tab);
-            tabX += tabWidth;
+            tabX += (isLeftToRight() ? 1 : -1) * tabWidth;
         }
         const qreal tabWidth = d->tabWidthHintForScrollable(d->tabs.at(_index));
-        const qreal currentTabCenter = tabX + tabWidth / 2.0;
+        const qreal currentTabCenter = tabX + (isLeftToRight() ? 1 : -1) * tabWidth / 2.0;
         //
         // ... таб должен быть расположен внутри видимой области
         //
         qreal targetTabCenter = 0.0;
-        if (tabX < Ui::DesignSystem::layout().px48()) {
-            targetTabCenter = Ui::DesignSystem::layout().px48() + tabWidth / 2.0;
-        } else if (tabX + tabWidth > width() - Ui::DesignSystem::layout().px48()) {
-            targetTabCenter = width() - Ui::DesignSystem::layout().px48() - tabWidth / 2.0;
+        if (isLeftToRight()) {
+            if (tabX < Ui::DesignSystem::layout().px48()) {
+                targetTabCenter = Ui::DesignSystem::layout().px48() + tabWidth / 2.0;
+            } else if (tabX + tabWidth > width() - Ui::DesignSystem::layout().px48()) {
+                targetTabCenter = width() - Ui::DesignSystem::layout().px48() - tabWidth / 2.0;
+            } else {
+                targetTabCenter = currentTabCenter;
+            }
         } else {
-            targetTabCenter = currentTabCenter;
+            if (tabX > width() - Ui::DesignSystem::layout().px48()) {
+                targetTabCenter = width() - Ui::DesignSystem::layout().px48() - tabWidth / 2.0;
+            } else if (tabX - tabWidth < Ui::DesignSystem::layout().px48()) {
+                targetTabCenter = Ui::DesignSystem::layout().px48() + tabWidth / 2.0;
+            } else {
+                targetTabCenter = currentTabCenter;
+            }
         }
         //
         // ... рассчитаем на сколько нужно сместить вьюпорт
@@ -405,7 +451,7 @@ void TabBar::removeAllTabs()
 QSize TabBar::minimumSizeHint() const
 {
     QSizeF sizeHint;
-    for (const Tab& tab : d->tabs) {
+    for (const Tab& tab : std::as_const(d->tabs)) {
         if (!tab.visible) {
             continue;
         }
@@ -484,23 +530,17 @@ void TabBar::paintEvent(QPaintEvent* _event)
         return;
     }
     //
-    qreal tabX = 0;
+    qreal tabX = isLeftToRight() ? 0.0 : std::max(static_cast<qreal>(width()), d->contentWidth());
     tabX -= d->scrollState.current;
-    for (int tabIndex = 0; tabIndex < d->tabs.size(); ++tabIndex) {
-        //
-        // Определим таб и является ли он текущим
-        //
-        const Tab& tab = d->tabs.at(tabIndex);
-        if (!tab.visible) {
-            continue;
-        }
-        const bool isTabCurrent = tabIndex == d->currentTabIndex;
+    for (const auto& tab : tabs) {
+        const bool isTabCurrent = tab == d->tabs[d->currentTabIndex];
 
         //
         // Определим область для отрисовки таба
         //
         const qreal tabWidth = d->tabWidthHint(tab);
-        const QRectF tabBoundingRect = QRectF(QPointF(tabX, 0.0), QSizeF(tabWidth, height()));
+        const QRectF tabBoundingRect = QRectF(
+            QPointF(isLeftToRight() ? tabX : tabX - tabWidth, 0.0), QSizeF(tabWidth, height()));
 
         //
         // Ховер
@@ -572,7 +612,7 @@ void TabBar::paintEvent(QPaintEvent* _event)
             painter.fillRect(currentDecorationRect, painter.pen().color());
         }
 
-        tabX += tabBoundingRect.width();
+        tabX += (isLeftToRight() ? 1 : -1) * tabBoundingRect.width();
     }
 
     painter.setOpacity(Ui::DesignSystem::disabledTextOpacity());
@@ -599,24 +639,14 @@ void TabBar::leaveEvent(QEvent* _event)
 
 void TabBar::mouseMoveEvent(QMouseEvent* _event)
 {
-    qreal tabX = 0;
-    tabX -= d->scrollState.current;
-    for (int tabIndex = 0; tabIndex < d->tabs.size(); ++tabIndex) {
-        const Tab& tab = d->tabs.at(tabIndex);
-        if (!tab.visible) {
-            continue;
+    const auto tab = d->tabAt(_event->pos());
+    if (tab.isValid()) {
+        const auto tabIndex = d->tabs.indexOf(tab);
+        if (d->hoverTabIndex != tabIndex) {
+            d->hoverTabIndex = tabIndex;
+            update();
         }
-
-        const auto tabWidth = d->tabWidthHint(tab);
-        if (tabX < _event->pos().x() && _event->pos().x() < tabX + tabWidth) {
-            if (d->hoverTabIndex != tabIndex) {
-                d->hoverTabIndex = tabIndex;
-                update();
-            }
-            return;
-        }
-
-        tabX += tabWidth;
+        return;
     }
 
     if (d->hoverTabIndex != -1) {
@@ -628,29 +658,16 @@ void TabBar::mouseMoveEvent(QMouseEvent* _event)
 void TabBar::mousePressEvent(QMouseEvent* _event)
 {
     d->decorationCenterPosition = _event->pos();
-    d->decorationRadiusAnimation.setEndValue(
-        static_cast<qreal>(d->isFixed ? width() / d->tabs.size()
-                                      : d->tabSizeHint(d->tabs[d->currentTabIndex]).width()));
+    d->decorationRadiusAnimation.setEndValue(static_cast<qreal>(
+        d->isFixed ? width() / d->tabs.size() : d->tabSizeHint(d->tabAt(_event->pos())).width()));
     d->animateClick();
 }
 
 void TabBar::mouseReleaseEvent(QMouseEvent* _event)
 {
-    qreal tabX = 0;
-    tabX -= d->scrollState.current;
-    for (int tabIndex = 0; tabIndex < d->tabs.size(); ++tabIndex) {
-        const Tab& tab = d->tabs.at(tabIndex);
-        if (!tab.visible) {
-            continue;
-        }
-
-        const auto tabWidth = d->tabWidthHint(tab);
-        if (tabX < _event->pos().x() && _event->pos().x() < tabX + tabWidth) {
-            setCurrentTab(tabIndex);
-            return;
-        }
-
-        tabX += tabWidth;
+    const auto tab = d->tabAt(_event->pos());
+    if (tab.isValid()) {
+        setCurrentTab(d->tabs.indexOf(tab));
     }
 }
 
