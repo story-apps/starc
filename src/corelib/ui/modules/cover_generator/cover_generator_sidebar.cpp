@@ -600,7 +600,8 @@ void CoverGeneratorSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _ev
             { Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
               Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12() });
         textFieldWithOptions->fontFamily->setCustomMargins(
-            { Ui::DesignSystem::layout().px12(), 0.0, 0.0, 0.0 });
+            { isLeftToRight() ? Ui::DesignSystem::layout().px12() : 0.0, 0.0,
+              isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px12(), 0.0 });
         textFieldWithOptions->fontFamily->setPopupBackgroundColor(
             ColorHelper::nearby(Ui::DesignSystem::color().primary()));
         textFieldWithOptions->fontSize->setCustomMargins(
@@ -621,14 +622,19 @@ void CoverGeneratorSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _ev
                                            Ui::DesignSystem::layout().px12());
         }
         textFieldWithOptions->fontColor->setTextColor(Ui::DesignSystem::color().onPrimary());
-        textFieldWithOptions->fontColor->setContentsMargins(0, 0, Ui::DesignSystem::layout().px12(),
-                                                            0);
-        textFieldWithOptions->fontBold->setContentsMargins(Ui::DesignSystem::layout().px12(),
-                                                           Ui::DesignSystem::layout().px12(), 0,
-                                                           Ui::DesignSystem::layout().px12());
-        textFieldWithOptions->alignLeft->setContentsMargins(Ui::DesignSystem::layout().px24(),
-                                                            Ui::DesignSystem::layout().px12(), 0,
-                                                            Ui::DesignSystem::layout().px12());
+        textFieldWithOptions->fontColor->setContentsMargins(
+            isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px12(), 0,
+            isLeftToRight() ? Ui::DesignSystem::layout().px12() : 0.0, 0);
+        textFieldWithOptions->fontBold->setContentsMargins(
+            isLeftToRight() ? Ui::DesignSystem::layout().px12() : 0.0,
+            Ui::DesignSystem::layout().px12(),
+            isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px12(),
+            Ui::DesignSystem::layout().px12());
+        textFieldWithOptions->alignLeft->setContentsMargins(
+            isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0.0,
+            Ui::DesignSystem::layout().px12(),
+            isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px24(),
+            Ui::DesignSystem::layout().px12());
     }
     d->colorPickerPopup->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->colorPickerPopup->setTextColor(Ui::DesignSystem::color().onPrimary());
@@ -638,8 +644,10 @@ void CoverGeneratorSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _ev
     d->searchImages->setBackgroundColor(Ui::DesignSystem::color().onPrimary());
     d->searchImages->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->searchImages->setCustomMargins(
-        { Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
-          Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px24() });
+        { isLeftToRight() ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12(),
+          Ui::DesignSystem::layout().px24(),
+          isLeftToRight() ? Ui::DesignSystem::layout().px12() : Ui::DesignSystem::layout().px24(),
+          Ui::DesignSystem::layout().px24() });
     for (auto button : {
              d->pasteImageFromClipboard,
              d->chooseImageFile,
@@ -647,7 +655,9 @@ void CoverGeneratorSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _ev
         button->setBackgroundColor(Ui::DesignSystem::color().primary());
         button->setTextColor(Ui::DesignSystem::color().onPrimary());
     }
-    d->chooseImageFile->setContentsMargins(0, 0, Ui::DesignSystem::layout().px12(), 0);
+    d->chooseImageFile->setContentsMargins(
+        isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px12(), 0,
+        isLeftToRight() ? Ui::DesignSystem::layout().px12() : 0.0, 0);
     d->imagesView->setBackgroundColor(Ui::DesignSystem::color().primary());
 }
 
