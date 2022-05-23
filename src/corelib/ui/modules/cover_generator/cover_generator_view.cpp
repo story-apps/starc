@@ -69,6 +69,10 @@ public:
     Splitter* splitter = nullptr;
 
     FloatingToolBar* toolbar = nullptr;
+    QAction* saveAction = nullptr;
+    QAction* discardAction = nullptr;
+    QAction* clearAction = nullptr;
+    QAction* saveToFileAction = nullptr;
 
     Widget* coverBackground = nullptr;
     Card* coverCard = nullptr;
@@ -85,6 +89,10 @@ CoverGeneratorView::Implementation::Implementation(CoverGeneratorView* _q)
     : q(_q)
     , splitter(new Splitter(_q))
     , toolbar(new FloatingToolBar(_q))
+    , saveAction(new QAction(_q))
+    , discardAction(new QAction(_q))
+    , clearAction(new QAction(_q))
+    , saveToFileAction(new QAction(_q))
     , coverBackground(new Widget(_q))
     , coverCard(new Card(_q))
     , coverImage(new ImageLabel(_q))
@@ -93,6 +101,22 @@ CoverGeneratorView::Implementation::Implementation(CoverGeneratorView* _q)
 {
     splitter->setWidgets(coverBackground, sidebar);
     splitter->setSizes({ 7, 3 });
+
+    saveAction->setIconText(u8"\U000F012C");
+    toolbar->addAction(saveAction);
+    //
+    discardAction->setIconText(u8"\U000F0156");
+    toolbar->addAction(discardAction);
+    //
+    auto separatorAction = new QAction;
+    separatorAction->setSeparator(true);
+    toolbar->addAction(separatorAction);
+    //
+    clearAction->setIconText(u8"\U000F00E2");
+    toolbar->addAction(clearAction);
+    //
+    saveToFileAction->setIconText(u8"\U000F0193");
+    toolbar->addAction(saveToFileAction);
 
     auto coverCardLayout = new QHBoxLayout;
     coverCardLayout->setContentsMargins({});
@@ -256,26 +280,6 @@ CoverGeneratorView::CoverGeneratorView(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
-    auto saveAction = new QAction;
-    saveAction->setIconText(u8"\U000F012C");
-    d->toolbar->addAction(saveAction);
-    //
-    auto discardAction = new QAction;
-    discardAction->setIconText(u8"\U000F0156");
-    d->toolbar->addAction(discardAction);
-    //
-    auto separatorAction = new QAction;
-    separatorAction->setSeparator(true);
-    d->toolbar->addAction(separatorAction);
-    //
-    auto clearAction = new QAction;
-    clearAction->setIconText(u8"\U000F00E2");
-    d->toolbar->addAction(clearAction);
-    //
-    auto saveToFileAction = new QAction;
-    saveToFileAction->setIconText(u8"\U000F0193");
-    d->toolbar->addAction(saveToFileAction);
-
     d->coverBackground->installEventFilter(this);
 
     auto layout = new QHBoxLayout;
@@ -285,14 +289,14 @@ CoverGeneratorView::CoverGeneratorView(QWidget* _parent)
     setLayout(layout);
 
 
-    connect(saveAction, &QAction::triggered, this, &CoverGeneratorView::savePressed);
-    connect(discardAction, &QAction::triggered, this, &CoverGeneratorView::discardPressed);
-    connect(clearAction, &QAction::triggered, this, [this] {
+    connect(d->saveAction, &QAction::triggered, this, &CoverGeneratorView::savePressed);
+    connect(d->discardAction, &QAction::triggered, this, &CoverGeneratorView::discardPressed);
+    connect(d->clearAction, &QAction::triggered, this, [this] {
         d->sidebar->clear();
         d->backgroundImage = {};
         d->updateCover();
     });
-    connect(saveToFileAction, &QAction::triggered, this, [this] {
+    connect(d->saveToFileAction, &QAction::triggered, this, [this] {
         const auto imagesFolder
             = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
         auto imagePath = QFileDialog::getSaveFileName(
@@ -365,6 +369,10 @@ void CoverGeneratorView::resizeEvent(QResizeEvent* _event)
 
 void CoverGeneratorView::updateTranslations()
 {
+    d->saveAction->setToolTip(tr("Use cover for the project"));
+    d->discardAction->setToolTip(tr("Close without saving"));
+    d->clearAction->setToolTip(tr("Clear cover parameters"));
+    d->saveToFileAction->setToolTip(tr("Save cover to the file"));
 }
 
 void CoverGeneratorView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
