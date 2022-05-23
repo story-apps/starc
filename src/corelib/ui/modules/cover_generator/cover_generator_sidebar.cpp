@@ -1,5 +1,8 @@
 #include "cover_generator_sidebar.h"
 
+#include "unsplash_images_view.h"
+
+#include <3rd_party/webloader/src/NetworkRequestLoader.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/color_picker/color_picker_popup.h>
@@ -10,9 +13,12 @@
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/ui_helper.h>
+#include <utils/tools/debouncer.h>
 
 #include <QBoxLayout>
 #include <QFontDatabase>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QScrollArea>
 #include <QStringListModel>
 
@@ -178,6 +184,9 @@ public:
     TabBar* tabs = nullptr;
     StackWidget* content = nullptr;
 
+    /**
+     * @brief Страница текстовых параметров
+     */
     QScrollArea* textPage = nullptr;
     TextFiledWithOptions* top1Text = nullptr;
     TextFiledWithOptions* top2Text = nullptr;
@@ -193,7 +202,15 @@ public:
      */
     ColorPickerPopup* colorPickerPopup = nullptr;
 
+    /**
+     * @brief Страница параметров изображения
+     */
     Widget* imagePage = nullptr;
+    TextField* searchImages = nullptr;
+    Debouncer searchDebouncer;
+    IconButton* pasteImageFromClipboard = nullptr;
+    IconButton* chooseImageFile = nullptr;
+    UnsplashImagesView* imagesView = nullptr;
 };
 
 CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
@@ -210,6 +227,11 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
     , websiteText(new TextFiledWithOptions(_parent))
     , colorPickerPopup(new ColorPickerPopup(_parent))
     , imagePage(new Widget(_parent))
+    , searchImages(new TextField(_parent))
+    , searchDebouncer(300)
+    , pasteImageFromClipboard(new IconButton(_parent))
+    , chooseImageFile(new IconButton(_parent))
+    , imagesView(new UnsplashImagesView(_parent))
 {
     fontsModel.setStringList(QFontDatabase().families());
 
@@ -262,6 +284,12 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
 
     colorPickerPopup->setColorCanBeDeselected(true);
 
+    pasteImageFromClipboard->setIcon(u8"\U000F0192");
+    chooseImageFile->setIcon(u8"\U000F0552");
+
+    auto imagesScrollArea = UiHelper::createScrollArea(_parent);
+    imagesScrollArea->setWidget(imagesView);
+
 
     auto textLayout = qobject_cast<QVBoxLayout*>(textPage->widget()->layout());
     auto stretch = textLayout->takeAt(0);
@@ -274,6 +302,19 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
     textLayout->addWidget(releaseDateText);
     textLayout->addWidget(websiteText);
     textLayout->addItem(stretch);
+
+    auto imageSourceLayout = new QHBoxLayout;
+    imageSourceLayout->setContentsMargins({});
+    imageSourceLayout->setSpacing(0);
+    imageSourceLayout->addWidget(searchImages, 1);
+    imageSourceLayout->addWidget(pasteImageFromClipboard, 0, Qt::AlignVCenter);
+    imageSourceLayout->addWidget(chooseImageFile, 0, Qt::AlignVCenter);
+    auto imageLayout = new QVBoxLayout;
+    imageLayout->setContentsMargins({});
+    imageLayout->setSpacing(0);
+    imageLayout->addLayout(imageSourceLayout);
+    imageLayout->addWidget(imagesScrollArea, 1);
+    imagePage->setLayout(imageLayout);
 }
 
 
@@ -291,6 +332,7 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
     layout->addWidget(d->content, 1);
     setLayout(layout);
 
+
     connect(d->tabs, &TabBar::currentIndexChanged, this, [this](int _index) {
         switch (_index) {
         default:
@@ -305,6 +347,7 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
         }
         }
     });
+    //
     for (auto textFieldWithOptions : {
              d->top1Text,
              d->top2Text,
@@ -366,9 +409,82 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
                     &CoverGeneratorSidebar::coverParametersChanged);
         }
     }
+    //
+    connect(d->searchImages, &TextField::textChanged, &d->searchDebouncer, &Debouncer::orderWork);
+    connect(&d->searchDebouncer, &Debouncer::gotWork, this, [this] {
+        if (d->searchImages->text().isEmpty()) {
+            return;
+        }
+
+        //
+        // Формируем английский перевод поисковой фразы
+        //
+        const QUrl keywordsTranslateUrl(QString("https://translate.googleapis.com/translate_a/"
+                                                "t?client=dict-chrome-ex&sl=auto&tl=en&q=%1")
+                                            .arg(d->searchImages->text()));
+        NetworkRequestLoader::loadAsync(
+            keywordsTranslateUrl, this, [this](const QByteArray& _response) {
+                const auto translations = QJsonDocument::fromJson(_response).array();
+                if (translations.isEmpty() || translations.at(0).toArray().isEmpty()) {
+                    return;
+                }
+                const auto keywords = translations.at(0).toArray().at(0).toString();
+
+                //
+                // Запрашиваем картинки
+                //
+                d->imagesView->loadImages(keywords);
+            });
+    });
+    connect(d->imagesView, &UnsplashImagesView::imageSelected, this,
+            &CoverGeneratorSidebar::unsplashImageSelected);
+    connect(d->pasteImageFromClipboard, &IconButton::clicked, this,
+            &CoverGeneratorSidebar::pasteImageFromClipboardPressed);
+    connect(d->chooseImageFile, &IconButton::clicked, this,
+            &CoverGeneratorSidebar::chooseImgeFromFilePressed);
 }
 
 CoverGeneratorSidebar::~CoverGeneratorSidebar() = default;
+
+void CoverGeneratorSidebar::clear()
+{
+    d->top1Text->text->clear();
+    d->top1Text->fontFamily->setCurrentText("Montserrat");
+    d->top1Text->fontSize->setText("16");
+    d->top1Text->alignCenter->setChecked(true);
+    d->top2Text->text->clear();
+    d->top2Text->fontFamily->setCurrentText("Montserrat");
+    d->top2Text->fontSize->setText("16");
+    d->top2Text->fontBold->setChecked(true);
+    d->top2Text->alignCenter->setChecked(true);
+    d->beforeNameText->text->clear();
+    d->beforeNameText->fontFamily->setCurrentText("Montserrat");
+    d->beforeNameText->fontSize->setText("22");
+    d->beforeNameText->alignCenter->setChecked(true);
+    d->nameText->text->clear();
+    d->nameText->fontFamily->setCurrentText("Montserrat");
+    d->nameText->fontSize->setText("44");
+    d->nameText->fontBold->setChecked(true);
+    d->nameText->alignCenter->setChecked(true);
+    d->afterNameText->text->clear();
+    d->afterNameText->fontFamily->setCurrentText("Montserrat");
+    d->afterNameText->fontSize->setText("18");
+    d->afterNameText->alignCenter->setChecked(true);
+    d->creditsText->text->clear();
+    d->creditsText->fontFamily->setCurrentText("SF Movie Poster");
+    d->creditsText->fontSize->setText("24");
+    d->creditsText->alignCenter->setChecked(true);
+    d->releaseDateText->text->clear();
+    d->releaseDateText->fontFamily->setCurrentText("Montserrat");
+    d->releaseDateText->fontSize->setText("16");
+    d->releaseDateText->fontBold->setChecked(true);
+    d->releaseDateText->alignCenter->setChecked(true);
+    d->websiteText->text->clear();
+    d->websiteText->fontFamily->setCurrentText("Montserrat");
+    d->websiteText->fontSize->setText("12");
+    d->websiteText->fontBold->setChecked(true);
+    d->websiteText->alignCenter->setChecked(true);
+}
 
 CoverTextParameters CoverGeneratorSidebar::top1Text() const
 {
@@ -410,11 +526,6 @@ CoverTextParameters CoverGeneratorSidebar::websiteText() const
     return d->websiteText->parameters();
 }
 
-QPixmap CoverGeneratorSidebar::backgroundImage() const
-{
-    return {};
-}
-
 void CoverGeneratorSidebar::updateTranslations()
 {
     d->tabs->setTabName(kTextIndex, tr("Text"));
@@ -447,6 +558,11 @@ void CoverGeneratorSidebar::updateTranslations()
         textField->alignCenter->setToolTip(tr("Align text to the center"));
         textField->alignRight->setToolTip(tr("Align text to the right"));
     }
+
+    d->searchImages->setLabel(tr("Search images"));
+    d->pasteImageFromClipboard->setToolTip(
+        tr("Paste image from clipboard (image file or image url)"));
+    d->chooseImageFile->setToolTip(tr("Choose file with image"));
 }
 
 void CoverGeneratorSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -457,7 +573,10 @@ void CoverGeneratorSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _ev
     d->tabs->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->tabs->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->content->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->imagePage->setBackgroundColor(Ui::DesignSystem::color().primary());
+
+    d->textPage->widget()->layout()->setContentsMargins(
+        Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
+        Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12());
     for (auto textFieldWithOptions : {
              d->top1Text,
              d->top2Text,
@@ -514,9 +633,22 @@ void CoverGeneratorSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _ev
     d->colorPickerPopup->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->colorPickerPopup->setTextColor(Ui::DesignSystem::color().onPrimary());
 
-    d->textPage->widget()->layout()->setContentsMargins(
-        Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-        Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12());
+
+    d->imagePage->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->searchImages->setBackgroundColor(Ui::DesignSystem::color().onPrimary());
+    d->searchImages->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->searchImages->setCustomMargins(
+        { Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
+          Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px24() });
+    for (auto button : {
+             d->pasteImageFromClipboard,
+             d->chooseImageFile,
+         }) {
+        button->setBackgroundColor(Ui::DesignSystem::color().primary());
+        button->setTextColor(Ui::DesignSystem::color().onPrimary());
+    }
+    d->chooseImageFile->setContentsMargins(0, 0, Ui::DesignSystem::layout().px12(), 0);
+    d->imagesView->setBackgroundColor(Ui::DesignSystem::color().primary());
 }
 
 } // namespace Ui

@@ -21,6 +21,11 @@ public:
     ~CoverGeneratorSidebar() override;
 
     /**
+     * @brief Очистить параметры
+     */
+    void clear();
+
+    /**
      * @brief Параметры постера
      */
     /** @{ **/
@@ -32,8 +37,6 @@ public:
     CoverTextParameters creditsText() const;
     CoverTextParameters releaseDateText() const;
     CoverTextParameters websiteText() const;
-    //
-    QPixmap backgroundImage() const;
     /** @} **/
 
 signals:
@@ -41,6 +44,21 @@ signals:
      * @brief Изменились параметры постера
      */
     void coverParametersChanged();
+
+    /**
+     * @brief Выбрано изображение для загрузки
+     */
+    void unsplashImageSelected(const QString& _url, const QString& _copyright);
+
+    /**
+     * @brief Нажата кнопка вставить изображение из буфера обмена
+     */
+    void pasteImageFromClipboardPressed();
+
+    /**
+     * @brief Нажата кнопка выбора локального файла для вставки
+     */
+    void chooseImgeFromFilePressed();
 
 protected:
     /**

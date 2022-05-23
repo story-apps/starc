@@ -43,6 +43,11 @@ signals:
 
 protected:
     /**
+     * @brief Получить список действий контекстного меню
+     */
+    virtual QVector<QAction*> contextMenuActions() const;
+
+    /**
      * @brief Переопределяем для реализации тултипа
      */
     bool event(QEvent* _event) override;

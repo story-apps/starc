@@ -33,6 +33,7 @@ public:
      * @brief Задать подсказку по обрезке изображения
      */
     void setImageCroppingText(const QString& _text);
+    void setImageCroppingNote(const QString& _text);
 
 signals:
     /**

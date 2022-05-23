@@ -109,9 +109,6 @@ ImageCard::Implementation::Implementation(ImageCard* _parent)
     overlayOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
     overlayOpacityAnimation.setStartValue(0.0);
     overlayOpacityAnimation.setEndValue(1.0);
-
-    contextMenu->setActions(
-        { changeImageAction, clearImageAction, copyImageAction, pasteImageAction });
 }
 
 void ImageCard::Implementation::prepareImageForDisplaing(const QSize& _size)
@@ -185,6 +182,10 @@ bool ImageCard::Implementation::isInsideClearButton(const QPoint _position) cons
 
 void ImageCard::Implementation::prepareContextMenu()
 {
+    if (contextMenu->actions().isEmpty()) {
+        contextMenu->setActions(q->contextMenuActions());
+    }
+
     const auto hasImage = !image.source.isNull();
     clearImageAction->setVisible(hasImage);
     copyImageAction->setVisible(hasImage);
@@ -313,6 +314,16 @@ void ImageCard::setImage(const QPixmap& _image)
     update();
 
     emit imageChanged(d->image.source);
+}
+
+QVector<QAction*> ImageCard::contextMenuActions() const
+{
+    return {
+        d->changeImageAction,
+        d->clearImageAction,
+        d->copyImageAction,
+        d->pasteImageAction,
+    };
 }
 
 bool ImageCard::event(QEvent* _event)

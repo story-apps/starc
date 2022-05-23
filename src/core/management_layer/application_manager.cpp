@@ -1466,6 +1466,12 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     fontDatabase.addApplicationFont(":/fonts/courier-prime-bold-italic");
     fontDatabase.addApplicationFont(":/fonts/muktamalar-bold");
     fontDatabase.addApplicationFont(":/fonts/muktamalar-regular");
+    //
+    fontDatabase.addApplicationFont(":/fonts/montserrat-regular");
+    fontDatabase.addApplicationFont(":/fonts/montserrat-bold");
+    fontDatabase.addApplicationFont(":/fonts/montserrat-italic");
+    fontDatabase.addApplicationFont(":/fonts/montserrat-bold-italic");
+    fontDatabase.addApplicationFont(":/fonts/sf-movie-poster");
 
     //
     // Инициилизируем данные после подгрузки шрифтов, чтобы они сразу подхватились системой

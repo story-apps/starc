@@ -34,8 +34,6 @@ CheckBox::CheckBox(QWidget* _parent)
 
     connect(&d->decorationAnimation, &ClickAnimation::valueChanged, this,
             qOverload<>(&CheckBox::update));
-
-    designSystemChangeEvent(nullptr);
 }
 
 CheckBox::~CheckBox() = default;

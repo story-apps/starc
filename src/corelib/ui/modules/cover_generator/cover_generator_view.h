@@ -16,11 +16,32 @@ public:
     explicit CoverGeneratorView(QWidget* _parent = nullptr);
     ~CoverGeneratorView() override;
 
+    /**
+     * @brief Текущий постер
+     */
+    const QPixmap& coverImage() const;
+
+signals:
+    /**
+     * @brief Пользователь хочет использовать текущую обложку
+     */
+    void savePressed();
+
+    /**
+     * @brief Пользователь не хочет использовать обложку
+     */
+    void discardPressed();
+
 protected:
     /**
      * @brief Переопределяем, чтобы отлавливать события изменения размера области постера
      */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
+
+    /**
+     * @brief Корректируем позицию тулбара, при изменении размера
+     */
+    void resizeEvent(QResizeEvent* _event) override;
 
     /**
      * @brief Обновить переводы

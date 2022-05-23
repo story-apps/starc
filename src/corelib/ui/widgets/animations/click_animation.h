@@ -17,6 +17,25 @@ public:
     ~ClickAnimation() override;
 
     /**
+     * @brief Настроить скорость анимации
+     *        Быстрая - для радиокнопок, иконок и т.п., где маленькая область и быстрая анимация
+     *        Долгая - для кнопок и т.п. элементов, где декорация занимает большую площадь
+     */
+    void setFast(bool _fast);
+
+    /**
+     * @brief Точка начала анимации
+     */
+    void setClickPosition(const QPointF& _position);
+    QPointF clickPosition() const;
+
+    /**
+     * @brief Область в которой может отображаться декорация
+     */
+    void setClipRect(const QRectF& _rect);
+    QRectF clipRect() const;
+
+    /**
      * @brief Задать значения радиуса
      */
     void setRadiusInterval(qreal _from, qreal _to);

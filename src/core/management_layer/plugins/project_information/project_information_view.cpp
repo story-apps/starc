@@ -1,12 +1,15 @@
 #include "project_information_view.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/modules/cover_generator/cover_generator_view.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/image/image_card.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/ui_helper.h>
 
+#include <QAction>
 #include <QGridLayout>
 #include <QScrollArea>
 
@@ -19,31 +22,40 @@ public:
     explicit Implementation(QWidget* _parent);
 
 
-    QScrollArea* content = nullptr;
+    StackWidget* content = nullptr;
 
+    QScrollArea* parametersPage = nullptr;
+    //
     Card* projectInfo = nullptr;
     QGridLayout* projectInfoLayout = nullptr;
     TextField* projectName = nullptr;
     TextField* projectLogline = nullptr;
+    //
+    CoverImageCard* projectCover = nullptr;
 
-    ImageCard* projectCover = nullptr;
+    CoverGeneratorView* generatorPage = nullptr;
 };
 
 ProjectInformationView::Implementation::Implementation(QWidget* _parent)
-    : content(new QScrollArea(_parent))
+    : content(new StackWidget(_parent))
+    , parametersPage(new QScrollArea(_parent))
     , projectInfo(new Card(_parent))
     , projectInfoLayout(new QGridLayout)
     , projectName(new TextField(projectInfo))
     , projectLogline(new TextField(projectInfo))
-    , projectCover(new ImageCard(projectInfo))
+    , projectCover(new CoverImageCard(projectInfo))
+    , generatorPage(new CoverGeneratorView(_parent))
 {
+    content->setCurrentWidget(parametersPage);
+    content->addWidget(generatorPage);
+
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
     palette.setColor(QPalette::Window, Qt::transparent);
-    content->setPalette(palette);
-    content->setFrameShape(QFrame::NoFrame);
-    content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    content->setVerticalScrollBar(new ScrollBar);
+    parametersPage->setPalette(palette);
+    parametersPage->setFrameShape(QFrame::NoFrame);
+    parametersPage->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    parametersPage->setVerticalScrollBar(new ScrollBar);
     projectCover->setDecorationIcon(u8"\U000F02E9");
 
     projectInfoLayout->setContentsMargins({});
@@ -60,8 +72,8 @@ ProjectInformationView::Implementation::Implementation(QWidget* _parent)
     UiHelper::initSpellingFor(projectLogline);
 
     QWidget* contentWidget = new QWidget;
-    content->setWidget(contentWidget);
-    content->setWidgetResizable(true);
+    parametersPage->setWidget(contentWidget);
+    parametersPage->setWidgetResizable(true);
     auto layout = new QGridLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
@@ -89,10 +101,16 @@ ProjectInformationView::ProjectInformationView(QWidget* _parent)
             [this] { emit nameChanged(d->projectName->text()); });
     connect(d->projectLogline, &TextField::textChanged, this,
             [this] { emit loglineChanged(d->projectLogline->text()); });
-    connect(d->projectCover, &ImageCard::imageChanged, this, &ProjectInformationView::coverChanged);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
+    connect(d->projectCover, &CoverImageCard::generateCoverPressed, this,
+            [this] { d->content->setCurrentWidget(d->generatorPage); });
+    connect(d->projectCover, &CoverImageCard::imageChanged, this,
+            &ProjectInformationView::coverChanged);
+    connect(d->generatorPage, &CoverGeneratorView::savePressed, this, [this] {
+        d->projectCover->setImage(d->generatorPage->coverImage());
+        d->content->setCurrentWidget(d->parametersPage);
+    });
+    connect(d->generatorPage, &CoverGeneratorView::discardPressed, this,
+            [this] { d->content->setCurrentWidget(d->parametersPage); });
 }
 
 ProjectInformationView::~ProjectInformationView() = default;
@@ -140,8 +158,9 @@ void ProjectInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _e
     Widget::designSystemChangeEvent(_event);
 
     setBackgroundColor(Ui::DesignSystem::color().surface());
+    d->content->setBackgroundColor(Ui::DesignSystem::color().surface());
 
-    d->content->widget()->layout()->setContentsMargins(
+    d->parametersPage->widget()->layout()->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
                   Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
             .toMargins());
@@ -160,6 +179,52 @@ void ProjectInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _e
     d->projectCover->setBackgroundColor(Ui::DesignSystem::color().background());
     d->projectCover->setTextColor(Ui::DesignSystem::color().onBackground());
     d->projectCover->setFixedSize((QSizeF(336, 510) * Ui::DesignSystem::scaleFactor()).toSize());
+}
+
+
+// ****
+
+
+class CoverImageCard::Implementation
+{
+public:
+    explicit Implementation(QWidget* _parent);
+
+
+    QAction* generateCoverAction = nullptr;
+};
+
+CoverImageCard::Implementation::Implementation(QWidget* _parent)
+    : generateCoverAction(new QAction(_parent))
+{
+}
+
+
+// **
+
+
+CoverImageCard::CoverImageCard(QWidget* _parent)
+    : ImageCard(_parent)
+    , d(new Implementation(this))
+{
+    connect(d->generateCoverAction, &QAction::triggered, this,
+            &CoverImageCard::generateCoverPressed);
+}
+
+CoverImageCard::~CoverImageCard() = default;
+
+QVector<QAction*> CoverImageCard::contextMenuActions() const
+{
+    auto actions = ImageCard::contextMenuActions();
+    actions.prepend(d->generateCoverAction);
+    return actions;
+}
+
+void CoverImageCard::updateTranslations()
+{
+    ImageCard::updateTranslations();
+
+    d->generateCoverAction->setText(tr("Generate"));
 }
 
 } // namespace Ui

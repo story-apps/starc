@@ -6,27 +6,52 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
+#include <ui/widgets/image/image_cropping_dialog.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/splitter/splitter.h>
+#include <ui/widgets/task_bar/task_bar.h>
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/tools/debouncer.h>
 
+#include <QAction>
+#include <QApplication>
 #include <QBoxLayout>
+#include <QClipboard>
+#include <QFileDialog>
 #include <QPainter>
 #include <QResizeEvent>
+#include <QSettings>
+#include <QStandardPaths>
 
 
 namespace Ui {
 
 namespace {
 const QSizeF kCoverSize(5.4, 8);
-}
+const QString kImagesPathKey = QLatin1String("widgets/image-card/files-path");
+} // namespace
 
 class CoverGeneratorView::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(CoverGeneratorView* _q);
+
+    /**
+     * @brief Обновить настройки UI панели инструментов
+     */
+    void updateToolbarUi();
+    void updateToolbarPositon();
+
+    /**
+     * @brief Загрузить изображение по ссылке или из файла
+     */
+    void loadImage(const QString& _url);
+
+    /**
+     * @brief Обрезать заданное изображение
+     */
+    void cropImage(const QPixmap& _image);
 
     /**
      * @brief Растянуть карточку обложки на всю доступную область
@@ -39,6 +64,8 @@ public:
     void updateCover();
 
 
+    CoverGeneratorView* q = nullptr;
+
     Splitter* splitter = nullptr;
 
     FloatingToolBar* toolbar = nullptr;
@@ -50,14 +77,18 @@ public:
 
     CoverGeneratorSidebar* sidebar = nullptr;
     Debouncer coverParametersDebouncer;
+    QString imageCopyright;
+    QPixmap backgroundImage;
 };
 
-CoverGeneratorView::Implementation::Implementation(QWidget* _parent)
-    : splitter(new Splitter(_parent))
-    , coverBackground(new Widget(_parent))
-    , coverCard(new Card(_parent))
-    , coverImage(new ImageLabel(_parent))
-    , sidebar(new CoverGeneratorSidebar(_parent))
+CoverGeneratorView::Implementation::Implementation(CoverGeneratorView* _q)
+    : q(_q)
+    , splitter(new Splitter(_q))
+    , toolbar(new FloatingToolBar(_q))
+    , coverBackground(new Widget(_q))
+    , coverCard(new Card(_q))
+    , coverImage(new ImageLabel(_q))
+    , sidebar(new CoverGeneratorSidebar(_q))
     , coverParametersDebouncer(300)
 {
     splitter->setWidgets(coverBackground, sidebar);
@@ -74,6 +105,82 @@ CoverGeneratorView::Implementation::Implementation(QWidget* _parent)
     coverLayout->setSpacing(0);
     coverLayout->addWidget(coverCard, 0, Qt::AlignCenter);
     coverBackground->setLayout(coverLayout);
+}
+
+void CoverGeneratorView::Implementation::updateToolbarUi()
+{
+    toolbar->resize(toolbar->sizeHint());
+    updateToolbarPositon();
+    toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
+    toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
+    toolbar->raise();
+}
+
+void CoverGeneratorView::Implementation::updateToolbarPositon()
+{
+    toolbar->move(QPointF(q->isLeftToRight()
+                              ? Ui::DesignSystem::layout().px24()
+                              : q->width() - toolbar->width() - Ui::DesignSystem::layout().px24(),
+                          Ui::DesignSystem::layout().px24())
+                      .toPoint());
+}
+
+void CoverGeneratorView::Implementation::loadImage(const QString& _url)
+{
+    //
+    // Обрабатываем ссылки
+    //
+    if (_url.startsWith("http")) {
+        NetworkRequest* request = new NetworkRequest;
+        connect(request, &NetworkRequest::downloadComplete, q,
+                [this](const QByteArray& _imageData) {
+                    QPixmap image;
+                    image.loadFromData(_imageData);
+                    cropImage(image);
+                });
+        connect(request, &NetworkRequest::downloadProgress, q,
+                [_url](int _progress) { TaskBar::setTaskProgress(_url, _progress); });
+        connect(request, &NetworkRequest::finished, request, [request, _url] {
+            TaskBar::finishTask(_url);
+            request->deleteLater();
+        });
+        TaskBar::addTask(_url);
+        TaskBar::setTaskTitle(_url, tr("Loading image"));
+        request->loadAsync(_url);
+        return;
+    }
+
+    //
+    // Обрабатываем локальные файлы
+    //
+    if (!QFile::exists(_url)) {
+        return;
+    }
+    cropImage(QPixmap(_url));
+}
+
+void CoverGeneratorView::Implementation::cropImage(const QPixmap& _image)
+{
+    if (_image.isNull()) {
+        return;
+    }
+
+    auto dlg = new ImageCroppingDialog(q->window());
+    dlg->setImage(_image);
+    dlg->setImageProportion(kCoverSize);
+    dlg->setImageProportionFixed(true);
+    dlg->setImageCroppingText(tr("Select an area for cover background"));
+    if (!imageCopyright.isEmpty()) {
+        dlg->setImageCroppingNote(imageCopyright);
+        imageCopyright.clear();
+    }
+    connect(dlg, &ImageCroppingDialog::disappeared, dlg, &ImageCroppingDialog::deleteLater);
+    connect(dlg, &ImageCroppingDialog::imageSelected, q, [this](const QPixmap& _image) {
+        backgroundImage = _image;
+        updateCover();
+    });
+
+    dlg->showDialog();
 }
 
 void CoverGeneratorView::Implementation::updateCoverCardSize()
@@ -99,8 +206,8 @@ void CoverGeneratorView::Implementation::updateCover()
     //
     // Рисуем фон
     //
-    if (!sidebar->backgroundImage().isNull()) {
-        painter.drawPixmap(0, 0, coverSize.width(), coverSize.height(), sidebar->backgroundImage());
+    if (!backgroundImage.isNull()) {
+        painter.drawPixmap(0, 0, coverSize.width(), coverSize.height(), backgroundImage);
     } else {
         cover.fill(coverImage->backgroundColor());
     }
@@ -117,9 +224,8 @@ void CoverGeneratorView::Implementation::updateCover()
         const auto height
             = TextHelper::heightForWidth(_parameters.text, _parameters.font, availableWidth);
         const QRectF rect(margin, _top > 0 ? _top : _bottom - height, availableWidth, height);
-        painter.drawText(
-            rect, Qt::TextWordWrap | Qt::TextWrapAnywhere | Qt::AlignVCenter | _parameters.align,
-            _parameters.text);
+        painter.drawText(rect, Qt::TextWordWrap | Qt::AlignVCenter | _parameters.align,
+                         _parameters.text);
 
         return rect;
     };
@@ -150,6 +256,26 @@ CoverGeneratorView::CoverGeneratorView(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
+    auto saveAction = new QAction;
+    saveAction->setIconText(u8"\U000F012C");
+    d->toolbar->addAction(saveAction);
+    //
+    auto discardAction = new QAction;
+    discardAction->setIconText(u8"\U000F0156");
+    d->toolbar->addAction(discardAction);
+    //
+    auto separatorAction = new QAction;
+    separatorAction->setSeparator(true);
+    d->toolbar->addAction(separatorAction);
+    //
+    auto clearAction = new QAction;
+    clearAction->setIconText(u8"\U000F00E2");
+    d->toolbar->addAction(clearAction);
+    //
+    auto saveToFileAction = new QAction;
+    saveToFileAction->setIconText(u8"\U000F0193");
+    d->toolbar->addAction(saveToFileAction);
+
     d->coverBackground->installEventFilter(this);
 
     auto layout = new QHBoxLayout;
@@ -159,13 +285,66 @@ CoverGeneratorView::CoverGeneratorView(QWidget* _parent)
     setLayout(layout);
 
 
+    connect(saveAction, &QAction::triggered, this, &CoverGeneratorView::savePressed);
+    connect(discardAction, &QAction::triggered, this, &CoverGeneratorView::discardPressed);
+    connect(clearAction, &QAction::triggered, this, [this] {
+        d->sidebar->clear();
+        d->backgroundImage = {};
+        d->updateCover();
+    });
+    connect(saveToFileAction, &QAction::triggered, this, [this] {
+        const auto imagesFolder
+            = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+        auto imagePath = QFileDialog::getSaveFileName(
+            this, tr("Select location for saving cover to file"), imagesFolder,
+            QString("%1 (*.png)").arg(tr("PNG image")));
+        if (imagePath.isEmpty()) {
+            return;
+        }
+
+        if (!imagePath.endsWith(".png", Qt::CaseInsensitive)) {
+            imagePath.append(".png");
+        }
+        d->cover.save(imagePath, "PNG");
+    });
+    //
     connect(d->sidebar, &CoverGeneratorSidebar::coverParametersChanged,
             &d->coverParametersDebouncer, &Debouncer::orderWork);
     connect(&d->coverParametersDebouncer, &Debouncer::gotWork, this, [this] { d->updateCover(); });
+    connect(d->sidebar, &CoverGeneratorSidebar::unsplashImageSelected, this,
+            [this](const QString& _url, const QString& _copyright) {
+                d->imageCopyright = _copyright;
+                d->loadImage(_url);
+            });
+    connect(d->sidebar, &CoverGeneratorSidebar::pasteImageFromClipboardPressed, this, [this] {
+        const auto image = QApplication::clipboard()->pixmap();
+        if (!image.isNull()) {
+            d->cropImage(image);
+            return;
+        }
+
+        d->loadImage(QApplication::clipboard()->text());
+    });
+    connect(d->sidebar, &CoverGeneratorSidebar::chooseImgeFromFilePressed, this, [this] {
+        QSettings settings;
+        const auto imagesFolder = settings.value(kImagesPathKey).toString();
+        const auto imagePath = QFileDialog::getOpenFileName(
+            this, tr("Select file for background image"), imagesFolder,
+            QString("%1 (*.png *.jpeg *.jpg *.bmp *.tiff *.tif *.gif)").arg(tr("Images")));
+        if (imagePath.isEmpty()) {
+            return;
+        }
+        settings.setValue(kImagesPathKey, imagePath);
+
+        d->loadImage(imagePath);
+    });
 }
 
-CoverGeneratorView::~CoverGeneratorView()
+CoverGeneratorView::~CoverGeneratorView() = default;
+
+const QPixmap& CoverGeneratorView::coverImage() const
 {
+    return d->cover;
 }
 
 bool CoverGeneratorView::eventFilter(QObject* _watched, QEvent* _event)
@@ -177,6 +356,13 @@ bool CoverGeneratorView::eventFilter(QObject* _watched, QEvent* _event)
     return Widget::eventFilter(_watched, _event);
 }
 
+void CoverGeneratorView::resizeEvent(QResizeEvent* _event)
+{
+    Widget::resizeEvent(_event);
+
+    d->updateToolbarPositon();
+}
+
 void CoverGeneratorView::updateTranslations()
 {
 }
@@ -184,6 +370,8 @@ void CoverGeneratorView::updateTranslations()
 void CoverGeneratorView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
+
+    d->updateToolbarUi();
 
     setBackgroundColor(Ui::DesignSystem::color().surface());
     d->coverBackground->setBackgroundColor(Ui::DesignSystem::color().surface());
