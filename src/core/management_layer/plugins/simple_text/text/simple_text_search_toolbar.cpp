@@ -261,28 +261,45 @@ void SimpleTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _
     //
     setActionCustomWidth(d->searchTextAction, textFieldWidth);
     d->searchText->setFixedWidth(textFieldWidth);
-    const auto searchLeft = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-        + Ui::DesignSystem::floatingToolBar().iconSize().width()
-        + Ui::DesignSystem::floatingToolBar().spacing();
+    const auto searchLeft = isLeftToRight()
+        ? (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+           + Ui::DesignSystem::floatingToolBar().iconSize().width()
+           + Ui::DesignSystem::floatingToolBar().spacing())
+        : (width() - Ui::DesignSystem::floatingToolBar().shadowMargins().right()
+           - Ui::DesignSystem::floatingToolBar().iconSize().width()
+           - Ui::DesignSystem::floatingToolBar().spacing())
+            - textFieldWidth;
     d->searchText->move(searchLeft, Ui::DesignSystem::floatingToolBar().shadowMargins().top());
 
-    const auto replaceLeft = searchLeft + d->searchText->width()
-        + Ui::DesignSystem::floatingToolBar().spacing()
-        + (Ui::DesignSystem::floatingToolBar().iconSize().width()
-           + Ui::DesignSystem::floatingToolBar().spacing())
-            * 3;
+    const auto replaceLeft = isLeftToRight()
+        ? (searchLeft + d->searchText->width() + Ui::DesignSystem::floatingToolBar().spacing()
+           + (Ui::DesignSystem::floatingToolBar().iconSize().width()
+              + Ui::DesignSystem::floatingToolBar().spacing())
+               * 3)
+        : (searchLeft - Ui::DesignSystem::floatingToolBar().spacing()
+           - (Ui::DesignSystem::floatingToolBar().iconSize().width()
+              + Ui::DesignSystem::floatingToolBar().spacing())
+               * 3
+           - textFieldWidth);
 
     setActionCustomWidth(d->replaceTextAction, textFieldWidth);
     d->replaceText->setFixedWidth(textFieldWidth);
     d->replaceText->move(replaceLeft, Ui::DesignSystem::floatingToolBar().shadowMargins().top());
     //
     setActionCustomWidth(d->replaceAction, replaceActionWidth);
-    d->replace->move(d->replaceText->geometry().right()
-                         + Ui::DesignSystem::floatingToolBar().spacing(),
-                     Ui::DesignSystem::floatingToolBar().shadowMargins().top()
-                         + Ui::DesignSystem::layout().px8());
+    d->replace->move(
+        isLeftToRight()
+            ? (d->replaceText->geometry().right() + Ui::DesignSystem::floatingToolBar().spacing())
+            : (d->replaceText->geometry().left() - Ui::DesignSystem::floatingToolBar().spacing()
+               - replaceActionWidth),
+        Ui::DesignSystem::floatingToolBar().shadowMargins().top()
+            + Ui::DesignSystem::layout().px8());
     setActionCustomWidth(d->replaceAllAction, replaceAllActionWidth);
-    d->replaceAll->move(d->replace->geometry().right(), d->replace->geometry().top());
+    d->replaceAll->move(isLeftToRight() ? d->replace->geometry().right()
+                                        : (d->replace->geometry().left()
+                                           - Ui::DesignSystem::floatingToolBar().spacing()
+                                           - replaceAllActionWidth),
+                        d->replace->geometry().top());
 
     resize(sizeHint());
 }

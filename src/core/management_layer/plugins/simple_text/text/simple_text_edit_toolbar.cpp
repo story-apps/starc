@@ -94,13 +94,13 @@ SimpleTextEditToolbar::SimpleTextEditToolbar(QWidget* _parent)
     d->fastFormatAction->setIconText(u8"\U000f0328");
     d->fastFormatAction->setCheckable(true);
     addAction(d->fastFormatAction);
-    connect(d->fastFormatAction, &QAction::toggled, this,
-            &SimpleTextEditToolbar::updateTranslations);
-    connect(d->fastFormatAction, &QAction::toggled, this,
-            &SimpleTextEditToolbar::fastFormatPanelVisibleChanged);
     connect(d->fastFormatAction, &QAction::toggled, this, [this](bool _checked) {
+        updateTranslations();
+
         d->paragraphTypeAction->setVisible(!_checked);
         designSystemChangeEvent(nullptr);
+
+        emit fastFormatPanelVisibleChanged(_checked);
     });
 
     d->searchAction->setIconText(u8"\U000f0349");

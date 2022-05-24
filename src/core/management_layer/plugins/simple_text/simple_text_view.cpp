@@ -274,10 +274,15 @@ void SimpleTextView::Implementation::updateToolbarPositon()
 {
     toolbar->move(QPointF(q->isLeftToRight()
                               ? Ui::DesignSystem::layout().px24()
-                              : q->width() - toolbar->width() - Ui::DesignSystem::layout().px24(),
+                              : (q->width() - toolbar->width() - Ui::DesignSystem::layout().px24()),
                           Ui::DesignSystem::layout().px24())
                       .toPoint());
-    searchManager->toolbar()->move(toolbar->pos());
+    searchManager->toolbar()->move(QPointF(q->isLeftToRight()
+                                               ? Ui::DesignSystem::layout().px24()
+                                               : (q->width() - searchManager->toolbar()->width()
+                                                  - Ui::DesignSystem::layout().px24()),
+                                           Ui::DesignSystem::layout().px24())
+                                       .toPoint());
 }
 
 void SimpleTextView::Implementation::updateToolbarCurrentParagraphTypeName()

@@ -367,6 +367,10 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     painter.setBrush(backgroundColor());
     painter.drawRoundedRect(backgroundRect, radius, radius);
 
+    if (actions().isEmpty()) {
+        return;
+    }
+
     //
     // Рисуем иконки
     //
