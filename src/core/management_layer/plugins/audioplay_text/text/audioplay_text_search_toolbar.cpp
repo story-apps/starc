@@ -80,14 +80,19 @@ void AudioplayTextSearchToolbar::Implementation::showPopup(AudioplayTextSearchTo
         + _parent->actionCustomWidth(searchInAction);
 
     const auto left = QPoint(
-        Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-            + Ui::DesignSystem::floatingToolBar().margins().left() + searchText->width()
-            + Ui::DesignSystem::floatingToolBar().spacing()
-            + (Ui::DesignSystem::floatingToolBar().iconSize().width()
-               + Ui::DesignSystem::floatingToolBar().spacing())
-                * 4
-            - Ui::DesignSystem::floatingToolBar().spacing()
-            - Ui::DesignSystem::card().shadowMargins().left(),
+        _parent->isLeftToRight()
+            ? (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+               + Ui::DesignSystem::floatingToolBar().margins().left() + searchText->width()
+               + (Ui::DesignSystem::floatingToolBar().iconSize().width()
+                  + Ui::DesignSystem::floatingToolBar().spacing())
+                   * 4
+               - Ui::DesignSystem::card().shadowMargins().left())
+            : (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+               + Ui::DesignSystem::floatingToolBar().margins().left()
+               + _parent->actionCustomWidth(replaceAllAction)
+               + _parent->actionCustomWidth(replaceAction) + replaceText->width()
+               + Ui::DesignSystem::floatingToolBar().spacing() * 2
+               - Ui::DesignSystem::card().shadowMargins().left()),
         _parent->rect().bottom() - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
     const auto position = _parent->mapToGlobal(left)
         + QPointF(Ui::DesignSystem::textField().margins().left(),
@@ -182,9 +187,6 @@ AudioplayTextSearchToolbar::AudioplayTextSearchToolbar(QWidget* _parent)
     connect(d->replace, &Button::clicked, this, &AudioplayTextSearchToolbar::replaceOnePressed);
     addAction(d->replaceAllAction);
     connect(d->replaceAll, &Button::clicked, this, &AudioplayTextSearchToolbar::replaceAllPressed);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 AudioplayTextSearchToolbar::~AudioplayTextSearchToolbar() = default;
@@ -335,9 +337,13 @@ void AudioplayTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEvent
     //
     setActionCustomWidth(d->searchTextAction, textFieldWidth);
     d->searchText->setFixedWidth(textFieldWidth);
-    const auto searchLeft = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-        + Ui::DesignSystem::floatingToolBar().iconSize().width()
-        + Ui::DesignSystem::floatingToolBar().spacing();
+    const auto searchLeft = isLeftToRight()
+        ? (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+           + Ui::DesignSystem::floatingToolBar().iconSize().width()
+           + Ui::DesignSystem::floatingToolBar().spacing())
+        : (width() - Ui::DesignSystem::floatingToolBar().shadowMargins().right()
+           - Ui::DesignSystem::floatingToolBar().iconSize().width()
+           - Ui::DesignSystem::floatingToolBar().spacing() - textFieldWidth);
     d->searchText->move(searchLeft, Ui::DesignSystem::floatingToolBar().shadowMargins().top());
     //
     setActionCustomWidth(d->searchInAction, static_cast<int>(searchInActionWidth));
@@ -346,24 +352,37 @@ void AudioplayTextSearchToolbar::designSystemChangeEvent(DesignSystemChangeEvent
     d->popup->setTextColor(Ui::DesignSystem::color().onBackground());
 
 
-    const auto replaceLeft = searchLeft + d->searchText->width()
-        + Ui::DesignSystem::floatingToolBar().spacing()
-        + (Ui::DesignSystem::floatingToolBar().iconSize().width()
-           + Ui::DesignSystem::floatingToolBar().spacing())
-            * 3
-        + actionCustomWidth(d->searchInAction) + Ui::DesignSystem::floatingToolBar().spacing();
+    const auto replaceLeft = isLeftToRight()
+        ? (searchLeft + d->searchText->width() + Ui::DesignSystem::floatingToolBar().spacing()
+           + (Ui::DesignSystem::floatingToolBar().iconSize().width()
+              + Ui::DesignSystem::floatingToolBar().spacing())
+               * 3
+           + actionCustomWidth(d->searchInAction) + Ui::DesignSystem::floatingToolBar().spacing())
+        : (searchLeft - Ui::DesignSystem::floatingToolBar().spacing()
+           - (Ui::DesignSystem::floatingToolBar().iconSize().width()
+              + Ui::DesignSystem::floatingToolBar().spacing())
+               * 3
+           - actionCustomWidth(d->searchInAction) - Ui::DesignSystem::floatingToolBar().spacing()
+           - textFieldWidth);
 
     setActionCustomWidth(d->replaceTextAction, textFieldWidth);
     d->replaceText->setFixedWidth(textFieldWidth);
     d->replaceText->move(replaceLeft, Ui::DesignSystem::floatingToolBar().shadowMargins().top());
     //
     setActionCustomWidth(d->replaceAction, replaceActionWidth);
-    d->replace->move(d->replaceText->geometry().right()
-                         + Ui::DesignSystem::floatingToolBar().spacing(),
-                     Ui::DesignSystem::floatingToolBar().shadowMargins().top()
-                         + Ui::DesignSystem::layout().px8());
+    d->replace->move(
+        isLeftToRight()
+            ? (d->replaceText->geometry().right() + Ui::DesignSystem::floatingToolBar().spacing())
+            : (d->replaceText->geometry().left() - Ui::DesignSystem::floatingToolBar().spacing()
+               - replaceActionWidth),
+        Ui::DesignSystem::floatingToolBar().shadowMargins().top()
+            + Ui::DesignSystem::layout().px8());
     setActionCustomWidth(d->replaceAllAction, replaceAllActionWidth);
-    d->replaceAll->move(d->replace->geometry().right(), d->replace->geometry().top());
+    d->replaceAll->move(isLeftToRight() ? d->replace->geometry().right()
+                                        : (d->replace->geometry().left()
+                                           - Ui::DesignSystem::floatingToolBar().spacing()
+                                           - replaceAllActionWidth),
+                        d->replace->geometry().top());
 
     resize(sizeHint());
 }

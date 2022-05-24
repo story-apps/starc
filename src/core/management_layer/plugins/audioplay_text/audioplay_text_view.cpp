@@ -61,7 +61,7 @@ const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 class AudioplayTextView::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(AudioplayTextView* _q);
 
     /**
      * @brief Переконфигурировать представление
@@ -77,7 +77,8 @@ public:
     /**
      * @brief Обновить настройки UI панели инструментов
      */
-    void updateToolBarUi();
+    void updateToolbarUi();
+    void updateToolbarPositon();
 
     /**
      * @brief Обновить текущий отображаемый тип абзаца в панели инструментов
@@ -92,7 +93,7 @@ public:
     /**
      * @brief Обновить видимость и положение панели инструментов рецензирования
      */
-    void updateCommentsToolBar();
+    void updateCommentsToolbar();
 
     /**
      * @brief Обновить видимость боковой панели (показана, если показана хотя бы одна из вложенных
@@ -107,6 +108,8 @@ public:
                        const QString& _comment);
 
 
+    AudioplayTextView* q = nullptr;
+
     //
     // Модели
     //
@@ -117,7 +120,7 @@ public:
     //
     // Редактор текста
     //
-    AudioplayTextEdit* audioplayText = nullptr;
+    AudioplayTextEdit* textEdit = nullptr;
     AudioplayTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
     AudioplayTextScrollBarManager* audioplayTextScrollbarManager = nullptr;
@@ -154,36 +157,37 @@ public:
     QAction* showBookmarksAction = nullptr;
 };
 
-AudioplayTextView::Implementation::Implementation(QWidget* _parent)
-    : commentsModel(new BusinessLayer::CommentsModel(_parent))
-    , bookmarksModel(new BusinessLayer::BookmarksModel(_parent))
-    , audioplayText(new AudioplayTextEdit(_parent))
-    , shortcutsManager(audioplayText)
-    , scalableWrapper(new ScalableWrapper(audioplayText, _parent))
+AudioplayTextView::Implementation::Implementation(AudioplayTextView* _q)
+    : q(_q)
+    , commentsModel(new BusinessLayer::CommentsModel(_q))
+    , bookmarksModel(new BusinessLayer::BookmarksModel(_q))
+    , textEdit(new AudioplayTextEdit(_q))
+    , shortcutsManager(textEdit)
+    , scalableWrapper(new ScalableWrapper(textEdit, _q))
     , audioplayTextScrollbarManager(new AudioplayTextScrollBarManager(scalableWrapper))
-    , toolbar(new AudioplayTextEditToolbar(scalableWrapper))
-    , searchManager(new BusinessLayer::AudioplayTextSearchManager(scalableWrapper, audioplayText))
-    , toolbarAnimation(new FloatingToolbarAnimator(_parent))
+    , toolbar(new AudioplayTextEditToolbar(_q))
+    , searchManager(new BusinessLayer::AudioplayTextSearchManager(scalableWrapper, textEdit))
+    , toolbarAnimation(new FloatingToolbarAnimator(_q))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
-    , commentsToolbar(new CommentsToolbar(_parent))
+    , commentsToolbar(new CommentsToolbar(_q))
     , sidebarShadow(new Shadow(Qt::RightEdge, scalableWrapper))
-    , sidebarWidget(new Widget(_parent))
-    , sidebarTabs(new TabBar(_parent))
-    , sidebarContent(new StackWidget(_parent))
-    , fastFormatWidget(new AudioplayTextFastFormatWidget(_parent))
-    , commentsView(new CommentsView(_parent))
-    , bookmarksView(new BookmarksView(_parent))
-    , splitter(new Splitter(_parent))
+    , sidebarWidget(new Widget(_q))
+    , sidebarTabs(new TabBar(_q))
+    , sidebarContent(new StackWidget(_q))
+    , fastFormatWidget(new AudioplayTextFastFormatWidget(_q))
+    , commentsView(new CommentsView(_q))
+    , bookmarksView(new BookmarksView(_q))
+    , splitter(new Splitter(_q))
     //
-    , showBookmarksAction(new QAction(_parent))
+    , showBookmarksAction(new QAction(_q))
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
 
     commentsToolbar->hide();
 
-    audioplayText->setVerticalScrollBar(new ScrollBar);
-    audioplayText->setHorizontalScrollBar(new ScrollBar);
+    textEdit->setVerticalScrollBar(new ScrollBar);
+    textEdit->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
     //
     // Вертикальный скрол настраивается менеджером audioplayTextScrollbarManager
@@ -192,7 +196,7 @@ AudioplayTextView::Implementation::Implementation(QWidget* _parent)
     scalableWrapper->initScrollBarsSyncing();
     audioplayTextScrollbarManager->initScrollBarsSyncing();
 
-    audioplayText->setUsePageMode(true);
+    textEdit->setUsePageMode(true);
 
     sidebarWidget->hide();
     sidebarTabs->setFixed(false);
@@ -245,17 +249,17 @@ void AudioplayTextView::Implementation::reconfigureTemplate(bool _withModelReini
     shortcutsManager.reconfigure();
 
     if (_withModelReinitialization) {
-        audioplayText->reinit();
+        textEdit->reinit();
     }
 }
 
 void AudioplayTextView::Implementation::reconfigureBlockNumbersVisibility()
 {
     if (model && model->informationModel()) {
-        audioplayText->setShowBlockNumbers(model->informationModel()->showBlockNumbers(),
-                                           model->informationModel()->continueBlockNumbers());
+        textEdit->setShowBlockNumbers(model->informationModel()->showBlockNumbers(),
+                                      model->informationModel()->continueBlockNumbers());
     } else {
-        audioplayText->setShowBlockNumbers(
+        textEdit->setShowBlockNumbers(
             settingsValue(DataStorageLayer::kComponentsAudioplayEditorShowBlockNumbersKey).toBool(),
             settingsValue(DataStorageLayer::kComponentsAudioplayEditorContinueBlockNumbersKey)
                 .toBool());
@@ -268,16 +272,13 @@ void AudioplayTextView::Implementation::updateOptionsTranslations()
                                                                   : tr("Show bookmarks list"));
 }
 
-void AudioplayTextView::Implementation::updateToolBarUi()
+void AudioplayTextView::Implementation::updateToolbarUi()
 {
-    toolbar->move(
-        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
+    updateToolbarPositon();
     toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
     toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     toolbar->raise();
 
-    searchManager->toolbar()->move(
-        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
     searchManager->toolbar()->setBackgroundColor(Ui::DesignSystem::color().background());
     searchManager->toolbar()->setTextColor(Ui::DesignSystem::color().onBackground());
     searchManager->toolbar()->raise();
@@ -288,12 +289,27 @@ void AudioplayTextView::Implementation::updateToolBarUi()
     commentsToolbar->setBackgroundColor(Ui::DesignSystem::color().background());
     commentsToolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     commentsToolbar->raise();
-    updateCommentsToolBar();
+    updateCommentsToolbar();
+}
+
+void AudioplayTextView::Implementation::updateToolbarPositon()
+{
+    toolbar->move(QPointF(q->isLeftToRight()
+                              ? Ui::DesignSystem::layout().px24()
+                              : (q->width() - toolbar->width() - Ui::DesignSystem::layout().px24()),
+                          Ui::DesignSystem::layout().px24())
+                      .toPoint());
+    searchManager->toolbar()->move(QPointF(q->isLeftToRight()
+                                               ? Ui::DesignSystem::layout().px24()
+                                               : (q->width() - searchManager->toolbar()->width()
+                                                  - Ui::DesignSystem::layout().px24()),
+                                           Ui::DesignSystem::layout().px24())
+                                       .toPoint());
 }
 
 void AudioplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 {
-    auto paragraphType = audioplayText->currentParagraphType();
+    auto paragraphType = textEdit->currentParagraphType();
     if (currentParagraphType == paragraphType) {
         return;
     }
@@ -323,7 +339,7 @@ void AudioplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 
 void AudioplayTextView::Implementation::updateTextEditPageMargins()
 {
-    if (audioplayText->usePageMode()) {
+    if (textEdit->usePageMode()) {
         return;
     }
 
@@ -332,12 +348,12 @@ void AudioplayTextView::Implementation::updateTextEditPageMargins()
                      12 / scalableWrapper->zoomRange()
                          + MeasurementHelper::pxToMm(scalableWrapper->verticalScrollBar()->width()),
                      5 };
-    audioplayText->setPageMarginsMm(pageMargins);
+    textEdit->setPageMarginsMm(pageMargins);
 }
 
-void AudioplayTextView::Implementation::updateCommentsToolBar()
+void AudioplayTextView::Implementation::updateCommentsToolbar()
 {
-    if (!toolbar->isCommentsModeEnabled() || !audioplayText->textCursor().hasSelection()) {
+    if (!toolbar->isCommentsModeEnabled() || !textEdit->textCursor().hasSelection()) {
         commentsToolbar->hideToolbar();
         return;
     }
@@ -345,20 +361,25 @@ void AudioplayTextView::Implementation::updateCommentsToolBar()
     //
     // Определяем точку на границе страницы, либо если страница не влезает в экран, то с боку экрана
     //
-    const int x = (audioplayText->width() - audioplayText->viewport()->width()) / 2
-        + audioplayText->viewport()->width() - commentsToolbar->width();
+    const int x = (q->isLeftToRight() ? ((textEdit->width() - textEdit->viewport()->width()) / 2
+                                         + textEdit->viewport()->width())
+                                      : ((textEdit->width() - textEdit->viewport()->width()) / 2))
+        - commentsToolbar->width();
     const qreal textRight = scalableWrapper->mapFromEditor(QPoint(x, 0)).x();
-    const auto cursorRect = audioplayText->cursorRect();
-    const auto globalCursorCenter = audioplayText->mapToGlobal(cursorRect.center());
+    const auto cursorRect = textEdit->cursorRect();
+    const auto globalCursorCenter = textEdit->mapToGlobal(cursorRect.center());
     const auto localCursorCenter
         = commentsToolbar->parentWidget()->mapFromGlobal(globalCursorCenter);
     //
     // И смещаем панель рецензирования к этой точке
     //
-    commentsToolbar->moveToolbar(QPoint(std::min(scalableWrapper->width() - commentsToolbar->width()
-                                                     - Ui::DesignSystem::layout().px24(),
-                                                 textRight),
-                                        localCursorCenter.y() - (commentsToolbar->height() / 3)));
+    commentsToolbar->moveToolbar(QPoint(
+        q->isLeftToRight()
+            ? std::min(scalableWrapper->width() - commentsToolbar->width()
+                           - Ui::DesignSystem::layout().px24(),
+                       textRight)
+            : sidebarWidget->width() + std::max(Ui::DesignSystem::layout().px24(), textRight),
+        localCursorCenter.y() - (commentsToolbar->height() / 3)));
 
     //
     // Если панель ещё не была показана, отобразим её
@@ -392,22 +413,22 @@ void AudioplayTextView::Implementation::addReviewMark(const QColor& _textColor,
     //
     const auto textColor
         = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
-    audioplayText->addReviewMark(textColor, _backgroundColor, _comment);
+    textEdit->addReviewMark(textColor, _backgroundColor, _comment);
 
     //
     // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение
     // добавлено
     //
-    BusinessLayer::TextCursor cursor(audioplayText->textCursor());
+    BusinessLayer::TextCursor cursor(textEdit->textCursor());
     const auto selectionInterval = cursor.selectionInterval();
     //
     // ... делаем танец с бубном, чтобы получить сигнал об обновлении позиции курсора
     //     и выделить новую заметку в общем списке
     //
     cursor.setPosition(selectionInterval.to);
-    audioplayText->setTextCursorReimpl(cursor);
+    textEdit->setTextCursorReimpl(cursor);
     cursor.setPosition(selectionInterval.from);
-    audioplayText->setTextCursorReimpl(cursor);
+    textEdit->setTextCursorReimpl(cursor);
 
     //
     // Фокусируем редактор сценария, чтобы пользователь мог продолжать работать с ним
@@ -440,19 +461,20 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->splitter);
 
-    connect(d->toolbar, &AudioplayTextEditToolbar::undoPressed, d->audioplayText,
+    connect(d->toolbar, &AudioplayTextEditToolbar::undoPressed, d->textEdit,
             &AudioplayTextEdit::undo);
-    connect(d->toolbar, &AudioplayTextEditToolbar::redoPressed, d->audioplayText,
+    connect(d->toolbar, &AudioplayTextEditToolbar::redoPressed, d->textEdit,
             &AudioplayTextEdit::redo);
     connect(d->toolbar, &AudioplayTextEditToolbar::paragraphTypeChanged, this,
             [this](const QModelIndex& _index) {
                 const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
-                d->audioplayText->setCurrentParagraphType(type);
+                d->textEdit->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();
             });
     connect(d->toolbar, &AudioplayTextEditToolbar::fastFormatPanelVisibleChanged, this,
             [this](bool _visible) {
+                d->updateToolbarPositon();
                 d->sidebarTabs->setTabVisible(kFastFormatTabIndex, _visible);
                 d->fastFormatWidget->setVisible(_visible);
                 if (_visible) {
@@ -468,7 +490,7 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
                 if (_enabled) {
                     d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
                     d->sidebarContent->setCurrentWidget(d->commentsView);
-                    d->updateCommentsToolBar();
+                    d->updateCommentsToolbar();
                 }
                 d->updateSideBarVisibility(this);
             });
@@ -507,11 +529,11 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
     connect(d->commentsView, &CommentsView::commentSelected, this,
             [this](const QModelIndex& _index) {
                 const auto positionHint = d->commentsModel->mapToModel(_index);
-                const auto position = d->audioplayText->positionForModelIndex(positionHint.index)
+                const auto position = d->textEdit->positionForModelIndex(positionHint.index)
                     + positionHint.blockPosition;
-                auto cursor = d->audioplayText->textCursor();
+                auto cursor = d->textEdit->textCursor();
                 cursor.setPosition(position);
-                d->audioplayText->ensureCursorVisible(cursor);
+                d->textEdit->ensureCursorVisible(cursor);
                 d->scalableWrapper->setFocus();
             });
     connect(d->commentsView, &CommentsView::markAsDoneRequested, this,
@@ -539,10 +561,10 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
     connect(d->bookmarksView, &BookmarksView::bookmarkSelected, this,
             [this](const QModelIndex& _index) {
                 const auto index = d->bookmarksModel->mapToModel(_index);
-                const auto position = d->audioplayText->positionForModelIndex(index);
-                auto cursor = d->audioplayText->textCursor();
+                const auto position = d->textEdit->positionForModelIndex(index);
+                auto cursor = d->textEdit->textCursor();
                 cursor.setPosition(position);
-                d->audioplayText->ensureCursorVisible(cursor);
+                d->textEdit->ensureCursorVisible(cursor);
                 d->scalableWrapper->setFocus();
             });
     connect(d->bookmarksView, &BookmarksView::removeRequested, this,
@@ -573,19 +595,19 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
             [this](const QModelIndex& _index) {
                 const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
-                d->audioplayText->setCurrentParagraphType(type);
+                d->textEdit->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();
             });
     //
     connect(d->scalableWrapper->verticalScrollBar(), &QScrollBar::valueChanged, this,
-            [this] { d->updateCommentsToolBar(); });
+            [this] { d->updateCommentsToolbar(); });
     connect(d->scalableWrapper->horizontalScrollBar(), &QScrollBar::valueChanged, this,
-            [this] { d->updateCommentsToolBar(); });
+            [this] { d->updateCommentsToolbar(); });
     connect(
         d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this,
         [this] {
             d->updateTextEditPageMargins();
-            d->updateCommentsToolBar();
+            d->updateCommentsToolbar();
         },
         Qt::QueuedConnection);
     //
@@ -597,12 +619,12 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
         //
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
-        const auto audioplayModelIndex = d->audioplayText->currentModelIndex();
+        const auto audioplayModelIndex = d->textEdit->currentModelIndex();
         emit currentModelIndexChanged(audioplayModelIndex);
         //
         // Если необходимо выберем соответствующий комментарий
         //
-        const auto positionInBlock = d->audioplayText->textCursor().positionInBlock();
+        const auto positionInBlock = d->textEdit->textCursor().positionInBlock();
         const auto commentModelIndex
             = d->commentsModel->mapFromModel(audioplayModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
@@ -612,13 +634,13 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
         const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(audioplayModelIndex);
         d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
     };
-    connect(d->audioplayText, &AudioplayTextEdit::paragraphTypeChanged, this,
+    connect(d->textEdit, &AudioplayTextEdit::paragraphTypeChanged, this,
             handleCursorPositionChanged);
-    connect(d->audioplayText, &AudioplayTextEdit::cursorPositionChanged, this,
+    connect(d->textEdit, &AudioplayTextEdit::cursorPositionChanged, this,
             handleCursorPositionChanged);
-    connect(d->audioplayText, &AudioplayTextEdit::selectionChanged, this,
-            [this] { d->updateCommentsToolBar(); });
-    connect(d->audioplayText, &AudioplayTextEdit::addBookmarkRequested, this, [this] {
+    connect(d->textEdit, &AudioplayTextEdit::selectionChanged, this,
+            [this] { d->updateCommentsToolbar(); });
+    connect(d->textEdit, &AudioplayTextEdit::addBookmarkRequested, this, [this] {
         //
         // Если список закладок показан, добавляем новую через него
         //
@@ -632,7 +654,7 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
             emit addBookmarkRequested();
         }
     });
-    connect(d->audioplayText, &AudioplayTextEdit::editBookmarkRequested, this, [this] {
+    connect(d->textEdit, &AudioplayTextEdit::editBookmarkRequested, this, [this] {
         //
         // Если список закладок показан, редактируем через него
         //
@@ -647,9 +669,9 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
             emit addBookmarkRequested();
         }
     });
-    connect(d->audioplayText, &AudioplayTextEdit::removeBookmarkRequested, this,
+    connect(d->textEdit, &AudioplayTextEdit::removeBookmarkRequested, this,
             &AudioplayTextView::removeBookmarkRequested);
-    connect(d->audioplayText, &AudioplayTextEdit::showBookmarksRequested, d->showBookmarksAction,
+    connect(d->textEdit, &AudioplayTextEdit::showBookmarksRequested, d->showBookmarksAction,
             &QAction::toggle);
     //
     connect(d->showBookmarksAction, &QAction::toggled, this, [this](bool _checked) {
@@ -691,7 +713,7 @@ QVector<QAction*> AudioplayTextView::options() const
 
 void AudioplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
-    UiHelper::initSpellingFor(d->audioplayText);
+    UiHelper::initSpellingFor(d->textEdit);
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
@@ -707,7 +729,7 @@ void AudioplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->reconfigureBlockNumbersVisibility();
     }
     if (_changedSettingsKeys.isEmpty()) {
-        d->audioplayText->setCorrectionOptions(true);
+        d->textEdit->setCorrectionOptions(true);
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
@@ -719,26 +741,26 @@ void AudioplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationShowDocumentsPagesKey)) {
         const auto usePageMode
             = settingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey).toBool();
-        d->audioplayText->setUsePageMode(usePageMode);
+        d->textEdit->setUsePageMode(usePageMode);
         if (usePageMode) {
-            d->audioplayText->reinit();
+            d->textEdit->reinit();
         } else {
             d->updateTextEditPageMargins();
         }
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationHighlightCurrentLineKey)) {
-        d->audioplayText->setHighlightCurrentLine(
+        d->textEdit->setHighlightCurrentLine(
             settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationFocusCurrentParagraphKey)) {
-        d->audioplayText->setFocusCurrentParagraph(
+        d->textEdit->setFocusCurrentParagraph(
             settingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey).toBool());
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationUseTypewriterScrollingKey)) {
-        d->audioplayText->setUseTypewriterScrolling(
+        d->textEdit->setUseTypewriterScrolling(
             settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
     }
 }
@@ -805,7 +827,7 @@ void AudioplayTextView::setModel(BusinessLayer::AudioplayTextModel* _model)
                 [this] { d->reconfigureBlockNumbersVisibility(); });
     }
 
-    d->audioplayText->initWithModel(d->model);
+    d->textEdit->initWithModel(d->model);
     d->audioplayTextScrollbarManager->setModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);
@@ -815,41 +837,41 @@ void AudioplayTextView::setModel(BusinessLayer::AudioplayTextModel* _model)
 
 QModelIndex AudioplayTextView::currentModelIndex() const
 {
-    return d->audioplayText->currentModelIndex();
+    return d->textEdit->currentModelIndex();
 }
 
 void AudioplayTextView::setCurrentModelIndex(const QModelIndex& _index)
 {
-    d->audioplayText->setCurrentModelIndex(_index);
+    d->textEdit->setCurrentModelIndex(_index);
 }
 
 int AudioplayTextView::cursorPosition() const
 {
-    return d->audioplayText->textCursor().position();
+    return d->textEdit->textCursor().position();
 }
 
 void AudioplayTextView::setCursorPosition(int _position)
 {
-    auto cursor = d->audioplayText->textCursor();
+    auto cursor = d->textEdit->textCursor();
     cursor.setPosition(_position);
-    d->audioplayText->ensureCursorVisible(cursor, false);
+    d->textEdit->ensureCursorVisible(cursor, false);
 }
 
 int AudioplayTextView::verticalScroll() const
 {
-    return d->audioplayText->verticalScrollBar()->value();
+    return d->textEdit->verticalScrollBar()->value();
 }
 
 void AudioplayTextView::setverticalScroll(int _value)
 {
-    d->audioplayText->verticalScrollBar()->setValue(_value);
+    d->textEdit->verticalScrollBar()->setValue(_value);
 }
 
 bool AudioplayTextView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->scalableWrapper) {
         if (_event->type() == QEvent::Resize) {
-            QTimer::singleShot(0, this, [this] { d->updateCommentsToolBar(); });
+            QTimer::singleShot(0, this, [this] { d->updateCommentsToolbar(); });
         } else if (_event->type() == QEvent::KeyPress && d->searchManager->toolbar()->isVisible()
                    && d->scalableWrapper->hasFocus()) {
             auto keyEvent = static_cast<QKeyEvent*>(_event);
@@ -866,11 +888,8 @@ void AudioplayTextView::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);
 
-    const auto toolbarPosition
-        = QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint();
-    d->toolbar->move(toolbarPosition);
-    d->searchManager->toolbar()->move(toolbarPosition);
-    d->updateCommentsToolBar();
+    d->updateToolbarPositon();
+    d->updateCommentsToolbar();
 }
 
 void AudioplayTextView::updateTranslations()
@@ -888,9 +907,9 @@ void AudioplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
-    d->updateToolBarUi();
+    d->updateToolbarUi();
 
-    d->audioplayText->setPageSpacing(Ui::DesignSystem::layout().px24());
+    d->textEdit->setPageSpacing(Ui::DesignSystem::layout().px24());
     QPalette palette;
     palette.setColor(QPalette::Window, Ui::DesignSystem::color().surface());
     palette.setColor(QPalette::Base, Ui::DesignSystem::color().textEditor());
@@ -898,11 +917,11 @@ void AudioplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().secondary());
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
     d->scalableWrapper->setPalette(palette);
-    d->audioplayText->setPalette(palette);
+    d->textEdit->setPalette(palette);
     palette.setColor(QPalette::Base, Qt::transparent);
-    d->audioplayText->viewport()->setPalette(palette);
-    d->audioplayText->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->audioplayText->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->textEdit->viewport()->setPalette(palette);
+    d->textEdit->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->textEdit->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
 
     d->splitter->setBackgroundColor(Ui::DesignSystem::color().background());
 
