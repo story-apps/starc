@@ -59,7 +59,7 @@ const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 class SimpleTextView::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(SimpleTextView* _q);
 
     /**
      * @brief Переконфигурировать представление
@@ -74,12 +74,13 @@ public:
     /**
      * @brief Обновить настройки UI панели инструментов
      */
-    void updateToolBarUi();
+    void updateToolbarUi();
+    void updateToolbarPositon();
 
     /**
      * @brief Обновить текущий отображаемый тип абзаца в панели инструментов
      */
-    void updateToolBarCurrentParagraphTypeName();
+    void updateToolbarCurrentParagraphTypeName();
 
     /**
      * @brief Обновить компоновку страницы
@@ -89,7 +90,7 @@ public:
     /**
      * @brief Обновить видимость и положение панели инструментов рецензирования
      */
-    void updateCommentsToolBar();
+    void updateCommentsToolbar();
 
     /**
      * @brief Обновить видимость боковой панели (показана, если показана хотя бы одна из вложенных
@@ -103,6 +104,8 @@ public:
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
                        const QString& _comment);
 
+
+    SimpleTextView* q = nullptr;
 
     //
     //  Модели
@@ -150,26 +153,27 @@ public:
     QAction* showBookmarksAction = nullptr;
 };
 
-SimpleTextView::Implementation::Implementation(QWidget* _parent)
-    : commentsModel(new BusinessLayer::CommentsModel(_parent))
-    , bookmarksModel(new BusinessLayer::BookmarksModel(_parent))
-    , textEdit(new SimpleTextEdit(_parent))
+SimpleTextView::Implementation::Implementation(SimpleTextView* _q)
+    : q(_q)
+    , commentsModel(new BusinessLayer::CommentsModel(_q))
+    , bookmarksModel(new BusinessLayer::BookmarksModel(_q))
+    , textEdit(new SimpleTextEdit(_q))
     , shortcutsManager(textEdit)
-    , scalableWrapper(new ScalableWrapper(textEdit, _parent))
-    , toolbar(new SimpleTextEditToolbar(scalableWrapper))
+    , scalableWrapper(new ScalableWrapper(textEdit, _q))
+    , toolbar(new SimpleTextEditToolbar(_q))
     , searchManager(new BusinessLayer::SimpleTextSearchManager(scalableWrapper, textEdit))
-    , toolbarAnimation(new FloatingToolbarAnimator(_parent))
+    , toolbarAnimation(new FloatingToolbarAnimator(_q))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
-    , commentsToolbar(new CommentsToolbar(_parent))
+    , commentsToolbar(new CommentsToolbar(_q))
     , sidebarShadow(new Shadow(Qt::RightEdge, scalableWrapper))
-    , sidebarWidget(new Widget(_parent))
-    , sidebarTabs(new TabBar(_parent))
-    , sidebarContent(new StackWidget(_parent))
-    , fastFormatWidget(new SimpleTextFastFormatWidget(_parent))
-    , commentsView(new CommentsView(_parent))
-    , bookmarksView(new BookmarksView(_parent))
-    , splitter(new Splitter(_parent))
-    , showBookmarksAction(new QAction(_parent))
+    , sidebarWidget(new Widget(_q))
+    , sidebarTabs(new TabBar(_q))
+    , sidebarContent(new StackWidget(_q))
+    , fastFormatWidget(new SimpleTextFastFormatWidget(_q))
+    , commentsView(new CommentsView(_q))
+    , bookmarksView(new BookmarksView(_q))
+    , splitter(new Splitter(_q))
+    , showBookmarksAction(new QAction(_q))
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
 
@@ -246,16 +250,13 @@ void SimpleTextView::Implementation::updateOptionsTranslations()
                                                                   : tr("Show bookmarks list"));
 }
 
-void SimpleTextView::Implementation::updateToolBarUi()
+void SimpleTextView::Implementation::updateToolbarUi()
 {
-    toolbar->move(
-        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
+    updateToolbarPositon();
     toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
     toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     toolbar->raise();
 
-    searchManager->toolbar()->move(
-        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
     searchManager->toolbar()->setBackgroundColor(Ui::DesignSystem::color().background());
     searchManager->toolbar()->setTextColor(Ui::DesignSystem::color().onBackground());
     searchManager->toolbar()->raise();
@@ -266,10 +267,20 @@ void SimpleTextView::Implementation::updateToolBarUi()
     commentsToolbar->setBackgroundColor(Ui::DesignSystem::color().background());
     commentsToolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     commentsToolbar->raise();
-    updateCommentsToolBar();
+    updateCommentsToolbar();
 }
 
-void SimpleTextView::Implementation::updateToolBarCurrentParagraphTypeName()
+void SimpleTextView::Implementation::updateToolbarPositon()
+{
+    toolbar->move(QPointF(q->isLeftToRight()
+                              ? Ui::DesignSystem::layout().px24()
+                              : q->width() - toolbar->width() - Ui::DesignSystem::layout().px24(),
+                          Ui::DesignSystem::layout().px24())
+                      .toPoint());
+    searchManager->toolbar()->move(toolbar->pos());
+}
+
+void SimpleTextView::Implementation::updateToolbarCurrentParagraphTypeName()
 {
     auto paragraphType = textEdit->currentParagraphType();
     if (currentParagraphType == paragraphType) {
@@ -301,7 +312,7 @@ void SimpleTextView::Implementation::updateTextEditPageMargins()
     textEdit->setPageMarginsMm(pageMargins);
 }
 
-void SimpleTextView::Implementation::updateCommentsToolBar()
+void SimpleTextView::Implementation::updateCommentsToolbar()
 {
     if (!toolbar->isCommentsModeEnabled() || !textEdit->textCursor().hasSelection()) {
         commentsToolbar->hideToolbar();
@@ -311,8 +322,10 @@ void SimpleTextView::Implementation::updateCommentsToolBar()
     //
     // Определяем точку на границе страницы, либо если страница не влезает в экран, то с боку экрана
     //
-    const int x = (textEdit->width() - textEdit->viewport()->width()) / 2
-        + textEdit->viewport()->width() - commentsToolbar->width();
+    const int x = (q->isLeftToRight() ? ((textEdit->width() - textEdit->viewport()->width()) / 2
+                                         + textEdit->viewport()->width())
+                                      : ((textEdit->width() - textEdit->viewport()->width()) / 2))
+        - commentsToolbar->width();
     const qreal textRight = scalableWrapper->mapFromEditor(QPoint(x, 0)).x();
     const auto cursorRect = textEdit->cursorRect();
     const auto globalCursorCenter = textEdit->mapToGlobal(cursorRect.center());
@@ -321,10 +334,13 @@ void SimpleTextView::Implementation::updateCommentsToolBar()
     //
     // И смещаем панель рецензирования к этой точке
     //
-    commentsToolbar->moveToolbar(QPoint(std::min(scalableWrapper->width() - commentsToolbar->width()
-                                                     - Ui::DesignSystem::layout().px24(),
-                                                 textRight),
-                                        localCursorCenter.y() - (commentsToolbar->height() / 3)));
+    commentsToolbar->moveToolbar(QPoint(
+        q->isLeftToRight()
+            ? std::min(scalableWrapper->width() - commentsToolbar->width()
+                           - Ui::DesignSystem::layout().px24(),
+                       textRight)
+            : sidebarWidget->width() + std::max(Ui::DesignSystem::layout().px24(), textRight),
+        localCursorCenter.y() - (commentsToolbar->height() / 3)));
 
     //
     // Если панель ещё не была показана, отобразим её
@@ -417,6 +433,7 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
             });
     connect(d->toolbar, &SimpleTextEditToolbar::fastFormatPanelVisibleChanged, this,
             [this](bool _visible) {
+                d->updateToolbarPositon();
                 d->sidebarTabs->setTabVisible(kFastFormatTabIndex, _visible);
                 d->fastFormatWidget->setVisible(_visible);
                 if (_visible) {
@@ -432,7 +449,7 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
                 if (_enabled) {
                     d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
                     d->sidebarContent->setCurrentWidget(d->commentsView);
-                    d->updateCommentsToolBar();
+                    d->updateCommentsToolbar();
                 }
                 d->updateSideBarVisibility(this);
             });
@@ -541,14 +558,14 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
             });
     //
     connect(d->scalableWrapper->verticalScrollBar(), &QScrollBar::valueChanged, this,
-            [this] { d->updateCommentsToolBar(); });
+            [this] { d->updateCommentsToolbar(); });
     connect(d->scalableWrapper->horizontalScrollBar(), &QScrollBar::valueChanged, this,
-            [this] { d->updateCommentsToolBar(); });
+            [this] { d->updateCommentsToolbar(); });
     connect(
         d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this,
         [this] {
             d->updateTextEditPageMargins();
-            d->updateCommentsToolBar();
+            d->updateCommentsToolbar();
         },
         Qt::QueuedConnection);
     //
@@ -556,7 +573,7 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
         //
         // Обновим состояние панелей форматов
         //
-        d->updateToolBarCurrentParagraphTypeName();
+        d->updateToolbarCurrentParagraphTypeName();
         //
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
@@ -578,7 +595,7 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
     connect(d->textEdit, &SimpleTextEdit::paragraphTypeChanged, this, handleCursorPositionChanged);
     connect(d->textEdit, &SimpleTextEdit::cursorPositionChanged, this, handleCursorPositionChanged);
     connect(d->textEdit, &SimpleTextEdit::selectionChanged, this,
-            [this] { d->updateCommentsToolBar(); });
+            [this] { d->updateCommentsToolbar(); });
     connect(d->textEdit, &SimpleTextEdit::addBookmarkRequested, this, [this] {
         //
         // Если список закладок показан, добавляем новую через него
@@ -744,7 +761,7 @@ void SimpleTextView::setModel(BusinessLayer::SimpleTextModel* _model)
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);
 
-    d->updateToolBarCurrentParagraphTypeName();
+    d->updateToolbarCurrentParagraphTypeName();
 }
 
 QModelIndex SimpleTextView::currentModelIndex() const
@@ -783,7 +800,7 @@ bool SimpleTextView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->scalableWrapper) {
         if (_event->type() == QEvent::Resize) {
-            QTimer::singleShot(0, this, [this] { d->updateCommentsToolBar(); });
+            QTimer::singleShot(0, this, [this] { d->updateCommentsToolbar(); });
         } else if (_event->type() == QEvent::KeyPress && d->searchManager->toolbar()->isVisible()
                    && d->scalableWrapper->hasFocus()) {
             auto keyEvent = static_cast<QKeyEvent*>(_event);
@@ -800,11 +817,8 @@ void SimpleTextView::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);
 
-    const auto toolbarPosition
-        = QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint();
-    d->toolbar->move(toolbarPosition);
-    d->searchManager->toolbar()->move(toolbarPosition);
-    d->updateCommentsToolBar();
+    d->updateToolbarPositon();
+    d->updateCommentsToolbar();
 }
 
 void SimpleTextView::updateTranslations()
@@ -822,7 +836,7 @@ void SimpleTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
-    d->updateToolBarUi();
+    d->updateToolbarUi();
 
     d->textEdit->setPageSpacing(Ui::DesignSystem::layout().px24());
     QPalette palette;

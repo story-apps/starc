@@ -47,13 +47,18 @@ void SimpleTextEditToolbar::Implementation::showPopup(SimpleTextEditToolbar* _pa
     const auto width = Ui::DesignSystem::floatingToolBar().spacing() * 2
         + _parent->actionCustomWidth(paragraphTypeAction);
 
-    const auto left = QPoint(Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-                                 + Ui::DesignSystem::floatingToolBar().margins().left()
-                                 + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
-                                 + Ui::DesignSystem::floatingToolBar().spacing()
-                                 - Ui::DesignSystem::card().shadowMargins().left(),
-                             _parent->rect().bottom()
-                                 - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
+    const auto left = QPoint(
+        _parent->isLeftToRight() ? (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+                                    + Ui::DesignSystem::floatingToolBar().margins().left()
+                                    + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
+                                    + Ui::DesignSystem::floatingToolBar().spacing()
+                                    - Ui::DesignSystem::card().shadowMargins().left())
+                                 : (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+                                    + Ui::DesignSystem::floatingToolBar().margins().left()
+                                    + Ui::DesignSystem::floatingToolBar().iconSize().width() * 3
+                                    + Ui::DesignSystem::floatingToolBar().spacing() * 2
+                                    - Ui::DesignSystem::card().shadowMargins().left()),
+        _parent->rect().bottom() - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
     const auto position = _parent->mapToGlobal(left)
         + QPointF(Ui::DesignSystem::textField().margins().left(),
                   -Ui::DesignSystem::textField().margins().bottom());
@@ -93,7 +98,7 @@ SimpleTextEditToolbar::SimpleTextEditToolbar(QWidget* _parent)
             &SimpleTextEditToolbar::updateTranslations);
     connect(d->fastFormatAction, &QAction::toggled, this,
             &SimpleTextEditToolbar::fastFormatPanelVisibleChanged);
-    connect(d->fastFormatAction, &QAction::toggled, [this](bool _checked) {
+    connect(d->fastFormatAction, &QAction::toggled, this, [this](bool _checked) {
         d->paragraphTypeAction->setVisible(!_checked);
         designSystemChangeEvent(nullptr);
     });
@@ -119,9 +124,6 @@ SimpleTextEditToolbar::SimpleTextEditToolbar(QWidget* _parent)
             });
     connect(d->popup, &Card::disappeared, this,
             [this] { d->paragraphTypeAction->setIconText(u8"\U000f035d"); });
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 SimpleTextEditToolbar::~SimpleTextEditToolbar() = default;
