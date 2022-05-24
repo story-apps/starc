@@ -350,6 +350,10 @@ void TabBar::setTabVisible(int _tabIndex, bool _visible)
 void TabBar::setCurrentTab(int _index)
 {
     if (0 > _index || _index >= d->tabs.size() || d->currentTabIndex == _index) {
+        //
+        // ... запомним текущее положение прокрутки, чтобы декорация корректно отображалась
+        //
+        d->scrollingAnimation.setStartValue(d->scrollState.current);
         return;
     }
 
@@ -556,14 +560,20 @@ void TabBar::paintEvent(QPaintEvent* _event)
         //
         // Декорация
         //
-        if (tabBoundingRect.contains(d->decorationCenterPosition)
+        // ... смещаем центр декорации в кейсе, когда табы могут прокручиваться
+        //
+        const auto decorationCenterPosition = d->decorationCenterPosition
+            - (!d->isFixed ? QPointF(
+                   d->scrollState.current - d->scrollingAnimation.startValue().toReal(), 0)
+                           : QPointF());
+        if (tabBoundingRect.contains(decorationCenterPosition)
             && (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
                 || d->decorationOpacityAnimation.state() == QVariantAnimation::Running)) {
             painter.setClipRect(tabBoundingRect);
             painter.setPen(Qt::NoPen);
             painter.setBrush(Ui::DesignSystem::color().secondary());
             painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
-            painter.drawEllipse(d->decorationCenterPosition,
+            painter.drawEllipse(decorationCenterPosition,
                                 d->decorationRadiusAnimation.currentValue().toReal(),
                                 d->decorationRadiusAnimation.currentValue().toReal());
             painter.setOpacity(1.0);
