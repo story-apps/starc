@@ -103,7 +103,7 @@ void UnsplashImagesView::Implementation::processImagesJson(const QByteArray& _js
         UnsplashImageInfo imageInfo;
         imageInfo.author = imageData["user"].toObject()["name"].toString();
         imageInfo.previewUrl = imageData["urls"].toObject()["small"].toString();
-        imageInfo.downloadUrl = imageData["links"].toObject()["download"].toString();
+        imageInfo.downloadUrl = imageData["links"].toObject()["download_location"].toString();
         images.insert(imageInfo.previewUrl, imageInfo);
 
         NetworkRequestLoader::loadAsync(
@@ -177,7 +177,8 @@ UnsplashImagesView::~UnsplashImagesView() = default;
 
 void UnsplashImagesView::loadImages(const QString& _keywords)
 {
-    const QUrl url(QString("https://starc.app/api/services/unsplash?text=%1").arg(_keywords));
+    const QUrl url(
+        QString("https://starc.app/api/services/unsplash/search?text=%1").arg(_keywords));
     NetworkRequestLoader::loadAsync(
         url, this, [this](const QByteArray& _response) { d->processImagesJson(_response); });
 }
@@ -266,8 +267,12 @@ void UnsplashImagesView::mouseReleaseEvent(QMouseEvent* _event)
 
     const auto imageInfo = d->imageInfoFor(_event->pos()).first;
     if (!imageInfo.downloadUrl.isEmpty()) {
-        emit imageSelected(imageInfo.downloadUrl,
-                           tr("Photo by %1 on Unsplash.com").arg(imageInfo.author));
+        const auto url = QString("https://starc.app/api/services/unsplash/download?url=%1")
+                             .arg(imageInfo.downloadUrl);
+        NetworkRequestLoader::loadAsync(url, this, [this, imageInfo](const QByteArray& _data) {
+            emit imageSelected(QJsonDocument::fromJson(_data).object()["url"].toString(),
+                               tr("Photo by %1 on Unsplash.com").arg(imageInfo.author));
+        });
     }
 }
 
