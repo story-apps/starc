@@ -40,6 +40,7 @@ CardPopup::CardPopup(QWidget* _parent)
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_ShowWithoutActivating);
     setFocusPolicy(Qt::NoFocus);
+    setResizingActive(false);
     hide();
 
 
@@ -112,6 +113,10 @@ void CardPopup::showPopup(const QPoint& _position, int _parentHeight, const QSiz
 
 void CardPopup::hidePopup()
 {
+    if (!isVisible()) {
+        return;
+    }
+
     if (d->heightAnimation.endValue().toInt() != sizeHint().height()) {
         d->heightAnimation.setEndValue(sizeHint().height());
     }

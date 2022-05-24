@@ -62,19 +62,32 @@ void TitlePageEditToolbar::Implementation::showPopup(TitlePageEditToolbar* _pare
         + _parent->actionCustomWidth(_forAction);
 
     const auto left = QPoint(
-        Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-            + Ui::DesignSystem::floatingToolBar().margins().left()
-            + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
-            //
-            // Тут костылик, чтобы понимать, что нужно дополнительное смещение для попапа с размером
-            // шрифта
-            //
-            + (_forAction == textFontSizeAction ? Ui::DesignSystem::floatingToolBar().spacing()
-                       + _parent->actionCustomWidth(textFontAction)
-                                                : 0)
-            //
-            + Ui::DesignSystem::floatingToolBar().spacing()
-            - Ui::DesignSystem::card().shadowMargins().left(),
+        _parent->isLeftToRight()
+            ? (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+               + Ui::DesignSystem::floatingToolBar().margins().left()
+               + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
+               //
+               // Тут костылик, чтобы понимать, что нужно дополнительное смещение для попапа с
+               // размером шрифта
+               //
+               + (_forAction == textFontSizeAction ? (Ui::DesignSystem::floatingToolBar().spacing()
+                                                      + _parent->actionCustomWidth(textFontAction))
+                                                   : 0)
+               //
+               + Ui::DesignSystem::floatingToolBar().spacing()
+               - Ui::DesignSystem::card().shadowMargins().left())
+            : (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+               + Ui::DesignSystem::floatingToolBar().margins().left()
+               + Ui::DesignSystem::floatingToolBar().iconSize().width()
+               //
+               // Тут костылик, чтобы понимать, что нужно дополнительное смещение для попапа со
+               // шрифтом
+               //
+               + (_forAction == textFontAction ? (Ui::DesignSystem::floatingToolBar().spacing()
+                                                  + _parent->actionCustomWidth(textFontSizeAction))
+                                               : 0)
+               //
+               - Ui::DesignSystem::card().shadowMargins().left()),
         _parent->rect().bottom() - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
     const auto position = _parent->mapToGlobal(left)
         + QPointF(Ui::DesignSystem::textField().margins().left(),
@@ -97,25 +110,18 @@ TitlePageEditToolbar::TitlePageEditToolbar(QWidget* _parent)
     addAction(d->redoAction);
     connect(d->redoAction, &QAction::triggered, this, &TitlePageEditToolbar::redoPressed);
 
-    //
-    // FIXME: дефолтный шрифт из шаблона
-    //
     const QFont defaultFont;
     d->textFontAction->setText(defaultFont.family());
     addAction(d->textFontAction);
     d->textFontSizeAction->setText(QString::number(defaultFont.pointSize()));
     addAction(d->textFontSizeAction);
     auto activatePopup = [this](QAction* _action, QStringListModel* _model) {
+        _action->setIconText(u8"\U000f0360");
+
         QSignalBlocker blocker(d->popup);
         d->popup->setContentModel(_model);
-        {
-            //                QSignalBlocker signalBlocker(this);
-            //                const int currentItemRow =
-            //                _model->stringList().indexOf(_action->text());
-            //                d->popupContent->setCurrentIndex(_model->index(currentItemRow,
-            //                0));
-        }
-        _action->setIconText(u8"\U000f0360");
+        const int currentItemRow = _model->stringList().indexOf(_action->text());
+        d->popup->setCurrentIndex(_model->index(currentItemRow, 0));
         d->showPopup(this, _action);
     };
     connect(d->textFontAction, &QAction::triggered, this,
@@ -205,8 +211,6 @@ void TitlePageEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _eve
 
     d->popup->setBackgroundColor(Ui::DesignSystem::color().background());
     d->popup->setTextColor(Ui::DesignSystem::color().onBackground());
-
-    resize(sizeHint());
 }
 
 } // namespace Ui

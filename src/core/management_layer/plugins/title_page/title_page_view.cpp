@@ -38,18 +38,21 @@ const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enab
 class TitlePageView::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(TitlePageView* _q);
 
     /**
      * @brief Обновить настройки UI панели инструментов
      */
-    void updateToolBarUi();
+    void updateToolbarUi();
+    void updateToolbarPositon();
 
     /**
      * @brief Обновить текущий отображаемый тип абзаца в панели инструментов
      */
     void updateToolBarCurrentParagraphTypeName();
 
+
+    TitlePageView* q = nullptr;
 
     TitlePageEdit* textEdit = nullptr;
     ScalableWrapper* scalableWrapper = nullptr;
@@ -61,9 +64,10 @@ public:
     Domain::DocumentObjectType currentModelType = Domain::DocumentObjectType::Undefined;
 };
 
-TitlePageView::Implementation::Implementation(QWidget* _parent)
-    : textEdit(new TitlePageEdit(_parent))
-    , scalableWrapper(new ScalableWrapper(textEdit, _parent))
+TitlePageView::Implementation::Implementation(TitlePageView* _q)
+    : q(_q)
+    , textEdit(new TitlePageEdit(_q))
+    , scalableWrapper(new ScalableWrapper(textEdit, _q))
     , toolbar(new TitlePageEditToolbar(scalableWrapper))
 {
     textEdit->setVerticalScrollBar(new ScrollBar);
@@ -75,13 +79,22 @@ TitlePageView::Implementation::Implementation(QWidget* _parent)
     textEdit->setUsePageMode(true);
 }
 
-void TitlePageView::Implementation::updateToolBarUi()
+void TitlePageView::Implementation::updateToolbarUi()
 {
-    toolbar->move(
-        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
+    toolbar->resize(toolbar->sizeHint());
+    updateToolbarPositon();
     toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
     toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     toolbar->raise();
+}
+
+void TitlePageView::Implementation::updateToolbarPositon()
+{
+    toolbar->move(QPointF(q->isLeftToRight()
+                              ? Ui::DesignSystem::layout().px24()
+                              : q->width() - toolbar->width() - Ui::DesignSystem::layout().px24(),
+                          Ui::DesignSystem::layout().px24())
+                      .toPoint());
 }
 
 void TitlePageView::Implementation::updateToolBarCurrentParagraphTypeName()
@@ -257,9 +270,7 @@ void TitlePageView::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);
 
-    const auto toolbarPosition
-        = QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint();
-    d->toolbar->move(toolbarPosition);
+    d->updateToolbarPositon();
 }
 
 void TitlePageView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -268,7 +279,7 @@ void TitlePageView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
-    d->updateToolBarUi();
+    d->updateToolbarUi();
 
     d->textEdit->setPageSpacing(Ui::DesignSystem::layout().px24());
     QPalette palette;
