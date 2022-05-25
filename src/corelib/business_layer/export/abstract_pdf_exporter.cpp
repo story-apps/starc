@@ -259,15 +259,23 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
             fontMetrics = QFontMetrics(font);
         }
 
-        _painter->setFont(font);
-        _painter->setPen(_exportOptions.watermarkColor);
-
         //
-        // Рисуем водяной знак
+        // Рисуем картинку водяного знака
         //
-        _painter->rotate(qRadiansToDegrees(atan(_body.height() / _body.width())));
-        const int delta = fontMetrics.height() / 4;
-        _painter->drawText(delta, delta, watermark);
+        QPixmap watermarkPixmap(_body.size().toSize());
+        {
+            watermarkPixmap.fill(Qt::transparent);
+            QPainter painter(&watermarkPixmap);
+            painter.rotate(qRadiansToDegrees(atan(_body.height() / _body.width())));
+            painter.setFont(font);
+            painter.setPen(_exportOptions.watermarkColor);
+            const int delta = fontMetrics.height() / 4;
+            painter.drawText(delta, delta, watermark);
+        }
+        //
+        // ... и переносим её в документ
+        //
+        _painter->drawPixmap(_body, watermarkPixmap, watermarkPixmap.rect());
 
         //
         // TODO: Рисуем мусор на странице, чтобы текст нельзя было вытащить
