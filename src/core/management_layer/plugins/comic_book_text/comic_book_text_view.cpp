@@ -60,7 +60,7 @@ const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 class ComicBookTextView::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(ComicBookTextView* _q);
 
     /**
      * @brief Переконфигурировать представление
@@ -76,7 +76,8 @@ public:
     /**
      * @brief Обновить настройки UI панели инструментов
      */
-    void updateToolBarUi();
+    void updateToolbarUi();
+    void updateToolbarPositon();
 
     /**
      * @brief Обновить текущий отображаемый тип абзаца в панели инструментов
@@ -91,7 +92,7 @@ public:
     /**
      * @brief Обновить видимость и положение панели инструментов рецензирования
      */
-    void updateCommentsToolBar();
+    void updateCommentsToolbar();
 
     /**
      * @brief Обновить видимость боковой панели (показана, если показана хотя бы одна из вложенных
@@ -106,6 +107,8 @@ public:
                        const QString& _comment);
 
 
+    ComicBookTextView* q = nullptr;
+
     //
     // Модели
     //
@@ -116,7 +119,7 @@ public:
     //
     // Редактор текста
     //
-    ComicBookTextEdit* comicBookText = nullptr;
+    ComicBookTextEdit* textEdit = nullptr;
     ComicBookTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
 
@@ -152,41 +155,42 @@ public:
     QAction* showBookmarksAction = nullptr;
 };
 
-ComicBookTextView::Implementation::Implementation(QWidget* _parent)
-    : commentsModel(new BusinessLayer::CommentsModel(_parent))
-    , bookmarksModel(new BusinessLayer::BookmarksModel(_parent))
-    , comicBookText(new ComicBookTextEdit(_parent))
-    , shortcutsManager(comicBookText)
-    , scalableWrapper(new ScalableWrapper(comicBookText, _parent))
-    , toolbar(new ComicBookTextEditToolbar(scalableWrapper))
-    , searchManager(new BusinessLayer::ComicBookTextSearchManager(scalableWrapper, comicBookText))
-    , toolbarAnimation(new FloatingToolbarAnimator(_parent))
+ComicBookTextView::Implementation::Implementation(ComicBookTextView* _q)
+    : q(_q)
+    , commentsModel(new BusinessLayer::CommentsModel(_q))
+    , bookmarksModel(new BusinessLayer::BookmarksModel(_q))
+    , textEdit(new ComicBookTextEdit(_q))
+    , shortcutsManager(textEdit)
+    , scalableWrapper(new ScalableWrapper(textEdit, _q))
+    , toolbar(new ComicBookTextEditToolbar(_q))
+    , searchManager(new BusinessLayer::ComicBookTextSearchManager(scalableWrapper, textEdit))
+    , toolbarAnimation(new FloatingToolbarAnimator(_q))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
-    , commentsToolbar(new CommentsToolbar(_parent))
+    , commentsToolbar(new CommentsToolbar(_q))
     , sidebarShadow(new Shadow(Qt::RightEdge, scalableWrapper))
-    , sidebarWidget(new Widget(_parent))
-    , sidebarTabs(new TabBar(_parent))
-    , sidebarContent(new StackWidget(_parent))
-    , fastFormatWidget(new ComicBookTextFastFormatWidget(_parent))
-    , commentsView(new CommentsView(_parent))
-    , bookmarksView(new BookmarksView(_parent))
-    , splitter(new Splitter(_parent))
+    , sidebarWidget(new Widget(_q))
+    , sidebarTabs(new TabBar(_q))
+    , sidebarContent(new StackWidget(_q))
+    , fastFormatWidget(new ComicBookTextFastFormatWidget(_q))
+    , commentsView(new CommentsView(_q))
+    , bookmarksView(new BookmarksView(_q))
+    , splitter(new Splitter(_q))
     //
-    , showBookmarksAction(new QAction(_parent))
+    , showBookmarksAction(new QAction(_q))
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
 
     commentsToolbar->hide();
 
-    comicBookText->setVerticalScrollBar(new ScrollBar);
-    comicBookText->setHorizontalScrollBar(new ScrollBar);
+    textEdit->setVerticalScrollBar(new ScrollBar);
+    textEdit->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
     scalableWrapper->setVerticalScrollBar(new ScrollBar);
     scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
 
-    comicBookText->setUsePageMode(true);
+    textEdit->setUsePageMode(true);
 
     sidebarWidget->hide();
     sidebarTabs->setFixed(false);
@@ -239,7 +243,7 @@ void ComicBookTextView::Implementation::reconfigureTemplate(bool _withModelReini
     shortcutsManager.reconfigure();
 
     if (_withModelReinitialization) {
-        comicBookText->reinit();
+        textEdit->reinit();
     }
 }
 
@@ -262,16 +266,13 @@ void ComicBookTextView::Implementation::updateOptionsTranslations()
                                                                   : tr("Show bookmarks list"));
 }
 
-void ComicBookTextView::Implementation::updateToolBarUi()
+void ComicBookTextView::Implementation::updateToolbarUi()
 {
-    toolbar->move(
-        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
+    updateToolbarPositon();
     toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
     toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     toolbar->raise();
 
-    searchManager->toolbar()->move(
-        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
     searchManager->toolbar()->setBackgroundColor(Ui::DesignSystem::color().background());
     searchManager->toolbar()->setTextColor(Ui::DesignSystem::color().onBackground());
     searchManager->toolbar()->raise();
@@ -282,12 +283,27 @@ void ComicBookTextView::Implementation::updateToolBarUi()
     commentsToolbar->setBackgroundColor(Ui::DesignSystem::color().background());
     commentsToolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     commentsToolbar->raise();
-    updateCommentsToolBar();
+    updateCommentsToolbar();
+}
+
+void ComicBookTextView::Implementation::updateToolbarPositon()
+{
+    toolbar->move(QPointF(q->isLeftToRight()
+                              ? Ui::DesignSystem::layout().px24()
+                              : (q->width() - toolbar->width() - Ui::DesignSystem::layout().px24()),
+                          Ui::DesignSystem::layout().px24())
+                      .toPoint());
+    searchManager->toolbar()->move(QPointF(q->isLeftToRight()
+                                               ? Ui::DesignSystem::layout().px24()
+                                               : (q->width() - searchManager->toolbar()->width()
+                                                  - Ui::DesignSystem::layout().px24()),
+                                           Ui::DesignSystem::layout().px24())
+                                       .toPoint());
 }
 
 void ComicBookTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 {
-    auto paragraphType = comicBookText->currentParagraphType();
+    auto paragraphType = textEdit->currentParagraphType();
     if (currentParagraphType == paragraphType) {
         return;
     }
@@ -317,7 +333,7 @@ void ComicBookTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 
 void ComicBookTextView::Implementation::updateTextEditPageMargins()
 {
-    if (comicBookText->usePageMode()) {
+    if (textEdit->usePageMode()) {
         return;
     }
 
@@ -326,12 +342,12 @@ void ComicBookTextView::Implementation::updateTextEditPageMargins()
                      12 / scalableWrapper->zoomRange()
                          + MeasurementHelper::pxToMm(scalableWrapper->verticalScrollBar()->width()),
                      5 };
-    comicBookText->setPageMarginsMm(pageMargins);
+    textEdit->setPageMarginsMm(pageMargins);
 }
 
-void ComicBookTextView::Implementation::updateCommentsToolBar()
+void ComicBookTextView::Implementation::updateCommentsToolbar()
 {
-    if (!toolbar->isCommentsModeEnabled() || !comicBookText->textCursor().hasSelection()) {
+    if (!toolbar->isCommentsModeEnabled() || !textEdit->textCursor().hasSelection()) {
         commentsToolbar->hideToolbar();
         return;
     }
@@ -339,20 +355,25 @@ void ComicBookTextView::Implementation::updateCommentsToolBar()
     //
     // Определяем точку на границе страницы, либо если страница не влезает в экран, то с боку экрана
     //
-    const int x = (comicBookText->width() - comicBookText->viewport()->width()) / 2
-        + comicBookText->viewport()->width() - commentsToolbar->width();
+    const int x = (q->isLeftToRight() ? ((textEdit->width() - textEdit->viewport()->width()) / 2
+                                         + textEdit->viewport()->width())
+                                      : ((textEdit->width() - textEdit->viewport()->width()) / 2))
+        - commentsToolbar->width();
     const qreal textRight = scalableWrapper->mapFromEditor(QPoint(x, 0)).x();
-    const auto cursorRect = comicBookText->cursorRect();
-    const auto globalCursorCenter = comicBookText->mapToGlobal(cursorRect.center());
+    const auto cursorRect = textEdit->cursorRect();
+    const auto globalCursorCenter = textEdit->mapToGlobal(cursorRect.center());
     const auto localCursorCenter
         = commentsToolbar->parentWidget()->mapFromGlobal(globalCursorCenter);
     //
     // И смещаем панель рецензирования к этой точке
     //
-    commentsToolbar->moveToolbar(QPoint(std::min(scalableWrapper->width() - commentsToolbar->width()
-                                                     - Ui::DesignSystem::layout().px24(),
-                                                 textRight),
-                                        localCursorCenter.y() - (commentsToolbar->height() / 3)));
+    commentsToolbar->moveToolbar(QPoint(
+        q->isLeftToRight()
+            ? std::min(scalableWrapper->width() - commentsToolbar->width()
+                           - Ui::DesignSystem::layout().px24(),
+                       textRight)
+            : sidebarWidget->width() + std::max(Ui::DesignSystem::layout().px24(), textRight),
+        localCursorCenter.y() - (commentsToolbar->height() / 3)));
 
     //
     // Если панель ещё не была показана, отобразим её
@@ -386,22 +407,22 @@ void ComicBookTextView::Implementation::addReviewMark(const QColor& _textColor,
     //
     const auto textColor
         = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
-    comicBookText->addReviewMark(textColor, _backgroundColor, _comment);
+    textEdit->addReviewMark(textColor, _backgroundColor, _comment);
 
     //
     // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение
     // добавлено
     //
-    BusinessLayer::TextCursor cursor(comicBookText->textCursor());
+    BusinessLayer::TextCursor cursor(textEdit->textCursor());
     const auto selectionInterval = cursor.selectionInterval();
     //
     // ... делаем танец с бубном, чтобы получить сигнал об обновлении позиции курсора
     //     и выделить новую заметку в общем списке
     //
     cursor.setPosition(selectionInterval.to);
-    comicBookText->setTextCursorReimpl(cursor);
+    textEdit->setTextCursorReimpl(cursor);
     cursor.setPosition(selectionInterval.from);
-    comicBookText->setTextCursorReimpl(cursor);
+    textEdit->setTextCursorReimpl(cursor);
 
     //
     // Фокусируем редактор сценария, чтобы пользователь мог продолжать работать с ним
@@ -434,15 +455,15 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->splitter);
 
-    connect(d->toolbar, &ComicBookTextEditToolbar::undoPressed, d->comicBookText,
+    connect(d->toolbar, &ComicBookTextEditToolbar::undoPressed, d->textEdit,
             &ComicBookTextEdit::undo);
-    connect(d->toolbar, &ComicBookTextEditToolbar::redoPressed, d->comicBookText,
+    connect(d->toolbar, &ComicBookTextEditToolbar::redoPressed, d->textEdit,
             &ComicBookTextEdit::redo);
     connect(d->toolbar, &ComicBookTextEditToolbar::paragraphTypeChanged, this,
             [this](const QModelIndex& _index) {
                 const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
-                d->comicBookText->setCurrentParagraphType(type);
+                d->textEdit->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();
             });
     connect(d->toolbar, &ComicBookTextEditToolbar::fastFormatPanelVisibleChanged, this,
@@ -462,7 +483,7 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
                 if (_enabled) {
                     d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
                     d->sidebarContent->setCurrentWidget(d->commentsView);
-                    d->updateCommentsToolBar();
+                    d->updateCommentsToolbar();
                 }
                 d->updateSideBarVisibility(this);
             });
@@ -501,11 +522,11 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
     connect(d->commentsView, &CommentsView::commentSelected, this,
             [this](const QModelIndex& _index) {
                 const auto positionHint = d->commentsModel->mapToModel(_index);
-                const auto position = d->comicBookText->positionForModelIndex(positionHint.index)
+                const auto position = d->textEdit->positionForModelIndex(positionHint.index)
                     + positionHint.blockPosition;
-                auto cursor = d->comicBookText->textCursor();
+                auto cursor = d->textEdit->textCursor();
                 cursor.setPosition(position);
-                d->comicBookText->ensureCursorVisible(cursor);
+                d->textEdit->ensureCursorVisible(cursor);
                 d->scalableWrapper->setFocus();
             });
     connect(d->commentsView, &CommentsView::markAsDoneRequested, this,
@@ -533,10 +554,10 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
     connect(d->bookmarksView, &BookmarksView::bookmarkSelected, this,
             [this](const QModelIndex& _index) {
                 const auto index = d->bookmarksModel->mapToModel(_index);
-                const auto position = d->comicBookText->positionForModelIndex(index);
-                auto cursor = d->comicBookText->textCursor();
+                const auto position = d->textEdit->positionForModelIndex(index);
+                auto cursor = d->textEdit->textCursor();
                 cursor.setPosition(position);
-                d->comicBookText->ensureCursorVisible(cursor);
+                d->textEdit->ensureCursorVisible(cursor);
                 d->scalableWrapper->setFocus();
             });
     connect(d->bookmarksView, &BookmarksView::removeRequested, this,
@@ -567,19 +588,19 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
             [this](const QModelIndex& _index) {
                 const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
-                d->comicBookText->setCurrentParagraphType(type);
+                d->textEdit->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();
             });
     //
     connect(d->scalableWrapper->verticalScrollBar(), &QScrollBar::valueChanged, this,
-            [this] { d->updateCommentsToolBar(); });
+            [this] { d->updateCommentsToolbar(); });
     connect(d->scalableWrapper->horizontalScrollBar(), &QScrollBar::valueChanged, this,
-            [this] { d->updateCommentsToolBar(); });
+            [this] { d->updateCommentsToolbar(); });
     connect(
         d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this,
         [this] {
             d->updateTextEditPageMargins();
-            d->updateCommentsToolBar();
+            d->updateCommentsToolbar();
         },
         Qt::QueuedConnection);
     //
@@ -591,12 +612,12 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
         //
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
-        const auto comicBookModelIndex = d->comicBookText->currentModelIndex();
+        const auto comicBookModelIndex = d->textEdit->currentModelIndex();
         emit currentModelIndexChanged(comicBookModelIndex);
         //
         // Если необходимо выберем соответствующий комментарий
         //
-        const auto positionInBlock = d->comicBookText->textCursor().positionInBlock();
+        const auto positionInBlock = d->textEdit->textCursor().positionInBlock();
         const auto commentModelIndex
             = d->commentsModel->mapFromModel(comicBookModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
@@ -606,13 +627,13 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
         const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(comicBookModelIndex);
         d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
     };
-    connect(d->comicBookText, &ComicBookTextEdit::paragraphTypeChanged, this,
+    connect(d->textEdit, &ComicBookTextEdit::paragraphTypeChanged, this,
             handleCursorPositionChanged);
-    connect(d->comicBookText, &ComicBookTextEdit::cursorPositionChanged, this,
+    connect(d->textEdit, &ComicBookTextEdit::cursorPositionChanged, this,
             handleCursorPositionChanged);
-    connect(d->comicBookText, &ComicBookTextEdit::selectionChanged, this,
-            [this] { d->updateCommentsToolBar(); });
-    connect(d->comicBookText, &ComicBookTextEdit::addBookmarkRequested, this, [this] {
+    connect(d->textEdit, &ComicBookTextEdit::selectionChanged, this,
+            [this] { d->updateCommentsToolbar(); });
+    connect(d->textEdit, &ComicBookTextEdit::addBookmarkRequested, this, [this] {
         //
         // Если список закладок показан, добавляем новую через него
         //
@@ -626,7 +647,7 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
             emit addBookmarkRequested();
         }
     });
-    connect(d->comicBookText, &ComicBookTextEdit::editBookmarkRequested, this, [this] {
+    connect(d->textEdit, &ComicBookTextEdit::editBookmarkRequested, this, [this] {
         //
         // Если список закладок показан, редактируем через него
         //
@@ -641,9 +662,9 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
             emit addBookmarkRequested();
         }
     });
-    connect(d->comicBookText, &ComicBookTextEdit::removeBookmarkRequested, this,
+    connect(d->textEdit, &ComicBookTextEdit::removeBookmarkRequested, this,
             &ComicBookTextView::removeBookmarkRequested);
-    connect(d->comicBookText, &ComicBookTextEdit::showBookmarksRequested, d->showBookmarksAction,
+    connect(d->textEdit, &ComicBookTextEdit::showBookmarksRequested, d->showBookmarksAction,
             &QAction::toggle);
     //
     connect(d->showBookmarksAction, &QAction::toggled, this, [this](bool _checked) {
@@ -684,7 +705,7 @@ QVector<QAction*> ComicBookTextView::options() const
 
 void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
-    UiHelper::initSpellingFor(d->comicBookText);
+    UiHelper::initSpellingFor(d->textEdit);
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
@@ -712,7 +733,7 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
     // d->reconfigureBlockNumbersVisiblity();
 
     if (_changedSettingsKeys.isEmpty()) {
-        d->comicBookText->setCorrectionOptions(true, true);
+        d->textEdit->setCorrectionOptions(true, true);
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
@@ -724,26 +745,26 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationShowDocumentsPagesKey)) {
         const auto usePageMode
             = settingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey).toBool();
-        d->comicBookText->setUsePageMode(usePageMode);
+        d->textEdit->setUsePageMode(usePageMode);
         if (usePageMode) {
-            d->comicBookText->reinit();
+            d->textEdit->reinit();
         } else {
             d->updateTextEditPageMargins();
         }
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationHighlightCurrentLineKey)) {
-        d->comicBookText->setHighlightCurrentLine(
+        d->textEdit->setHighlightCurrentLine(
             settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationFocusCurrentParagraphKey)) {
-        d->comicBookText->setFocusCurrentParagraph(
+        d->textEdit->setFocusCurrentParagraph(
             settingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey).toBool());
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationUseTypewriterScrollingKey)) {
-        d->comicBookText->setUseTypewriterScrolling(
+        d->textEdit->setUseTypewriterScrolling(
             settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
     }
 }
@@ -810,7 +831,7 @@ void ComicBookTextView::setModel(BusinessLayer::ComicBookTextModel* _model)
         //                this, [this] { d->reconfigureBlockNumbersVisibility(); });
     }
 
-    d->comicBookText->initWithModel(d->model);
+    d->textEdit->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);
 
@@ -819,41 +840,41 @@ void ComicBookTextView::setModel(BusinessLayer::ComicBookTextModel* _model)
 
 QModelIndex ComicBookTextView::currentModelIndex() const
 {
-    return d->comicBookText->currentModelIndex();
+    return d->textEdit->currentModelIndex();
 }
 
 void ComicBookTextView::setCurrentModelIndex(const QModelIndex& _index)
 {
-    d->comicBookText->setCurrentModelIndex(_index);
+    d->textEdit->setCurrentModelIndex(_index);
 }
 
 int ComicBookTextView::cursorPosition() const
 {
-    return d->comicBookText->textCursor().position();
+    return d->textEdit->textCursor().position();
 }
 
 void ComicBookTextView::setCursorPosition(int _position)
 {
-    auto cursor = d->comicBookText->textCursor();
+    auto cursor = d->textEdit->textCursor();
     cursor.setPosition(_position);
-    d->comicBookText->ensureCursorVisible(cursor, false);
+    d->textEdit->ensureCursorVisible(cursor, false);
 }
 
 int ComicBookTextView::verticalScroll() const
 {
-    return d->comicBookText->verticalScrollBar()->value();
+    return d->textEdit->verticalScrollBar()->value();
 }
 
 void ComicBookTextView::setverticalScroll(int _value)
 {
-    d->comicBookText->verticalScrollBar()->setValue(_value);
+    d->textEdit->verticalScrollBar()->setValue(_value);
 }
 
 bool ComicBookTextView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->scalableWrapper) {
         if (_event->type() == QEvent::Resize) {
-            QTimer::singleShot(0, this, [this] { d->updateCommentsToolBar(); });
+            QTimer::singleShot(0, this, [this] { d->updateCommentsToolbar(); });
         } else if (_event->type() == QEvent::KeyPress && d->searchManager->toolbar()->isVisible()
                    && d->scalableWrapper->hasFocus()) {
             auto keyEvent = static_cast<QKeyEvent*>(_event);
@@ -870,11 +891,8 @@ void ComicBookTextView::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);
 
-    const auto toolbarPosition
-        = QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint();
-    d->toolbar->move(toolbarPosition);
-    d->searchManager->toolbar()->move(toolbarPosition);
-    d->updateCommentsToolBar();
+    d->updateToolbarPositon();
+    d->updateCommentsToolbar();
 }
 
 void ComicBookTextView::updateTranslations()
@@ -892,9 +910,9 @@ void ComicBookTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
-    d->updateToolBarUi();
+    d->updateToolbarUi();
 
-    d->comicBookText->setPageSpacing(Ui::DesignSystem::layout().px24());
+    d->textEdit->setPageSpacing(Ui::DesignSystem::layout().px24());
     QPalette palette;
     palette.setColor(QPalette::Window, Ui::DesignSystem::color().surface());
     palette.setColor(QPalette::Base, Ui::DesignSystem::color().textEditor());
@@ -902,11 +920,11 @@ void ComicBookTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().secondary());
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
     d->scalableWrapper->setPalette(palette);
-    d->comicBookText->setPalette(palette);
+    d->textEdit->setPalette(palette);
     palette.setColor(QPalette::Base, Qt::transparent);
-    d->comicBookText->viewport()->setPalette(palette);
-    d->comicBookText->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->comicBookText->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->textEdit->viewport()->setPalette(palette);
+    d->textEdit->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->textEdit->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
 
     d->splitter->setBackgroundColor(Ui::DesignSystem::color().background());
 
