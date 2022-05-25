@@ -60,7 +60,7 @@ const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 class StageplayTextView::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(StageplayTextView* _q);
 
     /**
      * @brief Переконфигурировать представление
@@ -75,7 +75,8 @@ public:
     /**
      * @brief Обновить настройки UI панели инструментов
      */
-    void updateToolBarUi();
+    void updateToolbarUi();
+    void updateToolbarPositon();
 
     /**
      * @brief Обновить текущий отображаемый тип абзаца в панели инструментов
@@ -90,7 +91,7 @@ public:
     /**
      * @brief Обновить видимость и положение панели инструментов рецензирования
      */
-    void updateCommentsToolBar();
+    void updateCommentsToolbar();
 
     /**
      * @brief Обновить видимость боковой панели (показана, если показана хотя бы одна из вложенных
@@ -105,6 +106,8 @@ public:
                        const QString& _comment);
 
 
+    StageplayTextView* q = nullptr;
+
     //
     // Модели
     //
@@ -115,7 +118,7 @@ public:
     //
     // Редактор текста
     //
-    StageplayTextEdit* stageplayText = nullptr;
+    StageplayTextEdit* textEdit = nullptr;
     StageplayTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
 
@@ -151,41 +154,42 @@ public:
     QAction* showBookmarksAction = nullptr;
 };
 
-StageplayTextView::Implementation::Implementation(QWidget* _parent)
-    : commentsModel(new BusinessLayer::CommentsModel(_parent))
-    , bookmarksModel(new BusinessLayer::BookmarksModel(_parent))
-    , stageplayText(new StageplayTextEdit(_parent))
-    , shortcutsManager(stageplayText)
-    , scalableWrapper(new ScalableWrapper(stageplayText, _parent))
-    , toolbar(new StageplayTextEditToolbar(scalableWrapper))
-    , searchManager(new BusinessLayer::StageplayTextSearchManager(scalableWrapper, stageplayText))
-    , toolbarAnimation(new FloatingToolbarAnimator(_parent))
+StageplayTextView::Implementation::Implementation(StageplayTextView* _q)
+    : q(_q)
+    , commentsModel(new BusinessLayer::CommentsModel(_q))
+    , bookmarksModel(new BusinessLayer::BookmarksModel(_q))
+    , textEdit(new StageplayTextEdit(_q))
+    , shortcutsManager(textEdit)
+    , scalableWrapper(new ScalableWrapper(textEdit, _q))
+    , toolbar(new StageplayTextEditToolbar(_q))
+    , searchManager(new BusinessLayer::StageplayTextSearchManager(scalableWrapper, textEdit))
+    , toolbarAnimation(new FloatingToolbarAnimator(_q))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
-    , commentsToolbar(new CommentsToolbar(_parent))
+    , commentsToolbar(new CommentsToolbar(_q))
     , sidebarShadow(new Shadow(Qt::RightEdge, scalableWrapper))
-    , sidebarWidget(new Widget(_parent))
-    , sidebarTabs(new TabBar(_parent))
-    , sidebarContent(new StackWidget(_parent))
-    , fastFormatWidget(new StageplayTextFastFormatWidget(_parent))
-    , commentsView(new CommentsView(_parent))
-    , bookmarksView(new BookmarksView(_parent))
-    , splitter(new Splitter(_parent))
+    , sidebarWidget(new Widget(_q))
+    , sidebarTabs(new TabBar(_q))
+    , sidebarContent(new StackWidget(_q))
+    , fastFormatWidget(new StageplayTextFastFormatWidget(_q))
+    , commentsView(new CommentsView(_q))
+    , bookmarksView(new BookmarksView(_q))
+    , splitter(new Splitter(_q))
     //
-    , showBookmarksAction(new QAction(_parent))
+    , showBookmarksAction(new QAction(_q))
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
 
     commentsToolbar->hide();
 
-    stageplayText->setVerticalScrollBar(new ScrollBar);
-    stageplayText->setHorizontalScrollBar(new ScrollBar);
+    textEdit->setVerticalScrollBar(new ScrollBar);
+    textEdit->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
     scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->setVerticalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
 
-    stageplayText->setUsePageMode(true);
+    textEdit->setUsePageMode(true);
 
     sidebarWidget->hide();
     sidebarTabs->setFixed(false);
@@ -238,7 +242,7 @@ void StageplayTextView::Implementation::reconfigureTemplate(bool _withModelReini
     shortcutsManager.reconfigure();
 
     if (_withModelReinitialization) {
-        stageplayText->reinit();
+        textEdit->reinit();
     }
 }
 
@@ -248,16 +252,13 @@ void StageplayTextView::Implementation::updateOptionsTranslations()
                                                                   : tr("Show bookmarks list"));
 }
 
-void StageplayTextView::Implementation::updateToolBarUi()
+void StageplayTextView::Implementation::updateToolbarUi()
 {
-    toolbar->move(
-        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
+    updateToolbarPositon();
     toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
     toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     toolbar->raise();
 
-    searchManager->toolbar()->move(
-        QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint());
     searchManager->toolbar()->setBackgroundColor(Ui::DesignSystem::color().background());
     searchManager->toolbar()->setTextColor(Ui::DesignSystem::color().onBackground());
     searchManager->toolbar()->raise();
@@ -268,12 +269,27 @@ void StageplayTextView::Implementation::updateToolBarUi()
     commentsToolbar->setBackgroundColor(Ui::DesignSystem::color().background());
     commentsToolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     commentsToolbar->raise();
-    updateCommentsToolBar();
+    updateCommentsToolbar();
+}
+
+void StageplayTextView::Implementation::updateToolbarPositon()
+{
+    toolbar->move(QPointF(q->isLeftToRight()
+                              ? Ui::DesignSystem::layout().px24()
+                              : (q->width() - toolbar->width() - Ui::DesignSystem::layout().px24()),
+                          Ui::DesignSystem::layout().px24())
+                      .toPoint());
+    searchManager->toolbar()->move(QPointF(q->isLeftToRight()
+                                               ? Ui::DesignSystem::layout().px24()
+                                               : (q->width() - searchManager->toolbar()->width()
+                                                  - Ui::DesignSystem::layout().px24()),
+                                           Ui::DesignSystem::layout().px24())
+                                       .toPoint());
 }
 
 void StageplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 {
-    auto paragraphType = stageplayText->currentParagraphType();
+    auto paragraphType = textEdit->currentParagraphType();
     if (currentParagraphType == paragraphType) {
         return;
     }
@@ -303,7 +319,7 @@ void StageplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 
 void StageplayTextView::Implementation::updateTextEditPageMargins()
 {
-    if (stageplayText->usePageMode()) {
+    if (textEdit->usePageMode()) {
         return;
     }
 
@@ -312,12 +328,12 @@ void StageplayTextView::Implementation::updateTextEditPageMargins()
                      12 / scalableWrapper->zoomRange()
                          + MeasurementHelper::pxToMm(scalableWrapper->verticalScrollBar()->width()),
                      5 };
-    stageplayText->setPageMarginsMm(pageMargins);
+    textEdit->setPageMarginsMm(pageMargins);
 }
 
-void StageplayTextView::Implementation::updateCommentsToolBar()
+void StageplayTextView::Implementation::updateCommentsToolbar()
 {
-    if (!toolbar->isCommentsModeEnabled() || !stageplayText->textCursor().hasSelection()) {
+    if (!toolbar->isCommentsModeEnabled() || !textEdit->textCursor().hasSelection()) {
         commentsToolbar->hideToolbar();
         return;
     }
@@ -325,20 +341,25 @@ void StageplayTextView::Implementation::updateCommentsToolBar()
     //
     // Определяем точку на границе страницы, либо если страница не влезает в экран, то с боку экрана
     //
-    const int x = (stageplayText->width() - stageplayText->viewport()->width()) / 2
-        + stageplayText->viewport()->width() - commentsToolbar->width();
+    const int x = (q->isLeftToRight() ? ((textEdit->width() - textEdit->viewport()->width()) / 2
+                                         + textEdit->viewport()->width())
+                                      : ((textEdit->width() - textEdit->viewport()->width()) / 2))
+        - commentsToolbar->width();
     const qreal textRight = scalableWrapper->mapFromEditor(QPoint(x, 0)).x();
-    const auto cursorRect = stageplayText->cursorRect();
-    const auto globalCursorCenter = stageplayText->mapToGlobal(cursorRect.center());
+    const auto cursorRect = textEdit->cursorRect();
+    const auto globalCursorCenter = textEdit->mapToGlobal(cursorRect.center());
     const auto localCursorCenter
         = commentsToolbar->parentWidget()->mapFromGlobal(globalCursorCenter);
     //
     // И смещаем панель рецензирования к этой точке
     //
-    commentsToolbar->moveToolbar(QPoint(std::min(scalableWrapper->width() - commentsToolbar->width()
-                                                     - Ui::DesignSystem::layout().px24(),
-                                                 textRight),
-                                        localCursorCenter.y() - (commentsToolbar->height() / 3)));
+    commentsToolbar->moveToolbar(QPoint(
+        q->isLeftToRight()
+            ? std::min(scalableWrapper->width() - commentsToolbar->width()
+                           - Ui::DesignSystem::layout().px24(),
+                       textRight)
+            : sidebarWidget->width() + std::max(Ui::DesignSystem::layout().px24(), textRight),
+        localCursorCenter.y() - (commentsToolbar->height() / 3)));
 
     //
     // Если панель ещё не была показана, отобразим её
@@ -372,22 +393,22 @@ void StageplayTextView::Implementation::addReviewMark(const QColor& _textColor,
     //
     const auto textColor
         = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
-    stageplayText->addReviewMark(textColor, _backgroundColor, _comment);
+    textEdit->addReviewMark(textColor, _backgroundColor, _comment);
 
     //
     // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение
     // добавлено
     //
-    BusinessLayer::TextCursor cursor(stageplayText->textCursor());
+    BusinessLayer::TextCursor cursor(textEdit->textCursor());
     const auto selectionInterval = cursor.selectionInterval();
     //
     // ... делаем танец с бубном, чтобы получить сигнал об обновлении позиции курсора
     //     и выделить новую заметку в общем списке
     //
     cursor.setPosition(selectionInterval.to);
-    stageplayText->setTextCursorReimpl(cursor);
+    textEdit->setTextCursorReimpl(cursor);
     cursor.setPosition(selectionInterval.from);
-    stageplayText->setTextCursorReimpl(cursor);
+    textEdit->setTextCursorReimpl(cursor);
 
     //
     // Фокусируем редактор сценария, чтобы пользователь мог продолжать работать с ним
@@ -420,15 +441,15 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->splitter);
 
-    connect(d->toolbar, &StageplayTextEditToolbar::undoPressed, d->stageplayText,
+    connect(d->toolbar, &StageplayTextEditToolbar::undoPressed, d->textEdit,
             &StageplayTextEdit::undo);
-    connect(d->toolbar, &StageplayTextEditToolbar::redoPressed, d->stageplayText,
+    connect(d->toolbar, &StageplayTextEditToolbar::redoPressed, d->textEdit,
             &StageplayTextEdit::redo);
     connect(d->toolbar, &StageplayTextEditToolbar::paragraphTypeChanged, this,
             [this](const QModelIndex& _index) {
                 const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
-                d->stageplayText->setCurrentParagraphType(type);
+                d->textEdit->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();
             });
     connect(d->toolbar, &StageplayTextEditToolbar::fastFormatPanelVisibleChanged, this,
@@ -448,7 +469,7 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
                 if (_enabled) {
                     d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
                     d->sidebarContent->setCurrentWidget(d->commentsView);
-                    d->updateCommentsToolBar();
+                    d->updateCommentsToolbar();
                 }
                 d->updateSideBarVisibility(this);
             });
@@ -487,11 +508,11 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
     connect(d->commentsView, &CommentsView::commentSelected, this,
             [this](const QModelIndex& _index) {
                 const auto positionHint = d->commentsModel->mapToModel(_index);
-                const auto position = d->stageplayText->positionForModelIndex(positionHint.index)
+                const auto position = d->textEdit->positionForModelIndex(positionHint.index)
                     + positionHint.blockPosition;
-                auto cursor = d->stageplayText->textCursor();
+                auto cursor = d->textEdit->textCursor();
                 cursor.setPosition(position);
-                d->stageplayText->ensureCursorVisible(cursor);
+                d->textEdit->ensureCursorVisible(cursor);
                 d->scalableWrapper->setFocus();
             });
     connect(d->commentsView, &CommentsView::markAsDoneRequested, this,
@@ -519,10 +540,10 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
     connect(d->bookmarksView, &BookmarksView::bookmarkSelected, this,
             [this](const QModelIndex& _index) {
                 const auto index = d->bookmarksModel->mapToModel(_index);
-                const auto position = d->stageplayText->positionForModelIndex(index);
-                auto cursor = d->stageplayText->textCursor();
+                const auto position = d->textEdit->positionForModelIndex(index);
+                auto cursor = d->textEdit->textCursor();
                 cursor.setPosition(position);
-                d->stageplayText->ensureCursorVisible(cursor);
+                d->textEdit->ensureCursorVisible(cursor);
                 d->scalableWrapper->setFocus();
             });
     connect(d->bookmarksView, &BookmarksView::removeRequested, this,
@@ -553,19 +574,19 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
             [this](const QModelIndex& _index) {
                 const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
-                d->stageplayText->setCurrentParagraphType(type);
+                d->textEdit->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();
             });
     //
     connect(d->scalableWrapper->verticalScrollBar(), &QScrollBar::valueChanged, this,
-            [this] { d->updateCommentsToolBar(); });
+            [this] { d->updateCommentsToolbar(); });
     connect(d->scalableWrapper->horizontalScrollBar(), &QScrollBar::valueChanged, this,
-            [this] { d->updateCommentsToolBar(); });
+            [this] { d->updateCommentsToolbar(); });
     connect(
         d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this,
         [this] {
             d->updateTextEditPageMargins();
-            d->updateCommentsToolBar();
+            d->updateCommentsToolbar();
         },
         Qt::QueuedConnection);
     //
@@ -577,12 +598,12 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
         //
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
-        const auto stageplayModelIndex = d->stageplayText->currentModelIndex();
+        const auto stageplayModelIndex = d->textEdit->currentModelIndex();
         emit currentModelIndexChanged(stageplayModelIndex);
         //
         // Если необходимо выберем соответствующий комментарий
         //
-        const auto positionInBlock = d->stageplayText->textCursor().positionInBlock();
+        const auto positionInBlock = d->textEdit->textCursor().positionInBlock();
         const auto commentModelIndex
             = d->commentsModel->mapFromModel(stageplayModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
@@ -592,13 +613,13 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
         const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(stageplayModelIndex);
         d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
     };
-    connect(d->stageplayText, &StageplayTextEdit::paragraphTypeChanged, this,
+    connect(d->textEdit, &StageplayTextEdit::paragraphTypeChanged, this,
             handleCursorPositionChanged);
-    connect(d->stageplayText, &StageplayTextEdit::cursorPositionChanged, this,
+    connect(d->textEdit, &StageplayTextEdit::cursorPositionChanged, this,
             handleCursorPositionChanged);
-    connect(d->stageplayText, &StageplayTextEdit::selectionChanged, this,
-            [this] { d->updateCommentsToolBar(); });
-    connect(d->stageplayText, &StageplayTextEdit::addBookmarkRequested, this, [this] {
+    connect(d->textEdit, &StageplayTextEdit::selectionChanged, this,
+            [this] { d->updateCommentsToolbar(); });
+    connect(d->textEdit, &StageplayTextEdit::addBookmarkRequested, this, [this] {
         //
         // Если список закладок показан, добавляем новую через него
         //
@@ -612,7 +633,7 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
             emit addBookmarkRequested();
         }
     });
-    connect(d->stageplayText, &StageplayTextEdit::editBookmarkRequested, this, [this] {
+    connect(d->textEdit, &StageplayTextEdit::editBookmarkRequested, this, [this] {
         //
         // Если список закладок показан, редактируем через него
         //
@@ -627,9 +648,9 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
             emit addBookmarkRequested();
         }
     });
-    connect(d->stageplayText, &StageplayTextEdit::removeBookmarkRequested, this,
+    connect(d->textEdit, &StageplayTextEdit::removeBookmarkRequested, this,
             &StageplayTextView::removeBookmarkRequested);
-    connect(d->stageplayText, &StageplayTextEdit::showBookmarksRequested, d->showBookmarksAction,
+    connect(d->textEdit, &StageplayTextEdit::showBookmarksRequested, d->showBookmarksAction,
             &QAction::toggle);
     //
     connect(d->showBookmarksAction, &QAction::toggled, this, [this](bool _checked) {
@@ -670,7 +691,7 @@ QVector<QAction*> StageplayTextView::options() const
 
 void StageplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
-    UiHelper::initSpellingFor(d->stageplayText);
+    UiHelper::initSpellingFor(d->textEdit);
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
@@ -679,7 +700,7 @@ void StageplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     }
 
     if (_changedSettingsKeys.isEmpty()) {
-        d->stageplayText->setCorrectionOptions(true);
+        d->textEdit->setCorrectionOptions(true);
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
@@ -691,26 +712,26 @@ void StageplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationShowDocumentsPagesKey)) {
         const auto usePageMode
             = settingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey).toBool();
-        d->stageplayText->setUsePageMode(usePageMode);
+        d->textEdit->setUsePageMode(usePageMode);
         if (usePageMode) {
-            d->stageplayText->reinit();
+            d->textEdit->reinit();
         } else {
             d->updateTextEditPageMargins();
         }
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationHighlightCurrentLineKey)) {
-        d->stageplayText->setHighlightCurrentLine(
+        d->textEdit->setHighlightCurrentLine(
             settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationFocusCurrentParagraphKey)) {
-        d->stageplayText->setFocusCurrentParagraph(
+        d->textEdit->setFocusCurrentParagraph(
             settingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey).toBool());
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationUseTypewriterScrollingKey)) {
-        d->stageplayText->setUseTypewriterScrolling(
+        d->textEdit->setUseTypewriterScrolling(
             settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
     }
 }
@@ -770,7 +791,7 @@ void StageplayTextView::setModel(BusinessLayer::StageplayTextModel* _model)
                 [this] { d->reconfigureTemplate(); });
     }
 
-    d->stageplayText->initWithModel(d->model);
+    d->textEdit->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);
 
@@ -779,41 +800,41 @@ void StageplayTextView::setModel(BusinessLayer::StageplayTextModel* _model)
 
 QModelIndex StageplayTextView::currentModelIndex() const
 {
-    return d->stageplayText->currentModelIndex();
+    return d->textEdit->currentModelIndex();
 }
 
 void StageplayTextView::setCurrentModelIndex(const QModelIndex& _index)
 {
-    d->stageplayText->setCurrentModelIndex(_index);
+    d->textEdit->setCurrentModelIndex(_index);
 }
 
 int StageplayTextView::cursorPosition() const
 {
-    return d->stageplayText->textCursor().position();
+    return d->textEdit->textCursor().position();
 }
 
 void StageplayTextView::setCursorPosition(int _position)
 {
-    auto cursor = d->stageplayText->textCursor();
+    auto cursor = d->textEdit->textCursor();
     cursor.setPosition(_position);
-    d->stageplayText->ensureCursorVisible(cursor, false);
+    d->textEdit->ensureCursorVisible(cursor, false);
 }
 
 int StageplayTextView::verticalScroll() const
 {
-    return d->stageplayText->verticalScrollBar()->value();
+    return d->textEdit->verticalScrollBar()->value();
 }
 
 void StageplayTextView::setverticalScroll(int _value)
 {
-    d->stageplayText->verticalScrollBar()->setValue(_value);
+    d->textEdit->verticalScrollBar()->setValue(_value);
 }
 
 bool StageplayTextView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->scalableWrapper) {
         if (_event->type() == QEvent::Resize) {
-            QTimer::singleShot(0, this, [this] { d->updateCommentsToolBar(); });
+            QTimer::singleShot(0, this, [this] { d->updateCommentsToolbar(); });
         } else if (_event->type() == QEvent::KeyPress && d->searchManager->toolbar()->isVisible()
                    && d->scalableWrapper->hasFocus()) {
             auto keyEvent = static_cast<QKeyEvent*>(_event);
@@ -830,11 +851,8 @@ void StageplayTextView::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);
 
-    const auto toolbarPosition
-        = QPointF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24()).toPoint();
-    d->toolbar->move(toolbarPosition);
-    d->searchManager->toolbar()->move(toolbarPosition);
-    d->updateCommentsToolBar();
+    d->updateToolbarPositon();
+    d->updateCommentsToolbar();
 }
 
 void StageplayTextView::updateTranslations()
@@ -852,9 +870,9 @@ void StageplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
-    d->updateToolBarUi();
+    d->updateToolbarUi();
 
-    d->stageplayText->setPageSpacing(Ui::DesignSystem::layout().px24());
+    d->textEdit->setPageSpacing(Ui::DesignSystem::layout().px24());
     QPalette palette;
     palette.setColor(QPalette::Window, Ui::DesignSystem::color().surface());
     palette.setColor(QPalette::Base, Ui::DesignSystem::color().textEditor());
@@ -862,11 +880,11 @@ void StageplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().secondary());
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
     d->scalableWrapper->setPalette(palette);
-    d->stageplayText->setPalette(palette);
+    d->textEdit->setPalette(palette);
     palette.setColor(QPalette::Base, Qt::transparent);
-    d->stageplayText->viewport()->setPalette(palette);
-    d->stageplayText->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->stageplayText->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->textEdit->viewport()->setPalette(palette);
+    d->textEdit->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->textEdit->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
 
     d->splitter->setBackgroundColor(Ui::DesignSystem::color().background());
 

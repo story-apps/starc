@@ -47,13 +47,18 @@ void StageplayTextEditToolbar::Implementation::showPopup(StageplayTextEditToolba
     const auto width = Ui::DesignSystem::floatingToolBar().spacing() * 2
         + _parent->actionCustomWidth(paragraphTypeAction);
 
-    const auto left = QPoint(Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-                                 + Ui::DesignSystem::floatingToolBar().margins().left()
-                                 + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
-                                 + Ui::DesignSystem::floatingToolBar().spacing()
-                                 - Ui::DesignSystem::card().shadowMargins().left(),
-                             _parent->rect().bottom()
-                                 - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
+    const auto left = QPoint(
+        _parent->isLeftToRight() ? (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+                                    + Ui::DesignSystem::floatingToolBar().margins().left()
+                                    + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
+                                    + Ui::DesignSystem::floatingToolBar().spacing()
+                                    - Ui::DesignSystem::card().shadowMargins().left())
+                                 : (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+                                    + Ui::DesignSystem::floatingToolBar().margins().left()
+                                    + Ui::DesignSystem::floatingToolBar().iconSize().width() * 3
+                                    + Ui::DesignSystem::floatingToolBar().spacing() * 2
+                                    - Ui::DesignSystem::card().shadowMargins().left()),
+        _parent->rect().bottom() - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
     const auto position = _parent->mapToGlobal(left)
         + QPointF(Ui::DesignSystem::textField().margins().left(),
                   -Ui::DesignSystem::textField().margins().bottom());
@@ -89,13 +94,13 @@ StageplayTextEditToolbar::StageplayTextEditToolbar(QWidget* _parent)
     d->fastFormatAction->setIconText(u8"\U000f0328");
     d->fastFormatAction->setCheckable(true);
     addAction(d->fastFormatAction);
-    connect(d->fastFormatAction, &QAction::toggled, this,
-            &StageplayTextEditToolbar::updateTranslations);
-    connect(d->fastFormatAction, &QAction::toggled, this,
-            &StageplayTextEditToolbar::fastFormatPanelVisibleChanged);
-    connect(d->fastFormatAction, &QAction::toggled, [this](bool _checked) {
+    connect(d->fastFormatAction, &QAction::toggled, this, [this](bool _checked) {
+        updateTranslations();
+
         d->paragraphTypeAction->setVisible(!_checked);
         designSystemChangeEvent(nullptr);
+
+        emit fastFormatPanelVisibleChanged(_checked);
     });
 
     d->searchAction->setIconText(u8"\U000f0349");
@@ -120,9 +125,6 @@ StageplayTextEditToolbar::StageplayTextEditToolbar(QWidget* _parent)
             });
     connect(d->popup, &Card::disappeared, this,
             [this] { d->paragraphTypeAction->setIconText(u8"\U000f035d"); });
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 StageplayTextEditToolbar::~StageplayTextEditToolbar() = default;
