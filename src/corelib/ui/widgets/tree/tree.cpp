@@ -288,6 +288,7 @@ void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     auto lastDelegate = d->tree->itemDelegate();
     d->tree->setItemDelegate(nullptr);
     d->tree->setItemDelegate(lastDelegate);
+    d->tree->setAnimated(isLeftToRight());
 
     d->header->setPalette(palette);
 

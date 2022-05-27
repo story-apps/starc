@@ -10,6 +10,8 @@ namespace Ui {
  */
 class CommentDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
+
 public:
     explicit CommentDelegate(QObject* _parent = nullptr);
 
