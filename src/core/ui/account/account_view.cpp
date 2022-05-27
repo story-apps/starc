@@ -427,6 +427,7 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     d->avatar->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->avatar->setTextColor(Ui::DesignSystem::color().onBackground());
     d->avatar->setFixedSize((QSizeF(288, 288) * Ui::DesignSystem::scaleFactor()).toSize());
 
     d->accountInfoLayout->setSpacing(Ui::DesignSystem::layout().px24());
