@@ -26,7 +26,7 @@ public:
      * @brief Нарисовать цвет элемента
      */
     void paintItemColor(QPainter* _painter, const QStyleOptionViewItem& _option,
-                        const QVariant& _color) const;
+                        const QVariant& _color, const QModelIndex& _index) const;
 
     /**
      * @brief Нарисовать количество слов в элемента и получить область где это будет отрисовано
@@ -60,7 +60,8 @@ public:
 };
 
 void ComicBookTextStructureDelegate::Implementation::paintItemColor(
-    QPainter* _painter, const QStyleOptionViewItem& _option, const QVariant& _color) const
+    QPainter* _painter, const QStyleOptionViewItem& _option, const QVariant& _color,
+    const QModelIndex& _index) const
 {
     if (_color.isNull() || !_color.canConvert<QColor>()) {
         return;
@@ -71,10 +72,22 @@ void ComicBookTextStructureDelegate::Implementation::paintItemColor(
         return;
     }
 
+    auto fullIndicatorWidth = [_index] {
+        int level = 0;
+        auto index = _index;
+        while (index.isValid()) {
+            ++level;
+            index = index.parent();
+        }
+        return level * Ui::DesignSystem::tree().indicatorWidth();
+    };
     const auto backgroundRect = _option.rect;
-    const QRectF sceneColorRect(0.0, backgroundRect.top(), Ui::DesignSystem::layout().px4(),
-                                backgroundRect.height());
-    _painter->fillRect(sceneColorRect, color);
+    const QRectF colorRect(
+        QLocale().textDirection() == Qt::LeftToRight
+            ? 0.0
+            : (backgroundRect.right() + fullIndicatorWidth() - Ui::DesignSystem::layout().px4()),
+        backgroundRect.top(), Ui::DesignSystem::layout().px4(), backgroundRect.height());
+    _painter->fillRect(colorRect, color);
 }
 
 QRectF ComicBookTextStructureDelegate::Implementation::paintItemWordsCount(
@@ -90,10 +103,13 @@ QRectF ComicBookTextStructureDelegate::Implementation::paintItemWordsCount(
     const qreal durationWidth = _painter->fontMetrics().horizontalAdvance(durationText);
 
     const QRectF backgroundRect = _option.rect;
-    const QRectF durationRect(QPointF(backgroundRect.right() - durationWidth
-                                          - Ui::DesignSystem::treeOneLineItem().margins().right(),
-                                      backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-                              QSizeF(durationWidth, Ui::DesignSystem::layout().px24()));
+    const QRectF durationRect(
+        QPointF(QLocale().textDirection() == Qt::LeftToRight
+                    ? (backgroundRect.right() - durationWidth
+                       - Ui::DesignSystem::treeOneLineItem().margins().right())
+                    : backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left(),
+                backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+        QSizeF(durationWidth, Ui::DesignSystem::layout().px24()));
     if (_wordsCount != kInvalidWordsCount) {
         _painter->drawText(durationRect, Qt::AlignLeft | Qt::AlignVCenter, durationText);
     }
@@ -108,6 +124,7 @@ void ComicBookTextStructureDelegate::Implementation::paintFolder(
 
     auto backgroundColor = _option.palette.color(QPalette::Base);
     auto textColor = _option.palette.color(QPalette::Text);
+    const auto isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
 
     //
     // Рисуем
@@ -139,7 +156,7 @@ void ComicBookTextStructureDelegate::Implementation::paintFolder(
     //
     // ... цвет папки
     //
-    paintItemColor(_painter, _option, _index.data(TextModelFolderItem::FolderColorRole));
+    paintItemColor(_painter, _option, _index.data(TextModelFolderItem::FolderColorRole), _index);
 
     //
     // ... иконка
@@ -147,13 +164,23 @@ void ComicBookTextStructureDelegate::Implementation::paintFolder(
     _painter->setPen(textColor);
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
-        iconRect
-            = QRectF(QPointF(std::max(backgroundRect.left(),
-                                      Ui::DesignSystem::treeOneLineItem().margins().left()),
-                             backgroundRect.top()),
-                     QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                            Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
-                                + Ui::DesignSystem::layout().px16()));
+        if (isLeftToRight) {
+            iconRect = QRectF(
+                QPointF(std::max(backgroundRect.left(),
+                                 Ui::DesignSystem::treeOneLineItem().margins().left()),
+                        backgroundRect.top()),
+                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                       Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
+                           + Ui::DesignSystem::layout().px16()));
+        } else {
+            iconRect = QRectF(QPointF(backgroundRect.right()
+                                          - Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                      backgroundRect.top()),
+                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                     Ui::DesignSystem::layout().px16()
+                                         + Ui::DesignSystem::layout().px24()
+                                         + Ui::DesignSystem::layout().px16()));
+        }
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
         _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignVCenter,
                            _index.data(Qt::DecorationRole).toString());
@@ -162,23 +189,33 @@ void ComicBookTextStructureDelegate::Implementation::paintFolder(
     //
     // ... количесвто слов в диалогах
     //
-    const auto folderDurationRect = paintItemWordsCount(_painter, _option);
+    const auto dialoguesWordsCountRect = paintItemWordsCount(_painter, _option);
 
     //
     // ... название папки
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     _painter->setPen(textColor);
-    const qreal folderNameLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-    const qreal folderNameWidth = folderDurationRect.left() - folderNameLeft
-        - Ui::DesignSystem::treeOneLineItem().spacing();
-    const QRectF folderNameRect(
-        QPointF(folderNameLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-        QSizeF(folderNameWidth, Ui::DesignSystem::layout().px24()));
+    QRectF headingRect;
+    if (isLeftToRight) {
+        const qreal hadingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
+        const qreal headingWidth = dialoguesWordsCountRect.left() - hadingLeft
+            - Ui::DesignSystem::treeOneLineItem().spacing();
+        headingRect
+            = QRectF(QPointF(hadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    } else {
+        const qreal hadingLeft
+            = dialoguesWordsCountRect.right() + Ui::DesignSystem::treeOneLineItem().spacing();
+        const qreal headingWidth = iconRect.left() - hadingLeft - Ui::DesignSystem::layout().px4();
+        headingRect
+            = QRectF(QPointF(hadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    }
     const auto folderName = _painter->fontMetrics().elidedText(
         _index.data(TextModelFolderItem::FolderHeadingRole).toString(), Qt::ElideRight,
-        static_cast<int>(folderNameRect.width()));
-    _painter->drawText(folderNameRect, Qt::AlignLeft | Qt::AlignVCenter, folderName);
+        static_cast<int>(headingRect.width()));
+    _painter->drawText(headingRect, Qt::AlignLeft | Qt::AlignVCenter, folderName);
 }
 
 void ComicBookTextStructureDelegate::Implementation::paintPage(QPainter* _painter,
@@ -189,6 +226,7 @@ void ComicBookTextStructureDelegate::Implementation::paintPage(QPainter* _painte
 
     auto backgroundColor = _option.palette.color(QPalette::Base);
     auto textColor = _option.palette.color(QPalette::Text);
+    const auto isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
 
     //
     // Рисуем
@@ -220,20 +258,30 @@ void ComicBookTextStructureDelegate::Implementation::paintPage(QPainter* _painte
     //
     // ... цвет папки
     //
-    paintItemColor(_painter, _option, _index.data(TextModelFolderItem::FolderColorRole));
+    paintItemColor(_painter, _option, _index.data(TextModelFolderItem::FolderColorRole), _index);
 
     //
     // ... иконка
     //
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
-        iconRect
-            = QRectF(QPointF(std::max(backgroundRect.left(),
-                                      Ui::DesignSystem::treeOneLineItem().margins().left()),
-                             backgroundRect.top()),
-                     QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                            Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
-                                + Ui::DesignSystem::layout().px16()));
+        if (isLeftToRight) {
+            iconRect = QRectF(
+                QPointF(std::max(backgroundRect.left(),
+                                 Ui::DesignSystem::treeOneLineItem().margins().left()),
+                        backgroundRect.top()),
+                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                       Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
+                           + Ui::DesignSystem::layout().px16()));
+        } else {
+            iconRect = QRectF(QPointF(backgroundRect.right()
+                                          - Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                      backgroundRect.top()),
+                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                     Ui::DesignSystem::layout().px16()
+                                         + Ui::DesignSystem::layout().px24()
+                                         + Ui::DesignSystem::layout().px16()));
+        }
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
         _painter->setPen(_index.data(ComicBookTextModelPageItem::PageHasNumberingErrorRole).toBool()
                              ? DesignSystem::color().error()
@@ -254,18 +302,28 @@ void ComicBookTextStructureDelegate::Implementation::paintPage(QPainter* _painte
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     _painter->setPen(textColor);
-    const qreal pageNameLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-    const qreal pageNameWidth = dialoguesWordsCountRect.left() - pageNameLeft
-        - Ui::DesignSystem::treeOneLineItem().spacing();
-    const QRectF pageNameRect(
-        QPointF(pageNameLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-        QSizeF(pageNameWidth, Ui::DesignSystem::layout().px24()));
+    QRectF headingRect;
+    if (isLeftToRight) {
+        const qreal hadingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
+        const qreal headingWidth = dialoguesWordsCountRect.left() - hadingLeft
+            - Ui::DesignSystem::treeOneLineItem().spacing();
+        headingRect
+            = QRectF(QPointF(hadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    } else {
+        const qreal hadingLeft
+            = dialoguesWordsCountRect.right() + Ui::DesignSystem::treeOneLineItem().spacing();
+        const qreal headingWidth = iconRect.left() - hadingLeft - Ui::DesignSystem::layout().px4();
+        headingRect
+            = QRectF(QPointF(hadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    }
     const auto pageName = QString("%1 (%2)").arg(
         _index.data(ComicBookTextModelPageItem::GroupHeadingRole).toString(),
         tr("%n PANELS", "", _index.data(ComicBookTextModelPageItem::PagePanelsCountRole).toInt()));
     const auto pageNameCorrected = _painter->fontMetrics().elidedText(
-        pageName, Qt::ElideRight, static_cast<int>(pageNameRect.width()));
-    _painter->drawText(pageNameRect, Qt::AlignLeft | Qt::AlignVCenter, pageNameCorrected);
+        pageName, Qt::ElideRight, static_cast<int>(headingRect.width()));
+    _painter->drawText(headingRect, Qt::AlignLeft | Qt::AlignVCenter, pageNameCorrected);
 }
 
 void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _painter,
@@ -276,6 +334,7 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
 
     auto backgroundColor = _option.palette.color(QPalette::Base);
     auto textColor = _option.palette.color(QPalette::Text);
+    const auto isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
 
     //
     // Рисуем
@@ -307,7 +366,8 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     //
     // ... цвет сцены
     //
-    paintItemColor(_painter, _option, _index.data(ComicBookTextModelPanelItem::GroupColorRole));
+    paintItemColor(_painter, _option, _index.data(ComicBookTextModelPanelItem::GroupColorRole),
+                   _index);
 
     //
     // ... иконка
@@ -315,13 +375,23 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     _painter->setPen(textColor);
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
-        iconRect
-            = QRectF(QPointF(std::max(backgroundRect.left(),
-                                      Ui::DesignSystem::treeOneLineItem().margins().left()),
-                             backgroundRect.top()),
-                     QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                            Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
-                                + Ui::DesignSystem::layout().px16()));
+        if (isLeftToRight) {
+            iconRect = QRectF(
+                QPointF(std::max(backgroundRect.left(),
+                                 Ui::DesignSystem::treeOneLineItem().margins().left()),
+                        backgroundRect.top()),
+                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                       Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
+                           + Ui::DesignSystem::layout().px16()));
+        } else {
+            iconRect = QRectF(QPointF(backgroundRect.right()
+                                          - Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                      backgroundRect.top()),
+                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                     Ui::DesignSystem::layout().px16()
+                                         + Ui::DesignSystem::layout().px24()
+                                         + Ui::DesignSystem::layout().px16()));
+        }
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
         _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignVCenter,
                            _index.data(Qt::DecorationRole).toString());
@@ -332,22 +402,32 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     //
     const int wordsSize
         = _index.data(ComicBookTextModelPanelItem::PanelDialoguesWordsSizeRole).toInt();
-    const auto panelDurationRect = paintItemWordsCount(_painter, _option, wordsSize);
+    const auto dialoguesWordsCountRect = paintItemWordsCount(_painter, _option, wordsSize);
 
     //
     // ... заголовок сцены
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
-    const qreal panelHeadingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-    const qreal panelHeadingWidth = panelDurationRect.left() - panelHeadingLeft
-        - Ui::DesignSystem::treeOneLineItem().spacing();
-    const QRectF panelHeadingRect(
-        QPointF(panelHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-        QSizeF(panelHeadingWidth, Ui::DesignSystem::layout().px24()));
+    QRectF headingRect;
+    if (isLeftToRight) {
+        const qreal hadingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
+        const qreal headingWidth = dialoguesWordsCountRect.left() - hadingLeft
+            - Ui::DesignSystem::treeOneLineItem().spacing();
+        headingRect
+            = QRectF(QPointF(hadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    } else {
+        const qreal hadingLeft
+            = dialoguesWordsCountRect.right() + Ui::DesignSystem::treeOneLineItem().spacing();
+        const qreal headingWidth = iconRect.left() - hadingLeft - Ui::DesignSystem::layout().px4();
+        headingRect
+            = QRectF(QPointF(hadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    }
     auto panelHeading = _index.data(ComicBookTextModelPanelItem::GroupHeadingRole).toString();
     panelHeading = _painter->fontMetrics().elidedText(panelHeading, Qt::ElideRight,
-                                                      static_cast<int>(panelHeadingRect.width()));
-    _painter->drawText(panelHeadingRect, Qt::AlignLeft | Qt::AlignVCenter, panelHeading);
+                                                      static_cast<int>(headingRect.width()));
+    _painter->drawText(headingRect, Qt::AlignLeft | Qt::AlignVCenter, panelHeading);
 
     //
     // ... текст сцены
@@ -356,27 +436,27 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
     if (panelText.isEmpty()) {
         return;
     }
-    QRectF panelTextRect;
+    QRectF textRect;
     if (textLines > 0) {
         _painter->setFont(Ui::DesignSystem::font().body2());
-        const qreal panelTextLeft = iconRect.left();
-        const qreal panelTextWidth = backgroundRect.right() - panelTextLeft
-            - Ui::DesignSystem::treeOneLineItem().margins().right();
-        panelTextRect = QRectF(
-            QPointF(panelTextLeft, panelHeadingRect.bottom() + Ui::DesignSystem::layout().px8()),
-            QSizeF(panelTextWidth, _painter->fontMetrics().lineSpacing() * textLines));
-        panelText
-            = TextHelper::elidedText(panelText, Ui::DesignSystem::font().body2(), panelTextRect);
-        _painter->drawText(panelTextRect, Qt::TextWordWrap, panelText);
+        const qreal textLeft = isLeftToRight ? iconRect.left() : dialoguesWordsCountRect.left();
+        const qreal textWidth = isLeftToRight ? (dialoguesWordsCountRect.right() - iconRect.left())
+                                              : (iconRect.right() - dialoguesWordsCountRect.left());
+        textRect
+            = QRectF(QPointF(textLeft, headingRect.bottom() + Ui::DesignSystem::layout().px8()),
+                     QSizeF(textWidth, _painter->fontMetrics().lineSpacing() * textLines));
+        panelText = TextHelper::elidedText(panelText, Ui::DesignSystem::font().body2(), textRect);
+        _painter->drawText(textRect, Qt::TextWordWrap, panelText);
     }
 
     //
     // ... иконки заметок
     //
     const auto inlineNotesSize = _index.data(TextModelGroupItem::GroupInlineNotesSizeRole).toInt();
-    const qreal notesLeft = iconRect.left();
-    const qreal notesTop = (panelTextRect.isValid() ? panelTextRect : panelHeadingRect).bottom()
-        + Ui::DesignSystem::layout().px8();
+    const qreal notesLeft
+        = isLeftToRight ? iconRect.left() : (iconRect.right() - Ui::DesignSystem::layout().px24());
+    const qreal notesTop
+        = (textRect.isValid() ? textRect : headingRect).bottom() + Ui::DesignSystem::layout().px8();
     const qreal notesHeight = Ui::DesignSystem::layout().px16();
     QRectF inlineNotesRect;
     if (inlineNotesSize > 0) {
@@ -387,11 +467,15 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
         //
         _painter->setFont(Ui::DesignSystem::font().caption());
         const auto inlineNotesSizeText = QString::number(inlineNotesSize);
+        const auto inlineNotesSizeTextWidth
+            = TextHelper::fineTextWidthF(inlineNotesSizeText, _painter->font());
         inlineNotesRect
-            = { QPointF(inlineNotesIconRect.right() + Ui::DesignSystem::layout().px2(),
+            = { QPointF(isLeftToRight
+                            ? (inlineNotesIconRect.right() + Ui::DesignSystem::layout().px2())
+                            : (inlineNotesIconRect.left() - Ui::DesignSystem::layout().px2()
+                               - inlineNotesSizeTextWidth),
                         inlineNotesIconRect.top()),
-                QSizeF(TextHelper::fineTextWidthF(inlineNotesSizeText, _painter->font()),
-                       notesHeight) };
+                QSizeF(inlineNotesSizeTextWidth, notesHeight) };
         _painter->drawText(inlineNotesRect, Qt::AlignLeft | Qt::AlignVCenter, inlineNotesSizeText);
     }
     //
@@ -400,7 +484,10 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
         _painter->setFont(Ui::DesignSystem::font().iconsSmall());
         const QRectF reviewMarksIconRect(
             QPointF(inlineNotesRect.isValid()
-                        ? (inlineNotesRect.right() + Ui::DesignSystem::layout().px16())
+                        ? (isLeftToRight
+                               ? (inlineNotesRect.right() + Ui::DesignSystem::layout().px16())
+                               : (inlineNotesRect.left() - Ui::DesignSystem::layout().px16()
+                                  - Ui::DesignSystem::layout().px24()))
                         : notesLeft,
                     notesTop),
             QSizeF(Ui::DesignSystem::layout().px24(), notesHeight));
@@ -408,10 +495,14 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
         //
         _painter->setFont(Ui::DesignSystem::font().caption());
         const auto reviewMarksSizeText = QString::number(reviewMarksSize);
+        const auto reviewMarksSizeTextWidth
+            = TextHelper::fineTextWidthF(reviewMarksSizeText, _painter->font());
         const QRectF reviewMarksRect(
-            QPointF(reviewMarksIconRect.right() + Ui::DesignSystem::layout().px2(),
+            QPointF(isLeftToRight ? (reviewMarksIconRect.right() + Ui::DesignSystem::layout().px2())
+                                  : (reviewMarksIconRect.left() - Ui::DesignSystem::layout().px2()
+                                     - reviewMarksSizeTextWidth),
                     reviewMarksIconRect.top()),
-            QSizeF(TextHelper::fineTextWidthF(reviewMarksSizeText, _painter->font()), notesHeight));
+            QSizeF(reviewMarksSizeTextWidth, notesHeight));
         _painter->drawText(reviewMarksRect, Qt::AlignLeft | Qt::AlignVCenter, reviewMarksSizeText);
     }
 }
@@ -435,7 +526,6 @@ QSize ComicBookTextStructureDelegate::Implementation::folderSizeHint(
     //
     // Считаем высоту
     //
-    const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body2());
     int height = Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
         + Ui::DesignSystem::layout().px16();
 
