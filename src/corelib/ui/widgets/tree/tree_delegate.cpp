@@ -44,6 +44,7 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
 
     auto backgroundColor = opt.palette.color(QPalette::Base);
     auto textColor = opt.palette.color(QPalette::Text);
+    const auto isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
 
     //
     // Рисуем
@@ -84,7 +85,7 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
             _painter->setPen(_index.data(Qt::DecorationPropertyRole).value<QColor>());
         }
 
-        if (QLocale().textDirection() == Qt::LeftToRight) {
+        if (isLeftToRight) {
             iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
                                                Ui::DesignSystem::treeOneLineItem().margins().left())
                                           + m_additionalLeftMargin,
@@ -108,7 +109,7 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     _painter->setPen(textColor);
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     QRectF textRect;
-    if (QLocale().textDirection() == Qt::LeftToRight) {
+    if (isLeftToRight) {
         const qreal textLeft = iconRect.isValid()
             ? iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing()
             : backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left()
@@ -143,12 +144,14 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     // Рисуем декорацию
     //
     if (!m_hoverTrailingIcon.isEmpty() && opt.state.testFlag(QStyle::State_MouseOver)) {
-        auto iconRect = QRectF(QPointF(backgroundRect.right()
-                                           - Ui::DesignSystem::treeOneLineItem().iconSize().width()
-                                           - Ui::DesignSystem::treeOneLineItem().margins().right(),
-                                       backgroundRect.top()),
-                               QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                                      backgroundRect.height()));
+        auto iconRect = QRectF(
+            QPointF(isLeftToRight ? (backgroundRect.right()
+                                     - Ui::DesignSystem::treeOneLineItem().iconSize().width()
+                                     - Ui::DesignSystem::treeOneLineItem().margins().right())
+                                  : Ui::DesignSystem::treeOneLineItem().margins().left(),
+                    backgroundRect.top()),
+            QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                   backgroundRect.height()));
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
         _painter->drawText(iconRect, Qt::AlignCenter, m_hoverTrailingIcon);
     }
