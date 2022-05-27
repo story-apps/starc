@@ -73,9 +73,9 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     //
     // ... цвет главы
     //
-    const auto chapterColor = _index.data(TextModelGroupItem::GroupColorRole);
-    if (!chapterColor.isNull() && chapterColor.canConvert<QColor>()) {
-        const QColor color = chapterColor.value<QColor>();
+    const auto itemColor = _index.data(TextModelGroupItem::GroupColorRole);
+    if (!itemColor.isNull() && itemColor.canConvert<QColor>()) {
+        const QColor color = itemColor.value<QColor>();
         if (color.isValid()) {
             auto fullIndicatorWidth = [_index] {
                 int level = 0;
@@ -87,12 +87,12 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
                 return level * Ui::DesignSystem::tree().indicatorWidth();
             };
             const auto backgroundRect = _option.rect;
-            const QRectF chapterColorRect(
+            const QRectF itemColorRect(
                 isLeftToRight ? 0.0
                               : (backgroundRect.right() + fullIndicatorWidth()
                                  - Ui::DesignSystem::layout().px4()),
                 backgroundRect.top(), Ui::DesignSystem::layout().px4(), backgroundRect.height());
-            _painter->fillRect(chapterColorRect, color);
+            _painter->fillRect(itemColorRect, color);
         }
     }
 
@@ -128,27 +128,27 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     // ... заголовок главы
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
-    QRectF chapterHeadingRect;
+    QRectF headingRect;
     if (isLeftToRight) {
-        const qreal chapterHeadingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-        const qreal chapterHeadingWidth = backgroundRect.right()
-            - Ui::DesignSystem::treeOneLineItem().margins().right() - chapterHeadingLeft
+        const qreal headingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
+        const qreal headingWidth = backgroundRect.right()
+            - Ui::DesignSystem::treeOneLineItem().margins().right() - headingLeft
             - Ui::DesignSystem::treeOneLineItem().spacing();
-        chapterHeadingRect = QRectF(
-            QPointF(chapterHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-            QSizeF(chapterHeadingWidth, Ui::DesignSystem::layout().px24()));
+        headingRect
+            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
     } else {
-        const qreal chapterHeadingLeft
+        const qreal headingLeft
             = backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
-        const qreal chapterHeadingWidth = iconRect.left() - chapterHeadingLeft;
-        chapterHeadingRect = QRectF(
-            QPointF(chapterHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-            QSizeF(chapterHeadingWidth, Ui::DesignSystem::layout().px24()));
+        const qreal headingWidth = iconRect.left() - headingLeft;
+        headingRect
+            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
     }
     auto chapterHeading = _index.data(SimpleTextModelChapterItem::GroupHeadingRole).toString();
-    chapterHeading = _painter->fontMetrics().elidedText(
-        chapterHeading, Qt::ElideRight, static_cast<int>(chapterHeadingRect.width()));
-    _painter->drawText(chapterHeadingRect, Qt::AlignLeft | Qt::AlignVCenter, chapterHeading);
+    chapterHeading = _painter->fontMetrics().elidedText(chapterHeading, Qt::ElideRight,
+                                                        static_cast<int>(headingRect.width()));
+    _painter->drawText(headingRect, Qt::AlignLeft | Qt::AlignVCenter, chapterHeading);
 
     //
     // ... текст главы
@@ -157,28 +157,26 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     if (chapterText.isEmpty()) {
         return;
     }
-    QRectF chapterTextRect;
+    QRectF textRect;
     if (textLines > 0) {
         _painter->setFont(Ui::DesignSystem::font().body2());
         if (isLeftToRight) {
-            const qreal chapterTextLeft = iconRect.left();
-            const qreal chapterTextWidth = backgroundRect.right() - chapterTextLeft
+            const qreal textLeft = iconRect.left();
+            const qreal textWidth = backgroundRect.right() - textLeft
                 - Ui::DesignSystem::treeOneLineItem().margins().right();
-            chapterTextRect = QRectF(
-                QPointF(chapterTextLeft,
-                        chapterHeadingRect.bottom() + Ui::DesignSystem::layout().px8()),
-                QSizeF(chapterTextWidth, _painter->fontMetrics().lineSpacing() * textLines));
+            textRect
+                = QRectF(QPointF(textLeft, headingRect.bottom() + Ui::DesignSystem::layout().px8()),
+                         QSizeF(textWidth, _painter->fontMetrics().lineSpacing() * textLines));
         } else {
-            const qreal chapterTextLeft = chapterHeadingRect.left();
-            const qreal chapterTextWidth = iconRect.right() - chapterTextLeft;
-            chapterTextRect = QRectF(
-                QPointF(chapterTextLeft,
-                        chapterHeadingRect.bottom() + Ui::DesignSystem::layout().px8()),
-                QSizeF(chapterTextWidth, _painter->fontMetrics().lineSpacing() * textLines));
+            const qreal textLeft = headingRect.left();
+            const qreal textWidth = iconRect.right() - textLeft;
+            textRect
+                = QRectF(QPointF(textLeft, headingRect.bottom() + Ui::DesignSystem::layout().px8()),
+                         QSizeF(textWidth, _painter->fontMetrics().lineSpacing() * textLines));
         }
-        chapterText = TextHelper::elidedText(chapterText, Ui::DesignSystem::font().body2(),
-                                             chapterTextRect);
-        _painter->drawText(chapterTextRect, Qt::TextWordWrap, chapterText);
+        chapterText
+            = TextHelper::elidedText(chapterText, Ui::DesignSystem::font().body2(), textRect);
+        _painter->drawText(textRect, Qt::TextWordWrap, chapterText);
     }
 
     //
@@ -188,8 +186,7 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     const qreal notesLeft
         = isLeftToRight ? iconRect.left() : (iconRect.right() - Ui::DesignSystem::layout().px24());
     const qreal notesTop
-        = (chapterTextRect.isValid() ? chapterTextRect : chapterHeadingRect).bottom()
-        + Ui::DesignSystem::layout().px8();
+        = (textRect.isValid() ? textRect : headingRect).bottom() + Ui::DesignSystem::layout().px8();
     const qreal notesHeight = Ui::DesignSystem::layout().px16();
     QRectF inlineNotesRect;
     if (inlineNotesSize > 0) {

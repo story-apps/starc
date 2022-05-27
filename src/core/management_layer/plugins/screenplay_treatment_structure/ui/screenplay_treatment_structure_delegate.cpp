@@ -22,7 +22,7 @@ public:
      * @brief Нарисовать цвет элемента
      */
     void paintItemColor(QPainter* _painter, const QStyleOptionViewItem& _option,
-                        const QVariant& _color) const;
+                        const QVariant& _color, const QModelIndex& _index) const;
 
     /**
      * @brief Нарисовать элемент
@@ -47,7 +47,8 @@ public:
 };
 
 void ScreenplayTreatmentStructureDelegate::Implementation::paintItemColor(
-    QPainter* _painter, const QStyleOptionViewItem& _option, const QVariant& _color) const
+    QPainter* _painter, const QStyleOptionViewItem& _option, const QVariant& _color,
+    const QModelIndex& _index) const
 {
     if (_color.isNull() || !_color.canConvert<QColor>()) {
         return;
@@ -58,10 +59,22 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintItemColor(
         return;
     }
 
+    auto fullIndicatorWidth = [_index] {
+        int level = 0;
+        auto index = _index;
+        while (index.isValid()) {
+            ++level;
+            index = index.parent();
+        }
+        return level * Ui::DesignSystem::tree().indicatorWidth();
+    };
     const auto backgroundRect = _option.rect;
-    const QRectF sceneColorRect(0.0, backgroundRect.top(), Ui::DesignSystem::layout().px4(),
-                                backgroundRect.height());
-    _painter->fillRect(sceneColorRect, color);
+    const QRectF colorRect(
+        QLocale().textDirection() == Qt::LeftToRight
+            ? 0.0
+            : (backgroundRect.right() + fullIndicatorWidth() - Ui::DesignSystem::layout().px4()),
+        backgroundRect.top(), Ui::DesignSystem::layout().px4(), backgroundRect.height());
+    _painter->fillRect(colorRect, color);
 }
 
 void ScreenplayTreatmentStructureDelegate::Implementation::paintFolder(
@@ -71,6 +84,7 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintFolder(
 
     auto backgroundColor = _option.palette.color(QPalette::Base);
     auto textColor = _option.palette.color(QPalette::Text);
+    const auto isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
 
     //
     // Рисуем
@@ -102,7 +116,7 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintFolder(
     //
     // ... цвет папки
     //
-    paintItemColor(_painter, _option, _index.data(TextModelFolderItem::FolderColorRole));
+    paintItemColor(_painter, _option, _index.data(TextModelFolderItem::FolderColorRole), _index);
 
     //
     // ... иконка
@@ -110,13 +124,23 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintFolder(
     _painter->setPen(textColor);
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
-        iconRect
-            = QRectF(QPointF(std::max(backgroundRect.left(),
-                                      Ui::DesignSystem::treeOneLineItem().margins().left()),
-                             backgroundRect.top()),
-                     QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                            Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
-                                + Ui::DesignSystem::layout().px16()));
+        if (isLeftToRight) {
+            iconRect = QRectF(
+                QPointF(std::max(backgroundRect.left(),
+                                 Ui::DesignSystem::treeOneLineItem().margins().left()),
+                        backgroundRect.top()),
+                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                       Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
+                           + Ui::DesignSystem::layout().px16()));
+        } else {
+            iconRect = QRectF(QPointF(backgroundRect.right()
+                                          - Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                      backgroundRect.top()),
+                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                     Ui::DesignSystem::layout().px16()
+                                         + Ui::DesignSystem::layout().px24()
+                                         + Ui::DesignSystem::layout().px16()));
+        }
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
         _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignVCenter,
                            _index.data(Qt::DecorationRole).toString());
@@ -127,16 +151,27 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintFolder(
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     _painter->setPen(textColor);
-    const qreal folderNameLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-    const qreal folderNameWidth
-        = backgroundRect.right() - folderNameLeft - Ui::DesignSystem::treeOneLineItem().spacing();
-    const QRectF folderNameRect(
-        QPointF(folderNameLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-        QSizeF(folderNameWidth, Ui::DesignSystem::layout().px24()));
+    QRectF headingRect;
+    if (isLeftToRight) {
+        const qreal headingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
+        const qreal headingWidth = backgroundRect.right()
+            - Ui::DesignSystem::treeOneLineItem().margins().right() - headingLeft
+            - Ui::DesignSystem::treeOneLineItem().spacing();
+        headingRect
+            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    } else {
+        const qreal headingLeft
+            = backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
+        const qreal headingWidth = iconRect.left() - headingLeft;
+        headingRect
+            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    }
     const auto folderName = _painter->fontMetrics().elidedText(
         _index.data(TextModelFolderItem::FolderHeadingRole).toString(), Qt::ElideRight,
-        static_cast<int>(folderNameRect.width()));
-    _painter->drawText(folderNameRect, Qt::AlignLeft | Qt::AlignVCenter, folderName);
+        static_cast<int>(headingRect.width()));
+    _painter->drawText(headingRect, Qt::AlignLeft | Qt::AlignVCenter, folderName);
 }
 
 void ScreenplayTreatmentStructureDelegate::Implementation::paintScene(
@@ -146,6 +181,7 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintScene(
 
     auto backgroundColor = _option.palette.color(QPalette::Base);
     auto textColor = _option.palette.color(QPalette::Text);
+    const auto isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
 
     //
     // Рисуем
@@ -177,7 +213,7 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintScene(
     //
     // ... цвет сцены
     //
-    paintItemColor(_painter, _option, _index.data(TextModelGroupItem::GroupColorRole));
+    paintItemColor(_painter, _option, _index.data(TextModelGroupItem::GroupColorRole), _index);
 
     //
     // ... иконка
@@ -185,13 +221,23 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintScene(
     _painter->setPen(textColor);
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
-        iconRect
-            = QRectF(QPointF(std::max(backgroundRect.left(),
-                                      Ui::DesignSystem::treeOneLineItem().margins().left()),
-                             backgroundRect.top()),
-                     QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                            Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
-                                + Ui::DesignSystem::layout().px16()));
+        if (isLeftToRight) {
+            iconRect = QRectF(
+                QPointF(std::max(backgroundRect.left(),
+                                 Ui::DesignSystem::treeOneLineItem().margins().left()),
+                        backgroundRect.top()),
+                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                       Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
+                           + Ui::DesignSystem::layout().px16()));
+        } else {
+            iconRect = QRectF(QPointF(backgroundRect.right()
+                                          - Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                      backgroundRect.top()),
+                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                     Ui::DesignSystem::layout().px16()
+                                         + Ui::DesignSystem::layout().px24()
+                                         + Ui::DesignSystem::layout().px16()));
+        }
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
         _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignVCenter,
                            _index.data(Qt::DecorationRole).toString());
@@ -201,40 +247,30 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintScene(
     // ... заголовок сцены
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
-    const qreal sceneHeadingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-    const qreal sceneHeadingWidth
-        = backgroundRect.right() - sceneHeadingLeft - Ui::DesignSystem::treeOneLineItem().spacing();
-    const QRectF sceneHeadingRect(
-        QPointF(sceneHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-        QSizeF(sceneHeadingWidth, Ui::DesignSystem::layout().px24()));
+    QRectF headingRect;
+    if (isLeftToRight) {
+        const qreal headingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
+        const qreal headingWidth = backgroundRect.right()
+            - Ui::DesignSystem::treeOneLineItem().margins().right() - headingLeft
+            - Ui::DesignSystem::treeOneLineItem().spacing();
+        headingRect
+            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    } else {
+        const qreal headingLeft
+            = backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
+        const qreal headingWidth = iconRect.left() - headingLeft;
+        headingRect
+            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    }
     auto sceneHeading = _index.data(TextModelGroupItem::GroupHeadingRole).toString();
     if (showSceneNumber) {
         sceneHeading.prepend(_index.data(TextModelGroupItem::GroupNumberRole).toString() + " ");
     }
     sceneHeading = _painter->fontMetrics().elidedText(sceneHeading, Qt::ElideRight,
-                                                      static_cast<int>(sceneHeadingRect.width()));
-    _painter->drawText(sceneHeadingRect, Qt::AlignLeft | Qt::AlignVCenter, sceneHeading);
-
-    //
-    // ... текст сцены
-    //
-    auto sceneText = _index.data(TextModelGroupItem::GroupTextRole).toString();
-    if (sceneText.isEmpty()) {
-        return;
-    }
-    QRectF sceneTextRect;
-    if (textLines > 0) {
-        _painter->setFont(Ui::DesignSystem::font().body2());
-        const qreal sceneTextLeft = iconRect.left();
-        const qreal sceneTextWidth = backgroundRect.right() - sceneTextLeft
-            - Ui::DesignSystem::treeOneLineItem().margins().right();
-        sceneTextRect = QRectF(
-            QPointF(sceneTextLeft, sceneHeadingRect.bottom() + Ui::DesignSystem::layout().px8()),
-            QSizeF(sceneTextWidth, _painter->fontMetrics().lineSpacing() * textLines));
-        sceneText
-            = TextHelper::elidedText(sceneText, Ui::DesignSystem::font().body2(), sceneTextRect);
-        _painter->drawText(sceneTextRect, Qt::TextWordWrap, sceneText);
-    }
+                                                      static_cast<int>(headingRect.width()));
+    _painter->drawText(headingRect, Qt::AlignLeft | Qt::AlignVCenter, sceneHeading);
 }
 
 void ScreenplayTreatmentStructureDelegate::Implementation::paintBeat(
@@ -244,6 +280,7 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintBeat(
 
     auto backgroundColor = _option.palette.color(QPalette::Base);
     auto textColor = _option.palette.color(QPalette::Text);
+    const auto isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
 
     //
     // Рисуем
@@ -275,7 +312,7 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintBeat(
     //
     // ... цвет бита
     //
-    paintItemColor(_painter, _option, _index.data(TextModelGroupItem::GroupColorRole));
+    paintItemColor(_painter, _option, _index.data(TextModelGroupItem::GroupColorRole), _index);
 
     //
     // ... иконка
@@ -283,13 +320,23 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintBeat(
     _painter->setPen(textColor);
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
-        iconRect
-            = QRectF(QPointF(std::max(backgroundRect.left(),
-                                      Ui::DesignSystem::treeOneLineItem().margins().left()),
-                             backgroundRect.top()),
-                     QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                            Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
-                                + Ui::DesignSystem::layout().px16()));
+        if (isLeftToRight) {
+            iconRect = QRectF(
+                QPointF(std::max(backgroundRect.left(),
+                                 Ui::DesignSystem::treeOneLineItem().margins().left()),
+                        backgroundRect.top()),
+                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                       Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
+                           + Ui::DesignSystem::layout().px16()));
+        } else {
+            iconRect = QRectF(QPointF(backgroundRect.right()
+                                          - Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                      backgroundRect.top()),
+                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                     Ui::DesignSystem::layout().px16()
+                                         + Ui::DesignSystem::layout().px24()
+                                         + Ui::DesignSystem::layout().px16()));
+        }
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
         _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignVCenter,
                            _index.data(Qt::DecorationRole).toString());
@@ -300,12 +347,23 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintBeat(
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     _painter->setPen(textColor);
-    const qreal headingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-    const qreal headingWidth
-        = backgroundRect.right() - headingLeft - Ui::DesignSystem::treeOneLineItem().spacing();
-    const QRectF headingRect(
-        QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-        QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    QRectF headingRect;
+    if (isLeftToRight) {
+        const qreal headingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
+        const qreal headingWidth = backgroundRect.right()
+            - Ui::DesignSystem::treeOneLineItem().margins().right() - headingLeft
+            - Ui::DesignSystem::treeOneLineItem().spacing();
+        headingRect
+            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    } else {
+        const qreal headingLeft
+            = backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
+        const qreal headingWidth = iconRect.left() - headingLeft;
+        headingRect
+            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+    }
     const auto heading = _painter->fontMetrics().elidedText(
         _index.data(TextModelGroupItem::GroupHeadingRole).toString(), Qt::ElideRight,
         static_cast<int>(headingRect.width()));

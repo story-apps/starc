@@ -80,7 +80,6 @@ void StageplayTextStructureDelegate::Implementation::paintItemColor(
             : (backgroundRect.right() + fullIndicatorWidth() - Ui::DesignSystem::layout().px4()),
         backgroundRect.top(), Ui::DesignSystem::layout().px4(), backgroundRect.height());
     _painter->fillRect(colorRect, color);
-    _painter->fillRect(colorRect, color);
 }
 
 QRectF StageplayTextStructureDelegate::Implementation::paintItemDuration(
