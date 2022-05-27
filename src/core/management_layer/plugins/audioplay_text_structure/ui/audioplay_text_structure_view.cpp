@@ -78,10 +78,6 @@ AudioplayTextStructureView::AudioplayTextStructureView(QWidget* _parent)
     connect(d->content, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
         emit customContextMenuRequested(d->content->mapToParent(_pos));
     });
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 AudioplayTextStructureView::~AudioplayTextStructureView() = default;
@@ -155,14 +151,19 @@ void AudioplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent
     d->content->setBackgroundColor(DesignSystem::color().primary());
     d->content->setTextColor(DesignSystem::color().onPrimary());
 
-    d->backIcon->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px8(),
-                  Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px8())
-            .toMargins());
-    d->backText->setContentsMargins(QMarginsF(0, Ui::DesignSystem::layout().px12(),
-                                              Ui::DesignSystem::layout().px16(),
-                                              Ui::DesignSystem::layout().px12())
+    d->backIcon->setContentsMargins(QMarginsF(isLeftToRight() ? Ui::DesignSystem::layout().px12()
+                                                              : Ui::DesignSystem::layout().px4(),
+                                              Ui::DesignSystem::layout().px8(),
+                                              isLeftToRight() ? Ui::DesignSystem::layout().px4()
+                                                              : Ui::DesignSystem::layout().px12(),
+                                              Ui::DesignSystem::layout().px8())
                                         .toMargins());
+    d->backText->setContentsMargins(
+        QMarginsF(isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px16(),
+                  Ui::DesignSystem::layout().px12(),
+                  isLeftToRight() ? Ui::DesignSystem::layout().px16() : 0.0,
+                  Ui::DesignSystem::layout().px12())
+            .toMargins());
 }
 
 } // namespace Ui

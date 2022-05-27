@@ -80,7 +80,6 @@ void ScreenplayTextStructureDelegate::Implementation::paintItemColor(
             : (backgroundRect.right() + fullIndicatorWidth() - Ui::DesignSystem::layout().px4()),
         backgroundRect.top(), Ui::DesignSystem::layout().px4(), backgroundRect.height());
     _painter->fillRect(colorRect, color);
-    _painter->fillRect(colorRect, color);
 }
 
 QRectF ScreenplayTextStructureDelegate::Implementation::paintItemDuration(
@@ -331,10 +330,7 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
         _painter->setFont(Ui::DesignSystem::font().body2());
         const qreal textLeft = isLeftToRight ? iconRect.left() : durationRect.left();
         const qreal textWidth = isLeftToRight ? (durationRect.right() - iconRect.left())
-                                              : (iconRect.right() - durationRect.left())
-            /*backgroundRect.right() - textLeft
-- Ui::DesignSystem::treeOneLineItem().margins().right()*/
-            ;
+                                              : (iconRect.right() - durationRect.left());
         textRect
             = QRectF(QPointF(textLeft, headingRect.bottom() + Ui::DesignSystem::layout().px8()),
                      QSizeF(textWidth, _painter->fontMetrics().lineSpacing() * textLines));
