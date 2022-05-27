@@ -41,6 +41,7 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
 
     auto backgroundColor = _option.palette.color(QPalette::Base);
     auto textColor = _option.palette.color(QPalette::Text);
+    const auto isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
 
     //
     // Рисуем
@@ -76,10 +77,21 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     if (!chapterColor.isNull() && chapterColor.canConvert<QColor>()) {
         const QColor color = chapterColor.value<QColor>();
         if (color.isValid()) {
+            auto fullIndicatorWidth = [_index] {
+                int level = 0;
+                auto index = _index;
+                while (index.isValid()) {
+                    ++level;
+                    index = index.parent();
+                }
+                return level * Ui::DesignSystem::tree().indicatorWidth();
+            };
             const auto backgroundRect = _option.rect;
-            const QRectF chapterColorRect(0.0, backgroundRect.top(),
-                                          Ui::DesignSystem::layout().px4(),
-                                          backgroundRect.height());
+            const QRectF chapterColorRect(
+                isLeftToRight ? 0.0
+                              : (backgroundRect.right() + fullIndicatorWidth()
+                                 - Ui::DesignSystem::layout().px4()),
+                backgroundRect.top(), Ui::DesignSystem::layout().px4(), backgroundRect.height());
             _painter->fillRect(chapterColorRect, color);
         }
     }
@@ -90,13 +102,23 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     _painter->setPen(textColor);
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
-        iconRect
-            = QRectF(QPointF(std::max(backgroundRect.left(),
-                                      Ui::DesignSystem::treeOneLineItem().margins().left()),
-                             backgroundRect.top()),
-                     QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                            Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
-                                + Ui::DesignSystem::layout().px16()));
+        if (isLeftToRight) {
+            iconRect = QRectF(
+                QPointF(std::max(backgroundRect.left(),
+                                 Ui::DesignSystem::treeOneLineItem().margins().left()),
+                        backgroundRect.top()),
+                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                       Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
+                           + Ui::DesignSystem::layout().px16()));
+        } else {
+            iconRect = QRectF(QPointF(backgroundRect.right()
+                                          - Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                      backgroundRect.top()),
+                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                     Ui::DesignSystem::layout().px16()
+                                         + Ui::DesignSystem::layout().px24()
+                                         + Ui::DesignSystem::layout().px16()));
+        }
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
         _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignVCenter,
                            _index.data(Qt::DecorationRole).toString());
@@ -106,13 +128,23 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     // ... заголовок главы
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
-    const qreal chapterHeadingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-    const qreal chapterHeadingWidth = backgroundRect.right()
-        - Ui::DesignSystem::treeOneLineItem().margins().right() - chapterHeadingLeft
-        - Ui::DesignSystem::treeOneLineItem().spacing();
-    const QRectF chapterHeadingRect(
-        QPointF(chapterHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-        QSizeF(chapterHeadingWidth, Ui::DesignSystem::layout().px24()));
+    QRectF chapterHeadingRect;
+    if (isLeftToRight) {
+        const qreal chapterHeadingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
+        const qreal chapterHeadingWidth = backgroundRect.right()
+            - Ui::DesignSystem::treeOneLineItem().margins().right() - chapterHeadingLeft
+            - Ui::DesignSystem::treeOneLineItem().spacing();
+        chapterHeadingRect = QRectF(
+            QPointF(chapterHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+            QSizeF(chapterHeadingWidth, Ui::DesignSystem::layout().px24()));
+    } else {
+        const qreal chapterHeadingLeft
+            = backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
+        const qreal chapterHeadingWidth = iconRect.left() - chapterHeadingLeft;
+        chapterHeadingRect = QRectF(
+            QPointF(chapterHeadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
+            QSizeF(chapterHeadingWidth, Ui::DesignSystem::layout().px24()));
+    }
     auto chapterHeading = _index.data(SimpleTextModelChapterItem::GroupHeadingRole).toString();
     chapterHeading = _painter->fontMetrics().elidedText(
         chapterHeading, Qt::ElideRight, static_cast<int>(chapterHeadingRect.width()));
@@ -128,13 +160,22 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     QRectF chapterTextRect;
     if (textLines > 0) {
         _painter->setFont(Ui::DesignSystem::font().body2());
-        const qreal chapterTextLeft = iconRect.left();
-        const qreal chapterTextWidth = backgroundRect.right() - chapterTextLeft
-            - Ui::DesignSystem::treeOneLineItem().margins().right();
-        chapterTextRect
-            = QRectF(QPointF(chapterTextLeft,
-                             chapterHeadingRect.bottom() + Ui::DesignSystem::layout().px8()),
-                     QSizeF(chapterTextWidth, _painter->fontMetrics().lineSpacing() * textLines));
+        if (isLeftToRight) {
+            const qreal chapterTextLeft = iconRect.left();
+            const qreal chapterTextWidth = backgroundRect.right() - chapterTextLeft
+                - Ui::DesignSystem::treeOneLineItem().margins().right();
+            chapterTextRect = QRectF(
+                QPointF(chapterTextLeft,
+                        chapterHeadingRect.bottom() + Ui::DesignSystem::layout().px8()),
+                QSizeF(chapterTextWidth, _painter->fontMetrics().lineSpacing() * textLines));
+        } else {
+            const qreal chapterTextLeft = chapterHeadingRect.left();
+            const qreal chapterTextWidth = iconRect.right() - chapterTextLeft;
+            chapterTextRect = QRectF(
+                QPointF(chapterTextLeft,
+                        chapterHeadingRect.bottom() + Ui::DesignSystem::layout().px8()),
+                QSizeF(chapterTextWidth, _painter->fontMetrics().lineSpacing() * textLines));
+        }
         chapterText = TextHelper::elidedText(chapterText, Ui::DesignSystem::font().body2(),
                                              chapterTextRect);
         _painter->drawText(chapterTextRect, Qt::TextWordWrap, chapterText);
@@ -144,7 +185,8 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     // ... иконки заметок
     //
     const auto inlineNotesSize = _index.data(TextModelGroupItem::GroupInlineNotesSizeRole).toInt();
-    const qreal notesLeft = iconRect.left();
+    const qreal notesLeft
+        = isLeftToRight ? iconRect.left() : (iconRect.right() - Ui::DesignSystem::layout().px24());
     const qreal notesTop
         = (chapterTextRect.isValid() ? chapterTextRect : chapterHeadingRect).bottom()
         + Ui::DesignSystem::layout().px8();
@@ -158,11 +200,15 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
         //
         _painter->setFont(Ui::DesignSystem::font().caption());
         const auto inlineNotesSizeText = QString::number(inlineNotesSize);
+        const auto inlineNotesSizeTextWidth
+            = TextHelper::fineTextWidthF(inlineNotesSizeText, _painter->font());
         inlineNotesRect
-            = { QPointF(inlineNotesIconRect.right() + Ui::DesignSystem::layout().px2(),
+            = { QPointF(isLeftToRight
+                            ? (inlineNotesIconRect.right() + Ui::DesignSystem::layout().px2())
+                            : (inlineNotesIconRect.left() - Ui::DesignSystem::layout().px2()
+                               - inlineNotesSizeTextWidth),
                         inlineNotesIconRect.top()),
-                QSizeF(TextHelper::fineTextWidthF(inlineNotesSizeText, _painter->font()),
-                       notesHeight) };
+                QSizeF(inlineNotesSizeTextWidth, notesHeight) };
         _painter->drawText(inlineNotesRect, Qt::AlignLeft | Qt::AlignVCenter, inlineNotesSizeText);
     }
     //
@@ -171,7 +217,10 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
         _painter->setFont(Ui::DesignSystem::font().iconsSmall());
         const QRectF reviewMarksIconRect(
             QPointF(inlineNotesRect.isValid()
-                        ? (inlineNotesRect.right() + Ui::DesignSystem::layout().px16())
+                        ? (isLeftToRight
+                               ? (inlineNotesRect.right() + Ui::DesignSystem::layout().px16())
+                               : (inlineNotesRect.left() - Ui::DesignSystem::layout().px16()
+                                  - Ui::DesignSystem::layout().px24()))
                         : notesLeft,
                     notesTop),
             QSizeF(Ui::DesignSystem::layout().px24(), notesHeight));
@@ -179,10 +228,14 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
         //
         _painter->setFont(Ui::DesignSystem::font().caption());
         const auto reviewMarksSizeText = QString::number(reviewMarksSize);
+        const auto reviewMarksSizeTextWidth
+            = TextHelper::fineTextWidthF(reviewMarksSizeText, _painter->font());
         const QRectF reviewMarksRect(
-            QPointF(reviewMarksIconRect.right() + Ui::DesignSystem::layout().px2(),
+            QPointF(isLeftToRight ? (reviewMarksIconRect.right() + Ui::DesignSystem::layout().px2())
+                                  : (reviewMarksIconRect.left() - Ui::DesignSystem::layout().px2()
+                                     - reviewMarksSizeTextWidth),
                     reviewMarksIconRect.top()),
-            QSizeF(TextHelper::fineTextWidthF(reviewMarksSizeText, _painter->font()), notesHeight));
+            QSizeF(reviewMarksSizeTextWidth, notesHeight));
         _painter->drawText(reviewMarksRect, Qt::AlignLeft | Qt::AlignVCenter, reviewMarksSizeText);
     }
 }
