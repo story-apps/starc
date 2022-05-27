@@ -131,10 +131,6 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
         d->updateOptionsTranslations();
         d->beatNameWidget->setVisible(_checked);
     });
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 ScreenplayTextStructureView::~ScreenplayTextStructureView() = default;
@@ -208,7 +204,7 @@ void ScreenplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEven
     setBackgroundColor(DesignSystem::color().primary());
     auto backTextColor = DesignSystem::color().onPrimary();
     backTextColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
-    for (auto widget : QVector<Widget*>{
+    for (auto widget : std::vector<Widget*>{
              d->backIcon,
              d->backText,
          }) {
@@ -218,14 +214,19 @@ void ScreenplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEven
     d->content->setBackgroundColor(DesignSystem::color().primary());
     d->content->setTextColor(DesignSystem::color().onPrimary());
 
-    d->backIcon->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px8(),
-                  Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px8())
-            .toMargins());
-    d->backText->setContentsMargins(QMarginsF(0, Ui::DesignSystem::layout().px12(),
-                                              Ui::DesignSystem::layout().px16(),
-                                              Ui::DesignSystem::layout().px12())
+    d->backIcon->setContentsMargins(QMarginsF(isLeftToRight() ? Ui::DesignSystem::layout().px12()
+                                                              : Ui::DesignSystem::layout().px4(),
+                                              Ui::DesignSystem::layout().px8(),
+                                              isLeftToRight() ? Ui::DesignSystem::layout().px4()
+                                                              : Ui::DesignSystem::layout().px12(),
+                                              Ui::DesignSystem::layout().px8())
                                         .toMargins());
+    d->backText->setContentsMargins(
+        QMarginsF(isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px16(),
+                  Ui::DesignSystem::layout().px12(),
+                  isLeftToRight() ? Ui::DesignSystem::layout().px16() : 0.0,
+                  Ui::DesignSystem::layout().px12())
+            .toMargins());
 }
 
 } // namespace Ui
