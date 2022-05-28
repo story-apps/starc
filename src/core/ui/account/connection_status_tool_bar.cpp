@@ -12,11 +12,23 @@
 
 namespace Ui {
 
+namespace {
+constexpr int kUnsetPosition = -1;
+}
+
 class ConnectionStatusToolBar::Implementation
 {
 public:
     explicit Implementation(ConnectionStatusToolBar* _q);
 
+    /**
+     * @brief Скорректировать положение панели относительно родительского виджета
+     */
+    void correctPosition(int _y = kUnsetPosition);
+
+    /**
+     * @brief Показать/скрыть панель
+     */
     void show();
     void hide();
 
@@ -89,6 +101,16 @@ ConnectionStatusToolBar::Implementation::Implementation(ConnectionStatusToolBar*
     positionAnimation.setDuration(240);
 }
 
+void ConnectionStatusToolBar::Implementation::correctPosition(int _y)
+{
+    q->move(q->isLeftToRight()
+                ? (q->parentWidget()->width() - q->width() - Ui::DesignSystem::layout().px24())
+                : Ui::DesignSystem::layout().px24(),
+            _y == kUnsetPosition
+                ? (q->parentWidget()->height() - q->height() - Ui::DesignSystem::layout().px24())
+                : _y);
+}
+
 void ConnectionStatusToolBar::Implementation::show()
 {
     if (q->isVisible()) {
@@ -142,10 +164,7 @@ ConnectionStatusToolBar::ConnectionStatusToolBar(QWidget* _parent)
     connect(&d->spanAngleAnimation, &QVariantAnimation::valueChanged, this,
             qOverload<>(&ConnectionStatusToolBar::update));
     connect(&d->positionAnimation, &QVariantAnimation::valueChanged, this,
-            [this](const QVariant& _value) {
-                move(parentWidget()->width() - width() - Ui::DesignSystem::layout().px24(),
-                     _value.toInt());
-            });
+            [this](const QVariant& _value) { d->correctPosition(_value.toInt()); });
     connect(&d->positionAnimation, &QVariantAnimation::finished, this, [this] {
         //
         // Если скрываем панель с экрана, то по завершении остановим анимацию прогресса и скроем
@@ -190,8 +209,7 @@ bool ConnectionStatusToolBar::eventFilter(QObject* _watched, QEvent* _event)
                 }
                 d->positionAnimation.resume();
             } else {
-                move(parentWidget()->width() - width() - Ui::DesignSystem::layout().px24(),
-                     parentWidget()->height() - height() - Ui::DesignSystem::layout().px24());
+                d->correctPosition();
             }
         } else if (_event->type() == QEvent::ChildAdded) {
             raise();
@@ -241,8 +259,7 @@ void ConnectionStatusToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _
 
     raise();
     resize(sizeHint());
-    move(parentWidget()->width() - width() - Ui::DesignSystem::layout().px24(),
-         parentWidget()->height() - height() - Ui::DesignSystem::layout().px24());
+    d->correctPosition();
 }
 
 } // namespace Ui
