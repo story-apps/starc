@@ -50,8 +50,9 @@ void TaskBar::Implementation::correctGeometry(QWidget* _taskBar)
                                + Ui::DesignSystem::taskBar().taskHeight() * tasks.size()
                                + Ui::DesignSystem::taskBar().margins().bottom());
 
-    const int x
-        = _taskBar->parentWidget()->width() - _taskBar->width() - Ui::DesignSystem::layout().px4();
+    const int x = _taskBar->isLeftToRight()
+        ? (_taskBar->parentWidget()->width() - _taskBar->width() - Ui::DesignSystem::layout().px4())
+        : Ui::DesignSystem::layout().px4();
     const int y = _taskBar->parentWidget()->height() - _taskBar->height()
         - Ui::DesignSystem::layout().px4();
     _taskBar->move(x, y);
@@ -182,7 +183,7 @@ void TaskBar::paintEvent(QPaintEvent* _event)
 
     const auto progressRadius = Ui::DesignSystem::progressBar().linearTrackHeight() / 2.0;
     qreal lastTop = Ui::DesignSystem::taskBar().margins().top();
-    for (const auto& task : d->tasks) {
+    for (const auto& task : std::as_const(d->tasks)) {
         //
         // Заголовок
         //
@@ -209,9 +210,13 @@ void TaskBar::paintEvent(QPaintEvent* _event)
         //
         // ... заполненная часть
         //
-        const QRectF progressRect(progressBackgroundRect.left(), progressBackgroundRect.top(),
-                                  progressBackgroundRect.width() * task.progress / 100.0,
-                                  progressBackgroundRect.height());
+        const QRectF progressRect(
+            progressBackgroundRect.left()
+                + (isLeftToRight() ? 0.0
+                                   : (progressBackgroundRect.width()
+                                      - progressBackgroundRect.width() * task.progress / 100.0)),
+            progressBackgroundRect.top(), progressBackgroundRect.width() * task.progress / 100.0,
+            progressBackgroundRect.height());
         painter.setOpacity(1.0);
         painter.drawRoundedRect(progressRect, progressRadius, progressRadius);
 
