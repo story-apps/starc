@@ -124,27 +124,30 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
     bool isAuthorChanged = true;
     bool isCurrentAuthor = false;
     ChatMessage lastMessage;
-    auto drawAvatar
-        = [&painter, &lastY, &isDateChanged, &isAuthorChanged, &isCurrentAuthor, &lastMessage] {
-              if (!lastMessage.author().isValid()) {
-                  return;
-              }
+    auto drawAvatar = [this, &painter, &lastY, &isDateChanged, &isAuthorChanged, &isCurrentAuthor,
+                       &lastMessage] {
+        if (!lastMessage.author().isValid()) {
+            return;
+        }
 
-              //
-              // Если предыдущее сообщение было не своё, и при этом изменяется пользователь, или
-              // день, то отрисуем авку
-              //
-              if (!isCurrentAuthor && (isDateChanged || isAuthorChanged)) {
-                  const auto avatarSize = Ui::DesignSystem::treeOneLineItem().iconSize();
-                  const QRectF avatarRect(
-                      QPointF(Ui::DesignSystem::layout().px12(), lastY - avatarSize.height()),
-                      avatarSize);
-                  const auto avatar = ImageHelper::makeAvatar(lastMessage.author().name(),
-                                                              Ui::DesignSystem::font().body2(),
-                                                              avatarSize.toSize(), Qt::white);
-                  painter.drawPixmap(avatarRect, avatar, avatar.rect());
-              }
-          };
+        //
+        // Если предыдущее сообщение было не своё, и при этом изменяется пользователь, или
+        // день, то отрисуем авку
+        //
+        if (!isCurrentAuthor && (isDateChanged || isAuthorChanged)) {
+            const auto avatarSize = Ui::DesignSystem::treeOneLineItem().iconSize();
+            const QRectF avatarRect(
+                QPointF(isLeftToRight()
+                            ? Ui::DesignSystem::layout().px12()
+                            : (width() - Ui::DesignSystem::layout().px12() - avatarSize.width()),
+                        lastY - avatarSize.height()),
+                avatarSize);
+            const auto avatar = ImageHelper::makeAvatar(lastMessage.author().name(),
+                                                        Ui::DesignSystem::font().body2(),
+                                                        avatarSize.toSize(), Qt::white);
+            painter.drawPixmap(avatarRect, avatar, avatar.rect());
+        }
+    };
 
     for (const auto& message : std::as_const(d->messages)) {
         //
@@ -199,8 +202,10 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
                                : Ui::DesignSystem::layout().px2());
         const qreal messageWidth = messageTextWidth + Ui::DesignSystem::layout().px24();
         const qreal messageX = isCurrentAuthor && messageTextWidth < maximumTextWidth
-            ? width() - messageWidth - Ui::DesignSystem::layout().px16()
-            : Ui::DesignSystem::layout().px48();
+            ? (isLeftToRight() ? (width() - messageWidth - Ui::DesignSystem::layout().px16())
+                               : Ui::DesignSystem::layout().px16())
+            : (isLeftToRight() ? Ui::DesignSystem::layout().px48()
+                               : (width() - messageWidth - Ui::DesignSystem::layout().px48()));
         const qreal messageHeightDelta = isAuthorChanged && !isCurrentAuthor
             ? titleFontMetrics.lineSpacing() + Ui::DesignSystem::layout().px4()
             : 0.0;
@@ -217,18 +222,20 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
                                 Ui::DesignSystem::card().borderRadius());
         painter.setPen(textColor());
         //
+        QTextOption textOption;
+        textOption.setAlignment(isLeftToRight() ? Qt::AlignLeft : Qt::AlignRight);
         if (isAuthorChanged && !isCurrentAuthor) {
             painter.setFont(Ui::DesignSystem::font().subtitle2());
             painter.setPen(message.author().avatarColor());
-            painter.drawText(QPointF(messageTextRect.left(),
-                                     messageRect.top() + Ui::DesignSystem::layout().px4()
-                                         + titleFontMetrics.lineSpacing()),
-                             message.author().name());
+            painter.drawText(
+                QRectF(QPointF(messageTextRect.left(),
+                               messageRect.top() + Ui::DesignSystem::layout().px8()),
+                       QSizeF(messageTextRect.width(), titleFontMetrics.lineSpacing())),
+                message.author().name(), textOption);
             painter.setFont(Ui::DesignSystem::font().body2());
             painter.setPen(textColor());
         }
         //
-        QTextOption textOption;
         textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
         painter.drawText(messageTextRect, message.text(), textOption);
 

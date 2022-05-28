@@ -326,13 +326,15 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
                                   Ui::DesignSystem::card().borderRadius());
         _painter->setFont(Ui::DesignSystem::font().subtitle2());
         _painter->setPen(textColor);
-        _painter->drawText(QPointF(lastCommentTextRect.left(),
-                                   lastCommentRect.top() + Ui::DesignSystem::layout().px4()
-                                       + titleFontMetrics.lineSpacing()),
-                           lastComment.author);
+        QTextOption commentTextOption;
+        commentTextOption.setAlignment(isLeftToRight ? Qt::AlignLeft : Qt::AlignRight);
+        _painter->drawText(
+            QRectF(QPointF(lastCommentTextRect.left(),
+                           lastCommentRect.top() + Ui::DesignSystem::layout().px8()),
+                   QSizeF(lastCommentTextRect.width(), titleFontMetrics.lineSpacing())),
+            lastComment.author, commentTextOption);
         _painter->setFont(Ui::DesignSystem::font().body2());
         _painter->setPen(textColor);
-        QTextOption commentTextOption;
         commentTextOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
         _painter->drawText(lastCommentTextRect, lastComment.text, commentTextOption);
 
