@@ -59,7 +59,10 @@ AudioplayTextScrollBarManager::Implementation::Implementation(QWidget* _parent)
 
 void AudioplayTextScrollBarManager::Implementation::updateTimelineGeometry()
 {
-    timeline->move(timeline->parentWidget()->size().width() - timeline->width(), 0);
+    timeline->move(QLocale().textDirection() == Qt::LeftToRight
+                       ? (timeline->parentWidget()->size().width() - timeline->width())
+                       : 0,
+                   0);
     timeline->resize(timeline->sizeHint().width(), timeline->parentWidget()->size().height());
     scrollbar->setFixedWidth(timeline->width());
 }
@@ -324,8 +327,9 @@ void AudioplayTextTimeline::paintEvent(QPaintEvent* _event)
     // 16 - скролбар с ползунком 4 + 8 + 4
     // 48 - правая часть от скролбара с таймлайном
     //
-    const QRectF scrollbarRect(Ui::DesignSystem::layout().px16(), 0,
-                               Ui::DesignSystem::layout().px8(), contentRect.height());
+    const QRectF scrollbarRect(isLeftToRight() ? Ui::DesignSystem::layout().px16()
+                                               : (width() - Ui::DesignSystem::layout().px24()),
+                               0, Ui::DesignSystem::layout().px8(), contentRect.height());
     const auto scrollbarColor = ColorHelper::nearby(Ui::DesignSystem::color().textEditor());
     painter.fillRect(scrollbarRect, scrollbarColor);
     //
@@ -379,10 +383,10 @@ void AudioplayTextTimeline::paintEvent(QPaintEvent* _event)
         // Рисуем линию
         //
         const auto duration = iter->first;
-        QPointF left(0,
+        QPointF left(isLeftToRight() ? 0 : scrollbarRect.left(),
                      (height() - painter.fontMetrics().lineSpacing()) * duration / d->maximum
                          + painter.fontMetrics().lineSpacing() / 2);
-        const QPointF right(scrollbarRect.right(), left.y());
+        const QPointF right(isLeftToRight() ? scrollbarRect.right() : width(), left.y());
         const QLineF colorRect(left, right);
 
         painter.drawLine(colorRect);
@@ -390,9 +394,15 @@ void AudioplayTextTimeline::paintEvent(QPaintEvent* _event)
         // и наконечник
         //
         QPolygonF treangle;
-        treangle << QPointF(left.x(), left.y() - Ui::DesignSystem::layout().px4())
-                 << QPointF(left.x() + Ui::DesignSystem::layout().px8(), left.y())
-                 << QPointF(left.x(), left.y() + Ui::DesignSystem::layout().px4());
+        if (isLeftToRight()) {
+            treangle << QPointF(left.x(), left.y() - Ui::DesignSystem::layout().px4())
+                     << QPointF(left.x() + Ui::DesignSystem::layout().px8(), left.y())
+                     << QPointF(left.x(), left.y() + Ui::DesignSystem::layout().px4());
+        } else {
+            treangle << QPointF(right.x(), right.y() - Ui::DesignSystem::layout().px4())
+                     << QPointF(right.x() - Ui::DesignSystem::layout().px8(), right.y())
+                     << QPointF(right.x(), right.y() + Ui::DesignSystem::layout().px4());
+        }
         painter.drawPolygon(treangle);
     }
     painter.setBrush(Qt::NoBrush);
@@ -400,9 +410,10 @@ void AudioplayTextTimeline::paintEvent(QPaintEvent* _event)
     //
     // Заливаем правую часть фона
     //
-    const QRectF scrollbarBackgroundRect(scrollbarRect.right(), scrollbarRect.top(),
-                                         Ui::DesignSystem::layout().px62(), scrollbarRect.height());
-    painter.fillRect(scrollbarBackgroundRect, scrollbarColor);
+    const QRectF scrollbarBackgroundRect(isLeftToRight() ? scrollbarRect.right() : 0.0,
+                                         scrollbarRect.top(), Ui::DesignSystem::layout().px(56),
+                                         scrollbarRect.height());
+    painter.fillRect(scrollbarBackgroundRect, Ui::DesignSystem::color().surface());
 
     //
     // Рисуем хэндл
@@ -424,31 +435,37 @@ void AudioplayTextTimeline::paintEvent(QPaintEvent* _event)
     //
     // Считаем область для отрисовки метки хэндла
     //
-    const qreal handleTextLeft = handleRect.right() + Ui::DesignSystem::layout().px8();
-    const QRectF handleTextRect(handleTextLeft, handleRect.top(),
-                                contentRect.width() - handleTextLeft, handleRect.height());
+    const qreal handleTextLeft
+        = isLeftToRight() ? (handleRect.right() + Ui::DesignSystem::layout().px8()) : 0.0;
+    const qreal handleTextWidth = isLeftToRight()
+        ? (contentRect.width() - handleTextLeft)
+        : handleRect.left() - Ui::DesignSystem::layout().px8();
+    const QRectF handleTextRect(handleTextLeft, handleRect.top(), handleTextWidth,
+                                handleRect.height());
 
     //
     // Рисуем метки на таймлайне
     //
-    const auto tickRight = scrollbarRect.right() + (handleTextLeft - scrollbarRect.right()) / 2;
+    const auto tickWidth = isLeftToRight()
+        ? (scrollbarRect.right() + (handleTextLeft - scrollbarRect.right()) / 2)
+        : handleTextLeft + handleTextWidth
+            + ((scrollbarRect.left() - (handleTextLeft + handleTextWidth)) / 2);
     const auto markColor = ColorHelper::transparent(Ui::DesignSystem::color().onTextEditor(),
                                                     Ui::DesignSystem::disabledTextOpacity());
-    const auto markWidth = contentRect.width() - handleTextLeft;
     const qreal marksSpacing = painter.fontMetrics().lineSpacing() * 4;
     const int marksCount = (height() - painter.fontMetrics().lineSpacing()) / marksSpacing;
     const qreal marksSpacingCorrected
         = static_cast<qreal>(height() - painter.fontMetrics().lineSpacing()) / marksCount;
     qreal top = 0.0;
     for (int markIndex = 0; markIndex <= marksCount; ++markIndex) {
-        const QRectF markTextRect(handleTextLeft, top, markWidth,
+        const QRectF markTextRect(handleTextLeft, top, handleTextWidth,
                                   painter.fontMetrics().lineSpacing());
         const auto duartionAtMark = d->maximum * (static_cast<qreal>(markIndex) / marksCount);
         if (d->scrollable && markTextRect.intersects(handleTextRect)) {
             painter.setOpacity(opacity() * Ui::DesignSystem::focusBackgroundOpacity());
         }
         painter.setPen(QPen(scrollbarColor, Ui::DesignSystem::layout().px2()));
-        painter.drawLine(scrollbarRect.right(), markTextRect.center().y(), tickRight,
+        painter.drawLine(scrollbarRect.right(), markTextRect.center().y(), tickWidth,
                          markTextRect.center().y());
         painter.setPen(markColor);
         painter.drawText(
