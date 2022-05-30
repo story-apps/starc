@@ -149,10 +149,9 @@ ProjectCard::~ProjectCard()
 
 void ProjectCard::setProject(const ManagementLayer::Project& _project)
 {
-    if (m_project == _project) {
-        return;
-    }
-
+    //
+    // Всегда обновляем проект, т.к. мог измениться постер, а мы не сравниваем картинки
+    //
     m_project = _project;
     update();
 }

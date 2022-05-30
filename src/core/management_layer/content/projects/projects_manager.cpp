@@ -333,6 +333,12 @@ void ProjectsManager::setCurrentProjectLogline(const QString& _logline)
 
 void ProjectsManager::setCurrentProjectCover(const QPixmap& _cover)
 {
+    if (_cover.isNull()) {
+        d->currentProject.setPosterPath({});
+        d->projects->updateProject(d->currentProject);
+        return;
+    }
+
     const QString posterDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
         + "/thumbnails/projects/";
     QDir::root().mkpath(posterDir);
