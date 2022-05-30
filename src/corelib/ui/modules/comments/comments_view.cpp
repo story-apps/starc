@@ -175,19 +175,18 @@ CommentsView::CommentsView(QWidget* _parent)
     });
     connect(d->repliesView, &CommentRepliesView::addReplyPressed, this,
             [this](const QString& _reply) {
-                emit addReviewMarkReplyRequested(d->commentsView->currentIndex(), _reply);
+                const auto currentCommentIndex = d->commentsView->currentIndex();
+                emit addReviewMarkReplyRequested(currentCommentIndex, _reply);
+                d->commentsView->setCurrentIndex(currentCommentIndex);
             });
     connect(d->repliesView, &CommentRepliesView::closePressed, this, [this] {
         auto animationRect = d->commentsView->visualRect(d->commentsView->currentIndex());
         animationRect.setLeft(0);
         setAnimationRect(d->commentsView, animationRect);
         setCurrentWidget(d->commentsView);
-        QTimer::singleShot(animationDuration(),
+        QTimer::singleShot(animationDuration(), this,
                            [this] { setAnimationType(StackWidget::AnimationType::Slide); });
     });
-
-
-    designSystemChangeEvent(nullptr);
 }
 
 CommentsView::~CommentsView() = default;
