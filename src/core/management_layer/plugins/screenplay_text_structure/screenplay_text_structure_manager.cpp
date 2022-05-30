@@ -195,8 +195,7 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     //
     if (d->model != nullptr) {
         disconnect(d->model->informationModel(),
-                   &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view,
-                   &Ui::ScreenplayTextStructureView::setTitle);
+                   &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view, nullptr);
     }
 
     //
@@ -221,11 +220,13 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     // Настраиваем соединения с новой моделью
     //
     if (d->model != nullptr) {
-        d->view->setTitle(
-            QString("%1 | %2").arg(tr("Screenplay"), d->model->informationModel()->name()));
+        auto updateTitle = [this] {
+            d->view->setTitle(
+                QString("%1 | %2").arg(tr("Screenplay"), d->model->informationModel()->name()));
+        };
+        updateTitle();
         connect(d->model->informationModel(),
-                &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view,
-                &Ui::ScreenplayTextStructureView::setTitle);
+                &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view, updateTitle);
     }
 
     //

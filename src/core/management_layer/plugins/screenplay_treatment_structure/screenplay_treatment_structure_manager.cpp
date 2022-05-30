@@ -195,8 +195,7 @@ void ScreenplayTreatmentStructureManager::setModel(BusinessLayer::AbstractModel*
     //
     if (d->model != nullptr) {
         disconnect(d->model->informationModel(),
-                   &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view,
-                   &Ui::ScreenplayTreatmentStructureView::setTitle);
+                   &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view, nullptr);
     }
 
     //
@@ -221,11 +220,13 @@ void ScreenplayTreatmentStructureManager::setModel(BusinessLayer::AbstractModel*
     // Настраиваем соединения с новой моделью
     //
     if (d->model != nullptr) {
-        d->view->setTitle(
-            QString("%1 | %2").arg(tr("Treatment"), d->model->informationModel()->name()));
+        auto updateTitle = [this] {
+            d->view->setTitle(
+                QString("%1 | %2").arg(tr("Treatment"), d->model->informationModel()->name()));
+        };
+        updateTitle();
         connect(d->model->informationModel(),
-                &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view,
-                &Ui::ScreenplayTreatmentStructureView::setTitle);
+                &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view, updateTitle);
     }
 
     //

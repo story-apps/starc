@@ -132,7 +132,6 @@ QModelIndexList ScreenplayTreatmentStructureView::selectedIndexes() const
 
 void ScreenplayTreatmentStructureView::updateTranslations()
 {
-    d->backText->setText("Back to navigator");
 }
 
 void ScreenplayTreatmentStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
