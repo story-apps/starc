@@ -537,6 +537,11 @@ QWidget* TemplateOptionsManager::viewToolBar() const
     return d->viewToolBar;
 }
 
+Domain::DocumentObjectType TemplateOptionsManager::currentDocumentType() const
+{
+    return d->currentDocumentType;
+}
+
 void TemplateOptionsManager::setCurrentDocumentType(Domain::DocumentObjectType _type)
 {
     if (d->currentDocumentType == _type) {

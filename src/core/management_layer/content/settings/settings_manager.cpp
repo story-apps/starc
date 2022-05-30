@@ -798,8 +798,38 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
         //
         // После закрытия уведомляем клиентов о том, что текущий шаблон обновился
         //
-        emit screenplayEditorChanged(
-            { DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey });
+        switch (d->templateOptionsManager->currentDocumentType()) {
+        default:
+        case Domain::DocumentObjectType::SimpleText: {
+            emit simpleTextEditorChanged(
+                { DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey });
+            break;
+        }
+
+        case Domain::DocumentObjectType::Screenplay: {
+            emit screenplayEditorChanged(
+                { DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey });
+            break;
+        }
+
+        case Domain::DocumentObjectType::ComicBook: {
+            emit comicBookEditorChanged(
+                { DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey });
+            break;
+        }
+
+        case Domain::DocumentObjectType::Audioplay: {
+            emit audioplayEditorChanged(
+                { DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey });
+            break;
+        }
+
+        case Domain::DocumentObjectType::Stageplay: {
+            emit stageplayEditorChanged(
+                { DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey });
+            break;
+        }
+        }
     });
     connect(d->templateOptionsManager, &TemplateOptionsManager::showViewRequested, this,
             [this](QWidget* _view) {
@@ -902,6 +932,8 @@ void SettingsManager::setApplicationShowDocumentsPages(bool _show)
     emit simpleTextEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
     emit screenplayEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
+    emit audioplayEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
+    emit stageplayEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
 }
 
 void SettingsManager::setApplicationUseTypeWriterSound(bool _use)
@@ -1098,6 +1130,8 @@ void SettingsManager::setApplicationHighlightCurrentLine(bool _highlight)
     emit simpleTextEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
     emit screenplayEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
+    emit audioplayEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
+    emit stageplayEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
 }
 
 void SettingsManager::setApplicationFocusCurrentParagraph(bool _focus)
@@ -1106,6 +1140,8 @@ void SettingsManager::setApplicationFocusCurrentParagraph(bool _focus)
     emit simpleTextEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
     emit screenplayEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
+    emit audioplayEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
+    emit stageplayEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
 }
 
 void SettingsManager::setApplicationUseTypewriterScrolling(bool _use)
@@ -1114,6 +1150,8 @@ void SettingsManager::setApplicationUseTypewriterScrolling(bool _use)
     emit simpleTextEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
     emit screenplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
+    emit audioplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
+    emit stageplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
 }
 
 void SettingsManager::setSimpleTextAvailable(bool _available)
@@ -1244,8 +1282,7 @@ void SettingsManager::setComicBookEditorDefaultTemplate(const QString& _template
 {
     setSettingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey, _templateId);
     BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(_templateId);
-    emit screenplayEditorChanged(
-        { DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey });
+    emit comicBookEditorChanged({ DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey });
 }
 
 void SettingsManager::setComicBookNavigatorShowSceneText(bool _show, int _lines)

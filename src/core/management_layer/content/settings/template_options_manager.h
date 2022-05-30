@@ -29,8 +29,9 @@ public:
     QWidget* viewToolBar() const;
 
     /**
-     * @brief Задать текущий тим шаблона
+     * @brief Текущий тим шаблона
      */
+    Domain::DocumentObjectType currentDocumentType() const;
     void setCurrentDocumentType(Domain::DocumentObjectType _type);
 
     /**
