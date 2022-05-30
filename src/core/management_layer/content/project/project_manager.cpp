@@ -10,6 +10,7 @@
 #include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/project/project_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/stageplay/text/stageplay_text_model.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
 #include <business_layer/model/structure/structure_proxy_model.h>
@@ -362,6 +363,18 @@ void ProjectManager::Implementation::findAllCharacters()
     for (auto model : comicBookModels) {
         auto comicBook = qobject_cast<BusinessLayer::ComicBookTextModel*>(model);
         charactersFromText.unite(comicBook->findCharactersFromText());
+    }
+    //
+    const auto audioplayModels = modelsFacade.modelsFor(Domain::DocumentObjectType::AudioplayText);
+    for (auto model : audioplayModels) {
+        auto audioplay = qobject_cast<BusinessLayer::AudioplayTextModel*>(model);
+        charactersFromText.unite(audioplay->findCharactersFromText());
+    }
+    //
+    const auto stageplayModels = modelsFacade.modelsFor(Domain::DocumentObjectType::StageplayText);
+    for (auto model : stageplayModels) {
+        auto stageplay = qobject_cast<BusinessLayer::StageplayTextModel*>(model);
+        charactersFromText.unite(stageplay->findCharactersFromText());
     }
     charactersFromText.remove({});
 
@@ -891,6 +904,20 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 for (auto model : comicBookModels) {
                     auto comicBook = qobject_cast<BusinessLayer::ComicBookTextModel*>(model);
                     comicBook->updateCharacterName(_oldName, _newName);
+                }
+                //
+                const auto audioplayModels
+                    = d->modelsFacade.modelsFor(Domain::DocumentObjectType::AudioplayText);
+                for (auto model : audioplayModels) {
+                    auto audioplay = qobject_cast<BusinessLayer::AudioplayTextModel*>(model);
+                    audioplay->updateCharacterName(_oldName, _newName);
+                }
+                //
+                const auto stageplayModels
+                    = d->modelsFacade.modelsFor(Domain::DocumentObjectType::StageplayText);
+                for (auto model : stageplayModels) {
+                    auto stageplay = qobject_cast<BusinessLayer::StageplayTextModel*>(model);
+                    stageplay->updateCharacterName(_oldName, _newName);
                 }
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this,
