@@ -720,7 +720,8 @@ SettingsStorage::Implementation::Implementation()
         addAudioplayEditorStylesChangeByEnter(TextParagraphType::Music,
                                               TextParagraphType::SceneHeading);
         addAudioplayEditorStylesChangeByTab(TextParagraphType::Cue, TextParagraphType::Character);
-        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Cue, TextParagraphType::Character);
+        addAudioplayEditorStylesChangeByEnter(TextParagraphType::Cue,
+                                              TextParagraphType::SceneHeading);
         addAudioplayEditorStylesChangeByTab(TextParagraphType::InlineNote,
                                             TextParagraphType::Character);
         addAudioplayEditorStylesChangeByEnter(TextParagraphType::InlineNote,
