@@ -282,7 +282,7 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
         bestXDelta = xDelta;
     }
 
-    editor()->setTextCursor(cursor);
+    editor()->setTextCursorForced(cursor);
 
     //
     // Если курсор в абзаце с таблицей, а под таблицей ничего нет, то добавим блок вниз,
@@ -343,7 +343,7 @@ void StandardKeyHandler::removeCharacters(bool _backward)
         cursor.movePosition(QTextCursor::StartOfBlock);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-        editor()->setTextCursor(cursor);
+        editor()->setTextCursorForced(cursor);
     }
     //
     // Если пользователь нажал Delete в конце непустого абзаца и при этом после текущего абзаца идёт
@@ -356,7 +356,7 @@ void StandardKeyHandler::removeCharacters(bool _backward)
         cursor.movePosition(QTextCursor::EndOfBlock);
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
         cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-        editor()->setTextCursor(cursor);
+        editor()->setTextCursorForced(cursor);
     }
 
     cursor.removeCharacters(_backward, editor());

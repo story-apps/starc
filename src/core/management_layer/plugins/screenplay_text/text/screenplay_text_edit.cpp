@@ -101,7 +101,7 @@ void ScreenplayTextEdit::Implementation::revertAction(bool previous)
     if (document.characterCount() > lastCursorPosition) {
         auto cursor = q->textCursor();
         cursor.setPosition(lastCursorPosition);
-        q->setTextCursorReimpl(cursor);
+        q->setTextCursorAndKeepScrollBars(cursor);
         q->ensureCursorVisible();
 
         //
@@ -337,7 +337,7 @@ BusinessLayer::TextParagraphType ScreenplayTextEdit::currentParagraphType() cons
     return TextBlockStyle::forBlock(textCursor().block());
 }
 
-void ScreenplayTextEdit::setTextCursorReimpl(const QTextCursor& _cursor)
+void ScreenplayTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
 {
     //
     // TODO: пояснить зачем это необходимо делать?

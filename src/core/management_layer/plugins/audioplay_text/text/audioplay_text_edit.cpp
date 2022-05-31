@@ -85,7 +85,7 @@ void AudioplayTextEdit::Implementation::revertAction(bool previous)
     if (document.characterCount() > lastCursorPosition) {
         auto cursor = q->textCursor();
         cursor.setPosition(lastCursorPosition);
-        q->setTextCursorReimpl(cursor);
+        q->setTextCursorAndKeepScrollBars(cursor);
         q->ensureCursorVisible();
 
         //
@@ -250,7 +250,7 @@ void AudioplayTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
         cursor.movePosition(QTextCursor::NextBlock);
         Q_ASSERT(!cursor.inTable());
 
-        setTextCursor(cursor);
+        setTextCursorForced(cursor);
     }
 
     //
@@ -404,11 +404,8 @@ BusinessLayer::TextParagraphType AudioplayTextEdit::currentParagraphType() const
     return TextBlockStyle::forBlock(textCursor().block());
 }
 
-void AudioplayTextEdit::setTextCursorReimpl(const QTextCursor& _cursor)
+void AudioplayTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
 {
-    //
-    // TODO: пояснить зачем это необходимо делать?
-    //
     const int verticalScrollValue = verticalScrollBar()->value();
     setTextCursor(_cursor);
     verticalScrollBar()->setValue(verticalScrollValue);

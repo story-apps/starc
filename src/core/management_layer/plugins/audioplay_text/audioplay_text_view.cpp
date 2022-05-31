@@ -426,9 +426,9 @@ void AudioplayTextView::Implementation::addReviewMark(const QColor& _textColor,
     //     и выделить новую заметку в общем списке
     //
     cursor.setPosition(selectionInterval.to);
-    textEdit->setTextCursorReimpl(cursor);
+    textEdit->setTextCursorAndKeepScrollBars(cursor);
     cursor.setPosition(selectionInterval.from);
-    textEdit->setTextCursorReimpl(cursor);
+    textEdit->setTextCursorAndKeepScrollBars(cursor);
 
     //
     // Фокусируем редактор сценария, чтобы пользователь мог продолжать работать с ним

@@ -282,7 +282,7 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
         bestXDelta = xDelta;
     }
 
-    editor()->setTextCursor(cursor);
+    editor()->setTextCursorForced(cursor);
 
     //
     // Если курсор в абзаце с таблицей, а под таблицей ничего нет, то добавим блок вниз,

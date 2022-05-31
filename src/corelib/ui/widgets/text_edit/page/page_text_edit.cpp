@@ -874,6 +874,12 @@ void PageTextEdit::setTextCursor(const QTextCursor& cursor)
     doSetTextCursor(cursor);
 }
 
+void PageTextEdit::setTextCursorForced(const QTextCursor& cursor)
+{
+    Q_D(PageTextEdit);
+    d->control->setTextCursor(cursor);
+}
+
 /*!
     \internal
 

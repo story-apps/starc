@@ -384,7 +384,7 @@ void StandardKeyHandler::removeCharacters(bool _backward)
             cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         }
-        editor()->setTextCursor(cursor);
+        editor()->setTextCursorForced(cursor);
     } else if (!cursor.atEnd() && !cursor.hasSelection()
                && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::BeatHeading
                && cursor.block().text().isEmpty()
@@ -413,7 +413,7 @@ void StandardKeyHandler::removeCharacters(bool _backward)
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             }
         }
-        editor()->setTextCursor(cursor);
+        editor()->setTextCursorForced(cursor);
     }
 
     cursor.removeCharacters(_backward, editor());

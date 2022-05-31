@@ -62,7 +62,7 @@ public:
     /**
      * @brief Своя реализация установки курсора
      */
-    void setTextCursorReimpl(const QTextCursor& _cursor);
+    void setTextCursorAndKeepScrollBars(const QTextCursor& _cursor);
 
     /**
      * @brief Получить индекс элемента модели в текущей позиции курсора

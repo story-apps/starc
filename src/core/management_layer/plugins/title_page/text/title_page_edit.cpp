@@ -81,7 +81,7 @@ void TitlePageEdit::Implementation::revertAction(bool previous)
     if (document.characterCount() > lastCursorPosition) {
         auto cursor = q->textCursor();
         cursor.setPosition(lastCursorPosition);
-        q->setTextCursorReimpl(cursor);
+        q->setTextCursorAndKeepScrollBars(cursor);
         q->ensureCursorVisible();
 
         //
@@ -352,7 +352,7 @@ void TitlePageEdit::addParagraph(BusinessLayer::TextParagraphType _type)
     emit paragraphTypeChanged();
 }
 
-void TitlePageEdit::setTextCursorReimpl(const QTextCursor& _cursor)
+void TitlePageEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
 {
     //
     // TODO: пояснить зачем это необходимо делать?

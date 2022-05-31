@@ -423,9 +423,9 @@ void ScreenplayTreatmentView::Implementation::addReviewMark(const QColor& _textC
     //     и выделить новую заметку в общем списке
     //
     cursor.setPosition(selectionInterval.to);
-    screenplayText->setTextCursorReimpl(cursor);
+    screenplayText->setTextCursorAndKeepScrollBars(cursor);
     cursor.setPosition(selectionInterval.from);
-    screenplayText->setTextCursorReimpl(cursor);
+    screenplayText->setTextCursorAndKeepScrollBars(cursor);
 
     //
     // Фокусируем редактор сценария, чтобы пользователь мог продолжать работать с ним

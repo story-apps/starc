@@ -73,7 +73,7 @@ void SimpleTextEdit::Implementation::revertAction(bool previous)
     if (document.characterCount() > lastCursorPosition) {
         auto cursor = q->textCursor();
         cursor.setPosition(lastCursorPosition);
-        q->setTextCursorReimpl(cursor);
+        q->setTextCursorAndKeepScrollBars(cursor);
         q->ensureCursorVisible();
 
         //
@@ -162,7 +162,7 @@ BusinessLayer::TextParagraphType SimpleTextEdit::currentParagraphType() const
     return TextBlockStyle::forBlock(textCursor().block());
 }
 
-void SimpleTextEdit::setTextCursorReimpl(const QTextCursor& _cursor)
+void SimpleTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
 {
     //
     // TODO: пояснить зачем это необходимо делать?

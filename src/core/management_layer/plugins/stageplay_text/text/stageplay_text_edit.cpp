@@ -85,7 +85,7 @@ void StageplayTextEdit::Implementation::revertAction(bool previous)
     if (document.characterCount() > lastCursorPosition) {
         auto cursor = q->textCursor();
         cursor.setPosition(lastCursorPosition);
-        q->setTextCursorReimpl(cursor);
+        q->setTextCursorAndKeepScrollBars(cursor);
         q->ensureCursorVisible();
 
         //
@@ -249,7 +249,7 @@ void StageplayTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
         cursor.movePosition(QTextCursor::NextBlock);
         Q_ASSERT(!cursor.inTable());
 
-        setTextCursor(cursor);
+        setTextCursorForced(cursor);
     }
 
     //
@@ -409,7 +409,7 @@ BusinessLayer::TextParagraphType StageplayTextEdit::currentParagraphType() const
     return TextBlockStyle::forBlock(textCursor().block());
 }
 
-void StageplayTextEdit::setTextCursorReimpl(const QTextCursor& _cursor)
+void StageplayTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
 {
     //
     // TODO: пояснить зачем это необходимо делать?

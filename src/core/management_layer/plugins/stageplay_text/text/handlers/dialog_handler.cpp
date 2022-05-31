@@ -236,7 +236,7 @@ void DialogHandler::handleOther(QKeyEvent* _event)
                 //
                 cursor = editor()->textCursor();
                 cursor.movePosition(QTextCursor::PreviousBlock);
-                editor()->setTextCursorReimpl(cursor);
+                editor()->setTextCursorAndKeepScrollBars(cursor);
             }
 
             //

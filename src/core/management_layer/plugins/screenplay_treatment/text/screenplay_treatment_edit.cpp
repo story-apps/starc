@@ -101,7 +101,7 @@ void ScreenplayTreatmentEdit::Implementation::revertAction(bool previous)
     if (document.characterCount() > lastCursorPosition) {
         auto cursor = q->textCursor();
         cursor.setPosition(lastCursorPosition);
-        q->setTextCursorReimpl(cursor);
+        q->setTextCursorAndKeepScrollBars(cursor);
         q->ensureCursorVisible();
 
         //
@@ -364,7 +364,7 @@ BusinessLayer::TextParagraphType ScreenplayTreatmentEdit::currentParagraphType()
     return TextBlockStyle::forBlock(textCursor().block());
 }
 
-void ScreenplayTreatmentEdit::setTextCursorReimpl(const QTextCursor& _cursor)
+void ScreenplayTreatmentEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
 {
     //
     // При позиционировании курсора в невидимый блок, Qt откидывает прокрутку в самый верх, поэтому
@@ -581,7 +581,7 @@ bool ScreenplayTreatmentEdit::updateEnteredText(const QString& _eventText)
         // Выводим необходимый
         //
         cursor.insertText(correctedText);
-        setTextCursorReimpl(cursor);
+        setTextCursorAndKeepScrollBars(cursor);
 
         return true;
     }
@@ -612,7 +612,7 @@ bool ScreenplayTreatmentEdit::updateEnteredText(const QString& _eventText)
         // Выводим необходимый
         //
         cursor.insertText(correctedText);
-        setTextCursorReimpl(cursor);
+        setTextCursorAndKeepScrollBars(cursor);
 
         return true;
     }

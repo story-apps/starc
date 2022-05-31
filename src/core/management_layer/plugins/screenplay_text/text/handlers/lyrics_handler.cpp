@@ -208,7 +208,7 @@ void LyricsHandler::handleTab(QKeyEvent*)
                     //
                     cursor = editor()->textCursor();
                     cursor.movePosition(QTextCursor::PreviousBlock);
-                    editor()->setTextCursorReimpl(cursor);
+                    editor()->setTextCursorAndKeepScrollBars(cursor);
 
                     //
                     // ... делаем блок под курсором ремаркой
@@ -279,7 +279,7 @@ void LyricsHandler::handleOther(QKeyEvent* _event)
                 //
                 cursor = editor()->textCursor();
                 cursor.movePosition(QTextCursor::PreviousBlock);
-                editor()->setTextCursorReimpl(cursor);
+                editor()->setTextCursorAndKeepScrollBars(cursor);
             }
 
             //

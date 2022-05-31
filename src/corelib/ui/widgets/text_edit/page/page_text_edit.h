@@ -81,6 +81,7 @@ public:
     QString placeholderText() const;
 
     void setTextCursor(const QTextCursor& cursor);
+    void setTextCursorForced(const QTextCursor& cursor);
     QTextCursor textCursor() const;
 
     bool isReadOnly() const;
