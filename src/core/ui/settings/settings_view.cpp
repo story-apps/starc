@@ -2047,6 +2047,9 @@ void SettingsView::setApplicationLanguage(int _language)
         case QLocale::Italian: {
             return "Italiano";
         }
+        case QLocale::Korean: {
+            return "한국어";
+        }
         case QLocale::Persian: {
             return "فارسی";
         }

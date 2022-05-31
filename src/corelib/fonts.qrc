@@ -35,5 +35,6 @@
         <file alias="montserrat-italic">fonts/montserrat-italic.ttf</file>
         <file alias="montserrat-regular">fonts/montserrat-regular.ttf</file>
         <file alias="sf-movie-poster">fonts/sf-movie-poster.ttf</file>
+        <file alias="noto-sans-korean-regular">fonts/noto-sans-korean-regular.otf</file>
     </qresource>
 </RCC>

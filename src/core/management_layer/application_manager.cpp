@@ -663,6 +663,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         break;
     }
 
+    case QLocale::Korean: {
+        translation = "ko";
+        break;
+    }
+
     case QLocale::Persian: {
         translation = "fa";
         break;
@@ -1451,6 +1456,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     fontDatabase.addApplicationFont(":/fonts/noto-sans-tamil-light");
     fontDatabase.addApplicationFont(":/fonts/noto-sans-tamil-medium");
     fontDatabase.addApplicationFont(":/fonts/noto-sans-tamil-regular");
+    fontDatabase.addApplicationFont(":/fonts/noto-sans-korean-regular");
     //
     fontDatabase.addApplicationFont(":/fonts/arial");
     fontDatabase.addApplicationFont(":/fonts/arial-bold");

@@ -367,6 +367,12 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
         break;
     }
 
+    case QLocale::Korean: {
+        fontFamilies.prepend(QLatin1String("Noto Sans"));
+        fontFamilies.prepend(QLatin1String("Noto Sans KR"));
+        break;
+    }
+
     default: {
         break;
     }
