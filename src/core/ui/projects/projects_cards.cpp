@@ -208,14 +208,15 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     //
     // Постер
     //
-    const QPixmap& poster = m_project.poster();
     const QSizeF posterSize
-        = poster.size().scaled(backgroundRect.size().toSize(), Qt::KeepAspectRatio);
+        = m_project.poster().size().scaled(backgroundRect.size().toSize(), Qt::KeepAspectRatio);
     const QRectF posterRect(isLeftToRight
                                 ? backgroundRect.topLeft()
                                 : backgroundRect.topRight() - QPointF(posterSize.width(), 0),
                             posterSize);
-    _painter->drawPixmap(posterRect, poster, poster.rect());
+    const auto scaledPoster = m_project.poster().scaled(posterSize.toSize(), Qt::KeepAspectRatio,
+                                                        Qt::SmoothTransformation);
+    _painter->drawPixmap(posterRect, scaledPoster, scaledPoster.rect());
 
     //
     // Заголовок
