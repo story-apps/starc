@@ -61,9 +61,6 @@ void BeatHeadingHandler::handleEnter(QKeyEvent*)
             if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
-                //
-                // Если строка пуста, то сменить стиль на имя героя
-                //
                 editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::BeatHeading));
             } else {
                 //! Текст не пуст
@@ -71,22 +68,15 @@ void BeatHeadingHandler::handleEnter(QKeyEvent*)
                 if (cursorBackwardText.isEmpty()) {
                     //! В начале блока
 
-                    //
-                    // Ни чего не делаем
-                    //
+                    editor()->addParagraph(TextParagraphType::BeatHeading);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
-                    //
-                    // Вставляем блок персонажа
-                    //
-                    editor()->addParagraph(jumpForTab(TextParagraphType::BeatHeading));
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::BeatHeading));
                 } else {
                     //! Внутри блока
 
-                    //
-                    // Ни чего не делаем
-                    //
+                    editor()->addParagraph(jumpForEnter(TextParagraphType::BeatHeading));
                 }
             }
         }

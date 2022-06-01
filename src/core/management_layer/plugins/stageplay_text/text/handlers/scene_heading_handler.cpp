@@ -58,9 +58,6 @@ void SceneHeadingHandler::handleEnter(QKeyEvent*)
             if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
-                //
-                // Ни чего не делаем
-                //
                 editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::SceneHeading));
             } else {
                 //! Текст не пуст
