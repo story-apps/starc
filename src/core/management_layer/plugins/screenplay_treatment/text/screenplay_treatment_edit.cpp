@@ -297,10 +297,39 @@ void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
     const auto horizontalScrollValue = horizontalScrollBar()->value();
 
     //
+    // Если курсор в начале блока, то просто переносим всё содержимое блока вперёд
+    //
+    BusinessLayer::TextCursor cursor = textCursor();
+    QString blockEndMime;
+    if (cursor.positionInBlock() == 0) {
+        //
+        // ... ничего не делаем
+        //
+    }
+    //
     // Добавляем новый блок после всех невидимых блоков идущих за текущим
     //
-    auto cursor = textCursor();
-    if (cursor.positionInBlock() == cursor.block().text().length()) {
+    else {
+        //
+        // Если в середине блока, то вырежем контент идущий до конца блока
+        //
+        if (cursor.positionInBlock() < cursor.block().text().length()) {
+            //
+            // Выделяем до конца, плюс захватываем начало следующего блока
+            //
+            cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+            const auto selection = cursor.selectionInterval();
+            blockEndMime = d->document.mimeFromSelection(selection.from, selection.to);
+            //
+            // Возвращаемся в конец предыдущего блока, чтобы удалять только контент заголовка бита
+            //
+            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+            cursor.removeSelectedText();
+        }
+
+        //
+        // ... собственно передвигаем курсор для добавления нового блока
+        //
         while (cursor.block().next().isValid() && !cursor.block().next().isVisible()) {
             moveCursor(QTextCursor::NextBlock);
             moveCursor(QTextCursor::EndOfBlock);
@@ -313,11 +342,22 @@ void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
     emit paragraphTypeChanged();
 
     //
-    // Если добавляется бит, то вложим к нему блок описания действия и скроем его
+    // Если добавляется бит
     //
     if (_type == TextParagraphType::BeatHeading) {
-        d->document.addParagraph(TextParagraphType::Action, textCursor());
-        moveCursor(QTextCursor::PreviousCharacter);
+        //
+        // Если это разрыв текущего бита, то вставим сохранённый в буфер контент
+        //
+        if (!blockEndMime.isEmpty()) {
+            d->document.insertFromMime(textCursor().position(), blockEndMime);
+        }
+        //
+        // В противном случае вложим к нему блок описания действия и скроем его
+        //
+        else {
+            d->document.addParagraph(TextParagraphType::Action, textCursor());
+            moveCursor(QTextCursor::PreviousCharacter);
+        }
     }
 
     //
@@ -1254,11 +1294,10 @@ void ScreenplayTreatmentEdit::insertFromMimeData(const QMimeData* _source)
     // Вручную разделяем параграфы, если курсор в середине блока
     //
     if (!cursor.block().text().isEmpty() && cursor.positionInBlock() > 0
-        && cursor.positionInBlock() < cursor.block().length() - 1) {
+        && cursor.positionInBlock() < cursor.block().length()) {
+        const auto lastPosition = cursor.position();
         addParagraph(BusinessLayer::TextParagraphType::BeatHeading);
-        cursor = textCursor();
-        cursor.movePosition(QTextCursor::PreviousBlock);
-        cursor.movePosition(QTextCursor::EndOfBlock);
+        cursor.setPosition(lastPosition);
     }
 
     //
