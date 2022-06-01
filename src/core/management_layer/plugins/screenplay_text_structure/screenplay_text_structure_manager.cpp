@@ -32,6 +32,12 @@ public:
     Ui::ScreenplayTextStructureView* createView();
 
     /**
+     * @brief Работа с параметрами отображения представления
+     */
+    void loadViewSettings();
+    void saveViewSettings();
+
+    /**
      * @brief Настроить контекстное меню
      */
     void updateContextMenu(const QModelIndexList& _indexes);
@@ -75,12 +81,24 @@ ScreenplayTextStructureManager::Implementation::Implementation()
 {
     view = createView();
     contextMenu = new ContextMenu(view);
+
+    loadViewSettings();
 }
 
 Ui::ScreenplayTextStructureView* ScreenplayTextStructureManager::Implementation::createView()
 {
     allViews.append(new Ui::ScreenplayTextStructureView);
     return allViews.last();
+}
+
+void ScreenplayTextStructureManager::Implementation::loadViewSettings()
+{
+    view->loadViewSettings();
+}
+
+void ScreenplayTextStructureManager::Implementation::saveViewSettings()
+{
+    view->saveViewSettings();
 }
 
 void ScreenplayTextStructureManager::Implementation::updateContextMenu(
@@ -269,6 +287,11 @@ void ScreenplayTextStructureManager::bind(IDocumentManager* _manager)
 
     connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
             SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
+}
+
+void ScreenplayTextStructureManager::saveSettings()
+{
+    d->saveViewSettings();
 }
 
 void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)

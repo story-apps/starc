@@ -29,6 +29,12 @@ public:
     void reconfigure();
 
     /**
+     * @brief Работа с параметрами отображения представления
+     */
+    void loadViewSettings();
+    void saveViewSettings();
+
+    /**
      * @brief Задать заголовок навигатора
      */
     void setTitle(const QString& _title) override;

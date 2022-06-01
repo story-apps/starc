@@ -32,6 +32,7 @@ public:
     Ui::IDocumentView* createView() override;
     void reconfigure(const QStringList& _changedSettingsKeys) override;
     void bind(IDocumentManager* _manager) override;
+    void saveSettings() override;
     /** @} */
 
 signals:

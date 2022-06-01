@@ -20,6 +20,13 @@
 
 namespace Ui {
 
+namespace {
+
+const QString kSettingsKey = "screenplay-text-structure";
+const QString kIsBeatTextVisibleKey = kSettingsKey + "/is-beat-text-visible";
+
+} // namespace
+
 class ScreenplayTextStructureView::Implementation
 {
 public:
@@ -81,7 +88,7 @@ void ScreenplayTextStructureView::Implementation::updateCurrentBeatName(const QM
             == TextGroupType::Beat) {
         beatNameWidget->setBeatName(_index.data(TextModelGroupItem::GroupHeadingRole).toString());
     } else {
-        beatNameWidget->setBeatName(tr("No one beat selected"));
+        beatNameWidget->clearBeatName();
     }
 }
 
@@ -167,6 +174,17 @@ void ScreenplayTextStructureView::reconfigure()
 
     d->content->setItemDelegate(nullptr);
     d->content->setItemDelegate(d->contentDelegate);
+}
+
+void ScreenplayTextStructureView::loadViewSettings()
+{
+    const auto isBeatTextVisible = settingsValue(kIsBeatTextVisibleKey, false).toBool();
+    d->showBeatTextAction->setChecked(isBeatTextVisible);
+}
+
+void ScreenplayTextStructureView::saveViewSettings()
+{
+    setSettingsValue(kIsBeatTextVisibleKey, d->showBeatTextAction->isChecked());
 }
 
 void ScreenplayTextStructureView::setTitle(const QString& _title)
