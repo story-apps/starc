@@ -397,14 +397,15 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText,
     // Дополним текст
     //
     int cursorMovement = sectionText.length();
-    while (!_cursorBackwardText.endsWith(sectionText.left(cursorMovement), Qt::CaseInsensitive)) {
+    while (
+        !_cursorBackwardText.endsWith(sectionText.leftRef(cursorMovement), Qt::CaseInsensitive)) {
         --cursorMovement;
     }
     //
     // ... дополняем, когда цикл обработки событий выполнится, чтобы позиция курсора
     //     корректно определилась после изменения текста
     //
-    QTimer::singleShot(0, [this, sectionModel, sectionText, cursorMovement] {
+    QTimer::singleShot(0, editor(), [this, sectionModel, sectionText, cursorMovement] {
         editor()->complete(sectionModel, sectionText, cursorMovement);
     });
 }
@@ -427,6 +428,14 @@ void SceneHeadingHandler::storeSceneParameters() const
     // Сохраняем время
     //
     const QString sceneIntro = ScreenplaySceneHeadingParser::sceneIntro(cursorBackwardText);
+    //
+    // ... если интро сцены не заканчивается на точку, либо содержит пробелы, то это скорей всего не
+    //     интро, а просто текст, который мы не можем разбить на части сцены, а соответственно и не
+    //     будем сохранять
+    //
+    if (!sceneIntro.endsWith('.') || sceneIntro.contains(' ')) {
+        return;
+    }
     editor()->dictionaries()->addSceneIntro(sceneIntro);
 
     //

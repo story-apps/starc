@@ -76,13 +76,12 @@ ScreenplaySceneHeadingParser::Section ScreenplaySceneHeadingParser::section(cons
 
 QString ScreenplaySceneHeadingParser::sceneIntro(const QString& _text)
 {
-    QString placeName;
-
-    if (_text.split(". ").count() > 0) {
-        placeName = _text.split(". ").value(0);
+    if (!_text.contains(". ")) {
+        return _text;
     }
 
-    return TextHelper::smartToUpper(placeName).simplified();
+    const auto placeName = _text.split(". ").constFirst();
+    return TextHelper::smartToUpper(placeName).simplified() + ".";
 }
 
 QString ScreenplaySceneHeadingParser::location(const QString& _text, bool _force)
