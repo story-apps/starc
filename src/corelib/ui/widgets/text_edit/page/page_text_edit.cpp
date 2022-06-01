@@ -2299,24 +2299,18 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos) const
     // NOTE: Тут кьют кидает курсор в самый конец документа, поэтому проверяем эту ситуацию, и
     // корректируем положение на ближайший блок, в который должен встать курсор около клика мыши
     //
-    const int maxMovement = 100;
-    const int movementDelta = 5;
-    int xDistance = q->cursorRect(cursor).center().x() - _eventPos.x();
-    int yDistance = q->cursorRect(cursor).center().y() - _eventPos.y();
-    int currentMovement = movementDelta;
-    while (!cursor.block().isVisible() && currentMovement < maxMovement) {
-        const auto nextCursor = q->cursorForPosition(_eventPos + QPoint(0, currentMovement));
-        const auto nextXDistance = q->cursorRect(nextCursor).center().x() - _eventPos.x();
-        const auto nextYDistance = q->cursorRect(nextCursor).center().y() - _eventPos.y();
-        if (cursor.block().isVisible()
-            && (nextYDistance > yDistance || nextXDistance > xDistance)) {
-            break;
+    auto cursorRect = q->cursorRect(cursor);
+    if (std::abs(cursorRect.bottom() - _eventPos.y()) > cursorRect.height()) {
+        const auto maxDistanse = std::abs(cursorRect.bottom() - _eventPos.y());
+        const int maxMovement = 500;
+        const int movementDelta = 5;
+        int currentMovement = movementDelta;
+        while (std::abs(cursorRect.bottom() - _eventPos.y()) >= maxDistanse
+               && currentMovement <= maxMovement) {
+            cursor = q->cursorForPosition(_eventPos + QPoint(0, currentMovement));
+            cursorRect = q->cursorRect(cursor);
+            currentMovement += movementDelta;
         }
-
-        cursor = nextCursor;
-        xDistance = nextXDistance;
-        yDistance = nextYDistance;
-        currentMovement += movementDelta;
     }
 
     //
