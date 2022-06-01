@@ -1496,6 +1496,8 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Если вставляются данные в сценарном формате, то вставляем как положено
     //
+    const int invalidPosition = -1;
+    int removeCharacterAtPosition = invalidPosition;
     if (_source->formats().contains(d->model->mimeTypes().constFirst())) {
         textToInsert = _source->data(d->model->mimeTypes().constFirst());
     }
@@ -1510,6 +1512,7 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
         // него пробел, чтобы его стиль не изменился, а сам текст будем вставлять в начало абзаца
         //
         if (!text.contains('\n') && cursor.block().text().isEmpty()) {
+            removeCharacterAtPosition = cursor.position();
             cursor.insertText(" ");
             cursor.movePosition(QTextCursor::PreviousCharacter);
             setTextCursor(cursor);
@@ -1528,6 +1531,14 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
     // Собственно вставка данных
     //
     d->document.insertFromMime(textCursor().position(), textToInsert);
+
+    //
+    // Удалим лишний пробел, который вставляли
+    //
+    if (removeCharacterAtPosition != invalidPosition) {
+        cursor.setPosition(removeCharacterAtPosition);
+        cursor.deleteChar();
+    }
 
     //
     // Восстанавливаем режим редактирования, если нужно

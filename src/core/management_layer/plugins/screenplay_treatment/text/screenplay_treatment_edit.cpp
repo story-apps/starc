@@ -1166,11 +1166,30 @@ QMimeData* ScreenplayTreatmentEdit::createMimeDataFromSelection() const
 
     QMimeData* mimeData = new QMimeData;
     BusinessLayer::TextCursor cursor = textCursor();
-    const auto selection = cursor.selectionInterval();
+    auto selection = cursor.selectionInterval();
+    //
+    // Расширим выделение, чтобы туда попало содержимое битов
+    //
+    cursor.setPosition(selection.to);
+    if (BusinessLayer::TextBlockStyle::forBlock(cursor)
+        == BusinessLayer::TextParagraphType::BeatHeading) {
+        do {
+            cursor.movePosition(QTextCursor::NextBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock);
+
+            if (BusinessLayer::TextBlockStyle::forBlock(cursor)
+                == BusinessLayer::TextParagraphType::BeatHeading) {
+                cursor.movePosition(QTextCursor::PreviousBlock);
+                cursor.movePosition(QTextCursor::EndOfBlock);
+                break;
+            }
+        } while (!cursor.atEnd());
+        cursor.setPosition(selection.from, QTextCursor::KeepAnchor);
+    }
+    selection = cursor.selectionInterval();
 
     //
     // Сформируем в текстовом виде, для вставки наружу
-    // TODO: экспорт в фонтан
     //
     {
         QByteArray text;
@@ -1232,6 +1251,46 @@ void ScreenplayTreatmentEdit::insertFromMimeData(const QMimeData* _source)
     }
 
     //
+    // Вручную разделяем параграфы, если курсор в середине блока
+    //
+    if (!cursor.block().text().isEmpty() && cursor.positionInBlock() > 0
+        && cursor.positionInBlock() < cursor.block().length() - 1) {
+        addParagraph(BusinessLayer::TextParagraphType::BeatHeading);
+        cursor = textCursor();
+        cursor.movePosition(QTextCursor::PreviousBlock);
+        cursor.movePosition(QTextCursor::EndOfBlock);
+    }
+
+    //
+    // Переместим курсор в конец бита
+    //
+    const int invalidPosition = -1;
+    int removeCharacterAtPosition = invalidPosition;
+    if (BusinessLayer::TextBlockStyle::forBlock(cursor)
+        == BusinessLayer::TextParagraphType::BeatHeading) {
+        do {
+            cursor.movePosition(QTextCursor::NextBlock);
+            if (BusinessLayer::TextBlockStyle::forBlock(cursor)
+                == BusinessLayer::TextParagraphType::BeatHeading) {
+                cursor.movePosition(QTextCursor::PreviousBlock);
+                break;
+            }
+            cursor.movePosition(QTextCursor::EndOfBlock);
+        } while (!cursor.atEnd());
+
+        //
+        // Если текст блока пуст, то поместим туда пробел, чтобы вставка майм-данных не
+        // проглатила этот блок
+        //
+        if (cursor.block().text().isEmpty()) {
+            removeCharacterAtPosition = cursor.position();
+            cursor.insertText(" ");
+        } else {
+            cursor.movePosition(QTextCursor::EndOfBlock);
+        }
+    }
+
+    //
     // Если в моменте входа мы в состоянии редактирования (такое возможно в момент дропа),
     // то запомним это состояние, чтобы восстановить после дропа, а для вставки важно,
     // чтобы режим редактирования был выключен, т.к. данные будут загружаться через модель
@@ -1253,11 +1312,14 @@ void ScreenplayTreatmentEdit::insertFromMimeData(const QMimeData* _source)
         textToInsert = _source->data(d->model->mimeTypes().constFirst());
     }
     //
-    // Если простой текст, то вставляем его, импортировав с фонтана
-    // NOTE: Перед текстом нужно обязательно добавить перенос строки, чтобы он
-    //       не воспринимался как титульная страница
+    // Если простой текст
     //
     else if (_source->hasText()) {
+        //
+        // Если простой текст, то вставляем его, импортировав с фонтана
+        // NOTE: Перед текстом нужно обязательно добавить перенос строки, чтобы он
+        //       не воспринимался как титульная страница
+        //
         BusinessLayer::ScreenplayFountainImporter fountainImporter;
         textToInsert = fountainImporter.importScreenplay("\n" + _source->text()).text;
 
@@ -1271,7 +1333,15 @@ void ScreenplayTreatmentEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Собственно вставка данных
     //
-    d->document.insertFromMime(textCursor().position(), textToInsert);
+    d->document.insertFromMime(cursor.position(), textToInsert);
+
+    //
+    // Удалим лишний пробел, который вставляли
+    //
+    if (removeCharacterAtPosition != invalidPosition) {
+        cursor.setPosition(removeCharacterAtPosition);
+        cursor.deleteChar();
+    }
 
     //
     // Восстанавливаем режим редактирования, если нужно
