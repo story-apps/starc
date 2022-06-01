@@ -15,10 +15,13 @@ class BeatNameWidget::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    void updateBeatNameTextColor();
+
 
     AbstractLabel* titleLabel = nullptr;
     IconButton* copyNameButton = nullptr;
     AbstractLabel* beatNameLabel = nullptr;
+    bool hasBeatName = false;
 };
 
 BeatNameWidget::Implementation::Implementation(QWidget* _parent)
@@ -28,6 +31,13 @@ BeatNameWidget::Implementation::Implementation(QWidget* _parent)
 {
     copyNameButton->setIcon(u8"\U000F0CF9");
     copyNameButton->setFocusPolicy(Qt::NoFocus);
+}
+
+void BeatNameWidget::Implementation::updateBeatNameTextColor()
+{
+    beatNameLabel->setTextColor(
+        ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
+                                 hasBeatName ? 1.0 : Ui::DesignSystem::disabledTextOpacity()));
 }
 
 
@@ -52,19 +62,36 @@ BeatNameWidget::BeatNameWidget(QWidget* _parent)
     setLayout(layout);
 
 
-    connect(d->copyNameButton, &IconButton::clicked, this,
-            [this] { emit pasteBeatNamePressed(d->beatNameLabel->text()); });
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
+    connect(d->copyNameButton, &IconButton::clicked, this, [this] {
+        if (d->hasBeatName) {
+            emit pasteBeatNamePressed(d->beatNameLabel->text());
+        }
+    });
 }
 
 BeatNameWidget::~BeatNameWidget() = default;
 
 void BeatNameWidget::setBeatName(const QString& _name)
 {
+    if (_name.isEmpty()) {
+        clearBeatName();
+        return;
+    }
+
+    if (_name == d->beatNameLabel->text()) {
+        return;
+    }
+
+    d->hasBeatName = true;
     d->beatNameLabel->setText(_name);
+    d->updateBeatNameTextColor();
+}
+
+void BeatNameWidget::clearBeatName()
+{
+    d->hasBeatName = false;
+    d->beatNameLabel->setText(tr("No one beat selected"));
+    d->updateBeatNameTextColor();
 }
 
 void BeatNameWidget::updateTranslations()
@@ -88,7 +115,7 @@ void BeatNameWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                                       Ui::DesignSystem::inactiveTextOpacity()));
     }
     d->beatNameLabel->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->beatNameLabel->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->updateBeatNameTextColor();
     d->beatNameLabel->setContentsMargins(0, 0, Ui::DesignSystem::layout().px12(), 0);
 
     layout()->setContentsMargins(Ui::DesignSystem::layout().px24(), 0, 0,

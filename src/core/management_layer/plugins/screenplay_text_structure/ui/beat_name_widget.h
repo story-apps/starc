@@ -17,6 +17,7 @@ public:
      * @brief Задать текст бита
      */
     void setBeatName(const QString& _name);
+    void clearBeatName();
 
 signals:
     /**
