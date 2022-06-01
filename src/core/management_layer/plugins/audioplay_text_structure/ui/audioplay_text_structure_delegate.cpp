@@ -42,9 +42,9 @@ public:
     /**
      * @brief Идеальный размер для элемент
      */
-    QSize folderSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
+    QSize folderSizeHint(const QStyleOptionViewItem& _option) const;
     QSize sceneSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
-    QSize textSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
+    QSize textSizeHint(const QStyleOptionViewItem& _option) const;
 
 
     bool showSceneNumber = true;
@@ -88,8 +88,6 @@ QRectF AudioplayTextStructureDelegate::Implementation::paintItemDuration(
 {
     using namespace BusinessLayer;
 
-    const auto textColor = _option.palette.color(QPalette::Text);
-    _painter->setPen(textColor);
     _painter->setFont(Ui::DesignSystem::font().body2());
 
     const auto durationText = QString("(%1)").arg(TimeHelper::toString(_duration));
@@ -484,10 +482,8 @@ void AudioplayTextStructureDelegate::Implementation::paintText(QPainter* _painte
 }
 
 QSize AudioplayTextStructureDelegate::Implementation::folderSizeHint(
-    const QStyleOptionViewItem& _option, const QModelIndex& _index) const
+    const QStyleOptionViewItem& _option) const
 {
-    Q_UNUSED(_index)
-
     using namespace BusinessLayer;
 
     //
@@ -545,9 +541,9 @@ QSize AudioplayTextStructureDelegate::Implementation::sceneSizeHint(
 }
 
 QSize AudioplayTextStructureDelegate::Implementation::textSizeHint(
-    const QStyleOptionViewItem& _option, const QModelIndex& _index) const
+    const QStyleOptionViewItem& _option) const
 {
-    return folderSizeHint(_option, _index);
+    return folderSizeHint(_option);
 }
 
 
@@ -634,7 +630,7 @@ QSize AudioplayTextStructureDelegate::sizeHint(const QStyleOptionViewItem& _opti
     const auto type = static_cast<TextModelItemType>(typeValue.toInt());
     switch (type) {
     case TextModelItemType::Folder: {
-        return d->folderSizeHint(_option, _index);
+        return d->folderSizeHint(_option);
     }
 
     case TextModelItemType::Group: {
@@ -642,7 +638,7 @@ QSize AudioplayTextStructureDelegate::sizeHint(const QStyleOptionViewItem& _opti
     }
 
     case TextModelItemType::Text: {
-        return d->textSizeHint(_option, _index);
+        return d->textSizeHint(_option);
     }
 
     default: {

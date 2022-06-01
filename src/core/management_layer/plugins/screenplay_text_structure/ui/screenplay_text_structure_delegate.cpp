@@ -42,9 +42,9 @@ public:
     /**
      * @brief Идеальный размер для элемент
      */
-    QSize folderSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
+    QSize folderSizeHint(const QStyleOptionViewItem& _option) const;
     QSize sceneSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
-    QSize textSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
+    QSize textSizeHint(const QStyleOptionViewItem& _option) const;
 
 
     bool showSceneNumber = true;
@@ -88,8 +88,6 @@ QRectF ScreenplayTextStructureDelegate::Implementation::paintItemDuration(
 {
     using namespace BusinessLayer;
 
-    const auto textColor = _option.palette.color(QPalette::Text);
-    _painter->setPen(textColor);
     _painter->setFont(Ui::DesignSystem::font().body2());
 
     const auto durationText = QString("(%1)").arg(TimeHelper::toString(_duration));
@@ -494,7 +492,7 @@ void ScreenplayTextStructureDelegate::Implementation::paintText(QPainter* _paint
 }
 
 QSize ScreenplayTextStructureDelegate::Implementation::folderSizeHint(
-    const QStyleOptionViewItem& _option, const QModelIndex& _index) const
+    const QStyleOptionViewItem& _option) const
 {
     using namespace BusinessLayer;
 
@@ -511,7 +509,6 @@ QSize ScreenplayTextStructureDelegate::Implementation::folderSizeHint(
     //
     // Считаем высоту
     //
-    const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body2());
     int height = Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
         + Ui::DesignSystem::layout().px16();
 
@@ -554,9 +551,9 @@ QSize ScreenplayTextStructureDelegate::Implementation::sceneSizeHint(
 }
 
 QSize ScreenplayTextStructureDelegate::Implementation::textSizeHint(
-    const QStyleOptionViewItem& _option, const QModelIndex& _index) const
+    const QStyleOptionViewItem& _option) const
 {
-    return folderSizeHint(_option, _index);
+    return folderSizeHint(_option);
 }
 
 
@@ -643,7 +640,7 @@ QSize ScreenplayTextStructureDelegate::sizeHint(const QStyleOptionViewItem& _opt
     const auto type = static_cast<TextModelItemType>(typeValue.toInt());
     switch (type) {
     case TextModelItemType::Folder: {
-        return d->folderSizeHint(_option, _index);
+        return d->folderSizeHint(_option);
     }
 
     case TextModelItemType::Group: {
@@ -651,7 +648,7 @@ QSize ScreenplayTextStructureDelegate::sizeHint(const QStyleOptionViewItem& _opt
     }
 
     case TextModelItemType::Text: {
-        return d->textSizeHint(_option, _index);
+        return d->textSizeHint(_option);
     }
 
     default: {

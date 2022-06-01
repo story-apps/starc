@@ -51,8 +51,8 @@ public:
     /**
      * @brief Идеальный размер для элемент
      */
-    QSize folderSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
-    QSize pageSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
+    QSize folderSizeHint(const QStyleOptionViewItem& _option) const;
+    QSize pageSizeHint(const QStyleOptionViewItem& _option) const;
     QSize panelSizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const;
 
 
@@ -95,8 +95,6 @@ QRectF ComicBookTextStructureDelegate::Implementation::paintItemWordsCount(
 {
     using namespace BusinessLayer;
 
-    const auto textColor = _option.palette.color(QPalette::Text);
-    _painter->setPen(textColor);
     _painter->setFont(Ui::DesignSystem::font().body2());
 
     const auto durationText = QString("(%1)").arg(QString::number(_wordsCount));
@@ -508,9 +506,8 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
 }
 
 QSize ComicBookTextStructureDelegate::Implementation::folderSizeHint(
-    const QStyleOptionViewItem& _option, const QModelIndex& _index) const
+    const QStyleOptionViewItem& _option) const
 {
-    Q_UNUSED(_index)
     using namespace BusinessLayer;
 
     //
@@ -533,9 +530,9 @@ QSize ComicBookTextStructureDelegate::Implementation::folderSizeHint(
 }
 
 QSize ComicBookTextStructureDelegate::Implementation::pageSizeHint(
-    const QStyleOptionViewItem& _option, const QModelIndex& _index) const
+    const QStyleOptionViewItem& _option) const
 {
-    return folderSizeHint(_option, _index);
+    return folderSizeHint(_option);
 }
 
 QSize ComicBookTextStructureDelegate::Implementation::panelSizeHint(
@@ -654,14 +651,14 @@ QSize ComicBookTextStructureDelegate::sizeHint(const QStyleOptionViewItem& _opti
     const auto type = static_cast<TextModelItemType>(typeValue.toInt());
     switch (type) {
     case TextModelItemType::Folder: {
-        return d->folderSizeHint(_option, _index);
+        return d->folderSizeHint(_option);
     }
 
     case TextModelItemType::Group: {
         const auto groupType
             = static_cast<TextGroupType>(_index.data(TextModelGroupItem::GroupTypeRole).toInt());
         if (groupType == TextGroupType::Page) {
-            return d->pageSizeHint(_option, _index);
+            return d->pageSizeHint(_option);
         } else {
             return d->panelSizeHint(_option, _index);
         }
