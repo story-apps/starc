@@ -177,8 +177,9 @@ UnsplashImagesView::~UnsplashImagesView() = default;
 
 void UnsplashImagesView::loadImages(const QString& _keywords)
 {
-    const QUrl url(
-        QString("https://starc.app/api/services/unsplash/search?text=%1").arg(_keywords));
+    const QUrl url(QString("https://starc.app/api/services/unsplash/search?text=%1")
+                       .arg(_keywords)
+                       .replace(' ', ','));
     NetworkRequestLoader::loadAsync(
         url, this, [this](const QByteArray& _response) { d->processImagesJson(_response); });
 }
