@@ -1254,6 +1254,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
 
 #ifdef XML_CHECKS
     const auto newContent = dmpController().applyPatch(toXml(), _patch);
+    qDebug(QString("Before applying patch xml is\n\n%1\n\n").arg(toXml().constData()).toUtf8());
 #endif
 
     //
@@ -1269,10 +1270,15 @@ void TextModel::applyPatch(const QByteArray& _patch)
     changes.second.xml = xml::prepareXml(changes.second.xml);
 
 #ifdef XML_CHECKS
-    qDebug(changes.first.xml);
-    qDebug("************************");
-    qDebug(changes.second.xml);
-    qDebug("\n\n\n");
+    qDebug(QString("Patch is\n\n%1\n\n")
+               .arg(QByteArray::fromPercentEncoding(_patch).constData())
+               .toUtf8());
+    qDebug(QString("Xml data changes first item\n\n%1\n\n")
+               .arg(changes.first.xml.constData())
+               .toUtf8());
+    qDebug(QString("Xml data changes second item\n\n%1\n\n")
+               .arg(changes.second.xml.constData())
+               .toUtf8());
 #endif
 
     //
@@ -1560,7 +1566,8 @@ void TextModel::applyPatch(const QByteArray& _patch)
             // И это первый из вставляемых
             //
             if (previousNewItem == nullptr) {
-                const int modelItemIndex = modelItem->parent()->rowOfChild(modelItem);
+                const int modelItemIndex
+                    = modelItem ? modelItem->parent()->rowOfChild(modelItem) : 0;
                 //
                 // Если нужно вставить перед первым элементом, то это случай вставки в начало
                 // документа
@@ -1904,12 +1911,8 @@ void TextModel::applyPatch(const QByteArray& _patch)
     // Делаем проверку на соответствие обновлённой модели прямому наложению патча
     //
     if (newContent != toXml()) {
-        qDebug(newContent);
-        qDebug("\n\n************************\n\n");
-        qDebug(qUtf8Printable(QByteArray::fromPercentEncoding(_patch)));
-        qDebug("\n\n************************\n\n");
-        qDebug(toXml());
-        qDebug("\n\n\n");
+        qDebug(QString("New content should be\n\n%1\n\n").arg(newContent.constData()).toUtf8());
+        qDebug(QString("New content is\n\n%1\n\n").arg(toXml().constData()).toUtf8());
     }
     Q_ASSERT(newContent == toXml());
 #endif
