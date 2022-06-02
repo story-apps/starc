@@ -1255,6 +1255,9 @@ void TextModel::applyPatch(const QByteArray& _patch)
 #ifdef XML_CHECKS
     const auto newContent = dmpController().applyPatch(toXml(), _patch);
     qDebug(QString("Before applying patch xml is\n\n%1\n\n").arg(toXml().constData()).toUtf8());
+    qDebug(QString("Patch is\n\n%1\n\n")
+               .arg(QByteArray::fromPercentEncoding(_patch).constData())
+               .toUtf8());
 #endif
 
     //
@@ -1270,9 +1273,6 @@ void TextModel::applyPatch(const QByteArray& _patch)
     changes.second.xml = xml::prepareXml(changes.second.xml);
 
 #ifdef XML_CHECKS
-    qDebug(QString("Patch is\n\n%1\n\n")
-               .arg(QByteArray::fromPercentEncoding(_patch).constData())
-               .toUtf8());
     qDebug(QString("Xml data changes first item\n\n%1\n\n")
                .arg(changes.first.xml.constData())
                .toUtf8());
@@ -1347,12 +1347,21 @@ void TextModel::applyPatch(const QByteArray& _patch)
     //
     const auto operationsLimit = 1000;
     if (oldItemsPlain.size() * newItemsPlain.size() / 2 > operationsLimit) {
+        Log::trace("Apply patch operations to much, avoid step by step procesing.");
+
+        //
+        // Сперва загружаем содержимое из нового XML в модель через документ
+        //
+        const auto oldContent = document()->content();
         const auto newContent = dmpController().applyPatch(toXml(), _patch);
         clearDocument();
         document()->setContent(newContent);
         initDocument();
-        //        beginResetModel();
-        //        endResetModel();
+        //
+        // ... но затем возвращаем предыдущее состояние в документ, чтобы модель могла сформировать
+        //     патч осуществлённого измененеия сравним собственное состояние с состоянием документа
+        //
+        document()->setContent(oldContent);
         return;
     }
 
