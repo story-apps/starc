@@ -2300,10 +2300,11 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos) const
     // корректируем положение на ближайший блок, в который должен встать курсор около клика мыши
     //
     auto cursorRect = q->cursorRect(cursor);
-    if (std::abs(cursorRect.bottom() - _eventPos.y()) > cursorRect.height()) {
+    if (std::abs(cursorRect.top() - _eventPos.y()) > cursorRect.height()
+        && std::abs(cursorRect.bottom() - _eventPos.y()) > cursorRect.height()) {
         const auto maxDistanse = std::abs(cursorRect.bottom() - _eventPos.y());
-        const int maxMovement = 500;
-        const int movementDelta = 5;
+        const int maxMovement = viewport->height() / 4;
+        const int movementDelta = 20;
         int currentMovement = movementDelta;
         while (std::abs(cursorRect.bottom() - _eventPos.y()) >= maxDistanse
                && currentMovement <= maxMovement) {

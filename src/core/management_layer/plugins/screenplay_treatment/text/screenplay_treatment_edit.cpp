@@ -688,7 +688,7 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
     //
     QTextBlock topBlock = document()->lastBlock();
     {
-        for (int delta = 0; delta < viewport()->height() / 4; delta += 10) {
+        for (int delta = 0; delta < viewport()->height() / 4; delta += 20) {
             const auto topCursor
                 = cursorForPositionReimpl(viewport()->mapFromParent(QPoint(0, delta)));
             if (topBlock.blockNumber() > topCursor.block().blockNumber()) {
