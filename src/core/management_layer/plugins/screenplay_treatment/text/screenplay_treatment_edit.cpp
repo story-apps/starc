@@ -688,12 +688,9 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
     //
     QTextBlock topBlock = document()->lastBlock();
     {
-        for (int delta = 0; delta < viewport()->height() / 4; delta += 20) {
-            const auto topCursor
-                = cursorForPositionReimpl(viewport()->mapFromParent(QPoint(0, delta)));
-            if (topBlock.blockNumber() > topCursor.block().blockNumber()) {
-                topBlock = topCursor.block();
-            }
+        const auto topCursor = cursorForPositionReimpl(viewport()->mapFromParent(QPoint(0, 0)));
+        if (topBlock.blockNumber() > topCursor.block().blockNumber()) {
+            topBlock = topCursor.block();
         }
     }
     //
@@ -710,12 +707,10 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
     //
     QTextBlock bottomBlock = document()->firstBlock();
     {
-        for (int delta = viewport()->height(); delta > viewport()->height() * 3 / 4; delta -= 10) {
-            const auto bottomCursor
-                = cursorForPositionReimpl(viewport()->mapFromParent(QPoint(0, delta)));
-            if (bottomBlock.blockNumber() < bottomCursor.block().blockNumber()) {
-                bottomBlock = bottomCursor.block();
-            }
+        const auto bottomCursor
+            = cursorForPositionReimpl(viewport()->mapFromParent(QPoint(0, viewport()->height())));
+        if (bottomBlock.blockNumber() < bottomCursor.block().blockNumber()) {
+            bottomBlock = bottomCursor.block();
         }
     }
     if (bottomBlock == document()->firstBlock()) {

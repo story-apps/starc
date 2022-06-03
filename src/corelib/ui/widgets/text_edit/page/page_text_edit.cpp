@@ -2288,37 +2288,17 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos) const
 
     //
     // Корректируем позицию для случаев, когда
-    // - курсор оказывается в невидимом блоке
     // - курсор оказывается в блоке, в котором запрещено позиционировать курсор
     // - при клике на разрыве между двух страниц
     //
     auto cursor = q->cursorForPosition(_eventPos);
 
     //
-    // Обработка попадания в кривой (невидимый) блок
-    // NOTE: Тут кьют кидает курсор в самый конец документа, поэтому проверяем эту ситуацию, и
-    // корректируем положение на ближайший блок, в который должен встать курсор около клика мыши
-    //
-    auto cursorRect = q->cursorRect(cursor);
-    if (std::abs(cursorRect.top() - _eventPos.y()) > cursorRect.height()
-        && std::abs(cursorRect.bottom() - _eventPos.y()) > cursorRect.height()) {
-        const auto maxDistanse = std::abs(cursorRect.bottom() - _eventPos.y());
-        const int maxMovement = viewport->height() / 4;
-        const int movementDelta = 20;
-        int currentMovement = movementDelta;
-        while (std::abs(cursorRect.bottom() - _eventPos.y()) >= maxDistanse
-               && currentMovement <= maxMovement) {
-            cursor = q->cursorForPosition(_eventPos + QPoint(0, currentMovement));
-            cursorRect = q->cursorRect(cursor);
-            currentMovement += movementDelta;
-        }
-    }
-
-    //
     // Обработка попадания в блок, в котором запрещено позиционировать курсор
     //
     while (!cursor.atEnd()
-           && cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor)) {
+           && (!cursor.block().isVisible()
+               || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
         if (cursor.atBlockEnd()) {
             cursor.movePosition(QTextCursor::NextBlock);
         } else {
@@ -2774,7 +2754,79 @@ QMenu* PageTextEdit::createStandardContextMenu(const QPoint& position)
 QTextCursor PageTextEdit::cursorForPosition(const QPoint& pos) const
 {
     Q_D(const PageTextEdit);
-    return d->control->cursorForPosition(d->mapToContents(pos));
+
+    //
+    // Перерабатываем метод определения курсора по позиции, т.к. кьют не умеет корректно определять
+    // её в кейсе, когда в документе есть невидимые блоки
+    //
+    // NOTE: Исходный вариант данного метода выглядит так:
+    // return d->control->cursorForPosition(d->mapToContents(pos));
+
+    auto posMappedToContents = d->mapToContents(pos);
+    QTextCursor cursor(document());
+
+    //
+    // Курсор выше первого видимого абзаца
+    //
+    if (posMappedToContents.y() < document()->rootFrame()->frameFormat().topMargin()) {
+        auto block = document()->begin();
+        while (!block.isVisible() && block.isValid()) {
+            block = block.next();
+        }
+
+        if (block.isValid()) {
+            cursor.setPosition(block.position());
+        }
+    }
+
+    //
+    // Курсор ниже последнего видимого абзаца
+    //
+    else if (posMappedToContents.y() > (document()->size().height()
+                                        - document()->rootFrame()->frameFormat().bottomMargin())) {
+        auto block = document()->lastBlock();
+        while (!block.isVisible() && block.isValid()) {
+            block = block.previous();
+        }
+
+        if (block.isValid()) {
+            cursor.setPosition(block.position() + block.text().length());
+        }
+    }
+    //
+    // Курсор внутри документа
+    //
+    else {
+        //
+        // Ищем ближайшее совпадение по ExactHit в начале строки и используем координату этой точки
+        //
+        auto y = posMappedToContents.y();
+        constexpr int repeats = 20;
+        bool success = false;
+        ;
+        for (int repeat = 0; repeat < repeats; ++repeat) {
+            cursor.setPosition(
+                d->control->hitTest(QPoint(posMappedToContents.x(), y), Qt::FuzzyHit));
+            const auto cursorRect = d->control->cursorRect(cursor);
+            if (abs(cursorRect.bottom() - y) < cursorRect.height()) {
+                posMappedToContents.setY(y);
+                success = true;
+                break;
+            }
+
+            constexpr int movementDelta = 20;
+            y += movementDelta;
+        }
+
+        //
+        // Если не удалось найти лучшее совпадение, используем дефолтный способ определения позиции
+        //
+        if (!success) {
+            cursor.setPosition(d->control->hitTest(posMappedToContents, Qt::FuzzyHit));
+        }
+    }
+
+    return cursor;
 }
 
 QTextCursor PageTextEdit::cursorForPositionReimpl(const QPoint& pos) const
