@@ -145,10 +145,16 @@ SectionEnd
 
 Function .onInit
 
-	;Language selection dialog
+  FindWindow $0 "" "Story Architect"
+    StrCmp $0 0 notRunning
+    MessageBox MB_OK|MB_ICONEXCLAMATION "Story Architect already running. Please close it and restart installation." /SD IDOK
+    Abort
+  notRunning:
 
-	InitPluginsDir
-	!insertmacro MUI_LANGDLL_DISPLAY
+  ;Language selection dialog
+
+  InitPluginsDir
+  !insertmacro MUI_LANGDLL_DISPLAY
 	
 FunctionEnd
 
