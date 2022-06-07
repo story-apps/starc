@@ -323,6 +323,13 @@ void AccountManager::setAccountInfo(const QString& _email, const QString& _name,
         const auto interval = std::min(currentDateTime.msecsTo(_subscriptionEnds), maxInterval);
         d->subscriptionEndsTimer.start(interval);
     }
+
+    //
+    // Если информация обновилась во время оплаты лицензии, то закроем диалог платежей
+    //
+    if (d->purchaseDialog != nullptr && d->purchaseDialog->isVisible()) {
+        d->purchaseDialog->hideDialog();
+    }
 }
 
 void AccountManager::clearAccountInfo()

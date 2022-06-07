@@ -8,7 +8,7 @@
 /**
  * @brief Анимация клика на объекте
  */
-class ClickAnimation : public QParallelAnimationGroup
+class CORE_LIBRARY_EXPORT ClickAnimation : public QParallelAnimationGroup
 {
     Q_OBJECT
 
