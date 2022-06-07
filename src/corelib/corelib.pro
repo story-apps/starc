@@ -459,7 +459,7 @@ HEADERS += \
     domain/identifier.h \
     domain/notification.h \
     domain/objects_builder.h \
-    domain/payent_info.h \
+    domain/payment_info.h \
     domain/session_info.h \
     domain/subscription_info.h \
     ui/abstract_navigator.h \

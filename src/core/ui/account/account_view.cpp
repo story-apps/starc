@@ -2,7 +2,7 @@
 
 #include "session_widget.h"
 
-#include <domain/payent_info.h>
+#include <domain/payment_info.h>
 #include <domain/session_info.h>
 #include <domain/subscription_info.h>
 #include <ui/design_system/design_system.h>
@@ -35,6 +35,11 @@ public:
      */
     void scrollToTitle(AbstractLabel* title);
 
+    /**
+     * @brief Обновить текст лейбла окончания подписки
+     */
+    void updateSubscriptionEndsLabel();
+
 
     QScrollArea* content = nullptr;
     QVariantAnimation scrollAnimation;
@@ -56,8 +61,13 @@ public:
     QGridLayout* subscriptionInfoLayout = nullptr;
     int subscriptionInfoLastRow = 0;
     H6Label* subscriptionTitle = nullptr;
+    QDateTime subscriptionEnds;
+    Subtitle2Label* subscriptionEndsLabel = nullptr;
     Body1LinkLabel* subscriptionDetails = nullptr;
-    Button* subscriptionUpgradeToPro = nullptr;
+    Button* subscriptionTryForFree = nullptr;
+    Button* subscriptionUpgrade = nullptr;
+    Button* subscriptionBuyLifetime = nullptr;
+    Button* subscriptionRenew = nullptr;
 
     H5Label* sessionsTitle = nullptr;
     QVector<SessionWidget*> sessions;
@@ -74,8 +84,12 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , subscriptionInfo(new Card(_parent))
     , subscriptionInfoLayout(new QGridLayout)
     , subscriptionTitle(new H6Label(subscriptionInfo))
+    , subscriptionEndsLabel(new Subtitle2Label(subscriptionInfo))
     , subscriptionDetails(new Body1LinkLabel(subscriptionInfo))
-    , subscriptionUpgradeToPro(new Button(subscriptionInfo))
+    , subscriptionTryForFree(new Button(subscriptionInfo))
+    , subscriptionUpgrade(new Button(subscriptionInfo))
+    , subscriptionBuyLifetime(new Button(subscriptionInfo))
+    , subscriptionRenew(new Button(subscriptionInfo))
     , sessionsTitle(new H5Label(_parent))
 {
     QPalette palette;
@@ -110,9 +124,20 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     subscriptionInfoLayout->setContentsMargins({});
     subscriptionInfoLayout->setSpacing(0);
     row = 0;
-    subscriptionInfoLayout->addWidget(subscriptionTitle, row++, 0, 1, 2);
-    subscriptionInfoLayout->addWidget(subscriptionDetails, row, 0);
-    subscriptionInfoLayout->addWidget(subscriptionUpgradeToPro, row++, 1, Qt::AlignRight);
+    subscriptionInfoLayout->addWidget(subscriptionTitle, row++, 0);
+    subscriptionInfoLayout->addWidget(subscriptionEndsLabel, row++, 0);
+    subscriptionInfoLayout->addWidget(subscriptionDetails, row++, 0, Qt::AlignLeft);
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addStretch();
+        layout->addWidget(subscriptionTryForFree);
+        layout->addWidget(subscriptionUpgrade);
+        layout->addWidget(subscriptionBuyLifetime);
+        layout->addWidget(subscriptionRenew);
+        subscriptionInfoLayout->addLayout(layout, row++, 0);
+    }
     subscriptionInfoLastRow = row;
     subscriptionInfoLayout->setRowMinimumHeight(subscriptionInfoLastRow,
                                                 1); // добавляем пустую строку, вместо отступа снизу
@@ -160,6 +185,14 @@ void AccountView::Implementation::scrollToTitle(AbstractLabel* title)
     colorAnimation.setEndValue(colorableTitle->textColor());
     colorableTitle->setTextColor(colorAnimation.startValue().value<QColor>());
     colorAnimation.start();
+}
+
+void AccountView::Implementation::updateSubscriptionEndsLabel()
+{
+    subscriptionEndsLabel->setText(
+        subscriptionEnds.isNull()
+            ? tr("Lifetime access")
+            : tr("Active until %1").arg(subscriptionEnds.toString("dd.MM.yyyy")));
 }
 
 
@@ -211,7 +244,11 @@ AccountView::AccountView(QWidget* _parent)
     //
     // Подписка
     //
-    connect(d->subscriptionUpgradeToPro, &Button::clicked, this, &AccountView::upgradeToProPressed);
+    connect(d->subscriptionTryForFree, &Button::clicked, this, &AccountView::tryForFreePressed);
+    connect(d->subscriptionUpgrade, &Button::clicked, this, &AccountView::upgradeToProPressed);
+    connect(d->subscriptionBuyLifetime, &Button::clicked, this,
+            &AccountView::buyProLifetimePressed);
+    connect(d->subscriptionRenew, &Button::clicked, this, &AccountView::renewProPressed);
 }
 
 AccountView::~AccountView() = default;
@@ -236,7 +273,10 @@ void AccountView::setConnected(bool _connected)
     d->name->setEnabled(_connected);
     d->description->setEnabled(_connected);
     d->avatar->setEnabled(_connected);
-    d->subscriptionUpgradeToPro->setEnabled(_connected);
+    d->subscriptionTryForFree->setEnabled(_connected);
+    d->subscriptionUpgrade->setEnabled(_connected);
+    d->subscriptionBuyLifetime->setEnabled(_connected);
+    d->subscriptionRenew->setEnabled(_connected);
 }
 
 void AccountView::setEmail(const QString& _email)
@@ -277,34 +317,70 @@ void AccountView::setSubscriptionInfo(Domain::SubscriptionType _subscriptionType
     switch (_subscriptionType) {
     case Domain::SubscriptionType::Free: {
         d->subscriptionTitle->setText(tr("FREE version"));
-        d->subscriptionUpgradeToPro->setText(tr("Upgrade to PRO"));
+        d->subscriptionEndsLabel->hide();
+        d->subscriptionTryForFree->hide();
+        d->subscriptionUpgrade->hide();
         for (const auto& paymentOption : _paymentOptions) {
-            if (paymentOption.amount != 0
-                || paymentOption.subscriptionType != Domain::SubscriptionType::ProMonthly) {
-                continue;
+            if (paymentOption.amount == 0
+                && paymentOption.subscriptionType == Domain::SubscriptionType::ProMonthly) {
+                d->subscriptionTryForFree->setText(tr("Try PRO for free"));
+                d->subscriptionTryForFree->show();
+            } else if (paymentOption.amount != 0
+                       && (paymentOption.subscriptionType == Domain::SubscriptionType::ProMonthly
+                           || paymentOption.subscriptionType
+                               == Domain::SubscriptionType::ProLifetime)) {
+                d->subscriptionUpgrade->setText(tr("Upgrade to PRO"));
+                d->subscriptionUpgrade->show();
             }
-
-            d->subscriptionUpgradeToPro->setText(tr("Try PRO for free"));
-            break;
         }
+        d->subscriptionBuyLifetime->hide();
+        d->subscriptionRenew->hide();
         break;
     }
 
-    case Domain::SubscriptionType::ProMonthly:
+    case Domain::SubscriptionType::ProMonthly: {
+        d->subscriptionTitle->setText(tr("PRO version"));
+        d->subscriptionEnds = _subscriptionEnds;
+        d->updateSubscriptionEndsLabel();
+        d->subscriptionEndsLabel->show();
+        d->subscriptionTryForFree->hide();
+        d->subscriptionUpgrade->hide();
+        d->subscriptionBuyLifetime->show();
+        d->subscriptionRenew->show();
+        for (const auto& paymentOption : _paymentOptions) {
+            if (paymentOption.subscriptionType == Domain::SubscriptionType::ProLifetime) {
+                d->subscriptionBuyLifetime->show();
+            } else if (paymentOption.subscriptionType == Domain::SubscriptionType::ProMonthly) {
+                d->subscriptionRenew->show();
+            }
+        }
+        break;
+    }
     case Domain::SubscriptionType::ProLifetime: {
         d->subscriptionTitle->setText(tr("PRO version"));
-        d->subscriptionUpgradeToPro->hide();
+        d->subscriptionEnds = {};
+        d->updateSubscriptionEndsLabel();
+        d->subscriptionEndsLabel->show();
+        d->subscriptionTryForFree->hide();
+        d->subscriptionUpgrade->hide();
+        d->subscriptionBuyLifetime->hide();
+        d->subscriptionRenew->hide();
         break;
     }
 
     case Domain::SubscriptionType::TeamMonthly:
     case Domain::SubscriptionType::TeamLifetime: {
         d->subscriptionTitle->setText(tr("TEAM version"));
-        d->subscriptionUpgradeToPro->hide();
+        d->subscriptionEndsLabel->hide();
+        d->subscriptionTryForFree->hide();
+        d->subscriptionUpgrade->hide();
+        d->subscriptionBuyLifetime->hide();
+        d->subscriptionRenew->hide();
         break;
     }
 
     case Domain::SubscriptionType::Corporate: {
+        d->subscriptionEndsLabel->hide();
         d->subscriptionInfo->hide();
         break;
     }
@@ -358,7 +434,10 @@ void AccountView::updateTranslations()
                                  tr("Do you want to delete your avatar?"));
     d->avatar->setImageCroppingText(tr("Select an area for the avatar"));
     d->subscriptionTitle->setText(tr("Subscription type"));
+    d->updateSubscriptionEndsLabel();
     d->subscriptionDetails->setText(tr("What's included?"));
+    d->subscriptionBuyLifetime->setText(tr("Buy lifetime"));
+    d->subscriptionRenew->setText(tr("Renew"));
     d->sessionsTitle->setText(tr("Active sessions"));
 }
 
@@ -406,10 +485,15 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
     labelMargins.setTop(0);
     labelMargins.setBottom(0);
-    d->subscriptionDetails->setContentsMargins(labelMargins);
-    d->subscriptionDetails->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->subscriptionDetails->setTextColor(ColorHelper::transparent(
-        Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::inactiveTextOpacity()));
+    for (auto subtitle : std::vector<Widget*>{
+             d->subscriptionEndsLabel,
+             d->subscriptionDetails,
+         }) {
+        subtitle->setContentsMargins(labelMargins);
+        subtitle->setBackgroundColor(Ui::DesignSystem::color().background());
+        subtitle->setTextColor(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
+                                                        Ui::DesignSystem::inactiveTextOpacity()));
+    }
 
     for (auto textField : {
              d->name,
@@ -420,7 +504,10 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto button : {
-             d->subscriptionUpgradeToPro,
+             d->subscriptionTryForFree,
+             d->subscriptionUpgrade,
+             d->subscriptionBuyLifetime,
+             d->subscriptionRenew,
          }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
@@ -433,11 +520,10 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->accountInfoLayout->setSpacing(Ui::DesignSystem::layout().px24());
     d->accountInfoLayout->setRowMinimumHeight(d->accountInfoLastRow,
                                               static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->subscriptionInfoLayout->setSpacing(Ui::DesignSystem::layout().px24());
+    d->subscriptionInfoLayout->setVerticalSpacing(Ui::DesignSystem::layout().px24());
     d->subscriptionInfoLayout->setRowMinimumHeight(
         d->subscriptionInfoLastRow, static_cast<int>(Ui::DesignSystem::layout().px16()));
-    d->subscriptionInfoLayout->setColumnMinimumWidth(
-        3, static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->subscriptionInfoLayout->setContentsMargins(0, 0, Ui::DesignSystem::layout().px16(), 0);
 }
 
 } // namespace Ui

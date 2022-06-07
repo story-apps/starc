@@ -44,7 +44,10 @@ signals:
     /**
      * @brief Пользователь хочет проапгрейдить аккаунт
      */
+    void tryProForFreePressed();
     void upgradeToProPressed();
+    void buyProLifetimePressed();
+    void renewProPressed();
 
     /**
      * @brief Пользователь хочет выйти из личного кабинета

@@ -1,6 +1,6 @@
 #include "account_navigator.h"
 
-#include <domain/payent_info.h>
+#include <domain/payment_info.h>
 #include <domain/subscription_info.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -32,6 +32,8 @@ public:
     void updateProSubscriptionEndsLabel();
 
 
+    QDateTime subscriptionEnds;
+
     Tree* tree = nullptr;
 
     ButtonLabel* freeTitle = nullptr;
@@ -39,10 +41,9 @@ public:
     Button* upgradeToProButton = nullptr;
 
     ButtonLabel* proTitle = nullptr;
-    QDateTime proSubscriptionEnds;
     Subtitle2Label* proSubscriptionEndsLabel = nullptr;
-    Button* renewProSubscriptionButton = nullptr;
     Button* upgradeToProLifetimeButton = nullptr;
+    Button* renewProSubscriptionButton = nullptr;
     Button* upgradeToTeamButton = nullptr;
 
     ButtonLabel* teamTitle = nullptr;
@@ -59,8 +60,8 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     , upgradeToProButton(new Button(_parent))
     , proTitle(new ButtonLabel(_parent))
     , proSubscriptionEndsLabel(new Subtitle2Label(_parent))
-    , renewProSubscriptionButton(new Button(_parent))
     , upgradeToProLifetimeButton(new Button(_parent))
+    , renewProSubscriptionButton(new Button(_parent))
     , upgradeToTeamButton(new Button(_parent))
     , teamTitle(new ButtonLabel(_parent))
     , logoutButton(new Button(_parent))
@@ -85,9 +86,9 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
 void AccountNavigator::Implementation::updateProSubscriptionEndsLabel()
 {
     proSubscriptionEndsLabel->setText(
-        proSubscriptionEnds.isNull()
+        subscriptionEnds.isNull()
             ? tr("Lifetime access")
-            : tr("Active until %1").arg(proSubscriptionEnds.toString("dd.MM.yyyy")));
+            : tr("Active until %1").arg(subscriptionEnds.toString("dd.MM.yyyy")));
 }
 
 
@@ -106,8 +107,8 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
     d->layout->addWidget(d->upgradeToProButton, row++, 2);
     d->layout->addWidget(d->proTitle, row++, 2);
     d->layout->addWidget(d->proSubscriptionEndsLabel, row++, 2);
-    d->layout->addWidget(d->renewProSubscriptionButton, row++, 2);
     d->layout->addWidget(d->upgradeToProLifetimeButton, row++, 2);
+    d->layout->addWidget(d->renewProSubscriptionButton, row++, 2);
     d->layout->addWidget(d->upgradeToTeamButton, row++, 2);
     d->layout->addWidget(d->teamTitle, row++, 2);
     d->layout->setRowStretch(row++, 1);
@@ -133,13 +134,13 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
         }
         }
     });
-    connect(d->tryProButton, &Button::clicked, this, &AccountNavigator::upgradeToProPressed);
+    connect(d->tryProButton, &Button::clicked, this, &AccountNavigator::tryProForFreePressed);
     connect(d->upgradeToProButton, &Button::clicked, this, &AccountNavigator::upgradeToProPressed);
+    connect(d->upgradeToProLifetimeButton, &Button::clicked, this,
+            &AccountNavigator::buyProLifetimePressed);
+    connect(d->renewProSubscriptionButton, &Button::clicked, this,
+            &AccountNavigator::renewProPressed);
     connect(d->logoutButton, &Button::clicked, this, &AccountNavigator::logoutPressed);
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 AccountNavigator::~AccountNavigator() = default;
@@ -148,8 +149,8 @@ void AccountNavigator::setConnected(bool _connected)
 {
     d->tryProButton->setEnabled(_connected);
     d->upgradeToProButton->setEnabled(_connected);
-    d->renewProSubscriptionButton->setEnabled(_connected);
     d->upgradeToProLifetimeButton->setEnabled(_connected);
+    d->renewProSubscriptionButton->setEnabled(_connected);
     d->upgradeToTeamButton->setEnabled(_connected);
 }
 
@@ -161,21 +162,29 @@ void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptio
     case Domain::SubscriptionType::Free: {
         d->freeTitle->show();
         d->tryProButton->hide();
-        d->upgradeToProButton->show();
+        d->upgradeToProButton->hide();
         for (const auto& paymentOption : _paymentOptions) {
-            if (paymentOption.amount != 0
-                || paymentOption.subscriptionType != Domain::SubscriptionType::ProMonthly) {
-                continue;
+            //
+            // Если есть бесплатная опция с ПРО, то показываем кнопку попробовать ПРО
+            //
+            if (paymentOption.amount == 0
+                && paymentOption.subscriptionType == Domain::SubscriptionType::ProMonthly) {
+                d->tryProButton->show();
             }
-
-            d->tryProButton->show();
-            d->upgradeToProButton->hide();
-            break;
+            //
+            // Если есть платные опции ПРО, то показываем кнопку апгрейда до ПРО
+            //
+            else if (paymentOption.amount != 0
+                     && (paymentOption.subscriptionType == Domain::SubscriptionType::ProMonthly
+                         || paymentOption.subscriptionType
+                             == Domain::SubscriptionType::ProLifetime)) {
+                d->upgradeToProButton->show();
+            }
         }
         d->proTitle->hide();
         d->proSubscriptionEndsLabel->hide();
-        d->renewProSubscriptionButton->hide();
         d->upgradeToProLifetimeButton->hide();
+        d->renewProSubscriptionButton->hide();
         d->upgradeToTeamButton->hide();
         d->teamTitle->hide();
         break;
@@ -186,11 +195,18 @@ void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptio
         d->tryProButton->hide();
         d->upgradeToProButton->hide();
         d->proTitle->show();
-        d->proSubscriptionEnds = _subscriptionEnds;
+        d->subscriptionEnds = _subscriptionEnds;
         d->updateProSubscriptionEndsLabel();
         d->proSubscriptionEndsLabel->show();
-        d->renewProSubscriptionButton->hide(); // TODO:
-        d->upgradeToProLifetimeButton->hide(); // TODO:
+        d->upgradeToProLifetimeButton->hide();
+        d->renewProSubscriptionButton->hide();
+        for (const auto& paymentOption : _paymentOptions) {
+            if (paymentOption.subscriptionType == Domain::SubscriptionType::ProLifetime) {
+                d->upgradeToProLifetimeButton->show();
+            } else if (paymentOption.subscriptionType == Domain::SubscriptionType::ProMonthly) {
+                d->renewProSubscriptionButton->show();
+            }
+        }
         d->upgradeToTeamButton->hide(); // TODO:
         d->teamTitle->hide();
         break;
@@ -201,10 +217,11 @@ void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptio
         d->tryProButton->hide();
         d->upgradeToProButton->hide();
         d->proTitle->show();
-        d->proSubscriptionEnds = {};
+        d->subscriptionEnds = {};
         d->updateProSubscriptionEndsLabel();
-        d->renewProSubscriptionButton->hide();
+        d->proSubscriptionEndsLabel->show();
         d->upgradeToProLifetimeButton->hide();
+        d->renewProSubscriptionButton->hide();
         d->upgradeToTeamButton->hide(); // TODO:
         d->teamTitle->hide();
         break;
@@ -217,8 +234,8 @@ void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptio
         d->upgradeToProButton->hide();
         d->proTitle->hide();
         d->proSubscriptionEndsLabel->hide();
-        d->renewProSubscriptionButton->hide();
         d->upgradeToProLifetimeButton->hide();
+        d->renewProSubscriptionButton->hide();
         d->upgradeToTeamButton->hide();
         d->teamTitle->show();
         break;
@@ -230,8 +247,8 @@ void AccountNavigator::setSubscriptionInfo(Domain::SubscriptionType _subscriptio
         d->upgradeToProButton->hide();
         d->proTitle->hide();
         d->proSubscriptionEndsLabel->hide();
-        d->renewProSubscriptionButton->hide();
         d->upgradeToProLifetimeButton->hide();
+        d->renewProSubscriptionButton->hide();
         d->upgradeToTeamButton->hide();
         d->teamTitle->hide();
         break;
@@ -250,8 +267,8 @@ void AccountNavigator::updateTranslations()
     d->upgradeToProButton->setText(tr("Upgrade to PRO"));
     d->proTitle->setText(tr("PRO version"));
     d->updateProSubscriptionEndsLabel();
-    d->renewProSubscriptionButton->setText(tr("Renew"));
     d->upgradeToProLifetimeButton->setText(tr("Buy lifetime"));
+    d->renewProSubscriptionButton->setText(tr("Renew"));
     d->upgradeToTeamButton->setText(tr("Upgrade to TEAM"));
     d->teamTitle->setText(tr("TEAM version"));
     d->logoutButton->setText(tr("Logout"));
@@ -279,7 +296,11 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         title->setContentsMargins(titleMargins.toMargins());
     }
 
-    auto subtitleMargins = titleMargins;
+    auto freeTitleMargins = titleMargins;
+    freeTitleMargins.setBottom(Ui::DesignSystem::layout().px12());
+    d->freeTitle->setContentsMargins(freeTitleMargins.toMargins());
+
+    auto subtitleMargins = freeTitleMargins;
     subtitleMargins.setTop(Ui::DesignSystem::layout().px2());
     for (auto subtitle : {
              d->proSubscriptionEndsLabel,
@@ -293,8 +314,8 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto button : {
              d->tryProButton,
              d->upgradeToProButton,
-             d->renewProSubscriptionButton,
              d->upgradeToProLifetimeButton,
+             d->renewProSubscriptionButton,
              d->upgradeToTeamButton,
              d->logoutButton,
          }) {

@@ -60,9 +60,21 @@ public:
     QPixmap avatar() const;
 
     /**
-     * @brief Проапгрейдить учётную запись
+     * @brief Проапгрейдить учётную любым из способов
      */
     void upgradeAccount();
+
+    /**
+     * @brief Активировать бесплатный период для ПРО
+     */
+    bool tryProForFree();
+
+    /**
+     * @brief Оплатить ПРО версию
+     */
+    void upgradeToPro();
+    void buyProLifetme();
+    void renewPro();
 
 signals:
     //

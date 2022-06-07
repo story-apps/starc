@@ -1,13 +1,12 @@
 #include "account_manager.h"
 
-#include <domain/payent_info.h>
+#include <domain/payment_info.h>
 #include <domain/subscription_info.h>
 #include <ui/account/account_navigator.h>
 #include <ui/account/account_tool_bar.h>
 #include <ui/account/account_view.h>
 #include <ui/account/login_dialog.h>
-#include <ui/account/renew_subscription_dialog.h>
-#include <ui/account/upgrade_to_pro_dialog.h>
+#include <ui/account/purchase_dialog.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <utils/helpers/image_helper.h>
@@ -47,6 +46,11 @@ public:
      */
     void initLoginDialog();
 
+    /**
+     * @brief Инициилизировать диалог поккупки услуг
+     */
+    void initPurchaseDialog();
+
 
     AccountManager* q = nullptr;
 
@@ -55,8 +59,7 @@ public:
     Ui::LoginDialog* loginDialog = nullptr;
     int confirmationCodeLength = kInvalidConfirmationCodeLength;
 
-    Ui::UpgradeToProDialog* upgradeToProDialog = nullptr;
-    Ui::RenewSubscriptionDialog* renewSubscriptionDialog = nullptr;
+    Ui::PurchaseDialog* purchaseDialog = nullptr;
 
     Ui::AccountToolBar* toolBar = nullptr;
     Ui::AccountNavigator* navigator = nullptr;
@@ -115,22 +118,13 @@ void AccountManager::Implementation::initNavigatorConnections()
     connect(navigator, &Ui::AccountNavigator::sessionsPressed, view,
             &Ui::AccountView::showSessions);
 
+    connect(navigator, &Ui::AccountNavigator::tryProForFreePressed, q,
+            &AccountManager::tryProForFree);
     connect(navigator, &Ui::AccountNavigator::upgradeToProPressed, q,
-            &AccountManager::upgradeAccount);
-
-    //    connect(navigator, &Ui::AccountNavigator::upgradeToProPressed, q, [this] {
-    //        if (upgradeToProDialog == nullptr) {
-    //            upgradeToProDialog = new Ui::UpgradeToProDialog(topLevelWidget);
-    //            connect(upgradeToProDialog, &Ui::UpgradeToProDialog::canceled, upgradeToProDialog,
-    //                    &Ui::UpgradeToProDialog::hideDialog);
-    //            connect(upgradeToProDialog, &Ui::UpgradeToProDialog::disappeared, q, [this] {
-    //                upgradeToProDialog->deleteLater();
-    //                upgradeToProDialog = nullptr;
-    //            });
-    //        }
-
-    //        upgradeToProDialog->showDialog();
-    //    });
+            &AccountManager::upgradeToPro);
+    connect(navigator, &Ui::AccountNavigator::buyProLifetimePressed, q,
+            &AccountManager::buyProLifetme);
+    connect(navigator, &Ui::AccountNavigator::renewProPressed, q, &AccountManager::renewPro);
 
     connect(navigator, &Ui::AccountNavigator::logoutPressed, q, [this] {
         q->clearAccountInfo();
@@ -167,7 +161,10 @@ void AccountManager::Implementation::initViewConnections()
                 notifyUpdateAccountInfoRequested();
             });
 
-    connect(view, &Ui::AccountView::upgradeToProPressed, q, &AccountManager::upgradeAccount);
+    connect(view, &Ui::AccountView::tryForFreePressed, q, &AccountManager::tryProForFree);
+    connect(view, &Ui::AccountView::upgradeToProPressed, q, &AccountManager::upgradeToPro);
+    connect(view, &Ui::AccountView::buyProLifetimePressed, q, &AccountManager::buyProLifetme);
+    connect(view, &Ui::AccountView::renewProPressed, q, &AccountManager::renewPro);
 
     connect(view, &Ui::AccountView::terminateSessionRequested, q,
             &AccountManager::terminateSessionRequested);
@@ -214,6 +211,23 @@ void AccountManager::Implementation::initLoginDialog()
         loginDialog->deleteLater();
         loginDialog = nullptr;
     });
+}
+
+void AccountManager::Implementation::initPurchaseDialog()
+{
+    if (purchaseDialog == nullptr) {
+        purchaseDialog = new Ui::PurchaseDialog(view->topLevelWidget());
+        connect(purchaseDialog, &Ui::PurchaseDialog::purchasePressed, q,
+                &AccountManager::activatePaymentOptionRequested);
+        connect(purchaseDialog, &Ui::PurchaseDialog::canceled, purchaseDialog,
+                &Ui::PurchaseDialog::hideDialog);
+        connect(purchaseDialog, &Ui::PurchaseDialog::disappeared, purchaseDialog, [this] {
+            purchaseDialog->deleteLater();
+            purchaseDialog = nullptr;
+        });
+    }
+
+    purchaseDialog->setPaymentOptions(paymentOptions);
 }
 
 
@@ -343,43 +357,75 @@ void AccountManager::upgradeAccount()
     // Иначе, покажем диалог с апгрейдом аккаунта
     //
     else {
-        //
-        // Ищем бесплатную активацию
-        //
-        Domain::PaymentOption freeOption;
-        for (const auto& paymentOption : std::as_const(d->paymentOptions)) {
-            if (paymentOption.amount != 0
-                || paymentOption.subscriptionType != Domain::SubscriptionType::ProMonthly) {
-                continue;
-            }
-
-            freeOption = paymentOption;
-            break;
-        }
-
-        //
-        // Если удалось найти бесплатную версию, то предлагаем пользователю активировать бесплатно
-        //
-        if (freeOption.isValid()) {
-            auto dialog = new Dialog(d->view->topLevelWidget());
-            dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
-            dialog->showDialog(tr("Try PRO version for free"),
-                               tr("While Starc is in the beta we'd like to thank our users by "
-                                  "providing them with free PRO features. After beta ends you'll "
-                                  "still be able to use PRO version for 30 days for free."),
-                               { { 0, tr("Continue with free version"), Dialog::RejectButton },
-                                 { 1, tr("Activate PRO"), Dialog::AcceptButton } });
-            QObject::connect(dialog, &Dialog::finished, this,
-                             [this, dialog, freeOption](const Dialog::ButtonInfo& _presedButton) {
-                                 dialog->hideDialog();
-                                 if (_presedButton.type == Dialog::AcceptButton) {
-                                     emit activatePaymentOptionRequested(freeOption);
-                                 }
-                             });
-            QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+        const auto canBeUpdatedForFree = tryProForFree();
+        if (canBeUpdatedForFree) {
             return;
         }
+
+        upgradeToPro();
     }
+}
+
+bool AccountManager::tryProForFree()
+{
+    //
+    // Ищем бесплатную активацию
+    //
+    Domain::PaymentOption freeOption;
+    for (const auto& paymentOption : std::as_const(d->paymentOptions)) {
+        if (paymentOption.amount != 0
+            || paymentOption.subscriptionType != Domain::SubscriptionType::ProMonthly) {
+            continue;
+        }
+
+        freeOption = paymentOption;
+        break;
+    }
+
+    //
+    // Если удалось найти бесплатную версию, то предлагаем пользователю активировать бесплатно
+    //
+    if (freeOption.isValid()) {
+        auto dialog = new Dialog(d->view->topLevelWidget());
+        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+        dialog->showDialog(tr("Try PRO version for free"),
+                           tr("While Starc is in the beta we'd like to thank our users by "
+                              "providing them with free PRO features. After beta ends you'll "
+                              "still be able to use PRO version for 30 days for free."),
+                           { { 0, tr("Continue with free version"), Dialog::RejectButton },
+                             { 1, tr("Activate PRO"), Dialog::AcceptButton } });
+        QObject::connect(dialog, &Dialog::finished, this,
+                         [this, dialog, freeOption](const Dialog::ButtonInfo& _presedButton) {
+                             dialog->hideDialog();
+                             if (_presedButton.type == Dialog::AcceptButton) {
+                                 emit activatePaymentOptionRequested(freeOption);
+                             }
+                         });
+        QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+        return true;
+    }
+
+    return false;
+}
+
+void AccountManager::upgradeToPro()
+{
+    d->initPurchaseDialog();
+    d->purchaseDialog->showDialog();
+}
+
+void AccountManager::buyProLifetme()
+{
+    d->initPurchaseDialog();
+    d->purchaseDialog->selectOption(d->paymentOptions.constFirst());
+    d->purchaseDialog->showDialog();
+}
+
+void AccountManager::renewPro()
+{
+    d->initPurchaseDialog();
+    d->purchaseDialog->selectOption(d->paymentOptions.constLast());
+    d->purchaseDialog->showDialog();
 }
 
 } // namespace ManagementLayer

@@ -85,7 +85,10 @@ signals:
     /**
      * @brief Пользователь нажал кнопку обновления подписки
      */
+    void tryForFreePressed();
     void upgradeToProPressed();
+    void buyProLifetimePressed();
+    void renewProPressed();
 
     /**
      * @brief ПОльзователь хочет завершить заданную сессию

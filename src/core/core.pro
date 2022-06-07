@@ -68,9 +68,9 @@ SOURCES += \
     ui/account/account_view.cpp \
     ui/account/connection_status_tool_bar.cpp \
     ui/account/login_dialog.cpp \
-    ui/account/renew_subscription_dialog.cpp \
+    ui/account/purchase_dialog.cpp \
+    ui/account/purchase_dialog_option.cpp \
     ui/account/session_widget.cpp \
-    ui/account/upgrade_to_pro_dialog.cpp \
     ui/application_style.cpp \
     ui/application_view.cpp \
     ui/crash_report_dialog.cpp \
@@ -130,9 +130,9 @@ HEADERS += \
     ui/account/account_view.h \
     ui/account/connection_status_tool_bar.h \
     ui/account/login_dialog.h \
-    ui/account/renew_subscription_dialog.h \
+    ui/account/purchase_dialog.h \
+    ui/account/purchase_dialog_option.h \
     ui/account/session_widget.h \
-    ui/account/upgrade_to_pro_dialog.h \
     ui/application_style.h \
     ui/application_view.h \
     ui/crash_report_dialog.h \
