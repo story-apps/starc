@@ -1350,7 +1350,6 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
             //
             moveCursor(QTextCursor::PreviousBlock);
             moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::PreviousBlock);
             moveCursor(QTextCursor::EndOfBlock);
         }
     });
