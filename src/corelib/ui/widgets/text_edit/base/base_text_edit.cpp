@@ -96,6 +96,15 @@ QString localCloseQuote()
 }
 /** @} */
 
+/**
+ * @brief Можно ли показать курсор в заданной позиции
+ */
+bool canShowCursor(const QTextCursor& _cursor)
+{
+    return _cursor.block().isVisible()
+        && !_cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor);
+}
+
 } // namespace
 
 
@@ -517,14 +526,18 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     // ... перевод курсора к следующему символу
     //
     else if (_event == QKeySequence::MoveToNextChar) {
-        const bool isShiftPressed = _event->modifiers().testFlag(Qt::ShiftModifier);
+        const auto moveAnchor = _event->modifiers().testFlag(Qt::ShiftModifier)
+            ? QTextCursor::KeepAnchor
+            : QTextCursor::MoveAnchor;
         auto cursor = textCursor();
         if (textCursor().block().textDirection() == Qt::LeftToRight) {
-            cursor.movePosition(QTextCursor::NextCharacter,
-                                isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+            do {
+                cursor.movePosition(QTextCursor::NextCharacter, moveAnchor);
+            } while (!cursor.atEnd() && !canShowCursor(cursor));
         } else {
-            cursor.movePosition(QTextCursor::PreviousCharacter,
-                                isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+            do {
+                cursor.movePosition(QTextCursor::PreviousCharacter, moveAnchor);
+            } while (!cursor.atStart() && !canShowCursor(cursor));
         }
         setTextCursor(cursor);
     }
@@ -532,14 +545,18 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     // ... перевод курсора к предыдущему символу
     //
     else if (_event == QKeySequence::MoveToPreviousChar) {
-        const bool isShiftPressed = _event->modifiers().testFlag(Qt::ShiftModifier);
+        const auto moveAnchor = _event->modifiers().testFlag(Qt::ShiftModifier)
+            ? QTextCursor::KeepAnchor
+            : QTextCursor::MoveAnchor;
         auto cursor = textCursor();
         if (textCursor().block().textDirection() == Qt::LeftToRight) {
-            cursor.movePosition(QTextCursor::PreviousCharacter,
-                                isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+            do {
+                cursor.movePosition(QTextCursor::PreviousCharacter, moveAnchor);
+            } while (!cursor.atStart() && !canShowCursor(cursor));
         } else {
-            cursor.movePosition(QTextCursor::NextCharacter,
-                                isShiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+            do {
+                cursor.movePosition(QTextCursor::NextCharacter, moveAnchor);
+            } while (!cursor.atEnd() && !canShowCursor(cursor));
         }
         setTextCursor(cursor);
     }
@@ -803,9 +820,7 @@ void BaseTextEdit::doSetTextCursor(const QTextCursor& _cursor)
         : _cursor.selectionStart();
     const bool isSelectionForward = sourceSelectionStart < sourceSelectionEnd;
     cursor.setPosition(sourceSelectionStart);
-    while ((isSelectionForward ? !cursor.atEnd() : !cursor.atStart())
-           && (!cursor.block().isVisible()
-               || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
+    while ((isSelectionForward ? !cursor.atEnd() : !cursor.atStart()) && !canShowCursor(cursor)) {
         const auto isCursorMoved = cursor.movePosition(
             isSelectionForward ? QTextCursor::NextBlock : QTextCursor::PreviousBlock);
         if (isCursorMoved) {
@@ -824,8 +839,7 @@ void BaseTextEdit::doSetTextCursor(const QTextCursor& _cursor)
     if (_cursor.hasSelection()) {
         cursor.setPosition(sourceSelectionEnd);
         while ((isSelectionForward ? !cursor.atStart() : !cursor.atEnd())
-               && (!cursor.block().isVisible()
-                   || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
+               && !canShowCursor(cursor)) {
             const auto isCursorMoved = cursor.movePosition(
                 isSelectionForward ? QTextCursor::PreviousBlock : QTextCursor::NextBlock);
             if (isCursorMoved) {
@@ -846,10 +860,7 @@ void BaseTextEdit::doSetTextCursor(const QTextCursor& _cursor)
     //
     else {
         if (!cursor.block().isVisible()) {
-            while (
-                !cursor.atEnd()
-                && (!cursor.block().isVisible()
-                    || cursor.blockFormat().boolProperty(PageTextEdit::PropertyDontShowCursor))) {
+            while (!cursor.atEnd() && !canShowCursor(cursor)) {
                 const auto isCursorMoved = cursor.movePosition(QTextCursor::NextBlock);
                 if (isCursorMoved) {
                     cursor.movePosition(QTextCursor::StartOfBlock);
