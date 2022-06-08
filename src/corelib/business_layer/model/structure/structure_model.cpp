@@ -527,7 +527,7 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     }
 
     //
-    // Элемент нельзя ни перемещать ни вставлять внутрь другие
+    // Элемент нельзя ни перемещать ни вставлять внутрь в другие
     //
     case Domain::DocumentObjectType::ScreenplayTitlePage:
     case Domain::DocumentObjectType::ScreenplaySynopsis:
@@ -659,8 +659,10 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     //
     // ... внутрь сценария ничего нельзя вложить
     //
+    case Domain::DocumentObjectType::Screenplay:
     case Domain::DocumentObjectType::ComicBook:
-    case Domain::DocumentObjectType::Screenplay: {
+    case Domain::DocumentObjectType::Audioplay:
+    case Domain::DocumentObjectType::Stageplay: {
         return false;
     }
 
