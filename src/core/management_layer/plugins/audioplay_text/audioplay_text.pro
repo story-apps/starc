@@ -44,6 +44,7 @@ HEADERS += \
     text/handlers/prepare_handler.h \
     text/handlers/scene_heading_handler.h \
     text/handlers/sound_handler.h \
+    text/handlers/splitter_handler.h \
     text/handlers/standard_key_handler.h \
     text/handlers/unformatted_text_handler.h \
     text/audioplay_text_edit.h \

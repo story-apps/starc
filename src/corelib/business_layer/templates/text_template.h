@@ -516,6 +516,11 @@ public:
     virtual bool canMergeParagraph() const;
 
     /**
+     * @brief Дефолтный стиль блока для шаблона
+     */
+    TextParagraphType defaultParagraphType() const;
+
+    /**
      * @brief Дефолтный шрифт шаблона
      */
     QFont defaultFont() const;

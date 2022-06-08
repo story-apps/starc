@@ -10,6 +10,7 @@
 #include "prepare_handler.h"
 #include "scene_heading_handler.h"
 #include "sound_handler.h"
+#include "splitter_handler.h"
 #include "unformatted_text_handler.h"
 
 #include <business_layer/templates/audioplay_template.h>
@@ -27,32 +28,34 @@ class KeyPressHandlerFacade::Implementation
 public:
     explicit Implementation(AudioplayTextEdit* _editor);
 
-    Ui::AudioplayTextEdit* m_editor = nullptr;
+    Ui::AudioplayTextEdit* editor = nullptr;
 
-    QScopedPointer<PrepareHandler> m_prepareHandler;
-    QScopedPointer<PreHandler> m_preHandler;
-    QScopedPointer<UnformattedTextHandler> m_unformattedTextHandler;
-    QScopedPointer<SceneHeadingHandler> m_sceneHeaderHandler;
-    QScopedPointer<CharacterHandler> m_characterHandler;
-    QScopedPointer<DialogHandler> m_dialogHandler;
-    QScopedPointer<SoundHandler> m_soundHandler;
-    QScopedPointer<MusicHandler> m_musicHandler;
-    QScopedPointer<CueHandler> m_cueHandler;
-    QScopedPointer<InlineNoteHandler> m_inlineNoteHandler;
+    QScopedPointer<PrepareHandler> prepareHandler;
+    QScopedPointer<PreHandler> preHandler;
+    QScopedPointer<UnformattedTextHandler> unformattedTextHandler;
+    QScopedPointer<SceneHeadingHandler> sceneHeaderHandler;
+    QScopedPointer<CharacterHandler> characterHandler;
+    QScopedPointer<DialogHandler> dialogHandler;
+    QScopedPointer<SoundHandler> soundHandler;
+    QScopedPointer<MusicHandler> musicHandler;
+    QScopedPointer<CueHandler> cueHandler;
+    QScopedPointer<InlineNoteHandler> inlineNoteHandler;
+    QScopedPointer<SplitterHandler> splitterHandler;
 };
 
 KeyPressHandlerFacade::Implementation::Implementation(Ui::AudioplayTextEdit* _editor)
-    : m_editor(_editor)
-    , m_prepareHandler(new PrepareHandler(_editor))
-    , m_preHandler(new PreHandler(_editor))
-    , m_unformattedTextHandler(new UnformattedTextHandler(_editor))
-    , m_sceneHeaderHandler(new SceneHeadingHandler(_editor))
-    , m_characterHandler(new CharacterHandler(_editor))
-    , m_dialogHandler(new DialogHandler(_editor))
-    , m_soundHandler(new SoundHandler(_editor))
-    , m_musicHandler(new MusicHandler(_editor))
-    , m_cueHandler(new CueHandler(_editor))
-    , m_inlineNoteHandler(new InlineNoteHandler(_editor))
+    : editor(_editor)
+    , prepareHandler(new PrepareHandler(_editor))
+    , preHandler(new PreHandler(_editor))
+    , unformattedTextHandler(new UnformattedTextHandler(_editor))
+    , sceneHeaderHandler(new SceneHeadingHandler(_editor))
+    , characterHandler(new CharacterHandler(_editor))
+    , dialogHandler(new DialogHandler(_editor))
+    , soundHandler(new SoundHandler(_editor))
+    , musicHandler(new MusicHandler(_editor))
+    , cueHandler(new CueHandler(_editor))
+    , inlineNoteHandler(new InlineNoteHandler(_editor))
+    , splitterHandler(new SplitterHandler(_editor))
 {
 }
 
@@ -74,12 +77,12 @@ KeyPressHandlerFacade::~KeyPressHandlerFacade() = default;
 
 void KeyPressHandlerFacade::prepare(QKeyEvent* _event)
 {
-    d->m_prepareHandler->handle(_event);
+    d->prepareHandler->handle(_event);
 }
 
 void KeyPressHandlerFacade::prepareForHandle(QKeyEvent* _event)
 {
-    d->m_preHandler->handle(_event);
+    d->preHandler->handle(_event);
 }
 
 void KeyPressHandlerFacade::prehandle()
@@ -90,7 +93,7 @@ void KeyPressHandlerFacade::prehandle()
 
 void KeyPressHandlerFacade::handle(QEvent* _event, bool _pre)
 {
-    QTextBlock currentBlock = d->m_editor->textCursor().block();
+    QTextBlock currentBlock = d->editor->textCursor().block();
     const auto currentType = BusinessLayer::TextBlockStyle::forBlock(currentBlock);
     auto currentHandler = handlerFor(currentType);
 
@@ -107,17 +110,17 @@ void KeyPressHandlerFacade::handle(QEvent* _event, bool _pre)
 
 bool KeyPressHandlerFacade::needSendEventToBaseClass() const
 {
-    return d->m_prepareHandler->needSendEventToBaseClass();
+    return d->prepareHandler->needSendEventToBaseClass();
 }
 
 bool KeyPressHandlerFacade::needEnsureCursorVisible() const
 {
-    return d->m_prepareHandler->needEnsureCursorVisible();
+    return d->prepareHandler->needEnsureCursorVisible();
 }
 
 bool KeyPressHandlerFacade::needPrehandle() const
 {
-    return d->m_prepareHandler->needPrehandle();
+    return d->prepareHandler->needPrehandle();
 }
 
 KeyPressHandlerFacade::KeyPressHandlerFacade(AudioplayTextEdit* _editor)
@@ -129,35 +132,39 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
 {
     switch (_type) {
     case TextParagraphType::UnformattedText: {
-        return d->m_unformattedTextHandler.data();
+        return d->unformattedTextHandler.data();
     }
 
     case TextParagraphType::SceneHeading: {
-        return d->m_sceneHeaderHandler.data();
+        return d->sceneHeaderHandler.data();
     }
 
     case TextParagraphType::Character: {
-        return d->m_characterHandler.data();
+        return d->characterHandler.data();
     }
 
     case TextParagraphType::Dialogue: {
-        return d->m_dialogHandler.data();
+        return d->dialogHandler.data();
     }
 
     case TextParagraphType::Sound: {
-        return d->m_soundHandler.data();
+        return d->soundHandler.data();
     }
 
     case TextParagraphType::Music: {
-        return d->m_musicHandler.data();
+        return d->musicHandler.data();
     }
 
     case TextParagraphType::Cue: {
-        return d->m_cueHandler.data();
+        return d->cueHandler.data();
     }
 
     case TextParagraphType::InlineNote: {
-        return d->m_inlineNoteHandler.data();
+        return d->inlineNoteHandler.data();
+    }
+
+    case TextParagraphType::PageSplitter: {
+        return d->splitterHandler.data();
     }
 
     default: {

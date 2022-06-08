@@ -11,6 +11,7 @@
 #include "prepare_handler.h"
 #include "sequence_footer_handler.h"
 #include "sequence_heading_handler.h"
+#include "splitter_handler.h"
 #include "unformatted_text_handler.h"
 
 #include <business_layer/templates/comic_book_template.h>
@@ -28,34 +29,36 @@ class KeyPressHandlerFacade::Implementation
 public:
     explicit Implementation(ComicBookTextEdit* _editor);
 
-    Ui::ComicBookTextEdit* m_editor = nullptr;
+    Ui::ComicBookTextEdit* editor = nullptr;
 
-    QScopedPointer<PrepareHandler> m_prepareHandler;
-    QScopedPointer<PreHandler> m_preHandler;
-    QScopedPointer<UnformattedTextHandler> m_unformattedTextHandler;
-    QScopedPointer<PageHandler> m_pageHandler;
-    QScopedPointer<PanelHandler> m_panelHandler;
-    QScopedPointer<DescriptionHandler> m_actionHandler;
-    QScopedPointer<CharacterHandler> m_characterHandler;
-    QScopedPointer<DialogHandler> m_dialogHandler;
-    QScopedPointer<InlineNoteHandler> m_inlineNoteHandler;
-    QScopedPointer<SequenceHeadingHandler> m_sequenceHeadingHandler;
-    QScopedPointer<SequenceFooterHandler> m_sequenceFooterHandler;
+    QScopedPointer<PrepareHandler> prepareHandler;
+    QScopedPointer<PreHandler> preHandler;
+    QScopedPointer<UnformattedTextHandler> unformattedTextHandler;
+    QScopedPointer<PageHandler> pageHandler;
+    QScopedPointer<PanelHandler> panelHandler;
+    QScopedPointer<DescriptionHandler> actionHandler;
+    QScopedPointer<CharacterHandler> characterHandler;
+    QScopedPointer<DialogHandler> dialogHandler;
+    QScopedPointer<InlineNoteHandler> inlineNoteHandler;
+    QScopedPointer<SequenceHeadingHandler> sequenceHeadingHandler;
+    QScopedPointer<SequenceFooterHandler> sequenceFooterHandler;
+    QScopedPointer<SplitterHandler> splitterHandler;
 };
 
 KeyPressHandlerFacade::Implementation::Implementation(Ui::ComicBookTextEdit* _editor)
-    : m_editor(_editor)
-    , m_prepareHandler(new PrepareHandler(_editor))
-    , m_preHandler(new PreHandler(_editor))
-    , m_unformattedTextHandler(new UnformattedTextHandler(_editor))
-    , m_pageHandler(new PageHandler(_editor))
-    , m_panelHandler(new PanelHandler(_editor))
-    , m_actionHandler(new DescriptionHandler(_editor))
-    , m_characterHandler(new CharacterHandler(_editor))
-    , m_dialogHandler(new DialogHandler(_editor))
-    , m_inlineNoteHandler(new InlineNoteHandler(_editor))
-    , m_sequenceHeadingHandler(new SequenceHeadingHandler(_editor))
-    , m_sequenceFooterHandler(new SequenceFooterHandler(_editor))
+    : editor(_editor)
+    , prepareHandler(new PrepareHandler(_editor))
+    , preHandler(new PreHandler(_editor))
+    , unformattedTextHandler(new UnformattedTextHandler(_editor))
+    , pageHandler(new PageHandler(_editor))
+    , panelHandler(new PanelHandler(_editor))
+    , actionHandler(new DescriptionHandler(_editor))
+    , characterHandler(new CharacterHandler(_editor))
+    , dialogHandler(new DialogHandler(_editor))
+    , inlineNoteHandler(new InlineNoteHandler(_editor))
+    , sequenceHeadingHandler(new SequenceHeadingHandler(_editor))
+    , sequenceFooterHandler(new SequenceFooterHandler(_editor))
+    , splitterHandler(new SplitterHandler(_editor))
 {
 }
 
@@ -77,12 +80,12 @@ KeyPressHandlerFacade::~KeyPressHandlerFacade() = default;
 
 void KeyPressHandlerFacade::prepare(QKeyEvent* _event)
 {
-    d->m_prepareHandler->handle(_event);
+    d->prepareHandler->handle(_event);
 }
 
 void KeyPressHandlerFacade::prepareForHandle(QKeyEvent* _event)
 {
-    d->m_preHandler->handle(_event);
+    d->preHandler->handle(_event);
 }
 
 void KeyPressHandlerFacade::prehandle()
@@ -93,7 +96,7 @@ void KeyPressHandlerFacade::prehandle()
 
 void KeyPressHandlerFacade::handle(QEvent* _event, bool _pre)
 {
-    QTextBlock currentBlock = d->m_editor->textCursor().block();
+    QTextBlock currentBlock = d->editor->textCursor().block();
     const auto currentType = BusinessLayer::TextBlockStyle::forBlock(currentBlock);
     auto currentHandler = handlerFor(currentType);
 
@@ -110,17 +113,17 @@ void KeyPressHandlerFacade::handle(QEvent* _event, bool _pre)
 
 bool KeyPressHandlerFacade::needSendEventToBaseClass() const
 {
-    return d->m_prepareHandler->needSendEventToBaseClass();
+    return d->prepareHandler->needSendEventToBaseClass();
 }
 
 bool KeyPressHandlerFacade::needEnsureCursorVisible() const
 {
-    return d->m_prepareHandler->needEnsureCursorVisible();
+    return d->prepareHandler->needEnsureCursorVisible();
 }
 
 bool KeyPressHandlerFacade::needPrehandle() const
 {
-    return d->m_prepareHandler->needPrehandle();
+    return d->prepareHandler->needPrehandle();
 }
 
 KeyPressHandlerFacade::KeyPressHandlerFacade(ComicBookTextEdit* _editor)
@@ -132,39 +135,43 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
 {
     switch (_type) {
     case TextParagraphType::UnformattedText: {
-        return d->m_unformattedTextHandler.data();
+        return d->unformattedTextHandler.data();
     }
 
     case TextParagraphType::PageHeading: {
-        return d->m_pageHandler.data();
+        return d->pageHandler.data();
     }
 
     case TextParagraphType::PanelHeading: {
-        return d->m_panelHandler.data();
+        return d->panelHandler.data();
     }
 
     case TextParagraphType::Description: {
-        return d->m_actionHandler.data();
+        return d->actionHandler.data();
     }
 
     case TextParagraphType::Character: {
-        return d->m_characterHandler.data();
+        return d->characterHandler.data();
     }
 
     case TextParagraphType::Dialogue: {
-        return d->m_dialogHandler.data();
+        return d->dialogHandler.data();
     }
 
     case TextParagraphType::InlineNote: {
-        return d->m_inlineNoteHandler.data();
+        return d->inlineNoteHandler.data();
     }
 
     case TextParagraphType::SequenceHeading: {
-        return d->m_sequenceHeadingHandler.data();
+        return d->sequenceHeadingHandler.data();
     }
 
     case TextParagraphType::SequenceFooter: {
-        return d->m_sequenceFooterHandler.data();
+        return d->sequenceFooterHandler.data();
+    }
+
+    case TextParagraphType::PageSplitter: {
+        return d->splitterHandler.data();
     }
 
     default: {

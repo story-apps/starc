@@ -255,7 +255,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
             auto bottomBlock = document()->findBlock(bottomCursorPosition);
             if (TextBlockStyle::forBlock(topBlock) == TextParagraphType::SequenceHeading
                 && TextBlockStyle::forBlock(bottomBlock) == TextParagraphType::SequenceFooter
-                && topBlock == document()->begin() && bottomBlock.next() == document()->end()) {
+                && topBlock == document()->begin() && bottomBlock == document()->lastBlock()) {
                 //
                 // Нельзя просто взять и удалить весь текст, потому что тогда останется блок
                 // окончания папки, с которым ничего нельзя сделать, поэтому действуем
@@ -267,10 +267,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                 cursor.movePosition(QTextCursor::Start);
                 auto textDocument = static_cast<BusinessLayer::TextDocument*>(document());
                 Q_ASSERT(textDocument);
-                //
-                // TODO: Сделать универсально
-                //
-                textDocument->setParagraphType(TextParagraphType::SceneHeading, cursor);
+                textDocument->setParagraphType(textTemplate().defaultParagraphType(), cursor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 cursor.insertText(" ");
                 cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
@@ -288,8 +285,10 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
             checkCursor.setPosition(topCursorPosition);
             if (!checkCursor.inTable()) {
                 const bool isTopBlockEmpty = checkCursor.block().text().isEmpty();
+                const auto topBlock = checkCursor.block();
                 checkCursor.setPosition(bottomCursorPosition);
-                if (TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter) {
+                if (topBlock.next() == checkCursor.block()
+                    && TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter) {
                     //
                     // ... если блок пуст, то удалим блок, пододвинув таблицу наверх
                     //

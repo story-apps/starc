@@ -9,6 +9,7 @@
 #include "pre_handler.h"
 #include "prepare_handler.h"
 #include "scene_heading_handler.h"
+#include "splitter_handler.h"
 #include "unformatted_text_handler.h"
 
 #include <business_layer/templates/stageplay_template.h>
@@ -26,30 +27,32 @@ class KeyPressHandlerFacade::Implementation
 public:
     explicit Implementation(StageplayTextEdit* _editor);
 
-    Ui::StageplayTextEdit* m_editor = nullptr;
+    Ui::StageplayTextEdit* editor = nullptr;
 
-    QScopedPointer<PrepareHandler> m_prepareHandler;
-    QScopedPointer<PreHandler> m_preHandler;
-    QScopedPointer<UnformattedTextHandler> m_unformattedTextHandler;
-    QScopedPointer<SceneHeadingHandler> m_sceneHeaderHandler;
-    QScopedPointer<CharacterHandler> m_characterHandler;
-    QScopedPointer<DialogHandler> m_dialogHandler;
-    QScopedPointer<ParentheticalHandler> m_parentheticalHandler;
-    QScopedPointer<ActionHandler> m_actionHandler;
-    QScopedPointer<InlineNoteHandler> m_inlineNoteHandler;
+    QScopedPointer<PrepareHandler> prepareHandler;
+    QScopedPointer<PreHandler> preHandler;
+    QScopedPointer<UnformattedTextHandler> unformattedTextHandler;
+    QScopedPointer<SceneHeadingHandler> sceneHeaderHandler;
+    QScopedPointer<CharacterHandler> characterHandler;
+    QScopedPointer<DialogHandler> dialogHandler;
+    QScopedPointer<ParentheticalHandler> parentheticalHandler;
+    QScopedPointer<ActionHandler> actionHandler;
+    QScopedPointer<InlineNoteHandler> inlineNoteHandler;
+    QScopedPointer<SplitterHandler> splitterHandler;
 };
 
 KeyPressHandlerFacade::Implementation::Implementation(Ui::StageplayTextEdit* _editor)
-    : m_editor(_editor)
-    , m_prepareHandler(new PrepareHandler(_editor))
-    , m_preHandler(new PreHandler(_editor))
-    , m_unformattedTextHandler(new UnformattedTextHandler(_editor))
-    , m_sceneHeaderHandler(new SceneHeadingHandler(_editor))
-    , m_characterHandler(new CharacterHandler(_editor))
-    , m_dialogHandler(new DialogHandler(_editor))
-    , m_parentheticalHandler(new ParentheticalHandler(_editor))
-    , m_actionHandler(new ActionHandler(_editor))
-    , m_inlineNoteHandler(new InlineNoteHandler(_editor))
+    : editor(_editor)
+    , prepareHandler(new PrepareHandler(_editor))
+    , preHandler(new PreHandler(_editor))
+    , unformattedTextHandler(new UnformattedTextHandler(_editor))
+    , sceneHeaderHandler(new SceneHeadingHandler(_editor))
+    , characterHandler(new CharacterHandler(_editor))
+    , dialogHandler(new DialogHandler(_editor))
+    , parentheticalHandler(new ParentheticalHandler(_editor))
+    , actionHandler(new ActionHandler(_editor))
+    , inlineNoteHandler(new InlineNoteHandler(_editor))
+    , splitterHandler(new SplitterHandler(_editor))
 {
 }
 
@@ -71,12 +74,12 @@ KeyPressHandlerFacade::~KeyPressHandlerFacade() = default;
 
 void KeyPressHandlerFacade::prepare(QKeyEvent* _event)
 {
-    d->m_prepareHandler->handle(_event);
+    d->prepareHandler->handle(_event);
 }
 
 void KeyPressHandlerFacade::prepareForHandle(QKeyEvent* _event)
 {
-    d->m_preHandler->handle(_event);
+    d->preHandler->handle(_event);
 }
 
 void KeyPressHandlerFacade::prehandle()
@@ -87,7 +90,7 @@ void KeyPressHandlerFacade::prehandle()
 
 void KeyPressHandlerFacade::handle(QEvent* _event, bool _pre)
 {
-    QTextBlock currentBlock = d->m_editor->textCursor().block();
+    QTextBlock currentBlock = d->editor->textCursor().block();
     const auto currentType = BusinessLayer::TextBlockStyle::forBlock(currentBlock);
     auto currentHandler = handlerFor(currentType);
 
@@ -104,17 +107,17 @@ void KeyPressHandlerFacade::handle(QEvent* _event, bool _pre)
 
 bool KeyPressHandlerFacade::needSendEventToBaseClass() const
 {
-    return d->m_prepareHandler->needSendEventToBaseClass();
+    return d->prepareHandler->needSendEventToBaseClass();
 }
 
 bool KeyPressHandlerFacade::needEnsureCursorVisible() const
 {
-    return d->m_prepareHandler->needEnsureCursorVisible();
+    return d->prepareHandler->needEnsureCursorVisible();
 }
 
 bool KeyPressHandlerFacade::needPrehandle() const
 {
-    return d->m_prepareHandler->needPrehandle();
+    return d->prepareHandler->needPrehandle();
 }
 
 KeyPressHandlerFacade::KeyPressHandlerFacade(StageplayTextEdit* _editor)
@@ -126,31 +129,35 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
 {
     switch (_type) {
     case TextParagraphType::UnformattedText: {
-        return d->m_unformattedTextHandler.data();
+        return d->unformattedTextHandler.data();
     }
 
     case TextParagraphType::SceneHeading: {
-        return d->m_sceneHeaderHandler.data();
+        return d->sceneHeaderHandler.data();
     }
 
     case TextParagraphType::Character: {
-        return d->m_characterHandler.data();
+        return d->characterHandler.data();
     }
 
     case TextParagraphType::Dialogue: {
-        return d->m_dialogHandler.data();
+        return d->dialogHandler.data();
     }
 
     case TextParagraphType::Parenthetical: {
-        return d->m_parentheticalHandler.data();
+        return d->parentheticalHandler.data();
     }
 
     case TextParagraphType::Action: {
-        return d->m_actionHandler.data();
+        return d->actionHandler.data();
     }
 
     case TextParagraphType::InlineNote: {
-        return d->m_inlineNoteHandler.data();
+        return d->inlineNoteHandler.data();
+    }
+
+    case TextParagraphType::PageSplitter: {
+        return d->splitterHandler.data();
     }
 
     default: {

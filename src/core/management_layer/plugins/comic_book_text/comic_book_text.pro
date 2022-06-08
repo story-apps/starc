@@ -45,6 +45,7 @@ HEADERS += \
     text/handlers/prepare_handler.h \
     text/handlers/sequence_footer_handler.h \
     text/handlers/sequence_heading_handler.h \
+    text/handlers/splitter_handler.h \
     text/handlers/standard_key_handler.h \
     text/handlers/unformatted_text_handler.h \
     text/comic_book_text_edit.h \

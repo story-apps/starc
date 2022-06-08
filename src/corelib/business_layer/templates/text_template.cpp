@@ -648,7 +648,7 @@ public:
     /**
      * @brief Тип дефолтного блока
      */
-    TextParagraphType defaultBlockType() const;
+    TextParagraphType defaultParagraphType() const;
 
     /**
      * @brief Дефолтный шрифт
@@ -733,7 +733,7 @@ TextTemplate::Implementation::Implementation()
 {
 }
 
-TextParagraphType TextTemplate::Implementation::defaultBlockType() const
+TextParagraphType TextTemplate::Implementation::defaultParagraphType() const
 {
     if (paragraphsStyles.contains(TextParagraphType::Action)) {
         return TextParagraphType::Action;
@@ -748,7 +748,7 @@ TextParagraphType TextTemplate::Implementation::defaultBlockType() const
 
 QFont TextTemplate::Implementation::defaultFont() const
 {
-    auto font = paragraphsStyles.value(defaultBlockType()).font();
+    auto font = paragraphsStyles.value(defaultParagraphType()).font();
     font.setCapitalization(QFont::MixedCase);
     font.setBold(false);
     font.setItalic(false);
@@ -770,7 +770,7 @@ void TextTemplate::Implementation::buildTitlePageTemplate()
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
     defaultBlockStyle.setFont(defaultFont());
-    defaultBlockStyle.setAlign(paragraphsStyles.value(defaultBlockType()).align());
+    defaultBlockStyle.setAlign(paragraphsStyles.value(defaultParagraphType()).align());
     //
     for (auto type : {
              TextParagraphType::ChapterHeading1,
@@ -802,7 +802,7 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
     defaultBlockStyle.setFont(defaultFont());
-    defaultBlockStyle.setAlign(paragraphsStyles.value(defaultBlockType()).align());
+    defaultBlockStyle.setAlign(paragraphsStyles.value(defaultParagraphType()).align());
     //
     for (auto type : {
              TextParagraphType::ChapterHeading1,
@@ -1121,6 +1121,11 @@ qreal TextTemplate::pageSplitterWidth() const
 bool TextTemplate::canMergeParagraph() const
 {
     return true;
+}
+
+TextParagraphType TextTemplate::defaultParagraphType() const
+{
+    return d->defaultParagraphType();
 }
 
 QFont TextTemplate::defaultFont() const
