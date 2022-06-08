@@ -1090,7 +1090,13 @@ void TextField::keyPressEvent(QKeyEvent* _event)
         return;
     }
 
-    BaseTextEdit::keyPressEvent(_event);
+    if (keyPressEventReimpl(_event)) {
+        _event->accept();
+    } else {
+        BaseTextEdit::keyPressEvent(_event);
+    }
+
+    updateEnteredText(_event->text());
 }
 
 void TextField::changeEvent(QEvent* _event)
