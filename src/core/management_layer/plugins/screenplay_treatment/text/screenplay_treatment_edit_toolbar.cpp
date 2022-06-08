@@ -114,12 +114,7 @@ ScreenplayTreatmentEditToolbar::ScreenplayTreatmentEditToolbar(QWidget* _parent)
             &ScreenplayTreatmentEditToolbar::commentsModeEnabledChanged);
 
     connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
-            [this](const QModelIndex& _index) {
-                d->paragraphTypeAction->setText(_index.data().toString());
-                update();
-
-                emit paragraphTypeChanged(_index);
-            });
+            [this](const QModelIndex& _index) { emit paragraphTypeChanged(_index); });
     connect(d->popup, &Card::disappeared, this,
             [this] { d->paragraphTypeAction->setIconText(u8"\U000f035d"); });
 

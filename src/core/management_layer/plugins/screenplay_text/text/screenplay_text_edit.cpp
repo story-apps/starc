@@ -288,6 +288,16 @@ void ScreenplayTextEdit::redo()
 
 void ScreenplayTextEdit::addParagraph(TextParagraphType _type)
 {
+    //
+    // При попытке вставки папки или сцены в таблицу, подменяем тип на описание действия
+    //
+    if (_type == TextParagraphType::SequenceHeading || _type == TextParagraphType::SceneHeading) {
+        BusinessLayer::TextCursor cursor = textCursor();
+        if (cursor.inTable()) {
+            _type = TextParagraphType::Action;
+        }
+    }
+
     d->document.addParagraph(_type, textCursor());
 
     emit paragraphTypeChanged();
@@ -299,11 +309,20 @@ void ScreenplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
         return;
     }
 
+    BusinessLayer::TextCursor cursor = textCursor();
+
     //
-    // Если тип блока меняется на заголовок сцены, но это единственный текстовый блок бита, то
-    // добавим сцену отдельным блоком после него, т.к. бит не может включать в себя сцену
+    // Если тип блока меняется на заголовок папки илисцены, но это единственный текстовый блок бита,
+    // то добавим сцену отдельным блоком после него, т.к. бит не может включать в себя сцену
     //
-    if (_type == TextParagraphType::SceneHeading) {
+    if (_type == TextParagraphType::SequenceHeading || _type == TextParagraphType::SceneHeading) {
+        //
+        // Внтури таблицы нельзя создавать папки и сцены
+        //
+        if (cursor.inTable()) {
+            return;
+        }
+
         const auto item = d->currentItem();
         Q_ASSERT(item);
         if (item->parent() != nullptr
