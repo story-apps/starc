@@ -43,6 +43,7 @@ public:
     QHBoxLayout* buttonsLayout = nullptr;
     Button* addDocumentButton = nullptr;
     QShortcut* addDocumentShortcut = nullptr;
+    Button* emptyRecycleBinButton = nullptr;
 };
 
 ProjectNavigator::Implementation::Implementation(ProjectNavigator* _parent)
@@ -54,6 +55,7 @@ ProjectNavigator::Implementation::Implementation(ProjectNavigator* _parent)
     , buttonsLayout(new QHBoxLayout)
     , addDocumentButton(new Button(_parent))
     , addDocumentShortcut(new QShortcut(_parent))
+    , emptyRecycleBinButton(new Button(_parent))
 {
     tree->setDragDropEnabled(true);
     tree->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -62,6 +64,8 @@ ProjectNavigator::Implementation::Implementation(ProjectNavigator* _parent)
     addDocumentButton->setFocusPolicy(Qt::NoFocus);
     addDocumentButton->setIcon(u8"\U000f0415");
     addDocumentShortcut->setKey(QKeySequence::New);
+    emptyRecycleBinButton->setFocusPolicy(Qt::NoFocus);
+    emptyRecycleBinButton->setIcon(u8"\U000F05E8");
 
     new Shadow(Qt::TopEdge, tree);
     new Shadow(Qt::BottomEdge, tree);
@@ -94,6 +98,7 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
     d->buttonsLayout->setContentsMargins({});
     d->buttonsLayout->setSpacing(0);
     d->buttonsLayout->addWidget(d->addDocumentButton);
+    d->buttonsLayout->addWidget(d->emptyRecycleBinButton);
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
@@ -135,6 +140,8 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
             emit addDocumentClicked();
         }
     });
+    connect(d->emptyRecycleBinButton, &Button::clicked, this,
+            &ProjectNavigator::emptyRecycleBinClicked);
 }
 
 ProjectNavigator::~ProjectNavigator() = default;
@@ -188,6 +195,29 @@ bool ProjectNavigator::isProjectNavigatorShown() const
     return currentWidget() == d->navigatorPage;
 }
 
+void ProjectNavigator::showButton(ActionButton _type)
+{
+    switch (_type) {
+    case ActionButton::AddDocument: {
+        d->emptyRecycleBinButton->hide();
+        d->addDocumentButton->show();
+        break;
+    }
+
+    case ActionButton::EmptyRecycleBin: {
+        d->addDocumentButton->hide();
+        d->emptyRecycleBinButton->show();
+        break;
+    }
+    }
+}
+
+void ProjectNavigator::setButtonEnabled(bool _enabled)
+{
+    d->addDocumentButton->setEnabled(_enabled);
+    d->emptyRecycleBinButton->setEnabled(_enabled);
+}
+
 bool ProjectNavigator::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_watched == d->tree && _event->type() == QEvent::ToolTip) {
@@ -202,6 +232,7 @@ bool ProjectNavigator::eventFilter(QObject* _watched, QEvent* _event)
 void ProjectNavigator::updateTranslations()
 {
     d->addDocumentButton->setText(tr("Add document"));
+    d->emptyRecycleBinButton->setText(tr("Empty recycle bin"));
 }
 
 void ProjectNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -222,6 +253,8 @@ void ProjectNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         DesignSystem::layout().px12());
     d->addDocumentButton->setBackgroundColor(DesignSystem::color().secondary());
     d->addDocumentButton->setTextColor(DesignSystem::color().secondary());
+    d->emptyRecycleBinButton->setBackgroundColor(DesignSystem::color().secondary());
+    d->emptyRecycleBinButton->setTextColor(DesignSystem::color().secondary());
 }
 
 } // namespace Ui

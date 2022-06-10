@@ -166,6 +166,11 @@ signals:
      */
     void locationNameChanged(const QString& _oldName, const QString& _newName);
 
+    /**
+     * @brief Необходимо очистить корзинку
+     */
+    void emptyRecycleBinRequested();
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

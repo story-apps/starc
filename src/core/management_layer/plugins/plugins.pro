@@ -22,7 +22,8 @@ SUBDIRS = \
     stageplay_parameters \
     stageplay_text \
     stageplay_text_structure \
-    title_page
+    title_page \
+    recycle_bin
 
 exists (characters_relations/characters_relations.pro) {
     SUBDIRS += characters_relations

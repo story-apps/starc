@@ -14,6 +14,24 @@ class CORE_LIBRARY_EXPORT RecycleBinModel : public AbstractModel
 
 public:
     explicit RecycleBinModel(QObject* _parent = nullptr);
+    ~RecycleBinModel() override;
+
+    /**
+     * @brief Количество документов к удалению
+     */
+    int documentsToRemoveSize() const;
+    void setDocumentsToRemoveSize(int _size);
+
+signals:
+    /**
+     * @brief Изменилось количество документов к удалению
+     */
+    void documentsToRemoveSizeChanged(int _size);
+
+    /**
+     * @brief Необходимо очистить корзинку
+     */
+    void emptyRecycleBinRequested();
 
 protected:
     /**
@@ -24,6 +42,10 @@ protected:
     void clearDocument() override;
     QByteArray toXml() const override;
     /** @} */
+
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 } // namespace BusinessLayer

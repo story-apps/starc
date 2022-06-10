@@ -111,7 +111,9 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         { "application/x-starc/document/location",   { { "application/x-starc/editor/location/information", u8"\U000f02fd" } } },
         //
         { "application/x-starc/document/folder",     { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
-        { "application/x-starc/document/text",       { { kSimpleTextEditorMime, u8"\U000f09ed" } } }
+        { "application/x-starc/document/text",       { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
+        //,
+        { "application/x-starc/document/recycle-bin",       { { "application/x-starc/editor/recycle-bin", u8"\U000f01b4" } } }
       };
 
 /**
@@ -163,6 +165,8 @@ const QHash<QString, QString> kMimeToPlugin
         //
         { "application/x-starc/editor/locations/map", "*locationsmapplugin*" },
         { "application/x-starc/editor/location/information", "*locationinformationplugin*" },
+        //
+        { "application/x-starc/editor/recycle-bin", "*recyclebinplugin*" },
       };
 // clang-format on
 
@@ -405,7 +409,11 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                   QApplication::translate("ProjectPluginsBuilder", "Folder text") } } },
             { "application/x-starc/document/text",
               { { kSimpleTextEditorMime,
-                  QApplication::translate("ProjectPluginsBuilder", "Document text") } } }
+                  QApplication::translate("ProjectPluginsBuilder", "Document text") } } },
+            //,
+            { "application/x-starc/document/recycle-bin",
+              { { "application/x-starc/editor/recycle-bin",
+                  QApplication::translate("ProjectPluginsBuilder", "Recycle bin summary info") } } }
              };
     // clang-format on
     return descriptions.value(_documentMimeType).value(_editorMimeType);

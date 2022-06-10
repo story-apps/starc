@@ -143,7 +143,35 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::RecycleBin: {
-            model = new BusinessLayer::RecycleBinModel;
+            auto recycleBinModel = new BusinessLayer::RecycleBinModel;
+
+            auto updateChildCount = [this, recycleBinModel, documentUuid = _document->uuid()] {
+                auto recycleBinItem = d->projectStructureModel->itemForUuid(documentUuid);
+                if (recycleBinItem == nullptr) {
+                    return;
+                }
+
+                std::function<int(BusinessLayer::StructureModelItem*)> countChildren;
+                countChildren = [&countChildren](BusinessLayer::StructureModelItem* _item) {
+                    int childrenSize = 0;
+                    for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+                        childrenSize += 1 + countChildren(_item->childAt(childIndex));
+                    }
+                    return childrenSize;
+                };
+                recycleBinModel->setDocumentsToRemoveSize(countChildren(recycleBinItem));
+            };
+            updateChildCount();
+            connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsInserted,
+                    recycleBinModel, updateChildCount);
+            connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsMoved,
+                    recycleBinModel, updateChildCount);
+            connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsRemoved,
+                    recycleBinModel, updateChildCount);
+            connect(recycleBinModel, &BusinessLayer::RecycleBinModel::emptyRecycleBinRequested,
+                    this, &ProjectModelsFacade::emptyRecycleBinRequested);
+
+            model = recycleBinModel;
             break;
         }
 
@@ -769,7 +797,7 @@ void ProjectModelsFacade::removeModelFor(Domain::DocumentObject* _document)
 QVector<BusinessLayer::AbstractModel*> ProjectModelsFacade::loadedModels() const
 {
     QVector<BusinessLayer::AbstractModel*> models;
-    for (auto model : d->documentsToModels) {
+    for (auto model : std::as_const(d->documentsToModels)) {
         models.append(model);
     }
     return models;

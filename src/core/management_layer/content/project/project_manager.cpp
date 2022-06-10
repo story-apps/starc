@@ -92,7 +92,7 @@ public:
     /**
      * @brief Очистить корзину
      */
-    void emptyRecycleBin(const QModelIndex& _recycleBinIndex);
+    void emptyRecycleBin();
 
     //
     // Данные
@@ -175,8 +175,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         if (currentItem->hasChildren()) {
             auto emptyRecycleBin = new QAction(tr("Empty recycle bin"));
             emptyRecycleBin->setIconText(u8"\U000f05e8");
-            connect(emptyRecycleBin, &QAction::triggered,
-                    [this, currentItemIndex] { this->emptyRecycleBin(currentItemIndex); });
+            connect(emptyRecycleBin, &QAction::triggered, [this] { this->emptyRecycleBin(); });
             menuActions.append(emptyRecycleBin);
         }
     }
@@ -568,9 +567,9 @@ void ProjectManager::Implementation::findAllLocations()
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
-void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycleBinIndex)
+void ProjectManager::Implementation::emptyRecycleBin()
 {
-    auto recycleBin = projectStructureModel->itemForIndex(_recycleBinIndex);
+    auto recycleBin = projectStructureModel->itemForType(Domain::DocumentObjectType::RecycleBin);
     if (recycleBin == nullptr) {
         return;
     }
@@ -626,6 +625,11 @@ void ProjectManager::Implementation::emptyRecycleBin(const QModelIndex& _recycle
                 auto itemToRemove = recycleBin->childAt(0);
                 removeItem(itemToRemove);
             }
+
+            //
+            // Дизейблим кнопку очистки корзины в навигаторе
+            //
+            navigator->setButtonEnabled(false);
         });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
@@ -680,6 +684,24 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     return;
                 }
                 showView(_index, views.first().mimeType);
+
+                //
+                // Для корзины и вложенных элементов вместо кнопки добавления документов показываем
+                // кнопку очистки корзины
+                //
+                bool isInRecycleBin = false;
+                auto topLevelParent = item;
+                while (topLevelParent != nullptr) {
+                    if (topLevelParent->type() == Domain::DocumentObjectType::RecycleBin) {
+                        isInRecycleBin = true;
+                        break;
+                    }
+                    topLevelParent = topLevelParent->parent();
+                }
+                d->navigator->showButton(isInRecycleBin
+                                             ? Ui::ProjectNavigator::ActionButton::EmptyRecycleBin
+                                             : Ui::ProjectNavigator::ActionButton::AddDocument);
+                d->navigator->setButtonEnabled(true);
             });
     //
     // Отображаем навигатор выбранного элемента
@@ -704,6 +726,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             [this](const QModelIndex& _index) { d->updateNavigatorContextMenu(_index); });
     connect(d->navigator, &Ui::ProjectNavigator::addDocumentClicked, this,
             [this] { d->addDocument(); });
+    connect(d->navigator, &Ui::ProjectNavigator::emptyRecycleBinClicked, this,
+            [this] { d->emptyRecycleBin(); });
 
     //
     // Соединения с моделью структуры проекта
@@ -1017,6 +1041,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 setDocumentVisible(_model, Domain::DocumentObjectType::AudioplayStatistics,
                                    _visible);
             });
+    //
+    connect(&d->modelsFacade, &ProjectModelsFacade::emptyRecycleBinRequested, this,
+            [this] { d->emptyRecycleBin(); });
 }
 
 ProjectManager::~ProjectManager() = default;

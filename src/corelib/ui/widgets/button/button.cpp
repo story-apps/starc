@@ -205,7 +205,7 @@ void Button::paintEvent(QPaintEvent* _event)
     // Заливаем фон
     //
     QColor backgroundColor;
-    if (underMouse()) {
+    if (isEnabled() && underMouse()) {
         if (d->isContained || d->isFlat) {
             backgroundColor = ColorHelper::transparent(
                 this->backgroundColor(), 1.0 - Ui::DesignSystem::hoverBackgroundOpacity());
