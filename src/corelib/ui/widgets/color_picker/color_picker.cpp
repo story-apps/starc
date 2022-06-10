@@ -81,6 +81,12 @@ ColorPicker::ColorPicker(QWidget* _parent)
     connect(d->colorCode, &TextField::textChanged, this, [this] {
         const auto colorName = d->colorCode->text();
         if (colorName.length() != 7) {
+            //
+            // В кейсе когда из буфера обмена вставили хекс без решётки, докрутим его немного
+            //
+            if (colorName.length() == 6 && !colorName.startsWith('#')) {
+                d->colorCode->setText("#" + colorName);
+            }
             return;
         }
 
