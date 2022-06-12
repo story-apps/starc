@@ -85,8 +85,33 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->view, &Ui::ProjectsView::openProjectRequested, this,
             [this](const Project& _project) { emit openChoosedProjectRequested(_project.path()); });
 
-    connect(d->view, &Ui::ProjectsView::hideProjectRequested, this,
-            [this](const Project& _project) { d->projects->remove(_project); });
+    connect(
+        d->view, &Ui::ProjectsView::hideProjectRequested, this, [this](const Project& _project) {
+            auto dialog = new Dialog(d->view->topLevelWidget());
+            constexpr int cancelButtonId = 0;
+            constexpr int hideButtonId = 1;
+            dialog->showDialog({}, tr("Do you really want to hide a project from the recent list?"),
+                               { { cancelButtonId, tr("No"), Dialog::RejectButton },
+                                 { hideButtonId, tr("Yes, hide"), Dialog::AcceptButton } });
+            QObject::connect(
+                dialog, &Dialog::finished, this,
+                [this, _project, cancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                    dialog->hideDialog();
+
+                    //
+                    // Пользователь передумал скрывать
+                    //
+                    if (_buttonInfo.id == cancelButtonId) {
+                        return;
+                    }
+
+                    //
+                    // Если таки хочет, то скрываем проект
+                    //
+                    d->projects->remove(_project);
+                });
+            QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+        });
     connect(d->view, &Ui::ProjectsView::removeProjectRequested, this,
             [this](const Project& _project) { d->projects->remove(_project); });
 }
