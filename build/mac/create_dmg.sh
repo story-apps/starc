@@ -3,8 +3,8 @@
 #
 # сформировать app-файл
 #
-cp -R ../../src/_build/starcapp.app starcapp.app
-macdeployqt starcapp.app
+cp -R ../../src/_build/starcapp.app Story\ Architect.app
+macdeployqt Story\ Architect.app
 
 #
 # подпишем app-файл
@@ -16,12 +16,12 @@ security unlock-keychain -p $APPLE_KEYCHAIN_PASSWORD build.keychain
 security import certificate.p12 -k build.keychain -P $APPLE_CERTIFICATE_PASSWORD -T /usr/bin/codesign
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $APPLE_KEYCHAIN_PASSWORD build.keychain
 security find-identity
-codesign --force --entitlements entitlements.plist --deep --sign "$APPLE_SIGNING_IDENTITY" --options "runtime" "starcapp.app/" -v
+codesign --force --entitlements entitlements.plist --deep --sign "$APPLE_SIGNING_IDENTITY" --options "runtime" "Story Architect.app/" -v
 
 #
 # сформировать архив с приложением
 #
-ditto -ck --keepParent starcapp.app starcapp.zip
+ditto -ck --keepParent Story\ Architect.app starcapp.zip
 
 #
 # отправить архив на проверку
@@ -36,10 +36,10 @@ rm -R starcapp.zip
 #
 # поместить тикет в приложение
 #
-xcrun stapler staple starcapp.app
+xcrun stapler staple Story\ Architect.app
 
 #
 # Создаём dmg-файл
 #
-./make_dmg.sh -i starc.app/Contents/Resources/icon.icns -b cover.png -c "462:252:176:258" -s "640:400"  starcapp.app
-mv -f starcapp.dmg starc-setup.dmg
+./make_dmg.sh -i Story\ Architect.app/Contents/Resources/icon.icns -b cover.png -c "462:252:176:258" -s "640:400" Story\ Architect.app
+mv -f Story\ Architect.dmg starc-setup.dmg
