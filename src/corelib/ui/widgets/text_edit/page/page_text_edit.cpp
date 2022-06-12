@@ -1950,6 +1950,10 @@ void PageTextEditPrivate::paintPageNumber(QPainter* _painter, const QRectF& _rec
         return;
     }
 
+    if (_number == 1 && !showPageNumberAtFirstPage) {
+        return;
+    }
+
     //
     // Верхнее поле
     //
@@ -3790,6 +3794,17 @@ void PageTextEdit::setShowPageNumbers(bool _show)
     }
 
     d->showPageNumbers = _show;
+    d->relayoutDocument();
+}
+
+void PageTextEdit::setShowPageNumberAtFirstPage(bool _show)
+{
+    Q_D(PageTextEdit);
+    if (d->showPageNumberAtFirstPage == _show) {
+        return;
+    }
+
+    d->showPageNumberAtFirstPage = _show;
     d->relayoutDocument();
 }
 

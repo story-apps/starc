@@ -360,6 +360,7 @@ public:
      * @brief Установить значение необходимости отображения номеров страниц
      */
     void setShowPageNumbers(bool _show);
+    void setShowPageNumberAtFirstPage(bool _show);
 
     /**
      * @brief Установить место отображения номеров страниц

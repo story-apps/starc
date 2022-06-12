@@ -108,6 +108,7 @@ StageplayTextEdit::StageplayTextEdit(QWidget* _parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
     setShowPageNumbers(true);
+    setShowPageNumberAtFirstPage(false);
 
     setDocument(&d->document);
     setCapitalizeWords(false);

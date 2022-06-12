@@ -180,6 +180,7 @@ public:
      * @brief Необходимо ли показывать номера страниц
      */
     bool showPageNumbers = false;
+    bool showPageNumberAtFirstPage = true;
 
     /**
      * @brief Где показывать номера страниц
