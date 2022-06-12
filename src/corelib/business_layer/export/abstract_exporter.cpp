@@ -1,5 +1,6 @@
 #include "abstract_exporter.h"
 
+#include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/document/text/text_document.h>
 #include <business_layer/export/export_options.h>
@@ -50,13 +51,20 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
     //
     if (_exportOptions.includeTiltePage) {
         //
-        // Переносим основной текст на следующую страницу
+        // Переносим основной текст и данные на следующую страницу
         //
+        TextBlockData* firstBlockUserData = nullptr;
+        if (cursor.block().userData() != nullptr) {
+            firstBlockUserData
+                = new TextBlockData(static_cast<TextBlockData*>(cursor.block().userData()));
+            cursor.block().setUserData(nullptr);
+        }
         cursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
         auto blockFormat = cursor.blockFormat();
         blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
         blockFormat.setTopMargin(0);
         cursor.setBlockFormat(blockFormat);
+        cursor.block().setUserData(firstBlockUserData);
 
         //
         // Собственно добавляем текст титульной страницы

@@ -42,10 +42,8 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
     if (!exportOptions.exportScenes.isEmpty()) {
         const auto blockData = static_cast<TextBlockData*>(_cursor.block().userData());
         bool needRemoveBlock = false;
-        if (!blockData || !blockData->item() || !blockData->item()->parent()
-            || blockData->item()->parent()->type() != TextModelItemType::Group) {
-            needRemoveBlock = true;
-        } else {
+        if (blockData && blockData->item() && blockData->item()->parent()
+            && blockData->item()->parent()->type() == TextModelItemType::Group) {
             const auto sceneItem
                 = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
             if (!exportOptions.exportScenes.contains(QString::number(sceneItem->number()->value))) {

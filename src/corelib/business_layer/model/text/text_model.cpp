@@ -7,11 +7,13 @@
 #include "text_model_xml.h"
 #include "text_model_xml_writer.h"
 
+#include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
+#include <utils/helpers/model_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/logging.h>
 #include <utils/shugar.h>
@@ -1204,6 +1206,8 @@ void TextModel::setTitlePageModel(SimpleTextModel* _model)
 
 SimpleTextModel* TextModel::titlePageModel() const
 {
+    ModelHelper::initTitlePageModel(d->titlePageModel);
+
     return d->titlePageModel;
 }
 

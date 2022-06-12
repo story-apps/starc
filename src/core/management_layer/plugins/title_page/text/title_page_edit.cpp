@@ -26,6 +26,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/model_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QAction>
@@ -275,15 +276,7 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
     //
     // Если в модели всего один пустой элемент, значит нужно заменить титульной страницей из шаблона
     //
-    if (d->model && d->model->rowCount() == 1) {
-        const auto item = d->model->itemForIndex(d->model->index(0, 0));
-        if (item->type() == BusinessLayer::TextModelItemType::Text) {
-            const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
-            if (textItem->text().isEmpty()) {
-                restoreFromTemplate();
-            }
-        }
-    }
+    ModelHelper::initTitlePageModel(d->model);
 
     //
     // Для титульной страницы уравновесим поля в сторону большего,
@@ -323,26 +316,7 @@ void TitlePageEdit::redo()
 
 void TitlePageEdit::restoreFromTemplate()
 {
-    if (!d->model) {
-        return;
-    }
-
-    QString titlePage;
-    if (auto model = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
-        titlePage = TemplatesFacade::screenplayTemplate(model->informationModel()->templateId())
-                        .titlePage();
-    } else if (auto model = qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
-        titlePage = TemplatesFacade::comicBookTemplate(model->informationModel()->templateId())
-                        .titlePage();
-    } else if (auto model = qobject_cast<BusinessLayer::AudioplayTitlePageModel*>(d->model)) {
-        titlePage = TemplatesFacade::audioplayTemplate(model->informationModel()->templateId())
-                        .titlePage();
-    } else if (auto model = qobject_cast<BusinessLayer::StageplayTitlePageModel*>(d->model)) {
-        titlePage = TemplatesFacade::stageplayTemplate(model->informationModel()->templateId())
-                        .titlePage();
-    }
-
-    d->model->setDocumentContent(titlePage.toUtf8());
+    ModelHelper::initTitlePageModel(d->model);
 }
 
 void TitlePageEdit::addParagraph(BusinessLayer::TextParagraphType _type)
