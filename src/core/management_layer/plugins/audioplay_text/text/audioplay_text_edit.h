@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/text_edit/base/base_text_edit.h>
+#include <ui/modules/script_text_edit/script_text_edit.h>
 
 namespace BusinessLayer {
 class AudioplayDictionariesModel;
@@ -16,7 +16,7 @@ namespace Ui {
 /**
  * @brief Текстовый редактор аудиопостановки
  */
-class AudioplayTextEdit : public BaseTextEdit
+class AudioplayTextEdit : public ScriptTextEdit
 {
     Q_OBJECT
 

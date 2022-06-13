@@ -341,6 +341,7 @@ public:
     CheckBox* audioplayEditorShowBlockNumber = nullptr;
     CheckBox* audioplayEditorContinueBlockNumbers = nullptr;
     CheckBox* audioplayEditorUseCharactersFromText = nullptr;
+    CheckBox* audioplayEditorShowCharacterSuggestionsInEmptyBlock = nullptr;
     //
     // ... Audioplay navigator
     //
@@ -513,6 +514,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , audioplayEditorShowBlockNumber(new CheckBox(audioplayCard))
     , audioplayEditorContinueBlockNumbers(new CheckBox(audioplayCard))
     , audioplayEditorUseCharactersFromText(new CheckBox(audioplayCard))
+    , audioplayEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(audioplayCard))
     , audioplayNavigatorTitle(new H6Label(audioplayCard))
     , audioplayNavigatorShowSceneNumber(new CheckBox(audioplayCard))
     , audioplayNavigatorShowSceneText(new CheckBox(audioplayCard))
@@ -983,6 +985,8 @@ void SettingsView::Implementation::initAudioplayCard()
         audioplayCardLayout->addLayout(layout, itemIndex++, 0);
     }
     audioplayCardLayout->addWidget(audioplayEditorUseCharactersFromText, itemIndex++, 0);
+    audioplayCardLayout->addWidget(audioplayEditorShowCharacterSuggestionsInEmptyBlock, itemIndex++,
+                                   0);
     //
     // ... навигатор сценария
     //
@@ -1668,6 +1672,7 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->audioplayEditorShowBlockNumber,
                  d->audioplayEditorContinueBlockNumbers,
                  d->audioplayEditorUseCharactersFromText,
+                 d->audioplayEditorShowCharacterSuggestionsInEmptyBlock,
                  d->audioplayNavigatorTitle,
                  d->audioplayNavigatorShowSceneNumber,
                  d->audioplayNavigatorShowSceneText,
@@ -1753,6 +1758,8 @@ SettingsView::SettingsView(QWidget* _parent)
             notifyAudioplayEditorShowSceneNumbersChanged);
     connect(d->audioplayEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
             &SettingsView::audioplayEditorUseCharactersFromTextChanged);
+    connect(d->audioplayEditorShowCharacterSuggestionsInEmptyBlock, &CheckBox::checkedChanged, this,
+            &SettingsView::audioplayEditorShowCharacterSuggestionsInEmptyBlockChanged);
     //
     // ... навигатор сценария
     //
@@ -2356,6 +2363,11 @@ void SettingsView::setAudioplayEditorUseCharactersFromText(bool _use)
     d->audioplayEditorUseCharactersFromText->setChecked(_use);
 }
 
+void SettingsView::setAudioplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
+{
+    d->audioplayEditorShowCharacterSuggestionsInEmptyBlock->setChecked(_show);
+}
+
 void SettingsView::setAudioplayNavigatorShowSceneNumber(bool _show)
 {
     d->audioplayNavigatorShowSceneNumber->setChecked(_show);
@@ -2714,6 +2726,8 @@ void SettingsView::updateTranslations()
     d->audioplayEditorContinueBlockNumbers->setText(tr("Continue block numbers through document"));
     d->audioplayEditorUseCharactersFromText->setText(
         tr("Show hints for major & related to a current story characters only"));
+    d->audioplayEditorShowCharacterSuggestionsInEmptyBlock->setText(
+        tr("Show characters suggestions in empty paragraphs"));
     d->audioplayNavigatorTitle->setText(tr("Audioplay navigator"));
     d->audioplayNavigatorShowSceneNumber->setText(tr("Show scene number"));
     d->audioplayNavigatorShowSceneText->setText(tr("Show scene text, lines"));
@@ -2900,6 +2914,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->audioplayEditorShowBlockNumber,
              d->audioplayEditorContinueBlockNumbers,
              d->audioplayEditorUseCharactersFromText,
+             d->audioplayEditorShowCharacterSuggestionsInEmptyBlock,
              d->audioplayNavigatorShowSceneNumber,
              d->audioplayNavigatorShowSceneText,
              //

@@ -152,6 +152,7 @@ private:
     void setAudioplayEditorDefaultTemplate(const QString& _templateId);
     void setAudioplayEditorShowBlockNumber(bool _show, bool _continued);
     void setAudioplayEditorUseCharactersFromText(bool _use);
+    void setAudioplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setAudioplayNavigatorShowSceneNumber(bool _show);
     void setAudioplayNavigatorShowSceneText(bool _show, int _lines);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/text_edit/base/base_text_edit.h>
+#include <ui/modules/script_text_edit/script_text_edit.h>
 
 namespace BusinessLayer {
 class CharactersModel;
@@ -18,7 +18,7 @@ namespace Ui {
 /**
  * @brief Текстовый редактор сценария
  */
-class ComicBookTextEdit : public BaseTextEdit
+class ComicBookTextEdit : public ScriptTextEdit
 {
     Q_OBJECT
 

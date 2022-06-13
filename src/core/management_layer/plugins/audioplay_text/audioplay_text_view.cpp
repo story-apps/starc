@@ -733,6 +733,14 @@ void AudioplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey)) {
+        d->textEdit->setShowSuggestionsInEmptyBlocks(
+            settingsValue(
+                DataStorageLayer::kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey)
+                .toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsAudioplayEditorShortcutsKey)) {
         d->shortcutsManager.reconfigure();
     }

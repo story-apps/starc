@@ -215,6 +215,10 @@ void SettingsManager::Implementation::loadAudioplaySettings()
     view->setAudioplayEditorUseCharactersFromText(
         settingsValue(DataStorageLayer::kComponentsAudioplayEditorUseCharactersFromTextKey)
             .toBool());
+    view->setAudioplayEditorShowCharacterSuggestionsInEmptyBlock(
+        settingsValue(
+            DataStorageLayer::kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey)
+            .toBool());
     //
     view->setAudioplayNavigatorShowSceneNumber(
         settingsValue(DataStorageLayer::kComponentsAudioplayNavigatorShowSceneNumberKey).toBool());
@@ -498,6 +502,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setAudioplayEditorShowBlockNumber);
     connect(d->view, &Ui::SettingsView::audioplayEditorUseCharactersFromTextChanged, this,
             &SettingsManager::setAudioplayEditorUseCharactersFromText);
+    connect(d->view, &Ui::SettingsView::audioplayEditorShowCharacterSuggestionsInEmptyBlockChanged,
+            this, &SettingsManager::setAudioplayEditorShowCharacterSuggestionsInEmptyBlock);
     //
     connect(d->view, &Ui::SettingsView::audioplayNavigatorShowSceneNumberChanged, this,
             &SettingsManager::setAudioplayNavigatorShowSceneNumber);
@@ -1319,6 +1325,14 @@ void SettingsManager::setAudioplayEditorUseCharactersFromText(bool _use)
     setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorUseCharactersFromTextKey, _use);
     emit audioplayEditorChanged(
         { DataStorageLayer::kComponentsAudioplayEditorUseCharactersFromTextKey });
+}
+
+void SettingsManager::setAudioplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
+{
+    setSettingsValue(
+        DataStorageLayer::kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey, _show);
+    emit audioplayEditorChanged(
+        { DataStorageLayer::kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey });
 }
 
 void SettingsManager::setAudioplayNavigatorShowSceneNumber(bool _show)

@@ -237,6 +237,8 @@ const QString kComponentsAudioplayEditorContinueBlockNumbersKey
     = kComponentsAudioplayEditorKey + QStringLiteral("/continue-block-numbers");
 const QString kComponentsAudioplayEditorUseCharactersFromTextKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/use-characters-from-text");
+const QString kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
 const QString kComponentsAudioplayEditorShortcutsKey
     = kComponentsAudioplayEditorKey + QStringLiteral("/shortcuts");
 // ... навигатор

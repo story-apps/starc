@@ -337,6 +337,10 @@ void CharacterHandler::complete(const QString& _currentBlockText,
         return;
     }
 
+    if (_currentBlockText.isEmpty() && !editor()->showSuggestionsInEmptyBlocks()) {
+        return;
+    }
+
     //
     // Получим модель подсказок для текущей секции и выведем пользователю
     //

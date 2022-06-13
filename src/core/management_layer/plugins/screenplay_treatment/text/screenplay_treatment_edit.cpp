@@ -133,7 +133,7 @@ BusinessLayer::TextModelItem* ScreenplayTreatmentEdit::Implementation::currentIt
 
 
 ScreenplayTreatmentEdit::ScreenplayTreatmentEdit(QWidget* _parent)
-    : BaseTextEdit(_parent)
+    : ScriptTextEdit(_parent)
     , d(new Implementation(this))
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -486,7 +486,7 @@ void ScreenplayTreatmentEdit::addReviewMark(const QColor& _textColor,
 void ScreenplayTreatmentEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {
-        BaseTextEdit::keyPressEvent(_event);
+        ScriptTextEdit::keyPressEvent(_event);
         return;
     }
 
@@ -517,7 +517,7 @@ void ScreenplayTreatmentEdit::keyPressEvent(QKeyEvent* _event)
         if (keyPressEventReimpl(_event)) {
             _event->accept();
         } else {
-            BaseTextEdit::keyPressEvent(_event);
+            ScriptTextEdit::keyPressEvent(_event);
             _event->ignore();
         }
 
@@ -589,7 +589,7 @@ bool ScreenplayTreatmentEdit::keyPressEventReimpl(QKeyEvent* _event)
     // Обрабатываем в базовом классе
     //
     else {
-        isEventHandled = BaseTextEdit::keyPressEventReimpl(_event);
+        isEventHandled = ScriptTextEdit::keyPressEventReimpl(_event);
     }
 
     return isEventHandled;
@@ -676,12 +676,12 @@ bool ScreenplayTreatmentEdit::updateEnteredText(const QString& _eventText)
         return true;
     }
 
-    return BaseTextEdit::updateEnteredText(_eventText);
+    return ScriptTextEdit::updateEnteredText(_eventText);
 }
 
 void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
 {
-    BaseTextEdit::paintEvent(_event);
+    ScriptTextEdit::paintEvent(_event);
 
     //
     // Определить область прорисовки по краям от текста
@@ -1163,7 +1163,7 @@ ContextMenu* ScreenplayTreatmentEdit::createContextMenu(const QPoint& _position,
     // Сначала нужно создать контекстное меню в базовом классе, т.к. в этот момент может
     // измениться курсор, который установлен в текстовом редакторе, и использовать его
     //
-    auto menu = BaseTextEdit::createContextMenu(_position, _parent);
+    auto menu = ScriptTextEdit::createContextMenu(_position, _parent);
 
     const BusinessLayer::TextCursor cursor = textCursor();
 

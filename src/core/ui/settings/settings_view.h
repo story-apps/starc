@@ -104,6 +104,7 @@ public:
     void setAudioplayEditorDefaultTemplate(const QString& _templateId);
     void setAudioplayEditorShowBlockNumber(bool _show, bool _continue);
     void setAudioplayEditorUseCharactersFromText(bool _use);
+    void setAudioplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setAudioplayNavigatorShowSceneNumber(bool _show);
     void setAudioplayNavigatorShowSceneText(bool _show, int _lines);
@@ -196,6 +197,7 @@ signals:
     void audioplayEditorDefaultTemplateChanged(const QString& _templateId);
     void audioplayEditorShowBlockNumberChanged(bool _show, bool _continue);
     void audioplayEditorUseCharactersFromTextChanged(bool _use);
+    void audioplayEditorShowCharacterSuggestionsInEmptyBlockChanged(bool _show);
     //
     void audioplayNavigatorShowSceneNumberChanged(bool _show);
     void audioplayNavigatorShowSceneTextChanged(bool _show, int _lines);
