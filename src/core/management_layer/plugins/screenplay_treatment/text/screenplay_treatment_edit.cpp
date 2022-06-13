@@ -370,20 +370,38 @@ void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
 
 void ScreenplayTreatmentEdit::setCurrentParagraphType(TextParagraphType _type)
 {
-    if (currentParagraphType() == _type) {
+    const auto currentType = currentParagraphType();
+    if (currentType == _type) {
         return;
+    }
+
+    //
+    // Если изменяется бит, то убираем пустой блок описания действия из него,
+    // если он присутствует конечно же
+    //
+    if (currentType == TextParagraphType::BeatHeading) {
+        const auto item = d->currentItem();
+        Q_ASSERT(item);
+        Q_ASSERT(item->parent());
+        if (item->parent()->childCount() == 2) {
+            auto cursor = textCursor();
+            cursor.movePosition(QTextCursor::NextBlock);
+            if (cursor.block().text().isEmpty()) {
+                cursor.deletePreviousChar();
+            }
+        }
     }
 
     d->document.setParagraphType(_type, textCursor());
 
     //
-    // Если вставили папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
+    // Если сменили на папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
     //
     if (_type == TextParagraphType::SequenceHeading) {
         moveCursor(QTextCursor::PreviousBlock);
     }
     //
-    // Если вставили бит, то нужно проследить, чтобы у него внутри были блоки,
+    // Если сменили на бит, то нужно проследить, чтобы у него внутри были блоки,
     // в противном случае создаём блок описания действия
     //
     else if (_type == TextParagraphType::BeatHeading) {

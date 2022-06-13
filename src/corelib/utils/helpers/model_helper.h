@@ -1,10 +1,16 @@
 #pragma once
 
+#include <corelib_global.h>
+
 namespace BusinessLayer {
 class SimpleTextModel;
 }
 
-class ModelHelper
+
+/**
+ * @brief Вспомогательные методы для моделей данных
+ */
+class CORE_LIBRARY_EXPORT ModelHelper
 {
 public:
     /**
