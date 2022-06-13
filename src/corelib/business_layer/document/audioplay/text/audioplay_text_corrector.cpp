@@ -1682,10 +1682,6 @@ void AudioplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBloc
         paragraphType = TextParagraphType::BeatHeadingShadow;
         break;
     }
-    case TextParagraphType::PanelHeading: {
-        paragraphType = TextParagraphType::PanelHeadingShadow;
-        break;
-    }
     case TextParagraphType::ActHeading:
     case TextParagraphType::ActFooter:
     case TextParagraphType::SequenceHeading:
