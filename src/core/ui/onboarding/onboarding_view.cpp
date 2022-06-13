@@ -129,7 +129,7 @@ void OnboardingView::Implementation::initLanguagePage()
     auto spanishLanguage = initLanguageButton("Español", QLocale::Spanish, 84);
     auto tagalogLanguage = initLanguageButton("Tagalog", QLocale::Filipino, 24);
     auto tamilLanguage = initLanguageButton("தமிழ்", QLocale::Tamil, 59);
-    auto turkishLanguage = initLanguageButton("Türkçe", QLocale::Turkish, 46);
+    auto turkishLanguage = initLanguageButton("Türkçe", QLocale::Turkish, 100);
     auto ukrainianLanguage = initLanguageButton("Українська", QLocale::Ukrainian, 100);
     //
     // Если мы умеем в язык системы, то оставляем выбранным его

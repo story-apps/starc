@@ -750,7 +750,7 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsAudioplayEditorContinueBlockNumbersKey, true);
         defaultValues.insert(kComponentsAudioplayEditorUseCharactersFromTextKey, false);
         defaultValues.insert(kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey,
-                             true);
+                             false);
         //
         // Параметры навигатора сценария
         //

@@ -6,55 +6,55 @@
     <message>
         <location filename="../../corelib/ui/widgets/app_bar/app_bar.cpp" line="392"/>
         <source>Show module options</source>
-        <translation type="unfinished"></translation>
+        <translation>Modül seçeneklerini göster</translation>
     </message>
 </context>
 <context>
     <name>BaseTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="299"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="308"/>
         <source>Formatting</source>
         <translation>Biçimlendirme</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="303"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="312"/>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalın</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="310"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="319"/>
         <source>Italic</source>
-        <translation type="unfinished"></translation>
+        <translation>İtalik</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="317"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="326"/>
         <source>Underline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="324"/>
-        <source>Strikethrough</source>
-        <translation type="unfinished"></translation>
+        <translation>Altı çizili</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="333"/>
+        <source>Strikethrough</source>
+        <translation>Üstü çizili</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="342"/>
         <source>Align left</source>
-        <translation type="unfinished"></translation>
+        <translation>Sola hizala</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="339"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="348"/>
         <source>Align center</source>
-        <translation type="unfinished"></translation>
+        <translation>Ortala</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="345"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="354"/>
         <source>Align right</source>
-        <translation type="unfinished"></translation>
+        <translation>Sağa hizala</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="351"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="360"/>
         <source>Align justify</source>
-        <translation type="unfinished"></translation>
+        <translation>hizala yasla</translation>
     </message>
 </context>
 <context>
@@ -62,7 +62,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="129"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>Bulunamadı</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="131"/>
@@ -77,22 +77,22 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="135"/>
         <source>Act</source>
-        <translation type="unfinished"></translation>
+        <translation>Oyun</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="137"/>
         <source>Act footer</source>
-        <translation type="unfinished"></translation>
+        <translation>Oyun alt bilgisi</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="139"/>
         <source>Sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekans</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="141"/>
         <source>Sequence footer</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekans alt bilgisi</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="144"/>
@@ -117,7 +117,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="153"/>
         <source>Beat</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuruş</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="155"/>
@@ -148,64 +148,64 @@
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="166"/>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="220"/>
         <source>Sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="168"/>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="223"/>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation>Müzik</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="170"/>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="226"/>
         <source>Cue</source>
-        <translation type="unfinished"></translation>
+        <translation>Replik</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="173"/>
         <source>Page</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayfa</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="175"/>
         <source>Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Panel</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="177"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Açıklama</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="180"/>
         <source>Heading 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Başlık</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="182"/>
         <source>Heading 2</source>
-        <translation type="unfinished"></translation>
+        <translation>2. Başlık</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="184"/>
         <source>Heading 3</source>
-        <translation type="unfinished"></translation>
+        <translation>3. Başlık</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="186"/>
         <source>Heading 4</source>
-        <translation type="unfinished"></translation>
+        <translation>4. Başlık</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="188"/>
         <source>Heading 5</source>
-        <translation type="unfinished"></translation>
+        <translation>5. Başlık</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="190"/>
         <source>Heading 6</source>
-        <translation type="unfinished"></translation>
+        <translation>6. Başlık</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="192"/>
@@ -223,29 +223,29 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="240"/>
         <source>Paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Paragraf</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="244"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelimeler</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="248"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="311"/>
         <source>Occurrences</source>
-        <translation type="unfinished"></translation>
+        <translation>Olaylar</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="252"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="315"/>
         <source>Percents</source>
-        <translation type="unfinished"></translation>
+        <translation>Yüzdeler</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="307"/>
         <source>Character type</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter tipi</translation>
     </message>
 </context>
 <context>
@@ -261,12 +261,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="21"/>
         <source>BBC scene style template (page: A4; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>BBC sahne stili şablonu (sayfa: A4; yazı tipi: Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="24"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>ABD şablonu (sayfa: Mektup; yazı tipi: Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -274,7 +274,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/characters/characters_model.cpp" line="179"/>
         <source>New group</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni Grup</translation>
     </message>
 </context>
 <context>
@@ -282,59 +282,59 @@
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="107"/>
         <source>page</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayfa</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="111"/>
         <source>pages</source>
         <extracomment>Comic book title pages</extracomment>
-        <translation>sayfa</translation>
+        <translation>Sayfalar</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="116"/>
         <source>panel</source>
         <extracomment>Comic book panel intro</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>panel</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
         <source>CAPTION</source>
-        <translation type="unfinished"></translation>
+        <translation>ALINTI</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
         <source>NARRATION</source>
-        <translation type="unfinished"></translation>
+        <translation>ANLATIM</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
         <source>SFX</source>
-        <translation type="unfinished"></translation>
+        <translation>SFX</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>KAPALI</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>WHISPER</source>
-        <translation type="unfinished"></translation>
+        <translation>FISILTI</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>BURST</source>
-        <translation type="unfinished"></translation>
+        <translation>AÇILMA</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>WEAK</source>
-        <translation type="unfinished"></translation>
+        <translation>ZAYIF</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
         <source>SINGING</source>
-        <translation type="unfinished"></translation>
+        <translation>ŞARKI SÖYLER</translation>
     </message>
 </context>
 <context>
@@ -342,22 +342,22 @@
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="211"/>
         <source>Paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Paragraf</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="215"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelimeler</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="219"/>
         <source>Occurrences</source>
-        <translation type="unfinished"></translation>
+        <translation>Olaylar</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="223"/>
         <source>Percents</source>
-        <translation type="unfinished"></translation>
+        <translation>Yüzdeler</translation>
     </message>
 </context>
 <context>
@@ -365,12 +365,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="23"/>
         <source>International template (page: A4; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>Uluslararası şablon (sayfa: A4; yazı tipi: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="27"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>ABD şablonu (sayfa: Mektup; yazı tipi: Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -403,12 +403,12 @@
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="30"/>
         <source>EXT./INT</source>
-        <translation type="unfinished"></translation>
+        <translation>DIŞ./İÇ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="31"/>
         <source>EXT/INT</source>
-        <translation type="unfinished"></translation>
+        <translation>DIŞ/İÇ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="32"/>
@@ -458,14 +458,14 @@
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="35"/>
         <location filename="../../corelib/business_layer/import/stageplay/stageplay_fountain_importer.cpp" line="34"/>
         <source>EXT./INT</source>
-        <translation type="unfinished"></translation>
+        <translation>DIŞ./İÇ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="35"/>
         <location filename="../../corelib/business_layer/import/screenplay/screenplay_fountain_importer.cpp" line="36"/>
         <location filename="../../corelib/business_layer/import/stageplay/stageplay_fountain_importer.cpp" line="35"/>
         <source>EXT/INT</source>
-        <translation type="unfinished"></translation>
+        <translation>DIŞ/İÇ</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/import/audioplay/audioplay_fountain_importer.cpp" line="36"/>
@@ -489,7 +489,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/locations/locations_model.cpp" line="170"/>
         <source>New group</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni Grup</translation>
     </message>
 </context>
 <context>
@@ -512,7 +512,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="286"/>
         <source>EXT./INT.</source>
-        <translation type="unfinished"></translation>
+        <translation>DIŞ./İÇ.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="291"/>
@@ -635,12 +635,12 @@
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="257"/>
         <source>Paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Paragraf</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="261"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelimeler</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="265"/>
@@ -648,7 +648,7 @@
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="387"/>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="451"/>
         <source>Occurrences</source>
-        <translation type="unfinished"></translation>
+        <translation>Olaylar</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="269"/>
@@ -656,22 +656,22 @@
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="391"/>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="455"/>
         <source>Percents</source>
-        <translation type="unfinished"></translation>
+        <translation>Yüzdeler</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="322"/>
         <source>Scene time</source>
-        <translation type="unfinished"></translation>
+        <translation>Sahne zamanı</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="383"/>
         <source>Scene intro</source>
-        <translation type="unfinished"></translation>
+        <translation>Sahne girişi</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="447"/>
         <source>Character type</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter tipi</translation>
     </message>
 </context>
 <context>
@@ -687,37 +687,37 @@
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="21"/>
         <source>International template (page: A4; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>Uluslararası şablon (sayfa: A4; yazı tipi: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="25"/>
         <source>International template (page: A4; font: Courier New)</source>
-        <translation type="unfinished"></translation>
+        <translation>Uluslararası şablon (sayfa: A4; yazı tipi: Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="28"/>
         <source>Arabic template (page: A4; font: Courier New)</source>
-        <translation type="unfinished"></translation>
+        <translation>Arapça şablon (sayfa: A4; yazı tipi: Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="31"/>
         <source>Hebrew template (page: A4; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>İbranice şablon (sayfa: A4; yazı tipi: Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="34"/>
         <source>Russian template (page: A4; font: Courier New)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rusça şablon (sayfa: A4; yazı tipi: Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="37"/>
         <source>Tamil template (page: A4; font: Mukta Malar)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamil şablonu (sayfa: A4; yazı tipi: Mukta Malar)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="40"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>ABD şablonu (sayfa: Mektup; yazı tipi: Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -725,29 +725,29 @@
     <message>
         <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="240"/>
         <source>Paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Paragraf</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="244"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelimeler</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="248"/>
         <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="311"/>
         <source>Occurrences</source>
-        <translation type="unfinished"></translation>
+        <translation>Olaylar</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="252"/>
         <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="315"/>
         <source>Percents</source>
-        <translation type="unfinished"></translation>
+        <translation>Yüzdeler</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="307"/>
         <source>Character type</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter tipi</translation>
     </message>
 </context>
 <context>
@@ -763,12 +763,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/stageplay_template.cpp" line="21"/>
         <source>BBC stage template (page: A4; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>BBC sahne şablonu (sayfa: A4; yazı tipi: Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/stageplay_template.cpp" line="24"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>ABD şablonu (sayfa: Mektup; yazı tipi: Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -816,24 +816,24 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="227"/>
         <source>Comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi Roman</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="233"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="247"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="261"/>
         <source>Script</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaryo</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="241"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses Oyunu</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="255"/>
         <source>Stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Piyes</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="268"/>
@@ -851,27 +851,27 @@
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="22"/>
         <source>Monotype template (page: A4; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>Monotype şablonu (sayfa: A4; yazı tipi: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="25"/>
         <source>Monotype template (page: A4; font: Courier New)</source>
-        <translation type="unfinished"></translation>
+        <translation>Monotype şablonu (sayfa: A4; yazı tipi: Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="28"/>
         <source>Monotype template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>Monotype şablonu (sayfa: Mektup; yazı tipi: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="31"/>
         <source>Sans serif template (page: A4; font: Roboto)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sans serif şablonu (sayfa: A4; yazı tipi: Roboto)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="34"/>
         <source>Sans serif template (page: Letter; font: Roboto)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sans serif şablonu (sayfa: Mektup; yazı tipi: Roboto)</translation>
     </message>
 </context>
 <context>
@@ -879,17 +879,17 @@
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="295"/>
         <source>More then 10 dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>10 diyalogdan fazla</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="298"/>
         <source>About 10 dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>10 diyalog hakkında</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="302"/>
         <source>Nonspeaking</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessiz</translation>
     </message>
 </context>
 <context>
@@ -898,22 +898,22 @@
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="308"/>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="369"/>
         <source>[UNDEFINED]</source>
-        <translation type="unfinished"></translation>
+        <translation>[BULUNAMADI]</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="434"/>
         <source>More then 10 dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>10 diyalogdan fazla</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="438"/>
         <source>About 10 dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>10 diyalog hakkında</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="442"/>
         <source>Nonspeaking</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessiz</translation>
     </message>
 </context>
 <context>
@@ -921,7 +921,7 @@
     <message>
         <location filename="../../corelib/business_layer/document/audioplay/text/audioplay_text_corrector.cpp" line="38"/>
         <location filename="../../corelib/business_layer/document/comic_book/text/comic_book_text_corrector.cpp" line="42"/>
-        <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="39"/>
+        <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="41"/>
         <location filename="../../corelib/business_layer/document/stageplay/text/stageplay_text_corrector.cpp" line="38"/>
         <source>CONT&apos;D</source>
         <extracomment>Continued</extracomment>
@@ -930,7 +930,7 @@
     <message>
         <location filename="../../corelib/business_layer/document/audioplay/text/audioplay_text_corrector.cpp" line="43"/>
         <location filename="../../corelib/business_layer/document/comic_book/text/comic_book_text_corrector.cpp" line="47"/>
-        <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="44"/>
+        <location filename="../../corelib/business_layer/document/screenplay/text/screenplay_text_corrector.cpp" line="46"/>
         <location filename="../../corelib/business_layer/document/stageplay/text/stageplay_text_corrector.cpp" line="43"/>
         <source>MORE</source>
         <translation>DAHA</translation>
@@ -941,17 +941,17 @@
     <message>
         <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="295"/>
         <source>More then 10 dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>10 diyalogdan fazla</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="298"/>
         <source>About 10 dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>10 diyalog hakkında</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="302"/>
         <source>Nonspeaking</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessiz</translation>
     </message>
 </context>
 <context>
@@ -965,17 +965,17 @@
 <context>
     <name>ColorPicker</name>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="151"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="157"/>
         <source>Color hex code</source>
-        <translation type="unfinished"></translation>
+        <translation>Renk kodu</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="152"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="158"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="153"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="159"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
@@ -998,7 +998,7 @@
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="39"/>
         <source>Story Architect template</source>
-        <translation type="unfinished"></translation>
+        <translation>Story Architect şablonu</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="45"/>
@@ -1048,7 +1048,7 @@
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="99"/>
         <source>Portable document format</source>
-        <translation type="unfinished"></translation>
+        <translation>Taşınabilir Döküman Formatı</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="107"/>
@@ -1110,7 +1110,7 @@
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="140"/>
         <source>Choose image</source>
-        <translation type="unfinished"></translation>
+        <translation>Görsel seçin</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="141"/>
@@ -1125,32 +1125,32 @@
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="231"/>
         <source>Yes, delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Evet, sil</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="339"/>
         <source>Delete image</source>
-        <translation type="unfinished"></translation>
+        <translation>Görseli sil</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="563"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Sil</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="564"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Yapıştır</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="565"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopyala</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="566"/>
         <source>Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Değiştir</translation>
     </message>
 </context>
 <context>
@@ -1169,12 +1169,12 @@
 <context>
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
-        <location filename="../../corelib/business_layer/export/abstract_exporter.cpp" line="179"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="971"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="929"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="872"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="927"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="979"/>
+        <location filename="../../corelib/business_layer/export/abstract_exporter.cpp" line="187"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="967"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="925"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="926"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="942"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="975"/>
         <source>END OF</source>
         <translation>SONU</translation>
     </message>
@@ -1184,30 +1184,30 @@
     <message>
         <location filename="../../corelib/ui/widgets/tree/tree_delegate.cpp" line="212"/>
         <source>Press shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Kısayola basın</translation>
     </message>
 </context>
 <context>
     <name>ManagementLayer::AccountManager</name>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="366"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="398"/>
         <source>Try PRO version for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Profesyonel sürümü ücretsiz olarak deneyin</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="367"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="399"/>
         <source>While Starc is in the beta we&apos;d like to thank our users by providing them with free PRO features. After beta ends you&apos;ll still be able to use PRO version for 30 days for free.</source>
-        <translation type="unfinished"></translation>
+        <translation>Starc beta sürümündeyken, kullanıcılarımıza ücretsiz PRO özellikleri sunarak teşekkür etmek istiyoruz. Beta sona erdikten sonra PRO sürümünü 30 gün boyunca ücretsiz olarak kullanmaya devam edebileceksiniz.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="370"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="402"/>
         <source>Continue with free version</source>
-        <translation type="unfinished"></translation>
+        <translation>Ücretsiz versiyon ile devam edin</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="371"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="403"/>
         <source>Activate PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Profesyonel sürümü aktif edin.</translation>
     </message>
 </context>
 <context>
@@ -1257,12 +1257,12 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="1008"/>
         <source>Choose file to save story</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikayeyi kaydetmek için dosya seçin</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="1047"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikaye %1 dosyasına kaydedilemiyor. Lütfen izinleri kontrol edin ve yeniden deneyin.</translation>
     </message>
     <message>
         <location filename="../management_layer/application_manager.cpp" line="1097"/>
@@ -1287,7 +1287,7 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="1190"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu dosya şu anda açılamıyor çünkü uygulamanın başka bir kopyasında zaten açık.</translation>
     </message>
 </context>
 <context>
@@ -1295,12 +1295,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="120"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Renk</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/audioplay_text_structure_manager.cpp" line="221"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses Oyunu</translation>
     </message>
 </context>
 <context>
@@ -1308,7 +1308,7 @@
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="147"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; olan karakter adı &quot;%2&quot; olarak değiştirildi. Değişiklikleri uygulansın mı?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="149"/>
@@ -1318,7 +1318,7 @@
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="150"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Evet</translation>
     </message>
 </context>
 <context>
@@ -1326,7 +1326,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="219"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; olan karakter adı &quot;%2&quot; olarak değiştirildi. Değişiklikler uygulansın mı?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="221"/>
@@ -1336,17 +1336,17 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="222"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Evet</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="311"/>
         <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter ilişkileri grafiğini düzenlemek için Profesyonel Sürüme geçmeniz gerekir.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="313"/>
         <source>Maybe later</source>
-        <translation type="unfinished"></translation>
+        <translation>Belki sonra</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="314"/>
@@ -1356,7 +1356,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="331"/>
         <source>Character with this name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu ada sahip karakter zaten var</translation>
     </message>
 </context>
 <context>
@@ -1364,7 +1364,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_text_structure/comic_book_text_structure_manager.cpp" line="119"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Renk</translation>
     </message>
 </context>
 <context>
@@ -1375,7 +1375,7 @@
         <location filename="../management_layer/content/export/export_manager.cpp" line="395"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="527"/>
         <source>Choose the file to export</source>
-        <translation type="unfinished"></translation>
+        <translation>Dışa aktarılacak dosyayı seçin</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="146"/>
@@ -1383,7 +1383,7 @@
         <location filename="../management_layer/content/export/export_manager.cpp" line="418"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="550"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosyaya yazılamıyor. Başka bir uygulama tarafından açılmış gibi görünüyor. Lütfen kapatın ve dışa aktarmayı yeniden deneyin.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="149"/>
@@ -1391,7 +1391,7 @@
         <location filename="../management_layer/content/export/export_manager.cpp" line="421"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="553"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosyaya yazılamıyor. Seçilen klasöre yazma izinlerini kontrol edin veya başka bir klasör seçin.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/export/export_manager.cpp" line="152"/>
@@ -1399,7 +1399,7 @@
         <location filename="../management_layer/content/export/export_manager.cpp" line="424"/>
         <location filename="../management_layer/content/export/export_manager.cpp" line="556"/>
         <source>Export error</source>
-        <translation type="unfinished"></translation>
+        <translation>Hata</translation>
     </message>
 </context>
 <context>
@@ -1425,7 +1425,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="143"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; olan konum adı &quot;%2&quot; olarak değiştirildi. Değişiklikler uygulansın mı?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="145"/>
@@ -1435,7 +1435,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="146"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Evet</translation>
     </message>
 </context>
 <context>
@@ -1443,7 +1443,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="213"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; olan konum adı &quot;%2&quot; olarak değiştirildi. Değişiklikler uygulansın mı?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="215"/>
@@ -1453,17 +1453,17 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="216"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Evet</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="298"/>
         <source>To edit the location map, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Konum haritasını düzenlemek için Profesyonel Sürüme geçmeniz gerekir.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="300"/>
         <source>Maybe later</source>
-        <translation type="unfinished"></translation>
+        <translation>Belki sonra</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="301"/>
@@ -1473,7 +1473,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="318"/>
         <source>Location with this name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu ada sahip konum zaten var</translation>
     </message>
 </context>
 <context>
@@ -1481,22 +1481,22 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="155"/>
         <source>Find all characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Tüm karakterleri bul</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="160"/>
         <source>Add character</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="165"/>
         <source>Find all locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Bütün mekanları bul</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="170"/>
         <source>Add location</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekan ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="176"/>
@@ -1504,105 +1504,105 @@
         <translation>Boş geridönüşüm kutusu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="187"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="186"/>
         <source>Add document</source>
         <translation>Belge ekle</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="215"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="214"/>
         <source>Remove document</source>
         <translation>Belge sil</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="321"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="320"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Belgeyi kalıcı olarak silmeyi gerçekten istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="322"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="586"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="321"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="585"/>
         <source>No</source>
         <translation>Hayır</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="323"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="587"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="322"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="586"/>
         <source>Yes, remove</source>
         <translation>Evet, sil</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="402"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="401"/>
         <source>Characters from the text</source>
-        <translation type="unfinished"></translation>
+        <translation>Metinden karakterler</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="412"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="411"/>
         <source>Characters that are not found in the text</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterler metinde bulunamadı</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="424"/>
+        <source>Save only characters from the text</source>
+        <translation>Yalnızca metindeki karakterleri kaydet</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="425"/>
-        <source>Save only characters from the text</source>
-        <translation type="unfinished"></translation>
+        <source>Save all characters</source>
+        <translation>Tüm karakterleri kaydet</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="426"/>
-        <source>Save all characters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="427"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="529"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="528"/>
         <source>Change nothing</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiçbir şeyi değiştirme</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="504"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="503"/>
         <source>Locations from the text</source>
-        <translation type="unfinished"></translation>
+        <translation>Metinden konumlar</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="514"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="513"/>
         <source>Locations that are not found in the text</source>
-        <translation type="unfinished"></translation>
+        <translation>Konumlar metinde bulunamadı</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="526"/>
+        <source>Save only locations from the text</source>
+        <translation>Yalnızca metindeki mekanları kaydet</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="527"/>
-        <source>Save only locations from the text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="528"/>
         <source>Save all locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Bütün konumları kaydet</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="585"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="584"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Geridönüşüm kutusundaki belgeleri kalıcı olarak silmeyi gerçekten istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1294"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1321"/>
         <source>Title page</source>
         <translation>Başlık sayfası</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1296"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1323"/>
         <source>Synopsis</source>
         <translation>Özet</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1308"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1335"/>
         <source>Treatment</source>
         <translation>Tretman</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1299"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1326"/>
         <source>Screenplay</source>
         <translation>Senaryo</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1302"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1329"/>
         <source>Statistics</source>
         <translation>İstatistik</translation>
     </message>
@@ -1610,7 +1610,22 @@
 <context>
     <name>ManagementLayer::ProjectsManager</name>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="249"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="93"/>
+        <source>Do you really want to hide a project from the recent list?</source>
+        <translation>Son listeden bir projeyi gerçekten gizlemek istiyor musunuz?</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="94"/>
+        <source>No</source>
+        <translation>Hayır</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="95"/>
+        <source>Yes, hide</source>
+        <translation>Evet, gizle</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="274"/>
         <source>Choose the file to open</source>
         <translation>Açılacak dosyayı seç</translation>
     </message>
@@ -1620,17 +1635,17 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="145"/>
         <source>Scene intro</source>
-        <translation type="unfinished"></translation>
+        <translation>Sahne girişi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="146"/>
         <source>Scene time</source>
-        <translation type="unfinished"></translation>
+        <translation>Sahne zamanı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="147"/>
         <source>Character extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter uzantısı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="148"/>
@@ -1641,12 +1656,12 @@
 <context>
     <name>ManagementLayer::ScreenplayTextStructureManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="120"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="138"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Renk</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="225"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="243"/>
         <source>Screenplay</source>
         <translation>Senaryo</translation>
     </message>
@@ -1656,7 +1671,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="122"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Renk</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="225"/>
@@ -1667,25 +1682,25 @@
 <context>
     <name>ManagementLayer::SettingsManager</name>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="557"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="608"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="659"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="709"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="759"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="563"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="614"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="665"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="715"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="765"/>
         <source>Choose the file to save template</source>
-        <translation type="unfinished"></translation>
+        <translation>Şablonun kaydedileceği dosyayı seçin</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="578"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="629"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="679"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="729"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="779"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="584"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="635"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="685"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="735"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="785"/>
         <source>Choose the file with template to load</source>
-        <translation type="unfinished"></translation>
+        <translation>Yüklenecek şablonlu dosyayı seçin</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="993"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="999"/>
         <source>Spelling dictionary loading</source>
         <translation>İmla sözlüğü yükleniyor</translation>
     </message>
@@ -1695,7 +1710,7 @@
     <message>
         <location filename="../management_layer/plugins/simple_text_structure/simple_text_structure_manager.cpp" line="113"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Renk</translation>
     </message>
 </context>
 <context>
@@ -1703,12 +1718,12 @@
     <message>
         <location filename="../management_layer/plugins/stageplay_text_structure/stageplay_text_structure_manager.cpp" line="120"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Renk</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_text_structure/stageplay_text_structure_manager.cpp" line="221"/>
         <source>Stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Piyes</translation>
     </message>
 </context>
 <context>
@@ -1716,7 +1731,7 @@
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="404"/>
         <source>Template was modified. Save changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Şablon değiştirildi. Değişiklikler kaydedilsin mi?</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/template_options_manager.cpp" line="405"/>
@@ -1739,22 +1754,22 @@
     <message>
         <location filename="../../corelib/utils/helpers/names_generator.cpp" line="113"/>
         <source>Male names</source>
-        <translation type="unfinished"></translation>
+        <translation>Erkek isimleri</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/names_generator.cpp" line="116"/>
         <source>Female names</source>
-        <translation type="unfinished"></translation>
+        <translation>Kadın isimleri</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/names_generator.cpp" line="119"/>
         <source>Both names</source>
-        <translation type="unfinished"></translation>
+        <translation>Her iki isim</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/names_generator.cpp" line="145"/>
         <source>Type of name</source>
-        <translation type="unfinished"></translation>
+        <translation>İsmin türü</translation>
     </message>
 </context>
 <context>
@@ -1768,173 +1783,178 @@
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3838"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3900"/>
         <source>Cut</source>
-        <translation type="unfinished"></translation>
+        <translation>Kes</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3845"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3907"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopyala</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3851"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3913"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Yapıştır</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3858"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3920"/>
         <source>Select all</source>
-        <translation type="unfinished"></translation>
+        <translation>Hepsini seç</translation>
     </message>
 </context>
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="296"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="300"/>
         <source>Information about project</source>
         <translation>Proje hakkında bilgi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="298"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="302"/>
         <source>Project collaborators</source>
         <translation>Proje ortak çalışanları</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="302"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="306"/>
         <source>Information about screenplay</source>
         <translation>Senaryo hakkında bilgi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="304"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="308"/>
         <source>Screenplay parameters</source>
         <translation>Senaryo parametreleri</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="307"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="336"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="356"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="376"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="311"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="340"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="360"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="380"/>
         <source>Title page text</source>
         <translation>Başlık sayfası metni</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="310"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="339"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="359"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="379"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="314"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="343"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="363"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="383"/>
         <source>Synopsis text</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinopsis</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="315"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="319"/>
         <source>Beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuruşlar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="324"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="328"/>
         <source>Timeline</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaman akışı</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="331"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="335"/>
         <source>Information about comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi roman hakkında bilgi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="333"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="337"/>
         <source>Comic book parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi roman parametreleri</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="342"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="346"/>
         <source>Comic book text</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi roman metni</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="351"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="355"/>
         <source>Information about audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses oyunu hakkında bilgi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="353"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="357"/>
         <source>Audioplay parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses oyunu parametreleri</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="362"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="366"/>
         <source>Audioplay text</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses oyunu metni</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="371"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="375"/>
         <source>Information about stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Piyes hakkında bilgi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="373"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="377"/>
         <source>Stageplay parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Piyes parametreleri</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="382"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="386"/>
         <source>Stageplay text</source>
-        <translation type="unfinished"></translation>
+        <translation>Piyes metni</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="391"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="395"/>
         <source>Characters relations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="394"/>
-        <source>Character information</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter ilişkileri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="398"/>
-        <source>Locations map</source>
-        <translation type="unfinished"></translation>
+        <source>Character information</source>
+        <translation>Karakter bilgileri</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="401"/>
-        <source>Location information</source>
-        <translation type="unfinished"></translation>
+        <location filename="../management_layer/plugins_builder.cpp" line="402"/>
+        <source>Locations map</source>
+        <translation>Mekan haritası</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="405"/>
+        <source>Location information</source>
+        <translation>Mekan bilgisi</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins_builder.cpp" line="409"/>
         <source>Folder text</source>
-        <translation type="unfinished"></translation>
+        <translation>Klasör metni</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="408"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="412"/>
         <source>Document text</source>
-        <translation type="unfinished"></translation>
+        <translation>Belge metni</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="313"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="416"/>
+        <source>Recycle bin summary info</source>
+        <translation>Geri dönüşüm kutusu özet bilgileri</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins_builder.cpp" line="317"/>
         <source>Treatment text</source>
         <translation>Tretman metni</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="320"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="324"/>
         <source>Screenplay text</source>
         <translation>Senaryo metni</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="317"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="322"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="344"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="364"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="384"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="321"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="326"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="348"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="368"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="388"/>
         <source>Cards</source>
         <translation>Kartlar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="327"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="347"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="367"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="387"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="331"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="351"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="371"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="391"/>
         <source>Statistics</source>
         <translation>İstatistik</translation>
     </message>
@@ -1961,17 +1981,17 @@
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="192"/>
         <source>Spelling</source>
-        <translation type="unfinished"></translation>
+        <translation>Heceleme</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="206"/>
         <source>Add to dictionary</source>
-        <translation type="unfinished"></translation>
+        <translation>Sözlüğe ekle</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="210"/>
         <source>Ignore word</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelimeyi yoksay</translation>
     </message>
 </context>
 <context>
@@ -1980,7 +2000,7 @@
         <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="464"/>
         <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="465"/>
         <source>Show hidden panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Gizli paneli göster</translation>
     </message>
 </context>
 <context>
@@ -2058,7 +2078,7 @@
         <location filename="../ui/settings/widgets/theme_preview.cpp" line="215"/>
         <source>Mixed</source>
         <comment>Theme, will be used in case &quot;Theme: Dark and Light&quot;</comment>
-        <translation type="unfinished"></translation>
+        <translation>Karışık</translation>
     </message>
     <message>
         <location filename="../ui/settings/widgets/theme_preview.cpp" line="219"/>
@@ -2075,7 +2095,7 @@
     <message>
         <location filename="../ui/settings/widgets/theme_preview.cpp" line="252"/>
         <source>Copy theme HASH</source>
-        <translation type="unfinished"></translation>
+        <translation>Temayı kopyala HASH</translation>
     </message>
 </context>
 <context>
@@ -2083,183 +2103,204 @@
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="158"/>
         <source>version</source>
-        <translation type="unfinished"></translation>
+        <translation>sürüm</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="160"/>
         <source>Designed, coded and crafted with love at the</source>
-        <translation type="unfinished"></translation>
+        <translation>Sevgiyle tasarlandı, kodlandı ve oluşturuldu.</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="162"/>
         <source>company</source>
-        <translation type="unfinished"></translation>
+        <translation>şirket</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="163"/>
         <source>The Logline Generator is powered by</source>
-        <translation type="unfinished"></translation>
+        <translation>Önerme üretici .... tarafından desteklenmektedir</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="167"/>
         <source>Starc is being developed with strong authors’ involvement and support so we won’t waste the app performance on the features you don’t need.</source>
-        <translation type="unfinished"></translation>
+        <translation>Starc, güçlü yazarların katılımı ve desteğiyle geliştirilmektedir, bu nedenle uygulama performansını ihtiyacınız olmayan özellikler için boşa harcamayız.</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="170"/>
         <source>Feel free to contact us at any point of your creative journey to share your thoughts about the app, suggest ideas and report issues you met.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uygulama hakkındaki düşüncelerinizi paylaşmak, fikir önermek ve karşılaştığınız sorunları bildirmek için yaratıcı yolculuğunuzun herhangi bir noktasında bizimle iletişime geçmekten çekinmeyin.</translation>
     </message>
 </context>
 <context>
     <name>Ui::AccountNavigator</name>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="89"/>
-        <source>Lifetime access</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/account/account_navigator.cpp" line="90"/>
+        <source>Lifetime access</source>
+        <translation>Ömür boyu erişim</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_navigator.cpp" line="91"/>
         <source>Active until %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 tarihine kadar etkin</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="245"/>
+        <location filename="../ui/account/account_navigator.cpp" line="262"/>
         <source>Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Hesap</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="246"/>
+        <location filename="../ui/account/account_navigator.cpp" line="263"/>
         <source>Subscription</source>
-        <translation type="unfinished"></translation>
+        <translation>Abonelik</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="247"/>
+        <location filename="../ui/account/account_navigator.cpp" line="264"/>
         <source>Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Etkin oturumlar</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="248"/>
+        <location filename="../ui/account/account_navigator.cpp" line="265"/>
         <source>FREE version</source>
-        <translation type="unfinished"></translation>
+        <translation>Ücretsiz versiyon</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="249"/>
+        <location filename="../ui/account/account_navigator.cpp" line="266"/>
         <source>Try PRO for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Profesyonel sürümü ücretsiz deneyin</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="250"/>
+        <location filename="../ui/account/account_navigator.cpp" line="267"/>
         <source>Upgrade to PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Profesyonel sürüme yükselt</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="251"/>
+        <location filename="../ui/account/account_navigator.cpp" line="268"/>
         <source>PRO version</source>
-        <translation type="unfinished"></translation>
+        <translation>Profesyonel sürüm</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="253"/>
+        <location filename="../ui/account/account_navigator.cpp" line="271"/>
         <source>Renew</source>
         <translation>Yenile</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="254"/>
+        <location filename="../ui/account/account_navigator.cpp" line="270"/>
         <source>Buy lifetime</source>
-        <translation type="unfinished"></translation>
+        <translation>Ömür boyu erişim al</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="255"/>
+        <location filename="../ui/account/account_navigator.cpp" line="272"/>
         <source>Upgrade to TEAM</source>
-        <translation type="unfinished"></translation>
+        <translation>Takım paketine yükselt</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="256"/>
+        <location filename="../ui/account/account_navigator.cpp" line="273"/>
         <source>TEAM version</source>
-        <translation type="unfinished"></translation>
+        <translation>Takım versiyonu</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="257"/>
+        <location filename="../ui/account/account_navigator.cpp" line="274"/>
         <source>Logout</source>
-        <translation type="unfinished"></translation>
+        <translation>Çıkış yap</translation>
     </message>
 </context>
 <context>
     <name>Ui::AccountView</name>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="196"/>
+        <location filename="../ui/account/account_view.cpp" line="229"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>Kullanıcı adı boş kalamaz, lütfen doldurun</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="279"/>
+        <location filename="../ui/account/account_view.cpp" line="319"/>
         <source>FREE version</source>
-        <translation type="unfinished"></translation>
+        <translation>Ücretsiz versiyon</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="280"/>
+        <location filename="../ui/account/account_view.cpp" line="332"/>
         <source>Upgrade to PRO</source>
-        <translation type="unfinished"></translation>
+        <translation>Profesyonel sürüme yükselt</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="287"/>
+        <location filename="../ui/account/account_view.cpp" line="326"/>
         <source>Try PRO for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Profesyonel sürümü ücretsiz deneyin</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="295"/>
-        <source>PRO version</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/account/account_view.cpp" line="194"/>
+        <source>Lifetime access</source>
+        <translation>Ömür boyu erişim</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="302"/>
-        <source>TEAM version</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/account/account_view.cpp" line="195"/>
+        <source>Active until %1</source>
+        <translation>%1 tarihine kadar etkin</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="355"/>
-        <source>Your name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="356"/>
-        <source>Your bio</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="357"/>
-        <source>Add avatar +</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="357"/>
-        <source>Change avatar...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="358"/>
-        <source>Do you want to delete your avatar?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="359"/>
-        <source>Select an area for the avatar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../ui/account/account_view.cpp" line="342"/>
         <location filename="../ui/account/account_view.cpp" line="360"/>
+        <source>PRO version</source>
+        <translation>Profesyonel sürüm</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="373"/>
+        <source>TEAM version</source>
+        <translation>Takım versiyonu</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="431"/>
+        <source>Your name</source>
+        <translation>Adınız</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="432"/>
+        <source>Your bio</source>
+        <translation>Biyografiniz</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="433"/>
+        <source>Add avatar +</source>
+        <translation>Avatar ekleyin</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="433"/>
+        <source>Change avatar...</source>
+        <translation>Avatarı değiştirin</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="434"/>
+        <source>Do you want to delete your avatar?</source>
+        <translation>Avatarınızı silmek istiyor musunuz?</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="435"/>
+        <source>Select an area for the avatar</source>
+        <translation>Avatar için bir alan seçin</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="436"/>
         <source>Subscription type</source>
-        <translation type="unfinished"></translation>
+        <translation>Abonelik tipi</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="361"/>
+        <location filename="../ui/account/account_view.cpp" line="438"/>
         <source>What&apos;s included?</source>
-        <translation type="unfinished"></translation>
+        <translation>Neler dahil?</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="362"/>
+        <location filename="../ui/account/account_view.cpp" line="439"/>
+        <source>Buy lifetime</source>
+        <translation>Ömür boyu erişim al</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="440"/>
+        <source>Renew</source>
+        <translation>Yenile</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="441"/>
         <source>Active sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Etkin oturumlar</translation>
     </message>
 </context>
 <context>
@@ -2267,12 +2308,12 @@
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/add_bookmark_view.cpp" line="153"/>
         <source>Bookmark name</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretleri ismi</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/add_bookmark_view.cpp" line="154"/>
         <source>Select bookmark color</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretleri rengi seçin</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/add_bookmark_view.cpp" line="155"/>
@@ -2290,7 +2331,7 @@
     <message>
         <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="126"/>
         <source>Сomment</source>
-        <translation type="unfinished"></translation>
+        <translation>Yorum</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="127"/>
@@ -2308,7 +2349,7 @@
     <message>
         <location filename="../ui/application_view.cpp" line="183"/>
         <source>Turn off full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Tam ekrandan çık</translation>
     </message>
 </context>
 <context>
@@ -2316,42 +2357,42 @@
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="180"/>
         <source>Export audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses oyununu dışarı aktar</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="182"/>
         <source>Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Format</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="183"/>
         <source>Include title page</source>
-        <translation type="unfinished"></translation>
+        <translation>Başlık sayfasını dahil et</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="184"/>
         <source>Include inline notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Satır içi notları dahil et</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="185"/>
         <source>Include review marks</source>
-        <translation type="unfinished"></translation>
+        <translation>İnceleme işaretlerini dahil et</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="186"/>
         <source>Watermark</source>
-        <translation type="unfinished"></translation>
+        <translation>Filigran</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="188"/>
         <source>Open document after export</source>
-        <translation type="unfinished"></translation>
+        <translation>Dışa aktardıktan sonra belgeyi aç</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="189"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Dışa aktar</translation>
     </message>
     <message>
         <location filename="../ui/export/audioplay_export_dialog.cpp" line="190"/>
@@ -2364,12 +2405,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="187"/>
         <source>Audioplay name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses oyunu adı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="188"/>
         <source>Tagline</source>
-        <translation type="unfinished"></translation>
+        <translation>Slogan</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="189"/>
@@ -2379,7 +2420,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="190"/>
         <source>Generate logline</source>
-        <translation type="unfinished"></translation>
+        <translation>Önermeyi oluştur</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="191"/>
@@ -2394,7 +2435,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="193"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses Oyunu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="194"/>
@@ -2427,22 +2468,22 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="224"/>
         <source>Override common settings for this audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu ses oyunu için genel ayarları geçersiz kıl</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="225"/>
         <source>Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslak</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="226"/>
         <source>Show block numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Blok numaralarını göster</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="227"/>
         <source>Continue block numbers through document</source>
-        <translation type="unfinished"></translation>
+        <translation>Belge üzerinden blok numaralarına devam et</translation>
     </message>
 </context>
 <context>
@@ -2455,55 +2496,55 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="210"/>
         <source>Pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayfalar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="211"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelimeler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="212"/>
         <source>Characters with/without spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Boşluklu/boşluksuz karakterler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="214"/>
         <source>Text statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazı istatistikleri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="215"/>
         <source>Characters statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter istatistikleri</translation>
     </message>
 </context>
 <context>
     <name>Ui::AudioplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1216"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1212"/>
         <source>Bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işareti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1220"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1216"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1226"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1222"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzenle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1231"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1227"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1238"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1234"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Listeyi göster/gizle</translation>
     </message>
 </context>
 <context>
@@ -2514,42 +2555,42 @@
         <translation>Sahne başlığı</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="226"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="221"/>
         <source>Undo last action</source>
         <translation>Son eylemi geri al</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="230"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="225"/>
         <source>Redo last action</source>
         <translation>Son eylemi yinele</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="233"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="228"/>
         <source>Current paragraph format</source>
         <translation>Geçerli paragraf biçimi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="235"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="230"/>
         <source>Hide fast format panel</source>
         <translation>Hızlı format panelini gizle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="236"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="231"/>
         <source>Show fast format panel</source>
         <translation>Hızlı format panelini göster</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="238"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="233"/>
         <source>Search text</source>
         <translation>Metin ara</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="241"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="236"/>
         <source>Disable review mode</source>
         <translation>İnceleme modunu kapat</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="242"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="237"/>
         <source>Enable review mode</source>
         <translation>İnceleme modunu aç</translation>
     </message>
@@ -2640,40 +2681,45 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="271"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini gizle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="897"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="905"/>
         <source>Formatting</source>
         <translation>Biçimlendirme</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="898"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="906"/>
         <source>Comments</source>
         <translation>Yorumlar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="899"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="907"/>
         <source>Bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretleri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="272"/>
         <source>Show bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini göster</translation>
     </message>
 </context>
 <context>
     <name>Ui::BeatNameWidget</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text_structure/ui/beat_name_widget.cpp" line="72"/>
-        <source>Current beat:</source>
-        <translation type="unfinished"></translation>
+        <location filename="../management_layer/plugins/screenplay_text_structure/ui/beat_name_widget.cpp" line="93"/>
+        <source>No one beat selected</source>
+        <translation>Hiç kimse seçilmedi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text_structure/ui/beat_name_widget.cpp" line="73"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/ui/beat_name_widget.cpp" line="99"/>
+        <source>Current beat:</source>
+        <translation>Şimdiki vuruş:</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text_structure/ui/beat_name_widget.cpp" line="100"/>
         <source>Copy current beat text and paste it to the document</source>
-        <translation type="unfinished"></translation>
+        <translation>Geçerli vuruş metnini kopyalayın ve belgeye yapıştırın</translation>
     </message>
 </context>
 <context>
@@ -2681,22 +2727,22 @@
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="130"/>
         <source>Create new bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni yer işareti oluştur</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="131"/>
         <source>Edit bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretini düzenle</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="132"/>
         <source>Bookmark text</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işareti metni</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="133"/>
         <source>Select bookmark color</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretleri rengi seçin</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="134"/>
@@ -2711,7 +2757,7 @@
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="135"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Güncelle</translation>
     </message>
 </context>
 <context>
@@ -2719,7 +2765,7 @@
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmarks_view.cpp" line="66"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzenle</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmarks_view.cpp" line="74"/>
@@ -2729,7 +2775,7 @@
     <message>
         <location filename="../../corelib/ui/modules/bookmarks/bookmarks_view.cpp" line="84"/>
         <source>Remove selected bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>Seçili yer işaretlerini kaldır</translation>
     </message>
 </context>
 <context>
@@ -2737,13 +2783,13 @@
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="119"/>
         <source>Apply new character name</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni karakter adını uygula</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="125"/>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="283"/>
         <source>Select character color</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter rengini seç</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="282"/>
@@ -2753,83 +2799,83 @@
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="284"/>
         <source>Story role</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikaye rolü</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="287"/>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>İlk</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="287"/>
         <source>Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation>İkincil</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="287"/>
         <source>Tertiary</source>
-        <translation type="unfinished"></translation>
+        <translation>Üçüncül</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="287"/>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="293"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>Bulunamadı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="289"/>
         <source>Age</source>
-        <translation type="unfinished"></translation>
+        <translation>Yaş</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="290"/>
         <source>Gender</source>
-        <translation type="unfinished"></translation>
+        <translation>Cinsiyet</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="293"/>
         <source>Male</source>
-        <translation type="unfinished"></translation>
+        <translation>Kadın</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="293"/>
         <source>Female</source>
-        <translation type="unfinished"></translation>
+        <translation>Kadın</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="293"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Diğer</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="295"/>
         <source>One sentence description</source>
-        <translation type="unfinished"></translation>
+        <translation>Tek cümle ile özetle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="296"/>
         <source>Long description</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzun tanımlama</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="298"/>
         <source>Add photo +</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotoğraf ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="298"/>
         <source>Change photo...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotoğrafı değiştir</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="299"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterin ana fotoğrafını silmek istiyor musunuz?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="300"/>
         <source>Select an area for the character main photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterin ana fotoğrafı için bir alan seçin</translation>
     </message>
 </context>
 <context>
@@ -2837,47 +2883,47 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="352"/>
         <source>Apply new character name</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni karakter adını uygula</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="358"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="793"/>
         <source>Select character color</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter rengini seç</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="630"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="771"/>
         <source>To create a new relation, hold the Option button and move one character to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni bir ilişki oluşturmak için Seçenek düğmesini basılı tutun ve bir karakteri diğerine taşıyın.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="633"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="774"/>
         <source>To create a new relation, hold the Alt button and move one character to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni bir ilişki oluşturmak için Alt düğmesini basılı tutun ve bir karakteri diğerine taşıyın.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="638"/>
         <source>%1 has no relations with other characters</source>
-        <translation type="unfinished"></translation>
+        <translation>%1&apos;in diğer karakterlerle hiçbir ilişkisi yok</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="641"/>
         <source>What %1 feels to</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ne hissediyor</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="647"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="809"/>
         <source>Open relation details</source>
-        <translation type="unfinished"></translation>
+        <translation>İlişki detaylarını aç</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="705"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="710"/>
         <source>%1 point of view</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 bakış açısı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="706"/>
@@ -2885,57 +2931,57 @@
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="711"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="712"/>
         <source>Show all %1&apos;s relations</source>
-        <translation type="unfinished"></translation>
+        <translation>%1&apos;in tüm ilişkilerini göster</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="768"/>
         <source>To see relation details, select concrete relation.</source>
-        <translation type="unfinished"></translation>
+        <translation>İlişki ayrıntılarını görmek için ilişkiyi seçin.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="781"/>
         <source>Border line type</source>
-        <translation type="unfinished"></translation>
+        <translation>Kenar çizgisi türü</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="782"/>
         <source>Group name</source>
-        <translation type="unfinished"></translation>
+        <translation>Grup adı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="783"/>
         <source>Group description</source>
-        <translation type="unfinished"></translation>
+        <translation>Grup açıklaması</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="785"/>
         <source>Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="786"/>
         <source>Relations</source>
-        <translation type="unfinished"></translation>
+        <translation>İlişkiler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="789"/>
         <source>Add photo +</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotoğraf ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="789"/>
         <source>Change photo...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotoğrafı değiştir</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="790"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterin ana fotoğrafını silmek istiyor musunuz?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="791"/>
         <source>Select an area for the character main photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterin ana fotoğrafı için bir alan seçin</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="792"/>
@@ -2945,100 +2991,100 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="794"/>
         <source>Story role</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikaye rolü</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="797"/>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>İlk</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="797"/>
         <source>Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation>İkinci</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="797"/>
         <source>Tertiary</source>
-        <translation type="unfinished"></translation>
+        <translation>Üçüncü</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="797"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="803"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>Bulunamadı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="799"/>
         <source>Age</source>
-        <translation type="unfinished"></translation>
+        <translation>Yaş</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="800"/>
         <source>Gender</source>
-        <translation type="unfinished"></translation>
+        <translation>Cinsiyet</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="803"/>
         <source>Male</source>
-        <translation type="unfinished"></translation>
+        <translation>Kadın</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="803"/>
         <source>Female</source>
-        <translation type="unfinished"></translation>
+        <translation>Kadın</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="803"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Diğer</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="805"/>
         <source>One sentence description</source>
-        <translation type="unfinished"></translation>
+        <translation>Tek kelime ile özetle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="806"/>
         <source>Long description</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzun tanımlama</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="812"/>
         <source>Line type</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi tipi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="776"/>
         <source>Solid line</source>
-        <translation type="unfinished"></translation>
+        <translation>Düz çizgi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="767"/>
         <source>To see character information and all their relations, select concrete character.</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter bilgilerini ve tüm ilişkilerini görmek için karakter seçin.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="776"/>
         <source>Dash line</source>
-        <translation type="unfinished"></translation>
+        <translation>Kısa çizgi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="776"/>
         <source>Dot line</source>
-        <translation type="unfinished"></translation>
+        <translation>Nokta çizgisi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="813"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="815"/>
         <source>Feeling</source>
-        <translation type="unfinished"></translation>
+        <translation>His</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="814"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="816"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Detaylar</translation>
     </message>
 </context>
 <context>
@@ -3046,37 +3092,37 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="303"/>
         <source>Unlock ability to edit characters relations</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter ilişkilerini düzenleme yeteneğinin kilidini açın</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="304"/>
         <source>Add character</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="305"/>
         <source>Add group</source>
-        <translation type="unfinished"></translation>
+        <translation>Grup ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="306"/>
         <source>Remove selected item</source>
-        <translation type="unfinished"></translation>
+        <translation>Seçili öğeleri sil</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="309"/>
         <source>Show relations titles only for the selected characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Yalnızca seçili karakterler için ilişki başlıklarını göster</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="311"/>
         <source>Here will be a characters relations scheme.</source>
-        <translation type="unfinished"></translation>
+        <translation>Burada bir karakter ilişkileri şeması olacak.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="312"/>
         <source>It&apos;s time to create the first character!</source>
-        <translation type="unfinished"></translation>
+        <translation>İlk karakteri yaratma zamanı!</translation>
     </message>
 </context>
 <context>
@@ -3084,47 +3130,47 @@
     <message>
         <location filename="../ui/export/comic_book_export_dialog.cpp" line="167"/>
         <source>Export comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi roman dışa aktar</translation>
     </message>
     <message>
         <location filename="../ui/export/comic_book_export_dialog.cpp" line="169"/>
         <source>Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Format</translation>
     </message>
     <message>
         <location filename="../ui/export/comic_book_export_dialog.cpp" line="170"/>
         <source>Print title page</source>
-        <translation type="unfinished"></translation>
+        <translation>Başlık sayfasını yazdır</translation>
     </message>
     <message>
         <location filename="../ui/export/comic_book_export_dialog.cpp" line="171"/>
         <source>Print panels numbers in form of words</source>
-        <translation type="unfinished"></translation>
+        <translation>Panel numaralarını sözcük biçiminde yazdırın</translation>
     </message>
     <message>
         <location filename="../ui/export/comic_book_export_dialog.cpp" line="172"/>
         <source>Print inline notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Satır içi notları yazdır</translation>
     </message>
     <message>
         <location filename="../ui/export/comic_book_export_dialog.cpp" line="173"/>
         <source>Print review marks</source>
-        <translation type="unfinished"></translation>
+        <translation>İnceleme işaretlerini yazdır</translation>
     </message>
     <message>
         <location filename="../ui/export/comic_book_export_dialog.cpp" line="174"/>
         <source>Watermark</source>
-        <translation type="unfinished"></translation>
+        <translation>Filigran</translation>
     </message>
     <message>
         <location filename="../ui/export/comic_book_export_dialog.cpp" line="176"/>
         <source>Open document after export</source>
-        <translation type="unfinished"></translation>
+        <translation>Dışa aktardıktan sonra belgeyi aç</translation>
     </message>
     <message>
         <location filename="../ui/export/comic_book_export_dialog.cpp" line="177"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Dışa aktar</translation>
     </message>
     <message>
         <location filename="../ui/export/comic_book_export_dialog.cpp" line="178"/>
@@ -3137,12 +3183,12 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="187"/>
         <source>Comic book name</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi roman adı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="188"/>
         <source>Tagline</source>
-        <translation type="unfinished"></translation>
+        <translation>Slogan</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="189"/>
@@ -3152,7 +3198,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="190"/>
         <source>Generate logline</source>
-        <translation type="unfinished"></translation>
+        <translation>Önermeyi oluştur</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="191"/>
@@ -3167,7 +3213,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="193"/>
         <source>Script</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaryo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="194"/>
@@ -3200,12 +3246,12 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="195"/>
         <source>Override common settings for this comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu çizgi roman için genel ayarları geçersiz kıl</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="196"/>
         <source>Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslak</translation>
     </message>
 </context>
 <context>
@@ -3213,62 +3259,62 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="188"/>
         <source>Pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayfalar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="189"/>
         <source>Panels</source>
-        <translation type="unfinished"></translation>
+        <translation>Paneller</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="190"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelimeler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="191"/>
         <source>Characters with/without spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Boşluklu/boşluksuz karakterler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="193"/>
         <source>Text statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazı istatistikleri</translation>
     </message>
 </context>
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1012"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1008"/>
         <source>%n panels</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n panel</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1213"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1209"/>
         <source>Bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işareti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1217"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1213"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1223"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1219"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzenle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1228"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1224"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1235"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1231"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Listeyi göster/gizle</translation>
     </message>
 </context>
 <context>
@@ -3279,42 +3325,42 @@
         <translation>Sahne başlığı</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="226"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="221"/>
         <source>Undo last action</source>
         <translation>Son eylemi geri al</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="230"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="225"/>
         <source>Redo last action</source>
         <translation>Son eylemi yinele</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="233"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="228"/>
         <source>Current paragraph format</source>
         <translation>Geçerli paragraf biçimi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="235"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="230"/>
         <source>Hide fast format panel</source>
         <translation>Hızlı format panelini gizle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="236"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="231"/>
         <source>Show fast format panel</source>
         <translation>Hızlı format panelini göster</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="238"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="233"/>
         <source>Search text</source>
         <translation>Metin ara</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="241"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="236"/>
         <source>Disable review mode</source>
         <translation>İnceleme modunu kapat</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="242"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="237"/>
         <source>Enable review mode</source>
         <translation>İnceleme modunu aç</translation>
     </message>
@@ -3408,10 +3454,10 @@
 <context>
     <name>Ui::ComicBookTextStructureDelegate</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="323"/>
+        <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="321"/>
         <source>%n PANELS</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n PANEL</numerusform>
         </translation>
     </message>
 </context>
@@ -3420,7 +3466,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="265"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini gizle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="900"/>
@@ -3435,12 +3481,12 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="902"/>
         <source>Bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretleri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="266"/>
         <source>Show bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini göster</translation>
     </message>
 </context>
 <context>
@@ -3448,13 +3494,13 @@
     <message>
         <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="162"/>
         <source>edited</source>
-        <translation type="unfinished"></translation>
+        <translation>düzenlendi</translation>
     </message>
     <message numerus="yes">
         <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="281"/>
         <source>%n reply(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n cevap(lar)&#xa0;</numerusform>
         </translation>
     </message>
 </context>
@@ -3463,7 +3509,7 @@
     <message>
         <location filename="../../corelib/ui/modules/comments/comment_replies_view.cpp" line="177"/>
         <source>Back to comments list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yorum listesine geri dön</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/comments/comment_replies_view.cpp" line="178"/>
@@ -3500,12 +3546,12 @@
     <message>
         <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="71"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzenle</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="81"/>
         <source>Discuss</source>
-        <translation type="unfinished"></translation>
+        <translation>Tartışma</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="90"/>
@@ -3543,7 +3589,7 @@
     <message>
         <location filename="../ui/account/connection_status_tool_bar.cpp" line="250"/>
         <source>Connection with server lost. Automatic reconnection enabled. Press, to try to reconnect right now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sunucuyla bağlantı kesildi fakat otomatik yeniden bağlantı etkinleştirildi. Hemen yeniden bağlanmayı denemek için, tuşa basın.</translation>
     </message>
 </context>
 <context>
@@ -3556,22 +3602,22 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="532"/>
         <source>Background image</source>
-        <translation type="unfinished"></translation>
+        <translation>Arka plan fotoğrafı</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="533"/>
         <source>Text of the first top line</source>
-        <translation type="unfinished"></translation>
+        <translation>İlk üst satırın metni</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="534"/>
         <source>Text of the second top line</source>
-        <translation type="unfinished"></translation>
+        <translation>İkinci üst satırın metni</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="535"/>
         <source>Text above of the project name</source>
-        <translation type="unfinished"></translation>
+        <translation>Proje adının üstündeki metin</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="536"/>
@@ -3581,82 +3627,82 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="537"/>
         <source>Text under the project name</source>
-        <translation type="unfinished"></translation>
+        <translation>Proje adı altındaki metin</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="538"/>
         <source>Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Emeği geçenler</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="539"/>
         <source>Release date or coming soon</source>
-        <translation type="unfinished"></translation>
+        <translation>Çıkış tarihi veya yakında</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="540"/>
         <source>Website</source>
-        <translation type="unfinished"></translation>
+        <translation>İnternet sitesi</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="551"/>
         <source>Font family</source>
-        <translation type="unfinished"></translation>
+        <translation>Font ailesi</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="552"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Boyut</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="553"/>
         <source>Text color</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazı rengi</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="554"/>
         <source>Make text bold</source>
-        <translation type="unfinished"></translation>
+        <translation>Metni kalın yap</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="555"/>
         <source>Make text italic</source>
-        <translation type="unfinished"></translation>
+        <translation>Metni italik yap</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="556"/>
         <source>Make text underlined</source>
-        <translation type="unfinished"></translation>
+        <translation>Metni altı çizili yap</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="557"/>
         <source>Align text to the left</source>
-        <translation type="unfinished"></translation>
+        <translation>Metni sola hizala</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="558"/>
         <source>Align text to the center</source>
-        <translation type="unfinished"></translation>
+        <translation>Metni merkeze hizalayın</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="559"/>
         <source>Align text to the right</source>
-        <translation type="unfinished"></translation>
+        <translation>Metni sağa hizala</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="562"/>
         <source>Search images</source>
-        <translation type="unfinished"></translation>
+        <translation>Görselleri ara</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="564"/>
         <source>Paste image from clipboard (image file or image url)</source>
-        <translation type="unfinished"></translation>
+        <translation>Panodan resim yapıştırın (resim dosyası veya resim url&apos;si)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="565"/>
         <source>Choose file with image</source>
-        <translation type="unfinished"></translation>
+        <translation>Resimli dosya seçin</translation>
     </message>
 </context>
 <context>
@@ -3664,27 +3710,27 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="172"/>
         <source>Loading image</source>
-        <translation type="unfinished"></translation>
+        <translation>Görsel yükleniyor</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="196"/>
         <source>Select an area for cover background</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapak arka planı için bir alan seçin</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="303"/>
         <source>Select location for saving cover to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapağı dosyaya kaydetmek için konum seçin</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="304"/>
         <source>PNG image</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG görseli</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="336"/>
         <source>Select file for background image</source>
-        <translation type="unfinished"></translation>
+        <translation>Arka plan resmi için dosya seçin</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="337"/>
@@ -3694,22 +3740,22 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="372"/>
         <source>Use cover for the project</source>
-        <translation type="unfinished"></translation>
+        <translation>Proje için kapak kullanın</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="373"/>
         <source>Close without saving</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaydetmeden kapat</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="374"/>
         <source>Clear cover parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapak parametrelerini temizle</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="375"/>
         <source>Save cover to the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapağı dosyaya kaydet</translation>
     </message>
 </context>
 <context>
@@ -3717,7 +3763,7 @@
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="227"/>
         <source>Generate</source>
-        <translation type="unfinished"></translation>
+        <translation>Oluştur</translation>
     </message>
 </context>
 <context>
@@ -3725,77 +3771,77 @@
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="191"/>
         <source>Oops.. looks like a crash has happened</source>
-        <translation type="unfinished"></translation>
+        <translation>Hata.. bir kaza olmuş gibi görünüyor</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="193"/>
         <source>We are sorry that someting went wrong. Please help us fix this issue and share some details so it&apos;ll never bother you again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir şeyler ters gittiği için üzgünüz. Lütfen bu sorunu çözmemize yardımcı olun ve sizi bir daha asla rahatsız etmeyecek şekilde bazı ayrıntıları paylaşın.</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="195"/>
         <source>How often do crashes happen?</source>
-        <translation type="unfinished"></translation>
+        <translation>Çökmeler ne sıklıkla olur?</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="196"/>
         <source>Once</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir kere</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="197"/>
         <source>Time to time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaman zaman</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="198"/>
         <source>Often</source>
-        <translation type="unfinished"></translation>
+        <translation>Sıklıkla</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="199"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Diğer</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="202"/>
         <source>Does the issue happen within all projects or with the last edited project?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sorun tüm projelerde mi yoksa en son düzenlenen projede mi oluyor?</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="203"/>
         <source>I don&apos;t know</source>
-        <translation type="unfinished"></translation>
+        <translation>Bilmiyorum</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="204"/>
         <source>All projects</source>
-        <translation type="unfinished"></translation>
+        <translation>Tüm projeler</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="205"/>
         <source>Single project</source>
-        <translation type="unfinished"></translation>
+        <translation>Tek proje</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="206"/>
         <source>What did you do when this issue happened?</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu sorun olduğunda ne yaptınız?</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="207"/>
         <source>Contact e-mail</source>
-        <translation type="unfinished"></translation>
+        <translation>İletişim E-posta</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="208"/>
         <source>Ignore error</source>
-        <translation type="unfinished"></translation>
+        <translation>Hatayı yoksay</translation>
     </message>
     <message>
         <location filename="../ui/crash_report_dialog.cpp" line="209"/>
         <source>Send report</source>
-        <translation type="unfinished"></translation>
+        <translation>Rapor gönder</translation>
     </message>
 </context>
 <context>
@@ -3803,17 +3849,17 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="68"/>
         <source>The character should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterin bir adı olmalı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="105"/>
         <source>Create new character</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni karakter oluştur</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="106"/>
         <source>Character name</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter ismi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="107"/>
@@ -3831,57 +3877,57 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="106"/>
         <source>Create a folder to group documents inside the story.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öykünün içindeki belgeleri gruplamak için bir klasör oluşturun.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="108"/>
         <source>Create a plain text document to write out ideas and notes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fikirleri ve notları yazmak için düz bir metin belgesi oluşturun.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="110"/>
         <source>Create a document with full character&apos;s description to track his relations and follow his journey within the story.</source>
-        <translation type="unfinished"></translation>
+        <translation>İlişkilerini takip etmek ve hikaye içindeki yolculuğunu takip etmek için tam karakter açıklaması içeren bir belge oluşturun.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="113"/>
         <source>Create a document to note down the location&apos;s description and keep the details.</source>
-        <translation type="unfinished"></translation>
+        <translation>Konumun açıklamasını not etmek ve ayrıntıları saklamak için bir belge oluşturun.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="115"/>
         <source>Create a document set to streamline your work on the feature film, series, or animation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzun metrajlı film, dizi veya animasyon üzerindeki çalışmanızı kolaylaştırmak için bir belge seti oluşturun.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="118"/>
         <source>Create a document set to streamline your work on the comic book, graphic novel, or manga.</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi roman, grafik roman veya mangadaki çalışmalarınızı düzene koymak için bir belge seti oluşturun.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="121"/>
         <source>Create a document set to streamline your work on the audio drama, or podcast.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sesli drama veya podcast üzerindeki çalışmanızı kolaylaştırmak için bir belge seti oluşturun.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="123"/>
         <source>Create a document set to streamline your work on the stage play, or musical.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sahne oyunu veya müzikal çalışmalarınızı düzene sokmak için bir belge seti oluşturun.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="183"/>
         <source>The character should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterin bir adı olmalı</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="185"/>
         <source>The location should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekanın adı olmalı</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="222"/>
         <source>Insert into</source>
-        <translation type="unfinished"></translation>
+        <translation>Takın</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="243"/>
@@ -3906,7 +3952,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="264"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekan</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="269"/>
@@ -3916,17 +3962,17 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="274"/>
         <source>Comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi Roman</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="279"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses Oyunu</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="284"/>
         <source>Stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Piyes</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="295"/>
@@ -3949,17 +3995,17 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="66"/>
         <source>The location should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekanın adı olmalı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="103"/>
         <source>Create new location</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni mekan oluştur</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="104"/>
         <source>Location name</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekan ismi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="105"/>
@@ -4027,12 +4073,12 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="318"/>
         <source>Type of story</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikayenin türü</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="324"/>
         <source>Not set</source>
-        <translation type="unfinished"></translation>
+        <translation>Ayarlanmamış</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="329"/>
@@ -4042,22 +4088,22 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="334"/>
         <source>Comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi Roman</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="339"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses Oyunu</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="344"/>
         <source>Stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Piyes</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="350"/>
         <source>Name of the story</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikayenin ismi</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="351"/>
@@ -4077,7 +4123,7 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="355"/>
         <source>Choose the folder where the new story will be placed</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni hikayenin yerleştirileceği klasörü seçin</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="356"/>
@@ -4087,12 +4133,12 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="357"/>
         <source>Choose file for importing</source>
-        <translation type="unfinished"></translation>
+        <translation>İçe aktarmak için dosya seçin</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="358"/>
         <source>Advanced options</source>
-        <translation type="unfinished"></translation>
+        <translation>Gelişmiş seçenekler</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="359"/>
@@ -4110,12 +4156,12 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/ui/dictionaries_view.cpp" line="136"/>
         <source>Dictionary type</source>
-        <translation type="unfinished"></translation>
+        <translation>Sözlük tipi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/ui/dictionaries_view.cpp" line="137"/>
         <source>Add new item to the current dictionary</source>
-        <translation type="unfinished"></translation>
+        <translation>Geçerli sözlüğe yeni öğe ekle</translation>
     </message>
 </context>
 <context>
@@ -4123,12 +4169,12 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="88"/>
         <source>Hint</source>
-        <translation type="unfinished"></translation>
+        <translation>İpucu</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="89"/>
         <source>Read more</source>
-        <translation type="unfinished"></translation>
+        <translation>Daha fazla oku</translation>
     </message>
 </context>
 <context>
@@ -4199,7 +4245,7 @@
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="344"/>
         <source>Improve</source>
-        <translation type="unfinished"></translation>
+        <translation>Geliştirmek</translation>
     </message>
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="345"/>
@@ -4212,7 +4258,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="102"/>
         <source>Apply new location name</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni mekan adını uygula</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="229"/>
@@ -4222,57 +4268,57 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="230"/>
         <source>Story role</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikaye rolü</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="233"/>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>İlk</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="233"/>
         <source>Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation>İkinci</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="233"/>
         <source>Tertiary</source>
-        <translation type="unfinished"></translation>
+        <translation>Üçüncü</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="233"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>Bulunamadı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="235"/>
         <source>One sentence description</source>
-        <translation type="unfinished"></translation>
+        <translation>Tek kelime ile özetle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="236"/>
         <source>Long description</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzun tanımlama</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="237"/>
         <source>Add photo +</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotoğraf ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="237"/>
         <source>Change photo...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotoğrafı değiştir</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="238"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekanın ana fotoğrafını silmek istiyor musunuz?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="239"/>
         <source>Select an area for the location main photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekan ana fotoğrafı için bir alan seçin</translation>
     </message>
 </context>
 <context>
@@ -4280,35 +4326,35 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="329"/>
         <source>Apply new location name</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni mekan adını uygula</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="564"/>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="693"/>
         <source>To create a new route, hold the Option button and move one location to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni bir rota oluşturmak için Seçenek düğmesini basılı tutun ve bir konumu diğerine taşıyın.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="567"/>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="696"/>
         <source>To create a new route, hold the Alt button and move one location to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni bir rota oluşturmak için Alt düğmesini basılı tutun ve bir konumu diğerine taşıyın.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="571"/>
         <source>%1 has no routes with other locations</source>
-        <translation type="unfinished"></translation>
+        <translation>%1&apos;in başka mekanlara sahip rotası yok</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="573"/>
         <source>What routes %1 has</source>
-        <translation type="unfinished"></translation>
+        <translation>%1&apos;in hangi rotaları var</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="579"/>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="723"/>
         <source>Open route details</source>
-        <translation type="unfinished"></translation>
+        <translation>Rota detaylarını aç</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="634"/>
@@ -4316,77 +4362,77 @@
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="639"/>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="640"/>
         <source>Show all %1&apos;s routes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1&apos;in tüm rotalarını göster</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="689"/>
         <source>To see location info and all their routes, select concrete location.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekan bilgilerini ve tüm rotalarını görmek için somut konumu seçin.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="690"/>
         <source>To see route details, select concrete route.</source>
-        <translation type="unfinished"></translation>
+        <translation>Güzergah ayrıntılarını görmek için güzergahı seçin.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="698"/>
         <source>Solid line</source>
-        <translation type="unfinished"></translation>
+        <translation>Düz çizgi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="698"/>
         <source>Dash line</source>
-        <translation type="unfinished"></translation>
+        <translation>Kısa çizgi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="698"/>
         <source>Dot line</source>
-        <translation type="unfinished"></translation>
+        <translation>Nokta çizgisi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="703"/>
         <source>Border line type</source>
-        <translation type="unfinished"></translation>
+        <translation>Kenar çizgisi türü</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="704"/>
         <source>Group name</source>
-        <translation type="unfinished"></translation>
+        <translation>Grup adı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="705"/>
         <source>Group description</source>
-        <translation type="unfinished"></translation>
+        <translation>Grup açıklaması</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="707"/>
         <source>Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="708"/>
         <source>Routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Güzergahlar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="710"/>
         <source>Add photo +</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotoğraf ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="710"/>
         <source>Change photo...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotoğrafı değiştir</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="711"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekanın ana fotoğrafını silmek istiyor musunuz?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="712"/>
         <source>Select an area for the location main photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekan ana fotoğrafı için bir alan seçin</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="713"/>
@@ -4397,47 +4443,47 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="714"/>
         <source>Story role</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikaye rolü</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="717"/>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>İlk</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="717"/>
         <source>Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation>İkinci</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="717"/>
         <source>Tertiary</source>
-        <translation type="unfinished"></translation>
+        <translation>Üçüncü</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="717"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>Bulunamadı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="719"/>
         <source>One sentence description</source>
-        <translation type="unfinished"></translation>
+        <translation>Tek kelime ile özetle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="720"/>
         <source>Long description</source>
-        <translation type="unfinished"></translation>
+        <translation>Uzun tanımlama</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="726"/>
         <source>Line type</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi tipi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="728"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Detaylar</translation>
     </message>
 </context>
 <context>
@@ -4445,37 +4491,37 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="301"/>
         <source>Unlock ability to edit locations map</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekan haritasını düzenleme yeteneğinin kilidini açın</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="302"/>
         <source>Add location</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekan ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="303"/>
         <source>Add group</source>
-        <translation type="unfinished"></translation>
+        <translation>Grup ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="304"/>
         <source>Remove selected item</source>
-        <translation type="unfinished"></translation>
+        <translation>Seçili öğeleri sil</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="307"/>
         <source>Show routes titles only for the selected locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Yalnızca seçili mekanlar için rota başlıklarını göster</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="309"/>
         <source>Here will be a locations map.</source>
-        <translation type="unfinished"></translation>
+        <translation>Burada bir mekan haritası olacak.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="310"/>
         <source>It&apos;s time to create the first location!</source>
-        <translation type="unfinished"></translation>
+        <translation>İlk mekanı oluşturma zamanı!</translation>
     </message>
 </context>
 <context>
@@ -4488,12 +4534,12 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="74"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gönderdiğimiz onay kodunun süresi doldu.</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="76"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
-        <translation type="unfinished"></translation>
+        <translation>Yukarıdaki e-postaya bir onay kodu gönderdik, lütfen doğrulamak için buraya girin</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="194"/>
@@ -4503,7 +4549,7 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="196"/>
         <source>Sign in to get access to the extended free and pro features</source>
-        <translation type="unfinished"></translation>
+        <translation>Genişletilmiş ücretsiz ve profesyonel özelliklere erişmek için oturum açın</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="197"/>
@@ -4523,7 +4569,7 @@
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="201"/>
         <source>Send code again</source>
-        <translation type="unfinished"></translation>
+        <translation>Kodu tekrar gönder</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="202"/>
@@ -4536,278 +4582,278 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="485"/>
         <source>Every successful screen story has a central character. Describe it!</source>
-        <translation type="unfinished"></translation>
+        <translation>Her başarılı beyazperde hikayesinin merkezi bir karakteri vardır. Bunu tanımla!</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="495"/>
         <source>Untick if you don&apos;t want to include theme.</source>
-        <translation type="unfinished"></translation>
+        <translation>Temayı dahil etmek istemiyorsanız işareti kaldırın.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="505"/>
         <source>Come on! No goal, no story! Complete it, then move on.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hadi! Hedef yoksa, hikaye yoktur! Tamamlayın, sonra devam edin.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="516"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="521"/>
         <source>Untick if you don&apos;t want to include MPR.</source>
-        <translation type="unfinished"></translation>
+        <translation>MPR&apos;yi dahil etmek istemiyorsanız işareti kaldırın.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="532"/>
         <source>Untick if you don&apos;t want to include special rules.</source>
-        <translation type="unfinished"></translation>
+        <translation>Özel kurallar eklemek istemiyorsanız işareti kaldırın.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="542"/>
         <source>Untick if you don&apos;t want to include stakes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bahisleri dahil etmek istemiyorsanız işareti kaldırın.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="574"/>
         <source>he</source>
-        <translation type="unfinished"></translation>
+        <translation>O</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="575"/>
         <source>she</source>
-        <translation type="unfinished"></translation>
+        <translation>O</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="575"/>
         <source>it</source>
-        <translation type="unfinished"></translation>
+        <translation>O</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="579"/>
         <source>When</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne zaman</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="587"/>
         <source>in</source>
-        <translation type="unfinished"></translation>
+        <translation>içinde</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="598"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
         <source>must</source>
-        <translation type="unfinished"></translation>
+        <translation>olmalı</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="607"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="616"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="628"/>
         <source>in order to</source>
-        <translation type="unfinished"></translation>
+        <translation>için</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
         <source>but</source>
-        <translation type="unfinished"></translation>
+        <translation>ama</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
         <source>when</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne zaman</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="635"/>
         <source>before</source>
-        <translation type="unfinished"></translation>
+        <translation>önce</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="740"/>
         <source>Share your logline</source>
-        <translation type="unfinished"></translation>
+        <translation>Önermenizi paylaşın</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="743"/>
         <source>Check out my new logline</source>
-        <translation type="unfinished"></translation>
+        <translation>Benim yeni önermeme bakın!</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="769"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="816"/>
         <source>Show help</source>
-        <translation type="unfinished"></translation>
+        <translation>Yardımı göster</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="815"/>
         <source>Logline generator</source>
-        <translation type="unfinished"></translation>
+        <translation>Önerme üretici</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="818"/>
         <source>Describe your main character</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana karakteri tanımlayın</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="819"/>
         <source>E.g. &apos;A lonesome cowboy&apos;, or &apos;An arrogant publicist&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Örneğin. &apos;Yalnız bir kovboy&apos; veya &apos;Kibirli bir reklamcı&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="820"/>
         <source>What is their gender?</source>
-        <translation type="unfinished"></translation>
+        <translation>Cinsiyeti ne?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="821"/>
         <source>Male</source>
-        <translation type="unfinished"></translation>
+        <translation>Erkek</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="821"/>
         <source>Female</source>
-        <translation type="unfinished"></translation>
+        <translation>Kadın</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="821"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="822"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Diğer</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="824"/>
         <source>Typically this includes the character&apos;s function or job, and some weakness and/or strength. Loglines only have character names if the names are already a part of popular culture.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipik olarak bu, karakterin işlevini veya işini ve bazı zayıflıkları ve/veya güçleri içerir. Günlük satırlarında yalnızca, adlar zaten popüler kültürün bir parçasıysa karakter adları bulunur.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="828"/>
         <source>What event triggers the story&apos;s main action?</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikayenin tetikleyici olayı ne?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="830"/>
         <source>E.g. &apos;A shark kills a swimmer&apos; or &apos;her best friend shoots a man who tried to rape her&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Örneğin. &apos;Bir köpekbalığı bir yüzücüyü öldürür&apos; veya &apos;en iyi arkadaşı ona tecavüz etmeye çalışan bir adamı vurur&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="833"/>
         <source>Did you include a description of the main character?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana karakterin bir açıklamasını eklediniz mi?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="835"/>
         <source>Events are things that happen to the main character, and that motivates their actions. They&apos;re never anything the character does. Here we&apos;re looking for the story&apos;s main event or Inciting Incident / Call To Adventure. This typically happens in the first 10 - 20 minutes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Olaylar, ana karakterin başına gelen ve onların eylemlerini motive eden şeylerdir. Asla karakterin yaptığı bir şey değiller. Burada hikayenin ana olayını veya Teşvik Edici Olayı / Maceraya Çağrı&apos;yı arıyoruz. Bu genellikle ilk 10 - 20 dakika içinde olur.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="840"/>
         <source>Include a Theme or Character Arc</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir Tema veya Karakter Yayı Ekle</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="841"/>
         <source>What do they have to learn/overcome?</source>
-        <translation type="unfinished"></translation>
+        <translation>Neleri öğrenmeleri/aşmaları gerekiyor?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="842"/>
         <source>E.g. &apos;to become less selfish&apos;, or &apos;to find purpose in life&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Örneğin. &apos;daha az bencil olmak&apos; veya &apos;hayatta bir amaç bulmak&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="844"/>
         <source>Even if theme is important in most stories, it is not critical to a basic logline. And often theme is established further down the development process. Leave it out for now, or try something and change it later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Çoğu hikayede tema önemli olsa bile, temel bir giriş satırı için kritik değildir. Ve genellikle tema, geliştirme sürecinin daha aşağısında kurulur. Şimdilik bırakın ya da bir şeyler deneyin ve daha sonra değiştirin.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="848"/>
         <source>What is the main Action / Goal?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana hedef ne?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="850"/>
         <source>E.g. &apos;to close the beach&apos;, or &apos;to find her son and return him home&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Örneğin. &apos;plajı kapatmak&apos; veya &apos;oğlunu bulup eve döndürmek&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="852"/>
         <source>The main action or goal is &apos;what the story is about&apos; for the broad audience. It is that part of the story we can visualise when we hear the logline, and which (hopefully) makes us want to see the film or show episode. It is the objective the main character will pursue for most of the time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana eylem veya hedef, geniş kitleler için &apos;hikayenin ne hakkında olduğu&apos;dur. Bu, hikayenin, giriş satırını duyduğumuzda görselleştirebildiğimiz ve (umarım) filmi veya şov bölümünü görmek istememizi sağlayan kısmıdır. Ana karakterin çoğu zaman takip edeceği amaç budur.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="857"/>
         <source>Include a Mid Point Reversal (MPR)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir Orta Nokta Ters Çevirme (MPR) ekleyin</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="858"/>
         <source>What is the MPR Event?</source>
-        <translation type="unfinished"></translation>
+        <translation>MPR Olayı nedir?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="860"/>
         <source>E.g. &apos;the trip to Vegas is aborted&apos;, or &apos;his employer turns out to be his nemesis&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Örneğin. &apos;Vegas gezisi iptal edildi&apos; veya &apos;işvereninin düşmanı olduğu ortaya çıktı&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="861"/>
         <source>What is the character&apos;s new Action / Goal?</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakterin yeni Aksiyonu / Hedefi nedir?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="862"/>
         <source>E.g. &apos;to venture into the ocean and kill the shark&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Örneğin. &apos;okyanusa girip köpekbalığını öldürmek&apos;</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="864"/>
         <source>This event often happens just when the goal is within reach. It flips the character&apos;s fortune, and any gains now seem lost. But it may also be the motivation for the character&apos;s change in goal or approach. After the MPR, they often change their behaviour and start doing &apos;the right thing&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu olay genellikle tam hedefe ulaşıldığında gerçekleşir. Karakterin servetini çevirir ve kazanımlar artık kaybolmuş gibi görünür. Ama aynı zamanda karakterin hedefindeki veya yaklaşımındaki değişikliğin motivasyonu da olabilir. MPR&apos;den sonra genellikle davranışlarını değiştirirler ve &apos;doğru olanı&apos; yapmaya başlarlar.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="869"/>
         <source>Is the story set in a special, future or magical world?</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikaye özel bir gelecekte mi yoksa büyülü bir dünyada mı geçiyor?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="870"/>
         <source>How is your story world different from normal reality?</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikaye dünyanız normal gerçeklikten nasıl farklı?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="872"/>
         <source>E.g. &apos;it is 1920&apos;s Paris&apos;, or &apos;it is a world where pigs fly&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Örneğin. &apos;1920&apos;lerin Paris&apos;i&apos; veya &apos;domuzların uçtuğu bir dünya&apos;</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="873"/>
         <source>Only add this if it is essential to understand the story. </source>
-        <translation type="unfinished"></translation>
+        <translation>Bunu yalnızca hikayeyi anlamak için gerekliyse ekleyin.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="875"/>
         <source>Include a Deadline/Stakes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir Deadline Eklensin mi?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="876"/>
         <source>What happens if the main character fails?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana karakter başarısız olursa ne olur?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="877"/>
         <source>E.g. &apos;the police catches the girls&apos;, or &apos;the shark attacks again&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Örneğin. &apos;polis kızları yakalar&apos; veya &apos;köpekbalığı yeniden saldırır&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="881"/>
         <source>To make the logline work, write this as a full sentence like in the examples.</source>
-        <translation type="unfinished"></translation>
+        <translation>Logline (Önerme)&apos;nin çalışması için bunu örneklerdeki gibi tam bir cümle olarak yazın.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="882"/>
         <source>Often the stakes are clear from the Main Event. But in some cases, adding negative stakes adds urgency to the logline, ultimately improving its emotional impact.</source>
-        <translation type="unfinished"></translation>
+        <translation>Çoğu zaman, Ana Etkinlikten bahisler açıktır. Ancak bazı durumlarda, olumsuz riskler eklemek, giriş çizgisine aciliyet katar ve nihayetinde duygusal etkisini iyileştirir.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="898"/>
         <source>Your logline is cooked!</source>
-        <translation type="unfinished"></translation>
+        <translation>Logline&apos;ınız hazır!</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="900"/>
@@ -4817,7 +4863,7 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="901"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Geri</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="902"/>
@@ -4827,7 +4873,7 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="903"/>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamamlandı</translation>
     </message>
 </context>
 <context>
@@ -4836,13 +4882,13 @@
         <location filename="../ui/menu_view.cpp" line="319"/>
         <location filename="../ui/menu_view.cpp" line="503"/>
         <source>Hide developers version</source>
-        <translation type="unfinished"></translation>
+        <translation>Geliştirici seçeneklerini gizle</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="320"/>
         <location filename="../ui/menu_view.cpp" line="504"/>
         <source>Show developers version</source>
-        <translation type="unfinished"></translation>
+        <translation>Geliştirici seçeneklerini göster</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="391"/>
@@ -4889,12 +4935,12 @@
     <message>
         <location filename="../ui/menu_view.cpp" line="484"/>
         <source>Export current document...</source>
-        <translation type="unfinished"></translation>
+        <translation>Geçerli belgeyi dışa aktar...</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="487"/>
         <source>Toggle full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Tam ekran</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="490"/>
@@ -4904,37 +4950,37 @@
     <message>
         <location filename="../ui/menu_view.cpp" line="492"/>
         <source>Show writing sprint timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazma zamanlayıcısını göster</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="493"/>
         <source>Show notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildirimleri göster</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="496"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versiyon</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="497"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Hakkında</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="499"/>
         <source>Back to main menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana menüye dön</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="500"/>
         <source>Notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildirimler</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="501"/>
         <source>Notifications preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildirim tercihleri</translation>
     </message>
 </context>
 <context>
@@ -4958,47 +5004,47 @@
         <translation>Çeviri %1% için hazır. Nasıl iyileştirebileceğinizi bilin. </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="431"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="429"/>
         <source>Choose preferred language</source>
         <translation>Tercih edilen dili seç</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="433"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="431"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Tercih ettiğiniz dili bulamadınız mı? Kendiniz nasıl ekleyebileceğinizi okuyun.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="434"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="432"/>
         <source>Continue</source>
         <translation>Devam et</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="435"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="433"/>
         <source>Skip initial setup</source>
         <translation>İlk kurulumu atla</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="437"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="435"/>
         <source>Choose application theme</source>
         <translation>Uygulama teması seç</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="436"/>
         <source>Setup size of the user interface elements</source>
         <translation>Kullanıcı arabirimi öğelerinin boyutu kurulumu</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="437"/>
         <source>small</source>
         <translation>küçük</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
         <source>big</source>
         <translation>büyük</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="441"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
         <source>Start writing</source>
         <translation>Yazmaya başla</translation>
     </message>
@@ -5023,35 +5069,40 @@
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="151"/>
         <source>Add cover +</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapak ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="151"/>
         <source>Change cover...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapağı değiştir</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="152"/>
         <source>Do you want to reset the story&apos;s cover?</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikayenin kapağını sıfırlamak istiyor musunuz?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="153"/>
         <source>Select an area for the cover</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapak için bir alan seçin</translation>
     </message>
 </context>
 <context>
     <name>Ui::ProjectNavigator</name>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="196"/>
+        <location filename="../ui/project/project_navigator.cpp" line="226"/>
         <source>Show document navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>Belge gezginini göster</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="204"/>
+        <location filename="../ui/project/project_navigator.cpp" line="234"/>
         <source>Add document</source>
         <translation>Belge ekle</translation>
+    </message>
+    <message>
+        <location filename="../ui/project/project_navigator.cpp" line="235"/>
+        <source>Empty recycle bin</source>
+        <translation>Boş geridönüşüm kutusu</translation>
     </message>
 </context>
 <context>
@@ -5140,89 +5191,129 @@
     </message>
 </context>
 <context>
+    <name>Ui::PurchaseDialog</name>
+    <message>
+        <location filename="../ui/account/purchase_dialog.cpp" line="157"/>
+        <source>Choose what suits you</source>
+        <translation>Sana uygun olanı seç</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_dialog.cpp" line="158"/>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_dialog.cpp" line="159"/>
+        <source>Purchase</source>
+        <translation>Satın alma</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::PurchaseDialogOption</name>
+    <message>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="129"/>
+        <source>%1 lifetime</source>
+        <translation>%1 ömür boyu</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="159"/>
+        <source>%1 for %2</source>
+        <translation>%2 için %1</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="159"/>
+        <source>%n month(s)</source>
+        <translation>
+            <numerusform>%n ay(lar)</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="171"/>
+        <source>$%1 per month</source>
+        <translation>ayda %1 dolar</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::RecycleBinView</name>
+    <message>
+        <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="67"/>
+        <source>Recycle bin is empty.</source>
+        <translation>Geri dönüşüm kutusu boş.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="68"/>
+        <source>There are no documents in the recycle bin, but when they will be here, you&apos;ll be able to check them out.</source>
+        <translation>Geri dönüşüm kutusunda hiçbir belge yok, ancak burada olduklarında onları kontrol edebileceksiniz.</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="74"/>
+        <source>There are %n document(s) in the recycle bin.</source>
+        <translation>
+            <numerusform>Geri dönüşüm kutusunda %n belge(ler) var.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="75"/>
+        <source>Select a document to see its contents.</source>
+        <translation>İçeriğini görmek için bir belge seçin.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="76"/>
+        <source>Empty recycle bin</source>
+        <translation>Boş geridönüşüm kutusu</translation>
+    </message>
+</context>
+<context>
     <name>Ui::ReleaseView</name>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="190"/>
         <source>Dev version updated</source>
-        <translation type="unfinished"></translation>
+        <translation>Geliştirici sürümü güncellendi</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="192"/>
         <source>Story Architect version %1 was published for testing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Starc sürümü %1, test için yayınlandı.</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="193"/>
         <source>Check out what&apos;s changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Nelerin değiştiğine bakın</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="199"/>
         <source>Version %1 published</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 sürümü yayınlandı</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="201"/>
         <source>Read more about release</source>
-        <translation type="unfinished"></translation>
+        <translation>Yayın hakkında daha fazla bilgi edinin</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="208"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>İndir</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="209"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Yüklendi</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="228"/>
         <source>Cancel downloading</source>
-        <translation type="unfinished"></translation>
+        <translation>İndirmeyi iptal et</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="247"/>
         <source>Downloaded</source>
-        <translation type="unfinished"></translation>
+        <translation>İndirildi</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="248"/>
         <source>Install</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Ui::RenewSubscriptionDialog</name>
-    <message>
-        <location filename="../ui/account/renew_subscription_dialog.cpp" line="140"/>
-        <source>Renew cloud service subscription for</source>
-        <translation>Bulut hizmeti aboneliğini yenileyin</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/renew_subscription_dialog.cpp" line="146"/>
-        <source>via PayPal</source>
-        <translation>PayPal ile</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/renew_subscription_dialog.cpp" line="147"/>
-        <source>via bank card</source>
-        <translation>banka kartı ile</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/renew_subscription_dialog.cpp" line="148"/>
-        <source>via Yandex.Money</source>
-        <translation>Yandex.Money ile</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/renew_subscription_dialog.cpp" line="149"/>
-        <source>Renew</source>
-        <translation>Yenile</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/renew_subscription_dialog.cpp" line="150"/>
-        <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>Yükle</translation>
     </message>
 </context>
 <context>
@@ -5230,57 +5321,57 @@
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="251"/>
         <source>Export screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaryoyu dışa aktar</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="253"/>
         <source>Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Format</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="254"/>
         <source>Include title page</source>
-        <translation type="unfinished"></translation>
+        <translation>Başlık sayfasını dahil et</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="255"/>
         <source>Include sequences headers and footers</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekans üstbilgilerini ve altbilgilerini dahil et</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="256"/>
         <source>Include inline notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Satır içi notları dahil et</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="257"/>
         <source>Include review marks</source>
-        <translation type="unfinished"></translation>
+        <translation>İnceleme işaretlerini dahil et</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="258"/>
         <source>Export concrete scenes</source>
-        <translation type="unfinished"></translation>
+        <translation>Somut sahneleri dışa aktar</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="259"/>
         <source>Keep empty, if you want to print all scenes</source>
-        <translation type="unfinished"></translation>
+        <translation>Tüm sahneleri yazdırmak istiyorsanız boş tutun</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="260"/>
         <source>Watermark</source>
-        <translation type="unfinished"></translation>
+        <translation>Filigran</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="262"/>
         <source>Open document after export</source>
-        <translation type="unfinished"></translation>
+        <translation>Dışa aktardıktan sonra belgeyi aç</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="263"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Dışa aktar</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="264"/>
@@ -5298,7 +5389,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="198"/>
         <source>Tagline</source>
-        <translation type="unfinished"></translation>
+        <translation>Slogan</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="199"/>
@@ -5308,7 +5399,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="200"/>
         <source>Generate logline</source>
-        <translation type="unfinished"></translation>
+        <translation>Önermeyi oluştur</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="201"/>
@@ -5371,17 +5462,17 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="294"/>
         <source>Override common settings for this screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu senaryo için genel ayarları geçersiz kıl</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="295"/>
         <source>Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslak</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="296"/>
         <source>Print scenes numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Sahne numaralarını yazdır</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="297"/>
@@ -5396,7 +5487,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="299"/>
         <source>Print dialogues numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Diyalog numaralarını yazdır</translation>
     </message>
 </context>
 <context>
@@ -5409,37 +5500,37 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="259"/>
         <source>Pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayfalar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="260"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelimeler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="261"/>
         <source>Characters with/without spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Boşluklu/boşluksuz karakterler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="263"/>
         <source>Text statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazı istatistikleri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="264"/>
         <source>Scenes statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Sahne istatistikleri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="265"/>
         <source>Locations statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Mekan istatistikleri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="266"/>
         <source>Characters statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter istatistikleri</translation>
     </message>
 </context>
 <context>
@@ -5447,22 +5538,22 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_navigator.cpp" line="68"/>
         <source>Edit template parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Şablon parametrelerini düzenle</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_navigator.cpp" line="69"/>
         <source>Show template parameters in</source>
-        <translation type="unfinished"></translation>
+        <translation>Şablon parametrelerini şurada göster:</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_navigator.cpp" line="70"/>
         <source>Millimeters</source>
-        <translation type="unfinished"></translation>
+        <translation>Milimetre</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_navigator.cpp" line="71"/>
         <source>Inches</source>
-        <translation type="unfinished"></translation>
+        <translation>İnç</translation>
     </message>
 </context>
 <context>
@@ -5470,71 +5561,71 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="350"/>
         <source>mm</source>
-        <translation type="unfinished"></translation>
+        <translation>mm</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="350"/>
         <source>inch</source>
-        <translation type="unfinished"></translation>
+        <translation>inc</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="351"/>
         <source>Template name</source>
-        <translation type="unfinished"></translation>
+        <translation>Şablon ismi</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="352"/>
         <source>Page format</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayfa formatı</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="369"/>
         <source>Page margins</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayfa kenar boşlukları</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="370"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="382"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Sol</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="372"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="379"/>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Üst</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="374"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="384"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Sağ</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="376"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="380"/>
         <source>Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="378"/>
         <source>Page numbering alignment by vertical</source>
-        <translation type="unfinished"></translation>
+        <translation>Dikey olarak sayfa numaralandırma hizalaması</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="381"/>
         <source>by horizontal</source>
-        <translation type="unfinished"></translation>
+        <translation>yatay olarak</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="383"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Merkez</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="385"/>
         <source>Split page into columns in proportion</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayfayı orantılı olarak sütunlara böl</translation>
     </message>
 </context>
 <context>
@@ -5542,161 +5633,161 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="759"/>
         <source>mm</source>
-        <translation type="unfinished"></translation>
+        <translation>mm</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="759"/>
         <source>inch</source>
-        <translation type="unfinished"></translation>
+        <translation>inc</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="763"/>
         <source>Is paragraph style available</source>
-        <translation type="unfinished"></translation>
+        <translation>Paragraf stili mevcut mu?</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="764"/>
         <source>Font family</source>
-        <translation type="unfinished"></translation>
+        <translation>Font ailesi</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="765"/>
         <source>Font size</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazı Boyutu</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="766"/>
         <source>Place paragraph at the top of the page</source>
-        <translation type="unfinished"></translation>
+        <translation>Paragrafı sayfanın en üstüne yerleştirin</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="767"/>
         <source>Use UPPERCASE characters for paragraph text</source>
-        <translation type="unfinished"></translation>
+        <translation>Paragraf metni için BÜYÜK HARF karakterleri kullanın</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="768"/>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalın</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="769"/>
         <source>Italic</source>
-        <translation type="unfinished"></translation>
+        <translation>İtalik</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="770"/>
         <source>Underline</source>
-        <translation type="unfinished"></translation>
+        <translation>Altı çizili</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="771"/>
         <source>Align text on the page</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayfadaki metni hizalayın</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="772"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="782"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="788"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Sol</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="773"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Merkez</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="774"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="784"/>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="790"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Sağ</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="775"/>
         <source>Justify</source>
-        <translation type="unfinished"></translation>
+        <translation>çizgi uzunluğunu ayarla</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="776"/>
         <source>Vertical indentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Dikey girinti</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="777"/>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Üst</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="778"/>
         <source>Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="779"/>
         <source>lines</source>
-        <translation type="unfinished"></translation>
+        <translation>çizgiler</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="781"/>
         <source>Horizontal indentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Yatay girinti</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="787"/>
         <source>Horizontal indentation (for two-column mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>Yatay girinti (iki sütunlu mod için)</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="792"/>
         <source>Line spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>Satır aralığı</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="793"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tür</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="795"/>
         <source>Single</source>
-        <translation type="unfinished"></translation>
+        <translation>Tek</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="795"/>
         <source>One and half</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir buçuk</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="795"/>
         <source>Double</source>
-        <translation type="unfinished"></translation>
+        <translation>Çift</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="795"/>
         <source>Fixed</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzeltilmiş</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="796"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Değer</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="798"/>
         <source>Show paragraph&apos;s title</source>
-        <translation type="unfinished"></translation>
+        <translation>Paragrafın başlığını göster</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="799"/>
         <source>Use custom title</source>
-        <translation type="unfinished"></translation>
+        <translation>Özel başlık kullan</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="800"/>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Başlık</translation>
     </message>
 </context>
 <context>
@@ -5709,17 +5800,17 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_tool_bar.cpp" line="90"/>
         <source>Template page settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Şablon sayfası ayarları</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_tool_bar.cpp" line="91"/>
         <source>Title page template</source>
-        <translation type="unfinished"></translation>
+        <translation>Başlık sayfası şablonu</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_tool_bar.cpp" line="92"/>
         <source>Template paragraphs settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Şablon paragraf ayarları</translation>
     </message>
 </context>
 <context>
@@ -5727,50 +5818,50 @@
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_view_tool_bar.cpp" line="48"/>
         <source>Save template</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslağı kaydet</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_view_tool_bar.cpp" line="49"/>
         <source>Export template to the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Şablonu dosyaya aktar</translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1327"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1342"/>
         <source>Merge paragraph</source>
         <translation>Paragraf birleştir</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1330"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1345"/>
         <source>Split paragraph</source>
         <translation>Paragraf ayır</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1367"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1381"/>
         <source>Bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işareti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1371"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1385"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1377"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1391"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzenle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1383"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1397"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1390"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1404"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Listeyi göster/gizle</translation>
     </message>
 </context>
 <context>
@@ -5781,42 +5872,42 @@
         <translation>Sahne başlığı</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="226"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="221"/>
         <source>Undo last action</source>
         <translation>Son eylemi geri al</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="230"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="225"/>
         <source>Redo last action</source>
         <translation>Son eylemi yinele</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="233"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="228"/>
         <source>Current paragraph format</source>
         <translation>Geçerli paragraf biçimi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="235"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="230"/>
         <source>Hide fast format panel</source>
         <translation>Hızlı format panelini gizle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="236"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="231"/>
         <source>Show fast format panel</source>
         <translation>Hızlı format panelini göster</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="238"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="233"/>
         <source>Search text</source>
         <translation>Metin ara</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="241"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="236"/>
         <source>Disable review mode</source>
         <translation>İnceleme modunu kapat</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="242"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="237"/>
         <source>Enable review mode</source>
         <translation>İnceleme modunu aç</translation>
     </message>
@@ -5908,29 +5999,21 @@
     </message>
 </context>
 <context>
-    <name>Ui::ScreenplayTextStructureView</name>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="84"/>
-        <source>No one beat selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Ui::ScreenplayTextView</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="336"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini gizle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="339"/>
         <source>Hide screenplay dictionaries</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaryo sözlüklerini gizle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="340"/>
         <source>Show screenplay dictionaries</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaryo sözlüklerini göster</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1011"/>
@@ -5945,45 +6028,45 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1013"/>
         <source>Bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretleri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1014"/>
         <source>Dictionaries</source>
-        <translation type="unfinished"></translation>
+        <translation>Sözlükler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="337"/>
         <source>Show bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini göster</translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayTreatmentEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1120"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1174"/>
         <source>Bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işareti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1124"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1178"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1130"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1184"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzenle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1136"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1190"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1143"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1197"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Listeyi göster/gizle</translation>
     </message>
 </context>
 <context>
@@ -5994,42 +6077,42 @@
         <translation>Sahne başlığı</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="226"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="221"/>
         <source>Undo last action</source>
         <translation>Son eylemi geri al</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="230"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="225"/>
         <source>Redo last action</source>
         <translation>Son eylemi yinele</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="233"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="228"/>
         <source>Current paragraph format</source>
         <translation>Geçerli paragraf biçimi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="235"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="230"/>
         <source>Hide fast format panel</source>
         <translation>Hızlı format panelini gizle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="236"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="231"/>
         <source>Show fast format panel</source>
         <translation>Hızlı format panelini göster</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="238"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="233"/>
         <source>Search text</source>
         <translation>Metin ara</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="241"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="236"/>
         <source>Disable review mode</source>
         <translation>İnceleme modunu kapat</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="242"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="237"/>
         <source>Enable review mode</source>
         <translation>İnceleme modunu aç</translation>
     </message>
@@ -6125,12 +6208,12 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="285"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini gizle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="286"/>
         <source>Show bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini göster</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="909"/>
@@ -6145,7 +6228,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="911"/>
         <source>Bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretleri</translation>
     </message>
 </context>
 <context>
@@ -6153,28 +6236,28 @@
     <message>
         <location filename="../ui/account/session_widget.cpp" line="124"/>
         <source>Current device</source>
-        <translation type="unfinished"></translation>
+        <translation>Şu anki cihaz</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="132"/>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Çevrimiçi</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="136"/>
         <source>was active %1 at %2</source>
         <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1, %2 konumunda etkindi</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="140"/>
         <source>Terminate others</source>
-        <translation type="unfinished"></translation>
+        <translation>Diğerlerini sonlandır</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="141"/>
         <source>Terminate</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonlandır</translation>
     </message>
 </context>
 <context>
@@ -6197,7 +6280,7 @@
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="170"/>
         <source>Text editing</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazıyı düzenle</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="171"/>
@@ -6207,7 +6290,7 @@
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="172"/>
         <source>Simple text</source>
-        <translation type="unfinished"></translation>
+        <translation>Basit metin</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="173"/>
@@ -6217,17 +6300,17 @@
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="174"/>
         <source>Comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi Roman</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="175"/>
         <source>Audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses Oyunu</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="176"/>
         <source>Stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Piyes</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="177"/>
@@ -6246,820 +6329,825 @@
 <context>
     <name>Ui::SettingsView</name>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1167"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1171"/>
         <source>Choose the folder where backups will be saved</source>
         <translation>Yedeklemelerin kaydedileceği klasörü seçin</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1251"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1388"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1579"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1701"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1843"/>
-        <source>Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1258"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1395"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1586"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1708"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1255"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1392"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1583"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1706"/>
         <location filename="../ui/settings/settings_view.cpp" line="1850"/>
-        <source>Duplicate</source>
-        <translation type="unfinished"></translation>
+        <source>Edit</source>
+        <translation>Düzenle</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1265"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1402"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1593"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1715"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1262"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1399"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1590"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1713"/>
         <location filename="../ui/settings/settings_view.cpp" line="1857"/>
-        <source>Save to file</source>
-        <translation type="unfinished"></translation>
+        <source>Duplicate</source>
+        <translation>Çoğalt</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1271"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1408"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1599"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1721"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1863"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1269"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1406"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1597"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1720"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1864"/>
+        <source>Save to file</source>
+        <translation>Dosyaya kaydet</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1275"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1412"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1603"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1726"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1870"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1278"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1415"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1606"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1728"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1870"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1282"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1419"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1610"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1733"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1877"/>
         <source>Load template from file</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosyadan şablon yükle</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2484"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2499"/>
         <source>Application settings</source>
         <translation>Uygulama ayarları</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2485"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2500"/>
         <source>Language</source>
         <translation>Dil</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2497"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2512"/>
         <source>Text editing</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazıyı düzenle</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2498"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2513"/>
         <source>Show documents pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Belgeleri göster</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2499"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2514"/>
         <source>Use typewriter sound for keys pressing</source>
         <translation>Tuşlara basarken daktilo sesi kullanın</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2500"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2515"/>
         <source>Spell check</source>
         <translation>Yazım denetimi</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2501"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2516"/>
         <source>Spelling dictionary</source>
         <translation>Yazım sözlüğü</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2503"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2518"/>
         <source>Afrikaans</source>
         <translation>Güney Afrika Hollanda lehçesi</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2504"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2519"/>
         <source>Aragonese</source>
         <translation>Aragonca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2505"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2520"/>
         <source>Arabic</source>
         <translation>Arapça</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2506"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2521"/>
         <source>Azerbaijani</source>
         <translation>Azerbaycan Türkçesi</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2507"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2522"/>
         <source>Belarusian</source>
         <translation>Belarusça</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2508"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2523"/>
         <source>Bulgarian</source>
         <translation>Bulgarca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2509"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2524"/>
         <source>Bengali</source>
         <translation>Bengalce</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2510"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2525"/>
         <source>Tibetan</source>
         <translation>Tibetçe</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2511"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2526"/>
         <source>Breton</source>
         <translation>Breton</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2512"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2527"/>
         <source>Bosnian</source>
         <translation>Boşnakça</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2513"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2528"/>
         <source>Catalan (Valencian)</source>
         <translation>Katalanca (Valensiya)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2514"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2529"/>
         <source>Catalan</source>
         <translation>Katalanca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2515"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2530"/>
         <source>Czech</source>
         <translation>Çek</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2516"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2531"/>
         <source>Welsh</source>
         <translation>Galce</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2517"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2532"/>
         <source>Danish</source>
         <translation>Danimarka dili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2518"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2533"/>
         <source>German (Austria)</source>
         <translation>Almanca (Avusturya)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2519"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2534"/>
         <source>German (Switzerland)</source>
         <translation>Almanca (İsviçre)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2520"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2535"/>
         <source>German</source>
         <translation>Almanca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2521"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2536"/>
         <source>Greek (Polytonic)</source>
         <translation>Yunanca (Politonik)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2522"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2537"/>
         <source>Greek</source>
         <translation>Yunanca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2523"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2538"/>
         <source>English (Australia)</source>
         <translation>İngilizce (Avustralya)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2524"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2539"/>
         <source>English (Canada)</source>
         <translation>İngilizce (Kanada)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2525"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2540"/>
         <source>English (United Kingdom)</source>
         <translation>İngilizce (Birleşik Krallık)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2526"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2541"/>
         <source>English (New Zealand)</source>
         <translation>İngilizce (Yeni Zelanda)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2527"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2542"/>
         <source>English (South Africa)</source>
         <translation>İngilizce (Güney Afrika)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2528"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2543"/>
         <source>English (United States)</source>
         <translation>İngilizce (Amerika Birleşik Devletleri)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2529"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2544"/>
         <source>Esperanto</source>
         <translation>Esperanto</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2530"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2545"/>
         <source>Spanish (Argentina)</source>
         <translation>İspanyolca (Arjantin)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2531"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2546"/>
         <source>Spanish (Bolivia)</source>
         <translation>İspanyolca (Bolivya)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2532"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2547"/>
         <source>Spanish (Chile)</source>
         <translation>İspanyolca (Şili)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2533"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2548"/>
         <source>Spanish (Colombia)</source>
         <translation>İspanyolca (Kolombiya)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2534"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2549"/>
         <source>Spanish (Costa Rica)</source>
         <translation>İspanyolca (Kosta Rika)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2535"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2550"/>
         <source>Spanish (Cuba)</source>
         <translation>İspanyolca (Küba)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2536"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2551"/>
         <source>Spanish (Dominican Republic)</source>
         <translation>İspanyolca (Dominik Cumhuriyeti)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2537"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2552"/>
         <source>Spanish (Ecuador)</source>
         <translation>İspanyolca (Ekvador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2538"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2553"/>
         <source>Spanish (Guatemala)</source>
         <translation>İspanyolca (Guatemala)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2539"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2554"/>
         <source>Spanish (Honduras)</source>
         <translation>İspanyolca (Honduras)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2540"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2555"/>
         <source>Spanish (Mexico)</source>
         <translation>İspanyolca (Meksika)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2541"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2556"/>
         <source>Spanish (Nicaragua)</source>
         <translation>İspanyolca (Nikaragua)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2542"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2557"/>
         <source>Spanish (Panama)</source>
         <translation>İspanyolca (Panama)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2543"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2558"/>
         <source>Spanish (Peru)</source>
         <translation>İspanyolca (Peru)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2544"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2559"/>
         <source>Spanish (Philippines)</source>
         <translation>İspanyolca (Filipinler)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2545"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2560"/>
         <source>Spanish (Puerto Rico)</source>
         <translation>İspanyolca (Porto Riko)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2546"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2561"/>
         <source>Spanish (Paraguay)</source>
         <translation>İspanyolca (Paraguay)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2547"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2562"/>
         <source>Spanish (El Salvador)</source>
         <translation>İspanyolca (El Salvador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2548"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2563"/>
         <source>Spanish (United States)</source>
         <translation>İspanyolca (Amerika Birleşik Devletleri)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2549"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2564"/>
         <source>Spanish (Uruguay)</source>
         <translation>İspanyolca (Uruguay)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2550"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2565"/>
         <source>Spanish (Venezuela)</source>
         <translation>İspanyolca (Venezuela)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2551"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2566"/>
         <source>Spanish</source>
         <translation>İspanyolca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2552"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2567"/>
         <source>Estonian</source>
         <translation>Estonya dili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2553"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2568"/>
         <source>Basque</source>
         <translation>Bask dili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2554"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2569"/>
         <source>Persian</source>
         <translation>Farsça</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2555"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2570"/>
         <source>Faroese</source>
         <translation>Faroe</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2556"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2571"/>
         <source>French</source>
         <translation>Fransızca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2557"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2572"/>
         <source>Friulian</source>
         <translation>Furlanca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2558"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2573"/>
         <source>Western Frisian</source>
         <translation>Batı Frizcesi</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2559"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2574"/>
         <source>Irish</source>
         <translation>İrlanda dili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2560"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2575"/>
         <source>Gaelic</source>
         <translation>Galce</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2561"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2576"/>
         <source>Galician</source>
         <translation>Galiçyaca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2562"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2577"/>
         <source>Gujarati</source>
         <translation>Gucaratça</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2563"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2578"/>
         <source>Guarani</source>
         <translation>Guarani</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2564"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2579"/>
         <source>Hebrew</source>
         <translation>İbranice</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2565"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2580"/>
         <source>Hindi</source>
         <translation>Hintçe</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2566"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2581"/>
         <source>Croatian</source>
         <translation>Hırvatça</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2567"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2582"/>
         <source>Hungarian</source>
         <translation>Macarca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2568"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2583"/>
         <source>Armenian</source>
         <translation>Ermenice</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2569"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2584"/>
         <source>Armenian (Western)</source>
         <translation>Ermenice (Batı)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2570"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2585"/>
         <source>Interlingua</source>
         <translation>Interlingua</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2571"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2586"/>
         <source>Indonesian</source>
         <translation>Endonezya dili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2572"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2587"/>
         <source>Icelandic</source>
         <translation>İzlandaca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2573"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2588"/>
         <source>Italian</source>
         <translation>İtalyanca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2574"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2589"/>
         <source>Georgian</source>
         <translation>Gürcü dili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2575"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2590"/>
         <source>Kazakh</source>
         <translation>Kazakça</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2576"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2591"/>
         <source>Kurdish</source>
         <translation>Kürtçe</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2577"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2592"/>
         <source>Korean</source>
         <translation>Korece</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2578"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2593"/>
         <source>Latin</source>
         <translation>Latince</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2579"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2594"/>
         <source>Luxembourgish</source>
         <translation>Lüksemburgca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2580"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2595"/>
         <source>Lao</source>
         <translation>Laoca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2581"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2596"/>
         <source>Lithuanian</source>
         <translation>Litvanyaca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2582"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2597"/>
         <source>Latgalian</source>
         <translation>Latgal dili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2583"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2598"/>
         <source>Latvian</source>
         <translation>Letonca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2584"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2599"/>
         <source>Macedonian</source>
         <translation>Makedonca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2585"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2600"/>
         <source>Mongolian</source>
         <translation>Moğolca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2586"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2601"/>
         <source>Maltese</source>
         <translation>Malta dili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2587"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2591"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2602"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2606"/>
         <source>Norwegian</source>
         <translation>Norveççe</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2588"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2603"/>
         <source>Low German</source>
         <translation>Düşük Almanca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2589"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2604"/>
         <source>Nepali</source>
         <translation>Nepalce</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2590"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2605"/>
         <source>Dutch</source>
         <translation>Flemenkçe</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2592"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2607"/>
         <source>Occitan</source>
         <translation>Oksitanca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2593"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2608"/>
         <source>Polish</source>
         <translation>Lehçe</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2594"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2609"/>
         <source>Portuguese (Brazilian)</source>
         <translation>Portekizce (Brezilya)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2595"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2610"/>
         <source>Portuguese</source>
         <translation>Portekizce</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2596"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2611"/>
         <source>Quechua</source>
         <translation>Quechua</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2597"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2612"/>
         <source>Romanian</source>
         <translation>Romence</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2598"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2613"/>
         <source>Russian (with Yo)</source>
         <translation>Rusça (Yo ile)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2599"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2614"/>
         <source>Russian</source>
         <translation>Rusça</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2600"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2615"/>
         <source>Kinyarwanda</source>
         <translation>Ruandaca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2601"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2616"/>
         <source>Sinhala</source>
         <translation>Seylanca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2602"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2617"/>
         <source>Slovak</source>
         <translation>Slovakça</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2603"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2618"/>
         <source>Slovenian</source>
         <translation>Slovence</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2604"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2619"/>
         <source>Albanian</source>
         <translation>Arnavutça</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2605"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2620"/>
         <source>Serbian (Latin)</source>
         <translation>Sırpça (Latin)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2606"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2621"/>
         <source>Serbian</source>
         <translation>Sırpça</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2607"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2622"/>
         <source>Swedish (Finland)</source>
         <translation>İsveççe (Finlandiya)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2608"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2623"/>
         <source>Swedish</source>
         <translation>İsveççe</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2609"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2624"/>
         <source>Swahili</source>
         <translation>Svahili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2610"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2625"/>
         <source>Tamil</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamilce</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2611"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2626"/>
         <source>Telugu</source>
         <translation>Teluguca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2612"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2627"/>
         <source>Thai</source>
         <translation>Tay dili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2613"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2628"/>
         <source>Turkmen</source>
         <translation>Türkmen</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2614"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2629"/>
         <source>Klingon (Latin)</source>
         <translation>Klingon dili (Latin)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2615"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2630"/>
         <source>Klingon</source>
         <translation>Klingon dili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2616"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2631"/>
         <source>Turkish</source>
         <translation>Türkçe</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2617"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2632"/>
         <source>Ukrainian</source>
         <translation>Ukraynaca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2618"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2633"/>
         <source>Vietnamese</source>
         <translation>Vietnamca</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2628"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2643"/>
         <source>User interface</source>
         <translation>Kullanıcı arayüzü</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2629"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2644"/>
         <source>Manage user dictionary</source>
-        <translation type="unfinished"></translation>
+        <translation>Kullanıcı sözlüğünü yönet</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2640"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2655"/>
         <source>Turn on/off text and folders module</source>
-        <translation type="unfinished"></translation>
+        <translation>Metin ve klasörler modülünü aç/kapat</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2654"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2669"/>
         <source>Turn on/off screenplay module</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaryo modülünü aç/kapat</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2666"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2713"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2736"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2681"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2728"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2753"/>
         <source>Show hints for major &amp; related to a current story characters only</source>
-        <translation type="unfinished"></translation>
+        <translation>Yalnızca güncel bir hikaye karakterleriyle ilgili ve ana karakterlerle ilgili ipuçlarını göster</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2667"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2682"/>
         <source>Screenplay navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaryo Yöneticisi</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2668"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2683"/>
         <source>Show beats</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuruşları göster</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2691"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2706"/>
         <source>Turn on/off comic book module</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi roman modülünü aç/kapat</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2704"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2719"/>
         <source>Audioplay module</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses oyunu modülü</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2705"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2720"/>
         <source>Turn on/off audioplay module</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2710"/>
-        <source>Show block numbers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2711"/>
-        <source>Continue block numbers through document</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2714"/>
-        <source>Audioplay navigator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2723"/>
-        <source>Calculate duration based on the count of words</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses oyunu modülünü aç/kapat</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2725"/>
-        <source>words</source>
-        <translation type="unfinished"></translation>
+        <source>Show block numbers</source>
+        <translation>Blok numaralarını göster</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2729"/>
-        <source>Stageplay module</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/settings/settings_view.cpp" line="2726"/>
+        <source>Continue block numbers through document</source>
+        <translation>Belge üzerinden blok numaralarına devam et</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2730"/>
-        <source>Turn on/off stageplay module</source>
-        <translation type="unfinished"></translation>
+        <source>Show characters suggestions in empty paragraphs</source>
+        <translation>Boş paragraflarda karakter önerilerini göster</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2737"/>
-        <source>Stageplay navigator</source>
-        <translation type="unfinished"></translation>
+        <location filename="../ui/settings/settings_view.cpp" line="2731"/>
+        <source>Audioplay navigator</source>
+        <translation>Ses oyunu Yöneticisi</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="2740"/>
+        <source>Calculate duration based on the count of words</source>
+        <translation>Kelime sayısına göre süreyi hesaplayın</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="2742"/>
+        <source>words</source>
+        <translation>kelimeler</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="2746"/>
+        <source>Stageplay module</source>
+        <translation>Piyes modülü</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2747"/>
+        <source>Turn on/off stageplay module</source>
+        <translation>Piyes modülünü aç/kapat</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="2754"/>
+        <source>Stageplay navigator</source>
+        <translation>Piyes Yöneticisi</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="2764"/>
         <source>Screenplay editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Piyes editörü</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2750"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2767"/>
         <source>Block name</source>
-        <translation type="unfinished"></translation>
+        <translation>Blok adı</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2751"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2768"/>
         <source>Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Kısayol</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2752"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2769"/>
         <source>If you press in paragraphs end</source>
-        <translation type="unfinished"></translation>
+        <translation>Paragrafların sonuna basarsanız</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2753"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2770"/>
         <source>If you press in empty paragraphs</source>
-        <translation type="unfinished"></translation>
+        <translation>Boş paragraflara basarsanız</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2756"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2773"/>
         <source>Add paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Paragraf ekle</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2757"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2774"/>
         <source>Change to</source>
-        <translation type="unfinished"></translation>
+        <translation>Değiştir</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2486"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2501"/>
         <source>Size of the user interface elements:</source>
         <translation>Kullanıcı arayüzü öğelerinin boyutu:</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2487"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2502"/>
         <source>small</source>
         <translation>küçük</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2488"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2503"/>
         <source>big</source>
         <translation>büyük</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2489"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2504"/>
         <source>Save changes &amp; backups</source>
         <translation>Değişiklikleri &amp; yedeklemeleri kaydet</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2490"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2505"/>
         <source>Automatically save changes as soon as possible</source>
         <translation>Değişiklikleri mümkün olan en kısa sürede otomatik olarak kaydet</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2492"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2507"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
@@ -7068,182 +7156,182 @@ Farenizi veya klavyenizi kullanmıyorsanız projeyi her 3 saniyede bir kaydeder.
 Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2495"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2510"/>
         <source>Save backups</source>
         <translation>Yedekleri kaydet</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2496"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2511"/>
         <source>Backups folder path</source>
         <translation>Yedeklemeler klasör yolu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2631"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2646"/>
         <source>Focus current paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Geçerli paragrafa odaklan</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2633"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2648"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
-        <translation type="unfinished"></translation>
+        <translation>Daktilo kaydırmayı kullanın (imleç ekranın ortasındaki çizgiyi korur)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2635"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2650"/>
         <source>Components</source>
         <translation>Bileşenler</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2639"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2654"/>
         <source>Simple text module</source>
-        <translation type="unfinished"></translation>
+        <translation>Basit metin modülü</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2641"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2655"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2692"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2706"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2731"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2656"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2670"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2707"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2721"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2748"/>
         <source>Text editor</source>
         <translation>Metin düzenleyici</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2642"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2656"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2693"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2707"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2732"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2657"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2671"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2708"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2722"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2749"/>
         <source>Default template</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2644"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2658"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2695"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2709"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2734"/>
-        <source>Available actions for the selected template</source>
-        <translation type="unfinished"></translation>
+        <translation>Varsayılan şablon</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2659"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2669"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2715"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2738"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2673"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2710"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2724"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2751"/>
+        <source>Available actions for the selected template</source>
+        <translation>Seçili şablon için mevcut eylemler</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="2674"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2684"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2732"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2755"/>
         <source>Show scene number</source>
         <translation>Sahne numarasını göster</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2660"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2675"/>
         <source>on the left</source>
         <translation>solda</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2661"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2676"/>
         <source>on the right</source>
         <translation>sağda</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2662"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2677"/>
         <source>Show dialogue number</source>
         <translation>Diyalog numarasını göster</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2630"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2645"/>
         <source>Highlight current line</source>
         <translation>Güncel satırı vurgula</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2645"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2696"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2660"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2711"/>
         <source>Navigator</source>
         <translation>Navigatör</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2646"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2661"/>
         <source>Show chapter text, lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Bölüm metnini, satırları göster</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2653"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2668"/>
         <source>Screenplay module</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaryo modülü</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2664"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2679"/>
         <source>Automatically continue same speaker&apos;s dialogue</source>
-        <translation type="unfinished"></translation>
+        <translation>Aynı konuşmacının diyaloğunu otomatik olarak devam ettir</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2670"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2716"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2739"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2685"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2733"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2756"/>
         <source>Show scene text, lines</source>
         <translation>Sahne metnini, çizgilerini göster</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2676"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2722"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2691"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2739"/>
         <source>Duration</source>
         <translation>Süre</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2677"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2692"/>
         <source>Calculate duration based on the count of pages</source>
         <translation>Süreyi sayfa sayısına göre hesapla</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2678"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2684"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2724"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2693"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2699"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2741"/>
         <source>at the rate of</source>
         <translation>oranında</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2679"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2694"/>
         <source>pages</source>
         <translation>sayfa</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2680"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2687"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2726"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2695"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2702"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2743"/>
         <source>has duration</source>
         <translation>süresi var</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2681"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2688"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2727"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2696"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2703"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2744"/>
         <source>seconds</source>
         <translation>saniye</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2683"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2698"/>
         <source>Calculate duration based on the count of letters</source>
         <translation>Harf sayısına göre süreyi hesapla</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2685"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2700"/>
         <source>letters</source>
         <translation>harf</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2686"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2701"/>
         <source>including spaces</source>
         <translation>boşluklar dahil</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2690"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2705"/>
         <source>Comic book module</source>
-        <translation type="unfinished"></translation>
+        <translation>Çizgi roman modülü</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2697"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2712"/>
         <source>Show panel text, lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Panel metnini, satırları göster</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2746"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2763"/>
         <source>Shortcuts</source>
         <translation>Kısayollar</translation>
     </message>
@@ -7251,29 +7339,29 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
 <context>
     <name>Ui::SimpleTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="648"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="643"/>
         <source>Bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işareti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="652"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="647"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="657"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="652"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzenle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="662"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="657"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="669"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="664"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Listeyi göster/gizle</translation>
     </message>
 </context>
 <context>
@@ -7284,42 +7372,42 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
         <translation>Sahne başlığı</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="220"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="215"/>
         <source>Undo last action</source>
         <translation>Son eylemi geri al</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="224"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="219"/>
         <source>Redo last action</source>
         <translation>Son eylemi yinele</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="227"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="222"/>
         <source>Current paragraph format</source>
         <translation>Geçerli paragraf biçimi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="229"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="224"/>
         <source>Hide fast format panel</source>
         <translation>Hızlı format panelini gizle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="230"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="225"/>
         <source>Show fast format panel</source>
         <translation>Hızlı format panelini göster</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="232"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="227"/>
         <source>Search text</source>
         <translation>Metin ara</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="235"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="230"/>
         <source>Disable review mode</source>
         <translation>İnceleme modunu kapat</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="236"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="231"/>
         <source>Enable review mode</source>
         <translation>İnceleme modunu aç</translation>
     </message>
@@ -7390,7 +7478,7 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="125"/>
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="126"/>
         <source>Back to navigator</source>
-        <translation type="unfinished"></translation>
+        <translation>Yönetici&apos;ye dön</translation>
     </message>
 </context>
 <context>
@@ -7398,12 +7486,12 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="249"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini gizle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="250"/>
         <source>Show bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini göster</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="831"/>
@@ -7418,7 +7506,7 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="833"/>
         <source>Bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretleri</translation>
     </message>
 </context>
 <context>
@@ -7426,42 +7514,42 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../ui/export/stageplay_export_dialog.cpp" line="180"/>
         <source>Export stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Piyesi dışa aktar</translation>
     </message>
     <message>
         <location filename="../ui/export/stageplay_export_dialog.cpp" line="182"/>
         <source>Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Format</translation>
     </message>
     <message>
         <location filename="../ui/export/stageplay_export_dialog.cpp" line="183"/>
         <source>Include title page</source>
-        <translation type="unfinished"></translation>
+        <translation>Başlık sayfasını dahil et</translation>
     </message>
     <message>
         <location filename="../ui/export/stageplay_export_dialog.cpp" line="184"/>
         <source>Include inline notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Satır içi notları dahil et</translation>
     </message>
     <message>
         <location filename="../ui/export/stageplay_export_dialog.cpp" line="185"/>
         <source>Include review marks</source>
-        <translation type="unfinished"></translation>
+        <translation>İnceleme işaretlerini dahil et</translation>
     </message>
     <message>
         <location filename="../ui/export/stageplay_export_dialog.cpp" line="186"/>
         <source>Watermark</source>
-        <translation type="unfinished"></translation>
+        <translation>Filigran</translation>
     </message>
     <message>
         <location filename="../ui/export/stageplay_export_dialog.cpp" line="188"/>
         <source>Open document after export</source>
-        <translation type="unfinished"></translation>
+        <translation>Dışa aktardıktan sonra belgeyi aç</translation>
     </message>
     <message>
         <location filename="../ui/export/stageplay_export_dialog.cpp" line="189"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Dışa aktar</translation>
     </message>
     <message>
         <location filename="../ui/export/stageplay_export_dialog.cpp" line="190"/>
@@ -7474,12 +7562,12 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="187"/>
         <source>Stageplay name</source>
-        <translation type="unfinished"></translation>
+        <translation>Piyes adı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="188"/>
         <source>Tagline</source>
-        <translation type="unfinished"></translation>
+        <translation>Slogan</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="189"/>
@@ -7489,7 +7577,7 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="190"/>
         <source>Generate logline</source>
-        <translation type="unfinished"></translation>
+        <translation>Önermeyi oluştur</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="191"/>
@@ -7504,7 +7592,7 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="193"/>
         <source>Stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Piyes</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="194"/>
@@ -7537,12 +7625,12 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="185"/>
         <source>Override common settings for this stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu piyes için ortak ayarları geçersiz kıl</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="186"/>
         <source>Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslak</translation>
     </message>
 </context>
 <context>
@@ -7550,55 +7638,55 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="198"/>
         <source>Pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Sayfalar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="199"/>
         <source>Words</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelimeler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="200"/>
         <source>Characters with/without spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Boşluklu/boşluksuz karakterler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="202"/>
         <source>Text statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazı istatistikleri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="203"/>
         <source>Characters statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter istatistikleri</translation>
     </message>
 </context>
 <context>
     <name>Ui::StageplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1269"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1265"/>
         <source>Bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işareti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1273"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1269"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1279"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1275"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzenle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1284"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1280"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1291"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1287"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Listeyi göster/gizle</translation>
     </message>
 </context>
 <context>
@@ -7609,42 +7697,42 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
         <translation>Sahne başlığı</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="226"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="221"/>
         <source>Undo last action</source>
         <translation>Son eylemi geri al</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="230"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="225"/>
         <source>Redo last action</source>
         <translation>Son eylemi yinele</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="233"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="228"/>
         <source>Current paragraph format</source>
         <translation>Geçerli paragraf biçimi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="235"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="230"/>
         <source>Hide fast format panel</source>
         <translation>Hızlı format panelini gizle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="236"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="231"/>
         <source>Show fast format panel</source>
         <translation>Hızlı format panelini göster</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="238"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="233"/>
         <source>Search text</source>
         <translation>Metin ara</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="241"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="236"/>
         <source>Disable review mode</source>
         <translation>İnceleme modunu kapat</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="242"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="237"/>
         <source>Enable review mode</source>
         <translation>İnceleme modunu aç</translation>
     </message>
@@ -7735,12 +7823,12 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="251"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini gizle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="252"/>
         <source>Show bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretlerini göster</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="860"/>
@@ -7755,7 +7843,7 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="862"/>
         <source>Bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>Yer işaretleri</translation>
     </message>
 </context>
 <context>
@@ -7763,67 +7851,67 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="294"/>
         <source>HASH copied.</source>
-        <translation type="unfinished"></translation>
+        <translation>HASH kopyalandı</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="299"/>
         <source>Pasted HASH has incorrect length</source>
-        <translation type="unfinished"></translation>
+        <translation>Yapıştırılan HASH yanlış uzunlukta</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="309"/>
         <source>Pasted HASH has invalid colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Yapıştırılan HASH geçersiz renklere sahip</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="318"/>
         <source>Pasted HASH has too many equal colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Yapıştırılan HASH çok fazla eşit renge sahip</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="323"/>
         <source>HASH pasted.</source>
-        <translation type="unfinished"></translation>
+        <translation>HASH yapıştırıldı.</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="389"/>
         <source>Copy theme HASH to share your custom theme with others</source>
-        <translation type="unfinished"></translation>
+        <translation>Özel temanızı başkalarıyla paylaşmak için HASH temasını kopyalayın</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="390"/>
         <source>Paste theme HASH from clipboard and apply it</source>
-        <translation type="unfinished"></translation>
+        <translation>HASH temasını panodan yapıştırın ve uygulayın</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="392"/>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>İlk</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="393"/>
         <source>Accent</source>
-        <translation type="unfinished"></translation>
+        <translation>Aksan</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="394"/>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Arka plan </translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="395"/>
         <source>Surface</source>
-        <translation type="unfinished"></translation>
+        <translation>Yüzey</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="396"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Hata</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="397"/>
         <source>Text edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazıyı düzenle</translation>
     </message>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="399"/>
@@ -7851,53 +7939,25 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="182"/>
         <source>Current text font family</source>
-        <translation type="unfinished"></translation>
+        <translation>Geçerli metin yazı tipi ailesi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="183"/>
         <source>Current text font size</source>
-        <translation type="unfinished"></translation>
+        <translation>Geçerli metin yazı tipi boyutu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/title_page/text/title_page_edit_toolbar.cpp" line="184"/>
         <source>Restore default title page</source>
-        <translation type="unfinished"></translation>
+        <translation>Varsayılan başlık sayfasını geri yükle</translation>
     </message>
 </context>
 <context>
     <name>Ui::UnsplashImagesView</name>
     <message>
-        <location filename="../../corelib/ui/modules/cover_generator/unsplash_images_view.cpp" line="274"/>
+        <location filename="../../corelib/ui/modules/cover_generator/unsplash_images_view.cpp" line="275"/>
         <source>Photo by %1 on Unsplash.com</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Ui::UpgradeToProDialog</name>
-    <message>
-        <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="90"/>
-        <source>via PayPal</source>
-        <translation>PayPal ile</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="91"/>
-        <source>via bank card</source>
-        <translation>banka kartı ile</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="92"/>
-        <source>via Yandex.Money</source>
-        <translation>Yandex.Money ile</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="93"/>
-        <source>Upgrade</source>
-        <translation>Yükselt</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/upgrade_to_pro_dialog.cpp" line="94"/>
-        <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>Unsplash.com&apos;da %1&apos;in fotoğrafı</translation>
     </message>
 </context>
 <context>
@@ -7905,51 +7965,51 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="214"/>
         <source>Until the end of the sprint left</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprintin sonuna kadar sola</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="220"/>
         <source>Sprint finished!</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprint bitti!</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="268"/>
         <source>Done! I&apos;ve just written %n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Tamamlandı! Az önce %n kelime yazdım</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="269"/>
         <source>in %n minute(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n dakika içinde</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="450"/>
         <source>Sprint duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprint süresi</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="451"/>
         <source>min</source>
-        <translation type="unfinished"></translation>
+        <translation>dakika</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="453"/>
         <source>Great job</source>
-        <translation type="unfinished"></translation>
+        <translation>İyi iş</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="454"/>
         <source>words written</source>
-        <translation type="unfinished"></translation>
+        <translation> kelime yazıldı</translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="455"/>
         <source>Restart sprint</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprint&apos;i yeniden başlat</translation>
     </message>
 </context>
 <context>
