@@ -19,6 +19,7 @@ public:
     /**
      * @brief Настроить отображение поэпизодника
      */
+    bool isTreatmentVisible() const;
     void setTreatmentVisible(bool _visible);
 
     /**

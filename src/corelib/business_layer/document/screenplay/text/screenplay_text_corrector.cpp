@@ -1,5 +1,7 @@
 #include "screenplay_text_corrector.h"
 
+#include "screenplay_text_document.h"
+
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
@@ -1798,15 +1800,15 @@ void ScreenplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBlo
     auto paragraphType = TextBlockStyle::forBlock(_block);
     switch (paragraphType) {
     case TextParagraphType::SceneHeading: {
-        paragraphType = TextParagraphType::SceneHeadingShadow;
+        auto screenplay = qobject_cast<ScreenplayTextDocument*>(document());
+        Q_ASSERT(screenplay);
+        paragraphType = screenplay->isTreatmentVisible()
+            ? TextParagraphType::SceneHeadingShadowTreatment
+            : TextParagraphType::SceneHeadingShadow;
         break;
     }
     case TextParagraphType::BeatHeading: {
         paragraphType = TextParagraphType::BeatHeadingShadow;
-        break;
-    }
-    case TextParagraphType::PanelHeading: {
-        paragraphType = TextParagraphType::PanelHeadingShadow;
         break;
     }
     case TextParagraphType::ActHeading:

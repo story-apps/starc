@@ -47,7 +47,7 @@ QSet<TextParagraphType> ScreenplayTextDocument::Implementation::visibleBlocksTyp
 {
     if (isTreatmentVisible) {
         return {
-            TextParagraphType::SceneHeading,      TextParagraphType::SceneHeadingShadow,
+            TextParagraphType::SceneHeading,      TextParagraphType::SceneHeadingShadowTreatment,
             TextParagraphType::SceneCharacters,   TextParagraphType::BeatHeading,
             TextParagraphType::BeatHeadingShadow, TextParagraphType::ActHeading,
             TextParagraphType::ActFooter,         TextParagraphType::SequenceHeading,
@@ -144,6 +144,11 @@ ScreenplayTextDocument::ScreenplayTextDocument(QObject* _parent)
 }
 
 ScreenplayTextDocument::~ScreenplayTextDocument() = default;
+
+bool ScreenplayTextDocument::isTreatmentVisible() const
+{
+    return d->isTreatmentVisible;
+}
 
 void ScreenplayTextDocument::setTreatmentVisible(bool _visible)
 {

@@ -59,7 +59,8 @@ enum class TextParagraphType {
     // Скрипты
     //
     SceneHeading, //!< Заголовок сцены
-    SceneHeadingShadow, //!< Заголовок сцены, для вспомогательных разрывов
+    SceneHeadingShadow, //!< Заголовок сцены, для вспомогательных разрывов в сценарии
+    SceneHeadingShadowTreatment, //!< Заголовок сцены, для вспомогательных разрывов в поэпизоднике
     Character, //!< Имя персонажа
     Dialogue, //!< Реплика персонажа
     //
