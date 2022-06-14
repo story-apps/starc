@@ -287,7 +287,7 @@ QSet<QString> StageplayTextModel::findCharactersFromText() const
             case TextModelItemType::Text: {
                 auto textItem = static_cast<TextModelTextItem*>(childItem);
                 if (textItem->paragraphType() == TextParagraphType::Character) {
-                    characters.insert(textItem->text());
+                    characters.insert(StageplayCharacterParser::name(textItem->text()));
                 }
                 break;
             }

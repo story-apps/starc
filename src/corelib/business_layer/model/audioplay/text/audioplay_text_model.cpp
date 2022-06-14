@@ -290,7 +290,7 @@ QSet<QString> AudioplayTextModel::findCharactersFromText() const
             case TextModelItemType::Text: {
                 auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
                 if (textItem->paragraphType() == TextParagraphType::Character) {
-                    characters.insert(textItem->text());
+                    characters.insert(AudioplayCharacterParser::name(textItem->text()));
                 }
                 break;
             }
