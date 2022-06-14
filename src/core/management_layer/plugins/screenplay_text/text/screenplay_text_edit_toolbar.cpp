@@ -118,8 +118,10 @@ ScreenplayTextEditToolbar::ScreenplayTextEditToolbar(QWidget* _parent)
 
     connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
             [this](const QModelIndex& _index) { emit paragraphTypeChanged(_index); });
-    connect(d->popup, &Card::disappeared, this,
-            [this] { d->paragraphTypeAction->setIconText(u8"\U000f035d"); });
+    connect(d->popup, &Card::disappeared, this, [this] {
+        d->paragraphTypeAction->setIconText(u8"\U000f035d");
+        animateHoverOut();
+    });
 }
 
 ScreenplayTextEditToolbar::~ScreenplayTextEditToolbar() = default;
@@ -213,6 +215,11 @@ bool ScreenplayTextEditToolbar::isCommentsModeEnabled() const
 void ScreenplayTextEditToolbar::setCommentsModeEnabled(bool _enabled)
 {
     d->commentsAction->setChecked(_enabled);
+}
+
+bool ScreenplayTextEditToolbar::canAnimateHoverOut() const
+{
+    return !d->popup->isVisible();
 }
 
 void ScreenplayTextEditToolbar::updateTranslations()

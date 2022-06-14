@@ -88,6 +88,11 @@ protected:
     bool eventFilter(QObject* _watched, QEvent* _event) override;
 
     /**
+     * @brief Переопределяем для более красивой работы с выпадающими списками
+     */
+    bool canAnimateHoverOut() const override;
+
+    /**
      * @brief Корректируем цвета вложенных виджетов
      */
     void processBackgroundColorChange() override;

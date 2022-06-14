@@ -173,7 +173,7 @@ ComicBookTextSearchToolbar::ComicBookTextSearchToolbar(QWidget* _parent)
             });
     connect(d->popup, &Card::disappeared, this, [this] {
         d->searchInAction->setIconText(u8"\U000f035d");
-        update();
+        animateHoverOut();
     });
     //
     addAction(d->searchInAction);
@@ -252,6 +252,11 @@ bool ComicBookTextSearchToolbar::eventFilter(QObject* _watched, QEvent* _event)
     }
 
     return FloatingToolBar::eventFilter(_watched, _event);
+}
+
+bool ComicBookTextSearchToolbar::canAnimateHoverOut() const
+{
+    return !d->popup->isVisible();
 }
 
 void ComicBookTextSearchToolbar::processBackgroundColorChange()

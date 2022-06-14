@@ -65,6 +65,11 @@ signals:
 
 protected:
     /**
+     * @brief Переопределяем для более красивой работы с выпадающими списками
+     */
+    bool canAnimateHoverOut() const override;
+
+    /**
      * @brief Обновить переводы
      */
     void updateTranslations() override;

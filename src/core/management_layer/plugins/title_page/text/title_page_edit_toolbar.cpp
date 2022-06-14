@@ -145,6 +145,7 @@ TitlePageEditToolbar::TitlePageEditToolbar(QWidget* _parent)
     connect(d->popup, &CardPopupWithTree::disappeared, this, [this] {
         d->textFontAction->setIconText(u8"\U000f035d");
         d->textFontSizeAction->setIconText(u8"\U000f035d");
+        animateHoverOut();
     });
 
 
@@ -167,6 +168,11 @@ void TitlePageEditToolbar::setCurrentFont(const QFont& _font)
 
     d->textFontAction->setText(_font.family());
     d->textFontSizeAction->setText(QString::number(MeasurementHelper::pxToPt(_font.pixelSize())));
+}
+
+bool TitlePageEditToolbar::canAnimateHoverOut() const
+{
+    return !d->popup->isVisible();
 }
 
 void TitlePageEditToolbar::updateTranslations()

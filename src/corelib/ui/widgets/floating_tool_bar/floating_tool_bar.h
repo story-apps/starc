@@ -51,6 +51,16 @@ protected:
     void setActionColor(QAction* _action, const QColor& _color);
 
     /**
+     * @brief Можно ли анимировать эффект покидания курсора из панели
+     */
+    virtual bool canAnimateHoverOut() const;
+
+    /**
+     * @brief Анимировать эффект покадания курсора из панели
+     */
+    void animateHoverOut();
+
+    /**
      * @brief Переопределяем для отображения тултипов кнопок
      */
     bool event(QEvent* _event) override;

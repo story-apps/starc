@@ -115,8 +115,10 @@ ScreenplayTreatmentEditToolbar::ScreenplayTreatmentEditToolbar(QWidget* _parent)
 
     connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
             [this](const QModelIndex& _index) { emit paragraphTypeChanged(_index); });
-    connect(d->popup, &Card::disappeared, this,
-            [this] { d->paragraphTypeAction->setIconText(u8"\U000f035d"); });
+    connect(d->popup, &Card::disappeared, this, [this] {
+        d->paragraphTypeAction->setIconText(u8"\U000f035d");
+        animateHoverOut();
+    });
 
     updateTranslations();
     designSystemChangeEvent(nullptr);
@@ -213,6 +215,11 @@ bool ScreenplayTreatmentEditToolbar::isCommentsModeEnabled() const
 void ScreenplayTreatmentEditToolbar::setCommentsModeEnabled(bool _enabled)
 {
     d->commentsAction->setChecked(_enabled);
+}
+
+bool ScreenplayTreatmentEditToolbar::canAnimateHoverOut() const
+{
+    return !d->popup->isVisible();
 }
 
 void ScreenplayTreatmentEditToolbar::updateTranslations()

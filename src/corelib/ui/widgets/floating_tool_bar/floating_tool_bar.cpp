@@ -310,6 +310,18 @@ void FloatingToolBar::setActionColor(QAction* _action, const QColor& _color)
     update();
 }
 
+bool FloatingToolBar::canAnimateHoverOut() const
+{
+    return true;
+}
+
+void FloatingToolBar::animateHoverOut()
+{
+    if (canAnimateHoverOut()) {
+        d->animateHoverOut();
+    }
+}
+
 bool FloatingToolBar::event(QEvent* _event)
 {
     if (_event->type() == QEvent::ToolTip) {
@@ -512,7 +524,7 @@ void FloatingToolBar::enterEvent(QEvent* _event)
 void FloatingToolBar::leaveEvent(QEvent* _event)
 {
     Q_UNUSED(_event)
-    d->animateHoverOut();
+    animateHoverOut();
 }
 
 void FloatingToolBar::mousePressEvent(QMouseEvent* _event)

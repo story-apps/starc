@@ -118,8 +118,10 @@ StageplayTextEditToolbar::StageplayTextEditToolbar(QWidget* _parent)
 
     connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
             [this](const QModelIndex& _index) { emit paragraphTypeChanged(_index); });
-    connect(d->popup, &Card::disappeared, this,
-            [this] { d->paragraphTypeAction->setIconText(u8"\U000f035d"); });
+    connect(d->popup, &Card::disappeared, this, [this] {
+        d->paragraphTypeAction->setIconText(u8"\U000f035d");
+        animateHoverOut();
+    });
 }
 
 StageplayTextEditToolbar::~StageplayTextEditToolbar() = default;
@@ -213,6 +215,11 @@ bool StageplayTextEditToolbar::isCommentsModeEnabled() const
 void StageplayTextEditToolbar::setCommentsModeEnabled(bool _enabled)
 {
     d->commentsAction->setChecked(_enabled);
+}
+
+bool StageplayTextEditToolbar::canAnimateHoverOut() const
+{
+    return !d->popup->isVisible();
 }
 
 void StageplayTextEditToolbar::updateTranslations()

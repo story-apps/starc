@@ -169,7 +169,7 @@ ScreenplayTreatmentSearchToolbar::ScreenplayTreatmentSearchToolbar(QWidget* _par
             });
     connect(d->popup, &Card::disappeared, this, [this] {
         d->searchInAction->setIconText(u8"\U000f035d");
-        update();
+        animateHoverOut();
     });
     //
     addAction(d->searchInAction);
@@ -253,6 +253,11 @@ bool ScreenplayTreatmentSearchToolbar::eventFilter(QObject* _watched, QEvent* _e
     }
 
     return FloatingToolBar::eventFilter(_watched, _event);
+}
+
+bool ScreenplayTreatmentSearchToolbar::canAnimateHoverOut() const
+{
+    return !d->popup->isVisible();
 }
 
 void ScreenplayTreatmentSearchToolbar::processBackgroundColorChange()

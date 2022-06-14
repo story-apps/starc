@@ -118,8 +118,10 @@ ComicBookTextEditToolbar::ComicBookTextEditToolbar(QWidget* _parent)
 
     connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
             [this](const QModelIndex& _index) { emit paragraphTypeChanged(_index); });
-    connect(d->popup, &Card::disappeared, this,
-            [this] { d->paragraphTypeAction->setIconText(u8"\U000f035d"); });
+    connect(d->popup, &Card::disappeared, this, [this] {
+        d->paragraphTypeAction->setIconText(u8"\U000f035d");
+        animateHoverOut();
+    });
 }
 
 ComicBookTextEditToolbar::~ComicBookTextEditToolbar() = default;
@@ -213,6 +215,11 @@ bool ComicBookTextEditToolbar::isCommentsModeEnabled() const
 void ComicBookTextEditToolbar::setCommentsModeEnabled(bool _enabled)
 {
     d->commentsAction->setChecked(_enabled);
+}
+
+bool ComicBookTextEditToolbar::canAnimateHoverOut() const
+{
+    return !d->popup->isVisible();
 }
 
 void ComicBookTextEditToolbar::updateTranslations()
