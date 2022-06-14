@@ -162,6 +162,10 @@ void SettingsManager::Implementation::loadScreenplaySettings()
     view->setScreenplayEditorUseCharactersFromText(
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorUseCharactersFromTextKey)
             .toBool());
+    view->setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(
+        settingsValue(
+            DataStorageLayer::kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey)
+            .toBool());
     //
     view->setScreenplayNavigatorShowBeats(
         settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsKey).toBool());
@@ -243,6 +247,12 @@ void SettingsManager::Implementation::loadStageplaySettings()
     view->setStageplayEditorUseCharactersFromText(
         settingsValue(DataStorageLayer::kComponentsStageplayEditorUseCharactersFromTextKey)
             .toBool());
+    view->setStageplayEditorShowCharacterSuggestionsInEmptyBlock(
+        settingsValue(
+            DataStorageLayer::kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey)
+            .toBool());
+    view->setStageplayEditorShowCharacterSuggestionsInEmptyBlock(
+        settingsValue(DataStorageLayer::kComponentsStageplayEditorShortcutsKey).toBool());
     //
     view->setStageplayNavigatorShowSceneNumber(
         settingsValue(DataStorageLayer::kComponentsStageplayNavigatorShowSceneNumberKey).toBool());
@@ -461,6 +471,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setScreenplayEditorContinueDialogue);
     connect(d->view, &Ui::SettingsView::screenplayEditorUseCharactersFromTextChanged, this,
             &SettingsManager::setScreenplayEditorUseCharactersFromText);
+    connect(d->view, &Ui::SettingsView::screenplayEditorShowCharacterSuggestionsInEmptyBlockChanged,
+            this, &SettingsManager::setScreenplayEditorShowCharacterSuggestionsInEmptyBlock);
     //
     connect(d->view, &Ui::SettingsView::screenplayNavigatorShowBeatsChanged, this,
             &SettingsManager::setScreenplayNavigatorShowBeats);
@@ -524,6 +536,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setStageplayEditorDefaultTemplate);
     connect(d->view, &Ui::SettingsView::stageplayEditorUseCharactersFromTextChanged, this,
             &SettingsManager::setStageplayEditorUseCharactersFromText);
+    connect(d->view, &Ui::SettingsView::stageplayEditorShowCharacterSuggestionsInEmptyBlockChanged,
+            this, &SettingsManager::setStageplayEditorShowCharacterSuggestionsInEmptyBlock);
     //
     connect(d->view, &Ui::SettingsView::stageplayNavigatorShowSceneNumberChanged, this,
             &SettingsManager::setStageplayNavigatorShowSceneNumber);
@@ -1227,6 +1241,15 @@ void SettingsManager::setScreenplayEditorUseCharactersFromText(bool _use)
         { DataStorageLayer::kComponentsScreenplayEditorUseCharactersFromTextKey });
 }
 
+void SettingsManager::setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
+{
+    setSettingsValue(
+        DataStorageLayer::kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey,
+        _show);
+    emit screenplayEditorChanged(
+        { DataStorageLayer::kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey });
+}
+
 void SettingsManager::setScreenplayNavigatorShowBeats(bool _show)
 {
     setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsKey, _show);
@@ -1377,6 +1400,14 @@ void SettingsManager::setStageplayEditorUseCharactersFromText(bool _use)
     setSettingsValue(DataStorageLayer::kComponentsStageplayEditorUseCharactersFromTextKey, _use);
     emit stageplayEditorChanged(
         { DataStorageLayer::kComponentsStageplayEditorUseCharactersFromTextKey });
+}
+
+void SettingsManager::setStageplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
+{
+    setSettingsValue(
+        DataStorageLayer::kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey, _show);
+    emit stageplayEditorChanged(
+        { DataStorageLayer::kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey });
 }
 
 void SettingsManager::setStageplayNavigatorShowSceneNumber(bool _show)

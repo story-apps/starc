@@ -832,6 +832,14 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey)) {
+        d->textEdit->setShowSuggestionsInEmptyBlocks(
+            settingsValue(DataStorageLayer::
+                              kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey)
+                .toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsScreenplayEditorShortcutsKey)) {
         d->shortcutsManager.reconfigure();
     }

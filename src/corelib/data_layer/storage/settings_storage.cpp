@@ -486,6 +486,8 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersOnRightKey, true);
         defaultValues.insert(kComponentsScreenplayEditorContinueDialogueKey, true);
         defaultValues.insert(kComponentsScreenplayEditorUseCharactersFromTextKey, false);
+        defaultValues.insert(kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey,
+                             true);
         //
         // Параметры навигатора сценария
         //
@@ -880,6 +882,8 @@ SettingsStorage::Implementation::Implementation()
         //
         defaultValues.insert(kComponentsStageplayEditorDefaultTemplateKey, "bbc");
         defaultValues.insert(kComponentsStageplayEditorUseCharactersFromTextKey, false);
+        defaultValues.insert(kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey,
+                             false);
         //
         // Параметры навигатора сценария
         //

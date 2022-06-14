@@ -704,6 +704,14 @@ void StageplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey)) {
+        d->textEdit->setShowSuggestionsInEmptyBlocks(
+            settingsValue(
+                DataStorageLayer::kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey)
+                .toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsStageplayEditorShortcutsKey)) {
         d->shortcutsManager.reconfigure();
     }

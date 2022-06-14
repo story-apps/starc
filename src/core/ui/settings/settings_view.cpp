@@ -275,6 +275,7 @@ public:
     CheckBox* screenplayEditorShowDialogueNumber = nullptr;
     CheckBox* screenplayEditorContinueDialogue = nullptr;
     CheckBox* screenplayEditorUseCharactersFromText = nullptr;
+    CheckBox* screenplayEditorShowCharacterSuggestionsInEmptyBlock = nullptr;
     //
     // ... Screenplay navigator
     //
@@ -313,6 +314,8 @@ public:
     H6Label* comicBookEditorTitle = nullptr;
     ComboBox* comicBookEditorDefaultTemplate = nullptr;
     IconButton* comicBookEditorDefaultTemplateOptions = nullptr;
+    CheckBox* comicBookEditorUseCharactersFromText = nullptr;
+    CheckBox* comicBookEditorShowCharacterSuggestionsInEmptyBlock = nullptr;
     //
     // ... Comic book navigator
     //
@@ -363,7 +366,7 @@ public:
     //
     int audioplayCardBottomSpacerIndex = 0;
     //
-    // Audioplay
+    // Stageplay
     //
     Card* stageplayCard = nullptr;
     QGridLayout* stageplayCardLayout = nullptr;
@@ -376,6 +379,7 @@ public:
     ComboBox* stageplayEditorDefaultTemplate = nullptr;
     IconButton* stageplayEditorDefaultTemplateOptions = nullptr;
     CheckBox* stageplayEditorUseCharactersFromText = nullptr;
+    CheckBox* stageplayEditorShowCharacterSuggestionsInEmptyBlock = nullptr;
     //
     // ... Stageplay navigator
     //
@@ -471,6 +475,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayEditorShowDialogueNumber(new CheckBox(screenplayCard))
     , screenplayEditorContinueDialogue(new CheckBox(screenplayCard))
     , screenplayEditorUseCharactersFromText(new CheckBox(screenplayCard))
+    , screenplayEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(screenplayCard))
     , screenplayNavigatorTitle(new H6Label(screenplayCard))
     , screenplayNavigatorShowBeats(new CheckBox(screenplayCard))
     , screenplayNavigatorShowSceneNumber(new CheckBox(screenplayCard))
@@ -536,6 +541,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , stageplayEditorDefaultTemplate(new ComboBox(stageplayCard))
     , stageplayEditorDefaultTemplateOptions(new IconButton(stageplayCard))
     , stageplayEditorUseCharactersFromText(new CheckBox(stageplayCard))
+    , stageplayEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(stageplayCard))
     , stageplayNavigatorTitle(new H6Label(stageplayCard))
     , stageplayNavigatorShowSceneNumber(new CheckBox(stageplayCard))
     , stageplayNavigatorShowSceneText(new CheckBox(stageplayCard))
@@ -823,6 +829,8 @@ void SettingsView::Implementation::initScreenplayCard()
     screenplayCardLayout->addWidget(screenplayEditorShowDialogueNumber, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorContinueDialogue, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorUseCharactersFromText, itemIndex++, 0);
+    screenplayCardLayout->addWidget(screenplayEditorShowCharacterSuggestionsInEmptyBlock,
+                                    itemIndex++, 0);
     //
     // ... навигатор сценария
     //
@@ -1064,6 +1072,8 @@ void SettingsView::Implementation::initStageplayCard()
         stageplayCardLayout->addLayout(layout, itemIndex++, 0);
     }
     stageplayCardLayout->addWidget(stageplayEditorUseCharactersFromText, itemIndex++, 0);
+    stageplayCardLayout->addWidget(stageplayEditorShowCharacterSuggestionsInEmptyBlock, itemIndex++,
+                                   0);
     //
     // ... навигатор сценария
     //
@@ -1347,6 +1357,7 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->screenplayEditorShowDialogueNumber,
                  d->screenplayEditorContinueDialogue,
                  d->screenplayEditorUseCharactersFromText,
+                 d->screenplayEditorShowCharacterSuggestionsInEmptyBlock,
                  d->screenplayNavigatorTitle,
                  d->screenplayNavigatorShowBeats,
                  d->screenplayNavigatorShowSceneNumber,
@@ -1463,6 +1474,8 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::screenplayEditorContinueDialogueChanged);
     connect(d->screenplayEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
             &SettingsView::screenplayEditorUseCharactersFromTextChanged);
+    connect(d->screenplayEditorShowCharacterSuggestionsInEmptyBlock, &CheckBox::checkedChanged,
+            this, &SettingsView::screenplayEditorShowCharacterSuggestionsInEmptyBlockChanged);
     //
     // ... навигатор сценария
     //
@@ -1821,6 +1834,7 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->stageplayEditorDefaultTemplate,
                  d->stageplayEditorDefaultTemplateOptions,
                  d->stageplayEditorUseCharactersFromText,
+                 d->stageplayEditorShowCharacterSuggestionsInEmptyBlock,
                  d->stageplayNavigatorTitle,
                  d->stageplayNavigatorShowSceneNumber,
                  d->stageplayNavigatorShowSceneText,
@@ -1891,6 +1905,8 @@ SettingsView::SettingsView(QWidget* _parent)
             });
     connect(d->stageplayEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
             &SettingsView::stageplayEditorUseCharactersFromTextChanged);
+    connect(d->stageplayEditorShowCharacterSuggestionsInEmptyBlock, &CheckBox::checkedChanged, this,
+            &SettingsView::stageplayEditorShowCharacterSuggestionsInEmptyBlockChanged);
     //
     // ... навигатор пьесы
     //
@@ -2240,6 +2256,11 @@ void SettingsView::setScreenplayEditorUseCharactersFromText(bool _use)
     d->screenplayEditorUseCharactersFromText->setChecked(_use);
 }
 
+void SettingsView::setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
+{
+    d->screenplayEditorShowCharacterSuggestionsInEmptyBlock->setChecked(_show);
+}
+
 void SettingsView::setScreenplayNavigatorShowBeats(bool _show)
 {
     d->screenplayNavigatorShowBeats->setChecked(_show);
@@ -2419,6 +2440,11 @@ void SettingsView::setStageplayEditorDefaultTemplate(const QString& _templateId)
 void SettingsView::setStageplayEditorUseCharactersFromText(bool _use)
 {
     d->stageplayEditorUseCharactersFromText->setChecked(_use);
+}
+
+void SettingsView::setStageplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
+{
+    d->stageplayEditorShowCharacterSuggestionsInEmptyBlock->setChecked(_show);
 }
 
 void SettingsView::setStageplayNavigatorShowSceneNumber(bool _show)
@@ -2679,6 +2705,8 @@ void SettingsView::updateTranslations()
         tr("Automatically continue same speaker's dialogue"));
     d->screenplayEditorUseCharactersFromText->setText(
         tr("Show hints for major & related to a current story characters only"));
+    d->screenplayEditorShowCharacterSuggestionsInEmptyBlock->setText(
+        tr("Show characters suggestions in empty paragraph"));
     d->screenplayNavigatorTitle->setText(tr("Screenplay navigator"));
     d->screenplayNavigatorShowBeats->setText(tr("Show beats"));
     d->screenplayNavigatorShowSceneNumber->setText(tr("Show scene number"));
@@ -2727,7 +2755,7 @@ void SettingsView::updateTranslations()
     d->audioplayEditorUseCharactersFromText->setText(
         tr("Show hints for major & related to a current story characters only"));
     d->audioplayEditorShowCharacterSuggestionsInEmptyBlock->setText(
-        tr("Show characters suggestions in empty paragraphs"));
+        tr("Show characters suggestions in empty paragraph"));
     d->audioplayNavigatorTitle->setText(tr("Audioplay navigator"));
     d->audioplayNavigatorShowSceneNumber->setText(tr("Show scene number"));
     d->audioplayNavigatorShowSceneText->setText(tr("Show scene text, lines"));
@@ -2751,6 +2779,8 @@ void SettingsView::updateTranslations()
         tr("Available actions for the selected template"));
     d->stageplayEditorUseCharactersFromText->setText(
         tr("Show hints for major & related to a current story characters only"));
+    d->stageplayEditorShowCharacterSuggestionsInEmptyBlock->setText(
+        tr("Show characters suggestions in empty paragraph"));
     d->stageplayNavigatorTitle->setText(tr("Stageplay navigator"));
     d->stageplayNavigatorShowSceneNumber->setText(tr("Show scene number"));
     d->stageplayNavigatorShowSceneText->setText(tr("Show scene text, lines"));
@@ -2767,7 +2797,7 @@ void SettingsView::updateTranslations()
         model->setData(model->index(0, 0), tr("Block name"), Qt::DisplayRole);
         model->setData(model->index(0, 1), tr("Shortcut"), Qt::DisplayRole);
         model->setData(model->index(0, 2), tr("If you press in paragraphs end"), Qt::DisplayRole);
-        model->setData(model->index(0, 3), tr("If you press in empty paragraphs"), Qt::DisplayRole);
+        model->setData(model->index(0, 3), tr("If you press in empty paragraph"), Qt::DisplayRole);
     }
     buildScreenplayParagraphTypesModel(d->shortcutsForScreenplay, d->screenplayParagraphTypesModel);
     d->screenplayParagraphAddTypeDelegate->setLabel(tr("Add paragraph"));
@@ -2904,6 +2934,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayEditorShowDialogueNumber,
              d->screenplayEditorContinueDialogue,
              d->screenplayEditorUseCharactersFromText,
+             d->screenplayEditorShowCharacterSuggestionsInEmptyBlock,
              d->screenplayNavigatorShowBeats,
              d->screenplayNavigatorShowSceneNumber,
              d->screenplayNavigatorShowSceneText,
@@ -2919,6 +2950,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->audioplayNavigatorShowSceneText,
              //
              d->stageplayEditorUseCharactersFromText,
+             d->stageplayEditorShowCharacterSuggestionsInEmptyBlock,
              d->stageplayNavigatorShowSceneNumber,
              d->stageplayNavigatorShowSceneText,
          }) {

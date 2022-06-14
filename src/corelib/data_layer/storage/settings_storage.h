@@ -178,6 +178,8 @@ const QString kComponentsScreenplayEditorContinueDialogueKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/continue-dialogue");
 const QString kComponentsScreenplayEditorUseCharactersFromTextKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/use-characters-from-text");
+const QString kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
 const QString kComponentsScreenplayEditorShortcutsKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/shortcuts");
 // ... навигатор
@@ -236,16 +238,16 @@ const QString kComponentsAudioplayEditorShowBlockNumbersKey
 const QString kComponentsAudioplayEditorContinueBlockNumbersKey
     = kComponentsAudioplayEditorKey + QStringLiteral("/continue-block-numbers");
 const QString kComponentsAudioplayEditorUseCharactersFromTextKey
-    = kComponentsScreenplayEditorKey + QStringLiteral("/use-characters-from-text");
+    = kComponentsAudioplayEditorKey + QStringLiteral("/use-characters-from-text");
 const QString kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey
-    = kComponentsScreenplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
+    = kComponentsAudioplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
 const QString kComponentsAudioplayEditorShortcutsKey
     = kComponentsAudioplayEditorKey + QStringLiteral("/shortcuts");
 // ... навигатор
 const QString kComponentsAudioplayNavigatorKey
     = kComponentsAudioplayKey + QStringLiteral("/navigator");
 const QString kComponentsAudioplayNavigatorShowSceneNumberKey
-    = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-scene-number");
+    = kComponentsAudioplayNavigatorKey + QStringLiteral("/show-scene-number");
 const QString kComponentsAudioplayNavigatorShowSceneTextKey
     = kComponentsAudioplayNavigatorKey + QStringLiteral("/show-scene-text");
 const QString kComponentsAudioplayNavigatorSceneTextLinesKey
@@ -267,14 +269,16 @@ const QString kComponentsStageplayEditorKey = kComponentsStageplayKey + QStringL
 const QString kComponentsStageplayEditorDefaultTemplateKey
     = kComponentsStageplayEditorKey + QStringLiteral("/default-template");
 const QString kComponentsStageplayEditorUseCharactersFromTextKey
-    = kComponentsScreenplayEditorKey + QStringLiteral("/use-characters-from-text");
+    = kComponentsStageplayEditorKey + QStringLiteral("/use-characters-from-text");
+const QString kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey
+    = kComponentsStageplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
 const QString kComponentsStageplayEditorShortcutsKey
     = kComponentsStageplayEditorKey + QStringLiteral("/shortcuts");
 // ... навигатор
 const QString kComponentsStageplayNavigatorKey
     = kComponentsStageplayKey + QStringLiteral("/navigator");
 const QString kComponentsStageplayNavigatorShowSceneNumberKey
-    = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-scene-number");
+    = kComponentsStageplayNavigatorKey + QStringLiteral("/show-scene-number");
 const QString kComponentsStageplayNavigatorShowSceneTextKey
     = kComponentsStageplayNavigatorKey + QStringLiteral("/show-scene-text");
 const QString kComponentsStageplayNavigatorSceneTextLinesKey

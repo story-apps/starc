@@ -76,6 +76,7 @@ public:
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorContinueDialogue(bool _continue);
     void setScreenplayEditorUseCharactersFromText(bool _use);
+    void setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setScreenplayNavigatorShowBeats(bool _show);
     void setScreenplayNavigatorShowSceneNumber(bool _show);
@@ -119,6 +120,7 @@ public:
     //
     void setStageplayEditorDefaultTemplate(const QString& _templateId);
     void setStageplayEditorUseCharactersFromText(bool _use);
+    void setStageplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setStageplayNavigatorShowSceneNumber(bool _show);
     void setStageplayNavigatorShowSceneText(bool _show, int _lines);
@@ -169,6 +171,7 @@ signals:
     void screenplayEditorShowDialogueNumberChanged(bool _show);
     void screenplayEditorContinueDialogueChanged(bool _continue);
     void screenplayEditorUseCharactersFromTextChanged(bool _use);
+    void screenplayEditorShowCharacterSuggestionsInEmptyBlockChanged(bool _show);
     //
     void screenplayNavigatorShowBeatsChanged(bool _show);
     void screenplayNavigatorShowSceneNumberChanged(bool _show);
@@ -213,6 +216,7 @@ signals:
     void stageplayEditorDefaultTemplateChanged(const QString& _templateId);
     void stageplayEditorShowBlockNumberChanged(bool _show, bool _continue);
     void stageplayEditorUseCharactersFromTextChanged(bool _use);
+    void stageplayEditorShowCharacterSuggestionsInEmptyBlockChanged(bool _show);
     //
     void stageplayNavigatorShowSceneNumberChanged(bool _show);
     void stageplayNavigatorShowSceneTextChanged(bool _show, int _lines);

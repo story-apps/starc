@@ -124,6 +124,7 @@ private:
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorContinueDialogue(bool _continue);
     void setScreenplayEditorUseCharactersFromText(bool _use);
+    void setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setScreenplayNavigatorShowBeats(bool _show);
     void setScreenplayNavigatorShowSceneNumber(bool _show);
@@ -167,6 +168,7 @@ private:
     //
     void setStageplayEditorDefaultTemplate(const QString& _templateId);
     void setStageplayEditorUseCharactersFromText(bool _use);
+    void setStageplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setStageplayNavigatorShowSceneNumber(bool _show);
     void setStageplayNavigatorShowSceneText(bool _show, int _lines);
