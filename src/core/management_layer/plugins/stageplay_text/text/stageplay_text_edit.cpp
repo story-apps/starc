@@ -749,6 +749,7 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
         int lastSceneBlockBottom = 0;
         QColor lastSceneColor;
         QColor lastCharacterColor;
+        int lastCharacterColorWithNumberRectBottom = 0;
 
         auto setPainterPen = [&painter, &block, this](const QColor& _color) {
             painter.setPen(ColorHelper::transparent(
@@ -812,6 +813,7 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
             if (blockType == TextParagraphType::Character && d->model
                 && d->model->charactersModel() != nullptr) {
                 lastCharacterColor = QColor();
+                lastCharacterColorWithNumberRectBottom = 0;
                 const QString characterName
                     = BusinessLayer::StageplayCharacterParser::name(block.text());
                 if (auto character = d->model->character(characterName)) {
@@ -829,9 +831,16 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
             // Нарисуем цвет персонажа
             //
             if (lastCharacterColor.isValid()) {
-                const auto isBlockCharacterWithNumber
-                    = blockType == TextParagraphType::Character && d->showBlockNumbers;
-                if (!isBlockCharacterWithNumber) {
+                QRectF colorRect;
+                //
+                // ... если у стиля персонажа есть пустое пространство слева, то
+                //     поместим цвет реплики внутри текстовой области
+                //
+                if (d->stageplayTemplate()
+                        .paragraphStyle(TextParagraphType::Character)
+                        .marginsOnHalfPage()
+                        .left()
+                    > 0) {
                     QPointF topLeft(isLeftToRight
                                         ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
                                             + DesignSystem::layout().px4()
@@ -839,8 +848,30 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                                     cursorR.top());
                     const QPointF bottomRight(topLeft.x() + DesignSystem::layout().px4(),
                                               cursorREnd.bottom());
-                    const QRectF rect(topLeft, bottomRight);
-                    painter.fillRect(rect, lastCharacterColor);
+                    colorRect = QRectF(topLeft, bottomRight);
+                }
+                //
+                // ... если нет, то рисуем на полях
+                //
+                else {
+                    const QPointF topLeft(
+                        isLeftToRight ? (textLeft + leftDelta - DesignSystem::layout().px16())
+                                      : (pageRight + leftDelta + DesignSystem::layout().px4()),
+                        cursorR.top());
+                    const QPointF bottomRight(topLeft.x() + DesignSystem::layout().px4(),
+                                              cursorREnd.bottom());
+                    colorRect = QRectF(topLeft, bottomRight);
+                }
+
+                const auto isBlockCharacterWithNumber
+                    = blockType == TextParagraphType::Character && d->showBlockNumbers;
+                if (isBlockCharacterWithNumber) {
+                    lastCharacterColorWithNumberRectBottom = colorRect.bottom();
+                } else {
+                    if (lastCharacterColorWithNumberRectBottom > colorRect.top()) {
+                        colorRect.setTop(lastCharacterColorWithNumberRectBottom);
+                    }
+                    painter.fillRect(colorRect, lastCharacterColor);
                 }
             }
 
