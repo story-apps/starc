@@ -1078,6 +1078,7 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             lastItem = newItem;
         }
     }
+    insertCollectedItems();
 
     //
     // Если есть оторванный от первого блока текст

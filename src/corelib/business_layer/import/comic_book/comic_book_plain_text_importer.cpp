@@ -55,8 +55,12 @@ ComicBookAbstractImporter::Document ComicBookPlainTextImporter::importComicBook(
                           Domain::mimeTypeFor(Domain::DocumentObjectType::ComicBookText));
     writer.writeAttribute(xml::kVersionAttribute, "1.0");
 
-    const QStringList paragraphs = QString(_text).split("\n");
+    const QStringList paragraphs = QString(_text).remove('\r').split("\n", Qt::SkipEmptyParts);
     for (const auto& paragraph : paragraphs) {
+        if (paragraph.simplified().isEmpty()) {
+            continue;
+        }
+
         writer.writeStartElement(toString(TextParagraphType::Description));
         writer.writeStartElement(xml::kValueTag);
         writer.writeCDATA(TextHelper::toHtmlEscaped(paragraph));

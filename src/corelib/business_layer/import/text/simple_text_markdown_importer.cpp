@@ -57,6 +57,10 @@ SimpleTextAbstractImporter::Document SimpleTextMarkdownImporter::importDocument(
 
     const QStringList paragraphs = QString(_text).remove('\r').split('\n');
     for (const auto& paragraph : paragraphs) {
+        if (paragraph.simplified().isEmpty()) {
+            continue;
+        }
+
         writer.writeStartElement(toString(TextParagraphType::Text));
         writer.writeStartElement(xml::kValueTag);
         writer.writeCDATA(TextHelper::toHtmlEscaped(paragraph));
