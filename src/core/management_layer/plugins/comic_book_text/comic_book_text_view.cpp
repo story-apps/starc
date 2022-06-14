@@ -737,6 +737,14 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey)) {
+        d->textEdit->setShowSuggestionsInEmptyBlocks(
+            settingsValue(
+                DataStorageLayer::kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey)
+                .toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsComicBookEditorShortcutsKey)) {
         d->shortcutsManager.reconfigure();
     }

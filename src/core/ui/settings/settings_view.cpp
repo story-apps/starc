@@ -501,6 +501,8 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , comicBookEditorTitle(new H6Label(comicBookCard))
     , comicBookEditorDefaultTemplate(new ComboBox(comicBookCard))
     , comicBookEditorDefaultTemplateOptions(new IconButton(comicBookCard))
+    , comicBookEditorUseCharactersFromText(new CheckBox(comicBookCard))
+    , comicBookEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(comicBookCard))
     , comicBookNavigatorTitle(new H6Label(comicBookCard))
     , comicBookNavigatorShowSceneText(new CheckBox(comicBookCard))
     , comicBookNavigatorSceneDescriptionLines1(new RadioButton(comicBookCard))
@@ -918,6 +920,9 @@ void SettingsView::Implementation::initComicBookCard()
         layout->addWidget(comicBookEditorDefaultTemplateOptions);
         comicBookCardLayout->addLayout(layout, itemIndex++, 0);
     }
+    comicBookCardLayout->addWidget(comicBookEditorUseCharactersFromText, itemIndex++, 0);
+    comicBookCardLayout->addWidget(comicBookEditorShowCharacterSuggestionsInEmptyBlock, itemIndex++,
+                                   0);
     //
     // ... навигатор текста
     //
@@ -1568,6 +1573,8 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->comicBookEditorTitle,
                  d->comicBookEditorDefaultTemplate,
                  d->comicBookEditorDefaultTemplateOptions,
+                 d->comicBookEditorDefaultTemplate,
+                 d->comicBookEditorDefaultTemplateOptions,
                  d->comicBookNavigatorTitle,
                  d->comicBookNavigatorShowSceneText,
                  d->comicBookNavigatorSceneDescriptionLines1,
@@ -1634,6 +1641,10 @@ SettingsView::SettingsView(QWidget* _parent)
                 emit comicBookEditorDefaultTemplateChanged(
                     _index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
             });
+    connect(d->comicBookEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
+            &SettingsView::comicBookEditorUseCharactersFromTextChanged);
+    connect(d->comicBookEditorShowCharacterSuggestionsInEmptyBlock, &CheckBox::checkedChanged, this,
+            &SettingsView::comicBookEditorShowCharacterSuggestionsInEmptyBlockChanged);
     //
     // ... навигатор текста
     //
@@ -2340,6 +2351,16 @@ void SettingsView::setComicBookEditorDefaultTemplate(const QString& _templateId)
     }
 }
 
+void SettingsView::setComicBookEditorUseCharactersFromText(bool _use)
+{
+    d->comicBookEditorUseCharactersFromText->setChecked(_use);
+}
+
+void SettingsView::setComicBookEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
+{
+    d->comicBookEditorShowCharacterSuggestionsInEmptyBlock->setChecked(_show);
+}
+
 void SettingsView::setComicBookNavigatorShowSceneText(bool _show, int _lines)
 {
     d->comicBookNavigatorShowSceneText->setChecked(_show);
@@ -2736,6 +2757,10 @@ void SettingsView::updateTranslations()
     d->comicBookEditorDefaultTemplate->setLabel(tr("Default template"));
     d->comicBookEditorDefaultTemplateOptions->setToolTip(
         tr("Available actions for the selected template"));
+    d->comicBookEditorUseCharactersFromText->setText(
+        tr("Show hints for major & related to a current story characters only"));
+    d->comicBookEditorShowCharacterSuggestionsInEmptyBlock->setText(
+        tr("Show characters suggestions in empty paragraph"));
     d->comicBookNavigatorTitle->setText(tr("Navigator"));
     d->comicBookNavigatorShowSceneText->setText(tr("Show panel text, lines"));
     d->comicBookNavigatorSceneDescriptionLines1->setText("1");
@@ -2940,6 +2965,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayNavigatorShowSceneText,
              d->screenplayDurationByCharactersIncludingSpaces,
              //
+             d->comicBookEditorUseCharactersFromText,
+             d->comicBookEditorShowCharacterSuggestionsInEmptyBlock,
              d->comicBookNavigatorShowSceneText,
              //
              d->audioplayEditorShowBlockNumber,

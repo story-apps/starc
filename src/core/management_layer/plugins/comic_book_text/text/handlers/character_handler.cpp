@@ -448,7 +448,7 @@ void CharacterHandler::storeCharacter() const
     // Сохраняем персонажа
     //
     if (!editor()->dictionaries()->commonCharacters().contains(characterName)) {
-        editor()->characters()->createCharacter(characterName);
+        editor()->createCharacter(characterName);
     }
     editor()->dictionaries()->addCharacterExtension(characterExtension);
 }

@@ -72,8 +72,11 @@ void DescriptionHandler::handleEnter(QKeyEvent*)
                 //
                 // Если введён персонаж, меняем стиль блока и переходим к реплике
                 //
+                const auto charactersModel
+                    = qobject_cast<BusinessLayer::CharactersModel*>(editor()->characters());
                 if (cursorForwardText.isEmpty()) {
-                    if (editor()->characters()->exists(cursorBackwardText)) {
+                    if (cursorForwardText.isEmpty() && charactersModel
+                        && charactersModel->exists(cursorBackwardText)) {
                         editor()->setCurrentParagraphType(TextParagraphType::Character);
                         editor()->addParagraph(TextParagraphType::Dialogue);
                         isHandled = true;

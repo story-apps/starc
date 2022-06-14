@@ -142,6 +142,8 @@ private:
     void setComicBookAvailable(bool _available);
     //
     void setComicBookEditorDefaultTemplate(const QString& _templateId);
+    void setComicBookEditorUseCharactersFromText(bool _use);
+    void setComicBookEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setComicBookNavigatorShowSceneText(bool _show, int _lines);
 

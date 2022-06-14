@@ -198,6 +198,13 @@ void SettingsManager::Implementation::loadComicBookSettings()
         = settingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey).toString();
     view->setComicBookEditorDefaultTemplate(defaultTemplate);
     BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(defaultTemplate);
+    view->setComicBookEditorUseCharactersFromText(
+        settingsValue(DataStorageLayer::kComponentsComicBookEditorUseCharactersFromTextKey)
+            .toBool());
+    view->setComicBookEditorShowCharacterSuggestionsInEmptyBlock(
+        settingsValue(
+            DataStorageLayer::kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey)
+            .toBool());
     //
     view->setComicBookNavigatorShowSceneText(
         settingsValue(DataStorageLayer::kComponentsComicBookNavigatorShowSceneTextKey).toBool(),
@@ -499,6 +506,10 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     //
     connect(d->view, &Ui::SettingsView::comicBookEditorDefaultTemplateChanged, this,
             &SettingsManager::setComicBookEditorDefaultTemplate);
+    connect(d->view, &Ui::SettingsView::comicBookEditorUseCharactersFromTextChanged, this,
+            &SettingsManager::setComicBookEditorUseCharactersFromText);
+    connect(d->view, &Ui::SettingsView::comicBookEditorShowCharacterSuggestionsInEmptyBlockChanged,
+            this, &SettingsManager::setComicBookEditorShowCharacterSuggestionsInEmptyBlock);
     //
     connect(d->view, &Ui::SettingsView::comicBookNavigatorShowSceneTextChanged, this,
             &SettingsManager::setComicBookNavigatorShowSceneText);
@@ -1312,6 +1323,21 @@ void SettingsManager::setComicBookEditorDefaultTemplate(const QString& _template
     setSettingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey, _templateId);
     BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(_templateId);
     emit comicBookEditorChanged({ DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey });
+}
+
+void SettingsManager::setComicBookEditorUseCharactersFromText(bool _use)
+{
+    setSettingsValue(DataStorageLayer::kComponentsComicBookEditorUseCharactersFromTextKey, _use);
+    emit comicBookEditorChanged(
+        { DataStorageLayer::kComponentsComicBookEditorUseCharactersFromTextKey });
+}
+
+void SettingsManager::setComicBookEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
+{
+    setSettingsValue(
+        DataStorageLayer::kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey, _show);
+    emit comicBookEditorChanged(
+        { DataStorageLayer::kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey });
 }
 
 void SettingsManager::setComicBookNavigatorShowSceneText(bool _show, int _lines)

@@ -1350,11 +1350,28 @@ bool ProjectManager::event(QEvent* _event)
         //
         // ... для сценариев корректируем список подсказок имён персонажей
         //
-        const auto models
-            = d->modelsFacade.loadedModelsFor(Domain::DocumentObjectType::ScreenplayText);
-        for (auto model : models) {
+        auto models = d->modelsFacade.loadedModelsFor(Domain::DocumentObjectType::ScreenplayText);
+        for (auto model : std::as_const(models)) {
             auto screenplay = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
             screenplay->updateRuntimeDictionariesIfNeeded();
+        }
+        //
+        models = d->modelsFacade.loadedModelsFor(Domain::DocumentObjectType::ComicBookText);
+        for (auto model : std::as_const(models)) {
+            auto comicBook = qobject_cast<BusinessLayer::ComicBookTextModel*>(model);
+            comicBook->updateRuntimeDictionariesIfNeeded();
+        }
+        //
+        models = d->modelsFacade.loadedModelsFor(Domain::DocumentObjectType::AudioplayText);
+        for (auto model : std::as_const(models)) {
+            auto audioplay = qobject_cast<BusinessLayer::AudioplayTextModel*>(model);
+            audioplay->updateRuntimeDictionariesIfNeeded();
+        }
+        //
+        models = d->modelsFacade.loadedModelsFor(Domain::DocumentObjectType::StageplayText);
+        for (auto model : std::as_const(models)) {
+            auto stageplay = qobject_cast<BusinessLayer::StageplayTextModel*>(model);
+            stageplay->updateRuntimeDictionariesIfNeeded();
         }
         break;
     }

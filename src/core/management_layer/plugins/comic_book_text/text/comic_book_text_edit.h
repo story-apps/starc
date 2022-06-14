@@ -65,7 +65,12 @@ public:
     /**
      * @brief Получить модель персонажей
      */
-    BusinessLayer::CharactersModel* characters() const;
+    QAbstractItemModel* characters() const;
+
+    /**
+     * @brief Создать персонажа с заданным именем
+     */
+    void createCharacter(const QString& _name);
 
     /**
      * @brief Отменить последнее изменение

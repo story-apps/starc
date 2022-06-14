@@ -4,17 +4,21 @@
 #include "comic_book_text_model_page_item.h"
 #include "comic_book_text_model_panel_item.h"
 
+#include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/comic_book/comic_book_dictionaries_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/text/text_model_folder_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/comic_book_template.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/logging.h>
 #include <utils/shugar.h>
 
 #include <QRegularExpression>
+#include <QStringListModel>
 #include <QXmlStreamReader>
 
 
@@ -59,6 +63,16 @@ public:
      * @brief Модель персонажей
      */
     CharactersModel* charactersModel = nullptr;
+
+    /**
+     * @brief Нужно ли обновить справочники, которые строятся в рантайме
+     */
+    bool needUpdateRuntimeDictionaries = false;
+
+    /**
+     * @brief Справочники, которые строятся в рантайме
+     */
+    QStringListModel* charactersModelFromText = nullptr;
 };
 
 ComicBookTextModel::Implementation::Implementation(ComicBookTextModel* _q)
@@ -135,6 +149,9 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
     auto updateNumbering = [this] { d->updateNumbering(); };
     connect(this, &ComicBookTextModel::rowsInserted, this, updateNumbering);
     connect(this, &ComicBookTextModel::rowsRemoved, this, updateNumbering);
+
+    connect(this, &ComicBookTextModel::contentsChanged, this,
+            [this] { d->needUpdateRuntimeDictionaries = true; });
 }
 
 ComicBookTextModel::~ComicBookTextModel() = default;
@@ -197,17 +214,33 @@ ComicBookDictionariesModel* ComicBookTextModel::dictionariesModel() const
 
 void ComicBookTextModel::setCharactersModel(CharactersModel* _model)
 {
+    if (d->charactersModel) {
+        d->charactersModel->disconnect(this);
+    }
+
     d->charactersModel = _model;
+
+    connect(d->charactersModel, &CharactersModel::contentsChanged, this,
+            [this] { d->needUpdateRuntimeDictionaries = true; });
 }
 
-CharactersModel* ComicBookTextModel::charactersModel() const
+QAbstractItemModel* ComicBookTextModel::charactersModel() const
 {
+    if (d->charactersModelFromText != nullptr) {
+        return d->charactersModelFromText;
+    }
+
     return d->charactersModel;
 }
 
 CharacterModel* ComicBookTextModel::character(const QString& _name) const
 {
     return d->charactersModel->character(_name);
+}
+
+void ComicBookTextModel::createCharacter(const QString& _name)
+{
+    d->charactersModel->createCharacter(_name);
 }
 
 void ComicBookTextModel::updateCharacterName(const QString& _oldName, const QString& _newName)
@@ -297,6 +330,99 @@ QSet<QString> ComicBookTextModel::findCharactersFromText() const
     findCharacters(d->rootItem());
 
     return characters;
+}
+
+void ComicBookTextModel::updateRuntimeDictionariesIfNeeded()
+{
+    if (!d->needUpdateRuntimeDictionaries) {
+        return;
+    }
+
+    updateRuntimeDictionaries();
+
+    d->needUpdateRuntimeDictionaries = false;
+}
+
+void ComicBookTextModel::updateRuntimeDictionaries()
+{
+    const bool useCharactersFromText
+        = settingsValue(DataStorageLayer::kComponentsComicBookEditorUseCharactersFromTextKey)
+              .toBool();
+
+    //
+    // Если нет необходимости собирать персонажей из текста
+    //
+    if (!useCharactersFromText) {
+        //
+        // ... удалим старый список, если он был создан
+        //
+        if (d->charactersModelFromText != nullptr) {
+            d->charactersModelFromText->deleteLater();
+            d->charactersModelFromText = nullptr;
+        }
+        //
+        // ... и далее ничего не делаем
+        //
+        return;
+    }
+
+    //
+    // В противном случае, собираем персонажей из текста
+    //
+    QSet<QString> characters;
+    std::function<void(const TextModelItem*)> findCharactersInText;
+    findCharactersInText = [this, &findCharactersInText, &characters](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case TextModelItemType::Folder:
+            case TextModelItemType::Group: {
+                findCharactersInText(childItem);
+                break;
+            }
+
+            case TextModelItemType::Text: {
+                auto textItem = static_cast<TextModelTextItem*>(childItem);
+
+                switch (textItem->paragraphType()) {
+                case TextParagraphType::Character: {
+                    const auto character = ComicBookCharacterParser::name(textItem->text());
+                    if (d->charactersModel->exists(character)) {
+                        characters.insert(character);
+                    }
+                    break;
+                }
+
+                default: {
+                    break;
+                }
+                }
+
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
+    findCharactersInText(d->rootItem());
+    //
+    // ... не забываем приаттачить всех персонажей, у кого определена роль в истории
+    //
+    for (int row = 0; row < d->charactersModel->rowCount(); ++row) {
+        const auto character = d->charactersModel->character(row);
+        if (character->storyRole() != CharacterStoryRole::Undefined) {
+            characters.insert(character->name());
+        }
+    }
+    //
+    // ... создаём (при необходимости) и наполняем модель
+    //
+    if (d->charactersModelFromText == nullptr) {
+        d->charactersModelFromText = new QStringListModel(this);
+    }
+    d->charactersModelFromText->setStringList(characters.values());
 }
 
 QStringList ComicBookTextModel::mimeTypes() const

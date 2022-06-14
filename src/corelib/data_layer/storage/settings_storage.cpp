@@ -629,6 +629,9 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsComicBookAvailableKey, true);
         //
         defaultValues.insert(kComponentsComicBookEditorDefaultTemplateKey, "world");
+        defaultValues.insert(kComponentsComicBookEditorUseCharactersFromTextKey, false);
+        defaultValues.insert(kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey,
+                             false);
         //
         // Параметры навигатора сценария
         //

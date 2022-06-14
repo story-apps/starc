@@ -44,12 +44,17 @@ public:
      * @brief Задать модель персонажей проекта
      */
     void setCharactersModel(CharactersModel* _model);
-    CharactersModel* charactersModel() const;
+    QAbstractItemModel* charactersModel() const;
 
     /**
      * @brief Получить модель персонажа по заданному имени
      */
     BusinessLayer::CharacterModel* character(const QString& _name) const;
+
+    /**
+     * @brief Создать персонажа с заданным именем
+     */
+    void createCharacter(const QString& _name);
 
     /**
      * @brief Обновить имя персонажа
@@ -60,6 +65,12 @@ public:
      * @brief Найти всех персонажей сценария
      */
     QSet<QString> findCharactersFromText() const;
+
+    /**
+     * @brief Настроить справочники, которые собираются во время работы приложения
+     */
+    void updateRuntimeDictionariesIfNeeded();
+    void updateRuntimeDictionaries();
 
     /**
      * @brief Определим список майм типов для модели

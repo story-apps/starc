@@ -187,6 +187,13 @@ void ComicBookTextEdit::reinit()
     // Перенастроим всё, что зависит от шаблона
     //
     initWithModel(d->model);
+
+    //
+    // Пересчитаем всё, что считается во время выполнения
+    //
+    if (d->model != nullptr) {
+        d->model->updateRuntimeDictionaries();
+    }
 }
 
 const BusinessLayer::ComicBookTemplate& ComicBookTextEdit::comicBookTemplate() const
@@ -203,13 +210,22 @@ BusinessLayer::ComicBookDictionariesModel* ComicBookTextEdit::dictionaries() con
     return d->model->dictionariesModel();
 }
 
-BusinessLayer::CharactersModel* ComicBookTextEdit::characters() const
+QAbstractItemModel* ComicBookTextEdit::characters() const
 {
     if (d->model == nullptr) {
         return nullptr;
     }
 
     return d->model->charactersModel();
+}
+
+void ComicBookTextEdit::createCharacter(const QString& _name)
+{
+    if (d->model == nullptr) {
+        return;
+    }
+
+    d->model->createCharacter(_name);
 }
 
 void ComicBookTextEdit::undo()

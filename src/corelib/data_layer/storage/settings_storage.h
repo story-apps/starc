@@ -215,6 +215,10 @@ const QString kComponentsComicBookAvailableKey
 const QString kComponentsComicBookEditorKey = kComponentsComicBookKey + QStringLiteral("/editor");
 const QString kComponentsComicBookEditorDefaultTemplateKey
     = kComponentsComicBookEditorKey + QStringLiteral("/default-template");
+const QString kComponentsComicBookEditorUseCharactersFromTextKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/use-characters-from-text");
+const QString kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
 const QString kComponentsComicBookEditorShortcutsKey
     = kComponentsComicBookEditorKey + QStringLiteral("/shortcuts");
 // ... навигатор
