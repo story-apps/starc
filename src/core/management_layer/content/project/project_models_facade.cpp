@@ -393,7 +393,21 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ComicBookSynopsis: {
-            model = new BusinessLayer::ComicBookSynopsisModel;
+            auto synopsisModel = new BusinessLayer::ComicBookSynopsisModel;
+
+            const auto sinopsisItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(sinopsisItem);
+            Q_ASSERT(sinopsisItem->parent());
+            const auto parentUuid = sinopsisItem->parent()->uuid();
+
+            //
+            // Добавляем в модель титульной страницы, модель информации о комиксе
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::ComicBookInformationModel*>(modelFor(parentUuid));
+            synopsisModel->setInformationModel(informationModel);
+
+            model = synopsisModel;
             break;
         }
 
@@ -514,7 +528,21 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::AudioplaySynopsis: {
-            model = new BusinessLayer::AudioplaySynopsisModel;
+            auto synopsisModel = new BusinessLayer::AudioplaySynopsisModel;
+
+            const auto synopsisItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(synopsisItem);
+            Q_ASSERT(synopsisItem->parent());
+            const auto parentUuid = synopsisItem->parent()->uuid();
+
+            //
+            // Добавляем в модель синопсиса, модель информации о сценарие
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::AudioplayInformationModel*>(modelFor(parentUuid));
+            synopsisModel->setInformationModel(informationModel);
+
+            model = synopsisModel;
             break;
         }
 
@@ -624,7 +652,21 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::StageplaySynopsis: {
-            model = new BusinessLayer::StageplaySynopsisModel;
+            auto synopsisModel = new BusinessLayer::StageplaySynopsisModel;
+
+            const auto synopsisItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(synopsisItem);
+            Q_ASSERT(synopsisItem->parent());
+            const auto parentUuid = synopsisItem->parent()->uuid();
+
+            //
+            // Добавляем в модель синопсиса, модель информации о сценарие
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::StageplayInformationModel*>(modelFor(parentUuid));
+            synopsisModel->setInformationModel(informationModel);
+
+            model = synopsisModel;
             break;
         }
 

@@ -1,9 +1,5 @@
 #include "stageplay_title_page_model.h"
 
-#include <business_layer/model/text/text_model_text_item.h>
-#include <business_layer/templates/simple_text_template.h>
-#include <domain/document_object.h>
-
 
 namespace BusinessLayer {
 

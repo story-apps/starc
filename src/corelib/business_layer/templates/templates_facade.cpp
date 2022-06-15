@@ -7,9 +7,11 @@
 #include "stageplay_template.h"
 
 #include <business_layer/model/audioplay/audioplay_information_model.h>
+#include <business_layer/model/audioplay/audioplay_synopsis_model.h>
 #include <business_layer/model/audioplay/audioplay_title_page_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
+#include <business_layer/model/comic_book/comic_book_synopsis_model.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
@@ -17,6 +19,7 @@
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/stageplay/stageplay_information_model.h>
+#include <business_layer/model/stageplay/stageplay_synopsis_model.h>
 #include <business_layer/model/stageplay/stageplay_title_page_model.h>
 #include <business_layer/model/stageplay/text/stageplay_text_model.h>
 
@@ -393,18 +396,24 @@ const TextTemplate& TemplatesFacade::textTemplate(const TextModel* _model)
         return comicBookTemplate(model->informationModel()->templateId());
     } else if (auto model = qobject_cast<const ComicBookTitlePageModel*>(_model)) {
         return comicBookTemplate(model->informationModel()->templateId()).titlePageTemplate();
+    } else if (auto model = qobject_cast<const ComicBookSynopsisModel*>(_model)) {
+        return comicBookTemplate(model->informationModel()->templateId()).synopsisTemplate();
     }
     //
     else if (auto model = qobject_cast<const AudioplayTextModel*>(_model)) {
         return audioplayTemplate(model->informationModel()->templateId());
     } else if (auto model = qobject_cast<const AudioplayTitlePageModel*>(_model)) {
         return audioplayTemplate(model->informationModel()->templateId()).titlePageTemplate();
+    } else if (auto model = qobject_cast<const AudioplaySynopsisModel*>(_model)) {
+        return audioplayTemplate(model->informationModel()->templateId()).synopsisTemplate();
     }
     //
     else if (auto model = qobject_cast<const StageplayTextModel*>(_model)) {
         return stageplayTemplate(model->informationModel()->templateId());
     } else if (auto model = qobject_cast<const StageplayTitlePageModel*>(_model)) {
         return stageplayTemplate(model->informationModel()->templateId()).titlePageTemplate();
+    } else if (auto model = qobject_cast<const StageplaySynopsisModel*>(_model)) {
+        return stageplayTemplate(model->informationModel()->templateId()).synopsisTemplate();
     }
     return simpleTextTemplate();
 }
