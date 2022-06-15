@@ -210,6 +210,11 @@ void CreateDocumentDialog::setDocumentType(Domain::DocumentObjectType _type)
     }
 }
 
+void CreateDocumentDialog::setNameError(const QString& _error)
+{
+    d->documentName->setError(_error);
+}
+
 void CreateDocumentDialog::setInsertionParent(const QString& _parentName)
 {
     if (_parentName.isEmpty()) {

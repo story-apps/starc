@@ -133,8 +133,9 @@ void LocationsModel::createLocation(const QString& _name, const QByteArray& _con
 
 bool LocationsModel::exists(const QString& _name) const
 {
+    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
     for (const auto location : std::as_const(d->locationModels)) {
-        if (location->name() == _name) {
+        if (location->name() == nameCorrected) {
             return true;
         }
     }

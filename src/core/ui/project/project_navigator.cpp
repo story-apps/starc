@@ -66,6 +66,7 @@ ProjectNavigator::Implementation::Implementation(ProjectNavigator* _parent)
     addDocumentShortcut->setKey(QKeySequence::New);
     emptyRecycleBinButton->setFocusPolicy(Qt::NoFocus);
     emptyRecycleBinButton->setIcon(u8"\U000F05E8");
+    emptyRecycleBinButton->hide();
 
     new Shadow(Qt::TopEdge, tree);
     new Shadow(Qt::BottomEdge, tree);

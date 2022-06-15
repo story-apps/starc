@@ -133,8 +133,9 @@ void CharactersModel::createCharacter(const QString& _name, const QByteArray& _c
 
 bool CharactersModel::exists(const QString& _name) const
 {
+    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
     for (const auto character : std::as_const(d->characterModels)) {
-        if (character->name() == _name) {
+        if (character->name() == nameCorrected) {
             return true;
         }
     }

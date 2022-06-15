@@ -128,11 +128,11 @@ CrashReportDialog::CrashReportDialog(QWidget* _parent)
 
     connect(d->frequencyOther, &RadioButton::checkedChanged, d->frequencyOtherDetails,
             &TextField::setVisible);
-    connect(d->cancelButton, &Button::clicked, this, &CrashReportDialog::hideDialog);
+    connect(d->cancelButton, &Button::clicked, this, [this] {
+        d->crashDetails->setText("User decided to ignore filling error reason");
+        emit sendReportPressed();
+    });
     connect(d->sendButton, &Button::clicked, this, &CrashReportDialog::sendReportPressed);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 CrashReportDialog::~CrashReportDialog() = default;

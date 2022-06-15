@@ -240,6 +240,28 @@ void ProjectManager::Implementation::addDocument()
     connect(
         dialog, &Ui::CreateDocumentDialog::createPressed, navigator,
         [this, currentItemIndex, dialog](Domain::DocumentObjectType _type, const QString& _name) {
+            if (_type == Domain::DocumentObjectType::Character) {
+                auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
+                    Domain::DocumentObjectType::Characters);
+                auto model = modelsFacade.modelFor(document);
+                auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(model);
+                Q_ASSERT(charactersModel);
+                if (charactersModel->exists(_name)) {
+                    dialog->setNameError(tr("Character with this name already exists"));
+                    return;
+                }
+            } else if (_type == Domain::DocumentObjectType::Location) {
+                auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
+                    Domain::DocumentObjectType::Locations);
+                auto model = modelsFacade.modelFor(document);
+                auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(model);
+                Q_ASSERT(locationsModel);
+                if (locationsModel->exists(_name)) {
+                    dialog->setNameError(tr("Location with this name already exists"));
+                    return;
+                }
+            }
+
             //
             // Определим индекс родительского элемента, ищем именно папку
             //

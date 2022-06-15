@@ -356,7 +356,7 @@ void StageplayTextModel::updateRuntimeDictionaries()
 
                 switch (textItem->paragraphType()) {
                 case TextParagraphType::Character: {
-                    const auto character = textItem->text();
+                    const auto character = StageplayCharacterParser::name(textItem->text());
                     if (d->charactersModel->exists(character)) {
                         characters.insert(character);
                     }

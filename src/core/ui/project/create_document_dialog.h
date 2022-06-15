@@ -26,6 +26,11 @@ public:
     void setDocumentType(Domain::DocumentObjectType _type);
 
     /**
+     * @brief Задать ошибку имени
+     */
+    void setNameError(const QString& _error);
+
+    /**
      * @brief Установить возможность вставки элемента в родителя
      */
     void setInsertionParent(const QString& _parentName);
