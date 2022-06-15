@@ -51,6 +51,14 @@ class TitlePageEdit::Implementation
 public:
     explicit Implementation(TitlePageEdit* _q);
 
+    /**
+     * @brief Текущий шаблон документа
+     */
+    const BusinessLayer::TextTemplate& textTemplate() const;
+
+    /**
+     * @brief Отменить/повторить последнее действие
+     */
     void revertAction(bool previous);
 
 
@@ -63,6 +71,11 @@ public:
 TitlePageEdit::Implementation::Implementation(TitlePageEdit* _q)
     : q(_q)
 {
+}
+
+const BusinessLayer::TextTemplate& TitlePageEdit::Implementation::textTemplate() const
+{
+    return TemplatesFacade::textTemplate(model);
 }
 
 void TitlePageEdit::Implementation::revertAction(bool previous)
@@ -120,16 +133,10 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
 
     d->model = _model;
 
-    QMarginsF pageMargins;
     //
     // Сценарий
     //
     if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
-        const auto& currentTemplate = TemplatesFacade::textTemplate(titlePageModel);
-        setPageFormat(currentTemplate.pageSizeId());
-        setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
-        pageMargins = currentTemplate.pageMargins();
-
         auto updateHeader = [this, titlePageModel] {
             setHeader(titlePageModel->informationModel()->printHeaderOnTitlePage()
                           ? titlePageModel->informationModel()->header()
@@ -163,11 +170,6 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
     //
     else if (auto titlePageModel
              = qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
-        const auto& currentTemplate = TemplatesFacade::textTemplate(titlePageModel);
-        setPageFormat(currentTemplate.pageSizeId());
-        setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
-        pageMargins = currentTemplate.pageMargins();
-
         auto updateHeader = [this, titlePageModel] {
             setHeader(titlePageModel->informationModel()->printHeaderOnTitlePage()
                           ? titlePageModel->informationModel()->header()
@@ -201,11 +203,6 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
     //
     else if (auto titlePageModel
              = qobject_cast<BusinessLayer::AudioplayTitlePageModel*>(d->model)) {
-        const auto& currentTemplate = TemplatesFacade::textTemplate(titlePageModel);
-        setPageFormat(currentTemplate.pageSizeId());
-        setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
-        pageMargins = currentTemplate.pageMargins();
-
         auto updateHeader = [this, titlePageModel] {
             setHeader(titlePageModel->informationModel()->printHeaderOnTitlePage()
                           ? titlePageModel->informationModel()->header()
@@ -239,11 +236,6 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
     //
     else if (auto titlePageModel
              = qobject_cast<BusinessLayer::StageplayTitlePageModel*>(d->model)) {
-        const auto& currentTemplate = TemplatesFacade::textTemplate(titlePageModel);
-        setPageFormat(currentTemplate.pageSizeId());
-        setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
-        pageMargins = currentTemplate.pageMargins();
-
         auto updateHeader = [this, titlePageModel] {
             setHeader(titlePageModel->informationModel()->printHeaderOnTitlePage()
                           ? titlePageModel->informationModel()->header()
@@ -279,9 +271,17 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
     ModelHelper::initTitlePageModel(d->model);
 
     //
+    // Настроим редактор в соответствии с параметрами шаблона
+    //
+    const auto& currentTemplate = textTemplate();
+    setPageFormat(currentTemplate.pageSizeId());
+    setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+
+    //
     // Для титульной страницы уравновесим поля в сторону большего,
     // на случай, если кто-то ещё их печатает и сшивает
     //
+    auto pageMargins = currentTemplate.pageMargins();
     if (pageMargins.left() < pageMargins.right()) {
         pageMargins.setLeft(pageMargins.right());
     } else if (pageMargins.right() < pageMargins.left()) {
@@ -304,6 +304,11 @@ void TitlePageEdit::reinit()
     initWithModel(d->model);
 }
 
+const BusinessLayer::TextTemplate& TitlePageEdit::textTemplate() const
+{
+    return d->textTemplate();
+}
+
 void TitlePageEdit::undo()
 {
     d->revertAction(true);
@@ -316,7 +321,7 @@ void TitlePageEdit::redo()
 
 void TitlePageEdit::restoreFromTemplate()
 {
-    ModelHelper::initTitlePageModel(d->model);
+    ModelHelper::resetTitlePageModel(d->model);
 }
 
 void TitlePageEdit::addParagraph(BusinessLayer::TextParagraphType _type)

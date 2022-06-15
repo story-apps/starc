@@ -828,16 +828,11 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
 
 const TextTemplate& TextCursor::textTemplate() const
 {
-    if (document() == nullptr) {
-        return TemplatesFacade::simpleTextTemplate();
+    if (auto textDocument = qobject_cast<TextDocument*>(document()); textDocument != nullptr) {
+        return TemplatesFacade::textTemplate(textDocument->model());
     }
 
-    auto textDocument = qobject_cast<TextDocument*>(document());
-    if (textDocument == nullptr) {
-        return TemplatesFacade::simpleTextTemplate();
-    }
-
-    return TemplatesFacade::textTemplate(textDocument->model());
+    return TemplatesFacade::simpleTextTemplate();
 }
 
 } // namespace BusinessLayer

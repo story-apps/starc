@@ -49,13 +49,9 @@ public:
      */
     static const SimpleTextTemplate& simpleTextTemplate(const QString& _templateId = {});
     static const ScreenplayTemplate& screenplayTemplate(const QString& _templateId = {});
-    static const TextTemplate& screenplayTitlePageTemplate(const QString& _templateId = {});
     static const ComicBookTemplate& comicBookTemplate(const QString& _templateId = {});
-    static const TextTemplate& comicBookTitlePageTemplate(const QString& _templateId = {});
     static const AudioplayTemplate& audioplayTemplate(const QString& _templateId = {});
-    static const TextTemplate& audioplayTitlePageTemplate(const QString& _templateId = {});
     static const StageplayTemplate& stageplayTemplate(const QString& _templateId = {});
-    static const TextTemplate& stageplayTitlePageTemplate(const QString& _templateId = {});
 
     /**
      * @brief Задать стандартный шаблон

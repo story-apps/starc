@@ -217,7 +217,7 @@ void SimpleTextView::Implementation::reconfigureTemplate(bool _withModelReinitia
     paragraphTypesModel->clear();
 
     using namespace BusinessLayer;
-    const auto usedTemplate = BusinessLayer::TemplatesFacade::simpleTextTemplate();
+    const auto usedTemplate = BusinessLayer::TemplatesFacade::textTemplate(model);
     const QVector<TextParagraphType> types = { TextParagraphType::ChapterHeading1,
                                                TextParagraphType::ChapterHeading2,
                                                TextParagraphType::ChapterHeading3,

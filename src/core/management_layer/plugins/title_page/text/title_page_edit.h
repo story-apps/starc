@@ -4,6 +4,7 @@
 
 namespace BusinessLayer {
 class SimpleTextModel;
+class TextTemplate;
 enum class TextParagraphType;
 } // namespace BusinessLayer
 
@@ -31,6 +32,12 @@ public:
      * @note Например в случае смены шаблона оформления сценария
      */
     void reinit();
+
+    /**
+     * @brief Текущий используемый шаблон оформления
+     */
+    const BusinessLayer::TextTemplate& textTemplate() const;
+
 
     /**
      * @brief Отменить последнее изменение

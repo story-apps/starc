@@ -766,11 +766,14 @@ void TextTemplate::Implementation::buildTitlePageTemplate()
     titlePageTemplate->setPageMargins(pageMargins);
     titlePageTemplate->setPageNumbersAlignment(pageNumbersAlignment);
 
-    TextBlockStyle defaultBlockStyle;
+    TextBlockStyle defaultBlockStyle = paragraphsStyles.value(defaultParagraphType());
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
     defaultBlockStyle.setFont(defaultFont());
-    defaultBlockStyle.setAlign(paragraphsStyles.value(defaultParagraphType()).align());
+    defaultBlockStyle.setMargins({});
+    defaultBlockStyle.setLinesBefore(0);
+    defaultBlockStyle.setLinesAfter(0);
+    defaultBlockStyle.setLineSpacingType(TextBlockStyle::LineSpacingType::SingleLineSpacing);
     //
     for (auto type : {
              TextParagraphType::ChapterHeading1,
@@ -798,25 +801,40 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
     synopsisTemplate->setPageMargins(pageMargins);
     synopsisTemplate->setPageNumbersAlignment(pageNumbersAlignment);
 
-    TextBlockStyle defaultBlockStyle;
+    TextBlockStyle defaultBlockStyle = paragraphsStyles.value(defaultParagraphType());
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
     defaultBlockStyle.setFont(defaultFont());
-    defaultBlockStyle.setAlign(paragraphsStyles.value(defaultParagraphType()).align());
+    defaultBlockStyle.setMargins({});
+    defaultBlockStyle.setLinesBefore(1);
+    defaultBlockStyle.setLinesAfter(0);
+    defaultBlockStyle.setLineSpacingType(TextBlockStyle::LineSpacingType::SingleLineSpacing);
     //
     for (auto type : {
-             TextParagraphType::ChapterHeading1,
-             TextParagraphType::ChapterHeading2,
-             TextParagraphType::ChapterHeading3,
-             TextParagraphType::ChapterHeading4,
-             TextParagraphType::ChapterHeading5,
-             TextParagraphType::ChapterHeading6,
              TextParagraphType::Text,
              TextParagraphType::InlineNote,
          }) {
         auto blockStyle = defaultBlockStyle;
         blockStyle.setType(type);
         synopsisTemplate->setParagraphStyle(blockStyle);
+    }
+    //
+    auto headingFont = defaultBlockStyle.font();
+    headingFont.setBold(true);
+    for (auto type : {
+             TextParagraphType::ChapterHeading6,
+             TextParagraphType::ChapterHeading5,
+             TextParagraphType::ChapterHeading4,
+             TextParagraphType::ChapterHeading3,
+             TextParagraphType::ChapterHeading2,
+             TextParagraphType::ChapterHeading1,
+         }) {
+        auto blockStyle = defaultBlockStyle;
+        blockStyle.setType(type);
+        blockStyle.setFont(headingFont);
+        synopsisTemplate->setParagraphStyle(blockStyle);
+
+        headingFont.setPixelSize(headingFont.pixelSize() + MeasurementHelper::ptToPx(2));
     }
 }
 

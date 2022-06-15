@@ -38,7 +38,7 @@ void PreHandler::handleOther(QKeyEvent* _event)
     //
     QTextCursor topCursor(editor()->document());
     topCursor.setPosition(qMin(cursor.selectionStart(), cursor.selectionEnd()));
-    const auto topStyle = BusinessLayer::TemplatesFacade::simpleTextTemplate().paragraphStyle(
+    const auto topStyle = editor()->textTemplate().paragraphStyle(
         BusinessLayer::TextBlockStyle::forBlock(topCursor.block()));
 
     //
@@ -46,7 +46,7 @@ void PreHandler::handleOther(QKeyEvent* _event)
     //
     QTextCursor bottomCursor(editor()->document());
     bottomCursor.setPosition(qMax(cursor.selectionStart(), cursor.selectionEnd()));
-    const auto bottomStyle = BusinessLayer::TemplatesFacade::simpleTextTemplate().paragraphStyle(
+    const auto bottomStyle = editor()->textTemplate().paragraphStyle(
         BusinessLayer::TextBlockStyle::forBlock(bottomCursor.block()));
 
     //

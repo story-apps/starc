@@ -432,7 +432,7 @@ public:
     explicit TextTemplate(const QString& _fromFile);
     TextTemplate(const TextTemplate& _other);
     TextTemplate& operator=(const TextTemplate& _other);
-    ~TextTemplate();
+    virtual ~TextTemplate();
 
     /**
      * @brief Загрузить шаблон из файла

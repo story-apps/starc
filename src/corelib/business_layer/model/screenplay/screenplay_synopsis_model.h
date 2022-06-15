@@ -5,6 +5,8 @@
 
 namespace BusinessLayer {
 
+class ScreenplayInformationModel;
+
 /**
  * @brief Модель
  */
@@ -14,11 +16,22 @@ class CORE_LIBRARY_EXPORT ScreenplaySynopsisModel : public SimpleTextModel
 
 public:
     explicit ScreenplaySynopsisModel(QObject* _parent = nullptr);
+    ~ScreenplaySynopsisModel() override;
 
     /**
      * @brief Игнорируем установку названия документа
      */
     void setDocumentName(const QString& _name) override;
+
+    /**
+     * @brief Задать модель информации о сценарии
+     */
+    void setInformationModel(ScreenplayInformationModel* _model);
+    ScreenplayInformationModel* informationModel() const;
+
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 } // namespace BusinessLayer

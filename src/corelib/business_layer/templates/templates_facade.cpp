@@ -13,6 +13,7 @@
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/stageplay/stageplay_information_model.h>
@@ -383,25 +384,27 @@ const TextTemplate& TemplatesFacade::textTemplate(const TextModel* _model)
     if (auto model = qobject_cast<const ScreenplayTextModel*>(_model)) {
         return screenplayTemplate(model->informationModel()->templateId());
     } else if (auto model = qobject_cast<const ScreenplayTitlePageModel*>(_model)) {
-        return screenplayTitlePageTemplate(model->informationModel()->templateId());
+        return screenplayTemplate(model->informationModel()->templateId()).titlePageTemplate();
+    } else if (auto model = qobject_cast<const ScreenplaySynopsisModel*>(_model)) {
+        return screenplayTemplate(model->informationModel()->templateId()).synopsisTemplate();
     }
     //
     else if (auto model = qobject_cast<const ComicBookTextModel*>(_model)) {
         return comicBookTemplate(model->informationModel()->templateId());
     } else if (auto model = qobject_cast<const ComicBookTitlePageModel*>(_model)) {
-        return comicBookTitlePageTemplate(model->informationModel()->templateId());
+        return comicBookTemplate(model->informationModel()->templateId()).titlePageTemplate();
     }
     //
     else if (auto model = qobject_cast<const AudioplayTextModel*>(_model)) {
         return audioplayTemplate(model->informationModel()->templateId());
     } else if (auto model = qobject_cast<const AudioplayTitlePageModel*>(_model)) {
-        return audioplayTitlePageTemplate(model->informationModel()->templateId());
+        return audioplayTemplate(model->informationModel()->templateId()).titlePageTemplate();
     }
     //
     else if (auto model = qobject_cast<const StageplayTextModel*>(_model)) {
         return stageplayTemplate(model->informationModel()->templateId());
     } else if (auto model = qobject_cast<const StageplayTitlePageModel*>(_model)) {
-        return stageplayTitlePageTemplate(model->informationModel()->templateId());
+        return stageplayTemplate(model->informationModel()->templateId()).titlePageTemplate();
     }
     return simpleTextTemplate();
 }
@@ -416,19 +419,9 @@ const ScreenplayTemplate& TemplatesFacade::screenplayTemplate(const QString& _te
     return instance().d->getTemplate<ScreenplayTemplate>(_templateId);
 }
 
-const TextTemplate& TemplatesFacade::screenplayTitlePageTemplate(const QString& _templateId)
-{
-    return screenplayTemplate(_templateId).titlePageTemplate();
-}
-
 const ComicBookTemplate& TemplatesFacade::comicBookTemplate(const QString& _templateId)
 {
     return instance().d->getTemplate<ComicBookTemplate>(_templateId);
-}
-
-const TextTemplate& TemplatesFacade::comicBookTitlePageTemplate(const QString& _templateId)
-{
-    return comicBookTemplate(_templateId).titlePageTemplate();
 }
 
 const AudioplayTemplate& TemplatesFacade::audioplayTemplate(const QString& _templateId)
@@ -436,19 +429,9 @@ const AudioplayTemplate& TemplatesFacade::audioplayTemplate(const QString& _temp
     return instance().d->getTemplate<AudioplayTemplate>(_templateId);
 }
 
-const TextTemplate& TemplatesFacade::audioplayTitlePageTemplate(const QString& _templateId)
-{
-    return audioplayTemplate(_templateId).titlePageTemplate();
-}
-
 const StageplayTemplate& TemplatesFacade::stageplayTemplate(const QString& _templateId)
 {
     return instance().d->getTemplate<StageplayTemplate>(_templateId);
-}
-
-const TextTemplate& TemplatesFacade::stageplayTitlePageTemplate(const QString& _templateId)
-{
-    return stageplayTemplate(_templateId).titlePageTemplate();
 }
 
 void TemplatesFacade::setDefaultSimpleTextTemplate(const QString& _templateId)

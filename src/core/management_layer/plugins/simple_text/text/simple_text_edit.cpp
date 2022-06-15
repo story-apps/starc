@@ -37,6 +37,14 @@ class SimpleTextEdit::Implementation
 public:
     explicit Implementation(SimpleTextEdit* _q);
 
+    /**
+     * @brief Текущий шаблон документа
+     */
+    const BusinessLayer::TextTemplate& textTemplate() const;
+
+    /**
+     * @brief Отменить/повторить последнее действие
+     */
     void revertAction(bool previous);
 
 
@@ -54,6 +62,11 @@ public:
 SimpleTextEdit::Implementation::Implementation(SimpleTextEdit* _q)
     : q(_q)
 {
+}
+
+const BusinessLayer::TextTemplate& SimpleTextEdit::Implementation::textTemplate() const
+{
+    return TemplatesFacade::textTemplate(model);
 }
 
 void SimpleTextEdit::Implementation::revertAction(bool previous)
@@ -108,7 +121,7 @@ void SimpleTextEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
     d->model = _model;
 
     if (usePageMode()) {
-        const auto currentTemplate = TemplatesFacade::simpleTextTemplate();
+        const auto currentTemplate = TemplatesFacade::textTemplate(_model);
         setPageFormat(currentTemplate.pageSizeId());
         setPageMarginsMm(currentTemplate.pageMargins());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
@@ -127,6 +140,11 @@ void SimpleTextEdit::reinit()
     // Перенастроим всё, что зависит от шаблона
     //
     initWithModel(d->model);
+}
+
+const BusinessLayer::TextTemplate& SimpleTextEdit::textTemplate() const
+{
+    return d->textTemplate();
 }
 
 void SimpleTextEdit::undo()

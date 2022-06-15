@@ -227,7 +227,21 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ScreenplaySynopsis: {
-            model = new BusinessLayer::ScreenplaySynopsisModel;
+            auto synopsisModel = new BusinessLayer::ScreenplaySynopsisModel;
+
+            const auto synopsisItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(synopsisItem);
+            Q_ASSERT(synopsisItem->parent());
+            const auto parentUuid = synopsisItem->parent()->uuid();
+
+            //
+            // Добавляем в модель синопсиса, модель информации о сценарие
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::ScreenplayInformationModel*>(modelFor(parentUuid));
+            synopsisModel->setInformationModel(informationModel);
+
+            model = synopsisModel;
             break;
         }
 
