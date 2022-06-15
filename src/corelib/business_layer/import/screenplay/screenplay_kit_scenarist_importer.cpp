@@ -2,6 +2,7 @@
 
 #include "screenlay_import_options.h"
 
+#include <business_layer/import/text/simple_text_markdown_importer.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/model/text/text_model_xml.h>
@@ -123,6 +124,16 @@ QString readLocation(const QString& _locationName, const QString& _kitLocationXm
     writer.writeEndDocument();
 
     return locationXml;
+}
+
+/**
+ * @brief Сформировать простой текстовый документ из текстового документа КИТа
+ */
+QString readPlainTextDocument(const QString& _sourceDocument)
+{
+    const auto sourceDocumentPlainText = htmlToPlain(_sourceDocument);
+    const auto document = SimpleTextMarkdownImporter().importDocument(sourceDocumentPlainText);
+    return document.text;
 }
 
 /**
@@ -443,27 +454,40 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayKitScenaristImporter::
             QSqlQuery query(database);
 
             //
-            // Читаем название
-            //
-            QString name = QFileInfo(_options.filePath).completeBaseName();
-            {
-                query.exec("SELECT data_value FROM scenario_data WHERE data_name = 'name'");
-                query.next();
-                const auto screenplayName = query.record().value("data_value").toString();
-                if (!screenplayName.isEmpty()) {
-                    name = screenplayName;
-                }
-            }
-
-            //
             // Читаем сценарий
             //
+            QString screenplayName = QFileInfo(_options.filePath).completeBaseName();
             {
                 query.exec("SELECT text FROM scenario WHERE is_draft = 0");
                 query.next();
                 const auto kitScreenplayXml = query.record().value("text").toString();
                 auto screenplay = readScreenplay(kitScreenplayXml);
-                screenplay.name = name;
+
+                //
+                // Читаем данные
+                //
+                query.exec("SELECT data_name, data_value FROM scenario_data");
+                while (query.next()) {
+                    const auto dataName = query.record().value("data_name").toString();
+                    const auto dataValue = query.record().value("data_value").toString();
+                    if (dataValue.isNull() || dataValue.isEmpty()) {
+                        continue;
+                    }
+
+                    if (dataName == "name") {
+                        screenplayName = dataValue;
+                        screenplay.name = dataValue;
+                    } else if (dataName == "header") {
+                        screenplay.header = dataValue;
+                    } else if (dataName == "footer") {
+                        screenplay.footer = dataValue;
+                    } else if (dataName == "logline") {
+                        screenplay.logline = htmlToPlain(dataValue);
+                    } else if (dataName == "synopsis") {
+                        screenplay.synopsis = readPlainTextDocument(dataValue);
+                    }
+                }
+
                 result.append(screenplay);
             }
 
@@ -484,7 +508,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayKitScenaristImporter::
                 if (kitScreenplayXml != defaultKitScreenplay) {
                     auto screenplay = readScreenplay(kitScreenplayXml);
                     screenplay.name = QString("%1 (%2)").arg(
-                        name,
+                        screenplayName,
                         //: Draft screenplay imported from KIT Scenarist file
                         QApplication::translate("BusinessLayer::KitScenaristImporter", "draft"));
                     result.append(screenplay);

@@ -42,6 +42,9 @@ public:
      */
     struct Screenplay {
         QString name;
+        QString header;
+        QString footer;
+        QString logline;
         QString titlePage;
         QString synopsis;
         QString treatment;
