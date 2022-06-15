@@ -702,11 +702,12 @@ QMimeData* SimpleTextEdit::createMimeDataFromSelection() const
                 cursor.setPosition(selection.to, QTextCursor::KeepAnchor);
             }
             if (!text.isEmpty()) {
-                text.append("\r\n");
+                text.append("\r\n\r\n");
             }
+            const auto selectedText = cursor.selectedText().replace(QChar::LineSeparator, "\r\n");
             text.append(cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
-                            ? TextHelper::smartToUpper(cursor.selectedText())
-                            : cursor.selectedText());
+                            ? TextHelper::smartToUpper(selectedText)
+                            : selectedText);
         } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
                  && cursor.movePosition(QTextCursor::NextBlock));
 
