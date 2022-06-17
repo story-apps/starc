@@ -278,7 +278,7 @@ tell application \"Finder\"
 		open
 		-- Rearranging
 		${NO_COORDS}set the position of item \"Applications\" to {${APPS_X}, ${APPS_Y}}
-        ${NO_COORDS}set the position of item \"starcapp\" to {${BUNDLE_X}, ${BUNDLE_Y}}
+        ${NO_COORDS}set the position of item \"Story Architect\" to {${BUNDLE_X}, ${BUNDLE_Y}}
 		-- Updating and sleeping for 5 secs
 		update without registering applications
 		delay 5
