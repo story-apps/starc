@@ -87,8 +87,6 @@ ProjectView::ProjectView(QWidget* _parent)
 
     connect(d->defaultPageAddItemButton, &Body1LinkLabel::clicked, this,
             &ProjectView::createNewItemPressed);
-
-    designSystemChangeEvent(nullptr);
 }
 
 ProjectView::~ProjectView() = default;

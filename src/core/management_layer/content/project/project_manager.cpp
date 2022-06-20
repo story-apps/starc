@@ -33,12 +33,14 @@
 #include <ui/project/project_view.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/dialog/dialog.h>
+#include <ui/widgets/splitter/splitter.h>
 #include <utils/logging.h>
 
 #include <QAction>
 #include <QDateTime>
 #include <QHBoxLayout>
 #include <QSet>
+#include <QShortcut>
 #include <QTimer>
 #include <QUuid>
 #include <QVariantAnimation>
@@ -50,6 +52,8 @@ class ProjectManager::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent, const PluginsBuilder& _pluginsBuilder);
+
+    void updateSplitScreenActionText();
 
     /**
      * @brief Действия контекстного меню
@@ -104,14 +108,35 @@ public:
 
     Ui::ProjectNavigator* navigator = nullptr;
 
-    Ui::ProjectView* view = nullptr;
+    Splitter* view = nullptr;
+    Ui::ProjectView* leftView = nullptr;
+    Ui::ProjectView* rightView = nullptr;
 
+    /**
+     * @brief Действие разделения экрана напополам
+     */
+    QAction* splitScreenAction = nullptr;
+    QShortcut* splitScreenShortcut = nullptr;
+
+    /**
+     * @brief Модели списка документов
+     */
     BusinessLayer::StructureModel* projectStructureModel = nullptr;
     BusinessLayer::StructureProxyModel* projectStructureProxyModel = nullptr;
 
+    /**
+     * @brief Хранилище изображений проекта
+     */
     DataStorageLayer::DocumentImageStorage documentDataStorage;
 
+    /**
+     * @brief Фасад доступа к моделям проекта
+     */
     ProjectModelsFacade modelsFacade;
+
+    /**
+     * @brief Фабрика для создания плагинов-редакторов к моделям
+     */
     const PluginsBuilder& pluginsBuilder;
 
     /**
@@ -128,7 +153,11 @@ ProjectManager::Implementation::Implementation(QWidget* _parent,
     : topLevelWidget(_parent)
     , toolBar(new Ui::ProjectToolBar(_parent))
     , navigator(new Ui::ProjectNavigator(_parent))
-    , view(new Ui::ProjectView(_parent))
+    , view(new Splitter(_parent))
+    , leftView(new Ui::ProjectView(_parent))
+    , rightView(new Ui::ProjectView(_parent))
+    , splitScreenAction(new QAction(_parent))
+    , splitScreenShortcut(new QShortcut(_parent))
     , projectStructureModel(new BusinessLayer::StructureModel(navigator))
     , projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel))
     , modelsFacade(projectStructureModel, &documentDataStorage)
@@ -136,9 +165,26 @@ ProjectManager::Implementation::Implementation(QWidget* _parent,
 {
     toolBar->hide();
     navigator->hide();
+    view->setWidgets(leftView, rightView);
+    view->setSizes({ 1, 0 });
     view->hide();
+    rightView->hide();
 
     navigator->setModel(projectStructureProxyModel);
+
+    splitScreenAction->setCheckable(true);
+    splitScreenAction->setIconText(u8"\U000F10E7");
+    splitScreenAction->setShortcut(QKeySequence("F2"));
+    updateSplitScreenActionText();
+    toolBar->setOptions({ splitScreenAction }, AppBarOptionsLevel::App);
+    splitScreenShortcut->setKey(QKeySequence("F2"));
+    splitScreenShortcut->setContext(Qt::ApplicationShortcut);
+}
+
+void ProjectManager::Implementation::updateSplitScreenActionText()
+{
+    splitScreenAction->setText(splitScreenAction->isChecked() ? tr("Merge screen")
+                                                              : tr("Split screen"));
 }
 
 void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelIndex& _index)
@@ -154,28 +200,31 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     if (currentItem->type() == Domain::DocumentObjectType::Characters) {
         auto findAllCharacters = new QAction(tr("Find all characters"));
         findAllCharacters->setIconText(u8"\U000F0016");
-        connect(findAllCharacters, &QAction::triggered, [this] { this->findAllCharacters(); });
+        connect(findAllCharacters, &QAction::triggered, topLevelWidget,
+                [this] { this->findAllCharacters(); });
         menuActions.append(findAllCharacters);
 
         auto addCharacter = new QAction(tr("Add character"));
         addCharacter->setIconText(u8"\U000F0014");
-        connect(addCharacter, &QAction::triggered, [this] { this->addDocument(); });
+        connect(addCharacter, &QAction::triggered, topLevelWidget, [this] { this->addDocument(); });
         menuActions.append(addCharacter);
     } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
         auto findAllLocations = new QAction(tr("Find all locations"));
         findAllLocations->setIconText(u8"\U000F13B0");
-        connect(findAllLocations, &QAction::triggered, [this] { this->findAllLocations(); });
+        connect(findAllLocations, &QAction::triggered, topLevelWidget,
+                [this] { this->findAllLocations(); });
         menuActions.append(findAllLocations);
 
         auto addLocation = new QAction(tr("Add location"));
         addLocation->setIconText(u8"\U000F0975");
-        connect(addLocation, &QAction::triggered, [this] { this->addDocument(); });
+        connect(addLocation, &QAction::triggered, topLevelWidget, [this] { this->addDocument(); });
         menuActions.append(addLocation);
     } else if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
         if (currentItem->hasChildren()) {
             auto emptyRecycleBin = new QAction(tr("Empty recycle bin"));
             emptyRecycleBin->setIconText(u8"\U000f05e8");
-            connect(emptyRecycleBin, &QAction::triggered, [this] { this->emptyRecycleBin(); });
+            connect(emptyRecycleBin, &QAction::triggered, topLevelWidget,
+                    [this] { this->emptyRecycleBin(); });
             menuActions.append(emptyRecycleBin);
         }
     }
@@ -185,7 +234,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     else {
         auto addDocument = new QAction(tr("Add document"));
         addDocument->setIconText(u8"\U000f0415");
-        connect(addDocument, &QAction::triggered, [this] { this->addDocument(); });
+        connect(addDocument, &QAction::triggered, topLevelWidget, [this] { this->addDocument(); });
         menuActions.append(addDocument);
 
         const QSet<Domain::DocumentObjectType> cantBeRemovedItems = {
@@ -213,7 +262,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
             auto removeDocument = new QAction(tr("Remove document"));
             removeDocument->setIconText(u8"\U000f01b4");
-            connect(removeDocument, &QAction::triggered,
+            connect(removeDocument, &QAction::triggered, topLevelWidget,
                     [this, currentItemIndex] { this->removeDocument(currentItemIndex); });
             menuActions.append(removeDocument);
         }
@@ -669,6 +718,21 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->toolBar, &Ui::ProjectToolBar::viewPressed, this, [this](const QString& _mimeType) {
         showView(d->navigator->currentIndex(), _mimeType);
     });
+    connect(d->splitScreenAction, &QAction::toggled, this, [this](bool _checked) {
+        d->updateSplitScreenActionText();
+        if (_checked) {
+            d->view->setSizes({ 1, 1 });
+        } else {
+            d->view->setSizes({ 1, 0 });
+        }
+    });
+    connect(d->splitScreenShortcut, &QShortcut::activated, this, [this] {
+        if (!d->view->isVisible()) {
+            return;
+        }
+
+        d->splitScreenAction->toggle();
+    });
 
     //
     // Отображаем необходимый редактор при выборе документа в списке
@@ -676,7 +740,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->navigator, &Ui::ProjectNavigator::itemSelected, this,
             [this](const QModelIndex& _index) {
                 if (!_index.isValid()) {
-                    d->view->showDefaultPage();
+                    d->leftView->showDefaultPage();
                     return;
                 }
 
@@ -702,7 +766,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 // Откроем документ на редактирование в первом из представлений
                 //
                 if (views.isEmpty()) {
-                    d->view->showNotImplementedPage();
+                    d->leftView->showNotImplementedPage();
                     return;
                 }
                 showView(_index, views.first().mimeType);
@@ -896,7 +960,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     //
     // Соединения представления
     //
-    connect(d->view, &Ui::ProjectView::createNewItemPressed, this, [this] { d->addDocument(); });
+    connect(d->leftView, &Ui::ProjectView::createNewItemPressed, this,
+            [this] { d->addDocument(); });
 
     //
     // Соединения со строителем моделей
@@ -1437,7 +1502,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
 
     if (!_itemIndex.isValid()) {
         updateCurrentDocument(nullptr, {});
-        d->view->showDefaultPage();
+        d->leftView->showDefaultPage();
         return;
     }
 
@@ -1449,7 +1514,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     updateCurrentDocument(d->modelsFacade.modelFor(item->uuid()), _viewMimeType);
     if (d->currentDocument.model == nullptr) {
-        d->view->showNotImplementedPage();
+        d->leftView->showNotImplementedPage();
         return;
     }
 
@@ -1458,10 +1523,10 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     auto view = d->pluginsBuilder.activateView(_viewMimeType, d->currentDocument.model);
     if (view == nullptr) {
-        d->view->showNotImplementedPage();
+        d->leftView->showNotImplementedPage();
         return;
     }
-    d->view->setCurrentWidget(view->asQWidget());
+    d->leftView->setCurrentWidget(view->asQWidget());
 
     //
     // Настроим опции редактора
@@ -1499,7 +1564,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Фокусируем представление
     //
-    QTimer::singleShot(d->view->animationDuration() * 1.3, this, [this] { d->view->setFocus(); });
+    QTimer::singleShot(d->leftView->animationDuration() * 1.3, this,
+                       [this] { d->leftView->setFocus(); });
 }
 
 void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType)

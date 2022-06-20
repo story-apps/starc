@@ -200,8 +200,6 @@ AppBar::AppBar(QWidget* _parent)
             [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
-
-    designSystemChangeEvent(nullptr);
 }
 
 void AppBar::setBadgeVisible(QAction* _action, bool _visible)
