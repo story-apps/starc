@@ -55,9 +55,9 @@ LoginDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
     buttonsLayout->addStretch();
-    buttonsLayout->addWidget(signInButton);
-    buttonsLayout->addWidget(resendCodeButton);
     buttonsLayout->addWidget(cancelButton);
+    buttonsLayout->addWidget(resendCodeButton);
+    buttonsLayout->addWidget(signInButton);
 
     confirmationCodeSendedInfo->hide();
     confirmationCode->hide();
