@@ -33,6 +33,7 @@
 #include <ui/widgets/dialog/standard_dialog.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/extension_helper.h>
+#include <utils/logging.h>
 
 #include <QDesktopServices>
 #include <QFileDialog>
@@ -652,6 +653,9 @@ void ExportManager::exportDocument(BusinessLayer::AbstractModel* _model)
     if (!canExportDocument(_model)) {
         return;
     }
+
+    Log::info("Exporting started. Export document of type %1",
+              Domain::mimeTypeFor(_model->document()->type()).constData());
 
     switch (_model->document()->type()) {
     case Domain::DocumentObjectType::ScreenplayText: {

@@ -859,6 +859,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                     while (TextBlockStyle::forBlock(insertCursor.block())
                            != TextParagraphType::PageSplitter) {
                         insertCursor.movePosition(TextCursor::NextBlock);
+                        insertCursor.movePosition(TextCursor::EndOfBlock);
                     }
                     bool isFirstParagraph = false;
 

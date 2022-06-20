@@ -136,6 +136,15 @@ void AbstractModel::clear()
     clearDocument();
 }
 
+void AbstractModel::reassignContent()
+{
+    if (d->document == nullptr) {
+        return;
+    }
+
+    d->document->setContent(toXml());
+}
+
 void AbstractModel::saveChanges()
 {
     if (d->document == nullptr) {

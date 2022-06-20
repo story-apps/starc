@@ -13,6 +13,7 @@
 #include <ui/widgets/dialog/standard_dialog.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/extension_helper.h>
+#include <utils/logging.h>
 
 #include <QFileDialog>
 
@@ -141,6 +142,8 @@ ImportManager::~ImportManager() = default;
 
 void ImportManager::import()
 {
+    Log::info("Importing started");
+
     //
     // Предоставим пользователю возможность выбрать файл, который он хочет импортировать
     //

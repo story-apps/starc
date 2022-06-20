@@ -738,12 +738,17 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             if (cursor.block().next() != cursor.document()->end()) {
                 cursor.movePosition(TextCursor::EndOfBlock, TextCursor::KeepAnchor);
                 cursor.movePosition(TextCursor::NextCharacter, TextCursor::KeepAnchor);
-                cursor.deleteChar();
             } else {
                 cursor.movePosition(TextCursor::PreviousCharacter);
                 cursor.movePosition(TextCursor::NextBlock, TextCursor::KeepAnchor);
                 cursor.movePosition(TextCursor::EndOfBlock, TextCursor::KeepAnchor);
+            }
+            if (cursor.hasSelection()) {
                 cursor.deleteChar();
+            } else {
+                QTextBlockFormat breakStartFormat = cursor.blockFormat();
+                breakStartFormat.clearProperty(TextBlockStyle::PropertyIsCorrection);
+                cursor.setBlockFormat(breakStartFormat);
             }
             //
             // ... и продолжим со следующего блока

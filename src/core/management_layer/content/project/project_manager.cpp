@@ -767,6 +767,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
 
                 auto documentModel = d->modelsFacade.modelFor(document);
                 documentModel->setDocumentName(_name);
+                if (!_content.isNull()) {
+                    documentModel->reassignContent();
+                }
 
                 switch (_type) {
                 case Domain::DocumentObjectType::Character: {

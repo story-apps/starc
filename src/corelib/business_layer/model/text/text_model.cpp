@@ -1474,7 +1474,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
     //
     // Подгрузим информацию о родительских элементах, если они были вставлены при балансировке
     //
-    if (oldItemsPlain.constFirst()->isEqual(modelItem)) {
+    if (!oldItemsPlain.isEmpty() && oldItemsPlain.constFirst()->isEqual(modelItem)) {
         auto oldItemParent = oldItemsPlain.first()->parent();
         auto modelItemParent = modelItem->parent();
         while (oldItemParent != nullptr) {
@@ -1483,7 +1483,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
             modelItemParent = modelItemParent->parent();
         }
     }
-    if (newItemsPlain.constFirst()->isEqual(modelItem)) {
+    if (!newItemsPlain.isEmpty() && newItemsPlain.constFirst()->isEqual(modelItem)) {
         auto newItemParent = newItemsPlain.first()->parent();
         auto modelItemParent = modelItem->parent();
         while (newItemParent != nullptr) {
