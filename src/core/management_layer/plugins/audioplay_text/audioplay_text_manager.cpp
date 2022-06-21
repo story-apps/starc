@@ -30,105 +30,80 @@ QString verticalScrollFor(Domain::DocumentObject* _item)
 class AudioplayTextManager::Implementation
 {
 public:
-    explicit Implementation();
+    explicit Implementation(AudioplayTextManager* _q);
 
     /**
      * @brief Создать представление
      */
-    Ui::AudioplayTextView* createView();
+    Ui::AudioplayTextView* createView(BusinessLayer::AbstractModel* _model);
+
+    /**
+     * @brief Связать заданную модель и представление
+     */
+    void setModelForView(BusinessLayer::AbstractModel* _model, Ui::AudioplayTextView* _view);
+
+    /**
+     * @brief Получить модель связанную с заданным представлением
+     */
+    QPointer<BusinessLayer::AudioplayTextModel> modelForView(Ui::AudioplayTextView* _view) const;
 
     /**
      * @brief Работа с параметрами отображения представления
      */
-    void loadViewSettings();
-    void saveViewSettings();
-
-    /**
-     * @brief Работа с параметрами отображения текущей модели
-     */
-    void loadModelSettings();
-    void saveModelSettings();
+    void loadModelAndViewSettings(BusinessLayer::AbstractModel* _model,
+                                  Ui::AudioplayTextView* _view);
+    void saveModelAndViewSettings(BusinessLayer::AbstractModel* _model,
+                                  Ui::AudioplayTextView* _view);
 
 
-    /**
-     * @brief Текущая модель представления основного окна
-     */
-    QPointer<BusinessLayer::AudioplayTextModel> model;
+    AudioplayTextManager* q = nullptr;
 
     /**
      * @brief Предаставление для основного окна
      */
     Ui::AudioplayTextView* view = nullptr;
+    Ui::AudioplayTextView* secondaryView = nullptr;
 
     /**
-     * @brief Все созданные представления
+     * @brief Все созданные представления с моделями, которые в них отображаются
      */
-    QVector<Ui::AudioplayTextView*> allViews;
+    struct ViewAndModel {
+        Ui::AudioplayTextView* view = nullptr;
+        QPointer<BusinessLayer::AudioplayTextModel> model;
+    };
+    QVector<ViewAndModel> allViews;
 };
 
-AudioplayTextManager::Implementation::Implementation()
+AudioplayTextManager::Implementation::Implementation(AudioplayTextManager* _q)
+    : q(_q)
 {
-    view = createView();
-    loadViewSettings();
 }
 
-Ui::AudioplayTextView* AudioplayTextManager::Implementation::createView()
+Ui::AudioplayTextView* AudioplayTextManager::Implementation::createView(
+    BusinessLayer::AbstractModel* _model)
 {
-    allViews.append(new Ui::AudioplayTextView);
-    return allViews.last();
-}
+    auto view = new Ui::AudioplayTextView;
+    setModelForView(_model, view);
 
-void AudioplayTextManager::Implementation::loadViewSettings()
-{
-    view->loadViewSettings();
-}
-
-void AudioplayTextManager::Implementation::saveViewSettings()
-{
-    view->saveViewSettings();
-}
-
-void AudioplayTextManager::Implementation::loadModelSettings()
-{
-    const auto cursorPosition = settingsValue(cursorPositionFor(model->document()), 0).toInt();
-    view->setCursorPosition(cursorPosition);
-    const auto verticalScroll = settingsValue(verticalScrollFor(model->document()), 0).toInt();
-    view->setverticalScroll(verticalScroll);
-}
-
-void AudioplayTextManager::Implementation::saveModelSettings()
-{
-    setSettingsValue(cursorPositionFor(model->document()), view->cursorPosition());
-    setSettingsValue(verticalScrollFor(model->document()), view->verticalScroll());
-}
-
-
-// ****
-
-
-AudioplayTextManager::AudioplayTextManager(QObject* _parent)
-    : QObject(_parent)
-    , d(new Implementation)
-{
-    connect(d->view, &Ui::AudioplayTextView::currentModelIndexChanged, this,
+    connect(view, &Ui::AudioplayTextView::currentModelIndexChanged, q,
             &AudioplayTextManager::currentModelIndexChanged);
-    auto showBookmarkDialog = [this](Ui::BookmarkDialog::DialogType _type) {
-        auto item = d->model->itemForIndex(d->view->currentModelIndex());
+    auto showBookmarkDialog = [this, view](Ui::BookmarkDialog::DialogType _type) {
+        auto item = modelForView(view)->itemForIndex(view->currentModelIndex());
         if (item->type() != BusinessLayer::TextModelItemType::Text) {
             return;
         }
 
-        auto dialog = new Ui::BookmarkDialog(d->view->topLevelWidget());
+        auto dialog = new Ui::BookmarkDialog(view->topLevelWidget());
         dialog->setDialogType(_type);
         if (_type == Ui::BookmarkDialog::DialogType::Edit) {
             const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
             dialog->setBookmarkName(textItem->bookmark()->name);
             dialog->setBookmarkColor(textItem->bookmark()->color);
         }
-        connect(dialog, &Ui::BookmarkDialog::savePressed, this, [this, item, dialog] {
+        connect(dialog, &Ui::BookmarkDialog::savePressed, q, [this, view, item, dialog] {
             auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
             textItem->setBookmark({ dialog->bookmarkColor(), dialog->bookmarkName() });
-            d->model->updateItem(textItem);
+            modelForView(view)->updateItem(textItem);
 
             dialog->hideDialog();
         });
@@ -139,43 +114,152 @@ AudioplayTextManager::AudioplayTextManager(QObject* _parent)
         //
         dialog->showDialog();
     };
-    connect(d->view, &Ui::AudioplayTextView::addBookmarkRequested, this, [showBookmarkDialog] {
+    connect(view, &Ui::AudioplayTextView::addBookmarkRequested, q, [showBookmarkDialog] {
         showBookmarkDialog(Ui::BookmarkDialog::DialogType::CreateNew);
     });
-    connect(d->view, &Ui::AudioplayTextView::editBookmarkRequested, this,
+    connect(view, &Ui::AudioplayTextView::editBookmarkRequested, q,
             [showBookmarkDialog] { showBookmarkDialog(Ui::BookmarkDialog::DialogType::Edit); });
-    connect(d->view, &Ui::AudioplayTextView::createBookmarkRequested, this,
-            [this](const QString& _text, const QColor& _color) {
-                auto item = d->model->itemForIndex(d->view->currentModelIndex());
+    connect(view, &Ui::AudioplayTextView::createBookmarkRequested, q,
+            [this, view](const QString& _text, const QColor& _color) {
+                auto model = modelForView(view);
+                auto item = model->itemForIndex(view->currentModelIndex());
                 if (item->type() != BusinessLayer::TextModelItemType::Text) {
                     return;
                 }
 
                 auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
                 textItem->setBookmark({ _color, _text });
-                d->model->updateItem(textItem);
+                model->updateItem(textItem);
             });
-    connect(d->view, &Ui::AudioplayTextView::changeBookmarkRequested, this,
-            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
-                auto item = d->model->itemForIndex(_index);
+    connect(view, &Ui::AudioplayTextView::changeBookmarkRequested, q,
+            [this, view](const QModelIndex& _index, const QString& _text, const QColor& _color) {
+                auto model = modelForView(view);
+                auto item = model->itemForIndex(_index);
                 if (item->type() != BusinessLayer::TextModelItemType::Text) {
                     return;
                 }
 
                 auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
                 textItem->setBookmark({ _color, _text });
-                d->model->updateItem(textItem);
+                model->updateItem(textItem);
             });
-    connect(d->view, &Ui::AudioplayTextView::removeBookmarkRequested, this, [this] {
-        auto item = d->model->itemForIndex(d->view->currentModelIndex());
+    connect(view, &Ui::AudioplayTextView::removeBookmarkRequested, q, [this, view] {
+        auto model = modelForView(view);
+        auto item = model->itemForIndex(view->currentModelIndex());
         if (item->type() != BusinessLayer::TextModelItemType::Text) {
             return;
         }
 
         auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
         textItem->clearBookmark();
-        d->model->updateItem(textItem);
+        model->updateItem(textItem);
     });
+
+    return view;
+}
+
+void AudioplayTextManager::Implementation::setModelForView(BusinessLayer::AbstractModel* _model,
+                                                           Ui::AudioplayTextView* _view)
+{
+    constexpr int invalidIndex = -1;
+    int viewIndex = invalidIndex;
+    for (int index = 0; index < allViews.size(); ++index) {
+        if (allViews[index].view == _view) {
+            if (allViews[index].model == _model) {
+                return;
+            }
+
+            viewIndex = index;
+            break;
+        }
+    }
+
+    //
+    // Если модель была задана
+    //
+    if (viewIndex != invalidIndex && allViews[viewIndex].model != nullptr) {
+        //
+        // ... сохраняем параметры
+        //
+        saveModelAndViewSettings(allViews[viewIndex].model, _view);
+        //
+        // ... разрываем соединения
+        //
+        _view->disconnect(allViews[viewIndex].model);
+    }
+
+    //
+    // Определяем новую модель
+    //
+    auto model = qobject_cast<BusinessLayer::AudioplayTextModel*>(_model);
+    _view->setModel(model);
+
+    //
+    // Обновляем связь представления с моделью
+    //
+    if (viewIndex != invalidIndex) {
+        allViews[viewIndex].model = model;
+    }
+    //
+    // Или сохраняем связь представления с моделью
+    //
+    else {
+        allViews.append({ _view, model });
+    }
+
+    //
+    // Если новая модель задана
+    //
+    if (model != nullptr) {
+        //
+        // ... загрузим параметры
+        //
+        loadModelAndViewSettings(model, _view);
+        //
+        // ... настраиваем соединения
+        //
+    }
+}
+
+QPointer<BusinessLayer::AudioplayTextModel> AudioplayTextManager::Implementation::modelForView(
+    Ui::AudioplayTextView* _view) const
+{
+    for (auto& viewAndModel : allViews) {
+        if (viewAndModel.view == _view) {
+            return viewAndModel.model;
+        }
+    }
+    return {};
+}
+
+void AudioplayTextManager::Implementation::loadModelAndViewSettings(
+    BusinessLayer::AbstractModel* _model, Ui::AudioplayTextView* _view)
+{
+    const auto cursorPosition = settingsValue(cursorPositionFor(_model->document()), 0).toInt();
+    _view->setCursorPosition(cursorPosition);
+    const auto verticalScroll = settingsValue(verticalScrollFor(_model->document()), 0).toInt();
+    _view->setverticalScroll(verticalScroll);
+
+    _view->loadViewSettings();
+}
+
+void AudioplayTextManager::Implementation::saveModelAndViewSettings(
+    BusinessLayer::AbstractModel* _model, Ui::AudioplayTextView* _view)
+{
+    setSettingsValue(cursorPositionFor(_model->document()), _view->cursorPosition());
+    setSettingsValue(verticalScrollFor(_model->document()), _view->verticalScroll());
+
+    _view->saveViewSettings();
+}
+
+
+// ****
+
+
+AudioplayTextManager::AudioplayTextManager(QObject* _parent)
+    : QObject(_parent)
+    , d(new Implementation(this))
+{
 }
 
 AudioplayTextManager::~AudioplayTextManager() = default;
@@ -185,54 +269,48 @@ QObject* AudioplayTextManager::asQObject()
     return this;
 }
 
-void AudioplayTextManager::setModel(BusinessLayer::AbstractModel* _model)
-{
-    if (d->model == _model) {
-        return;
-    }
-
-    //
-    // Если модель была задана
-    //
-    if (d->model != nullptr) {
-        //
-        // ... сохраняем её параметры
-        //
-        d->saveModelSettings();
-        //
-        // ... разрываем соединения
-        //
-        d->view->disconnect(d->model);
-    }
-
-    //
-    // Определяем новую модель
-    //
-    d->model = qobject_cast<BusinessLayer::AudioplayTextModel*>(_model);
-    d->view->setModel(d->model);
-
-    //
-    // Если новая модель задана
-    //
-    if (d->model != nullptr) {
-        //
-        // ... загрузим параметры
-        //
-        d->loadModelSettings();
-        //
-        // ... настраиваем соединения
-        //
-    }
-}
-
 Ui::IDocumentView* AudioplayTextManager::view()
 {
     return d->view;
 }
 
-Ui::IDocumentView* AudioplayTextManager::createView()
+Ui::IDocumentView* AudioplayTextManager::view(BusinessLayer::AbstractModel* _model)
 {
-    return d->createView();
+    if (d->view == nullptr) {
+        d->view = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->view);
+    }
+
+    return d->view;
+}
+
+Ui::IDocumentView* AudioplayTextManager::secondaryView()
+{
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* AudioplayTextManager::secondaryView(BusinessLayer::AbstractModel* _model)
+{
+    if (d->secondaryView == nullptr) {
+        d->secondaryView = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->secondaryView);
+    }
+
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* AudioplayTextManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    return d->createView(_model);
+}
+
+void AudioplayTextManager::resetModels()
+{
+    for (auto& viewAndModel : d->allViews) {
+        d->setModelForView(nullptr, viewAndModel.view);
+    }
 }
 
 void AudioplayTextManager::reconfigure(const QStringList& _changedSettingsKeys)
@@ -261,10 +339,10 @@ void AudioplayTextManager::bind(IDocumentManager* _manager)
 
 void AudioplayTextManager::saveSettings()
 {
-    d->saveViewSettings();
-
-    if (d->model != nullptr) {
-        d->saveModelSettings();
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.model != nullptr && viewAndModel.view != nullptr) {
+            d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+        }
     }
 }
 

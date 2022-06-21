@@ -26,9 +26,12 @@ public:
      * @brief Реализуем интерфейс менеджера документа
      */
     /** @{ */
-    void setModel(BusinessLayer::AbstractModel* _model) override;
     Ui::IDocumentView* view() override;
-    Ui::IDocumentView* createView() override;
+    Ui::IDocumentView* view(BusinessLayer::AbstractModel* _model) override;
+    Ui::IDocumentView* secondaryView() override;
+    Ui::IDocumentView* secondaryView(BusinessLayer::AbstractModel* _model) override;
+    Ui::IDocumentView* createView(BusinessLayer::AbstractModel* _model) override;
+    void resetModels() override;
     /** @} */
 
 private:

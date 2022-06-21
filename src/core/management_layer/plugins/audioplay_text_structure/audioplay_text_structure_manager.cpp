@@ -25,12 +25,7 @@ namespace ManagementLayer {
 class AudioplayTextStructureManager::Implementation
 {
 public:
-    explicit Implementation();
-
-    /**
-     * @brief Создать представление
-     */
-    Ui::AudioplayTextStructureView* createView();
+    Implementation();
 
     /**
      * @brief Настроить контекстное меню
@@ -73,15 +68,9 @@ public:
 };
 
 AudioplayTextStructureManager::Implementation::Implementation()
+    : view(new Ui::AudioplayTextStructureView)
+    , contextMenu(new ContextMenu(view))
 {
-    view = createView();
-    contextMenu = new ContextMenu(view);
-}
-
-Ui::AudioplayTextStructureView* AudioplayTextStructureManager::Implementation::createView()
-{
-    allViews.append(new Ui::AudioplayTextStructureView);
-    return allViews.last();
 }
 
 void AudioplayTextStructureManager::Implementation::updateContextMenu(
@@ -186,8 +175,46 @@ QObject* AudioplayTextStructureManager::asQObject()
     return this;
 }
 
+Ui::IDocumentView* AudioplayTextStructureManager::view()
+{
+    return d->view;
+}
+
+Ui::IDocumentView* AudioplayTextStructureManager::view(BusinessLayer::AbstractModel* _model)
+{
+    setModel(_model);
+    return d->view;
+}
+
+Ui::IDocumentView* AudioplayTextStructureManager::secondaryView()
+{
+    return nullptr;
+}
+
+Ui::IDocumentView* AudioplayTextStructureManager::secondaryView(
+    BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+Ui::IDocumentView* AudioplayTextStructureManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+void AudioplayTextStructureManager::resetModels()
+{
+    setModel(nullptr);
+}
+
 void AudioplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
 {
+    if (d->model == _model) {
+        return;
+    }
+
     //
     // Разрываем соединения со старой моделью
     //
@@ -235,16 +262,6 @@ void AudioplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mode
     // Переконфигурируемся
     //
     reconfigure({});
-}
-
-Ui::IDocumentView* AudioplayTextStructureManager::view()
-{
-    return d->view;
-}
-
-Ui::IDocumentView* AudioplayTextStructureManager::createView()
-{
-    return d->createView();
 }
 
 void AudioplayTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)

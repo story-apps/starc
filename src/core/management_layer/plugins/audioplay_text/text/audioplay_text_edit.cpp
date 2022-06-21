@@ -657,6 +657,10 @@ bool AudioplayTextEdit::updateEnteredText(const QString& _eventText)
 
 void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
 {
+    if (d->model.isNull()) {
+        return;
+    }
+
     ScriptTextEdit::paintEvent(_event);
 
     //
