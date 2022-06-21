@@ -16,6 +16,15 @@ namespace ManagementLayer {
 
 namespace {
 
+/**
+ * @brief Тип представления для активации из плагина
+ */
+enum ViewType {
+    Primary,
+    Secondary,
+    Window,
+};
+
 // clang-format off
 /**
  * @brief Майм-типы плагинов
@@ -179,7 +188,7 @@ public:
      * @brief Активировать плагин заданного типа указанной моделью
      */
     Ui::IDocumentView* activatePlugin(const QString& _mimeType,
-                                      BusinessLayer::AbstractModel* _model);
+                                      BusinessLayer::AbstractModel* _model, ViewType _type);
 
     /**
      * @brief Загруженные плагины <mime, plugin>
@@ -188,7 +197,7 @@ public:
 };
 
 Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
-    const QString& _mimeType, BusinessLayer::AbstractModel* _model)
+    const QString& _mimeType, BusinessLayer::AbstractModel* _model, ViewType _type)
 {
     if (!plugins.contains(_mimeType)) {
         //
@@ -258,9 +267,19 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
         return nullptr;
     }
 
-    plugin->setModel(_model);
+    switch (_type) {
+    case Primary: {
+        return plugin->view(_model);
+    }
 
-    return plugin->view();
+    case Secondary: {
+        return plugin->secondaryView(_model);
+    }
+
+    default: {
+        return plugin->createView(_model);
+    }
+    }
 }
 
 
@@ -427,7 +446,13 @@ QString PluginsBuilder::navigatorMimeTypeFor(const QString& _editorMimeType) con
 Ui::IDocumentView* PluginsBuilder::activateView(const QString& _viewMimeType,
                                                 BusinessLayer::AbstractModel* _model) const
 {
-    return d->activatePlugin(_viewMimeType, _model);
+    return d->activatePlugin(_viewMimeType, _model, ViewType::Primary);
+}
+
+Ui::IDocumentView* PluginsBuilder::activateSecondView(const QString& _viewMimeType,
+                                                      BusinessLayer::AbstractModel* _model) const
+{
+    return d->activatePlugin(_viewMimeType, _model, ViewType::Secondary);
 }
 
 void PluginsBuilder::bind(const QString& _viewMimeType, const QString& _navigatorMimeType) const
@@ -442,13 +467,29 @@ void PluginsBuilder::bind(const QString& _viewMimeType, const QString& _navigato
     navigatorPlugin->bind(viewPlugin);
 }
 
-void PluginsBuilder::toggleFullScreen(bool _isFullScreen, const QString& _viewMimeType) const
+void PluginsBuilder::toggleViewFullScreen(bool _isFullScreen, const QString& _viewMimeType) const
 {
     if (!d->plugins.contains(_viewMimeType)) {
         return;
     }
 
-    d->plugins.value(_viewMimeType)->view()->toggleFullScreen(_isFullScreen);
+    auto view = d->plugins.value(_viewMimeType)->view();
+    if (view != nullptr) {
+        view->toggleFullScreen(_isFullScreen);
+    }
+}
+
+void PluginsBuilder::toggleSecondaryViewFullScreen(bool _isFullScreen,
+                                                   const QString& _viewMimeType) const
+{
+    if (!d->plugins.contains(_viewMimeType)) {
+        return;
+    }
+
+    auto view = d->plugins.value(_viewMimeType)->secondaryView();
+    if (view != nullptr) {
+        view->toggleFullScreen(_isFullScreen);
+    }
 }
 
 void PluginsBuilder::reconfigureAll() const
@@ -538,7 +579,7 @@ void PluginsBuilder::resetModels() const
 {
     for (auto plugin : std::as_const(d->plugins)) {
         plugin->saveSettings();
-        plugin->setModel(nullptr);
+        plugin->resetModels();
     }
 }
 

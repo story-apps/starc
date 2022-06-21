@@ -13,6 +13,10 @@ enum class EventType {
     //
     IdleEvent = QEvent::User + 1,
     //
+    // Событие смены фокуса в приложении
+    //
+    FocusChangeEvent,
+    //
     // Событие изменения дизайн системы
     //
     DesignSystemChangeEvent,
@@ -31,6 +35,18 @@ class IdleEvent : public QEvent
 public:
     IdleEvent()
         : QEvent(static_cast<QEvent::Type>(EventType::IdleEvent))
+    {
+    }
+};
+
+/**
+ * @brief Событие простоя приложения
+ */
+class FocusChangeEvent : public QEvent
+{
+public:
+    FocusChangeEvent()
+        : QEvent(static_cast<QEvent::Type>(EventType::FocusChangeEvent))
     {
     }
 };

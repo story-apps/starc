@@ -155,6 +155,11 @@ bool Application::notify(QObject* _object, QEvent* _event)
             break;
         }
 
+        case QEvent::FocusIn: {
+            postEvent(d->applicationManager, new FocusChangeEvent);
+            break;
+        }
+
         default:
             break;
         }

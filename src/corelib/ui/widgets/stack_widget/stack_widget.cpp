@@ -353,6 +353,11 @@ void StackWidget::addWidget(QWidget* _widget)
     _widget->hide();
 }
 
+bool StackWidget::containsWidget(QWidget* _widget)
+{
+    return d->widgets.contains(_widget);
+}
+
 void StackWidget::setCurrentWidget(QWidget* _widget)
 {
     if (d->currentWidget == _widget) {

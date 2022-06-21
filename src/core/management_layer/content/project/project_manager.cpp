@@ -37,6 +37,7 @@
 #include <utils/logging.h>
 
 #include <QAction>
+#include <QApplication>
 #include <QDateTime>
 #include <QHBoxLayout>
 #include <QSet>
@@ -53,7 +54,15 @@ class ProjectManager::Implementation
 public:
     explicit Implementation(QWidget* _parent, const PluginsBuilder& _pluginsBuilder);
 
+    /**
+     * @brief Обновить текст пункта меню разделения экрана
+     */
     void updateSplitScreenActionText();
+
+    /**
+     * @brief Переключить активное представление
+     */
+    void switchViews();
 
     /**
      * @brief Действия контекстного меню
@@ -108,9 +117,32 @@ public:
 
     Ui::ProjectNavigator* navigator = nullptr;
 
-    Splitter* view = nullptr;
-    Ui::ProjectView* leftView = nullptr;
-    Ui::ProjectView* rightView = nullptr;
+    /**
+     * @brief Виджеты представления текущих редакторов
+     */
+    struct {
+        Splitter* container = nullptr;
+
+        Ui::ProjectView* left = nullptr;
+        Ui::ProjectView* right = nullptr;
+
+        //
+        // Ссылки на активное представление и неактивное
+        //
+        Ui::ProjectView* active = nullptr;
+        Ui::ProjectView* inactive = nullptr;
+
+        //
+        // Индексы элементов представлений в дереве
+        //
+        QModelIndex activeIndex = {};
+        QModelIndex inactiveIndex = {};
+
+        //
+        // Состояние контейнера перед входом в полноэкранный режим
+        //
+        QByteArray stateBeforeFullscreen = {};
+    } view;
 
     /**
      * @brief Действие разделения экрана напополам
@@ -153,9 +185,11 @@ ProjectManager::Implementation::Implementation(QWidget* _parent,
     : topLevelWidget(_parent)
     , toolBar(new Ui::ProjectToolBar(_parent))
     , navigator(new Ui::ProjectNavigator(_parent))
-    , view(new Splitter(_parent))
-    , leftView(new Ui::ProjectView(_parent))
-    , rightView(new Ui::ProjectView(_parent))
+    , view({
+          new Splitter(_parent),
+          new Ui::ProjectView(_parent),
+          new Ui::ProjectView(_parent),
+      })
     , splitScreenAction(new QAction(_parent))
     , splitScreenShortcut(new QShortcut(_parent))
     , projectStructureModel(new BusinessLayer::StructureModel(navigator))
@@ -165,10 +199,12 @@ ProjectManager::Implementation::Implementation(QWidget* _parent,
 {
     toolBar->hide();
     navigator->hide();
-    view->setWidgets(leftView, rightView);
-    view->setSizes({ 1, 0 });
-    view->hide();
-    rightView->hide();
+    view.container->setWidgets(view.left, view.right);
+    view.container->setSizes({ 1, 0 });
+    view.container->hide();
+    view.right->hide();
+    view.active = view.left;
+    view.inactive = view.right;
 
     navigator->setModel(projectStructureProxyModel);
 
@@ -185,6 +221,17 @@ void ProjectManager::Implementation::updateSplitScreenActionText()
 {
     splitScreenAction->setText(splitScreenAction->isChecked() ? tr("Merge screen")
                                                               : tr("Split screen"));
+}
+
+void ProjectManager::Implementation::switchViews()
+{
+    std::swap(view.active, view.inactive);
+    view.active->setActive(true);
+    view.inactive->setActive(false);
+
+    std::swap(view.activeIndex, view.inactiveIndex);
+
+    navigator->setCurrentIndex(view.activeIndex);
 }
 
 void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelIndex& _index)
@@ -721,13 +768,18 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->splitScreenAction, &QAction::toggled, this, [this](bool _checked) {
         d->updateSplitScreenActionText();
         if (_checked) {
-            d->view->setSizes({ 1, 1 });
+            d->view.container->setSizes({ 1, 1 });
+            d->view.right->show();
+            d->switchViews();
         } else {
-            d->view->setSizes({ 1, 0 });
+            d->view.right->hide();
+            if (d->view.active == d->view.right) {
+                d->switchViews();
+            }
         }
     });
     connect(d->splitScreenShortcut, &QShortcut::activated, this, [this] {
-        if (!d->view->isVisible()) {
+        if (!d->view.container->isVisible()) {
             return;
         }
 
@@ -740,7 +792,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->navigator, &Ui::ProjectNavigator::itemSelected, this,
             [this](const QModelIndex& _index) {
                 if (!_index.isValid()) {
-                    d->leftView->showDefaultPage();
+                    d->view.active->showDefaultPage();
                     return;
                 }
 
@@ -766,7 +818,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 // Откроем документ на редактирование в первом из представлений
                 //
                 if (views.isEmpty()) {
-                    d->leftView->showNotImplementedPage();
+                    d->view.active->showNotImplementedPage();
                     return;
                 }
                 showView(_index, views.first().mimeType);
@@ -818,7 +870,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     //
     // Соединения с моделью структуры проекта
     //
-    connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAdded,
+    connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAdded, this,
             [this](const QUuid& _uuid, const QUuid& _parentUuid, Domain::DocumentObjectType _type,
                    const QString& _name, const QByteArray& _content) {
                 Q_UNUSED(_parentUuid);
@@ -960,7 +1012,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     //
     // Соединения представления
     //
-    connect(d->leftView, &Ui::ProjectView::createNewItemPressed, this,
+    connect(d->view.left, &Ui::ProjectView::createNewItemPressed, this,
+            [this] { d->addDocument(); });
+    connect(d->view.right, &Ui::ProjectView::createNewItemPressed, this,
             [this] { d->addDocument(); });
 
     //
@@ -1150,7 +1204,7 @@ QWidget* ProjectManager::navigator() const
 
 QWidget* ProjectManager::view() const
 {
-    return d->view;
+    return d->view.container;
 }
 
 void ProjectManager::setHasUnreadNotifications(bool _hasUnreadNotifications)
@@ -1160,7 +1214,38 @@ void ProjectManager::setHasUnreadNotifications(bool _hasUnreadNotifications)
 
 void ProjectManager::toggleFullScreen(bool _isFullScreen)
 {
-    d->pluginsBuilder.toggleFullScreen(_isFullScreen, d->currentDocument.viewMimeType);
+    //
+    // Отключаем возможность разделять и объединять панели в полноэкранном режиме
+    //
+    d->splitScreenAction->setEnabled(!_isFullScreen);
+
+    //
+    // При переходе в полноэкранный режим, если активировано разделение экрана, то скроем неактивный
+    // редактор и запомним состояние разделения
+    //
+    if (_isFullScreen && d->splitScreenAction->isChecked()) {
+        d->view.stateBeforeFullscreen = d->view.container->saveState();
+        d->view.inactive->hide();
+    }
+
+    //
+    // Собственно активируем полноэкранный режим
+    //
+    if (d->view.active == d->view.left) {
+        d->pluginsBuilder.toggleViewFullScreen(_isFullScreen, d->currentDocument.viewMimeType);
+    } else {
+        d->pluginsBuilder.toggleSecondaryViewFullScreen(_isFullScreen,
+                                                        d->currentDocument.viewMimeType);
+    }
+
+    //
+    // При выходе из полноэкранного режима, если экран был разделён, то покажем неактивный редактор
+    // и восстановим состояние разеделения
+    //
+    if (!_isFullScreen && d->splitScreenAction->isChecked()) {
+        d->view.inactive->show();
+        d->view.container->restoreState(d->view.stateBeforeFullscreen);
+    }
 }
 
 void ProjectManager::reconfigureAll()
@@ -1466,6 +1551,38 @@ bool ProjectManager::event(QEvent* _event)
         break;
     }
 
+    case static_cast<QEvent::Type>(EventType::FocusChangeEvent): {
+        //
+        // При смене сфокусированного виджета, проверяем не изменился ли активный из редакторов
+        //
+
+        if (!d->view.right->isVisible()) {
+            break;
+        }
+
+        auto targetWidget = QApplication::focusWidget();
+        if (targetWidget == nullptr) {
+            break;
+        }
+
+        do {
+            if (targetWidget == d->view.left) {
+                if (d->view.active != d->view.left) {
+                    d->switchViews();
+                }
+                break;
+            } else if (targetWidget == d->view.right) {
+                if (d->view.active != d->view.right) {
+                    d->switchViews();
+                }
+                break;
+            }
+
+            targetWidget = targetWidget->parentWidget();
+        } while (targetWidget != nullptr);
+        break;
+    }
+
     default:
         break;
     }
@@ -1502,7 +1619,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
 
     if (!_itemIndex.isValid()) {
         updateCurrentDocument(nullptr, {});
-        d->leftView->showDefaultPage();
+        d->view.active->showDefaultPage();
         return;
     }
 
@@ -1514,19 +1631,25 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     updateCurrentDocument(d->modelsFacade.modelFor(item->uuid()), _viewMimeType);
     if (d->currentDocument.model == nullptr) {
-        d->leftView->showNotImplementedPage();
+        d->view.active->showNotImplementedPage();
         return;
     }
 
     //
     // Определим представление и отобразим
     //
-    auto view = d->pluginsBuilder.activateView(_viewMimeType, d->currentDocument.model);
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = d->pluginsBuilder.activateView(_viewMimeType, d->currentDocument.model);
+    } else {
+        view = d->pluginsBuilder.activateSecondView(_viewMimeType, d->currentDocument.model);
+    }
     if (view == nullptr) {
-        d->leftView->showNotImplementedPage();
+        d->view.active->showNotImplementedPage();
         return;
     }
-    d->leftView->setCurrentWidget(view->asQWidget());
+    d->view.active->setCurrentWidget(view->asQWidget());
+    d->view.activeIndex = _itemIndex;
 
     //
     // Настроим опции редактора
@@ -1564,8 +1687,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Фокусируем представление
     //
-    QTimer::singleShot(d->leftView->animationDuration() * 1.3, this,
-                       [this] { d->leftView->setFocus(); });
+    QTimer::singleShot(d->view.active->animationDuration() * 1.3, this,
+                       [this] { d->view.active->setFocus(); });
 }
 
 void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType)

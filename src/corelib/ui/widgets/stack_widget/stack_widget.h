@@ -38,6 +38,11 @@ public:
     void addWidget(QWidget* _widget);
 
     /**
+     * @brief Содержится ли заданный виджет в стэке
+     */
+    bool containsWidget(QWidget* _widget);
+
+    /**
      * @brief Сделать заданный виджет текущим
      */
     void setCurrentWidget(QWidget* _widget);

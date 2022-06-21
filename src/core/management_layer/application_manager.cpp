@@ -1677,6 +1677,16 @@ bool ApplicationManager::event(QEvent* _event)
         return false;
     }
 
+    case static_cast<QEvent::Type>(EventType::FocusChangeEvent): {
+        //
+        // Посылаем событие о смене фокуса в менеджер проекта, чтобы определить текущее активное
+        // представление
+        //
+        QApplication::sendEvent(d->projectManager.data(), _event);
+
+        return false;
+    }
+
     default: {
         return QObject::event(_event);
     }

@@ -25,6 +25,11 @@ public:
      */
     void showNotImplementedPage();
 
+    /**
+     * @brief Активно ли представление в данный момент
+     */
+    void setActive(bool _active);
+
 signals:
     /**
      * @brief Пользователь нажал кнопку создания нового проекта
@@ -32,6 +37,11 @@ signals:
     void createNewItemPressed();
 
 protected:
+    /**
+     * @brief Отслеживаем изменение размера, чтобы скорректировать размер оверлея
+     */
+    void resizeEvent(QResizeEvent* _event) override;
+
     /**
      * @brief Обновить переводы
      */

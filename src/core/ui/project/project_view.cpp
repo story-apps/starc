@@ -3,6 +3,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/label/link_label.h>
+#include <utils/helpers/color_helper.h>
 
 #include <QVBoxLayout>
 
@@ -14,6 +15,7 @@ class ProjectView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+
     Widget* defaultPage = nullptr;
     H6Label* defaultPageTitleLabel = nullptr;
     Body1Label* defaultPageBodyLabel = nullptr;
@@ -22,6 +24,8 @@ public:
     Widget* notImplementedPage = nullptr;
     H6Label* notImplementedPageTitleLabel = nullptr;
     Body1Label* notImplementedPageBodyLabel = nullptr;
+
+    Widget* overlay = nullptr;
 };
 
 ProjectView::Implementation::Implementation(QWidget* _parent)
@@ -32,9 +36,12 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
     , notImplementedPage(new Widget(_parent))
     , notImplementedPageTitleLabel(new H6Label(notImplementedPage))
     , notImplementedPageBodyLabel(new Body1Label(notImplementedPage))
+    , overlay(new Widget(_parent))
 {
     defaultPageBodyLabel->setAlignment(Qt::AlignCenter);
     notImplementedPageBodyLabel->setAlignment(Qt::AlignCenter);
+    overlay->setAttribute(Qt::WA_TransparentForMouseEvents);
+    overlay->hide();
 
     {
         QVBoxLayout* layout = new QVBoxLayout(defaultPage);
@@ -101,6 +108,24 @@ void ProjectView::showNotImplementedPage()
     setCurrentWidget(d->notImplementedPage);
 }
 
+void ProjectView::setActive(bool _active)
+{
+    const bool isVisible = !_active;
+    if (d->overlay->isVisible() == isVisible) {
+        return;
+    }
+
+    d->overlay->setVisible(isVisible);
+    d->overlay->raise();
+}
+
+void ProjectView::resizeEvent(QResizeEvent* _event)
+{
+    StackWidget::resizeEvent(_event);
+
+    d->overlay->resize(size());
+}
+
 void ProjectView::updateTranslations()
 {
     d->defaultPageTitleLabel->setText(
@@ -124,7 +149,10 @@ void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->defaultPageBodyLabel->setContentsMargins(
         0, static_cast<int>(Ui::DesignSystem::layout().px16()),
         static_cast<int>(Ui::DesignSystem::layout().px4()), 0);
-    for (auto label : QVector<Widget*>{ d->defaultPageTitleLabel, d->defaultPageBodyLabel }) {
+    for (auto label : std::vector<Widget*>{
+             d->defaultPageTitleLabel,
+             d->defaultPageBodyLabel,
+         }) {
         label->setBackgroundColor(Ui::DesignSystem::color().surface());
         label->setTextColor(Ui::DesignSystem::color().onSurface());
     }
@@ -137,11 +165,16 @@ void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->notImplementedPageBodyLabel->setContentsMargins(
         0, static_cast<int>(Ui::DesignSystem::layout().px16()),
         static_cast<int>(Ui::DesignSystem::layout().px4()), 0);
-    for (auto label :
-         QVector<Widget*>{ d->notImplementedPageTitleLabel, d->notImplementedPageBodyLabel }) {
+    for (auto label : std::vector<Widget*>{
+             d->notImplementedPageTitleLabel,
+             d->notImplementedPageBodyLabel,
+         }) {
         label->setBackgroundColor(Ui::DesignSystem::color().surface());
         label->setTextColor(Ui::DesignSystem::color().onSurface());
     }
+
+    d->overlay->setBackgroundColor(
+        ColorHelper::transparent(backgroundColor(), Ui::DesignSystem::inactiveItemOpacity()));
 }
 
 } // namespace Ui

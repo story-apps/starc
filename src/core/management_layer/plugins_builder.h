@@ -58,6 +58,8 @@ public:
      */
     Ui::IDocumentView* activateView(const QString& _viewMimeType,
                                     BusinessLayer::AbstractModel* _model) const;
+    Ui::IDocumentView* activateSecondView(const QString& _viewMimeType,
+                                          BusinessLayer::AbstractModel* _model) const;
 
     /**
      * @brief Связать два менеджера
@@ -68,7 +70,8 @@ public:
     /**
      * @brief Активировать полноэкранный режим
      */
-    void toggleFullScreen(bool _isFullScreen, const QString& _viewMimeType) const;
+    void toggleViewFullScreen(bool _isFullScreen, const QString& _viewMimeType) const;
+    void toggleSecondaryViewFullScreen(bool _isFullScreen, const QString& _viewMimeType) const;
 
     /**
      * @brief Перенастроить плагины

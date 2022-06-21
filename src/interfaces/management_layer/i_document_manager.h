@@ -33,19 +33,22 @@ public:
     }
 
     /**
-     * @brief Задать модель документа
-     */
-    virtual void setModel(BusinessLayer::AbstractModel* _model) = 0;
-
-    /**
      * @brief Представление документа для основного окна приложения
      */
     virtual Ui::IDocumentView* view() = 0;
+    virtual Ui::IDocumentView* view(BusinessLayer::AbstractModel*) = 0;
+    virtual Ui::IDocumentView* secondaryView() = 0;
+    virtual Ui::IDocumentView* secondaryView(BusinessLayer::AbstractModel*) = 0;
 
     /**
-     * @brief Представление документа для отдельного окна
+     * @brief Представление документа для отдельного окна с заданной моделью
      */
-    virtual Ui::IDocumentView* createView() = 0;
+    virtual Ui::IDocumentView* createView(BusinessLayer::AbstractModel*) = 0;
+
+    /**
+     * @brief Сбросить все модели данных, к которым подсоединены представления
+     */
+    virtual void resetModels() = 0;
 
     /**
      * @brief Перенастроить редактор, которым управляет менеджер,
