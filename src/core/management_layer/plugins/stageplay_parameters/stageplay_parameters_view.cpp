@@ -139,26 +139,46 @@ QWidget* StageplayParametersView::asQWidget()
 
 void StageplayParametersView::setHeader(const QString& _header)
 {
+    if (d->header->text() == _header) {
+        return;
+    }
+
     d->header->setText(_header);
 }
 
 void StageplayParametersView::setPrintHeaderOnTitlePage(bool _print)
 {
+    if (d->printHeaderOnTitlePage->isChecked() == _print) {
+        return;
+    }
+
     d->printHeaderOnTitlePage->setChecked(_print);
 }
 
 void StageplayParametersView::setFooter(const QString& _footer)
 {
+    if (d->footer->text() == _footer) {
+        return;
+    }
+
     d->footer->setText(_footer);
 }
 
 void StageplayParametersView::setPrintFooterOnTitlePage(bool _print)
 {
+    if (d->printFooterOnTitlePage->isChecked() == _print) {
+        return;
+    }
+
     d->printFooterOnTitlePage->setChecked(_print);
 }
 
 void StageplayParametersView::setOverrideCommonSettings(bool _override)
 {
+    if (d->overrideCommonSettings->isChecked() == _override) {
+        return;
+    }
+
     d->overrideCommonSettings->setChecked(_override);
 }
 
@@ -171,7 +191,9 @@ void StageplayParametersView::setStageplayTemplate(const QString& _templateId)
             continue;
         }
 
-        d->stageplayTemplate->setCurrentIndex(item->index());
+        if (d->stageplayTemplate->currentIndex() != item->index()) {
+            d->stageplayTemplate->setCurrentIndex(item->index());
+        }
         break;
     }
 }

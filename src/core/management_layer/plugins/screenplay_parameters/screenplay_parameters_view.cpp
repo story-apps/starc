@@ -211,26 +211,46 @@ QWidget* ScreenplayParametersView::asQWidget()
 
 void ScreenplayParametersView::setHeader(const QString& _header)
 {
+    if (d->header->text() == _header) {
+        return;
+    }
+
     d->header->setText(_header);
 }
 
 void ScreenplayParametersView::setPrintHeaderOnTitlePage(bool _print)
 {
+    if (d->printHeaderOnTitlePage->isChecked() == _print) {
+        return;
+    }
+
     d->printHeaderOnTitlePage->setChecked(_print);
 }
 
 void ScreenplayParametersView::setFooter(const QString& _footer)
 {
+    if (d->footer->text() == _footer) {
+        return;
+    }
+
     d->footer->setText(_footer);
 }
 
 void ScreenplayParametersView::setPrintFooterOnTitlePage(bool _print)
 {
+    if (d->printFooterOnTitlePage->isChecked() == _print) {
+        return;
+    }
+
     d->printFooterOnTitlePage->setChecked(_print);
 }
 
 void ScreenplayParametersView::setScenesNumbersPrefix(const QString& _prefix)
 {
+    if (d->scenesNumbersPrefix->text() == _prefix) {
+        return;
+    }
+
     d->scenesNumbersPrefix->setText(_prefix);
 }
 
@@ -246,6 +266,10 @@ void ScreenplayParametersView::setScenesNumbersingStartAt(int _startNumber)
 
 void ScreenplayParametersView::setOverrideCommonSettings(bool _override)
 {
+    if (d->overrideCommonSettings->isChecked() == _override) {
+        return;
+    }
+
     d->overrideCommonSettings->setChecked(_override);
 }
 
@@ -258,28 +282,46 @@ void ScreenplayParametersView::setScreenplayTemplate(const QString& _templateId)
             continue;
         }
 
-        d->screenplayTemplate->setCurrentIndex(item->index());
+        if (d->screenplayTemplate->currentIndex() != item->index()) {
+            d->screenplayTemplate->setCurrentIndex(item->index());
+        }
         break;
     }
 }
 
 void ScreenplayParametersView::setShowSceneNumbers(bool _show)
 {
+    if (d->showSceneNumbers->isChecked() == _show) {
+        return;
+    }
+
     d->showSceneNumbers->setChecked(_show);
 }
 
 void ScreenplayParametersView::setShowSceneNumbersOnLeft(bool _show)
 {
+    if (d->showSceneNumbersOnLeft->isChecked() == _show) {
+        return;
+    }
+
     d->showSceneNumbersOnLeft->setChecked(_show);
 }
 
 void ScreenplayParametersView::setShowSceneNumbersOnRight(bool _show)
 {
+    if (d->showSceneNumbersOnRight->isChecked() == _show) {
+        return;
+    }
+
     d->showSceneNumbersOnRight->setChecked(_show);
 }
 
 void ScreenplayParametersView::setShowDialoguesNumbers(bool _show)
 {
+    if (d->showDialoguesNumbers->isChecked() == _show) {
+        return;
+    }
+
     d->showDialoguesNumbers->setChecked(_show);
 }
 

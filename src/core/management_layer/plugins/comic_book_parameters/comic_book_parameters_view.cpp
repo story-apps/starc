@@ -169,6 +169,10 @@ void ComicBookParametersView::setPrintFooterOnTitlePage(bool _print)
 
 void ComicBookParametersView::setOverrideCommonSettings(bool _override)
 {
+    if (d->overrideCommonSettings->isChecked() == _override) {
+        return;
+    }
+
     d->overrideCommonSettings->setChecked(_override);
 }
 
@@ -181,7 +185,9 @@ void ComicBookParametersView::setComicBookTemplate(const QString& _templateId)
             continue;
         }
 
-        d->comicBookTemplate->setCurrentIndex(item->index());
+        if (d->comicBookTemplate->currentIndex() != item->index()) {
+            d->comicBookTemplate->setCurrentIndex(item->index());
+        }
         break;
     }
 }

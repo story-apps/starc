@@ -168,26 +168,46 @@ QWidget* AudioplayParametersView::asQWidget()
 
 void AudioplayParametersView::setHeader(const QString& _header)
 {
+    if (d->header->text() == _header) {
+        return;
+    }
+
     d->header->setText(_header);
 }
 
 void AudioplayParametersView::setPrintHeaderOnTitlePage(bool _print)
 {
+    if (d->printHeaderOnTitlePage->isChecked() == _print) {
+        return;
+    }
+
     d->printHeaderOnTitlePage->setChecked(_print);
 }
 
 void AudioplayParametersView::setFooter(const QString& _footer)
 {
+    if (d->footer->text() == _footer) {
+        return;
+    }
+
     d->footer->setText(_footer);
 }
 
 void AudioplayParametersView::setPrintFooterOnTitlePage(bool _print)
 {
+    if (d->printFooterOnTitlePage->isChecked() == _print) {
+        return;
+    }
+
     d->printFooterOnTitlePage->setChecked(_print);
 }
 
 void AudioplayParametersView::setOverrideCommonSettings(bool _override)
 {
+    if (d->overrideCommonSettings->isChecked() == _override) {
+        return;
+    }
+
     d->overrideCommonSettings->setChecked(_override);
 }
 
@@ -200,18 +220,28 @@ void AudioplayParametersView::setAudioplayTemplate(const QString& _templateId)
             continue;
         }
 
-        d->audioplayTemplate->setCurrentIndex(item->index());
+        if (d->audioplayTemplate->currentIndex() != item->index()) {
+            d->audioplayTemplate->setCurrentIndex(item->index());
+        }
         break;
     }
 }
 
 void AudioplayParametersView::setShowBlockNumbers(bool _show)
 {
+    if (d->showBlockNumbers->isChecked() == _show) {
+        return;
+    }
+
     d->showBlockNumbers->setChecked(_show);
 }
 
 void AudioplayParametersView::setContinueBlockNumbers(bool _continue)
 {
+    if (d->continueBlockNumbers->isChecked() == _continue) {
+        return;
+    }
+
     d->continueBlockNumbers->setChecked(_continue);
 }
 
