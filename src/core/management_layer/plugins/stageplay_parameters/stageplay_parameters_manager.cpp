@@ -13,39 +13,119 @@ namespace ManagementLayer {
 class StageplayParametersManager::Implementation
 {
 public:
-    explicit Implementation();
-
     /**
      * @brief Создать представление
      */
-    Ui::StageplayParametersView* createView();
-
+    Ui::StageplayParametersView* createView(BusinessLayer::AbstractModel* _model);
 
     /**
-     * @brief Текущая модель представления основного окна
+     * @brief Связать заданную модель и представление
      */
-    QPointer<BusinessLayer::StageplayInformationModel> model;
+    void setModelForView(BusinessLayer::AbstractModel* _model, Ui::StageplayParametersView* _view);
+
 
     /**
      * @brief Предаставление для основного окна
      */
     Ui::StageplayParametersView* view = nullptr;
+    Ui::StageplayParametersView* secondaryView = nullptr;
 
     /**
-     * @brief Все созданные представления
+     * @brief Все созданные представления с моделями, которые в них отображаются
      */
-    QVector<Ui::StageplayParametersView*> allViews;
+    struct ViewAndModel {
+        Ui::StageplayParametersView* view = nullptr;
+        QPointer<BusinessLayer::StageplayInformationModel> model;
+    };
+    QVector<ViewAndModel> allViews;
 };
 
-StageplayParametersManager::Implementation::Implementation()
+Ui::StageplayParametersView* StageplayParametersManager::Implementation::createView(
+    BusinessLayer::AbstractModel* _model)
 {
-    view = createView();
+    auto view = new Ui::StageplayParametersView;
+    setModelForView(_model, view);
+    return view;
 }
 
-Ui::StageplayParametersView* StageplayParametersManager::Implementation::createView()
+void StageplayParametersManager::Implementation::setModelForView(
+    BusinessLayer::AbstractModel* _model, Ui::StageplayParametersView* _view)
 {
-    allViews.append(new Ui::StageplayParametersView);
-    return allViews.last();
+    constexpr int invalidIndex = -1;
+    int viewIndex = invalidIndex;
+    for (int index = 0; index < allViews.size(); ++index) {
+        if (allViews[index].view == _view) {
+            if (allViews[index].model == _model) {
+                return;
+            }
+
+            viewIndex = index;
+            break;
+        }
+    }
+
+    //
+    // Разрываем соединения со старой моделью
+    //
+    if (viewIndex != invalidIndex && allViews[viewIndex].model != nullptr) {
+        _view->disconnect(allViews[viewIndex].model);
+    }
+
+    //
+    // Определяем новую модель
+    //
+    auto model = qobject_cast<BusinessLayer::StageplayInformationModel*>(_model);
+
+    //
+    // Обновляем связь представления с моделью
+    //
+    if (viewIndex != invalidIndex) {
+        allViews[viewIndex].model = model;
+    }
+    //
+    // Или сохраняем связь представления с моделью
+    //
+    else {
+        allViews.append({ _view, model });
+    }
+
+    //
+    // Настраиваем соединения с новой моделью
+    //
+    if (model != nullptr) {
+        _view->setHeader(model->header());
+        _view->setPrintHeaderOnTitlePage(model->printHeaderOnTitlePage());
+        _view->setFooter(model->footer());
+        _view->setPrintFooterOnTitlePage(model->printFooterOnTitlePage());
+        _view->setOverrideCommonSettings(model->overrideCommonSettings());
+        _view->setStageplayTemplate(model->templateId());
+
+        connect(model, &BusinessLayer::StageplayInformationModel::headerChanged, _view,
+                &Ui::StageplayParametersView::setHeader);
+        connect(model, &BusinessLayer::StageplayInformationModel::printHeaderOnTitlePageChanged,
+                _view, &Ui::StageplayParametersView::setPrintHeaderOnTitlePage);
+        connect(model, &BusinessLayer::StageplayInformationModel::footerChanged, _view,
+                &Ui::StageplayParametersView::setFooter);
+        connect(model, &BusinessLayer::StageplayInformationModel::printFooterOnTitlePageChanged,
+                _view, &Ui::StageplayParametersView::setPrintFooterOnTitlePage);
+        connect(model, &BusinessLayer::StageplayInformationModel::overrideCommonSettingsChanged,
+                _view, &Ui::StageplayParametersView::setOverrideCommonSettings);
+        connect(model, &BusinessLayer::StageplayInformationModel::templateIdChanged, _view,
+                &Ui::StageplayParametersView::setStageplayTemplate);
+        //
+        connect(_view, &Ui::StageplayParametersView::headerChanged, model,
+                &BusinessLayer::StageplayInformationModel::setHeader);
+        connect(_view, &Ui::StageplayParametersView::printHeaderOnTitlePageChanged, model,
+                &BusinessLayer::StageplayInformationModel::setPrintHeaderOnTitlePage);
+        connect(_view, &Ui::StageplayParametersView::footerChanged, model,
+                &BusinessLayer::StageplayInformationModel::setFooter);
+        connect(_view, &Ui::StageplayParametersView::printFooterOnTitlePageChanged, model,
+                &BusinessLayer::StageplayInformationModel::setPrintFooterOnTitlePage);
+        connect(_view, &Ui::StageplayParametersView::overrideCommonSettingsChanged, model,
+                &BusinessLayer::StageplayInformationModel::setOverrideCommonSettings);
+        connect(_view, &Ui::StageplayParametersView::stageplayTemplateChanged, model,
+                &BusinessLayer::StageplayInformationModel::setTemplateId);
+    }
 }
 
 
@@ -60,67 +140,48 @@ StageplayParametersManager::StageplayParametersManager(QObject* _parent)
 
 StageplayParametersManager::~StageplayParametersManager() = default;
 
-void StageplayParametersManager::setModel(BusinessLayer::AbstractModel* _model)
-{
-    //
-    // Разрываем соединения со старой моделью
-    //
-    if (d->model != nullptr) {
-        d->view->disconnect(d->model);
-    }
-
-    //
-    // Определяем новую модель
-    //
-    d->model = qobject_cast<BusinessLayer::StageplayInformationModel*>(_model);
-
-    //
-    // Настраиваем соединения с новой моделью
-    //
-    if (d->model != nullptr) {
-        d->view->setHeader(d->model->header());
-        d->view->setPrintHeaderOnTitlePage(d->model->printHeaderOnTitlePage());
-        d->view->setFooter(d->model->footer());
-        d->view->setPrintFooterOnTitlePage(d->model->printFooterOnTitlePage());
-        d->view->setOverrideCommonSettings(d->model->overrideCommonSettings());
-        d->view->setStageplayTemplate(d->model->templateId());
-
-        connect(d->model, &BusinessLayer::StageplayInformationModel::headerChanged, d->view,
-                &Ui::StageplayParametersView::setHeader);
-        connect(d->model, &BusinessLayer::StageplayInformationModel::printHeaderOnTitlePageChanged,
-                d->view, &Ui::StageplayParametersView::setPrintHeaderOnTitlePage);
-        connect(d->model, &BusinessLayer::StageplayInformationModel::footerChanged, d->view,
-                &Ui::StageplayParametersView::setFooter);
-        connect(d->model, &BusinessLayer::StageplayInformationModel::printFooterOnTitlePageChanged,
-                d->view, &Ui::StageplayParametersView::setPrintFooterOnTitlePage);
-        connect(d->model, &BusinessLayer::StageplayInformationModel::overrideCommonSettingsChanged,
-                d->view, &Ui::StageplayParametersView::setOverrideCommonSettings);
-        connect(d->model, &BusinessLayer::StageplayInformationModel::templateIdChanged, d->view,
-                &Ui::StageplayParametersView::setStageplayTemplate);
-        //
-        connect(d->view, &Ui::StageplayParametersView::headerChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setHeader);
-        connect(d->view, &Ui::StageplayParametersView::printHeaderOnTitlePageChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setPrintHeaderOnTitlePage);
-        connect(d->view, &Ui::StageplayParametersView::footerChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setFooter);
-        connect(d->view, &Ui::StageplayParametersView::printFooterOnTitlePageChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setPrintFooterOnTitlePage);
-        connect(d->view, &Ui::StageplayParametersView::overrideCommonSettingsChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setOverrideCommonSettings);
-        connect(d->view, &Ui::StageplayParametersView::stageplayTemplateChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setTemplateId);
-    }
-}
-
 Ui::IDocumentView* StageplayParametersManager::view()
 {
     return d->view;
 }
 
-Ui::IDocumentView* StageplayParametersManager::createView()
+Ui::IDocumentView* StageplayParametersManager::view(BusinessLayer::AbstractModel* _model)
 {
-    return d->createView();
+    if (d->view == nullptr) {
+        d->view = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->view);
+    }
+
+    return d->view;
+}
+
+Ui::IDocumentView* StageplayParametersManager::secondaryView()
+{
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* StageplayParametersManager::secondaryView(BusinessLayer::AbstractModel* _model)
+{
+    if (d->secondaryView == nullptr) {
+        d->secondaryView = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->secondaryView);
+    }
+
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* StageplayParametersManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    return d->createView(_model);
+}
+
+void StageplayParametersManager::resetModels()
+{
+    for (auto& viewAndModel : d->allViews) {
+        d->setModelForView(nullptr, viewAndModel.view);
+    }
 }
 
 } // namespace ManagementLayer

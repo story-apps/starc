@@ -13,39 +13,124 @@ namespace ManagementLayer {
 class StageplayInformationManager::Implementation
 {
 public:
-    explicit Implementation();
-
     /**
      * @brief Создать представление
      */
-    Ui::StageplayInformationView* createView();
-
+    Ui::StageplayInformationView* createView(BusinessLayer::AbstractModel* _model);
 
     /**
-     * @brief Текущая модель представления основного окна
+     * @brief Связать заданную модель и представление
      */
-    QPointer<BusinessLayer::StageplayInformationModel> model;
+    void setModelForView(BusinessLayer::AbstractModel* _model, Ui::StageplayInformationView* _view);
+
 
     /**
      * @brief Предаставление для основного окна
      */
     Ui::StageplayInformationView* view = nullptr;
+    Ui::StageplayInformationView* secondaryView = nullptr;
 
     /**
-     * @brief Все созданные представления
+     * @brief Все созданные представления с моделями, которые в них отображаются
      */
-    QVector<Ui::StageplayInformationView*> allViews;
+    struct ViewAndModel {
+        Ui::StageplayInformationView* view = nullptr;
+        QPointer<BusinessLayer::StageplayInformationModel> model;
+    };
+    QVector<ViewAndModel> allViews;
 };
 
-StageplayInformationManager::Implementation::Implementation()
+Ui::StageplayInformationView* StageplayInformationManager::Implementation::createView(
+    BusinessLayer::AbstractModel* _model)
 {
-    view = createView();
+    auto view = new Ui::StageplayInformationView;
+    setModelForView(_model, view);
+    return view;
 }
 
-Ui::StageplayInformationView* StageplayInformationManager::Implementation::createView()
+void StageplayInformationManager::Implementation::setModelForView(
+    BusinessLayer::AbstractModel* _model, Ui::StageplayInformationView* _view)
 {
-    allViews.append(new Ui::StageplayInformationView);
-    return allViews.last();
+    constexpr int invalidIndex = -1;
+    int viewIndex = invalidIndex;
+    for (int index = 0; index < allViews.size(); ++index) {
+        if (allViews[index].view == _view) {
+            if (allViews[index].model == _model) {
+                return;
+            }
+
+            viewIndex = index;
+            break;
+        }
+    }
+
+    //
+    // Разрываем соединения со старой моделью
+    //
+    if (viewIndex != invalidIndex && allViews[viewIndex].model != nullptr) {
+        _view->disconnect(allViews[viewIndex].model);
+    }
+
+    //
+    // Определяем новую модель
+    //
+    auto model = qobject_cast<BusinessLayer::StageplayInformationModel*>(_model);
+
+    //
+    // Обновляем связь представления с моделью
+    //
+    if (viewIndex != invalidIndex) {
+        allViews[viewIndex].model = model;
+    }
+    //
+    // Или сохраняем связь представления с моделью
+    //
+    else {
+        allViews.append({ _view, model });
+    }
+
+    //
+    // Настраиваем соединения с новой моделью
+    //
+    if (model != nullptr) {
+        _view->setName(model->name());
+        _view->setTagline(model->tagline());
+        _view->setLogline(model->logline());
+        _view->setTitlePageVisible(model->titlePageVisible());
+        _view->setSynopsisVisible(model->synopsisVisible());
+        _view->setStageplayTextVisible(model->stageplayTextVisible());
+        _view->setStageplayStatisticsVisible(model->stageplayStatisticsVisible());
+
+        connect(model, &BusinessLayer::StageplayInformationModel::nameChanged, _view,
+                &Ui::StageplayInformationView::setName);
+        connect(model, &BusinessLayer::StageplayInformationModel::taglineChanged, _view,
+                &Ui::StageplayInformationView::setTagline);
+        connect(model, &BusinessLayer::StageplayInformationModel::loglineChanged, _view,
+                &Ui::StageplayInformationView::setLogline);
+        connect(model, &BusinessLayer::StageplayInformationModel::titlePageVisibleChanged, _view,
+                &Ui::StageplayInformationView::setTitlePageVisible);
+        connect(model, &BusinessLayer::StageplayInformationModel::synopsisVisibleChanged, _view,
+                &Ui::StageplayInformationView::setSynopsisVisible);
+        connect(model, &BusinessLayer::StageplayInformationModel::stageplayTextVisibleChanged,
+                _view, &Ui::StageplayInformationView::setStageplayTextVisible);
+        connect(model, &BusinessLayer::StageplayInformationModel::stageplayStatisticsVisibleChanged,
+                _view, &Ui::StageplayInformationView::setStageplayStatisticsVisible);
+        //
+        connect(_view, &Ui::StageplayInformationView::nameChanged, model,
+                &BusinessLayer::StageplayInformationModel::setName);
+        connect(_view, &Ui::StageplayInformationView::taglineChanged, model,
+                &BusinessLayer::StageplayInformationModel::setTagline);
+        connect(_view, &Ui::StageplayInformationView::loglineChanged, model,
+                &BusinessLayer::StageplayInformationModel::setLogline);
+        connect(_view, &Ui::StageplayInformationView::titlePageVisibleChanged, model,
+                &BusinessLayer::StageplayInformationModel::setTitlePageVisible);
+        connect(_view, &Ui::StageplayInformationView::synopsisVisibleChanged, model,
+                &BusinessLayer::StageplayInformationModel::setSynopsisVisible);
+        connect(_view, &Ui::StageplayInformationView::stageplayTextVisibleChanged, model,
+                &BusinessLayer::StageplayInformationModel::setStageplayTextVisible);
+        connect(_view, &Ui::StageplayInformationView::stageplayStatisticsVisibleChanged, model,
+                &BusinessLayer::StageplayInformationModel::setStageplayStatisticsVisible);
+    }
 }
 
 
@@ -60,73 +145,48 @@ StageplayInformationManager::StageplayInformationManager(QObject* _parent)
 
 StageplayInformationManager::~StageplayInformationManager() = default;
 
-void StageplayInformationManager::setModel(BusinessLayer::AbstractModel* _model)
-{
-    //
-    // Разрываем соединения со старой моделью
-    //
-    if (d->model != nullptr) {
-        d->view->disconnect(d->model);
-    }
-
-    //
-    // Определяем новую модель
-    //
-    d->model = qobject_cast<BusinessLayer::StageplayInformationModel*>(_model);
-
-    //
-    // Настраиваем соединения с новой моделью
-    //
-    if (d->model != nullptr) {
-        d->view->setName(d->model->name());
-        d->view->setTagline(d->model->tagline());
-        d->view->setLogline(d->model->logline());
-        d->view->setTitlePageVisible(d->model->titlePageVisible());
-        d->view->setSynopsisVisible(d->model->synopsisVisible());
-        d->view->setStageplayTextVisible(d->model->stageplayTextVisible());
-        d->view->setStageplayStatisticsVisible(d->model->stageplayStatisticsVisible());
-
-        connect(d->model, &BusinessLayer::StageplayInformationModel::nameChanged, d->view,
-                &Ui::StageplayInformationView::setName);
-        connect(d->model, &BusinessLayer::StageplayInformationModel::taglineChanged, d->view,
-                &Ui::StageplayInformationView::setTagline);
-        connect(d->model, &BusinessLayer::StageplayInformationModel::loglineChanged, d->view,
-                &Ui::StageplayInformationView::setLogline);
-        connect(d->model, &BusinessLayer::StageplayInformationModel::titlePageVisibleChanged,
-                d->view, &Ui::StageplayInformationView::setTitlePageVisible);
-        connect(d->model, &BusinessLayer::StageplayInformationModel::synopsisVisibleChanged,
-                d->view, &Ui::StageplayInformationView::setSynopsisVisible);
-        connect(d->model, &BusinessLayer::StageplayInformationModel::stageplayTextVisibleChanged,
-                d->view, &Ui::StageplayInformationView::setStageplayTextVisible);
-        connect(d->model,
-                &BusinessLayer::StageplayInformationModel::stageplayStatisticsVisibleChanged,
-                d->view, &Ui::StageplayInformationView::setStageplayStatisticsVisible);
-        //
-        connect(d->view, &Ui::StageplayInformationView::nameChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setName);
-        connect(d->view, &Ui::StageplayInformationView::taglineChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setTagline);
-        connect(d->view, &Ui::StageplayInformationView::loglineChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setLogline);
-        connect(d->view, &Ui::StageplayInformationView::titlePageVisibleChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setTitlePageVisible);
-        connect(d->view, &Ui::StageplayInformationView::synopsisVisibleChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setSynopsisVisible);
-        connect(d->view, &Ui::StageplayInformationView::stageplayTextVisibleChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setStageplayTextVisible);
-        connect(d->view, &Ui::StageplayInformationView::stageplayStatisticsVisibleChanged, d->model,
-                &BusinessLayer::StageplayInformationModel::setStageplayStatisticsVisible);
-    }
-}
-
 Ui::IDocumentView* StageplayInformationManager::view()
 {
     return d->view;
 }
 
-Ui::IDocumentView* StageplayInformationManager::createView()
+Ui::IDocumentView* StageplayInformationManager::view(BusinessLayer::AbstractModel* _model)
 {
-    return d->createView();
+    if (d->view == nullptr) {
+        d->view = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->view);
+    }
+
+    return d->view;
+}
+
+Ui::IDocumentView* StageplayInformationManager::secondaryView()
+{
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* StageplayInformationManager::secondaryView(BusinessLayer::AbstractModel* _model)
+{
+    if (d->secondaryView == nullptr) {
+        d->secondaryView = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->secondaryView);
+    }
+
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* StageplayInformationManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    return d->createView(_model);
+}
+
+void StageplayInformationManager::resetModels()
+{
+    for (auto& viewAndModel : d->allViews) {
+        d->setModelForView(nullptr, viewAndModel.view);
+    }
 }
 
 } // namespace ManagementLayer

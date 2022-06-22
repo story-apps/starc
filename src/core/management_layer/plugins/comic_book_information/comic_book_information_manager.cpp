@@ -13,39 +13,124 @@ namespace ManagementLayer {
 class ComicBookInformationManager::Implementation
 {
 public:
-    explicit Implementation();
-
     /**
      * @brief Создать представление
      */
-    Ui::ComicBookInformationView* createView();
-
+    Ui::ComicBookInformationView* createView(BusinessLayer::AbstractModel* _model);
 
     /**
-     * @brief Текущая модель представления основного окна
+     * @brief Связать заданную модель и представление
      */
-    QPointer<BusinessLayer::ComicBookInformationModel> model;
+    void setModelForView(BusinessLayer::AbstractModel* _model, Ui::ComicBookInformationView* _view);
+
 
     /**
      * @brief Предаставление для основного окна
      */
     Ui::ComicBookInformationView* view = nullptr;
+    Ui::ComicBookInformationView* secondaryView = nullptr;
 
     /**
-     * @brief Все созданные представления
+     * @brief Все созданные представления с моделями, которые в них отображаются
      */
-    QVector<Ui::ComicBookInformationView*> allViews;
+    struct ViewAndModel {
+        Ui::ComicBookInformationView* view = nullptr;
+        QPointer<BusinessLayer::ComicBookInformationModel> model;
+    };
+    QVector<ViewAndModel> allViews;
 };
 
-ComicBookInformationManager::Implementation::Implementation()
+Ui::ComicBookInformationView* ComicBookInformationManager::Implementation::createView(
+    BusinessLayer::AbstractModel* _model)
 {
-    view = createView();
+    auto view = new Ui::ComicBookInformationView;
+    setModelForView(_model, view);
+    return view;
 }
 
-Ui::ComicBookInformationView* ComicBookInformationManager::Implementation::createView()
+void ComicBookInformationManager::Implementation::setModelForView(
+    BusinessLayer::AbstractModel* _model, Ui::ComicBookInformationView* _view)
 {
-    allViews.append(new Ui::ComicBookInformationView);
-    return allViews.last();
+    constexpr int invalidIndex = -1;
+    int viewIndex = invalidIndex;
+    for (int index = 0; index < allViews.size(); ++index) {
+        if (allViews[index].view == _view) {
+            if (allViews[index].model == _model) {
+                return;
+            }
+
+            viewIndex = index;
+            break;
+        }
+    }
+
+    //
+    // Разрываем соединения со старой моделью
+    //
+    if (viewIndex != invalidIndex && allViews[viewIndex].model != nullptr) {
+        _view->disconnect(allViews[viewIndex].model);
+    }
+
+    //
+    // Определяем новую модель
+    //
+    auto model = qobject_cast<BusinessLayer::ComicBookInformationModel*>(_model);
+
+    //
+    // Обновляем связь представления с моделью
+    //
+    if (viewIndex != invalidIndex) {
+        allViews[viewIndex].model = model;
+    }
+    //
+    // Или сохраняем связь представления с моделью
+    //
+    else {
+        allViews.append({ _view, model });
+    }
+
+    //
+    // Настраиваем соединения с новой моделью
+    //
+    if (model != nullptr) {
+        _view->setName(model->name());
+        _view->setTagline(model->tagline());
+        _view->setLogline(model->logline());
+        _view->setTitlePageVisible(model->titlePageVisible());
+        _view->setSynopsisVisible(model->synopsisVisible());
+        _view->setComicBookTextVisible(model->comicBookTextVisible());
+        _view->setComicBookStatisticsVisible(model->comicBookStatisticsVisible());
+
+        connect(model, &BusinessLayer::ComicBookInformationModel::nameChanged, _view,
+                &Ui::ComicBookInformationView::setName);
+        connect(model, &BusinessLayer::ComicBookInformationModel::taglineChanged, _view,
+                &Ui::ComicBookInformationView::setTagline);
+        connect(model, &BusinessLayer::ComicBookInformationModel::loglineChanged, _view,
+                &Ui::ComicBookInformationView::setLogline);
+        connect(model, &BusinessLayer::ComicBookInformationModel::titlePageVisibleChanged, _view,
+                &Ui::ComicBookInformationView::setTitlePageVisible);
+        connect(model, &BusinessLayer::ComicBookInformationModel::synopsisVisibleChanged, _view,
+                &Ui::ComicBookInformationView::setSynopsisVisible);
+        connect(model, &BusinessLayer::ComicBookInformationModel::comicBookTextVisibleChanged,
+                _view, &Ui::ComicBookInformationView::setComicBookTextVisible);
+        connect(model, &BusinessLayer::ComicBookInformationModel::comicBookStatisticsVisibleChanged,
+                _view, &Ui::ComicBookInformationView::setComicBookStatisticsVisible);
+        //
+        connect(_view, &Ui::ComicBookInformationView::nameChanged, model,
+                &BusinessLayer::ComicBookInformationModel::setName);
+        connect(_view, &Ui::ComicBookInformationView::taglineChanged, model,
+                &BusinessLayer::ComicBookInformationModel::setTagline);
+        connect(_view, &Ui::ComicBookInformationView::loglineChanged, model,
+                &BusinessLayer::ComicBookInformationModel::setLogline);
+        connect(_view, &Ui::ComicBookInformationView::titlePageVisibleChanged, model,
+                &BusinessLayer::ComicBookInformationModel::setTitlePageVisible);
+        connect(_view, &Ui::ComicBookInformationView::synopsisVisibleChanged, model,
+                &BusinessLayer::ComicBookInformationModel::setSynopsisVisible);
+        connect(_view, &Ui::ComicBookInformationView::comicBookTextVisibleChanged, model,
+                &BusinessLayer::ComicBookInformationModel::setComicBookTextVisible);
+        connect(_view, &Ui::ComicBookInformationView::comicBookStatisticsVisibleChanged, model,
+                &BusinessLayer::ComicBookInformationModel::setComicBookStatisticsVisible);
+    }
 }
 
 
@@ -60,73 +145,48 @@ ComicBookInformationManager::ComicBookInformationManager(QObject* _parent)
 
 ComicBookInformationManager::~ComicBookInformationManager() = default;
 
-void ComicBookInformationManager::setModel(BusinessLayer::AbstractModel* _model)
-{
-    //
-    // Разрываем соединения со старой моделью
-    //
-    if (d->model != nullptr) {
-        d->view->disconnect(d->model);
-    }
-
-    //
-    // Определяем новую модель
-    //
-    d->model = qobject_cast<BusinessLayer::ComicBookInformationModel*>(_model);
-
-    //
-    // Настраиваем соединения с новой моделью
-    //
-    if (d->model != nullptr) {
-        d->view->setName(d->model->name());
-        d->view->setTagline(d->model->tagline());
-        d->view->setLogline(d->model->logline());
-        d->view->setTitlePageVisible(d->model->titlePageVisible());
-        d->view->setSynopsisVisible(d->model->synopsisVisible());
-        d->view->setComicBookTextVisible(d->model->comicBookTextVisible());
-        d->view->setComicBookStatisticsVisible(d->model->comicBookStatisticsVisible());
-
-        connect(d->model, &BusinessLayer::ComicBookInformationModel::nameChanged, d->view,
-                &Ui::ComicBookInformationView::setName);
-        connect(d->model, &BusinessLayer::ComicBookInformationModel::taglineChanged, d->view,
-                &Ui::ComicBookInformationView::setTagline);
-        connect(d->model, &BusinessLayer::ComicBookInformationModel::loglineChanged, d->view,
-                &Ui::ComicBookInformationView::setLogline);
-        connect(d->model, &BusinessLayer::ComicBookInformationModel::titlePageVisibleChanged,
-                d->view, &Ui::ComicBookInformationView::setTitlePageVisible);
-        connect(d->model, &BusinessLayer::ComicBookInformationModel::synopsisVisibleChanged,
-                d->view, &Ui::ComicBookInformationView::setSynopsisVisible);
-        connect(d->model, &BusinessLayer::ComicBookInformationModel::comicBookTextVisibleChanged,
-                d->view, &Ui::ComicBookInformationView::setComicBookTextVisible);
-        connect(d->model,
-                &BusinessLayer::ComicBookInformationModel::comicBookStatisticsVisibleChanged,
-                d->view, &Ui::ComicBookInformationView::setComicBookStatisticsVisible);
-        //
-        connect(d->view, &Ui::ComicBookInformationView::nameChanged, d->model,
-                &BusinessLayer::ComicBookInformationModel::setName);
-        connect(d->view, &Ui::ComicBookInformationView::taglineChanged, d->model,
-                &BusinessLayer::ComicBookInformationModel::setTagline);
-        connect(d->view, &Ui::ComicBookInformationView::loglineChanged, d->model,
-                &BusinessLayer::ComicBookInformationModel::setLogline);
-        connect(d->view, &Ui::ComicBookInformationView::titlePageVisibleChanged, d->model,
-                &BusinessLayer::ComicBookInformationModel::setTitlePageVisible);
-        connect(d->view, &Ui::ComicBookInformationView::synopsisVisibleChanged, d->model,
-                &BusinessLayer::ComicBookInformationModel::setSynopsisVisible);
-        connect(d->view, &Ui::ComicBookInformationView::comicBookTextVisibleChanged, d->model,
-                &BusinessLayer::ComicBookInformationModel::setComicBookTextVisible);
-        connect(d->view, &Ui::ComicBookInformationView::comicBookStatisticsVisibleChanged, d->model,
-                &BusinessLayer::ComicBookInformationModel::setComicBookStatisticsVisible);
-    }
-}
-
 Ui::IDocumentView* ComicBookInformationManager::view()
 {
     return d->view;
 }
 
-Ui::IDocumentView* ComicBookInformationManager::createView()
+Ui::IDocumentView* ComicBookInformationManager::view(BusinessLayer::AbstractModel* _model)
 {
-    return d->createView();
+    if (d->view == nullptr) {
+        d->view = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->view);
+    }
+
+    return d->view;
+}
+
+Ui::IDocumentView* ComicBookInformationManager::secondaryView()
+{
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* ComicBookInformationManager::secondaryView(BusinessLayer::AbstractModel* _model)
+{
+    if (d->secondaryView == nullptr) {
+        d->secondaryView = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->secondaryView);
+    }
+
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* ComicBookInformationManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    return d->createView(_model);
+}
+
+void ComicBookInformationManager::resetModels()
+{
+    for (auto& viewAndModel : d->allViews) {
+        d->setModelForView(nullptr, viewAndModel.view);
+    }
 }
 
 } // namespace ManagementLayer

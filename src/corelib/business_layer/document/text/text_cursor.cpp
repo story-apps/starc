@@ -516,6 +516,15 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
         targetBlockData = cloneBlockData(topBlock);
     }
 
+    //    //
+    //    // Если при удалении целевым был назначен стиль разделения, то сбросим его до стандартного
+    //    //
+    //    if (targetStyle.type() == TextParagraphType::PageSplitter) {
+    //        targetStyle = textTemplate().paragraphStyle(textTemplate().defaultParagraphType());
+    //        delete targetBlockData;
+    //        targetBlockData = nullptr;
+    //    }
+
     //
     // Собственно удаление
     //

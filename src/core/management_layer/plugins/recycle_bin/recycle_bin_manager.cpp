@@ -10,12 +10,15 @@ namespace ManagementLayer {
 class RecycleBinManager::Implementation
 {
 public:
-    explicit Implementation();
-
     /**
      * @brief Создать представление
      */
-    Ui::RecycleBinView* createView();
+    Ui::RecycleBinView* createView(BusinessLayer::AbstractModel* _model);
+
+    /**
+     * @brief Связать заданную модель и представление
+     */
+    void setModelForView(BusinessLayer::AbstractModel* _model, Ui::RecycleBinView* _view);
 
 
     /**
@@ -27,22 +30,78 @@ public:
      * @brief Предаставление для основного окна
      */
     Ui::RecycleBinView* view = nullptr;
+    Ui::RecycleBinView* secondaryView = nullptr;
 
     /**
-     * @brief Все созданные представления
+     * @brief Все созданные представления с моделями, которые в них отображаются
      */
-    QVector<Ui::RecycleBinView*> allViews;
+    struct ViewAndModel {
+        Ui::RecycleBinView* view = nullptr;
+        QPointer<BusinessLayer::RecycleBinModel> model;
+    };
+    QVector<ViewAndModel> allViews;
 };
 
-RecycleBinManager::Implementation::Implementation()
+Ui::RecycleBinView* RecycleBinManager::Implementation::createView(
+    BusinessLayer::AbstractModel* _model)
 {
-    view = createView();
+    auto view = new Ui::RecycleBinView;
+    setModelForView(_model, view);
+    return view;
 }
 
-Ui::RecycleBinView* RecycleBinManager::Implementation::createView()
+void RecycleBinManager::Implementation::setModelForView(BusinessLayer::AbstractModel* _model,
+                                                        Ui::RecycleBinView* _view)
 {
-    allViews.append(new Ui::RecycleBinView);
-    return allViews.last();
+    constexpr int invalidIndex = -1;
+    int viewIndex = invalidIndex;
+    for (int index = 0; index < allViews.size(); ++index) {
+        if (allViews[index].view == _view) {
+            if (allViews[index].model == _model) {
+                return;
+            }
+
+            viewIndex = index;
+            break;
+        }
+    }
+
+    //
+    // Разрываем соединения со старой моделью
+    //
+    if (viewIndex != invalidIndex && allViews[viewIndex].model != nullptr) {
+        _view->disconnect(allViews[viewIndex].model);
+    }
+
+    //
+    // Определяем новую модель
+    //
+    auto model = qobject_cast<BusinessLayer::RecycleBinModel*>(_model);
+
+    //
+    // Обновляем связь представления с моделью
+    //
+    if (viewIndex != invalidIndex) {
+        allViews[viewIndex].model = model;
+    }
+    //
+    // Или сохраняем связь представления с моделью
+    //
+    else {
+        allViews.append({ _view, model });
+    }
+
+    //
+    // Настраиваем соединения с новой моделью
+    //
+    if (model != nullptr) {
+        _view->setDocumentsToRemoveSize(model->documentsToRemoveSize());
+
+        connect(_view, &Ui::RecycleBinView::emptyRecycleBinPressed, model,
+                &BusinessLayer::RecycleBinModel::emptyRecycleBinRequested);
+        connect(model, &BusinessLayer::RecycleBinModel::documentsToRemoveSizeChanged, _view,
+                &Ui::RecycleBinView::setDocumentsToRemoveSize);
+    }
 }
 
 
@@ -57,41 +116,48 @@ RecycleBinManager::RecycleBinManager(QObject* _parent)
 
 RecycleBinManager::~RecycleBinManager() = default;
 
-void RecycleBinManager::setModel(BusinessLayer::AbstractModel* _model)
-{
-    //
-    // Разрываем соединения со старой моделью
-    //
-    if (d->model != nullptr) {
-        d->view->disconnect(d->model);
-    }
-
-    //
-    // Определяем новую модель
-    //
-    d->model = qobject_cast<BusinessLayer::RecycleBinModel*>(_model);
-
-    //
-    // Настраиваем соединения с новой моделью
-    //
-    if (d->model != nullptr) {
-        d->view->setDocumentsToRemoveSize(d->model->documentsToRemoveSize());
-
-        connect(d->view, &Ui::RecycleBinView::emptyRecycleBinPressed, d->model,
-                &BusinessLayer::RecycleBinModel::emptyRecycleBinRequested);
-        connect(d->model, &BusinessLayer::RecycleBinModel::documentsToRemoveSizeChanged, d->view,
-                &Ui::RecycleBinView::setDocumentsToRemoveSize);
-    }
-}
-
 Ui::IDocumentView* RecycleBinManager::view()
 {
     return d->view;
 }
 
-Ui::IDocumentView* RecycleBinManager::createView()
+Ui::IDocumentView* RecycleBinManager::view(BusinessLayer::AbstractModel* _model)
 {
-    return d->createView();
+    if (d->view == nullptr) {
+        d->view = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->view);
+    }
+
+    return d->view;
+}
+
+Ui::IDocumentView* RecycleBinManager::secondaryView()
+{
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* RecycleBinManager::secondaryView(BusinessLayer::AbstractModel* _model)
+{
+    if (d->secondaryView == nullptr) {
+        d->secondaryView = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->secondaryView);
+    }
+
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* RecycleBinManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    return d->createView(_model);
+}
+
+void RecycleBinManager::resetModels()
+{
+    for (auto& viewAndModel : d->allViews) {
+        d->setModelForView(nullptr, viewAndModel.view);
+    }
 }
 
 } // namespace ManagementLayer
