@@ -27,9 +27,12 @@ public:
      */
     /** @{ */
     QObject* asQObject() override;
-    void setModel(BusinessLayer::AbstractModel* _model) override;
     Ui::IDocumentView* view() override;
-    Ui::IDocumentView* createView() override;
+    Ui::IDocumentView* view(BusinessLayer::AbstractModel* _model) override;
+    Ui::IDocumentView* secondaryView() override;
+    Ui::IDocumentView* secondaryView(BusinessLayer::AbstractModel* _model) override;
+    Ui::IDocumentView* createView(BusinessLayer::AbstractModel* _model) override;
+    void resetModels() override;
     void reconfigure(const QStringList& _changedSettingsKeys) override;
     void bind(IDocumentManager* _manager) override;
     void saveSettings() override;
@@ -51,6 +54,11 @@ private:
      * @brief Выбрать в навигаторе элемент соответствующий заданному индексу в модели
      */
     Q_SLOT void setCurrentModelIndex(const QModelIndex& _index);
+
+    /**
+     * @brief Установить модель
+     */
+    void setModel(BusinessLayer::AbstractModel* _model);
 
 private:
     class Implementation;

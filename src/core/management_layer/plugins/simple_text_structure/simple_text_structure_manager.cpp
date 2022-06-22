@@ -175,6 +175,74 @@ QObject* SimpleTextStructureManager::asQObject()
     return this;
 }
 
+Ui::IDocumentView* SimpleTextStructureManager::view()
+{
+    return d->view;
+}
+
+Ui::IDocumentView* SimpleTextStructureManager::view(BusinessLayer::AbstractModel* _model)
+{
+    setModel(_model);
+    return d->view;
+}
+
+Ui::IDocumentView* SimpleTextStructureManager::secondaryView()
+{
+    return nullptr;
+}
+
+Ui::IDocumentView* SimpleTextStructureManager::secondaryView(BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+Ui::IDocumentView* SimpleTextStructureManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+void SimpleTextStructureManager::resetModels()
+{
+    setModel(nullptr);
+}
+
+void SimpleTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
+{
+    Q_UNUSED(_changedSettingsKeys);
+    d->view->reconfigure();
+}
+
+void SimpleTextStructureManager::bind(IDocumentManager* _manager)
+{
+    Q_ASSERT(_manager);
+
+    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
+            SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
+}
+
+void SimpleTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
+{
+    if (!_index.isValid()) {
+        return;
+    }
+
+    if (d->model != _index.model()) {
+        d->modelIndexToSelect = _index;
+        return;
+    }
+
+    QSignalBlocker signalBlocker(this);
+
+    //
+    // Из редактора текста мы получаем индексы текстовых элементов, они хранятся внутри
+    // глав, которые как раз и отображаются в навигаторе
+    //
+    d->view->setCurrentModelIndex(d->structureModel->mapFromSource(_index.parent()));
+    d->modelIndexToSelect = {};
+}
+
 void SimpleTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
 {
     //
@@ -217,51 +285,6 @@ void SimpleTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
     if (d->modelIndexToSelect.isValid()) {
         setCurrentModelIndex(d->modelIndexToSelect);
     }
-}
-
-Ui::IDocumentView* SimpleTextStructureManager::view()
-{
-    return d->view;
-}
-
-Ui::IDocumentView* SimpleTextStructureManager::createView()
-{
-    return d->createView();
-}
-
-void SimpleTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
-{
-    Q_UNUSED(_changedSettingsKeys);
-    d->view->reconfigure();
-}
-
-void SimpleTextStructureManager::bind(IDocumentManager* _manager)
-{
-    Q_ASSERT(_manager);
-
-    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
-            SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
-}
-
-void SimpleTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
-{
-    if (!_index.isValid()) {
-        return;
-    }
-
-    if (d->model != _index.model()) {
-        d->modelIndexToSelect = _index;
-        return;
-    }
-
-    QSignalBlocker signalBlocker(this);
-
-    //
-    // Из редактора текста мы получаем индексы текстовых элементов, они хранятся внутри
-    // глав, которые как раз и отображаются в навигаторе
-    //
-    d->view->setCurrentModelIndex(d->structureModel->mapFromSource(_index.parent()));
-    d->modelIndexToSelect = {};
 }
 
 } // namespace ManagementLayer

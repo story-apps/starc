@@ -206,68 +206,38 @@ QObject* ScreenplayTextStructureManager::asQObject()
     return this;
 }
 
-void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
-{
-    //
-    // Разрываем соединения со старой моделью
-    //
-    if (d->model != nullptr) {
-        disconnect(d->model->informationModel(),
-                   &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view, nullptr);
-    }
-
-    //
-    // Определяем новую модель
-    //
-    d->model = qobject_cast<BusinessLayer::ScreenplayTextModel*>(_model);
-
-    //
-    // Создаём прокси модель, если ещё не была создана и настриваем её
-    //
-    if (d->structureModel == nullptr) {
-        d->structureModel = new BusinessLayer::ScreenplayTextStructureModel(d->view);
-        d->view->setModel(d->structureModel);
-    }
-
-    //
-    // Помещаем модель с данными в прокси
-    //
-    d->structureModel->setSourceModel(d->model);
-
-    //
-    // Настраиваем соединения с новой моделью
-    //
-    if (d->model != nullptr) {
-        auto updateTitle = [this] {
-            d->view->setTitle(
-                QString("%1 | %2").arg(tr("Screenplay"), d->model->informationModel()->name()));
-        };
-        updateTitle();
-        connect(d->model->informationModel(),
-                &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view, updateTitle);
-    }
-
-    //
-    // Если элемент к выделению уже задан, выберем его в структуре
-    //
-    if (d->modelIndexToSelect.isValid()) {
-        setCurrentModelIndex(d->modelIndexToSelect);
-    }
-
-    //
-    // Переконфигурируемся
-    //
-    reconfigure({});
-}
-
 Ui::IDocumentView* ScreenplayTextStructureManager::view()
 {
     return d->view;
 }
 
-Ui::IDocumentView* ScreenplayTextStructureManager::createView()
+Ui::IDocumentView* ScreenplayTextStructureManager::view(BusinessLayer::AbstractModel* _model)
 {
-    return d->createView();
+    setModel(_model);
+    return d->view;
+}
+
+Ui::IDocumentView* ScreenplayTextStructureManager::secondaryView()
+{
+    return nullptr;
+}
+
+Ui::IDocumentView* ScreenplayTextStructureManager::secondaryView(
+    BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+Ui::IDocumentView* ScreenplayTextStructureManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+void ScreenplayTextStructureManager::resetModels()
+{
+    setModel(nullptr);
 }
 
 void ScreenplayTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
@@ -320,6 +290,60 @@ void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _in
     }
     d->view->setCurrentModelIndex(_index.parent(), indexForSelect);
     d->modelIndexToSelect = {};
+}
+
+void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
+{
+    //
+    // Разрываем соединения со старой моделью
+    //
+    if (d->model != nullptr) {
+        disconnect(d->model->informationModel(),
+                   &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view, nullptr);
+    }
+
+    //
+    // Определяем новую модель
+    //
+    d->model = qobject_cast<BusinessLayer::ScreenplayTextModel*>(_model);
+
+    //
+    // Создаём прокси модель, если ещё не была создана и настриваем её
+    //
+    if (d->structureModel == nullptr) {
+        d->structureModel = new BusinessLayer::ScreenplayTextStructureModel(d->view);
+        d->view->setModel(d->structureModel);
+    }
+
+    //
+    // Помещаем модель с данными в прокси
+    //
+    d->structureModel->setSourceModel(d->model);
+
+    //
+    // Настраиваем соединения с новой моделью
+    //
+    if (d->model != nullptr) {
+        auto updateTitle = [this] {
+            d->view->setTitle(
+                QString("%1 | %2").arg(tr("Screenplay"), d->model->informationModel()->name()));
+        };
+        updateTitle();
+        connect(d->model->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view, updateTitle);
+    }
+
+    //
+    // Если элемент к выделению уже задан, выберем его в структуре
+    //
+    if (d->modelIndexToSelect.isValid()) {
+        setCurrentModelIndex(d->modelIndexToSelect);
+    }
+
+    //
+    // Переконфигурируемся
+    //
+    reconfigure({});
 }
 
 } // namespace ManagementLayer

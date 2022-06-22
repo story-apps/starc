@@ -188,6 +188,88 @@ QObject* ScreenplayTreatmentStructureManager::asQObject()
     return this;
 }
 
+Ui::IDocumentView* ScreenplayTreatmentStructureManager::view()
+{
+    return d->view;
+}
+
+Ui::IDocumentView* ScreenplayTreatmentStructureManager::view(BusinessLayer::AbstractModel* _model)
+{
+    setModel(_model);
+    return d->view;
+}
+
+Ui::IDocumentView* ScreenplayTreatmentStructureManager::secondaryView()
+{
+    return nullptr;
+}
+
+Ui::IDocumentView* ScreenplayTreatmentStructureManager::secondaryView(
+    BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+Ui::IDocumentView* ScreenplayTreatmentStructureManager::createView(
+    BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+void ScreenplayTreatmentStructureManager::resetModels()
+{
+    setModel(nullptr);
+}
+
+void ScreenplayTreatmentStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
+{
+    Q_UNUSED(_changedSettingsKeys);
+
+    const bool showBeats
+        = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsKey).toBool();
+    d->structureModel->showBeats(showBeats);
+
+    d->view->reconfigure();
+}
+
+void ScreenplayTreatmentStructureManager::bind(IDocumentManager* _manager)
+{
+    Q_ASSERT(_manager);
+
+    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
+            SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
+}
+
+void ScreenplayTreatmentStructureManager::setCurrentModelIndex(const QModelIndex& _index)
+{
+    if (!_index.isValid()) {
+        return;
+    }
+
+    if (d->model != _index.model()) {
+        d->modelIndexToSelect = _index;
+        return;
+    }
+
+    QSignalBlocker signalBlocker(this);
+
+    //
+    // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
+    // папок, сцен или битов, которые как раз и отображаются в навигаторе
+    //
+    auto indexForSelect = d->structureModel->mapFromSource(_index.parent());
+    //
+    // ... когда быти скрыты в навигаторе, берём папку или сцену, в которой они находятся
+    //
+    if (!indexForSelect.isValid()) {
+        indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());
+    }
+    d->view->setCurrentModelIndex(indexForSelect);
+    d->modelIndexToSelect = {};
+}
+
 void ScreenplayTreatmentStructureManager::setModel(BusinessLayer::AbstractModel* _model)
 {
     //
@@ -240,63 +322,6 @@ void ScreenplayTreatmentStructureManager::setModel(BusinessLayer::AbstractModel*
     // Переконфигурируемся
     //
     reconfigure({});
-}
-
-Ui::IDocumentView* ScreenplayTreatmentStructureManager::view()
-{
-    return d->view;
-}
-
-Ui::IDocumentView* ScreenplayTreatmentStructureManager::createView()
-{
-    return d->createView();
-}
-
-void ScreenplayTreatmentStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
-{
-    Q_UNUSED(_changedSettingsKeys);
-
-    const bool showBeats
-        = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsKey).toBool();
-    d->structureModel->showBeats(showBeats);
-
-    d->view->reconfigure();
-}
-
-void ScreenplayTreatmentStructureManager::bind(IDocumentManager* _manager)
-{
-    Q_ASSERT(_manager);
-
-    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
-            SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
-}
-
-void ScreenplayTreatmentStructureManager::setCurrentModelIndex(const QModelIndex& _index)
-{
-    if (!_index.isValid()) {
-        return;
-    }
-
-    if (d->model != _index.model()) {
-        d->modelIndexToSelect = _index;
-        return;
-    }
-
-    QSignalBlocker signalBlocker(this);
-
-    //
-    // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
-    // папок, сцен или битов, которые как раз и отображаются в навигаторе
-    //
-    auto indexForSelect = d->structureModel->mapFromSource(_index.parent());
-    //
-    // ... когда быти скрыты в навигаторе, берём папку или сцену, в которой они находятся
-    //
-    if (!indexForSelect.isValid()) {
-        indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());
-    }
-    d->view->setCurrentModelIndex(indexForSelect);
-    d->modelIndexToSelect = {};
 }
 
 } // namespace ManagementLayer

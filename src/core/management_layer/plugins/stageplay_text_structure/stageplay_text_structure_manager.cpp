@@ -186,6 +186,83 @@ QObject* StageplayTextStructureManager::asQObject()
     return this;
 }
 
+Ui::IDocumentView* StageplayTextStructureManager::view()
+{
+    return d->view;
+}
+
+Ui::IDocumentView* StageplayTextStructureManager::view(BusinessLayer::AbstractModel* _model)
+{
+    setModel(_model);
+    return d->view;
+}
+
+Ui::IDocumentView* StageplayTextStructureManager::secondaryView()
+{
+    return nullptr;
+}
+
+Ui::IDocumentView* StageplayTextStructureManager::secondaryView(
+    BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+Ui::IDocumentView* StageplayTextStructureManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+void StageplayTextStructureManager::resetModels()
+{
+    setModel(nullptr);
+}
+
+void StageplayTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
+{
+    Q_UNUSED(_changedSettingsKeys);
+
+    d->view->reconfigure();
+}
+
+void StageplayTextStructureManager::bind(IDocumentManager* _manager)
+{
+    Q_ASSERT(_manager);
+
+    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
+            SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
+}
+
+void StageplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
+{
+    if (!_index.isValid()) {
+        return;
+    }
+
+    if (d->model != _index.model()) {
+        d->modelIndexToSelect = _index;
+        return;
+    }
+
+    QSignalBlocker signalBlocker(this);
+
+    //
+    // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
+    // папок, сцен или битов, которые как раз и отображаются в навигаторе
+    //
+    auto indexForSelect = d->structureModel->mapFromSource(_index.parent());
+    //
+    // ... когда быти скрыты в навигаторе, берём папку или сцену, в которой они находятся
+    //
+    if (!indexForSelect.isValid()) {
+        indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());
+    }
+    d->view->setCurrentModelIndex(_index.parent(), indexForSelect);
+    d->modelIndexToSelect = {};
+}
+
 void StageplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
 {
     //
@@ -235,59 +312,6 @@ void StageplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mode
     // Переконфигурируемся
     //
     reconfigure({});
-}
-
-Ui::IDocumentView* StageplayTextStructureManager::view()
-{
-    return d->view;
-}
-
-Ui::IDocumentView* StageplayTextStructureManager::createView()
-{
-    return d->createView();
-}
-
-void StageplayTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
-{
-    Q_UNUSED(_changedSettingsKeys);
-
-    d->view->reconfigure();
-}
-
-void StageplayTextStructureManager::bind(IDocumentManager* _manager)
-{
-    Q_ASSERT(_manager);
-
-    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
-            SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
-}
-
-void StageplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
-{
-    if (!_index.isValid()) {
-        return;
-    }
-
-    if (d->model != _index.model()) {
-        d->modelIndexToSelect = _index;
-        return;
-    }
-
-    QSignalBlocker signalBlocker(this);
-
-    //
-    // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
-    // папок, сцен или битов, которые как раз и отображаются в навигаторе
-    //
-    auto indexForSelect = d->structureModel->mapFromSource(_index.parent());
-    //
-    // ... когда быти скрыты в навигаторе, берём папку или сцену, в которой они находятся
-    //
-    if (!indexForSelect.isValid()) {
-        indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());
-    }
-    d->view->setCurrentModelIndex(_index.parent(), indexForSelect);
-    d->modelIndexToSelect = {};
 }
 
 } // namespace ManagementLayer

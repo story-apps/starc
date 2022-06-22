@@ -185,6 +185,75 @@ QObject* ComicBookTextStructureManager::asQObject()
     return this;
 }
 
+Ui::IDocumentView* ComicBookTextStructureManager::view()
+{
+    return d->view;
+}
+
+Ui::IDocumentView* ComicBookTextStructureManager::view(BusinessLayer::AbstractModel* _model)
+{
+    setModel(_model);
+    return d->view;
+}
+
+Ui::IDocumentView* ComicBookTextStructureManager::secondaryView()
+{
+    return nullptr;
+}
+
+Ui::IDocumentView* ComicBookTextStructureManager::secondaryView(
+    BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+Ui::IDocumentView* ComicBookTextStructureManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+void ComicBookTextStructureManager::resetModels()
+{
+    setModel(nullptr);
+}
+
+void ComicBookTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
+{
+    Q_UNUSED(_changedSettingsKeys);
+    d->view->reconfigure();
+}
+
+void ComicBookTextStructureManager::bind(IDocumentManager* _manager)
+{
+    Q_ASSERT(_manager);
+
+    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)), this,
+            SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
+}
+
+void ComicBookTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
+{
+    if (!_index.isValid()) {
+        return;
+    }
+
+    if (d->model != _index.model()) {
+        d->modelIndexToSelect = _index;
+        return;
+    }
+
+    QSignalBlocker signalBlocker(this);
+
+    //
+    // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
+    // сцен или папок, которые как раз и отображаются в навигаторе
+    //
+    d->view->setCurrentModelIndex(d->structureModel->mapFromSource(_index.parent()));
+    d->modelIndexToSelect = {};
+}
+
 void ComicBookTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
 {
     //
@@ -228,51 +297,6 @@ void ComicBookTextStructureManager::setModel(BusinessLayer::AbstractModel* _mode
     if (d->modelIndexToSelect.isValid()) {
         setCurrentModelIndex(d->modelIndexToSelect);
     }
-}
-
-Ui::IDocumentView* ComicBookTextStructureManager::view()
-{
-    return d->view;
-}
-
-Ui::IDocumentView* ComicBookTextStructureManager::createView()
-{
-    return d->createView();
-}
-
-void ComicBookTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
-{
-    Q_UNUSED(_changedSettingsKeys);
-    d->view->reconfigure();
-}
-
-void ComicBookTextStructureManager::bind(IDocumentManager* _manager)
-{
-    Q_ASSERT(_manager);
-
-    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(const QModelIndex&)), this,
-            SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
-}
-
-void ComicBookTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
-{
-    if (!_index.isValid()) {
-        return;
-    }
-
-    if (d->model != _index.model()) {
-        d->modelIndexToSelect = _index;
-        return;
-    }
-
-    QSignalBlocker signalBlocker(this);
-
-    //
-    // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
-    // сцен или папок, которые как раз и отображаются в навигаторе
-    //
-    d->view->setCurrentModelIndex(d->structureModel->mapFromSource(_index.parent()));
-    d->modelIndexToSelect = {};
 }
 
 } // namespace ManagementLayer

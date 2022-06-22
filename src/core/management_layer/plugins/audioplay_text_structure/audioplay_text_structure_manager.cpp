@@ -209,6 +209,49 @@ void AudioplayTextStructureManager::resetModels()
     setModel(nullptr);
 }
 
+void AudioplayTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
+{
+    Q_UNUSED(_changedSettingsKeys);
+
+    d->view->reconfigure();
+}
+
+void AudioplayTextStructureManager::bind(IDocumentManager* _manager)
+{
+    Q_ASSERT(_manager);
+
+    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
+            SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
+}
+
+void AudioplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
+{
+    if (!_index.isValid()) {
+        return;
+    }
+
+    if (d->model != _index.model()) {
+        d->modelIndexToSelect = _index;
+        return;
+    }
+
+    QSignalBlocker signalBlocker(this);
+
+    //
+    // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
+    // папок, сцен или битов, которые как раз и отображаются в навигаторе
+    //
+    auto indexForSelect = d->structureModel->mapFromSource(_index.parent());
+    //
+    // ... когда быти скрыты в навигаторе, берём папку или сцену, в которой они находятся
+    //
+    if (!indexForSelect.isValid()) {
+        indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());
+    }
+    d->view->setCurrentModelIndex(_index.parent(), indexForSelect);
+    d->modelIndexToSelect = {};
+}
+
 void AudioplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
 {
     if (d->model == _model) {
@@ -262,49 +305,6 @@ void AudioplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mode
     // Переконфигурируемся
     //
     reconfigure({});
-}
-
-void AudioplayTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
-{
-    Q_UNUSED(_changedSettingsKeys);
-
-    d->view->reconfigure();
-}
-
-void AudioplayTextStructureManager::bind(IDocumentManager* _manager)
-{
-    Q_ASSERT(_manager);
-
-    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
-            SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
-}
-
-void AudioplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
-{
-    if (!_index.isValid()) {
-        return;
-    }
-
-    if (d->model != _index.model()) {
-        d->modelIndexToSelect = _index;
-        return;
-    }
-
-    QSignalBlocker signalBlocker(this);
-
-    //
-    // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
-    // папок, сцен или битов, которые как раз и отображаются в навигаторе
-    //
-    auto indexForSelect = d->structureModel->mapFromSource(_index.parent());
-    //
-    // ... когда быти скрыты в навигаторе, берём папку или сцену, в которой они находятся
-    //
-    if (!indexForSelect.isValid()) {
-        indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());
-    }
-    d->view->setCurrentModelIndex(_index.parent(), indexForSelect);
-    d->modelIndexToSelect = {};
 }
 
 } // namespace ManagementLayer
