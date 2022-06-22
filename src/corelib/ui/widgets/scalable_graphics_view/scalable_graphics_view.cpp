@@ -53,7 +53,9 @@ void ScalableGraphicsView::animateCenterOn(QGraphicsItem* _item)
     const qreal width = viewport()->width();
     const qreal height = viewport()->height();
     const QPointF viewPoint
-        = transform().map(QRectF(_item->scenePos(), _item->boundingRect().size()).center());
+        = transform().map(QRectF(_item->mapToScene(_item->shape().boundingRect().topLeft()),
+                                 _item->boundingRect().size())
+                              .center());
     QPoint targetPosition;
     if (isRightToLeft()) {
         qint64 horizontal = 0;
