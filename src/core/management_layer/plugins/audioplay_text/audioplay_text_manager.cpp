@@ -45,7 +45,7 @@ public:
     /**
      * @brief Получить модель связанную с заданным представлением
      */
-    QPointer<BusinessLayer::AudioplayTextModel> modelForView(Ui::AudioplayTextView* _view) const;
+    QPointer<BusinessLayer::AudioplayTextModel> modelForView(Ui::AudioplayTextView* _view);
 
     /**
      * @brief Работа с параметрами отображения представления
@@ -222,7 +222,7 @@ void AudioplayTextManager::Implementation::setModelForView(BusinessLayer::Abstra
 }
 
 QPointer<BusinessLayer::AudioplayTextModel> AudioplayTextManager::Implementation::modelForView(
-    Ui::AudioplayTextView* _view) const
+    Ui::AudioplayTextView* _view)
 {
     for (auto& viewAndModel : allViews) {
         if (viewAndModel.view == _view) {

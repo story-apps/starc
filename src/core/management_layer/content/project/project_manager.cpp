@@ -231,7 +231,12 @@ void ProjectManager::Implementation::switchViews()
 
     std::swap(view.activeIndex, view.inactiveIndex);
 
-    navigator->setCurrentIndex(view.activeIndex);
+    //
+    // Прежде чем выбрать нужный элемент в навигаторе, заблокируем сигналы, чтобы не было ложных
+    // срабатываний и повторной установки плагина редактора
+    //
+    QSignalBlocker signalBlocker(navigator);
+    navigator->setCurrentIndex(projectStructureProxyModel->mapFromSource(view.activeIndex));
 }
 
 void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelIndex& _index)
@@ -1623,8 +1628,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         return;
     }
 
-    const auto mappedItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
-    const auto item = d->projectStructureModel->itemForIndex(mappedItemIndex);
+    const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
+    const auto item = d->projectStructureModel->itemForIndex(sourceItemIndex);
 
     //
     // Определим модель
@@ -1649,7 +1654,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         return;
     }
     d->view.active->setCurrentWidget(view->asQWidget());
-    d->view.activeIndex = _itemIndex;
+    d->view.activeIndex = sourceItemIndex;
 
     //
     // Настроим опции редактора
@@ -1660,7 +1665,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Настроим возможность перехода в навигатор
     //
     const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(_viewMimeType);
-    d->projectStructureModel->setNavigatorAvailableFor(mappedItemIndex,
+    d->projectStructureModel->setNavigatorAvailableFor(sourceItemIndex,
                                                        !navigatorMimeType.isEmpty());
 
     //
