@@ -75,6 +75,11 @@ public:
     void updateNavigatorContextMenu(const QModelIndex& _index);
 
     /**
+     * @brief Открыть текущий документ в отдельном окне
+     */
+    void openCurrentDocumentInNewWindow();
+
+    /**
      * @brief Добавить документ в проект
      */
     void addDocument();
@@ -320,7 +325,36 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         }
     }
 
+    //
+    // Каждый из элементов можно открыть в своём окне
+    //
+    auto openInNewWindow = new QAction(tr("Open in new window"));
+    openInNewWindow->setSeparator(true);
+    openInNewWindow->setIconText(u8"\U000F03CC");
+    connect(openInNewWindow, &QAction::triggered, topLevelWidget,
+            [this] { this->openCurrentDocumentInNewWindow(); });
+    menuActions.append(openInNewWindow);
+
     navigator->setContextMenuActions(menuActions);
+}
+
+void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
+{
+    if (currentDocument.model == nullptr) {
+        return;
+    }
+
+    Log::info("Activate plugin \"%1\" in new window", currentDocument.viewMimeType);
+    auto view
+        = pluginsBuilder.activateWindowView(currentDocument.viewMimeType, currentDocument.model);
+    if (auto window = view->asQWidget()) {
+        window->resize(800, 600);
+        window->show();
+        //
+        // TODO: Почему-то ни одна из моделей не использует это поле
+        //
+        window->setWindowTitle(currentDocument.model->documentName());
+    }
 }
 
 void ProjectManager::Implementation::addDocument()

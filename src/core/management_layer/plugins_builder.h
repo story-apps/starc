@@ -60,6 +60,8 @@ public:
                                     BusinessLayer::AbstractModel* _model) const;
     Ui::IDocumentView* activateSecondView(const QString& _viewMimeType,
                                           BusinessLayer::AbstractModel* _model) const;
+    Ui::IDocumentView* activateWindowView(const QString& _viewMimeType,
+                                          BusinessLayer::AbstractModel* _model) const;
 
     /**
      * @brief Связать два менеджера
