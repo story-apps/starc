@@ -40,24 +40,32 @@ QString verticalScrollFor(Domain::DocumentObject* _item)
 class ScreenplayTextManager::Implementation
 {
 public:
-    explicit Implementation();
+    explicit Implementation(ScreenplayTextManager* _q);
 
     /**
      * @brief Создать представление
      */
-    Ui::ScreenplayTextView* createView();
+    Ui::ScreenplayTextView* createView(BusinessLayer::AbstractModel* _model);
+
+    /**
+     * @brief Связать заданную модель и представление
+     */
+    void setModelForView(BusinessLayer::AbstractModel* _model, Ui::ScreenplayTextView* _view);
+
+
+    /**
+     * @brief Получить модель связанную с заданным представлением
+     */
+    QPointer<BusinessLayer::ScreenplayTextModel> modelForView(Ui::ScreenplayTextView* _view) const;
+
 
     /**
      * @brief Работа с параметрами отображения представления
      */
-    void loadViewSettings();
-    void saveViewSettings();
-
-    /**
-     * @brief Работа с параметрами отображения текущей модели
-     */
-    void loadModelSettings();
-    void saveModelSettings();
+    void loadModelAndViewSettings(BusinessLayer::AbstractModel* _model,
+                                  Ui::ScreenplayTextView* _view);
+    void saveModelAndViewSettings(BusinessLayer::AbstractModel* _model,
+                                  Ui::ScreenplayTextView* _view);
 
     /**
      * @brief Обновить переводы
@@ -67,13 +75,10 @@ public:
     /**
      * @brief Обновить список элементов словаря в редакторе словарей
      */
-    void updateDictionaryItemsList(int _dictionaryType);
+    void updateDictionaryItemsList(int _dictionaryType, Ui::ScreenplayTextView* _view);
 
 
-    /**
-     * @brief Текущая модель представления основного окна
-     */
-    QPointer<BusinessLayer::ScreenplayTextModel> model;
+    ScreenplayTextManager* q = nullptr;
 
     /**
      * @brief Модель типов справочников
@@ -89,54 +94,328 @@ public:
      * @brief Предаставление для основного окна
      */
     Ui::ScreenplayTextView* view = nullptr;
+    Ui::ScreenplayTextView* secondaryView = nullptr;
 
     /**
-     * @brief Все созданные представления
+     * @brief Все созданные представления с моделями, которые в них отображаются
      */
-    QVector<Ui::ScreenplayTextView*> allViews;
+    struct ViewAndModel {
+        Ui::ScreenplayTextView* view = nullptr;
+        QPointer<BusinessLayer::ScreenplayTextModel> model;
+    };
+    QVector<ViewAndModel> allViews;
 };
 
-ScreenplayTextManager::Implementation::Implementation()
+ScreenplayTextManager::Implementation::Implementation(ScreenplayTextManager* _q)
+    : q(_q)
 {
-    view = createView();
     dictionariesTypesModel = new QStringListModel(view);
-    view->dictionariesView()->setTypes(dictionariesTypesModel);
     dictionaryItemsModel = new QStringListModel(view);
+}
+
+Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
+    BusinessLayer::AbstractModel* _model)
+{
+    auto view = new Ui::ScreenplayTextView;
+    view->installEventFilter(q);
+    view->dictionariesView()->setTypes(dictionariesTypesModel);
     view->dictionariesView()->setDictionaryItems(dictionaryItemsModel);
+    setModelForView(_model, view);
 
-    loadViewSettings();
+    auto showBookmarkDialog = [this, view](Ui::BookmarkDialog::DialogType _type) {
+        auto item = modelForView(view)->itemForIndex(view->currentModelIndex());
+        if (item->type() != BusinessLayer::TextModelItemType::Text) {
+            return;
+        }
+
+        auto dialog = new Ui::BookmarkDialog(view->topLevelWidget());
+        dialog->setDialogType(_type);
+        if (_type == Ui::BookmarkDialog::DialogType::Edit) {
+            const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+            dialog->setBookmarkName(textItem->bookmark()->name);
+            dialog->setBookmarkColor(textItem->bookmark()->color);
+        }
+        connect(dialog, &Ui::BookmarkDialog::savePressed, q, [this, view, item, dialog] {
+            auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+            textItem->setBookmark({ dialog->bookmarkColor(), dialog->bookmarkName() });
+            modelForView(view)->updateItem(textItem);
+
+            dialog->hideDialog();
+        });
+        connect(dialog, &Ui::BookmarkDialog::disappeared, dialog, &Ui::BookmarkDialog::deleteLater);
+
+        //
+        // Отображаем диалог
+        //
+        dialog->showDialog();
+    };
+    connect(view, &Ui::ScreenplayTextView::addBookmarkRequested, q, [showBookmarkDialog] {
+        showBookmarkDialog(Ui::BookmarkDialog::DialogType::CreateNew);
+    });
+    connect(view, &Ui::ScreenplayTextView::editBookmarkRequested, q,
+            [showBookmarkDialog] { showBookmarkDialog(Ui::BookmarkDialog::DialogType::Edit); });
+    connect(view, &Ui::ScreenplayTextView::createBookmarkRequested, q,
+            [this, view](const QString& _text, const QColor& _color) {
+                auto item = modelForView(view)->itemForIndex(view->currentModelIndex());
+                if (item->type() != BusinessLayer::TextModelItemType::Text) {
+                    return;
+                }
+
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+                textItem->setBookmark({ _color, _text });
+                modelForView(view)->updateItem(textItem);
+            });
+    connect(view, &Ui::ScreenplayTextView::changeBookmarkRequested, q,
+            [this, view](const QModelIndex& _index, const QString& _text, const QColor& _color) {
+                auto item = modelForView(view)->itemForIndex(_index);
+                if (item->type() != BusinessLayer::TextModelItemType::Text) {
+                    return;
+                }
+
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+                textItem->setBookmark({ _color, _text });
+                modelForView(view)->updateItem(textItem);
+            });
+    connect(view, &Ui::ScreenplayTextView::removeBookmarkRequested, q, [this, view] {
+        auto item = modelForView(view)->itemForIndex(view->currentModelIndex());
+        if (item->type() != BusinessLayer::TextModelItemType::Text) {
+            return;
+        }
+
+        auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+        textItem->clearBookmark();
+        modelForView(view)->updateItem(textItem);
+    });
+    //
+    connect(
+        view->dictionariesView(), &Ui::DictionariesView::typeChanged, q,
+        [this, view](const QModelIndex& _index) { updateDictionaryItemsList(_index.row(), view); });
+    connect(view->dictionariesView(), &Ui::DictionariesView::addItemRequested, q,
+            [this, view](const QModelIndex& _typeIndex) {
+                auto model = modelForView(view);
+                if (model == nullptr) {
+                    return;
+                }
+
+                auto dictionaries = model->dictionariesModel();
+                Q_ASSERT(dictionaries);
+                switch (_typeIndex.row()) {
+                case kSceneIntrosIndex: {
+                    dictionaries->addSceneIntro("");
+                    break;
+                }
+
+                case kSceneTimesIndex: {
+                    dictionaries->addSceneTime("");
+                    break;
+                }
+
+                case kCharacterExtensionsIndex: {
+                    dictionaries->addCharacterExtension("");
+                    break;
+                }
+
+                case kTransitionIndex: {
+                    dictionaries->addTransition("");
+                    break;
+                }
+                }
+
+                view->dictionariesView()->editLastItem();
+            });
+    connect(view->dictionariesView(), &Ui::DictionariesView::editItemRequested, q,
+            [this, view](const QModelIndex& _typeIndex, const QModelIndex& _itemIndex,
+                         const QString& _item) {
+                auto model = modelForView(view);
+                if (modelForView(view) == nullptr) {
+                    return;
+                }
+
+                auto dictionaries = model->dictionariesModel();
+                Q_ASSERT(dictionaries);
+                switch (_typeIndex.row()) {
+                case kSceneIntrosIndex: {
+                    dictionaries->setSceneIntro(_itemIndex.row(), _item);
+                    break;
+                }
+
+                case kSceneTimesIndex: {
+                    dictionaries->setSceneTime(_itemIndex.row(), _item);
+                    break;
+                }
+
+                case kCharacterExtensionsIndex: {
+                    dictionaries->setCharacterExtension(_itemIndex.row(), _item);
+                    break;
+                }
+
+                case kTransitionIndex: {
+                    dictionaries->setTransition(_itemIndex.row(), _item);
+                    break;
+                }
+                }
+            });
+    connect(view->dictionariesView(), &Ui::DictionariesView::removeItemRequested, q,
+            [this, view](const QModelIndex& _typeIndex, const QModelIndex& _itemIndex) {
+                auto model = modelForView(view);
+                if (modelForView(view) == nullptr) {
+                    return;
+                }
+
+                auto dictionaries = model->dictionariesModel();
+                Q_ASSERT(dictionaries);
+                switch (_typeIndex.row()) {
+                case kSceneIntrosIndex: {
+                    dictionaries->removeSceneIntro(_itemIndex.row());
+                    break;
+                }
+
+                case kSceneTimesIndex: {
+                    dictionaries->removeSceneTime(_itemIndex.row());
+                    break;
+                }
+
+                case kCharacterExtensionsIndex: {
+                    dictionaries->removeCharacterExtension(_itemIndex.row());
+                    break;
+                }
+
+                case kTransitionIndex: {
+                    dictionaries->removeTransition(_itemIndex.row());
+                    break;
+                }
+                }
+            });
+
+
+    updateTranslations();
+
+    return view;
 }
 
-Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView()
+void ScreenplayTextManager::Implementation::setModelForView(BusinessLayer::AbstractModel* _model,
+                                                            Ui::ScreenplayTextView* _view)
 {
-    auto newView = new Ui::ScreenplayTextView;
-    allViews.append(newView);
+    constexpr int invalidIndex = -1;
+    int viewIndex = invalidIndex;
+    for (int index = 0; index < allViews.size(); ++index) {
+        if (allViews[index].view == _view) {
+            if (allViews[index].model == _model) {
+                return;
+            }
 
-    return newView;
+            viewIndex = index;
+            break;
+        }
+    }
+
+    //
+    // Если модель была задана
+    //
+    if (viewIndex != invalidIndex && allViews[viewIndex].model != nullptr) {
+        //
+        // ... сохраняем параметры
+        //
+        saveModelAndViewSettings(allViews[viewIndex].model, _view);
+        //
+        // ... разрываем соединения
+        //
+        _view->disconnect(allViews[viewIndex].model);
+        _view->disconnect(allViews[viewIndex].model->dictionariesModel());
+    }
+
+    //
+    // Определяем новую модель
+    //
+    auto model = qobject_cast<BusinessLayer::ScreenplayTextModel*>(_model);
+    _view->setModel(model);
+
+    //
+    // Обновляем связь представления с моделью
+    //
+    if (viewIndex != invalidIndex) {
+        allViews[viewIndex].model = model;
+    }
+    //
+    // Или сохраняем связь представления с моделью
+    //
+    else {
+        allViews.append({ _view, model });
+    }
+
+    //
+    // Если новая модель задана
+    //
+    if (model != nullptr) {
+        //
+        // ... загрузим параметры
+        //
+        loadModelAndViewSettings(model, _view);
+        updateDictionaryItemsList(kSceneIntrosIndex, _view);
+        //
+        // ... настраиваем соединения
+        //
+        connect(model->dictionariesModel(),
+                &BusinessLayer::ScreenplayDictionariesModel::sceneIntrosChanged, _view,
+                [this, _view] {
+                    if (_view->dictionariesView()->currentTypeIndex().row() == kSceneIntrosIndex) {
+                        updateDictionaryItemsList(kSceneIntrosIndex, _view);
+                    }
+                });
+        connect(model->dictionariesModel(),
+                &BusinessLayer::ScreenplayDictionariesModel::sceneTimesChanged, _view,
+                [this, _view] {
+                    if (_view->dictionariesView()->currentTypeIndex().row() == kSceneTimesIndex) {
+                        updateDictionaryItemsList(kSceneTimesIndex, _view);
+                    }
+                });
+        connect(model->dictionariesModel(),
+                &BusinessLayer::ScreenplayDictionariesModel::charactersExtensionsChanged, _view,
+                [this, _view] {
+                    if (_view->dictionariesView()->currentTypeIndex().row()
+                        == kCharacterExtensionsIndex) {
+                        updateDictionaryItemsList(kCharacterExtensionsIndex, _view);
+                    }
+                });
+        connect(model->dictionariesModel(),
+                &BusinessLayer::ScreenplayDictionariesModel::transitionsChanged, _view,
+                [this, _view] {
+                    if (_view->dictionariesView()->currentTypeIndex().row() == kTransitionIndex) {
+                        updateDictionaryItemsList(kTransitionIndex, _view);
+                    }
+                });
+    }
 }
 
-void ScreenplayTextManager::Implementation::loadViewSettings()
+QPointer<BusinessLayer::ScreenplayTextModel> ScreenplayTextManager::Implementation::modelForView(
+    Ui::ScreenplayTextView* _view) const
 {
-    view->loadViewSettings();
+    for (auto& viewAndModel : allViews) {
+        if (viewAndModel.view == _view) {
+            return viewAndModel.model;
+        }
+    }
+    return {};
 }
 
-void ScreenplayTextManager::Implementation::saveViewSettings()
+void ScreenplayTextManager::Implementation::loadModelAndViewSettings(
+    BusinessLayer::AbstractModel* _model, Ui::ScreenplayTextView* _view)
 {
-    view->saveViewSettings();
+    const auto cursorPosition = settingsValue(cursorPositionFor(_model->document()), 0).toInt();
+    _view->setCursorPosition(cursorPosition);
+    const auto verticalScroll = settingsValue(verticalScrollFor(_model->document()), 0).toInt();
+    _view->setverticalScroll(verticalScroll);
+
+    _view->loadViewSettings();
 }
 
-void ScreenplayTextManager::Implementation::loadModelSettings()
+void ScreenplayTextManager::Implementation::saveModelAndViewSettings(
+    BusinessLayer::AbstractModel* _model, Ui::ScreenplayTextView* _view)
 {
-    const auto cursorPosition = settingsValue(cursorPositionFor(model->document()), 0).toInt();
-    view->setCursorPosition(cursorPosition);
-    const auto verticalScroll = settingsValue(verticalScrollFor(model->document()), 0).toInt();
-    view->setverticalScroll(verticalScroll);
-}
+    setSettingsValue(cursorPositionFor(_model->document()), _view->cursorPosition());
+    setSettingsValue(verticalScrollFor(_model->document()), _view->verticalScroll());
 
-void ScreenplayTextManager::Implementation::saveModelSettings()
-{
-    setSettingsValue(cursorPositionFor(model->document()), view->cursorPosition());
-    setSettingsValue(verticalScrollFor(model->document()), view->verticalScroll());
+    _view->saveViewSettings();
 }
 
 void ScreenplayTextManager::Implementation::updateTranslations()
@@ -149,8 +428,10 @@ void ScreenplayTextManager::Implementation::updateTranslations()
     });
 }
 
-void ScreenplayTextManager::Implementation::updateDictionaryItemsList(int _dictionaryType)
+void ScreenplayTextManager::Implementation::updateDictionaryItemsList(int _dictionaryType,
+                                                                      Ui::ScreenplayTextView* _view)
 {
+    auto model = modelForView(_view);
     if (model == nullptr) {
         return;
     }
@@ -190,170 +471,8 @@ void ScreenplayTextManager::Implementation::updateDictionaryItemsList(int _dicti
 
 ScreenplayTextManager::ScreenplayTextManager(QObject* _parent)
     : QObject(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
-    d->view->installEventFilter(this);
-
-    connect(d->view, &Ui::ScreenplayTextView::currentModelIndexChanged, this,
-            &ScreenplayTextManager::currentModelIndexChanged);
-    //
-    auto showBookmarkDialog = [this](Ui::BookmarkDialog::DialogType _type) {
-        auto item = d->model->itemForIndex(d->view->currentModelIndex());
-        if (item->type() != BusinessLayer::TextModelItemType::Text) {
-            return;
-        }
-
-        auto dialog = new Ui::BookmarkDialog(d->view->topLevelWidget());
-        dialog->setDialogType(_type);
-        if (_type == Ui::BookmarkDialog::DialogType::Edit) {
-            const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
-            dialog->setBookmarkName(textItem->bookmark()->name);
-            dialog->setBookmarkColor(textItem->bookmark()->color);
-        }
-        connect(dialog, &Ui::BookmarkDialog::savePressed, this, [this, item, dialog] {
-            auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
-            textItem->setBookmark({ dialog->bookmarkColor(), dialog->bookmarkName() });
-            d->model->updateItem(textItem);
-
-            dialog->hideDialog();
-        });
-        connect(dialog, &Ui::BookmarkDialog::disappeared, dialog, &Ui::BookmarkDialog::deleteLater);
-
-        //
-        // Отображаем диалог
-        //
-        dialog->showDialog();
-    };
-    connect(d->view, &Ui::ScreenplayTextView::addBookmarkRequested, this, [showBookmarkDialog] {
-        showBookmarkDialog(Ui::BookmarkDialog::DialogType::CreateNew);
-    });
-    connect(d->view, &Ui::ScreenplayTextView::editBookmarkRequested, this,
-            [showBookmarkDialog] { showBookmarkDialog(Ui::BookmarkDialog::DialogType::Edit); });
-    connect(d->view, &Ui::ScreenplayTextView::createBookmarkRequested, this,
-            [this](const QString& _text, const QColor& _color) {
-                auto item = d->model->itemForIndex(d->view->currentModelIndex());
-                if (item->type() != BusinessLayer::TextModelItemType::Text) {
-                    return;
-                }
-
-                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
-                textItem->setBookmark({ _color, _text });
-                d->model->updateItem(textItem);
-            });
-    connect(d->view, &Ui::ScreenplayTextView::changeBookmarkRequested, this,
-            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
-                auto item = d->model->itemForIndex(_index);
-                if (item->type() != BusinessLayer::TextModelItemType::Text) {
-                    return;
-                }
-
-                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
-                textItem->setBookmark({ _color, _text });
-                d->model->updateItem(textItem);
-            });
-    connect(d->view, &Ui::ScreenplayTextView::removeBookmarkRequested, this, [this] {
-        auto item = d->model->itemForIndex(d->view->currentModelIndex());
-        if (item->type() != BusinessLayer::TextModelItemType::Text) {
-            return;
-        }
-
-        auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
-        textItem->clearBookmark();
-        d->model->updateItem(textItem);
-    });
-    //
-    connect(d->view->dictionariesView(), &Ui::DictionariesView::typeChanged, this,
-            [this](const QModelIndex& _index) { d->updateDictionaryItemsList(_index.row()); });
-    connect(d->view->dictionariesView(), &Ui::DictionariesView::addItemRequested, this,
-            [this](const QModelIndex& _typeIndex) {
-                if (d->model == nullptr) {
-                    return;
-                }
-
-                switch (_typeIndex.row()) {
-                case kSceneIntrosIndex: {
-                    d->model->dictionariesModel()->addSceneIntro("");
-                    break;
-                }
-
-                case kSceneTimesIndex: {
-                    d->model->dictionariesModel()->addSceneTime("");
-                    break;
-                }
-
-                case kCharacterExtensionsIndex: {
-                    d->model->dictionariesModel()->addCharacterExtension("");
-                    break;
-                }
-
-                case kTransitionIndex: {
-                    d->model->dictionariesModel()->addTransition("");
-                    break;
-                }
-                }
-
-                d->view->dictionariesView()->editLastItem();
-            });
-    connect(
-        d->view->dictionariesView(), &Ui::DictionariesView::editItemRequested, this,
-        [this](const QModelIndex& _typeIndex, const QModelIndex& _itemIndex, const QString& _item) {
-            if (d->model == nullptr) {
-                return;
-            }
-
-            switch (_typeIndex.row()) {
-            case kSceneIntrosIndex: {
-                d->model->dictionariesModel()->setSceneIntro(_itemIndex.row(), _item);
-                break;
-            }
-
-            case kSceneTimesIndex: {
-                d->model->dictionariesModel()->setSceneTime(_itemIndex.row(), _item);
-                break;
-            }
-
-            case kCharacterExtensionsIndex: {
-                d->model->dictionariesModel()->setCharacterExtension(_itemIndex.row(), _item);
-                break;
-            }
-
-            case kTransitionIndex: {
-                d->model->dictionariesModel()->setTransition(_itemIndex.row(), _item);
-                break;
-            }
-            }
-        });
-    connect(d->view->dictionariesView(), &Ui::DictionariesView::removeItemRequested, this,
-            [this](const QModelIndex& _typeIndex, const QModelIndex& _itemIndex) {
-                if (d->model == nullptr) {
-                    return;
-                }
-
-                switch (_typeIndex.row()) {
-                case kSceneIntrosIndex: {
-                    d->model->dictionariesModel()->removeSceneIntro(_itemIndex.row());
-                    break;
-                }
-
-                case kSceneTimesIndex: {
-                    d->model->dictionariesModel()->removeSceneTime(_itemIndex.row());
-                    break;
-                }
-
-                case kCharacterExtensionsIndex: {
-                    d->model->dictionariesModel()->removeCharacterExtension(_itemIndex.row());
-                    break;
-                }
-
-                case kTransitionIndex: {
-                    d->model->dictionariesModel()->removeTransition(_itemIndex.row());
-                    break;
-                }
-                }
-            });
-
-
-    d->updateTranslations();
 }
 
 ScreenplayTextManager::~ScreenplayTextManager() = default;
@@ -363,83 +482,55 @@ QObject* ScreenplayTextManager::asQObject()
     return this;
 }
 
-void ScreenplayTextManager::setModel(BusinessLayer::AbstractModel* _model)
-{
-    if (d->model == _model) {
-        return;
-    }
-
-    //
-    // Если модель была задана
-    //
-    if (d->model != nullptr) {
-        //
-        // ... сохраняем её параметры
-        //
-        d->saveModelSettings();
-        //
-        // ... разрываем соединения
-        //
-        d->view->disconnect(d->model);
-        d->view->disconnect(d->model->dictionariesModel());
-    }
-
-    //
-    // Определяем новую модель
-    //
-    d->model = qobject_cast<BusinessLayer::ScreenplayTextModel*>(_model);
-    d->view->setModel(d->model);
-
-    //
-    // Если новая модель задана
-    //
-    if (d->model != nullptr) {
-        //
-        // ... загрузим параметры
-        //
-        d->loadModelSettings();
-        d->updateDictionaryItemsList(kSceneIntrosIndex);
-        //
-        // ... настраиваем соединения
-        //
-        connect(d->model->dictionariesModel(),
-                &BusinessLayer::ScreenplayDictionariesModel::sceneIntrosChanged, d->view, [this] {
-                    if (d->view->dictionariesView()->currentTypeIndex().row()
-                        == kSceneIntrosIndex) {
-                        d->updateDictionaryItemsList(kSceneIntrosIndex);
-                    }
-                });
-        connect(d->model->dictionariesModel(),
-                &BusinessLayer::ScreenplayDictionariesModel::sceneTimesChanged, d->view, [this] {
-                    if (d->view->dictionariesView()->currentTypeIndex().row() == kSceneTimesIndex) {
-                        d->updateDictionaryItemsList(kSceneTimesIndex);
-                    }
-                });
-        connect(d->model->dictionariesModel(),
-                &BusinessLayer::ScreenplayDictionariesModel::charactersExtensionsChanged, d->view,
-                [this] {
-                    if (d->view->dictionariesView()->currentTypeIndex().row()
-                        == kCharacterExtensionsIndex) {
-                        d->updateDictionaryItemsList(kCharacterExtensionsIndex);
-                    }
-                });
-        connect(d->model->dictionariesModel(),
-                &BusinessLayer::ScreenplayDictionariesModel::transitionsChanged, d->view, [this] {
-                    if (d->view->dictionariesView()->currentTypeIndex().row() == kTransitionIndex) {
-                        d->updateDictionaryItemsList(kTransitionIndex);
-                    }
-                });
-    }
-}
-
 Ui::IDocumentView* ScreenplayTextManager::view()
 {
     return d->view;
 }
 
-Ui::IDocumentView* ScreenplayTextManager::createView()
+Ui::IDocumentView* ScreenplayTextManager::view(BusinessLayer::AbstractModel* _model)
 {
-    return d->createView();
+    if (d->view == nullptr) {
+        d->view = d->createView(_model);
+
+        //
+        // Наружу даём сигналы только от первичного представления, только оно может
+        // взаимодействовать с навигатором документа
+        //
+        connect(d->view, &Ui::ScreenplayTextView::currentModelIndexChanged, this,
+                &ScreenplayTextManager::currentModelIndexChanged);
+    } else {
+        d->setModelForView(_model, d->view);
+    }
+
+    return d->view;
+}
+
+Ui::IDocumentView* ScreenplayTextManager::secondaryView()
+{
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* ScreenplayTextManager::secondaryView(BusinessLayer::AbstractModel* _model)
+{
+    if (d->secondaryView == nullptr) {
+        d->secondaryView = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->secondaryView);
+    }
+
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* ScreenplayTextManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    return d->createView(_model);
+}
+
+void ScreenplayTextManager::resetModels()
+{
+    for (auto& viewAndModel : d->allViews) {
+        d->setModelForView(nullptr, viewAndModel.view);
+    }
 }
 
 void ScreenplayTextManager::reconfigure(const QStringList& _changedSettingsKeys)
@@ -449,6 +540,13 @@ void ScreenplayTextManager::reconfigure(const QStringList& _changedSettingsKeys)
 
 void ScreenplayTextManager::bind(IDocumentManager* _manager)
 {
+    //
+    // Т.к. навигатор соединяется только с главным инстансом редактора, проверяем создан ли он
+    //
+    if (d->view == nullptr) {
+        return;
+    }
+
     Q_ASSERT(_manager);
 
     const auto isConnectedFirstTime
@@ -470,10 +568,10 @@ void ScreenplayTextManager::bind(IDocumentManager* _manager)
 
 void ScreenplayTextManager::saveSettings()
 {
-    d->saveViewSettings();
-
-    if (d->model != nullptr) {
-        d->saveModelSettings();
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.model != nullptr && viewAndModel.view != nullptr) {
+            d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+        }
     }
 }
 

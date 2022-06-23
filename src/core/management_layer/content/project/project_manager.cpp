@@ -219,8 +219,8 @@ ProjectManager::Implementation::Implementation(QWidget* _parent,
 
 void ProjectManager::Implementation::updateSplitScreenActionText()
 {
-    splitScreenAction->setText(splitScreenAction->isChecked() ? tr("Merge screen")
-                                                              : tr("Split screen"));
+    splitScreenAction->setText(splitScreenAction->isChecked() ? tr("Remove split")
+                                                              : tr("Split window"));
 }
 
 void ProjectManager::Implementation::switchViews()

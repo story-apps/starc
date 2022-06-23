@@ -29,74 +29,150 @@ QString cursorPositionFor(Domain::DocumentObject* _item)
 class TitlePageManager::Implementation
 {
 public:
-    explicit Implementation();
+    explicit Implementation(TitlePageManager* _q);
 
     /**
      * @brief Создать представление
      */
-    Ui::TitlePageView* createView();
+    Ui::TitlePageView* createView(BusinessLayer::AbstractModel* _model);
+
+    /**
+     * @brief Связать заданную модель и представление
+     */
+    void setModelForView(BusinessLayer::AbstractModel* _model, Ui::TitlePageView* _view);
+
+    /**
+     * @brief Получить модель связанную с заданным представлением
+     */
+    QPointer<BusinessLayer::SimpleTextModel> modelForView(Ui::TitlePageView* _view) const;
 
     /**
      * @brief Работа с параметрами отображения представления
      */
-    void loadViewSettings();
-    void saveViewSettings();
-
-    /**
-     * @brief Работа с параметрами отображения текущей модели
-     */
-    void loadModelSettings();
-    void saveModelSettings();
+    void loadModelAndViewSettings(BusinessLayer::AbstractModel* _model, Ui::TitlePageView* _view);
+    void saveModelAndViewSettings(BusinessLayer::AbstractModel* _model, Ui::TitlePageView* _view);
 
 
-    /**
-     * @brief Текущая модель представления основного окна
-     */
-    QPointer<BusinessLayer::SimpleTextModel> model;
+    TitlePageManager* q = nullptr;
 
     /**
      * @brief Предаставление для основного окна
      */
     Ui::TitlePageView* view = nullptr;
+    Ui::TitlePageView* secondaryView = nullptr;
 
     /**
-     * @brief Все созданные представления
+     * @brief Все созданные представления с моделями, которые в них отображаются
      */
-    QVector<Ui::TitlePageView*> allViews;
+    struct ViewAndModel {
+        Ui::TitlePageView* view = nullptr;
+        QPointer<BusinessLayer::SimpleTextModel> model;
+    };
+    QVector<ViewAndModel> allViews;
 };
 
-TitlePageManager::Implementation::Implementation()
+TitlePageManager::Implementation::Implementation(TitlePageManager* _q)
+    : q(_q)
 {
-    view = createView();
-    loadViewSettings();
 }
 
-Ui::TitlePageView* TitlePageManager::Implementation::createView()
+Ui::TitlePageView* TitlePageManager::Implementation::createView(
+    BusinessLayer::AbstractModel* _model)
 {
-    allViews.append(new Ui::TitlePageView);
-    return allViews.last();
+    auto view = new Ui::TitlePageView;
+    setModelForView(_model, view);
+    return view;
 }
 
-void TitlePageManager::Implementation::loadViewSettings()
+void TitlePageManager::Implementation::setModelForView(BusinessLayer::AbstractModel* _model,
+                                                       Ui::TitlePageView* _view)
 {
-    view->loadViewSettings();
+    constexpr int invalidIndex = -1;
+    int viewIndex = invalidIndex;
+    for (int index = 0; index < allViews.size(); ++index) {
+        if (allViews[index].view == _view) {
+            if (allViews[index].model == _model) {
+                return;
+            }
+
+            viewIndex = index;
+            break;
+        }
+    }
+
+    //
+    // Если модель была задана
+    //
+    if (viewIndex != invalidIndex && allViews[viewIndex].model != nullptr) {
+        //
+        // ... сохраняем параметры
+        //
+        saveModelAndViewSettings(allViews[viewIndex].model, _view);
+        //
+        // ... разрываем соединения
+        //
+        _view->disconnect(allViews[viewIndex].model);
+    }
+
+    //
+    // Определяем новую модель
+    //
+    auto model = qobject_cast<BusinessLayer::SimpleTextModel*>(_model);
+    _view->setModel(model);
+
+    //
+    // Обновляем связь представления с моделью
+    //
+    if (viewIndex != invalidIndex) {
+        allViews[viewIndex].model = model;
+    }
+    //
+    // Или сохраняем связь представления с моделью
+    //
+    else {
+        allViews.append({ _view, model });
+    }
+
+    //
+    // Если новая модель задана
+    //
+    if (model != nullptr) {
+        //
+        // ... загрузим параметры
+        //
+        loadModelAndViewSettings(model, _view);
+        //
+        // ... настраиваем соединения
+        //
+    }
 }
 
-void TitlePageManager::Implementation::saveViewSettings()
+QPointer<BusinessLayer::SimpleTextModel> TitlePageManager::Implementation::modelForView(
+    Ui::TitlePageView* _view) const
 {
-    view->saveViewSettings();
+    for (auto& viewAndModel : allViews) {
+        if (viewAndModel.view == _view) {
+            return viewAndModel.model;
+        }
+    }
+    return {};
 }
 
-void TitlePageManager::Implementation::loadModelSettings()
+void TitlePageManager::Implementation::loadModelAndViewSettings(
+    BusinessLayer::AbstractModel* _model, Ui::TitlePageView* _view)
 {
-    using namespace DataStorageLayer;
-    const auto cursorPosition = settingsValue(cursorPositionFor(model->document()), 0).toInt();
-    view->setCursorPosition(cursorPosition);
+    const auto cursorPosition = settingsValue(cursorPositionFor(_model->document()), 0).toInt();
+    _view->setCursorPosition(cursorPosition);
+
+    _view->loadViewSettings();
 }
 
-void TitlePageManager::Implementation::saveModelSettings()
+void TitlePageManager::Implementation::saveModelAndViewSettings(
+    BusinessLayer::AbstractModel* _model, Ui::TitlePageView* _view)
 {
-    setSettingsValue(cursorPositionFor(model->document()), view->cursorPosition());
+    setSettingsValue(cursorPositionFor(_model->document()), _view->cursorPosition());
+
+    _view->saveViewSettings();
 }
 
 
@@ -105,57 +181,54 @@ void TitlePageManager::Implementation::saveModelSettings()
 
 TitlePageManager::TitlePageManager(QObject* _parent)
     : QObject(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
 }
 
 TitlePageManager::~TitlePageManager() = default;
-
-void TitlePageManager::setModel(BusinessLayer::AbstractModel* _model)
-{
-    if (d->model == _model) {
-        return;
-    }
-
-    //
-    // Если модель была задана
-    //
-    if (d->model != nullptr) {
-        //
-        // ... сохраняем её параметры
-        //
-        d->saveModelSettings();
-        //
-        // ... разрываем соединения
-        //
-        d->view->disconnect(d->model);
-    }
-
-    //
-    // Определяем новую модель
-    //
-    d->model = qobject_cast<BusinessLayer::SimpleTextModel*>(_model);
-    d->view->setModel(d->model);
-
-    //
-    // Если новая модель задана
-    //
-    if (d->model != nullptr) {
-        //
-        // ... загрузим параметры
-        //
-        d->loadModelSettings();
-    }
-}
 
 Ui::IDocumentView* TitlePageManager::view()
 {
     return d->view;
 }
 
-Ui::IDocumentView* TitlePageManager::createView()
+Ui::IDocumentView* TitlePageManager::view(BusinessLayer::AbstractModel* _model)
 {
-    return d->createView();
+    if (d->view == nullptr) {
+        d->view = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->view);
+    }
+
+    return d->view;
+}
+
+Ui::IDocumentView* TitlePageManager::secondaryView()
+{
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* TitlePageManager::secondaryView(BusinessLayer::AbstractModel* _model)
+{
+    if (d->secondaryView == nullptr) {
+        d->secondaryView = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->secondaryView);
+    }
+
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* TitlePageManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    return d->createView(_model);
+}
+
+void TitlePageManager::resetModels()
+{
+    for (auto& viewAndModel : d->allViews) {
+        d->setModelForView(nullptr, viewAndModel.view);
+    }
 }
 
 void TitlePageManager::reconfigure(const QStringList& _changedSettingsKeys)
@@ -165,10 +238,10 @@ void TitlePageManager::reconfigure(const QStringList& _changedSettingsKeys)
 
 void TitlePageManager::saveSettings()
 {
-    d->saveViewSettings();
-
-    if (d->model != nullptr) {
-        d->saveModelSettings();
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.model != nullptr && viewAndModel.view != nullptr) {
+            d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+        }
     }
 }
 

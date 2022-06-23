@@ -30,105 +30,78 @@ QString verticalScrollFor(Domain::DocumentObject* _item)
 class ComicBookTextManager::Implementation
 {
 public:
-    explicit Implementation();
+    explicit Implementation(ComicBookTextManager* _q);
 
     /**
      * @brief Создать представление
      */
-    Ui::ComicBookTextView* createView();
+    Ui::ComicBookTextView* createView(BusinessLayer::AbstractModel* _model);
+
+    /**
+     * @brief Связать заданную модель и представление
+     */
+    void setModelForView(BusinessLayer::AbstractModel* _model, Ui::ComicBookTextView* _view);
+
+    /**
+     * @brief Получить модель связанную с заданным представлением
+     */
+    QPointer<BusinessLayer::ComicBookTextModel> modelForView(Ui::ComicBookTextView* _view) const;
 
     /**
      * @brief Работа с параметрами отображения представления
      */
-    void loadViewSettings();
-    void saveViewSettings();
-
-    /**
-     * @brief Работа с параметрами отображения текущей модели
-     */
-    void loadModelSettings();
-    void saveModelSettings();
+    void loadModelAndViewSettings(BusinessLayer::AbstractModel* _model,
+                                  Ui::ComicBookTextView* _view);
+    void saveModelAndViewSettings(BusinessLayer::AbstractModel* _model,
+                                  Ui::ComicBookTextView* _view);
 
 
-    /**
-     * @brief Текущая модель представления основного окна
-     */
-    QPointer<BusinessLayer::ComicBookTextModel> model;
+    ComicBookTextManager* q = nullptr;
 
     /**
      * @brief Предаставление для основного окна
      */
     Ui::ComicBookTextView* view = nullptr;
+    Ui::ComicBookTextView* secondaryView = nullptr;
 
     /**
-     * @brief Все созданные представления
+     * @brief Все созданные представления с моделями, которые в них отображаются
      */
-    QVector<Ui::ComicBookTextView*> allViews;
+    struct ViewAndModel {
+        Ui::ComicBookTextView* view = nullptr;
+        QPointer<BusinessLayer::ComicBookTextModel> model;
+    };
+    QVector<ViewAndModel> allViews;
 };
 
-ComicBookTextManager::Implementation::Implementation()
+ComicBookTextManager::Implementation::Implementation(ComicBookTextManager* _q)
+    : q(_q)
 {
-    view = createView();
-    loadViewSettings();
 }
 
-Ui::ComicBookTextView* ComicBookTextManager::Implementation::createView()
+Ui::ComicBookTextView* ComicBookTextManager::Implementation::createView(
+    BusinessLayer::AbstractModel* _model)
 {
-    allViews.append(new Ui::ComicBookTextView);
-    return allViews.last();
-}
+    auto view = new Ui::ComicBookTextView;
+    setModelForView(_model, view);
 
-void ComicBookTextManager::Implementation::loadViewSettings()
-{
-    view->loadViewSettings();
-}
-
-void ComicBookTextManager::Implementation::saveViewSettings()
-{
-    view->saveViewSettings();
-}
-
-void ComicBookTextManager::Implementation::loadModelSettings()
-{
-    const auto cursorPosition = settingsValue(cursorPositionFor(model->document()), 0).toInt();
-    view->setCursorPosition(cursorPosition);
-    const auto verticalScroll = settingsValue(verticalScrollFor(model->document()), 0).toInt();
-    view->setverticalScroll(verticalScroll);
-}
-
-void ComicBookTextManager::Implementation::saveModelSettings()
-{
-    setSettingsValue(cursorPositionFor(model->document()), view->cursorPosition());
-    setSettingsValue(verticalScrollFor(model->document()), view->verticalScroll());
-}
-
-
-// ****
-
-
-ComicBookTextManager::ComicBookTextManager(QObject* _parent)
-    : QObject(_parent)
-    , d(new Implementation)
-{
-    connect(d->view, &Ui::ComicBookTextView::currentModelIndexChanged, this,
-            &ComicBookTextManager::currentModelIndexChanged);
-    auto showBookmarkDialog = [this](Ui::BookmarkDialog::DialogType _type) {
-        auto item = d->model->itemForIndex(d->view->currentModelIndex());
+    auto showBookmarkDialog = [this, view](Ui::BookmarkDialog::DialogType _type) {
+        auto item = modelForView(view)->itemForIndex(view->currentModelIndex());
         if (item->type() != BusinessLayer::TextModelItemType::Text) {
             return;
         }
 
-        auto dialog = new Ui::BookmarkDialog(d->view->topLevelWidget());
+        auto dialog = new Ui::BookmarkDialog(view->topLevelWidget());
         dialog->setDialogType(_type);
         if (_type == Ui::BookmarkDialog::DialogType::Edit) {
             const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
             dialog->setBookmarkName(textItem->bookmark()->name);
             dialog->setBookmarkColor(textItem->bookmark()->color);
         }
-        connect(dialog, &Ui::BookmarkDialog::savePressed, this, [this, item, dialog] {
+        connect(dialog, &Ui::BookmarkDialog::savePressed, q, [this, view, item, dialog] {
             auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
             textItem->setBookmark({ dialog->bookmarkColor(), dialog->bookmarkName() });
-            d->model->updateItem(textItem);
+            modelForView(view)->updateItem(textItem);
 
             dialog->hideDialog();
         });
@@ -139,43 +112,149 @@ ComicBookTextManager::ComicBookTextManager(QObject* _parent)
         //
         dialog->showDialog();
     };
-    connect(d->view, &Ui::ComicBookTextView::addBookmarkRequested, this, [showBookmarkDialog] {
+    connect(view, &Ui::ComicBookTextView::addBookmarkRequested, q, [showBookmarkDialog] {
         showBookmarkDialog(Ui::BookmarkDialog::DialogType::CreateNew);
     });
-    connect(d->view, &Ui::ComicBookTextView::editBookmarkRequested, this,
+    connect(view, &Ui::ComicBookTextView::editBookmarkRequested, q,
             [showBookmarkDialog] { showBookmarkDialog(Ui::BookmarkDialog::DialogType::Edit); });
-    connect(d->view, &Ui::ComicBookTextView::createBookmarkRequested, this,
-            [this](const QString& _text, const QColor& _color) {
-                auto item = d->model->itemForIndex(d->view->currentModelIndex());
+    connect(view, &Ui::ComicBookTextView::createBookmarkRequested, q,
+            [this, view](const QString& _text, const QColor& _color) {
+                auto item = modelForView(view)->itemForIndex(view->currentModelIndex());
                 if (item->type() != BusinessLayer::TextModelItemType::Text) {
                     return;
                 }
 
                 auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
                 textItem->setBookmark({ _color, _text });
-                d->model->updateItem(textItem);
+                modelForView(view)->updateItem(textItem);
             });
-    connect(d->view, &Ui::ComicBookTextView::changeBookmarkRequested, this,
-            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
-                auto item = d->model->itemForIndex(_index);
+    connect(view, &Ui::ComicBookTextView::changeBookmarkRequested, q,
+            [this, view](const QModelIndex& _index, const QString& _text, const QColor& _color) {
+                auto item = modelForView(view)->itemForIndex(_index);
                 if (item->type() != BusinessLayer::TextModelItemType::Text) {
                     return;
                 }
 
                 auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
                 textItem->setBookmark({ _color, _text });
-                d->model->updateItem(textItem);
+                modelForView(view)->updateItem(textItem);
             });
-    connect(d->view, &Ui::ComicBookTextView::removeBookmarkRequested, this, [this] {
-        auto item = d->model->itemForIndex(d->view->currentModelIndex());
+    connect(view, &Ui::ComicBookTextView::removeBookmarkRequested, q, [this, view] {
+        auto item = modelForView(view)->itemForIndex(view->currentModelIndex());
         if (item->type() != BusinessLayer::TextModelItemType::Text) {
             return;
         }
 
         auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
         textItem->clearBookmark();
-        d->model->updateItem(textItem);
+        modelForView(view)->updateItem(textItem);
     });
+
+    return view;
+}
+
+void ComicBookTextManager::Implementation::setModelForView(BusinessLayer::AbstractModel* _model,
+                                                           Ui::ComicBookTextView* _view)
+{
+    constexpr int invalidIndex = -1;
+    int viewIndex = invalidIndex;
+    for (int index = 0; index < allViews.size(); ++index) {
+        if (allViews[index].view == _view) {
+            if (allViews[index].model == _model) {
+                return;
+            }
+
+            viewIndex = index;
+            break;
+        }
+    }
+
+    //
+    // Если модель была задана
+    //
+    if (viewIndex != invalidIndex && allViews[viewIndex].model != nullptr) {
+        //
+        // ... сохраняем параметры
+        //
+        saveModelAndViewSettings(allViews[viewIndex].model, _view);
+        //
+        // ... разрываем соединения
+        //
+        _view->disconnect(allViews[viewIndex].model);
+    }
+
+    //
+    // Определяем новую модель
+    //
+    auto model = qobject_cast<BusinessLayer::ComicBookTextModel*>(_model);
+    _view->setModel(model);
+
+    //
+    // Обновляем связь представления с моделью
+    //
+    if (viewIndex != invalidIndex) {
+        allViews[viewIndex].model = model;
+    }
+    //
+    // Или сохраняем связь представления с моделью
+    //
+    else {
+        allViews.append({ _view, model });
+    }
+
+    //
+    // Если новая модель задана
+    //
+    if (model != nullptr) {
+        //
+        // ... загрузим параметры
+        //
+        loadModelAndViewSettings(model, _view);
+        //
+        // ... настраиваем соединения
+        //
+    }
+}
+
+QPointer<BusinessLayer::ComicBookTextModel> ComicBookTextManager::Implementation::modelForView(
+    Ui::ComicBookTextView* _view) const
+{
+    for (auto& viewAndModel : allViews) {
+        if (viewAndModel.view == _view) {
+            return viewAndModel.model;
+        }
+    }
+    return {};
+}
+
+void ComicBookTextManager::Implementation::loadModelAndViewSettings(
+    BusinessLayer::AbstractModel* _model, Ui::ComicBookTextView* _view)
+{
+    const auto cursorPosition = settingsValue(cursorPositionFor(_model->document()), 0).toInt();
+    _view->setCursorPosition(cursorPosition);
+    const auto verticalScroll = settingsValue(verticalScrollFor(_model->document()), 0).toInt();
+    _view->setverticalScroll(verticalScroll);
+
+    _view->loadViewSettings();
+}
+
+void ComicBookTextManager::Implementation::saveModelAndViewSettings(
+    BusinessLayer::AbstractModel* _model, Ui::ComicBookTextView* _view)
+{
+    setSettingsValue(cursorPositionFor(_model->document()), _view->cursorPosition());
+    setSettingsValue(verticalScrollFor(_model->document()), _view->verticalScroll());
+
+    _view->saveViewSettings();
+}
+
+
+// ****
+
+
+ComicBookTextManager::ComicBookTextManager(QObject* _parent)
+    : QObject(_parent)
+    , d(new Implementation(this))
+{
 }
 
 ComicBookTextManager::~ComicBookTextManager() = default;
@@ -185,54 +264,55 @@ QObject* ComicBookTextManager::asQObject()
     return this;
 }
 
-void ComicBookTextManager::setModel(BusinessLayer::AbstractModel* _model)
-{
-    if (d->model == _model) {
-        return;
-    }
-
-    //
-    // Если модель была задана
-    //
-    if (d->model != nullptr) {
-        //
-        // ... сохраняем её параметры
-        //
-        d->saveModelSettings();
-        //
-        // ... разрываем соединения
-        //
-        d->view->disconnect(d->model);
-    }
-
-    //
-    // Определяем новую модель
-    //
-    d->model = qobject_cast<BusinessLayer::ComicBookTextModel*>(_model);
-    d->view->setModel(d->model);
-
-    //
-    // Если новая модель задана
-    //
-    if (d->model != nullptr) {
-        //
-        // ... загрузим параметры
-        //
-        d->loadModelSettings();
-        //
-        // ... настраиваем соединения
-        //
-    }
-}
-
 Ui::IDocumentView* ComicBookTextManager::view()
 {
     return d->view;
 }
 
-Ui::IDocumentView* ComicBookTextManager::createView()
+Ui::IDocumentView* ComicBookTextManager::view(BusinessLayer::AbstractModel* _model)
 {
-    return d->createView();
+    if (d->view == nullptr) {
+        d->view = d->createView(_model);
+
+        //
+        // Наружу даём сигналы только от первичного представления, только оно может
+        // взаимодействовать с навигатором документа
+        //
+        connect(d->view, &Ui::ComicBookTextView::currentModelIndexChanged, this,
+                &ComicBookTextManager::currentModelIndexChanged);
+    } else {
+        d->setModelForView(_model, d->view);
+    }
+
+    return d->view;
+}
+
+Ui::IDocumentView* ComicBookTextManager::secondaryView()
+{
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* ComicBookTextManager::secondaryView(BusinessLayer::AbstractModel* _model)
+{
+    if (d->secondaryView == nullptr) {
+        d->secondaryView = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->secondaryView);
+    }
+
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* ComicBookTextManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    return d->createView(_model);
+}
+
+void ComicBookTextManager::resetModels()
+{
+    for (auto& viewAndModel : d->allViews) {
+        d->setModelForView(nullptr, viewAndModel.view);
+    }
 }
 
 void ComicBookTextManager::reconfigure(const QStringList& _changedSettingsKeys)
@@ -242,6 +322,13 @@ void ComicBookTextManager::reconfigure(const QStringList& _changedSettingsKeys)
 
 void ComicBookTextManager::bind(IDocumentManager* _manager)
 {
+    //
+    // Т.к. навигатор соединяется только с главным инстансом редактора, проверяем создан ли он
+    //
+    if (d->view == nullptr) {
+        return;
+    }
+
     Q_ASSERT(_manager);
 
     const auto isConnectedFirstTime
@@ -261,10 +348,10 @@ void ComicBookTextManager::bind(IDocumentManager* _manager)
 
 void ComicBookTextManager::saveSettings()
 {
-    d->saveViewSettings();
-
-    if (d->model != nullptr) {
-        d->saveModelSettings();
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.model != nullptr && viewAndModel.view != nullptr) {
+            d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+        }
     }
 }
 

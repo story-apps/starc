@@ -30,105 +30,78 @@ QString verticalScrollFor(Domain::DocumentObject* _item)
 class StageplayTextManager::Implementation
 {
 public:
-    explicit Implementation();
+    explicit Implementation(StageplayTextManager* _q);
 
     /**
      * @brief Создать представление
      */
-    Ui::StageplayTextView* createView();
+    Ui::StageplayTextView* createView(BusinessLayer::AbstractModel* _model);
+
+    /**
+     * @brief Связать заданную модель и представление
+     */
+    void setModelForView(BusinessLayer::AbstractModel* _model, Ui::StageplayTextView* _view);
+
+    /**
+     * @brief Получить модель связанную с заданным представлением
+     */
+    QPointer<BusinessLayer::StageplayTextModel> modelForView(Ui::StageplayTextView* _view) const;
 
     /**
      * @brief Работа с параметрами отображения представления
      */
-    void loadViewSettings();
-    void saveViewSettings();
-
-    /**
-     * @brief Работа с параметрами отображения текущей модели
-     */
-    void loadModelSettings();
-    void saveModelSettings();
+    void loadModelAndViewSettings(BusinessLayer::AbstractModel* _model,
+                                  Ui::StageplayTextView* _view);
+    void saveModelAndViewSettings(BusinessLayer::AbstractModel* _model,
+                                  Ui::StageplayTextView* _view);
 
 
-    /**
-     * @brief Текущая модель представления основного окна
-     */
-    QPointer<BusinessLayer::StageplayTextModel> model;
+    StageplayTextManager* q = nullptr;
 
     /**
      * @brief Предаставление для основного окна
      */
     Ui::StageplayTextView* view = nullptr;
+    Ui::StageplayTextView* secondaryView = nullptr;
 
     /**
-     * @brief Все созданные представления
+     * @brief Все созданные представления с моделями, которые в них отображаются
      */
-    QVector<Ui::StageplayTextView*> allViews;
+    struct ViewAndModel {
+        Ui::StageplayTextView* view = nullptr;
+        QPointer<BusinessLayer::StageplayTextModel> model;
+    };
+    QVector<ViewAndModel> allViews;
 };
 
-StageplayTextManager::Implementation::Implementation()
+StageplayTextManager::Implementation::Implementation(StageplayTextManager* _q)
+    : q(_q)
 {
-    view = createView();
-    loadViewSettings();
 }
 
-Ui::StageplayTextView* StageplayTextManager::Implementation::createView()
+Ui::StageplayTextView* StageplayTextManager::Implementation::createView(
+    BusinessLayer::AbstractModel* _model)
 {
-    allViews.append(new Ui::StageplayTextView);
-    return allViews.last();
-}
+    auto view = new Ui::StageplayTextView;
+    setModelForView(_model, view);
 
-void StageplayTextManager::Implementation::loadViewSettings()
-{
-    view->loadViewSettings();
-}
-
-void StageplayTextManager::Implementation::saveViewSettings()
-{
-    view->saveViewSettings();
-}
-
-void StageplayTextManager::Implementation::loadModelSettings()
-{
-    const auto cursorPosition = settingsValue(cursorPositionFor(model->document()), 0).toInt();
-    view->setCursorPosition(cursorPosition);
-    const auto verticalScroll = settingsValue(verticalScrollFor(model->document()), 0).toInt();
-    view->setverticalScroll(verticalScroll);
-}
-
-void StageplayTextManager::Implementation::saveModelSettings()
-{
-    setSettingsValue(cursorPositionFor(model->document()), view->cursorPosition());
-    setSettingsValue(verticalScrollFor(model->document()), view->verticalScroll());
-}
-
-
-// ****
-
-
-StageplayTextManager::StageplayTextManager(QObject* _parent)
-    : QObject(_parent)
-    , d(new Implementation)
-{
-    connect(d->view, &Ui::StageplayTextView::currentModelIndexChanged, this,
-            &StageplayTextManager::currentModelIndexChanged);
-    auto showBookmarkDialog = [this](Ui::BookmarkDialog::DialogType _type) {
-        auto item = d->model->itemForIndex(d->view->currentModelIndex());
+    auto showBookmarkDialog = [this, view](Ui::BookmarkDialog::DialogType _type) {
+        auto item = modelForView(view)->itemForIndex(view->currentModelIndex());
         if (item->type() != BusinessLayer::TextModelItemType::Text) {
             return;
         }
 
-        auto dialog = new Ui::BookmarkDialog(d->view->topLevelWidget());
+        auto dialog = new Ui::BookmarkDialog(view->topLevelWidget());
         dialog->setDialogType(_type);
         if (_type == Ui::BookmarkDialog::DialogType::Edit) {
             const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
             dialog->setBookmarkName(textItem->bookmark()->name);
             dialog->setBookmarkColor(textItem->bookmark()->color);
         }
-        connect(dialog, &Ui::BookmarkDialog::savePressed, this, [this, item, dialog] {
+        connect(dialog, &Ui::BookmarkDialog::savePressed, q, [this, view, item, dialog] {
             auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
             textItem->setBookmark({ dialog->bookmarkColor(), dialog->bookmarkName() });
-            d->model->updateItem(textItem);
+            modelForView(view)->updateItem(textItem);
 
             dialog->hideDialog();
         });
@@ -139,43 +112,149 @@ StageplayTextManager::StageplayTextManager(QObject* _parent)
         //
         dialog->showDialog();
     };
-    connect(d->view, &Ui::StageplayTextView::addBookmarkRequested, this, [showBookmarkDialog] {
+    connect(view, &Ui::StageplayTextView::addBookmarkRequested, q, [showBookmarkDialog] {
         showBookmarkDialog(Ui::BookmarkDialog::DialogType::CreateNew);
     });
-    connect(d->view, &Ui::StageplayTextView::editBookmarkRequested, this,
+    connect(view, &Ui::StageplayTextView::editBookmarkRequested, q,
             [showBookmarkDialog] { showBookmarkDialog(Ui::BookmarkDialog::DialogType::Edit); });
-    connect(d->view, &Ui::StageplayTextView::createBookmarkRequested, this,
-            [this](const QString& _text, const QColor& _color) {
-                auto item = d->model->itemForIndex(d->view->currentModelIndex());
+    connect(view, &Ui::StageplayTextView::createBookmarkRequested, q,
+            [this, view](const QString& _text, const QColor& _color) {
+                auto item = modelForView(view)->itemForIndex(view->currentModelIndex());
                 if (item->type() != BusinessLayer::TextModelItemType::Text) {
                     return;
                 }
 
                 auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
                 textItem->setBookmark({ _color, _text });
-                d->model->updateItem(textItem);
+                modelForView(view)->updateItem(textItem);
             });
-    connect(d->view, &Ui::StageplayTextView::changeBookmarkRequested, this,
-            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
-                auto item = d->model->itemForIndex(_index);
+    connect(view, &Ui::StageplayTextView::changeBookmarkRequested, q,
+            [this, view](const QModelIndex& _index, const QString& _text, const QColor& _color) {
+                auto item = modelForView(view)->itemForIndex(_index);
                 if (item->type() != BusinessLayer::TextModelItemType::Text) {
                     return;
                 }
 
                 auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
                 textItem->setBookmark({ _color, _text });
-                d->model->updateItem(textItem);
+                modelForView(view)->updateItem(textItem);
             });
-    connect(d->view, &Ui::StageplayTextView::removeBookmarkRequested, this, [this] {
-        auto item = d->model->itemForIndex(d->view->currentModelIndex());
+    connect(view, &Ui::StageplayTextView::removeBookmarkRequested, q, [this, view] {
+        auto item = modelForView(view)->itemForIndex(view->currentModelIndex());
         if (item->type() != BusinessLayer::TextModelItemType::Text) {
             return;
         }
 
         auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
         textItem->clearBookmark();
-        d->model->updateItem(textItem);
+        modelForView(view)->updateItem(textItem);
     });
+
+    return view;
+}
+
+void StageplayTextManager::Implementation::setModelForView(BusinessLayer::AbstractModel* _model,
+                                                           Ui::StageplayTextView* _view)
+{
+    constexpr int invalidIndex = -1;
+    int viewIndex = invalidIndex;
+    for (int index = 0; index < allViews.size(); ++index) {
+        if (allViews[index].view == _view) {
+            if (allViews[index].model == _model) {
+                return;
+            }
+
+            viewIndex = index;
+            break;
+        }
+    }
+
+    //
+    // Если модель была задана
+    //
+    if (viewIndex != invalidIndex && allViews[viewIndex].model != nullptr) {
+        //
+        // ... сохраняем параметры
+        //
+        saveModelAndViewSettings(allViews[viewIndex].model, _view);
+        //
+        // ... разрываем соединения
+        //
+        _view->disconnect(allViews[viewIndex].model);
+    }
+
+    //
+    // Определяем новую модель
+    //
+    auto model = qobject_cast<BusinessLayer::StageplayTextModel*>(_model);
+    _view->setModel(model);
+
+    //
+    // Обновляем связь представления с моделью
+    //
+    if (viewIndex != invalidIndex) {
+        allViews[viewIndex].model = model;
+    }
+    //
+    // Или сохраняем связь представления с моделью
+    //
+    else {
+        allViews.append({ _view, model });
+    }
+
+    //
+    // Если новая модель задана
+    //
+    if (model != nullptr) {
+        //
+        // ... загрузим параметры
+        //
+        loadModelAndViewSettings(model, _view);
+        //
+        // ... настраиваем соединения
+        //
+    }
+}
+
+QPointer<BusinessLayer::StageplayTextModel> StageplayTextManager::Implementation::modelForView(
+    Ui::StageplayTextView* _view) const
+{
+    for (auto& viewAndModel : allViews) {
+        if (viewAndModel.view == _view) {
+            return viewAndModel.model;
+        }
+    }
+    return {};
+}
+
+void StageplayTextManager::Implementation::loadModelAndViewSettings(
+    BusinessLayer::AbstractModel* _model, Ui::StageplayTextView* _view)
+{
+    const auto cursorPosition = settingsValue(cursorPositionFor(_model->document()), 0).toInt();
+    _view->setCursorPosition(cursorPosition);
+    const auto verticalScroll = settingsValue(verticalScrollFor(_model->document()), 0).toInt();
+    _view->setverticalScroll(verticalScroll);
+
+    _view->loadViewSettings();
+}
+
+void StageplayTextManager::Implementation::saveModelAndViewSettings(
+    BusinessLayer::AbstractModel* _model, Ui::StageplayTextView* _view)
+{
+    setSettingsValue(cursorPositionFor(_model->document()), _view->cursorPosition());
+    setSettingsValue(verticalScrollFor(_model->document()), _view->verticalScroll());
+
+    _view->saveViewSettings();
+}
+
+
+// ****
+
+
+StageplayTextManager::StageplayTextManager(QObject* _parent)
+    : QObject(_parent)
+    , d(new Implementation(this))
+{
 }
 
 StageplayTextManager::~StageplayTextManager() = default;
@@ -185,54 +264,55 @@ QObject* StageplayTextManager::asQObject()
     return this;
 }
 
-void StageplayTextManager::setModel(BusinessLayer::AbstractModel* _model)
-{
-    if (d->model == _model) {
-        return;
-    }
-
-    //
-    // Если модель была задана
-    //
-    if (d->model != nullptr) {
-        //
-        // ... сохраняем её параметры
-        //
-        d->saveModelSettings();
-        //
-        // ... разрываем соединения
-        //
-        d->view->disconnect(d->model);
-    }
-
-    //
-    // Определяем новую модель
-    //
-    d->model = qobject_cast<BusinessLayer::StageplayTextModel*>(_model);
-    d->view->setModel(d->model);
-
-    //
-    // Если новая модель задана
-    //
-    if (d->model != nullptr) {
-        //
-        // ... загрузим параметры
-        //
-        d->loadModelSettings();
-        //
-        // ... настраиваем соединения
-        //
-    }
-}
-
 Ui::IDocumentView* StageplayTextManager::view()
 {
     return d->view;
 }
 
-Ui::IDocumentView* StageplayTextManager::createView()
+Ui::IDocumentView* StageplayTextManager::view(BusinessLayer::AbstractModel* _model)
 {
-    return d->createView();
+    if (d->view == nullptr) {
+        d->view = d->createView(_model);
+
+        //
+        // Наружу даём сигналы только от первичного представления, только оно может
+        // взаимодействовать с навигатором документа
+        //
+        connect(d->view, &Ui::StageplayTextView::currentModelIndexChanged, this,
+                &StageplayTextManager::currentModelIndexChanged);
+    } else {
+        d->setModelForView(_model, d->view);
+    }
+
+    return d->view;
+}
+
+Ui::IDocumentView* StageplayTextManager::secondaryView()
+{
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* StageplayTextManager::secondaryView(BusinessLayer::AbstractModel* _model)
+{
+    if (d->secondaryView == nullptr) {
+        d->secondaryView = d->createView(_model);
+    } else {
+        d->setModelForView(_model, d->secondaryView);
+    }
+
+    return d->secondaryView;
+}
+
+Ui::IDocumentView* StageplayTextManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    return d->createView(_model);
+}
+
+void StageplayTextManager::resetModels()
+{
+    for (auto& viewAndModel : d->allViews) {
+        d->setModelForView(nullptr, viewAndModel.view);
+    }
 }
 
 void StageplayTextManager::reconfigure(const QStringList& _changedSettingsKeys)
@@ -242,6 +322,13 @@ void StageplayTextManager::reconfigure(const QStringList& _changedSettingsKeys)
 
 void StageplayTextManager::bind(IDocumentManager* _manager)
 {
+    //
+    // Т.к. навигатор соединяется только с главным инстансом редактора, проверяем создан ли он
+    //
+    if (d->view == nullptr) {
+        return;
+    }
+
     Q_ASSERT(_manager);
 
     const auto isConnectedFirstTime
@@ -261,10 +348,10 @@ void StageplayTextManager::bind(IDocumentManager* _manager)
 
 void StageplayTextManager::saveSettings()
 {
-    d->saveViewSettings();
-
-    if (d->model != nullptr) {
-        d->saveModelSettings();
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.model != nullptr && viewAndModel.view != nullptr) {
+            d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+        }
     }
 }
 

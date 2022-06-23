@@ -85,8 +85,6 @@ Ui::AudioplayTextView* AudioplayTextManager::Implementation::createView(
     auto view = new Ui::AudioplayTextView;
     setModelForView(_model, view);
 
-    connect(view, &Ui::AudioplayTextView::currentModelIndexChanged, q,
-            &AudioplayTextManager::currentModelIndexChanged);
     auto showBookmarkDialog = [this, view](Ui::BookmarkDialog::DialogType _type) {
         auto item = modelForView(view)->itemForIndex(view->currentModelIndex());
         if (item->type() != BusinessLayer::TextModelItemType::Text) {
@@ -278,6 +276,13 @@ Ui::IDocumentView* AudioplayTextManager::view(BusinessLayer::AbstractModel* _mod
 {
     if (d->view == nullptr) {
         d->view = d->createView(_model);
+
+        //
+        // Наружу даём сигналы только от первичного представления, только оно может
+        // взаимодействовать с навигатором документа
+        //
+        connect(d->view, &Ui::AudioplayTextView::currentModelIndexChanged, this,
+                &AudioplayTextManager::currentModelIndexChanged);
     } else {
         d->setModelForView(_model, d->view);
     }
@@ -320,6 +325,13 @@ void AudioplayTextManager::reconfigure(const QStringList& _changedSettingsKeys)
 
 void AudioplayTextManager::bind(IDocumentManager* _manager)
 {
+    //
+    // Т.к. навигатор соединяется только с главным инстансом редактора, проверяем создан ли он
+    //
+    if (d->view == nullptr) {
+        return;
+    }
+
     Q_ASSERT(_manager);
 
     const auto isConnectedFirstTime
