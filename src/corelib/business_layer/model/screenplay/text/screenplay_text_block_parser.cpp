@@ -134,7 +134,7 @@ QStringList ScreenplaySceneCharactersParser::characters(const QString& _text)
     // Убираем символы пробелов
     //
     for (int index = 0; index < charactersList.size(); ++index) {
-        charactersList[index] = TextHelper::smartToUpper(charactersList[index].simplified());
+        charactersList[index] = ScreenplayCharacterParser::name(charactersList[index].simplified());
     }
 
     return charactersList;

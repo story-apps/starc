@@ -456,7 +456,7 @@ Ui::IDocumentView* PluginsBuilder::activateSecondView(const QString& _viewMimeTy
 }
 
 Ui::IDocumentView* PluginsBuilder::activateWindowView(const QString& _viewMimeType,
-                                              BusinessLayer::AbstractModel* _model) const
+                                                      BusinessLayer::AbstractModel* _model) const
 {
     return d->activatePlugin(_viewMimeType, _model, ViewType::Window);
 }
