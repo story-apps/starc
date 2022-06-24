@@ -99,6 +99,12 @@ ImageCard::Implementation::Implementation(ImageCard* _parent)
     , copyImageAction(new QAction(contextMenu))
     , pasteImageAction(new QAction(contextMenu))
 {
+    changeImageAction->setIconText(u8"\U000F0770");
+    copyImageAction->setIconText(u8"\U000F018F");
+    copyImageAction->setSeparator(true);
+    pasteImageAction->setIconText(u8"\U000F0192");
+    clearImageAction->setIconText(u8"\U000F01B4");
+
     dragIndicationOpacityAnimation.setStartValue(0.0);
     dragIndicationOpacityAnimation.setEndValue(1.0);
     dragIndicationOpacityAnimation.setDuration(240);
@@ -187,8 +193,8 @@ void ImageCard::Implementation::prepareContextMenu()
     }
 
     const auto hasImage = !image.source.isNull();
-    clearImageAction->setVisible(hasImage);
     copyImageAction->setVisible(hasImage);
+    clearImageAction->setVisible(hasImage);
 }
 
 
@@ -253,9 +259,6 @@ ImageCard::ImageCard(QWidget* _parent)
             qOverload<>(&ImageCard::update));
     connect(&d->overlayOpacityAnimation, &QVariantAnimation::valueChanged, this,
             qOverload<>(&ImageCard::update));
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 ImageCard::~ImageCard() = default;
@@ -320,9 +323,9 @@ QVector<QAction*> ImageCard::contextMenuActions() const
 {
     return {
         d->changeImageAction,
-        d->clearImageAction,
         d->copyImageAction,
         d->pasteImageAction,
+        d->clearImageAction,
     };
 }
 
@@ -560,10 +563,10 @@ void ImageCard::processTextColorChange()
 
 void ImageCard::updateTranslations()
 {
-    d->clearImageAction->setText(tr("Delete"));
-    d->pasteImageAction->setText(tr("Paste"));
+    d->changeImageAction->setText(tr("Select file"));
     d->copyImageAction->setText(tr("Copy"));
-    d->changeImageAction->setText(tr("Change"));
+    d->pasteImageAction->setText(tr("Paste"));
+    d->clearImageAction->setText(tr("Delete"));
 }
 
 void ImageCard::designSystemChangeEvent(DesignSystemChangeEvent* _event)

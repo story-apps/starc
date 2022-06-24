@@ -191,12 +191,13 @@ public:
     explicit Implementation(QWidget* _parent);
 
 
-    QAction* generateCoverAction = nullptr;
+    QAction* createCoverAction = nullptr;
 };
 
 CoverImageCard::Implementation::Implementation(QWidget* _parent)
-    : generateCoverAction(new QAction(_parent))
+    : createCoverAction(new QAction(_parent))
 {
+    createCoverAction->setIconText(u8"\U000F1353");
 }
 
 
@@ -207,8 +208,7 @@ CoverImageCard::CoverImageCard(QWidget* _parent)
     : ImageCard(_parent)
     , d(new Implementation(this))
 {
-    connect(d->generateCoverAction, &QAction::triggered, this,
-            &CoverImageCard::generateCoverPressed);
+    connect(d->createCoverAction, &QAction::triggered, this, &CoverImageCard::generateCoverPressed);
 }
 
 CoverImageCard::~CoverImageCard() = default;
@@ -216,7 +216,7 @@ CoverImageCard::~CoverImageCard() = default;
 QVector<QAction*> CoverImageCard::contextMenuActions() const
 {
     auto actions = ImageCard::contextMenuActions();
-    actions.prepend(d->generateCoverAction);
+    actions.prepend(d->createCoverAction);
     return actions;
 }
 
@@ -224,7 +224,7 @@ void CoverImageCard::updateTranslations()
 {
     ImageCard::updateTranslations();
 
-    d->generateCoverAction->setText(tr("Generate"));
+    d->createCoverAction->setText(tr("Create poster"));
 }
 
 } // namespace Ui
