@@ -352,9 +352,10 @@ QRectF Pie::Implementation::scaledRectFromCenter(const QRectF& _rect, qreal _sca
 void Pie::Implementation::recalculateSlices()
 {
     const auto circle = 360.0;
-    const auto min = std::min(q->size().width(), q->size().height());
-    const QRectF region = { { (q->rect().width() - min) / 2.0, (q->rect().height() - min) / 2.0 },
-                            QSize{ min, min } };
+    const auto min = std::min(q->contentsRect().width(), q->contentsRect().height());
+    const QRectF region
+        = { { (q->contentsRect().width() - min) / 2.0, (q->contentsRect().height() - min) / 2.0 },
+            QSize{ min, min } };
     const auto total = std::accumulate(
         slices.begin(), slices.end(), 0.0,
         [](const qreal a, const Implementation::Slice& b) { return a + b.value; });
@@ -389,11 +390,39 @@ Pie::Pie(QWidget* _parent, qreal _hole)
 
 Pie::~Pie() = default;
 
+void Pie::setModel(const QAbstractItemModel* _model, int _valueColumn)
+{
+    d->setModel(_model, _valueColumn);
+}
+
+void Pie::setCurrentItem(const QModelIndex& _index)
+{
+    d->selectSlice(_index.row());
+}
+
+void Pie::setHole(qreal _hole)
+{
+    if (d->hole == _hole) {
+        return;
+    }
+
+    d->hole = _hole;
+    d->recalculateSlices();
+    update();
+}
+
+QSize Pie::sizeHint() const
+{
+    return QSize(contentsMargins().left() + minimumWidth() + contentsMargins().right(),
+                 contentsMargins().top() + minimumHeight() + contentsMargins().bottom());
+}
+
 void Pie::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
 
     QPainter painter(this);
+    painter.translate(contentsRect().topLeft());
     painter.setRenderHint(QPainter::Antialiasing);
 
     if (d->sliceOpacityAnimation.state() == QVariantAnimation::Running) {
@@ -428,27 +457,6 @@ void Pie::resizeEvent(QResizeEvent* _event)
 
 void Pie::mouseMoveEvent(QMouseEvent* _event)
 {
-    auto selectedSlice = d->findSelectedSlice(_event->pos());
+    auto selectedSlice = d->findSelectedSlice(_event->pos() - contentsRect().topLeft());
     d->selectSlice(selectedSlice);
-}
-
-void Pie::setModel(const QAbstractItemModel* _model, int _valueColumn)
-{
-    d->setModel(_model, _valueColumn);
-}
-
-void Pie::setCurrentItem(const QModelIndex& _index)
-{
-    d->selectSlice(_index.row());
-}
-
-void Pie::setHole(qreal _hole)
-{
-    if (d->hole == _hole) {
-        return;
-    }
-
-    d->hole = _hole;
-    d->recalculateSlices();
-    update();
 }

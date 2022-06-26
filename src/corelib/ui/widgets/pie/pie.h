@@ -35,11 +35,16 @@ public:
      */
     void setHole(qreal _hole);
 
+    /**
+     * @brief Переопределяем определение идеального размера, чтобы учитывал отступы от контента
+     */
+    QSize sizeHint() const override;
+
 signals:
     /**
      * @brief Навели машкой на кусочек пирога
      */
-    void currentIndexChanged(const QModelIndex& _index) const;
+    void currentIndexChanged(const QModelIndex& _index);
 
 protected:
     /**
