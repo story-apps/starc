@@ -1265,7 +1265,7 @@ void ApplicationManager::Implementation::importProject()
 
 void ApplicationManager::Implementation::exportCurrentDocument()
 {
-    exportManager->exportDocument(projectManager->currentModel());
+    exportManager->exportDocument(projectManager->currentModelForExport());
 }
 
 void ApplicationManager::Implementation::toggleFullScreen()

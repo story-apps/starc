@@ -94,9 +94,11 @@ public:
                        const QString& _treatment, const QString& _text);
 
     /**
-     * @brief Модель текущего документа
+     * @brief Модель документа для экспорта
+     * @note Маппим модели для случаев, когда у пользователя выбрана титульная страница, чтобы
+     *       экспортировался сам скрипт
      */
-    BusinessLayer::AbstractModel* currentModel() const;
+    BusinessLayer::AbstractModel* currentModelForExport() const;
 
 signals:
     /**

@@ -8,8 +8,10 @@
 
 namespace BusinessLayer {
 
-TextDocument* StageplayExporter::createDocument() const
+TextDocument* StageplayExporter::createDocument(const ExportOptions& _exportOptions) const
 {
+    Q_UNUSED(_exportOptions)
+
     auto document = new StageplayTextDocument;
     document->setCorrectionOptions(true);
     return document;

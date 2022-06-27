@@ -1574,8 +1574,74 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
         _treatment.toUtf8());
 }
 
-BusinessLayer::AbstractModel* ProjectManager::currentModel() const
+BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
 {
+    auto scriptTextModel = [this](const BusinessLayer::StructureModelItem* _screenplayItem)
+        -> BusinessLayer::AbstractModel* {
+        if (_screenplayItem == nullptr) {
+            return nullptr;
+        }
+
+        constexpr int scriptTextIndex = 2;
+        return d->modelsFacade.modelFor(_screenplayItem->childAt(scriptTextIndex)->uuid());
+    };
+
+    const auto document = d->currentDocument.model->document();
+    const auto item = d->projectStructureModel->itemForUuid(document->uuid());
+    switch (document->type()) {
+    case Domain::DocumentObjectType::Audioplay: {
+        return scriptTextModel(item);
+    }
+    case Domain::DocumentObjectType::AudioplayTitlePage:
+    case Domain::DocumentObjectType::AudioplaySynopsis: {
+        if (item == nullptr) {
+            break;
+        }
+
+        return scriptTextModel(item->parent());
+    }
+
+    case Domain::DocumentObjectType::ComicBook: {
+        return scriptTextModel(item);
+    }
+    case Domain::DocumentObjectType::ComicBookTitlePage:
+    case Domain::DocumentObjectType::ComicBookSynopsis: {
+        if (item == nullptr) {
+            break;
+        }
+
+        return scriptTextModel(item->parent());
+    }
+
+    case Domain::DocumentObjectType::Screenplay: {
+        return scriptTextModel(item);
+    }
+    case Domain::DocumentObjectType::ScreenplayTitlePage:
+    case Domain::DocumentObjectType::ScreenplaySynopsis: {
+        if (item == nullptr) {
+            break;
+        }
+
+        return scriptTextModel(item->parent());
+    }
+
+    case Domain::DocumentObjectType::Stageplay: {
+        return scriptTextModel(item);
+    }
+    case Domain::DocumentObjectType::StageplayTitlePage:
+    case Domain::DocumentObjectType::StageplaySynopsis: {
+        if (item == nullptr) {
+            break;
+        }
+
+        return scriptTextModel(item->parent());
+    }
+
+    default: {
+        break;
+    }
+    }
+
     return d->currentDocument.model;
 }
 

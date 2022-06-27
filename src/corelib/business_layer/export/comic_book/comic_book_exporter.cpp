@@ -8,8 +8,10 @@
 
 namespace BusinessLayer {
 
-TextDocument* ComicBookExporter::createDocument() const
+TextDocument* ComicBookExporter::createDocument(const ExportOptions& _exportOptions) const
 {
+    Q_UNUSED(_exportOptions)
+
     auto document = new ComicBookTextDocument;
     document->setCorrectionOptions(true, true);
     return document;

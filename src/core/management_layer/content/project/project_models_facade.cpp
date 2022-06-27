@@ -295,6 +295,16 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(titlePageItem->uuid()));
             screenplayModel->setTitlePageModel(titlePageModel);
             //
+            // ... модель синопсиса
+            //
+            const auto synopsisIndex = 1;
+            auto synopsisItem = screenplayItem->parent()->childAt(synopsisIndex);
+            Q_ASSERT(synopsisItem);
+            Q_ASSERT(synopsisItem->type() == Domain::DocumentObjectType::ScreenplaySynopsis);
+            auto synopsisModel
+                = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(synopsisItem->uuid()));
+            screenplayModel->setSynopsisModel(synopsisModel);
+            //
             // ... модель справочников сценариев
             //
             auto dictionariesModel = qobject_cast<BusinessLayer::ScreenplayDictionariesModel*>(

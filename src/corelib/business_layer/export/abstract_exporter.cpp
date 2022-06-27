@@ -25,7 +25,7 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
     PageTextEdit textEdit;
     textEdit.setUsePageMode(true);
     textEdit.setPageSpacing(0);
-    auto textDocument = createDocument();
+    auto textDocument = createDocument(_exportOptions);
     textEdit.setDocument(textDocument);
     //
     // ... параметры страницы
@@ -72,7 +72,7 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
         auto titlePageText = new TextDocument;
         titlePageText->setModel(_model->titlePageModel(), false);
         //
-        cursor.movePosition(TextCursor::Start);
+        cursor.movePosition(TextCursor::PreviousBlock);
         auto block = titlePageText->begin();
         while (block.isValid()) {
             //
@@ -134,25 +134,149 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
         cursor.movePosition(TextCursor::StartOfBlock);
     }
     //
-    // ... для первого блока убираем принудительный перенос страницы,
-    //     если он есть и если не печатается титульная страница
+    // ... вставляем синопсис
     //
-    else if (cursor.block().blockFormat().pageBreakPolicy()
-             == QTextFormat::PageBreak_AlwaysBefore) {
+    if (_exportOptions.includeSynopsis) {
+        //
+        // Переносим основной текст и данные на следующую страницу
+        //
+        TextBlockData* firstBlockUserData = nullptr;
+        if (cursor.block().userData() != nullptr) {
+            firstBlockUserData
+                = new TextBlockData(static_cast<TextBlockData*>(cursor.block().userData()));
+            cursor.block().setUserData(nullptr);
+        }
+        cursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
         auto blockFormat = cursor.blockFormat();
-        blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+        blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+        blockFormat.setTopMargin(0);
         cursor.setBlockFormat(blockFormat);
-    }
-    //
-    do {
-        const auto blockType = TextBlockStyle::forBlock(cursor.block());
+        cursor.block().setUserData(firstBlockUserData);
 
         //
-        // Если не нужно печатать папки, то удаляем их
+        // Собственно добавляем текст синопсиса
         //
-        if (!_exportOptions.includeFolders) {
-            if (blockType == TextParagraphType::SequenceHeading
-                || blockType == TextParagraphType::SequenceFooter) {
+        auto synopsisText = new TextDocument;
+        synopsisText->setModel(_model->synopsisModel(), false);
+        //
+        cursor.movePosition(TextCursor::PreviousBlock);
+        auto block = synopsisText->begin();
+        while (block.isValid()) {
+            //
+            // Донастроим стиль блока
+            //
+            auto blockFormat = block.blockFormat();
+            //
+            // ... сбросим тип
+            //
+            blockFormat.setProperty(TextBlockStyle::PropertyType,
+                                    static_cast<int>(TextParagraphType::Undefined));
+            //
+            // ... вставляем блок
+            //
+            if (cursor.atStart()) {
+                cursor.setBlockFormat(blockFormat);
+                cursor.setBlockCharFormat(block.charFormat());
+            } else {
+                cursor.insertBlock(blockFormat, block.charFormat());
+            }
+            //
+            // ... вставляем текст
+            //
+            const auto formats = block.textFormats();
+            for (const auto& format : formats) {
+                cursor.insertText(block.text().mid(format.start, format.length), format.format);
+            }
+            //
+            // ... если первый блок пуст, добавим пробел, чтобы избежать косяка с сохранением в PDF
+            //
+            if (cursor.atStart()) {
+                cursor.insertText(" ");
+            }
+
+            block = block.next();
+        }
+
+        //
+        // Убираем нижний отступ у поледнего блока синопсиса
+        //
+        blockFormat = cursor.blockFormat();
+        blockFormat.setBottomMargin(0);
+        cursor.setBlockFormat(blockFormat);
+
+        //
+        // Переходим к тексту сценария
+        //
+        cursor.movePosition(TextCursor::NextBlock);
+        cursor.movePosition(TextCursor::StartOfBlock);
+    }
+    //
+    // ... корректируем сценарий, если он нужен
+    //
+    if (_exportOptions.includeScript) {
+        //
+        // ... для первого блока убираем принудительный перенос страницы,
+        //     если он есть и если не печатается титульная страница
+        //
+        if (cursor.atStart()
+            && cursor.block().blockFormat().pageBreakPolicy()
+                == QTextFormat::PageBreak_AlwaysBefore) {
+            auto blockFormat = cursor.blockFormat();
+            blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+            cursor.setBlockFormat(blockFormat);
+        }
+        //
+        do {
+            const auto blockType = TextBlockStyle::forBlock(cursor.block());
+
+            //
+            // Если не нужно печатать папки, то удаляем их
+            //
+            if (!_exportOptions.includeFolders) {
+                if (blockType == TextParagraphType::SequenceHeading
+                    || blockType == TextParagraphType::SequenceFooter) {
+                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                    if (cursor.hasSelection()) {
+                        cursor.deleteChar();
+                    }
+                    cursor.deleteChar();
+                    continue;
+                }
+            }
+            //
+            // В противном случае подставляем текст для пустых завершающих блоков
+            //
+            else if (blockType == TextParagraphType::SequenceFooter) {
+                if (cursor.block().text().isEmpty()) {
+                    auto headerBlock = cursor.block().previous();
+                    int openedFolders = 0;
+                    while (headerBlock.isValid()) {
+                        const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
+                        if (headerBlockType == TextParagraphType::SequenceHeading) {
+                            if (openedFolders > 0) {
+                                --openedFolders;
+                            } else {
+                                break;
+                            }
+                        } else if (headerBlockType == TextParagraphType::SequenceFooter) {
+                            ++openedFolders;
+                        }
+
+                        headerBlock = headerBlock.previous();
+                    }
+
+                    const auto footerText = QString("%1 %2").arg(
+                        QGuiApplication::translate("KeyProcessingLayer::FolderFooterHandler",
+                                                   "END OF"),
+                        headerBlock.text());
+                    cursor.insertText(footerText);
+                }
+            }
+
+            //
+            // Если не нужно печатать заметки по тексту, то удаляем их
+            //
+            if (!_exportOptions.includeInlineNotes && blockType == TextParagraphType::InlineNote) {
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 if (cursor.hasSelection()) {
                     cursor.deleteChar();
@@ -160,62 +284,29 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
                 cursor.deleteChar();
                 continue;
             }
-        }
-        //
-        // В противном случае подставляем текст для пустых завершающих блоков
-        //
-        else if (blockType == TextParagraphType::SequenceFooter) {
-            if (cursor.block().text().isEmpty()) {
-                auto headerBlock = cursor.block().previous();
-                int openedFolders = 0;
-                while (headerBlock.isValid()) {
-                    const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
-                    if (headerBlockType == TextParagraphType::SequenceHeading) {
-                        if (openedFolders > 0) {
-                            --openedFolders;
-                        } else {
-                            break;
-                        }
-                    } else if (headerBlockType == TextParagraphType::SequenceFooter) {
-                        ++openedFolders;
-                    }
 
-                    headerBlock = headerBlock.previous();
-                }
-
-                const auto footerText = QString("%1 %2").arg(
-                    QGuiApplication::translate("KeyProcessingLayer::FolderFooterHandler", "END OF"),
-                    headerBlock.text());
-                cursor.insertText(footerText);
+            //
+            // Обрабатываем блок в наследниках
+            //
+            const auto skipMovement = prepareBlock(_exportOptions, cursor);
+            if (skipMovement) {
+                continue;
             }
-        }
 
-        //
-        // Если не нужно печатать заметки по тексту, то удаляем их
-        //
-        if (!_exportOptions.includeInlineNotes && blockType == TextParagraphType::InlineNote) {
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            if (cursor.hasSelection()) {
-                cursor.deleteChar();
-            }
-            cursor.deleteChar();
-            continue;
-        }
-
-        //
-        // Обрабатываем блок в наследниках
-        //
-        const auto skipMovement = prepareBlock(_exportOptions, cursor);
-        if (skipMovement) {
-            continue;
-        }
-
-        //
-        // Переходим к следующему блоку
-        //
-        cursor.movePosition(QTextCursor::EndOfBlock);
-        cursor.movePosition(QTextCursor::NextBlock);
-    } while (!cursor.atEnd());
+            //
+            // Переходим к следующему блоку
+            //
+            cursor.movePosition(QTextCursor::EndOfBlock);
+            cursor.movePosition(QTextCursor::NextBlock);
+        } while (!cursor.atEnd());
+    }
+    //
+    // ... а если не нужен, удаляем его
+    //
+    else {
+        cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+        cursor.deleteChar();
+    }
 
     return textDocument;
 }

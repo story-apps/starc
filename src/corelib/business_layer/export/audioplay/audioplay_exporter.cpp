@@ -8,8 +8,10 @@
 
 namespace BusinessLayer {
 
-TextDocument* AudioplayExporter::createDocument() const
+TextDocument* AudioplayExporter::createDocument(const ExportOptions& _exportOptions) const
 {
+    Q_UNUSED(_exportOptions)
+
     auto document = new AudioplayTextDocument;
     document->setCorrectionOptions(true);
     return document;

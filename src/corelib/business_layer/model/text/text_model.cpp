@@ -65,6 +65,11 @@ public:
     SimpleTextModel* titlePageModel = nullptr;
 
     /**
+     * @brief Модель синопсиса
+     */
+    SimpleTextModel* synopsisModel = nullptr;
+
+    /**
      * @brief Последние скопированные данные модели
      */
     struct {
@@ -1210,6 +1215,16 @@ SimpleTextModel* TextModel::titlePageModel() const
     ModelHelper::initTitlePageModel(d->titlePageModel);
 
     return d->titlePageModel;
+}
+
+void TextModel::setSynopsisModel(SimpleTextModel* _model)
+{
+    d->synopsisModel = _model;
+}
+
+SimpleTextModel* TextModel::synopsisModel() const
+{
+    return d->synopsisModel;
 }
 
 void TextModel::initDocument()

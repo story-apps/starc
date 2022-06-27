@@ -637,9 +637,25 @@ bool ExportManager::canExportDocument(BusinessLayer::AbstractModel* _model) cons
     }
 
     switch (_model->document()->type()) {
-    case Domain::DocumentObjectType::ScreenplayText:
-    case Domain::DocumentObjectType::ComicBookText:
+    case Domain::DocumentObjectType::Audioplay:
+    case Domain::DocumentObjectType::AudioplayTitlePage:
+    case Domain::DocumentObjectType::AudioplaySynopsis:
     case Domain::DocumentObjectType::AudioplayText:
+    //
+    case Domain::DocumentObjectType::ComicBook:
+    case Domain::DocumentObjectType::ComicBookTitlePage:
+    case Domain::DocumentObjectType::ComicBookSynopsis:
+    case Domain::DocumentObjectType::ComicBookText:
+    //
+    case Domain::DocumentObjectType::Screenplay:
+    case Domain::DocumentObjectType::ScreenplayTitlePage:
+    case Domain::DocumentObjectType::ScreenplaySynopsis:
+    case Domain::DocumentObjectType::ScreenplayTreatment:
+    case Domain::DocumentObjectType::ScreenplayText:
+    //
+    case Domain::DocumentObjectType::Stageplay:
+    case Domain::DocumentObjectType::StageplayTitlePage:
+    case Domain::DocumentObjectType::StageplaySynopsis:
     case Domain::DocumentObjectType::StageplayText:
         return true;
 

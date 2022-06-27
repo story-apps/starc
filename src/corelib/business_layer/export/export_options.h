@@ -43,6 +43,16 @@ struct CORE_LIBRARY_EXPORT ExportOptions {
     bool includeTiltePage = true;
 
     /**
+     * @brief Печатать синопсис
+     */
+    bool includeSynopsis = false;
+
+    /**
+     * @brief Печатать сценарий
+     */
+    bool includeScript = true;
+
+    /**
      * @brief Печатать ли блоки папок
      */
     bool includeFolders = true;

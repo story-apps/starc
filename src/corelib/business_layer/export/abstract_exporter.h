@@ -30,7 +30,7 @@ protected:
     /**
      * @brief Создать документ для экспорта
      */
-    virtual TextDocument* createDocument() const = 0;
+    virtual TextDocument* createDocument(const ExportOptions& _exportOptions) const = 0;
 
     /**
      * @brief Получить шаблон конкретного документа

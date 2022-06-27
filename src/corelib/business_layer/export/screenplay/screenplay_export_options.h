@@ -6,6 +6,11 @@ namespace BusinessLayer {
 
 struct CORE_LIBRARY_EXPORT ScreenplayExportOptions : public ExportOptions {
     /**
+     * @brief Печатать поэпизодник
+     */
+    bool includeTreatment = false;
+
+    /**
      * @brief Печатать номера сцен
      */
     bool showScenesNumbers = true;

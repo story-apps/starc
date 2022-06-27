@@ -11,7 +11,7 @@ protected:
     /**
      * @brief Создать документ для экспорта
      */
-    TextDocument* createDocument() const override;
+    TextDocument* createDocument(const ExportOptions& _exportOptions) const override;
 
     /**
      * @brief Получить шаблон конкретного документа

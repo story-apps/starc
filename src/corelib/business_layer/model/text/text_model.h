@@ -120,6 +120,12 @@ public:
     void setTitlePageModel(SimpleTextModel* _model);
     SimpleTextModel* titlePageModel() const;
 
+    /**
+     * @brief Задать модель синопсиса
+     */
+    void setSynopsisModel(SimpleTextModel* _model);
+    SimpleTextModel* synopsisModel() const;
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

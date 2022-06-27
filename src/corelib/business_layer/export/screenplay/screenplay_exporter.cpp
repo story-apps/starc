@@ -17,12 +17,15 @@
 
 namespace BusinessLayer {
 
-TextDocument* ScreenplayExporter::createDocument() const
+TextDocument* ScreenplayExporter::createDocument(const ExportOptions& _exportOptions) const
 {
+    const auto& exportOptions = static_cast<const ScreenplayExportOptions&>(_exportOptions);
+
     auto document = new ScreenplayTextDocument;
     document->setCorrectionOptions(
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey).toBool(),
         true);
+    document->setTreatmentVisible(exportOptions.includeTreatment);
     return document;
 }
 
@@ -35,6 +38,10 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
                                       TextCursor& _cursor) const
 {
     const auto& exportOptions = static_cast<const ScreenplayExportOptions&>(_exportOptions);
+
+    //
+    // Скорем блок, если в нём нет необходимости
+    //
 
     //
     // Если не нужно печатать, эту сцену, то удаляем её
