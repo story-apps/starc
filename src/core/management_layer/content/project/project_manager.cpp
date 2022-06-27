@@ -132,6 +132,11 @@ public:
         Ui::ProjectView* right = nullptr;
 
         //
+        // Список представлений, открытых в отдельных окнах
+        //
+        QVector<QWidget*> windows;
+
+        //
         // Ссылки на активное представление и неактивное
         //
         Ui::ProjectView* active = nullptr;
@@ -354,6 +359,8 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
         // TODO: Почему-то ни одна из моделей не использует это поле
         //
         window->setWindowTitle(currentDocument.model->documentName());
+
+        this->view.windows.append(window);
     }
 }
 
@@ -811,6 +818,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             d->view.right->show();
             d->switchViews();
         } else {
+            d->view.container->setSizes({ 1, 0 });
             d->view.right->hide();
             if (d->view.active == d->view.right) {
                 d->switchViews();
@@ -1436,6 +1444,22 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     setSettingsValue(DataStorageLayer::projectStructureKey(_path), d->navigator->saveState());
     setSettingsValue(DataStorageLayer::projectStructureVisibleKey(_path),
                      d->navigator->isProjectNavigatorShown());
+
+    //
+    // FIXME: Сохранять и восстанавливать состояние панелей
+    //
+    while (!d->view.windows.isEmpty()) {
+        auto window = d->view.windows.takeFirst();
+        window->close();
+        window->deleteLater();
+    }
+    if (d->splitScreenAction->isChecked()) {
+        d->splitScreenAction->toggle();
+        d->view.activeIndex = {};
+        d->view.active->showDefaultPage();
+        d->view.inactiveIndex = {};
+        d->view.inactive->showDefaultPage();
+    }
 
     //
     // Очищаем структуру

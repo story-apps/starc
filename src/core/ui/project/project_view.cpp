@@ -111,12 +111,10 @@ void ProjectView::showNotImplementedPage()
 void ProjectView::setActive(bool _active)
 {
     const bool isVisible = !_active;
-    if (d->overlay->isVisible() == isVisible) {
-        return;
-    }
-
     d->overlay->setVisible(isVisible);
-    d->overlay->raise();
+    if (isVisible) {
+        d->overlay->raise();
+    }
 }
 
 void ProjectView::resizeEvent(QResizeEvent* _event)
