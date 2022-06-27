@@ -1,8 +1,6 @@
 #include "screenplay_export_dialog.h"
 
 #include <business_layer/export/screenplay/screenplay_export_options.h>
-#include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -256,10 +254,10 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
     d->includeSequences->setChecked(settings.value(kIncludeSequencesKey, true).toBool());
     d->includeInlineNotes->setChecked(settings.value(kIncludeInlineNotesKey, false).toBool());
     d->includeReviewMarks->setChecked(settings.value(kIncludeReviewMarksKey, true).toBool());
-    d->openDocumentAfterExport->setChecked(
-        settings.value(kOpenDocumentAfterExportKey, true).toBool());
     d->exportConcreteScenes->setText(settings.value(kScenesToPrintKey).toString());
     d->watermark->setText(settings.value(kWatermarkKey).toString());
+    d->openDocumentAfterExport->setChecked(
+        settings.value(kOpenDocumentAfterExportKey, true).toBool());
 }
 
 ScreenplayExportDialog::~ScreenplayExportDialog()

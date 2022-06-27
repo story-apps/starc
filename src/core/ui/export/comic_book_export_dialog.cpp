@@ -1,8 +1,6 @@
 #include "comic_book_export_dialog.h"
 
 #include <business_layer/export/comic_book/comic_book_export_options.h>
-#include <business_layer/templates/comic_book_template.h>
-#include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -12,11 +10,24 @@
 
 #include <QEvent>
 #include <QGridLayout>
+#include <QSettings>
 #include <QStandardItemModel>
 #include <QStringListModel>
 
 
 namespace Ui {
+
+namespace {
+const QString kGroupKey = "widgets/comic-book-export-dialog/";
+const QString kIncludeTitlePageKey = kGroupKey + "include-title-page";
+const QString kIncludeSynopsisKey = kGroupKey + "include-synopsis";
+const QString kIncludeScriptKey = kGroupKey + "include-script";
+const QString kFormatKey = kGroupKey + "format";
+const QString kIncludeInlineNotesKey = kGroupKey + "include-inline-notes";
+const QString kIncludeReviewMarksKey = kGroupKey + "include-review-marks";
+const QString kWatermarkKey = kGroupKey + "watermark";
+const QString kOpenDocumentAfterExportKey = kGroupKey + "open-document-after-export";
+} // namespace
 
 class ComicBookExportDialog::Implementation
 {
@@ -24,11 +35,13 @@ public:
     explicit Implementation(QWidget* _parent);
 
 
+    CheckBox* includeTitlePage = nullptr;
+    CheckBox* includeSynopsis = nullptr;
+    CheckBox* includeScript = nullptr;
+
     ComboBox* fileFormat = nullptr;
-    CheckBox* printTitlePage = nullptr;
-    CheckBox* useWordsInPageHeadings = nullptr;
-    CheckBox* printInlineNotes = nullptr;
-    CheckBox* printReviewMarks = nullptr;
+    CheckBox* includeInlineNotes = nullptr;
+    CheckBox* includeReviewMarks = nullptr;
     TextField* watermark = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -38,11 +51,12 @@ public:
 };
 
 ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
-    : fileFormat(new ComboBox(_parent))
-    , printTitlePage(new CheckBox(_parent))
-    , useWordsInPageHeadings(new CheckBox(_parent))
-    , printInlineNotes(new CheckBox(_parent))
-    , printReviewMarks(new CheckBox(_parent))
+    : includeTitlePage(new CheckBox(_parent))
+    , includeSynopsis(new CheckBox(_parent))
+    , includeScript(new CheckBox(_parent))
+    , fileFormat(new ComboBox(_parent))
+    , includeInlineNotes(new CheckBox(_parent))
+    , includeReviewMarks(new CheckBox(_parent))
     , watermark(new TextField(_parent))
     , buttonsLayout(new QHBoxLayout)
     , openDocumentAfterExport(new CheckBox(_parent))
@@ -55,13 +69,6 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     auto formatsModel = new QStringListModel({ "PDF", "DOCX" });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
-
-    useWordsInPageHeadings->hide();
-
-    for (auto checkBox :
-         { printTitlePage, useWordsInPageHeadings, printReviewMarks, openDocumentAfterExport }) {
-        checkBox->setChecked(true);
-    }
 
     watermark->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
@@ -84,17 +91,27 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
     setAcceptButton(d->exportButton);
     setRejectButton(d->cancelButton);
 
+    auto leftLayout = new QVBoxLayout;
+    leftLayout->setContentsMargins({});
+    leftLayout->setSpacing(0);
+    leftLayout->addWidget(d->includeTitlePage);
+    leftLayout->addWidget(d->includeSynopsis);
+    leftLayout->addWidget(d->includeScript);
+    leftLayout->addStretch();
+    //
     int row = 0;
-    contentsLayout()->addWidget(d->fileFormat, row++, 0);
-    contentsLayout()->addWidget(d->printTitlePage, row++, 0);
-    contentsLayout()->addWidget(d->useWordsInPageHeadings, row++, 0);
-    contentsLayout()->addWidget(d->printInlineNotes, row++, 0);
-    contentsLayout()->addWidget(d->printReviewMarks, row++, 0);
-    contentsLayout()->addWidget(d->watermark, row++, 0);
-    contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
+    int column = 0;
+    contentsLayout()->addLayout(leftLayout, row, column++, 4, 1);
+    contentsLayout()->addWidget(d->fileFormat, row++, column);
+    contentsLayout()->addWidget(d->includeInlineNotes, row++, column);
+    contentsLayout()->addWidget(d->includeReviewMarks, row++, column);
+    contentsLayout()->addWidget(d->watermark, row++, column, Qt::AlignTop);
+    contentsLayout()->setRowStretch(row++, 1);
+    column = 0;
+    contentsLayout()->addLayout(d->buttonsLayout, row++, column, 1, 2);
+    contentsLayout()->setColumnStretch(1, 1);
 
-    connect(d->fileFormat, &ComboBox::currentIndexChanged, this, [this] {
-        auto isComicBookTemplateVisible = true;
+    auto updateParametersVisibility = [this] {
         auto isPrintInlineNotesVisible = true;
         auto isPrintReviewMarksVisible = true;
         auto isWatermarkVisible = true;
@@ -118,30 +135,69 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
             break;
         }
         }
-        d->printInlineNotes->setVisible(isPrintInlineNotesVisible);
-        d->printReviewMarks->setVisible(isPrintReviewMarksVisible);
+        if (!d->includeScript->isChecked()) {
+            isPrintInlineNotesVisible = false;
+            isPrintReviewMarksVisible = false;
+        }
+        d->includeInlineNotes->setVisible(isPrintInlineNotesVisible);
+        d->includeReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->watermark->setVisible(isWatermarkVisible);
-    });
-
+    };
+    connect(d->includeScript, &CheckBox::checkedChanged, this, updateParametersVisibility);
+    connect(d->fileFormat, &ComboBox::currentIndexChanged, this, updateParametersVisibility);
+    //
+    auto updateExportEnabled = [this] {
+        d->exportButton->setEnabled(d->includeTitlePage->isChecked()
+                                    || d->includeSynopsis->isChecked()
+                                    || d->includeScript->isChecked());
+    };
+    connect(d->includeTitlePage, &CheckBox::checkedChanged, this, updateExportEnabled);
+    connect(d->includeSynopsis, &CheckBox::checkedChanged, this, updateExportEnabled);
+    connect(d->includeScript, &CheckBox::checkedChanged, this, updateExportEnabled);
+    //
     connect(d->exportButton, &Button::clicked, this, &ComicBookExportDialog::exportRequested);
     connect(d->cancelButton, &Button::clicked, this, &ComicBookExportDialog::canceled);
 
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
+    updateParametersVisibility();
+    updateExportEnabled();
+
+    QSettings settings;
+    d->includeTitlePage->setChecked(settings.value(kIncludeTitlePageKey, true).toBool());
+    d->includeSynopsis->setChecked(settings.value(kIncludeSynopsisKey, true).toBool());
+    d->includeScript->setChecked(settings.value(kIncludeScriptKey, false).toBool());
+    const auto fileFormatIndex
+        = d->fileFormat->model()->index(settings.value(kFormatKey, 0).toInt(), 0);
+    d->fileFormat->setCurrentIndex(fileFormatIndex);
+    d->includeInlineNotes->setChecked(settings.value(kIncludeInlineNotesKey, false).toBool());
+    d->includeReviewMarks->setChecked(settings.value(kIncludeReviewMarksKey, true).toBool());
+    d->watermark->setText(settings.value(kWatermarkKey).toString());
+    d->openDocumentAfterExport->setChecked(
+        settings.value(kOpenDocumentAfterExportKey, true).toBool());
 }
 
-ComicBookExportDialog::~ComicBookExportDialog() = default;
+ComicBookExportDialog::~ComicBookExportDialog()
+{
+    QSettings settings;
+    settings.setValue(kIncludeTitlePageKey, d->includeTitlePage->isChecked());
+    settings.setValue(kIncludeSynopsisKey, d->includeSynopsis->isChecked());
+    settings.setValue(kIncludeScriptKey, d->includeScript->isChecked());
+    settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
+    settings.setValue(kIncludeInlineNotesKey, d->includeInlineNotes->isChecked());
+    settings.setValue(kIncludeReviewMarksKey, d->includeReviewMarks->isChecked());
+    settings.setValue(kWatermarkKey, d->watermark->text());
+    settings.setValue(kOpenDocumentAfterExportKey, d->openDocumentAfterExport->isChecked());
+}
 
 BusinessLayer::ComicBookExportOptions ComicBookExportDialog::exportOptions() const
 {
     BusinessLayer::ComicBookExportOptions options;
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
-    options.includeTiltePage = d->printTitlePage->isChecked();
-    options.includeFolders = false;
-    options.useWordsInPageHeadings = d->useWordsInPageHeadings->isChecked();
-    options.includeInlineNotes = d->printInlineNotes->isChecked();
-    options.includeReviewMarks = d->printReviewMarks->isChecked();
+    options.includeTiltePage = d->includeTitlePage->isChecked();
+    options.includeSynopsis = d->includeSynopsis->isChecked();
+    options.includeScript = d->includeScript->isChecked();
+    options.includeInlineNotes = d->includeInlineNotes->isChecked();
+    options.includeReviewMarks = d->includeReviewMarks->isChecked();
     options.watermark = d->watermark->text();
     options.watermarkColor = QColor(100, 100, 100, 30);
     return options;
@@ -154,7 +210,7 @@ bool ComicBookExportDialog::openDocumentAfterExport() const
 
 QWidget* ComicBookExportDialog::focusedWidgetAfterShow() const
 {
-    return d->fileFormat;
+    return d->includeTitlePage;
 }
 
 QWidget* ComicBookExportDialog::lastFocusableWidget() const
@@ -166,11 +222,13 @@ void ComicBookExportDialog::updateTranslations()
 {
     setTitle(tr("Export comic book"));
 
+    d->includeTitlePage->setText(tr("Title page"));
+    d->includeSynopsis->setText(tr("Synopsis"));
+    d->includeScript->setText(tr("Script"));
+
     d->fileFormat->setLabel(tr("Format"));
-    d->printTitlePage->setText(tr("Print title page"));
-    d->useWordsInPageHeadings->setText(tr("Print panels numbers in form of words"));
-    d->printInlineNotes->setText(tr("Print inline notes"));
-    d->printReviewMarks->setText(tr("Print review marks"));
+    d->includeInlineNotes->setText(tr("Print inline notes"));
+    d->includeReviewMarks->setText(tr("Print review marks"));
     d->watermark->setLabel(tr("Watermark"));
 
     d->openDocumentAfterExport->setText(tr("Open document after export"));
@@ -199,8 +257,14 @@ void ComicBookExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
         combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
     }
 
-    for (auto checkBox : { d->printTitlePage, d->useWordsInPageHeadings, d->printInlineNotes,
-                           d->printReviewMarks, d->openDocumentAfterExport }) {
+    for (auto checkBox : {
+             d->includeTitlePage,
+             d->includeSynopsis,
+             d->includeScript,
+             d->includeInlineNotes,
+             d->includeReviewMarks,
+             d->openDocumentAfterExport,
+         }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }

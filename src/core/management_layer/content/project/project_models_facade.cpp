@@ -446,6 +446,16 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(titlePageItem->uuid()));
             comicBookModel->setTitlePageModel(titlePageModel);
             //
+            // ... модель синопсиса
+            //
+            const auto synopsisIndex = 1;
+            auto synopsisItem = comicBookItem->parent()->childAt(synopsisIndex);
+            Q_ASSERT(synopsisItem);
+            Q_ASSERT(synopsisItem->type() == Domain::DocumentObjectType::ComicBookSynopsis);
+            auto synopsisModel
+                = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(synopsisItem->uuid()));
+            comicBookModel->setSynopsisModel(synopsisModel);
+            //
             // ... модель справочников
             //
             auto dictionariesModel = qobject_cast<BusinessLayer::ComicBookDictionariesModel*>(
@@ -581,6 +591,16 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(titlePageItem->uuid()));
             audioplayModel->setTitlePageModel(titlePageModel);
             //
+            // ... модель синопсиса
+            //
+            const auto synopsisIndex = 1;
+            auto synopsisItem = audioplayItem->parent()->childAt(synopsisIndex);
+            Q_ASSERT(synopsisItem);
+            Q_ASSERT(synopsisItem->type() == Domain::DocumentObjectType::AudioplaySynopsis);
+            auto synopsisModel
+                = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(synopsisItem->uuid()));
+            audioplayModel->setSynopsisModel(synopsisModel);
+            //
             // ... модель персонажей
             //
             auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
@@ -704,6 +724,16 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             auto titlePageModel
                 = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(titlePageItem->uuid()));
             stageplayModel->setTitlePageModel(titlePageModel);
+            //
+            // ... модель синопсиса
+            //
+            const auto synopsisIndex = 1;
+            auto synopsisItem = stageplayItem->parent()->childAt(synopsisIndex);
+            Q_ASSERT(synopsisItem);
+            Q_ASSERT(synopsisItem->type() == Domain::DocumentObjectType::StageplaySynopsis);
+            auto synopsisModel
+                = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(synopsisItem->uuid()));
+            stageplayModel->setSynopsisModel(synopsisModel);
             //
             // ... модель персонажей
             //

@@ -1,9 +1,6 @@
 #include "stageplay_export_dialog.h"
 
-#include <business_layer/export/export_options.h>
 #include <business_layer/export/stageplay/stageplay_export_options.h>
-#include <business_layer/templates/stageplay_template.h>
-#include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -22,10 +19,13 @@ namespace Ui {
 
 namespace {
 const QString kGroupKey = "widgets/stageplay-export-dialog/";
-const QString kFormatKey = kGroupKey + "format";
 const QString kIncludeTitlePageKey = kGroupKey + "include-title-page";
+const QString kIncludeSynopsisKey = kGroupKey + "include-synopsis";
+const QString kIncludeScriptKey = kGroupKey + "include-script";
+const QString kFormatKey = kGroupKey + "format";
 const QString kIncludeInlineNotesKey = kGroupKey + "include-inline-notes";
 const QString kIncludeReviewMarksKey = kGroupKey + "include-review-marks";
+const QString kWatermarkKey = kGroupKey + "watermark";
 const QString kOpenDocumentAfterExportKey = kGroupKey + "open-document-after-export";
 } // namespace
 
@@ -35,8 +35,11 @@ public:
     explicit Implementation(QWidget* _parent);
 
 
-    ComboBox* fileFormat = nullptr;
     CheckBox* includeTitlePage = nullptr;
+    CheckBox* includeSynopsis = nullptr;
+    CheckBox* includeScript = nullptr;
+
+    ComboBox* fileFormat = nullptr;
     CheckBox* includeInlineNotes = nullptr;
     CheckBox* includeReviewMarks = nullptr;
     TextField* watermark = nullptr;
@@ -48,8 +51,10 @@ public:
 };
 
 StageplayExportDialog::Implementation::Implementation(QWidget* _parent)
-    : fileFormat(new ComboBox(_parent))
-    , includeTitlePage(new CheckBox(_parent))
+    : includeTitlePage(new CheckBox(_parent))
+    , includeSynopsis(new CheckBox(_parent))
+    , includeScript(new CheckBox(_parent))
+    , fileFormat(new ComboBox(_parent))
     , includeInlineNotes(new CheckBox(_parent))
     , includeReviewMarks(new CheckBox(_parent))
     , watermark(new TextField(_parent))
@@ -86,15 +91,26 @@ StageplayExportDialog::StageplayExportDialog(QWidget* _parent)
     setAcceptButton(d->exportButton);
     setRejectButton(d->cancelButton);
 
+    auto leftLayout = new QVBoxLayout;
+    leftLayout->setContentsMargins({});
+    leftLayout->setSpacing(0);
+    leftLayout->addWidget(d->includeTitlePage);
+    leftLayout->addWidget(d->includeSynopsis);
+    leftLayout->addWidget(d->includeScript);
+    leftLayout->addStretch();
     int row = 0;
-    contentsLayout()->addWidget(d->fileFormat, row++, 0);
-    contentsLayout()->addWidget(d->includeTitlePage, row++, 0);
-    contentsLayout()->addWidget(d->includeInlineNotes, row++, 0);
-    contentsLayout()->addWidget(d->includeReviewMarks, row++, 0);
-    contentsLayout()->addWidget(d->watermark, row++, 0);
-    contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
+    int column = 0;
+    contentsLayout()->addLayout(leftLayout, row, column++, 4, 1);
+    contentsLayout()->addWidget(d->fileFormat, row++, column);
+    contentsLayout()->addWidget(d->includeInlineNotes, row++, column);
+    contentsLayout()->addWidget(d->includeReviewMarks, row++, column);
+    contentsLayout()->addWidget(d->watermark, row++, column, Qt::AlignTop);
+    contentsLayout()->setRowStretch(row++, 1);
+    column = 0;
+    contentsLayout()->addLayout(d->buttonsLayout, row++, column, 1, 2);
+    contentsLayout()->setColumnStretch(1, 1);
 
-    connect(d->fileFormat, &ComboBox::currentIndexChanged, this, [this] {
+    auto updateParametersVisibility = [this] {
         auto isPrintInlineNotesVisible = true;
         auto isPrintReviewMarksVisible = true;
         auto isWatermarkVisible = true;
@@ -118,21 +134,42 @@ StageplayExportDialog::StageplayExportDialog(QWidget* _parent)
             break;
         }
         }
+        if (!d->includeScript->isChecked()) {
+            isPrintInlineNotesVisible = false;
+            isPrintReviewMarksVisible = false;
+        }
         d->includeInlineNotes->setVisible(isPrintInlineNotesVisible);
         d->includeReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->watermark->setVisible(isWatermarkVisible);
-    });
+    };
+    connect(d->includeScript, &CheckBox::checkedChanged, this, updateParametersVisibility);
+    connect(d->fileFormat, &ComboBox::currentIndexChanged, this, updateParametersVisibility);
+    //
+    auto updateExportEnabled = [this] {
+        d->exportButton->setEnabled(d->includeTitlePage->isChecked()
+                                    || d->includeSynopsis->isChecked()
+                                    || d->includeScript->isChecked());
+    };
+    connect(d->includeTitlePage, &CheckBox::checkedChanged, this, updateExportEnabled);
+    connect(d->includeSynopsis, &CheckBox::checkedChanged, this, updateExportEnabled);
+    connect(d->includeScript, &CheckBox::checkedChanged, this, updateExportEnabled);
     //
     connect(d->exportButton, &Button::clicked, this, &StageplayExportDialog::exportRequested);
     connect(d->cancelButton, &Button::clicked, this, &StageplayExportDialog::canceled);
 
+    updateParametersVisibility();
+    updateExportEnabled();
+
     QSettings settings;
+    d->includeTitlePage->setChecked(settings.value(kIncludeTitlePageKey, true).toBool());
+    d->includeSynopsis->setChecked(settings.value(kIncludeSynopsisKey, true).toBool());
+    d->includeScript->setChecked(settings.value(kIncludeScriptKey, false).toBool());
     const auto fileFormatIndex
         = d->fileFormat->model()->index(settings.value(kFormatKey, 0).toInt(), 0);
     d->fileFormat->setCurrentIndex(fileFormatIndex);
-    d->includeTitlePage->setChecked(settings.value(kIncludeTitlePageKey, true).toBool());
     d->includeInlineNotes->setChecked(settings.value(kIncludeInlineNotesKey, false).toBool());
     d->includeReviewMarks->setChecked(settings.value(kIncludeReviewMarksKey, true).toBool());
+    d->watermark->setText(settings.value(kWatermarkKey).toString());
     d->openDocumentAfterExport->setChecked(
         settings.value(kOpenDocumentAfterExportKey, true).toBool());
 }
@@ -140,10 +177,13 @@ StageplayExportDialog::StageplayExportDialog(QWidget* _parent)
 StageplayExportDialog::~StageplayExportDialog()
 {
     QSettings settings;
-    settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
     settings.setValue(kIncludeTitlePageKey, d->includeTitlePage->isChecked());
+    settings.setValue(kIncludeSynopsisKey, d->includeSynopsis->isChecked());
+    settings.setValue(kIncludeScriptKey, d->includeScript->isChecked());
+    settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
     settings.setValue(kIncludeInlineNotesKey, d->includeInlineNotes->isChecked());
     settings.setValue(kIncludeReviewMarksKey, d->includeReviewMarks->isChecked());
+    settings.setValue(kWatermarkKey, d->watermark->text());
     settings.setValue(kOpenDocumentAfterExportKey, d->openDocumentAfterExport->isChecked());
 }
 
@@ -153,6 +193,8 @@ BusinessLayer::StageplayExportOptions StageplayExportDialog::exportOptions() con
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
     options.includeTiltePage = d->includeTitlePage->isChecked();
+    options.includeSynopsis = d->includeSynopsis->isChecked();
+    options.includeScript = d->includeScript->isChecked();
     options.includeInlineNotes = d->includeInlineNotes->isChecked();
     options.includeReviewMarks = d->includeReviewMarks->isChecked();
     options.watermark = d->watermark->text();
@@ -167,7 +209,7 @@ bool StageplayExportDialog::openDocumentAfterExport() const
 
 QWidget* StageplayExportDialog::focusedWidgetAfterShow() const
 {
-    return d->fileFormat;
+    return d->includeTitlePage;
 }
 
 QWidget* StageplayExportDialog::lastFocusableWidget() const
@@ -179,8 +221,11 @@ void StageplayExportDialog::updateTranslations()
 {
     setTitle(tr("Export stageplay"));
 
+    d->includeTitlePage->setText(tr("Title page"));
+    d->includeSynopsis->setText(tr("Synopsis"));
+    d->includeScript->setText(tr("Script"));
+
     d->fileFormat->setLabel(tr("Format"));
-    d->includeTitlePage->setText(tr("Include title page"));
     d->includeInlineNotes->setText(tr("Include inline notes"));
     d->includeReviewMarks->setText(tr("Include review marks"));
     d->watermark->setLabel(tr("Watermark"));
@@ -193,6 +238,8 @@ void StageplayExportDialog::updateTranslations()
 void StageplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
+
+    setContentMaximumWidth(topLevelWidget()->width() * 0.7);
 
     auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
     titleMargins.setTop(Ui::DesignSystem::layout().px8());
@@ -213,6 +260,8 @@ void StageplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
 
     for (auto checkBox : {
              d->includeTitlePage,
+             d->includeSynopsis,
+             d->includeScript,
              d->includeInlineNotes,
              d->includeReviewMarks,
              d->openDocumentAfterExport,
