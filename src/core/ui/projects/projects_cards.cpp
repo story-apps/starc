@@ -72,12 +72,6 @@ private:
      */
     qreal nextZValue() const;
 
-    /**
-     * @brief Получить области действий карточки
-     * @note В списке они идут от последнего к первому, так проще формировать
-     */
-    QVector<QRectF> actionsRects() const;
-
 
     /**
      * @brief Проект для отображения на карточке
@@ -88,11 +82,6 @@ private:
      * @brief  Декорации тени при наведении
      */
     QVariantAnimation m_shadowHeightAnimation;
-
-    /**
-     * @brief  Декорации иконок действий при наведении
-     */
-    QVariantAnimation m_actionsOpacityAnimation;
 
     /**
      * @brief Декорации при клике
@@ -118,13 +107,6 @@ ProjectCard::ProjectCard(QGraphicsItem* _parent)
     QObject::connect(&m_shadowHeightAnimation, &QVariantAnimation::valueChanged,
                      [this] { update(); });
 
-    m_actionsOpacityAnimation.setStartValue(0.0);
-    m_actionsOpacityAnimation.setEndValue(1.0);
-    m_actionsOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    m_actionsOpacityAnimation.setDuration(220);
-    QObject::connect(&m_actionsOpacityAnimation, &QVariantAnimation::valueChanged,
-                     [this] { update(); });
-
     m_decorationRadiusAnimation.setDuration(240);
     QObject::connect(&m_decorationRadiusAnimation, &QVariantAnimation::valueChanged,
                      [this] { update(); });
@@ -139,8 +121,6 @@ ProjectCard::~ProjectCard()
 {
     m_shadowHeightAnimation.disconnect();
     m_shadowHeightAnimation.stop();
-    m_actionsOpacityAnimation.disconnect();
-    m_actionsOpacityAnimation.stop();
     m_decorationRadiusAnimation.disconnect();
     m_decorationRadiusAnimation.stop();
     m_decorationOpacityAnimation.disconnect();
@@ -235,40 +215,32 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
         textFontMetrics.elidedText(m_project.name(), Qt::ElideRight, textRect.width()));
 
     //
-    // Путь
-    //
-    const QColor betweenBackgroundColor = ColorHelper::colorBetween(
-        Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::color().background());
-    _painter->setPen(betweenBackgroundColor);
-    _painter->setFont(Ui::DesignSystem::font().body2());
-    const QFontMetricsF fontMetrics(_painter->font());
-    const QRectF pathRect(textRect.left(), textRect.bottom() + Ui::DesignSystem::layout().px4(),
-                          textRect.width(), fontMetrics.lineSpacing());
-    _painter->drawText(pathRect, Qt::AlignLeft | Qt::AlignVCenter,
-                       fontMetrics.elidedText(m_project.path(), Qt::ElideLeft, pathRect.width()));
-
-    //
     // Логлайн
     //
     _painter->setPen(Ui::DesignSystem::color().onBackground());
-    const QRectF loglineRect(pathRect.left(), pathRect.bottom() + Ui::DesignSystem::layout().px4(),
-                             pathRect.width(), fontMetrics.lineSpacing() * 5);
-    const QString text = TextHelper::elidedText(m_project.logline(), _painter->font(), loglineRect);
-    _painter->drawText(loglineRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, text);
-
-    //
-    // Нижняя строка формируется в зависимости от того, наведена ли мышь на проект
-    // и разруливается это всё за счёт прозрачности
-    //
+    _painter->setFont(Ui::DesignSystem::font().body2());
+    const auto fullLoglinHeight
+        = TextHelper::heightForWidth(m_project.logline(), _painter->font(), textRect.width());
+    const QFontMetricsF fontMetrics(_painter->font());
+    const QRectF loglineRect(textRect.left(), textRect.bottom() + Ui::DesignSystem::layout().px8(),
+                             textRect.width(),
+                             std::min(fullLoglinHeight, fontMetrics.lineSpacing() * 5));
+    const QString loglineCorrected
+        = TextHelper::elidedText(m_project.logline(), _painter->font(), loglineRect);
+    _painter->drawText(loglineRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap,
+                       loglineCorrected);
 
     //
     // Дата последнего изменения
     //
-    _painter->setOpacity(1.0 - m_actionsOpacityAnimation.currentValue().toReal());
+    const QColor betweenBackgroundColor = ColorHelper::colorBetween(
+        Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::color().background());
     _painter->setPen(betweenBackgroundColor);
-    const qreal lastDateHeight = fontMetrics.lineSpacing() + Ui::DesignSystem::layout().px8() * 2;
-    const QRectF lastDateRect(loglineRect.left(), backgroundRect.bottom() - lastDateHeight,
-                              pathRect.width(), lastDateHeight);
+    const auto lastDateTop = loglineCorrected.isEmpty()
+        ? loglineRect.top()
+        : loglineRect.bottom() + Ui::DesignSystem::layout().px4();
+    const QRectF lastDateRect(loglineRect.left(), lastDateTop, loglineRect.width(),
+                              fontMetrics.lineSpacing());
     _painter->drawText(lastDateRect, Qt::AlignLeft | Qt::AlignTop, m_project.displayLastEditTime());
 
     //
@@ -283,21 +255,8 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
         backgroundRect.bottom() - Ui::DesignSystem::layout().px24() * 2,
         Ui::DesignSystem::layout().px24() * 2, Ui::DesignSystem::layout().px24() * 2);
     _painter->drawText(iconRect, Qt::AlignCenter,
-                       m_project.type() == ManagementLayer::ProjectType::Local ? u8"\U000f0379"
-                                                                               : u8"\U000f0163");
-
-    //
-    // Иконки действий
-    //
-    _painter->setOpacity(m_actionsOpacityAnimation.currentValue().toReal());
-    const auto iconsRects = actionsRects();
-    if (m_project.type() == ManagementLayer::ProjectType::Local) {
-        _painter->drawText(iconsRects[0], Qt::AlignCenter, u8"\U000f0167"); // move to cloud
-        _painter->drawText(iconsRects[1], Qt::AlignCenter, u8"\U000f06d1"); // hide
-    } else {
-        _painter->drawText(iconsRects[0], Qt::AlignCenter, u8"\U000f03eb"); // pencil
-        _painter->drawText(iconsRects[1], Qt::AlignCenter, u8"\U000f01b4"); // delete
-    }
+                       m_project.type() == ManagementLayer::ProjectType::Local ? u8"\U000F0322"
+                                                                               : u8"\U000F0163");
 
     //
     // Декорация
@@ -320,8 +279,6 @@ void ProjectCard::hoverEnterEvent(QGraphicsSceneHoverEvent* _event)
     QGraphicsRectItem::hoverEnterEvent(_event);
     m_shadowHeightAnimation.setDirection(QVariantAnimation::Forward);
     m_shadowHeightAnimation.start();
-    m_actionsOpacityAnimation.setDirection(QVariantAnimation::Forward);
-    m_actionsOpacityAnimation.start();
 }
 
 void ProjectCard::hoverLeaveEvent(QGraphicsSceneHoverEvent* _event)
@@ -329,8 +286,6 @@ void ProjectCard::hoverLeaveEvent(QGraphicsSceneHoverEvent* _event)
     QGraphicsRectItem::hoverLeaveEvent(_event);
     m_shadowHeightAnimation.setDirection(QVariantAnimation::Backward);
     m_shadowHeightAnimation.start();
-    m_actionsOpacityAnimation.setDirection(QVariantAnimation::Backward);
-    m_actionsOpacityAnimation.start();
 }
 
 void ProjectCard::mousePressEvent(QGraphicsSceneMouseEvent* _event)
@@ -343,25 +298,24 @@ void ProjectCard::mousePressEvent(QGraphicsSceneMouseEvent* _event)
     m_decorationRadiusAnimation.setEasingCurve(QEasingCurve::InQuad);
     m_decorationRadiusAnimation.setStartValue(1.0);
     m_decorationRadiusAnimation.setEndValue(rect().width());
-    for (const auto& rect : actionsRects()) {
-        if (rect.contains(_event->pos())) {
-            m_decorationCenterPosition = rect.center();
-            m_decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
-            m_decorationRadiusAnimation.setStartValue(rect.width() / 2);
-            m_decorationRadiusAnimation.setEndValue(rect.height() * 2 / 3);
-            break;
-        }
-    }
     m_decorationOpacityAnimation.setCurrentTime(0);
     m_decorationRadiusAnimation.start();
     m_decorationOpacityAnimation.setStartValue(0.5);
     m_decorationOpacityAnimation.setEndValue(0.15);
     m_decorationOpacityAnimation.start();
+
+    if (_event->button() == Qt::RightButton) {
+        emit projectsScene()->projectContextMenuRequested(m_project);
+    }
 }
 
 void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
 {
     QGraphicsRectItem::mouseReleaseEvent(_event);
+
+    if (_event->button() == Qt::RightButton) {
+        return;
+    }
 
     auto scene = projectsScene();
 
@@ -371,34 +325,13 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
         m_decorationOpacityAnimation.setEndValue(0.0);
         m_decorationOpacityAnimation.resume();
 
-        const auto iconsRects = actionsRects();
-        if (m_project.type() == ManagementLayer::ProjectType::Local) {
-            if (iconsRects[0].contains(_event->pos())) {
-                emit scene->moveProjectToCloudRequested(m_project);
-            } else if (iconsRects[1].contains(_event->pos())) {
-                needToReorder = false;
-                emit scene->hideProjectRequested(m_project);
-            } else {
-                //
-                // Отложенно уведомляем о клике на карточке.
-                // NOTE: Важно, чтобы это событие выполнилось после завершения анимации, чтобы
-                // корректно обработать кейс, когда проект был удалён/переименован на компе, в
-                // результате чего, клик на карточке приведёт к её удалению
-                //
-                QMetaObject::invokeMethod(scene,
-                                          [this, scene] { emit scene->projectPressed(m_project); });
-            }
-        } else {
-            if (iconsRects[0].contains(_event->pos())) {
-                emit scene->changeProjectNameRequested(m_project);
-            } else if (iconsRects[1].contains(_event->pos())) {
-                needToReorder = false;
-                emit scene->removeProjectRequested(m_project);
-            } else {
-                QMetaObject::invokeMethod(scene,
-                                          [this, scene] { emit scene->projectPressed(m_project); });
-            }
-        }
+        //
+        // Отложенно уведомляем о клике на карточке.
+        // NOTE: Важно, чтобы это событие выполнилось после завершения анимации, чтобы
+        // корректно обработать кейс, когда проект был удалён/переименован на компе, в
+        // результате чего, клик на карточке приведёт к её удалению
+        //
+        QMetaObject::invokeMethod(scene, [this, scene] { emit scene->projectPressed(m_project); });
     } else {
         m_decorationOpacityAnimation.setStartValue(0.15);
         m_decorationOpacityAnimation.setEndValue(0.0);
@@ -429,34 +362,6 @@ qreal ProjectCard::nextZValue() const
     static qreal z = 0.0;
     z += 0.001;
     return z;
-}
-
-QVector<QRectF> ProjectCard::actionsRects() const
-{
-    const bool isLeftToRight = QApplication::isLeftToRight();
-    const QRectF backgroundRect = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins());
-    const QPixmap& poster = m_project.poster();
-    const QSizeF posterSize
-        = poster.size().scaled(backgroundRect.size().toSize(), Qt::KeepAspectRatio);
-    const QRectF posterRect(isLeftToRight
-                                ? backgroundRect.topLeft()
-                                : backgroundRect.topRight() - QPointF(posterSize.width(), 0),
-                            posterSize);
-    QRectF iconRect(isLeftToRight ? posterRect.right() + Ui::DesignSystem::layout().px12()
-                                  : posterRect.left() - Ui::DesignSystem::layout().px12()
-                            - Ui::DesignSystem::layout().px24(),
-                    backgroundRect.bottom() - Ui::DesignSystem::layout().px24() * 2,
-                    Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24() * 2);
-
-    QVector<QRectF> rects;
-    const int kRepeats = m_project.type() == ManagementLayer::ProjectType::Local ? 2 : 2;
-    for (int repeat = 0; repeat < kRepeats; ++repeat) {
-        rects.append(iconRect);
-        iconRect.moveLeft(iconRect.left()
-                          + (isLeftToRight ? 1 : -1) * Ui::DesignSystem::layout().px8() * 5);
-    }
-
-    return rects;
 }
 
 } // namespace
@@ -749,14 +654,8 @@ ProjectsCards::ProjectsCards(QWidget* _parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(d->scene, &ProjectsScene::projectPressed, this, &ProjectsCards::openProjectRequested);
-    connect(d->scene, &ProjectsScene::moveProjectToCloudRequested, this,
-            &ProjectsCards::moveProjectToCloudRequested);
-    connect(d->scene, &ProjectsScene::hideProjectRequested, this,
-            &ProjectsCards::hideProjectRequested);
-    connect(d->scene, &ProjectsScene::changeProjectNameRequested, this,
-            &ProjectsCards::changeProjectNameRequested);
-    connect(d->scene, &ProjectsScene::removeProjectRequested, this,
-            &ProjectsCards::removeProjectRequested);
+    connect(d->scene, &ProjectsScene::projectContextMenuRequested, this,
+            &ProjectsCards::projectContextMenuRequested);
     connect(d->scene, &ProjectsScene::reorderProjectCardRequested, this,
             [this](QGraphicsItem* _projectCard) { d->reorderCard(_projectCard); });
 }

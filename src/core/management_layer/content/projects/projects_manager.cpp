@@ -6,14 +6,17 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
+#include <ui/design_system/design_system.h>
 #include <ui/projects/create_project_dialog.h>
 #include <ui/projects/projects_navigator.h>
 #include <ui/projects/projects_tool_bar.h>
 #include <ui/projects/projects_view.h>
+#include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/file_helper.h>
 
+#include <QAction>
 #include <QCryptographicHash>
 #include <QDateTime>
 #include <QDir>
@@ -22,6 +25,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QMenu>
 #include <QStandardPaths>
 #include <QTimer>
 #include <QWidget>
@@ -84,36 +88,53 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
             &ProjectsManager::openProjectRequested);
     connect(d->view, &Ui::ProjectsView::openProjectRequested, this,
             [this](const Project& _project) { emit openChoosedProjectRequested(_project.path()); });
+    connect(d->view, &Ui::ProjectsView::projectContextMenuRequested, this,
+            [this](const Project& _project) {
+                auto showInFolderAction = new QAction;
+                showInFolderAction->setIconText(u8"\U000F178B");
+                showInFolderAction->setText(tr("Show in folder"));
+                connect(showInFolderAction, &QAction::triggered, this,
+                        [_project] { FileHelper::showInGraphicalShell(_project.path()); });
+                //
+                auto hideFromRecentAction = new QAction;
+                hideFromRecentAction->setIconText(u8"\U000F06D1");
+                hideFromRecentAction->setText(tr("Hide from recent list"));
+                connect(hideFromRecentAction, &QAction::triggered, this, [this, _project] {
+                    auto dialog = new Dialog(d->view->topLevelWidget());
+                    constexpr int cancelButtonId = 0;
+                    constexpr int hideButtonId = 1;
+                    dialog->showDialog(
+                        {}, tr("Do you really want to hide a project from the recent list?"),
+                        { { cancelButtonId, tr("No"), Dialog::RejectButton },
+                          { hideButtonId, tr("Yes, hide"), Dialog::AcceptButton } });
+                    QObject::connect(dialog, &Dialog::finished, this,
+                                     [this, _project, cancelButtonId,
+                                      dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                                         dialog->hideDialog();
 
-    connect(
-        d->view, &Ui::ProjectsView::hideProjectRequested, this, [this](const Project& _project) {
-            auto dialog = new Dialog(d->view->topLevelWidget());
-            constexpr int cancelButtonId = 0;
-            constexpr int hideButtonId = 1;
-            dialog->showDialog({}, tr("Do you really want to hide a project from the recent list?"),
-                               { { cancelButtonId, tr("No"), Dialog::RejectButton },
-                                 { hideButtonId, tr("Yes, hide"), Dialog::AcceptButton } });
-            QObject::connect(
-                dialog, &Dialog::finished, this,
-                [this, _project, cancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
-                    dialog->hideDialog();
+                                         //
+                                         // Пользователь передумал скрывать
+                                         //
+                                         if (_buttonInfo.id == cancelButtonId) {
+                                             return;
+                                         }
 
-                    //
-                    // Пользователь передумал скрывать
-                    //
-                    if (_buttonInfo.id == cancelButtonId) {
-                        return;
-                    }
-
-                    //
-                    // Если таки хочет, то скрываем проект
-                    //
-                    d->projects->remove(_project);
+                                         //
+                                         // Если таки хочет, то скрываем проект
+                                         //
+                                         d->projects->remove(_project);
+                                     });
+                    QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
                 });
-            QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
-        });
-    connect(d->view, &Ui::ProjectsView::removeProjectRequested, this,
-            [this](const Project& _project) { d->projects->remove(_project); });
+
+                auto menu = new ContextMenu(d->view);
+                menu->setActions({ showInFolderAction, hideFromRecentAction });
+                menu->setBackgroundColor(Ui::DesignSystem::color().background());
+                menu->setTextColor(Ui::DesignSystem::color().onBackground());
+                connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
+
+                menu->showContextMenu(QCursor::pos());
+            });
 }
 
 ProjectsManager::~ProjectsManager() = default;
