@@ -156,8 +156,6 @@ ColorPallete::ColorPallete(QWidget* _parent)
     for (const auto& color : customColors) {
         d->customColors.append(color);
     }
-
-    designSystemChangeEvent(nullptr);
 }
 
 ColorPallete::~ColorPallete() = default;

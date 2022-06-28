@@ -4,9 +4,11 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
+#include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/color_helper.h>
 
 #include <QEvent>
 #include <QGridLayout>
@@ -26,6 +28,7 @@ const QString kFormatKey = kGroupKey + "format";
 const QString kIncludeInlineNotesKey = kGroupKey + "include-inline-notes";
 const QString kIncludeReviewMarksKey = kGroupKey + "include-review-marks";
 const QString kWatermarkKey = kGroupKey + "watermark";
+const QString kWatermarkColorKey = kGroupKey + "watermark-color";
 const QString kOpenDocumentAfterExportKey = kGroupKey + "open-document-after-export";
 } // namespace
 
@@ -43,6 +46,7 @@ public:
     CheckBox* includeInlineNotes = nullptr;
     CheckBox* includeReviewMarks = nullptr;
     TextField* watermark = nullptr;
+    ColorPickerPopup* watermarkColorPopup = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
     CheckBox* openDocumentAfterExport = nullptr;
@@ -58,6 +62,7 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     , includeInlineNotes(new CheckBox(_parent))
     , includeReviewMarks(new CheckBox(_parent))
     , watermark(new TextField(_parent))
+    , watermarkColorPopup(new ColorPickerPopup(_parent))
     , buttonsLayout(new QHBoxLayout)
     , openDocumentAfterExport(new CheckBox(_parent))
     , cancelButton(new Button(_parent))
@@ -69,8 +74,9 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     auto formatsModel = new QStringListModel({ "PDF", "DOCX" });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
-
     watermark->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    watermark->setTrailingIcon(u8"\U000F0765");
+    watermarkColorPopup->setColorCanBeDeselected(false);
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
@@ -155,6 +161,12 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
     connect(d->includeSynopsis, &CheckBox::checkedChanged, this, updateExportEnabled);
     connect(d->includeScript, &CheckBox::checkedChanged, this, updateExportEnabled);
     //
+    connect(d->watermark, &TextField::trailingIconPressed, this, [this] {
+        d->watermarkColorPopup->showPopup(d->watermark, Qt::AlignBottom | Qt::AlignRight);
+    });
+    connect(d->watermarkColorPopup, &ColorPickerPopup::selectedColorChanged, this,
+            [this](const QColor& _color) { d->watermark->setTrailingIconColor(_color); });
+    //
     connect(d->exportButton, &Button::clicked, this, &ComicBookExportDialog::exportRequested);
     connect(d->cancelButton, &Button::clicked, this, &ComicBookExportDialog::canceled);
 
@@ -171,8 +183,12 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
     d->includeInlineNotes->setChecked(settings.value(kIncludeInlineNotesKey, false).toBool());
     d->includeReviewMarks->setChecked(settings.value(kIncludeReviewMarksKey, true).toBool());
     d->watermark->setText(settings.value(kWatermarkKey).toString());
+    d->watermarkColorPopup->setSelectedColor(
+        settings.value(kWatermarkColorKey, QColor("#B7B7B7")).value<QColor>());
     d->openDocumentAfterExport->setChecked(
         settings.value(kOpenDocumentAfterExportKey, true).toBool());
+
+    d->watermark->setTrailingIconColor(d->watermarkColorPopup->selectedColor());
 }
 
 ComicBookExportDialog::~ComicBookExportDialog()
@@ -185,6 +201,7 @@ ComicBookExportDialog::~ComicBookExportDialog()
     settings.setValue(kIncludeInlineNotesKey, d->includeInlineNotes->isChecked());
     settings.setValue(kIncludeReviewMarksKey, d->includeReviewMarks->isChecked());
     settings.setValue(kWatermarkKey, d->watermark->text());
+    settings.setValue(kWatermarkColorKey, d->watermarkColorPopup->selectedColor());
     settings.setValue(kOpenDocumentAfterExportKey, d->openDocumentAfterExport->isChecked());
 }
 
@@ -199,7 +216,7 @@ BusinessLayer::ComicBookExportOptions ComicBookExportDialog::exportOptions() con
     options.includeInlineNotes = d->includeInlineNotes->isChecked();
     options.includeReviewMarks = d->includeReviewMarks->isChecked();
     options.watermark = d->watermark->text();
-    options.watermarkColor = QColor(100, 100, 100, 30);
+    options.watermarkColor = ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3);
     return options;
 }
 
@@ -268,6 +285,9 @@ void ComicBookExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
+
+    d->watermarkColorPopup->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->watermarkColorPopup->setTextColor(Ui::DesignSystem::color().onBackground());
 
     for (auto button : { d->exportButton, d->cancelButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());

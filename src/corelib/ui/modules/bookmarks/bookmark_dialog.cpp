@@ -63,8 +63,6 @@ BookmarkDialog::BookmarkDialog(QWidget* _parent)
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
 
 
-    connect(d->bookmarkName, &TextField::textChanged, this,
-            [this] { d->bookmarkName->setError({}); });
     connect(d->bookmarkName, &TextField::trailingIconPressed, this, [this] {
         d->bookmarkColorPopup->showPopup(d->bookmarkName, Qt::AlignBottom | Qt::AlignRight);
     });
@@ -72,10 +70,6 @@ BookmarkDialog::BookmarkDialog(QWidget* _parent)
             [this](const QColor& _color) { d->bookmarkName->setTrailingIconColor(_color); });
     connect(d->cancelButton, &Button::clicked, this, &BookmarkDialog::hideDialog);
     connect(d->saveButton, &Button::clicked, this, &BookmarkDialog::savePressed);
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 BookmarkDialog::~BookmarkDialog() = default;

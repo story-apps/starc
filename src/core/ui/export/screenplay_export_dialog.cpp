@@ -4,9 +4,11 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
+#include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/color_helper.h>
 
 #include <QEvent>
 #include <QGridLayout>
@@ -29,6 +31,7 @@ const QString kIncludeInlineNotesKey = kGroupKey + "include-inline-notes";
 const QString kIncludeReviewMarksKey = kGroupKey + "include-review-marks";
 const QString kScenesToPrintKey = kGroupKey + "scenes-to-print";
 const QString kWatermarkKey = kGroupKey + "watermark";
+const QString kWatermarkColorKey = kGroupKey + "watermark-color";
 const QString kOpenDocumentAfterExportKey = kGroupKey + "open-document-after-export";
 } // namespace
 
@@ -54,6 +57,7 @@ public:
     CheckBox* includeReviewMarks = nullptr;
     TextField* exportConcreteScenes = nullptr;
     TextField* watermark = nullptr;
+    ColorPickerPopup* watermarkColorPopup = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
     CheckBox* openDocumentAfterExport = nullptr;
@@ -72,20 +76,20 @@ ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
     , includeReviewMarks(new CheckBox(_parent))
     , exportConcreteScenes(new TextField(_parent))
     , watermark(new TextField(_parent))
+    , watermarkColorPopup(new ColorPickerPopup(_parent))
     , buttonsLayout(new QHBoxLayout)
     , openDocumentAfterExport(new CheckBox(_parent))
     , cancelButton(new Button(_parent))
     , exportButton(new Button(_parent))
 {
-    using namespace BusinessLayer;
-
     fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     auto formatsModel = new QStringListModel({ "PDF", "DOCX", "FDX", "Fountain" });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
-
     exportConcreteScenes->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     watermark->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    watermark->setTrailingIcon(u8"\U000F0765");
+    watermarkColorPopup->setColorCanBeDeselected(false);
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
@@ -237,6 +241,12 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
     connect(d->includeTreatment, &CheckBox::checkedChanged, this, updateExportEnabled);
     connect(d->includeScreenplay, &CheckBox::checkedChanged, this, updateExportEnabled);
     //
+    connect(d->watermark, &TextField::trailingIconPressed, this, [this] {
+        d->watermarkColorPopup->showPopup(d->watermark, Qt::AlignBottom | Qt::AlignRight);
+    });
+    connect(d->watermarkColorPopup, &ColorPickerPopup::selectedColorChanged, this,
+            [this](const QColor& _color) { d->watermark->setTrailingIconColor(_color); });
+    //
     connect(d->exportButton, &Button::clicked, this, &ScreenplayExportDialog::exportRequested);
     connect(d->cancelButton, &Button::clicked, this, &ScreenplayExportDialog::canceled);
 
@@ -256,8 +266,12 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
     d->includeReviewMarks->setChecked(settings.value(kIncludeReviewMarksKey, true).toBool());
     d->exportConcreteScenes->setText(settings.value(kScenesToPrintKey).toString());
     d->watermark->setText(settings.value(kWatermarkKey).toString());
+    d->watermarkColorPopup->setSelectedColor(
+        settings.value(kWatermarkColorKey, QColor("#B7B7B7")).value<QColor>());
     d->openDocumentAfterExport->setChecked(
         settings.value(kOpenDocumentAfterExportKey, true).toBool());
+
+    d->watermark->setTrailingIconColor(d->watermarkColorPopup->selectedColor());
 }
 
 ScreenplayExportDialog::~ScreenplayExportDialog()
@@ -273,6 +287,7 @@ ScreenplayExportDialog::~ScreenplayExportDialog()
     settings.setValue(kIncludeReviewMarksKey, d->includeReviewMarks->isChecked());
     settings.setValue(kScenesToPrintKey, d->exportConcreteScenes->text());
     settings.setValue(kWatermarkKey, d->watermark->text());
+    settings.setValue(kWatermarkColorKey, d->watermarkColorPopup->selectedColor());
     settings.setValue(kOpenDocumentAfterExportKey, d->openDocumentAfterExport->isChecked());
 }
 
@@ -290,7 +305,7 @@ BusinessLayer::ScreenplayExportOptions ScreenplayExportDialog::exportOptions() c
     options.includeReviewMarks = d->includeReviewMarks->isChecked();
     options.exportScenes = d->scenesToPrint();
     options.watermark = d->watermark->text();
-    options.watermarkColor = QColor(100, 100, 100, 30);
+    options.watermarkColor = ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3);
     return options;
 }
 
@@ -368,6 +383,9 @@ void ScreenplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
+
+    d->watermarkColorPopup->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->watermarkColorPopup->setTextColor(Ui::DesignSystem::color().onBackground());
 
     for (auto button : { d->exportButton, d->cancelButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
