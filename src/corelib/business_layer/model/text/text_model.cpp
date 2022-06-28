@@ -1930,6 +1930,16 @@ void TextModel::applyPatch(const QByteArray& _patch)
         }
     }
 
+    //
+    // Если у нас в буфере есть перенесённые элементы и текущий является их предводителем
+    //
+    if (!movedSiblingItems.isEmpty() && previousModelItem != nullptr) {
+        for (auto siblingItem : reversed(movedSiblingItems)) {
+            takeItem(siblingItem, siblingItem->parent());
+            insertItem(siblingItem, previousModelItem);
+        }
+    }
+
     qDeleteAll(oldItems);
     qDeleteAll(newItems);
 
