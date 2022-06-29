@@ -151,7 +151,7 @@ void ImportManager::import()
         = settingsValue(DataStorageLayer::kProjectImportFolderKey).toString();
     const auto importFilePath
         = QFileDialog::getOpenFileName(d->topLevelWidget, tr("Choose the file to import"),
-                                       projectImportFolder, DialogHelper::importFilters());
+                                       projectImportFolder, DialogHelper::filtersForImport());
     if (importFilePath.isEmpty()) {
         return;
     }

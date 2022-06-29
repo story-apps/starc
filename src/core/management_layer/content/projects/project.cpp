@@ -12,12 +12,14 @@ class Project::Implementation
 public:
     ProjectType type = ProjectType::Invalid;
     QString path;
+    QString realPath;
 
     mutable QPixmap poster;
     QString posterPath;
     QString name;
     QString logline;
     QDateTime lastEditTime;
+    bool canAskAboutSwitch = true;
     int id = -1;
 };
 
@@ -111,6 +113,16 @@ void Project::setPath(const QString& _path)
     d->path = _path;
 }
 
+QString Project::realPath() const
+{
+    return d->realPath;
+}
+
+void Project::setRealPath(const QString& _path)
+{
+    d->realPath = _path;
+}
+
 const QPixmap& Project::poster() const
 {
     if (d->poster.isNull()) {
@@ -169,6 +181,16 @@ QDateTime Project::lastEditTime() const
 void Project::setLastEditTime(const QDateTime& _time)
 {
     d->lastEditTime = _time;
+}
+
+bool Project::canAskAboutSwitch() const
+{
+    return d->canAskAboutSwitch;
+}
+
+void Project::setCanAskAboutSwitch(bool _can)
+{
+    d->canAskAboutSwitch = _can;
 }
 
 int Project::id() const

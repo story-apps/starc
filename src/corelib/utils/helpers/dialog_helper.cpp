@@ -100,20 +100,49 @@ QString DialogHelper::pdfFilter()
                       ExtensionHelper::pdf());
 }
 
-QString DialogHelper::importFilters()
+QString DialogHelper::filtersForOpenProject()
 {
-    QString filters;
-    filters.append(
-        makeFilter(QApplication::translate("DialogHelper", "All supported files"),
-                   { ExtensionHelper::kitScenarist(), ExtensionHelper::finalDraft(),
-                     ExtensionHelper::finalDraftTemplate(), ExtensionHelper::trelby(),
-                     ExtensionHelper::msOfficeBinary(), ExtensionHelper::msOfficeOpenXml(),
-                     ExtensionHelper::openDocumentXml(), ExtensionHelper::fountain(),
-                     ExtensionHelper::celtx(), ExtensionHelper::plainText() }));
-    for (const auto& filter :
-         { kitScenaristFilter(), finalDraftFilter(), finalDraftTemplateFilter(), trelbyFilter(),
-           msWordFilter(), openDocumentXmlFilter(), fountainFilter(), celtxFilter(),
-           plainTextFilter() }) {
+    QString filters = makeFilter(QApplication::translate("DialogHelper", "All supported files"),
+                                 {
+                                     ExtensionHelper::starc(),
+                                     ExtensionHelper::fountain(),
+                                 });
+    for (const auto& filter : {
+             starcProjectFilter(),
+             fountainFilter(),
+         }) {
+        filters.append(";;");
+        filters.append(filter);
+    }
+    return filters;
+}
+
+QString DialogHelper::filtersForImport()
+{
+    QString filters = makeFilter(QApplication::translate("DialogHelper", "All supported files"),
+                                 {
+                                     ExtensionHelper::kitScenarist(),
+                                     ExtensionHelper::finalDraft(),
+                                     ExtensionHelper::finalDraftTemplate(),
+                                     ExtensionHelper::trelby(),
+                                     ExtensionHelper::msOfficeBinary(),
+                                     ExtensionHelper::msOfficeOpenXml(),
+                                     ExtensionHelper::openDocumentXml(),
+                                     ExtensionHelper::fountain(),
+                                     ExtensionHelper::celtx(),
+                                     ExtensionHelper::plainText(),
+                                 });
+    for (const auto& filter : {
+             kitScenaristFilter(),
+             finalDraftFilter(),
+             finalDraftTemplateFilter(),
+             trelbyFilter(),
+             msWordFilter(),
+             openDocumentXmlFilter(),
+             fountainFilter(),
+             celtxFilter(),
+             plainTextFilter(),
+         }) {
         filters.append(";;");
         filters.append(filter);
     }

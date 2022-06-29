@@ -63,6 +63,13 @@ public:
     void setCurrentProject(const QString& _path);
 
     /**
+     * @brief Установить текущий проект
+     * @note Для случаев, когда в программе открывается проект другой программы, @b _path указвыает
+     *       путь к исходному файлу, а @b _realPath путь к временному файлу проекта
+     */
+    void setCurrentProject(const QString& _path, const QString& _realPath);
+
+    /**
      * @brief Установить название текущего проекта
      */
     void setCurrentProjectName(const QString& _name);
@@ -76,6 +83,12 @@ public:
      * @brief Установить обложку текущего проекта
      */
     void setCurrentProjectCover(const QPixmap& _cover);
+
+    /**
+     * @brief Запомнить, что пользователь больше никогда нехочет видеть вопроса о переключении
+     * формата проекта
+     */
+    void setCurrentProjectNeverAskAboutSwitch();
 
     /**
      * @brief Закрыть текущий проект

@@ -49,6 +49,8 @@ public:
      * @brief Экспортировать документ
      */
     void exportScreenplay(BusinessLayer::AbstractModel* _model);
+    void exportScreenplay(BusinessLayer::AbstractModel* _model,
+                          const BusinessLayer::ScreenplayExportOptions& _options);
     void exportComicBook(BusinessLayer::AbstractModel* _model);
     void exportAudioplay(BusinessLayer::AbstractModel* _model);
     void exportStageplay(BusinessLayer::AbstractModel* _model);
@@ -131,79 +133,7 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                 // Если файл был выбран
                 //
                 exportOptions.filePath = exportFilePath;
-                //
-                // ... проверяем возможность записи в файл
-                //
-                QFile file(exportFilePath);
-                const bool canWrite = file.open(QIODevice::WriteOnly);
-                file.close();
-                if (!canWrite) {
-                    //
-                    // ... предупреждаем
-                    //
-                    QString errorMessage;
-                    const QFileInfo fileInfo(exportFilePath);
-                    if (fileInfo.exists()) {
-                        errorMessage = tr("Can't write to file. Looks like it's opened by another "
-                                          "application. Please close it and retry the export.");
-                    } else {
-                        errorMessage = tr("Can't write to file. Check permissions to write in the "
-                                          "chosen folder or choose another folder.");
-                    }
-                    StandardDialog::information(topLevelWidget, tr("Export error"), errorMessage);
-                    return;
-                }
-
-                //
-                // ... донастроим параметры экспорта
-                //
-                const auto screenplayInformation = screenplayTextModel->informationModel();
-                exportOptions.templateId = screenplayInformation->templateId();
-                exportOptions.showScenesNumbers = screenplayInformation->showSceneNumbers();
-                exportOptions.showScenesNumbersOnLeft
-                    = screenplayInformation->showSceneNumbersOnLeft();
-                exportOptions.showScenesNumbersOnRight
-                    = screenplayInformation->showSceneNumbersOnRight();
-                exportOptions.showDialoguesNumbers = screenplayInformation->showDialoguesNumbers();
-                exportOptions.header = screenplayInformation->header();
-                exportOptions.printHeaderOnTitlePage
-                    = screenplayInformation->printHeaderOnTitlePage();
-                exportOptions.footer = screenplayInformation->footer();
-                exportOptions.printFooterOnTitlePage
-                    = screenplayInformation->printFooterOnTitlePage();
-                //
-                // ... обновим папку, куда в следующий раз он предположительно опять будет
-                //     экспортировать
-                //
-                setSettingsValue(DataStorageLayer::kProjectExportFolderKey,
-                                 QFileInfo(exportFilePath).dir().absolutePath());
-                //
-                // ... и экспортируем документ
-                //
-                QScopedPointer<BusinessLayer::ScreenplayExporter> exporter;
-                switch (exportOptions.fileFormat) {
-                default:
-                case ExportFileFormat::Pdf: {
-                    exporter.reset(new BusinessLayer::ScreenplayPdfExporter);
-                    break;
-                }
-                case ExportFileFormat::Docx: {
-                    exporter.reset(new BusinessLayer::ScreenplayDocxExporter);
-                    break;
-                }
-                case ExportFileFormat::Fdx: {
-                    exporter.reset(new BusinessLayer::ScreenplayFdxExporter);
-                    break;
-                }
-                case ExportFileFormat::Fountain: {
-                    exporter.reset(new BusinessLayer::ScreenplayFountainExporter);
-                    break;
-                }
-                }
-                if (exporter.isNull()) {
-                    return;
-                }
-                exporter->exportTo(screenplayTextModel, exportOptions);
+                exportScreenplay(_model, exportOptions);
 
                 //
                 // Если необходимо, откроем экспортированный документ
@@ -226,6 +156,85 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
     }
 
     screenplayExportDialog->showDialog();
+}
+
+void ExportManager::Implementation::exportScreenplay(
+    BusinessLayer::AbstractModel* _model, const BusinessLayer::ScreenplayExportOptions& _options)
+{
+    using namespace BusinessLayer;
+
+    ScreenplayExportOptions exportOptions = _options;
+
+    //
+    // ... проверяем возможность записи в файл
+    //
+    QFile file(exportOptions.filePath);
+    const bool canWrite = file.open(QIODevice::WriteOnly);
+    file.close();
+    if (!canWrite) {
+        //
+        // ... предупреждаем
+        //
+        QString errorMessage;
+        const QFileInfo fileInfo(exportOptions.filePath);
+        if (fileInfo.exists()) {
+            errorMessage = tr("Can't write to file. Looks like it's opened by another "
+                              "application. Please close it and retry the export.");
+        } else {
+            errorMessage = tr("Can't write to file. Check permissions to write in the "
+                              "chosen folder or choose another folder.");
+        }
+        StandardDialog::information(topLevelWidget, tr("Export error"), errorMessage);
+        return;
+    }
+
+    //
+    // ... донастроим параметры экспорта
+    //
+    const auto screenplayTextModel = qobject_cast<ScreenplayTextModel*>(_model);
+    const auto screenplayInformation = screenplayTextModel->informationModel();
+    exportOptions.templateId = screenplayInformation->templateId();
+    exportOptions.showScenesNumbers = screenplayInformation->showSceneNumbers();
+    exportOptions.showScenesNumbersOnLeft = screenplayInformation->showSceneNumbersOnLeft();
+    exportOptions.showScenesNumbersOnRight = screenplayInformation->showSceneNumbersOnRight();
+    exportOptions.showDialoguesNumbers = screenplayInformation->showDialoguesNumbers();
+    exportOptions.header = screenplayInformation->header();
+    exportOptions.printHeaderOnTitlePage = screenplayInformation->printHeaderOnTitlePage();
+    exportOptions.footer = screenplayInformation->footer();
+    exportOptions.printFooterOnTitlePage = screenplayInformation->printFooterOnTitlePage();
+    //
+    // ... обновим папку, куда в следующий раз он предположительно опять будет
+    //     экспортировать
+    //
+    setSettingsValue(DataStorageLayer::kProjectExportFolderKey,
+                     QFileInfo(exportOptions.filePath).dir().absolutePath());
+    //
+    // ... и экспортируем документ
+    //
+    QScopedPointer<ScreenplayExporter> exporter;
+    switch (exportOptions.fileFormat) {
+    default:
+    case ExportFileFormat::Pdf: {
+        exporter.reset(new ScreenplayPdfExporter);
+        break;
+    }
+    case ExportFileFormat::Docx: {
+        exporter.reset(new ScreenplayDocxExporter);
+        break;
+    }
+    case ExportFileFormat::Fdx: {
+        exporter.reset(new ScreenplayFdxExporter);
+        break;
+    }
+    case ExportFileFormat::Fountain: {
+        exporter.reset(new ScreenplayFountainExporter);
+        break;
+    }
+    }
+    if (exporter.isNull()) {
+        return;
+    }
+    exporter->exportTo(screenplayTextModel, exportOptions);
 }
 
 void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel* _model)
@@ -691,6 +700,34 @@ void ExportManager::exportDocument(BusinessLayer::AbstractModel* _model)
 
     case Domain::DocumentObjectType::StageplayText: {
         d->exportStageplay(_model);
+        break;
+    }
+
+    default:
+        break;
+    }
+}
+
+void ExportManager::exportDocument(BusinessLayer::AbstractModel* _model, const QString& _filePath)
+{
+    if (!canExportDocument(_model)) {
+        return;
+    }
+
+    Log::info("Exporting started. Export document of type %1 to file %2",
+              Domain::mimeTypeFor(_model->document()->type()).constData(), _filePath);
+
+    switch (_model->document()->type()) {
+    case Domain::DocumentObjectType::ScreenplayText: {
+        BusinessLayer::ScreenplayExportOptions options;
+        options.filePath = _filePath;
+        options.fileFormat = BusinessLayer::ExportFileFormat::Fountain;
+        options.includeFolders = true;
+        options.includeInlineNotes = true;
+        options.includeReviewMarks = true;
+        options.includeTiltePage = true;
+        options.includeScript = true;
+        d->exportScreenplay(_model, options);
         break;
     }
 

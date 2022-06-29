@@ -20,6 +20,7 @@
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/document_object.h>
 #include <include/custom_events.h>
 #include <ui/account/connection_status_tool_bar.h>
 #include <ui/application_style.h>
@@ -33,6 +34,7 @@
 #include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 #include <utils/helpers/dialog_helper.h>
+#include <utils/helpers/extension_helper.h>
 #include <utils/helpers/file_helper.h>
 #include <utils/logging.h>
 #include <utils/tools/backup_builder.h>
@@ -52,6 +54,7 @@
 #include <QSoundEffect>
 #include <QStandardPaths>
 #include <QStyleFactory>
+#include <QTemporaryFile>
 #include <QTimer>
 #include <QTranslator>
 #include <QUuid>
@@ -900,6 +903,14 @@ void ApplicationManager::Implementation::saveChanges()
     }
 
     //
+    // Если работает с теневым проектом, то экспортируем его при сохранении
+    //
+    if (projectsManager->currentProject().type() == ProjectType::LocalShadow) {
+        exportManager->exportDocument(projectManager->firstScriptModel(),
+                                      projectsManager->currentProject().path());
+    }
+
+    //
     // Если изменения сохранились без ошибок, то изменим статус окна на сохранение изменений
     //
     markChangesSaved(true);
@@ -987,11 +998,21 @@ void ApplicationManager::Implementation::saveAs()
     //
     const auto& currentProject = projectsManager->currentProject();
     QString projectPath = currentProject.path();
-    if (currentProject.isRemote()) {
-        //
-        // Для удаленных проектов используем имя проекта + id проекта
-        // и сохраняем в папку вновь создаваемых проектов
-        //
+    switch (currentProject.type()) {
+    //
+    // Для теневых проектов добавляем расширение старка, чтобы пользователя не пугал вопрос о
+    // перезаписи основного файла
+    //
+    case ProjectType::LocalShadow: {
+        projectPath += "." + ExtensionHelper::starc();
+        break;
+    }
+
+    //
+    // Для удаленных проектов используем имя проекта + id проекта
+    // и сохраняем в папку вновь создаваемых проектов
+    //
+    case ProjectType::Remote: {
         const auto projectsFolderPath
             = settingsValue(DataStorageLayer::kProjectSaveFolderKey).toString();
         projectPath = projectsFolderPath + QDir::separator()
@@ -999,6 +1020,12 @@ void ApplicationManager::Implementation::saveAs()
                   .arg(currentProject.name())
                   .arg(currentProject.id())
                   .arg(Project::extension());
+        break;
+    }
+
+    default: {
+        break;
+    }
     }
 
     //
@@ -1040,7 +1067,7 @@ void ApplicationManager::Implementation::saveAs()
     //
     // ... скопируем текущую базу в указанный файл
     //
-    const auto isCopied = QFile::copy(currentProject.path(), saveAsProjectFilePath);
+    const auto isCopied = QFile::copy(currentProject.realPath(), saveAsProjectFilePath);
     if (!isCopied) {
         StandardDialog::information(
             applicationView, tr("Saving error"),
@@ -1170,14 +1197,31 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
     }
 
     //
+    // Если это не проект старка, то создаём временный файл проекта и в последующем импортируем
+    // данные в него
+    //
+    QString projectFilePath = _path;
+    QString importFilePath;
+    if (!projectFilePath.endsWith(ExtensionHelper::starc(), Qt::CaseInsensitive)) {
+        QTemporaryFile tempProject;
+        tempProject.setAutoRemove(false);
+        if (!tempProject.open()) {
+            return;
+        }
+
+        projectFilePath = tempProject.fileName();
+        importFilePath = _path;
+    }
+
+    //
     // ... переключаемся на работу с выбранным файлом
     //
-    projectsManager->setCurrentProject(_path);
+    projectsManager->setCurrentProject(_path, projectFilePath);
 
     //
     // ... перейдём к редактированию
     //
-    goToEditCurrentProject();
+    goToEditCurrentProject(importFilePath);
 }
 
 bool ApplicationManager::Implementation::tryLockProject(const QString& _path)
@@ -1212,16 +1256,42 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     menuView->setProjectActionsVisible(true);
 
     //
+    // Сохраняем тип проекта по-умолчанию
+    //
+    const auto projectType = static_cast<Domain::DocumentObjectType>(
+        settingsValue(DataStorageLayer::kProjectTypeKey).toInt());
+    //
+    // Если будет импорт, то сбросим умолчальный тип проекта, чтобы не создавать лишних документов
+    //
+    if (!_importFilePath.isEmpty()) {
+        setSettingsValue(DataStorageLayer::kProjectTypeKey,
+                         static_cast<int>(Domain::DocumentObjectType::Undefined));
+    }
+
+    //
     // Загрузим данные текущего проекта
     //
     projectManager->loadCurrentProject(projectsManager->currentProject().name(),
                                        projectsManager->currentProject().path());
 
     //
+    // Восстанавливаем тип проекта по-умолчанию для будущих свершений
+    //
+    if (!_importFilePath.isEmpty()) {
+        setSettingsValue(DataStorageLayer::kProjectTypeKey, static_cast<int>(projectType));
+    }
+
+    //
     // При необходимости импортируем данные из заданного файла
     //
     if (!_importFilePath.isEmpty()) {
         importManager->import(_importFilePath);
+
+        //
+        // ... а после импорта пробуем повторно восстановить состояние,
+        //     особенно актуально для кейса с теневым проектом
+        //
+        projectManager->restoreCurrentProjectState(projectsManager->currentProject().path());
     }
 
     //
@@ -1230,6 +1300,70 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     showProject();
 
     state = ApplicationState::Working;
+
+    if (projectsManager->currentProject().type() == ProjectType::LocalShadow) {
+        //
+        // Покажем диалог с предупреждением о том, что не все функции могут работать и предложим
+        // сохранить в формате старка
+        //
+        if (projectsManager->currentProject().canAskAboutSwitch()) {
+            const int kNeverAskAgainButtonId = 0;
+            const int kKeepButtonId = 1;
+            const int kYesButtonId = 2;
+            Dialog* informationDialog = new Dialog(applicationView);
+            const auto projectFileSuffix
+                = QFileInfo(projectsManager->currentProject().path()).suffix().toUpper();
+            informationDialog->showDialog(
+                tr("Do you want continue to use .%1 file format?").arg(projectFileSuffix),
+                tr("Some project data cannot be saved in .%1 format. We recommend you to use Story "
+                   "Architect .%2 format so all the project data will be saved properly.")
+                    .arg(projectFileSuffix.toUpper(), ExtensionHelper::starc().toUpper()),
+                { { kNeverAskAgainButtonId, tr("Never ask again"), Dialog::NormalButton },
+                  { kKeepButtonId, tr("Keep .%1").arg(projectFileSuffix), Dialog::RejectButton },
+                  { kYesButtonId, tr("Switch to .STARC"), Dialog::AcceptButton } });
+            QObject::connect(informationDialog, &Dialog::finished, informationDialog,
+                             [this, informationDialog, kNeverAskAgainButtonId,
+                              kKeepButtonId](const Dialog::ButtonInfo& _buttonInfo) {
+                                 informationDialog->hideDialog();
+
+                                 //
+                                 // Пользователь хочет использовать оригинальный формат и просит
+                                 // больше его не беспокоить
+                                 //
+                                 if (_buttonInfo.id == kNeverAskAgainButtonId) {
+                                     projectsManager->setCurrentProjectNeverAskAboutSwitch();
+                                     return;
+                                 }
+
+                                 //
+                                 // Пользователь хочет использовать оригинальный формат в текущей
+                                 // сессии
+                                 //
+                                 if (_buttonInfo.id == kKeepButtonId) {
+                                     return;
+                                 }
+
+                                 //
+                                 // Пользователь хочет перейти на формат старка
+                                 //
+                                 // ... создаём новый документ и туда импортируем данные текущего
+                                 //
+                                 const auto project = projectsManager->currentProject();
+                                 const QString projectPath
+                                     = project.path() + "." + ExtensionHelper::starc();
+                                 createLocalProject(projectsManager->currentProject().name(),
+                                                    projectPath, project.path());
+                                 //
+                                 // ... скрываем текущий из списка недавних
+                                 //
+                                 projectsManager->hideProject(project.path());
+                             });
+            QObject::connect(informationDialog, &Dialog::disappeared, informationDialog,
+                             &Dialog::deleteLater);
+
+            QApplication::alert(applicationView);
+        }
+    }
 }
 
 void ApplicationManager::Implementation::closeCurrentProject()

@@ -8,12 +8,24 @@ namespace ManagementLayer {
 /**
  * @brief Тип проекта
  */
-enum class ProjectType { Invalid, Local, Remote };
+enum class ProjectType {
+    Invalid,
+    Local,
+    LocalShadow,
+    Remote,
+};
 
 /**
  * @brief Роли для данных проекта в модели
  */
-enum ProjectDataRole { Type, Path, PosterPath, Name, Logline, LastEditTime };
+enum ProjectDataRole {
+    Type,
+    Path,
+    PosterPath,
+    Name,
+    Logline,
+    LastEditTime,
+};
 
 /**
  * @brief Файл проекта
@@ -46,11 +58,17 @@ public:
     void setType(ProjectType _type);
 
     /**
-     * @brief Путь к проекту
+     * @brief Путь к исходному файлу проекта
      */
     QString displayPath() const;
     QString path() const;
     void setPath(const QString& _path);
+
+    /**
+     * @brief Доподлинный путь к проекту
+     */
+    QString realPath() const;
+    void setRealPath(const QString& _path);
 
     /**
      * @brief Путь к постеру проекта
@@ -77,6 +95,12 @@ public:
     QString displayLastEditTime() const;
     QDateTime lastEditTime() const;
     void setLastEditTime(const QDateTime& _time);
+
+    /**
+     * @brief Можно ли показывать диалог с вопросом о смене типа теневого проекта
+     */
+    bool canAskAboutSwitch() const;
+    void setCanAskAboutSwitch(bool _can);
 
     /**
      * @brief Идентификатор проекта

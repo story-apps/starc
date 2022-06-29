@@ -1412,6 +1412,19 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     // Открыть структуру
     //
 
+    restoreCurrentProjectState(_path);
+
+    //
+    // Синхронизировать выбранный документ
+    //
+
+    //
+    // Синхрониировать все остальные изменения
+    //
+}
+
+void ProjectManager::restoreCurrentProjectState(const QString& _path)
+{
     //
     // Загрузить состояние дерева
     //
@@ -1426,14 +1439,6 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     if (isProjectStructureVisible.isValid() && !isProjectStructureVisible.toBool()) {
         showNavigator(d->navigator->currentIndex());
     }
-
-    //
-    // Синхронизировать выбранный документ
-    //
-
-    //
-    // Синхрониировать все остальные изменения
-    //
 }
 
 void ProjectManager::closeCurrentProject(const QString& _path)
@@ -1572,18 +1577,20 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     d->projectStructureModel->insertItem(
         createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), synopsisItem,
         _treatment.toUtf8());
+
+    emit contentsChanged();
 }
 
 BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
 {
-    auto scriptTextModel = [this](const BusinessLayer::StructureModelItem* _screenplayItem)
-        -> BusinessLayer::AbstractModel* {
-        if (_screenplayItem == nullptr) {
+    auto scriptTextModel
+        = [this](const BusinessLayer::StructureModelItem* _item) -> BusinessLayer::AbstractModel* {
+        if (_item == nullptr) {
             return nullptr;
         }
 
         constexpr int scriptTextIndex = 2;
-        return d->modelsFacade.modelFor(_screenplayItem->childAt(scriptTextIndex)->uuid());
+        return d->modelsFacade.modelFor(_item->childAt(scriptTextIndex)->uuid());
     };
 
     const auto document = d->currentDocument.model->document();
@@ -1643,6 +1650,25 @@ BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
     }
 
     return d->currentDocument.model;
+}
+
+BusinessLayer::AbstractModel* ProjectManager::firstScriptModel() const
+{
+    auto model = d->projectStructureModel;
+    for (auto row = 0; row < model->rowCount(); ++row) {
+        const auto index = model->index(row, 0);
+        const auto item = d->projectStructureModel->itemForIndex(index);
+        if (item != nullptr
+            && (item->type() == Domain::DocumentObjectType::Audioplay
+                || item->type() == Domain::DocumentObjectType::ComicBook
+                || item->type() == Domain::DocumentObjectType::Screenplay
+                || item->type() == Domain::DocumentObjectType::Stageplay)) {
+            constexpr int scriptTextIndex = 2;
+            return d->modelsFacade.modelFor(item->childAt(scriptTextIndex)->uuid());
+        }
+    }
+
+    return nullptr;
 }
 
 bool ProjectManager::event(QEvent* _event)

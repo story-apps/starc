@@ -66,6 +66,7 @@ public:
      * @brief Загрузить данные текущего проекта
      */
     void loadCurrentProject(const QString& _name, const QString& _path);
+    void restoreCurrentProjectState(const QString& _path);
 
     /**
      * @brief Закрыть текущий проект
@@ -99,6 +100,12 @@ public:
      *       экспортировался сам скрипт
      */
     BusinessLayer::AbstractModel* currentModelForExport() const;
+
+    /**
+     * @brief Получить первую модель проекта со сценарием
+     * @note Используется для экспорта сценария в теневом режиме
+     */
+    BusinessLayer::AbstractModel* firstScriptModel() const;
 
 signals:
     /**

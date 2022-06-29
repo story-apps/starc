@@ -164,8 +164,18 @@ QVariant ProjectNavigator::saveState() const
 
 void ProjectNavigator::restoreState(bool _isNewProject, const QVariant& _state)
 {
+    //
+    // Если проект новый, то раскрываем только последний документ
+    //
     if (_isNewProject) {
-        d->tree->expandAll();
+        auto model = d->tree->model();
+        for (int row = model->rowCount() - 1; row >= 0; --row) {
+            const auto index = model->index(row, 0);
+            if (model->rowCount(index) > 0) {
+                d->tree->expand(index);
+                break;
+            }
+        }
     }
 
     if (!_state.isValid()) {

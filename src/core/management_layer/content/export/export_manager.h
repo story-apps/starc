@@ -28,6 +28,11 @@ public:
      */
     void exportDocument(BusinessLayer::AbstractModel* _model);
 
+    /**
+     * @brief Экспортировать заданный документ в заданный файл
+     */
+    void exportDocument(BusinessLayer::AbstractModel* _model, const QString& _filePath);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

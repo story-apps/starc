@@ -28,7 +28,12 @@ public:
     static QString pdfFilter();
 
     /**
+     * @brief Получить список фильтров файлов которые приложение может открыть
+     */
+    static QString filtersForOpenProject();
+
+    /**
      * @brief Получить список фильтров файлов которые приложение может импортировать
      */
-    static QString importFilters();
+    static QString filtersForImport();
 };
