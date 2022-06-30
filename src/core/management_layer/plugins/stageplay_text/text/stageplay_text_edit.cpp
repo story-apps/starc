@@ -130,8 +130,11 @@ void StageplayTextEdit::setCorrectionOptions(bool _needToCorrectPageBreaks)
 
 void StageplayTextEdit::initWithModel(BusinessLayer::StageplayTextModel* _model)
 {
-    if (d->model && d->model->informationModel()) {
-        disconnect(d->model->informationModel());
+    if (d->model) {
+        disconnect(d->model);
+        if (d->model->informationModel()) {
+            disconnect(d->model->informationModel());
+        }
     }
     d->model = _model;
 
@@ -163,6 +166,8 @@ void StageplayTextEdit::initWithModel(BusinessLayer::StageplayTextModel* _model)
         setHeader(d->model->informationModel()->header());
         setFooter(d->model->informationModel()->footer());
 
+        connect(d->model, &BusinessLayer::StageplayTextModel::dataChanged, this,
+                qOverload<>(&StageplayTextEdit::update));
         connect(d->model->informationModel(),
                 &BusinessLayer::StageplayInformationModel::headerChanged, this,
                 &StageplayTextEdit::setHeader);

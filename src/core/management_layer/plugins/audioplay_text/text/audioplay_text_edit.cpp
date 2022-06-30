@@ -130,8 +130,11 @@ void AudioplayTextEdit::setCorrectionOptions(bool _needToCorrectPageBreaks)
 
 void AudioplayTextEdit::initWithModel(BusinessLayer::AudioplayTextModel* _model)
 {
-    if (d->model && d->model->informationModel()) {
-        disconnect(d->model->informationModel());
+    if (d->model) {
+        disconnect(d->model);
+        if (d->model->informationModel()) {
+            disconnect(d->model->informationModel());
+        }
     }
     d->model = _model;
 
@@ -163,6 +166,8 @@ void AudioplayTextEdit::initWithModel(BusinessLayer::AudioplayTextModel* _model)
         setHeader(d->model->informationModel()->header());
         setFooter(d->model->informationModel()->footer());
 
+        connect(d->model, &BusinessLayer::AudioplayTextModel::dataChanged, this,
+                qOverload<>(&AudioplayTextEdit::update));
         connect(d->model->informationModel(),
                 &BusinessLayer::AudioplayInformationModel::headerChanged, this,
                 &AudioplayTextEdit::setHeader);

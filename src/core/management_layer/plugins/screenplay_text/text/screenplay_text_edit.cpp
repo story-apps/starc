@@ -169,8 +169,11 @@ void ScreenplayTextEdit::setCorrectionOptions(bool _needToCorrectCharactersNames
 
 void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _model)
 {
-    if (d->model && d->model->informationModel()) {
-        disconnect(d->model->informationModel());
+    if (d->model) {
+        disconnect(d->model);
+        if (d->model->informationModel()) {
+            disconnect(d->model->informationModel());
+        }
     }
     d->model = _model;
 
@@ -202,6 +205,8 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
         setHeader(d->model->informationModel()->header());
         setFooter(d->model->informationModel()->footer());
 
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::dataChanged, this,
+                qOverload<>(&ScreenplayTextEdit::update));
         connect(d->model->informationModel(),
                 &BusinessLayer::ScreenplayInformationModel::headerChanged, this,
                 &ScreenplayTextEdit::setHeader);

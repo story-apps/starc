@@ -139,8 +139,11 @@ void ComicBookTextEdit::setCorrectionOptions(bool _needToCorrectCharactersNames,
 
 void ComicBookTextEdit::initWithModel(BusinessLayer::ComicBookTextModel* _model)
 {
-    if (d->model && d->model->informationModel()) {
-        disconnect(d->model->informationModel());
+    if (d->model) {
+        disconnect(d->model);
+        if (d->model->informationModel()) {
+            disconnect(d->model->informationModel());
+        }
     }
     d->model = _model;
 
@@ -172,6 +175,8 @@ void ComicBookTextEdit::initWithModel(BusinessLayer::ComicBookTextModel* _model)
         setHeader(d->model->informationModel()->header());
         setFooter(d->model->informationModel()->footer());
 
+        connect(d->model, &BusinessLayer::ComicBookTextModel::dataChanged, this,
+                qOverload<>(&ComicBookTextEdit::update));
         connect(d->model->informationModel(),
                 &BusinessLayer::ComicBookInformationModel::headerChanged, this,
                 &ComicBookTextEdit::setHeader);

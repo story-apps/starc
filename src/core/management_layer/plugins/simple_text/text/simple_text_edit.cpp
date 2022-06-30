@@ -118,6 +118,10 @@ SimpleTextEdit::~SimpleTextEdit() = default;
 
 void SimpleTextEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
 {
+    if (d->model) {
+        disconnect(d->model);
+    }
+
     d->model = _model;
 
     if (usePageMode()) {
@@ -132,6 +136,11 @@ void SimpleTextEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
     // изменений
     //
     d->document.setModel(d->model);
+
+    if (d->model) {
+        connect(d->model, &BusinessLayer::SimpleTextModel::dataChanged, this,
+                qOverload<>(&SimpleTextEdit::update));
+    }
 }
 
 void SimpleTextEdit::reinit()
