@@ -149,6 +149,12 @@ protected:
      */
     bool event(QEvent* _event) override;
 
+    /**
+     * @brief Реализуем фильтр на событие смены дизайн системы, чтобы обновить значения в
+     *        представлениях открытых в отдельных окнах
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
 private:
     /**
      * @brief Обработать изменение модели

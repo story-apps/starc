@@ -1,5 +1,6 @@
 #include "project_manager.h"
 
+#include "include/custom_events.h"
 #include "project_models_facade.h"
 
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
@@ -52,7 +53,8 @@ namespace ManagementLayer {
 class ProjectManager::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent, const PluginsBuilder& _pluginsBuilder);
+    explicit Implementation(ProjectManager* _q, QWidget* _parent,
+                            const PluginsBuilder& _pluginsBuilder);
 
     /**
      * @brief Обновить текст пункта меню разделения экрана
@@ -134,7 +136,7 @@ public:
         //
         // Список представлений, открытых в отдельных окнах
         //
-        QVector<QWidget*> windows;
+        QVector<QWidget*> windows = {};
 
         //
         // Ссылки на активное представление и неактивное
@@ -190,7 +192,7 @@ public:
     } currentDocument;
 };
 
-ProjectManager::Implementation::Implementation(QWidget* _parent,
+ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _parent,
                                                const PluginsBuilder& _pluginsBuilder)
     : topLevelWidget(_parent)
     , toolBar(new Ui::ProjectToolBar(_parent))
@@ -209,6 +211,7 @@ ProjectManager::Implementation::Implementation(QWidget* _parent,
 {
     toolBar->hide();
     navigator->hide();
+    view.left->installEventFilter(_q);
     view.container->setWidgets(view.left, view.right);
     view.container->setSizes({ 1, 0 });
     view.container->hide();
@@ -805,7 +808,7 @@ void ProjectManager::Implementation::emptyRecycleBin()
 ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                                const PluginsBuilder& _pluginsBuilder)
     : QObject(_parent)
-    , d(new Implementation(_parentWidget, _pluginsBuilder))
+    , d(new Implementation(this, _parentWidget, _pluginsBuilder))
 {
     connect(d->toolBar, &Ui::ProjectToolBar::menuPressed, this, &ProjectManager::menuRequested);
     connect(d->toolBar, &Ui::ProjectToolBar::viewPressed, this, [this](const QString& _mimeType) {
@@ -1743,6 +1746,18 @@ bool ProjectManager::event(QEvent* _event)
     }
 
     return QObject::event(_event);
+}
+
+bool ProjectManager::eventFilter(QObject* _watched, QEvent* _event)
+{
+    if (static_cast<EventType>(_event->type()) == EventType::DesignSystemChangeEvent
+        && _watched == d->view.active) {
+        for (auto window : std::as_const(d->view.windows)) {
+            QCoreApplication::sendEvent(window, _event);
+        }
+    }
+
+    return QObject::eventFilter(_watched, _event);
 }
 
 void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
