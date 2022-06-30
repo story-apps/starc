@@ -40,6 +40,11 @@ public:
      */
     void updateNumbering();
 
+    /**
+     * @brief Пересчитать хронометраж элемента и всех детей
+     */
+    void updateChildrenDuration(const TextModelItem* _item);
+
 
     /**
      * @brief Родительский элемент
@@ -121,6 +126,30 @@ void AudioplayTextModel::Implementation::updateNumbering()
     updateChildNumbering(rootItem());
 }
 
+void AudioplayTextModel::Implementation::updateChildrenDuration(const TextModelItem* _item)
+{
+    for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+        auto childItem = _item->childAt(childIndex);
+        switch (childItem->type()) {
+        case TextModelItemType::Folder:
+        case TextModelItemType::Group: {
+            updateChildrenDuration(childItem);
+            break;
+        }
+
+        case TextModelItemType::Text: {
+            auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
+            textItem->updateDuration();
+            q->updateItem(textItem);
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+}
+
 
 // ****
 
@@ -129,9 +158,12 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
     : TextModel(_parent, createFolderItem())
     , d(new Implementation(this))
 {
-    auto updateNumbering = [this] { d->updateNumbering(); };
-    connect(this, &AudioplayTextModel::rowsInserted, this, updateNumbering);
-    connect(this, &AudioplayTextModel::rowsRemoved, this, updateNumbering);
+    auto updateCounters = [this](const QModelIndex& _index) {
+        d->updateNumbering();
+        d->updateChildrenDuration(itemForIndex(_index));
+    };
+    connect(this, &AudioplayTextModel::rowsInserted, this, updateCounters);
+    connect(this, &AudioplayTextModel::rowsRemoved, this, updateCounters);
 
     connect(this, &AudioplayTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });
@@ -377,32 +409,8 @@ std::map<std::chrono::milliseconds, QColor> AudioplayTextModel::itemsBookmarks()
 
 void AudioplayTextModel::recalculateDuration()
 {
-    std::function<void(const TextModelItem*)> updateChildDuration;
-    updateChildDuration = [this, &updateChildDuration](const TextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case TextModelItemType::Folder:
-            case TextModelItemType::Group: {
-                updateChildDuration(childItem);
-                break;
-            }
-
-            case TextModelItemType::Text: {
-                auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
-                textItem->updateDuration();
-                updateItem(textItem);
-                break;
-            }
-
-            default:
-                break;
-            }
-        }
-    };
-
     emit rowsAboutToBeChanged();
-    updateChildDuration(d->rootItem());
+    d->updateChildrenDuration(d->rootItem());
     emit rowsChanged();
 }
 

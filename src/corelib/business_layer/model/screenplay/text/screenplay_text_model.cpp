@@ -42,6 +42,11 @@ public:
      */
     void updateNumbering();
 
+    /**
+     * @brief Пересчитать хронометраж элемента и всех детей
+     */
+    void updateChildrenDuration(const TextModelItem* _item);
+
 
     /**
      * @brief Родительский элемент
@@ -133,6 +138,30 @@ void ScreenplayTextModel::Implementation::updateNumbering()
     updateChildNumbering(rootItem());
 }
 
+void ScreenplayTextModel::Implementation::updateChildrenDuration(const TextModelItem* _item)
+{
+    for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+        auto childItem = _item->childAt(childIndex);
+        switch (childItem->type()) {
+        case TextModelItemType::Folder:
+        case TextModelItemType::Group: {
+            updateChildrenDuration(childItem);
+            break;
+        }
+
+        case TextModelItemType::Text: {
+            auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+            textItem->updateDuration();
+            q->updateItem(textItem);
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+}
+
 
 // ****
 
@@ -141,9 +170,12 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
     : TextModel(_parent, createFolderItem())
     , d(new Implementation(this))
 {
-    auto updateNumbering = [this] { d->updateNumbering(); };
-    connect(this, &ScreenplayTextModel::rowsInserted, this, updateNumbering);
-    connect(this, &ScreenplayTextModel::rowsRemoved, this, updateNumbering);
+    auto updateCounters = [this](const QModelIndex& _index) {
+        d->updateNumbering();
+        d->updateChildrenDuration(itemForIndex(_index));
+    };
+    connect(this, &ScreenplayTextModel::rowsInserted, this, updateCounters);
+    connect(this, &ScreenplayTextModel::rowsRemoved, this, updateCounters);
 
     connect(this, &ScreenplayTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });
@@ -539,32 +571,8 @@ std::map<std::chrono::milliseconds, QColor> ScreenplayTextModel::itemsBookmarks(
 
 void ScreenplayTextModel::recalculateDuration()
 {
-    std::function<void(const TextModelItem*)> updateChildDuration;
-    updateChildDuration = [this, &updateChildDuration](const TextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case TextModelItemType::Folder:
-            case TextModelItemType::Group: {
-                updateChildDuration(childItem);
-                break;
-            }
-
-            case TextModelItemType::Text: {
-                auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                textItem->updateDuration();
-                updateItem(textItem);
-                break;
-            }
-
-            default:
-                break;
-            }
-        }
-    };
-
     emit rowsAboutToBeChanged();
-    updateChildDuration(d->rootItem());
+    d->updateChildrenDuration(d->rootItem());
     emit rowsChanged();
 }
 

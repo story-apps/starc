@@ -159,8 +159,9 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
         }
     });
     connect(d->importFilePath, &TextField::trailingIconPressed, this, [this] {
-        const auto path = QFileDialog::getOpenFileName(
-            this, tr("Choose the file to import"), d->importFolder, DialogHelper::filtersForImport());
+        const auto path
+            = QFileDialog::getOpenFileName(this, tr("Choose the file to import"), d->importFolder,
+                                           DialogHelper::filtersForImport());
         if (path.isEmpty()) {
             return;
         }
