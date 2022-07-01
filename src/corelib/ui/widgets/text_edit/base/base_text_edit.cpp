@@ -470,7 +470,11 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     // 3. все строчные
     //
     else if (_event->modifiers().testFlag(Qt::ControlModifier)
-             && (_event->key() == Qt::Key_Up || _event->key() == Qt::Key_Down)) {
+             && (_event->key() == Qt::Key_Up || _event->key() == Qt::Key_Down)
+#ifdef Q_OS_MAC
+             && _event->modifiers().testFlag(Qt::ShiftModifier)
+#endif
+    ) {
         //
         // Нужно ли убирать выделение после операции
         //
