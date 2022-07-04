@@ -117,7 +117,7 @@ void PurchaseDialogOption::paintEvent(QPaintEvent* _event)
     const auto regularPrice = QString("$%1").arg(d->option.amount / 100.0, 0, 'f', 2);
     const auto totalPrice = QString("$%1").arg(d->option.totalAmount / 100.0, 0, 'f', 2);
     auto paymentMethodsText
-        = [](int _price) { return _price > 2000 ? u8" \U000F019B \U000F0813" : u8" \U000F019B"; };
+        = [](int _price) { return _price >= 2000 ? u8" \U000F019B \U000F0813" : u8" \U000F019B"; };
 
     //
     // Лайфтайм версия рисуется на всю ширину
