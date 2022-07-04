@@ -76,6 +76,16 @@ public:
     void buyProLifetme();
     void renewPro();
 
+    /**
+     * @brief Показать сообщение активации промокода
+     */
+    void showPromocodeActivationMessage(const QString& _message);
+
+    /**
+     * @brief Задать ошибку промокода
+     */
+    void setPromocodeError(const QString& _error);
+
 signals:
     //
     // Диалог авторизации
@@ -134,6 +144,11 @@ signals:
      * @brief Пользователь хочет применить заданную опцию оплаты
      */
     void activatePaymentOptionRequested(const Domain::PaymentOption& _paymentOption);
+
+    /**
+     * @brief Пользователь хочет активировать промокод
+     */
+    void activatePromocodeRequested(const QString& _promocode);
 
 
     // =============================================

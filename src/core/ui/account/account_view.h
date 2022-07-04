@@ -62,6 +62,16 @@ public:
                              const QVector<Domain::PaymentOption>& _paymentOptions);
 
     /**
+     * @brief Очистить промокод
+     */
+    void clearPromocode();
+
+    /**
+     * @brief Задать ошибку промокода
+     */
+    void setPromocodeError(const QString& _error);
+
+    /**
      * @brief Задать список сессий аккаунта
      */
     void setSessions(const QVector<Domain::SessionInfo>& _sessions);
@@ -89,6 +99,11 @@ signals:
     void upgradeToProPressed();
     void buyProLifetimePressed();
     void renewProPressed();
+
+    /**
+     * @brief Пользователь нажал кнопку активировать промокод
+     */
+    void activatePromocodePressed(const QString& _promocode);
 
     /**
      * @brief ПОльзователь хочет завершить заданную сессию

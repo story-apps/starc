@@ -69,6 +69,11 @@ public:
     Button* subscriptionBuyLifetime = nullptr;
     Button* subscriptionRenew = nullptr;
 
+    Card* promocodeInfo = nullptr;
+    QGridLayout* promocodeInfoLayout = nullptr;
+    TextField* promocodeName = nullptr;
+    Button* activatePromocode = nullptr;
+
     H5Label* sessionsTitle = nullptr;
     QVector<SessionWidget*> sessions;
 };
@@ -81,6 +86,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , name(new TextField(accountInfo))
     , description(new TextField(accountInfo))
     , avatar(new ImageCard(accountInfo))
+    //
     , subscriptionInfo(new Card(_parent))
     , subscriptionInfoLayout(new QGridLayout)
     , subscriptionTitle(new H6Label(subscriptionInfo))
@@ -90,6 +96,12 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , subscriptionUpgrade(new Button(subscriptionInfo))
     , subscriptionBuyLifetime(new Button(subscriptionInfo))
     , subscriptionRenew(new Button(subscriptionInfo))
+    //
+    , promocodeInfo(new Card(_parent))
+    , promocodeInfoLayout(new QGridLayout)
+    , promocodeName(new TextField(promocodeInfo))
+    , activatePromocode(new Button(promocodeInfo))
+    //
     , sessionsTitle(new H5Label(_parent))
 {
     QPalette palette;
@@ -126,11 +138,11 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     row = 0;
     subscriptionInfoLayout->addWidget(subscriptionTitle, row++, 0);
     subscriptionInfoLayout->addWidget(subscriptionEndsLabel, row++, 0);
-    subscriptionInfoLayout->addWidget(subscriptionDetails, row++, 0, Qt::AlignLeft);
     {
         auto layout = new QHBoxLayout;
         layout->setContentsMargins({});
         layout->setSpacing(0);
+        layout->addWidget(subscriptionDetails);
         layout->addStretch();
         layout->addWidget(subscriptionTryForFree);
         layout->addWidget(subscriptionUpgrade);
@@ -142,6 +154,11 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     subscriptionInfoLayout->setRowMinimumHeight(subscriptionInfoLastRow,
                                                 1); // добавляем пустую строку, вместо отступа снизу
     subscriptionInfo->setLayoutReimpl(subscriptionInfoLayout);
+    //
+    promocodeInfoLayout->addWidget(promocodeName, 0, 0);
+    promocodeInfoLayout->addWidget(activatePromocode, 0, 1, Qt::AlignBottom);
+    promocodeInfoLayout->setColumnStretch(0, 1);
+    promocodeInfo->setLayoutReimpl(promocodeInfoLayout);
 
     auto contentWidget = new QWidget;
     content->setWidget(contentWidget);
@@ -153,6 +170,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     layout->addWidget(accountInfo, row, 0, 1, 2);
     layout->addWidget(avatar, row++, 2, 3, 1, Qt::AlignTop);
     layout->addWidget(subscriptionInfo, row++, 0, 1, 2);
+    layout->addWidget(promocodeInfo, row++, 0, 1, 2);
     layout->addWidget(sessionsTitle, row++, 0, 1, 2);
     ++row; // оставляем строку для сессий
     layout->setRowStretch(row, 1);
@@ -169,7 +187,6 @@ void AccountView::Implementation::scrollToTitle(AbstractLabel* title)
     QRect focusRect = (microFocus != defaultMicroFocus)
         ? QRect(title->mapTo(content->widget(), microFocus.topLeft()), microFocus.size())
         : QRect(title->mapTo(content->widget(), QPoint(0, 0)), title->size());
-    const QRect visibleRect(-content->widget()->pos(), content->viewport()->size());
 
     focusRect.adjust(-50, -50, 50, 50);
 
@@ -249,6 +266,17 @@ AccountView::AccountView(QWidget* _parent)
     connect(d->subscriptionBuyLifetime, &Button::clicked, this,
             &AccountView::buyProLifetimePressed);
     connect(d->subscriptionRenew, &Button::clicked, this, &AccountView::renewProPressed);
+
+    connect(d->promocodeName, &TextField::textChanged, d->promocodeName,
+            [this] { d->promocodeName->setError({}); });
+    connect(d->promocodeName, &TextField::enterPressed, d->activatePromocode, &Button::click);
+    connect(d->activatePromocode, &Button::clicked, this, [this] {
+        if (d->promocodeName->text().isEmpty()) {
+            return;
+        }
+
+        emit activatePromocodePressed(d->promocodeName->text());
+    });
 }
 
 AccountView::~AccountView() = default;
@@ -387,6 +415,17 @@ void AccountView::setSubscriptionInfo(Domain::SubscriptionType _subscriptionType
     }
 }
 
+void AccountView::clearPromocode()
+{
+    d->promocodeName->clear();
+}
+
+void AccountView::setPromocodeError(const QString& _error)
+{
+    d->promocodeName->setError(_error);
+    d->promocodeName->selectAll();
+}
+
 void AccountView::setSessions(const QVector<Domain::SessionInfo>& _sessions)
 {
     while (!d->sessions.isEmpty()) {
@@ -439,6 +478,8 @@ void AccountView::updateTranslations()
     d->subscriptionBuyLifetime->setText(tr("Buy lifetime"));
     d->subscriptionRenew->setText(tr("Renew"));
     d->sessionsTitle->setText(tr("Active sessions"));
+    d->promocodeName->setLabel(tr("Promotional or gift code"));
+    d->activatePromocode->setText(tr("Activate"));
 }
 
 void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -457,6 +498,7 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto card : {
              d->accountInfo,
              d->subscriptionInfo,
+             d->promocodeInfo,
          }) {
         card->setBackgroundColor(DesignSystem::color().background());
     }
@@ -498,6 +540,7 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto textField : {
              d->name,
              d->description,
+             d->promocodeName,
          }) {
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
@@ -508,6 +551,7 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->subscriptionUpgrade,
              d->subscriptionBuyLifetime,
              d->subscriptionRenew,
+             d->activatePromocode,
          }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
@@ -524,6 +568,9 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->subscriptionInfoLayout->setRowMinimumHeight(
         d->subscriptionInfoLastRow, static_cast<int>(Ui::DesignSystem::layout().px16()));
     d->subscriptionInfoLayout->setContentsMargins(0, 0, Ui::DesignSystem::layout().px16(), 0);
+    d->promocodeInfoLayout->setContentsMargins(0, Ui::DesignSystem::layout().px24(),
+                                               Ui::DesignSystem::layout().px24(),
+                                               Ui::DesignSystem::layout().px24());
 }
 
 } // namespace Ui

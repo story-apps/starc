@@ -38,6 +38,11 @@ struct PaymentOption {
     int amount = -1;
 
     /**
+     * @brief Стоимость со скидкой, в центах
+     */
+    int totalAmount = -1;
+
+    /**
      * @brief Тип подписки
      */
     Domain::SubscriptionType subscriptionType;

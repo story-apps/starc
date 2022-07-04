@@ -2117,6 +2117,10 @@ void ApplicationManager::initConnections()
         d->menuView->setAccountEmail(d->accountManager->email());
         d->projectManager->checkAvailabilityToEdit();
     });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::promocodeActivated,
+            d->accountManager.data(), &AccountManager::showPromocodeActivationMessage);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::promocodeErrorRecieved,
+            d->accountManager.data(), &AccountManager::setPromocodeError);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::logoutRequired,
             d->accountManager.data(), &AccountManager::logoutRequested);
     connect(d->accountManager.data(), &AccountManager::askAccountInfoRequested,
@@ -2125,6 +2129,9 @@ void ApplicationManager::initConnections()
             d->cloudServiceManager.data(), &CloudServiceManager::setAccountInfo);
     connect(d->accountManager.data(), &AccountManager::activatePaymentOptionRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::activatePaymentOption);
+    connect(d->accountManager.data(), &AccountManager::activatePromocodeRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::activatePromocode);
+
     connect(d->accountManager.data(), &AccountManager::terminateSessionRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::terminateSession);
     connect(d->accountManager.data(), &AccountManager::logoutRequested, this, [this] {

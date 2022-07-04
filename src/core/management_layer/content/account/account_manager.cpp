@@ -9,6 +9,7 @@
 #include <ui/account/purchase_dialog.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/dialog/dialog.h>
+#include <ui/widgets/dialog/standard_dialog.h>
 #include <utils/helpers/image_helper.h>
 
 #include <QFileDialog>
@@ -165,6 +166,8 @@ void AccountManager::Implementation::initViewConnections()
     connect(view, &Ui::AccountView::upgradeToProPressed, q, &AccountManager::upgradeToPro);
     connect(view, &Ui::AccountView::buyProLifetimePressed, q, &AccountManager::buyProLifetme);
     connect(view, &Ui::AccountView::renewProPressed, q, &AccountManager::renewPro);
+    connect(view, &Ui::AccountView::activatePromocodePressed, q,
+            &AccountManager::activatePromocodeRequested);
 
     connect(view, &Ui::AccountView::terminateSessionRequested, q,
             &AccountManager::terminateSessionRequested);
@@ -433,6 +436,17 @@ void AccountManager::renewPro()
     d->initPurchaseDialog();
     d->purchaseDialog->selectOption(d->paymentOptions.constLast());
     d->purchaseDialog->showDialog();
+}
+
+void AccountManager::showPromocodeActivationMessage(const QString& _message)
+{
+    StandardDialog::information(d->view, {}, _message);
+    d->view->clearPromocode();
+}
+
+void AccountManager::setPromocodeError(const QString& _error)
+{
+    d->view->setPromocodeError(_error);
 }
 
 } // namespace ManagementLayer
