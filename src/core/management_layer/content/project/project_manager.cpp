@@ -141,6 +141,8 @@ public:
                                 Domain::DocumentObjectType _documentType,
                                 const QString& _documentName, const QByteArray& _content = {});
 
+    BusinessLayer::StructureModelItem* aliasedItemForIndex(const QModelIndex& _index);
+
     /**
      * @brief Создать новую версию заданного документа
      */
@@ -537,6 +539,18 @@ void ProjectManager::Implementation::addDocumentToContainer(
     }
 }
 
+BusinessLayer::StructureModelItem* ProjectManager::Implementation::aliasedItemForIndex(
+    const QModelIndex& _index)
+{
+    auto item = projectStructureModel->itemForIndex(_index);
+    if (item->type() != Domain::DocumentObjectType::ScreenplayTreatment) {
+        return item;
+    }
+
+    auto model = modelsFacade.modelFor(item->uuid());
+    return projectStructureModel->itemForUuid(model->document()->uuid());
+}
+
 void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIndex)
 {
     auto dialog = new Ui::CreateVersionDialog(topLevelWidget);
@@ -544,7 +558,7 @@ void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIn
             [this, _itemIndex, dialog](const QString& _name, const QColor& _color, bool _readOnly) {
                 dialog->hideDialog();
 
-                const auto item = projectStructureModel->itemForIndex(_itemIndex);
+                const auto item = aliasedItemForIndex(_itemIndex);
                 const auto model = modelsFacade.modelFor(item->uuid());
                 projectStructureModel->addItemVersion(item, _name, _color, _readOnly,
                                                       model->document()->content());
@@ -559,7 +573,7 @@ void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIn
 void ProjectManager::Implementation::editVersion(const QModelIndex& _itemIndex, int _versionIndex)
 {
     auto dialog = new Ui::CreateVersionDialog(topLevelWidget);
-    const auto item = projectStructureModel->itemForIndex(_itemIndex);
+    const auto item = aliasedItemForIndex(_itemIndex);
     const auto version = item->versions().at(_versionIndex);
     dialog->edit(version->name(), version->color(), version->readOnly());
     connect(dialog, &Ui::CreateVersionDialog::savePressed, view.active,
@@ -578,7 +592,7 @@ void ProjectManager::Implementation::editVersion(const QModelIndex& _itemIndex, 
 void ProjectManager::Implementation::removeVersion(const QModelIndex& _itemIndex, int _versionIndex)
 {
     auto dialog = new Dialog(view.active->topLevelWidget());
-    const auto item = projectStructureModel->itemForIndex(_itemIndex);
+    const auto item = aliasedItemForIndex(_itemIndex);
     const auto version = item->versions().at(_versionIndex);
     constexpr int cancelButtonId = 0;
     constexpr int removeButtonId = 1;
@@ -1231,7 +1245,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
         connect(view, &Ui::ProjectView::showVersionPressed, this, [this](int _versionIndex) {
             const auto currentItemIndex
                 = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
-            const auto currentItem = d->projectStructureModel->itemForIndex(currentItemIndex);
+            const auto currentItem = d->aliasedItemForIndex(currentItemIndex);
 
             //
             // Показать текущую версию
@@ -1250,6 +1264,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 [this](int _versionIndex) {
                     const auto currentItemIndex
                         = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
+                    auto item = d->aliasedItemForIndex(currentItemIndex);
+                    auto model = d->modelsFacade.modelFor(item->uuid());
+                    d->projectStructureModel->itemForUuid(model->document()->uuid());
 
                     QVector<QAction*> menuActions;
                     auto createNewVersionAction = new QAction;
@@ -2053,7 +2070,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
 
     const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
-    const auto item = d->projectStructureModel->itemForIndex(sourceItemIndex);
+    const auto item = d->aliasedItemForIndex(sourceItemIndex);
 
     //
     // Определим модель
