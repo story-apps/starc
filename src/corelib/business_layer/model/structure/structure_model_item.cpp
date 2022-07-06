@@ -118,15 +118,17 @@ const QVector<StructureModelItem*>& StructureModelItem::versions() const
 StructureModelItem* StructureModelItem::addVersion(StructureModelItem* _version)
 {
     _version->setParent(parent());
-    d->versions.prepend(_version);
+    d->versions.append(_version);
     return _version;
 }
 
 StructureModelItem* StructureModelItem::addVersion(const QString& _name, const QColor& _color,
                                                    bool _readOnly)
 {
-    return addVersion(
-        new StructureModelItem(QUuid::createUuid(), type(), _name, _color, _readOnly));
+    auto version = new StructureModelItem(QUuid::createUuid(), type(), _name, _color, _readOnly);
+    version->setParent(parent());
+    d->versions.prepend(version);
+    return version;
 }
 
 void StructureModelItem::setVersions(const QVector<StructureModelItem*>& _versions)

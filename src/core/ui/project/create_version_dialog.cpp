@@ -87,7 +87,7 @@ CreateVersionDialog::CreateVersionDialog(QWidget* _parent)
             [this](const QColor& _color) { d->versionName->setTrailingIconColor(_color); });
     connect(d->createButton, &Button::clicked, this, [this] {
         emit savePressed(d->versionName->text(), d->versionColorPopup->selectedColor(),
-                           !d->allowEditVersion->isChecked());
+                         !d->allowEditVersion->isChecked());
     });
     connect(d->cancelButton, &Button::clicked, this, &CreateVersionDialog::hideDialog);
 }
