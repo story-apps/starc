@@ -45,6 +45,11 @@ public:
     int currentTab() const;
 
     /**
+     * @brief Получить индекс таба в заданной позиции
+     */
+    int tabAt(const QPointF& _position) const;
+
+    /**
      * @brief Удалить вкладку
      */
     void removeTab(int _tabIndex);

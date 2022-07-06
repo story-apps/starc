@@ -107,24 +107,24 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                         {}, tr("Do you really want to hide a project from the recent list?"),
                         { { cancelButtonId, tr("No"), Dialog::RejectButton },
                           { hideButtonId, tr("Yes, hide"), Dialog::AcceptButton } });
-                    QObject::connect(dialog, &Dialog::finished, this,
-                                     [this, _project, cancelButtonId,
-                                      dialog](const Dialog::ButtonInfo& _buttonInfo) {
-                                         dialog->hideDialog();
+                    connect(dialog, &Dialog::finished, this,
+                            [this, _project, cancelButtonId,
+                             dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                                dialog->hideDialog();
 
-                                         //
-                                         // Пользователь передумал скрывать
-                                         //
-                                         if (_buttonInfo.id == cancelButtonId) {
-                                             return;
-                                         }
+                                //
+                                // Пользователь передумал скрывать
+                                //
+                                if (_buttonInfo.id == cancelButtonId) {
+                                    return;
+                                }
 
-                                         //
-                                         // Если таки хочет, то скрываем проект
-                                         //
-                                         d->projects->remove(_project);
-                                     });
-                    QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+                                //
+                                // Если таки хочет, то скрываем проект
+                                //
+                                d->projects->remove(_project);
+                            });
+                    connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
                 });
 
                 auto menu = new ContextMenu(d->view);

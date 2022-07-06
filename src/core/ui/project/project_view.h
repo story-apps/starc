@@ -62,6 +62,11 @@ signals:
      */
     void showVersionPressed(int _versionIndex);
 
+    /**
+     * @brief Пользователь вызвал контекстное меню версии
+     */
+    void showVersionContextMenuPressed(int _versionIndex);
+
 protected:
     /**
      * @brief Отслеживаем изменение размера, чтобы скорректировать размер оверлея

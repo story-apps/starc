@@ -137,6 +137,20 @@ void StructureModelItem::setVersions(const QVector<StructureModelItem*>& _versio
     d->versions = _versions;
 }
 
+void StructureModelItem::removeVersion(int _versionIndex)
+{
+    if (d->versions.isEmpty()) {
+        return;
+    }
+
+    if (_versionIndex < 0 || _versionIndex > d->versions.size()) {
+        return;
+    }
+
+    auto version = d->versions.takeAt(_versionIndex);
+    delete version;
+}
+
 QVariant StructureModelItem::data(int _role) const
 {
     switch (_role) {

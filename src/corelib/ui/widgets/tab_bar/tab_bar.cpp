@@ -454,6 +454,11 @@ int TabBar::currentTab() const
     return d->currentTabIndex;
 }
 
+int TabBar::tabAt(const QPointF& _position) const
+{
+    return d->tabs.indexOf(d->tabAt(_position));
+}
+
 void TabBar::removeTab(int _tabIndex)
 {
     if (0 <= _tabIndex && _tabIndex < d->tabs.size()) {
@@ -463,10 +468,13 @@ void TabBar::removeTab(int _tabIndex)
 
 void TabBar::removeAllTabs()
 {
-    d->currentTabIndex = 0;
     while (!d->tabs.isEmpty()) {
         removeTab(0);
     }
+
+    const auto lastIndex = d->currentTabIndex;
+    d->currentTabIndex = 0;
+    emit currentIndexChanged(0, lastIndex);
 }
 
 QSize TabBar::minimumSizeHint() const

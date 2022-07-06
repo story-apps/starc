@@ -999,6 +999,35 @@ void StructureModel::addItemVersion(StructureModelItem* _item, const QString& _n
                        newVersion->name(), _content);
 }
 
+void StructureModel::updateItemVersion(StructureModelItem* _item, int _versionIndex,
+                                       const QString& _name, const QColor& _color)
+{
+    if (_item == nullptr) {
+        return;
+    }
+
+    const auto itemIndex = indexForItem(_item);
+    auto version = _item->versions().at(_versionIndex);
+    version->setName(_name);
+    version->setColor(_color);
+    emit dataChanged(itemIndex, itemIndex);
+}
+
+void StructureModel::removeItemVersion(StructureModelItem* _item, int _versionIndex)
+{
+    if (_item == nullptr) {
+        return;
+    }
+
+    const auto itemIndex = indexForItem(_item);
+    _item->removeVersion(_versionIndex);
+    emit dataChanged(itemIndex, itemIndex);
+
+    //
+    // TODO: Удалить документ из базы данных
+    //
+}
+
 void StructureModel::setNavigatorAvailableFor(const QModelIndex& _index, bool isAvailable)
 {
     if (isAvailable) {

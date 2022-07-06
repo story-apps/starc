@@ -147,6 +147,16 @@ public:
     void createNewVersion(const QModelIndex& _itemIndex);
 
     /**
+     * @brief Изменить версию
+     */
+    void editVersion(const QModelIndex& _itemIndex, int _versionIndex);
+
+    /**
+     * @brief Удалить версию
+     */
+    void removeVersion(const QModelIndex& _itemIndex, int _versionIndex);
+
+    /**
      * @brief Удалить документ
      */
     void removeDocument(const QModelIndex& _itemIndex);
@@ -530,20 +540,71 @@ void ProjectManager::Implementation::addDocumentToContainer(
 void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIndex)
 {
     auto dialog = new Ui::CreateVersionDialog(topLevelWidget);
-    connect(dialog, &Ui::CreateVersionDialog::createPressed, navigator,
+    connect(dialog, &Ui::CreateVersionDialog::savePressed, view.active,
             [this, _itemIndex, dialog](const QString& _name, const QColor& _color, bool _readOnly) {
+                dialog->hideDialog();
+
                 const auto item = projectStructureModel->itemForIndex(_itemIndex);
                 const auto model = modelsFacade.modelFor(item->uuid());
                 projectStructureModel->addItemVersion(item, _name, _color, _readOnly,
                                                       model->document()->content());
                 view.active->setDocumentVersions(item->versions());
-
-                dialog->hideDialog();
             });
     connect(dialog, &Ui::CreateVersionDialog::disappeared, dialog,
             &Ui::CreateVersionDialog::deleteLater);
 
     dialog->showDialog();
+}
+
+void ProjectManager::Implementation::editVersion(const QModelIndex& _itemIndex, int _versionIndex)
+{
+    auto dialog = new Ui::CreateVersionDialog(topLevelWidget);
+    const auto item = projectStructureModel->itemForIndex(_itemIndex);
+    const auto version = item->versions().at(_versionIndex);
+    dialog->edit(version->name(), version->color(), version->readOnly());
+    connect(dialog, &Ui::CreateVersionDialog::savePressed, view.active,
+            [this, item, _versionIndex, dialog](const QString& _name, const QColor& _color) {
+                dialog->hideDialog();
+
+                projectStructureModel->updateItemVersion(item, _versionIndex, _name, _color);
+                view.active->setDocumentVersions(item->versions());
+            });
+    connect(dialog, &Ui::CreateVersionDialog::disappeared, dialog,
+            &Ui::CreateVersionDialog::deleteLater);
+
+    dialog->showDialog();
+}
+
+void ProjectManager::Implementation::removeVersion(const QModelIndex& _itemIndex, int _versionIndex)
+{
+    auto dialog = new Dialog(view.active->topLevelWidget());
+    const auto item = projectStructureModel->itemForIndex(_itemIndex);
+    const auto version = item->versions().at(_versionIndex);
+    constexpr int cancelButtonId = 0;
+    constexpr int removeButtonId = 1;
+    dialog->showDialog(
+        {}, tr("Do you really want to remove project version \"%1\"?").arg(version->name()),
+        { { cancelButtonId, tr("No"), Dialog::RejectButton },
+          { removeButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
+    connect(
+        dialog, &Dialog::finished, view.active,
+        [this, item, _versionIndex, cancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
+            dialog->hideDialog();
+
+            //
+            // Пользователь передумал удалять
+            //
+            if (_buttonInfo.id == cancelButtonId) {
+                return;
+            }
+
+            //
+            // Если таки хочет, то удаляем версию
+            //
+            projectStructureModel->removeItemVersion(item, _versionIndex);
+            view.active->setDocumentVersions(item->versions());
+        });
+    connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
 void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemIndex)
@@ -1185,6 +1246,55 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             //
             showViewForVersion(currentItem->versions().at(_versionIndex - 1));
         });
+        connect(view, &Ui::ProjectView::showVersionContextMenuPressed, this,
+                [this](int _versionIndex) {
+                    const auto currentItemIndex
+                        = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
+
+                    QVector<QAction*> menuActions;
+                    auto createNewVersionAction = new QAction;
+                    createNewVersionAction->setIconText(u8"\U000F00FB");
+                    createNewVersionAction->setText(tr("Create new version"));
+                    connect(createNewVersionAction, &QAction::triggered, this,
+                            [this, currentItemIndex] { d->createNewVersion(currentItemIndex); });
+                    menuActions.append(createNewVersionAction);
+
+                    //
+                    // Для любой версии, кроме текущей показываем опции редактирования
+                    //
+                    if (_versionIndex > 0) {
+                        --_versionIndex;
+                        //
+                        auto editVersionAction = new QAction;
+                        editVersionAction->setIconText(u8"\U000F090C");
+                        editVersionAction->setText(tr("Edit"));
+                        connect(editVersionAction, &QAction::triggered, this,
+                                [this, currentItemIndex, _versionIndex] {
+                                    d->editVersion(currentItemIndex, _versionIndex);
+                                });
+                        menuActions.append(editVersionAction);
+                        //
+                        auto removeAction = new QAction;
+                        removeAction->setIconText(u8"\U000F01B4");
+                        removeAction->setText(tr("Remove"));
+                        connect(removeAction, &QAction::triggered, this,
+                                [this, currentItemIndex, _versionIndex] {
+                                    d->removeVersion(currentItemIndex, _versionIndex);
+                                });
+                        menuActions.append(removeAction);
+                        //
+                        createNewVersionAction->setSeparator(true);
+                        menuActions.move(0, menuActions.size() - 1);
+                    }
+
+                    auto menu = new ContextMenu(d->view.active);
+                    menu->setActions(menuActions);
+                    menu->setBackgroundColor(Ui::DesignSystem::color().background());
+                    menu->setTextColor(Ui::DesignSystem::color().onBackground());
+                    connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
+
+                    menu->showContextMenu(QCursor::pos());
+                });
     }
 
     //
@@ -1582,6 +1692,15 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     setSettingsValue(DataStorageLayer::projectStructureKey(_path), d->navigator->saveState());
     setSettingsValue(DataStorageLayer::projectStructureVisibleKey(_path),
                      d->navigator->isProjectNavigatorShown());
+
+    //
+    // Сохранить состояние отображения версий для текущего документа
+    //
+    if (d->currentDocument.model != nullptr && d->currentDocument.model->document() != nullptr) {
+        setSettingsValue(
+            documentSettingsKey(d->currentDocument.model->document()->uuid(), kVersionsVisibleKey),
+            d->showVersionsAction->isChecked());
+    }
 
     //
     // FIXME: Сохранять и восстанавливать состояние панелей

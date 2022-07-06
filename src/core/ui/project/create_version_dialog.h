@@ -13,11 +13,16 @@ public:
     explicit CreateVersionDialog(QWidget* _parent = nullptr);
     ~CreateVersionDialog() override;
 
+    /**
+     * @brief Редактировать версию с заданными параметрами
+     */
+    void edit(const QString& _name, const QColor& _color, bool _readOnly);
+
 signals:
     /**
-     * @brief Пользователь нажал кнопку создания новой версии
+     * @brief Пользователь нажал кнопку создания новой версии/сохранения редактируемой
      */
-    void createPressed(const QString& _versionName, const QColor& _color, bool _readOnly);
+    void savePressed(const QString& _versionName, const QColor& _color, bool _readOnly);
 
 protected:
     /**

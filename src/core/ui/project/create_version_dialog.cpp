@@ -11,6 +11,18 @@
 
 namespace Ui {
 
+namespace {
+
+/**
+ * @brief Состояние диалога
+ */
+enum State {
+    AddNew,
+    Edit,
+};
+
+} // namespace
+
 class CreateVersionDialog::Implementation
 {
 public:
@@ -24,6 +36,8 @@ public:
     QHBoxLayout* buttonsLayout = nullptr;
     Button* cancelButton = nullptr;
     Button* createButton = nullptr;
+
+    State state = AddNew;
 };
 
 CreateVersionDialog::Implementation::Implementation(QWidget* _parent)
@@ -72,10 +86,21 @@ CreateVersionDialog::CreateVersionDialog(QWidget* _parent)
     connect(d->versionColorPopup, &ColorPickerPopup::selectedColorChanged, this,
             [this](const QColor& _color) { d->versionName->setTrailingIconColor(_color); });
     connect(d->createButton, &Button::clicked, this, [this] {
-        emit createPressed(d->versionName->text(), d->versionColorPopup->selectedColor(),
+        emit savePressed(d->versionName->text(), d->versionColorPopup->selectedColor(),
                            !d->allowEditVersion->isChecked());
     });
     connect(d->cancelButton, &Button::clicked, this, &CreateVersionDialog::hideDialog);
+}
+
+void CreateVersionDialog::edit(const QString& _name, const QColor& _color, bool _readOnly)
+{
+    d->state = Edit;
+    updateTranslations();
+
+    d->versionName->setText(_name);
+    d->versionColorPopup->setSelectedColor(_color);
+    d->allowEditVersion->setChecked(!_readOnly);
+    d->allowEditVersion->setEnabled(false);
 }
 
 CreateVersionDialog::~CreateVersionDialog() = default;
@@ -92,12 +117,12 @@ QWidget* CreateVersionDialog::lastFocusableWidget() const
 
 void CreateVersionDialog::updateTranslations()
 {
-    setTitle(tr("Create new document version"));
+    setTitle(d->state == AddNew ? tr("Create new document version") : tr("Edit document version"));
 
-    d->versionName->setLabel(tr("New version name"));
+    d->versionName->setLabel(tr("Version name"));
     d->allowEditVersion->setText(tr("Allow to edit new version"));
     d->cancelButton->setText(tr("Cancel"));
-    d->createButton->setText(tr("Create"));
+    d->createButton->setText(d->state == AddNew ? tr("Create") : tr("Save"));
 }
 
 void CreateVersionDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)

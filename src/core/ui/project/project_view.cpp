@@ -53,6 +53,7 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
     defaultPageBodyLabel->setAlignment(Qt::AlignCenter);
     notImplementedPageBodyLabel->setAlignment(Qt::AlignCenter);
     documentVersions->hide();
+    documentVersions->setContextMenuPolicy(Qt::CustomContextMenu);
     documentEditor->setAnimationType(AnimationType::FadeThrough);
     overlay->setAttribute(Qt::WA_TransparentForMouseEvents);
     overlay->hide();
@@ -122,11 +123,13 @@ ProjectView::ProjectView(QWidget* _parent)
             &ProjectView::createNewItemPressed);
     connect(d->documentVersions, &TabBar::currentIndexChanged, this,
             &ProjectView::showVersionPressed);
-    connect(&d->heightAnimation, &QVariantAnimation::valueChanged, this,
-            [this](const QVariant& _value) {
-                qDebug(QString::number(_value.toInt()).toUtf8());
-                d->documentVersions->setFixedHeight(_value.toInt());
+    connect(d->documentVersions, &TabBar::customContextMenuRequested, this,
+            [this](const QPoint _position) {
+                emit showVersionContextMenuPressed(d->documentVersions->tabAt(_position));
             });
+    connect(
+        &d->heightAnimation, &QVariantAnimation::valueChanged, this,
+        [this](const QVariant& _value) { d->documentVersions->setFixedHeight(_value.toInt()); });
     connect(&d->heightAnimation, &QVariantAnimation::finished, this, [this] {
         if (d->heightAnimation.direction() == QVariantAnimation::Backward) {
             d->documentVersions->hide();

@@ -139,6 +139,9 @@ public:
      */
     void addItemVersion(StructureModelItem* _item, const QString& _name, const QColor& _color,
                         bool _readOnly, const QByteArray& _content);
+    void updateItemVersion(StructureModelItem* _item, int _versionIndex, const QString& _name,
+                           const QColor& _color);
+    void removeItemVersion(StructureModelItem* _item, int _versionIndex);
 
     /**
      * @brief Задать возможность перехода в навигатор для заданного индекса

@@ -11,7 +11,11 @@ class CORE_LIBRARY_EXPORT Dialog : public AbstractDialog
     Q_OBJECT
 
 public:
-    enum ButtonType { NormalButton, AcceptButton, RejectButton };
+    enum ButtonType {
+        NormalButton,
+        AcceptButton,
+        RejectButton,
+    };
 
     /**
      * @brief Структура для описания кнопок в диалоге
