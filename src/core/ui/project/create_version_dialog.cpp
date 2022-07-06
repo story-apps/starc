@@ -3,6 +3,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
+#include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/text_field/text_field.h>
 
 #include <QBoxLayout>
@@ -17,6 +18,7 @@ public:
 
 
     TextField* versionName = nullptr;
+    ColorPickerPopup* versionColorPopup = nullptr;
     CheckBox* allowEditVersion = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -26,12 +28,17 @@ public:
 
 CreateVersionDialog::Implementation::Implementation(QWidget* _parent)
     : versionName(new TextField(_parent))
+    , versionColorPopup(new ColorPickerPopup(_parent))
     , allowEditVersion(new CheckBox(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
     , createButton(new Button(_parent))
 {
+    versionColorPopup->setColorCanBeDeselected(false);
+    versionColorPopup->setSelectedColor(Qt::red);
     versionName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    versionName->setTrailingIcon(u8"\U000F0765");
+    versionName->setTrailingIconColor(versionColorPopup->selectedColor());
     createButton->setEnabled(false);
 
     buttonsLayout->setContentsMargins({});
@@ -59,8 +66,14 @@ CreateVersionDialog::CreateVersionDialog(QWidget* _parent)
 
     connect(d->versionName, &TextField::textChanged, this,
             [this] { d->createButton->setEnabled(!d->versionName->text().isEmpty()); });
+    connect(d->versionName, &TextField::trailingIconPressed, this, [this] {
+        d->versionColorPopup->showPopup(d->versionName, Qt::AlignBottom | Qt::AlignRight);
+    });
+    connect(d->versionColorPopup, &ColorPickerPopup::selectedColorChanged, this,
+            [this](const QColor& _color) { d->versionName->setTrailingIconColor(_color); });
     connect(d->createButton, &Button::clicked, this, [this] {
-        emit createPressed(d->versionName->text(), {}, !d->allowEditVersion->isChecked());
+        emit createPressed(d->versionName->text(), d->versionColorPopup->selectedColor(),
+                           !d->allowEditVersion->isChecked());
     });
     connect(d->cancelButton, &Button::clicked, this, &CreateVersionDialog::hideDialog);
 }
@@ -93,6 +106,8 @@ void CreateVersionDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
 
     d->versionName->setTextColor(Ui::DesignSystem::color().onBackground());
     d->versionName->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+    d->versionColorPopup->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->versionColorPopup->setTextColor(Ui::DesignSystem::color().onBackground());
     d->allowEditVersion->setTextColor(Ui::DesignSystem::color().onBackground());
     d->allowEditVersion->setBackgroundColor(Ui::DesignSystem::color().background());
 
