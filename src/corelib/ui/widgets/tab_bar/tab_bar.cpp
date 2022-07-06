@@ -447,6 +447,7 @@ void TabBar::removeTab(int _tabIndex)
 
 void TabBar::removeAllTabs()
 {
+    d->currentTabIndex = 0;
     while (!d->tabs.isEmpty()) {
         removeTab(0);
     }

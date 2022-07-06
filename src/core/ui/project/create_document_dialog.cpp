@@ -52,6 +52,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     , documentInfo(new Body1Label(_parent))
     , documentName(new TextField(_parent))
     , insertIntoParent(new CheckBox(_parent))
+    , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
     , createButton(new Button(_parent))
 {
@@ -92,7 +93,6 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
 
     insertIntoParent->hide();
 
-    buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton);

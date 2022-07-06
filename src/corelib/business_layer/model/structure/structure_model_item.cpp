@@ -21,6 +21,7 @@ public:
     QString name;
     QColor color;
     bool visible = true;
+    QVector<StructureModelItem*> versions;
 };
 
 StructureModelItem::Implementation::Implementation(const QUuid& _uuid,
@@ -53,7 +54,11 @@ StructureModelItem::StructureModelItem(const StructureModelItem& _other)
 {
 }
 
-StructureModelItem::~StructureModelItem() = default;
+StructureModelItem::~StructureModelItem()
+{
+    qDeleteAll(d->versions);
+    d->versions.clear();
+}
 
 const QUuid& StructureModelItem::uuid() const
 {
@@ -93,6 +98,43 @@ bool StructureModelItem::visible() const
 void StructureModelItem::setVisible(bool _visible)
 {
     d->visible = _visible;
+}
+
+bool StructureModelItem::readOnly() const
+{
+    return d->visible;
+}
+
+void StructureModelItem::setReadOnly(bool _readOnly)
+{
+    d->visible = _readOnly;
+}
+
+const QVector<StructureModelItem*>& StructureModelItem::versions() const
+{
+    return d->versions;
+}
+
+StructureModelItem* StructureModelItem::addVersion(StructureModelItem* _version)
+{
+    _version->setParent(parent());
+    d->versions.append(_version);
+    return _version;
+}
+
+StructureModelItem* StructureModelItem::addVersion(const QString& _name, const QColor& _color,
+                                                   bool _readOnly)
+{
+    return addVersion(
+        new StructureModelItem(QUuid::createUuid(), type(), _name, _color, _readOnly));
+}
+
+void StructureModelItem::setVersions(const QVector<StructureModelItem*>& _versions)
+{
+    qDeleteAll(d->versions);
+    d->versions.clear();
+
+    d->versions = _versions;
 }
 
 QVariant StructureModelItem::data(int _role) const

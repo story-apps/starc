@@ -602,6 +602,14 @@ void StackWidget::resizeEvent(QResizeEvent* _event)
             d->previousWidgetImage = d->previousWidget->grab(QRect({}, _event->size()));
         }
         d->currentWidgetImage = d->currentWidget->grab();
+
+        //
+        // Для фейда с расширением корректируем финальную область отображения, чтобы сгладить
+        // совместные анимации
+        //
+        if (d->animationType == AnimationType::FadeThrough) {
+            d->fadeAnimation.incomingContentGeometry->setEndValue(QRectF(rect()));
+        }
     }
 }
 

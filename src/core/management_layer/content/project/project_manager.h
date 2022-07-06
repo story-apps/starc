@@ -5,7 +5,8 @@
 
 namespace BusinessLayer {
 class AbstractModel;
-}
+class StructureModelItem;
+} // namespace BusinessLayer
 
 namespace Domain {
 enum class DocumentObjectType;
@@ -171,12 +172,14 @@ private:
      * @brief Отобразить представление заданного типа для заданного элемента
      */
     void showView(const QModelIndex& _itemIndex, const QString& _viewMimeType);
+    void showViewForVersion(BusinessLayer::StructureModelItem* _item);
 
     /**
      * @brief Отобразить навигатор для заданного индекса
      * @note Если индекс невалидный, то отображается навигатор по проекту
      */
     void showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType = {});
+    void showNavigatorForVersion(BusinessLayer::StructureModelItem* _item);
 
 private:
     /**

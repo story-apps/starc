@@ -440,7 +440,7 @@ void AccountManager::renewPro()
 
 void AccountManager::showPromocodeActivationMessage(const QString& _message)
 {
-    StandardDialog::information(d->view, {}, _message);
+    StandardDialog::information(d->view->topLevelWidget(), {}, _message);
     d->view->clearPromocode();
 }
 

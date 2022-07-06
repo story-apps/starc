@@ -220,7 +220,7 @@ ThemeSetupView::Implementation::Implementation(QWidget* _parent)
     layout->addWidget(saveButton, 0, Qt::AlignVCenter);
 
     heightAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    heightAnimation.setDuration(300);
+    heightAnimation.setDuration(160);
 }
 
 // **

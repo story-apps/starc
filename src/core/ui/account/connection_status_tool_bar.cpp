@@ -176,9 +176,6 @@ ConnectionStatusToolBar::ConnectionStatusToolBar(QWidget* _parent)
         }
     });
 
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
-
     hide();
 }
 

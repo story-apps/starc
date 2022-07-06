@@ -1505,6 +1505,11 @@ void ApplicationManager::Implementation::exit()
     Log::info("Closing application");
 
     //
+    // Скрываем интерфейс, чтобы для пользователя всё было максимально быстро
+    //
+    applicationView->hide();
+
+    //
     // Закрываем текущий открытый проект
     //
     closeCurrentProject();

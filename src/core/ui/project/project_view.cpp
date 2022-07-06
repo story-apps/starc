@@ -1,11 +1,14 @@
 #include "project_view.h"
 
+#include <business_layer/model/structure/structure_model_item.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/label/link_label.h>
+#include <ui/widgets/tab_bar/tab_bar.h>
 #include <utils/helpers/color_helper.h>
 
 #include <QVBoxLayout>
+#include <QVariantAnimation>
 
 
 namespace Ui {
@@ -25,7 +28,13 @@ public:
     H6Label* notImplementedPageTitleLabel = nullptr;
     Body1Label* notImplementedPageBodyLabel = nullptr;
 
+    Widget* documentEditorPage = nullptr;
+    TabBar* documentVersions = nullptr;
+    StackWidget* documentEditor = nullptr;
+
     Widget* overlay = nullptr;
+
+    QVariantAnimation heightAnimation;
 };
 
 ProjectView::Implementation::Implementation(QWidget* _parent)
@@ -36,10 +45,15 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
     , notImplementedPage(new Widget(_parent))
     , notImplementedPageTitleLabel(new H6Label(notImplementedPage))
     , notImplementedPageBodyLabel(new Body1Label(notImplementedPage))
+    , documentEditorPage(new Widget(_parent))
+    , documentVersions(new TabBar(documentEditorPage))
+    , documentEditor(new StackWidget(documentEditorPage))
     , overlay(new Widget(_parent))
 {
     defaultPageBodyLabel->setAlignment(Qt::AlignCenter);
     notImplementedPageBodyLabel->setAlignment(Qt::AlignCenter);
+    documentVersions->hide();
+    documentEditor->setAnimationType(AnimationType::FadeThrough);
     overlay->setAttribute(Qt::WA_TransparentForMouseEvents);
     overlay->hide();
 
@@ -75,6 +89,17 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
         layout->addLayout(bodyLayout);
         layout->addStretch();
     }
+
+    {
+        auto layout = new QVBoxLayout(documentEditorPage);
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(documentVersions);
+        layout->addWidget(documentEditor, 1);
+    }
+
+    heightAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    heightAnimation.setDuration(160);
 }
 
 
@@ -89,11 +114,24 @@ ProjectView::ProjectView(QWidget* _parent)
 
     addWidget(d->defaultPage);
     addWidget(d->notImplementedPage);
+    addWidget(d->documentEditorPage);
 
     showDefaultPage();
 
     connect(d->defaultPageAddItemButton, &Body1LinkLabel::clicked, this,
             &ProjectView::createNewItemPressed);
+    connect(d->documentVersions, &TabBar::currentIndexChanged, this,
+            &ProjectView::showVersionPressed);
+    connect(&d->heightAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                qDebug(QString::number(_value.toInt()).toUtf8());
+                d->documentVersions->setFixedHeight(_value.toInt());
+            });
+    connect(&d->heightAnimation, &QVariantAnimation::finished, this, [this] {
+        if (d->heightAnimation.direction() == QVariantAnimation::Backward) {
+            d->documentVersions->hide();
+        }
+    });
 }
 
 ProjectView::~ProjectView() = default;
@@ -108,6 +146,12 @@ void ProjectView::showNotImplementedPage()
     setCurrentWidget(d->notImplementedPage);
 }
 
+void ProjectView::showEditor(QWidget* _widget)
+{
+    d->documentEditor->setCurrentWidget(_widget);
+    setCurrentWidget(d->documentEditorPage);
+}
+
 void ProjectView::setActive(bool _active)
 {
     const bool isVisible = !_active;
@@ -115,6 +159,40 @@ void ProjectView::setActive(bool _active)
     if (isVisible) {
         d->overlay->raise();
     }
+}
+
+void ProjectView::setDocumentVersions(const QVector<BusinessLayer::StructureModelItem*>& _versions)
+{
+    const auto lastActiveVersion = d->documentVersions->currentTab();
+
+    d->documentVersions->removeAllTabs();
+    d->documentVersions->addTab(tr("Current version"));
+    for (const auto version : _versions) {
+        d->documentVersions->addTab(version->name());
+    }
+
+    d->documentVersions->setCurrentTab(lastActiveVersion);
+
+    d->heightAnimation.setStartValue(0);
+    d->heightAnimation.setEndValue(d->documentVersions->sizeHint().height());
+}
+
+void ProjectView::setVersionsVisible(bool _visible)
+{
+    if (d->heightAnimation.state() == QVariantAnimation::Running) {
+        if ((d->heightAnimation.direction() == QVariantAnimation::Forward && _visible)
+            || (d->heightAnimation.direction() == QVariantAnimation::Backward && !_visible)) {
+            return;
+        }
+        d->heightAnimation.stop();
+    }
+
+    if (_visible) {
+        d->documentVersions->show();
+    }
+    d->heightAnimation.setDirection(_visible ? QVariantAnimation::Forward
+                                             : QVariantAnimation::Backward);
+    d->heightAnimation.start();
 }
 
 void ProjectView::resizeEvent(QResizeEvent* _event)
@@ -135,6 +213,8 @@ void ProjectView::updateTranslations()
         tr("Ooops... looks like editor of this document not implemented yet."));
     d->notImplementedPageBodyLabel->setText(
         tr("But don't worry, it will be here in one of the future updates!"));
+
+    d->documentVersions->setTabName(0, tr("Current version"));
 }
 
 void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -171,8 +251,18 @@ void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         label->setTextColor(Ui::DesignSystem::color().onSurface());
     }
 
+    d->documentEditorPage->setBackgroundColor(Ui::DesignSystem::color().surface());
+    d->documentVersions->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->documentVersions->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->documentEditor->setBackgroundColor(Ui::DesignSystem::color().surface());
+
     d->overlay->setBackgroundColor(
         ColorHelper::transparent(backgroundColor(), Ui::DesignSystem::inactiveItemOpacity()));
+}
+
+void ProjectView::setCurrentWidget(QWidget* _widget)
+{
+    StackWidget::setCurrentWidget(_widget);
 }
 
 } // namespace Ui

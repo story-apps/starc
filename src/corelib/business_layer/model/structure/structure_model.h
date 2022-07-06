@@ -135,6 +135,12 @@ public:
     void setItemVisible(StructureModelItem* _item, bool _visible);
 
     /**
+     * @brief Работа со списком версий элемента
+     */
+    void addItemVersion(StructureModelItem* _item, const QString& _name, const QColor& _color,
+                        bool _readOnly, const QByteArray& _content);
+
+    /**
      * @brief Задать возможность перехода в навигатор для заданного индекса
      */
     void setNavigatorAvailableFor(const QModelIndex& _index, bool isAvailable);

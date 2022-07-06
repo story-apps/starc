@@ -14,7 +14,12 @@ public:
     /**
      * @brief Тип анимации контента
      */
-    enum class AnimationType { Fade, FadeThrough, Slide, Expand };
+    enum class AnimationType {
+        Fade,
+        FadeThrough,
+        Slide,
+        Expand,
+    };
 
 public:
     explicit StackWidget(QWidget* _parent = nullptr);

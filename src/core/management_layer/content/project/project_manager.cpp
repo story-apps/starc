@@ -15,6 +15,7 @@
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
 #include <business_layer/model/structure/structure_proxy_model.h>
+#include <data_layer/database.h>
 #include <data_layer/storage/document_change_storage.h>
 #include <data_layer/storage/document_data_storage.h>
 #include <data_layer/storage/document_storage.h>
@@ -29,6 +30,7 @@
 #include <ui/abstract_navigator.h>
 #include <ui/design_system/design_system.h>
 #include <ui/project/create_document_dialog.h>
+#include <ui/project/create_version_dialog.h>
 #include <ui/project/project_navigator.h>
 #include <ui/project/project_tool_bar.h>
 #include <ui/project/project_view.h>
@@ -50,6 +52,52 @@
 
 namespace ManagementLayer {
 
+namespace {
+
+const QLatin1String kVersionsVisibleKey("versions-visible");
+
+/**
+ * @brief Является ли заданный элемент текстовым
+ */
+bool isTextItem(BusinessLayer::StructureModelItem* _item)
+{
+    static const QSet<Domain::DocumentObjectType> textItems = {
+        Domain::DocumentObjectType::ScreenplayTitlePage,
+        Domain::DocumentObjectType::ScreenplaySynopsis,
+        Domain::DocumentObjectType::ScreenplayTreatment,
+        Domain::DocumentObjectType::ScreenplayText,
+        Domain::DocumentObjectType::ComicBookTitlePage,
+        Domain::DocumentObjectType::ComicBookSynopsis,
+        Domain::DocumentObjectType::ComicBookText,
+        Domain::DocumentObjectType::AudioplayTitlePage,
+        Domain::DocumentObjectType::AudioplaySynopsis,
+        Domain::DocumentObjectType::AudioplayText,
+        Domain::DocumentObjectType::StageplayTitlePage,
+        Domain::DocumentObjectType::StageplaySynopsis,
+        Domain::DocumentObjectType::StageplayText,
+        Domain::DocumentObjectType::SimpleText,
+    };
+    return textItems.contains(_item->type());
+}
+
+/**
+ * @brief Сформировать ключ настроек проекта
+ */
+QString projectSettingsKey(const QString& _key)
+{
+    return DatabaseLayer::Database::currentFile() + "/" + _key;
+}
+
+/**
+ * @brief Сформировать ключ настроек для документа проекта
+ */
+QString documentSettingsKey(const QUuid& _documentUuid, const QString& _key)
+{
+    return projectSettingsKey(_documentUuid.toString() + "/" + _key);
+}
+
+} // namespace
+
 class ProjectManager::Implementation
 {
 public:
@@ -59,7 +107,7 @@ public:
     /**
      * @brief Обновить текст пункта меню разделения экрана
      */
-    void updateSplitScreenActionText();
+    void updateOptionsText();
 
     /**
      * @brief Переключить активное представление
@@ -92,6 +140,11 @@ public:
     void addDocumentToContainer(Domain::DocumentObjectType _containerType,
                                 Domain::DocumentObjectType _documentType,
                                 const QString& _documentName, const QByteArray& _content = {});
+
+    /**
+     * @brief Создать новую версию заданного документа
+     */
+    void createNewVersion(const QModelIndex& _itemIndex);
 
     /**
      * @brief Удалить документ
@@ -163,6 +216,11 @@ public:
     QShortcut* splitScreenShortcut = nullptr;
 
     /**
+     * @brief Действие отображения списка версий документа
+     */
+    QAction* showVersionsAction = nullptr;
+
+    /**
      * @brief Модели списка документов
      */
     BusinessLayer::StructureModel* projectStructureModel = nullptr;
@@ -204,6 +262,7 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
       })
     , splitScreenAction(new QAction(_parent))
     , splitScreenShortcut(new QShortcut(_parent))
+    , showVersionsAction(new QAction(_parent))
     , projectStructureModel(new BusinessLayer::StructureModel(navigator))
     , projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel))
     , modelsFacade(projectStructureModel, &documentDataStorage)
@@ -224,16 +283,20 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
     splitScreenAction->setCheckable(true);
     splitScreenAction->setIconText(u8"\U000F10E7");
     splitScreenAction->setShortcut(QKeySequence("F2"));
-    updateSplitScreenActionText();
+    showVersionsAction->setCheckable(true);
+    showVersionsAction->setIconText(u8"\U000F0AB8");
+    updateOptionsText();
     toolBar->setOptions({ splitScreenAction }, AppBarOptionsLevel::App);
     splitScreenShortcut->setKey(QKeySequence("F2"));
     splitScreenShortcut->setContext(Qt::ApplicationShortcut);
 }
 
-void ProjectManager::Implementation::updateSplitScreenActionText()
+void ProjectManager::Implementation::updateOptionsText()
 {
     splitScreenAction->setText(splitScreenAction->isChecked() ? tr("Remove split")
                                                               : tr("Split window"));
+    showVersionsAction->setText(showVersionsAction->isChecked() ? tr("Hide document versions")
+                                                                : tr("Show document versions"));
 }
 
 void ProjectManager::Implementation::switchViews()
@@ -333,15 +396,31 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         }
     }
 
+    bool isDocumentActionAdded = false;
+    //
+    // Для текстовых документов можно создать версию
+    //
+    if (isTextItem(currentItem)) {
+        auto createNewVersion = new QAction(tr("Create new version"));
+        createNewVersion->setSeparator(true);
+        createNewVersion->setIconText(u8"\U000F00FB");
+        connect(createNewVersion, &QAction::triggered, topLevelWidget,
+                [this, currentItemIndex] { this->createNewVersion(currentItemIndex); });
+        menuActions.append(createNewVersion);
+
+        isDocumentActionAdded = true;
+    }
+
     //
     // Каждый из элементов можно открыть в своём окне
     //
     auto openInNewWindow = new QAction(tr("Open in new window"));
-    openInNewWindow->setSeparator(true);
+    openInNewWindow->setSeparator(!isDocumentActionAdded);
     openInNewWindow->setIconText(u8"\U000F03CC");
     connect(openInNewWindow, &QAction::triggered, topLevelWidget,
             [this] { this->openCurrentDocumentInNewWindow(); });
     menuActions.append(openInNewWindow);
+    isDocumentActionAdded = true;
 
     navigator->setContextMenuActions(menuActions);
 }
@@ -360,6 +439,7 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
         window->show();
         //
         // TODO: Почему-то ни одна из моделей не использует это поле
+        //       Ещё сюда нужно писать версию открытого документа, если это не текущая версия
         //
         window->setWindowTitle(currentDocument.model->documentName());
 
@@ -445,6 +525,25 @@ void ProjectManager::Implementation::addDocumentToContainer(
             break;
         }
     }
+}
+
+void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIndex)
+{
+    auto dialog = new Ui::CreateVersionDialog(topLevelWidget);
+    connect(dialog, &Ui::CreateVersionDialog::createPressed, navigator,
+            [this, _itemIndex, dialog](const QString& _name, const QColor& _color, bool _readOnly) {
+                const auto item = projectStructureModel->itemForIndex(_itemIndex);
+                const auto model = modelsFacade.modelFor(item->uuid());
+                projectStructureModel->addItemVersion(item, _name, _color, _readOnly,
+                                                      model->document()->content());
+                view.active->setDocumentVersions(item->versions());
+
+                dialog->hideDialog();
+            });
+    connect(dialog, &Ui::CreateVersionDialog::disappeared, dialog,
+            &Ui::CreateVersionDialog::deleteLater);
+
+    dialog->showDialog();
 }
 
 void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemIndex)
@@ -815,7 +914,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
         showView(d->navigator->currentIndex(), _mimeType);
     });
     connect(d->splitScreenAction, &QAction::toggled, this, [this](bool _checked) {
-        d->updateSplitScreenActionText();
+        d->updateOptionsText();
         if (_checked) {
             d->view.container->setSizes({ 1, 1 });
             d->view.right->show();
@@ -834,6 +933,10 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
         }
 
         d->splitScreenAction->toggle();
+    });
+    connect(d->showVersionsAction, &QAction::toggled, this, [this](bool _checked) {
+        d->updateOptionsText();
+        d->view.active->setVersionsVisible(_checked);
     });
 
     //
@@ -1062,10 +1165,27 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     //
     // Соединения представления
     //
-    connect(d->view.left, &Ui::ProjectView::createNewItemPressed, this,
-            [this] { d->addDocument(); });
-    connect(d->view.right, &Ui::ProjectView::createNewItemPressed, this,
-            [this] { d->addDocument(); });
+    for (auto view : { d->view.left, d->view.right }) {
+        connect(view, &Ui::ProjectView::createNewItemPressed, this, [this] { d->addDocument(); });
+        connect(view, &Ui::ProjectView::showVersionPressed, this, [this](int _versionIndex) {
+            const auto currentItemIndex
+                = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
+            const auto currentItem = d->projectStructureModel->itemForIndex(currentItemIndex);
+
+            //
+            // Показать текущую версию
+            //
+            if (_versionIndex == 0) {
+                showViewForVersion(currentItem);
+                return;
+            }
+
+            //
+            // Показать одну из установленных версий
+            //
+            showViewForVersion(currentItem->versions().at(_versionIndex - 1));
+        });
+    }
 
     //
     // Соединения со строителем моделей
@@ -1273,9 +1393,14 @@ void ProjectManager::toggleFullScreen(bool _isFullScreen)
     // При переходе в полноэкранный режим, если активировано разделение экрана, то скроем неактивный
     // редактор и запомним состояние разделения
     //
-    if (_isFullScreen && d->splitScreenAction->isChecked()) {
-        d->view.stateBeforeFullscreen = d->view.container->saveState();
-        d->view.inactive->hide();
+    if (_isFullScreen) {
+        if (d->splitScreenAction->isChecked()) {
+            d->view.stateBeforeFullscreen = d->view.container->saveState();
+            d->view.inactive->hide();
+        }
+        if (d->showVersionsAction->isChecked()) {
+            d->view.active->setVersionsVisible(false);
+        }
     }
 
     //
@@ -1292,9 +1417,14 @@ void ProjectManager::toggleFullScreen(bool _isFullScreen)
     // При выходе из полноэкранного режима, если экран был разделён, то покажем неактивный редактор
     // и восстановим состояние разеделения
     //
-    if (!_isFullScreen && d->splitScreenAction->isChecked()) {
-        d->view.inactive->show();
-        d->view.container->restoreState(d->view.stateBeforeFullscreen);
+    if (!_isFullScreen) {
+        if (d->splitScreenAction->isChecked()) {
+            d->view.inactive->show();
+            d->view.container->restoreState(d->view.stateBeforeFullscreen);
+        }
+        if (d->showVersionsAction->isChecked()) {
+            d->view.active->setVersionsVisible(true);
+        }
     }
 }
 
@@ -1787,8 +1917,18 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
 {
     Log::info("Activate plugin \"%1\"", _viewMimeType);
 
+    //
+    // Сохранить состояние отображения версий для текущего документа
+    //
+    if (d->currentDocument.model != nullptr && d->currentDocument.model->document() != nullptr) {
+        setSettingsValue(
+            documentSettingsKey(d->currentDocument.model->document()->uuid(), kVersionsVisibleKey),
+            d->showVersionsAction->isChecked());
+    }
+
     if (!_itemIndex.isValid()) {
         updateCurrentDocument(nullptr, {});
+        d->view.active->setVersionsVisible(false);
         d->view.active->showDefaultPage();
         return;
     }
@@ -1802,6 +1942,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     updateCurrentDocument(d->modelsFacade.modelFor(item->uuid()), _viewMimeType);
     if (d->currentDocument.model == nullptr) {
         d->view.active->showNotImplementedPage();
+        d->view.active->setVersionsVisible(false);
         return;
     }
 
@@ -1816,15 +1957,21 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
     if (view == nullptr) {
         d->view.active->showNotImplementedPage();
+        d->view.active->setVersionsVisible(false);
         return;
     }
-    d->view.active->setCurrentWidget(view->asQWidget());
+    d->view.active->setDocumentVersions(item->versions());
+    d->view.active->showEditor(view->asQWidget());
     d->view.activeIndex = sourceItemIndex;
 
     //
     // Настроим опции редактора
     //
-    d->toolBar->setOptions(view->options(), AppBarOptionsLevel::View);
+    auto viewOptions = view->options();
+    if (isTextItem(item)) {
+        viewOptions.prepend(d->showVersionsAction);
+    }
+    d->toolBar->setOptions(viewOptions, AppBarOptionsLevel::View);
 
     //
     // Настроим возможность перехода в навигатор
@@ -1837,7 +1984,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Если в данный момент отображён кастомный навигатов, откроем навигатор соответствующий
     // редактору
     //
-    if (!d->navigator->isProjectNavigatorShown()) {
+    if (!d->navigator->isProjectNavigatorShown() && d->view.active == d->view.left) {
         showNavigator(_itemIndex, _viewMimeType);
     }
 
@@ -1855,10 +2002,56 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
 
     //
+    // Отобразим версии документа, если необходимо
+    //
+    d->showVersionsAction->setChecked(
+        settingsValue(
+            documentSettingsKey(d->currentDocument.model->document()->uuid(), kVersionsVisibleKey),
+            false)
+            .toBool());
+
+    //
     // Фокусируем представление
     //
     QTimer::singleShot(d->view.active->animationDuration() * 1.3, this,
                        [this] { d->view.active->setFocus(); });
+}
+
+void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item)
+{
+    const auto viewMimeType = d->currentDocument.viewMimeType;
+
+    //
+    // Определим модель
+    //
+    updateCurrentDocument(d->modelsFacade.modelFor(_item->uuid()), viewMimeType);
+    if (d->currentDocument.model == nullptr) {
+        d->view.active->showNotImplementedPage();
+        return;
+    }
+
+    //
+    // Определим представление и отобразим
+    //
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = d->pluginsBuilder.activateView(viewMimeType, d->currentDocument.model);
+    } else {
+        view = d->pluginsBuilder.activateSecondView(viewMimeType, d->currentDocument.model);
+    }
+    if (view == nullptr) {
+        d->view.active->showNotImplementedPage();
+        return;
+    }
+    d->view.active->showEditor(view->asQWidget());
+
+    //
+    // Если в данный момент отображён кастомный навигатов, откроем навигатор соответствующий
+    // редактору
+    //
+    if (!d->navigator->isProjectNavigatorShown() && d->view.active == d->view.left) {
+        showNavigatorForVersion(_item);
+    }
 }
 
 void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType)
@@ -1911,6 +2104,29 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     connect(navigatorView, &Ui::AbstractNavigator::backPressed, d->toolBar,
             &Ui::ProjectToolBar::clearNavigatorOptions, Qt::UniqueConnection);
     d->navigator->setCurrentWidget(navigatorView);
+}
+
+void ProjectManager::showNavigatorForVersion(BusinessLayer::StructureModelItem* _item)
+{
+    //
+    // Определим модель
+    //
+    auto model = d->modelsFacade.modelFor(_item->uuid());
+    if (model == nullptr) {
+        d->navigator->showProjectNavigator();
+        return;
+    }
+
+    //
+    // Определим представление и отобразим
+    //
+    const auto viewMimeType = d->currentDocument.viewMimeType;
+    const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(viewMimeType);
+    auto view = d->pluginsBuilder.activateView(navigatorMimeType, model);
+    if (view == nullptr) {
+        d->navigator->showProjectNavigator();
+        return;
+    }
 }
 
 void ProjectManager::updateCurrentDocument(BusinessLayer::AbstractModel* _model,
