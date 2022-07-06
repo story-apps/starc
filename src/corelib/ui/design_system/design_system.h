@@ -757,12 +757,18 @@ public:
         qreal heightWithText() const;
         qreal heightWithIcon() const;
         qreal heightWithTextAndIcon() const;
+        qreal heightWithTextAndLeadingIcon() const;
         /** @} */
 
         /**
          * @brief Отступы вокруг
          */
         QMarginsF margins() const;
+
+        /**
+         * @brief Отступ между иконкой и текстом
+         */
+        qreal spacing() const;
 
         /**
          * @brief Размер иконки

@@ -1410,8 +1410,10 @@ public:
     qreal minimumWidth = 90.0;
     qreal heightWithText = 48.0;
     qreal heightWithIcon = 48.0;
-    qreal heightWithTextAndIcon = 72.0;
+    qreal heightWithTextAndIcon = 48.0;
+    qreal heightWithTextAndLeadingIcon = 72.0;
     QMarginsF margins = { 24.0, 12.0, 24.0, 12.0 };
+    qreal spacing = 12.0;
     QSizeF iconSize = { 24.0, 24.0 };
 };
 
@@ -1421,7 +1423,9 @@ DesignSystem::Tab::Implementation::Implementation(qreal _scaleFactor)
     heightWithText *= _scaleFactor;
     heightWithIcon *= _scaleFactor;
     heightWithTextAndIcon *= _scaleFactor;
+    heightWithTextAndLeadingIcon *= _scaleFactor;
     margins *= _scaleFactor;
+    spacing *= _scaleFactor;
     iconSize *= _scaleFactor;
 }
 
@@ -1449,9 +1453,19 @@ qreal DesignSystem::Tab::heightWithTextAndIcon() const
     return d->heightWithTextAndIcon;
 }
 
+qreal DesignSystem::Tab::heightWithTextAndLeadingIcon() const
+{
+    return d->heightWithTextAndLeadingIcon;
+}
+
 QMarginsF DesignSystem::Tab::margins() const
 {
     return d->margins;
+}
+
+qreal DesignSystem::Tab::spacing() const
+{
+    return d->spacing;
 }
 
 QSizeF DesignSystem::Tab::iconSize() const

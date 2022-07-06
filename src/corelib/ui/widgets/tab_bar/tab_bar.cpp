@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/scroller_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QMouseEvent>
 #include <QPainter>
@@ -14,7 +15,8 @@ namespace {
 
 struct Tab {
     QString name;
-    QPixmap icon;
+    QString icon;
+    QColor color;
     bool visible;
 
     bool isValid() const
@@ -34,6 +36,11 @@ class TabBar::Implementation
 {
 public:
     explicit Implementation(TabBar* _q);
+
+    /**
+     * @brief Ширина контента вкладки
+     */
+    qreal tabContentWidth(const Tab& _tab) const;
 
     /**
      * @brief Иделаьная ширина вкладки
@@ -121,6 +128,14 @@ TabBar::Implementation::Implementation(TabBar* _q)
     decorationOpacityAnimation.setDuration(420);
 }
 
+qreal TabBar::Implementation::tabContentWidth(const Tab& _tab) const
+{
+    return (_tab.icon.isEmpty()
+                ? 0.0
+                : (Ui::DesignSystem::tab().iconSize().width() + Ui::DesignSystem::tab().spacing()))
+        + TextHelper::fineTextWidthF(_tab.name, Ui::DesignSystem::font().button());
+}
+
 qreal TabBar::Implementation::tabWidthHint(const Tab& _tab) const
 {
     return isFixed ? tabWidthHintForFixed() : tabWidthHintForScrollable(_tab);
@@ -129,8 +144,7 @@ qreal TabBar::Implementation::tabWidthHint(const Tab& _tab) const
 qreal TabBar::Implementation::tabWidthHintForScrollable(const Tab& _tab) const
 {
     return qMax(Ui::DesignSystem::tab().minimumWidth(),
-                QFontMetricsF(Ui::DesignSystem::font().button()).boundingRect(_tab.name).width()
-                    + Ui::DesignSystem::tab().margins().left()
+                tabContentWidth(_tab) + Ui::DesignSystem::tab().margins().left()
                     + Ui::DesignSystem::tab().margins().right());
 }
 
@@ -267,10 +281,12 @@ void TabBar::setFixed(bool fixed)
     update();
 }
 
-void TabBar::addTab(const QString& _tabName)
+void TabBar::addTab(const QString& _tabName, const QString& _tabIcon, const QColor& _color)
 {
-    d->tabs.append({ _tabName, QPixmap(), true });
+    const bool visible = true;
+    d->tabs.append({ _tabName, _tabIcon, _color, visible });
 
+    d->updateScrollState();
     updateGeometry();
     update();
 }
@@ -520,7 +536,6 @@ void TabBar::paintEvent(QPaintEvent* _event)
     Q_UNUSED(_event);
 
     QPainter painter(this);
-    painter.setFont(Ui::DesignSystem::font().button());
 
     //
     // Заливаем фон
@@ -584,20 +599,42 @@ void TabBar::paintEvent(QPaintEvent* _event)
         //
         // Иконка и текст
         //
-        painter.setPen(isTabCurrent ? Ui::DesignSystem::color().secondary() : textColor());
+        painter.setPen(tab.color.isValid()
+                           ? tab.color
+                           : (isTabCurrent ? Ui::DesignSystem::color().secondary() : textColor()));
         painter.setOpacity(isTabCurrent ? 1.0 : Ui::DesignSystem::inactiveTextOpacity());
+        const qreal xDelta = (tabBoundingRect.width() - d->tabContentWidth(tab)) / 2.0;
+        const qreal heightDelta = height() - d->tabHeightHint(tab);
         //
-        // TODO: ... иконка
+        // ... иконка
         //
-
+        QRectF tabIconRect;
+        if (!tab.icon.isEmpty()) {
+            painter.setFont(Ui::DesignSystem::font().iconsMid());
+            tabIconRect
+                = QRectF(QPointF(tabBoundingRect.x() + xDelta, tabBoundingRect.y() + heightDelta),
+                         QSizeF(Ui::DesignSystem::tab().iconSize().width(),
+                                tabBoundingRect.height() - heightDelta));
+            painter.drawText(tabIconRect, Qt::AlignCenter, tab.icon);
+        }
         //
         // ... текст
         //
-        const qreal heightDelta = height() - d->tabHeightHint(tab);
-        const QRectF tabTextRect
-            = QRectF(QPointF(tabBoundingRect.x(), tabBoundingRect.y() + heightDelta),
-                     tabBoundingRect.adjusted(0, 0, 0, -heightDelta).size());
+        painter.setPen(isTabCurrent ? Ui::DesignSystem::color().secondary() : textColor());
+        painter.setFont(Ui::DesignSystem::font().button());
+        QRectF tabTextRect;
+        if (!tabIconRect.isNull()) {
+            tabTextRect = QRectF(
+                QPointF(tabIconRect.right() + Ui::DesignSystem::tab().spacing(), tabIconRect.y()),
+                QSizeF(tabBoundingRect.width() - tabIconRect.width()
+                           - Ui::DesignSystem::tab().spacing() - xDelta * 2,
+                       tabIconRect.height()));
+        } else {
+            tabTextRect = QRectF(QPointF(tabBoundingRect.x(), tabBoundingRect.y() + heightDelta),
+                                 tabBoundingRect.adjusted(0, 0, 0, -heightDelta).size());
+        }
         painter.drawText(tabTextRect, Qt::AlignCenter, tab.name);
+        //
         painter.setOpacity(1.0);
 
         //

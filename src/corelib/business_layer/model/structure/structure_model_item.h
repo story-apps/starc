@@ -60,7 +60,8 @@ public:
     void setReadOnly(bool _readOnly);
 
     /**
-     * @brief Версии документа
+     * @brief Версии документа (добавляются в начало списка, т.е. сверху находятся наиболее свежие
+     *        версии)
      */
     const QVector<StructureModelItem*>& versions() const;
     StructureModelItem* addVersion(StructureModelItem* _version);

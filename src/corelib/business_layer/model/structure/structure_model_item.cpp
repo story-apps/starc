@@ -118,7 +118,7 @@ const QVector<StructureModelItem*>& StructureModelItem::versions() const
 StructureModelItem* StructureModelItem::addVersion(StructureModelItem* _version)
 {
     _version->setParent(parent());
-    d->versions.append(_version);
+    d->versions.prepend(_version);
     return _version;
 }
 

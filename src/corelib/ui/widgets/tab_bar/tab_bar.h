@@ -22,7 +22,7 @@ public:
     /**
      * @brief Добавить вкладку с заданным названием
      */
-    void addTab(const QString& _tabName);
+    void addTab(const QString& _tabName, const QString& _tabIcon = {}, const QColor& _color = {});
 
     /**
      * @brief Задать название вкладки

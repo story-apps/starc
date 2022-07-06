@@ -17,7 +17,7 @@ public:
 
 
     TextField* versionName = nullptr;
-    CheckBox* readOnly = nullptr;
+    CheckBox* allowEditVersion = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
     Button* cancelButton = nullptr;
@@ -26,7 +26,7 @@ public:
 
 CreateVersionDialog::Implementation::Implementation(QWidget* _parent)
     : versionName(new TextField(_parent))
-    , readOnly(new CheckBox(_parent))
+    , allowEditVersion(new CheckBox(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
     , createButton(new Button(_parent))
@@ -54,13 +54,14 @@ CreateVersionDialog::CreateVersionDialog(QWidget* _parent)
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
     contentsLayout()->addWidget(d->versionName, 0, 0);
-    contentsLayout()->addWidget(d->readOnly, 1, 0);
+    contentsLayout()->addWidget(d->allowEditVersion, 1, 0);
     contentsLayout()->addLayout(d->buttonsLayout, 2, 0);
 
     connect(d->versionName, &TextField::textChanged, this,
             [this] { d->createButton->setEnabled(!d->versionName->text().isEmpty()); });
-    connect(d->createButton, &Button::clicked, this,
-            [this] { emit createPressed(d->versionName->text(), {}, d->readOnly->isChecked()); });
+    connect(d->createButton, &Button::clicked, this, [this] {
+        emit createPressed(d->versionName->text(), {}, !d->allowEditVersion->isChecked());
+    });
     connect(d->cancelButton, &Button::clicked, this, &CreateVersionDialog::hideDialog);
 }
 
@@ -81,7 +82,7 @@ void CreateVersionDialog::updateTranslations()
     setTitle(tr("Create new document version"));
 
     d->versionName->setLabel(tr("New version name"));
-    d->readOnly->setText(tr("Allow to edit new version"));
+    d->allowEditVersion->setText(tr("Allow to edit new version"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(tr("Create"));
 }
@@ -92,8 +93,8 @@ void CreateVersionDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
 
     d->versionName->setTextColor(Ui::DesignSystem::color().onBackground());
     d->versionName->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-    d->readOnly->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->readOnly->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->allowEditVersion->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->allowEditVersion->setBackgroundColor(Ui::DesignSystem::color().background());
 
     for (auto button : { d->cancelButton, d->createButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());

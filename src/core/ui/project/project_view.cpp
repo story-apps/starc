@@ -168,7 +168,9 @@ void ProjectView::setDocumentVersions(const QVector<BusinessLayer::StructureMode
     d->documentVersions->removeAllTabs();
     d->documentVersions->addTab(tr("Current version"));
     for (const auto version : _versions) {
-        d->documentVersions->addTab(version->name());
+        d->documentVersions->addTab(version->name(),
+                                    version->readOnly() ? u8"\U000F033E" : u8"\U000F0765",
+                                    version->color());
     }
 
     d->documentVersions->setCurrentTab(lastActiveVersion);
