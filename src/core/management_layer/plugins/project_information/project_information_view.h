@@ -44,6 +44,7 @@ private:
     QScopedPointer<Implementation> d;
 };
 
+
 /**
  * @brief Класс карточки постера, открывающий доступ к генератору постеров
  */

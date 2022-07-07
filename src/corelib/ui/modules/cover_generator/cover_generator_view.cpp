@@ -189,7 +189,7 @@ void CoverGeneratorView::Implementation::cropImage(const QPixmap& _image)
         return;
     }
 
-    auto dlg = new ImageCroppingDialog(q->window());
+    auto dlg = new ImageCroppingDialog(q->topLevelWidget());
     dlg->setImage(_image);
     dlg->setImageProportion(kCoverSize);
     dlg->setImageProportionFixed(true);

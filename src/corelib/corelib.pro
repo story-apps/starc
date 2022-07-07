@@ -202,6 +202,7 @@ SOURCES += \
     ui/modules/bookmarks/bookmark_dialog.cpp \
     ui/modules/bookmarks/bookmarks_model.cpp \
     ui/modules/bookmarks/bookmarks_view.cpp \
+    ui/modules/character_image_card/character_image_card.cpp \
     ui/modules/comments/add_comment_view.cpp \
     ui/modules/comments/comment_delegate.cpp \
     ui/modules/comments/comment_replies_view.cpp \
@@ -472,6 +473,7 @@ HEADERS += \
     ui/modules/bookmarks/bookmark_dialog.h \
     ui/modules/bookmarks/bookmarks_model.h \
     ui/modules/bookmarks/bookmarks_view.h \
+    ui/modules/character_image_card/character_image_card.h \
     ui/modules/comments/add_comment_view.h \
     ui/modules/comments/comment_delegate.h \
     ui/modules/comments/comment_replies_view.h \
