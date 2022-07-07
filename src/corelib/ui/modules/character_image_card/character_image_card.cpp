@@ -67,51 +67,51 @@ void CharacterImageCard::Implementation::generateCharacterPhoto()
     }
     const auto url
         = QString("https://starc.app/api/services/unsplash/search?text=%1").arg(keywords);
-    NetworkRequestLoader::loadAsync(url, q, [this, url](const QByteArray& _data) {
+    //
+    // Выбираем случайную страницу и загружаем её, чтобы получить конкретные фотки
+    //
+    // NOTE: оптимизация, чтобы не делать бессмысленный запрос на количество страниц, API Unsplash
+    // всегда отдаёт максимально 10000 изображений, а соответственно чуть более 400 страниц
+    //
+    const auto totalPages = 400;
+    const auto pageIndex = QRandomGenerator::global()->bounded(0, totalPages);
+    const auto photosPageUrl = QString("%1&page=%2").arg(url).arg(pageIndex);
+    NetworkRequestLoader::loadAsync(photosPageUrl, q, [this](const QByteArray& _data) {
         //
-        // Выбираем случайную страницу и загружаем её, чтобы получить конкретные фотки
+        // Выбираем случайную фотку на странице и загружаем ссылки на неё
         //
-        const auto totalPages = QJsonDocument::fromJson(_data).object()["total_pages"].toInt();
-        const auto pageIndex = QRandomGenerator::global()->bounded(0, totalPages);
-        const auto photosPageUrl = QString("%1&page=%2").arg(url).arg(pageIndex);
-        NetworkRequestLoader::loadAsync(photosPageUrl, q, [this](const QByteArray& _data) {
-            //
-            // Выбираем случайную фотку на странице и загружаем ссылки на неё
-            //
-            const auto photos = QJsonDocument::fromJson(_data).object()["results"].toArray();
-            const auto photoIndex = QRandomGenerator::global()->bounded(0, photos.size());
-            const auto photoInfo = photos.at(photoIndex).toObject();
-            const auto photoPageUrl
-                = QString("https://starc.app/api/services/unsplash/download?url=%1")
-                      .arg(photoInfo["links"].toObject()["download_location"].toString());
-            photoCopyright = tr("Photo by %1 on Unsplash.com")
-                                 .arg(photoInfo["user"].toObject()["name"].toString());
-            NetworkRequestLoader::loadAsync(
-                photoPageUrl, q, [this, photoInfo](const QByteArray& _data) {
-                    //
-                    // Собственно загружаем фотографию
-                    //
-                    TaskBar::setTaskTitle(photoGenerationTaskId, tr("Generating photo"));
-                    const auto url = QJsonDocument::fromJson(_data).object()["url"].toString();
-                    NetworkRequest* request = new NetworkRequest;
-                    connect(request, &NetworkRequest::downloadComplete, q,
-                            [this](const QByteArray& _imageData) {
-                                QPixmap image;
-                                image.loadFromData(_imageData);
-                                cropImage(image);
-                            });
-                    connect(request, &NetworkRequest::downloadProgress, q,
-                            [this, url](int _progress) {
-                                TaskBar::setTaskProgress(photoGenerationTaskId, _progress);
-                            });
-                    connect(request, &NetworkRequest::finished, q, [this, request, url] {
-                        request->deleteLater();
-                        TaskBar::finishTask(photoGenerationTaskId);
-                        photoGenerationTaskId.clear();
-                    });
-                    request->loadAsync(url);
+        const auto photos = QJsonDocument::fromJson(_data).object()["results"].toArray();
+        const auto photoIndex = QRandomGenerator::global()->bounded(0, photos.size());
+        const auto photoInfo = photos.at(photoIndex).toObject();
+        const auto photoPageUrl
+            = QString("https://starc.app/api/services/unsplash/download?url=%1")
+                  .arg(photoInfo["links"].toObject()["download_location"].toString());
+        photoCopyright = tr("Photo by %1 on Unsplash.com")
+                             .arg(photoInfo["user"].toObject()["name"].toString());
+        NetworkRequestLoader::loadAsync(
+            photoPageUrl, q, [this, photoInfo](const QByteArray& _data) {
+                //
+                // Собственно загружаем фотографию
+                //
+                TaskBar::setTaskTitle(photoGenerationTaskId, tr("Generating photo"));
+                const auto url = QJsonDocument::fromJson(_data).object()["url"].toString();
+                NetworkRequest* request = new NetworkRequest;
+                connect(request, &NetworkRequest::downloadComplete, q,
+                        [this](const QByteArray& _imageData) {
+                            QPixmap image;
+                            image.loadFromData(_imageData);
+                            cropImage(image);
+                        });
+                connect(request, &NetworkRequest::downloadProgress, q, [this, url](int _progress) {
+                    TaskBar::setTaskProgress(photoGenerationTaskId, _progress);
                 });
-        });
+                connect(request, &NetworkRequest::finished, q, [this, request, url] {
+                    request->deleteLater();
+                    TaskBar::finishTask(photoGenerationTaskId);
+                    photoGenerationTaskId.clear();
+                });
+                request->loadAsync(url);
+            });
     });
 }
 
