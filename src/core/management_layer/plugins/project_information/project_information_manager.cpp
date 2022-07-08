@@ -35,7 +35,7 @@ public:
      * @brief Все созданные представления с моделями, которые в них отображаются
      */
     struct ViewAndModel {
-        Ui::ProjectInformationView* view = nullptr;
+        QPointer<Ui::ProjectInformationView> view;
         QPointer<BusinessLayer::ProjectInformationModel> model;
     };
     QVector<ViewAndModel> allViews;
@@ -166,7 +166,22 @@ Ui::IDocumentView* ProjectInformationManager::createView(BusinessLayer::Abstract
 void ProjectInformationManager::resetModels()
 {
     for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
         d->setModelForView(nullptr, viewAndModel.view);
+    }
+}
+
+void ProjectInformationManager::setEditingMode(DocumentEditingMode _mode)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setEditingMode(_mode);
     }
 }
 

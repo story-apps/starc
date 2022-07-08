@@ -22,6 +22,7 @@
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <include/custom_events.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/account/connection_status_tool_bar.h>
 #include <ui/application_style.h>
 #include <ui/application_view.h>
@@ -808,8 +809,11 @@ void ApplicationManager::Implementation::updateWindowTitle()
         return;
     }
 
-    applicationView->setWindowTitle(
-        QString("[*]%1 - Story Architect").arg(projectsManager->currentProject().name()));
+    applicationView->setWindowTitle(QString("[*]%1 - Story Architect %2")
+                                        .arg(projectsManager->currentProject().name(),
+                                             (projectsManager->currentProject().isReadOnly()
+                                                  ? QString("- %1").arg(tr("Read only"))
+                                                  : "")));
 
     if (applicationView->isWindowModified()) {
         markChangesSaved(false);
@@ -1012,7 +1016,7 @@ void ApplicationManager::Implementation::saveAs()
     // Для удаленных проектов используем имя проекта + id проекта
     // и сохраняем в папку вновь создаваемых проектов
     //
-    case ProjectType::Remote: {
+    case ProjectType::Cloud: {
         const auto projectsFolderPath
             = settingsValue(DataStorageLayer::kProjectSaveFolderKey).toString();
         projectPath = projectsFolderPath + QDir::separator()
@@ -1273,6 +1277,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     //
     projectManager->loadCurrentProject(projectsManager->currentProject().name(),
                                        projectsManager->currentProject().path());
+    projectManager->setEditingMode(projectsManager->currentProject().editingMode());
 
     //
     // Восстанавливаем тип проекта по-умолчанию для будущих свершений
@@ -1300,6 +1305,17 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     showProject();
 
     state = ApplicationState::Working;
+
+    //
+    // Для локальных проектов доступных только для чтения, покажем соответствующее уведомление
+    //
+    if (projectsManager->currentProject().type() != ProjectType::Cloud
+        && projectsManager->currentProject().isReadOnly()) {
+        StandardDialog::information(applicationView, {},
+                                    tr("A file you try to open has no write permissions. Check out "
+                                       "file properties and allow it to be edited. Since it isn't "
+                                       "editable, it will be opened in a read only mode."));
+    }
 
     if (projectsManager->currentProject().type() == ProjectType::LocalShadow) {
         //

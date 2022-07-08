@@ -17,7 +17,10 @@ public:
     /**
      * @brief Реализация интерфейса IDocumentView
      */
+    /** @{ */
     QWidget* asQWidget() override;
+    void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
+    /** @} */
 
     void setName(const QString& _name);
     Q_SIGNAL void nameChanged(const QString& _name);
@@ -67,6 +70,11 @@ protected:
      * @brief Получить список действий контекстного меню
      */
     QVector<QAction*> contextMenuActions() const override;
+
+    /**
+     * @brief Дизейблим возможность генерации постера
+     */
+    void processReadOnlyChange() override;
 
     /**
      * @brief Обновить переводы

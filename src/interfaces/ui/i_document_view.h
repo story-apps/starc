@@ -5,6 +5,10 @@
 class QAction;
 class QWidget;
 
+namespace ManagementLayer {
+enum class DocumentEditingMode;
+}
+
 namespace Ui {
 
 /**
@@ -33,6 +37,13 @@ public:
     virtual QVector<QAction*> options() const
     {
         return {};
+    }
+
+    /**
+     * @brief Задать режим редактирования
+     */
+    virtual void setEditingMode(ManagementLayer::DocumentEditingMode)
+    {
     }
 };
 

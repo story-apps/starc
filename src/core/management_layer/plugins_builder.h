@@ -12,6 +12,8 @@ class IDocumentView;
 }
 
 namespace ManagementLayer {
+
+enum class DocumentEditingMode;
 class IDocumentManager;
 
 /**
@@ -95,6 +97,11 @@ public:
      * @brief Обновить информацию о том, может ли пользователь использовать платные редакторы
      */
     void checkAvailabilityToEdit() const;
+
+    /**
+     * @brief Задать режим работы с документами
+     */
+    void setEditingMode(DocumentEditingMode _mode) const;
 
     /**
      * @brief Сбросить модели для всех плагинов

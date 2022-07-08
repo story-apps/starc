@@ -255,8 +255,8 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
         backgroundRect.bottom() - Ui::DesignSystem::layout().px24() * 2,
         Ui::DesignSystem::layout().px24() * 2, Ui::DesignSystem::layout().px24() * 2);
     _painter->drawText(iconRect, Qt::AlignCenter,
-                       m_project.type() == ManagementLayer::ProjectType::Remote ? u8"\U000F0163"
-                                                                                : u8"\U000F0322");
+                       m_project.type() == ManagementLayer::ProjectType::Cloud ? u8"\U000F0163"
+                                                                               : u8"\U000F0322");
 
     //
     // Декорация

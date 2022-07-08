@@ -193,7 +193,12 @@ public:
     /**
      * @brief Загруженные плагины <mime, plugin>
      */
-    mutable QHash<QString, ManagementLayer::IDocumentManager*> plugins;
+    QHash<QString, ManagementLayer::IDocumentManager*> plugins;
+
+    /**
+     * @brief Текущий режим работы редакторов
+     */
+    DocumentEditingMode editingMode = DocumentEditingMode::Edit;
 };
 
 Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
@@ -259,6 +264,7 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
         }
 
         auto plugin = qobject_cast<ManagementLayer::IDocumentManager*>(pluginObject);
+        plugin->setEditingMode(editingMode);
         plugins.insert(_mimeType, plugin);
     }
 
@@ -267,19 +273,25 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
         return nullptr;
     }
 
+    Ui::IDocumentView* view = nullptr;
     switch (_type) {
     case Primary: {
-        return plugin->view(_model);
+        view = plugin->view(_model);
+        break;
     }
 
     case Secondary: {
-        return plugin->secondaryView(_model);
+        view = plugin->secondaryView(_model);
+        break;
     }
 
     default: {
-        return plugin->createView(_model);
+        view = plugin->createView(_model);
+        break;
     }
     }
+    view->setEditingMode(editingMode);
+    return view;
 }
 
 
@@ -578,6 +590,18 @@ void PluginsBuilder::checkAvailabilityToEdit() const
 {
     for (auto plugin : std::as_const(d->plugins)) {
         plugin->checkAvailabilityToEdit();
+    }
+}
+
+void PluginsBuilder::setEditingMode(DocumentEditingMode _mode) const
+{
+    if (d->editingMode == _mode) {
+        return;
+    }
+
+    d->editingMode = _mode;
+    for (auto plugin : std::as_const(d->plugins)) {
+        plugin->setEditingMode(d->editingMode);
     }
 }
 

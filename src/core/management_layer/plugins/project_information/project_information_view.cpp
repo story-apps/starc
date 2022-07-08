@@ -1,5 +1,6 @@
 #include "project_information_view.h"
 
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/cover_generator/cover_generator_view.h>
 #include <ui/widgets/card/card.h>
@@ -120,6 +121,14 @@ QWidget* ProjectInformationView::asQWidget()
     return this;
 }
 
+void ProjectInformationView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->projectName->setReadOnly(readOnly);
+    d->projectLogline->setReadOnly(readOnly);
+    d->projectCover->setReadOnly(readOnly);
+}
+
 void ProjectInformationView::setName(const QString& _name)
 {
     if (d->projectName->text() == _name) {
@@ -218,6 +227,11 @@ QVector<QAction*> CoverImageCard::contextMenuActions() const
     auto actions = ImageCard::contextMenuActions();
     actions.prepend(d->createCoverAction);
     return actions;
+}
+
+void CoverImageCard::processReadOnlyChange()
+{
+    d->createCoverAction->setEnabled(!readOnly());
 }
 
 void CoverImageCard::updateTranslations()

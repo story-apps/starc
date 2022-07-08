@@ -1,7 +1,10 @@
 #include "project.h"
 
+#include <interfaces/management_layer/i_document_manager.h>
+
 #include <QApplication>
 #include <QDateTime>
+#include <QFileInfo>
 #include <QPixmap>
 
 
@@ -21,6 +24,7 @@ public:
     QDateTime lastEditTime;
     bool canAskAboutSwitch = true;
     int id = -1;
+    DocumentEditingMode editingMode = DocumentEditingMode::Edit;
 };
 
 
@@ -60,7 +64,7 @@ bool Project::isLocal() const
 
 bool Project::isRemote() const
 {
-    return d->type == ProjectType::Remote;
+    return d->type == ProjectType::Cloud;
 }
 
 Project::~Project() = default;
@@ -111,6 +115,11 @@ QString Project::path() const
 void Project::setPath(const QString& _path)
 {
     d->path = _path;
+
+    if (d->type == ProjectType::Local || d->type == ProjectType::LocalShadow) {
+        d->editingMode = QFileInfo(d->path).isWritable() ? DocumentEditingMode::Edit
+                                                         : DocumentEditingMode::Read;
+    }
 }
 
 QString Project::realPath() const
@@ -201,6 +210,21 @@ int Project::id() const
 void Project::setId(int _id)
 {
     d->id = _id;
+}
+
+DocumentEditingMode Project::editingMode() const
+{
+    return d->editingMode;
+}
+
+void Project::setEditingMode(DocumentEditingMode _mode)
+{
+    d->editingMode = _mode;
+}
+
+bool Project::isReadOnly() const
+{
+    return d->editingMode == DocumentEditingMode::Read;
 }
 
 QVariant Project::data(int _role) const

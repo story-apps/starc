@@ -35,6 +35,12 @@ public:
      */
     void setImage(const QPixmap& _image);
 
+    /**
+     * @brief Возможность редактирования изображения
+     */
+    bool readOnly() const;
+    void setReadOnly(bool _readOnly);
+
 signals:
     /**
      * @brief Изображение сменилось
@@ -46,6 +52,11 @@ protected:
      * @brief Получить список действий контекстного меню
      */
     virtual QVector<QAction*> contextMenuActions() const;
+
+    /**
+     * @brief Произвести обработку в наследниках на событие смены возможности редактирования
+     */
+    virtual void processReadOnlyChange();
 
     /**
      * @brief Переопределяем для реализации тултипа

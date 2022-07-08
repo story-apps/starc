@@ -17,6 +17,15 @@ class QWidget;
 namespace ManagementLayer {
 
 /**
+ * @brief Режим редактирования документа
+ */
+enum class DocumentEditingMode {
+    Edit,
+    Comment,
+    Read,
+};
+
+/**
  * @brief Интерфейс менеджера документа
  */
 class IDocumentManager
@@ -77,6 +86,13 @@ public:
      * @note Актуально для платных плагинов
      */
     virtual void checkAvailabilityToEdit()
+    {
+    }
+
+    /**
+     * @brief Задать режим редактирования документа
+     */
+    virtual void setEditingMode(DocumentEditingMode)
     {
     }
 };

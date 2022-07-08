@@ -14,6 +14,7 @@ enum class DocumentObjectType;
 
 namespace ManagementLayer {
 
+enum class DocumentEditingMode;
 class PluginsBuilder;
 
 /**
@@ -62,6 +63,11 @@ public:
      * @brief Обновить информацию о том, может ли пользователь использовать платные редакторы
      */
     void checkAvailabilityToEdit();
+
+    /**
+     * @brief Задать режим работы с документами
+     */
+    void setEditingMode(DocumentEditingMode _mode);
 
     /**
      * @brief Загрузить данные текущего проекта

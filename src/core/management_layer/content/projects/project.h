@@ -5,6 +5,8 @@
 
 namespace ManagementLayer {
 
+enum class DocumentEditingMode;
+
 /**
  * @brief Тип проекта
  */
@@ -12,7 +14,7 @@ enum class ProjectType {
     Invalid,
     Local,
     LocalShadow,
-    Remote,
+    Cloud,
 };
 
 /**
@@ -107,6 +109,13 @@ public:
      */
     int id() const;
     void setId(int _id);
+
+    /**
+     * @brief Режим работы с проектом
+     */
+    DocumentEditingMode editingMode() const;
+    void setEditingMode(DocumentEditingMode _mode);
+    bool isReadOnly() const;
 
     /**
      * @brief Получить данные по роли из модели

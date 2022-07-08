@@ -254,10 +254,15 @@ public:
     const PluginsBuilder& pluginsBuilder;
 
     /**
+     * @brief Текущий режим редактирования документов
+     */
+    DocumentEditingMode editingMode = DocumentEditingMode::Edit;
+
+    /**
      * @brief Информация о текущем документе
      */
     struct {
-        BusinessLayer::AbstractModel* model = nullptr;
+        QPointer<BusinessLayer::AbstractModel> model;
         QString viewMimeType;
     } currentDocument;
 };
@@ -1639,6 +1644,16 @@ void ProjectManager::checkAvailabilityToEdit()
     d->pluginsBuilder.checkAvailabilityToEdit();
 }
 
+void ProjectManager::setEditingMode(DocumentEditingMode _mode)
+{
+    if (d->editingMode == _mode) {
+        return;
+    }
+
+    d->editingMode = _mode;
+    d->pluginsBuilder.setEditingMode(_mode);
+}
+
 void ProjectManager::loadCurrentProject(const QString& _name, const QString& _path)
 {
     //
@@ -2056,7 +2071,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Сохранить состояние отображения версий для текущего документа
     //
-    if (d->currentDocument.model != nullptr && d->currentDocument.model->document() != nullptr) {
+    if (!d->currentDocument.model.isNull() && d->currentDocument.model->document() != nullptr) {
         setSettingsValue(
             documentSettingsKey(d->currentDocument.model->document()->uuid(), kVersionsVisibleKey),
             d->showVersionsAction->isChecked());
@@ -2096,6 +2111,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         d->view.active->setVersionsVisible(false);
         return;
     }
+    view->setEditingMode(d->editingMode);
     d->view.active->setDocumentVersions(item->versions());
     d->view.active->showEditor(view->asQWidget());
     d->view.activeIndex = sourceItemIndex;
@@ -2179,6 +2195,7 @@ void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item
         d->view.active->showNotImplementedPage();
         return;
     }
+    view->setEditingMode(_item->readOnly() ? DocumentEditingMode::Read : d->editingMode);
     d->view.active->showEditor(view->asQWidget());
 
     //

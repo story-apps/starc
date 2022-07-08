@@ -69,6 +69,7 @@ public:
 
     ImageCard* q = nullptr;
 
+    bool readOnly = false;
     bool isDragActive = false;
     QString decorationIcon = u8"\U000F0513";
     QString emptyImageText;
@@ -319,6 +320,25 @@ void ImageCard::setImage(const QPixmap& _image)
     emit imageChanged(d->image.source);
 }
 
+bool ImageCard::readOnly() const
+{
+    return d->readOnly;
+}
+
+void ImageCard::setReadOnly(bool _readOnly)
+{
+    if (d->readOnly == _readOnly) {
+        return;
+    }
+
+    d->readOnly = _readOnly;
+    d->changeImageAction->setEnabled(!d->readOnly);
+    d->copyImageAction->setEnabled(!d->readOnly);
+    d->pasteImageAction->setEnabled(!d->readOnly);
+    d->clearImageAction->setEnabled(!d->readOnly);
+    processReadOnlyChange();
+}
+
 QVector<QAction*> ImageCard::contextMenuActions() const
 {
     return {
@@ -327,6 +347,10 @@ QVector<QAction*> ImageCard::contextMenuActions() const
         d->pasteImageAction,
         d->clearImageAction,
     };
+}
+
+void ImageCard::processReadOnlyChange()
+{
 }
 
 bool ImageCard::event(QEvent* _event)
@@ -409,16 +433,19 @@ void ImageCard::paintEvent(QPaintEvent* _event)
             //
             // ... кнопка очистки
             //
-            painter.setFont(Ui::DesignSystem::font().iconsMid());
-            painter.drawText(d->clearButtonRect(), Qt::AlignCenter, u8"\U000F0156");
+            if (!d->readOnly) {
+                painter.setFont(Ui::DesignSystem::font().iconsMid());
+                painter.drawText(d->clearButtonRect(), Qt::AlignCenter, u8"\U000F0156");
+            }
         }
     }
 
     //
     // Если в режиме вставки из буфера
     //
-    if (d->isDragActive
-        || d->dragIndicationOpacityAnimation.state() == QVariantAnimation::Running) {
+    if (!d->readOnly
+        && (d->isDragActive
+            || d->dragIndicationOpacityAnimation.state() == QVariantAnimation::Running)) {
         painter.setOpacity(d->dragIndicationOpacityAnimation.currentValue().toReal());
         //
         painter.setPen(Qt::NoPen);
@@ -478,7 +505,7 @@ void ImageCard::mousePressEvent(QMouseEvent* _event)
 {
     Card::mousePressEvent(_event);
 
-    if (_event->button() == Qt::LeftButton) {
+    if (!d->readOnly && _event->button() == Qt::LeftButton) {
         if (d->isInsideClearButton(_event->pos())) {
             d->clearImageAction->trigger();
         } else {
@@ -489,6 +516,11 @@ void ImageCard::mousePressEvent(QMouseEvent* _event)
 
 void ImageCard::dragEnterEvent(QDragEnterEvent* _event)
 {
+    if (d->readOnly) {
+        _event->ignore();
+        return;
+    }
+
     _event->acceptProposedAction();
 
     d->isDragActive = true;
@@ -498,11 +530,21 @@ void ImageCard::dragEnterEvent(QDragEnterEvent* _event)
 
 void ImageCard::dragMoveEvent(QDragMoveEvent* _event)
 {
+    if (d->readOnly) {
+        _event->ignore();
+        return;
+    }
+
     _event->acceptProposedAction();
 }
 
 void ImageCard::dragLeaveEvent(QDragLeaveEvent* _event)
 {
+    if (d->readOnly) {
+        _event->ignore();
+        return;
+    }
+
     _event->accept();
     d->isDragActive = false;
     d->dragIndicationOpacityAnimation.setDirection(QVariantAnimation::Backward);
@@ -511,6 +553,11 @@ void ImageCard::dragLeaveEvent(QDragLeaveEvent* _event)
 
 void ImageCard::dropEvent(QDropEvent* _event)
 {
+    if (d->readOnly) {
+        _event->ignore();
+        return;
+    }
+
     QPixmap droppedImage;
     const QMimeData* mimeData = _event->mimeData();
     //
