@@ -770,7 +770,7 @@ int TextField::heightForWidth(int _width) const
 ContextMenu* TextField::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
     const QRectF iconRect = d->trailingIconRect();
-    if (iconRect.contains(mapFromGlobal(QCursor::pos()))) {
+    if (!isReadOnly() && iconRect.contains(mapFromGlobal(QCursor::pos()))) {
         emit trailingIconContextMenuRequested();
         return nullptr;
     }
@@ -1054,7 +1054,7 @@ void TextField::mousePressEvent(QMouseEvent* _event)
 void TextField::mouseReleaseEvent(QMouseEvent* _event)
 {
     const QRectF iconRect = d->trailingIconRect();
-    if (_event->button() != Qt::RightButton && iconRect.contains(_event->pos())) {
+    if (!isReadOnly() && _event->button() != Qt::RightButton && iconRect.contains(_event->pos())) {
         emit trailingIconPressed();
         _event->accept();
     } else {

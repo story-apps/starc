@@ -161,7 +161,7 @@ bool SpellCheckTextEdit::isMispelledWordUnderCursor(const QPoint& _position) con
 ContextMenu* SpellCheckTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
     auto menu = PageTextEdit::createContextMenu(_position, _parent);
-    if (!useSpellChecker()) {
+    if (isReadOnly() || !useSpellChecker()) {
         return menu;
     }
 

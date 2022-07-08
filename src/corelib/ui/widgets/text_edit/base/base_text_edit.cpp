@@ -303,6 +303,9 @@ void BaseTextEdit::setTextAlignment(Qt::Alignment _alignment)
 ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
     auto menu = CompleterTextEdit::createContextMenu(_position, _parent);
+    if (isReadOnly()) {
+        return menu;
+    }
 
     auto formattingAction = new QAction;
     formattingAction->setText(tr("Formatting"));
