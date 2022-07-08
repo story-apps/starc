@@ -195,13 +195,15 @@ void ComboBox::focusOutEvent(QFocusEvent* _event)
 
 void ComboBox::keyPressEvent(QKeyEvent* _event)
 {
-    if (_event->key() == Qt::Key_Up) {
-        if (currentIndex().row() > 0) {
-            setCurrentIndex(model()->index(currentIndex().row() - 1, 0));
-        }
-    } else if (_event->key() == Qt::Key_Down) {
-        if (currentIndex().row() < model()->rowCount() - 1) {
-            setCurrentIndex(model()->index(currentIndex().row() + 1, 0));
+    if (!isReadOnly()) {
+        if (_event->key() == Qt::Key_Up) {
+            if (currentIndex().row() > 0) {
+                setCurrentIndex(model()->index(currentIndex().row() - 1, 0));
+            }
+        } else if (_event->key() == Qt::Key_Down) {
+            if (currentIndex().row() < model()->rowCount() - 1) {
+                setCurrentIndex(model()->index(currentIndex().row() + 1, 0));
+            }
         }
     }
 
@@ -212,13 +214,15 @@ void ComboBox::mousePressEvent(QMouseEvent* _event)
 {
     TextField::mousePressEvent(_event);
 
-    if (!d->popup->isVisible()) {
-        setTrailingIcon(u8"\U000f0360");
-        setTrailingIconColor(Ui::DesignSystem::color().secondary());
-        d->showPopup(this);
-    } else {
-        setTrailingIcon(u8"\U000f035d");
-        setTrailingIconColor({});
-        d->hidePopup();
+    if (!isReadOnly()) {
+        if (!d->popup->isVisible()) {
+            setTrailingIcon(u8"\U000f0360");
+            setTrailingIconColor(Ui::DesignSystem::color().secondary());
+            d->showPopup(this);
+        } else {
+            setTrailingIcon(u8"\U000f035d");
+            setTrailingIconColor({});
+            d->hidePopup();
+        }
     }
 }
