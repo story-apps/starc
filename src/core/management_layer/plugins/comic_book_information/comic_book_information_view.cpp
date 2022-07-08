@@ -1,5 +1,6 @@
 #include "comic_book_information_view.h"
 
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/logline_generator/logline_generator_dialog.h>
 #include <ui/widgets/card/card.h>
@@ -133,6 +134,19 @@ ComicBookInformationView::~ComicBookInformationView() = default;
 QWidget* ComicBookInformationView::asQWidget()
 {
     return this;
+}
+
+void ComicBookInformationView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->comicBookName->setReadOnly(readOnly);
+    d->comicBookTagline->setReadOnly(readOnly);
+    d->comicBookLogline->setReadOnly(readOnly);
+    const auto enabled = !readOnly;
+    d->titlePageVisiblity->setEnabled(enabled);
+    d->synopsisVisiblity->setEnabled(enabled);
+    d->comicBookTextVisiblity->setEnabled(enabled);
+    d->comicBookStatisticsVisiblity->setEnabled(enabled);
 }
 
 void ComicBookInformationView::setName(const QString& _name)

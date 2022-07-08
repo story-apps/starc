@@ -20,7 +20,10 @@ public:
     /**
      * @brief Реализация интерфейса IDocumentView
      */
+    /** @{ */
     QWidget* asQWidget() override;
+    void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
+    /** @} */
 
     void setHeader(const QString& _header);
     Q_SIGNAL void headerChanged(const QString& _header);

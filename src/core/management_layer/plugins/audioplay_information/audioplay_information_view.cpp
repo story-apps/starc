@@ -1,5 +1,6 @@
 #include "audioplay_information_view.h"
 
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/logline_generator/logline_generator_dialog.h>
 #include <ui/widgets/card/card.h>
@@ -123,9 +124,6 @@ AudioplayInformationView::AudioplayInformationView(QWidget* _parent)
             &AudioplayInformationView::audioplayTextVisibleChanged);
     connect(d->audioplayStatisticsVisiblity, &CheckBox::checkedChanged, this,
             &AudioplayInformationView::audioplayStatisticsVisibleChanged);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 AudioplayInformationView::~AudioplayInformationView() = default;
@@ -133,6 +131,19 @@ AudioplayInformationView::~AudioplayInformationView() = default;
 QWidget* AudioplayInformationView::asQWidget()
 {
     return this;
+}
+
+void AudioplayInformationView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->audioplayName->setReadOnly(readOnly);
+    d->audioplayTagline->setReadOnly(readOnly);
+    d->audioplayLogline->setReadOnly(readOnly);
+    const auto enabled = !readOnly;
+    d->titlePageVisiblity->setEnabled(enabled);
+    d->synopsisVisiblity->setEnabled(enabled);
+    d->audioplayTextVisiblity->setEnabled(enabled);
+    d->audioplayStatisticsVisiblity->setEnabled(enabled);
 }
 
 void AudioplayInformationView::setName(const QString& _name)

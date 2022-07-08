@@ -2,6 +2,7 @@
 
 #include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -154,9 +155,6 @@ AudioplayParametersView::AudioplayParametersView(QWidget* _parent)
     });
     connect(d->showBlockNumbers, &CheckBox::checkedChanged, d->continueBlockNumbers,
             &CheckBox::setEnabled);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 AudioplayParametersView::~AudioplayParametersView() = default;
@@ -164,6 +162,20 @@ AudioplayParametersView::~AudioplayParametersView() = default;
 QWidget* AudioplayParametersView::asQWidget()
 {
     return this;
+}
+
+void AudioplayParametersView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->header->setReadOnly(readOnly);
+    d->footer->setReadOnly(readOnly);
+    d->audioplayTemplate->setReadOnly(readOnly);
+    const auto enabled = !readOnly;
+    d->printHeaderOnTitlePage->setEnabled(enabled);
+    d->printFooterOnTitlePage->setEnabled(enabled);
+    d->overrideCommonSettings->setEnabled(enabled);
+    d->showBlockNumbers->setEnabled(enabled);
+    d->continueBlockNumbers->setEnabled(enabled);
 }
 
 void AudioplayParametersView::setHeader(const QString& _header)

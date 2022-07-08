@@ -1,5 +1,6 @@
 #include "screenplay_information_view.h"
 
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/logline_generator/logline_generator_dialog.h>
 #include <ui/widgets/card/card.h>
@@ -138,6 +139,20 @@ ScreenplayInformationView::~ScreenplayInformationView() = default;
 QWidget* ScreenplayInformationView::asQWidget()
 {
     return this;
+}
+
+void ScreenplayInformationView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->screenplayName->setReadOnly(readOnly);
+    d->screenplayTagline->setReadOnly(readOnly);
+    d->screenplayLogline->setReadOnly(readOnly);
+    const auto enabled = !readOnly;
+    d->titlePageVisiblity->setEnabled(enabled);
+    d->synopsisVisiblity->setEnabled(enabled);
+    d->treatmentVisiblity->setEnabled(enabled);
+    d->screenplayTextVisiblity->setEnabled(enabled);
+    d->screenplayStatisticsVisiblity->setEnabled(enabled);
 }
 
 void ScreenplayInformationView::setName(const QString& _name)

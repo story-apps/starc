@@ -2,6 +2,7 @@
 
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -197,9 +198,6 @@ ScreenplayParametersView::ScreenplayParametersView(QWidget* _parent)
     };
     connect(d->showSceneNumbersOnLeft, &CheckBox::checkedChanged, this, correctShownSceneNumber);
     connect(d->showSceneNumbersOnRight, &CheckBox::checkedChanged, this, correctShownSceneNumber);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 ScreenplayParametersView::~ScreenplayParametersView() = default;
@@ -207,6 +205,24 @@ ScreenplayParametersView::~ScreenplayParametersView() = default;
 QWidget* ScreenplayParametersView::asQWidget()
 {
     return this;
+}
+
+void ScreenplayParametersView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->header->setReadOnly(readOnly);
+    d->footer->setReadOnly(readOnly);
+    d->scenesNumbersPrefix->setReadOnly(readOnly);
+    d->scenesNumberingStartAt->setReadOnly(readOnly);
+    d->screenplayTemplate->setReadOnly(readOnly);
+    const auto enabled = !readOnly;
+    d->printHeaderOnTitlePage->setEnabled(enabled);
+    d->printFooterOnTitlePage->setEnabled(enabled);
+    d->overrideCommonSettings->setEnabled(enabled);
+    d->showSceneNumbers->setEnabled(enabled);
+    d->showSceneNumbersOnLeft->setEnabled(enabled);
+    d->showSceneNumbersOnRight->setEnabled(enabled);
+    d->showDialoguesNumbers->setEnabled(enabled);
 }
 
 void ScreenplayParametersView::setHeader(const QString& _header)

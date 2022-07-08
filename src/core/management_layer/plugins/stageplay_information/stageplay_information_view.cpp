@@ -1,5 +1,6 @@
 #include "stageplay_information_view.h"
 
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/logline_generator/logline_generator_dialog.h>
 #include <ui/widgets/card/card.h>
@@ -133,6 +134,19 @@ StageplayInformationView::~StageplayInformationView() = default;
 QWidget* StageplayInformationView::asQWidget()
 {
     return this;
+}
+
+void StageplayInformationView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->stageplayName->setReadOnly(readOnly);
+    d->stageplayTagline->setReadOnly(readOnly);
+    d->stageplayLogline->setReadOnly(readOnly);
+    const auto enabled = !readOnly;
+    d->titlePageVisiblity->setEnabled(enabled);
+    d->synopsisVisiblity->setEnabled(enabled);
+    d->stageplayTextVisiblity->setEnabled(enabled);
+    d->stageplayStatisticsVisiblity->setEnabled(enabled);
 }
 
 void StageplayInformationView::setName(const QString& _name)

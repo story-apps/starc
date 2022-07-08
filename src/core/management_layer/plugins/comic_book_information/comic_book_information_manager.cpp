@@ -34,7 +34,7 @@ public:
      * @brief Все созданные представления с моделями, которые в них отображаются
      */
     struct ViewAndModel {
-        Ui::ComicBookInformationView* view = nullptr;
+        QPointer<Ui::ComicBookInformationView> view;
         QPointer<BusinessLayer::ComicBookInformationModel> model;
     };
     QVector<ViewAndModel> allViews;
@@ -185,7 +185,22 @@ Ui::IDocumentView* ComicBookInformationManager::createView(BusinessLayer::Abstra
 void ComicBookInformationManager::resetModels()
 {
     for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
         d->setModelForView(nullptr, viewAndModel.view);
+    }
+}
+
+void ComicBookInformationManager::setEditingMode(DocumentEditingMode _mode)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setEditingMode(_mode);
     }
 }
 

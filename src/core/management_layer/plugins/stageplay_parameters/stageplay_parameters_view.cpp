@@ -2,6 +2,7 @@
 
 #include <business_layer/templates/stageplay_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -135,6 +136,18 @@ StageplayParametersView::~StageplayParametersView() = default;
 QWidget* StageplayParametersView::asQWidget()
 {
     return this;
+}
+
+void StageplayParametersView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->header->setReadOnly(readOnly);
+    d->footer->setReadOnly(readOnly);
+    d->stageplayTemplate->setReadOnly(readOnly);
+    const auto enabled = !readOnly;
+    d->printHeaderOnTitlePage->setEnabled(enabled);
+    d->printFooterOnTitlePage->setEnabled(enabled);
+    d->overrideCommonSettings->setEnabled(enabled);
 }
 
 void StageplayParametersView::setHeader(const QString& _header)

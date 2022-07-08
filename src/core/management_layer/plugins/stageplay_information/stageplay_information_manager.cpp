@@ -34,7 +34,7 @@ public:
      * @brief Все созданные представления с моделями, которые в них отображаются
      */
     struct ViewAndModel {
-        Ui::StageplayInformationView* view = nullptr;
+        QPointer<Ui::StageplayInformationView> view;
         QPointer<BusinessLayer::StageplayInformationModel> model;
     };
     QVector<ViewAndModel> allViews;
@@ -185,7 +185,22 @@ Ui::IDocumentView* StageplayInformationManager::createView(BusinessLayer::Abstra
 void StageplayInformationManager::resetModels()
 {
     for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
         d->setModelForView(nullptr, viewAndModel.view);
+    }
+}
+
+void StageplayInformationManager::setEditingMode(DocumentEditingMode _mode)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setEditingMode(_mode);
     }
 }
 

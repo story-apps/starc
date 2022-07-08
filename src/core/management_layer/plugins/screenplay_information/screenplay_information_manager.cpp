@@ -35,7 +35,7 @@ public:
      * @brief Все созданные представления с моделями, которые в них отображаются
      */
     struct ViewAndModel {
-        Ui::ScreenplayInformationView* view = nullptr;
+        QPointer<Ui::ScreenplayInformationView> view;
         QPointer<BusinessLayer::ScreenplayInformationModel> model;
     };
     QVector<ViewAndModel> allViews;
@@ -192,7 +192,22 @@ Ui::IDocumentView* ScreenplayInformationManager::createView(BusinessLayer::Abstr
 void ScreenplayInformationManager::resetModels()
 {
     for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
         d->setModelForView(nullptr, viewAndModel.view);
+    }
+}
+
+void ScreenplayInformationManager::setEditingMode(DocumentEditingMode _mode)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setEditingMode(_mode);
     }
 }
 

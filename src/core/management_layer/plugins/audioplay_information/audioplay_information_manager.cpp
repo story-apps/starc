@@ -34,7 +34,7 @@ public:
      * @brief Все созданные представления с моделями, которые в них отображаются
      */
     struct ViewAndModel {
-        Ui::AudioplayInformationView* view = nullptr;
+        QPointer<Ui::AudioplayInformationView> view;
         QPointer<BusinessLayer::AudioplayInformationModel> model;
     };
     QVector<ViewAndModel> allViews;
@@ -185,7 +185,22 @@ Ui::IDocumentView* AudioplayInformationManager::createView(BusinessLayer::Abstra
 void AudioplayInformationManager::resetModels()
 {
     for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
         d->setModelForView(nullptr, viewAndModel.view);
+    }
+}
+
+void AudioplayInformationManager::setEditingMode(DocumentEditingMode _mode)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setEditingMode(_mode);
     }
 }
 
