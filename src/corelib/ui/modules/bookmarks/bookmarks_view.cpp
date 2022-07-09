@@ -32,6 +32,8 @@ public:
     void updateBookmarksViewContextMenu(const QModelIndexList& _indexes, BookmarksView* _view);
 
 
+    bool isReadOnly = false;
+
     Tree* commentsView = nullptr;
     ContextMenu* commentsViewContextMenu = nullptr;
 
@@ -106,9 +108,13 @@ BookmarksView::BookmarksView(QWidget* _parent)
 
 
     connect(d->commentsView, &Tree::clicked, this, &BookmarksView::bookmarkSelected);
-    connect(d->commentsView, &Tree::doubleClicked, this, &BookmarksView::showAddBookmarkView);
+    connect(d->commentsView, &Tree::doubleClicked, this, [this](const QModelIndex& _index) {
+        if (!d->isReadOnly) {
+            showAddBookmarkView(_index);
+        }
+    });
     connect(d->commentsView, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
-        if (d->commentsView->selectedIndexes().isEmpty()) {
+        if (d->isReadOnly || d->commentsView->selectedIndexes().isEmpty()) {
             return;
         }
 
@@ -131,12 +137,14 @@ BookmarksView::BookmarksView(QWidget* _parent)
         d->itemWithBookmarkIndex = {};
         setCurrentWidget(d->commentsView);
     });
-
-
-    designSystemChangeEvent(nullptr);
 }
 
 BookmarksView::~BookmarksView() = default;
+
+void BookmarksView::setReadOnly(bool _readOnly)
+{
+    d->isReadOnly = _readOnly;
+}
 
 void BookmarksView::setModel(QAbstractItemModel* _model)
 {

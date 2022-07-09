@@ -33,6 +33,11 @@ public:
     void reconfigure();
 
     /**
+     * @brief Включить/выключить работу шорткатов
+     */
+    void setEnabled(bool _enabled);
+
+    /**
      * @brief Получить шорткат для блока
      */
     QString shortcut(BusinessLayer::TextParagraphType _forBlockType) const;

@@ -74,7 +74,8 @@ public:
 };
 
 StructureModel::Implementation::Implementation()
-    : rootItem(new StructureModelItem({}, Domain::DocumentObjectType::Undefined, {}, {}, true))
+    : rootItem(
+        new StructureModelItem({}, Domain::DocumentObjectType::Undefined, {}, {}, true, false))
 {
 }
 
@@ -89,12 +90,13 @@ void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structu
         //
         // Формируем элемент структуры
         //
+        const auto readOnly = false;
         auto item
             = new StructureModelItem(QUuid::fromString(_node.attribute(kUuidAttribute)),
                                      Domain::typeFor(_node.attribute(kTypeAttribute).toUtf8()),
                                      TextHelper::fromHtmlEscaped(_node.attribute(kNameAttribute)),
                                      ColorHelper::fromString(_node.attribute(kColorAttribute)),
-                                     _node.attribute(kVisibleAttribute) == "true");
+                                     _node.attribute(kVisibleAttribute) == "true", readOnly);
         //
         // ... вкладываем в родителя
         //
@@ -115,10 +117,11 @@ void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structu
             //
             else if (child.tagName() == kVersionKey) {
                 const auto versionNode = child.toElement();
+                const auto visible = true;
                 auto version = new StructureModelItem(
                     QUuid::fromString(versionNode.attribute(kUuidAttribute)), item->type(),
                     TextHelper::fromHtmlEscaped(versionNode.attribute(kNameAttribute)),
-                    ColorHelper::fromString(versionNode.attribute(kColorAttribute)),
+                    ColorHelper::fromString(versionNode.attribute(kColorAttribute)), visible,
                     _node.attribute(kReadOnlyAttribute) == "true");
                 item->addVersion(version);
             }
@@ -155,7 +158,7 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
                    .arg(kVersionKey, kUuidAttribute, _item->uuid().toString(), kNameAttribute,
                         TextHelper::toHtmlEscaped(_item->name()), kColorAttribute,
                         ColorHelper::toString(_item->color()), kReadOnlyAttribute,
-                        (_item->visible() ? "true" : "false"))
+                        (_item->isVisible() ? "true" : "false"))
                    .toUtf8();
     };
     std::function<void(StructureModelItem*)> writeItemXml;
@@ -165,7 +168,7 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
                         Domain::mimeTypeFor(_item->type()), kNameAttribute,
                         TextHelper::toHtmlEscaped(_item->name()), kColorAttribute,
                         ColorHelper::toString(_item->color()), kVisibleAttribute,
-                        (_item->visible() ? "true" : "false"))
+                        (_item->isVisible() ? "true" : "false"))
                    .toUtf8();
         if (_item->versions().isEmpty() && !_item->hasChildren()) {
             xml += "/>\n";
@@ -223,7 +226,8 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
     auto createItem = [](DocumentObjectType _type, const QString& _name) {
         auto uuid = QUuid::createUuid();
         const auto visible = true;
-        return new StructureModelItem(uuid, _type, _name, {}, visible);
+        const auto readOnly = false;
+        return new StructureModelItem(uuid, _type, _name, {}, visible, readOnly);
     };
 
     auto parentItem = itemForIndex(_parent);

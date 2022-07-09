@@ -18,7 +18,7 @@ bool StructureProxyModel::filterAcceptsRow(int _sourceRow, const QModelIndex& _s
 {
     const auto index = sourceModel()->index(_sourceRow, 0, _sourceParent);
     auto structure = qobject_cast<StructureModel*>(sourceModel());
-    return structure->itemForIndex(index)->visible();
+    return structure->itemForIndex(index)->isVisible();
 }
 
 } // namespace BusinessLayer

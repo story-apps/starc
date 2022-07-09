@@ -1311,10 +1311,11 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     //
     if (projectsManager->currentProject().type() != ProjectType::Cloud
         && projectsManager->currentProject().isReadOnly()) {
-        StandardDialog::information(applicationView, {},
-                                    tr("A file you try to open has no write permissions. Check out "
-                                       "file properties and allow it to be edited. Since it isn't "
-                                       "editable, it will be opened in a read only mode."));
+        StandardDialog::information(
+            applicationView, {},
+            tr("A file you are trying to open does not have write permissions. Check out file "
+               "properties and allow it to be edited. Since it isn't editable, it will be opened "
+               "in a read-only mode."));
     }
 
     if (projectsManager->currentProject().type() == ProjectType::LocalShadow) {

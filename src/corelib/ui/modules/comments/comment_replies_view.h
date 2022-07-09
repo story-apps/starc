@@ -16,6 +16,11 @@ public:
     ~CommentRepliesView() override;
 
     /**
+     * @brief Задать возможность редактирования
+     */
+    void setReadOnly(bool _readOnly);
+
+    /**
      * @brief Индекс текущего отображаемого комментария
      */
     QModelIndex commentIndex() const;

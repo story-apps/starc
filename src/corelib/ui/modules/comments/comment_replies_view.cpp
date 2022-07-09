@@ -88,18 +88,19 @@ CommentRepliesView::CommentRepliesView(QWidget* _parent)
     connect(d->headerView, &CommentView::clicked, this, &CommentRepliesView::closePressed);
     connect(d->replyTextField, &TextField::trailingIconPressed, this,
             &CommentRepliesView::postReply);
+}
 
+CommentRepliesView::~CommentRepliesView() = default;
 
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
+void CommentRepliesView::setReadOnly(bool _readOnly)
+{
+    d->replyTextField->setReadOnly(_readOnly);
 }
 
 QModelIndex CommentRepliesView::commentIndex() const
 {
     return d->commentIndex;
 }
-
-CommentRepliesView::~CommentRepliesView() = default;
 
 void CommentRepliesView::setCommentIndex(const QModelIndex& _index)
 {
@@ -119,7 +120,7 @@ void CommentRepliesView::setCommentIndex(const QModelIndex& _index)
         = _index.data(CommentsModel::ReviewMarkRepliesRole)
               .value<QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>>();
     QVector<ChatMessage> replies;
-    for (auto comment : comments) {
+    for (const auto& comment : comments) {
         if (comment == comments.first()) {
             continue;
         }

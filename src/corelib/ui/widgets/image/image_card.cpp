@@ -69,7 +69,7 @@ public:
 
     ImageCard* q = nullptr;
 
-    bool readOnly = false;
+    bool isReadOnly = false;
     bool isDragActive = false;
     QString decorationIcon = u8"\U000F0513";
     QString emptyImageText;
@@ -320,22 +320,22 @@ void ImageCard::setImage(const QPixmap& _image)
     emit imageChanged(d->image.source);
 }
 
-bool ImageCard::readOnly() const
+bool ImageCard::isReadOnly() const
 {
-    return d->readOnly;
+    return d->isReadOnly;
 }
 
 void ImageCard::setReadOnly(bool _readOnly)
 {
-    if (d->readOnly == _readOnly) {
+    if (d->isReadOnly == _readOnly) {
         return;
     }
 
-    d->readOnly = _readOnly;
-    d->changeImageAction->setEnabled(!d->readOnly);
-    d->copyImageAction->setEnabled(!d->readOnly);
-    d->pasteImageAction->setEnabled(!d->readOnly);
-    d->clearImageAction->setEnabled(!d->readOnly);
+    d->isReadOnly = _readOnly;
+    d->changeImageAction->setEnabled(!d->isReadOnly);
+    d->copyImageAction->setEnabled(!d->isReadOnly);
+    d->pasteImageAction->setEnabled(!d->isReadOnly);
+    d->clearImageAction->setEnabled(!d->isReadOnly);
     processReadOnlyChange();
 }
 
@@ -433,7 +433,7 @@ void ImageCard::paintEvent(QPaintEvent* _event)
             //
             // ... кнопка очистки
             //
-            if (!d->readOnly) {
+            if (!d->isReadOnly) {
                 painter.setFont(Ui::DesignSystem::font().iconsMid());
                 painter.drawText(d->clearButtonRect(), Qt::AlignCenter, u8"\U000F0156");
             }
@@ -443,7 +443,7 @@ void ImageCard::paintEvent(QPaintEvent* _event)
     //
     // Если в режиме вставки из буфера
     //
-    if (!d->readOnly
+    if (!d->isReadOnly
         && (d->isDragActive
             || d->dragIndicationOpacityAnimation.state() == QVariantAnimation::Running)) {
         painter.setOpacity(d->dragIndicationOpacityAnimation.currentValue().toReal());
@@ -505,7 +505,7 @@ void ImageCard::mousePressEvent(QMouseEvent* _event)
 {
     Card::mousePressEvent(_event);
 
-    if (!d->readOnly && _event->button() == Qt::LeftButton) {
+    if (!d->isReadOnly && _event->button() == Qt::LeftButton) {
         if (d->isInsideClearButton(_event->pos())) {
             d->clearImageAction->trigger();
         } else {
@@ -516,7 +516,7 @@ void ImageCard::mousePressEvent(QMouseEvent* _event)
 
 void ImageCard::dragEnterEvent(QDragEnterEvent* _event)
 {
-    if (d->readOnly) {
+    if (d->isReadOnly) {
         _event->ignore();
         return;
     }
@@ -530,7 +530,7 @@ void ImageCard::dragEnterEvent(QDragEnterEvent* _event)
 
 void ImageCard::dragMoveEvent(QDragMoveEvent* _event)
 {
-    if (d->readOnly) {
+    if (d->isReadOnly) {
         _event->ignore();
         return;
     }
@@ -540,7 +540,7 @@ void ImageCard::dragMoveEvent(QDragMoveEvent* _event)
 
 void ImageCard::dragLeaveEvent(QDragLeaveEvent* _event)
 {
-    if (d->readOnly) {
+    if (d->isReadOnly) {
         _event->ignore();
         return;
     }
@@ -553,7 +553,7 @@ void ImageCard::dragLeaveEvent(QDragLeaveEvent* _event)
 
 void ImageCard::dropEvent(QDropEvent* _event)
 {
-    if (d->readOnly) {
+    if (d->isReadOnly) {
         _event->ignore();
         return;
     }

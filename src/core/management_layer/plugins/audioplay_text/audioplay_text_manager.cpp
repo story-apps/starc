@@ -68,7 +68,7 @@ public:
      * @brief Все созданные представления с моделями, которые в них отображаются
      */
     struct ViewAndModel {
-        Ui::AudioplayTextView* view = nullptr;
+        QPointer<Ui::AudioplayTextView> view;
         QPointer<BusinessLayer::AudioplayTextModel> model;
     };
     QVector<ViewAndModel> allViews;
@@ -314,6 +314,10 @@ Ui::IDocumentView* AudioplayTextManager::createView(BusinessLayer::AbstractModel
 void AudioplayTextManager::resetModels()
 {
     for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
         d->setModelForView(nullptr, viewAndModel.view);
     }
 }
@@ -352,9 +356,22 @@ void AudioplayTextManager::bind(IDocumentManager* _manager)
 void AudioplayTextManager::saveSettings()
 {
     for (auto& viewAndModel : d->allViews) {
-        if (viewAndModel.model != nullptr && viewAndModel.view != nullptr) {
-            d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+        if (viewAndModel.model.isNull() || viewAndModel.view.isNull()) {
+            continue;
         }
+
+        d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+    }
+}
+
+void AudioplayTextManager::setEditingMode(DocumentEditingMode _mode)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setEditingMode(_mode);
     }
 }
 

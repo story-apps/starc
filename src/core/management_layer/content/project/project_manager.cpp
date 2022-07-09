@@ -580,7 +580,7 @@ void ProjectManager::Implementation::editVersion(const QModelIndex& _itemIndex, 
     auto dialog = new Ui::CreateVersionDialog(topLevelWidget);
     const auto item = aliasedItemForIndex(_itemIndex);
     const auto version = item->versions().at(_versionIndex);
-    dialog->edit(version->name(), version->color(), version->readOnly());
+    dialog->edit(version->name(), version->color(), version->isReadOnly());
     connect(dialog, &Ui::CreateVersionDialog::savePressed, view.active,
             [this, item, _versionIndex, dialog](const QString& _name, const QColor& _color) {
                 dialog->hideDialog();
@@ -1837,7 +1837,8 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     auto createItem = [](DocumentObjectType _type, const QString& _name) {
         auto uuid = QUuid::createUuid();
         const auto visible = true;
-        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible);
+        const auto readOnly = false;
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly);
     };
 
     auto rootItem = d->projectStructureModel->itemForIndex({});
@@ -2195,7 +2196,7 @@ void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item
         d->view.active->showNotImplementedPage();
         return;
     }
-    view->setEditingMode(_item->readOnly() ? DocumentEditingMode::Read : d->editingMode);
+    view->setEditingMode(_item->isReadOnly() ? DocumentEditingMode::Read : d->editingMode);
     d->view.active->showEditor(view->asQWidget());
 
     //

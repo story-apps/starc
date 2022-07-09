@@ -232,4 +232,9 @@ Widget* AudioplayTextSearchManager::toolbar() const
     return d->toolbar;
 }
 
+void AudioplayTextSearchManager::setReadOnly(bool _readOnly)
+{
+    d->toolbar->setReadOnly(_readOnly);
+}
+
 } // namespace BusinessLayer

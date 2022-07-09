@@ -38,7 +38,7 @@ public:
     /**
      * @brief Возможность редактирования изображения
      */
-    bool readOnly() const;
+    bool isReadOnly() const;
     void setReadOnly(bool _readOnly);
 
 signals:

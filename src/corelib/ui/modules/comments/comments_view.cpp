@@ -33,6 +33,8 @@ public:
     void updateCommentsViewContextMenu(const QModelIndexList& _indexes, CommentsView* _view);
 
 
+    bool isReadOnly = false;
+
     Tree* commentsView = nullptr;
     ContextMenu* commentsViewContextMenu = nullptr;
 
@@ -153,7 +155,7 @@ CommentsView::CommentsView(QWidget* _parent)
     connect(d->commentsView, &Tree::clicked, this, &CommentsView::commentSelected);
     connect(d->commentsView, &Tree::doubleClicked, this, &CommentsView::showCommentRepliesView);
     connect(d->commentsView, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
-        if (d->commentsView->selectedIndexes().isEmpty()) {
+        if (d->isReadOnly || d->commentsView->selectedIndexes().isEmpty()) {
             return;
         }
 
@@ -190,6 +192,12 @@ CommentsView::CommentsView(QWidget* _parent)
 }
 
 CommentsView::~CommentsView() = default;
+
+void CommentsView::setReadOnly(bool _readOnly)
+{
+    d->isReadOnly = _readOnly;
+    d->repliesView->setReadOnly(_readOnly);
+}
 
 void CommentsView::setModel(QAbstractItemModel* _model)
 {
@@ -230,7 +238,7 @@ void CommentsView::showCommentRepliesView(const QModelIndex& _commentIndex)
     //
     // Начинаем переход после того, как закончится анимация выбора элемента
     //
-    QTimer::singleShot(100, [this, _commentIndex] {
+    QTimer::singleShot(100, this, [this, _commentIndex] {
         setAnimationType(StackWidget::AnimationType::Expand);
         auto animationRect = d->commentsView->visualRect(_commentIndex);
         animationRect.setLeft(0);

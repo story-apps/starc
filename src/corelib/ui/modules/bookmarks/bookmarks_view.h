@@ -18,6 +18,11 @@ public:
     ~BookmarksView() override;
 
     /**
+     * @brief Задать возможность редактирования
+     */
+    void setReadOnly(bool _readOnly);
+
+    /**
      * @brief Установить модель закладок
      */
     void setModel(QAbstractItemModel* _model);

@@ -14,25 +14,28 @@ class StructureModelItem::Implementation
 {
 public:
     explicit Implementation(const QUuid& _uuid, Domain::DocumentObjectType _type,
-                            const QString& _name, const QColor& _color, bool _visible);
+                            const QString& _name, const QColor& _color, bool _visible,
+                            bool _readOnly);
 
     const QUuid uuid;
     Domain::DocumentObjectType type;
     QString name;
     QColor color;
     bool visible = true;
+    bool readOnly = false;
     QVector<StructureModelItem*> versions;
 };
 
 StructureModelItem::Implementation::Implementation(const QUuid& _uuid,
                                                    Domain::DocumentObjectType _type,
                                                    const QString& _name, const QColor& _color,
-                                                   bool _visible)
+                                                   bool _visible, bool _readOnly)
     : uuid(_uuid)
     , type(_type)
     , name(_name)
     , color(_color)
     , visible(_visible)
+    , readOnly(_readOnly)
 {
 }
 
@@ -41,16 +44,17 @@ StructureModelItem::Implementation::Implementation(const QUuid& _uuid,
 
 
 StructureModelItem::StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
-                                       const QString& _name, const QColor& _color, bool _visible)
+                                       const QString& _name, const QColor& _color, bool _visible,
+                                       bool _readOnly)
     : AbstractModelItem()
-    , d(new Implementation(_uuid, _type, _name, _color, _visible))
+    , d(new Implementation(_uuid, _type, _name, _color, _visible, _readOnly))
 {
 }
 
 StructureModelItem::StructureModelItem(const StructureModelItem& _other)
     : AbstractModelItem()
     , d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->color,
-                           _other.d->visible))
+                           _other.d->visible, _other.d->readOnly))
 {
 }
 
@@ -90,7 +94,7 @@ void StructureModelItem::setColor(const QColor& _color)
     d->color = _color;
 }
 
-bool StructureModelItem::visible() const
+bool StructureModelItem::isVisible() const
 {
     return d->visible;
 }
@@ -100,14 +104,14 @@ void StructureModelItem::setVisible(bool _visible)
     d->visible = _visible;
 }
 
-bool StructureModelItem::readOnly() const
+bool StructureModelItem::isReadOnly() const
 {
-    return d->visible;
+    return d->readOnly;
 }
 
 void StructureModelItem::setReadOnly(bool _readOnly)
 {
-    d->visible = _readOnly;
+    d->readOnly = _readOnly;
 }
 
 const QVector<StructureModelItem*>& StructureModelItem::versions() const
@@ -125,7 +129,9 @@ StructureModelItem* StructureModelItem::addVersion(StructureModelItem* _version)
 StructureModelItem* StructureModelItem::addVersion(const QString& _name, const QColor& _color,
                                                    bool _readOnly)
 {
-    auto version = new StructureModelItem(QUuid::createUuid(), type(), _name, _color, _readOnly);
+    const auto visible = true;
+    auto version
+        = new StructureModelItem(QUuid::createUuid(), type(), _name, _color, visible, _readOnly);
     version->setParent(parent());
     d->versions.prepend(version);
     return version;

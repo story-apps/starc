@@ -21,7 +21,8 @@ class CORE_LIBRARY_EXPORT StructureModelItem : public AbstractModelItem
 {
 public:
     explicit StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
-                                const QString& _name, const QColor& _color, bool _visible);
+                                const QString& _name, const QColor& _color, bool _visible,
+                                bool _readOnly);
     explicit StructureModelItem(const StructureModelItem& _other);
     ~StructureModelItem() override;
 
@@ -50,13 +51,13 @@ public:
     /**
      * @brief Должен ли быть виден элемент модели
      */
-    bool visible() const;
+    bool isVisible() const;
     void setVisible(bool _visible);
 
     /**
      * @brief Доступен ли элемент для редактирования
      */
-    bool readOnly() const;
+    bool isReadOnly() const;
     void setReadOnly(bool _readOnly);
 
     /**

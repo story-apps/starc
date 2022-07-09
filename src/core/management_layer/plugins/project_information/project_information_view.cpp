@@ -231,7 +231,7 @@ QVector<QAction*> CoverImageCard::contextMenuActions() const
 
 void CoverImageCard::processReadOnlyChange()
 {
-    d->createCoverAction->setEnabled(!readOnly());
+    d->createCoverAction->setEnabled(!isReadOnly());
 }
 
 void CoverImageCard::updateTranslations()

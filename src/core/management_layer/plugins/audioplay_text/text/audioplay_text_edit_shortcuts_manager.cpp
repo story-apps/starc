@@ -125,6 +125,13 @@ void AudioplayTextEditShortcutsManager::reconfigure()
     }
 }
 
+void AudioplayTextEditShortcutsManager::setEnabled(bool _enabled)
+{
+    for (auto shortcut : d->paragraphTypeToShortcut) {
+        shortcut->setEnabled(_enabled);
+    }
+}
+
 QString AudioplayTextEditShortcutsManager::shortcut(TextParagraphType _forBlockType) const
 {
     if (!d->paragraphTypeToShortcut.contains(_forBlockType)) {

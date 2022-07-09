@@ -20,6 +20,11 @@ public:
     ~CommentsView() override;
 
     /**
+     * @brief Задать возможность редактирования
+     */
+    void setReadOnly(bool _readOnly);
+
+    /**
      * @brief Установить модель комментариев
      */
     void setModel(QAbstractItemModel* _model);
