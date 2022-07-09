@@ -568,6 +568,13 @@ void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIn
                 projectStructureModel->addItemVersion(item, _name, _color, _readOnly,
                                                       model->document()->content());
                 view.active->setDocumentVersions(item->versions());
+
+                //
+                // Если версии скрыты, то отображим их список при добавлении новой
+                //
+                if (!showVersionsAction->isChecked()) {
+                    showVersionsAction->toggle();
+                }
             });
     connect(dialog, &Ui::CreateVersionDialog::disappeared, dialog,
             &Ui::CreateVersionDialog::deleteLater);
