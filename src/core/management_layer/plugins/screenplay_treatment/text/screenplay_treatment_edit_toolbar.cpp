@@ -119,12 +119,17 @@ ScreenplayTreatmentEditToolbar::ScreenplayTreatmentEditToolbar(QWidget* _parent)
         d->paragraphTypeAction->setIconText(u8"\U000f035d");
         animateHoverOut();
     });
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 ScreenplayTreatmentEditToolbar::~ScreenplayTreatmentEditToolbar() = default;
+
+void ScreenplayTreatmentEditToolbar::setReadOnly(bool _readOnly)
+{
+    const auto enabled = !_readOnly;
+    d->undoAction->setEnabled(enabled);
+    d->redoAction->setEnabled(enabled);
+    d->paragraphTypeAction->setEnabled(enabled);
+}
 
 void ScreenplayTreatmentEditToolbar::setParagraphTypesModel(QAbstractItemModel* _model)
 {

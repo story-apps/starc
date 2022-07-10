@@ -185,12 +185,17 @@ ScreenplayTreatmentSearchToolbar::ScreenplayTreatmentSearchToolbar(QWidget* _par
     addAction(d->replaceAllAction);
     connect(d->replaceAll, &Button::clicked, this,
             &ScreenplayTreatmentSearchToolbar::replaceAllPressed);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 ScreenplayTreatmentSearchToolbar::~ScreenplayTreatmentSearchToolbar() = default;
+
+void ScreenplayTreatmentSearchToolbar::setReadOnly(bool _readOnly)
+{
+    const auto enabled = !_readOnly;
+    d->replaceText->setEnabled(enabled);
+    d->replace->setEnabled(enabled);
+    d->replaceAll->setEnabled(enabled);
+}
 
 void ScreenplayTreatmentSearchToolbar::refocus()
 {

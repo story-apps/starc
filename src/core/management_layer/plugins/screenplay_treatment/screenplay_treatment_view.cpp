@@ -14,6 +14,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
 #include <ui/modules/bookmarks/bookmarks_view.h>
@@ -117,7 +118,7 @@ public:
     //
     // Редактор поэпизодника
     //
-    ScreenplayTreatmentEdit* screenplayText = nullptr;
+    ScreenplayTreatmentEdit* textEdit = nullptr;
     ScreenplayTreatmentEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
 
@@ -156,12 +157,11 @@ public:
 ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
     : commentsModel(new BusinessLayer::CommentsModel(_parent))
     , bookmarksModel(new BusinessLayer::BookmarksModel(_parent))
-    , screenplayText(new ScreenplayTreatmentEdit(_parent))
-    , shortcutsManager(screenplayText)
-    , scalableWrapper(new ScalableWrapper(screenplayText, _parent))
+    , textEdit(new ScreenplayTreatmentEdit(_parent))
+    , shortcutsManager(textEdit)
+    , scalableWrapper(new ScalableWrapper(textEdit, _parent))
     , toolbar(new ScreenplayTreatmentEditToolbar(scalableWrapper))
-    , searchManager(
-          new BusinessLayer::ScreenplayTreatmentSearchManager(scalableWrapper, screenplayText))
+    , searchManager(new BusinessLayer::ScreenplayTreatmentSearchManager(scalableWrapper, textEdit))
     , toolbarAnimation(new FloatingToolbarAnimator(_parent))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
     , commentsToolbar(new CommentsToolbar(_parent))
@@ -190,14 +190,14 @@ ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
 
     commentsToolbar->hide();
 
-    screenplayText->setVerticalScrollBar(new ScrollBar);
-    screenplayText->setHorizontalScrollBar(new ScrollBar);
+    textEdit->setVerticalScrollBar(new ScrollBar);
+    textEdit->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
     scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->setVerticalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
 
-    screenplayText->setUsePageMode(true);
+    textEdit->setUsePageMode(true);
 
     sidebarWidget->hide();
     sidebarTabs->setFixed(false);
@@ -250,18 +250,18 @@ void ScreenplayTreatmentView::Implementation::reconfigureTemplate(bool _withMode
     shortcutsManager.reconfigure();
 
     if (_withModelReinitialization) {
-        screenplayText->reinit();
+        textEdit->reinit();
     }
 }
 
 void ScreenplayTreatmentView::Implementation::reconfigureSceneNumbersVisibility()
 {
     if (model && model->informationModel()) {
-        screenplayText->setShowSceneNumber(model->informationModel()->showSceneNumbers(),
-                                           model->informationModel()->showSceneNumbersOnLeft(),
-                                           model->informationModel()->showSceneNumbersOnRight());
+        textEdit->setShowSceneNumber(model->informationModel()->showSceneNumbers(),
+                                     model->informationModel()->showSceneNumbersOnLeft(),
+                                     model->informationModel()->showSceneNumbersOnRight());
     } else {
-        screenplayText->setShowSceneNumber(
+        textEdit->setShowSceneNumber(
             settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey)
                 .toBool(),
             settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey)
@@ -273,7 +273,7 @@ void ScreenplayTreatmentView::Implementation::reconfigureSceneNumbersVisibility(
 
 void ScreenplayTreatmentView::Implementation::reconfigureDialoguesNumbersVisibility()
 {
-    screenplayText->setShowDialogueNumber(
+    textEdit->setShowDialogueNumber(
         model && model->informationModel()
             ? model->informationModel()->showDialoguesNumbers()
             : settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
@@ -311,7 +311,7 @@ void ScreenplayTreatmentView::Implementation::updateToolBarUi()
 
 void ScreenplayTreatmentView::Implementation::updateToolBarCurrentParagraphTypeName()
 {
-    auto paragraphType = screenplayText->currentParagraphType();
+    auto paragraphType = textEdit->currentParagraphType();
     if (currentParagraphType == paragraphType) {
         return;
     }
@@ -323,8 +323,8 @@ void ScreenplayTreatmentView::Implementation::updateToolBarCurrentParagraphTypeN
         toolbar->setParagraphTypesEnabled(false);
         fastFormatWidget->setEnabled(false);
     } else {
-        toolbar->setParagraphTypesEnabled(true);
-        fastFormatWidget->setEnabled(true);
+        toolbar->setParagraphTypesEnabled(!textEdit->isReadOnly() && true);
+        fastFormatWidget->setEnabled(!textEdit->isReadOnly() && true);
     }
 
     for (int itemRow = 0; itemRow < paragraphTypesModel->rowCount(); ++itemRow) {
@@ -341,7 +341,7 @@ void ScreenplayTreatmentView::Implementation::updateToolBarCurrentParagraphTypeN
 
 void ScreenplayTreatmentView::Implementation::updateTextEditPageMargins()
 {
-    if (screenplayText->usePageMode()) {
+    if (textEdit->usePageMode()) {
         return;
     }
 
@@ -350,12 +350,13 @@ void ScreenplayTreatmentView::Implementation::updateTextEditPageMargins()
                      12 / scalableWrapper->zoomRange()
                          + MeasurementHelper::pxToMm(scalableWrapper->verticalScrollBar()->width()),
                      5 };
-    screenplayText->setPageMarginsMm(pageMargins);
+    textEdit->setPageMarginsMm(pageMargins);
 }
 
 void ScreenplayTreatmentView::Implementation::updateCommentsToolBar()
 {
-    if (!toolbar->isCommentsModeEnabled() || !screenplayText->textCursor().hasSelection()) {
+    if (textEdit->isReadOnly() || !toolbar->isCommentsModeEnabled()
+        || !textEdit->textCursor().hasSelection()) {
         commentsToolbar->hideToolbar();
         return;
     }
@@ -363,11 +364,11 @@ void ScreenplayTreatmentView::Implementation::updateCommentsToolBar()
     //
     // Определяем точку на границе страницы, либо если страница не влезает в экран, то с боку экрана
     //
-    const int x = (screenplayText->width() - screenplayText->viewport()->width()) / 2
-        + screenplayText->viewport()->width() - commentsToolbar->width();
+    const int x = (textEdit->width() - textEdit->viewport()->width()) / 2
+        + textEdit->viewport()->width() - commentsToolbar->width();
     const qreal textRight = scalableWrapper->mapFromEditor(QPoint(x, 0)).x();
-    const auto cursorRect = screenplayText->cursorRect();
-    const auto globalCursorCenter = screenplayText->mapToGlobal(cursorRect.center());
+    const auto cursorRect = textEdit->cursorRect();
+    const auto globalCursorCenter = textEdit->mapToGlobal(cursorRect.center());
     const auto localCursorCenter
         = commentsToolbar->parentWidget()->mapFromGlobal(globalCursorCenter);
     //
@@ -410,22 +411,22 @@ void ScreenplayTreatmentView::Implementation::addReviewMark(const QColor& _textC
     //
     const auto textColor
         = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
-    screenplayText->addReviewMark(textColor, _backgroundColor, _comment);
+    textEdit->addReviewMark(textColor, _backgroundColor, _comment);
 
     //
     // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение
     // добавлено
     //
-    BusinessLayer::TextCursor cursor(screenplayText->textCursor());
+    BusinessLayer::TextCursor cursor(textEdit->textCursor());
     const auto selectionInterval = cursor.selectionInterval();
     //
     // ... делаем танец с бубном, чтобы получить сигнал об обновлении позиции курсора
     //     и выделить новую заметку в общем списке
     //
     cursor.setPosition(selectionInterval.to);
-    screenplayText->setTextCursorAndKeepScrollBars(cursor);
+    textEdit->setTextCursorAndKeepScrollBars(cursor);
     cursor.setPosition(selectionInterval.from);
-    screenplayText->setTextCursorAndKeepScrollBars(cursor);
+    textEdit->setTextCursorAndKeepScrollBars(cursor);
 
     //
     // Фокусируем редактор сценария, чтобы пользователь мог продолжать работать с ним
@@ -458,15 +459,15 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->splitter);
 
-    connect(d->toolbar, &ScreenplayTreatmentEditToolbar::undoPressed, d->screenplayText,
+    connect(d->toolbar, &ScreenplayTreatmentEditToolbar::undoPressed, d->textEdit,
             &ScreenplayTreatmentEdit::undo);
-    connect(d->toolbar, &ScreenplayTreatmentEditToolbar::redoPressed, d->screenplayText,
+    connect(d->toolbar, &ScreenplayTreatmentEditToolbar::redoPressed, d->textEdit,
             &ScreenplayTreatmentEdit::redo);
     connect(d->toolbar, &ScreenplayTreatmentEditToolbar::paragraphTypeChanged, this,
             [this](const QModelIndex& _index) {
                 const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
-                d->screenplayText->setCurrentParagraphType(type);
+                d->textEdit->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();
             });
     connect(d->toolbar, &ScreenplayTreatmentEditToolbar::fastFormatPanelVisibleChanged, this,
@@ -526,11 +527,11 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
     connect(d->commentsView, &CommentsView::commentSelected, this,
             [this](const QModelIndex& _index) {
                 const auto positionHint = d->commentsModel->mapToModel(_index);
-                const auto position = d->screenplayText->positionForModelIndex(positionHint.index)
+                const auto position = d->textEdit->positionForModelIndex(positionHint.index)
                     + positionHint.blockPosition;
-                auto cursor = d->screenplayText->textCursor();
+                auto cursor = d->textEdit->textCursor();
                 cursor.setPosition(position);
-                d->screenplayText->ensureCursorVisible(cursor);
+                d->textEdit->ensureCursorVisible(cursor);
                 d->scalableWrapper->setFocus();
             });
     connect(d->commentsView, &CommentsView::markAsDoneRequested, this,
@@ -558,10 +559,10 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
     connect(d->bookmarksView, &BookmarksView::bookmarkSelected, this,
             [this](const QModelIndex& _index) {
                 const auto index = d->bookmarksModel->mapToModel(_index);
-                const auto position = d->screenplayText->positionForModelIndex(index);
-                auto cursor = d->screenplayText->textCursor();
+                const auto position = d->textEdit->positionForModelIndex(index);
+                auto cursor = d->textEdit->textCursor();
                 cursor.setPosition(position);
-                d->screenplayText->ensureCursorVisible(cursor);
+                d->textEdit->ensureCursorVisible(cursor);
                 d->scalableWrapper->setFocus();
             });
     connect(d->bookmarksView, &BookmarksView::removeRequested, this,
@@ -591,7 +592,7 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
             [this](const QModelIndex& _index) {
                 const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());
-                d->screenplayText->setCurrentParagraphType(type);
+                d->textEdit->setCurrentParagraphType(type);
                 d->scalableWrapper->setFocus();
             });
     //
@@ -615,12 +616,12 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
         //
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
-        const auto screenplayModelIndex = d->screenplayText->currentModelIndex();
+        const auto screenplayModelIndex = d->textEdit->currentModelIndex();
         emit currentModelIndexChanged(screenplayModelIndex);
         //
         // Если необходимо выберем соответствующий комментарий
         //
-        const auto positionInBlock = d->screenplayText->textCursor().positionInBlock();
+        const auto positionInBlock = d->textEdit->textCursor().positionInBlock();
         const auto commentModelIndex
             = d->commentsModel->mapFromModel(screenplayModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
@@ -630,13 +631,13 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
         const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(screenplayModelIndex);
         d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
     };
-    connect(d->screenplayText, &ScreenplayTreatmentEdit::paragraphTypeChanged, this,
+    connect(d->textEdit, &ScreenplayTreatmentEdit::paragraphTypeChanged, this,
             handleCursorPositionChanged);
-    connect(d->screenplayText, &ScreenplayTreatmentEdit::cursorPositionChanged, this,
+    connect(d->textEdit, &ScreenplayTreatmentEdit::cursorPositionChanged, this,
             handleCursorPositionChanged);
-    connect(d->screenplayText, &ScreenplayTreatmentEdit::selectionChanged, this,
+    connect(d->textEdit, &ScreenplayTreatmentEdit::selectionChanged, this,
             [this] { d->updateCommentsToolBar(); });
-    connect(d->screenplayText, &ScreenplayTreatmentEdit::addBookmarkRequested, this, [this] {
+    connect(d->textEdit, &ScreenplayTreatmentEdit::addBookmarkRequested, this, [this] {
         //
         // Если список закладок показан, добавляем новую через него
         //
@@ -650,7 +651,7 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
             emit addBookmarkRequested();
         }
     });
-    connect(d->screenplayText, &ScreenplayTreatmentEdit::editBookmarkRequested, this, [this] {
+    connect(d->textEdit, &ScreenplayTreatmentEdit::editBookmarkRequested, this, [this] {
         //
         // Если список закладок показан, редактируем через него
         //
@@ -665,10 +666,10 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
             emit addBookmarkRequested();
         }
     });
-    connect(d->screenplayText, &ScreenplayTreatmentEdit::removeBookmarkRequested, this,
+    connect(d->textEdit, &ScreenplayTreatmentEdit::removeBookmarkRequested, this,
             &ScreenplayTreatmentView::removeBookmarkRequested);
-    connect(d->screenplayText, &ScreenplayTreatmentEdit::showBookmarksRequested,
-            d->showBookmarksAction, &QAction::toggle);
+    connect(d->textEdit, &ScreenplayTreatmentEdit::showBookmarksRequested, d->showBookmarksAction,
+            &QAction::toggle);
     //
     connect(d->showBookmarksAction, &QAction::toggled, this, [this](bool _checked) {
         d->updateOptionsTranslations();
@@ -706,9 +707,22 @@ QVector<QAction*> ScreenplayTreatmentView::options() const
     };
 }
 
+void ScreenplayTreatmentView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->textEdit->setReadOnly(readOnly);
+    d->toolbar->setReadOnly(readOnly);
+    d->searchManager->setReadOnly(readOnly);
+    d->commentsView->setReadOnly(readOnly);
+    d->bookmarksView->setReadOnly(readOnly);
+    const auto enabled = !readOnly;
+    d->shortcutsManager.setEnabled(enabled);
+    d->fastFormatWidget->setEnabled(enabled);
+}
+
 void ScreenplayTreatmentView::reconfigure(const QStringList& _changedSettingsKeys)
 {
-    UiHelper::initSpellingFor(d->screenplayText);
+    UiHelper::initSpellingFor(d->textEdit);
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
@@ -729,7 +743,7 @@ void ScreenplayTreatmentView::reconfigure(const QStringList& _changedSettingsKey
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)) {
-        d->screenplayText->setCorrectionOptions(
+        d->textEdit->setCorrectionOptions(
             settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)
                 .toBool(),
             true);
@@ -744,26 +758,26 @@ void ScreenplayTreatmentView::reconfigure(const QStringList& _changedSettingsKey
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationShowDocumentsPagesKey)) {
         const auto usePageMode
             = settingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey).toBool();
-        d->screenplayText->setUsePageMode(usePageMode);
+        d->textEdit->setUsePageMode(usePageMode);
         if (usePageMode) {
-            d->screenplayText->reinit();
+            d->textEdit->reinit();
         } else {
             d->updateTextEditPageMargins();
         }
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationHighlightCurrentLineKey)) {
-        d->screenplayText->setHighlightCurrentLine(
+        d->textEdit->setHighlightCurrentLine(
             settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationFocusCurrentParagraphKey)) {
-        d->screenplayText->setFocusCurrentParagraph(
+        d->textEdit->setFocusCurrentParagraph(
             settingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey).toBool());
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(DataStorageLayer::kApplicationUseTypewriterScrollingKey)) {
-        d->screenplayText->setUseTypewriterScrolling(
+        d->textEdit->setUseTypewriterScrolling(
             settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
     }
 }
@@ -837,7 +851,7 @@ void ScreenplayTreatmentView::setModel(BusinessLayer::ScreenplayTextModel* _mode
                 [this] { d->reconfigureDialoguesNumbersVisibility(); });
     }
 
-    d->screenplayText->initWithModel(d->model);
+    d->textEdit->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);
 
@@ -846,34 +860,34 @@ void ScreenplayTreatmentView::setModel(BusinessLayer::ScreenplayTextModel* _mode
 
 QModelIndex ScreenplayTreatmentView::currentModelIndex() const
 {
-    return d->screenplayText->currentModelIndex();
+    return d->textEdit->currentModelIndex();
 }
 
 void ScreenplayTreatmentView::setCurrentModelIndex(const QModelIndex& _index)
 {
-    d->screenplayText->setCurrentModelIndex(_index);
+    d->textEdit->setCurrentModelIndex(_index);
 }
 
 int ScreenplayTreatmentView::cursorPosition() const
 {
-    return d->screenplayText->textCursor().position();
+    return d->textEdit->textCursor().position();
 }
 
 void ScreenplayTreatmentView::setCursorPosition(int _position)
 {
-    auto cursor = d->screenplayText->textCursor();
+    auto cursor = d->textEdit->textCursor();
     cursor.setPosition(_position);
-    d->screenplayText->ensureCursorVisible(cursor, false);
+    d->textEdit->ensureCursorVisible(cursor, false);
 }
 
 int ScreenplayTreatmentView::verticalScroll() const
 {
-    return d->screenplayText->verticalScrollBar()->value();
+    return d->textEdit->verticalScrollBar()->value();
 }
 
 void ScreenplayTreatmentView::setverticalScroll(int _value)
 {
-    d->screenplayText->verticalScrollBar()->setValue(_value);
+    d->textEdit->verticalScrollBar()->setValue(_value);
 }
 
 bool ScreenplayTreatmentView::eventFilter(QObject* _target, QEvent* _event)
@@ -921,7 +935,7 @@ void ScreenplayTreatmentView::designSystemChangeEvent(DesignSystemChangeEvent* _
 
     d->updateToolBarUi();
 
-    d->screenplayText->setPageSpacing(Ui::DesignSystem::layout().px24());
+    d->textEdit->setPageSpacing(Ui::DesignSystem::layout().px24());
     QPalette palette;
     palette.setColor(QPalette::Window, Ui::DesignSystem::color().surface());
     palette.setColor(QPalette::Base, Ui::DesignSystem::color().textEditor());
@@ -929,11 +943,11 @@ void ScreenplayTreatmentView::designSystemChangeEvent(DesignSystemChangeEvent* _
     palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().secondary());
     palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
     d->scalableWrapper->setPalette(palette);
-    d->screenplayText->setPalette(palette);
+    d->textEdit->setPalette(palette);
     palette.setColor(QPalette::Base, Qt::transparent);
-    d->screenplayText->viewport()->setPalette(palette);
-    d->screenplayText->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->screenplayText->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->textEdit->viewport()->setPalette(palette);
+    d->textEdit->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->textEdit->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
 
     d->splitter->setBackgroundColor(Ui::DesignSystem::color().background());
 

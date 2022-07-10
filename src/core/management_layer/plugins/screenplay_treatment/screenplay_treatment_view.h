@@ -28,7 +28,8 @@ public:
     QWidget* asQWidget() override;
     void toggleFullScreen(bool _isFullScreen) override;
     QVector<QAction*> options() const override;
-    /** @{ */
+    void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
+    /** @} */
 
     /**
      * @brief Настроить редактор сценария в соответствии с параметрами заданными в настройках
