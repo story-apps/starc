@@ -235,6 +235,11 @@ void StageplayTextStructureManager::bind(IDocumentManager* _manager)
             SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
 }
 
+void StageplayTextStructureManager::setEditingMode(DocumentEditingMode _mode)
+{
+    d->view->setEditingMode(_mode);
+}
+
 void StageplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
 {
     if (!_index.isValid()) {

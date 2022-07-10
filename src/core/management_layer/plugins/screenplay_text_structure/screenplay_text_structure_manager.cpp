@@ -264,6 +264,11 @@ void ScreenplayTextStructureManager::saveSettings()
     d->saveViewSettings();
 }
 
+void ScreenplayTextStructureManager::setEditingMode(DocumentEditingMode _mode)
+{
+    d->view->setEditingMode(_mode);
+}
+
 void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
 {
     if (!_index.isValid()) {

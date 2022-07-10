@@ -222,6 +222,11 @@ void SimpleTextStructureManager::bind(IDocumentManager* _manager)
             SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
 }
 
+void SimpleTextStructureManager::setEditingMode(DocumentEditingMode _mode)
+{
+    d->view->setEditingMode(_mode);
+}
+
 void SimpleTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
 {
     if (!_index.isValid()) {

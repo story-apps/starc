@@ -20,8 +20,11 @@ public:
     /**
      * @brief Реализация интерфейса IDocumentView
      */
+    /** @{ */
     QWidget* asQWidget() override;
     QVector<QAction*> options() const override;
+    void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
+    /** @} */
 
     /**
      * @brief Настроить навигатор в соответствии с параметрами заданными в настройках

@@ -242,6 +242,11 @@ void ScreenplayTreatmentStructureManager::bind(IDocumentManager* _manager)
             SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
 }
 
+void ScreenplayTreatmentStructureManager::setEditingMode(DocumentEditingMode _mode)
+{
+    d->view->setEditingMode(_mode);
+}
+
 void ScreenplayTreatmentStructureManager::setCurrentModelIndex(const QModelIndex& _index)
 {
     if (!_index.isValid()) {

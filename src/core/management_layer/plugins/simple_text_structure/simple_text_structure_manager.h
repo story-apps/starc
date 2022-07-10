@@ -35,6 +35,7 @@ public:
     void resetModels() override;
     void reconfigure(const QStringList& _changedSettingsKeys) override;
     void bind(IDocumentManager* _manager) override;
+    void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
     /** @} */
 
 signals:

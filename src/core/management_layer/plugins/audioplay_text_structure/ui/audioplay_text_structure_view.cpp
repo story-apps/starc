@@ -6,6 +6,7 @@
 #include <business_layer/templates/audioplay_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -87,6 +88,13 @@ QWidget* AudioplayTextStructureView::asQWidget()
     return this;
 }
 
+void AudioplayTextStructureView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->content->setContextMenuPolicy(readOnly ? Qt::NoContextMenu : Qt::CustomContextMenu);
+    d->content->setDragDropEnabled(!readOnly);
+}
+
 void AudioplayTextStructureView::reconfigure()
 {
     const bool showSceneNumber
@@ -121,6 +129,7 @@ void AudioplayTextStructureView::setModel(QAbstractItemModel* _model)
 void AudioplayTextStructureView::setCurrentModelIndex(const QModelIndex& _sourceIndex,
                                                       const QModelIndex& _mappedIndex)
 {
+    Q_UNUSED(_sourceIndex)
     d->content->setCurrentIndex(_mappedIndex);
 }
 

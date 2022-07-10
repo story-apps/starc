@@ -224,6 +224,11 @@ void AudioplayTextStructureManager::bind(IDocumentManager* _manager)
             SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
 }
 
+void AudioplayTextStructureManager::setEditingMode(DocumentEditingMode _mode)
+{
+    d->view->setEditingMode(_mode);
+}
+
 void AudioplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
 {
     if (!_index.isValid()) {

@@ -233,6 +233,11 @@ void ComicBookTextStructureManager::bind(IDocumentManager* _manager)
             SLOT(setCurrentModelIndex(const QModelIndex&)), Qt::UniqueConnection);
 }
 
+void ComicBookTextStructureManager::setEditingMode(DocumentEditingMode _mode)
+{
+    d->view->setEditingMode(_mode);
+}
+
 void ComicBookTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
 {
     if (!_index.isValid()) {

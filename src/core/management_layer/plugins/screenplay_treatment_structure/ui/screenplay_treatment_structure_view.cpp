@@ -4,6 +4,7 @@
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -85,6 +86,13 @@ ScreenplayTreatmentStructureView::~ScreenplayTreatmentStructureView() = default;
 QWidget* ScreenplayTreatmentStructureView::asQWidget()
 {
     return this;
+}
+
+void ScreenplayTreatmentStructureView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->content->setContextMenuPolicy(readOnly ? Qt::NoContextMenu : Qt::CustomContextMenu);
+    d->content->setDragDropEnabled(!readOnly);
 }
 
 void ScreenplayTreatmentStructureView::reconfigure()
