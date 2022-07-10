@@ -36,7 +36,7 @@ public:
      * @brief Все созданные представления с моделями, которые в них отображаются
      */
     struct ViewAndModel {
-        Ui::RecycleBinView* view = nullptr;
+        QPointer<Ui::RecycleBinView> view;
         QPointer<BusinessLayer::RecycleBinModel> model;
     };
     QVector<ViewAndModel> allViews;
@@ -156,7 +156,22 @@ Ui::IDocumentView* RecycleBinManager::createView(BusinessLayer::AbstractModel* _
 void RecycleBinManager::resetModels()
 {
     for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
         d->setModelForView(nullptr, viewAndModel.view);
+    }
+}
+
+void RecycleBinManager::setEditingMode(DocumentEditingMode _mode)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setEditingMode(_mode);
     }
 }
 

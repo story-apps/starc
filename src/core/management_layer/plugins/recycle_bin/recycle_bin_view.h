@@ -20,7 +20,10 @@ public:
     /**
      * @brief Реализация интерфейса IDocumentView
      */
+    /** @{ */
     QWidget* asQWidget() override;
+    void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
+    /** @} */
 
     /**
      * @brief Задать количество удалённых документов

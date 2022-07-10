@@ -1,5 +1,6 @@
 #include "recycle_bin_view.h"
 
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
@@ -107,6 +108,12 @@ RecycleBinView::~RecycleBinView() = default;
 QWidget* RecycleBinView::asQWidget()
 {
     return this;
+}
+
+void RecycleBinView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto enabled = _mode == ManagementLayer::DocumentEditingMode::Edit;
+    d->emptyRecycleBinButton->setEnabled(enabled);
 }
 
 void RecycleBinView::setDocumentsToRemoveSize(int _size)

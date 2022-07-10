@@ -32,6 +32,7 @@ public:
     Ui::IDocumentView* secondaryView(BusinessLayer::AbstractModel* _model) override;
     Ui::IDocumentView* createView(BusinessLayer::AbstractModel* _model) override;
     void resetModels() override;
+    void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
     /** @} */
 
 private:
