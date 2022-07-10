@@ -120,7 +120,7 @@ void CreateVersionDialog::updateTranslations()
     setTitle(d->state == AddNew ? tr("Create new document version") : tr("Edit document version"));
 
     d->versionName->setLabel(tr("Version name"));
-    d->allowEditVersion->setText(tr("Allow to edit new version"));
+    d->allowEditVersion->setText(tr("Allow to edit version"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(d->state == AddNew ? tr("Create") : tr("Save"));
 }

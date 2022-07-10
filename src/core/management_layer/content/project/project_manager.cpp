@@ -609,7 +609,7 @@ void ProjectManager::Implementation::removeVersion(const QModelIndex& _itemIndex
     constexpr int cancelButtonId = 0;
     constexpr int removeButtonId = 1;
     dialog->showDialog(
-        {}, tr("Do you really want to remove project version \"%1\"?").arg(version->name()),
+        {}, tr("Do you really want to remove document version \"%1\"?").arg(version->name()),
         { { cancelButtonId, tr("No"), Dialog::RejectButton },
           { removeButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
     connect(
