@@ -1220,6 +1220,9 @@ ContextMenu* ComicBookTextEdit::createContextMenu(const QPoint& _position, QWidg
     // измениться курсор, который установлен в текстовом редакторе, и использовать его
     //
     auto menu = ScriptTextEdit::createContextMenu(_position, _parent);
+    if (isReadOnly()) {
+        return menu;
+    }
 
     const BusinessLayer::TextCursor cursor = textCursor();
 

@@ -23,6 +23,11 @@ public:
      */
     Widget* toolbar() const;
 
+    /**
+     * @brief Настроить режим редактирования
+     */
+    void setReadOnly(bool _readOnly);
+
 signals:
     /**
      * @brief Запрос на скрытие панели поиска

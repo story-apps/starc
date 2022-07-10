@@ -129,6 +129,13 @@ void ComicBookTextEditShortcutsManager::reconfigure()
     }
 }
 
+void ComicBookTextEditShortcutsManager::setEnabled(bool _enabled)
+{
+    for (auto shortcut : d->paragraphTypeToShortcut) {
+        shortcut->setEnabled(_enabled);
+    }
+}
+
 QString ComicBookTextEditShortcutsManager::shortcut(TextParagraphType _forBlockType) const
 {
     if (!d->paragraphTypeToShortcut.contains(_forBlockType)) {

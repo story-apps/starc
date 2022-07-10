@@ -234,4 +234,9 @@ Widget* ComicBookTextSearchManager::toolbar() const
     return d->toolbar;
 }
 
+void ComicBookTextSearchManager::setReadOnly(bool _readOnly)
+{
+    d->toolbar->setReadOnly(_readOnly);
+}
+
 } // namespace BusinessLayer

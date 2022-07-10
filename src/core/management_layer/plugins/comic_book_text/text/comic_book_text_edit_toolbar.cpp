@@ -126,6 +126,14 @@ ComicBookTextEditToolbar::ComicBookTextEditToolbar(QWidget* _parent)
 
 ComicBookTextEditToolbar::~ComicBookTextEditToolbar() = default;
 
+void ComicBookTextEditToolbar::setReadOnly(bool _readOnly)
+{
+    const auto enabled = !_readOnly;
+    d->undoAction->setEnabled(enabled);
+    d->redoAction->setEnabled(enabled);
+    d->paragraphTypeAction->setEnabled(enabled);
+}
+
 void ComicBookTextEditToolbar::setParagraphTypesModel(QAbstractItemModel* _model)
 {
     if (d->popup->contentModel() != nullptr) {

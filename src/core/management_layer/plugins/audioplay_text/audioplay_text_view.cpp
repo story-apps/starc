@@ -691,9 +691,6 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
         d->updateSideBarVisibility(this);
     });
 
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
-
     reconfigure({});
 }
 

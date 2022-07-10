@@ -191,6 +191,14 @@ ComicBookTextSearchToolbar::ComicBookTextSearchToolbar(QWidget* _parent)
 
 ComicBookTextSearchToolbar::~ComicBookTextSearchToolbar() = default;
 
+void ComicBookTextSearchToolbar::setReadOnly(bool _readOnly)
+{
+    const auto enabled = !_readOnly;
+    d->replaceText->setEnabled(enabled);
+    d->replace->setEnabled(enabled);
+    d->replaceAll->setEnabled(enabled);
+}
+
 void ComicBookTextSearchToolbar::refocus()
 {
     d->searchText->setFocus();

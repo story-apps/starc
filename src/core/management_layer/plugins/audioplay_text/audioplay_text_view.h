@@ -29,7 +29,7 @@ public:
     void toggleFullScreen(bool _isFullScreen) override;
     QVector<QAction*> options() const override;
     void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
-    /** @{ */
+    /** @} */
 
     /**
      * @brief Настроить редактор в соответствии с параметрами заданными в настройках
