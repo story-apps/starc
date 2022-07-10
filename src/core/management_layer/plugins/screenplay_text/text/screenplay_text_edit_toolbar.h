@@ -19,6 +19,11 @@ public:
     ~ScreenplayTextEditToolbar() override;
 
     /**
+     * @brief Настроить режим редактирования
+     */
+    void setReadOnly(bool _readOnly);
+
+    /**
      * @brief Задать модель выпадающего списка типов абзацев
      */
     void setParagraphTypesModel(QAbstractItemModel* _model);

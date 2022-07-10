@@ -29,6 +29,7 @@ public:
 
 
     bool useContentsWidth = false;
+    bool isReadOnly = false;
     CardPopupWithTree* popup = nullptr;
 };
 
@@ -85,7 +86,7 @@ ComboBox::ComboBox(QWidget* _parent)
     : TextField(_parent)
     , d(new Implementation(this))
 {
-    setReadOnly(true);
+    setTextInteractionFlags(Qt::TextSelectableByMouse);
     setTrailingIcon(u8"\U000f035d");
     viewport()->setCursor(Qt::ArrowCursor);
     viewport()->setMouseTracking(false);
@@ -102,6 +103,11 @@ ComboBox::ComboBox(QWidget* _parent)
 }
 
 ComboBox::~ComboBox() = default;
+
+void ComboBox::setReadOnly(bool _readOnly)
+{
+    d->isReadOnly = _readOnly;
+}
 
 void ComboBox::setPopupBackgroundColor(const QColor& _color)
 {
@@ -195,7 +201,7 @@ void ComboBox::focusOutEvent(QFocusEvent* _event)
 
 void ComboBox::keyPressEvent(QKeyEvent* _event)
 {
-    if (!isReadOnly()) {
+    if (!d->isReadOnly) {
         if (_event->key() == Qt::Key_Up) {
             if (currentIndex().row() > 0) {
                 setCurrentIndex(model()->index(currentIndex().row() - 1, 0));
@@ -214,7 +220,7 @@ void ComboBox::mousePressEvent(QMouseEvent* _event)
 {
     TextField::mousePressEvent(_event);
 
-    if (!isReadOnly()) {
+    if (!d->isReadOnly) {
         if (!d->popup->isVisible()) {
             setTrailingIcon(u8"\U000f0360");
             setTrailingIconColor(Ui::DesignSystem::color().secondary());

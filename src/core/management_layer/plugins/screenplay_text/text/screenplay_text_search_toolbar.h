@@ -17,6 +17,11 @@ public:
     ~ScreenplayTextSearchToolbar() override;
 
     /**
+     * @brief Настроить режим редактирования
+     */
+    void setReadOnly(bool _readOnly);
+
+    /**
      * @brief Возвращаем фокус после поиска
      */
     void refocus();

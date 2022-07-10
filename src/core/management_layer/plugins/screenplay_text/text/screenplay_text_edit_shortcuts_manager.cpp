@@ -129,6 +129,13 @@ void ScreenplayTextEditShortcutsManager::reconfigure()
     }
 }
 
+void ScreenplayTextEditShortcutsManager::setEnabled(bool _enabled)
+{
+    for (auto shortcut : d->paragraphTypeToShortcut) {
+        shortcut->setEnabled(_enabled);
+    }
+}
+
 QString ScreenplayTextEditShortcutsManager::shortcut(TextParagraphType _forBlockType) const
 {
     if (!d->paragraphTypeToShortcut.contains(_forBlockType)) {

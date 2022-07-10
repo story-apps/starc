@@ -17,6 +17,11 @@ public:
     ~ComboBox() override;
 
     /**
+     * @brief Переопределяем, чтобы реализовать собственную обработку смены режима редактирования
+     */
+    void setReadOnly(bool _readOnly);
+
+    /**
      * @brief Настроить кастомный цвет фона попапа
      */
     void setPopupBackgroundColor(const QColor& _color);
@@ -75,6 +80,7 @@ protected:
      * @brief Реализуем отображение/скрытие попапа
      */
     void mousePressEvent(QMouseEvent* _event) override;
+    ;
 
 private:
     class Implementation;

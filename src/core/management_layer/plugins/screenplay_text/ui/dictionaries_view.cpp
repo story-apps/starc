@@ -19,6 +19,8 @@ public:
     explicit Implementation(QWidget* _parent);
 
 
+    bool isReadOnly = false;
+
     ComboBox* dictionaryType = nullptr;
     IconButton* addItemToDictionary = nullptr;
     Tree* dictionaryItems = nullptr;
@@ -70,7 +72,7 @@ DictionariesView::DictionariesView(QWidget* _parent)
             [this] { emit addItemRequested(d->dictionaryType->currentIndex()); });
     connect(d->dictionaryItems, &Tree::clicked, this, [this] {
         const auto clickPosition = d->dictionaryItems->mapFromGlobal(QCursor::pos());
-        if (d->dictionaryItems->isOnItemTrilingIcon(clickPosition)) {
+        if (!d->isReadOnly && d->dictionaryItems->isOnItemTrilingIcon(clickPosition)) {
             emit removeItemRequested(d->dictionaryType->currentIndex(),
                                      d->dictionaryItems->currentIndex());
         }
@@ -81,13 +83,22 @@ DictionariesView::DictionariesView(QWidget* _parent)
                 emit editItemRequested(d->dictionaryType->currentIndex(),
                                        d->dictionaryItems->currentIndex(), textField->text());
             });
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 DictionariesView::~DictionariesView() = default;
+
+void DictionariesView::setReadOnly(bool _readOnly)
+{
+    if (d->isReadOnly == _readOnly) {
+        return;
+    }
+
+    d->isReadOnly = _readOnly;
+    d->addItemToDictionary->setEnabled(!d->isReadOnly);
+    d->dictionaryItems->setItemDelegate(d->isReadOnly ? nullptr : d->dictionaryItemsDelegate);
+    d->dictionaryItems->setEditTriggers(d->isReadOnly ? QAbstractItemView::NoEditTriggers
+                                                      : QAbstractItemView::DoubleClicked);
+}
 
 void DictionariesView::setTypes(QAbstractItemModel* _types)
 {

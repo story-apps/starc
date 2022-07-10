@@ -126,6 +126,14 @@ ScreenplayTextEditToolbar::ScreenplayTextEditToolbar(QWidget* _parent)
 
 ScreenplayTextEditToolbar::~ScreenplayTextEditToolbar() = default;
 
+void ScreenplayTextEditToolbar::setReadOnly(bool _readOnly)
+{
+    const auto enabled = !_readOnly;
+    d->undoAction->setEnabled(enabled);
+    d->redoAction->setEnabled(enabled);
+    d->paragraphTypeAction->setEnabled(enabled);
+}
+
 void ScreenplayTextEditToolbar::setParagraphTypesModel(QAbstractItemModel* _model)
 {
     if (d->popup->contentModel() != nullptr) {

@@ -234,4 +234,9 @@ Widget* ScreenplayTextSearchManager::toolbar() const
     return d->toolbar;
 }
 
+void ScreenplayTextSearchManager::setReadOnly(bool _readOnly)
+{
+    d->toolbar->setReadOnly(_readOnly);
+}
+
 } // namespace BusinessLayer

@@ -19,6 +19,11 @@ public:
     ~DictionariesView() override;
 
     /**
+     * @brief Настроить режим редактирования
+     */
+    void setReadOnly(bool _readOnly);
+
+    /**
      * @brief Задать список типов словарей
      */
     void setTypes(QAbstractItemModel* _types);

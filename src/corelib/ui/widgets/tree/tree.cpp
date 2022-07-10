@@ -135,12 +135,12 @@ int Tree::sizeHintForColumn(int _column) const
 
 void Tree::setItemDelegate(QAbstractItemDelegate* _delegate)
 {
-    d->tree->setItemDelegate(_delegate);
+    d->tree->setItemDelegate(_delegate == nullptr ? d->delegate : _delegate);
 }
 
 void Tree::setItemDelegateForColumn(int _column, QAbstractItemDelegate* _delegate)
 {
-    d->tree->setItemDelegateForColumn(_column, _delegate);
+    d->tree->setItemDelegateForColumn(_column, _delegate == nullptr ? d->delegate : _delegate);
 }
 
 void Tree::setCurrentIndex(const QModelIndex& _index)
@@ -215,6 +215,11 @@ void Tree::setHeader(QHeaderView* _headerView)
 QHeaderView* Tree::headerView() const
 {
     return d->tree->header();
+}
+
+void Tree::setEditTriggers(QAbstractItemView::EditTriggers _triggers)
+{
+    d->tree->setEditTriggers(_triggers);
 }
 
 void Tree::edit(const QModelIndex& _index)

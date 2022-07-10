@@ -131,6 +131,11 @@ public:
     QHeaderView* headerView() const;
 
     /**
+     * @brief Задать действия приводящие к редактированию элементов дерева
+     */
+    void setEditTriggers(QAbstractItemView::EditTriggers _triggers);
+
+    /**
      * @brief Активировать редактирование заданного элемента
      */
     void edit(const QModelIndex& _index);

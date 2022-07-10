@@ -16,6 +16,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
 #include <ui/modules/bookmarks/bookmarks_view.h>
@@ -389,8 +390,8 @@ void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
         toolbar->setParagraphTypesEnabled(false);
         fastFormatWidget->setEnabled(false);
     } else {
-        toolbar->setParagraphTypesEnabled(true);
-        fastFormatWidget->setEnabled(true);
+        toolbar->setParagraphTypesEnabled(!textEdit->isReadOnly() && true);
+        fastFormatWidget->setEnabled(!textEdit->isReadOnly() && true);
     }
 
     for (int itemRow = 0; itemRow < paragraphTypesModel->rowCount(); ++itemRow) {
@@ -421,7 +422,8 @@ void ScreenplayTextView::Implementation::updateTextEditPageMargins()
 
 void ScreenplayTextView::Implementation::updateCommentsToolbar()
 {
-    if (!toolbar->isCommentsModeEnabled() || !textEdit->textCursor().hasSelection()) {
+    if (textEdit->isReadOnly() || !toolbar->isCommentsModeEnabled()
+        || !textEdit->textCursor().hasSelection()) {
         commentsToolbar->hideToolbar();
         return;
     }
@@ -770,9 +772,6 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         d->updateSideBarVisibility(this);
     });
 
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
-
     reconfigure({});
 }
 
@@ -795,6 +794,20 @@ QVector<QAction*> ScreenplayTextView::options() const
         d->showBookmarksAction,
         d->showDictionariesAction,
     };
+}
+
+void ScreenplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->textEdit->setReadOnly(readOnly);
+    d->toolbar->setReadOnly(readOnly);
+    d->searchManager->setReadOnly(readOnly);
+    d->commentsView->setReadOnly(readOnly);
+    d->bookmarksView->setReadOnly(readOnly);
+    d->dictionariesView->setReadOnly(readOnly);
+    const auto enabled = !readOnly;
+    d->shortcutsManager.setEnabled(enabled);
+    d->fastFormatWidget->setEnabled(enabled);
 }
 
 DictionariesView* ScreenplayTextView::dictionariesView() const
