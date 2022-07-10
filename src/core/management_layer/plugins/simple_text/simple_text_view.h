@@ -28,6 +28,7 @@ public:
     QWidget* asQWidget() override;
     void toggleFullScreen(bool _isFullScreen) override;
     QVector<QAction*> options() const override;
+    void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
     /** @{ */
 
     /**

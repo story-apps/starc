@@ -68,7 +68,7 @@ public:
      * @brief Все созданные представления с моделями, которые в них отображаются
      */
     struct ViewAndModel {
-        Ui::StageplayTextView* view = nullptr;
+        QPointer<Ui::StageplayTextView> view;
         QPointer<BusinessLayer::StageplayTextModel> model;
     };
     QVector<ViewAndModel> allViews;
@@ -311,6 +311,9 @@ Ui::IDocumentView* StageplayTextManager::createView(BusinessLayer::AbstractModel
 void StageplayTextManager::resetModels()
 {
     for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
         d->setModelForView(nullptr, viewAndModel.view);
     }
 }
@@ -349,9 +352,22 @@ void StageplayTextManager::bind(IDocumentManager* _manager)
 void StageplayTextManager::saveSettings()
 {
     for (auto& viewAndModel : d->allViews) {
-        if (viewAndModel.model != nullptr && viewAndModel.view != nullptr) {
-            d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+        if (viewAndModel.model.isNull() || viewAndModel.view.isNull()) {
+            continue;
         }
+
+        d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+    }
+}
+
+void StageplayTextManager::setEditingMode(DocumentEditingMode _mode)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setEditingMode(_mode);
     }
 }
 

@@ -129,6 +129,13 @@ void SimpleTextEditShortcutsManager::reconfigure()
     }
 }
 
+void SimpleTextEditShortcutsManager::setEnabled(bool _enabled)
+{
+    for (auto shortcut : d->paragraphTypeToShortcut) {
+        shortcut->setEnabled(_enabled);
+    }
+}
+
 QString SimpleTextEditShortcutsManager::shortcut(TextParagraphType _forBlockType) const
 {
     if (!d->paragraphTypeToShortcut.contains(_forBlockType)) {

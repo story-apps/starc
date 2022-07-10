@@ -36,6 +36,7 @@ public:
     void reconfigure(const QStringList& _changedSettingsKeys) override;
     void bind(IDocumentManager* _manager) override;
     void saveSettings() override;
+    void setEditingMode(DocumentEditingMode _mode) override;
     /** @} */
 
 signals:

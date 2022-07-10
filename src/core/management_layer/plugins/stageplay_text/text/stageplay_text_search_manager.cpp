@@ -232,4 +232,9 @@ Widget* StageplayTextSearchManager::toolbar() const
     return d->toolbar;
 }
 
+void StageplayTextSearchManager::setReadOnly(bool _readOnly)
+{
+    d->toolbar->setReadOnly(_readOnly);
+}
+
 } // namespace BusinessLayer

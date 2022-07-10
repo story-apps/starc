@@ -125,6 +125,14 @@ SimpleTextEditToolbar::SimpleTextEditToolbar(QWidget* _parent)
 
 SimpleTextEditToolbar::~SimpleTextEditToolbar() = default;
 
+void SimpleTextEditToolbar::setReadOnly(bool _readOnly)
+{
+    const auto enabled = !_readOnly;
+    d->undoAction->setEnabled(enabled);
+    d->redoAction->setEnabled(enabled);
+    d->paragraphTypeAction->setEnabled(enabled);
+}
+
 void SimpleTextEditToolbar::setParagraphTypesModel(QAbstractItemModel* _model)
 {
     if (d->popup->contentModel() != nullptr) {

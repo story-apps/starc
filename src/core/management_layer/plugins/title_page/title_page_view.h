@@ -23,8 +23,11 @@ public:
     /**
      * @brief Реализация интерфейса IDocumentView
      */
+    /** @{ */
     QWidget* asQWidget() override;
     void toggleFullScreen(bool _isFullScreen) override;
+    void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
+    /** @} */
 
     /**
      * @brief Настроить редактор в соответствии с параметрами заданными в настройках

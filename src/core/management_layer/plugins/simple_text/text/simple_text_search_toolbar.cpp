@@ -125,12 +125,17 @@ SimpleTextSearchToolbar::SimpleTextSearchToolbar(QWidget* _parent)
     connect(d->replace, &Button::clicked, this, &SimpleTextSearchToolbar::replaceOnePressed);
     addAction(d->replaceAllAction);
     connect(d->replaceAll, &Button::clicked, this, &SimpleTextSearchToolbar::replaceAllPressed);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 SimpleTextSearchToolbar::~SimpleTextSearchToolbar() = default;
+
+void SimpleTextSearchToolbar::setReadOnly(bool _readOnly)
+{
+    const auto enabled = !_readOnly;
+    d->replaceText->setEnabled(enabled);
+    d->replace->setEnabled(enabled);
+    d->replaceAll->setEnabled(enabled);
+}
 
 void SimpleTextSearchToolbar::refocus()
 {

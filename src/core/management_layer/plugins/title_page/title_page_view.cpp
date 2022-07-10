@@ -14,6 +14,7 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
@@ -167,6 +168,13 @@ QWidget* TitlePageView::asQWidget()
 void TitlePageView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
+}
+
+void TitlePageView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+{
+    const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->textEdit->setReadOnly(readOnly);
+    d->toolbar->setReadOnly(readOnly);
 }
 
 void TitlePageView::reconfigure(const QStringList& _changedSettingsKeys)

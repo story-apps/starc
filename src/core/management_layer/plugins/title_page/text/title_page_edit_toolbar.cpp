@@ -152,12 +152,19 @@ TitlePageEditToolbar::TitlePageEditToolbar(QWidget* _parent)
     addAction(d->restoreTitlePageAction);
     connect(d->restoreTitlePageAction, &QAction::triggered, this,
             &TitlePageEditToolbar::restoreTitlePagePressed);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 TitlePageEditToolbar::~TitlePageEditToolbar() = default;
+
+void TitlePageEditToolbar::setReadOnly(bool _readOnly)
+{
+    const auto enabled = !_readOnly;
+    d->undoAction->setEnabled(enabled);
+    d->redoAction->setEnabled(enabled);
+    d->textFontAction->setEnabled(enabled);
+    d->textFontSizeAction->setEnabled(enabled);
+    d->restoreTitlePageAction->setEnabled(enabled);
+}
 
 void TitlePageEditToolbar::setCurrentFont(const QFont& _font)
 {

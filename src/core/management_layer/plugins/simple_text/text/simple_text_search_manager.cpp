@@ -201,4 +201,9 @@ Widget* SimpleTextSearchManager::toolbar() const
     return d->toolbar;
 }
 
+void SimpleTextSearchManager::setReadOnly(bool _readOnly)
+{
+    d->toolbar->setReadOnly(_readOnly);
+}
+
 } // namespace BusinessLayer

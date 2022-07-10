@@ -66,7 +66,7 @@ public:
      * @brief Все созданные представления с моделями, которые в них отображаются
      */
     struct ViewAndModel {
-        Ui::SimpleTextView* view = nullptr;
+        QPointer<Ui::SimpleTextView> view;
         QPointer<BusinessLayer::SimpleTextModel> model;
     };
     QVector<ViewAndModel> allViews;
@@ -309,6 +309,10 @@ Ui::IDocumentView* SimpleTextManager::createView(BusinessLayer::AbstractModel* _
 void SimpleTextManager::resetModels()
 {
     for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
         d->setModelForView(nullptr, viewAndModel.view);
     }
 }
@@ -347,9 +351,22 @@ void SimpleTextManager::bind(IDocumentManager* _manager)
 void SimpleTextManager::saveSettings()
 {
     for (auto& viewAndModel : d->allViews) {
-        if (viewAndModel.model != nullptr && viewAndModel.view != nullptr) {
-            d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+        if (viewAndModel.model.isNull() || viewAndModel.view.isNull()) {
+            continue;
         }
+
+        d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+    }
+}
+
+void SimpleTextManager::setEditingMode(DocumentEditingMode _mode)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setEditingMode(_mode);
     }
 }
 

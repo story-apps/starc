@@ -126,6 +126,14 @@ StageplayTextEditToolbar::StageplayTextEditToolbar(QWidget* _parent)
 
 StageplayTextEditToolbar::~StageplayTextEditToolbar() = default;
 
+void StageplayTextEditToolbar::setReadOnly(bool _readOnly)
+{
+    const auto enabled = !_readOnly;
+    d->undoAction->setEnabled(enabled);
+    d->redoAction->setEnabled(enabled);
+    d->paragraphTypeAction->setEnabled(enabled);
+}
+
 void StageplayTextEditToolbar::setParagraphTypesModel(QAbstractItemModel* _model)
 {
     if (d->popup->contentModel() != nullptr) {

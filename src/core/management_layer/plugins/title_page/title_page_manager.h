@@ -34,6 +34,7 @@ public:
     void resetModels() override;
     void reconfigure(const QStringList& _changedSettingsKeys) override;
     void saveSettings() override;
+    void setEditingMode(DocumentEditingMode _mode) override;
     /** @} */
 
 private:

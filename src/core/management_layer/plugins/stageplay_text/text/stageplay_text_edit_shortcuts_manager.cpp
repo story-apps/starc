@@ -125,6 +125,13 @@ void StageplayTextEditShortcutsManager::reconfigure()
     }
 }
 
+void StageplayTextEditShortcutsManager::setEnabled(bool _enabled)
+{
+    for (auto shortcut : d->paragraphTypeToShortcut) {
+        shortcut->setEnabled(_enabled);
+    }
+}
+
 QString StageplayTextEditShortcutsManager::shortcut(TextParagraphType _forBlockType) const
 {
     if (!d->paragraphTypeToShortcut.contains(_forBlockType)) {

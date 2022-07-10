@@ -660,6 +660,9 @@ ContextMenu* SimpleTextEdit::createContextMenu(const QPoint& _position, QWidget*
     // измениться курсор, который установлен в текстовом редакторе, и использовать его
     //
     auto menu = BaseTextEdit::createContextMenu(_position, _parent);
+    if (isReadOnly()) {
+        return menu;
+    }
 
     const BusinessLayer::TextCursor cursor = textCursor();
 

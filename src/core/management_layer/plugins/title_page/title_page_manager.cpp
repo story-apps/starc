@@ -65,7 +65,7 @@ public:
      * @brief Все созданные представления с моделями, которые в них отображаются
      */
     struct ViewAndModel {
-        Ui::TitlePageView* view = nullptr;
+        QPointer<Ui::TitlePageView> view;
         QPointer<BusinessLayer::SimpleTextModel> model;
     };
     QVector<ViewAndModel> allViews;
@@ -227,6 +227,10 @@ Ui::IDocumentView* TitlePageManager::createView(BusinessLayer::AbstractModel* _m
 void TitlePageManager::resetModels()
 {
     for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
         d->setModelForView(nullptr, viewAndModel.view);
     }
 }
@@ -239,9 +243,22 @@ void TitlePageManager::reconfigure(const QStringList& _changedSettingsKeys)
 void TitlePageManager::saveSettings()
 {
     for (auto& viewAndModel : d->allViews) {
-        if (viewAndModel.model != nullptr && viewAndModel.view != nullptr) {
-            d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+        if (viewAndModel.model.isNull() || viewAndModel.view.isNull()) {
+            continue;
         }
+
+        d->saveModelAndViewSettings(viewAndModel.model, viewAndModel.view);
+    }
+}
+
+void TitlePageManager::setEditingMode(DocumentEditingMode _mode)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setEditingMode(_mode);
     }
 }
 

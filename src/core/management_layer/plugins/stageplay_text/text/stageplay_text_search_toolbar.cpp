@@ -191,6 +191,14 @@ StageplayTextSearchToolbar::StageplayTextSearchToolbar(QWidget* _parent)
 
 StageplayTextSearchToolbar::~StageplayTextSearchToolbar() = default;
 
+void StageplayTextSearchToolbar::setReadOnly(bool _readOnly)
+{
+    const auto enabled = !_readOnly;
+    d->replaceText->setEnabled(enabled);
+    d->replace->setEnabled(enabled);
+    d->replaceAll->setEnabled(enabled);
+}
+
 void StageplayTextSearchToolbar::refocus()
 {
     d->searchText->setFocus();

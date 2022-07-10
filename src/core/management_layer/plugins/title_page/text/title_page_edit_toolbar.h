@@ -19,6 +19,11 @@ public:
     ~TitlePageEditToolbar() override;
 
     /**
+     * @brief Настроить режим редактирования
+     */
+    void setReadOnly(bool _readOnly);
+
+    /**
      * @brief Задать текущий шрифт у курсора
      */
     void setCurrentFont(const QFont& _font);
