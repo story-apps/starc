@@ -1068,10 +1068,12 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 // кнопку очистки корзины
                 //
                 bool isInRecycleBin = false;
+                bool isRecycleBinHasDocuments = false;
                 auto topLevelParent = item;
                 while (topLevelParent != nullptr) {
                     if (topLevelParent->type() == Domain::DocumentObjectType::RecycleBin) {
                         isInRecycleBin = true;
+                        isRecycleBinHasDocuments = topLevelParent->hasChildren();
                         break;
                     }
                     topLevelParent = topLevelParent->parent();
@@ -1079,7 +1081,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 d->navigator->showButton(isInRecycleBin
                                              ? Ui::ProjectNavigator::ActionButton::EmptyRecycleBin
                                              : Ui::ProjectNavigator::ActionButton::AddDocument);
-                d->navigator->setButtonEnabled(true);
+                d->navigator->setButtonEnabled(isInRecycleBin ? isRecycleBinHasDocuments : true);
             });
     //
     // Отображаем навигатор выбранного элемента
@@ -1280,10 +1282,13 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     auto model = d->modelsFacade.modelFor(item->uuid());
                     d->projectStructureModel->itemForUuid(model->document()->uuid());
 
+                    const auto enabled = d->editingMode == DocumentEditingMode::Edit;
+
                     QVector<QAction*> menuActions;
                     auto createNewVersionAction = new QAction;
                     createNewVersionAction->setIconText(u8"\U000F00FB");
                     createNewVersionAction->setText(tr("Create new version"));
+                    createNewVersionAction->setEnabled(enabled);
                     connect(createNewVersionAction, &QAction::triggered, this,
                             [this, currentItemIndex] { d->createNewVersion(currentItemIndex); });
                     menuActions.append(createNewVersionAction);
@@ -1297,6 +1302,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                         auto editVersionAction = new QAction;
                         editVersionAction->setIconText(u8"\U000F090C");
                         editVersionAction->setText(tr("Edit"));
+                        editVersionAction->setEnabled(enabled);
                         connect(editVersionAction, &QAction::triggered, this,
                                 [this, currentItemIndex, _versionIndex] {
                                     d->editVersion(currentItemIndex, _versionIndex);
@@ -1306,6 +1312,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                         auto removeAction = new QAction;
                         removeAction->setIconText(u8"\U000F01B4");
                         removeAction->setText(tr("Remove"));
+                        removeAction->setEnabled(enabled);
                         connect(removeAction, &QAction::triggered, this,
                                 [this, currentItemIndex, _versionIndex] {
                                     d->removeVersion(currentItemIndex, _versionIndex);
@@ -1659,6 +1666,8 @@ void ProjectManager::setEditingMode(DocumentEditingMode _mode)
 
     d->editingMode = _mode;
     d->pluginsBuilder.setEditingMode(_mode);
+    const auto readOnly = d->editingMode == DocumentEditingMode::Read;
+    d->navigator->setReadOnly(readOnly);
 }
 
 void ProjectManager::loadCurrentProject(const QString& _name, const QString& _path)

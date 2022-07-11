@@ -68,6 +68,11 @@ public:
     void markChangesSaved(bool _saved);
 
     /**
+     * @brief Задать доступность импорта
+     */
+    void setImportAvailable(bool _available);
+
+    /**
      * @brief Установить возможность экспортирования текущего документа
      */
     void setCurrentDocumentExportAvailable(bool _available);

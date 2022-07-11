@@ -28,6 +28,11 @@ public:
     ~ProjectNavigator() override;
 
     /**
+     * @brief Задать режим работы
+     */
+    void setReadOnly(bool _readOnly);
+
+    /**
      * @brief Задать модель документов проекта
      */
     void setModel(QAbstractItemModel* _model);

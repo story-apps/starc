@@ -392,6 +392,11 @@ void MenuView::markChangesSaved(bool _saved)
     update();
 }
 
+void MenuView::setImportAvailable(bool _available)
+{
+    d->importProject->setEnabled(_available);
+}
+
 void MenuView::setCurrentDocumentExportAvailable(bool _available)
 {
     d->exportCurrentDocument->setEnabled(_available);

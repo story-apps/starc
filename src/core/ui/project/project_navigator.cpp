@@ -35,6 +35,8 @@ public:
 
     ProjectNavigator* q = nullptr;
 
+    bool isReadOnly = false;
+
     Widget* navigatorPage = nullptr;
     Tree* tree = nullptr;
     ProjectTreeDelegate* treeDelegate = nullptr;
@@ -147,6 +149,21 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
 
 ProjectNavigator::~ProjectNavigator() = default;
 
+void ProjectNavigator::setReadOnly(bool _readOnly)
+{
+    if (d->isReadOnly == _readOnly) {
+        return;
+    }
+
+    d->isReadOnly = _readOnly;
+    const auto enabled = !d->isReadOnly;
+    d->tree->setDragDropEnabled(enabled);
+    d->tree->setContextMenuPolicy(d->isReadOnly ? Qt::NoContextMenu : Qt::CustomContextMenu);
+    d->addDocumentButton->setEnabled(enabled);
+    d->addDocumentShortcut->setEnabled(enabled);
+    d->emptyRecycleBinButton->setEnabled(enabled);
+}
+
 void ProjectNavigator::setModel(QAbstractItemModel* _model)
 {
     d->tree->setModel(_model);
@@ -225,8 +242,8 @@ void ProjectNavigator::showButton(ActionButton _type)
 
 void ProjectNavigator::setButtonEnabled(bool _enabled)
 {
-    d->addDocumentButton->setEnabled(_enabled);
-    d->emptyRecycleBinButton->setEnabled(_enabled);
+    d->addDocumentButton->setEnabled(!d->isReadOnly && _enabled);
+    d->emptyRecycleBinButton->setEnabled(!d->isReadOnly && _enabled);
 }
 
 bool ProjectNavigator::eventFilter(QObject* _watched, QEvent* _event)

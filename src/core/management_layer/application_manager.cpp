@@ -1278,6 +1278,8 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     projectManager->loadCurrentProject(projectsManager->currentProject().name(),
                                        projectsManager->currentProject().path());
     projectManager->setEditingMode(projectsManager->currentProject().editingMode());
+    menuView->setImportAvailable(projectsManager->currentProject().editingMode()
+                                 == DocumentEditingMode::Edit);
 
     //
     // Восстанавливаем тип проекта по-умолчанию для будущих свершений
