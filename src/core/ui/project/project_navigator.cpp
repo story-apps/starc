@@ -158,7 +158,6 @@ void ProjectNavigator::setReadOnly(bool _readOnly)
     d->isReadOnly = _readOnly;
     const auto enabled = !d->isReadOnly;
     d->tree->setDragDropEnabled(enabled);
-    d->tree->setContextMenuPolicy(d->isReadOnly ? Qt::NoContextMenu : Qt::CustomContextMenu);
     d->addDocumentButton->setEnabled(enabled);
     d->addDocumentShortcut->setEnabled(enabled);
     d->emptyRecycleBinButton->setEnabled(enabled);

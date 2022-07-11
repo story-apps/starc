@@ -213,7 +213,7 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
     //
     // ... корректируем сценарий, если он нужен
     //
-    if (_exportOptions.includeScript) {
+    if (_exportOptions.includeText) {
         //
         // ... для первого блока убираем принудительный перенос страницы,
         //     если он есть и если не печатается титульная страница

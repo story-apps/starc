@@ -48,9 +48,9 @@ struct CORE_LIBRARY_EXPORT ExportOptions {
     bool includeSynopsis = false;
 
     /**
-     * @brief Печатать сценарий
+     * @brief Печатать основной текст документа
      */
-    bool includeScript = true;
+    bool includeText = true;
 
     /**
      * @brief Печатать ли блоки папок

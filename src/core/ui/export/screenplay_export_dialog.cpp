@@ -298,7 +298,7 @@ BusinessLayer::ScreenplayExportOptions ScreenplayExportDialog::exportOptions() c
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
     options.includeTiltePage = d->includeTitlePage->isChecked();
     options.includeSynopsis = d->includeSynopsis->isChecked();
-    options.includeScript = d->includeTreatment->isChecked() || d->includeScreenplay->isChecked();
+    options.includeText = d->includeTreatment->isChecked() || d->includeScreenplay->isChecked();
     options.includeTreatment = d->includeTreatment->isChecked();
     options.includeFolders = d->includeSequences->isChecked();
     options.includeInlineNotes = d->includeInlineNotes->isChecked();

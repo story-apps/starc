@@ -96,6 +96,9 @@ SOURCES += \
     business_layer/export/screenplay/screenplay_fdx_exporter.cpp \
     business_layer/export/screenplay/screenplay_fountain_exporter.cpp \
     business_layer/export/screenplay/screenplay_pdf_exporter.cpp \
+    business_layer/export/simple_text/simple_text_docx_exporter.cpp \
+    business_layer/export/simple_text/simple_text_exporter.cpp \
+    business_layer/export/simple_text/simple_text_pdf_exporter.cpp \
     business_layer/export/stageplay/stageplay_docx_exporter.cpp \
     business_layer/export/stageplay/stageplay_exporter.cpp \
     business_layer/export/stageplay/stageplay_pdf_exporter.cpp \
@@ -347,6 +350,9 @@ HEADERS += \
     business_layer/export/screenplay/screenplay_fdx_exporter.h \
     business_layer/export/screenplay/screenplay_fountain_exporter.h \
     business_layer/export/screenplay/screenplay_pdf_exporter.h \
+    business_layer/export/simple_text/simple_text_docx_exporter.h \
+    business_layer/export/simple_text/simple_text_exporter.h \
+    business_layer/export/simple_text/simple_text_pdf_exporter.h \
     business_layer/export/stageplay/stageplay_docx_exporter.h \
     business_layer/export/stageplay/stageplay_export_options.h \
     business_layer/export/stageplay/stageplay_exporter.h \

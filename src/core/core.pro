@@ -77,6 +77,7 @@ SOURCES += \
     ui/export/audioplay_export_dialog.cpp \
     ui/export/comic_book_export_dialog.cpp \
     ui/export/screenplay_export_dialog.cpp \
+    ui/export/simple_text_export_dialog.cpp \
     ui/export/stageplay_export_dialog.cpp \
     ui/import/import_dialog.cpp \
     ui/menu_view.cpp \
@@ -140,6 +141,7 @@ HEADERS += \
     ui/export/audioplay_export_dialog.h \
     ui/export/comic_book_export_dialog.h \
     ui/export/screenplay_export_dialog.h \
+    ui/export/simple_text_export_dialog.h \
     ui/export/stageplay_export_dialog.h \
     ui/import/import_dialog.h \
     ui/menu_view.h \

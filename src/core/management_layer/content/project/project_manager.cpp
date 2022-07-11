@@ -339,12 +339,15 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     const auto currentItemIndex = projectStructureProxyModel->mapToSource(_index);
     const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
 
+    const auto enabled = editingMode == DocumentEditingMode::Edit;
+
     //
     // Формируем список действий для конкретных элементов структуры проекта
     //
     if (currentItem->type() == Domain::DocumentObjectType::Characters) {
         auto findAllCharacters = new QAction(tr("Find all characters"));
         findAllCharacters->setIconText(u8"\U000F0016");
+        findAllCharacters->setEnabled(enabled);
         connect(findAllCharacters, &QAction::triggered, topLevelWidget,
                 [this] { this->findAllCharacters(); });
         menuActions.append(findAllCharacters);
@@ -356,6 +359,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
         auto findAllLocations = new QAction(tr("Find all locations"));
         findAllLocations->setIconText(u8"\U000F13B0");
+        findAllLocations->setEnabled(enabled);
         connect(findAllLocations, &QAction::triggered, topLevelWidget,
                 [this] { this->findAllLocations(); });
         menuActions.append(findAllLocations);
@@ -368,6 +372,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         if (currentItem->hasChildren()) {
             auto emptyRecycleBin = new QAction(tr("Empty recycle bin"));
             emptyRecycleBin->setIconText(u8"\U000f05e8");
+            emptyRecycleBin->setEnabled(enabled);
             connect(emptyRecycleBin, &QAction::triggered, topLevelWidget,
                     [this] { this->emptyRecycleBin(); });
             menuActions.append(emptyRecycleBin);
@@ -379,6 +384,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     else {
         auto addDocument = new QAction(tr("Add document"));
         addDocument->setIconText(u8"\U000f0415");
+        addDocument->setEnabled(enabled);
         connect(addDocument, &QAction::triggered, topLevelWidget, [this] { this->addDocument(); });
         menuActions.append(addDocument);
 
@@ -407,6 +413,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
             auto removeDocument = new QAction(tr("Remove document"));
             removeDocument->setIconText(u8"\U000f01b4");
+            removeDocument->setEnabled(enabled);
             connect(removeDocument, &QAction::triggered, topLevelWidget,
                     [this, currentItemIndex] { this->removeDocument(currentItemIndex); });
             menuActions.append(removeDocument);
@@ -421,6 +428,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         auto createNewVersion = new QAction(tr("Create new version"));
         createNewVersion->setSeparator(true);
         createNewVersion->setIconText(u8"\U000F00FB");
+        createNewVersion->setEnabled(enabled);
         connect(createNewVersion, &QAction::triggered, topLevelWidget,
                 [this, currentItemIndex] { this->createNewVersion(currentItemIndex); });
         menuActions.append(createNewVersion);

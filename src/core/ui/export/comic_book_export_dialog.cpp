@@ -212,7 +212,7 @@ BusinessLayer::ComicBookExportOptions ComicBookExportDialog::exportOptions() con
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
     options.includeTiltePage = d->includeTitlePage->isChecked();
     options.includeSynopsis = d->includeSynopsis->isChecked();
-    options.includeScript = d->includeScript->isChecked();
+    options.includeText = d->includeScript->isChecked();
     options.includeInlineNotes = d->includeInlineNotes->isChecked();
     options.includeReviewMarks = d->includeReviewMarks->isChecked();
     options.watermark = d->watermark->text();

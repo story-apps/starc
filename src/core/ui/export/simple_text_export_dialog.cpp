@@ -1,6 +1,6 @@
-#include "audioplay_export_dialog.h"
+#include "simple_text_export_dialog.h"
 
-#include <business_layer/export/audioplay/audioplay_export_options.h>
+#include <business_layer/export/export_options.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -20,10 +20,7 @@
 namespace Ui {
 
 namespace {
-const QString kGroupKey = "widgets/audioplay-export-dialog/";
-const QString kIncludeTitlePageKey = kGroupKey + "include-title-page";
-const QString kIncludeSynopsisKey = kGroupKey + "include-synopsis";
-const QString kIncludeScriptKey = kGroupKey + "include-script";
+const QString kGroupKey = "widgets/simple-text-export-dialog/";
 const QString kFormatKey = kGroupKey + "format";
 const QString kIncludeInlineNotesKey = kGroupKey + "include-inline-notes";
 const QString kIncludeReviewMarksKey = kGroupKey + "include-review-marks";
@@ -32,15 +29,11 @@ const QString kWatermarkColorKey = kGroupKey + "watermark-color";
 const QString kOpenDocumentAfterExportKey = kGroupKey + "open-document-after-export";
 } // namespace
 
-class AudioplayExportDialog::Implementation
+class SimpleTextExportDialog::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
 
-
-    CheckBox* includeTitlePage = nullptr;
-    CheckBox* includeSynopsis = nullptr;
-    CheckBox* includeScript = nullptr;
 
     ComboBox* fileFormat = nullptr;
     CheckBox* includeInlineNotes = nullptr;
@@ -54,11 +47,8 @@ public:
     Button* exportButton = nullptr;
 };
 
-AudioplayExportDialog::Implementation::Implementation(QWidget* _parent)
-    : includeTitlePage(new CheckBox(_parent))
-    , includeSynopsis(new CheckBox(_parent))
-    , includeScript(new CheckBox(_parent))
-    , fileFormat(new ComboBox(_parent))
+SimpleTextExportDialog::Implementation::Implementation(QWidget* _parent)
+    : fileFormat(new ComboBox(_parent))
     , includeInlineNotes(new CheckBox(_parent))
     , includeReviewMarks(new CheckBox(_parent))
     , watermark(new TextField(_parent))
@@ -88,32 +78,22 @@ AudioplayExportDialog::Implementation::Implementation(QWidget* _parent)
 // ****
 
 
-AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
+SimpleTextExportDialog::SimpleTextExportDialog(QWidget* _parent)
     : AbstractDialog(_parent)
     , d(new Implementation(this))
 {
     setAcceptButton(d->exportButton);
     setRejectButton(d->cancelButton);
 
-    auto leftLayout = new QVBoxLayout;
-    leftLayout->setContentsMargins({});
-    leftLayout->setSpacing(0);
-    leftLayout->addWidget(d->includeTitlePage);
-    leftLayout->addWidget(d->includeSynopsis);
-    leftLayout->addWidget(d->includeScript);
-    leftLayout->addStretch();
-    //
     int row = 0;
     int column = 0;
-    contentsLayout()->addLayout(leftLayout, row, column++, 4, 1);
     contentsLayout()->addWidget(d->fileFormat, row++, column);
     contentsLayout()->addWidget(d->includeInlineNotes, row++, column);
     contentsLayout()->addWidget(d->includeReviewMarks, row++, column);
     contentsLayout()->addWidget(d->watermark, row++, column, Qt::AlignTop);
     contentsLayout()->setRowStretch(row++, 1);
     column = 0;
-    contentsLayout()->addLayout(d->buttonsLayout, row++, column, 1, 2);
-    contentsLayout()->setColumnStretch(1, 1);
+    contentsLayout()->addLayout(d->buttonsLayout, row++, column);
 
     auto updateParametersVisibility = [this] {
         auto isPrintInlineNotesVisible = true;
@@ -139,25 +119,11 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
             break;
         }
         }
-        if (!d->includeScript->isChecked()) {
-            isPrintInlineNotesVisible = false;
-            isPrintReviewMarksVisible = false;
-        }
         d->includeInlineNotes->setVisible(isPrintInlineNotesVisible);
         d->includeReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->watermark->setVisible(isWatermarkVisible);
     };
-    connect(d->includeScript, &CheckBox::checkedChanged, this, updateParametersVisibility);
     connect(d->fileFormat, &ComboBox::currentIndexChanged, this, updateParametersVisibility);
-    //
-    auto updateExportEnabled = [this] {
-        d->exportButton->setEnabled(d->includeTitlePage->isChecked()
-                                    || d->includeSynopsis->isChecked()
-                                    || d->includeScript->isChecked());
-    };
-    connect(d->includeTitlePage, &CheckBox::checkedChanged, this, updateExportEnabled);
-    connect(d->includeSynopsis, &CheckBox::checkedChanged, this, updateExportEnabled);
-    connect(d->includeScript, &CheckBox::checkedChanged, this, updateExportEnabled);
     //
     connect(d->watermark, &TextField::trailingIconPressed, this, [this] {
         d->watermarkColorPopup->showPopup(d->watermark, Qt::AlignBottom | Qt::AlignRight);
@@ -165,16 +131,12 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
     connect(d->watermarkColorPopup, &ColorPickerPopup::selectedColorChanged, this,
             [this](const QColor& _color) { d->watermark->setTrailingIconColor(_color); });
     //
-    connect(d->exportButton, &Button::clicked, this, &AudioplayExportDialog::exportRequested);
-    connect(d->cancelButton, &Button::clicked, this, &AudioplayExportDialog::canceled);
+    connect(d->exportButton, &Button::clicked, this, &SimpleTextExportDialog::exportRequested);
+    connect(d->cancelButton, &Button::clicked, this, &SimpleTextExportDialog::canceled);
 
     updateParametersVisibility();
-    updateExportEnabled();
 
     QSettings settings;
-    d->includeTitlePage->setChecked(settings.value(kIncludeTitlePageKey, true).toBool());
-    d->includeSynopsis->setChecked(settings.value(kIncludeSynopsisKey, true).toBool());
-    d->includeScript->setChecked(settings.value(kIncludeScriptKey, false).toBool());
     const auto fileFormatIndex
         = d->fileFormat->model()->index(settings.value(kFormatKey, 0).toInt(), 0);
     d->fileFormat->setCurrentIndex(fileFormatIndex);
@@ -189,12 +151,9 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
     d->watermark->setTrailingIconColor(d->watermarkColorPopup->selectedColor());
 }
 
-AudioplayExportDialog::~AudioplayExportDialog()
+SimpleTextExportDialog::~SimpleTextExportDialog()
 {
     QSettings settings;
-    settings.setValue(kIncludeTitlePageKey, d->includeTitlePage->isChecked());
-    settings.setValue(kIncludeSynopsisKey, d->includeSynopsis->isChecked());
-    settings.setValue(kIncludeScriptKey, d->includeScript->isChecked());
     settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
     settings.setValue(kIncludeInlineNotesKey, d->includeInlineNotes->isChecked());
     settings.setValue(kIncludeReviewMarksKey, d->includeReviewMarks->isChecked());
@@ -203,14 +162,11 @@ AudioplayExportDialog::~AudioplayExportDialog()
     settings.setValue(kOpenDocumentAfterExportKey, d->openDocumentAfterExport->isChecked());
 }
 
-BusinessLayer::AudioplayExportOptions AudioplayExportDialog::exportOptions() const
+BusinessLayer::ExportOptions SimpleTextExportDialog::exportOptions() const
 {
-    BusinessLayer::AudioplayExportOptions options;
+    BusinessLayer::ExportOptions options;
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
-    options.includeTiltePage = d->includeTitlePage->isChecked();
-    options.includeSynopsis = d->includeSynopsis->isChecked();
-    options.includeText = d->includeScript->isChecked();
     options.includeInlineNotes = d->includeInlineNotes->isChecked();
     options.includeReviewMarks = d->includeReviewMarks->isChecked();
     options.watermark = d->watermark->text();
@@ -218,28 +174,24 @@ BusinessLayer::AudioplayExportOptions AudioplayExportDialog::exportOptions() con
     return options;
 }
 
-bool AudioplayExportDialog::openDocumentAfterExport() const
+bool SimpleTextExportDialog::openDocumentAfterExport() const
 {
     return d->openDocumentAfterExport->isChecked();
 }
 
-QWidget* AudioplayExportDialog::focusedWidgetAfterShow() const
+QWidget* SimpleTextExportDialog::focusedWidgetAfterShow() const
 {
-    return d->includeTitlePage;
+    return d->fileFormat;
 }
 
-QWidget* AudioplayExportDialog::lastFocusableWidget() const
+QWidget* SimpleTextExportDialog::lastFocusableWidget() const
 {
     return d->exportButton;
 }
 
-void AudioplayExportDialog::updateTranslations()
+void SimpleTextExportDialog::updateTranslations()
 {
-    setTitle(tr("Export audioplay"));
-
-    d->includeTitlePage->setText(tr("Title page"));
-    d->includeSynopsis->setText(tr("Synopsis"));
-    d->includeScript->setText(tr("Script"));
+    setTitle(tr("Export text document"));
 
     d->fileFormat->setLabel(tr("Format"));
     d->includeInlineNotes->setText(tr("Include inline notes"));
@@ -251,7 +203,7 @@ void AudioplayExportDialog::updateTranslations()
     d->cancelButton->setText(tr("Cancel"));
 }
 
-void AudioplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void SimpleTextExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
@@ -275,9 +227,6 @@ void AudioplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
     }
 
     for (auto checkBox : {
-             d->includeTitlePage,
-             d->includeSynopsis,
-             d->includeScript,
              d->includeInlineNotes,
              d->includeReviewMarks,
              d->openDocumentAfterExport,
@@ -286,13 +235,13 @@ void AudioplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
-    d->watermarkColorPopup->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->watermarkColorPopup->setTextColor(Ui::DesignSystem::color().onBackground());
-
     for (auto button : { d->exportButton, d->cancelButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }
+
+    d->watermarkColorPopup->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->watermarkColorPopup->setTextColor(Ui::DesignSystem::color().onBackground());
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
     d->buttonsLayout->setContentsMargins(QMarginsF(0.0, Ui::DesignSystem::layout().px24(),
