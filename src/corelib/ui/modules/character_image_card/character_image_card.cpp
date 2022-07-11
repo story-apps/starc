@@ -162,6 +162,11 @@ QVector<QAction*> CharacterImageCard::contextMenuActions() const
     return actions;
 }
 
+void CharacterImageCard::processReadOnlyChange()
+{
+    d->generatePhotoAction->setEnabled(!isReadOnly());
+}
+
 void CharacterImageCard::updateTranslations()
 {
     ImageCard::updateTranslations();

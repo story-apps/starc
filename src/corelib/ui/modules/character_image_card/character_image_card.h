@@ -32,6 +32,11 @@ protected:
     QVector<QAction*> contextMenuActions() const override;
 
     /**
+     * @brief Дизейблим возможность генерации постера
+     */
+    void processReadOnlyChange() override;
+
+    /**
      * @brief Обновить переводы
      */
     void updateTranslations() override;
