@@ -1339,10 +1339,10 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->simpleTextNavigatorSceneDescriptionLines5,
              }) {
             widget->setVisible(_available);
-            d->simpleTextCardLayout->setRowMinimumHeight(
-                d->simpleTextCardBottomSpacerIndex,
-                _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
         }
+        d->simpleTextCardLayout->setRowMinimumHeight(
+            d->simpleTextCardBottomSpacerIndex,
+            _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
 
         emit simpleTextAvailableChanged(_available);
     });
@@ -1468,19 +1468,37 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->screenplayDurationByCharactersCharacters,
                  d->screenplayDurationByCharactersIncludingSpaces,
                  d->screenplayDurationByCharactersDuration,
+                 d->screenplayDurationConfigurable,
+                 d->screenplayDurationConfigurableForActionLabel,
+                 d->screenplayDurationConfigurablePerParagraphForAction,
+                 d->screenplayDurationConfigurableForActionPlus,
+                 d->screenplayDurationConfigurablePerEvery50ForAction,
+                 d->screenplayDurationConfigurableForDialogueLabel,
+                 d->screenplayDurationConfigurablePerParagraphForDialogue,
+                 d->screenplayDurationConfigurableForDialoguePlus,
+                 d->screenplayDurationConfigurablePerEvery50ForDialogue,
+                 d->screenplayDurationConfigurableForSceneHeadingLabel,
+                 d->screenplayDurationConfigurablePerParagraphForSceneHeading,
+                 d->screenplayDurationConfigurableForSceneHeadingPlus,
+                 d->screenplayDurationConfigurablePerEvery50ForSceneHeading,
                  d->shortcutsForScreenplayTitle,
                  d->shortcutsForScreenplay,
              }) {
             widget->setVisible(_available);
-            d->screenplayCardLayout->setRowMinimumHeight(
-                d->screenplayCardBottomSpacerIndex,
-                _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
-            const auto screenplayDurationByCharactersRow
-                = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
-            d->screenplayCardLayout->setRowMinimumHeight(
-                screenplayDurationByCharactersRow,
-                _available ? Ui::DesignSystem::layout().px62() : 0.0);
         }
+        d->screenplayCardLayout->setRowMinimumHeight(
+            d->screenplayCardBottomSpacerIndex,
+            _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
+        const auto screenplayDurationByCharactersRow
+            = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
+        d->screenplayCardLayout->setRowMinimumHeight(screenplayDurationByCharactersRow,
+                                                     _available ? Ui::DesignSystem::layout().px62()
+                                                                : 0.0);
+        const auto screenplayDurationConfigurableRow
+            = d->screenplayCardLayout->indexOf(d->screenplayDurationConfigurable);
+        d->screenplayCardLayout->setRowMinimumHeight(screenplayDurationConfigurableRow,
+                                                     _available ? Ui::DesignSystem::layout().px62()
+                                                                : 0.0);
 
         emit screenplayAvailableChanged(_available);
     });
@@ -1617,29 +1635,46 @@ SettingsView::SettingsView(QWidget* _parent)
     // ... хронометраж
     //
     connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, this, [this](bool _checked) {
-        d->screenplayDurationByPagePage->setVisible(_checked);
-        d->screenplayDurationByPageDuration->setVisible(_checked);
+        d->screenplayDurationByPagePage->setVisible(d->screenplayAvailable->isChecked()
+                                                    && _checked);
+        d->screenplayDurationByPageDuration->setVisible(d->screenplayAvailable->isChecked()
+                                                        && _checked);
     });
     connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, this,
             [this](bool _checked) {
-                d->screenplayDurationByCharactersCharacters->setVisible(_checked);
-                d->screenplayDurationByCharactersIncludingSpaces->setVisible(_checked);
-                d->screenplayDurationByCharactersDuration->setVisible(_checked);
+                d->screenplayDurationByCharactersCharacters->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationByCharactersIncludingSpaces->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationByCharactersDuration->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
             });
     connect(d->screenplayDurationConfigurable, &RadioButton::checkedChanged, this,
             [this](bool _checked) {
-                d->screenplayDurationConfigurableForActionLabel->setVisible(_checked);
-                d->screenplayDurationConfigurablePerParagraphForAction->setVisible(_checked);
-                d->screenplayDurationConfigurableForActionPlus->setVisible(_checked);
-                d->screenplayDurationConfigurablePerEvery50ForAction->setVisible(_checked);
-                d->screenplayDurationConfigurableForDialogueLabel->setVisible(_checked);
-                d->screenplayDurationConfigurablePerParagraphForDialogue->setVisible(_checked);
-                d->screenplayDurationConfigurableForDialoguePlus->setVisible(_checked);
-                d->screenplayDurationConfigurablePerEvery50ForDialogue->setVisible(_checked);
-                d->screenplayDurationConfigurableForSceneHeadingLabel->setVisible(_checked);
-                d->screenplayDurationConfigurablePerParagraphForSceneHeading->setVisible(_checked);
-                d->screenplayDurationConfigurableForSceneHeadingPlus->setVisible(_checked);
-                d->screenplayDurationConfigurablePerEvery50ForSceneHeading->setVisible(_checked);
+                d->screenplayDurationConfigurableForActionLabel->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationConfigurablePerParagraphForAction->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationConfigurableForActionPlus->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationConfigurablePerEvery50ForAction->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationConfigurableForDialogueLabel->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationConfigurablePerParagraphForDialogue->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationConfigurableForDialoguePlus->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationConfigurablePerEvery50ForDialogue->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationConfigurableForSceneHeadingLabel->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationConfigurablePerParagraphForSceneHeading->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationConfigurableForSceneHeadingPlus->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
+                d->screenplayDurationConfigurablePerEvery50ForSceneHeading->setVisible(
+                    d->screenplayAvailable->isChecked() && _checked);
             });
     //
     auto notifyScreenplayDurationTypeChanged = [this] {
@@ -1711,8 +1746,8 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->comicBookEditorTitle,
                  d->comicBookEditorDefaultTemplate,
                  d->comicBookEditorDefaultTemplateOptions,
-                 d->comicBookEditorDefaultTemplate,
-                 d->comicBookEditorDefaultTemplateOptions,
+                 d->comicBookEditorUseCharactersFromText,
+                 d->comicBookEditorShowCharacterSuggestionsInEmptyBlock,
                  d->comicBookNavigatorTitle,
                  d->comicBookNavigatorShowSceneText,
                  d->comicBookNavigatorSceneDescriptionLines1,
@@ -1722,10 +1757,10 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->comicBookNavigatorSceneDescriptionLines5,
              }) {
             widget->setVisible(_available);
-            d->comicBookCardLayout->setRowMinimumHeight(
-                d->comicBookCardBottomSpacerIndex,
-                _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
         }
+        d->comicBookCardLayout->setRowMinimumHeight(d->comicBookCardBottomSpacerIndex,
+                                                    _available ? Ui::DesignSystem::layout().px24()
+                                                               : Ui::DesignSystem::layout().px12());
 
         emit comicBookAvailableChanged(_available);
     });
@@ -1849,10 +1884,10 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->audioplayDurationByWordsDuration,
              }) {
             widget->setVisible(_available);
-            d->audioplayCardLayout->setRowMinimumHeight(
-                d->audioplayCardBottomSpacerIndex,
-                _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
         }
+        d->audioplayCardLayout->setRowMinimumHeight(d->audioplayCardBottomSpacerIndex,
+                                                    _available ? Ui::DesignSystem::layout().px24()
+                                                               : Ui::DesignSystem::layout().px12());
 
         emit audioplayAvailableChanged(_available);
     });
@@ -1994,10 +2029,10 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->stageplayNavigatorSceneDescriptionLines5,
              }) {
             widget->setVisible(_available);
-            d->stageplayCardLayout->setRowMinimumHeight(
-                d->stageplayCardBottomSpacerIndex,
-                _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
         }
+        d->stageplayCardLayout->setRowMinimumHeight(d->stageplayCardBottomSpacerIndex,
+                                                    _available ? Ui::DesignSystem::layout().px24()
+                                                               : Ui::DesignSystem::layout().px12());
 
         emit stageplayAvailableChanged(_available);
     });
