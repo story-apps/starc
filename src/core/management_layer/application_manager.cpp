@@ -2126,6 +2126,7 @@ void ApplicationManager::initConnections()
                 if (_isNewAccount) {
                     d->menuView->closeMenu();
                 }
+                d->cloudServiceManager->askNotifications();
             });
 
     //
