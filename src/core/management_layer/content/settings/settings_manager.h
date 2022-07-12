@@ -135,6 +135,12 @@ private:
     void setScreenplayDurationByCharactersCharacters(int _characters);
     void setScreenplayDurationByCharactersIncludeSpaces(bool _include);
     void setScreenplayDurationByCharactersDuration(int _duration);
+    void setScreenplayDurationConfigurablePerParagraphForAction(qreal _duration);
+    void setScreenplayDurationConfigurablePerEvery50ForAction(qreal _duration);
+    void setScreenplayDurationConfigurablePerParagraphForDialogue(qreal _duration);
+    void setScreenplayDurationConfigurablePerEvery50ForDialogue(qreal _duration);
+    void setScreenplayDurationConfigurablePerParagraphForSceneHeading(qreal _duration);
+    void setScreenplayDurationConfigurablePerEvery50ForSceneHeading(qreal _duration);
 
     //
     // Сохранение параметров редактора комикса

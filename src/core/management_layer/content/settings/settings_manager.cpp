@@ -188,6 +188,33 @@ void SettingsManager::Implementation::loadScreenplaySettings()
     view->setScreenplayDurationByCharactersDuration(
         settingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersDurationKey)
             .toInt());
+    view->setScreenplayDurationConfigurablePerParagraphForAction(
+        settingsValue(DataStorageLayer::
+                          kComponentsScreenplayDurationConfigurableSecondsPerParagraphForActionKey)
+            .toDouble());
+    view->setScreenplayDurationConfigurablePerEvery50ForAction(
+        settingsValue(DataStorageLayer::
+                          kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey)
+            .toDouble());
+    view->setScreenplayDurationConfigurablePerParagraphForDialogue(
+        settingsValue(
+            DataStorageLayer::
+                kComponentsScreenplayDurationConfigurableSecondsPerParagraphForDialogueKey)
+            .toDouble());
+    view->setScreenplayDurationConfigurablePerEvery50ForDialogue(
+        settingsValue(DataStorageLayer::
+                          kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForDialogueKey)
+            .toDouble());
+    view->setScreenplayDurationConfigurablePerParagraphForSceneHeading(
+        settingsValue(
+            DataStorageLayer::
+                kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey)
+            .toDouble());
+    view->setScreenplayDurationConfigurablePerEvery50ForSceneHeading(
+        settingsValue(
+            DataStorageLayer::
+                kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey)
+            .toDouble());
 }
 
 void SettingsManager::Implementation::loadComicBookSettings()
@@ -498,6 +525,21 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setScreenplayDurationByCharactersIncludeSpaces);
     connect(d->view, &Ui::SettingsView::screenplayDurationByCharactersDurationChanged, this,
             &SettingsManager::setScreenplayDurationByCharactersDuration);
+    connect(d->view, &Ui::SettingsView::screenplayDurationConfigurablePerParagraphForActionChanged,
+            this, &SettingsManager::setScreenplayDurationConfigurablePerParagraphForAction);
+    connect(d->view, &Ui::SettingsView::screenplayDurationConfigurablePerEvery50ForActionChanged,
+            this, &SettingsManager::setScreenplayDurationConfigurablePerEvery50ForAction);
+    connect(d->view,
+            &Ui::SettingsView::screenplayDurationConfigurablePerParagraphForDialogueChanged, this,
+            &SettingsManager::setScreenplayDurationConfigurablePerParagraphForDialogue);
+    connect(d->view, &Ui::SettingsView::screenplayDurationConfigurablePerEvery50ForDialogueChanged,
+            this, &SettingsManager::setScreenplayDurationConfigurablePerEvery50ForDialogue);
+    connect(d->view,
+            &Ui::SettingsView::screenplayDurationConfigurablePerParagraphForSceneHeadingChanged,
+            this, &SettingsManager::setScreenplayDurationConfigurablePerParagraphForSceneHeading);
+    connect(d->view,
+            &Ui::SettingsView::screenplayDurationConfigurablePerEvery50ForSceneHeadingChanged, this,
+            &SettingsManager::setScreenplayDurationConfigurablePerEvery50ForSceneHeading);
     //
     // ... комиксы
     //
@@ -1310,6 +1352,56 @@ void SettingsManager::setScreenplayDurationByCharactersDuration(int _duration)
 {
     setSettingsValue(DataStorageLayer::kComponentsScreenplayDurationByCharactersDurationKey,
                      _duration);
+    emit screenplayDurationChanged();
+}
+
+void SettingsManager::setScreenplayDurationConfigurablePerParagraphForAction(qreal _duration)
+{
+    setSettingsValue(
+        DataStorageLayer::kComponentsScreenplayDurationConfigurableSecondsPerParagraphForActionKey,
+        _duration);
+    emit screenplayDurationChanged();
+}
+
+void SettingsManager::setScreenplayDurationConfigurablePerEvery50ForAction(qreal _duration)
+{
+    setSettingsValue(
+        DataStorageLayer::kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey,
+        _duration);
+    emit screenplayDurationChanged();
+}
+
+void SettingsManager::setScreenplayDurationConfigurablePerParagraphForDialogue(qreal _duration)
+{
+    setSettingsValue(DataStorageLayer::
+                         kComponentsScreenplayDurationConfigurableSecondsPerParagraphForDialogueKey,
+                     _duration);
+    emit screenplayDurationChanged();
+}
+
+void SettingsManager::setScreenplayDurationConfigurablePerEvery50ForDialogue(qreal _duration)
+{
+    setSettingsValue(
+        DataStorageLayer::kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForDialogueKey,
+        _duration);
+    emit screenplayDurationChanged();
+}
+
+void SettingsManager::setScreenplayDurationConfigurablePerParagraphForSceneHeading(qreal _duration)
+{
+    setSettingsValue(
+        DataStorageLayer::
+            kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey,
+        _duration);
+    emit screenplayDurationChanged();
+}
+
+void SettingsManager::setScreenplayDurationConfigurablePerEvery50ForSceneHeading(qreal _duration)
+{
+    setSettingsValue(
+        DataStorageLayer::
+            kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey,
+        _duration);
     emit screenplayDurationChanged();
 }
 

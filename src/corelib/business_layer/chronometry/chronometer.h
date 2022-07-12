@@ -13,7 +13,11 @@ enum class TextParagraphType;
 /**
  * @brief Тип счётчика хронометража
  */
-enum class CORE_LIBRARY_EXPORT ChronometerType { Page, Characters };
+enum class CORE_LIBRARY_EXPORT ChronometerType {
+    Page,
+    Characters,
+    Configurable,
+};
 
 /**
  * @brief Фасад для вычисления хронометража способом, настроенным пользователем

@@ -295,10 +295,25 @@ public:
     RadioButton* screenplayDurationByPage = nullptr;
     TextField* screenplayDurationByPagePage = nullptr;
     TextField* screenplayDurationByPageDuration = nullptr;
+    //
     RadioButton* screenplayDurationByCharacters = nullptr;
     TextField* screenplayDurationByCharactersCharacters = nullptr;
     CheckBox* screenplayDurationByCharactersIncludingSpaces = nullptr;
     TextField* screenplayDurationByCharactersDuration = nullptr;
+    //
+    RadioButton* screenplayDurationConfigurable = nullptr;
+    Body1Label* screenplayDurationConfigurableForActionLabel = nullptr;
+    TextField* screenplayDurationConfigurablePerParagraphForAction = nullptr;
+    Body1Label* screenplayDurationConfigurableForActionPlus = nullptr;
+    TextField* screenplayDurationConfigurablePerEvery50ForAction = nullptr;
+    Body1Label* screenplayDurationConfigurableForDialogueLabel = nullptr;
+    TextField* screenplayDurationConfigurablePerParagraphForDialogue = nullptr;
+    Body1Label* screenplayDurationConfigurableForDialoguePlus = nullptr;
+    TextField* screenplayDurationConfigurablePerEvery50ForDialogue = nullptr;
+    Body1Label* screenplayDurationConfigurableForSceneHeadingLabel = nullptr;
+    TextField* screenplayDurationConfigurablePerParagraphForSceneHeading = nullptr;
+    Body1Label* screenplayDurationConfigurableForSceneHeadingPlus = nullptr;
+    TextField* screenplayDurationConfigurablePerEvery50ForSceneHeading = nullptr;
     //
     int screenplayCardBottomSpacerIndex = 0;
     //
@@ -493,6 +508,19 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayDurationByCharactersCharacters(new TextField(screenplayCard))
     , screenplayDurationByCharactersIncludingSpaces(new CheckBox(screenplayCard))
     , screenplayDurationByCharactersDuration(new TextField(screenplayCard))
+    , screenplayDurationConfigurable(new RadioButton(screenplayCard))
+    , screenplayDurationConfigurableForActionLabel(new Body1Label(screenplayCard))
+    , screenplayDurationConfigurablePerParagraphForAction(new TextField(screenplayCard))
+    , screenplayDurationConfigurableForActionPlus(new Body1Label(screenplayCard))
+    , screenplayDurationConfigurablePerEvery50ForAction(new TextField(screenplayCard))
+    , screenplayDurationConfigurableForDialogueLabel(new Body1Label(screenplayCard))
+    , screenplayDurationConfigurablePerParagraphForDialogue(new TextField(screenplayCard))
+    , screenplayDurationConfigurableForDialoguePlus(new Body1Label(screenplayCard))
+    , screenplayDurationConfigurablePerEvery50ForDialogue(new TextField(screenplayCard))
+    , screenplayDurationConfigurableForSceneHeadingLabel(new Body1Label(screenplayCard))
+    , screenplayDurationConfigurablePerParagraphForSceneHeading(new TextField(screenplayCard))
+    , screenplayDurationConfigurableForSceneHeadingPlus(new Body1Label(screenplayCard))
+    , screenplayDurationConfigurablePerEvery50ForSceneHeading(new TextField(screenplayCard))
     //
     , comicBookCard(new Card(content))
     , comicBookCardLayout(new QGridLayout)
@@ -785,16 +813,45 @@ void SettingsView::Implementation::initScreenplayCard()
     auto durationGroup = new RadioButtonGroup(screenplayCard);
     durationGroup->add(screenplayDurationByPage);
     durationGroup->add(screenplayDurationByCharacters);
+    durationGroup->add(screenplayDurationConfigurable);
     screenplayDurationByPage->setChecked(true);
     screenplayDurationByPagePage->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayDurationByPagePage->setText("1");
     screenplayDurationByPagePage->setReadOnly(true);
     screenplayDurationByPageDuration->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayDurationByCharactersCharacters->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    screenplayDurationByCharactersCharacters->setEnabled(false);
-    screenplayDurationByCharactersIncludingSpaces->setEnabled(false);
+    screenplayDurationByCharactersCharacters->setVisible(false);
+    screenplayDurationByCharactersIncludingSpaces->setVisible(false);
     screenplayDurationByCharactersDuration->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    screenplayDurationByCharactersDuration->setEnabled(false);
+    screenplayDurationByCharactersDuration->setVisible(false);
+    screenplayDurationConfigurableForActionLabel->setVisible(false);
+    screenplayDurationConfigurablePerParagraphForAction->setSpellCheckPolicy(
+        SpellCheckPolicy::Manual);
+    screenplayDurationConfigurablePerParagraphForAction->setVisible(false);
+    screenplayDurationConfigurableForActionPlus->setVisible(false);
+    screenplayDurationConfigurablePerEvery50ForAction->setSpellCheckPolicy(
+        SpellCheckPolicy::Manual);
+    screenplayDurationConfigurablePerEvery50ForAction->setVisible(false);
+    screenplayDurationConfigurableForDialogueLabel->setVisible(false);
+    screenplayDurationConfigurablePerParagraphForDialogue->setSpellCheckPolicy(
+        SpellCheckPolicy::Manual);
+    screenplayDurationConfigurablePerParagraphForDialogue->setVisible(false);
+    screenplayDurationConfigurablePerParagraphForDialogue->setLabelVisible(false);
+    screenplayDurationConfigurableForDialoguePlus->setVisible(false);
+    screenplayDurationConfigurablePerEvery50ForDialogue->setSpellCheckPolicy(
+        SpellCheckPolicy::Manual);
+    screenplayDurationConfigurablePerEvery50ForDialogue->setVisible(false);
+    screenplayDurationConfigurablePerEvery50ForDialogue->setLabelVisible(false);
+    screenplayDurationConfigurableForSceneHeadingLabel->setVisible(false);
+    screenplayDurationConfigurablePerParagraphForSceneHeading->setSpellCheckPolicy(
+        SpellCheckPolicy::Manual);
+    screenplayDurationConfigurablePerParagraphForSceneHeading->setVisible(false);
+    screenplayDurationConfigurablePerParagraphForSceneHeading->setLabelVisible(false);
+    screenplayDurationConfigurableForSceneHeadingPlus->setVisible(false);
+    screenplayDurationConfigurablePerEvery50ForSceneHeading->setSpellCheckPolicy(
+        SpellCheckPolicy::Manual);
+    screenplayDurationConfigurablePerEvery50ForSceneHeading->setVisible(false);
+    screenplayDurationConfigurablePerEvery50ForSceneHeading->setLabelVisible(false);
 
 
     //
@@ -870,6 +927,37 @@ void SettingsView::Implementation::initScreenplayCard()
         layout->addWidget(screenplayDurationByCharactersIncludingSpaces, 0, Qt::AlignCenter);
         layout->addWidget(screenplayDurationByCharactersDuration);
         layout->addStretch();
+        screenplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    screenplayCardLayout->addWidget(screenplayDurationConfigurable, itemIndex++, 0,
+                                    Qt::AlignBottom);
+    {
+        auto layout = new QGridLayout;
+        int row = 0;
+        int column = 0;
+        layout->addWidget(screenplayDurationConfigurableForActionLabel, row, column++,
+                          Qt::AlignLeft | Qt::AlignVCenter);
+        layout->addWidget(screenplayDurationConfigurablePerParagraphForAction, row, column++);
+        layout->addWidget(screenplayDurationConfigurableForActionPlus, row, column++,
+                          Qt::AlignCenter);
+        layout->addWidget(screenplayDurationConfigurablePerEvery50ForAction, row, column++);
+        ++row;
+        column = 0;
+        layout->addWidget(screenplayDurationConfigurableForDialogueLabel, row, column++,
+                          Qt::AlignLeft | Qt::AlignVCenter);
+        layout->addWidget(screenplayDurationConfigurablePerParagraphForDialogue, row, column++);
+        layout->addWidget(screenplayDurationConfigurableForDialoguePlus, row, column++,
+                          Qt::AlignCenter);
+        layout->addWidget(screenplayDurationConfigurablePerEvery50ForDialogue, row, column++);
+        ++row;
+        column = 0;
+        layout->addWidget(screenplayDurationConfigurableForSceneHeadingLabel, row, column++,
+                          Qt::AlignLeft | Qt::AlignVCenter);
+        layout->addWidget(screenplayDurationConfigurablePerParagraphForSceneHeading, row, column++);
+        layout->addWidget(screenplayDurationConfigurableForSceneHeadingPlus, row, column++,
+                          Qt::AlignCenter);
+        layout->addWidget(screenplayDurationConfigurablePerEvery50ForSceneHeading, row, column++);
+        layout->setColumnStretch(column, 1);
         screenplayCardLayout->addLayout(layout, itemIndex++, 0);
     }
     //
@@ -1528,16 +1616,31 @@ SettingsView::SettingsView(QWidget* _parent)
     //
     // ... хронометраж
     //
-    connect(d->screenplayDurationByPage, &RadioButton::checkedChanged,
-            d->screenplayDurationByPagePage, &TextField::setEnabled);
-    connect(d->screenplayDurationByPage, &RadioButton::checkedChanged,
-            d->screenplayDurationByPageDuration, &TextField::setEnabled);
-    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged,
-            d->screenplayDurationByCharactersCharacters, &TextField::setEnabled);
-    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged,
-            d->screenplayDurationByCharactersIncludingSpaces, &RadioButton::setEnabled);
-    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged,
-            d->screenplayDurationByCharactersDuration, &TextField::setEnabled);
+    connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, this, [this](bool _checked) {
+        d->screenplayDurationByPagePage->setVisible(_checked);
+        d->screenplayDurationByPageDuration->setVisible(_checked);
+    });
+    connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, this,
+            [this](bool _checked) {
+                d->screenplayDurationByCharactersCharacters->setVisible(_checked);
+                d->screenplayDurationByCharactersIncludingSpaces->setVisible(_checked);
+                d->screenplayDurationByCharactersDuration->setVisible(_checked);
+            });
+    connect(d->screenplayDurationConfigurable, &RadioButton::checkedChanged, this,
+            [this](bool _checked) {
+                d->screenplayDurationConfigurableForActionLabel->setVisible(_checked);
+                d->screenplayDurationConfigurablePerParagraphForAction->setVisible(_checked);
+                d->screenplayDurationConfigurableForActionPlus->setVisible(_checked);
+                d->screenplayDurationConfigurablePerEvery50ForAction->setVisible(_checked);
+                d->screenplayDurationConfigurableForDialogueLabel->setVisible(_checked);
+                d->screenplayDurationConfigurablePerParagraphForDialogue->setVisible(_checked);
+                d->screenplayDurationConfigurableForDialoguePlus->setVisible(_checked);
+                d->screenplayDurationConfigurablePerEvery50ForDialogue->setVisible(_checked);
+                d->screenplayDurationConfigurableForSceneHeadingLabel->setVisible(_checked);
+                d->screenplayDurationConfigurablePerParagraphForSceneHeading->setVisible(_checked);
+                d->screenplayDurationConfigurableForSceneHeadingPlus->setVisible(_checked);
+                d->screenplayDurationConfigurablePerEvery50ForSceneHeading->setVisible(_checked);
+            });
     //
     auto notifyScreenplayDurationTypeChanged = [this] {
         using namespace BusinessLayer;
@@ -1545,11 +1648,15 @@ SettingsView::SettingsView(QWidget* _parent)
             emit screenplayDurationTypeChanged(static_cast<int>(ChronometerType::Page));
         } else if (d->screenplayDurationByCharacters->isChecked()) {
             emit screenplayDurationTypeChanged(static_cast<int>(ChronometerType::Characters));
+        } else if (d->screenplayDurationConfigurable->isChecked()) {
+            emit screenplayDurationTypeChanged(static_cast<int>(ChronometerType::Configurable));
         }
     };
     connect(d->screenplayDurationByPage, &RadioButton::checkedChanged, this,
             notifyScreenplayDurationTypeChanged);
     connect(d->screenplayDurationByCharacters, &RadioButton::checkedChanged, this,
+            notifyScreenplayDurationTypeChanged);
+    connect(d->screenplayDurationConfigurable, &RadioButton::checkedChanged, this,
             notifyScreenplayDurationTypeChanged);
     connect(d->screenplayDurationByPageDuration, &TextField::textChanged, this, [this] {
         emit screenplayDurationByPageDurationChanged(
@@ -1565,6 +1672,37 @@ SettingsView::SettingsView(QWidget* _parent)
         emit screenplayDurationByCharactersDurationChanged(
             d->screenplayDurationByCharactersDuration->text().toInt());
     });
+    connect(d->screenplayDurationConfigurablePerParagraphForAction, &TextField::textChanged, this,
+            [this] {
+                emit screenplayDurationConfigurablePerParagraphForActionChanged(
+                    d->screenplayDurationConfigurablePerParagraphForAction->text().toDouble());
+            });
+    connect(d->screenplayDurationConfigurablePerEvery50ForAction, &TextField::textChanged, this,
+            [this] {
+                emit screenplayDurationConfigurablePerEvery50ForActionChanged(
+                    d->screenplayDurationConfigurablePerEvery50ForAction->text().toDouble());
+            });
+    connect(d->screenplayDurationConfigurablePerParagraphForDialogue, &TextField::textChanged, this,
+            [this] {
+                emit screenplayDurationConfigurablePerParagraphForDialogueChanged(
+                    d->screenplayDurationConfigurablePerParagraphForDialogue->text().toDouble());
+            });
+    connect(d->screenplayDurationConfigurablePerEvery50ForDialogue, &TextField::textChanged, this,
+            [this] {
+                emit screenplayDurationConfigurablePerEvery50ForDialogueChanged(
+                    d->screenplayDurationConfigurablePerEvery50ForDialogue->text().toDouble());
+            });
+    connect(
+        d->screenplayDurationConfigurablePerParagraphForSceneHeading, &TextField::textChanged, this,
+        [this] {
+            emit screenplayDurationConfigurablePerParagraphForSceneHeadingChanged(
+                d->screenplayDurationConfigurablePerParagraphForSceneHeading->text().toDouble());
+        });
+    connect(d->screenplayDurationConfigurablePerEvery50ForSceneHeading, &TextField::textChanged,
+            this, [this] {
+                emit screenplayDurationConfigurablePerEvery50ForSceneHeadingChanged(
+                    d->screenplayDurationConfigurablePerEvery50ForSceneHeading->text().toDouble());
+            });
     //
     // ... Редактор комикса
     //
@@ -2309,6 +2447,11 @@ void SettingsView::setScreenplayDurationType(int _type)
         d->screenplayDurationByCharacters->setChecked(true);
         break;
     }
+
+    case ChronometerType::Configurable: {
+        d->screenplayDurationConfigurable->setChecked(true);
+        break;
+    }
     }
 }
 
@@ -2330,6 +2473,42 @@ void SettingsView::setScreenplayDurationByCharactersIncludeSpaces(bool _include)
 void SettingsView::setScreenplayDurationByCharactersDuration(int _duration)
 {
     d->screenplayDurationByCharactersDuration->setText(QString::number(_duration));
+}
+
+void SettingsView::setScreenplayDurationConfigurablePerParagraphForAction(qreal _duration)
+{
+    d->screenplayDurationConfigurablePerParagraphForAction->setText(
+        QString::number(_duration, 'f', 1));
+}
+
+void SettingsView::setScreenplayDurationConfigurablePerEvery50ForAction(qreal _duration)
+{
+    d->screenplayDurationConfigurablePerEvery50ForAction->setText(
+        QString::number(_duration, 'f', 1));
+}
+
+void SettingsView::setScreenplayDurationConfigurablePerParagraphForDialogue(qreal _duration)
+{
+    d->screenplayDurationConfigurablePerParagraphForDialogue->setText(
+        QString::number(_duration, 'f', 1));
+}
+
+void SettingsView::setScreenplayDurationConfigurablePerEvery50ForDialogue(qreal _duration)
+{
+    d->screenplayDurationConfigurablePerEvery50ForDialogue->setText(
+        QString::number(_duration, 'f', 1));
+}
+
+void SettingsView::setScreenplayDurationConfigurablePerParagraphForSceneHeading(qreal _duration)
+{
+    d->screenplayDurationConfigurablePerParagraphForSceneHeading->setText(
+        QString::number(_duration, 'f', 1));
+}
+
+void SettingsView::setScreenplayDurationConfigurablePerEvery50ForSceneHeading(qreal _duration)
+{
+    d->screenplayDurationConfigurablePerEvery50ForSceneHeading->setText(
+        QString::number(_duration, 'f', 1));
 }
 
 void SettingsView::setComicBookAvailable(bool _available)
@@ -2750,6 +2929,21 @@ void SettingsView::updateTranslations()
     d->screenplayDurationByCharactersIncludingSpaces->setText(tr("including spaces"));
     d->screenplayDurationByCharactersDuration->setLabel(tr("has duration"));
     d->screenplayDurationByCharactersDuration->setSuffix(tr("seconds"));
+    d->screenplayDurationConfigurable->setText(tr("Calculate duration based on the custom rules"));
+    d->screenplayDurationConfigurableForActionLabel->setText(tr("For action"));
+    d->screenplayDurationConfigurablePerParagraphForAction->setLabel(tr("Per entry"));
+    d->screenplayDurationConfigurablePerParagraphForAction->setSuffix(tr("seconds"));
+    d->screenplayDurationConfigurableForActionPlus->setText(tr("+"));
+    d->screenplayDurationConfigurablePerEvery50ForAction->setLabel(tr("Each 50 characters"));
+    d->screenplayDurationConfigurablePerEvery50ForAction->setSuffix(tr("seconds"));
+    d->screenplayDurationConfigurableForDialogueLabel->setText(tr("For dialogue"));
+    d->screenplayDurationConfigurablePerParagraphForDialogue->setSuffix(tr("seconds"));
+    d->screenplayDurationConfigurableForDialoguePlus->setText(tr("+"));
+    d->screenplayDurationConfigurablePerEvery50ForDialogue->setSuffix(tr("seconds"));
+    d->screenplayDurationConfigurableForSceneHeadingLabel->setText(tr("For scene heading"));
+    d->screenplayDurationConfigurablePerParagraphForSceneHeading->setSuffix(tr("seconds"));
+    d->screenplayDurationConfigurableForSceneHeadingPlus->setText(tr("+"));
+    d->screenplayDurationConfigurablePerEvery50ForSceneHeading->setSuffix(tr("seconds"));
     //
     d->comicBookTitle->setText(tr("Comic book module"));
     d->comicBookAvailable->setToolTip(tr("Turn on/off comic book module"));
@@ -2918,6 +3112,12 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->scaleFactorTitle,
              d->scaleFactorSmallInfo,
              d->scaleFactorBigInfo,
+             d->screenplayDurationConfigurableForActionLabel,
+             d->screenplayDurationConfigurableForActionPlus,
+             d->screenplayDurationConfigurableForDialogueLabel,
+             d->screenplayDurationConfigurableForDialoguePlus,
+             d->screenplayDurationConfigurableForSceneHeadingLabel,
+             d->screenplayDurationConfigurableForSceneHeadingPlus,
              d->audioplayDurationByWordsTitle,
          }) {
         label->setBackgroundColor(DesignSystem::color().background());
@@ -2999,6 +3199,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayNavigatorSceneDescriptionLines5,
              d->screenplayDurationByPage,
              d->screenplayDurationByCharacters,
+             d->screenplayDurationConfigurable,
              //
              d->comicBookNavigatorSceneDescriptionLines1,
              d->comicBookNavigatorSceneDescriptionLines2,
@@ -3022,7 +3223,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         radioButton->setTextColor(DesignSystem::color().onBackground());
     }
 
-    for (auto textField : QVector<TextField*>{
+    for (auto textField : std::vector<TextField*>{
              d->backupsFolderPath,
              d->spellCheckerLanguage,
              d->simpleTextEditorDefaultTemplate,
@@ -3031,6 +3232,12 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayDurationByPageDuration,
              d->screenplayDurationByCharactersCharacters,
              d->screenplayDurationByCharactersDuration,
+             d->screenplayDurationConfigurablePerParagraphForAction,
+             d->screenplayDurationConfigurablePerEvery50ForAction,
+             d->screenplayDurationConfigurablePerParagraphForDialogue,
+             d->screenplayDurationConfigurablePerEvery50ForDialogue,
+             d->screenplayDurationConfigurablePerParagraphForSceneHeading,
+             d->screenplayDurationConfigurablePerEvery50ForSceneHeading,
              //
              d->comicBookEditorDefaultTemplate,
              //
@@ -3113,6 +3320,11 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
     d->screenplayCardLayout->setRowMinimumHeight(
         screenplayDurationByCharactersRow,
+        d->screenplayAvailable->isChecked() ? Ui::DesignSystem::layout().px62() : 0.0);
+    const auto screenplayDurationConfigurableRow
+        = d->screenplayCardLayout->indexOf(d->screenplayDurationConfigurable);
+    d->screenplayCardLayout->setRowMinimumHeight(
+        screenplayDurationConfigurableRow,
         d->screenplayAvailable->isChecked() ? Ui::DesignSystem::layout().px62() : 0.0);
     //
     d->comicBookCardLayout->setRowMinimumHeight(d->comicBookCardBottomSpacerIndex,

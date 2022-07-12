@@ -632,7 +632,7 @@ void TextField::setUnderlineDecorationVisible(bool _visible)
     update();
 }
 
-void TextField::setTitleVisible(bool _visible)
+void TextField::setLabelVisible(bool _visible)
 {
     if (d->isTitleVisible == _visible) {
         return;

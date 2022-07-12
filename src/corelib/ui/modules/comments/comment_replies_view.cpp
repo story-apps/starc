@@ -62,7 +62,7 @@ CommentRepliesView::Implementation::Implementation(QWidget* _parent)
     replyTextField->setEnterMakesNewLine(true);
     replyTextField->setTrailingIcon(u8"\U000f048A");
     replyTextField->setUnderlineDecorationVisible(false);
-    replyTextField->setTitleVisible(false);
+    replyTextField->setLabelVisible(false);
     replyTextField->setDefaultMarginsEnabled(false);
 }
 

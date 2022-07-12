@@ -503,6 +503,18 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsScreenplayDurationByCharactersCharactersKey, 1350);
         defaultValues.insert(kComponentsScreenplayDurationByCharactersIncludeSpacesKey, true);
         defaultValues.insert(kComponentsScreenplayDurationByCharactersDurationKey, 60);
+        defaultValues.insert(
+            kComponentsScreenplayDurationConfigurableSecondsPerParagraphForActionKey, 1.0);
+        defaultValues.insert(kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey,
+                             1.5);
+        defaultValues.insert(
+            kComponentsScreenplayDurationConfigurableSecondsPerParagraphForDialogueKey, 2.0);
+        defaultValues.insert(
+            kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForDialogueKey, 2.4);
+        defaultValues.insert(
+            kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey, 2.0);
+        defaultValues.insert(
+            kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey, 0.0);
     }
     //
     // Параметры редактора комикса

@@ -99,7 +99,7 @@ public:
     /**
      * @brief Установить видимость заголовка
      */
-    void setTitleVisible(bool _visible);
+    void setLabelVisible(bool _visible);
 
     /**
      * @brief Установить использование отступов по-умолчанию

@@ -87,6 +87,12 @@ public:
     void setScreenplayDurationByCharactersCharacters(int _characters);
     void setScreenplayDurationByCharactersIncludeSpaces(bool _include);
     void setScreenplayDurationByCharactersDuration(int _duration);
+    void setScreenplayDurationConfigurablePerParagraphForAction(qreal _duration);
+    void setScreenplayDurationConfigurablePerEvery50ForAction(qreal _duration);
+    void setScreenplayDurationConfigurablePerParagraphForDialogue(qreal _duration);
+    void setScreenplayDurationConfigurablePerEvery50ForDialogue(qreal _duration);
+    void setScreenplayDurationConfigurablePerParagraphForSceneHeading(qreal _duration);
+    void setScreenplayDurationConfigurablePerEvery50ForSceneHeading(qreal _duration);
 
     //
     // Задание параметров редактора комикса
@@ -184,6 +190,12 @@ signals:
     void screenplayDurationByCharactersCharactersChanged(int _characters);
     void screenplayDurationByCharactersIncludeSpacesChanged(bool _include);
     void screenplayDurationByCharactersDurationChanged(int _duration);
+    void screenplayDurationConfigurablePerParagraphForActionChanged(qreal _duration);
+    void screenplayDurationConfigurablePerEvery50ForActionChanged(qreal _duration);
+    void screenplayDurationConfigurablePerParagraphForDialogueChanged(qreal _duration);
+    void screenplayDurationConfigurablePerEvery50ForDialogueChanged(qreal _duration);
+    void screenplayDurationConfigurablePerParagraphForSceneHeadingChanged(qreal _duration);
+    void screenplayDurationConfigurablePerEvery50ForSceneHeadingChanged(qreal _duration);
 
     //
     // Уведомление об изменении параметров редактора комикса

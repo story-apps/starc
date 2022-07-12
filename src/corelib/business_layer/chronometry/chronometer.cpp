@@ -168,60 +168,66 @@ private:
 /**
  * @brief Расчёт хронометража а-ля Софокл
  */
-// class ConfigurableChronometer : public AbstractChronometer
-//{
-// public:
-//    std::chrono::seconds duration(const QTextBlock& _block) const override {
-//        const auto blockType = TextBlockStyle::forBlock(_block);
-//        if (blockType != TextParagraphType::SceneHeading
-//            && blockType != TextParagraphType::Action
-//            && blockType != TextParagraphType::Dialogue
-//            && blockType != TextParagraphType::Lyrics) {
-//            return std::chrono::seconds{0};
-//        }
+class ConfigurableChronometer : public AbstractChronometer
+{
+public:
+    ConfigurableChronometer(qreal _secondsPerParagraphForAction, qreal _secondsPerEvery50ForAction,
+                            qreal _secondsPerParagraphForDialogue,
+                            qreal _secondsPerEvery50ForDialogue,
+                            qreal _secondsPerParagraphForSceneHeading,
+                            qreal _secondsPerEvery50ForSceneHeading)
+        : m_secondsPerParagraphForAction(_secondsPerParagraphForAction)
+        , m_secondsPerEvery50ForAction(_secondsPerEvery50ForAction)
+        , m_secondsPerParagraphForDialogue(_secondsPerParagraphForDialogue)
+        , m_secondsPerEvery50ForDialogue(_secondsPerEvery50ForDialogue)
+        , m_secondsPerParagraphForSceneHeading(_secondsPerParagraphForSceneHeading)
+        , m_secondsPerEvery50ForSceneHeading(_secondsPerEvery50ForSceneHeading)
+    {
+    }
 
-//        //
-//        // Длительность зависит от блока
-//        //
-//        qreal secondsForParagraph = 0;
-//        qreal secondsForEvery50 = 0;
-//        QString secondsForParagraphKey;
-//        QString secondsForEvery50Key;
+    std::chrono::milliseconds duration(TextParagraphType _type, const QString& _text,
+                                       const TextTemplate& _textTemplate) const override
+    {
+        Q_UNUSED(_textTemplate)
 
-//        if (blockType == ScenarioBlockStyle::Action) {
-//            secondsForParagraphKey = "chronometry/configurable/seconds-for-paragraph/action";
-//            secondsForEvery50Key = "chronometry/configurable/seconds-for-every-50/action";
-//        } else if (blockType == ScenarioBlockStyle::Dialogue
-//                   || blockType == ScenarioBlockStyle::Lyrics) {
-//            secondsForParagraphKey = "chronometry/configurable/seconds-for-paragraph/dialog";
-//            secondsForEvery50Key = "chronometry/configurable/seconds-for-every-50/dialog";
-//        } else {
-//            secondsForParagraphKey =
-//            "chronometry/configurable/seconds-for-paragraph/scene_heading"; secondsForEvery50Key =
-//            "chronometry/configurable/seconds-for-every-50/scene_heading";
-//        }
+        const auto blockType = _type;
+        if (blockType != TextParagraphType::SceneHeading && blockType != TextParagraphType::Action
+            && blockType != TextParagraphType::Dialogue && blockType != TextParagraphType::Lyrics) {
+            return std::chrono::seconds{ 0 };
+        }
 
-//        //
-//        // Получим значения длительности
-//        //
-//        secondsForParagraph =
-//                StorageFacade::settingsStorage()->value(
-//                    secondsForParagraphKey,
-//                    SettingsStorage::ApplicationSettings)
-//                .toDouble();
+        //
+        // Длительность зависит от блока
+        //
+        qreal secondsForParagraph = 0.0;
+        qreal secondsForEvery50 = 0.0;
 
-//        secondsForEvery50 =
-//                StorageFacade::settingsStorage()->value(
-//                    secondsForEvery50Key,
-//                    SettingsStorage::ApplicationSettings)
-//                .toDouble();
+        if (blockType == TextParagraphType::Action) {
+            secondsForParagraph = m_secondsPerParagraphForAction;
+            secondsForEvery50 = m_secondsPerEvery50ForAction;
+        } else if (blockType == TextParagraphType::Dialogue
+                   || blockType == TextParagraphType::Lyrics) {
+            secondsForParagraph = m_secondsPerParagraphForDialogue;
+            secondsForEvery50 = m_secondsPerEvery50ForDialogue;
+        } else {
+            secondsForParagraph = m_secondsPerParagraphForSceneHeading;
+            secondsForEvery50 = m_secondsPerEvery50ForSceneHeading;
+        }
 
-//        const int every50 = 50;
-//        const qreal secondsPerCharacter = secondsForEvery50 / every50;
-//        const qreal textChron = secondsForParagraph + _length * secondsPerCharacter;
-//        return textChron;
-//    }
-//};
+        const qreal every50 = 50.0;
+        const qreal secondsPerCharacter = secondsForEvery50 / every50;
+        const qreal textDuration = secondsForParagraph + _text.length() * secondsPerCharacter;
+        return std::chrono::milliseconds{ qCeil(textDuration * 1000) };
+    }
+
+private:
+    qreal m_secondsPerParagraphForAction = 0.0;
+    qreal m_secondsPerEvery50ForAction = 0.0;
+    qreal m_secondsPerParagraphForDialogue = 0.0;
+    qreal m_secondsPerEvery50ForDialogue = 0.0;
+    qreal m_secondsPerParagraphForSceneHeading = 0.0;
+    qreal m_secondsPerEvery50ForSceneHeading = 0.0;
+};
 
 } // namespace
 
@@ -250,6 +256,37 @@ std::chrono::milliseconds ScreenplayChronometer::duration(TextParagraphType _typ
         const int seconds
             = settingsValue(kComponentsScreenplayDurationByCharactersDurationKey).toInt();
         return CharactersChronometer(characters, considerSpaces, seconds)
+            .duration(_type, _text, screenplayTemplate);
+    }
+
+    case ChronometerType::Configurable: {
+        const auto secondsPerParagraphForAction
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerParagraphForActionKey)
+                  .toDouble();
+        const auto secondsPerEvery50ForAction
+            = settingsValue(kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey)
+                  .toDouble();
+        const auto secondsPerParagraphForDialogue
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerParagraphForDialogueKey)
+                  .toDouble();
+        const auto secondsPerEvery50ForDialogue
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForDialogueKey)
+                  .toDouble();
+        const auto secondsPerParagraphForSceneHeading
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey)
+                  .toDouble();
+        const auto secondsPerEvery50ForSceneHeading
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey)
+                  .toDouble();
+        return ConfigurableChronometer(secondsPerParagraphForAction, secondsPerEvery50ForAction,
+                                       secondsPerParagraphForDialogue, secondsPerEvery50ForDialogue,
+                                       secondsPerParagraphForSceneHeading,
+                                       secondsPerEvery50ForSceneHeading)
             .duration(_type, _text, screenplayTemplate);
     }
 

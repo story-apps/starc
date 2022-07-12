@@ -206,6 +206,24 @@ const QString kComponentsScreenplayDurationByCharactersIncludeSpacesKey
     = kComponentsScreenplayDurationKey + QStringLiteral("/by-characters-include-spaces");
 const QString kComponentsScreenplayDurationByCharactersDurationKey
     = kComponentsScreenplayDurationKey + QStringLiteral("/by-characters-duration");
+const QString kComponentsScreenplayDurationConfigurableSecondsPerParagraphForActionKey
+    = kComponentsScreenplayDurationKey
+    + QStringLiteral("/configurable-secsonds-per-paragraph-for-action");
+const QString kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey
+    = kComponentsScreenplayDurationKey
+    + QStringLiteral("/configurable-secsonds-per-every50-for-action");
+const QString kComponentsScreenplayDurationConfigurableSecondsPerParagraphForDialogueKey
+    = kComponentsScreenplayDurationKey
+    + QStringLiteral("/configurable-secsonds-per-paragraph-for-dialogue");
+const QString kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForDialogueKey
+    = kComponentsScreenplayDurationKey
+    + QStringLiteral("/configurable-secsonds-per-every50-for-dialogue");
+const QString kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey
+    = kComponentsScreenplayDurationKey
+    + QStringLiteral("/configurable-secsonds-per-paragraph-for-scene-heading");
+const QString kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey
+    = kComponentsScreenplayDurationKey
+    + QStringLiteral("/configurable-secsonds-per-every50-for-scene-heading");
 //
 // комикс
 const QString kComponentsComicBookKey = kComponentsGroupKey + QStringLiteral("/comicbook");
