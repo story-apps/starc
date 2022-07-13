@@ -144,7 +144,6 @@ TextModel::TextModel(QObject* _parent, TextModelFolderItem* _rootItem)
             toString(TextGroupType::Beat),
             toString(TextGroupType::Page),
             toString(TextGroupType::Panel),
-            toString(TextGroupType::Chapter),
             toString(TextParagraphType::UnformattedText),
             toString(TextParagraphType::SceneHeading),
             toString(TextParagraphType::SceneCharacters),
