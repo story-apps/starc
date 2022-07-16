@@ -225,6 +225,7 @@ void CreateDocumentDialog::setInsertionParent(const QString& _parentName)
 
     d->insertIntoParentEnabled = true;
     d->insertIntoParent->setText(QString("%1 \"%2\"").arg(tr("Insert into"), _parentName));
+    d->insertIntoParent->setChecked(true);
     d->insertIntoParent->show();
 }
 

@@ -132,7 +132,7 @@ public:
     /**
      * @brief Добавить документ в проект
      */
-    void addDocument();
+    void addDocument(Domain::DocumentObjectType _type = Domain::DocumentObjectType::Undefined);
 
     /**
      * @brief Добавить документ в заданный контейнер
@@ -351,7 +351,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         connect(findAllCharacters, &QAction::triggered, topLevelWidget,
                 [this] { this->findAllCharacters(); });
         menuActions.append(findAllCharacters);
-
+        //
         auto addCharacter = new QAction(tr("Add character"));
         addCharacter->setIconText(u8"\U000F0014");
         connect(addCharacter, &QAction::triggered, topLevelWidget, [this] { this->addDocument(); });
@@ -363,7 +363,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         connect(findAllLocations, &QAction::triggered, topLevelWidget,
                 [this] { this->findAllLocations(); });
         menuActions.append(findAllLocations);
-
+        //
         auto addLocation = new QAction(tr("Add location"));
         addLocation->setIconText(u8"\U000F0975");
         connect(addLocation, &QAction::triggered, topLevelWidget, [this] { this->addDocument(); });
@@ -382,10 +382,18 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     // ... для остальных элементов
     //
     else {
+        auto addFolder = new QAction(tr("Add folder"));
+        addFolder->setIconText(u8"\U000F0257");
+        addFolder->setEnabled(enabled);
+        connect(addFolder, &QAction::triggered, topLevelWidget,
+                [this] { this->addDocument(Domain::DocumentObjectType::Folder); });
+        menuActions.append(addFolder);
+        //
         auto addDocument = new QAction(tr("Add document"));
-        addDocument->setIconText(u8"\U000f0415");
+        addDocument->setIconText(u8"\U000F0415");
         addDocument->setEnabled(enabled);
-        connect(addDocument, &QAction::triggered, topLevelWidget, [this] { this->addDocument(); });
+        connect(addDocument, &QAction::triggered, topLevelWidget,
+                [this] { this->addDocument(Domain::DocumentObjectType::SimpleText); });
         menuActions.append(addDocument);
 
         const QSet<Domain::DocumentObjectType> cantBeRemovedItems = {
@@ -412,6 +420,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         };
         if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
             auto removeDocument = new QAction(tr("Remove document"));
+            removeDocument->setSeparator(true);
             removeDocument->setIconText(u8"\U000f01b4");
             removeDocument->setEnabled(enabled);
             connect(removeDocument, &QAction::triggered, topLevelWidget,
@@ -424,7 +433,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     //
     // Для текстовых документов можно создать версию
     //
-    if (isTextItem(currentItem)) {
+    if (_index.isValid() && isTextItem(currentItem)) {
         auto createNewVersion = new QAction(tr("Create new version"));
         createNewVersion->setSeparator(true);
         createNewVersion->setIconText(u8"\U000F00FB");
@@ -439,13 +448,15 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     //
     // Каждый из элементов можно открыть в своём окне
     //
-    auto openInNewWindow = new QAction(tr("Open in new window"));
-    openInNewWindow->setSeparator(!isDocumentActionAdded);
-    openInNewWindow->setIconText(u8"\U000F03CC");
-    connect(openInNewWindow, &QAction::triggered, topLevelWidget,
-            [this] { this->openCurrentDocumentInNewWindow(); });
-    menuActions.append(openInNewWindow);
-    isDocumentActionAdded = true;
+    if (_index.isValid()) {
+        auto openInNewWindow = new QAction(tr("Open in new window"));
+        openInNewWindow->setSeparator(!isDocumentActionAdded && !menuActions.isEmpty());
+        openInNewWindow->setIconText(u8"\U000F03CC");
+        connect(openInNewWindow, &QAction::triggered, topLevelWidget,
+                [this] { this->openCurrentDocumentInNewWindow(); });
+        menuActions.append(openInNewWindow);
+        isDocumentActionAdded = true;
+    }
 
     navigator->setContextMenuActions(menuActions);
 }
@@ -472,7 +483,7 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
     }
 }
 
-void ProjectManager::Implementation::addDocument()
+void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _type)
 {
     const auto currentItemIndex
         = projectStructureProxyModel->mapToSource(navigator->currentIndex());
@@ -481,10 +492,15 @@ void ProjectManager::Implementation::addDocument()
     auto dialog = new Ui::CreateDocumentDialog(topLevelWidget);
     if (currentItem->type() == Domain::DocumentObjectType::Folder) {
         dialog->setInsertionParent(currentItem->name());
+    }
+    if (_type != Domain::DocumentObjectType::Undefined) {
+        dialog->setDocumentType(_type);
     } else if (currentItem->type() == Domain::DocumentObjectType::Characters) {
         dialog->setDocumentType(Domain::DocumentObjectType::Character);
     } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
         dialog->setDocumentType(Domain::DocumentObjectType::Location);
+    } else {
+        dialog->setDocumentType(Domain::DocumentObjectType::SimpleText);
     }
 
     connect(
