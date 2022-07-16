@@ -184,6 +184,7 @@ void AudioplayTextManager::Implementation::setModelForView(BusinessLayer::Abstra
         // ... разрываем соединения
         //
         _view->disconnect(allViews[viewIndex].model);
+        allViews[viewIndex].model->disconnect(_view);
     }
 
     //

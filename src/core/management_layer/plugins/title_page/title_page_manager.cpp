@@ -112,6 +112,7 @@ void TitlePageManager::Implementation::setModelForView(BusinessLayer::AbstractMo
         // ... разрываем соединения
         //
         _view->disconnect(allViews[viewIndex].model);
+        allViews[viewIndex].model->disconnect(_view);
     }
 
     //

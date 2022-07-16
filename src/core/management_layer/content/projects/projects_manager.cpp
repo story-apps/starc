@@ -15,6 +15,7 @@
 #include <ui/widgets/dialog/dialog.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/file_helper.h>
+#include <utils/logging.h>
 
 #include <QAction>
 #include <QCryptographicHash>
@@ -236,6 +237,8 @@ void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized, bool _abl
 
 void ProjectsManager::createProject()
 {
+    Log::debug("Create new project");
+
     //
     // Создаём и настраиваем диалог
     //
@@ -288,6 +291,8 @@ void ProjectsManager::createProject()
 
 void ProjectsManager::openProject()
 {
+    Log::debug("Open project");
+
     //
     // Предоставим пользователю возможность выбрать файл, который он хочет открыть
     //

@@ -182,6 +182,7 @@ void ScreenplayTreatmentManager::Implementation::setModelForView(
         // ... разрываем соединения
         //
         _view->disconnect(allViews[viewIndex].model);
+        allViews[viewIndex].model->disconnect(_view);
     }
 
     //

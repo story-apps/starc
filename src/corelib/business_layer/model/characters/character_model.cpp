@@ -226,7 +226,7 @@ void CharacterModel::setMainPhoto(const QPixmap& _photo)
 
 void CharacterModel::createRelation(const QUuid& _withCharacter)
 {
-    for (const auto& relation : d->relations) {
+    for (const auto& relation : std::as_const(d->relations)) {
         if (relation.character == _withCharacter) {
             return;
         }

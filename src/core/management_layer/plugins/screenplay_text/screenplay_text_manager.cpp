@@ -322,6 +322,8 @@ void ScreenplayTextManager::Implementation::setModelForView(BusinessLayer::Abstr
         //
         _view->disconnect(allViews[viewIndex].model);
         _view->disconnect(allViews[viewIndex].model->dictionariesModel());
+        allViews[viewIndex].model->disconnect(_view);
+        allViews[viewIndex].model->dictionariesModel()->disconnect(_view);
     }
 
     //

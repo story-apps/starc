@@ -179,6 +179,7 @@ void SimpleTextManager::Implementation::setModelForView(BusinessLayer::AbstractM
         // ... разрываем соединения
         //
         _view->disconnect(allViews[viewIndex].model);
+        allViews[viewIndex].model->disconnect(_view);
     }
 
     //

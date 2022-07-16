@@ -69,6 +69,7 @@ void StageplayInformationManager::Implementation::setModelForView(
     //
     if (viewIndex != invalidIndex && allViews[viewIndex].model != nullptr) {
         _view->disconnect(allViews[viewIndex].model);
+        allViews[viewIndex].model->disconnect(_view);
     }
 
     //
