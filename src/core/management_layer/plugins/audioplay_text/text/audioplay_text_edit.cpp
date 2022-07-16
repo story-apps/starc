@@ -1386,7 +1386,6 @@ void AudioplayTextEdit::insertFromMimeData(const QMimeData* _source)
         if (!text.contains('\n') && cursor.block().text().isEmpty()) {
             removeCharacterAtPosition = cursor.position();
             cursor.insertText(" ");
-            cursor.movePosition(QTextCursor::PreviousCharacter);
             setTextCursor(cursor);
         }
 
