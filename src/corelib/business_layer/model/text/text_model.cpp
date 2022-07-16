@@ -1013,6 +1013,12 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                 lastItem = lastItemParent;
                 insertAfterItem = lastItemParent;
             }
+            //
+            // ... в противном случае, вставлять будем после последнего вставленного элемента
+            //
+            else {
+                insertAfterItem = lastItem;
+            }
         }
 
 
