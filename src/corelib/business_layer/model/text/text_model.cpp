@@ -904,7 +904,18 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         // Если в заголовок папки
         //
-        if (textItem->paragraphType() == TextParagraphType::SequenceHeading) {
+        if (textItem->paragraphType() == TextParagraphType::ActHeading
+            || textItem->paragraphType() == TextParagraphType::SequenceHeading
+            || textItem->paragraphType() == TextParagraphType::SceneHeading
+            || textItem->paragraphType() == TextParagraphType::BeatHeading
+            || textItem->paragraphType() == TextParagraphType::PageHeading
+            || textItem->paragraphType() == TextParagraphType::PanelHeading
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading1
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading2
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading3
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading4
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading5
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading6) {
             //
             // ... то вставим после него
             //
@@ -912,7 +923,8 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         // Если завершение папки
         //
-        else if (textItem->paragraphType() == TextParagraphType::SequenceFooter) {
+        else if (textItem->paragraphType() == TextParagraphType::ActFooter
+                 || textItem->paragraphType() == TextParagraphType::SequenceFooter) {
             //
             // ... то вставляем после папки
             //
@@ -1031,9 +1043,10 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             // Если группа вставляется после группы, учитываем уровень группы, и при необходимости
             // поднимаемся ещё на уровень выше
             //
-            if (insertAfterItem->type() == TextModelItemType::Group) {
+            if (insertAfterItem && insertAfterItem->type() == TextModelItemType::Group) {
                 auto groupItem = static_cast<TextModelGroupItem*>(insertAfterItem);
-                while (groupItem != nullptr && groupItem->level() > newGroupItem->level()) {
+                while (groupItem != nullptr && groupItem->level() > newGroupItem->level()
+                       && groupItem->parent() != d->rootItem) {
                     insertAfterItem = insertAfterItem->parent();
                     if (insertAfterItem != nullptr
                         && insertAfterItem->type() != TextModelItemType::Group) {
