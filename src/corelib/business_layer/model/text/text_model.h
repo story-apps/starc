@@ -7,6 +7,7 @@ class QXmlStreamReader;
 
 namespace BusinessLayer {
 
+enum class TextFolderType;
 enum class TextGroupType;
 class SimpleTextModel;
 class TextModelItem;
@@ -29,7 +30,7 @@ public:
     /**
      * @brief Создать элементы модели
      */
-    virtual TextModelFolderItem* createFolderItem() const = 0;
+    virtual TextModelFolderItem* createFolderItem(TextFolderType _type) const = 0;
     virtual TextModelFolderItem* createFolderItem(QXmlStreamReader& _contentReader) const;
     virtual TextModelGroupItem* createGroupItem(TextGroupType _type) const = 0;
     virtual TextModelGroupItem* createGroupItem(QXmlStreamReader& _contentReader) const;

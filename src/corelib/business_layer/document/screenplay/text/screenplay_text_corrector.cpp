@@ -298,9 +298,11 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
     //
     // ... от начала сцены
     //
-    QVector<TextParagraphType> sceneBorders
-        = { TextParagraphType::SceneHeading, TextParagraphType::SequenceHeading,
-            TextParagraphType::SequenceFooter };
+    QVector<TextParagraphType> sceneBorders = {
+        TextParagraphType::SceneHeading,   TextParagraphType::ActHeading,
+        TextParagraphType::ActFooter,      TextParagraphType::SequenceHeading,
+        TextParagraphType::SequenceFooter,
+    };
     QTextBlock block = document()->findBlock(startPosition);
     while (block != document()->begin()) {
         const auto blockType = TextBlockStyle::forBlock(block);
@@ -860,6 +862,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             case TextParagraphType::SceneHeading:
             case TextParagraphType::BeatHeading:
             case TextParagraphType::Shot:
+            case TextParagraphType::ActHeading:
             case TextParagraphType::SequenceHeading: {
                 //
                 // Переносим на следующую страницу
@@ -874,6 +877,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             // Конец папки распологаем либо только в конце страницы, либо целиком переносим на
             // следующую страницу
             //
+            case TextParagraphType::ActFooter:
             case TextParagraphType::SequenceFooter: {
                 //
                 // Если в конце страницы, оставляем как есть

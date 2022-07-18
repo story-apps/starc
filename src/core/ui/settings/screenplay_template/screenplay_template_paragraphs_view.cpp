@@ -468,6 +468,8 @@ void ScreenplayTemplateParagraphsView::configureTemplateFor(Domain::DocumentObje
             BusinessLayer::TextParagraphType::UnformattedText,
             BusinessLayer::TextParagraphType::SequenceHeading,
             BusinessLayer::TextParagraphType::SequenceFooter,
+            BusinessLayer::TextParagraphType::ActHeading,
+            BusinessLayer::TextParagraphType::ActFooter,
         };
         break;
     }

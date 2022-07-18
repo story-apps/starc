@@ -27,7 +27,8 @@ void StageplayTextModelFolderItem::handleChange()
         switch (child->type()) {
         case TextModelItemType::Text: {
             auto childItem = static_cast<TextModelTextItem*>(child);
-            if (childItem->paragraphType() == TextParagraphType::SequenceHeading) {
+            if (childItem->paragraphType() == TextParagraphType::ActHeading
+                || childItem->paragraphType() == TextParagraphType::SequenceHeading) {
                 setHeading(TextHelper::smartToUpper(childItem->text()));
             }
             break;

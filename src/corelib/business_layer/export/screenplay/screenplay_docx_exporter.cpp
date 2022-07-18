@@ -22,20 +22,14 @@ ScreenplayDocxExporter::ScreenplayDocxExporter()
 QVector<TextParagraphType> ScreenplayDocxExporter::paragraphTypes() const
 {
     return {
-        TextParagraphType::Undefined,
-        TextParagraphType::UnformattedText,
-        TextParagraphType::SceneHeading,
-        TextParagraphType::SceneCharacters,
-        TextParagraphType::Action,
-        TextParagraphType::Character,
-        TextParagraphType::Parenthetical,
-        TextParagraphType::Dialogue,
-        TextParagraphType::Lyrics,
-        TextParagraphType::Transition,
-        TextParagraphType::Shot,
-        TextParagraphType::InlineNote,
-        TextParagraphType::SequenceHeading,
-        TextParagraphType::SequenceFooter,
+        TextParagraphType::Undefined,       TextParagraphType::UnformattedText,
+        TextParagraphType::InlineNote,      TextParagraphType::ActHeading,
+        TextParagraphType::ActFooter,       TextParagraphType::SequenceHeading,
+        TextParagraphType::SequenceFooter,  TextParagraphType::SceneHeading,
+        TextParagraphType::SceneCharacters, TextParagraphType::Action,
+        TextParagraphType::Character,       TextParagraphType::Parenthetical,
+        TextParagraphType::Dialogue,        TextParagraphType::Lyrics,
+        TextParagraphType::Transition,      TextParagraphType::Shot,
     };
 }
 

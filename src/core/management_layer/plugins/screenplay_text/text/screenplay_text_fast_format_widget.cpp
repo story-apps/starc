@@ -50,7 +50,7 @@ ScreenplayTextFastFormatWidget::Implementation::Implementation(QWidget* _parent)
     //
     // Создаём столько кнопок, сколько может быть стилей
     //
-    for (int index = 0; index < 12; ++index) {
+    for (int index = 0; index < 13; ++index) {
         buttons.append(new Button(_parent));
     }
 }

@@ -252,7 +252,8 @@ QByteArray TextModelFolderItem::toXml(TextModelItem* _from, int _fromPosition, T
             //
             // Если папка не была закрыта, добавим корректное завершение для неё
             //
-            if (textItem->paragraphType() != TextParagraphType::SequenceFooter) {
+            if (textItem->paragraphType() != TextParagraphType::ActFooter
+                && textItem->paragraphType() != TextParagraphType::SequenceFooter) {
                 xml += folderFooterXml();
             }
             break;

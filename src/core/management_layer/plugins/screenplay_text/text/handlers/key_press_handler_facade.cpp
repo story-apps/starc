@@ -1,6 +1,8 @@
 #include "key_press_handler_facade.h"
 
 #include "../screenplay_text_edit.h"
+#include "act_footer_handler.h"
+#include "act_heading_handler.h"
 #include "action_handler.h"
 #include "character_handler.h"
 #include "dialog_handler.h"
@@ -50,6 +52,8 @@ public:
     QScopedPointer<InlineNoteHandler> inlineNoteHandler;
     QScopedPointer<SequenceHeadingHandler> sequenceHeadingHandler;
     QScopedPointer<SequenceFooterHandler> sequenceFooterHandler;
+    QScopedPointer<ActHeadingHandler> actHeadingHandler;
+    QScopedPointer<ActFooterHandler> actFooterHandler;
     QScopedPointer<SplitterHandler> splitterHandler;
 };
 
@@ -70,6 +74,8 @@ KeyPressHandlerFacade::Implementation::Implementation(Ui::ScreenplayTextEdit* _e
     , inlineNoteHandler(new InlineNoteHandler(_editor))
     , sequenceHeadingHandler(new SequenceHeadingHandler(_editor))
     , sequenceFooterHandler(new SequenceFooterHandler(_editor))
+    , actHeadingHandler(new ActHeadingHandler(_editor))
+    , actFooterHandler(new ActFooterHandler(_editor))
     , splitterHandler(new SplitterHandler(_editor))
 {
 }
@@ -196,6 +202,14 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
 
     case TextParagraphType::SequenceFooter: {
         return d->sequenceFooterHandler.data();
+    }
+
+    case TextParagraphType::ActHeading: {
+        return d->actHeadingHandler.data();
+    }
+
+    case TextParagraphType::ActFooter: {
+        return d->actFooterHandler.data();
     }
 
     case TextParagraphType::PageSplitter: {

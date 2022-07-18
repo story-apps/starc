@@ -233,7 +233,9 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
             // Если не нужно печатать папки, то удаляем их
             //
             if (!_exportOptions.includeFolders) {
-                if (blockType == TextParagraphType::SequenceHeading
+                if (blockType == TextParagraphType::ActHeading
+                    || blockType == TextParagraphType::ActFooter
+                    || blockType == TextParagraphType::SequenceHeading
                     || blockType == TextParagraphType::SequenceFooter) {
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                     if (cursor.hasSelection()) {
@@ -246,19 +248,22 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
             //
             // В противном случае подставляем текст для пустых завершающих блоков
             //
-            else if (blockType == TextParagraphType::SequenceFooter) {
+            else if (blockType == TextParagraphType::ActFooter
+                     || blockType == TextParagraphType::SequenceFooter) {
                 if (cursor.block().text().isEmpty()) {
                     auto headerBlock = cursor.block().previous();
                     int openedFolders = 0;
                     while (headerBlock.isValid()) {
                         const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
-                        if (headerBlockType == TextParagraphType::SequenceHeading) {
+                        if (headerBlockType == TextParagraphType::ActHeading
+                            || headerBlockType == TextParagraphType::SequenceHeading) {
                             if (openedFolders > 0) {
                                 --openedFolders;
                             } else {
                                 break;
                             }
-                        } else if (headerBlockType == TextParagraphType::SequenceFooter) {
+                        } else if (headerBlockType == TextParagraphType::ActFooter
+                                   || headerBlockType == TextParagraphType::SequenceFooter) {
                             ++openedFolders;
                         }
 

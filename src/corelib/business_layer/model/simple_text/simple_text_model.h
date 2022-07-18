@@ -19,7 +19,7 @@ public:
     /**
      * @brief Создать элементы модели
      */
-    TextModelFolderItem* createFolderItem() const override;
+    TextModelFolderItem* createFolderItem(TextFolderType _type) const override;
     TextModelGroupItem* createGroupItem(TextGroupType _type) const override;
     TextModelTextItem* createTextItem() const override;
 

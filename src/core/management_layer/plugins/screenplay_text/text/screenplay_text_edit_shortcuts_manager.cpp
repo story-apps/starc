@@ -102,6 +102,7 @@ void ScreenplayTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
     d->createOrUpdateShortcut(TextParagraphType::Shot);
     d->createOrUpdateShortcut(TextParagraphType::InlineNote);
     d->createOrUpdateShortcut(TextParagraphType::SequenceHeading);
+    d->createOrUpdateShortcut(TextParagraphType::ActHeading);
 
     //
     // Настраиваем их

@@ -143,7 +143,7 @@ void ComicBookTextModel::Implementation::updateNumbering()
 
 
 ComicBookTextModel::ComicBookTextModel(QObject* _parent)
-    : TextModel(_parent, ComicBookTextModel::createFolderItem())
+    : TextModel(_parent, ComicBookTextModel::createFolderItem(TextFolderType::Sequence))
     , d(new Implementation(this))
 {
     auto updateNumbering = [this] { d->updateNumbering(); };
@@ -156,8 +156,10 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
 
 ComicBookTextModel::~ComicBookTextModel() = default;
 
-TextModelFolderItem* ComicBookTextModel::createFolderItem() const
+TextModelFolderItem* ComicBookTextModel::createFolderItem(TextFolderType _type) const
 {
+    Q_UNUSED(_type)
+
     return new TextModelFolderItem(this);
 }
 

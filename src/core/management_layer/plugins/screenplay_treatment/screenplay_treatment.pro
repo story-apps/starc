@@ -34,6 +34,8 @@ HEADERS += \
     screenplay_treatment_manager.h \
     screenplay_treatment_view.h \
     text/handlers/abstract_key_handler.h \
+    text/handlers/act_footer_handler.h \
+    text/handlers/act_heading_handler.h \
     text/handlers/beat_heading_handler.h \
     text/handlers/key_press_handler_facade.h \
     text/handlers/pre_handler.h \
@@ -54,6 +56,8 @@ SOURCES += \
     screenplay_treatment_manager.cpp \
     screenplay_treatment_view.cpp \
     text/handlers/abstract_key_handler.cpp \
+    text/handlers/act_footer_handler.cpp \
+    text/handlers/act_heading_handler.cpp \
     text/handlers/beat_heading_handler.cpp \
     text/handlers/key_press_handler_facade.cpp \
     text/handlers/pre_handler.cpp \

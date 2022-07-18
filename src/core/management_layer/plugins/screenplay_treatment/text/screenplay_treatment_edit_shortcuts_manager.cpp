@@ -97,6 +97,7 @@ void ScreenplayTreatmentEditShortcutsManager::setShortcutsContext(QWidget* _cont
     d->createOrUpdateShortcut(TextParagraphType::SceneCharacters);
     d->createOrUpdateShortcut(TextParagraphType::BeatHeading);
     d->createOrUpdateShortcut(TextParagraphType::SequenceHeading);
+    d->createOrUpdateShortcut(TextParagraphType::ActHeading);
 
     //
     // Настраиваем их

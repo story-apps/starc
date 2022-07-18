@@ -23,7 +23,7 @@ public:
     };
 
 public:
-    explicit ScreenplayTextModelFolderItem(const ScreenplayTextModel* _model);
+    explicit ScreenplayTextModelFolderItem(const ScreenplayTextModel* _model, TextFolderType _type);
     ~ScreenplayTextModelFolderItem() override;
 
     /**

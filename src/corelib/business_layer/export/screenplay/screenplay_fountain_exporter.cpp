@@ -355,6 +355,7 @@ void ScreenplayFountainExporter::exportTo(TextModel* _model, ExportOptions& _exp
                 break;
             }
 
+            case TextParagraphType::ActHeading:
             case TextParagraphType::SequenceHeading: {
                 //
                 // Напечатаем в начале столько #, насколько глубоко мы в директории
@@ -368,6 +369,7 @@ void ScreenplayFountainExporter::exportTo(TextModel* _model, ExportOptions& _exp
                 break;
             }
 
+            case TextParagraphType::ActFooter:
             case TextParagraphType::SequenceFooter: {
                 --dirNesting;
                 skipBlock = true;

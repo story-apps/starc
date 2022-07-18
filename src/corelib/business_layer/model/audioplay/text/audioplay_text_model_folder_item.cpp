@@ -77,7 +77,8 @@ void AudioplayTextModelFolderItem::handleChange()
 
         case TextModelItemType::Text: {
             auto childItem = static_cast<AudioplayTextModelTextItem*>(child);
-            if (childItem->paragraphType() == TextParagraphType::SequenceHeading) {
+            if (childItem->paragraphType() == TextParagraphType::ActHeading
+                || childItem->paragraphType() == TextParagraphType::SequenceHeading) {
                 setHeading(TextHelper::smartToUpper(childItem->text()));
             }
             d->duration += childItem->duration();

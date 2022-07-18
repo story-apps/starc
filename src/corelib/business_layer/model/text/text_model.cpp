@@ -145,6 +145,12 @@ TextModel::TextModel(QObject* _parent, TextModelFolderItem* _rootItem)
             toString(TextGroupType::Page),
             toString(TextGroupType::Panel),
             toString(TextParagraphType::UnformattedText),
+            toString(TextParagraphType::InlineNote),
+            toString(TextParagraphType::ActHeading),
+            toString(TextParagraphType::ActFooter),
+            toString(TextParagraphType::SequenceHeading),
+            toString(TextParagraphType::SequenceFooter),
+            toString(TextParagraphType::PageSplitter),
             toString(TextParagraphType::SceneHeading),
             toString(TextParagraphType::SceneCharacters),
             toString(TextParagraphType::BeatHeading),
@@ -155,12 +161,6 @@ TextModel::TextModel(QObject* _parent, TextModelFolderItem* _rootItem)
             toString(TextParagraphType::Lyrics),
             toString(TextParagraphType::Transition),
             toString(TextParagraphType::Shot),
-            toString(TextParagraphType::InlineNote),
-            toString(TextParagraphType::ActHeading),
-            toString(TextParagraphType::ActFooter),
-            toString(TextParagraphType::SequenceHeading),
-            toString(TextParagraphType::SequenceFooter),
-            toString(TextParagraphType::PageSplitter),
         },
         _parent)
     , d(new Implementation(this, _rootItem))
@@ -171,7 +171,7 @@ TextModel::~TextModel() = default;
 
 TextModelFolderItem* TextModel::createFolderItem(QXmlStreamReader& _contentReader) const
 {
-    auto item = createFolderItem();
+    auto item = createFolderItem(textFolderTypeFromString(_contentReader.name().toString()));
     item->readContent(_contentReader);
     return item;
 }
@@ -810,7 +810,8 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
                 // Не сохраняем закрывающие блоки неоткрытых папок, всё это делается внутри самих
                 // папок
                 //
-                if (textItem->paragraphType() == TextParagraphType::SequenceFooter) {
+                if (textItem->paragraphType() == TextParagraphType::ActFooter
+                    || textItem->paragraphType() == TextParagraphType::SequenceFooter) {
                     break;
                 }
 
@@ -848,12 +849,12 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     //
     if (fromItem->type() == TextModelItemType::Text) {
         const auto textItem = static_cast<TextModelTextItem*>(fromItem);
-        if (textItem->paragraphType() == TextParagraphType::SceneHeading
+        if (textItem->paragraphType() == TextParagraphType::ActHeading
+            || textItem->paragraphType() == TextParagraphType::SequenceHeading
+            || textItem->paragraphType() == TextParagraphType::SceneHeading
             || textItem->paragraphType() == TextParagraphType::BeatHeading
             || textItem->paragraphType() == TextParagraphType::PageHeading
-            || textItem->paragraphType() == TextParagraphType::PanelHeading
-            || textItem->paragraphType() == TextParagraphType::SequenceHeading
-            || textItem->paragraphType() == TextParagraphType::ActHeading) {
+            || textItem->paragraphType() == TextParagraphType::PanelHeading) {
             auto newFromItem = fromItemParent;
             fromItemParent = fromItemParent->parent();
             fromItemRow = fromItemParent->rowOfChild(newFromItem);
@@ -1885,7 +1886,8 @@ void TextModel::applyPatch(const QByteArray& _patch)
             TextModelItem* itemToInsert = nullptr;
             switch (newItem->type()) {
             case TextModelItemType::Folder: {
-                itemToInsert = createFolderItem();
+                itemToInsert
+                    = createFolderItem(static_cast<TextModelFolderItem*>(newItem)->folderType());
                 break;
             }
 

@@ -231,10 +231,9 @@ void ScreenplayTreatmentView::Implementation::reconfigureTemplate(bool _withMode
     const auto& usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(
         model && model->informationModel() ? model->informationModel()->templateId() : "");
     const QVector<TextParagraphType> types = {
-        TextParagraphType::SceneHeading,
-        TextParagraphType::SceneCharacters,
-        TextParagraphType::BeatHeading,
-        TextParagraphType::SequenceHeading,
+        TextParagraphType::SceneHeading, TextParagraphType::SceneCharacters,
+        TextParagraphType::BeatHeading,  TextParagraphType::SequenceHeading,
+        TextParagraphType::ActHeading,
     };
     for (const auto type : types) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {
@@ -318,7 +317,11 @@ void ScreenplayTreatmentView::Implementation::updateToolBarCurrentParagraphTypeN
 
     currentParagraphType = paragraphType;
 
-    if (paragraphType == BusinessLayer::TextParagraphType::SequenceFooter) {
+    if (paragraphType == BusinessLayer::TextParagraphType::ActFooter) {
+        paragraphType = BusinessLayer::TextParagraphType::ActHeading;
+        toolbar->setParagraphTypesEnabled(false);
+        fastFormatWidget->setEnabled(false);
+    } else if (paragraphType == BusinessLayer::TextParagraphType::SequenceFooter) {
         paragraphType = BusinessLayer::TextParagraphType::SequenceHeading;
         toolbar->setParagraphTypesEnabled(false);
         fastFormatWidget->setEnabled(false);

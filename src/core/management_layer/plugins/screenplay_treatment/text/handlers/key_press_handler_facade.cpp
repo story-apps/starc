@@ -1,6 +1,8 @@
 #include "key_press_handler_facade.h"
 
 #include "../screenplay_treatment_edit.h"
+#include "act_footer_handler.h"
+#include "act_heading_handler.h"
 #include "beat_heading_handler.h"
 #include "pre_handler.h"
 #include "prepare_handler.h"
@@ -33,6 +35,8 @@ public:
     QScopedPointer<BeatHeadingHandler> m_beatHeadingHandler;
     QScopedPointer<SequenceHeadingHandler> m_sequenceHeadingHandler;
     QScopedPointer<SequenceFooterHandler> m_sequenceFooterHandler;
+    QScopedPointer<ActHeadingHandler> m_actHeadingHandler;
+    QScopedPointer<ActFooterHandler> m_actFooterHandler;
 };
 
 KeyPressHandlerFacade::Implementation::Implementation(Ui::ScreenplayTreatmentEdit* _editor)
@@ -44,6 +48,8 @@ KeyPressHandlerFacade::Implementation::Implementation(Ui::ScreenplayTreatmentEdi
     , m_beatHeadingHandler(new BeatHeadingHandler(_editor))
     , m_sequenceHeadingHandler(new SequenceHeadingHandler(_editor))
     , m_sequenceFooterHandler(new SequenceFooterHandler(_editor))
+    , m_actHeadingHandler(new ActHeadingHandler(_editor))
+    , m_actFooterHandler(new ActFooterHandler(_editor))
 {
 }
 
@@ -138,6 +144,14 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
 
     case TextParagraphType::SequenceFooter: {
         return d->m_sequenceFooterHandler.data();
+    }
+
+    case TextParagraphType::ActHeading: {
+        return d->m_actHeadingHandler.data();
+    }
+
+    case TextParagraphType::ActFooter: {
+        return d->m_actFooterHandler.data();
     }
 
     default: {

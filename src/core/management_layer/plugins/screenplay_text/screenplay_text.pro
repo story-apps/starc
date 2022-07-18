@@ -34,6 +34,8 @@ HEADERS += \
     screenplay_text_manager.h \
     screenplay_text_view.h \
     text/handlers/abstract_key_handler.h \
+    text/handlers/act_footer_handler.h \
+    text/handlers/act_heading_handler.h \
     text/handlers/action_handler.h \
     text/handlers/character_handler.h \
     text/handlers/dialog_handler.h \
@@ -65,6 +67,8 @@ SOURCES += \
     screenplay_text_manager.cpp \
     screenplay_text_view.cpp \
     text/handlers/abstract_key_handler.cpp \
+    text/handlers/act_footer_handler.cpp \
+    text/handlers/act_heading_handler.cpp \
     text/handlers/action_handler.cpp \
     text/handlers/character_handler.cpp \
     text/handlers/dialog_handler.cpp \

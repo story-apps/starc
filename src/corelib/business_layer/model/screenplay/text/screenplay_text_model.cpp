@@ -2,8 +2,8 @@
 
 #include "screenplay_text_block_parser.h"
 #include "screenplay_text_model_beat_item.h"
-#include "screenplay_text_model_folder_item.h"
 #include "screenplay_text_model_scene_item.h"
+#include "screenplay_text_model_folder_item.h"
 #include "screenplay_text_model_text_item.h"
 
 #include <business_layer/model/characters/character_model.h>
@@ -167,7 +167,7 @@ void ScreenplayTextModel::Implementation::updateChildrenDuration(const TextModel
 
 
 ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
-    : TextModel(_parent, createFolderItem())
+    : TextModel(_parent, createFolderItem(TextFolderType::Sequence))
     , d(new Implementation(this))
 {
     auto updateCounters = [this](const QModelIndex& _index) {
@@ -183,15 +183,13 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
 
 ScreenplayTextModel::~ScreenplayTextModel() = default;
 
-TextModelFolderItem* ScreenplayTextModel::createFolderItem() const
+TextModelFolderItem* ScreenplayTextModel::createFolderItem(TextFolderType _type) const
 {
-    return new ScreenplayTextModelFolderItem(this);
+    return new ScreenplayTextModelFolderItem(this, _type);
 }
 
 TextModelGroupItem* ScreenplayTextModel::createGroupItem(TextGroupType _type) const
 {
-    Q_UNUSED(_type)
-
     switch (_type) {
     case TextGroupType::Scene: {
         return new ScreenplayTextModelSceneItem(this);

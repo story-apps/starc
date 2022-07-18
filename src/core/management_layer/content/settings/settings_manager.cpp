@@ -335,6 +335,7 @@ void SettingsManager::Implementation::loadShortcutsSettings()
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Shot));
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::InlineNote));
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::SequenceHeading));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::ActHeading));
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::UnformattedText));
     //
     // ... модель переходов между блоками, её заголовок и делегат

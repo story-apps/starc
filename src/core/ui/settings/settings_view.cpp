@@ -113,6 +113,7 @@ QStringListModel* buildScreenplayParagraphTypesModel(QObject* _parent,
         toDisplayString(TextParagraphType::Shot),
         toDisplayString(TextParagraphType::InlineNote),
         toDisplayString(TextParagraphType::SequenceHeading),
+        toDisplayString(TextParagraphType::ActHeading),
         toDisplayString(TextParagraphType::UnformattedText),
     };
 

@@ -27,11 +27,12 @@ public:
 // ****
 
 
-ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const ScreenplayTextModel* _model)
+ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const ScreenplayTextModel* _model,
+                                                             TextFolderType _type)
     : TextModelFolderItem(_model)
     , d(new Implementation)
 {
-    setFolderType(TextFolderType::Sequence);
+    setFolderType(_type);
 }
 
 ScreenplayTextModelFolderItem::~ScreenplayTextModelFolderItem() = default;
@@ -77,7 +78,8 @@ void ScreenplayTextModelFolderItem::handleChange()
 
         case TextModelItemType::Text: {
             auto childItem = static_cast<ScreenplayTextModelTextItem*>(child);
-            if (childItem->paragraphType() == TextParagraphType::SequenceHeading) {
+            if (childItem->paragraphType() == TextParagraphType::ActHeading
+                || childItem->paragraphType() == TextParagraphType::SequenceHeading) {
                 setHeading(TextHelper::smartToUpper(childItem->text()));
             }
             d->duration += childItem->duration();

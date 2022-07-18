@@ -402,7 +402,7 @@ void ScreenplayTreatmentEdit::setCurrentParagraphType(TextParagraphType _type)
     //
     // Если сменили на папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
     //
-    if (_type == TextParagraphType::SequenceHeading) {
+    if (_type == TextParagraphType::ActHeading || _type == TextParagraphType::SequenceHeading) {
         moveCursor(QTextCursor::PreviousBlock);
     }
     //
@@ -722,6 +722,7 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
     //
     while (TextBlockStyle::forBlock(topBlock) != TextParagraphType::SceneHeading
            && TextBlockStyle::forBlock(topBlock) != TextParagraphType::SequenceHeading
+           && TextBlockStyle::forBlock(topBlock) != TextParagraphType::ActHeading
            && topBlock != document()->firstBlock()) {
         topBlock = topBlock.previous();
     }
@@ -807,7 +808,8 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
             // Определим цвет сцены
             //
             if (blockType == TextParagraphType::SceneHeading
-                || blockType == TextParagraphType::SequenceHeading) {
+                || blockType == TextParagraphType::SequenceHeading
+                || blockType == TextParagraphType::ActHeading) {
                 lastSceneBlockBottom = cursorR.top();
                 lastSceneColor = d->document.itemColor(block);
             }
@@ -911,13 +913,15 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
                         int openedFolders = 0;
                         while (headerBlock.isValid()) {
                             const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
-                            if (headerBlockType == TextParagraphType::SequenceHeading) {
+                            if (headerBlockType == TextParagraphType::ActHeading
+                                || headerBlockType == TextParagraphType::SequenceHeading) {
                                 if (openedFolders > 0) {
                                     --openedFolders;
                                 } else {
                                     break;
                                 }
-                            } else if (headerBlockType == TextParagraphType::SequenceFooter) {
+                            } else if (headerBlockType == TextParagraphType::ActFooter
+                                       || headerBlockType == TextParagraphType::SequenceFooter) {
                                 ++openedFolders;
                             }
 
@@ -981,7 +985,8 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
                     //
                     // Прорисовка значков папки (можно использовать для закладок)
                     //
-                    if (blockType == TextParagraphType::SequenceHeading) {
+                    if (blockType == TextParagraphType::ActHeading
+                        || blockType == TextParagraphType::SequenceHeading) {
                         setPainterPen(palette().text().color());
                         painter.setFont(DesignSystem::font().iconsForEditors());
 

@@ -155,7 +155,7 @@ void AudioplayTextModel::Implementation::updateChildrenDuration(const TextModelI
 
 
 AudioplayTextModel::AudioplayTextModel(QObject* _parent)
-    : TextModel(_parent, createFolderItem())
+    : TextModel(_parent, createFolderItem(TextFolderType::Act))
     , d(new Implementation(this))
 {
     auto updateCounters = [this](const QModelIndex& _index) {
@@ -171,8 +171,10 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
 
 AudioplayTextModel::~AudioplayTextModel() = default;
 
-TextModelFolderItem* AudioplayTextModel::createFolderItem() const
+TextModelFolderItem* AudioplayTextModel::createFolderItem(TextFolderType _type) const
 {
+    Q_UNUSED(_type)
+
     return new AudioplayTextModelFolderItem(this);
 }
 
