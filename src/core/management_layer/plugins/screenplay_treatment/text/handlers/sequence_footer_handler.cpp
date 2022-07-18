@@ -69,12 +69,7 @@ void SequenceFooterHandler::handleEnter(QKeyEvent*)
                     //
                     // Вставить блок время и место перед папкой
                     //
-                    cursor.insertBlock();
-                    cursor.movePosition(QTextCursor::PreviousCharacter);
-                    cursor.setBlockFormat(QTextBlockFormat());
-                    editor()->setTextCursor(cursor);
-                    editor()->setCurrentParagraphType(TextParagraphType::SceneHeading);
-                    editor()->moveCursor(QTextCursor::NextCharacter);
+                    editor()->addParagraph(TextParagraphType::SceneHeading);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 

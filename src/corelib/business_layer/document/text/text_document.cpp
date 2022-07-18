@@ -1401,7 +1401,7 @@ void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
                                                    : TextParagraphType::SequenceFooter);
 
         //
-        // Вставляем закрывающий блок
+        // Вставляем закрывающий блок после заголовка
         //
         cursor.insertBlock();
         cursor.setBlockCharFormat(footerStyle.charFormat());

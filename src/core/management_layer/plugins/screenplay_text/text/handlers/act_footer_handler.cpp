@@ -57,38 +57,29 @@ void ActFooterHandler::handleEnter(QKeyEvent*)
                 //! Текст пуст
 
                 //
-                // Вставить блок время и место
+                // Вставить блок
                 //
-                editor()->addParagraph(TextParagraphType::SceneHeading);
+                editor()->addParagraph(TextParagraphType::ActHeading);
+                editor()->moveCursor(QTextCursor::PreviousCharacter);
+                editor()->ensureCursorVisible(editor()->textCursor());
             } else {
                 //! Текст не пуст
 
                 if (cursorBackwardText.isEmpty()) {
                     //! В начале блока
 
-                    //
-                    // Вставить блок время и место перед папкой
-                    //
-                    cursor.insertBlock();
-                    cursor.movePosition(QTextCursor::PreviousCharacter);
-                    cursor.setBlockFormat(QTextBlockFormat());
-                    editor()->setTextCursor(cursor);
-                    editor()->setCurrentParagraphType(TextParagraphType::SceneHeading);
-                    editor()->moveCursor(QTextCursor::NextCharacter);
+                    editor()->addParagraph(TextParagraphType::SceneHeading);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
-                    //
-                    // Вставить блок время и место
-                    //
-                    editor()->addParagraph(TextParagraphType::SceneHeading);
+                    editor()->addParagraph(TextParagraphType::ActHeading);
+                    editor()->moveCursor(QTextCursor::PreviousCharacter);
+                    editor()->ensureCursorVisible(editor()->textCursor());
                 } else {
                     //! Внутри блока
 
-                    //
-                    // Вставить блок время и место
-                    //
-                    editor()->addParagraph(TextParagraphType::SceneHeading);
+                    editor()->addParagraph(TextParagraphType::ActHeading);
+                    editor()->ensureCursorVisible(editor()->textCursor());
                 }
             }
         }
