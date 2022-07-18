@@ -2,8 +2,8 @@
 
 #include "screenplay_text_block_parser.h"
 #include "screenplay_text_model_beat_item.h"
-#include "screenplay_text_model_scene_item.h"
 #include "screenplay_text_model_folder_item.h"
+#include "screenplay_text_model_scene_item.h"
 #include "screenplay_text_model_text_item.h"
 
 #include <business_layer/model/characters/character_model.h>

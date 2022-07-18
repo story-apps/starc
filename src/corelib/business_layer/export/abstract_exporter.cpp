@@ -233,9 +233,7 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
             // Если не нужно печатать папки, то удаляем их
             //
             if (!_exportOptions.includeFolders) {
-                if (blockType == TextParagraphType::ActHeading
-                    || blockType == TextParagraphType::ActFooter
-                    || blockType == TextParagraphType::SequenceHeading
+                if (blockType == TextParagraphType::SequenceHeading
                     || blockType == TextParagraphType::SequenceFooter) {
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                     if (cursor.hasSelection()) {
@@ -245,11 +243,12 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
                     continue;
                 }
             }
+
             //
-            // В противном случае подставляем текст для пустых завершающих блоков
+            // Подставляем текст для пустых завершающих блоков
             //
-            else if (blockType == TextParagraphType::ActFooter
-                     || blockType == TextParagraphType::SequenceFooter) {
+            if (blockType == TextParagraphType::ActFooter
+                || blockType == TextParagraphType::SequenceFooter) {
                 if (cursor.block().text().isEmpty()) {
                     auto headerBlock = cursor.block().previous();
                     int openedFolders = 0;
@@ -301,9 +300,7 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
             //
             // Переходим к следующему блоку
             //
-            cursor.movePosition(QTextCursor::EndOfBlock);
-            cursor.movePosition(QTextCursor::NextBlock);
-        } while (!cursor.atEnd());
+        } while (cursor.movePosition(QTextCursor::NextBlock));
     }
     //
     // ... а если не нужен, удаляем его
