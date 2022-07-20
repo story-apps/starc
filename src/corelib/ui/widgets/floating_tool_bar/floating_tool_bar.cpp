@@ -201,8 +201,6 @@ FloatingToolBar::FloatingToolBar(QWidget* _parent)
             [this](const QVariant& _value) { setOpacity(_value.toDouble()); });
     connect(&d->shadowBlurRadiusAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
-
-    designSystemChangeEvent(nullptr);
 }
 
 FloatingToolBar::~FloatingToolBar() = default;
@@ -216,6 +214,11 @@ void FloatingToolBar::setOrientation(Qt::Orientation _orientation)
     d->orientation = _orientation;
     updateGeometry();
     update();
+}
+
+void FloatingToolBar::setStartOpacity(qreal _opacity)
+{
+    d->opacityAnimation.setStartValue(_opacity);
 }
 
 void FloatingToolBar::setActionCustomWidth(QAction* _action, int _width)

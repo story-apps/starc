@@ -109,6 +109,10 @@ void Widget::setOpacity(qreal _opacity)
     }
 
     d->opacity = _opacity;
+    const auto children = findChildren<Widget*>();
+    for (auto child : children) {
+        child->setOpacity(d->opacity);
+    }
     update();
 }
 

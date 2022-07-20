@@ -200,6 +200,7 @@ void Button::paintEvent(QPaintEvent* _event)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
+    painter.setOpacity(opacity());
 
     //
     // Заливаем фон
@@ -279,7 +280,7 @@ void Button::paintEvent(QPaintEvent* _event)
         painter.drawEllipse(d->decorationCenterPosition,
                             d->decorationRadiusAnimation.currentValue().toReal(),
                             d->decorationRadiusAnimation.currentValue().toReal());
-        painter.setOpacity(1.0);
+        painter.setOpacity(opacity());
         painter.setClipRect(QRect(), Qt::NoClip);
     }
 
