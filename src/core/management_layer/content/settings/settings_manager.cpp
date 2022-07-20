@@ -150,9 +150,9 @@ void SettingsManager::Implementation::loadScreenplaySettings()
     BusinessLayer::TemplatesFacade::setDefaultScreenplayTemplate(defaultTemplate);
     view->setScreenplayEditorShowSceneNumber(
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool(),
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey)
-            .toBool(),
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey)
+            .toBool(),
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey)
             .toBool());
     view->setScreenplayEditorShowDialogueNumber(
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
