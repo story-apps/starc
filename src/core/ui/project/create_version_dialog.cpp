@@ -98,6 +98,7 @@ void CreateVersionDialog::edit(const QString& _name, const QColor& _color, bool 
     updateTranslations();
 
     d->versionName->setText(_name);
+    d->versionName->setTrailingIconColor(_color);
     d->versionColorPopup->setSelectedColor(_color);
     d->allowEditVersion->setChecked(!_readOnly);
     d->allowEditVersion->setEnabled(false);
