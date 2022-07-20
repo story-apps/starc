@@ -158,12 +158,12 @@ TitlePageEditToolbar::~TitlePageEditToolbar() = default;
 
 void TitlePageEditToolbar::setReadOnly(bool _readOnly)
 {
-    const auto enabled = !_readOnly;
-    d->undoAction->setEnabled(enabled);
-    d->redoAction->setEnabled(enabled);
-    d->textFontAction->setEnabled(enabled);
-    d->textFontSizeAction->setEnabled(enabled);
-    d->restoreTitlePageAction->setEnabled(enabled);
+    //    const auto enabled = !_readOnly;
+    //    d->undoAction->setEnabled(enabled);
+    //    d->redoAction->setEnabled(enabled);
+    //    d->textFontAction->setEnabled(enabled);
+    //    d->textFontSizeAction->setEnabled(enabled);
+    //    d->restoreTitlePageAction->setEnabled(enabled);
 }
 
 void TitlePageEditToolbar::setCurrentFont(const QFont& _font)
@@ -224,6 +224,8 @@ void TitlePageEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _eve
 
     d->popup->setBackgroundColor(Ui::DesignSystem::color().background());
     d->popup->setTextColor(Ui::DesignSystem::color().onBackground());
+
+    resize(sizeHint());
 }
 
 } // namespace Ui

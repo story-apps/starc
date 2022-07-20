@@ -82,7 +82,6 @@ TitlePageView::Implementation::Implementation(TitlePageView* _q)
 
 void TitlePageView::Implementation::updateToolbarUi()
 {
-    toolbar->resize(toolbar->sizeHint());
     updateToolbarPositon();
     toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
     toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
