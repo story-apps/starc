@@ -118,11 +118,13 @@ void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structu
             else if (child.tagName() == kVersionKey) {
                 const auto versionNode = child.toElement();
                 const auto visible = true;
+                const auto readOnly = versionNode.hasAttribute(kReadOnlyAttribute)
+                    && versionNode.attribute(kReadOnlyAttribute) == "true";
                 auto version = new StructureModelItem(
                     QUuid::fromString(versionNode.attribute(kUuidAttribute)), item->type(),
                     TextHelper::fromHtmlEscaped(versionNode.attribute(kNameAttribute)),
                     ColorHelper::fromString(versionNode.attribute(kColorAttribute)), visible,
-                    versionNode.attribute(kReadOnlyAttribute) == "true");
+                    readOnly);
                 item->addVersion(version);
             }
             child = child.nextSiblingElement();
@@ -158,7 +160,7 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
                    .arg(kVersionKey, kUuidAttribute, _item->uuid().toString(), kNameAttribute,
                         TextHelper::toHtmlEscaped(_item->name()), kColorAttribute,
                         ColorHelper::toString(_item->color()), kReadOnlyAttribute,
-                        (_item->isVisible() ? "true" : "false"))
+                        (_item->isReadOnly() ? "true" : "false"))
                    .toUtf8();
     };
     std::function<void(StructureModelItem*)> writeItemXml;
