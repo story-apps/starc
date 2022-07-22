@@ -122,7 +122,7 @@ void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structu
                     QUuid::fromString(versionNode.attribute(kUuidAttribute)), item->type(),
                     TextHelper::fromHtmlEscaped(versionNode.attribute(kNameAttribute)),
                     ColorHelper::fromString(versionNode.attribute(kColorAttribute)), visible,
-                    _node.attribute(kReadOnlyAttribute) == "true");
+                    versionNode.attribute(kReadOnlyAttribute) == "true");
                 item->addVersion(version);
             }
             child = child.nextSiblingElement();
