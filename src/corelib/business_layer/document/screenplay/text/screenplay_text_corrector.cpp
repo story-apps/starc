@@ -105,6 +105,11 @@ public:
      */
     void correctPageBreaks(int _position = -1);
 
+    /**
+     * @brief Очистить все корректировки персонажей
+     */
+    void clearPageBreaksCorrections();
+
     //
     // Функции работающие в рамках текущей коррекции
     //
@@ -393,9 +398,6 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
 
 void ScreenplayTextCorrector::Implementation::clearCharacterNamesCorrections()
 {
-    //
-    // Начинаем работу с документом
-    //
     TextCursor cursor(document());
     cursor.beginEditBlock();
 
@@ -405,7 +407,7 @@ void ScreenplayTextCorrector::Implementation::clearCharacterNamesCorrections()
         if (blockType == TextParagraphType::Character) {
             auto characterFormat = block.blockFormat();
             if (characterFormat.boolProperty(TextBlockStyle::PropertyIsCharacterContinued)) {
-                characterFormat.setProperty(TextBlockStyle::PropertyIsCharacterContinued, false);
+                characterFormat.clearProperty(TextBlockStyle::PropertyIsCharacterContinued);
                 cursor.setPosition(block.position());
                 cursor.setBlockFormat(characterFormat);
             }
@@ -1528,6 +1530,59 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     cursor.endEditBlock();
 }
 
+void ScreenplayTextCorrector::Implementation::clearPageBreaksCorrections()
+{
+    TextCursor cursor(document());
+    cursor.beginEditBlock();
+
+    auto block = document()->begin();
+    do {
+        auto blockFormat = block.blockFormat();
+
+        //
+        // Разрыв склеиваем
+        //
+        if (blockFormat.boolProperty(TextBlockStyle::PropertyIsBreakCorrectionStart)) {
+            cursor.setPosition(block.position());
+
+            cursor.movePosition(TextCursor::EndOfBlock);
+            do {
+                cursor.movePosition(TextCursor::NextBlock, TextCursor::KeepAnchor);
+            } while (cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection));
+            if (cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
+                cursor.insertText(" ");
+            }
+
+            QTextBlockFormat cleanFormat = blockFormat;
+            cleanFormat.clearProperty(PageTextEdit::PropertyDontShowCursor);
+            cleanFormat.clearProperty(TextBlockStyle::PropertyIsBreakCorrectionStart);
+            cleanFormat.clearProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd);
+            cursor.setBlockFormat(cleanFormat);
+
+            block = cursor.block();
+            continue;
+        }
+        //
+        // Корректировки удаляем
+        //
+        else if (blockFormat.boolProperty(TextBlockStyle::PropertyIsCorrection)
+                 || blockFormat.boolProperty(TextBlockStyle::PropertyIsCorrectionContinued)
+                 || blockFormat.boolProperty(TextBlockStyle::PropertyIsCorrectionCharacter)) {
+            cursor.setPosition(block.position());
+            cursor.movePosition(TextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            cursor.movePosition(TextCursor::NextCharacter, QTextCursor::KeepAnchor);
+            cursor.removeSelectedText();
+
+            block = cursor.block();
+            continue;
+        }
+
+        block = block.next();
+    } while (block.isValid());
+
+    cursor.endEditBlock();
+}
+
 void ScreenplayTextCorrector::Implementation::moveCurrentBlockWithThreePreviousToNextPage(
     const QTextBlock& _prePrePreviousBlock, const QTextBlock& _prePreviousBlock,
     const QTextBlock& _previousBlock, qreal _pageHeight, qreal _pageWidth, TextCursor& _cursor,
@@ -1900,7 +1955,13 @@ void ScreenplayTextCorrector::setCorrectionOptions(const QStringList& _options)
     }
 
     d->needToCorrectCharactersNames = needToCorrectCharactersNames;
+    if (!d->needToCorrectCharactersNames) {
+        d->clearCharacterNamesCorrections();
+    }
     d->needToCorrectPageBreaks = needToCorrectPageBreaks;
+    if (!d->needToCorrectPageBreaks) {
+        d->clearPageBreaksCorrections();
+    }
 
     clear();
     correct();
