@@ -101,7 +101,6 @@ void CreateVersionDialog::edit(const QString& _name, const QColor& _color, bool 
     d->versionName->setTrailingIconColor(_color);
     d->versionColorPopup->setSelectedColor(_color);
     d->allowEditVersion->setChecked(!_readOnly);
-    d->allowEditVersion->setEnabled(false);
 }
 
 CreateVersionDialog::~CreateVersionDialog() = default;

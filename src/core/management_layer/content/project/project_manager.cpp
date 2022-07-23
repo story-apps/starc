@@ -613,10 +613,12 @@ void ProjectManager::Implementation::editVersion(const QModelIndex& _itemIndex, 
     const auto version = item->versions().at(_versionIndex);
     dialog->edit(version->name(), version->color(), version->isReadOnly());
     connect(dialog, &Ui::CreateVersionDialog::savePressed, view.active,
-            [this, item, _versionIndex, dialog](const QString& _name, const QColor& _color) {
+            [this, item, _versionIndex, dialog](const QString& _name, const QColor& _color,
+                                                bool _readOnly) {
                 dialog->hideDialog();
 
-                projectStructureModel->updateItemVersion(item, _versionIndex, _name, _color);
+                projectStructureModel->updateItemVersion(item, _versionIndex, _name, _color,
+                                                         _readOnly);
                 view.active->setDocumentVersions(item->versions());
             });
     connect(dialog, &Ui::CreateVersionDialog::disappeared, dialog,

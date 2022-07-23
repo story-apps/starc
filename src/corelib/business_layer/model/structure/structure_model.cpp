@@ -1006,7 +1006,7 @@ void StructureModel::addItemVersion(StructureModelItem* _item, const QString& _n
 }
 
 void StructureModel::updateItemVersion(StructureModelItem* _item, int _versionIndex,
-                                       const QString& _name, const QColor& _color)
+                                       const QString& _name, const QColor& _color, bool _readOnly)
 {
     if (_item == nullptr) {
         return;
@@ -1016,6 +1016,7 @@ void StructureModel::updateItemVersion(StructureModelItem* _item, int _versionIn
     auto version = _item->versions().at(_versionIndex);
     version->setName(_name);
     version->setColor(_color);
+    version->setReadOnly(_readOnly);
     emit dataChanged(itemIndex, itemIndex);
 }
 

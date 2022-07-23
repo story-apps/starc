@@ -140,7 +140,7 @@ public:
     void addItemVersion(StructureModelItem* _item, const QString& _name, const QColor& _color,
                         bool _readOnly, const QByteArray& _content);
     void updateItemVersion(StructureModelItem* _item, int _versionIndex, const QString& _name,
-                           const QColor& _color);
+                           const QColor& _color, bool _readOnly);
     void removeItemVersion(StructureModelItem* _item, int _versionIndex);
 
     /**
