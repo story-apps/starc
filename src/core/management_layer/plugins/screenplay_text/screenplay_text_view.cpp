@@ -842,11 +842,14 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)) {
+            DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)) {
         d->textEdit->setCorrectionOptions(
             settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)
                 .toBool(),
-            true);
+            settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)
+                .toBool());
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(

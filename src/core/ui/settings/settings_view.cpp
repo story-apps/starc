@@ -275,6 +275,7 @@ public:
     CheckBox* screenplayEditorShowSceneNumberOnRight = nullptr;
     CheckBox* screenplayEditorShowDialogueNumber = nullptr;
     CheckBox* screenplayEditorContinueDialogue = nullptr;
+    CheckBox* screenplayEditorCorrectTextOnPageBreaks = nullptr;
     CheckBox* screenplayEditorUseCharactersFromText = nullptr;
     CheckBox* screenplayEditorShowCharacterSuggestionsInEmptyBlock = nullptr;
     //
@@ -490,6 +491,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayEditorShowSceneNumberOnRight(new CheckBox(screenplayCard))
     , screenplayEditorShowDialogueNumber(new CheckBox(screenplayCard))
     , screenplayEditorContinueDialogue(new CheckBox(screenplayCard))
+    , screenplayEditorCorrectTextOnPageBreaks(new CheckBox(screenplayCard))
     , screenplayEditorUseCharactersFromText(new CheckBox(screenplayCard))
     , screenplayEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(screenplayCard))
     , screenplayNavigatorTitle(new H6Label(screenplayCard))
@@ -888,6 +890,7 @@ void SettingsView::Implementation::initScreenplayCard()
     }
     screenplayCardLayout->addWidget(screenplayEditorShowDialogueNumber, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorContinueDialogue, itemIndex++, 0);
+    screenplayCardLayout->addWidget(screenplayEditorCorrectTextOnPageBreaks, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorUseCharactersFromText, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorShowCharacterSuggestionsInEmptyBlock,
                                     itemIndex++, 0);
@@ -1450,6 +1453,7 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->screenplayEditorShowSceneNumberOnRight,
                  d->screenplayEditorShowDialogueNumber,
                  d->screenplayEditorContinueDialogue,
+                 d->screenplayEditorCorrectTextOnPageBreaks,
                  d->screenplayEditorUseCharactersFromText,
                  d->screenplayEditorShowCharacterSuggestionsInEmptyBlock,
                  d->screenplayNavigatorTitle,
@@ -1584,6 +1588,8 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::screenplayEditorShowDialogueNumberChanged);
     connect(d->screenplayEditorContinueDialogue, &CheckBox::checkedChanged, this,
             &SettingsView::screenplayEditorContinueDialogueChanged);
+    connect(d->screenplayEditorCorrectTextOnPageBreaks, &CheckBox::checkedChanged, this,
+            &SettingsView::screenplayEditorCorrectTextOnPageBreaksChanged);
     connect(d->screenplayEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
             &SettingsView::screenplayEditorUseCharactersFromTextChanged);
     connect(d->screenplayEditorShowCharacterSuggestionsInEmptyBlock, &CheckBox::checkedChanged,
@@ -2436,6 +2442,11 @@ void SettingsView::setScreenplayEditorContinueDialogue(bool _continue)
     d->screenplayEditorContinueDialogue->setChecked(_continue);
 }
 
+void SettingsView::setScreenplayEditorCorrectTextOnPageBreaks(bool _correct)
+{
+    d->screenplayEditorCorrectTextOnPageBreaks->setChecked(_correct);
+}
+
 void SettingsView::setScreenplayEditorUseCharactersFromText(bool _use)
 {
     d->screenplayEditorUseCharactersFromText->setChecked(_use);
@@ -2939,6 +2950,8 @@ void SettingsView::updateTranslations()
     d->screenplayEditorShowDialogueNumber->setText(tr("Show dialogue number"));
     d->screenplayEditorContinueDialogue->setText(
         tr("Automatically continue same speaker's dialogue"));
+    d->screenplayEditorCorrectTextOnPageBreaks->setText(
+        tr("Automatically correct screenplay text on page breaks"));
     d->screenplayEditorUseCharactersFromText->setText(
         tr("Show hints for major & related to a current story characters only"));
     d->screenplayEditorShowCharacterSuggestionsInEmptyBlock->setText(
@@ -3194,6 +3207,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayEditorShowSceneNumberOnRight,
              d->screenplayEditorShowDialogueNumber,
              d->screenplayEditorContinueDialogue,
+             d->screenplayEditorCorrectTextOnPageBreaks,
              d->screenplayEditorUseCharactersFromText,
              d->screenplayEditorShowCharacterSuggestionsInEmptyBlock,
              d->screenplayNavigatorShowBeats,

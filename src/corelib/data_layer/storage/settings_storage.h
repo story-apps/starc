@@ -179,6 +179,8 @@ const QString kComponentsScreenplayEditorShowDialogueNumbersKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-dialogue-number");
 const QString kComponentsScreenplayEditorContinueDialogueKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/continue-dialogue");
+const QString kComponentsScreenplayEditorCorrectTextOnPageBreaksKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/correct-text-on-page-breaks");
 const QString kComponentsScreenplayEditorUseCharactersFromTextKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/use-characters-from-text");
 const QString kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey

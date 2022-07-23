@@ -75,6 +75,7 @@ public:
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorContinueDialogue(bool _continue);
+    void setScreenplayEditorCorrectTextOnPageBreaks(bool _correct);
     void setScreenplayEditorUseCharactersFromText(bool _use);
     void setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
@@ -178,6 +179,7 @@ signals:
     void screenplayEditorShowSceneNumberChanged(bool _show, bool _atLeft, bool _atRight);
     void screenplayEditorShowDialogueNumberChanged(bool _show);
     void screenplayEditorContinueDialogueChanged(bool _continue);
+    void screenplayEditorCorrectTextOnPageBreaksChanged(bool _correct);
     void screenplayEditorUseCharactersFromTextChanged(bool _use);
     void screenplayEditorShowCharacterSuggestionsInEmptyBlockChanged(bool _show);
     //

@@ -159,6 +159,9 @@ void SettingsManager::Implementation::loadScreenplaySettings()
             .toBool());
     view->setScreenplayEditorContinueDialogue(
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey).toBool());
+    view->setScreenplayEditorCorrectTextOnPageBreaks(
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)
+            .toBool());
     view->setScreenplayEditorUseCharactersFromText(
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorUseCharactersFromTextKey)
             .toBool());
@@ -504,6 +507,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setScreenplayEditorShowDialogueNumber);
     connect(d->view, &Ui::SettingsView::screenplayEditorContinueDialogueChanged, this,
             &SettingsManager::setScreenplayEditorContinueDialogue);
+    connect(d->view, &Ui::SettingsView::screenplayEditorCorrectTextOnPageBreaksChanged, this,
+            &SettingsManager::setScreenplayEditorCorrectTextOnPageBreaks);
     connect(d->view, &Ui::SettingsView::screenplayEditorUseCharactersFromTextChanged, this,
             &SettingsManager::setScreenplayEditorUseCharactersFromText);
     connect(d->view, &Ui::SettingsView::screenplayEditorShowCharacterSuggestionsInEmptyBlockChanged,
@@ -1286,6 +1291,14 @@ void SettingsManager::setScreenplayEditorContinueDialogue(bool _continue)
     setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey, _continue);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey });
+}
+
+void SettingsManager::setScreenplayEditorCorrectTextOnPageBreaks(bool _correct)
+{
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey,
+                     _correct);
+    emit screenplayEditorChanged(
+        { DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey });
 }
 
 void SettingsManager::setScreenplayEditorUseCharactersFromText(bool _use)

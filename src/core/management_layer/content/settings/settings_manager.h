@@ -123,6 +123,7 @@ private:
     void setScreenplayEditorShowSceneNumber(bool _show, bool _atLeft, bool _atRight);
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorContinueDialogue(bool _continue);
+    void setScreenplayEditorCorrectTextOnPageBreaks(bool _correct);
     void setScreenplayEditorUseCharactersFromText(bool _use);
     void setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //

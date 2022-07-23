@@ -503,6 +503,7 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersOnLeftKey, true);
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersOnRightKey, true);
         defaultValues.insert(kComponentsScreenplayEditorContinueDialogueKey, true);
+        defaultValues.insert(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey, true);
         defaultValues.insert(kComponentsScreenplayEditorUseCharactersFromTextKey, false);
         defaultValues.insert(kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey,
                              true);
