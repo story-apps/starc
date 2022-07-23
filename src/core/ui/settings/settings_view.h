@@ -56,6 +56,7 @@ public:
     void setApplicationHighlightCurrentLine(bool _highlight);
     void setApplicationFocusCurrentParagraph(bool _focus);
     void setApplicationUseTypewriterScrolling(bool _use);
+    void setApplicationReplaceThreeDotsWithEllipsis(bool _replace);
 
     //
     // Задание параметров редактора текста
@@ -160,6 +161,7 @@ signals:
     void applicationHighlightCurentLineChanged(bool _highlight);
     void applicationFocusCurrentParagraphChanged(bool _focus);
     void applicationUseTypewriterScrollingChanged(bool _use);
+    void applicationReplaceThreeDotsWithEllipsisChanged(bool _replace);
 
     //
     // Уведомление об изменении параметров редактора текста

@@ -15,13 +15,16 @@ public:
      * @brief Необходимо ли поднимать регистр первой буквы в предложении
      */
     void setCapitalizeWords(bool _capitalize);
-    bool capitalizeWords() const;
 
     /**
      * @brief Необходимо ли корректировать проблему ДВойных ЗАглавных
      */
     void setCorrectDoubleCapitals(bool _correct);
-    bool correctDoubleCapitals() const;
+
+    /**
+     * @brief Необходимо ли заменять три точки на многоточие
+     */
+    void setReplaceThreeDots(bool _replace);
 
     /**
      * @brief Настроить форматирование выделенного текста

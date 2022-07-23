@@ -787,6 +787,12 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->textEdit->setUseTypewriterScrolling(
             settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
     }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey)) {
+        d->textEdit->setReplaceThreeDots(
+            settingsValue(DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey).toBool());
+    }
 }
 
 void ComicBookTextView::loadViewSettings()

@@ -194,19 +194,14 @@ void BaseTextEdit::setCapitalizeWords(bool _capitalize)
     d->capitalizeWords = _capitalize;
 }
 
-bool BaseTextEdit::capitalizeWords() const
-{
-    return d->capitalizeWords;
-}
-
 void BaseTextEdit::setCorrectDoubleCapitals(bool _correct)
 {
     d->correctDoubleCapitals = _correct;
 }
 
-bool BaseTextEdit::correctDoubleCapitals() const
+void BaseTextEdit::setReplaceThreeDots(bool _replace)
 {
-    return d->correctDoubleCapitals;
+    d->replaceThreeDots = _replace;
 }
 
 void BaseTextEdit::setTextBold(bool _bold)

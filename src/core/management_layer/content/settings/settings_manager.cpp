@@ -115,6 +115,8 @@ void SettingsManager::Implementation::loadApplicationSettings()
         settingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey).toBool());
     view->setApplicationUseTypewriterScrolling(
         settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
+    view->setApplicationReplaceThreeDotsWithEllipsis(
+        settingsValue(DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey).toBool());
 }
 
 void SettingsManager::Implementation::loadComponentsSettings()
@@ -482,6 +484,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setApplicationFocusCurrentParagraph);
     connect(d->view, &Ui::SettingsView::applicationUseTypewriterScrollingChanged, this,
             &SettingsManager::setApplicationUseTypewriterScrolling);
+    connect(d->view, &Ui::SettingsView::applicationReplaceThreeDotsWithEllipsisChanged, this,
+            &SettingsManager::setApplicationReplaceThreeDotsWithEllipsis);
     //
     // ... простой редактор текста
     //
@@ -1231,6 +1235,16 @@ void SettingsManager::setApplicationUseTypewriterScrolling(bool _use)
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
+}
+
+void SettingsManager::setApplicationReplaceThreeDotsWithEllipsis(bool _replace)
+{
+    setSettingsValue(DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey, _replace);
+    emit simpleTextEditorChanged({ DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey });
+    emit screenplayEditorChanged({ DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey });
+    emit comicBookEditorChanged({ DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey });
+    emit audioplayEditorChanged({ DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey });
+    emit stageplayEditorChanged({ DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey });
 }
 
 void SettingsManager::setSimpleTextAvailable(bool _available)

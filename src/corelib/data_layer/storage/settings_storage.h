@@ -74,6 +74,9 @@ const QString kApplicationFocusCurrentParagraphKey
 // включён ли режим печатной машинки для текстовых редакторов
 const QString kApplicationUseTypewriterScrollingKey
     = kApplicationGroupKey + "/use-typewriter-scrolling";
+// активна ли автозамена трёх точек на символ многоточия
+const QString kApplicationReplaceThreeDotsWithEllipsisKey
+    = kApplicationGroupKey + "/replace-three-dots-with-ellipsis";
 // список недавних проектов
 const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
 

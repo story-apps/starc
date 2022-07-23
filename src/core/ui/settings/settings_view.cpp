@@ -225,6 +225,8 @@ public:
     CheckBox* highlightCurrentLine = nullptr;
     CheckBox* focusCurrentParagraph = nullptr;
     CheckBox* useTypewriterScrolling = nullptr;
+    Subtitle1Label* applicationTextEditingSubtitle = nullptr;
+    CheckBox* replaceThreeDotsWithEllipsis = nullptr;
     //
     int applicationCardBottomSpacerIndex = 0;
 
@@ -461,6 +463,8 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , highlightCurrentLine(new CheckBox(applicationCard))
     , focusCurrentParagraph(new CheckBox(applicationCard))
     , useTypewriterScrolling(new CheckBox(applicationCard))
+    , applicationTextEditingSubtitle(new Subtitle1Label(applicationCard))
+    , replaceThreeDotsWithEllipsis(new CheckBox(applicationCard))
     //
     , componentsTitle(new H5Label(content))
     //
@@ -721,6 +725,8 @@ void SettingsView::Implementation::initApplicationCard()
     applicationCardLayout->addWidget(useTypewriterScrolling, itemIndex++, 0);
     applicationCardLayout->addWidget(focusCurrentParagraph, itemIndex++, 0);
     applicationCardLayout->addWidget(highlightCurrentLine, itemIndex++, 0);
+    applicationCardLayout->addWidget(applicationTextEditingSubtitle, itemIndex++, 0);
+    applicationCardLayout->addWidget(replaceThreeDotsWithEllipsis, itemIndex++, 0);
 
     applicationCardBottomSpacerIndex = itemIndex;
     applicationCard->setLayoutReimpl(applicationCardLayout);
@@ -1323,6 +1329,8 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::applicationFocusCurrentParagraphChanged);
     connect(d->useTypewriterScrolling, &CheckBox::checkedChanged, this,
             &SettingsView::applicationUseTypewriterScrollingChanged);
+    connect(d->replaceThreeDotsWithEllipsis, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationReplaceThreeDotsWithEllipsisChanged);
 
     //
     // Компоненты
@@ -2371,6 +2379,11 @@ void SettingsView::setApplicationUseTypewriterScrolling(bool _use)
     d->useTypewriterScrolling->setChecked(_use);
 }
 
+void SettingsView::setApplicationReplaceThreeDotsWithEllipsis(bool _replace)
+{
+    d->replaceThreeDotsWithEllipsis->setChecked(_replace);
+}
+
 void SettingsView::setSimpleTextAvailable(bool _available)
 {
     d->simpleTextAvailable->setChecked(_available);
@@ -2919,6 +2932,8 @@ void SettingsView::updateTranslations()
     d->focusCurrentParagraph->setText(tr("Focus current paragraph"));
     d->useTypewriterScrolling->setText(
         tr("Use typewriter scrolling (keeps line with the cursor on the screen center)"));
+    d->applicationTextEditingSubtitle->setText(tr("Automatic text corrections"));
+    d->replaceThreeDotsWithEllipsis->setText(tr("Replace three single dots with ellipsis"));
 
     d->componentsTitle->setText(tr("Components"));
     //
@@ -3109,6 +3124,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->applicationUserInterfaceTitle,
              d->applicationSaveAndBackupTitle,
              d->applicationTextEditingTitle,
+             d->applicationTextEditingSubtitle,
              d->simpleTextTitle,
              d->simpleTextEditorTitle,
              d->simpleTextNavigatorTitle,
@@ -3199,6 +3215,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->highlightCurrentLine,
              d->focusCurrentParagraph,
              d->useTypewriterScrolling,
+             d->replaceThreeDotsWithEllipsis,
              //
              d->simpleTextNavigatorShowSceneText,
              //
