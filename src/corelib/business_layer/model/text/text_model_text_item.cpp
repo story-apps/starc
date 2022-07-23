@@ -5,6 +5,7 @@
 
 #include <business_layer/templates/templates_facade.h>
 #include <business_layer/templates/text_template.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -482,6 +483,7 @@ QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const
     }
     if (backgroundColor.isValid()) {
         format.setBackground(backgroundColor);
+        format.setForeground(ColorHelper::contrasted(backgroundColor));
     }
     format.setProperty(TextBlockStyle::PropertyIsDone, isDone);
     QStringList authors, dates, comments, isEdited;
