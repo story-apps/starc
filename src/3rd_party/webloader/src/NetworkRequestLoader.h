@@ -65,7 +65,7 @@ public:
      * @brief Загрузить ссылку асинхронно, соединив возврат результата с функцией класса
      */
     template<typename Func>
-    static void loadAsync(QUrl _urlToLoad, QObject* _context = nullptr, Func _slot = nullptr)
+    static void loadAsync(QUrl _urlToLoad, QObject* _context, Func _slot)
     {
         NetworkRequest* request = new NetworkRequest;
         QObject::connect(request,
@@ -80,7 +80,7 @@ public:
      * @brief Загрузить ссылку асинхронно, соединив возврат результата с функцией класса
      */
     template<typename Func>
-    static void loadAsync(QString _urlToLoad, QObject* _context = nullptr, Func _slot = nullptr)
+    static void loadAsync(QString _urlToLoad, QObject* _context, Func _slot)
     {
         loadAsync(QUrl(_urlToLoad), _context, _slot);
     }

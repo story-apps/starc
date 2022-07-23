@@ -88,6 +88,11 @@ signals:
     void descriptionChanged(const QString& _description);
 
     /**
+     * @brief Пользователь подписался/отписался от рассылки
+     */
+    void newsletterSubscriptionChanged(bool _subscribed);
+
+    /**
      * @brief Пользователь изменил аватарку
      */
     void avatarChanged(const QPixmap& avatar);

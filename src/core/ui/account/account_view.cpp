@@ -8,6 +8,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/card/card.h>
+#include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <ui/widgets/image/image_card.h>
 #include <ui/widgets/label/label.h>
@@ -54,6 +55,7 @@ public:
     TextField* name = nullptr;
     Debouncer changeNameDebouncer{ 500 };
     TextField* description = nullptr;
+    CheckBox* newsletterSubscription = nullptr;
     Debouncer changeDescriptionDebouncer{ 500 };
     ImageCard* avatar = nullptr;
 
@@ -85,6 +87,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , accountTitle(new H6Label(accountInfo))
     , name(new TextField(accountInfo))
     , description(new TextField(accountInfo))
+    , newsletterSubscription(new CheckBox(accountInfo))
     , avatar(new ImageCard(accountInfo))
     //
     , subscriptionInfo(new Card(_parent))
@@ -126,6 +129,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     accountInfoLayout->addWidget(accountTitle, row++, 0);
     accountInfoLayout->addWidget(name, row++, 0);
     accountInfoLayout->addWidget(description, row++, 0);
+    accountInfoLayout->addWidget(newsletterSubscription, row++, 0);
     accountInfoLastRow = row;
     accountInfoLayout->setRowMinimumHeight(accountInfoLastRow,
                                            1); // добавляем пустую строку, вместо отступа снизу
@@ -255,6 +259,10 @@ AccountView::AccountView(QWidget* _parent)
             &Debouncer::orderWork);
     connect(&d->changeDescriptionDebouncer, &Debouncer::gotWork, this,
             [this] { emit descriptionChanged(d->description->text()); });
+    //
+    connect(d->newsletterSubscription, &CheckBox::checkedChanged, this,
+            &AccountView::newsletterSubscriptionChanged);
+    ;
     //
     connect(d->avatar, &ImageCard::imageChanged, this, &AccountView::avatarChanged);
 
@@ -469,6 +477,7 @@ void AccountView::updateTranslations()
 {
     d->name->setLabel(tr("Your name"));
     d->description->setLabel(tr("Your bio"));
+    d->newsletterSubscription->setText(tr("Subscribe to the newsletter"));
     d->avatar->setSupportingText(tr("Add avatar +"), tr("Change avatar..."),
                                  tr("Do you want to delete your avatar?"));
     d->avatar->setImageCroppingText(tr("Select an area for the avatar"));
@@ -546,6 +555,13 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
+    d->name->setCustomMargins(
+        { Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
+          Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px16() });
+
+    d->newsletterSubscription->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->newsletterSubscription->setTextColor(Ui::DesignSystem::color().onBackground());
+
     for (auto button : {
              d->subscriptionTryForFree,
              d->subscriptionUpgrade,
@@ -561,9 +577,8 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->avatar->setTextColor(Ui::DesignSystem::color().onBackground());
     d->avatar->setFixedSize((QSizeF(288, 288) * Ui::DesignSystem::scaleFactor()).toSize());
 
-    d->accountInfoLayout->setSpacing(Ui::DesignSystem::layout().px24());
     d->accountInfoLayout->setRowMinimumHeight(d->accountInfoLastRow,
-                                              static_cast<int>(Ui::DesignSystem::layout().px24()));
+                                              static_cast<int>(Ui::DesignSystem::layout().px8()));
     d->subscriptionInfoLayout->setVerticalSpacing(Ui::DesignSystem::layout().px24());
     d->subscriptionInfoLayout->setRowMinimumHeight(
         d->subscriptionInfoLastRow, static_cast<int>(Ui::DesignSystem::layout().px16()));

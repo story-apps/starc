@@ -73,7 +73,9 @@ public:
         QString email;
         QString name;
         QString description;
-        QPixmap avatar;
+        QString subscriptionLanguage;
+        bool subscribed = false;
+        QPixmap avatar = {};
     } account;
 
     /**
@@ -136,7 +138,8 @@ void AccountManager::Implementation::initNavigatorConnections()
 void AccountManager::Implementation::initViewConnections()
 {
     auto notifyUpdateAccountInfoRequested = [this] {
-        emit q->updateAccountInfoRequested(account.name, account.description,
+        emit q->updateAccountInfoRequested(account.email, account.name, account.description,
+                                           account.subscriptionLanguage, account.subscribed,
                                            ImageHelper::bytesFromImage(account.avatar));
     };
 
@@ -148,6 +151,13 @@ void AccountManager::Implementation::initViewConnections()
     connect(view, &Ui::AccountView::descriptionChanged, q,
             [this, notifyUpdateAccountInfoRequested](const QString& _description) {
                 account.description = _description;
+                notifyUpdateAccountInfoRequested();
+            });
+    connect(view, &Ui::AccountView::newsletterSubscriptionChanged, q,
+            [this, notifyUpdateAccountInfoRequested](bool _subscribed) {
+                account.subscriptionLanguage
+                    = QLocale().language() == QLocale::Russian ? "ru" : "en";
+                account.subscribed = _subscribed;
                 notifyUpdateAccountInfoRequested();
             });
     connect(view, &Ui::AccountView::avatarChanged, q,
