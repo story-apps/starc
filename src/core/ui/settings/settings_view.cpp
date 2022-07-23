@@ -2964,7 +2964,7 @@ void SettingsView::updateTranslations()
     d->screenplayEditorShowSceneNumberOnRight->setText(tr("on the right"));
     d->screenplayEditorShowDialogueNumber->setText(tr("Show dialogue number"));
     d->screenplayEditorContinueDialogue->setText(
-        tr("Automatically continue same speaker's dialogue"));
+        tr("Add a continuation (CONT'D) to dialogues separated by an action"));
     d->screenplayEditorCorrectTextOnPageBreaks->setText(
         tr("Automatically correct screenplay text on page breaks"));
     d->screenplayEditorUseCharactersFromText->setText(

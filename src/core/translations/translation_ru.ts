@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
     <name>AppBar</name>
     <message>
@@ -1433,11 +1431,7 @@
     <message numerus="yes">
         <location filename="../../cloud/cloud_service_manager.cpp" line="276"/>
         <source>PRO version subscription activated for %n month(s).</source>
-        <translation>
-            <numerusform>Подписка на PRO версию активирована на %n месяц.</numerusform>
-            <numerusform>Подписка на PRO версию активирована на %n месяца.</numerusform>
-            <numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform>
-        </translation>
+        <translation><numerusform>Подписка на PRO версию активирована на %n месяц.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяца.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform></translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="281"/>
@@ -1447,11 +1441,7 @@
     <message numerus="yes">
         <location filename="../../cloud/cloud_service_manager.cpp" line="285"/>
         <source>TEAM version subscription activated for %n month(s).</source>
-        <translation>
-            <numerusform>Подписка на TEAm версию активирована на %n месяц.</numerusform>
-            <numerusform>Подписка на TEAm версию активирована на %n месяца.</numerusform>
-            <numerusform>Подписка на TEAm версию активирована на %n месяцев.</numerusform>
-        </translation>
+        <translation><numerusform>Подписка на TEAm версию активирована на %n месяц.</numerusform><numerusform>Подписка на TEAm версию активирована на %n месяца.</numerusform><numerusform>Подписка на TEAm версию активирована на %n месяцев.</numerusform><numerusform>Подписка на TEAm версию активирована на %n месяцев.</numerusform></translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="290"/>
@@ -1653,19 +1643,19 @@
         <translation>Локация с таким названием уже существует</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="636"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="638"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить версию документа &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="697"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="699"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Вы действительно хотите удалить документ из корзины?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="637"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="698"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="962"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="639"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="700"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="964"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
@@ -1686,95 +1676,95 @@
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="437"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1314"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1316"/>
         <source>Create new version</source>
         <translation>Создать новую версию</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="638"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="699"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="963"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="640"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="701"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="965"/>
         <source>Yes, remove</source>
         <translation>Да, удалить</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="778"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="780"/>
         <source>Characters from the text</source>
         <translation>Персонажи обнаруженные в тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="788"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="790"/>
         <source>Characters that are not found in the text</source>
         <translation>Персонажи, которых нет в тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="801"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="803"/>
         <source>Save only characters from the text</source>
         <translation>Сохранить только персонажей из текста</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="802"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="804"/>
         <source>Save all characters</source>
         <translation>Сохранить всех персонажей</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="803"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="905"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="805"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="907"/>
         <source>Change nothing</source>
         <translation>Оставить без изменений</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="880"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="882"/>
         <source>Locations from the text</source>
         <translation>Локации обнаруженные в тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="890"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="892"/>
         <source>Locations that are not found in the text</source>
         <translation>Локации, которых нет в тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="903"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="905"/>
         <source>Save only locations from the text</source>
         <translation>Сохранить только локации из текста</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="904"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="906"/>
         <source>Save all locations</source>
         <translation>Сохранить все локации</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="961"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="963"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Удалить все элементы из корзины без возможности восстановления?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1328"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1330"/>
         <source>Edit</source>
         <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1338"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1340"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1889"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1891"/>
         <source>Title page</source>
         <translation>Титульная страница</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1891"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1893"/>
         <source>Synopsis</source>
         <translation>Синопсис</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1903"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1905"/>
         <source>Treatment</source>
         <translation>Поэпизодник</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1894"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1896"/>
         <source>Screenplay</source>
         <translation>Сценарий</translation>
     </message>
@@ -1789,7 +1779,7 @@
         <translation>Разделить окно</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1897"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -3514,11 +3504,7 @@
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1029"/>
         <source>%n panels</source>
-        <translation>
-            <numerusform>%n кадр</numerusform>
-            <numerusform>%n кадра</numerusform>
-            <numerusform>%n кадров</numerusform>
-        </translation>
+        <translation><numerusform>%n кадр</numerusform><numerusform>%n кадра</numerusform><numerusform>%n кадров</numerusform><numerusform>%n кадров</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1233"/>
@@ -3685,11 +3671,7 @@
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="321"/>
         <source>%n PANELS</source>
-        <translation>
-            <numerusform>%n КАДР</numerusform>
-            <numerusform>%n КАДРА</numerusform>
-            <numerusform>%n КАДРОВ</numerusform>
-        </translation>
+        <translation><numerusform>%n КАДР</numerusform><numerusform>%n КАДРА</numerusform><numerusform>%n КАДРОВ</numerusform><numerusform>%n КАДРОВ</numerusform></translation>
     </message>
 </context>
 <context>
@@ -3730,11 +3712,7 @@
     <message numerus="yes">
         <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="281"/>
         <source>%n reply(s)</source>
-        <translation>
-            <numerusform>%n ответ</numerusform>
-            <numerusform>%n ответа</numerusform>
-            <numerusform>%n ответов</numerusform>
-        </translation>
+        <translation><numerusform>%n ответ</numerusform><numerusform>%n ответа</numerusform><numerusform>%n ответов</numerusform><numerusform>%n ответов</numerusform></translation>
     </message>
 </context>
 <context>
@@ -4387,37 +4365,37 @@
 <context>
     <name>Ui::CreateVersionDialog</name>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="121"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="120"/>
         <source>Create new document version</source>
         <translation>Создать новую версию документа</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="121"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="120"/>
         <source>Edit document version</source>
         <translation>Изменить версию документа</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="123"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="122"/>
         <source>Version name</source>
         <translation>Название версии</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="124"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="123"/>
         <source>Allow to edit version</source>
         <translation>Разрешить редактирование версии</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="125"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="124"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="126"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="125"/>
         <source>Create</source>
         <translation>Создать</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="126"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="125"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
@@ -5505,11 +5483,7 @@
     <message numerus="yes">
         <location filename="../ui/account/purchase_dialog_option.cpp" line="195"/>
         <source>%n month(s)</source>
-        <translation>
-            <numerusform>%n месяц</numerusform>
-            <numerusform>%n месяца</numerusform>
-            <numerusform>%n месяцев</numerusform>
-        </translation>
+        <translation><numerusform>%n месяц</numerusform><numerusform>%n месяца</numerusform><numerusform>%n месяцев</numerusform><numerusform>%n месяцев</numerusform></translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_dialog_option.cpp" line="207"/>
@@ -5532,11 +5506,7 @@
     <message numerus="yes">
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="75"/>
         <source>There are %n document(s) in the recycle bin.</source>
-        <translation>
-            <numerusform>В корзине %n документ.</numerusform>
-            <numerusform>В корзине %n документа.</numerusform>
-            <numerusform>В корзине %n документов.</numerusform>
-        </translation>
+        <translation><numerusform>В корзине %n документ.</numerusform><numerusform>В корзине %n документа.</numerusform><numerusform>В корзине %n документов.</numerusform><numerusform>В корзине %n документов.</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="76"/>
@@ -6547,7 +6517,7 @@
     <message>
         <location filename="../ui/account/session_widget.cpp" line="136"/>
         <source>was active %1 at %2</source>
-        <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
+        <extracomment>Last active date (%1) and time (%2) of the user's device</extracomment>
         <translation>был активен %1 в %2</translation>
     </message>
     <message>
@@ -7321,6 +7291,11 @@
         <translation>Включить/выключить модуль сценария</translation>
     </message>
     <message>
+        <location filename="../ui/settings/settings_view.cpp" line="2967"/>
+        <source>Add a continuation (CONT&apos;D) to dialogues separated by an action</source>
+        <translation>Добавлять продолжение (ПРОД) в реплики персонажа разделённые действием</translation>
+    </message>
+    <message>
         <location filename="../ui/settings/settings_view.cpp" line="2969"/>
         <source>Automatically correct screenplay text on page breaks</source>
         <translation>Автоматически корректировать текст сценария на разрывах страниц</translation>
@@ -7612,11 +7587,6 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/settings/settings_view.cpp" line="2956"/>
         <source>Screenplay module</source>
         <translation>Сценарный модуль</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2967"/>
-        <source>Automatically continue same speaker&apos;s dialogue</source>
-        <translation>Автоматически продолжать реплики персонажей</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2977"/>
@@ -8391,20 +8361,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="268"/>
         <source>Done! I&apos;ve just written %n word(s)</source>
-        <translation>
-            <numerusform>Готово! Я только что написал %n слово</numerusform>
-            <numerusform>Готово! Я только что написал %n слова</numerusform>
-            <numerusform>Готово! Я только что написал %n слов</numerusform>
-        </translation>
+        <translation><numerusform>Готово! Я только что написал %n слово</numerusform><numerusform>Готово! Я только что написал %n слова</numerusform><numerusform>Готово! Я только что написал %n слов</numerusform><numerusform>Готово! Я только что написал %n слов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="269"/>
         <source>in %n minute(s)</source>
-        <translation>
-            <numerusform>за %n мунуту</numerusform>
-            <numerusform>за %n минуты</numerusform>
-            <numerusform>за %n минут</numerusform>
-        </translation>
+        <translation><numerusform>за %n мунуту</numerusform><numerusform>за %n минуты</numerusform><numerusform>за %n минут</numerusform><numerusform>за %n минут</numerusform></translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="450"/>

@@ -1649,19 +1649,19 @@
         <translation>Bu ada sahip mekan zaten var</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="636"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="638"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; belge sürümünü gerçekten kaldırmak istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="697"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="699"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Belgeyi kalıcı olarak silmeyi gerçekten istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="637"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="698"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="962"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="639"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="700"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="964"/>
         <source>No</source>
         <translation>Hayır</translation>
     </message>
@@ -1682,95 +1682,95 @@
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="437"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1314"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1316"/>
         <source>Create new version</source>
         <translation>Yeni sürüm oluştur</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="638"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="699"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="963"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="640"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="701"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="965"/>
         <source>Yes, remove</source>
         <translation>Evet, sil</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="778"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="780"/>
         <source>Characters from the text</source>
         <translation>Metinden karakterler</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="788"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="790"/>
         <source>Characters that are not found in the text</source>
         <translation>Karakterler metinde bulunamadı</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="801"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="803"/>
         <source>Save only characters from the text</source>
         <translation>Yalnızca metindeki karakterleri kaydet</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="802"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="804"/>
         <source>Save all characters</source>
         <translation>Tüm karakterleri kaydet</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="803"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="905"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="805"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="907"/>
         <source>Change nothing</source>
         <translation>Hiçbir şeyi değiştirme</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="880"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="882"/>
         <source>Locations from the text</source>
         <translation>Metinden mekanlar</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="890"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="892"/>
         <source>Locations that are not found in the text</source>
         <translation>Mekanlar metinde bulunamadı</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="903"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="905"/>
         <source>Save only locations from the text</source>
         <translation>Yalnızca metindeki mekanları kaydet</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="904"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="906"/>
         <source>Save all locations</source>
         <translation>Bütün mekanları kaydet</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="961"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="963"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Geridönüşüm kutusundaki belgeleri kalıcı olarak silmeyi gerçekten istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1328"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1330"/>
         <source>Edit</source>
         <translation>Düzenle</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1338"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1340"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1889"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1891"/>
         <source>Title page</source>
         <translation>Başlık sayfası</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1891"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1893"/>
         <source>Synopsis</source>
         <translation>Özet</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1903"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1905"/>
         <source>Treatment</source>
         <translation>Tretman</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1894"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1896"/>
         <source>Screenplay</source>
         <translation>Senaryo</translation>
     </message>
@@ -1785,7 +1785,7 @@
         <translation>Pencereyi bölme</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1897"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
         <source>Statistics</source>
         <translation>İstatistik</translation>
     </message>
@@ -4377,37 +4377,37 @@
 <context>
     <name>Ui::CreateVersionDialog</name>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="121"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="120"/>
         <source>Create new document version</source>
         <translation>Yeni belge sürümü oluştur</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="121"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="120"/>
         <source>Edit document version</source>
         <translation>Belge sürümünü düzenle</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="123"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="122"/>
         <source>Version name</source>
         <translation>Sürüm adı</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="124"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="123"/>
         <source>Allow to edit version</source>
         <translation>Sürümü düzenlemeye izin ver</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="125"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="124"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="126"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="125"/>
         <source>Create</source>
         <translation>Oluştur</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="126"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="125"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
@@ -7307,6 +7307,11 @@
         <translation>Senaryo modülünü aç/kapat</translation>
     </message>
     <message>
+        <location filename="../ui/settings/settings_view.cpp" line="2967"/>
+        <source>Add a continuation (CONT&apos;D) to dialogues separated by an action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/settings/settings_view.cpp" line="2969"/>
         <source>Automatically correct screenplay text on page breaks</source>
         <translation type="unfinished"></translation>
@@ -7600,9 +7605,8 @@ Kesintisiz çalışırsanız, projeyi her 3 dakikada bir kaydeder.</translation>
         <translation>Senaryo modülü</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2967"/>
         <source>Automatically continue same speaker&apos;s dialogue</source>
-        <translation>Aynı konuşmacının diyaloğunu otomatik olarak devam ettir</translation>
+        <translation type="vanished">Aynı konuşmacının diyaloğunu otomatik olarak devam ettir</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2977"/>

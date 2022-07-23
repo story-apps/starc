@@ -1649,19 +1649,19 @@
         <translation>이 이름을 가진 장소가 이미 존재합니다.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="636"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="638"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="697"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="699"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>정말로 문서를 완전히 삭제하시겠습니까? </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="637"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="698"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="962"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="639"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="700"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="964"/>
         <source>No</source>
         <translation>아니오</translation>
     </message>
@@ -1682,95 +1682,95 @@
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="437"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1314"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1316"/>
         <source>Create new version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="638"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="699"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="963"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="640"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="701"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="965"/>
         <source>Yes, remove</source>
         <translation>제거하기</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="778"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="780"/>
         <source>Characters from the text</source>
         <translation>본문으로부터 인물들</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="788"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="790"/>
         <source>Characters that are not found in the text</source>
         <translation>본문에서 발견되지 않는 인물들</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="801"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="803"/>
         <source>Save only characters from the text</source>
         <translation>본문으로부터 인물만 저장</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="802"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="804"/>
         <source>Save all characters</source>
         <translation>모든 인물들 저장</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="803"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="905"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="805"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="907"/>
         <source>Change nothing</source>
         <translation>아무것도 변경하지 않음</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="880"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="882"/>
         <source>Locations from the text</source>
         <translation>본문에서 장소</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="890"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="892"/>
         <source>Locations that are not found in the text</source>
         <translation>본문에서 발견되지 않는 장소</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="903"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="905"/>
         <source>Save only locations from the text</source>
         <translation>본문에서 장소만 저장</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="904"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="906"/>
         <source>Save all locations</source>
         <translation>모든 장소 저장하기</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="961"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="963"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>휴지통에서 모든 문서를 영구적으로 제거하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1328"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1330"/>
         <source>Edit</source>
         <translation>편집</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1338"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1340"/>
         <source>Remove</source>
         <translation>제거</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1889"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1891"/>
         <source>Title page</source>
         <translation>제목 페이지</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1891"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1893"/>
         <source>Synopsis</source>
         <translation>시놉시스</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1903"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1905"/>
         <source>Treatment</source>
         <translation>논의</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1894"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1896"/>
         <source>Screenplay</source>
         <translation>시나리오</translation>
     </message>
@@ -1785,7 +1785,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1897"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
         <source>Statistics</source>
         <translation>통계</translation>
     </message>
@@ -4377,37 +4377,37 @@
 <context>
     <name>Ui::CreateVersionDialog</name>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="121"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="120"/>
         <source>Create new document version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="121"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="120"/>
         <source>Edit document version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="123"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="122"/>
         <source>Version name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="124"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="123"/>
         <source>Allow to edit version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="125"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="124"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="126"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="125"/>
         <source>Create</source>
         <translation>생성</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="126"/>
+        <location filename="../ui/project/create_version_dialog.cpp" line="125"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
@@ -7307,6 +7307,11 @@
         <translation>영화 시나리오 모듈 켜기/끄기</translation>
     </message>
     <message>
+        <location filename="../ui/settings/settings_view.cpp" line="2967"/>
+        <source>Add a continuation (CONT&apos;D) to dialogues separated by an action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ui/settings/settings_view.cpp" line="2969"/>
         <source>Automatically correct screenplay text on page breaks</source>
         <translation type="unfinished"></translation>
@@ -7600,9 +7605,8 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>시나리오 모듈</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="2967"/>
         <source>Automatically continue same speaker&apos;s dialogue</source>
-        <translation>자동으로 같은 연사의 대화 계속</translation>
+        <translation type="vanished">자동으로 같은 연사의 대화 계속</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2977"/>
