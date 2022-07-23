@@ -340,6 +340,16 @@ void AccountView::setDescription(const QString& _description)
     d->description->setText(_description);
 }
 
+void AccountView::setNewsletterSubscribed(bool _subscribed)
+{
+    if (d->newsletterSubscription->isChecked() == _subscribed) {
+        return;
+    }
+
+    QSignalBlocker blocker(d->newsletterSubscription);
+    d->newsletterSubscription->setChecked(_subscribed);
+}
+
 void AccountView::setAvatar(const QPixmap& _avatar)
 {
     QSignalBlocker blocker(d->avatar);

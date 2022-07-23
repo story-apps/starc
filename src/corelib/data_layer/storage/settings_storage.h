@@ -86,8 +86,11 @@ const QString kAccountGroupKey = "account";
 const QString kAccountEmailKey = kAccountGroupKey + "/email";
 // имя пользователя
 const QString kAccountUserNameKey = kAccountGroupKey + "/user-name";
-// имя пользователя
+// описание пользователя
 const QString kAccountDescriptionKey = kAccountGroupKey + "/description";
+// подписка пользователя на новости
+const QString kAccountNewsletterLanguageKey = kAccountGroupKey + "/newsletter-language";
+const QString kAccountNewsletterSubscribedKey = kAccountGroupKey + "/newsletter-subscribed";
 // аватарка
 const QString kAccountAvatarKey = kAccountGroupKey + "/avatar";
 

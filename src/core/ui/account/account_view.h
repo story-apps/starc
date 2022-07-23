@@ -50,6 +50,11 @@ public:
     void setDescription(const QString& _description);
 
     /**
+     * @brief Подписан ли пользователь на рассылку
+     */
+    void setNewsletterSubscribed(bool _subscribed);
+
+    /**
      * @brief Аватар пользователя
      */
     void setAvatar(const QPixmap& _avatar);

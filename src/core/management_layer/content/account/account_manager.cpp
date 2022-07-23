@@ -300,7 +300,8 @@ void AccountManager::completeSignIn(bool _openAccount)
 }
 
 void AccountManager::setAccountInfo(const QString& _email, const QString& _name,
-                                    const QString& _description, const QByteArray& _avatar,
+                                    const QString& _description, bool _newsletterSubscribed,
+                                    const QByteArray& _avatar,
                                     Domain::SubscriptionType _subscriptionType,
                                     const QDateTime& _subscriptionEnds,
                                     const QVector<Domain::PaymentOption>& _paymentOptions,
@@ -312,6 +313,8 @@ void AccountManager::setAccountInfo(const QString& _email, const QString& _name,
     d->view->setName(d->account.name);
     d->account.description = _description;
     d->view->setDescription(d->account.description);
+    d->account.subscribed = _newsletterSubscribed;
+    d->view->setNewsletterSubscribed(d->account.subscribed);
     d->setAvatar(_avatar);
     d->paymentOptions = _paymentOptions;
 

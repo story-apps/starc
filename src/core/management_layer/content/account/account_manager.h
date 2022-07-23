@@ -49,7 +49,7 @@ public:
     /**
      * @brief Установить параметры аккаунта
      */
-    void setAccountInfo(const QString& _email, const QString& _name, const QString& _description,
+    void setAccountInfo(const QString& _email, const QString& _name, const QString& _description, bool _newsletterSubscribed,
                         const QByteArray& _avatar, Domain::SubscriptionType _subscriptionType,
                         const QDateTime& _subscriptionEnds,
                         const QVector<Domain::PaymentOption>& _paymentOptions,
