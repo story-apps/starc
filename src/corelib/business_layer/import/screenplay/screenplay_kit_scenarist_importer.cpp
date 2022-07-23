@@ -237,7 +237,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
                             reviewMark.comments.append(
                                 { reviewCommentNode.attribute("author"),
                                   reviewCommentNode.attribute("date"),
-                                  TextHelper::toHtmlEscaped(
+                                  TextHelper::fromHtmlEscaped(
                                       reviewCommentNode.attribute("comment")) });
 
                             reviewCommentNode
