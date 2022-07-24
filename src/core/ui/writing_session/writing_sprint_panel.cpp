@@ -14,11 +14,16 @@
 #include <QDesktopServices>
 #include <QPainter>
 #include <QResizeEvent>
+#include <QSettings>
 #include <QTimer>
 #include <QVariantAnimation>
 
 
 namespace Ui {
+
+namespace {
+const QString kSprintDurationKey = QLatin1String("widgets/writing-sprint-panel/duration");
+}
 
 class WritingSprintPanel::Implementation
 {
@@ -110,6 +115,9 @@ WritingSprintPanel::Implementation::Implementation(WritingSprintPanel* _q)
 
     heightAnimation.setEasingCurve(QEasingCurve::OutQuad);
     heightAnimation.setDuration(160);
+
+    QSettings settings;
+    sprintTime->setText(settings.value(kSprintDurationKey, "25").toString());
 
     sprintAction->setIcon(u8"\U000F040A");
     sprintAction->setFlat(true);
@@ -251,6 +259,10 @@ WritingSprintPanel::WritingSprintPanel(QWidget* _parent)
         //
         else {
             d->sprintOptions->hidePopup();
+
+            QSettings settings;
+            settings.setValue(kSprintDurationKey, d->sprintTime->text().toInt());
+
             //
             // После того, как скроются параметры спринта
             //
@@ -457,7 +469,6 @@ void WritingSprintPanel::updateTranslations()
 {
     d->sprintTime->setLabel(tr("Sprint duration"));
     d->sprintTime->setSuffix(tr("min"));
-    d->sprintTime->setText("25");
     d->sprintResultTitle->setText(tr("Great job"));
     d->sprintResultSubtitle->setText(tr("words written"));
     d->restartSprint->setText(tr("Restart sprint"));
