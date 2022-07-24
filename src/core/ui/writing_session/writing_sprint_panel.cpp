@@ -363,10 +363,10 @@ void WritingSprintPanel::paintEvent(QPaintEvent* _event)
     painter.fillRect(rect(), Qt::transparent);
     const auto backgroundRect = rect().adjusted(0, 0, 0, -Ui::DesignSystem::layout().px(6));
     painter.fillRect(backgroundRect,
-                     d->isSprintFinished()
-                         ? Ui::DesignSystem::color().secondary()
-                         : ColorHelper::transparent(Ui::DesignSystem::color().secondary(),
-                                                    Ui::DesignSystem::hoverBackgroundOpacity()));
+                     ColorHelper::transparent(Ui::DesignSystem::color().secondary(),
+                                              d->isSprintFinished()
+                                                  ? Ui::DesignSystem::inactiveTextOpacity()
+                                                  : Ui::DesignSystem::hoverBackgroundOpacity()));
 
     //
     // Заполненная полоса прогресса
@@ -375,7 +375,7 @@ void WritingSprintPanel::paintEvent(QPaintEvent* _event)
     completedRect.setWidth(completedRect.width() * d->sprintDuration.currentValue().toDouble());
     painter.fillRect(completedRect,
                      ColorHelper::transparent(Ui::DesignSystem::color().secondary(),
-                                              Ui::DesignSystem::disabledTextOpacity()));
+                                              Ui::DesignSystem::inactiveTextOpacity()));
 
     //
     // Если панель в состоянии открытой
@@ -385,22 +385,30 @@ void WritingSprintPanel::paintEvent(QPaintEvent* _event)
                                            : 0.0);
 
         //
-        // Рисуем текстовку
+        // Рисуем текстовку и кнопку закрытия
         //
-        painter.setPen(d->isSprintFinished() ? Ui::DesignSystem::color().onSecondary()
-                                             : ColorHelper::contrasted(ColorHelper::transparent(
-                                                 Ui::DesignSystem::color().secondary(),
-                                                 Ui::DesignSystem::disabledTextOpacity())));
-        painter.setFont(Ui::DesignSystem::font().subtitle2());
-        painter.drawText(backgroundRect, Qt::AlignCenter, d->status);
-
-        //
-        // Рисуем кнопку закрытия панели
-        //
-        painter.setFont(Ui::DesignSystem::font().iconsSmall());
         const QRectF closeIconRect(0, 0, Ui::DesignSystem::layout().px48(),
                                    backgroundRect.height());
+        //
+        // ... над полупрозрачной областью
+        //
+        painter.setClipRect(backgroundRect.adjusted(completedRect.width(), 0, 0, 0));
+        painter.setPen(Ui::DesignSystem::color().onSurface());
+        painter.setFont(Ui::DesignSystem::font().iconsSmall());
         painter.drawText(closeIconRect, Qt::AlignCenter, u8"\U000F0156");
+        //
+        painter.setFont(Ui::DesignSystem::font().subtitle2());
+        painter.drawText(backgroundRect, Qt::AlignCenter, d->status);
+        //
+        // ... над залитой областью
+        //
+        painter.setClipRect(completedRect);
+        painter.setPen(Ui::DesignSystem::color().onSecondary());
+        painter.setFont(Ui::DesignSystem::font().iconsSmall());
+        painter.drawText(closeIconRect, Qt::AlignCenter, u8"\U000F0156");
+        //
+        painter.setFont(Ui::DesignSystem::font().subtitle2());
+        painter.drawText(backgroundRect, Qt::AlignCenter, d->status);
     }
 }
 
