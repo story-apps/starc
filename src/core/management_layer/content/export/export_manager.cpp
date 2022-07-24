@@ -44,7 +44,21 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 
+
 namespace ManagementLayer {
+
+namespace {
+
+/**
+ * @brief Ключ для сохранения пути экспортируемого документа
+ */
+QString exportModelKey(BusinessLayer::AbstractModel* _model)
+{
+    return QString("%1/%2").arg(DataStorageLayer::kProjectExportFolderKey,
+                                _model->document()->uuid().toString());
+}
+
+} // namespace
 
 class ExportManager::Implementation
 {
@@ -97,8 +111,6 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                 //
                 // Предоставим пользователю возможность выбрать файл, куда он будет экспортировать
                 //
-                const auto projectExportFolder
-                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
                 QString exportFilter;
                 QString exportExtension;
                 switch (exportOptions.fileFormat) {
@@ -126,16 +138,23 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                 }
                 const auto screenplayTextModel
                     = qobject_cast<BusinessLayer::ScreenplayTextModel*>(_model);
-                const auto projectExportFile
+                const auto projectExportFolder
+                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                auto modelExportFile
                     = QString("%1/%2.%3")
                           .arg(projectExportFolder, screenplayTextModel->informationModel()->name(),
                                exportExtension);
-                auto exportFilePath
-                    = QFileDialog::getSaveFileName(topLevelWidget, tr("Choose the file to export"),
-                                                   projectExportFile, exportFilter);
+                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                auto exportFilePath = QFileDialog::getSaveFileName(
+                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
+
+                //
+                // Сохраним файл, в который экспортировали данную модель
+                //
+                setSettingsValue(exportModelKey(_model), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -260,8 +279,6 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                 // Предоставим пользователю возможность выбрать файл, куда он будет
                 // экспортировать
                 //
-                const auto projectExportFolder
-                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
                 QString exportFilter;
                 QString exportExtension;
                 switch (exportOptions.fileFormat) {
@@ -279,16 +296,23 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                 }
                 const auto comicBookTextModel
                     = qobject_cast<BusinessLayer::ComicBookTextModel*>(_model);
-                const auto projectExportFile
+                const auto projectExportFolder
+                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                auto modelExportFile
                     = QString("%1/%2.%3")
                           .arg(projectExportFolder, comicBookTextModel->informationModel()->name(),
                                exportExtension);
-                auto exportFilePath
-                    = QFileDialog::getSaveFileName(topLevelWidget, tr("Choose the file to export"),
-                                                   projectExportFile, exportFilter);
+                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                auto exportFilePath = QFileDialog::getSaveFileName(
+                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
+
+                //
+                // Сохраним файл, в который экспортировали данную модель
+                //
+                setSettingsValue(exportModelKey(_model), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -386,8 +410,6 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
                 //
                 // Предоставим пользователю возможность выбрать файл, куда он будет экспортировать
                 //
-                const auto projectExportFolder
-                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
                 QString exportFilter;
                 QString exportExtension;
                 switch (exportOptions.fileFormat) {
@@ -405,16 +427,23 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
                 }
                 const auto audioplayTextModel
                     = qobject_cast<BusinessLayer::AudioplayTextModel*>(_model);
-                const auto projectExportFile
+                const auto projectExportFolder
+                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                auto modelExportFile
                     = QString("%1/%2.%3")
                           .arg(projectExportFolder, audioplayTextModel->informationModel()->name(),
                                exportExtension);
-                auto exportFilePath
-                    = QFileDialog::getSaveFileName(topLevelWidget, tr("Choose the file to export"),
-                                                   projectExportFile, exportFilter);
+                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                auto exportFilePath = QFileDialog::getSaveFileName(
+                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
+
+                //
+                // Сохраним файл, в который экспортировали данную модель
+                //
+                setSettingsValue(exportModelKey(_model), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -518,8 +547,6 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
                 //
                 // Предоставим пользователю возможность выбрать файл, куда он будет экспортировать
                 //
-                const auto projectExportFolder
-                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
                 QString exportFilter;
                 QString exportExtension;
                 switch (exportOptions.fileFormat) {
@@ -537,16 +564,23 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
                 }
                 const auto stageplayTextModel
                     = qobject_cast<BusinessLayer::StageplayTextModel*>(_model);
-                const auto projectExportFile
+                const auto projectExportFolder
+                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                auto modelExportFile
                     = QString("%1/%2.%3")
                           .arg(projectExportFolder, stageplayTextModel->informationModel()->name(),
                                exportExtension);
-                auto exportFilePath
-                    = QFileDialog::getSaveFileName(topLevelWidget, tr("Choose the file to export"),
-                                                   projectExportFile, exportFilter);
+                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                auto exportFilePath = QFileDialog::getSaveFileName(
+                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
+
+                //
+                // Сохраним файл, в который экспортировали данную модель
+                //
+                setSettingsValue(exportModelKey(_model), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -649,8 +683,6 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
                 //
                 // Предоставим пользователю возможность выбрать файл, куда он будет экспортировать
                 //
-                const auto projectExportFolder
-                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
                 QString exportFilter;
                 QString exportExtension;
                 switch (exportOptions.fileFormat) {
@@ -666,17 +698,23 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
                     break;
                 }
                 }
-                const auto simpleTextTextModel
-                    = qobject_cast<BusinessLayer::SimpleTextModel*>(_model);
-                const auto projectExportFile
+                const auto simpleTextModel = qobject_cast<BusinessLayer::SimpleTextModel*>(_model);
+                const auto projectExportFolder
+                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                auto modelExportFile
                     = QString("%1/%2.%3")
-                          .arg(projectExportFolder, simpleTextTextModel->name(), exportExtension);
-                auto exportFilePath
-                    = QFileDialog::getSaveFileName(topLevelWidget, tr("Choose the file to export"),
-                                                   projectExportFile, exportFilter);
+                          .arg(projectExportFolder, simpleTextModel->name(), exportExtension);
+                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                auto exportFilePath = QFileDialog::getSaveFileName(
+                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
                 if (exportFilePath.isEmpty()) {
                     return;
                 }
+
+                //
+                // Сохраним файл, в который экспортировали данную модель
+                //
+                setSettingsValue(exportModelKey(_model), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -736,7 +774,7 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
                 if (exporter.isNull()) {
                     return;
                 }
-                exporter->exportTo(simpleTextTextModel, exportOptions);
+                exporter->exportTo(simpleTextModel, exportOptions);
 
                 //
                 // Если необходимо, откроем экспортированный документ
