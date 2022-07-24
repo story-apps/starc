@@ -1396,7 +1396,7 @@ void ScreenplayTreatmentEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Собственно вставка данных
     //
-    d->document.insertFromMime(cursor.position(), textToInsert);
+    auto cursorPosition = d->document.insertFromMime(cursor.position(), textToInsert);
 
     //
     // Удалим лишний пробел, который вставляли
@@ -1404,6 +1404,9 @@ void ScreenplayTreatmentEdit::insertFromMimeData(const QMimeData* _source)
     if (removeCharacterAtPosition != invalidPosition) {
         cursor.setPosition(removeCharacterAtPosition);
         cursor.deleteChar();
+        if (removeCharacterAtPosition < cursorPosition) {
+            --cursorPosition;
+        }
     }
 
     //
@@ -1411,6 +1414,14 @@ void ScreenplayTreatmentEdit::insertFromMimeData(const QMimeData* _source)
     //
     if (wasInEditBlock) {
         cursor.beginEditBlock();
+    }
+
+    //
+    // Позиционируем курсор
+    //
+    if (cursorPosition >= 0) {
+        cursor.setPosition(cursorPosition);
+        setTextCursor(cursor);
     }
 }
 

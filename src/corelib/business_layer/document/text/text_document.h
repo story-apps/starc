@@ -59,8 +59,9 @@ public:
 
     /**
      * @brief Вставить контент из mime-данных со сценарием в заданной позиции
+     * @return Позиция завершения вставки, либо -1 если вставки не было
      */
-    void insertFromMime(int _position, const QString& _mimeData);
+    int insertFromMime(int _position, const QString& _mimeData);
 
     /**
      * @brief Вставить новый блок заданного типа

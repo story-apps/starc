@@ -1422,6 +1422,12 @@ void StageplayTextEdit::insertFromMimeData(const QMimeData* _source)
     int removeCharacterAtPosition = invalidPosition;
     if (_source->formats().contains(d->model->mimeTypes().constFirst())) {
         textToInsert = _source->data(d->model->mimeTypes().constFirst());
+
+        if (cursor.block().text().isEmpty()) {
+            removeCharacterAtPosition = cursor.position();
+            cursor.insertText(" ");
+            setTextCursor(cursor);
+        }
     }
     //
     // Если простой текст
@@ -1451,7 +1457,7 @@ void StageplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Собственно вставка данных
     //
-    d->document.insertFromMime(textCursor().position(), textToInsert);
+    auto cursorPosition = d->document.insertFromMime(textCursor().position(), textToInsert);
 
     //
     // Удалим лишний пробел, который вставляли
@@ -1459,6 +1465,9 @@ void StageplayTextEdit::insertFromMimeData(const QMimeData* _source)
     if (removeCharacterAtPosition != invalidPosition) {
         cursor.setPosition(removeCharacterAtPosition);
         cursor.deleteChar();
+        if (removeCharacterAtPosition < cursorPosition) {
+            --cursorPosition;
+        }
     }
 
     //
@@ -1466,6 +1475,14 @@ void StageplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     if (wasInEditBlock) {
         cursor.beginEditBlock();
+    }
+
+    //
+    // Позиционируем курсор
+    //
+    if (cursorPosition >= 0) {
+        cursor.setPosition(cursorPosition);
+        setTextCursor(cursor);
     }
 }
 

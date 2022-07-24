@@ -1186,21 +1186,27 @@ QString TextDocument::mimeFromSelection(int _fromPosition, int _toPosition) cons
                                        toPositionInBlock, clearUuid);
 }
 
-void TextDocument::insertFromMime(int _position, const QString& _mimeData)
+int TextDocument::insertFromMime(int _position, const QString& _mimeData)
 {
+    constexpr auto invalidPosition = -1;
     const auto block = findBlock(_position);
     if (block.userData() == nullptr) {
-        return;
+        return invalidPosition;
     }
 
     auto blockData = static_cast<TextBlockData*>(block.userData());
     if (blockData == nullptr) {
-        return;
+        return invalidPosition;
     }
 
     const auto itemIndex = d->model->indexForItem(blockData->item());
     const auto positionInBlock = _position - block.position();
-    d->model->insertFromMime(itemIndex, positionInBlock, _mimeData);
+    const auto insertedMimeLength = d->model->insertFromMime(itemIndex, positionInBlock, _mimeData);
+    if (insertedMimeLength <= 0) {
+        return invalidPosition;
+    }
+
+    return _position + insertedMimeLength;
 }
 
 void TextDocument::addParagraph(BusinessLayer::TextParagraphType _type, TextCursor _cursor)

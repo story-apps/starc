@@ -21,6 +21,7 @@
 #include <utils/tools/model_index_path.h>
 
 #include <QDateTime>
+#include <QDomDocument>
 #include <QMimeData>
 #include <QRegularExpression>
 #include <QStringListModel>
@@ -779,8 +780,8 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     }
 
 
-    const bool addXMlHeader = true;
-    xml::TextModelXmlWriter xml(addXMlHeader);
+    const bool addXmlHeader = true;
+    xml::TextModelXmlWriter xml(addXmlHeader);
     xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type())
         + "\" version=\"1.0\">\n";
 
@@ -844,17 +845,18 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     auto fromItemParent = fromItem->parent();
     auto fromItemRow = fromItemParent->rowOfChild(fromItem);
     //
-    // Если построить нужно начиная с заголовка сцены или папки, то нужно захватить и саму
-    // сцену/папку
+    // Если построить нужно начиная с заголовка сцены или папки, и при этом майм нужен не только для
+    // блока заголовка, то нужно захватить и саму сцену/папку
     //
     if (fromItem->type() == TextModelItemType::Text) {
         const auto textItem = static_cast<TextModelTextItem*>(fromItem);
-        if (textItem->paragraphType() == TextParagraphType::ActHeading
-            || textItem->paragraphType() == TextParagraphType::SequenceHeading
-            || textItem->paragraphType() == TextParagraphType::SceneHeading
-            || textItem->paragraphType() == TextParagraphType::BeatHeading
-            || textItem->paragraphType() == TextParagraphType::PageHeading
-            || textItem->paragraphType() == TextParagraphType::PanelHeading) {
+        if (fromItem != toItem
+            && (textItem->paragraphType() == TextParagraphType::ActHeading
+                || textItem->paragraphType() == TextParagraphType::SequenceHeading
+                || textItem->paragraphType() == TextParagraphType::SceneHeading
+                || textItem->paragraphType() == TextParagraphType::BeatHeading
+                || textItem->paragraphType() == TextParagraphType::PageHeading
+                || textItem->paragraphType() == TextParagraphType::PanelHeading)) {
             auto newFromItem = fromItemParent;
             fromItemParent = fromItemParent->parent();
             fromItemRow = fromItemParent->rowOfChild(newFromItem);
@@ -874,15 +876,16 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     return xml.data();
 }
 
-void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
-                               const QString& _mimeData)
+int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
+                              const QString& _mimeData)
 {
+    constexpr auto invalidLength = -1;
     if (!_index.isValid()) {
-        return;
+        return invalidLength;
     }
 
     if (_mimeData.isEmpty()) {
-        return;
+        return invalidLength;
     }
 
     //
@@ -902,21 +905,32 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     QVector<TextModelItem*> lastItemsFromSourceScene;
     if (item->type() == TextModelItemType::Text) {
         auto textItem = static_cast<TextModelTextItem*>(item);
+        const auto isMimeContainsJustOneBlock = [_mimeData] {
+            QDomDocument mimeDocument;
+            mimeDocument.setContent(_mimeData);
+            auto document = mimeDocument.firstChildElement(xml::kDocumentTag);
+            return document.childNodes().size() == 1
+                && textFolderTypeFromString(document.firstChild().nodeName())
+                == TextFolderType::Undefined
+                && textGroupTypeFromString(document.firstChild().nodeName())
+                == TextGroupType::Undefined;
+        }();
         //
         // Если в заголовок папки
         //
-        if (textItem->paragraphType() == TextParagraphType::ActHeading
-            || textItem->paragraphType() == TextParagraphType::SequenceHeading
-            || textItem->paragraphType() == TextParagraphType::SceneHeading
-            || textItem->paragraphType() == TextParagraphType::BeatHeading
-            || textItem->paragraphType() == TextParagraphType::PageHeading
-            || textItem->paragraphType() == TextParagraphType::PanelHeading
-            || textItem->paragraphType() == TextParagraphType::ChapterHeading1
-            || textItem->paragraphType() == TextParagraphType::ChapterHeading2
-            || textItem->paragraphType() == TextParagraphType::ChapterHeading3
-            || textItem->paragraphType() == TextParagraphType::ChapterHeading4
-            || textItem->paragraphType() == TextParagraphType::ChapterHeading5
-            || textItem->paragraphType() == TextParagraphType::ChapterHeading6) {
+        if (!isMimeContainsJustOneBlock
+            && (textItem->paragraphType() == TextParagraphType::ActHeading
+                || textItem->paragraphType() == TextParagraphType::SequenceHeading
+                || textItem->paragraphType() == TextParagraphType::SceneHeading
+                || textItem->paragraphType() == TextParagraphType::BeatHeading
+                || textItem->paragraphType() == TextParagraphType::PageHeading
+                || textItem->paragraphType() == TextParagraphType::PanelHeading
+                || textItem->paragraphType() == TextParagraphType::ChapterHeading1
+                || textItem->paragraphType() == TextParagraphType::ChapterHeading2
+                || textItem->paragraphType() == TextParagraphType::ChapterHeading3
+                || textItem->paragraphType() == TextParagraphType::ChapterHeading4
+                || textItem->paragraphType() == TextParagraphType::ChapterHeading5
+                || textItem->paragraphType() == TextParagraphType::ChapterHeading6)) {
             //
             // ... то вставим после него
             //
@@ -924,8 +938,9 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         // Если завершение папки
         //
-        else if (textItem->paragraphType() == TextParagraphType::ActFooter
-                 || textItem->paragraphType() == TextParagraphType::SequenceFooter) {
+        else if (!isMimeContainsJustOneBlock
+                 && (textItem->paragraphType() == TextParagraphType::ActFooter
+                     || textItem->paragraphType() == TextParagraphType::SequenceFooter)) {
             //
             // ... то вставляем после папки
             //
@@ -956,12 +971,13 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     } else {
         Log::warning(
             "Trying to insert from mime to position with no text item. Aborting insertion.");
-        return;
+        return invalidLength;
     }
 
     //
     // Считываем данные и последовательно вставляем в модель
     //
+    int mimeLength = 0;
     QXmlStreamReader contentReader(_mimeData);
     contentReader.readNextStartElement(); // document
     contentReader.readNextStartElement();
@@ -1063,6 +1079,7 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             newItem = createSplitterItem(contentReader);
         } else {
             auto newTextItem = createTextItem(contentReader);
+            mimeLength += newTextItem->text().length();
             //
             // Если вставляется текстовый элемент внутрь уже существующего элемента
             //
@@ -1087,6 +1104,7 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                 //
                 else {
                     newItem = newTextItem;
+                    ++mimeLength; // +1 за перенос строки
                 }
             }
             //
@@ -1094,6 +1112,7 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             //
             else {
                 newItem = newTextItem;
+                ++mimeLength; // +1 за перенос строки
             }
         }
 
@@ -1111,33 +1130,36 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         contentReader.clear();
         contentReader.addData(sourceBlockEndContent);
         contentReader.readNextStartElement(); // document
-        contentReader.readNextStartElement(); // potential text node
+        const auto hasContent = contentReader.readNextStartElement(); // potential text node
         if (textFolderTypeFromString(contentReader.name().toString()) != TextFolderType::Undefined
             || textGroupTypeFromString(contentReader.name().toString())
                 != TextGroupType::Undefined) {
             contentReader.readNextStartElement(); // content
             contentReader.readNextStartElement(); // text node
         }
-        auto item = createTextItem(contentReader);
-        //
-        // ... и последний вставленный элемент был текстовым
-        //
-        if (lastItem->type() == TextModelItemType::Text) {
-            auto lastTextItem = static_cast<TextModelTextItem*>(lastItem);
 
+        if (hasContent) {
+            auto item = createTextItem(contentReader);
             //
-            // Объединим элементы
+            // ... и последний вставленный элемент был текстовым
             //
-            lastTextItem->mergeWith(item);
-            updateItem(lastTextItem);
-            delete item;
-        }
-        //
-        // В противном случае, вставляем текстовый элемент после последнего вставленного
-        //
-        else {
-            appendItem(item, lastItem);
-            lastItem = item;
+            if (lastItem->type() == TextModelItemType::Text) {
+                auto lastTextItem = static_cast<TextModelTextItem*>(lastItem);
+
+                //
+                // Объединим элементы
+                //
+                lastTextItem->mergeWith(item);
+                updateItem(lastTextItem);
+                delete item;
+            }
+            //
+            // В противном случае, вставляем текстовый элемент после последнего вставленного
+            //
+            else {
+                appendItem(item, lastItem);
+                lastItem = item;
+            }
         }
     }
 
@@ -1190,6 +1212,8 @@ void TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     // Завершаем изменение
     //
     emit rowsChanged();
+
+    return mimeLength;
 }
 
 TextModelItem* TextModel::itemForIndex(const QModelIndex& _index) const

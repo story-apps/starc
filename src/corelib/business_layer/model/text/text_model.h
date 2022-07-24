@@ -102,8 +102,9 @@ public:
 
     /**
      * @brief Вставить контент из mime-данных со сценарием в заданной позиции
+     * @return Длина вставленного фрагмента текста, если вставки не было, то -1
      */
-    void insertFromMime(const QModelIndex& _index, int _positionInBlock, const QString& _mimeData);
+    int insertFromMime(const QModelIndex& _index, int _positionInBlock, const QString& _mimeData);
 
     /**
      * @brief Получить элемент находящийся в заданном индексе
