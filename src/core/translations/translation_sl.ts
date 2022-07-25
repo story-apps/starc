@@ -1492,38 +1492,38 @@
 <context>
     <name>ManagementLayer::ExportManager</name>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="134"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="287"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="413"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="545"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="675"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="149"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="307"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="438"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="575"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="709"/>
         <source>Choose the file to export</source>
         <translation>Izberite datoteko za izvoz</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="189"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="310"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="436"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="568"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="698"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="208"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="334"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="465"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="602"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="736"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation>V datoteko ni mogoče pisati. Kaže, da je odprta v drugem programu. Zaprite jo in ponovno poskusite izvoziti.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="192"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="313"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="439"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="571"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="701"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="211"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="337"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="468"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="605"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="739"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation>V datoteko ni možno pisati. Preverite pravice pisanja v izbrani mapi ali izberite drugo mapo.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="195"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="316"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="442"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="574"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="704"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="214"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="340"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="471"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="608"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="742"/>
         <source>Export error</source>
         <translation>Napaka pri izvozu</translation>
     </message>
@@ -8390,17 +8390,17 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
 <context>
     <name>Ui::WritingSprintPanel</name>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="214"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="222"/>
         <source>Until the end of the sprint left</source>
         <translation>Do konca šprinta ostaja</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="220"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="228"/>
         <source>Sprint finished!</source>
         <translation>Šprint se je zaključil!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="268"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="280"/>
         <source>Done! I&apos;ve just written %n word(s)</source>
         <translation>
             <numerusform>Opravljeno! Napisali ste natanko %n besedo</numerusform>
@@ -8410,7 +8410,7 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="269"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="281"/>
         <source>in %n minute(s)</source>
         <translation>
             <numerusform>v %n minuti</numerusform>
@@ -8420,27 +8420,27 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
         </translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="450"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="470"/>
         <source>Sprint duration</source>
         <translation>Trajanje šprinta</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="451"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="471"/>
         <source>min</source>
         <translation>min</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="453"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="472"/>
         <source>Great job</source>
         <translation>Dobro opravljeno</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="454"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="473"/>
         <source>words written</source>
         <translation>spisanih besed</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="455"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="474"/>
         <source>Restart sprint</source>
         <translation>Ponovno zaženi šprint</translation>
     </message>

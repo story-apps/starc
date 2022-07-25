@@ -1486,38 +1486,38 @@
 <context>
     <name>ManagementLayer::ExportManager</name>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="134"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="287"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="413"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="545"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="675"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="149"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="307"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="438"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="575"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="709"/>
         <source>Choose the file to export</source>
         <translation>추출할 파일 선택</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="189"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="310"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="436"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="568"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="698"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="208"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="334"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="465"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="602"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="736"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation>파일에 쓸 수 없습니다. 다른 응용프로그램에 열려있는 거 같습니다. 파일을 닫고 다시 내보내십시오.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="192"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="313"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="439"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="571"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="701"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="211"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="337"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="468"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="605"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="739"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation>파일에 쓸 수 없습니다. 선택된 폴더에 쓰기 권한을 확인하거나 다른 폴더를 선택하시오.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="195"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="316"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="442"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="574"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="704"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="214"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="340"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="471"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="608"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="742"/>
         <source>Export error</source>
         <translation>내보내기 오류</translation>
     </message>
@@ -8369,51 +8369,51 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::WritingSprintPanel</name>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="214"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="222"/>
         <source>Until the end of the sprint left</source>
         <translation>스프린트가 끝날 때까지 왼쪽으로</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="220"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="228"/>
         <source>Sprint finished!</source>
         <translation>스프린트 종료</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="268"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="280"/>
         <source>Done! I&apos;ve just written %n word(s)</source>
         <translation>
             <numerusform>완료되었습니다! 방금 %n단어를 작성했습니다.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="269"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="281"/>
         <source>in %n minute(s)</source>
         <translation>
             <numerusform>%n 분에서</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="450"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="470"/>
         <source>Sprint duration</source>
         <translation>스프린트 지속 기간</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="451"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="471"/>
         <source>min</source>
         <translation>분</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="453"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="472"/>
         <source>Great job</source>
         <translation>훌륭합니다</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="454"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="473"/>
         <source>words written</source>
         <translation>쓰여진 말</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="455"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="474"/>
         <source>Restart sprint</source>
         <translation>스프린트 다시 시작</translation>
     </message>
