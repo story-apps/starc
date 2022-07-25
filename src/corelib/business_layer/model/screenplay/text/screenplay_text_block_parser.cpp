@@ -77,7 +77,7 @@ ScreenplaySceneHeadingParser::Section ScreenplaySceneHeadingParser::section(cons
 QString ScreenplaySceneHeadingParser::sceneIntro(const QString& _text)
 {
     if (!_text.contains(". ")) {
-        return _text;
+        return TextHelper::smartToUpper(_text);
     }
 
     const auto placeName = _text.split(". ").constFirst();
