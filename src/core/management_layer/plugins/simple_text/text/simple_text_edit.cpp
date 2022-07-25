@@ -119,7 +119,7 @@ SimpleTextEdit::~SimpleTextEdit() = default;
 void SimpleTextEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
 {
     if (d->model) {
-        disconnect(d->model);
+        d->model->disconnect(this);
     }
 
     d->model = _model;

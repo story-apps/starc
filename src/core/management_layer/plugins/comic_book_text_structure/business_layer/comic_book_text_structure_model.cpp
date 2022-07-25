@@ -29,10 +29,6 @@ ComicBookTextStructureModel::~ComicBookTextStructureModel() = default;
 
 void ComicBookTextStructureModel::setSourceModel(QAbstractItemModel* _sourceModel)
 {
-    if (d->comicBookModel) {
-        d->comicBookModel->disconnect(this);
-    }
-
     d->comicBookModel = qobject_cast<ComicBookTextModel*>(_sourceModel);
     QSortFilterProxyModel::setSourceModel(_sourceModel);
 }

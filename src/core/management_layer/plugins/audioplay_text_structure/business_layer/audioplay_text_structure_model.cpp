@@ -28,10 +28,6 @@ AudioplayTextStructureModel::~AudioplayTextStructureModel() = default;
 
 void AudioplayTextStructureModel::setSourceModel(QAbstractItemModel* _sourceModel)
 {
-    if (d->audioplayModel) {
-        d->audioplayModel->disconnect(this);
-    }
-
     d->audioplayModel = qobject_cast<AudioplayTextModel*>(_sourceModel);
     QSortFilterProxyModel::setSourceModel(_sourceModel);
 }

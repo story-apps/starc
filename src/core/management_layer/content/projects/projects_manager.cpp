@@ -40,6 +40,9 @@ public:
     explicit Implementation(QWidget* _parent);
 
 
+    bool isUserAuthorized = false;
+    bool canCreateCloudProject = false;
+
     ProjectsModel* projects = nullptr;
     Project currentProject;
 
@@ -48,9 +51,6 @@ public:
     Ui::ProjectsToolBar* toolBar = nullptr;
     Ui::ProjectsNavigator* navigator = nullptr;
     Ui::ProjectsView* view = nullptr;
-
-    bool isUserAuthorized = false;
-    bool canCreateCloudProject = false;
 };
 
 ProjectsManager::Implementation::Implementation(QWidget* _parent)

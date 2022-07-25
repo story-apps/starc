@@ -786,10 +786,6 @@ LoglineGeneratorDialog::LoglineGeneratorDialog(QWidget* _parent)
     connect(d->doneButton, &Button::clicked, this, &LoglineGeneratorDialog::donePressed);
 
 
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
-
-
     setHintsVisibile(false);
 }
 

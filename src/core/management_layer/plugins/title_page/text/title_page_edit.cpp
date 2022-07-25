@@ -128,7 +128,7 @@ TitlePageEdit::~TitlePageEdit() = default;
 void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
 {
     if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
-        disconnect(titlePageModel->informationModel());
+        titlePageModel->informationModel()->disconnect(this);
     }
 
     d->model = _model;

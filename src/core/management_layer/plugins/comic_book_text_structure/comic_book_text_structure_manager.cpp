@@ -264,8 +264,8 @@ void ComicBookTextStructureManager::setModel(BusinessLayer::AbstractModel* _mode
     //
     // Разрываем соединения со старой моделью
     //
-    if (d->model != nullptr) {
-        d->view->disconnect(d->model);
+    if (d->model != nullptr && d->model->informationModel() != nullptr) {
+        d->model->informationModel()->disconnect(d->view);
     }
 
     //

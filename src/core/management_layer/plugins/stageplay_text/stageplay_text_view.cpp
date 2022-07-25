@@ -803,7 +803,7 @@ void StageplayTextView::saveViewSettings()
 void StageplayTextView::setModel(BusinessLayer::StageplayTextModel* _model)
 {
     if (d->model && d->model->informationModel()) {
-        disconnect(d->model->informationModel());
+        d->model->informationModel()->disconnect(this);
     }
 
     d->model = _model;

@@ -202,7 +202,7 @@ void CommentsView::setReadOnly(bool _readOnly)
 void CommentsView::setModel(QAbstractItemModel* _model)
 {
     if (d->commentsView->model() != nullptr) {
-        disconnect(d->commentsView->model());
+        d->commentsView->model()->disconnect(this);
     }
 
     d->commentsView->setModel(_model);

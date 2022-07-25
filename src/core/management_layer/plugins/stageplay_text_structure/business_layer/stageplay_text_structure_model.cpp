@@ -28,10 +28,6 @@ StageplayTextStructureModel::~StageplayTextStructureModel() = default;
 
 void StageplayTextStructureModel::setSourceModel(QAbstractItemModel* _sourceModel)
 {
-    if (d->stageplayModel) {
-        d->stageplayModel->disconnect(this);
-    }
-
     d->stageplayModel = qobject_cast<StageplayTextModel*>(_sourceModel);
     QSortFilterProxyModel::setSourceModel(_sourceModel);
 }

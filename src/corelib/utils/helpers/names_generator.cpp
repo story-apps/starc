@@ -33,6 +33,11 @@ public:
         QString type;
         int gender = 0;
     } options;
+
+    /**
+     * @brief Соединения генератора
+     */
+    QHash<TextField*, QVector<QMetaObject::Connection>> connections;
 };
 
 
@@ -81,11 +86,12 @@ QString NamesGenerator::generate(const QString& _type, int _gender)
 void NamesGenerator::bind(TextField* _textField)
 {
     _textField->setTrailingIcon(u8"\U000F076E");
-    QObject::connect(_textField, &TextField::trailingIconPressed, _textField, [_textField] {
-        _textField->setText(
-            NamesGenerator::generate(instance().d->options.type, instance().d->options.gender));
-    });
-    QObject::connect(
+    auto generateNameConnection
+        = QObject::connect(_textField, &TextField::trailingIconPressed, _textField, [_textField] {
+              _textField->setText(NamesGenerator::generate(instance().d->options.type,
+                                                           instance().d->options.gender));
+          });
+    auto configureConnection = QObject::connect(
         _textField, &TextField::trailingIconContextMenuRequested, _textField, [_textField] {
             auto menu = new ContextMenu(_textField);
             QVector<QAction*> actions;
@@ -173,13 +179,20 @@ void NamesGenerator::bind(TextField* _textField)
             //
             menu->showContextMenu(QCursor::pos());
         });
+
+    //
+    // Сохраняем соединения
+    //
+    instance().d->connections.insert(_textField, { generateNameConnection, configureConnection });
 }
 
 void NamesGenerator::unbind(TextField* _textField)
 {
     _textField->setTrailingIcon({});
-    QObject::disconnect(_textField, &TextField::trailingIconPressed, nullptr, nullptr);
-    QObject::disconnect(_textField, &TextField::trailingIconContextMenuRequested, nullptr, nullptr);
+    for (auto& connection : instance().d->connections.value(_textField)) {
+        QObject::disconnect(connection);
+    }
+    instance().d->connections.remove(_textField);
 }
 
 NamesGenerator::~NamesGenerator() = default;

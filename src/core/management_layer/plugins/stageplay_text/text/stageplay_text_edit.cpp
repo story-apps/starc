@@ -131,9 +131,9 @@ void StageplayTextEdit::setCorrectionOptions(bool _needToCorrectPageBreaks)
 void StageplayTextEdit::initWithModel(BusinessLayer::StageplayTextModel* _model)
 {
     if (d->model) {
-        disconnect(d->model);
+        d->model->disconnect(this);
         if (d->model->informationModel()) {
-            disconnect(d->model->informationModel());
+            d->model->informationModel()->disconnect(this);
         }
     }
     d->model = _model;

@@ -254,7 +254,7 @@ void SimpleTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
     // Разрываем соединения со старой моделью
     //
     if (d->model != nullptr) {
-        d->view->disconnect(d->model);
+        d->model->disconnect(d->view);
     }
 
     //

@@ -135,7 +135,7 @@ QAbstractItemModel* ComboBox::model() const
 void ComboBox::setModel(QAbstractItemModel* _model)
 {
     if (d->popup->contentModel() != nullptr) {
-        disconnect(d->popup->contentModel());
+        d->popup->contentModel()->disconnect(this);
     }
 
     d->popup->setContentModel(_model);

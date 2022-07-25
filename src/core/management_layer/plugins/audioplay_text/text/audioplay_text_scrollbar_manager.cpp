@@ -157,7 +157,6 @@ void AudioplayTextScrollBarManager::setModel(BusinessLayer::AudioplayTextModel* 
     }
 
     if (d->model) {
-        d->model->disconnect(this);
         d->model->disconnect(&d->itemsColorsUpdateDebouncer);
     }
 

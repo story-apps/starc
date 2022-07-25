@@ -1936,8 +1936,9 @@ void ApplicationManager::initConnections()
             [this] { d->showAccount(); });
     connect(d->accountManager.data(), &AccountManager::closeAccountRequested, this,
             [this] { d->showLastContent(); });
-    connect(d->accountManager.data(), &AccountManager::cloudProjectsCreationAvailabilityChanged,
-            d->projectsManager.data(), &ProjectsManager::setProjectsInCloudCanBeCreated);
+    //    connect(d->accountManager.data(),
+    //    &AccountManager::cloudProjectsCreationAvailabilityChanged,
+    //            d->projectsManager.data(), &ProjectsManager::setProjectsInCloudCanBeCreated);
 
     //
     // Менеджер проектов

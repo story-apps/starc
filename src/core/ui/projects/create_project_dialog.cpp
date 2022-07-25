@@ -194,9 +194,6 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
 
         emit createProjectPressed();
     });
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 CreateProjectDialog::~CreateProjectDialog() = default;

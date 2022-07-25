@@ -29,10 +29,6 @@ SimpleTextStructureModel::~SimpleTextStructureModel() = default;
 
 void SimpleTextStructureModel::setSourceModel(QAbstractItemModel* _sourceModel)
 {
-    if (d->textModel) {
-        d->textModel->disconnect(this);
-    }
-
     d->textModel = qobject_cast<SimpleTextModel*>(_sourceModel);
     QSortFilterProxyModel::setSourceModel(_sourceModel);
 }

@@ -170,9 +170,9 @@ void ScreenplayTreatmentEdit::setCorrectionOptions(bool _needToCorrectCharacters
 void ScreenplayTreatmentEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _model)
 {
     if (d->model) {
-        disconnect(d->model);
+        d->model->disconnect(this);
         if (d->model->informationModel()) {
-            disconnect(d->model->informationModel());
+            d->model->informationModel()->disconnect(this);
         }
     }
     d->model = _model;

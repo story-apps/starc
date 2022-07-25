@@ -140,9 +140,9 @@ void ComicBookTextEdit::setCorrectionOptions(bool _needToCorrectCharactersNames,
 void ComicBookTextEdit::initWithModel(BusinessLayer::ComicBookTextModel* _model)
 {
     if (d->model) {
-        disconnect(d->model);
+        d->model->disconnect(this);
         if (d->model->informationModel()) {
-            disconnect(d->model->informationModel());
+            d->model->informationModel()->disconnect(this);
         }
     }
     d->model = _model;
