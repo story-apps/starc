@@ -916,6 +916,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         auto isMimeContainsFolderOrSequence = false;
         auto isMimeContainsJustOneBlock = false;
+        auto mimeBlockType = TextParagraphType::Undefined;
         {
             QDomDocument mimeDocument;
             mimeDocument.setContent(correctedMimeData);
@@ -933,7 +934,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             }
 
             //
-            // или папка/группа с одним заголовком
+            // или группа с одним заголовком
             //
             else if (document.childNodes().size() == 1
                      && (textFolderTypeFromString(document.firstChild().nodeName())
@@ -943,14 +944,16 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                      && document.firstChild().firstChild().childNodes().size() == 1) {
                 isMimeContainsFolderOrSequence = true;
                 isMimeContainsJustOneBlock = true;
+                mimeBlockType = textParagraphTypeFromString(
+                    document.firstChild().firstChild().firstChild().nodeName());
             }
         }
         //
         // ... если текст блока, в который идёт вставка не пуст, а в майм данных есть папка или
         //     группа и всего один текстовый элемент
         //
-        if (!textItem->text().isEmpty() && isMimeContainsFolderOrSequence
-            && isMimeContainsJustOneBlock) {
+        if ((!textItem->text().isEmpty() || textItem->paragraphType() == mimeBlockType)
+            && isMimeContainsFolderOrSequence && isMimeContainsJustOneBlock) {
             //
             // ... то удалим группирующий элемент, чтобы вставлять только текст
             //
