@@ -413,4 +413,11 @@ void StageplayTextModel::finalizeInitialization()
     emit rowsChanged();
 }
 
+void StageplayTextModel::applyPatch(const QByteArray& _patch)
+{
+    TextModel::applyPatch(_patch);
+
+    d->updateNumbering();
+}
+
 } // namespace BusinessLayer

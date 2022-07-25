@@ -52,6 +52,11 @@ protected:
      */
     void finalizeInitialization() override;
 
+    /**
+     * @brief Добавляем дополнительную логику после применения патча в модели
+     */
+    void applyPatch(const QByteArray& _patch) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

@@ -28,7 +28,7 @@ QString SimpleTextDocument::chapterNumber(const QTextBlock& _forBlock) const
     }
 
     auto itemScene = static_cast<SimpleTextModelChapterItem*>(itemParent);
-    return itemScene->number()->text;
+    return itemScene->number().value_or(TextModelGroupItem::Number()).text;
 }
 
 } // namespace BusinessLayer

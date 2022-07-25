@@ -190,7 +190,7 @@ QString ScreenplayTextDocument::sceneNumber(const QTextBlock& _forBlock) const
     }
 
     const auto sceneItem = static_cast<const ScreenplayTextModelSceneItem*>(itemParent);
-    return sceneItem->number()->text;
+    return sceneItem->number().value_or(TextModelGroupItem::Number()).text;
 }
 
 QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) const

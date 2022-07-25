@@ -204,4 +204,11 @@ void SimpleTextModel::finalizeInitialization()
     emit rowsChanged();
 }
 
+void SimpleTextModel::applyPatch(const QByteArray& _patch)
+{
+    TextModel::applyPatch(_patch);
+
+    d->updateNumbering();
+}
+
 } // namespace BusinessLayer

@@ -525,4 +525,11 @@ void AudioplayTextModel::finalizeInitialization()
     emit rowsChanged();
 }
 
+void AudioplayTextModel::applyPatch(const QByteArray& _patch)
+{
+    TextModel::applyPatch(_patch);
+
+    d->updateNumbering();
+}
+
 } // namespace BusinessLayer

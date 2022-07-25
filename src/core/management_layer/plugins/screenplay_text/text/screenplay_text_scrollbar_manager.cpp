@@ -157,7 +157,6 @@ void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel
     }
 
     if (d->model) {
-        d->model->disconnect(this);
         d->model->disconnect(&d->itemsColorsUpdateDebouncer);
     }
 

@@ -223,7 +223,7 @@ void ScreenplayTextModel::setInformationModel(ScreenplayInformationModel* _model
     }
 
     if (d->informationModel) {
-        disconnect(d->informationModel);
+        d->informationModel->disconnect(this);
     }
 
     d->informationModel = _model;
@@ -692,6 +692,13 @@ void ScreenplayTextModel::finalizeInitialization()
     emit rowsAboutToBeChanged();
     d->updateNumbering();
     emit rowsChanged();
+}
+
+void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
+{
+    TextModel::applyPatch(_patch);
+
+    d->updateNumbering();
 }
 
 } // namespace BusinessLayer

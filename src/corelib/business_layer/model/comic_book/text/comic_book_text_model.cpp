@@ -192,10 +192,6 @@ void ComicBookTextModel::setInformationModel(ComicBookInformationModel* _model)
         return;
     }
 
-    if (d->informationModel) {
-        disconnect(d->informationModel);
-    }
-
     d->informationModel = _model;
 }
 
@@ -446,6 +442,13 @@ void ComicBookTextModel::finalizeInitialization()
     emit rowsAboutToBeChanged();
     d->updateNumbering();
     emit rowsChanged();
+}
+
+void ComicBookTextModel::applyPatch(const QByteArray& _patch)
+{
+    TextModel::applyPatch(_patch);
+
+    d->updateNumbering();
 }
 
 } // namespace BusinessLayer

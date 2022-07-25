@@ -303,8 +303,7 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     // Разрываем соединения со старой моделью
     //
     if (d->model != nullptr) {
-        disconnect(d->model->informationModel(),
-                   &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view, nullptr);
+        d->model->informationModel()->disconnect(d->view);
     }
 
     //
