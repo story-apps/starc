@@ -1351,12 +1351,6 @@ void ComicBookTextEdit::insertFromMimeData(const QMimeData* _source)
     int removeCharacterAtPosition = invalidPosition;
     if (_source->formats().contains(d->model->mimeTypes().constFirst())) {
         textToInsert = _source->data(d->model->mimeTypes().constFirst());
-
-        if (cursor.block().text().isEmpty()) {
-            removeCharacterAtPosition = cursor.position();
-            cursor.insertText(" ");
-            setTextCursor(cursor);
-        }
     }
     //
     // Если простой текст

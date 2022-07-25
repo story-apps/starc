@@ -983,7 +983,7 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
                 //
                 else {
                     //
-                    // Прорисовка значков папки (можно использовать для закладок)
+                    // Прорисовка значков папки
                     //
                     if (blockType == TextParagraphType::ActHeading
                         || blockType == TextParagraphType::SequenceHeading) {
@@ -1007,8 +1007,10 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
                         const auto yDelta
                             = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
                         rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
-                        setPainterPen(palette().text().color());
-                        painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F024B");
+                        painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
+                                         blockType == TextParagraphType::ActHeading
+                                             ? u8"\U000F0253"
+                                             : u8"\U000F024B");
                     }
                     //
                     // Прорисовка номеров сцен, если необходимо

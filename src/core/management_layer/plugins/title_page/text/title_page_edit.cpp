@@ -590,13 +590,21 @@ void TitlePageEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Собственно вставка данных
     //
-    d->document.insertFromMime(textCursor().position(), textToInsert);
+    auto cursorPosition = d->document.insertFromMime(textCursor().position(), textToInsert);
 
     //
     // Восстанавливаем режим редактирования, если нужно
     //
     if (wasInEditBlock) {
         cursor.beginEditBlock();
+    }
+
+    //
+    // Позиционируем курсор
+    //
+    if (cursorPosition >= 0) {
+        cursor.setPosition(cursorPosition);
+        setTextCursor(cursor);
     }
 }
 

@@ -850,13 +850,18 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     //
     if (fromItem->type() == TextModelItemType::Text) {
         const auto textItem = static_cast<TextModelTextItem*>(fromItem);
-        if (fromItem != toItem
-            && (textItem->paragraphType() == TextParagraphType::ActHeading
-                || textItem->paragraphType() == TextParagraphType::SequenceHeading
-                || textItem->paragraphType() == TextParagraphType::SceneHeading
-                || textItem->paragraphType() == TextParagraphType::BeatHeading
-                || textItem->paragraphType() == TextParagraphType::PageHeading
-                || textItem->paragraphType() == TextParagraphType::PanelHeading)) {
+        if (textItem->paragraphType() == TextParagraphType::ActHeading
+            || textItem->paragraphType() == TextParagraphType::SequenceHeading
+            || textItem->paragraphType() == TextParagraphType::SceneHeading
+            || textItem->paragraphType() == TextParagraphType::BeatHeading
+            || textItem->paragraphType() == TextParagraphType::PageHeading
+            || textItem->paragraphType() == TextParagraphType::PanelHeading
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading1
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading2
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading3
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading4
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading5
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading6) {
             auto newFromItem = fromItemParent;
             fromItemParent = fromItemParent->parent();
             fromItemRow = fromItemParent->rowOfChild(newFromItem);
@@ -897,50 +902,74 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     // Определим элемент, внутрь, или после которого будем вставлять данные
     //
     auto item = itemForIndex(_index);
-
     //
-    // Извлекаем остающийся в блоке текст, если нужно
+    // и извлекаем остающийся в блоке текст, если нужно
     //
     QString sourceBlockEndContent;
     QVector<TextModelItem*> lastItemsFromSourceScene;
+    QString correctedMimeData = _mimeData;
     if (item->type() == TextModelItemType::Text) {
         auto textItem = static_cast<TextModelTextItem*>(item);
-        const auto isMimeContainsJustOneBlock = [_mimeData] {
+
+        //
+        // Посмотрим на содержимое майм данных и проверим сколько там текстовых блоков
+        //
+        auto isMimeContainsFolderOrSequence = false;
+        auto isMimeContainsJustOneBlock = false;
+        {
             QDomDocument mimeDocument;
-            mimeDocument.setContent(_mimeData);
-            auto document = mimeDocument.firstChildElement(xml::kDocumentTag);
-            return document.childNodes().size() == 1
+            mimeDocument.setContent(correctedMimeData);
+            const auto document = mimeDocument.firstChildElement(xml::kDocumentTag);
+
+            //
+            // Всего один текстовый блок
+            //
+            if (document.childNodes().size() == 1
                 && textFolderTypeFromString(document.firstChild().nodeName())
-                == TextFolderType::Undefined
+                    == TextFolderType::Undefined
                 && textGroupTypeFromString(document.firstChild().nodeName())
-                == TextGroupType::Undefined;
-        }();
-        //
-        // Если в заголовок папки
-        //
-        if (!isMimeContainsJustOneBlock
-            && (textItem->paragraphType() == TextParagraphType::ActHeading
-                || textItem->paragraphType() == TextParagraphType::SequenceHeading
-                || textItem->paragraphType() == TextParagraphType::SceneHeading
-                || textItem->paragraphType() == TextParagraphType::BeatHeading
-                || textItem->paragraphType() == TextParagraphType::PageHeading
-                || textItem->paragraphType() == TextParagraphType::PanelHeading
-                || textItem->paragraphType() == TextParagraphType::ChapterHeading1
-                || textItem->paragraphType() == TextParagraphType::ChapterHeading2
-                || textItem->paragraphType() == TextParagraphType::ChapterHeading3
-                || textItem->paragraphType() == TextParagraphType::ChapterHeading4
-                || textItem->paragraphType() == TextParagraphType::ChapterHeading5
-                || textItem->paragraphType() == TextParagraphType::ChapterHeading6)) {
+                    == TextGroupType::Undefined) {
+                isMimeContainsJustOneBlock = true;
+            }
+
             //
-            // ... то вставим после него
+            // или папка/группа с одним заголовком
             //
+            else if (document.childNodes().size() == 1
+                     && (textFolderTypeFromString(document.firstChild().nodeName())
+                             != TextFolderType::Undefined
+                         || textGroupTypeFromString(document.firstChild().nodeName())
+                             != TextGroupType::Undefined)
+                     && document.firstChild().firstChild().childNodes().size() == 1) {
+                isMimeContainsFolderOrSequence = true;
+                isMimeContainsJustOneBlock = true;
+            }
         }
         //
-        // Если завершение папки
+        // ... если текст блока, в который идёт вставка не пуст, а в майм данных есть папка или
+        //     группа и всего один текстовый элемент
         //
-        else if (!isMimeContainsJustOneBlock
-                 && (textItem->paragraphType() == TextParagraphType::ActFooter
-                     || textItem->paragraphType() == TextParagraphType::SequenceFooter)) {
+        if (!textItem->text().isEmpty() && isMimeContainsFolderOrSequence
+            && isMimeContainsJustOneBlock) {
+            //
+            // ... то удалим группирующий элемент, чтобы вставлять только текст
+            //
+            QDomDocument mimeDocument;
+            mimeDocument.setContent(correctedMimeData);
+            auto document = mimeDocument.firstChildElement(xml::kDocumentTag);
+            // document -> folder/group -> content tag -> text block
+            auto textNode = document.firstChild().firstChild().firstChild();
+            document.removeChild(document.firstChild());
+            document.appendChild(textNode);
+            correctedMimeData = mimeDocument.toString();
+        }
+
+        //
+        // Если вставляется несколько блоков и вставка идёт в завершение папки или группы
+        //
+        if (!isMimeContainsJustOneBlock
+            && (textItem->paragraphType() == TextParagraphType::ActFooter
+                || textItem->paragraphType() == TextParagraphType::SequenceFooter)) {
             //
             // ... то вставляем после папки
             //
@@ -951,8 +980,8 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         else {
             //
-            // Если вставка идёт в самое начало блока, то просто переносим блок после вставляемого
-            // фрагмента
+            // Если вставка идёт в пустой блок, то просто переносим блок после вставляемого
+            // фрагмента (в завершении вставки он будет удалён)
             //
             if (textItem->text().isEmpty()) {
                 lastItemsFromSourceScene.append(textItem);
@@ -978,7 +1007,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     // Считываем данные и последовательно вставляем в модель
     //
     int mimeLength = 0;
-    QXmlStreamReader contentReader(_mimeData);
+    QXmlStreamReader contentReader(correctedMimeData);
     contentReader.readNextStartElement(); // document
     contentReader.readNextStartElement();
     bool isFirstTextItemHandled = false;
@@ -1104,7 +1133,6 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                 //
                 else {
                     newItem = newTextItem;
-                    ++mimeLength; // +1 за перенос строки
                 }
             }
             //

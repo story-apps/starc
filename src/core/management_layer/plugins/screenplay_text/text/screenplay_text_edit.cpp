@@ -1048,7 +1048,10 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         const auto yDelta
                             = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
                         rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
-                        painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F024B");
+                        painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
+                                         blockType == TextParagraphType::ActHeading
+                                             ? u8"\U000F0253"
+                                             : u8"\U000F024B");
                     }
                     //
                     // Прорисовка номеров сцен, если необходимо
@@ -1531,7 +1534,14 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
     if (_source->formats().contains(d->model->mimeTypes().constFirst())) {
         textToInsert = _source->data(d->model->mimeTypes().constFirst());
 
-        if (cursor.block().text().isEmpty()) {
+        //
+        // Акта и папки не меняем ни на что
+        //
+        if ((TextBlockStyle::forBlock(cursor) == TextParagraphType::ActHeading
+             || TextBlockStyle::forBlock(cursor) == TextParagraphType::ActFooter
+             || TextBlockStyle::forBlock(cursor) == TextParagraphType::SequenceHeading
+             || TextBlockStyle::forBlock(cursor) == TextParagraphType::SequenceFooter)
+            && cursor.block().text().isEmpty()) {
             removeCharacterAtPosition = cursor.position();
             cursor.insertText(" ");
             setTextCursor(cursor);
