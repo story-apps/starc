@@ -1601,193 +1601,193 @@
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="348"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="351"/>
         <source>Find all characters</source>
         <translation>Find alle karakterer</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="355"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="358"/>
         <source>Add character</source>
         <translation>Tilføj karakter</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="360"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="363"/>
         <source>Find all locations</source>
         <translation>Find alle lokationer</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="367"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="370"/>
         <source>Add location</source>
         <translation>Tilføj lokation</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="373"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="376"/>
         <source>Empty recycle bin</source>
         <translation>Tøm papirkurv</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="392"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="395"/>
         <source>Add document</source>
         <translation>Tilføj dokument</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="422"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="425"/>
         <source>Remove document</source>
         <translation>Fjern dokument</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="452"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="455"/>
         <source>Open in new window</source>
         <translation>Åben i nyt vindue</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="516"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="519"/>
         <source>Character with this name already exists</source>
         <translation>Karakter med dette navn eksisterer allerede</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="526"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="529"/>
         <source>Location with this name already exists</source>
         <translation>Lokation med dette navn eksisterer allerede</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="638"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="641"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="699"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="702"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Vil du virkelig fjerne dokumentet permanent?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="639"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="700"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="964"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="642"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="703"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="967"/>
         <source>No</source>
         <translation>Nej</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="315"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="318"/>
         <source>Hide document versions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="316"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="319"/>
         <source>Show document versions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="385"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="388"/>
         <source>Add folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="437"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1316"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="440"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1319"/>
         <source>Create new version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="640"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="701"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="965"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="643"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="704"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="968"/>
         <source>Yes, remove</source>
         <translation>Ja, fjern</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="780"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="783"/>
         <source>Characters from the text</source>
         <translation>Karakterer fra teksten</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="790"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="793"/>
         <source>Characters that are not found in the text</source>
         <translation>Karakterer der ikke findes i teksten</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="803"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="806"/>
         <source>Save only characters from the text</source>
         <translation>Gem kun karakterer fra teksten</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="804"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="807"/>
         <source>Save all characters</source>
         <translation>Gem alle karakterer</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="805"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="907"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="808"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="910"/>
         <source>Change nothing</source>
         <translation>Ændr ingenting</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="882"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="885"/>
         <source>Locations from the text</source>
         <translation>Lokations fra teksten</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="892"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="895"/>
         <source>Locations that are not found in the text</source>
         <translation>Lokations der ikke findes i teksten</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="905"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="908"/>
         <source>Save only locations from the text</source>
         <translation>Gem kun lokations i teksten</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="906"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="909"/>
         <source>Save all locations</source>
         <translation>Gem alle lokations</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="963"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="966"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Ønsker du virkelig at fjerne alle dokumenterne fra papirkurven?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1330"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1333"/>
         <source>Edit</source>
         <translation>Rediger</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1340"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1343"/>
         <source>Remove</source>
         <translation>Fjern</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1891"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1894"/>
         <source>Title page</source>
         <translation>Titelside</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1893"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1896"/>
         <source>Synopsis</source>
         <translation>Synopsis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1905"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1908"/>
         <source>Treatment</source>
         <translation>Treatment</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1896"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
         <source>Screenplay</source>
         <translation>Manuskript</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="313"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="316"/>
         <source>Remove split</source>
         <translation>Fjern opsplitning</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="314"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="317"/>
         <source>Split window</source>
         <translation>Opdel vindue</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1902"/>
         <source>Statistics</source>
         <translation>Statistik</translation>
     </message>
@@ -2152,6 +2152,19 @@
         <location filename="../management_layer/plugins_builder.cpp" line="422"/>
         <source>Statistics</source>
         <translation>Statistik</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Remove split</source>
+        <comment>ManagementLayer::ProjectManager</comment>
+        <translation type="obsolete">Fjern opsplitning</translation>
+    </message>
+    <message>
+        <source>Split window</source>
+        <comment>ManagementLayer::ProjectManager</comment>
+        <translation type="obsolete">Opdel vindue</translation>
     </message>
 </context>
 <context>
@@ -6127,37 +6140,37 @@ Foreslå forbedringer og rapprter fejl.</translation>
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1358"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1361"/>
         <source>Merge paragraph</source>
         <translation>Læg afsnit sammen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1361"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1364"/>
         <source>Split paragraph</source>
         <translation>Opdel afsnit</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1397"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1400"/>
         <source>Bookmark</source>
         <translation>Bogmærke</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1401"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1404"/>
         <source>Add</source>
         <translation>Tilføj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1407"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1410"/>
         <source>Edit</source>
         <translation>Rediger</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1413"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1416"/>
         <source>Remove</source>
         <translation>Fjern</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1420"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1423"/>
         <source>Show/hide list</source>
         <translation>Vis/skjul liste</translation>
     </message>
@@ -6297,6 +6310,19 @@ Foreslå forbedringer og rapprter fejl.</translation>
     </message>
 </context>
 <context>
+    <name>Ui::ScreenplayTextStructureView</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="98"/>
+        <source>Hide current beat name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="99"/>
+        <source>Show current beat name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ui::ScreenplayTextView</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="338"/>
@@ -6342,27 +6368,27 @@ Foreslå forbedringer og rapprter fejl.</translation>
 <context>
     <name>Ui::ScreenplayTreatmentEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1184"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1186"/>
         <source>Bookmark</source>
         <translation>Bogmærke</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1188"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1190"/>
         <source>Add</source>
         <translation>Tilføj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1194"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1196"/>
         <source>Edit</source>
         <translation>Rediger</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1200"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1202"/>
         <source>Remove</source>
         <translation>Fjern</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1207"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1209"/>
         <source>Show/hide list</source>
         <translation>Vis/skjul liste</translation>
     </message>

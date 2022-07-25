@@ -2079,6 +2079,8 @@ bool ProjectManager::eventFilter(QObject* _watched, QEvent* _event)
         for (auto window : std::as_const(d->view.windows)) {
             QCoreApplication::sendEvent(window, _event);
         }
+    } else if (_event->type() == QEvent::LanguageChange) {
+        d->updateOptionsText();
     }
 
     return QObject::eventFilter(_watched, _event);

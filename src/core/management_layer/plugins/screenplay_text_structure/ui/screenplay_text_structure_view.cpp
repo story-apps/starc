@@ -95,8 +95,8 @@ void ScreenplayTextStructureView::Implementation::updateCurrentBeatName(const QM
 
 void ScreenplayTextStructureView::Implementation::updateOptionsTranslations()
 {
-    showBeatTextAction->setText(showBeatTextAction->isChecked() ? "Hide current beat name"
-                                                                : "Show current beat name");
+    showBeatTextAction->setText(showBeatTextAction->isChecked() ? tr("Hide current beat name")
+                                                                : tr("Show current beat name"));
 }
 
 

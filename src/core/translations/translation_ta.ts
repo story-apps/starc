@@ -1601,193 +1601,193 @@
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="348"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="351"/>
         <source>Find all characters</source>
         <translation>எல்லா கதாபாத்திரங்களையும் தேடு </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="355"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="358"/>
         <source>Add character</source>
         <translation>கதைமாந்தரை சேர் </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="360"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="363"/>
         <source>Find all locations</source>
         <translation>எல்லா இருப்பிடங்களையும் தேடு </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="367"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="370"/>
         <source>Add location</source>
         <translation>இருப்பிடத்தை சேர் </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="373"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="376"/>
         <source>Empty recycle bin</source>
         <translation>குப்பைதொட்டியை காலியாக்கு </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="392"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="395"/>
         <source>Add document</source>
         <translation>ஆவணத்தை சேர் </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="422"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="425"/>
         <source>Remove document</source>
         <translation>ஆவணத்தை நீக்கு </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="452"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="455"/>
         <source>Open in new window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="516"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="519"/>
         <source>Character with this name already exists</source>
         <translation>இப்பெயருடைய கதாபாத்திரம் ஏற்கனவே பயன்பாட்டிலுள்ளது </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="526"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="529"/>
         <source>Location with this name already exists</source>
         <translation>இப்பெயர்கொண்ட களம் ஏற்கனவே உள்ளது </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="638"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="641"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="699"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="702"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>உண்மையாகவே ஆவணத்தை நிரந்தரமாக நீக்கவேண்டுமா?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="639"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="700"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="964"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="642"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="703"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="967"/>
         <source>No</source>
         <translation>இல்லை </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="315"/>
-        <source>Hide document versions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="316"/>
-        <source>Show document versions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="385"/>
-        <source>Add folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="437"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1316"/>
-        <source>Create new version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="640"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="701"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="965"/>
-        <source>Yes, remove</source>
-        <translation>ஆம், நீக்கு </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="780"/>
-        <source>Characters from the text</source>
-        <translation>உரையுலுள்ள கதாபாத்திரங்கள் </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="790"/>
-        <source>Characters that are not found in the text</source>
-        <translation>உரையிலில்லா கதாபாத்திரங்கள் </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="803"/>
-        <source>Save only characters from the text</source>
-        <translation>உரையிலுள்ள கதாபாத்திரங்களை மட்டும் சேமி </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="804"/>
-        <source>Save all characters</source>
-        <translation>எல்லா கதாபாத்திரங்களையும் சேமி </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="805"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="907"/>
-        <source>Change nothing</source>
-        <translation>எதையும் மாற்றவேண்டாம் </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="882"/>
-        <source>Locations from the text</source>
-        <translation>உரையிலுள்ள இருப்பிடங்கள் </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="892"/>
-        <source>Locations that are not found in the text</source>
-        <translation>உரையில் இல்லாத இருப்பிடங்கள் </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="905"/>
-        <source>Save only locations from the text</source>
-        <translation>உரையில் உள்ள இருப்பிடங்களை மட்டும் சேமி </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="906"/>
-        <source>Save all locations</source>
-        <translation>எல்லா இருப்பிடங்களையும் சேமி </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="963"/>
-        <source>Do you really want to permanently remove all documents from the recycle bin?</source>
-        <translation>குப்பைதொட்டியிலுள்ள அனைத்து ஆவணங்களையும் உண்மையாகவே அழிக்கப்போகிறீர்களா?</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1330"/>
-        <source>Edit</source>
-        <translation>தொகு </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1340"/>
-        <source>Remove</source>
-        <translation>நீக்கு </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1891"/>
-        <source>Title page</source>
-        <translation>தலைப்பு பக்கம் </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1893"/>
-        <source>Synopsis</source>
-        <translation>கருப்பொருள் </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1905"/>
-        <source>Treatment</source>
-        <translation>கையாளும் முறை </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1896"/>
-        <source>Screenplay</source>
-        <translation>திரைக்கதை </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="313"/>
         <source>Remove split</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="314"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="317"/>
         <source>Split window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="318"/>
+        <source>Hide document versions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="319"/>
+        <source>Show document versions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="388"/>
+        <source>Add folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="440"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1319"/>
+        <source>Create new version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="643"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="704"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="968"/>
+        <source>Yes, remove</source>
+        <translation>ஆம், நீக்கு </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="783"/>
+        <source>Characters from the text</source>
+        <translation>உரையுலுள்ள கதாபாத்திரங்கள் </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="793"/>
+        <source>Characters that are not found in the text</source>
+        <translation>உரையிலில்லா கதாபாத்திரங்கள் </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="806"/>
+        <source>Save only characters from the text</source>
+        <translation>உரையிலுள்ள கதாபாத்திரங்களை மட்டும் சேமி </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="807"/>
+        <source>Save all characters</source>
+        <translation>எல்லா கதாபாத்திரங்களையும் சேமி </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="808"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="910"/>
+        <source>Change nothing</source>
+        <translation>எதையும் மாற்றவேண்டாம் </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="885"/>
+        <source>Locations from the text</source>
+        <translation>உரையிலுள்ள இருப்பிடங்கள் </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="895"/>
+        <source>Locations that are not found in the text</source>
+        <translation>உரையில் இல்லாத இருப்பிடங்கள் </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="908"/>
+        <source>Save only locations from the text</source>
+        <translation>உரையில் உள்ள இருப்பிடங்களை மட்டும் சேமி </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="909"/>
+        <source>Save all locations</source>
+        <translation>எல்லா இருப்பிடங்களையும் சேமி </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="966"/>
+        <source>Do you really want to permanently remove all documents from the recycle bin?</source>
+        <translation>குப்பைதொட்டியிலுள்ள அனைத்து ஆவணங்களையும் உண்மையாகவே அழிக்கப்போகிறீர்களா?</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1333"/>
+        <source>Edit</source>
+        <translation>தொகு </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1343"/>
+        <source>Remove</source>
+        <translation>நீக்கு </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1894"/>
+        <source>Title page</source>
+        <translation>தலைப்பு பக்கம் </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1896"/>
+        <source>Synopsis</source>
+        <translation>கருப்பொருள் </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1908"/>
+        <source>Treatment</source>
+        <translation>கையாளும் முறை </translation>
+    </message>
+    <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
+        <source>Screenplay</source>
+        <translation>திரைக்கதை </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1902"/>
         <source>Statistics</source>
         <translation>புள்ளி விவரங்கள் </translation>
     </message>
@@ -6123,37 +6123,37 @@
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1358"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1361"/>
         <source>Merge paragraph</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1361"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1364"/>
         <source>Split paragraph</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1397"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1400"/>
         <source>Bookmark</source>
         <translation>நூலடையாளம் </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1401"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1404"/>
         <source>Add</source>
         <translation>சேர் </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1407"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1410"/>
         <source>Edit</source>
         <translation>பகு </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1413"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1416"/>
         <source>Remove</source>
         <translation>நீக்கு </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1420"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1423"/>
         <source>Show/hide list</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6293,6 +6293,19 @@
     </message>
 </context>
 <context>
+    <name>Ui::ScreenplayTextStructureView</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="98"/>
+        <source>Hide current beat name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="99"/>
+        <source>Show current beat name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ui::ScreenplayTextView</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="338"/>
@@ -6338,27 +6351,27 @@
 <context>
     <name>Ui::ScreenplayTreatmentEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1184"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1186"/>
         <source>Bookmark</source>
         <translation>நூலடையாளம் </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1188"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1190"/>
         <source>Add</source>
         <translation>சேர் </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1194"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1196"/>
         <source>Edit</source>
         <translation>தொகு </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1200"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1202"/>
         <source>Remove</source>
         <translation>நீக்கு </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1207"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1209"/>
         <source>Show/hide list</source>
         <translation type="unfinished"></translation>
     </message>
