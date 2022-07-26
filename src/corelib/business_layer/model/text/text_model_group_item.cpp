@@ -216,6 +216,11 @@ QString TextModelGroupItem::text() const
     return d->text;
 }
 
+int TextModelGroupItem::length() const
+{
+    return heading().length() + text().length() + (childCount() > 1 ? 1 : 0);
+}
+
 int TextModelGroupItem::inlineNotesSize() const
 {
     return d->inlineNotesSize;

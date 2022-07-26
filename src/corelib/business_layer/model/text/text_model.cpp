@@ -905,6 +905,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     //
     // и извлекаем остающийся в блоке текст, если нужно
     //
+    int mimeLength = 0;
     QString sourceBlockEndContent;
     QVector<TextModelItem*> lastItemsFromSourceScene;
     QString correctedMimeData = _mimeData;
@@ -916,7 +917,6 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         auto isMimeContainsFolderOrSequence = false;
         auto isMimeContainsJustOneBlock = false;
-        auto mimeBlockType = TextParagraphType::Undefined;
         {
             QDomDocument mimeDocument;
             mimeDocument.setContent(correctedMimeData);
@@ -944,16 +944,14 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                      && document.firstChild().firstChild().childNodes().size() == 1) {
                 isMimeContainsFolderOrSequence = true;
                 isMimeContainsJustOneBlock = true;
-                mimeBlockType = textParagraphTypeFromString(
-                    document.firstChild().firstChild().firstChild().nodeName());
             }
         }
         //
-        // ... если текст блока, в который идёт вставка не пуст, а в майм данных есть папка или
-        //     группа и всего один текстовый элемент
+        // ... если текст блока, в который идёт вставка не пуст, а в майм данных есть группа и всего
+        //     один текстовый элемент в ней
         //
-        if ((!textItem->text().isEmpty() || textItem->paragraphType() == mimeBlockType)
-            && isMimeContainsFolderOrSequence && isMimeContainsJustOneBlock) {
+        if (!textItem->text().isEmpty() && isMimeContainsFolderOrSequence
+            && isMimeContainsJustOneBlock) {
             //
             // ... то удалим группирующий элемент, чтобы вставлять только текст
             //
@@ -990,14 +988,20 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                 lastItemsFromSourceScene.append(textItem);
             }
             //
-            // В противном случае, дробим блок на две части
+            // В противном случае
             //
-            else if (textItem->text().length() > _positionInBlock) {
-                const bool clearUuid = true;
-                sourceBlockEndContent = mimeFromSelection(_index, _positionInBlock, _index,
-                                                          textItem->text().length(), clearUuid);
-                textItem->removeText(_positionInBlock);
-                updateItem(textItem);
+            else {
+                ++mimeLength;
+                //
+                // ... если курсор стоит посередине блока, дробим блок на две части
+                //
+                if (textItem->text().length() > _positionInBlock) {
+                    const bool clearUuid = true;
+                    sourceBlockEndContent = mimeFromSelection(_index, _positionInBlock, _index,
+                                                              textItem->text().length(), clearUuid);
+                    textItem->removeText(_positionInBlock);
+                    updateItem(textItem);
+                }
             }
         }
     } else {
@@ -1009,7 +1013,6 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     //
     // Считываем данные и последовательно вставляем в модель
     //
-    int mimeLength = 0;
     QXmlStreamReader contentReader(correctedMimeData);
     contentReader.readNextStartElement(); // document
     contentReader.readNextStartElement();
@@ -1087,6 +1090,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             newItem = createFolderItem(contentReader);
         } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
             auto newGroupItem = createGroupItem(contentReader);
+            mimeLength += newGroupItem->length();
 
             //
             // Если группа вставляется после группы, учитываем уровень группы, и при необходимости
@@ -1208,7 +1212,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
 
                 //
                 // Удалим родителя, если у него больше не осталось детей
-                // NOTE: актуально для случая, когда в сцене был один пустой абзац заголовка
+                // NOTE: актуально для случая, когда в сцене был один абзац заголовка
                 //
                 if (itemParent->childCount() == 0) {
                     removeItem(itemParent);

@@ -95,6 +95,11 @@ public:
     QString text() const;
 
     /**
+     * @brief Длина текста группы
+     */
+    int length() const;
+
+    /**
      * @brief Количество заметок по тексту в группе
      */
     int inlineNotesSize() const;

@@ -152,7 +152,6 @@ void ScreenplayTextModel::Implementation::updateChildrenDuration(const TextModel
         case TextModelItemType::Text: {
             auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
             textItem->updateDuration();
-            q->updateItem(textItem);
             break;
         }
 
