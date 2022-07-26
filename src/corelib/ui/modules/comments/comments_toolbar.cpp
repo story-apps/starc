@@ -1,4 +1,5 @@
 #include "comments_toolbar.h"
+#include <utils/tools/run_once.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/color_picker/color_picker_popup.h>
@@ -154,16 +155,17 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
     connect(&d->hideTimer, &QTimer::timeout, this, &Widget::hide);
     connect(&d->moveAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) { move(_value.toPoint()); });
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 CommentsToolbar::~CommentsToolbar() = default;
 
 void CommentsToolbar::showToolbar()
 {
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
+        return;
+    }
+
     if (parentWidget() == nullptr) {
         return;
     }
