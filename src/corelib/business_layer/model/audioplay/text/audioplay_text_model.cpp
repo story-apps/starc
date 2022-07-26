@@ -140,7 +140,6 @@ void AudioplayTextModel::Implementation::updateChildrenDuration(const TextModelI
         case TextModelItemType::Text: {
             auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
             textItem->updateDuration();
-            q->updateItem(textItem);
             break;
         }
 
