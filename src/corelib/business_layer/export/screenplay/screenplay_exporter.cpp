@@ -49,13 +49,13 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
     //
     if (!exportOptions.exportScenes.isEmpty()) {
         const auto blockData = static_cast<TextBlockData*>(_cursor.block().userData());
-        bool needRemoveBlock = false;
+        bool needRemoveBlock = true;
         if (blockData && blockData->item() && blockData->item()->parent()
             && blockData->item()->parent()->type() == TextModelItemType::Group) {
             const auto sceneItem
                 = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
-            if (!exportOptions.exportScenes.contains(QString::number(sceneItem->number()->value))) {
-                needRemoveBlock = true;
+            if (exportOptions.exportScenes.contains(QString::number(sceneItem->number()->value))) {
+                needRemoveBlock = false;
             }
         }
         if (needRemoveBlock) {
@@ -63,7 +63,11 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
             if (_cursor.hasSelection()) {
                 _cursor.deleteChar();
             }
-            _cursor.deleteChar();
+            if (!_cursor.atEnd()) {
+                _cursor.deleteChar();
+            } else {
+                _cursor.deletePreviousChar();
+            }
             return true;
         }
     }

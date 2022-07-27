@@ -323,7 +323,9 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
             //
             // Переходим к следующему блоку
             //
-        } while (cursor.movePosition(QTextCursor::NextBlock));
+            cursor.movePosition(QTextCursor::EndOfBlock);
+            cursor.movePosition(QTextCursor::NextBlock);
+        } while (!cursor.atEnd());
     }
     //
     // ... а если не нужен, удаляем его
