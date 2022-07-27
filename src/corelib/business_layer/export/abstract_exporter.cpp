@@ -298,6 +298,29 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
             }
 
             //
+            // Если не нужно печатать редакторские заметки, убираем их
+            //
+            if (!_exportOptions.includeReviewMarks) {
+                const auto blockPosition = cursor.block().position();
+                for (const auto& formatRange : cursor.block().textFormats()) {
+                    if (formatRange.format.boolProperty(TextBlockStyle::PropertyIsReviewMark)
+                        == false) {
+                        continue;
+                    }
+
+                    auto blockFormat = cursor.blockCharFormat();
+                    blockFormat.setFontWeight(formatRange.format.fontWeight());
+                    blockFormat.setFontItalic(formatRange.format.fontItalic());
+                    blockFormat.setFontUnderline(formatRange.format.fontUnderline());
+                    cursor.setPosition(blockPosition + formatRange.start);
+                    cursor.setPosition(blockPosition + formatRange.start + formatRange.length,
+                                       QTextCursor::KeepAnchor);
+                    cursor.setCharFormat(blockFormat);
+                }
+                cursor.movePosition(QTextCursor::EndOfBlock);
+            }
+
+            //
             // Переходим к следующему блоку
             //
         } while (cursor.movePosition(QTextCursor::NextBlock));
