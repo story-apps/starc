@@ -631,7 +631,12 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
         // Если список закладок показан, добавляем новую через него
         //
         if (d->showBookmarksAction->isChecked()) {
-            d->bookmarksView->showAddBookmarkView({});
+            d->bookmarksView->showAddBookmarkView(
+                {},
+                d->bookmarksView
+                    ->mapFromGlobal(
+                        d->textEdit->viewport()->mapToGlobal(d->textEdit->cursorRect().topLeft()))
+                    .y());
         }
         //
         // В противном случае, через диалог
@@ -646,7 +651,11 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
         //
         if (d->showBookmarksAction->isChecked()) {
             d->bookmarksView->showAddBookmarkView(
-                d->bookmarksModel->mapFromModel(currentModelIndex()));
+                d->bookmarksModel->mapFromModel(currentModelIndex()),
+                d->bookmarksView
+                    ->mapFromGlobal(
+                        d->textEdit->viewport()->mapToGlobal(d->textEdit->cursorRect().topLeft()))
+                    .y());
         }
         //
         // В противном случае, через диалог

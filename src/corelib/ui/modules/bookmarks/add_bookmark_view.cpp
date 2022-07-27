@@ -5,6 +5,7 @@
 #include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/ui_helper.h>
 
 #include <QKeyEvent>
@@ -20,6 +21,7 @@ public:
     explicit Implementation(QWidget* _parent);
 
     QScrollArea* content = nullptr;
+    Widget* bookmarkNameContainer = nullptr;
     TextField* bookmarkName = nullptr;
     ColorPickerPopup* bookmarkColorPopup = nullptr;
     QHBoxLayout* buttonsLayout = nullptr;
@@ -29,6 +31,7 @@ public:
 
 AddBookmarkView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent))
+    , bookmarkNameContainer(new Widget(_parent))
     , bookmarkName(new TextField(_parent))
     , bookmarkColorPopup(new ColorPickerPopup(_parent))
     , buttonsLayout(new QHBoxLayout)
@@ -67,6 +70,13 @@ AddBookmarkView::AddBookmarkView(QWidget* _parent)
     setFocusProxy(d->bookmarkName);
 
     d->bookmarkName->installEventFilter(this);
+    d->bookmarkName->setEnterMakesNewLine(true);
+
+    auto bookmarkNameContainerLayout = new QVBoxLayout(d->bookmarkNameContainer);
+    bookmarkNameContainerLayout->setContentsMargins({});
+    bookmarkNameContainerLayout->setSpacing(0);
+    bookmarkNameContainerLayout->addWidget(d->bookmarkName);
+    bookmarkNameContainerLayout->addLayout(d->buttonsLayout);
 
     QWidget* contentWidget = new QWidget;
     d->content->setWidgetResizable(true);
@@ -74,8 +84,7 @@ AddBookmarkView::AddBookmarkView(QWidget* _parent)
     QVBoxLayout* contentLayout = new QVBoxLayout(contentWidget);
     contentLayout->setContentsMargins({});
     contentLayout->setSpacing(0);
-    contentLayout->addWidget(d->bookmarkName);
-    contentLayout->addLayout(d->buttonsLayout);
+    contentLayout->addWidget(d->bookmarkNameContainer);
     contentLayout->addStretch();
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -99,13 +108,14 @@ AddBookmarkView::AddBookmarkView(QWidget* _parent)
     });
     connect(d->saveButton, &Button::clicked, this, &AddBookmarkView::savePressed);
     connect(d->cancelButton, &Button::clicked, this, &AddBookmarkView::cancelPressed);
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 AddBookmarkView::~AddBookmarkView() = default;
+
+void AddBookmarkView::setTopMargin(int _margin)
+{
+    d->content->widget()->layout()->setContentsMargins(0, _margin, 0, 0);
+}
 
 QString AddBookmarkView::bookmarkName() const
 {
@@ -138,7 +148,7 @@ bool AddBookmarkView::eventFilter(QObject* _watched, QEvent* _event)
         const auto keyEvent = static_cast<QKeyEvent*>(_event);
         if (keyEvent->key() == Qt::Key_Escape) {
             emit cancelPressed();
-        } else if (!keyEvent->modifiers().testFlag(Qt::ShiftModifier)
+        } else if (keyEvent->modifiers().testFlag(Qt::ControlModifier)
                    && (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)) {
             emit savePressed();
             return true;
@@ -163,7 +173,12 @@ void AddBookmarkView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     setBackgroundColor(Ui::DesignSystem::color().primary());
 
     d->content->widget()->layout()->setContentsMargins(0, Ui::DesignSystem::layout().px24(), 0, 0);
-    d->content->widget()->layout()->setSpacing(Ui::DesignSystem::layout().px12());
+
+    d->bookmarkNameContainer->setBackgroundColor(
+        ColorHelper::transparent(ColorHelper::nearby(Ui::DesignSystem::color().primary()), 0.3));
+    d->bookmarkNameContainer->layout()->setContentsMargins(0, Ui::DesignSystem::layout().px24(), 0,
+                                                           Ui::DesignSystem::layout().px12());
+    d->bookmarkNameContainer->layout()->setSpacing(Ui::DesignSystem::layout().px12());
 
     for (auto textField : {
              d->bookmarkName,

@@ -35,7 +35,7 @@ public:
     /**
      * @brief Показать виджет добавления/редактирования закладки
      */
-    void showAddBookmarkView(const QModelIndex& _index);
+    void showAddBookmarkView(const QModelIndex& _index, int _topMargin);
 
 signals:
     /**

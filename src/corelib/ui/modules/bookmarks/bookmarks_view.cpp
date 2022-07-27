@@ -34,7 +34,7 @@ public:
 
     bool isReadOnly = false;
 
-    Tree* commentsView = nullptr;
+    Tree* bookmarksView = nullptr;
     ContextMenu* commentsViewContextMenu = nullptr;
 
     AddBookmarkView* addBookmarkView = nullptr;
@@ -42,14 +42,14 @@ public:
 };
 
 BookmarksView::Implementation::Implementation(QWidget* _parent)
-    : commentsView(new Tree(_parent))
-    , commentsViewContextMenu(new ContextMenu(commentsView))
+    : bookmarksView(new Tree(_parent))
+    , commentsViewContextMenu(new ContextMenu(bookmarksView))
     , addBookmarkView(new AddBookmarkView(_parent))
 {
-    commentsView->setAutoAdjustSize(true);
-    commentsView->setContextMenuPolicy(Qt::CustomContextMenu);
-    commentsView->setItemDelegate(new BookmarkDelegate(commentsView));
-    commentsView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    bookmarksView->setAutoAdjustSize(true);
+    bookmarksView->setContextMenuPolicy(Qt::CustomContextMenu);
+    bookmarksView->setItemDelegate(new BookmarkDelegate(bookmarksView));
+    bookmarksView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
 void BookmarksView::Implementation::updateBookmarksViewContextMenu(const QModelIndexList& _indexes,
@@ -68,15 +68,16 @@ void BookmarksView::Implementation::updateBookmarksViewContextMenu(const QModelI
         auto edit = new QAction(tr("Edit"));
         edit->setIconText(u8"\U000F03EB");
         connect(edit, &QAction::triggered, _view, [this, _view] {
-            itemWithBookmarkIndex = commentsView->selectedIndexes().constFirst();
-            _view->showAddBookmarkView(itemWithBookmarkIndex);
+            itemWithBookmarkIndex = bookmarksView->selectedIndexes().constFirst();
+            _view->showAddBookmarkView(itemWithBookmarkIndex,
+                                       bookmarksView->visualRect(itemWithBookmarkIndex).top());
         });
         menuActions.append(edit);
         //
         auto remove = new QAction(tr("Remove"));
         remove->setIconText(u8"\U000F01B4");
         connect(remove, &QAction::triggered, _view,
-                [this, _view] { emit _view->removeRequested(commentsView->selectedIndexes()); });
+                [this, _view] { emit _view->removeRequested(bookmarksView->selectedIndexes()); });
         menuActions.append(remove);
     }
     //
@@ -86,7 +87,7 @@ void BookmarksView::Implementation::updateBookmarksViewContextMenu(const QModelI
         auto remove = new QAction(tr("Remove selected bookmarks"));
         remove->setIconText(u8"\U000F01B4");
         connect(remove, &QAction::triggered, _view,
-                [this, _view] { emit _view->removeRequested(commentsView->selectedIndexes()); });
+                [this, _view] { emit _view->removeRequested(bookmarksView->selectedIndexes()); });
         menuActions.append(remove);
     }
 
@@ -103,23 +104,23 @@ BookmarksView::BookmarksView(QWidget* _parent)
 {
     setAnimationType(StackWidget::AnimationType::Slide);
 
-    setCurrentWidget(d->commentsView);
+    setCurrentWidget(d->bookmarksView);
     addWidget(d->addBookmarkView);
 
 
-    connect(d->commentsView, &Tree::clicked, this, &BookmarksView::bookmarkSelected);
-    connect(d->commentsView, &Tree::doubleClicked, this, [this](const QModelIndex& _index) {
+    connect(d->bookmarksView, &Tree::clicked, this, &BookmarksView::bookmarkSelected);
+    connect(d->bookmarksView, &Tree::doubleClicked, this, [this](const QModelIndex& _index) {
         if (!d->isReadOnly) {
-            showAddBookmarkView(_index);
+            showAddBookmarkView(_index, d->bookmarksView->visualRect(_index).top());
         }
     });
-    connect(d->commentsView, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
-        if (d->isReadOnly || d->commentsView->selectedIndexes().isEmpty()) {
+    connect(d->bookmarksView, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
+        if (d->isReadOnly || d->bookmarksView->selectedIndexes().isEmpty()) {
             return;
         }
 
-        d->updateBookmarksViewContextMenu(d->commentsView->selectedIndexes(), this);
-        d->commentsViewContextMenu->showContextMenu(d->commentsView->mapToGlobal(_pos));
+        d->updateBookmarksViewContextMenu(d->bookmarksView->selectedIndexes(), this);
+        d->commentsViewContextMenu->showContextMenu(d->bookmarksView->mapToGlobal(_pos));
     });
     connect(d->addBookmarkView, &AddBookmarkView::savePressed, this, [this] {
         if (d->itemWithBookmarkIndex.isValid()) {
@@ -131,11 +132,11 @@ BookmarksView::BookmarksView(QWidget* _parent)
             emit addBookmarkRequested(d->addBookmarkView->bookmarkName(),
                                       d->addBookmarkView->bookmarkColor());
         }
-        setCurrentWidget(d->commentsView);
+        setCurrentWidget(d->bookmarksView);
     });
     connect(d->addBookmarkView, &AddBookmarkView::cancelPressed, this, [this] {
         d->itemWithBookmarkIndex = {};
-        setCurrentWidget(d->commentsView);
+        setCurrentWidget(d->bookmarksView);
     });
 }
 
@@ -148,22 +149,23 @@ void BookmarksView::setReadOnly(bool _readOnly)
 
 void BookmarksView::setModel(QAbstractItemModel* _model)
 {
-    d->commentsView->setModel(_model);
+    d->bookmarksView->setModel(_model);
 }
 
 void BookmarksView::setCurrentIndex(const QModelIndex& _index)
 {
     QSignalBlocker blocker(this);
-    d->commentsView->setCurrentIndex(_index);
+    d->bookmarksView->setCurrentIndex(_index);
 }
 
-void BookmarksView::showAddBookmarkView(const QModelIndex& _index)
+void BookmarksView::showAddBookmarkView(const QModelIndex& _index, int _topMargin)
 {
     d->itemWithBookmarkIndex = _index;
     d->addBookmarkView->setBookmarkName(
         _index.data(BusinessLayer::BookmarksModel::BookmarkNameRole).toString());
     d->addBookmarkView->setBookmarkColor(
         _index.data(BusinessLayer::BookmarksModel::BookmarkColorRole).value<QColor>());
+    d->addBookmarkView->setTopMargin(_topMargin);
     setCurrentWidget(d->addBookmarkView);
     QTimer::singleShot(animationDuration(), d->addBookmarkView,
                        qOverload<>(&AddBookmarkView::setFocus));
@@ -174,8 +176,8 @@ void BookmarksView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     StackWidget::designSystemChangeEvent(_event);
 
     setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->commentsView->setBackgroundColor(DesignSystem::color().primary());
-    d->commentsView->setTextColor(DesignSystem::color().onPrimary());
+    d->bookmarksView->setBackgroundColor(DesignSystem::color().primary());
+    d->bookmarksView->setTextColor(DesignSystem::color().onPrimary());
     d->commentsViewContextMenu->setBackgroundColor(DesignSystem::color().background());
     d->commentsViewContextMenu->setTextColor(DesignSystem::color().onBackground());
 }
