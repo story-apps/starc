@@ -897,6 +897,7 @@ void CommentsModel::markAsUndone(const QModelIndexList& _indexes)
 
 void CommentsModel::addReply(const QModelIndex& _index, const QString& _comment)
 {
+    const auto replyDateTime = QDateTime::currentDateTime().toString(Qt::ISODate);
     const auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
     for (auto textItem : reviewMarkWrapper.items) {
         auto updatedReviewMarks = textItem->reviewMarks();
@@ -904,7 +905,7 @@ void CommentsModel::addReply(const QModelIndex& _index, const QString& _comment)
             if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
                 reviewMark.comments.append(
                     { DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
-                      QDateTime::currentDateTime().toString(Qt::ISODate), _comment });
+                      replyDateTime, _comment });
             }
         }
         textItem->setReviewMarks(updatedReviewMarks);
