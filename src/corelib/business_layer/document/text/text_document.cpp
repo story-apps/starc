@@ -1789,9 +1789,23 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             do {
                 const auto beginIter = itemsToDeleteSorted.cbegin();
                 const auto firstItem = beginIter->second;
-                if (!itemsGroup.isEmpty()
-                    && itemsGroup.constLast().item->parent() != firstItem->parent()) {
-                    break;
+                if (!itemsGroup.isEmpty()) {
+                    //
+                    // ... прерываем группировку, если у элементов разные родители
+                    //
+                    const auto lastGroupItem = itemsGroup.constLast().item;
+                    const auto lastGroupItemParent = lastGroupItem->parent();
+                    if (lastGroupItemParent != firstItem->parent()) {
+                        break;
+                    }
+                    //
+                    // ... или если они не идут друг за другом подряд
+                    //
+                    const auto lastGroupItemRow = lastGroupItemParent->rowOfChild(lastGroupItem);
+                    const auto firstItemRow = lastGroupItemParent->rowOfChild(firstItem);
+                    if (lastGroupItemRow + 1 != firstItemRow) {
+                        break;
+                    }
                 }
 
                 const auto firstItemPosition = beginIter->first;
@@ -1854,9 +1868,19 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             }
 
             const auto item = removeIter->second;
-            if (!itemsToDeleteGroup.isEmpty()
-                && itemsToDeleteGroup.constLast()->parent() != item->parent()) {
-                removeGroup();
+            if (!itemsToDeleteGroup.isEmpty()) {
+                const auto lastItemToDelete = itemsToDeleteGroup.constLast();
+                const auto lastItemToDeleteParent = lastItemToDelete->parent();
+                if (lastItemToDeleteParent != item->parent()) {
+                    removeGroup();
+                } else {
+                    const auto lastItemToDeleteRow
+                        = lastItemToDeleteParent->rowOfChild(lastItemToDelete);
+                    const auto itemRow = lastItemToDeleteParent->rowOfChild(item);
+                    if (lastItemToDeleteRow + 1 != itemRow) {
+                        removeGroup();
+                    }
+                }
             }
 
             itemsToDeleteGroup.append(item);
