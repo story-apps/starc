@@ -20,10 +20,28 @@ namespace Ui {
 class ThemeColor::Implementation
 {
 public:
+    /**
+     * @brief Получить области, которые занимают цвета
+     */
+    QPair<QRectF, QRectF> colorRects(const QRect& _rect) const;
+
+
     QColor color;
     QColor onColor;
     QString title;
 };
+
+QPair<QRectF, QRectF> ThemeColor::Implementation::colorRects(const QRect& _rect) const
+{
+    const QRectF colorsRect(_rect.left() + Ui::DesignSystem::layout().px4(),
+                            _rect.top() + Ui::DesignSystem::layout().px4(),
+                            _rect.width() - Ui::DesignSystem::layout().px8(),
+                            Ui::DesignSystem::layout().px(28));
+    const QRectF leftColorRect(colorsRect.left(), colorsRect.top(), colorsRect.width() / 2,
+                               colorsRect.height());
+    const QRectF rightColorRect(leftColorRect.topRight(), leftColorRect.size());
+    return { leftColorRect, rightColorRect };
+}
 
 // **
 
@@ -86,6 +104,24 @@ QSize ThemeColor::minimumSizeHint() const
     return sizeHint();
 }
 
+bool ThemeColor::event(QEvent* _event)
+{
+    if (_event->type() == QEvent::ToolTip) {
+        const auto colorRects = d->colorRects(contentsRect());
+        QHelpEvent* event = static_cast<QHelpEvent*>(_event);
+        if (colorRects.first.contains(event->pos())) {
+            QToolTip::showText(event->globalPos(), tr("Background color"));
+        } else if (colorRects.second.contains(event->pos())) {
+            QToolTip::showText(event->globalPos(), tr("Text color"));
+        } else {
+            QToolTip::hideText();
+        }
+        return true;
+    }
+
+    return Widget::event(_event);
+}
+
 void ThemeColor::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);
@@ -132,18 +168,10 @@ void ThemeColor::paintEvent(QPaintEvent* _event)
 
 void ThemeColor::mouseReleaseEvent(QMouseEvent* _event)
 {
-    const auto rect = contentsRect();
-    const QRectF colorsRect(rect.left() + Ui::DesignSystem::layout().px4(),
-                            rect.top() + Ui::DesignSystem::layout().px4(),
-                            rect.width() - Ui::DesignSystem::layout().px8(),
-                            Ui::DesignSystem::layout().px(28));
-    const QRectF leftColorRect(colorsRect.left(), colorsRect.top(), colorsRect.width() / 2,
-                               colorsRect.height());
-    const QRectF rightColorRect(leftColorRect.topRight(), leftColorRect.size());
-
-    if (leftColorRect.contains(_event->pos())) {
+    const auto colorRects = d->colorRects(contentsRect());
+    if (colorRects.first.contains(_event->pos())) {
         emit colorPressed(d->color);
-    } else if (rightColorRect.contains(_event->pos())) {
+    } else if (colorRects.second.contains(_event->pos())) {
         emit onColorPressed(d->onColor);
     }
 }

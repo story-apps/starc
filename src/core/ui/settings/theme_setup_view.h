@@ -53,6 +53,11 @@ signals:
 
 protected:
     /**
+     * @brief Переопределяем для отображения тултипов кнопок
+     */
+    bool event(QEvent* _event) override;
+
+    /**
      * @brief Реализуем собственную отрисовку
      */
     void paintEvent(QPaintEvent* _event) override;
