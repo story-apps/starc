@@ -371,10 +371,15 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
                 //
                 writer.writeAttribute(xml::kFromAttribute, QString::number(format.from));
                 writer.writeAttribute(xml::kLengthAttribute, QString::number(format.length));
-                writer.writeAttribute(xml::kBoldAttribute, format.isBold ? "true" : "false");
-                writer.writeAttribute(xml::kItalicAttribute, format.isItalic ? "true" : "false");
-                writer.writeAttribute(xml::kUnderlineAttribute,
-                                      format.isUnderline ? "true" : "false");
+                if (format.isBold) {
+                    writer.writeAttribute(xml::kBoldAttribute, "true");
+                }
+                if (format.isItalic) {
+                    writer.writeAttribute(xml::kItalicAttribute, "true");
+                }
+                if (format.isUnderline) {
+                    writer.writeAttribute(xml::kUnderlineAttribute, "true");
+                }
                 //
                 writer.writeEndElement(); // format
             }
