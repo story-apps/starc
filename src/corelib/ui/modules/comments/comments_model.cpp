@@ -562,41 +562,46 @@ void CommentsModel::Implementation::processSourceModelDataChanged(const QModelIn
     // Если в абзаце были заметки
     //
     else {
-        int newReviewMarkIndex = 0;
-        int oldReviewMarkIndex = 0;
-
-        for (; newReviewMarkIndex < textItem->reviewMarks().size(); ++newReviewMarkIndex) {
+        for (int newReviewMarkIndex = 0; newReviewMarkIndex < textItem->reviewMarks().size();
+             ++newReviewMarkIndex) {
+            bool hasSimilar = false;
             const auto newReviewMark = textItem->reviewMarks().at(newReviewMarkIndex);
-            const auto oldReviewMarkWrapper = oldReviewMarkWrappers.value(oldReviewMarkIndex);
-            //
-            // Обновим заметку, если она осталась на месте
-            //
-            if (newReviewMark.isPartiallyEqual(oldReviewMarkWrapper.reviewMark)) {
-                auto newReviewMarkWrapper = oldReviewMarkWrapper;
-                newReviewMarkWrapper.reviewMark = newReviewMark;
-                if (newReviewMarkWrapper.items.size() == 1) {
-                    newReviewMarkWrapper.fromInFirstItem = newReviewMark.from;
-                    newReviewMarkWrapper.toInLastItem = newReviewMark.end();
-                } else if (textItem == newReviewMarkWrapper.items.constFirst()) {
-                    newReviewMarkWrapper.fromInFirstItem = newReviewMark.from;
-                } else if (textItem == newReviewMarkWrapper.items.last()) {
-                    newReviewMarkWrapper.toInLastItem = newReviewMark.end();
+            for (int oldReviewMarkIndex = 0; oldReviewMarkIndex < oldReviewMarkWrappers.size();
+                 ++oldReviewMarkIndex) {
+                const auto oldReviewMarkWrapper = oldReviewMarkWrappers.value(oldReviewMarkIndex);
+                //
+                // Обновим заметку, если она осталась на месте
+                //
+                if (newReviewMark.isPartiallyEqual(oldReviewMarkWrapper.reviewMark)) {
+                    auto newReviewMarkWrapper = oldReviewMarkWrapper;
+                    newReviewMarkWrapper.reviewMark = newReviewMark;
+                    if (newReviewMarkWrapper.items.size() == 1) {
+                        newReviewMarkWrapper.fromInFirstItem = newReviewMark.from;
+                        newReviewMarkWrapper.toInLastItem = newReviewMark.end();
+                    } else if (textItem == newReviewMarkWrapper.items.constFirst()) {
+                        newReviewMarkWrapper.fromInFirstItem = newReviewMark.from;
+                    } else if (textItem == newReviewMarkWrapper.items.last()) {
+                        newReviewMarkWrapper.toInLastItem = newReviewMark.end();
+                    }
+
+                    //
+                    // Перезаписываем на обновлённый
+                    //
+                    const auto wrapperIndex = reviewMarks.indexOf(oldReviewMarkWrapper);
+                    reviewMarks[wrapperIndex] = newReviewMarkWrapper;
+                    const auto changedItemModelIndex = q->index(wrapperIndex, 0);
+                    emit q->dataChanged(changedItemModelIndex, changedItemModelIndex);
+
+                    oldReviewMarkWrappers.removeAt(oldReviewMarkIndex);
+                    hasSimilar = true;
+                    break;
                 }
-
-                //
-                // Перезаписываем на обновлённый
-                //
-                const auto wrapperIndex = reviewMarks.indexOf(oldReviewMarkWrapper);
-                reviewMarks[wrapperIndex] = newReviewMarkWrapper;
-                const auto changedItemModelIndex = q->index(wrapperIndex, 0);
-                emit q->dataChanged(changedItemModelIndex, changedItemModelIndex);
-
-                ++oldReviewMarkIndex;
             }
+
             //
-            // В противном случае добавляем новую заметку
+            // Если идентичной заметки не нашлось, добавляем новую заметку
             //
-            else {
+            if (!hasSimilar) {
                 saveReviewMark(textItem, newReviewMark);
             }
         }
@@ -604,7 +609,8 @@ void CommentsModel::Implementation::processSourceModelDataChanged(const QModelIn
         //
         // Удаляем старые заметки, которых нет в обновлённом блоке
         //
-        for (; oldReviewMarkIndex < oldReviewMarkWrappers.size(); ++oldReviewMarkIndex) {
+        for (int oldReviewMarkIndex = 0; oldReviewMarkIndex < oldReviewMarkWrappers.size();
+             ++oldReviewMarkIndex) {
             const auto oldReviewMarkWrapper = oldReviewMarkWrappers.value(oldReviewMarkIndex);
             const auto oldReviewMarkWrapperIndex = reviewMarks.indexOf(oldReviewMarkWrapper);
             q->beginRemoveRows({}, oldReviewMarkWrapperIndex, oldReviewMarkWrapperIndex);

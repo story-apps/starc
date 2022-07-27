@@ -1,8 +1,8 @@
 #include "comments_toolbar.h"
-#include <utils/tools/run_once.h>
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/color_picker/color_picker_popup.h>
+#include <utils/tools/run_once.h>
 
 #include <QAction>
 #include <QHBoxLayout>
