@@ -145,6 +145,12 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                           .arg(projectExportFolder, screenplayTextModel->informationModel()->name(),
                                exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                if (!modelExportFile.endsWith(exportExtension)) {
+                    while (!modelExportFile.endsWith('.')) {
+                        modelExportFile.chop(1);
+                    }
+                    modelExportFile += exportExtension;
+                }
                 auto exportFilePath = QFileDialog::getSaveFileName(
                     topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
                 if (exportFilePath.isEmpty()) {
@@ -303,6 +309,12 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                           .arg(projectExportFolder, comicBookTextModel->informationModel()->name(),
                                exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                if (!modelExportFile.endsWith(exportExtension)) {
+                    while (!modelExportFile.endsWith('.')) {
+                        modelExportFile.chop(1);
+                    }
+                    modelExportFile += exportExtension;
+                }
                 auto exportFilePath = QFileDialog::getSaveFileName(
                     topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
                 if (exportFilePath.isEmpty()) {
@@ -434,6 +446,12 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
                           .arg(projectExportFolder, audioplayTextModel->informationModel()->name(),
                                exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                if (!modelExportFile.endsWith(exportExtension)) {
+                    while (!modelExportFile.endsWith('.')) {
+                        modelExportFile.chop(1);
+                    }
+                    modelExportFile += exportExtension;
+                }
                 auto exportFilePath = QFileDialog::getSaveFileName(
                     topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
                 if (exportFilePath.isEmpty()) {
@@ -571,6 +589,12 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
                           .arg(projectExportFolder, stageplayTextModel->informationModel()->name(),
                                exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                if (!modelExportFile.endsWith(exportExtension)) {
+                    while (!modelExportFile.endsWith('.')) {
+                        modelExportFile.chop(1);
+                    }
+                    modelExportFile += exportExtension;
+                }
                 auto exportFilePath = QFileDialog::getSaveFileName(
                     topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
                 if (exportFilePath.isEmpty()) {
@@ -705,6 +729,12 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
                     = QString("%1/%2.%3")
                           .arg(projectExportFolder, simpleTextModel->name(), exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                if (!modelExportFile.endsWith(exportExtension)) {
+                    while (!modelExportFile.endsWith('.')) {
+                        modelExportFile.chop(1);
+                    }
+                    modelExportFile += exportExtension;
+                }
                 auto exportFilePath = QFileDialog::getSaveFileName(
                     topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
                 if (exportFilePath.isEmpty()) {
