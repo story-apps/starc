@@ -120,7 +120,7 @@ bool AddCommentView::eventFilter(QObject* _watched, QEvent* _event)
         const auto keyEvent = static_cast<QKeyEvent*>(_event);
         if (keyEvent->key() == Qt::Key_Escape) {
             emit cancelPressed();
-        } else if (!keyEvent->modifiers().testFlag(Qt::ShiftModifier)
+        } else if (keyEvent->modifiers().testFlag(Qt::ControlModifier)
                    && (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)) {
             emit savePressed();
             return true;
