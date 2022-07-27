@@ -37,7 +37,8 @@ public:
     /**
      * @brief Показать виджет добавления/редактирования комментария
      */
-    void showAddCommentView(const QColor& _withColor, const QString& _withText = {});
+    void showAddCommentView(const QColor& _withColor, const QString& _withText = {},
+                            int _topMargin = 0);
 
     /**
      * @brief Отобразить обуждение комментария

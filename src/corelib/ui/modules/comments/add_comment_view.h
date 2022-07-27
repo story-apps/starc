@@ -17,6 +17,12 @@ public:
     ~AddCommentView() override;
 
     /**
+     * @brief Задать отступ сверху, чтобы поле ввода было на уровне с текстом, для которого
+     *        добавлется комментарий
+     */
+    void setTopMargin(int _margin);
+
+    /**
      * @brief Текст комментария
      */
     QString comment() const;

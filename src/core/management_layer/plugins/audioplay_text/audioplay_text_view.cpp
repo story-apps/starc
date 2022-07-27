@@ -516,7 +516,12 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
     connect(d->commentsToolbar, &CommentsToolbar::commentAddRequested, this,
             [this](const QColor& _color) {
                 d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
-                d->commentsView->showAddCommentView(_color);
+                d->commentsView->showAddCommentView(
+                    _color, {},
+                    d->commentsView
+                        ->mapFromGlobal(d->textEdit->viewport()->mapToGlobal(
+                            d->textEdit->cursorRect().topLeft()))
+                        .y());
             });
     connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
             [this](const QColor& _color, const QString& _comment) {

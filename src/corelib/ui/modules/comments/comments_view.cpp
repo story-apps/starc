@@ -77,7 +77,8 @@ void CommentsView::Implementation::updateCommentsViewContextMenu(const QModelInd
             _view->showAddCommentView(
                 commentIndex.data(BusinessLayer::CommentsModel::ReviewMarkColorRole)
                     .value<QColor>(),
-                commentIndex.data(BusinessLayer::CommentsModel::ReviewMarkCommentRole).toString());
+                commentIndex.data(BusinessLayer::CommentsModel::ReviewMarkCommentRole).toString(),
+                commentsView->visualRect(commentIndex).top());
         });
         menuActions.append(edit);
         auto discuss = new QAction(tr("Discuss"));
@@ -222,10 +223,12 @@ void CommentsView::setCurrentIndex(const QModelIndex& _index)
     d->commentsView->setCurrentIndex(_index);
 }
 
-void CommentsView::showAddCommentView(const QColor& _withColor, const QString& _withText)
+void CommentsView::showAddCommentView(const QColor& _withColor, const QString& _withText,
+                                      int _topMargin)
 {
     d->commentColor = _withColor;
     d->addCommentView->setComment(_withText);
+    d->addCommentView->setTopMargin(_topMargin);
     setCurrentWidget(d->addCommentView);
     QTimer::singleShot(animationDuration(), d->addCommentView,
                        qOverload<>(&AddCommentView::setFocus));

@@ -4,6 +4,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/ui_helper.h>
 
 #include <QKeyEvent>
@@ -19,6 +20,7 @@ public:
     explicit Implementation(QWidget* _parent);
 
     QScrollArea* content = nullptr;
+    Widget* commentContainer = nullptr;
     TextField* comment = nullptr;
     QHBoxLayout* buttonsLayout = nullptr;
     Button* cancelButton = nullptr;
@@ -27,6 +29,7 @@ public:
 
 AddCommentView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent))
+    , commentContainer(new Widget(_parent))
     , comment(new TextField(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
@@ -62,14 +65,19 @@ AddCommentView::AddCommentView(QWidget* _parent)
 
     d->comment->installEventFilter(this);
 
+    auto commentContainerLayout = new QVBoxLayout(d->commentContainer);
+    commentContainerLayout->setContentsMargins({});
+    commentContainerLayout->setSpacing(0);
+    commentContainerLayout->addWidget(d->comment);
+    commentContainerLayout->addLayout(d->buttonsLayout);
+
     QWidget* contentWidget = new QWidget;
     d->content->setWidgetResizable(true);
     d->content->setWidget(contentWidget);
     QVBoxLayout* contentLayout = new QVBoxLayout(contentWidget);
     contentLayout->setContentsMargins({});
     contentLayout->setSpacing(0);
-    contentLayout->addWidget(d->comment);
-    contentLayout->addLayout(d->buttonsLayout);
+    contentLayout->addWidget(d->commentContainer);
     contentLayout->addStretch();
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -87,13 +95,14 @@ AddCommentView::AddCommentView(QWidget* _parent)
     });
     connect(d->saveButton, &Button::clicked, this, &AddCommentView::savePressed);
     connect(d->cancelButton, &Button::clicked, this, &AddCommentView::cancelPressed);
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 AddCommentView::~AddCommentView() = default;
+
+void AddCommentView::setTopMargin(int _margin)
+{
+    d->content->widget()->layout()->setContentsMargins(0, _margin, 0, 0);
+}
 
 QString AddCommentView::comment() const
 {
@@ -135,7 +144,12 @@ void AddCommentView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     setBackgroundColor(Ui::DesignSystem::color().primary());
 
     d->content->widget()->layout()->setContentsMargins(0, Ui::DesignSystem::layout().px24(), 0, 0);
-    d->content->widget()->layout()->setSpacing(Ui::DesignSystem::layout().px12());
+
+    d->commentContainer->setBackgroundColor(
+        ColorHelper::transparent(ColorHelper::nearby(Ui::DesignSystem::color().primary()), 0.3));
+    d->commentContainer->layout()->setContentsMargins(0, Ui::DesignSystem::layout().px24(), 0,
+                                                      Ui::DesignSystem::layout().px12());
+    d->commentContainer->layout()->setSpacing(Ui::DesignSystem::layout().px12());
 
     d->comment->setBackgroundColor(Ui::DesignSystem::color().onPrimary());
     d->comment->setTextColor(Ui::DesignSystem::color().onPrimary());
