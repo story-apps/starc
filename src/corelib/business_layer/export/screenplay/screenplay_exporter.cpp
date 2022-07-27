@@ -24,7 +24,8 @@ TextDocument* ScreenplayExporter::createDocument(const ExportOptions& _exportOpt
     auto document = new ScreenplayTextDocument;
     document->setCorrectionOptions(
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey).toBool(),
-        true);
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)
+            .toBool());
     document->setTreatmentVisible(exportOptions.includeTreatment);
     return document;
 }
