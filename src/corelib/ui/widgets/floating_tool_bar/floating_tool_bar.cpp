@@ -379,16 +379,16 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     backgroundImagePainter.setPen(Qt::NoPen);
     backgroundImagePainter.setBrush(backgroundColor());
     qreal radius = 0.0;
-    if (d->isCurtain) {
-        radius = Ui::DesignSystem::layout().px8();
-        backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()), radius,
-                                               radius);
-        backgroundImagePainter.fillRect(
-            QRect(0, 0, backgroundImage.width(), backgroundImage.height() / 2), painter.brush());
-    } else {
-        radius = Ui::DesignSystem::floatingToolBar().height() / 2.0;
-        backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()), radius,
-                                               radius);
+    {
+        const auto rect = QRect({ 0, 0 }, backgroundImage.size());
+        if (d->isCurtain) {
+            radius = Ui::DesignSystem::layout().px8();
+            backgroundImagePainter.drawRoundedRect(rect, radius, radius);
+            backgroundImagePainter.fillRect(rect.adjusted(0, 0, 0, radius), painter.brush());
+        } else {
+            radius = Ui::DesignSystem::floatingToolBar().height() / 2.0;
+            backgroundImagePainter.drawRoundedRect(rect, radius, radius);
+        }
     }
     //
     // ... рисуем тень
