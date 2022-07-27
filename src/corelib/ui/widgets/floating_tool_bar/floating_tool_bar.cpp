@@ -51,6 +51,11 @@ public:
     Qt::Orientation orientation = Qt::Horizontal;
 
     /**
+     * @brief Отбражать ли панель в стиле шторки
+     */
+    bool isCurtain = false;
+
+    /**
      * @brief Иконка на которой кликнули последней
      */
     QAction* lastPressedAction = nullptr;
@@ -216,6 +221,16 @@ void FloatingToolBar::setOrientation(Qt::Orientation _orientation)
     update();
 }
 
+void FloatingToolBar::setCurtain(bool _curtain)
+{
+    if (d->isCurtain == _curtain) {
+        return;
+    }
+
+    d->isCurtain = _curtain;
+    update();
+}
+
 void FloatingToolBar::setStartOpacity(qreal _opacity)
 {
     d->opacityAnimation.setStartValue(_opacity);
@@ -363,8 +378,18 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     QPainter backgroundImagePainter(&backgroundImage);
     backgroundImagePainter.setPen(Qt::NoPen);
     backgroundImagePainter.setBrush(backgroundColor());
-    const qreal radius = Ui::DesignSystem::floatingToolBar().height() / 2.0;
-    backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()), radius, radius);
+    qreal radius = 0.0;
+    if (d->isCurtain) {
+        radius = Ui::DesignSystem::layout().px8();
+        backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()), radius,
+                                               radius);
+        backgroundImagePainter.fillRect(
+            QRect(0, 0, backgroundImage.width(), backgroundImage.height() / 2), painter.brush());
+    } else {
+        radius = Ui::DesignSystem::floatingToolBar().height() / 2.0;
+        backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()), radius,
+                                               radius);
+    }
     //
     // ... рисуем тень
     //
@@ -380,7 +405,16 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     //
     painter.setPen(Qt::NoPen);
     painter.setBrush(backgroundColor());
-    painter.drawRoundedRect(backgroundRect, radius, radius);
+    if (d->isCurtain) {
+        const auto topRect = backgroundRect.adjusted(0, 0, 0, -radius);
+        painter.fillRect(topRect, painter.brush());
+        const auto bottomRect = backgroundRect.adjusted(0, topRect.height(), 0, 0);
+        painter.setClipRect(bottomRect);
+        painter.drawRoundedRect(backgroundRect, radius, radius);
+        painter.setClipRect(QRectF(), Qt::NoClip);
+    } else {
+        painter.drawRoundedRect(backgroundRect, radius, radius);
+    }
 
     if (actions().isEmpty()) {
         return;

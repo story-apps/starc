@@ -20,6 +20,12 @@ public:
     void setOrientation(Qt::Orientation _orientation);
 
     /**
+     * @brief Задать режим отрисовки в виде шторки (true) или плавающей панели (false)
+     * @default false
+     */
+    void setCurtain(bool _curtain);
+
+    /**
      * @brief Задать стартовую прозрачность
      */
     void setStartOpacity(qreal _opacity);
