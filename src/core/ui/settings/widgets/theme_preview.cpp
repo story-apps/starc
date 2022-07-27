@@ -119,7 +119,7 @@ void ThemePreview::paintEvent(QPaintEvent* _event)
     //
     // ... тулбар
     //
-    painter.setBrush(themeColor.primary());
+    painter.setBrush(ColorHelper::nearby(themeColor.background()));
     const QRectF toolBarRect(sideBarRect.right() + Ui::DesignSystem::layout().px(6),
                              Ui::DesignSystem::layout().px8(),
                              width() - sideBarRect.width() - Ui::DesignSystem::layout().px(40),
