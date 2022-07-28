@@ -298,7 +298,7 @@ void BaseTextEdit::setTextAlignment(Qt::Alignment _alignment)
 ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
     auto menu = CompleterTextEdit::createContextMenu(_position, _parent);
-    if (isReadOnly()) {
+    if (isReadOnly() || (!textCursor().hasSelection() && isMispelledWordUnderCursor(_position))) {
         return menu;
     }
 
@@ -365,12 +365,8 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     // В зависимости от того, есть ли меню проверки орфографии добавляем пункт меню форматирования
     //
     auto actions = menu->actions().toVector();
-    if (isMispelledWordUnderCursor(_position)) {
-        actions.insert(1, formattingAction);
-    } else {
-        actions.first()->setSeparator(true);
-        actions.prepend(formattingAction);
-    }
+    actions.first()->setSeparator(true);
+    actions.prepend(formattingAction);
     menu->setActions(actions);
 
     return menu;

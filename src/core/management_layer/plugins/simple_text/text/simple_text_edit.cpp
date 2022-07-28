@@ -660,7 +660,7 @@ ContextMenu* SimpleTextEdit::createContextMenu(const QPoint& _position, QWidget*
     // измениться курсор, который установлен в текстовом редакторе, и использовать его
     //
     auto menu = BaseTextEdit::createContextMenu(_position, _parent);
-    if (isReadOnly()) {
+    if (isReadOnly() || (!textCursor().hasSelection() && isMispelledWordUnderCursor(_position))) {
         return menu;
     }
 

@@ -1350,13 +1350,14 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     // измениться курсор, который установлен в текстовом редакторе, и использовать его
     //
     auto menu = ScriptTextEdit::createContextMenu(_position, _parent);
-    if (isReadOnly()) {
+    if (isReadOnly() || (!textCursor().hasSelection() && isMispelledWordUnderCursor(_position))) {
         return menu;
     }
 
     const BusinessLayer::TextCursor cursor = textCursor();
 
     auto splitAction = new QAction(this);
+    splitAction->setSeparator(true);
     if (cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
         splitAction->setIconText(u8"\U000f10e7");
@@ -1425,9 +1426,8 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     connect(showBookmarks, &QAction::triggered, this, &ScreenplayTextEdit::showBookmarksRequested);
 
     auto actions = menu->actions().toVector();
-    actions.first()->setSeparator(true);
-    actions.prepend(bookmarkAction);
     actions.prepend(splitAction);
+    actions.prepend(bookmarkAction);
     menu->setActions(actions);
 
     return menu;

@@ -4,6 +4,7 @@
 #include "spell_checker.h"
 
 #include <include/custom_events.h>
+#include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 
 #include <QApplication>
@@ -160,11 +161,20 @@ bool SpellCheckTextEdit::isMispelledWordUnderCursor(const QPoint& _position) con
 
 ContextMenu* SpellCheckTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
-    auto menu = PageTextEdit::createContextMenu(_position, _parent);
-    if (isReadOnly() || !useSpellChecker()) {
-        return menu;
+    //
+    // Если в режиме только чтения, не используется проверка орфографии, есть выделенный текст
+    // или нет ошибок под курсором
+    //
+    if (isReadOnly() || !useSpellChecker() || textCursor().hasSelection()
+        || !isMispelledWordUnderCursor(_position)) {
+        //
+        // ... возвращаем стандартное меню
+        //
+        return PageTextEdit::createContextMenu(_position, _parent);
     }
 
+    //
+    // А если ошибка есть, то генерим собственное меню
     //
     // Определим слово под курсором
     //
@@ -185,37 +195,48 @@ ContextMenu* SpellCheckTextEdit::createContextMenu(const QPoint& _position, QWid
     }
 
     //
-    // Если слово не проходит проверку орфографии добавим дополнительные действия в контекстное меню
+    // Формируем контекстное меню
     //
-    if (!d->spellChecker.spellCheckWord(wordInCorrectRegister)) {
-        auto spellingAction = new QAction;
-        spellingAction->setText(tr("Spelling"));
-        spellingAction->setIconText(u8"\U000F04C6");
-
-        const auto suggestions = d->spellChecker.suggestionsForWord(wordUnderCursor);
-        const auto maxSuggestions = std::min(5, static_cast<int>(suggestions.size()));
-        for (int index = 0; index < maxSuggestions; ++index) {
-            auto suggestionAction = new QAction(spellingAction);
-            suggestionAction->setText(suggestions.at(index));
-            connect(suggestionAction, &QAction::triggered, this,
-                    &SpellCheckTextEdit::replaceWordOnSuggestion);
+    QVector<QAction*> actions;
+    const auto suggestions = d->spellChecker.suggestionsForWord(wordUnderCursor);
+    const auto maxSuggestions = std::min(7, static_cast<int>(suggestions.size()));
+    for (int index = 0; index < maxSuggestions; ++index) {
+        auto suggestionAction = new QAction;
+        suggestionAction->setText(suggestions.at(index));
+        if (index == 0) {
+            suggestionAction->setIconText(u8"\U000F04C6");
+        } else {
+            suggestionAction->setIconText(u8"\U000F68C0");
         }
-
-        auto addWordAction = new QAction(spellingAction);
-        addWordAction->setSeparator(!suggestions.isEmpty());
-        addWordAction->setText(tr("Add to dictionary"));
-        connect(addWordAction, &QAction::triggered, this,
-                &SpellCheckTextEdit::addWordToUserDictionary);
-        auto ignoreWordAction = new QAction(spellingAction);
-        ignoreWordAction->setText(tr("Ignore word"));
-        connect(ignoreWordAction, &QAction::triggered, this, &SpellCheckTextEdit::ignoreWord);
-
-        auto actions = menu->actions().toVector();
-        actions.first()->setSeparator(true);
-        actions.insert(0, spellingAction);
-        menu->setActions(actions);
+        connect(suggestionAction, &QAction::triggered, this,
+                &SpellCheckTextEdit::replaceWordOnSuggestion);
+        actions.append(suggestionAction);
     }
+    if (actions.isEmpty()) {
+        auto suggestionAction = new QAction;
+        suggestionAction->setText("No suggestions");
+        suggestionAction->setIconText(u8"\U000F04C6");
+        suggestionAction->setEnabled(false);
+        actions.append(suggestionAction);
+    }
+    //
+    auto addWordAction = new QAction;
+    addWordAction->setSeparator(true);
+    addWordAction->setText(tr("Add to dictionary"));
+    addWordAction->setIconText(u8"\U000F68C0");
+    connect(addWordAction, &QAction::triggered, this, &SpellCheckTextEdit::addWordToUserDictionary);
+    actions.append(addWordAction);
+    //
+    auto ignoreWordAction = new QAction;
+    ignoreWordAction->setText(tr("Ignore word"));
+    ignoreWordAction->setIconText(u8"\U000F68C0");
+    connect(ignoreWordAction, &QAction::triggered, this, &SpellCheckTextEdit::ignoreWord);
+    actions.append(ignoreWordAction);
 
+    auto menu = new ContextMenu(_parent == nullptr ? this : _parent);
+    menu->setActions(actions);
+    menu->setBackgroundColor(Ui::DesignSystem::color().background());
+    menu->setTextColor(Ui::DesignSystem::color().onBackground());
     return menu;
 }
 
