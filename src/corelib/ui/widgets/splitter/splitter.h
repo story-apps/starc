@@ -15,6 +15,11 @@ public:
     ~Splitter() override;
 
     /**
+     * @brief Задать доступность кнопки скрытия панели
+     */
+    void setHidePanelButtonAvailable(bool _available);
+
+    /**
      * @brief Задать виджеты в контейнер
      */
     void setWidgets(QWidget* _first, QWidget* _second);

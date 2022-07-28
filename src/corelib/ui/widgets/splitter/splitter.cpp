@@ -6,6 +6,7 @@
 #include <QAction>
 #include <QMouseEvent>
 #include <QResizeEvent>
+#include <QTimer>
 #include <QVariantAnimation>
 
 
@@ -29,6 +30,7 @@ public:
      */
     void animateShowHiddenPanelToolbar(const QPointF& _finalPosition);
 
+
     Qt::Orientation orientation = Qt::Horizontal;
     Widget* handle = nullptr;
     QVector<qreal> sizes;
@@ -37,8 +39,14 @@ public:
     FloatingToolBar* showHiddenPanelToolbar = nullptr;
     QAction* showLeftPanelAction = nullptr;
     QAction* showRightPanelAction = nullptr;
-
     QVariantAnimation showHiddenPanelToolbarPositionAnimation;
+    //
+    bool isHideButtonAvailable = false;
+    FloatingToolBar* hideVisiblePanelToolbar = nullptr;
+    QAction* hideLeftPanelAction = nullptr;
+    QAction* hideRightPanelAction = nullptr;
+    QVariantAnimation hideVisiblePanelToolbarOpacityAnimation;
+    QTimer hideVisiblePanelToolbarHidingTimer;
 };
 
 Splitter::Implementation::Implementation(QWidget* _parent)
@@ -46,6 +54,9 @@ Splitter::Implementation::Implementation(QWidget* _parent)
     , showHiddenPanelToolbar(new FloatingToolBar(_parent))
     , showLeftPanelAction(new QAction(showHiddenPanelToolbar))
     , showRightPanelAction(new QAction(showHiddenPanelToolbar))
+    , hideVisiblePanelToolbar(new FloatingToolBar(_parent))
+    , hideLeftPanelAction(new QAction(showHiddenPanelToolbar))
+    , hideRightPanelAction(new QAction(showHiddenPanelToolbar))
 {
     handle->setBackgroundColor(Qt::transparent);
     handle->setCursor(Qt::SplitHCursor);
@@ -55,9 +66,20 @@ Splitter::Implementation::Implementation(QWidget* _parent)
     showHiddenPanelToolbar->hide();
     showLeftPanelAction->setIconText(u8"\U000F0142");
     showRightPanelAction->setIconText(u8"\U000F0141");
-
     showHiddenPanelToolbarPositionAnimation.setEasingCurve(QEasingCurve::OutQuad);
     showHiddenPanelToolbarPositionAnimation.setDuration(240);
+    //
+    hideVisiblePanelToolbar->addAction(hideRightPanelAction);
+    hideVisiblePanelToolbar->addAction(hideLeftPanelAction);
+    hideVisiblePanelToolbar->hide();
+    hideLeftPanelAction->setIconText(u8"\U000F0141");
+    hideRightPanelAction->setIconText(u8"\U000F0142");
+    hideVisiblePanelToolbarOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    hideVisiblePanelToolbarOpacityAnimation.setDuration(240);
+    hideVisiblePanelToolbarOpacityAnimation.setStartValue(0.0);
+    hideVisiblePanelToolbarOpacityAnimation.setEndValue(0.6);
+    hideVisiblePanelToolbarHidingTimer.setSingleShot(true);
+    hideVisiblePanelToolbarHidingTimer.setInterval(3000);
 }
 
 QVector<int> Splitter::Implementation::widgetsSizes() const
@@ -91,7 +113,7 @@ void Splitter::Implementation::resize(Splitter* _splitter, const QVector<qreal>&
 void Splitter::Implementation::animateShowHiddenPanelToolbar(const QPointF& _finalPosition)
 {
     //
-    // Показать
+    // Показать кнопку
     //
     if (!_finalPosition.isNull()) {
         if (showHiddenPanelToolbarPositionAnimation.direction() == QVariantAnimation::Forward
@@ -159,24 +181,49 @@ Splitter::Splitter(QWidget* _parent)
 
     connect(d->showLeftPanelAction, &QAction::triggered, this, [this] { setSizes({ 2, 7 }); });
     connect(d->showRightPanelAction, &QAction::triggered, this, [this] { setSizes({ 7, 2 }); });
+    connect(d->hideLeftPanelAction, &QAction::triggered, this, [this] { setSizes({ 0, 1 }); });
+    connect(d->hideRightPanelAction, &QAction::triggered, this, [this] { setSizes({ 1, 0 }); });
     connect(&d->showHiddenPanelToolbarPositionAnimation, &QVariantAnimation::valueChanged, this,
             [this] {
                 d->showHiddenPanelToolbar->move(
                     d->showHiddenPanelToolbarPositionAnimation.currentValue().toPoint());
             });
-    connect(&d->showHiddenPanelToolbarPositionAnimation, &QVariantAnimation::finished, this,
+    connect(&d->showHiddenPanelToolbarPositionAnimation, &QVariantAnimation::finished, this, [this] {
+        if (d->showHiddenPanelToolbarPositionAnimation.direction() == QVariantAnimation::Backward) {
+            d->showHiddenPanelToolbar->hide();
+        }
+    });
+    connect(&d->hideVisiblePanelToolbarOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this] {
-                if (d->showHiddenPanelToolbarPositionAnimation.direction()
+                d->hideVisiblePanelToolbar->setOpacity(
+                    d->hideVisiblePanelToolbarOpacityAnimation.currentValue().toReal());
+            });
+    connect(&d->hideVisiblePanelToolbarOpacityAnimation, &QVariantAnimation::finished, this,
+            [this] {
+                if (d->hideVisiblePanelToolbarOpacityAnimation.direction()
                     == QVariantAnimation::Backward) {
-                    d->showHiddenPanelToolbar->hide();
+                    d->hideVisiblePanelToolbar->hide();
                 }
             });
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
+    connect(&d->hideVisiblePanelToolbarHidingTimer, &QTimer::timeout, this, [this] {
+        d->hideVisiblePanelToolbarOpacityAnimation.setDirection(QVariantAnimation::Backward);
+        d->hideVisiblePanelToolbarOpacityAnimation.start();
+    });
 }
 
 Splitter::~Splitter() = default;
+
+void Splitter::setHidePanelButtonAvailable(bool _available)
+{
+    if (d->isHideButtonAvailable == _available) {
+        return;
+    }
+
+    d->isHideButtonAvailable = _available;
+    if (!d->isHideButtonAvailable && d->hideVisiblePanelToolbar->isVisible()) {
+        d->hideVisiblePanelToolbar->hide();
+    }
+}
 
 void Splitter::setWidgets(QWidget* _first, QWidget* _second)
 {
@@ -311,6 +358,27 @@ void Splitter::setSizes(const QVector<int>& _sizes)
     } else {
         d->animateShowHiddenPanelToolbar({});
     }
+    //
+    // ... и кнопку скрытия панели
+    //
+    if ((d->sizes.constFirst() <= minimumVisibleSize && widgets.constFirst()->isVisible())
+        || (d->sizes.constLast() <= minimumVisibleSize && widgets.constLast()->isVisible())) {
+        d->hideVisiblePanelToolbar->hide();
+    } else {
+        d->hideVisiblePanelToolbar->setActionCustomWidth(d->hideRightPanelAction,
+                                                         Ui::DesignSystem::layout().px8());
+        d->hideVisiblePanelToolbar->clearActionCustomWidth(d->hideLeftPanelAction);
+        d->widgets.constLast()->raise();
+        d->handle->raise();
+        d->hideVisiblePanelToolbar->raise();
+        d->widgets.constFirst()->raise();
+        d->hideVisiblePanelToolbar->resize(d->hideVisiblePanelToolbar->sizeHint());
+
+        d->hideVisiblePanelToolbar->move(
+            QPoint(handleGeometry.center().x() - (d->hideVisiblePanelToolbar->width() / 2),
+                   (height() - d->hideVisiblePanelToolbar->height()) / 2));
+    }
+    d->showHiddenPanelToolbar->raise();
 }
 
 QByteArray Splitter::saveState() const
@@ -452,6 +520,48 @@ bool Splitter::eventFilter(QObject* _watched, QEvent* _event)
         break;
     }
 
+    case QEvent::Enter: {
+        if (!d->isHideButtonAvailable) {
+            break;
+        }
+
+        auto widget = qobject_cast<QWidget*>(_watched);
+        const auto widgetIndex = d->widgets.indexOf(widget);
+        if (widgetIndex == -1) {
+            break;
+        }
+
+        if (widgetIndex == 0) {
+            d->hideVisiblePanelToolbarHidingTimer.stop();
+            if (!d->hideVisiblePanelToolbar->isVisible()) {
+                d->hideVisiblePanelToolbar->setOpacity(0.0);
+                d->hideVisiblePanelToolbar->setVisible(true);
+                d->hideVisiblePanelToolbarOpacityAnimation.setDirection(QVariantAnimation::Forward);
+                d->hideVisiblePanelToolbarOpacityAnimation.start();
+            }
+        } else if (widgetIndex == 1 && d->hideVisiblePanelToolbar->isVisible()) {
+            d->hideVisiblePanelToolbarHidingTimer.start();
+        }
+        break;
+    }
+
+    case QEvent::Leave: {
+        if (!d->isHideButtonAvailable) {
+            break;
+        }
+
+        auto widget = qobject_cast<QWidget*>(_watched);
+        const auto widgetIndex = d->widgets.indexOf(widget);
+        if (widgetIndex == -1) {
+            break;
+        }
+
+        if (widgetIndex == 0) {
+            d->hideVisiblePanelToolbarHidingTimer.start();
+        }
+        break;
+    }
+
     default:
         break;
     }
@@ -463,6 +573,8 @@ void Splitter::updateTranslations()
 {
     d->showLeftPanelAction->setToolTip(tr("Show hidden panel"));
     d->showRightPanelAction->setToolTip(tr("Show hidden panel"));
+    d->hideLeftPanelAction->setToolTip(tr("Hide left panel"));
+    d->hideRightPanelAction->setToolTip(tr("Hide right panel"));
 }
 
 void Splitter::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -471,4 +583,6 @@ void Splitter::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->showHiddenPanelToolbar->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->showHiddenPanelToolbar->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->hideVisiblePanelToolbar->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->hideVisiblePanelToolbar->setTextColor(Ui::DesignSystem::color().onPrimary());
 }
