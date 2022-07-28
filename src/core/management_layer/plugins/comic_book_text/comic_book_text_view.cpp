@@ -384,8 +384,8 @@ void ComicBookTextView::Implementation::updateCommentsToolbar()
 
 void ComicBookTextView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
-    const bool isSidebarShouldBeVisible
-        = toolbar->isFastFormatPanelVisible() || toolbar->isCommentsModeEnabled();
+    const bool isSidebarShouldBeVisible = toolbar->isFastFormatPanelVisible()
+        || toolbar->isCommentsModeEnabled() || showBookmarksAction->isChecked();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
