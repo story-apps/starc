@@ -463,9 +463,9 @@ TemplateOptionsManager::TemplateOptionsManager(QObject* _parent, QWidget* _paren
         QMetaObject::invokeMethod(
             this,
             [this, titlePageToolbar] {
-                titlePageToolbar->move(d->viewToolBar->geometry().right()
-                                           + Ui::DesignSystem::layout().px12(),
-                                       titlePageToolbar->y());
+                titlePageToolbar->move((d->titlePageView->width() - titlePageToolbar->width())
+                                           / 2.0,
+                                       -Ui::DesignSystem::card().shadowMargins().top());
                 titlePageToolbar->show();
             },
             Qt::QueuedConnection);

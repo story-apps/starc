@@ -526,7 +526,7 @@ public:
     qreal px24 = 24.0;
     qreal px48 = 48.0;
     qreal px62 = 62.0;
-    qreal topContentMargin = 116.0;
+    qreal topContentMargin = 72.0;
     qreal buttonsSpacing = 8.0;
 };
 
@@ -1966,7 +1966,7 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     QSizeF size = { 400, 230 };
-    QMarginsF margins = { 24, 116, 24, 24 };
+    QMarginsF margins = { 24, 72, 24, 24 };
     qreal spacing = 10;
 };
 

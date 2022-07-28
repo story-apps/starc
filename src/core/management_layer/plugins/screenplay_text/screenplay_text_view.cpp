@@ -345,18 +345,21 @@ void ScreenplayTextView::Implementation::updateOptionsTranslations()
 void ScreenplayTextView::Implementation::updateToolbarUi()
 {
     updateToolbarPositon();
-    toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
+    toolbar->setBackgroundColor(ColorHelper::nearby(Ui::DesignSystem::color().background()));
     toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     toolbar->raise();
 
-    searchManager->toolbar()->setBackgroundColor(Ui::DesignSystem::color().background());
+    searchManager->toolbar()->setBackgroundColor(
+        ColorHelper::nearby(Ui::DesignSystem::color().background()));
     searchManager->toolbar()->setTextColor(Ui::DesignSystem::color().onBackground());
     searchManager->toolbar()->raise();
 
-    toolbarAnimation->setBackgroundColor(Ui::DesignSystem::color().background());
+    toolbarAnimation->setBackgroundColor(
+        ColorHelper::nearby(Ui::DesignSystem::color().background()));
     toolbarAnimation->setTextColor(Ui::DesignSystem::color().onBackground());
 
-    commentsToolbar->setBackgroundColor(Ui::DesignSystem::color().background());
+    commentsToolbar->setBackgroundColor(
+        ColorHelper::nearby(Ui::DesignSystem::color().background()));
     commentsToolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     commentsToolbar->raise();
     updateCommentsToolbar();
@@ -364,17 +367,13 @@ void ScreenplayTextView::Implementation::updateToolbarUi()
 
 void ScreenplayTextView::Implementation::updateToolbarPositon()
 {
-    toolbar->move(QPointF(q->isLeftToRight()
-                              ? Ui::DesignSystem::layout().px24()
-                              : (q->width() - toolbar->width() - Ui::DesignSystem::layout().px24()),
-                          Ui::DesignSystem::layout().px24())
+    toolbar->move(QPointF((scalableWrapper->width() - toolbar->width()) / 2.0,
+                          -Ui::DesignSystem::card().shadowMargins().top())
                       .toPoint());
-    searchManager->toolbar()->move(QPointF(q->isLeftToRight()
-                                               ? Ui::DesignSystem::layout().px24()
-                                               : (q->width() - searchManager->toolbar()->width()
-                                                  - Ui::DesignSystem::layout().px24()),
-                                           Ui::DesignSystem::layout().px24())
-                                       .toPoint());
+    searchManager->toolbar()->move(
+        QPointF((scalableWrapper->width() - searchManager->toolbar()->width()) / 2.0,
+                -Ui::DesignSystem::card().shadowMargins().top())
+            .toPoint());
 }
 
 void ScreenplayTextView::Implementation::updateToolBarCurrentParagraphTypeName()
@@ -1034,7 +1033,10 @@ bool ScreenplayTextView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->scalableWrapper) {
         if (_event->type() == QEvent::Resize) {
-            QTimer::singleShot(0, this, [this] { d->updateCommentsToolbar(); });
+            QTimer::singleShot(0, this, [this] {
+                d->updateToolbarPositon();
+                d->updateCommentsToolbar();
+            });
         } else if (_event->type() == QEvent::KeyPress && d->searchManager->toolbar()->isVisible()
                    && d->scalableWrapper->hasFocus()) {
             auto keyEvent = static_cast<QKeyEvent*>(_event);

@@ -18,6 +18,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/ui_helper.h>
 
@@ -83,17 +84,15 @@ TitlePageView::Implementation::Implementation(TitlePageView* _q)
 void TitlePageView::Implementation::updateToolbarUi()
 {
     updateToolbarPositon();
-    toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
+    toolbar->setBackgroundColor(ColorHelper::nearby(Ui::DesignSystem::color().background()));
     toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     toolbar->raise();
 }
 
 void TitlePageView::Implementation::updateToolbarPositon()
 {
-    toolbar->move(QPointF(q->isLeftToRight()
-                              ? Ui::DesignSystem::layout().px24()
-                              : q->width() - toolbar->width() - Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px24())
+    toolbar->move(QPointF((scalableWrapper->width() - toolbar->width()) / 2.0,
+                          -Ui::DesignSystem::card().shadowMargins().top())
                       .toPoint());
 }
 

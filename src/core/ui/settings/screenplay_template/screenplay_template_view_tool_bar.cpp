@@ -1,6 +1,7 @@
 #include "screenplay_template_view_tool_bar.h"
 
 #include <ui/design_system/design_system.h>
+#include <utils/helpers/color_helper.h>
 
 #include <QAction>
 
@@ -33,12 +34,11 @@ ScreenplayTemplateViewToolBar::ScreenplayTemplateViewToolBar(QWidget* _parent)
     : FloatingToolBar(_parent)
     , d(new Implementation(this))
 {
+    setCurtain(true);
+
     connect(d->save, &QAction::triggered, this, &ScreenplayTemplateViewToolBar::savePressed);
 
     addActions({ d->save /*, d->exportToFile*/ });
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 ScreenplayTemplateViewToolBar::~ScreenplayTemplateViewToolBar() = default;
@@ -54,14 +54,14 @@ void ScreenplayTemplateViewToolBar::designSystemChangeEvent(DesignSystemChangeEv
     FloatingToolBar::designSystemChangeEvent(_event);
 
     resize(sizeHint());
-    setBackgroundColor(DesignSystem::color().background());
+    setBackgroundColor(ColorHelper::nearby(DesignSystem::color().background()));
     setTextColor(DesignSystem::color().onBackground());
     raise();
 
     move(QPointF(isLeftToRight()
                      ? Ui::DesignSystem::layout().px24()
                      : parentWidget()->width() - width() - Ui::DesignSystem::layout().px24(),
-                 Ui::DesignSystem::layout().px24())
+                 -Ui::DesignSystem::card().shadowMargins().top())
              .toPoint());
 }
 

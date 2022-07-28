@@ -71,6 +71,8 @@ ScreenplayTreatmentEditToolbar::ScreenplayTreatmentEditToolbar(QWidget* _parent)
     : FloatingToolBar(_parent)
     , d(new Implementation(this))
 {
+    setCurtain(true);
+
     d->undoAction->setIconText(u8"\U000f054c");
     addAction(d->undoAction);
     connect(d->undoAction, &QAction::triggered, this, &ScreenplayTreatmentEditToolbar::undoPressed);

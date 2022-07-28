@@ -104,6 +104,8 @@ TitlePageEditToolbar::TitlePageEditToolbar(QWidget* _parent)
     : FloatingToolBar(_parent)
     , d(new Implementation(this))
 {
+    setCurtain(true);
+
     addAction(d->undoAction);
     connect(d->undoAction, &QAction::triggered, this, &TitlePageEditToolbar::undoPressed);
 

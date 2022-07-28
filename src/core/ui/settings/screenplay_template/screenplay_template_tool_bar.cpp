@@ -67,8 +67,6 @@ ScreenplayTemplateToolBar::ScreenplayTemplateToolBar(QWidget* _parent)
     addAction(d->paragraphAction);
     connect(d->paragraphAction, &QAction::toggled, this,
             &ScreenplayTemplateToolBar::paragraphSettingsPressed);
-
-    designSystemChangeEvent(nullptr);
 }
 
 ScreenplayTemplateToolBar::~ScreenplayTemplateToolBar() = default;

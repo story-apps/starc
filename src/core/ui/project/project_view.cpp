@@ -257,7 +257,8 @@ void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     d->documentEditorPage->setBackgroundColor(Ui::DesignSystem::color().surface());
-    d->documentVersions->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->documentVersions->setBackgroundColor(
+        ColorHelper::nearby(Ui::DesignSystem::color().background()));
     d->documentVersions->setTextColor(Ui::DesignSystem::color().onBackground());
     d->documentEditor->setBackgroundColor(Ui::DesignSystem::color().surface());
 

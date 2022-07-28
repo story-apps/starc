@@ -10,6 +10,7 @@
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/task_bar/task_bar.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/tools/debouncer.h>
@@ -102,6 +103,8 @@ CoverGeneratorView::Implementation::Implementation(CoverGeneratorView* _q)
     splitter->setWidgets(coverBackground, sidebar);
     splitter->setSizes({ 7, 3 });
 
+    toolbar->setCurtain(true);
+
     saveAction->setIconText(u8"\U000F012C");
     toolbar->addAction(saveAction);
     //
@@ -135,17 +138,14 @@ void CoverGeneratorView::Implementation::updateToolbarUi()
 {
     toolbar->resize(toolbar->sizeHint());
     updateToolbarPositon();
-    toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
+    toolbar->setBackgroundColor(ColorHelper::nearby(Ui::DesignSystem::color().background()));
     toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     toolbar->raise();
 }
 
 void CoverGeneratorView::Implementation::updateToolbarPositon()
 {
-    toolbar->move(QPointF(q->isLeftToRight()
-                              ? Ui::DesignSystem::layout().px24()
-                              : q->width() - toolbar->width() - Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px24())
+    toolbar->move(QPointF((q->width() - toolbar->width()) / 2.0, Ui::DesignSystem::layout().px24())
                       .toPoint());
 }
 

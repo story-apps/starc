@@ -106,6 +106,8 @@ ScreenplayTreatmentSearchToolbar::ScreenplayTreatmentSearchToolbar(QWidget* _par
     : FloatingToolBar(_parent)
     , d(new Implementation(this))
 {
+    setCurtain(true);
+
     _parent->installEventFilter(this);
     d->searchText->installEventFilter(this);
     d->replaceText->installEventFilter(this);

@@ -6,6 +6,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <ui/widgets/label/label.h>
+#include <utils/helpers/color_helper.h>
 
 #include <QAction>
 #include <QResizeEvent>
@@ -65,6 +66,8 @@ ProjectsView::Implementation::Implementation(ProjectsView* _parent)
     , emptyPageCreateProjectButton(new Button(emptyPage))
     , projectsPage(new ProjectsCards(_parent))
 {
+    toolbar->setCurtain(true);
+
     initEmptyPage();
     initProjectsPage();
 }
@@ -107,17 +110,15 @@ void ProjectsView::Implementation::updateToolbarUi()
 {
     toolbar->resize(toolbar->sizeHint());
     updateToolbarPositon();
-    toolbar->setBackgroundColor(Ui::DesignSystem::color().background());
+    toolbar->setBackgroundColor(ColorHelper::nearby(Ui::DesignSystem::color().background()));
     toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
     toolbar->raise();
 }
 
 void ProjectsView::Implementation::updateToolbarPositon()
 {
-    toolbar->move(QPointF(q->isLeftToRight()
-                              ? Ui::DesignSystem::layout().px24()
-                              : q->width() - toolbar->width() - Ui::DesignSystem::layout().px24(),
-                          Ui::DesignSystem::layout().px24())
+    toolbar->move(QPointF((q->width() - toolbar->width()) / 2.0,
+                          -Ui::DesignSystem::card().shadowMargins().top())
                       .toPoint());
 }
 
