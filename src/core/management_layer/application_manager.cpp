@@ -262,6 +262,7 @@ public:
         QWidget* toolBar = nullptr;
         QWidget* navigator = nullptr;
         QWidget* view = nullptr;
+        bool isHideNavigatorButtonAvailable = false;
     } lastContent;
     Ui::ConnectionStatusToolBar* connectionStatus = nullptr;
     QPointer<Dialog> saveChangesDialog;
@@ -570,6 +571,7 @@ void ApplicationManager::Implementation::showLastContent()
 
     Log::info("Show last content");
     applicationView->showContent(lastContent.toolBar, lastContent.navigator, lastContent.view);
+    applicationView->setHideNavigationButtonAvailable(lastContent.isHideNavigatorButtonAvailable);
 }
 
 void ApplicationManager::Implementation::setTranslation(QLocale::Language _language)
@@ -1554,6 +1556,8 @@ template<typename Manager>
 void ApplicationManager::Implementation::showContent(Manager* _manager)
 {
     applicationView->showContent(_manager->toolBar(), _manager->navigator(), _manager->view());
+    applicationView->setHideNavigationButtonAvailable((void*)_manager
+                                                      == (void*)projectManager.data());
 }
 
 template<typename Manager>
@@ -1562,6 +1566,7 @@ void ApplicationManager::Implementation::saveLastContent(Manager* _manager)
     lastContent.toolBar = _manager->toolBar();
     lastContent.navigator = _manager->navigator();
     lastContent.view = _manager->view();
+    lastContent.isHideNavigatorButtonAvailable = (void*)_manager == (void*)projectManager.data();
 }
 
 // ****

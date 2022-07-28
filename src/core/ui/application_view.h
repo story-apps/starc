@@ -29,6 +29,11 @@ public:
     QWidget* view() const;
 
     /**
+     * @brief Задать доступность кнопки скрытия навигационной панели сплитера
+     */
+    void setHideNavigationButtonAvailable(bool _available);
+
+    /**
      * @brief Сохранить состояние
      */
     QVariantMap saveState() const;

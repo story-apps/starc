@@ -90,10 +90,6 @@ ApplicationView::ApplicationView(QWidget* _parent)
 
     connect(d->turnOffFullScreenIcon, &IconsBigLabel::clicked, this,
             &ApplicationView::turnOffFullScreenRequested);
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 ApplicationView::~ApplicationView() = default;
@@ -106,6 +102,11 @@ ThemeSetupView* ApplicationView::themeSetupView() const
 QWidget* ApplicationView::view() const
 {
     return d->view;
+}
+
+void ApplicationView::setHideNavigationButtonAvailable(bool _available)
+{
+    d->splitter->setHidePanelButtonAvailable(_available);
 }
 
 QVariantMap ApplicationView::saveState() const
