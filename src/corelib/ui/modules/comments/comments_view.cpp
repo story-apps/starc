@@ -5,6 +5,9 @@
 #include "comment_replies_view.h"
 #include "comments_model.h"
 
+#include <business_layer/model/text/text_model_text_item.h>
+#include <data_layer/storage/settings_storage.h>>
+#include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/tree/tree.h>
@@ -31,6 +34,11 @@ public:
      * @brief Обновить контекстное меню для заданного списка элементов
      */
     void updateCommentsViewContextMenu(const QModelIndexList& _indexes, CommentsView* _view);
+
+    /**
+     * @brief Редактировать заданный комментарий
+     */
+    void editComment(const QModelIndex& _index, CommentsView* _view);
 
 
     bool isReadOnly = false;
@@ -73,12 +81,7 @@ void CommentsView::Implementation::updateCommentsViewContextMenu(const QModelInd
         auto edit = new QAction(tr("Edit"));
         edit->setIconText(u8"\U000F03EB");
         connect(edit, &QAction::triggered, _view, [this, _view] {
-            commentIndex = commentsView->selectedIndexes().constFirst();
-            _view->showAddCommentView(
-                commentIndex.data(BusinessLayer::CommentsModel::ReviewMarkColorRole)
-                    .value<QColor>(),
-                commentIndex.data(BusinessLayer::CommentsModel::ReviewMarkCommentRole).toString(),
-                commentsView->visualRect(commentIndex).top());
+            editComment(commentsView->selectedIndexes().constFirst(), _view);
         });
         menuActions.append(edit);
         auto discuss = new QAction(tr("Discuss"));
@@ -138,6 +141,15 @@ void CommentsView::Implementation::updateCommentsViewContextMenu(const QModelInd
     commentsViewContextMenu->setActions(menuActions);
 }
 
+void CommentsView::Implementation::editComment(const QModelIndex& _index, CommentsView* _view)
+{
+    commentIndex = _index;
+    _view->showAddCommentView(
+        commentIndex.data(BusinessLayer::CommentsModel::ReviewMarkColorRole).value<QColor>(),
+        commentIndex.data(BusinessLayer::CommentsModel::ReviewMarkCommentRole).toString(),
+        commentsView->visualRect(commentIndex).top());
+}
+
 
 // ****
 
@@ -154,7 +166,52 @@ CommentsView::CommentsView(QWidget* _parent)
 
 
     connect(d->commentsView, &Tree::clicked, this, &CommentsView::commentSelected);
-    connect(d->commentsView, &Tree::doubleClicked, this, &CommentsView::showCommentRepliesView);
+    connect(d->commentsView, &Tree::doubleClicked, this, [this](const QModelIndex& _index) {
+        using namespace BusinessLayer;
+        const auto authorName = _index.data(CommentsModel::ReviewMarkAuthorNameRole).toString();
+        const auto authorEmail = _index.data(CommentsModel::ReviewMarkAuthorEmailRole).toString();
+        const auto replies = _index.data(CommentsModel::ReviewMarkRepliesRole)
+                                 .value<QVector<TextModelTextItem::ReviewComment>>();
+        //
+        // Если есть ответы, то показываем обсуждение
+        //
+        if (replies.size() > 1) {
+            showCommentRepliesView(_index);
+            return;
+        }
+
+        //
+        // Если у коммента есть имейл автора
+        //
+        if (!authorEmail.isEmpty()) {
+            //
+            // ... и он совпадает с комментом текущего пользователя - изменить комментарий
+            //
+            if (authorEmail == DataStorageLayer::StorageFacade::settingsStorage()->accountEmail()) {
+                d->editComment(_index, this);
+            }
+            //
+            // ... в противном случае - добавить ответ
+            //
+            else {
+                showCommentRepliesView(_index);
+            }
+            return;
+        }
+
+        //
+        // Если имя автора комментария совпадает с именем текущего пользователя - изменить коммент
+        //
+        if (authorName == DataStorageLayer::StorageFacade::settingsStorage()->accountName()) {
+            d->editComment(_index, this);
+        }
+        //
+        // В противном случае - добавить ответ
+        //
+        else {
+            showCommentRepliesView(_index);
+        }
+    });
     connect(d->commentsView, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
         if (d->isReadOnly || d->commentsView->selectedIndexes().isEmpty()) {
             return;

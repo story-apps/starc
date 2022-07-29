@@ -178,6 +178,8 @@ void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader
                     reviewMark.comments.append(
                         { TextHelper::fromHtmlEscaped(
                               commentAttributes.value(xml::kAuthorAttribute).toString()),
+                          TextHelper::fromHtmlEscaped(
+                              commentAttributes.value(xml::kEmailAttribute).toString()),
                           commentAttributes.value(xml::kDateAttribute).toString(),
                           TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString()),
                           commentAttributes.hasAttribute(xml::kIsCommentEditedAttribute) });
@@ -322,10 +324,11 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
             if (!reviewMark.comments.isEmpty()) {
                 xml += ">";
                 for (const auto& comment : std::as_const(reviewMark.comments)) {
-                    xml += QString("<%1 %2=\"%3\" %4=\"%5\"%6><![CDATA[%7]]></%1>")
+                    xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\"%8><![CDATA[%9]]></%1>")
                                .arg(xml::kCommentTag, xml::kAuthorAttribute,
-                                    TextHelper::toHtmlEscaped(comment.author), xml::kDateAttribute,
-                                    comment.date,
+                                    TextHelper::toHtmlEscaped(comment.author), xml::kEmailAttribute,
+                                    TextHelper::toHtmlEscaped(comment.authorEmail),
+                                    xml::kDateAttribute, comment.date,
                                     (comment.isEdited ? QString(" %1=\"true\"")
                                                             .arg(xml::kIsCommentEditedAttribute)
                                                       : ""),
@@ -457,8 +460,8 @@ QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
 bool TextModelTextItem::ReviewComment::operator==(
     const TextModelTextItem::ReviewComment& _other) const
 {
-    return author == _other.author && date == _other.date && text == _other.text
-        && isEdited == _other.isEdited;
+    return author == _other.author && authorEmail == _other.authorEmail && date == _other.date
+        && text == _other.text && isEdited == _other.isEdited;
 }
 
 bool TextModelTextItem::ReviewMark::operator==(const TextModelTextItem::ReviewMark& _other) const
@@ -486,14 +489,16 @@ QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const
         format.setForeground(ColorHelper::contrasted(backgroundColor));
     }
     format.setProperty(TextBlockStyle::PropertyIsDone, isDone);
-    QStringList authors, dates, comments, isEdited;
+    QStringList authors, emails, dates, comments, isEdited;
     for (const auto& comment : this->comments) {
         authors.append(comment.author);
+        emails.append(comment.authorEmail);
         dates.append(comment.date);
         comments.append(comment.text);
         isEdited.append(QVariant(comment.isEdited).toString());
     }
     format.setProperty(TextBlockStyle::PropertyCommentsAuthors, authors);
+    format.setProperty(TextBlockStyle::PropertyCommentsAuthorsEmails, emails);
     format.setProperty(TextBlockStyle::PropertyCommentsDates, dates);
     format.setProperty(TextBlockStyle::PropertyComments, comments);
     format.setProperty(TextBlockStyle::PropertyCommentsIsEdited, isEdited);
@@ -849,11 +854,14 @@ void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& 
             = reviewMark.format.property(TextBlockStyle::PropertyCommentsDates).toStringList();
         const QStringList authors
             = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthors).toStringList();
+        const QStringList emails
+            = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthorsEmails)
+                  .toStringList();
         const QStringList isEdited
             = reviewMark.format.property(TextBlockStyle::PropertyCommentsIsEdited).toStringList();
         for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
-            newReviewMark.comments.append({ authors.at(commentIndex), dates.at(commentIndex),
-                                            comments.at(commentIndex),
+            newReviewMark.comments.append({ authors.at(commentIndex), emails.at(commentIndex),
+                                            dates.at(commentIndex), comments.at(commentIndex),
                                             isEdited.at(commentIndex) == "true" });
         }
 

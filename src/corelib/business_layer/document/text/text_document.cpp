@@ -1622,6 +1622,7 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
         reviewMark.backgroundColor = _backgroundColor;
     }
     reviewMark.comments.append({ DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
+                                 DataStorageLayer::StorageFacade::settingsStorage()->accountEmail(),
                                  QDateTime::currentDateTime().toString(Qt::ISODate), _comment });
 
     auto cursor = _cursor;

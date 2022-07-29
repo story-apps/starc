@@ -95,7 +95,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
                 backgroundRect.top() + Ui::DesignSystem::layout().px16()),
         Ui::DesignSystem::treeOneLineItem().avatarSize());
     const auto avatar = ImageHelper::makeAvatar(
-        _index.data(CommentsModel::ReviewMarkAuthorEmailRole).toString(),
+        _index.data(CommentsModel::ReviewMarkAuthorNameRole).toString(),
         Ui::DesignSystem::font().body1(), avatarRect.size().toSize(), Qt::white);
     _painter->drawPixmap(avatarRect, avatar, avatar.rect());
 
@@ -147,7 +147,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     const QRectF textRect(QPointF(textLeft, avatarRect.top()),
                           QSizeF(textWidth, avatarRect.height() / 2));
     const auto text = _painter->fontMetrics().elidedText(
-        _index.data(CommentsModel::ReviewMarkAuthorEmailRole).toString(), Qt::ElideRight,
+        _index.data(CommentsModel::ReviewMarkAuthorNameRole).toString(), Qt::ElideRight,
         static_cast<int>(textRect.width()));
     _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignBottom, text);
     //
@@ -197,9 +197,8 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     //
     // ... ответы
     //
-    const auto comments
-        = _index.data(CommentsModel::ReviewMarkRepliesRole)
-              .value<QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>>();
+    const auto comments = _index.data(CommentsModel::ReviewMarkRepliesRole)
+                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
     if (!m_isSingleCommentMode && comments.size() > 1 && !done) {
         const auto avatarSize = Ui::DesignSystem::treeOneLineItem().iconSize();
         //

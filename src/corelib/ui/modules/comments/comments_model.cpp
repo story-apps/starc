@@ -905,6 +905,7 @@ void CommentsModel::addReply(const QModelIndex& _index, const QString& _comment)
             if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
                 reviewMark.comments.append(
                     { DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
+                      DataStorageLayer::StorageFacade::settingsStorage()->accountEmail(),
                       replyDateTime, _comment });
             }
         }
@@ -951,8 +952,12 @@ QVariant CommentsModel::data(const QModelIndex& _index, int _role) const
 
     const auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
     switch (_role) {
-    case ReviewMarkAuthorEmailRole: {
+    case ReviewMarkAuthorNameRole: {
         return reviewMarkWrapper.reviewMark.comments.constFirst().author;
+    }
+
+    case ReviewMarkAuthorEmailRole: {
+        return reviewMarkWrapper.reviewMark.comments.constFirst().authorEmail;
     }
 
     case ReviewMarkCreationDateRole: {

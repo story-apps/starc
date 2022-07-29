@@ -188,11 +188,13 @@ Splitter::Splitter(QWidget* _parent)
                 d->showHiddenPanelToolbar->move(
                     d->showHiddenPanelToolbarPositionAnimation.currentValue().toPoint());
             });
-    connect(&d->showHiddenPanelToolbarPositionAnimation, &QVariantAnimation::finished, this, [this] {
-        if (d->showHiddenPanelToolbarPositionAnimation.direction() == QVariantAnimation::Backward) {
-            d->showHiddenPanelToolbar->hide();
-        }
-    });
+    connect(&d->showHiddenPanelToolbarPositionAnimation, &QVariantAnimation::finished, this,
+            [this] {
+                if (d->showHiddenPanelToolbarPositionAnimation.direction()
+                    == QVariantAnimation::Backward) {
+                    d->showHiddenPanelToolbar->hide();
+                }
+            });
     connect(&d->hideVisiblePanelToolbarOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this] {
                 d->hideVisiblePanelToolbar->setOpacity(

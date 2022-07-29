@@ -228,6 +228,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayCeltxImporter::importS
                         = QColor(colorComponents[0].toInt(), colorComponents[1].toInt(),
                                  colorComponents[2].toInt());
                     note.comments.append({ "celtx user",
+                                           {},
                                            QDateTime::currentDateTime().toString(Qt::ISODate),
                                            child.getAttribute("text") });
                     reviewMarks.append(note);

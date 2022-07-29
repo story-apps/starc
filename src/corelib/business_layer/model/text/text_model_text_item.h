@@ -40,6 +40,7 @@ public:
     };
     struct CORE_LIBRARY_EXPORT ReviewComment {
         QString author;
+        QString authorEmail;
         QString date;
         QString text;
         bool isEdited = false;

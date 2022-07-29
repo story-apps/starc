@@ -175,6 +175,7 @@ public:
         PropertyIsDone, //!< Правка помечена как выполненная
         PropertyComments, //!< Список комментариев к правке
         PropertyCommentsAuthors, //!< Список авторов комментариев
+        PropertyCommentsAuthorsEmails, //!< Список email'ов авторов комментариев
         PropertyCommentsDates, //!< Список дат комментариев
         PropertyCommentsIsEdited, //!< Список признаков изменений комментариев
         //

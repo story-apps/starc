@@ -23,7 +23,8 @@ public:
      * @brief Роли данных из модели
      */
     enum DataRole {
-        ReviewMarkAuthorEmailRole = Qt::UserRole + 1,
+        ReviewMarkAuthorNameRole = Qt::UserRole + 1,
+        ReviewMarkAuthorEmailRole,
         ReviewMarkCreationDateRole,
         ReviewMarkCommentRole,
         ReviewMarkIsEditedRole,

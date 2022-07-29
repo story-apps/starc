@@ -1124,20 +1124,16 @@ QVariantMap SettingsStorage::values(const QString& _valuesGroup,
 
 QString SettingsStorage::accountName() const
 {
-    //
-    // TODO: получать имя пользователя если он авторизован
-    //
-
-    return value(kSystemUsernameKey, SettingsPlace::Application).toString();
+    auto name = value(kAccountUserNameKey, SettingsPlace::Application).toString();
+    if (name.isEmpty()) {
+        name = value(kSystemUsernameKey, SettingsPlace::Application).toString();
+    }
+    return name;
 }
 
 QString SettingsStorage::accountEmail() const
 {
-    //
-    // TODO
-    //
-
-    return {};
+    return value(kAccountEmailKey, SettingsPlace::Application).toString();
 }
 
 QString SettingsStorage::documentFolderPath(const QString& _key) const
