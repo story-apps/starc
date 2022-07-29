@@ -120,6 +120,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     colorAnimation.setDuration(1400);
 
     name->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    name->setCapitalizeWords(false);
     description->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     avatar->setDecorationIcon(u8"\U000F0004");
     //
@@ -487,7 +488,7 @@ void AccountView::updateTranslations()
 {
     d->name->setLabel(tr("Your name"));
     d->description->setLabel(tr("Your bio"));
-    d->newsletterSubscription->setText(tr("Subscribe to the newsletter"));
+    d->newsletterSubscription->setText(tr("I want to receive project's news"));
     d->avatar->setSupportingText(tr("Add avatar +"), tr("Change avatar..."),
                                  tr("Do you want to delete your avatar?"));
     d->avatar->setImageCroppingText(tr("Select an area for the avatar"));
