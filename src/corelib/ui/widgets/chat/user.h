@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QScopedPointer>
+#include <QString>
 
 #include <corelib_global.h>
 
@@ -13,7 +14,7 @@ class CORE_LIBRARY_EXPORT User
 {
 public:
     User();
-    explicit User(const QString& _name);
+    User(const QString& _name, const QString& _email);
     User(const User& _other);
     virtual ~User();
     User operator=(const User& _other);
@@ -21,6 +22,7 @@ public:
     bool isValid() const;
 
     QString name() const;
+    QString email() const;
 
     QColor avatarColor() const;
 

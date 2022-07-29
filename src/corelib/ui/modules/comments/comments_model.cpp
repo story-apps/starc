@@ -914,6 +914,38 @@ void CommentsModel::addReply(const QModelIndex& _index, const QString& _comment)
     }
 }
 
+void CommentsModel::editReply(const QModelIndex& _index, int _replyIndex, const QString& _comment)
+{
+    const auto replyDateTime = QDateTime::currentDateTime().toString(Qt::ISODate);
+    const auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
+    for (auto textItem : reviewMarkWrapper.items) {
+        auto updatedReviewMarks = textItem->reviewMarks();
+        for (auto& reviewMark : updatedReviewMarks) {
+            if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
+                reviewMark.comments[_replyIndex].text = _comment;
+                reviewMark.comments[_replyIndex].date = replyDateTime;
+            }
+        }
+        textItem->setReviewMarks(updatedReviewMarks);
+        d->model->updateItem(textItem);
+    }
+}
+
+void CommentsModel::removeReply(const QModelIndex& _index, int _replyIndex)
+{
+    const auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
+    for (auto textItem : reviewMarkWrapper.items) {
+        auto updatedReviewMarks = textItem->reviewMarks();
+        for (auto& reviewMark : updatedReviewMarks) {
+            if (reviewMark.isPartiallyEqual(reviewMarkWrapper.reviewMark)) {
+                reviewMark.comments.removeAt(_replyIndex);
+            }
+        }
+        textItem->setReviewMarks(updatedReviewMarks);
+        d->model->updateItem(textItem);
+    }
+}
+
 void CommentsModel::remove(const QModelIndexList& _indexes)
 {
     for (const auto& index : reversed(_indexes)) {

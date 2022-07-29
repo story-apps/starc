@@ -21,6 +21,16 @@ public:
     void setReadOnly(bool _readOnly);
 
     /**
+     * @brief Задать параметры текущего пользователя
+     */
+    void setCurrentUser(const QString& _name, const QString& _email);
+
+    /**
+     * @brief Задать изменение сообщения
+     */
+    void changeMessage(int _replyIndex, const QString& _text);
+
+    /**
      * @brief Индекс текущего отображаемого комментария
      */
     QModelIndex commentIndex() const;
@@ -40,6 +50,16 @@ signals:
      * @brief Пользователь хочет добавить ответ
      */
     void addReplyPressed(const QString& _reply);
+
+    /**
+     * @brief Пользователь хочет обновить текст ответа
+     */
+    void editReplyPressed(int _replyIndex, const QString& _reply);
+
+    /**
+     * @brief Пользователь хочет отобразить контекстное меню для ответа с заданным индексом
+     */
+    void replyContextMenuRequested(int _replyIndex);
 
 protected:
     /**

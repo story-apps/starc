@@ -20,7 +20,7 @@ public:
     /**
      * @brief Задать текущего пользователя чата
      */
-    void setCurrectUser(const User& _user);
+    void setCurrentUser(const User& _user);
 
     /**
      * @brief Установить список сообщений
@@ -31,6 +31,12 @@ public:
      * @brief Получить необходимую высоту в зависимости от ширины
      */
     int heightForWidth(int _width) const override;
+
+signals:
+    /**
+     * @brief Пользователь хочет отобразить контекстное меню для сообщения
+     */
+    void messageContextMenuRequested(int _messageIndex);
 
 protected:
     /**

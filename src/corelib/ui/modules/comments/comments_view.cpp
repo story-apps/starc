@@ -6,7 +6,7 @@
 #include "comments_model.h"
 
 #include <business_layer/model/text/text_model_text_item.h>
-#include <data_layer/storage/settings_storage.h>>
+#include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
@@ -23,28 +23,39 @@ namespace Ui {
 class CommentsView::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(CommentsView* _q);
 
     /**
      * @brief Действия контекстного меню
      */
-    enum class ContextMenuAction { MarkAsDone, MarkAsUndone, Remove };
+    enum class ContextMenuAction {
+        MarkAsDone,
+        MarkAsUndone,
+        Remove,
+    };
 
     /**
      * @brief Обновить контекстное меню для заданного списка элементов
      */
-    void updateCommentsViewContextMenu(const QModelIndexList& _indexes, CommentsView* _view);
+    void updateCommentsViewContextMenu(const QModelIndexList& _indexes);
 
     /**
      * @brief Редактировать заданный комментарий
      */
-    void editComment(const QModelIndex& _index, CommentsView* _view);
+    void editComment(const QModelIndex& _index);
 
+    /**
+     * @brief Обновить действия контекстного меню для заданного ответа
+     */
+    void updateReplyContextMenu(int _commentIndex);
+
+
+    CommentsView* q = nullptr;
 
     bool isReadOnly = false;
 
     Tree* commentsView = nullptr;
-    ContextMenu* commentsViewContextMenu = nullptr;
+    ContextMenu* contextMenu = nullptr;
 
     AddCommentView* addCommentView = nullptr;
     QModelIndex commentIndex;
@@ -53,11 +64,12 @@ public:
     CommentRepliesView* repliesView = nullptr;
 };
 
-CommentsView::Implementation::Implementation(QWidget* _parent)
-    : commentsView(new Tree(_parent))
-    , commentsViewContextMenu(new ContextMenu(commentsView))
-    , addCommentView(new AddCommentView(_parent))
-    , repliesView(new CommentRepliesView(_parent))
+CommentsView::Implementation::Implementation(CommentsView* _q)
+    : q(_q)
+    , commentsView(new Tree(_q))
+    , contextMenu(new ContextMenu(commentsView))
+    , addCommentView(new AddCommentView(_q))
+    , repliesView(new CommentRepliesView(_q))
 {
     commentsView->setAutoAdjustSize(true);
     commentsView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -65,8 +77,7 @@ CommentsView::Implementation::Implementation(QWidget* _parent)
     commentsView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
-void CommentsView::Implementation::updateCommentsViewContextMenu(const QModelIndexList& _indexes,
-                                                                 CommentsView* _view)
+void CommentsView::Implementation::updateCommentsViewContextMenu(const QModelIndexList& _indexes)
 {
     if (_indexes.isEmpty()) {
         return;
@@ -80,14 +91,13 @@ void CommentsView::Implementation::updateCommentsViewContextMenu(const QModelInd
     if (_indexes.size() == 1) {
         auto edit = new QAction(tr("Edit"));
         edit->setIconText(u8"\U000F03EB");
-        connect(edit, &QAction::triggered, _view, [this, _view] {
-            editComment(commentsView->selectedIndexes().constFirst(), _view);
-        });
+        connect(edit, &QAction::triggered, q,
+                [this] { editComment(commentsView->selectedIndexes().constFirst()); });
         menuActions.append(edit);
         auto discuss = new QAction(tr("Discuss"));
         discuss->setIconText(u8"\U000F0860");
-        connect(discuss, &QAction::triggered, _view, [this, _view] {
-            _view->showCommentRepliesView(commentsView->selectedIndexes().constFirst());
+        connect(discuss, &QAction::triggered, q, [this] {
+            q->showCommentRepliesView(commentsView->selectedIndexes().constFirst());
         });
         menuActions.append(discuss);
         if (_indexes.constFirst()
@@ -95,22 +105,20 @@ void CommentsView::Implementation::updateCommentsViewContextMenu(const QModelInd
                 .toBool()) {
             auto markAsUndone = new QAction(tr("Mark as undone"));
             markAsUndone->setIconText(u8"\U000F0131");
-            connect(markAsUndone, &QAction::triggered, _view, [this, _view] {
-                emit _view->markAsUndoneRequested(commentsView->selectedIndexes());
-            });
+            connect(markAsUndone, &QAction::triggered, q,
+                    [this] { emit q->markAsUndoneRequested(commentsView->selectedIndexes()); });
             menuActions.append(markAsUndone);
         } else {
             auto markAsDone = new QAction(tr("Mark as done"));
             markAsDone->setIconText(u8"\U000F0135");
-            connect(markAsDone, &QAction::triggered, _view, [this, _view] {
-                emit _view->markAsDoneRequested(commentsView->selectedIndexes());
-            });
+            connect(markAsDone, &QAction::triggered, q,
+                    [this] { emit q->markAsDoneRequested(commentsView->selectedIndexes()); });
             menuActions.append(markAsDone);
         }
         auto remove = new QAction(tr("Remove"));
         remove->setIconText(u8"\U000F01B4");
-        connect(remove, &QAction::triggered, _view,
-                [this, _view] { emit _view->removeRequested(commentsView->selectedIndexes()); });
+        connect(remove, &QAction::triggered, q,
+                [this] { emit q->removeRequested(commentsView->selectedIndexes()); });
         menuActions.append(remove);
     }
     //
@@ -119,35 +127,70 @@ void CommentsView::Implementation::updateCommentsViewContextMenu(const QModelInd
     else {
         auto markAsDone = new QAction(tr("Mark selected notes as done"));
         markAsDone->setIconText(u8"\U000F0139");
-        connect(markAsDone, &QAction::triggered, _view, [this, _view] {
-            emit _view->markAsDoneRequested(commentsView->selectedIndexes());
-        });
+        connect(markAsDone, &QAction::triggered, q,
+                [this] { emit q->markAsDoneRequested(commentsView->selectedIndexes()); });
         menuActions.append(markAsDone);
         //
         auto markAsUndone = new QAction(tr("Mark selected notes as undone"));
         markAsUndone->setIconText(u8"\U000F0137");
-        connect(markAsUndone, &QAction::triggered, _view, [this, _view] {
-            emit _view->markAsUndoneRequested(commentsView->selectedIndexes());
-        });
+        connect(markAsUndone, &QAction::triggered, q,
+                [this] { emit q->markAsUndoneRequested(commentsView->selectedIndexes()); });
         menuActions.append(markAsUndone);
         //
         auto remove = new QAction(tr("Remove selected notes"));
         remove->setIconText(u8"\U000F01B4");
-        connect(remove, &QAction::triggered, _view,
-                [this, _view] { emit _view->removeRequested(commentsView->selectedIndexes()); });
+        connect(remove, &QAction::triggered, q,
+                [this] { emit q->removeRequested(commentsView->selectedIndexes()); });
         menuActions.append(remove);
     }
 
-    commentsViewContextMenu->setActions(menuActions);
+    contextMenu->setActions(menuActions);
 }
 
-void CommentsView::Implementation::editComment(const QModelIndex& _index, CommentsView* _view)
+void CommentsView::Implementation::editComment(const QModelIndex& _index)
 {
     commentIndex = _index;
-    _view->showAddCommentView(
+    q->showAddCommentView(
         commentIndex.data(BusinessLayer::CommentsModel::ReviewMarkColorRole).value<QColor>(),
         commentIndex.data(BusinessLayer::CommentsModel::ReviewMarkCommentRole).toString(),
         commentsView->visualRect(commentIndex).top());
+}
+
+void CommentsView::Implementation::updateReplyContextMenu(int _commentIndex)
+{
+    const auto replyIndex = _commentIndex + 1;
+    const auto comments = repliesView->commentIndex()
+                              .data(BusinessLayer::CommentsModel::ReviewMarkRepliesRole)
+                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
+    const auto comment = comments.at(replyIndex);
+    if (!comment.authorEmail.isEmpty()
+        && comment.authorEmail
+            != DataStorageLayer::StorageFacade::settingsStorage()->accountEmail()) {
+        return;
+    }
+
+    QVector<QAction*> menuActions;
+
+    //
+    // Настраиваем контекстное меню для одного элемента
+    //
+    auto edit = new QAction(tr("Edit"));
+    edit->setIconText(u8"\U000F03EB");
+    connect(edit, &QAction::triggered, q,
+            [this, replyIndex, comment] { repliesView->changeMessage(replyIndex, comment.text); });
+    menuActions.append(edit);
+    //
+    auto remove = new QAction(tr("Remove"));
+    remove->setIconText(u8"\U000F01B4");
+    connect(remove, &QAction::triggered, q, [this, _commentIndex] {
+        const auto currentCommentIndex = commentsView->currentIndex();
+        emit q->removeReviewMarkReplyRequested(currentCommentIndex, _commentIndex + 1);
+        commentsView->setCurrentIndex(currentCommentIndex);
+        repliesView->setCommentIndex(currentCommentIndex);
+    });
+    menuActions.append(remove);
+
+    contextMenu->setActions(menuActions);
 }
 
 
@@ -188,7 +231,7 @@ CommentsView::CommentsView(QWidget* _parent)
             // ... и он совпадает с комментом текущего пользователя - изменить комментарий
             //
             if (authorEmail == DataStorageLayer::StorageFacade::settingsStorage()->accountEmail()) {
-                d->editComment(_index, this);
+                d->editComment(_index);
             }
             //
             // ... в противном случае - добавить ответ
@@ -203,7 +246,7 @@ CommentsView::CommentsView(QWidget* _parent)
         // Если имя автора комментария совпадает с именем текущего пользователя - изменить коммент
         //
         if (authorName == DataStorageLayer::StorageFacade::settingsStorage()->accountName()) {
-            d->editComment(_index, this);
+            d->editComment(_index);
         }
         //
         // В противном случае - добавить ответ
@@ -217,8 +260,8 @@ CommentsView::CommentsView(QWidget* _parent)
             return;
         }
 
-        d->updateCommentsViewContextMenu(d->commentsView->selectedIndexes(), this);
-        d->commentsViewContextMenu->showContextMenu(d->commentsView->mapToGlobal(_pos));
+        d->updateCommentsViewContextMenu(d->commentsView->selectedIndexes());
+        d->contextMenu->showContextMenu(d->commentsView->mapToGlobal(_pos));
     });
     connect(d->addCommentView, &AddCommentView::savePressed, this, [this] {
         if (d->commentIndex.isValid()) {
@@ -238,6 +281,17 @@ CommentsView::CommentsView(QWidget* _parent)
                 const auto currentCommentIndex = d->commentsView->currentIndex();
                 emit addReviewMarkReplyRequested(currentCommentIndex, _reply);
                 d->commentsView->setCurrentIndex(currentCommentIndex);
+            });
+    connect(d->repliesView, &CommentRepliesView::editReplyPressed, this,
+            [this](int _replyIndex, const QString& _reply) {
+                const auto currentCommentIndex = d->commentsView->currentIndex();
+                emit editReviewMarkReplyRequested(currentCommentIndex, _replyIndex, _reply);
+                d->commentsView->setCurrentIndex(currentCommentIndex);
+            });
+    connect(d->repliesView, &CommentRepliesView::replyContextMenuRequested, this,
+            [this](int _index) {
+                d->updateReplyContextMenu(_index);
+                d->contextMenu->showContextMenu(QCursor::pos());
             });
     connect(d->repliesView, &CommentRepliesView::closePressed, this, [this] {
         auto animationRect = d->commentsView->visualRect(d->commentsView->currentIndex());
@@ -293,6 +347,9 @@ void CommentsView::showAddCommentView(const QColor& _withColor, const QString& _
 
 void CommentsView::showCommentRepliesView(const QModelIndex& _commentIndex)
 {
+    d->repliesView->setCurrentUser(
+        DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
+        DataStorageLayer::StorageFacade::settingsStorage()->accountEmail());
     d->repliesView->setCommentIndex(_commentIndex);
 
     //
@@ -316,8 +373,8 @@ void CommentsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     setBackgroundColor(Ui::DesignSystem::color().primary());
     d->commentsView->setBackgroundColor(DesignSystem::color().primary());
     d->commentsView->setTextColor(DesignSystem::color().onPrimary());
-    d->commentsViewContextMenu->setBackgroundColor(DesignSystem::color().background());
-    d->commentsViewContextMenu->setTextColor(DesignSystem::color().onBackground());
+    d->contextMenu->setBackgroundColor(DesignSystem::color().background());
+    d->contextMenu->setTextColor(DesignSystem::color().onBackground());
 }
 
 } // namespace Ui

@@ -26,14 +26,67 @@ ChatMessagesView::ChatMessagesView(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation)
 {
+    setContextMenuPolicy(Qt::CustomContextMenu);
     auto sizePolicy = this->sizePolicy();
     sizePolicy.setHeightForWidth(true);
     setSizePolicy(sizePolicy);
+
+    connect(
+        this, &ChatMessagesView::customContextMenuRequested, this, [this](const QPoint& _position) {
+            const QFontMetricsF titleFontMetrics(Ui::DesignSystem::font().subtitle2());
+            const QFontMetricsF textFontMetrics(Ui::DesignSystem::font().body2());
+            const qreal maximumTextWidth = width()
+                - Ui::DesignSystem::layout().px48() // отступ слева под авку и между авкой и текстом
+                - Ui::DesignSystem::layout().px24() // марджины текста от балуна
+                - Ui::DesignSystem::layout().px16(); // отступ справа от границы
+            qreal lastY = Ui::DesignSystem::layout().px16();
+            bool isDateChanged = false;
+            bool isAuthorChanged = false;
+            bool isCurrentAuthor = false;
+            ChatMessage lastMessage;
+            for (int index = 0; index < d->messages.size(); ++index) {
+                const auto& message = d->messages[index];
+                isDateChanged = lastMessage.dateTime().date() != message.dateTime().date();
+                isAuthorChanged = lastMessage.author() != message.author();
+                isCurrentAuthor = message.author() == d->currectUser;
+
+                if (isDateChanged) {
+                    lastY += Ui::DesignSystem::layout().px16() + textFontMetrics.lineSpacing();
+                }
+
+                const qreal messageTextWidth = std::max(
+                    std::min(maximumTextWidth, textFontMetrics.horizontalAdvance(message.text())),
+                    TextHelper::fineTextWidthF(isCurrentAuthor ? "" : message.author().name(),
+                                               titleFontMetrics));
+                const qreal messageTextHeight = TextHelper::heightForWidth(
+                    message.text(), Ui::DesignSystem::font().body2(), messageTextWidth);
+                const qreal messageTopDelta = isDateChanged
+                    ? Ui::DesignSystem::layout().px16()
+                    : (isAuthorChanged ? Ui::DesignSystem::layout().px8()
+                                       : Ui::DesignSystem::layout().px2());
+                const qreal messageHeightDelta = isAuthorChanged && !isCurrentAuthor
+                    ? titleFontMetrics.lineSpacing() + Ui::DesignSystem::layout().px4()
+                    : 0.0;
+
+                if (lastY <= _position.y()
+                    && _position.y()
+                        <= (lastY + messageTopDelta + messageTextHeight + messageHeightDelta
+                            + Ui::DesignSystem::layout().px24())) {
+                    emit messageContextMenuRequested(index);
+                    return;
+                }
+
+                lastY += messageTopDelta + messageTextHeight + messageHeightDelta
+                    + Ui::DesignSystem::layout().px24();
+
+                lastMessage = message;
+            }
+        });
 }
 
 ChatMessagesView::~ChatMessagesView() = default;
 
-void ChatMessagesView::setCurrectUser(const User& _user)
+void ChatMessagesView::setCurrentUser(const User& _user)
 {
     d->currectUser = _user;
     updateGeometry();
@@ -65,8 +118,7 @@ int ChatMessagesView::heightForWidth(int _width) const
     bool isAuthorChanged = false;
     bool isCurrentAuthor = false;
     ChatMessage lastMessage;
-
-    for (const auto& message : d->messages) {
+    for (const auto& message : std::as_const(d->messages)) {
         isDateChanged = lastMessage.dateTime().date() != message.dateTime().date();
         isAuthorChanged = lastMessage.author() != message.author();
         isCurrentAuthor = message.author() == d->currectUser;
@@ -81,9 +133,10 @@ int ChatMessagesView::heightForWidth(int _width) const
                                        titleFontMetrics));
         const qreal messageTextHeight = TextHelper::heightForWidth(
             message.text(), Ui::DesignSystem::font().body2(), messageTextWidth);
-        const qreal messageTopDelta = isDateChanged ? Ui::DesignSystem::layout().px16()
-            : isAuthorChanged                       ? Ui::DesignSystem::layout().px8()
-                                                    : Ui::DesignSystem::layout().px2();
+        const qreal messageTopDelta = isDateChanged
+            ? Ui::DesignSystem::layout().px16()
+            : (isAuthorChanged ? Ui::DesignSystem::layout().px8()
+                               : Ui::DesignSystem::layout().px2());
         const qreal messageHeightDelta = isAuthorChanged && !isCurrentAuthor
             ? titleFontMetrics.lineSpacing() + Ui::DesignSystem::layout().px4()
             : 0.0;

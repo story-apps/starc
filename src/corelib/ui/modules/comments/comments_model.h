@@ -84,6 +84,16 @@ public:
     void addReply(const QModelIndex& _index, const QString& _comment);
 
     /**
+     * @brief Изменить комментарий к редакторской заметке
+     */
+    void editReply(const QModelIndex& _index, int _replyIndex, const QString& _comment);
+
+    /**
+     * @brief Удалить комментарий к редакторской заметке
+     */
+    void removeReply(const QModelIndex& _index, int _replyIndex);
+
+    /**
      * @brief Удалить выбранные элементы
      */
     void remove(const QModelIndexList& _indexes);

@@ -3,11 +3,13 @@
 #include "comment_view.h"
 #include "comments_model.h"
 
-#include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/chat/chat_message.h>
 #include <ui/widgets/chat/chat_messages_view.h>
 #include <ui/widgets/chat/user.h>
+#include <ui/widgets/icon_button/icon_button.h>
+#include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/text_field/text_field.h>
@@ -25,18 +27,26 @@ using BusinessLayer::CommentsModel;
 
 namespace Ui {
 
+namespace {
+constexpr int kInvalidIndex = -1;
+}
+
 class CommentRepliesView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
 
+
     QModelIndex commentIndex;
+    int editedReplyIndex = kInvalidIndex;
 
     CommentView* headerView = nullptr;
     ChatMessagesView* repliesView = nullptr;
     QScrollArea* repliesViewContainer = nullptr;
     ScrollBar* repliesViewScrollBar = nullptr;
-    Shadow* repliesViewTopShadow = nullptr;
+    Subtitle2Label* editingTitle = nullptr;
+    Body2Label* editingMessage = nullptr;
+    IconButton* cancelEditing = nullptr;
     TextField* replyTextField = nullptr;
 };
 
@@ -45,9 +55,14 @@ CommentRepliesView::Implementation::Implementation(QWidget* _parent)
     , repliesView(new ChatMessagesView)
     , repliesViewContainer(new QScrollArea(_parent))
     , repliesViewScrollBar(new ScrollBar(repliesViewContainer))
-    , repliesViewTopShadow(new Shadow(Qt::TopEdge, repliesViewContainer))
+    , editingTitle(new Subtitle2Label(_parent))
+    , editingMessage(new Body2Label(_parent))
+    , cancelEditing(new IconButton(_parent))
     , replyTextField(new TextField(_parent))
 {
+    new Shadow(Qt::TopEdge, repliesViewContainer);
+    new Shadow(Qt::BottomEdge, repliesViewContainer);
+
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
     palette.setColor(QPalette::Window, Qt::transparent);
@@ -57,6 +72,11 @@ CommentRepliesView::Implementation::Implementation(QWidget* _parent)
     repliesViewContainer->setVerticalScrollBar(repliesViewScrollBar);
     repliesViewContainer->setWidget(repliesView);
     repliesViewContainer->setWidgetResizable(true);
+
+    editingTitle->hide();
+    editingMessage->hide();
+    cancelEditing->setIcon(u8"\U000F0156");
+    cancelEditing->hide();
 
     UiHelper::initSpellingFor(replyTextField);
     replyTextField->setEnterMakesNewLine(true);
@@ -78,14 +98,28 @@ CommentRepliesView::CommentRepliesView(QWidget* _parent)
 
     d->replyTextField->installEventFilter(this);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(d->headerView);
     layout->addWidget(d->repliesViewContainer, 1);
+    {
+        auto editingLayout = new QGridLayout;
+        editingLayout->setContentsMargins({});
+        editingLayout->setSpacing(0);
+        editingLayout->addWidget(d->editingTitle, 0, 0);
+        editingLayout->addWidget(d->editingMessage, 1, 0);
+        editingLayout->addWidget(d->cancelEditing, 0, 1, 2, 1, Qt::AlignHCenter | Qt::AlignTop);
+        editingLayout->setColumnStretch(0, 1);
+        layout->addLayout(editingLayout);
+    }
     layout->addWidget(d->replyTextField);
 
+    connect(d->repliesView, &ChatMessagesView::messageContextMenuRequested, this,
+            &CommentRepliesView::replyContextMenuRequested);
     connect(d->headerView, &CommentView::clicked, this, &CommentRepliesView::closePressed);
+    connect(d->cancelEditing, &IconButton::clicked, this,
+            [this] { changeMessage(kInvalidIndex, {}); });
     connect(d->replyTextField, &TextField::trailingIconPressed, this,
             &CommentRepliesView::postReply);
 }
@@ -95,6 +129,33 @@ CommentRepliesView::~CommentRepliesView() = default;
 void CommentRepliesView::setReadOnly(bool _readOnly)
 {
     d->replyTextField->setReadOnly(_readOnly);
+}
+
+void CommentRepliesView::setCurrentUser(const QString& _name, const QString& _email)
+{
+    d->repliesView->setCurrentUser(User(_name, _email));
+}
+
+void CommentRepliesView::changeMessage(int _replyIndex, const QString& _text)
+{
+    d->editedReplyIndex = _replyIndex;
+
+    if (_text.isEmpty()) {
+        d->editingTitle->hide();
+        d->editingMessage->hide();
+        d->cancelEditing->hide();
+        d->replyTextField->setTrailingIcon(u8"\U000F048A");
+        d->replyTextField->clear();
+        return;
+    }
+
+    d->editingTitle->show();
+    d->editingMessage->setText(_text);
+    d->editingMessage->show();
+    d->cancelEditing->show();
+    d->replyTextField->setTrailingIcon(u8"\U000F0450");
+    d->replyTextField->setText(_text);
+    d->replyTextField->setFocus();
 }
 
 QModelIndex CommentRepliesView::commentIndex() const
@@ -116,9 +177,8 @@ void CommentRepliesView::setCommentIndex(const QModelIndex& _index)
     //
     // Собираем ответы на комментарий и помещаем их во вьюху
     //
-    const auto comments
-        = _index.data(CommentsModel::ReviewMarkRepliesRole)
-              .value<QVector<BusinessLayer::ScreenplayTextModelTextItem::ReviewComment>>();
+    const auto comments = _index.data(CommentsModel::ReviewMarkRepliesRole)
+                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
     QVector<ChatMessage> replies;
     for (const auto& comment : comments) {
         if (comment == comments.first()) {
@@ -126,7 +186,7 @@ void CommentRepliesView::setCommentIndex(const QModelIndex& _index)
         }
 
         replies.append({ QDateTime::fromString(comment.date, Qt::ISODate), comment.text,
-                         User(comment.author) });
+                         User(comment.author, comment.authorEmail) });
     }
     d->repliesView->setMessages(replies);
 
@@ -153,8 +213,13 @@ bool CommentRepliesView::eventFilter(QObject* _watched, QEvent* _event)
     if (_watched == d->replyTextField && _event->type() == QEvent::KeyPress) {
         const auto keyEvent = static_cast<QKeyEvent*>(_event);
         if (keyEvent->key() == Qt::Key_Escape) {
-            emit closePressed();
-        } else if (!keyEvent->modifiers().testFlag(Qt::ShiftModifier)
+            if (d->editedReplyIndex != kInvalidIndex) {
+                changeMessage(kInvalidIndex, {});
+            } else {
+                emit closePressed();
+            }
+            return true;
+        } else if (keyEvent->modifiers().testFlag(Qt::ControlModifier)
                    && (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)) {
             postReply();
             return true;
@@ -167,7 +232,11 @@ bool CommentRepliesView::eventFilter(QObject* _watched, QEvent* _event)
 void CommentRepliesView::keyPressEvent(QKeyEvent* _event)
 {
     if (_event->key() == Qt::Key_Escape) {
-        emit closePressed();
+        if (d->editedReplyIndex != kInvalidIndex) {
+            changeMessage(kInvalidIndex, {});
+        } else {
+            emit closePressed();
+        }
     }
 
     Widget::keyPressEvent(_event);
@@ -176,7 +245,9 @@ void CommentRepliesView::keyPressEvent(QKeyEvent* _event)
 void CommentRepliesView::updateTranslations()
 {
     d->headerView->setToolTip(tr("Back to comments list"));
-    d->replyTextField->setTrailingIconToolTip(tr("Add comment"));
+    d->editingTitle->setText(tr("Edit reply"));
+    d->replyTextField->setTrailingIconToolTip(QString("%1 (%2)").arg(
+        tr("Add reply"), QKeySequence("Ctrl+Enter").toString(QKeySequence::NativeText)));
 }
 
 void CommentRepliesView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -196,6 +267,19 @@ void CommentRepliesView::designSystemChangeEvent(DesignSystemChangeEvent* _event
     d->repliesViewScrollBar->setHandleColor(
         ColorHelper::transparent(textColor(), Ui::DesignSystem::focusBackgroundOpacity()));
 
+    d->editingTitle->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->editingTitle->setTextColor(Ui::DesignSystem::color().secondary());
+    d->editingTitle->setContentsMargins(Ui::DesignSystem::layout().px16(),
+                                        Ui::DesignSystem::layout().px12(), 0,
+                                        Ui::DesignSystem::layout().px4());
+    d->editingMessage->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->editingMessage->setContentsMargins(Ui::DesignSystem::layout().px16(), 0, 0,
+                                          Ui::DesignSystem::layout().px12());
+    d->editingMessage->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->cancelEditing->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->cancelEditing->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->cancelEditing->setContentsMargins(0, 0, Ui::DesignSystem::layout().px2(), 0);
+
     d->replyTextField->setBackgroundColor(Ui::DesignSystem::color().onPrimary());
     d->replyTextField->setTextColor(Ui::DesignSystem::color().onPrimary());
 }
@@ -206,8 +290,13 @@ void CommentRepliesView::postReply()
         return;
     }
 
-    emit addReplyPressed(d->replyTextField->text());
-    d->replyTextField->clear();
+    if (d->editedReplyIndex == kInvalidIndex) {
+        emit addReplyPressed(d->replyTextField->text());
+        d->replyTextField->clear();
+    } else {
+        emit editReplyPressed(d->editedReplyIndex, d->replyTextField->text());
+        changeMessage(kInvalidIndex, {});
+    }
     setCommentIndex(d->commentIndex);
 }
 

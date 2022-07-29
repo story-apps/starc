@@ -57,9 +57,20 @@ signals:
     void changeReviewMarkRequested(const QModelIndex& _index, const QString& _text);
 
     /**
-     * @brief Пользователь хочет комментарий к редакторской заметке
+     * @brief Пользователь хочет добавить комментарий к редакторской заметке
      */
     void addReviewMarkReplyRequested(const QModelIndex& _index, const QString& _text);
+
+    /**
+     * @brief Пользователь хочет обновить текст комментария к редакторской заметке
+     */
+    void editReviewMarkReplyRequested(const QModelIndex& _index, int _replyIndex,
+                                      const QString& _text);
+
+    /**
+     * @brief Пользователь хочет удалить комментарий к редакторской заметке
+     */
+    void removeReviewMarkReplyRequested(const QModelIndex& _index, int _replyIndex);
 
     /**
      * @brief Пользователь выбрал комментарий

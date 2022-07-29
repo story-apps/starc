@@ -1,20 +1,21 @@
 #include "user.h"
 
 #include <QColor>
-#include <QString>
 
 
 class User::Implementation
 {
 public:
-    explicit Implementation(const QString& _name);
+    Implementation(const QString& _name, const QString& _email);
 
     QString name;
+    QString email;
     QColor avatarColor;
 };
 
-User::Implementation::Implementation(const QString& _name)
+User::Implementation::Implementation(const QString& _name, const QString& _email)
     : name(_name)
+    , email(_email)
 {
     ushort hash = 0;
     for (int characterIndex = 0; characterIndex < name.length(); ++characterIndex) {
@@ -29,23 +30,24 @@ User::Implementation::Implementation(const QString& _name)
 
 
 User::User()
-    : d(new Implementation({}))
+    : d(new Implementation({}, {}))
 {
 }
 
-User::User(const QString& _name)
-    : d(new Implementation(_name))
+User::User(const QString& _name, const QString& _email)
+    : d(new Implementation(_name, _email))
 {
 }
 
 User::User(const User& _other)
-    : d(new Implementation(_other.name()))
+    : d(new Implementation(_other.name(), _other.email()))
 {
 }
 
 User User::operator=(const User& _other)
 {
     d->name = _other.name();
+    d->email = _other.email();
     return *this;
 }
 
@@ -61,6 +63,11 @@ QString User::name() const
     return d->name;
 }
 
+QString User::email() const
+{
+    return d->email;
+}
+
 QColor User::avatarColor() const
 {
     return d->avatarColor;
@@ -68,7 +75,7 @@ QColor User::avatarColor() const
 
 bool operator==(const User& _lhs, const User& _rhs)
 {
-    return _lhs.name() == _rhs.name();
+    return _lhs.name() == _rhs.name() && _lhs.email() == _rhs.email();
 }
 
 bool operator!=(const User& _lhs, const User& _rhs)
