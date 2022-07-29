@@ -84,11 +84,13 @@ void ThemePreview::paintEvent(QPaintEvent* _event)
     //
     // ... фон
     //
-    painter.fillRect(_event->rect(), themeColor.surface());
+    const auto backgroundRect
+        = QRectF({}, contentsRect().size()).adjusted(Ui::DesignSystem::layout().px(40), 0, 0, 0);
+    painter.fillRect(backgroundRect, themeColor.surface());
     //
     // ... сайдбар
     //
-    const QRectF sideBarRect(0, 0, Ui::DesignSystem::layout().px(40), height());
+    const QRectF sideBarRect(0, 0, backgroundRect.left(), height());
     painter.fillRect(sideBarRect, themeColor.primary());
     const QRectF selectedItemBackgroundRect(0, Ui::DesignSystem::layout().px(22),
                                             sideBarRect.width(), Ui::DesignSystem::layout().px12());
