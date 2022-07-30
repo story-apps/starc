@@ -378,16 +378,12 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     QPainter backgroundImagePainter(&backgroundImage);
     backgroundImagePainter.setPen(Qt::NoPen);
     backgroundImagePainter.setBrush(backgroundColor());
-    qreal radius = 0.0;
+    const qreal radius = Ui::DesignSystem::floatingToolBar().height() / 2.0;
     {
         const auto rect = QRect({ 0, 0 }, backgroundImage.size());
+        backgroundImagePainter.drawRoundedRect(rect, radius, radius);
         if (d->isCurtain) {
-            radius = Ui::DesignSystem::layout().px8();
-            backgroundImagePainter.drawRoundedRect(rect, radius, radius);
-            backgroundImagePainter.fillRect(rect.adjusted(0, 0, 0, radius), painter.brush());
-        } else {
-            radius = Ui::DesignSystem::floatingToolBar().height() / 2.0;
-            backgroundImagePainter.drawRoundedRect(rect, radius, radius);
+            backgroundImagePainter.fillRect(rect.adjusted(0, 0, 0, -radius), backgroundColor());
         }
     }
     //
