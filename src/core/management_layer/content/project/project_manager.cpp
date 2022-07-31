@@ -55,6 +55,7 @@ namespace ManagementLayer {
 namespace {
 
 const QLatin1String kVersionsVisibleKey("versions-visible");
+const QLatin1String kCurrentVersionKey("current-version");
 
 /**
  * @brief Является ли заданный элемент текстовым
@@ -1771,9 +1772,11 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     // Сохранить состояние отображения версий для текущего документа
     //
     if (d->currentDocument.model != nullptr && d->currentDocument.model->document() != nullptr) {
-        setSettingsValue(
-            documentSettingsKey(d->currentDocument.model->document()->uuid(), kVersionsVisibleKey),
-            d->showVersionsAction->isChecked());
+        const auto item = d->aliasedItemForIndex(d->view.activeIndex);
+        setSettingsValue(documentSettingsKey(item->uuid(), kVersionsVisibleKey),
+                         d->showVersionsAction->isChecked());
+        setSettingsValue(documentSettingsKey(item->uuid(), kCurrentVersionKey),
+                         d->view.active->currentVersion());
     }
 
     //
@@ -2117,9 +2120,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Сохранить состояние отображения версий для текущего документа
     //
     if (!d->currentDocument.model.isNull() && d->currentDocument.model->document() != nullptr) {
-        setSettingsValue(
-            documentSettingsKey(d->currentDocument.model->document()->uuid(), kVersionsVisibleKey),
-            d->showVersionsAction->isChecked());
+        const auto previousActiveItem = d->aliasedItemForIndex(d->view.activeIndex);
+        setSettingsValue(documentSettingsKey(previousActiveItem->uuid(), kVersionsVisibleKey),
+                         d->showVersionsAction->isChecked());
+        setSettingsValue(documentSettingsKey(previousActiveItem->uuid(), kCurrentVersionKey),
+                         d->view.active->currentVersion());
     }
 
     if (!_itemIndex.isValid()) {
@@ -2199,13 +2204,12 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
 
     //
-    // Отобразим версии документа, если необходимо
+    // Отобразим версии документа и выберем нужную, если необходимо
     //
     d->showVersionsAction->setChecked(
-        settingsValue(
-            documentSettingsKey(d->currentDocument.model->document()->uuid(), kVersionsVisibleKey),
-            false)
-            .toBool());
+        settingsValue(documentSettingsKey(item->uuid(), kVersionsVisibleKey), false).toBool());
+    d->view.active->setCurrentVersion(
+        settingsValue(documentSettingsKey(item->uuid(), kCurrentVersionKey), 0).toInt());
 
     //
     // Фокусируем представление
