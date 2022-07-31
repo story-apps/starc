@@ -536,6 +536,16 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
                 QSignalBlocker blocker(d->commentsView);
                 d->commentsModel->addReply(_index, _reply);
             });
+    connect(d->commentsView, &CommentsView::editReviewMarkReplyRequested, this,
+            [this](const QModelIndex& _index, int _replyIndex, const QString& _reply) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->editReply(_index, _replyIndex, _reply);
+            });
+    connect(d->commentsView, &CommentsView::removeReviewMarkReplyRequested, this,
+            [this](const QModelIndex& _index, int _replyIndex) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->removeReply(_index, _replyIndex);
+            });
     connect(d->commentsView, &CommentsView::commentSelected, this,
             [this](const QModelIndex& _index) {
                 const auto positionHint = d->commentsModel->mapToModel(_index);
