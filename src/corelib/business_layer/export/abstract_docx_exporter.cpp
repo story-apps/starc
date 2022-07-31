@@ -296,7 +296,7 @@ QString AbstractDocxExporter::Implementation::docxBlockStyle(const TextBlockStyl
     // ... регистр
     //
     if (_style.font().capitalization() == QFont::AllUppercase) {
-        blockStyle.append("<w:caps/>");
+        blockStyle.append("<w:caps w:val=\"true\" />");
     }
     //
     // ... конец параметров шрифта
@@ -425,6 +425,11 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         //
         const auto textFormats = _cursor.block().textFormats();
         for (const auto& formatRange : textFormats) {
+            auto formatRangeText
+                = _cursor.block().text().mid(formatRange.start, formatRange.length);
+            if (formatRange.format.fontCapitalization() == QFont::AllUppercase) {
+                formatRangeText = TextHelper::smartToUpper(formatRangeText);
+            }
             documentXml.append(
                 QString("<w:r><w:rPr><w:rFonts w:ascii=\"%1\" w:hAnsi=\"%1\"/><w:b "
                         "w:val=\"%2\"/><w:i w:val=\"%3\"/><w:sz w:val=\"%4\"/><w:szCs "
@@ -434,8 +439,7 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                     .arg(formatRange.format.font().italic() ? "true" : "false")
                     .arg(MeasurementHelper::pxToPt(formatRange.format.font().pixelSize()) * 2)
                     .arg(formatRange.format.font().underline() ? "single" : "none")
-                    .arg(TextHelper::toHtmlEscaped(
-                        _cursor.block().text().mid(formatRange.start, formatRange.length))));
+                    .arg(TextHelper::toHtmlEscaped(formatRangeText)));
         }
         documentXml.append("</w:p>");
     }
@@ -548,6 +552,10 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         documentXml.append("<w:rPr/></w:pPr>");
         const auto textFormats = block.textFormats();
         for (const auto& range : textFormats) {
+            auto formatRangeText = blockText.mid(range.start, range.length);
+            if (range.format.fontCapitalization() == QFont::AllUppercase) {
+                formatRangeText = TextHelper::smartToUpper(formatRangeText);
+            }
             //
             // ... не является редакторской заметкой
             //
@@ -561,8 +569,7 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                         QString("<w:rtl w:val=\"%1\"/>")
                             .arg(QLocale().textDirection() == Qt::RightToLeft ? "true" : "false"));
                     documentXml.append(QString("</w:rPr><w:t xml:space=\"preserve\">%2</w:t></w:r>")
-                                           .arg(TextHelper::toHtmlEscaped(
-                                               blockText.mid(range.start, range.length))));
+                                           .arg(TextHelper::toHtmlEscaped(formatRangeText)));
                 }
                 //
                 // ... не стандартный
