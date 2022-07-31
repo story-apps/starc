@@ -30,11 +30,10 @@ public:
 
     Widget* documentEditorPage = nullptr;
     TabBar* documentVersions = nullptr;
+    QVariantAnimation documentVersionsHeightAnimation;
     StackWidget* documentEditor = nullptr;
 
     Widget* overlay = nullptr;
-
-    QVariantAnimation heightAnimation;
 };
 
 ProjectView::Implementation::Implementation(QWidget* _parent)
@@ -99,8 +98,8 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
         layout->addWidget(documentEditor, 1);
     }
 
-    heightAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    heightAnimation.setDuration(160);
+    documentVersionsHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    documentVersionsHeightAnimation.setDuration(160);
 }
 
 
@@ -128,10 +127,10 @@ ProjectView::ProjectView(QWidget* _parent)
                 emit showVersionContextMenuPressed(d->documentVersions->tabAt(_position));
             });
     connect(
-        &d->heightAnimation, &QVariantAnimation::valueChanged, this,
+        &d->documentVersionsHeightAnimation, &QVariantAnimation::valueChanged, this,
         [this](const QVariant& _value) { d->documentVersions->setFixedHeight(_value.toInt()); });
-    connect(&d->heightAnimation, &QVariantAnimation::finished, this, [this] {
-        if (d->heightAnimation.direction() == QVariantAnimation::Backward) {
+    connect(&d->documentVersionsHeightAnimation, &QVariantAnimation::finished, this, [this] {
+        if (d->documentVersionsHeightAnimation.direction() == QVariantAnimation::Backward) {
             d->documentVersions->hide();
         }
     });
@@ -178,26 +177,38 @@ void ProjectView::setDocumentVersions(const QVector<BusinessLayer::StructureMode
 
     d->documentVersions->setCurrentTab(lastActiveVersion);
 
-    d->heightAnimation.setStartValue(0);
-    d->heightAnimation.setEndValue(d->documentVersions->sizeHint().height());
+    d->documentVersionsHeightAnimation.setStartValue(0);
+    d->documentVersionsHeightAnimation.setEndValue(d->documentVersions->sizeHint().height());
 }
 
 void ProjectView::setVersionsVisible(bool _visible)
 {
-    if (d->heightAnimation.state() == QVariantAnimation::Running) {
-        if ((d->heightAnimation.direction() == QVariantAnimation::Forward && _visible)
-            || (d->heightAnimation.direction() == QVariantAnimation::Backward && !_visible)) {
+    if (d->documentVersionsHeightAnimation.state() == QVariantAnimation::Running) {
+        if ((d->documentVersionsHeightAnimation.direction() == QVariantAnimation::Forward
+             && _visible)
+            || (d->documentVersionsHeightAnimation.direction() == QVariantAnimation::Backward
+                && !_visible)) {
             return;
         }
-        d->heightAnimation.stop();
+        d->documentVersionsHeightAnimation.stop();
     }
 
     if (_visible) {
         d->documentVersions->show();
     }
-    d->heightAnimation.setDirection(_visible ? QVariantAnimation::Forward
-                                             : QVariantAnimation::Backward);
-    d->heightAnimation.start();
+    d->documentVersionsHeightAnimation.setDirection(_visible ? QVariantAnimation::Forward
+                                                             : QVariantAnimation::Backward);
+    d->documentVersionsHeightAnimation.start();
+}
+
+int ProjectView::currentVersion() const
+{
+    return d->documentVersions->currentTab();
+}
+
+void ProjectView::setCurrentVersion(int _index)
+{
+    d->documentVersions->setCurrentTab(_index);
 }
 
 void ProjectView::resizeEvent(QResizeEvent* _event)

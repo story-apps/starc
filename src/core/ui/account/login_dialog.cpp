@@ -46,6 +46,7 @@ LoginDialog::Implementation::Implementation(QWidget* _parent)
     , resendCodeButton(new Button(_parent))
     , cancelButton(new Button(_parent))
 {
+    email->setCapitalizeWords(false);
     email->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     email->setTabChangesFocus(true);
 

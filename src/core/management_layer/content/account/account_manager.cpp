@@ -411,12 +411,13 @@ bool AccountManager::tryProForFree()
     if (freeOption.isValid()) {
         auto dialog = new Dialog(d->view->topLevelWidget());
         dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
-        dialog->showDialog(tr("Try PRO version for free"),
-                           tr("While Starc is in the beta we'd like to thank our users by "
-                              "providing them with free PRO features. After beta ends you'll "
-                              "still be able to use PRO version for 30 days for free."),
-                           { { 0, tr("Continue with free version"), Dialog::RejectButton },
-                             { 1, tr("Activate PRO"), Dialog::AcceptButton } });
+        dialog->showDialog(
+            tr("Try PRO version for free"),
+            tr("You can try all the features of the PRO version during 30 days for free. After "
+               "trial period, you can continue to use the PRO version by renewing your "
+               "subscription. Otherwise, you'll be returned to the FREE version automatically."),
+            { { 0, tr("Continue with free version"), Dialog::RejectButton },
+              { 1, tr("Activate PRO"), Dialog::AcceptButton } });
         QObject::connect(dialog, &Dialog::finished, this,
                          [this, dialog, freeOption](const Dialog::ButtonInfo& _presedButton) {
                              dialog->hideDialog();

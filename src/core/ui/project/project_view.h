@@ -50,6 +50,12 @@ public:
      */
     void setVersionsVisible(bool _visible);
 
+    /**
+     * @brief Задать текущую версию
+     */
+    int currentVersion() const;
+    void setCurrentVersion(int _index);
+
 signals:
     /**
      * @brief Пользователь нажал кнопку создания нового проекта

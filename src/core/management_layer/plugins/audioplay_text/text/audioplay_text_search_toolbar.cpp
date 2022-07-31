@@ -62,10 +62,12 @@ AudioplayTextSearchToolbar::Implementation::Implementation(QWidget* _parent)
     , replaceAllAction(new QAction)
     , replaceAll(new Button(_parent))
 {
+    searchText->setCapitalizeWords(false);
     searchText->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     searchText->setUnderlineDecorationVisible(false);
     searchText->setWordWrapMode(QTextOption::NoWrap);
 
+    replaceText->setCapitalizeWords(false);
     replaceText->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     replaceText->setUnderlineDecorationVisible(false);
     replaceText->setWordWrapMode(QTextOption::NoWrap);
