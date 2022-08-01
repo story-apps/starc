@@ -3,9 +3,8 @@
 #include <QObject>
 
 namespace Domain {
-enum class SubscriptionType;
 struct PaymentOption;
-struct SessionInfo;
+struct AccountInfo;
 } // namespace Domain
 
 
@@ -49,16 +48,8 @@ public:
     /**
      * @brief Установить параметры аккаунта
      */
-    void setAccountInfo(const QString& _email, const QString& _name, const QString& _description,
-                        bool _newsletterSubscribed, const QByteArray& _avatar,
-                        Domain::SubscriptionType _subscriptionType,
-                        const QDateTime& _subscriptionEnds,
-                        const QVector<Domain::PaymentOption>& _paymentOptions,
-                        const QVector<Domain::SessionInfo>& _sessions);
+    void setAccountInfo(const Domain::AccountInfo& _accountInfo);
     void clearAccountInfo();
-    QString email() const;
-    QString name() const;
-    QPixmap avatar() const;
 
     /**
      * @brief Проапгрейдить учётную любым из способов
@@ -126,7 +117,7 @@ signals:
     void askAccountInfoRequested();
 
     /**
-     * @brief Пользователь хочет получить информацию об аккаунте
+     * @brief Пользователь хочет обновить информацию об аккаунте
      */
     void updateAccountInfoRequested(const QString& _email, const QString& _name,
                                     const QString& _description,

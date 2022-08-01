@@ -6,6 +6,7 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
+#include <domain/subscription_info.h>
 #include <ui/design_system/design_system.h>
 #include <ui/projects/create_project_dialog.h>
 #include <ui/projects/projects_navigator.h>
@@ -229,10 +230,12 @@ void ProjectsManager::saveChanges()
     d->projects->updateProject(d->currentProject);
 }
 
-void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized, bool _ableToCreate)
+void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized,
+                                                     Domain::SubscriptionType _subscritionType)
 {
     d->isUserAuthorized = _authorized;
-    d->canCreateCloudProject = _ableToCreate;
+    d->canCreateCloudProject = _subscritionType == Domain::SubscriptionType::TeamMonthly
+        || _subscritionType == Domain::SubscriptionType::TeamLifetime;
 }
 
 void ProjectsManager::createProject()

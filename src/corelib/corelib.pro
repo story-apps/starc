@@ -462,6 +462,7 @@ HEADERS += \
     data_layer/storage/document_storage.h \
     data_layer/storage/settings_storage.h \
     data_layer/storage/storage_facade.h \
+    domain/account_info.h \
     domain/document_change_object.h \
     domain/document_object.h \
     domain/domain_object.h \

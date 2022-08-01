@@ -1,7 +1,6 @@
 #include "account_manager.h"
 
-#include <domain/payment_info.h>
-#include <domain/subscription_info.h>
+#include <domain/account_info.h>
 #include <ui/account/account_navigator.h>
 #include <ui/account/account_tool_bar.h>
 #include <ui/account/account_view.h>
@@ -36,13 +35,6 @@ public:
     void initViewConnections();
 
     /**
-     * @brief Методы работы с аватаром
-     */
-    void setAvatar(const QByteArray& _avatar);
-    void setAvatar(const QPixmap& _avatar);
-    void removeAvatar();
-
-    /**
      * @brief Инициилизировать диалог авторизации
      */
     void initLoginDialog();
@@ -69,24 +61,12 @@ public:
     /**
      * @biref Данные о пользователе, которые могут быть изменены непосредственно в личном кабинете
      */
-    struct {
-        QString email;
-        QString name;
-        QString description;
-        QString subscriptionLanguage;
-        bool subscribed = false;
-        QPixmap avatar = {};
-    } account;
+    Domain::AccountInfo accountInfo;
 
     /**
      * @brief Таймер проверки окончания подписки (срабатывает в момент завершения подписки)
      */
     QTimer subscriptionEndsTimer;
-
-    /**
-     * @brief Доступные опции для покупки
-     */
-    QVector<Domain::PaymentOption> paymentOptions;
 };
 
 AccountManager::Implementation::Implementation(AccountManager* _q, QWidget* _parent)
@@ -138,35 +118,35 @@ void AccountManager::Implementation::initNavigatorConnections()
 void AccountManager::Implementation::initViewConnections()
 {
     auto notifyUpdateAccountInfoRequested = [this] {
-        emit q->updateAccountInfoRequested(account.email, account.name, account.description,
-                                           account.subscriptionLanguage, account.subscribed,
-                                           ImageHelper::bytesFromImage(account.avatar));
+        emit q->updateAccountInfoRequested(accountInfo.email, accountInfo.name,
+                                           accountInfo.description, accountInfo.newsletterLanguage,
+                                           accountInfo.newsletterSubscribed, accountInfo.avatar);
     };
 
     connect(view, &Ui::AccountView::nameChanged, q,
             [this, notifyUpdateAccountInfoRequested](const QString& _name) {
-                account.name = _name;
+                accountInfo.name = _name;
                 notifyUpdateAccountInfoRequested();
             });
     connect(view, &Ui::AccountView::descriptionChanged, q,
             [this, notifyUpdateAccountInfoRequested](const QString& _description) {
-                account.description = _description;
+                accountInfo.description = _description;
                 notifyUpdateAccountInfoRequested();
             });
     connect(view, &Ui::AccountView::newsletterSubscriptionChanged, q,
             [this, notifyUpdateAccountInfoRequested](bool _subscribed) {
-                account.subscriptionLanguage
+                accountInfo.newsletterLanguage
                     = QLocale().language() == QLocale::Russian ? "ru" : "en";
-                account.subscribed = _subscribed;
+                accountInfo.newsletterSubscribed = _subscribed;
                 notifyUpdateAccountInfoRequested();
             });
     connect(view, &Ui::AccountView::avatarChanged, q,
             [this, notifyUpdateAccountInfoRequested](const QPixmap& _avatar) {
                 if (!_avatar.isNull()) {
-                    account.avatar
-                        = _avatar.scaled(288, 288, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                    accountInfo.avatar = ImageHelper::bytesFromImage(
+                        _avatar.scaled(288, 288, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
                 } else {
-                    account.avatar = {};
+                    accountInfo.avatar = {};
                 }
 
                 notifyUpdateAccountInfoRequested();
@@ -181,23 +161,6 @@ void AccountManager::Implementation::initViewConnections()
 
     connect(view, &Ui::AccountView::terminateSessionRequested, q,
             &AccountManager::terminateSessionRequested);
-}
-
-void AccountManager::Implementation::setAvatar(const QByteArray& _avatar)
-{
-    setAvatar(ImageHelper::imageFromBytes(_avatar));
-}
-
-void AccountManager::Implementation::setAvatar(const QPixmap& _avatar)
-{
-    account.avatar = _avatar;
-    view->setAvatar(account.avatar);
-}
-
-void AccountManager::Implementation::removeAvatar()
-{
-    account.avatar = {};
-    view->setAvatar({});
 }
 
 void AccountManager::Implementation::initLoginDialog()
@@ -240,7 +203,7 @@ void AccountManager::Implementation::initPurchaseDialog()
         });
     }
 
-    purchaseDialog->setPaymentOptions(paymentOptions);
+    purchaseDialog->setPaymentOptions(accountInfo.paymentOptions);
 }
 
 
@@ -299,29 +262,23 @@ void AccountManager::completeSignIn(bool _openAccount)
     }
 }
 
-void AccountManager::setAccountInfo(const QString& _email, const QString& _name,
-                                    const QString& _description, bool _newsletterSubscribed,
-                                    const QByteArray& _avatar,
-                                    Domain::SubscriptionType _subscriptionType,
-                                    const QDateTime& _subscriptionEnds,
-                                    const QVector<Domain::PaymentOption>& _paymentOptions,
-                                    const QVector<Domain::SessionInfo>& _sessions)
+void AccountManager::setAccountInfo(const Domain::AccountInfo& _accountInfo)
 {
-    d->account.email = _email;
-    d->view->setEmail(d->account.email);
-    d->account.name = _name;
-    d->view->setName(d->account.name);
-    d->account.description = _description;
-    d->view->setDescription(d->account.description);
-    d->account.subscribed = _newsletterSubscribed;
-    d->view->setNewsletterSubscribed(d->account.subscribed);
-    d->setAvatar(_avatar);
-    d->paymentOptions = _paymentOptions;
 
-    d->navigator->setSubscriptionInfo(_subscriptionType, _subscriptionEnds, _paymentOptions);
-    d->view->setSubscriptionInfo(_subscriptionType, _subscriptionEnds, _paymentOptions);
+    d->accountInfo = _accountInfo;
 
-    d->view->setSessions(_sessions);
+    d->view->setEmail(d->accountInfo.email);
+    d->view->setName(d->accountInfo.name);
+    d->view->setDescription(d->accountInfo.description);
+    d->view->setNewsletterSubscribed(d->accountInfo.newsletterSubscribed);
+    d->view->setAvatar(ImageHelper::imageFromBytes(d->accountInfo.avatar));
+
+    d->navigator->setSubscriptionInfo(d->accountInfo.subscriptionType,
+                                      d->accountInfo.subscriptionEnds,
+                                      d->accountInfo.paymentOptions);
+    d->view->setSubscriptionInfo(d->accountInfo.subscriptionType, d->accountInfo.subscriptionEnds,
+                                 d->accountInfo.paymentOptions);
+    d->view->setSessions(d->accountInfo.sessions);
 
     //
     // Взводим таймер проверки окончания сессии
@@ -330,13 +287,14 @@ void AccountManager::setAccountInfo(const QString& _email, const QString& _name,
         d->subscriptionEndsTimer.stop();
     }
     const auto currentDateTime = QDateTime::currentDateTimeUtc();
-    if (currentDateTime < _subscriptionEnds) {
+    if (currentDateTime < d->accountInfo.subscriptionEnds) {
         //
         // Т.к. таймер запускается на int миллисекунд, нельзя в него передавать слишком большое
         // значение (количество миллисекунд до самого конца подписки), выходящее за пределы INT_MAX
         //
         const qint64 maxInterval = INT_MAX;
-        const auto interval = std::min(currentDateTime.msecsTo(_subscriptionEnds), maxInterval);
+        const auto interval
+            = std::min(currentDateTime.msecsTo(d->accountInfo.subscriptionEnds), maxInterval);
         d->subscriptionEndsTimer.start(interval);
     }
 
@@ -350,22 +308,7 @@ void AccountManager::setAccountInfo(const QString& _email, const QString& _name,
 
 void AccountManager::clearAccountInfo()
 {
-    d->account = {};
-}
-
-QString AccountManager::email() const
-{
-    return d->account.email;
-}
-
-QString AccountManager::name() const
-{
-    return d->account.name;
-}
-
-QPixmap AccountManager::avatar() const
-{
-    return d->account.avatar;
+    d->accountInfo = {};
 }
 
 void AccountManager::upgradeAccount()
@@ -373,7 +316,7 @@ void AccountManager::upgradeAccount()
     //
     // Если ещё не авторизован, то отправим на авторизацию
     //
-    if (d->account.email.isEmpty()) {
+    if (d->accountInfo.email.isEmpty()) {
         signIn();
     }
     //
@@ -395,7 +338,7 @@ bool AccountManager::tryProForFree()
     // Ищем бесплатную активацию
     //
     Domain::PaymentOption freeOption;
-    for (const auto& paymentOption : std::as_const(d->paymentOptions)) {
+    for (const auto& paymentOption : std::as_const(d->accountInfo.paymentOptions)) {
         if (paymentOption.amount != 0
             || paymentOption.subscriptionType != Domain::SubscriptionType::ProMonthly) {
             continue;
@@ -441,14 +384,14 @@ void AccountManager::upgradeToPro()
 void AccountManager::buyProLifetme()
 {
     d->initPurchaseDialog();
-    d->purchaseDialog->selectOption(d->paymentOptions.constFirst());
+    d->purchaseDialog->selectOption(d->accountInfo.paymentOptions.constFirst());
     d->purchaseDialog->showDialog();
 }
 
 void AccountManager::renewPro()
 {
     d->initPurchaseDialog();
-    d->purchaseDialog->selectOption(d->paymentOptions.constLast());
+    d->purchaseDialog->selectOption(d->accountInfo.paymentOptions.constLast());
     d->purchaseDialog->showDialog();
 }
 

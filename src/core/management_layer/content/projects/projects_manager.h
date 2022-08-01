@@ -2,6 +2,9 @@
 
 #include <QObject>
 
+namespace Domain {
+enum class SubscriptionType;
+}
 
 namespace ManagementLayer {
 
@@ -45,7 +48,8 @@ public:
     /**
      * @brief Можно ли создавать проекты в облаке
      */
-    void setProjectsInCloudCanBeCreated(bool _authorized, bool _ableToCreate);
+    void setProjectsInCloudCanBeCreated(bool _authorized,
+                                        Domain::SubscriptionType _subscritionType);
 
     /**
      * @brief Создать проект

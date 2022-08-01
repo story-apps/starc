@@ -20,6 +20,7 @@
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/account_info.h>
 #include <domain/document_object.h>
 #include <include/custom_events.h>
 #include <interfaces/management_layer/i_document_manager.h>
@@ -37,6 +38,7 @@
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/extension_helper.h>
 #include <utils/helpers/file_helper.h>
+#include <utils/helpers/image_helper.h>
 #include <utils/logging.h>
 #include <utils/tools/backup_builder.h>
 #include <utils/tools/run_once.h>
@@ -2138,16 +2140,19 @@ void ApplicationManager::initConnections()
     //
     // Параметры аккаунта
     //
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::accountInfoReceived,
-            d->accountManager.data(), &AccountManager::setAccountInfo);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::accountInfoReceived, this, [this] {
-        d->menuView->setSignInVisible(false);
-        d->menuView->setAccountVisible(true);
-        d->menuView->setAvatar(d->accountManager->avatar());
-        d->menuView->setAccountName(d->accountManager->name());
-        d->menuView->setAccountEmail(d->accountManager->email());
-        d->projectManager->checkAvailabilityToEdit();
-    });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::accountInfoReceived, this,
+            [this](const Domain::AccountInfo& _accountInfo) {
+                d->accountManager->setAccountInfo(_accountInfo);
+
+                d->menuView->setSignInVisible(false);
+                d->menuView->setAccountVisible(true);
+                d->menuView->setAvatar(ImageHelper::imageFromBytes(_accountInfo.avatar));
+                d->menuView->setAccountName(_accountInfo.name);
+                d->menuView->setAccountEmail(_accountInfo.email);
+                d->projectsManager->setProjectsInCloudCanBeCreated(true,
+                                                                   _accountInfo.subscriptionType);
+                d->projectManager->checkAvailabilityToEdit();
+            });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::promocodeActivated,
             d->accountManager.data(), &AccountManager::showPromocodeActivationMessage);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::promocodeErrorRecieved,
@@ -2172,6 +2177,7 @@ void ApplicationManager::initConnections()
         d->menuView->setSignInVisible(true);
         d->menuView->setAccountVisible(false);
         d->projectManager->checkAvailabilityToEdit();
+        d->projectsManager->setProjectsInCloudCanBeCreated(false, Domain::SubscriptionType::Free);
     });
 #endif
 }
