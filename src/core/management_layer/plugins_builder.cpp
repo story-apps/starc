@@ -590,6 +590,12 @@ void PluginsBuilder::checkAvailabilityToEdit() const
 {
     for (auto plugin : std::as_const(d->plugins)) {
         plugin->checkAvailabilityToEdit();
+
+        //
+        // После того, как обновили доступность плагинов, нужно обновить их возможность к
+        // редактированию текущего документа
+        //
+        plugin->setEditingMode(d->editingMode);
     }
 }
 
