@@ -88,11 +88,8 @@ CharactersModel::CharactersModel(QObject* _parent)
 
 void CharactersModel::addCharacterModel(CharacterModel* _characterModel)
 {
-    if (_characterModel->name().isEmpty()) {
-        return;
-    }
-
-    if (d->characterModels.contains(_characterModel)) {
+    if (_characterModel == nullptr || _characterModel->name().isEmpty()
+        || d->characterModels.contains(_characterModel)) {
         return;
     }
 
@@ -104,11 +101,7 @@ void CharactersModel::addCharacterModel(CharacterModel* _characterModel)
 
 void CharactersModel::removeCharacterModel(CharacterModel* _characterModel)
 {
-    if (_characterModel == nullptr) {
-        return;
-    }
-
-    if (!d->characterModels.contains(_characterModel)) {
+    if (_characterModel == nullptr || !d->characterModels.contains(_characterModel)) {
         return;
     }
 

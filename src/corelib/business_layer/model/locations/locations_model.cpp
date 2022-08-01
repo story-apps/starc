@@ -86,11 +86,8 @@ LocationsModel::LocationsModel(QObject* _parent)
 
 void LocationsModel::addLocationModel(LocationModel* _locationModel)
 {
-    if (_locationModel->name().isEmpty()) {
-        return;
-    }
-
-    if (d->locationModels.contains(_locationModel)) {
+    if (_locationModel == nullptr || _locationModel->name().isEmpty()
+        || d->locationModels.contains(_locationModel)) {
         return;
     }
 
@@ -102,11 +99,7 @@ void LocationsModel::addLocationModel(LocationModel* _locationModel)
 
 void LocationsModel::removeLocationModel(LocationModel* _locationModel)
 {
-    if (_locationModel == nullptr) {
-        return;
-    }
-
-    if (!d->locationModels.contains(_locationModel)) {
+    if (_locationModel == nullptr || !d->locationModels.contains(_locationModel)) {
         return;
     }
 

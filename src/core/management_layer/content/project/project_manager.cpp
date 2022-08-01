@@ -718,6 +718,9 @@ void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureMode
             //
             auto document
                 = DataStorageLayer::StorageFacade::documentStorage()->document(_item->uuid());
+            if (document == nullptr) {
+                return;
+            }
             modelsFacade.removeModelFor(document);
             DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
             projectStructureModel->removeItem(_item);
