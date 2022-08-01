@@ -1219,22 +1219,22 @@
 <context>
     <name>ManagementLayer::AccountManager</name>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="414"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="415"/>
         <source>Try PRO version for free</source>
         <translation>무료로 프로버전을 사용해보십시오.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="415"/>
-        <source>While Starc is in the beta we&apos;d like to thank our users by providing them with free PRO features. After beta ends you&apos;ll still be able to use PRO version for 30 days for free.</source>
-        <translation>베타 버전에서 Starc가 사용자에게 무료 PRO 기능을 제공함으로써 사용자에게 감사드리고 싶습니다. 베타 버전이 종료된 후에도 30일 동안 무료로 PRO 버전을 사용할 수 있습니다.</translation>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="416"/>
+        <source>You can try all the features of the PRO version during 30 days for free. After trial period, you can continue to use the PRO version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="418"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="419"/>
         <source>Continue with free version</source>
         <translation>무료 버전으로 계속하기</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="419"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="420"/>
         <source>Activate PRO</source>
         <translation>프로 버전 활성화</translation>
     </message>
@@ -1599,193 +1599,193 @@
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="348"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="349"/>
         <source>Find all characters</source>
         <translation>모든 인물 찾기</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="355"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="356"/>
         <source>Add character</source>
         <translation>인물 추가</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="360"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="361"/>
         <source>Find all locations</source>
         <translation>모든 장소 찾기</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="367"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="368"/>
         <source>Add location</source>
         <translation>장소 추가</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="373"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="374"/>
         <source>Empty recycle bin</source>
         <translation>빈 휴지통</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="392"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="393"/>
         <source>Add document</source>
         <translation>문서 추가</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="422"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="423"/>
         <source>Remove document</source>
         <translation>문서 제거</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="452"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="453"/>
         <source>Open in new window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="516"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="517"/>
         <source>Character with this name already exists</source>
         <translation>이 이름을 가진 인물은 이미 존재합니다.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="526"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="527"/>
         <source>Location with this name already exists</source>
         <translation>이 이름을 가진 장소가 이미 존재합니다.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="638"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="639"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="699"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="700"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>정말로 문서를 완전히 삭제하시겠습니까? </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="639"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="700"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="964"/>
-        <source>No</source>
-        <translation>아니오</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="313"/>
-        <source>Remove split</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="314"/>
-        <source>Split window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="315"/>
-        <source>Hide document versions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="316"/>
-        <source>Show document versions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="385"/>
-        <source>Add folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="437"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1316"/>
-        <source>Create new version</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="640"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="701"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="965"/>
+        <source>No</source>
+        <translation>아니오</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="314"/>
+        <source>Remove split</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="315"/>
+        <source>Split window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="316"/>
+        <source>Hide document versions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="317"/>
+        <source>Show document versions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="386"/>
+        <source>Add folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="438"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1317"/>
+        <source>Create new version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="641"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="702"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="966"/>
         <source>Yes, remove</source>
         <translation>제거하기</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="780"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="781"/>
         <source>Characters from the text</source>
         <translation>본문으로부터 인물들</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="790"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="791"/>
         <source>Characters that are not found in the text</source>
         <translation>본문에서 발견되지 않는 인물들</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="803"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="804"/>
         <source>Save only characters from the text</source>
         <translation>본문으로부터 인물만 저장</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="804"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="805"/>
         <source>Save all characters</source>
         <translation>모든 인물들 저장</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="805"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="907"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="806"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="908"/>
         <source>Change nothing</source>
         <translation>아무것도 변경하지 않음</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="882"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="883"/>
         <source>Locations from the text</source>
         <translation>본문에서 장소</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="892"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="893"/>
         <source>Locations that are not found in the text</source>
         <translation>본문에서 발견되지 않는 장소</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="905"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="906"/>
         <source>Save only locations from the text</source>
         <translation>본문에서 장소만 저장</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="906"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="907"/>
         <source>Save all locations</source>
         <translation>모든 장소 저장하기</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="963"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="964"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>휴지통에서 모든 문서를 영구적으로 제거하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1330"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1331"/>
         <source>Edit</source>
         <translation>편집</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1340"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1341"/>
         <source>Remove</source>
         <translation>제거</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1891"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1894"/>
         <source>Title page</source>
         <translation>제목 페이지</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1893"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1896"/>
         <source>Synopsis</source>
         <translation>시놉시스</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1905"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1908"/>
         <source>Treatment</source>
         <translation>논의</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1896"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
         <source>Screenplay</source>
         <translation>시나리오</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1902"/>
         <source>Statistics</source>
         <translation>통계</translation>
     </message>
@@ -2171,10 +2171,6 @@
 </context>
 <context>
     <name>SpellCheckTextEdit</name>
-    <message>
-        <source>Spelling</source>
-        <translation type="vanished">철자</translation>
-    </message>
     <message>
         <location filename="../../corelib/ui/widgets/text_edit/spell_check/spell_check_text_edit.cpp" line="225"/>
         <source>Add to dictionary</source>
@@ -2825,80 +2821,80 @@
 <context>
     <name>Ui::AudioplayTextSearchToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="157"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="314"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="159"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="316"/>
         <source>Search without case sensitive</source>
         <translation>대소문자 구분 없이 검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="158"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="315"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="160"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="317"/>
         <source>Search with case sensitive</source>
         <translation>대소문자를 구분한 검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="163"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="298"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="165"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="300"/>
         <source>In the whole text</source>
         <translation>전체 본문에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="291"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="293"/>
         <source>Exit from search</source>
         <translation>검색에서 나가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="294"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="296"/>
         <source>Search</source>
         <translation>검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="295"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="297"/>
         <source>Enter search phrase here</source>
         <translation>여기에 검색 문구를 입력하시오</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="299"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="301"/>
         <source>In scene heading</source>
         <translation>신 제목에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="300"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="302"/>
         <source>In character</source>
         <translation>인물에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="301"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="303"/>
         <source>In dialogue</source>
         <translation>대화에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="306"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="308"/>
         <source>Go to the next search result</source>
         <translation>다음 검색 결과로 가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="310"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="312"/>
         <source>Go to the previous search result</source>
         <translation>이전 검색 결과로 가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="317"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="319"/>
         <source>Replace with</source>
         <translation>대체</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="318"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="320"/>
         <source>Enter phrase to replace</source>
         <translation>대체할 구절 입력</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="319"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="321"/>
         <source>Replace</source>
         <translation>교체</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="320"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="322"/>
         <source>All</source>
         <translation>모두</translation>
     </message>
@@ -2911,17 +2907,17 @@
         <translation>북마크 목록 숨기기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="943"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="953"/>
         <source>Formatting</source>
         <translation>서식 설정</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="944"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="954"/>
         <source>Comments</source>
         <translation>코멘트</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="945"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="955"/>
         <source>Bookmarks</source>
         <translation>북마크</translation>
     </message>
@@ -3600,85 +3596,85 @@
 <context>
     <name>Ui::ComicBookTextSearchToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="157"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="310"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="159"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="312"/>
         <source>Search without case sensitive</source>
         <translation>대소문자 구분 없이 검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="158"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="311"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="160"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="313"/>
         <source>Search with case sensitive</source>
         <translation>대소문자를 구분한 검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="163"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="297"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="165"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="299"/>
         <source>In the whole text</source>
         <translation>전체 본문에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="291"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="293"/>
         <source>Exit from search</source>
         <translation>검색에서 나가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="294"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="296"/>
         <source>Search</source>
         <translation>검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="295"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="297"/>
         <source>Enter search phrase here</source>
         <translation>여기에 검색 문구를 입력하시오</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="297"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="299"/>
         <source>In scene heading</source>
         <translation>신 제목에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="297"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="299"/>
         <source>In action</source>
         <translation>연기에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="298"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="300"/>
         <source>In character</source>
         <translation>인물에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="298"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="300"/>
         <source>In dialogue</source>
         <translation>대화에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="302"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="304"/>
         <source>Go to the next search result</source>
         <translation>다음 검색 결과로 가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="306"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="308"/>
         <source>Go to the previous search result</source>
         <translation>이전 검색 결과로 가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="313"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="315"/>
         <source>Replace with</source>
         <translation>대체</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="314"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="316"/>
         <source>Enter phrase to replace</source>
         <translation>대체할 구절 입력</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="315"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="317"/>
         <source>Replace</source>
         <translation>교체</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="316"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="318"/>
         <source>All</source>
         <translation>모두</translation>
     </message>
@@ -3701,17 +3697,17 @@
         <translation>북마크 목록 숨기기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="942"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="952"/>
         <source>Formatting</source>
         <translation>서식 설정</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="943"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="953"/>
         <source>Comments</source>
         <translation>코멘트</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="944"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="954"/>
         <source>Bookmarks</source>
         <translation>북마크</translation>
     </message>
@@ -3752,10 +3748,6 @@
         <location filename="../../corelib/ui/modules/comments/comment_replies_view.cpp" line="250"/>
         <source>Add reply</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add comment</source>
-        <translation type="vanished">코멘트 추가</translation>
     </message>
 </context>
 <context>
@@ -4808,52 +4800,52 @@
 <context>
     <name>Ui::LoginDialog</name>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="125"/>
+        <location filename="../ui/account/login_dialog.cpp" line="126"/>
         <source>Email invalid</source>
         <translation>유효하지않은 이메일</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="74"/>
+        <location filename="../ui/account/login_dialog.cpp" line="75"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
         <translation>전송한 확인 코드가 만료되었습니다.</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="76"/>
+        <location filename="../ui/account/login_dialog.cpp" line="77"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
         <translation>위의 이메일로 확인 코드를 보냈습니다. 확인하려면 여기에 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="194"/>
+        <location filename="../ui/account/login_dialog.cpp" line="195"/>
         <source>Get into your account</source>
         <translation>계정으로 들어가기</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="196"/>
+        <location filename="../ui/account/login_dialog.cpp" line="197"/>
         <source>Sign in to get access to the extended free and pro features</source>
         <translation>확장된 무료 및 프로 기능에 접근하려면 로그인하십시오.</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="197"/>
+        <location filename="../ui/account/login_dialog.cpp" line="198"/>
         <source>Email</source>
         <translation>이메일</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="199"/>
+        <location filename="../ui/account/login_dialog.cpp" line="200"/>
         <source>Confirmation code</source>
         <translation>확인 코드</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="200"/>
+        <location filename="../ui/account/login_dialog.cpp" line="201"/>
         <source>Sign in</source>
         <translation>로그인</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="201"/>
+        <location filename="../ui/account/login_dialog.cpp" line="202"/>
         <source>Send code again</source>
         <translation>다시 코드를 전송</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="202"/>
+        <location filename="../ui/account/login_dialog.cpp" line="203"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
@@ -5397,33 +5389,33 @@
 <context>
     <name>Ui::ProjectView</name>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="172"/>
-        <location filename="../ui/project/project_view.cpp" line="222"/>
+        <location filename="../ui/project/project_view.cpp" line="171"/>
+        <location filename="../ui/project/project_view.cpp" line="233"/>
         <source>Current version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="213"/>
+        <location filename="../ui/project/project_view.cpp" line="224"/>
         <source>Here will be an editor of the document you choose in the navigator (at left).</source>
         <translation>네비게이터에서 선택한 문서의 편집자(왼쪽)가 나타납니다.</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="214"/>
+        <location filename="../ui/project/project_view.cpp" line="225"/>
         <source>Choose an item to edit, or</source>
         <translation>편집할 아이템 선택 또는</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="215"/>
+        <location filename="../ui/project/project_view.cpp" line="226"/>
         <source>create a new one</source>
         <translation>새로운 것 생성</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="218"/>
+        <location filename="../ui/project/project_view.cpp" line="229"/>
         <source>Ooops... looks like editor of this document not implemented yet.</source>
         <translation>이 문서의 편집자가 아직 구현되지 않은 것 같습니다.</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="220"/>
+        <location filename="../ui/project/project_view.cpp" line="231"/>
         <source>But don&apos;t worry, it will be here in one of the future updates!</source>
         <translation>걱정하지마십시오. 향후 업데이트 중 하나가 여기에 있을 것입니다!</translation>
     </message>
@@ -6222,85 +6214,85 @@
 <context>
     <name>Ui::ScreenplayTextSearchToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="157"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="310"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="159"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="312"/>
         <source>Search without case sensitive</source>
         <translation>대소문자 구분 없이 검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="158"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="311"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="160"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="313"/>
         <source>Search with case sensitive</source>
         <translation>대소문자를 구분한 검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="163"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="297"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="165"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="299"/>
         <source>In the whole text</source>
         <translation>전체 본문에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="291"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="293"/>
         <source>Exit from search</source>
         <translation>검색에서 나가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="294"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="296"/>
         <source>Search</source>
         <translation>검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="295"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="297"/>
         <source>Enter search phrase here</source>
         <translation>여기에 검색 문구를 입력하시오</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="297"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="299"/>
         <source>In scene heading</source>
         <translation>신 제목에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="297"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="299"/>
         <source>In action</source>
         <translation>연기에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="298"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="300"/>
         <source>In character</source>
         <translation>인물에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="298"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="300"/>
         <source>In dialogue</source>
         <translation>대화에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="302"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="304"/>
         <source>Go to the next search result</source>
         <translation>다음 검색 결과로 가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="306"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="308"/>
         <source>Go to the previous search result</source>
         <translation>이전 검색 결과로 가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="313"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="315"/>
         <source>Replace with</source>
         <translation>대체</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="314"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="316"/>
         <source>Enter phrase to replace</source>
         <translation>대체할 구절 입력</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="315"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="317"/>
         <source>Replace</source>
         <translation>교체</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="316"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="318"/>
         <source>All</source>
         <translation>모두</translation>
     </message>
@@ -6440,85 +6432,85 @@
 <context>
     <name>Ui::ScreenplayTreatmentSearchToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="153"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="308"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="155"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="310"/>
         <source>Search without case sensitive</source>
         <translation>대소문자 구분 없이 검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="154"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="309"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="156"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="311"/>
         <source>Search with case sensitive</source>
         <translation>대소문자를 구분한 검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="295"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="161"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="297"/>
         <source>In the whole text</source>
         <translation>전체 본문에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="289"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="291"/>
         <source>Exit from search</source>
         <translation>검색에서 나가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="292"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="294"/>
         <source>Search</source>
         <translation>검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="293"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="295"/>
         <source>Enter search phrase here</source>
         <translation>여기에 검색 문구를 입력하시오</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="295"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="297"/>
         <source>In scene heading</source>
         <translation>신 제목에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="295"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="297"/>
         <source>In action</source>
         <translation>연기에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="296"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="298"/>
         <source>In character</source>
         <translation>인물에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="296"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="298"/>
         <source>In dialogue</source>
         <translation>대화에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="300"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="302"/>
         <source>Go to the next search result</source>
         <translation>다음 검색 결과로 가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="304"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="306"/>
         <source>Go to the previous search result</source>
         <translation>이전 검색 결과로 가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="311"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="313"/>
         <source>Replace with</source>
         <translation>대체</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="312"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="314"/>
         <source>Enter phrase to replace</source>
         <translation>대체할 구절 입력</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="313"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="315"/>
         <source>Replace</source>
         <translation>교체</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="314"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="316"/>
         <source>All</source>
         <translation>모두</translation>
     </message>
@@ -6536,17 +6528,17 @@
         <translation>북마크 목록 보여주기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="961"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="971"/>
         <source>Formatting</source>
         <translation>서식 설정</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="962"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="972"/>
         <source>Comments</source>
         <translation>코멘트</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="963"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="973"/>
         <source>Bookmarks</source>
         <translation>북마크</translation>
     </message>
@@ -7638,10 +7630,6 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>시나리오 모듈</translation>
     </message>
     <message>
-        <source>Automatically continue same speaker&apos;s dialogue</source>
-        <translation type="vanished">자동으로 같은 연사의 대화 계속</translation>
-    </message>
-    <message>
         <location filename="../ui/settings/settings_view.cpp" line="2977"/>
         <location filename="../ui/settings/settings_view.cpp" line="3044"/>
         <location filename="../ui/settings/settings_view.cpp" line="3069"/>
@@ -7808,95 +7796,95 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/export/simple_text_export_dialog.cpp" line="196"/>
         <source>Format</source>
-        <translation type="unfinished">형식</translation>
+        <translation>형식</translation>
     </message>
     <message>
         <location filename="../ui/export/simple_text_export_dialog.cpp" line="197"/>
         <source>Include inline notes</source>
-        <translation type="unfinished">인라인 노트 포함</translation>
+        <translation>인라인 노트 포함</translation>
     </message>
     <message>
         <location filename="../ui/export/simple_text_export_dialog.cpp" line="198"/>
         <source>Include review marks</source>
-        <translation type="unfinished">검토 마크 포함</translation>
+        <translation>검토 마크 포함</translation>
     </message>
     <message>
         <location filename="../ui/export/simple_text_export_dialog.cpp" line="199"/>
         <source>Watermark</source>
-        <translation type="unfinished">워터마크</translation>
+        <translation>워터마크</translation>
     </message>
     <message>
         <location filename="../ui/export/simple_text_export_dialog.cpp" line="201"/>
         <source>Open document after export</source>
-        <translation type="unfinished">내보내기 후에 문서 열기</translation>
+        <translation>내보내기 후에 문서 열기</translation>
     </message>
     <message>
         <location filename="../ui/export/simple_text_export_dialog.cpp" line="202"/>
         <source>Export</source>
-        <translation type="unfinished">내보내기</translation>
+        <translation>내보내기</translation>
     </message>
     <message>
         <location filename="../ui/export/simple_text_export_dialog.cpp" line="203"/>
         <source>Cancel</source>
-        <translation type="unfinished">취소</translation>
+        <translation>취소</translation>
     </message>
 </context>
 <context>
     <name>Ui::SimpleTextSearchToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="119"/>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="233"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="121"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="235"/>
         <source>Search without case sensitive</source>
         <translation>대소문자 구분 없이 검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="120"/>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="234"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="122"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="236"/>
         <source>Search with case sensitive</source>
         <translation>대소문자를 구분한 검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="219"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="221"/>
         <source>Exit from search</source>
         <translation>검색에서 나가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="222"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="224"/>
         <source>Search</source>
         <translation>검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="223"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="225"/>
         <source>Enter search phrase here</source>
         <translation>여기에 검색 문구를 입력하시오</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="225"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="227"/>
         <source>Go to the next search result</source>
         <translation>다음 검색 결과로 가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="229"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="231"/>
         <source>Go to the previous search result</source>
         <translation>이전 검색 결과로 가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="236"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="238"/>
         <source>Replace with</source>
         <translation>대체</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="237"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="239"/>
         <source>Enter phrase to replace</source>
         <translation>대체할 구절 입력</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="238"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="240"/>
         <source>Replace</source>
         <translation>교체</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="239"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="241"/>
         <source>All</source>
         <translation>모두</translation>
     </message>
@@ -7923,17 +7911,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>북마크 목록 보여주기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="865"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="875"/>
         <source>Formatting</source>
         <translation>서식 설정</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="866"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="876"/>
         <source>Comments</source>
         <translation>코멘트</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="867"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="877"/>
         <source>Bookmarks</source>
         <translation>북마크</translation>
     </message>
@@ -8179,80 +8167,80 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayTextSearchToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="157"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="309"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="159"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="311"/>
         <source>Search without case sensitive</source>
         <translation>대소문자 구분 없이 검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="158"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="310"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="160"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="312"/>
         <source>Search with case sensitive</source>
         <translation>대소문자를 구분한 검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="163"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="293"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="165"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="295"/>
         <source>In the whole text</source>
         <translation>전체 본문에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="286"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="288"/>
         <source>Exit from search</source>
         <translation>검색에서 나가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="289"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="291"/>
         <source>Search</source>
         <translation>검색</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="290"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="292"/>
         <source>Enter search phrase here</source>
         <translation>여기에 검색 문구를 입력하시오</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="294"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="296"/>
         <source>In scene heading</source>
         <translation>씬 장면 제목에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="295"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="297"/>
         <source>In character</source>
         <translation>인물에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="296"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="298"/>
         <source>In dialogue</source>
         <translation>대화에서</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="301"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="303"/>
         <source>Go to the next search result</source>
         <translation>다음 검색 결과로 가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="305"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="307"/>
         <source>Go to the previous search result</source>
         <translation>이전 검색 결과로 가기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="312"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="314"/>
         <source>Replace with</source>
         <translation>대체</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="313"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="315"/>
         <source>Enter phrase to replace</source>
         <translation>대체할 구절 입력</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="314"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="316"/>
         <source>Replace</source>
         <translation>교체</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="315"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="317"/>
         <source>All</source>
         <translation>모두</translation>
     </message>
@@ -8270,17 +8258,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>북마크 목록 보기</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="905"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="915"/>
         <source>Formatting</source>
         <translation>서식 설정</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="906"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="916"/>
         <source>Comments</source>
         <translation>코멘트</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="907"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="917"/>
         <source>Bookmarks</source>
         <translation>북마크</translation>
     </message>
@@ -8295,7 +8283,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="115"/>
         <source>Text color</source>
-        <translation type="unfinished">글자 색상</translation>
+        <translation>글자 색상</translation>
     </message>
 </context>
 <context>
