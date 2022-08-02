@@ -4,6 +4,7 @@
 # сформировать app-файл
 #
 cp -R ../../src/_build/starcapp.app Story\ Architect.app
+find Story\ Architect.app -name "*.dSYM" -print0 | xargs -0 rm -rf
 macdeployqt Story\ Architect.app
 
 #
