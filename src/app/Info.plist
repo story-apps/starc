@@ -22,11 +22,13 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-    <string>Story Architect</string>
+    <string>starcapp</string>
     <key>CFBundleIconFile</key>
     <string>icon.icns</string>
 	<key>CFBundleIdentifier</key>
     <string>dev.storyapps.starc-beta</string>
+    <key>CFBundleName</key>
+    <string>Story Architect</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
