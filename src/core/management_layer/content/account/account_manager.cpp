@@ -103,12 +103,12 @@ void AccountManager::Implementation::initNavigatorConnections()
 
     connect(navigator, &Ui::AccountNavigator::tryProForFreePressed, q,
             &AccountManager::tryProForFree);
-    connect(navigator, &Ui::AccountNavigator::upgradeToProPressed, q,
-            &AccountManager::upgradeToPro);
     connect(navigator, &Ui::AccountNavigator::buyProLifetimePressed, q,
             &AccountManager::buyProLifetme);
     connect(navigator, &Ui::AccountNavigator::renewProPressed, q, &AccountManager::renewPro);
-
+    connect(navigator, &Ui::AccountNavigator::tryTeamForFreePressed, q,
+            &AccountManager::tryTeamForFree);
+    connect(navigator, &Ui::AccountNavigator::renewTeamPressed, q, &AccountManager::renewTeam);
     connect(navigator, &Ui::AccountNavigator::logoutPressed, q, [this] {
         q->clearAccountInfo();
         emit q->logoutRequested();
@@ -152,10 +152,11 @@ void AccountManager::Implementation::initViewConnections()
                 notifyUpdateAccountInfoRequested();
             });
 
-    connect(view, &Ui::AccountView::tryForFreePressed, q, &AccountManager::tryProForFree);
-    connect(view, &Ui::AccountView::upgradeToProPressed, q, &AccountManager::upgradeToPro);
+    connect(view, &Ui::AccountView::tryProForFreePressed, q, &AccountManager::tryProForFree);
+    connect(view, &Ui::AccountView::tryTeamForFreePressed, q, &AccountManager::tryTeamForFree);
     connect(view, &Ui::AccountView::buyProLifetimePressed, q, &AccountManager::buyProLifetme);
     connect(view, &Ui::AccountView::renewProPressed, q, &AccountManager::renewPro);
+    connect(view, &Ui::AccountView::renewTeamPressed, q, &AccountManager::renewTeam);
     connect(view, &Ui::AccountView::activatePromocodePressed, q,
             &AccountManager::activatePromocodeRequested);
 
@@ -264,7 +265,6 @@ void AccountManager::completeSignIn(bool _openAccount)
 
 void AccountManager::setAccountInfo(const Domain::AccountInfo& _accountInfo)
 {
-
     d->accountInfo = _accountInfo;
 
     d->view->setEmail(d->accountInfo.email);
@@ -273,11 +273,8 @@ void AccountManager::setAccountInfo(const Domain::AccountInfo& _accountInfo)
     d->view->setNewsletterSubscribed(d->accountInfo.newsletterSubscribed);
     d->view->setAvatar(ImageHelper::imageFromBytes(d->accountInfo.avatar));
 
-    d->navigator->setSubscriptionInfo(d->accountInfo.subscriptionType,
-                                      d->accountInfo.subscriptionEnds,
-                                      d->accountInfo.paymentOptions);
-    d->view->setSubscriptionInfo(d->accountInfo.subscriptionType, d->accountInfo.subscriptionEnds,
-                                 d->accountInfo.paymentOptions);
+    d->navigator->setAccountInfo(d->accountInfo);
+    d->view->setAccountInfo(d->accountInfo);
     d->view->setSessions(d->accountInfo.sessions);
 
     //
@@ -287,14 +284,18 @@ void AccountManager::setAccountInfo(const Domain::AccountInfo& _accountInfo)
         d->subscriptionEndsTimer.stop();
     }
     const auto currentDateTime = QDateTime::currentDateTimeUtc();
-    if (currentDateTime < d->accountInfo.subscriptionEnds) {
+    //
+    // Тут для простоты берём последнюю из действующих подписок, т.к. если их несколько,
+    // то первая будет PRO Lifetime
+    //
+    const auto& subscription = d->accountInfo.subscriptions.constLast();
+    if (currentDateTime < subscription.end) {
         //
         // Т.к. таймер запускается на int миллисекунд, нельзя в него передавать слишком большое
         // значение (количество миллисекунд до самого конца подписки), выходящее за пределы INT_MAX
         //
         const qint64 maxInterval = INT_MAX;
-        const auto interval
-            = std::min(currentDateTime.msecsTo(d->accountInfo.subscriptionEnds), maxInterval);
+        const auto interval = std::min(currentDateTime.msecsTo(subscription.end), maxInterval);
         d->subscriptionEndsTimer.start(interval);
     }
 
@@ -328,7 +329,7 @@ void AccountManager::upgradeAccount()
             return;
         }
 
-        upgradeToPro();
+        buyProLifetme();
     }
 }
 
@@ -359,7 +360,7 @@ bool AccountManager::tryProForFree()
             tr("You can try all the features of the PRO version during 30 days for free. After "
                "trial period, you can continue to use the PRO version by renewing your "
                "subscription. Otherwise, you'll be returned to the FREE version automatically."),
-            { { 0, tr("Continue with free version"), Dialog::RejectButton },
+            { { 0, tr("Continue with FREE version"), Dialog::RejectButton },
               { 1, tr("Activate PRO"), Dialog::AcceptButton } });
         QObject::connect(dialog, &Dialog::finished, this,
                          [this, dialog, freeOption](const Dialog::ButtonInfo& _presedButton) {
@@ -375,23 +376,103 @@ bool AccountManager::tryProForFree()
     return false;
 }
 
-void AccountManager::upgradeToPro()
-{
-    d->initPurchaseDialog();
-    d->purchaseDialog->showDialog();
-}
-
 void AccountManager::buyProLifetme()
 {
     d->initPurchaseDialog();
-    d->purchaseDialog->selectOption(d->accountInfo.paymentOptions.constFirst());
+
+    auto proPaymentOptions = d->accountInfo.paymentOptions;
+    for (int index = proPaymentOptions.size() - 1; index >= 0; --index) {
+        const auto& option = proPaymentOptions.at(index);
+        if (option.amount == 0
+            || (option.subscriptionType != Domain::SubscriptionType::ProMonthly
+                && option.subscriptionType != Domain::SubscriptionType::ProLifetime)) {
+            proPaymentOptions.removeAt(index);
+        }
+    }
+
+    d->purchaseDialog->setPaymentOptions(proPaymentOptions);
+    d->purchaseDialog->selectOption(proPaymentOptions.constFirst());
     d->purchaseDialog->showDialog();
 }
 
 void AccountManager::renewPro()
 {
     d->initPurchaseDialog();
-    d->purchaseDialog->selectOption(d->accountInfo.paymentOptions.constLast());
+
+    auto proPaymentOptions = d->accountInfo.paymentOptions;
+    for (int index = proPaymentOptions.size() - 1; index >= 0; --index) {
+        const auto& option = proPaymentOptions.at(index);
+        if (option.amount == 0
+            || (option.subscriptionType != Domain::SubscriptionType::ProMonthly
+                && option.subscriptionType != Domain::SubscriptionType::ProLifetime)) {
+            proPaymentOptions.removeAt(index);
+        }
+    }
+
+    d->purchaseDialog->setPaymentOptions(proPaymentOptions);
+    d->purchaseDialog->selectOption(proPaymentOptions.constLast());
+    d->purchaseDialog->showDialog();
+}
+
+bool AccountManager::tryTeamForFree()
+{
+    //
+    // Ищем бесплатную активацию
+    //
+    Domain::PaymentOption freeOption;
+    for (const auto& paymentOption : std::as_const(d->accountInfo.paymentOptions)) {
+        if (paymentOption.amount != 0
+            || paymentOption.subscriptionType != Domain::SubscriptionType::TeamMonthly) {
+            continue;
+        }
+
+        freeOption = paymentOption;
+        break;
+    }
+
+    //
+    // Если удалось найти бесплатную версию, то предлагаем пользователю активировать бесплатно
+    //
+    if (freeOption.isValid()) {
+        auto dialog = new Dialog(d->view->topLevelWidget());
+        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+        dialog->showDialog(
+            tr("Try TEAM version for free"),
+            tr("You can try all the features of the TEAM version during 30 days for free. After "
+               "trial period, you can continue to use the TEAM version by renewing your "
+               "subscription. Otherwise, you'll be returned to the FREE version automatically."),
+            { { 0, tr("Continue with FREE version"), Dialog::RejectButton },
+              { 1, tr("Activate TEAM"), Dialog::AcceptButton } });
+        QObject::connect(dialog, &Dialog::finished, this,
+                         [this, dialog, freeOption](const Dialog::ButtonInfo& _presedButton) {
+                             dialog->hideDialog();
+                             if (_presedButton.type == Dialog::AcceptButton) {
+                                 emit activatePaymentOptionRequested(freeOption);
+                             }
+                         });
+        QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+        return true;
+    }
+
+    return false;
+}
+
+void AccountManager::renewTeam()
+{
+    d->initPurchaseDialog();
+
+    auto teamPaymentOptions = d->accountInfo.paymentOptions;
+    for (int index = teamPaymentOptions.size() - 1; index >= 0; --index) {
+        const auto& option = teamPaymentOptions.at(index);
+        if (option.amount == 0
+            || (option.subscriptionType != Domain::SubscriptionType::TeamMonthly
+                && option.subscriptionType != Domain::SubscriptionType::TeamLifetime)) {
+            teamPaymentOptions.removeAt(index);
+        }
+    }
+
+    d->purchaseDialog->setPaymentOptions(teamPaymentOptions);
+    d->purchaseDialog->selectOption(teamPaymentOptions.constLast());
     d->purchaseDialog->showDialog();
 }
 

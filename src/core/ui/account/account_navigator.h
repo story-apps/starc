@@ -3,8 +3,7 @@
 #include <ui/widgets/widget/widget.h>
 
 namespace Domain {
-enum class SubscriptionType;
-struct PaymentOption;
+struct AccountInfo;
 } // namespace Domain
 
 
@@ -29,9 +28,7 @@ public:
     /**
      * @brief Задать информацию о подписке
      */
-    void setSubscriptionInfo(Domain::SubscriptionType _subscriptionType,
-                             const QDateTime& _subscriptionEnds,
-                             const QVector<Domain::PaymentOption>& _paymentOptions);
+    void setAccountInfo(const Domain::AccountInfo& _account);
 
 signals:
     /**
@@ -45,9 +42,10 @@ signals:
      * @brief Пользователь хочет проапгрейдить аккаунт
      */
     void tryProForFreePressed();
-    void upgradeToProPressed();
     void buyProLifetimePressed();
     void renewProPressed();
+    void tryTeamForFreePressed();
+    void renewTeamPressed();
 
     /**
      * @brief Пользователь хочет выйти из личного кабинета

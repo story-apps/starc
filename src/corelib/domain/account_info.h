@@ -20,10 +20,11 @@ struct AccountInfo {
     bool newsletterSubscribed = false;
     QString newsletterLanguage;
     QByteArray avatar;
-    Domain::SubscriptionType subscriptionType;
-    QDateTime subscriptionEnds;
-    QVector<Domain::PaymentOption> paymentOptions;
-    QVector<Domain::SessionInfo> sessions;
+    quint64 cloudStorageSizeUsed = 0;
+    quint64 cloudStorageSize = 0;
+    QVector<SubscriptionInfo> subscriptions;
+    QVector<PaymentOption> paymentOptions;
+    QVector<SessionInfo> sessions;
 };
 
 } // namespace Domain

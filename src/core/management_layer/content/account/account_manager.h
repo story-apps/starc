@@ -64,9 +64,18 @@ public:
     /**
      * @brief Оплатить ПРО версию
      */
-    void upgradeToPro();
     void buyProLifetme();
     void renewPro();
+
+    /**
+     * @brief Активировать бесплатный период для ПРО
+     */
+    bool tryTeamForFree();
+
+    /**
+     * @brief Оплатить ПРО версию
+     */
+    void renewTeam();
 
     /**
      * @brief Показать сообщение активации промокода

@@ -2149,8 +2149,8 @@ void ApplicationManager::initConnections()
                 d->menuView->setAvatar(ImageHelper::imageFromBytes(_accountInfo.avatar));
                 d->menuView->setAccountName(_accountInfo.name);
                 d->menuView->setAccountEmail(_accountInfo.email);
-                d->projectsManager->setProjectsInCloudCanBeCreated(true,
-                                                                   _accountInfo.subscriptionType);
+                d->projectsManager->setProjectsInCloudCanBeCreated(
+                    true, _accountInfo.subscriptions.constLast().type);
                 d->projectManager->checkAvailabilityToEdit();
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::promocodeActivated,

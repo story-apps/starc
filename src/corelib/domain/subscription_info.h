@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QDateTime>
+
 
 namespace Domain {
 
@@ -13,6 +15,14 @@ enum class SubscriptionType {
     TeamMonthly = 2000,
     TeamLifetime = 2100,
     Corporate = 10000,
+};
+
+/**
+ * @brief Информация о подписке
+ */
+struct SubscriptionInfo {
+    SubscriptionType type = SubscriptionType::Free;
+    QDateTime end;
 };
 
 } // namespace Domain

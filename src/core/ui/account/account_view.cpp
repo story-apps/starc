@@ -2,9 +2,8 @@
 
 #include "session_widget.h"
 
-#include <domain/payment_info.h>
+#include <domain/account_info.h>
 #include <domain/session_info.h>
-#include <domain/subscription_info.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/card/card.h>
@@ -66,10 +65,13 @@ public:
     QDateTime subscriptionEnds;
     Subtitle2Label* subscriptionEndsLabel = nullptr;
     Body1LinkLabel* subscriptionDetails = nullptr;
-    Button* subscriptionTryForFree = nullptr;
-    Button* subscriptionUpgrade = nullptr;
-    Button* subscriptionBuyLifetime = nullptr;
-    Button* subscriptionRenew = nullptr;
+    Button* subscriptionTryProForFree = nullptr;
+    Button* subscriptionTryTeamForFree = nullptr;
+    Button* subscriptionBuyProLifetime = nullptr;
+    Button* subscriptionRenewPro = nullptr;
+    Button* subscriptionRenewTeam = nullptr;
+    Button* subscriptionUpgradeToPro = nullptr;
+    Button* subscriptionUpgradeToTeam = nullptr;
 
     Card* promocodeInfo = nullptr;
     QGridLayout* promocodeInfoLayout = nullptr;
@@ -95,10 +97,13 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , subscriptionTitle(new H6Label(subscriptionInfo))
     , subscriptionEndsLabel(new Subtitle2Label(subscriptionInfo))
     , subscriptionDetails(new Body1LinkLabel(subscriptionInfo))
-    , subscriptionTryForFree(new Button(subscriptionInfo))
-    , subscriptionUpgrade(new Button(subscriptionInfo))
-    , subscriptionBuyLifetime(new Button(subscriptionInfo))
-    , subscriptionRenew(new Button(subscriptionInfo))
+    , subscriptionTryProForFree(new Button(subscriptionInfo))
+    , subscriptionTryTeamForFree(new Button(subscriptionInfo))
+    , subscriptionBuyProLifetime(new Button(subscriptionInfo))
+    , subscriptionRenewPro(new Button(subscriptionInfo))
+    , subscriptionRenewTeam(new Button(subscriptionInfo))
+    , subscriptionUpgradeToPro(new Button(subscriptionInfo))
+    , subscriptionUpgradeToTeam(new Button(subscriptionInfo))
     //
     , promocodeInfo(new Card(_parent))
     , promocodeInfoLayout(new QGridLayout)
@@ -149,10 +154,13 @@ AccountView::Implementation::Implementation(QWidget* _parent)
         layout->setSpacing(0);
         layout->addWidget(subscriptionDetails);
         layout->addStretch();
-        layout->addWidget(subscriptionTryForFree);
-        layout->addWidget(subscriptionUpgrade);
-        layout->addWidget(subscriptionBuyLifetime);
-        layout->addWidget(subscriptionRenew);
+        layout->addWidget(subscriptionTryProForFree);
+        layout->addWidget(subscriptionTryTeamForFree);
+        layout->addWidget(subscriptionBuyProLifetime);
+        layout->addWidget(subscriptionRenewPro);
+        layout->addWidget(subscriptionRenewTeam);
+        layout->addWidget(subscriptionUpgradeToPro);
+        layout->addWidget(subscriptionUpgradeToTeam);
         subscriptionInfoLayout->addLayout(layout, row++, 0);
     }
     subscriptionInfoLastRow = row;
@@ -270,11 +278,16 @@ AccountView::AccountView(QWidget* _parent)
     //
     // Подписка
     //
-    connect(d->subscriptionTryForFree, &Button::clicked, this, &AccountView::tryForFreePressed);
-    connect(d->subscriptionUpgrade, &Button::clicked, this, &AccountView::upgradeToProPressed);
-    connect(d->subscriptionBuyLifetime, &Button::clicked, this,
+    connect(d->subscriptionTryProForFree, &Button::clicked, this,
+            &AccountView::tryProForFreePressed);
+    connect(d->subscriptionTryTeamForFree, &Button::clicked, this,
+            &AccountView::tryTeamForFreePressed);
+    connect(d->subscriptionBuyProLifetime, &Button::clicked, this,
             &AccountView::buyProLifetimePressed);
-    connect(d->subscriptionRenew, &Button::clicked, this, &AccountView::renewProPressed);
+    connect(d->subscriptionRenewPro, &Button::clicked, this, &AccountView::renewProPressed);
+    connect(d->subscriptionRenewTeam, &Button::clicked, this, &AccountView::renewTeamPressed);
+    connect(d->subscriptionUpgradeToPro, &Button::clicked, this, &AccountView::renewProPressed);
+    connect(d->subscriptionUpgradeToTeam, &Button::clicked, this, &AccountView::renewTeamPressed);
 
     connect(d->promocodeName, &TextField::textChanged, d->promocodeName,
             [this] { d->promocodeName->setError({}); });
@@ -310,10 +323,13 @@ void AccountView::setConnected(bool _connected)
     d->name->setEnabled(_connected);
     d->description->setEnabled(_connected);
     d->avatar->setEnabled(_connected);
-    d->subscriptionTryForFree->setEnabled(_connected);
-    d->subscriptionUpgrade->setEnabled(_connected);
-    d->subscriptionBuyLifetime->setEnabled(_connected);
-    d->subscriptionRenew->setEnabled(_connected);
+    d->subscriptionTryProForFree->setEnabled(_connected);
+    d->subscriptionTryTeamForFree->setEnabled(_connected);
+    d->subscriptionBuyProLifetime->setEnabled(_connected);
+    d->subscriptionRenewPro->setEnabled(_connected);
+    d->subscriptionRenewTeam->setEnabled(_connected);
+    d->subscriptionUpgradeToPro->setEnabled(_connected);
+    d->subscriptionUpgradeToTeam->setEnabled(_connected);
 }
 
 void AccountView::setEmail(const QString& _email)
@@ -357,80 +373,129 @@ void AccountView::setAvatar(const QPixmap& _avatar)
     d->avatar->setImage(_avatar);
 }
 
-void AccountView::setSubscriptionInfo(Domain::SubscriptionType _subscriptionType,
-                                      const QDateTime& _subscriptionEnds,
-                                      const QVector<Domain::PaymentOption>& _paymentOptions)
+void AccountView::setAccountInfo(const Domain::AccountInfo& _account)
 {
-    switch (_subscriptionType) {
+    d->subscriptionTryProForFree->hide();
+    d->subscriptionTryTeamForFree->hide();
+    d->subscriptionBuyProLifetime->hide();
+    d->subscriptionRenewPro->hide();
+    d->subscriptionRenewTeam->hide();
+    d->subscriptionUpgradeToPro->hide();
+    d->subscriptionUpgradeToTeam->hide();
+
+    const auto subscription = _account.subscriptions.constLast();
+    switch (subscription.type) {
     case Domain::SubscriptionType::Free: {
         d->subscriptionTitle->setText(tr("FREE version"));
-        d->subscriptionEndsLabel->hide();
-        d->subscriptionTryForFree->hide();
-        d->subscriptionUpgrade->hide();
-        for (const auto& paymentOption : _paymentOptions) {
-            if (paymentOption.amount == 0
-                && paymentOption.subscriptionType == Domain::SubscriptionType::ProMonthly) {
-                d->subscriptionTryForFree->setText(tr("Try PRO for free"));
-                d->subscriptionTryForFree->show();
-            } else if (paymentOption.amount != 0
-                       && (paymentOption.subscriptionType == Domain::SubscriptionType::ProMonthly
-                           || paymentOption.subscriptionType
-                               == Domain::SubscriptionType::ProLifetime)) {
-                d->subscriptionUpgrade->setText(tr("Upgrade to PRO"));
-                d->subscriptionUpgrade->show();
-            }
-        }
-        d->subscriptionBuyLifetime->hide();
-        d->subscriptionRenew->hide();
+        d->subscriptionEndsLabel->setText(tr("Lifetime access"));
         break;
     }
 
     case Domain::SubscriptionType::ProMonthly: {
         d->subscriptionTitle->setText(tr("PRO version"));
-        d->subscriptionEnds = _subscriptionEnds;
+        d->subscriptionEnds = subscription.end;
         d->updateSubscriptionEndsLabel();
-        d->subscriptionEndsLabel->show();
-        d->subscriptionTryForFree->hide();
-        d->subscriptionUpgrade->hide();
-        d->subscriptionBuyLifetime->show();
-        d->subscriptionRenew->show();
-        for (const auto& paymentOption : _paymentOptions) {
-            if (paymentOption.subscriptionType == Domain::SubscriptionType::ProLifetime) {
-                d->subscriptionBuyLifetime->show();
-            } else if (paymentOption.subscriptionType == Domain::SubscriptionType::ProMonthly) {
-                d->subscriptionRenew->show();
-            }
-        }
         break;
     }
     case Domain::SubscriptionType::ProLifetime: {
         d->subscriptionTitle->setText(tr("PRO version"));
         d->subscriptionEnds = {};
         d->updateSubscriptionEndsLabel();
-        d->subscriptionEndsLabel->show();
-        d->subscriptionTryForFree->hide();
-        d->subscriptionUpgrade->hide();
-        d->subscriptionBuyLifetime->hide();
-        d->subscriptionRenew->hide();
         break;
     }
 
-    case Domain::SubscriptionType::TeamMonthly:
+    case Domain::SubscriptionType::TeamMonthly: {
+        d->subscriptionTitle->setText(tr("TEAM version"));
+        d->subscriptionEnds = subscription.end;
+        d->updateSubscriptionEndsLabel();
+        break;
+    }
+
     case Domain::SubscriptionType::TeamLifetime: {
         d->subscriptionTitle->setText(tr("TEAM version"));
-        d->subscriptionEndsLabel->hide();
-        d->subscriptionTryForFree->hide();
-        d->subscriptionUpgrade->hide();
-        d->subscriptionBuyLifetime->hide();
-        d->subscriptionRenew->hide();
+        d->subscriptionEnds = {};
+        d->updateSubscriptionEndsLabel();
         break;
     }
 
-    case Domain::SubscriptionType::Corporate: {
-        d->subscriptionEndsLabel->hide();
-        d->subscriptionInfo->hide();
+    default: {
         break;
     }
+    }
+
+    //
+    // Если есть бесплатные опции, покажем только их
+    //
+    if (std::find_if(_account.paymentOptions.begin(), _account.paymentOptions.end(),
+                     [](const Domain::PaymentOption& _option) { return _option.amount == 0; })
+        != _account.paymentOptions.end()) {
+        for (const auto& option : _account.paymentOptions) {
+            if (option.amount != 0) {
+                continue;
+            }
+
+            if (option.subscriptionType == Domain::SubscriptionType::ProMonthly) {
+                d->subscriptionTryProForFree->show();
+            } else if (option.subscriptionType == Domain::SubscriptionType::TeamMonthly) {
+                d->subscriptionTryTeamForFree->show();
+            }
+        }
+    }
+    //
+    // В противном случае показываем в зависимости от текущей подписки
+    //
+    else {
+        switch (subscription.type) {
+        case Domain::SubscriptionType::Free: {
+            for (const auto& option : _account.paymentOptions) {
+                if (option.subscriptionType == Domain::SubscriptionType::ProMonthly
+                    || option.subscriptionType == Domain::SubscriptionType::ProLifetime) {
+                    d->subscriptionUpgradeToPro->show();
+                } else if (option.subscriptionType == Domain::SubscriptionType::TeamMonthly
+                           || option.subscriptionType == Domain::SubscriptionType::TeamLifetime) {
+                    d->subscriptionUpgradeToTeam->show();
+                }
+            }
+            break;
+        }
+
+        case Domain::SubscriptionType::ProMonthly: {
+            for (const auto& option : _account.paymentOptions) {
+                if (option.subscriptionType == Domain::SubscriptionType::ProMonthly) {
+                    d->subscriptionRenewPro->show();
+                } else if (option.subscriptionType == Domain::SubscriptionType::ProLifetime) {
+                    d->subscriptionBuyProLifetime->show();
+                } else if (option.subscriptionType == Domain::SubscriptionType::TeamMonthly
+                           || option.subscriptionType == Domain::SubscriptionType::TeamLifetime) {
+                    d->subscriptionUpgradeToTeam->show();
+                }
+            }
+            break;
+        }
+
+        case Domain::SubscriptionType::ProLifetime: {
+            for (const auto& option : _account.paymentOptions) {
+                if (option.subscriptionType == Domain::SubscriptionType::TeamMonthly
+                    || option.subscriptionType == Domain::SubscriptionType::TeamLifetime) {
+                    d->subscriptionUpgradeToTeam->show();
+                }
+            }
+            break;
+        }
+
+        case Domain::SubscriptionType::TeamMonthly: {
+            for (const auto& option : _account.paymentOptions) {
+                if (option.subscriptionType == Domain::SubscriptionType::TeamMonthly) {
+                    d->subscriptionRenewTeam->show();
+                }
+            }
+            break;
+        }
+
+        default: {
+            break;
+        }
+        }
     }
 }
 
@@ -494,9 +559,14 @@ void AccountView::updateTranslations()
     d->avatar->setImageCroppingText(tr("Select an area for the avatar"));
     d->subscriptionTitle->setText(tr("Subscription type"));
     d->updateSubscriptionEndsLabel();
-    d->subscriptionDetails->setText(tr("What's included?"));
-    d->subscriptionBuyLifetime->setText(tr("Buy lifetime"));
-    d->subscriptionRenew->setText(tr("Renew"));
+    d->subscriptionDetails->setText(tr("Compare versions"));
+    d->subscriptionTryProForFree->setText(tr("Try PRO for free"));
+    d->subscriptionTryTeamForFree->setText(tr("Try TEAM for free"));
+    d->subscriptionBuyProLifetime->setText(tr("Buy lifetime"));
+    d->subscriptionRenewPro->setText(tr("Renew"));
+    d->subscriptionRenewTeam->setText(tr("Renew"));
+    d->subscriptionUpgradeToPro->setText(tr("Upgrade to PRO"));
+    d->subscriptionUpgradeToTeam->setText(tr("Upgrade to TEAM"));
     d->sessionsTitle->setText(tr("Active sessions"));
     d->promocodeName->setLabel(tr("Promotional or gift code"));
     d->activatePromocode->setText(tr("Activate"));
@@ -574,10 +644,13 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->newsletterSubscription->setTextColor(Ui::DesignSystem::color().onBackground());
 
     for (auto button : {
-             d->subscriptionTryForFree,
-             d->subscriptionUpgrade,
-             d->subscriptionBuyLifetime,
-             d->subscriptionRenew,
+             d->subscriptionTryProForFree,
+             d->subscriptionTryTeamForFree,
+             d->subscriptionBuyProLifetime,
+             d->subscriptionRenewPro,
+             d->subscriptionRenewTeam,
+             d->subscriptionUpgradeToPro,
+             d->subscriptionUpgradeToTeam,
              d->activatePromocode,
          }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());

@@ -55,6 +55,7 @@ void ProgressBar::setProgress(qreal _progress)
     if (!isVisible()) {
         d->progressAnimation.setEndValue(_progress);
         d->progressAnimation.setCurrentTime(d->progressAnimation.duration());
+        d->progress = _progress;
         return;
     }
 
@@ -71,7 +72,9 @@ void ProgressBar::setProgress(qreal _progress)
 
 QSize ProgressBar::sizeHint() const
 {
-    return QSize(100, Ui::DesignSystem::layout().px4());
+    return QSize(contentsMargins().left() + 100 + contentsMargins().right(),
+                 contentsMargins().top() + Ui::DesignSystem::layout().px4()
+                     + contentsMargins().bottom());
 }
 
 void ProgressBar::paintEvent(QPaintEvent* _event)
