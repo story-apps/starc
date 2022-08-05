@@ -125,14 +125,24 @@ public:
     bool isFirstBlock = true;
 
     /**
-     * @brief Зашли ли мы уже в первую сцену
+     * @brief Зашли ли мы уже в сцену
      */
     bool alreadyInScene = false;
+
+    /**
+     * @brief Зашли ли мы уже в бит
+     */
+    bool alreadyInBeat = false;
 
     /**
      * @brief Текст блока
      */
     QString blockText;
+
+    /**
+     * @brief Текст последнего сохранённого блока
+     */
+    QString lastBlockText;
 
     /**
      * @brief Текст редакторской заметки
@@ -160,10 +170,10 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
                                                               TextParagraphType _type,
                                                               QXmlStreamWriter& _writer)
 {
+    //
+    // Начинается новая сущность
+    //
     if (!isNotation && !isCommenting) {
-        //
-        // Начинается новая сущность
-        //
         blockText.reserve(_paragraphText.size());
 
         //
@@ -173,6 +183,16 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
 
         noteLen = 0;
         noteStartPos = 0;
+    }
+    //
+    // Продолжается комментарий или заметка
+    //
+    else {
+        if (isCommenting) {
+            blockText.append(QChar::LineSeparator);
+        } else {
+            note.append(QChar::LineFeed);
+        }
     }
 
     if (!isCommenting) {
@@ -192,7 +212,7 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
                 blockText.append(_paragraphText[i]);
             }
             //
-            // Раз мы добавляем символ через '/',
+            // Раз мы добавляем символ через '\',
             // то он не должен участвовать в какой-либо обработке
             //
             prevSymbol = '\0';
@@ -218,7 +238,9 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
                 //
                 // Закроем предыдущий блок, добавим текущий
                 //
-                _writer.writeEndElement();
+                if (!lastBlockText.isEmpty()) {
+                    _writer.writeEndElement();
+                }
                 appendBlock(blockText.left(blockText.size()), TextParagraphType::InlineNote,
                             _writer);
                 blockText.clear();
@@ -245,8 +267,8 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
                 // Закроем предыдущий блок и, если комментирование начинается в середние текущего
                 // блока то добавим этот текущий блок
                 //
-                _writer.writeEndElement();
                 if (blockText.size() != 1) {
+                    _writer.writeEndElement();
                     appendBlock(blockText.left(blockText.size() - 1), _type, _writer);
                     appendComments(_writer);
                     notes.clear();
@@ -421,7 +443,6 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
             blockText.append('*');
         }
     }
-    asteriskLen = 0;
 
 
     if (!isNotation && !isCommenting) {
@@ -431,16 +452,16 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
         noteLen += blockText.size() - noteStartPos;
 
         //
-        // Закроем предыдущий блок
-        //
-        if (!isFirstBlock) {
-            _writer.writeEndElement();
-        }
-
-        //
         // Добавим текущий блок
         //
         if (!blockText.isEmpty() || _type == TextParagraphType::SequenceFooter) {
+            //
+            // ... но перед добавлением закроем предыдущий блок
+            //
+            if (!isFirstBlock) {
+                _writer.writeEndElement();
+            }
+
             appendBlock(blockText, _type, _writer);
         }
         blockText.clear();
@@ -586,12 +607,17 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
     //
     switch (_type) {
     case TextParagraphType::SequenceHeading: {
+        if (alreadyInBeat) {
+            _writer.writeEndElement(); // контент предыдущего бита
+            _writer.writeEndElement(); // предыдущий бит
+            alreadyInBeat = false; // вышли из бита
+        }
+
         if (alreadyInScene) {
             _writer.writeEndElement(); // контент предыдущей сцены
             _writer.writeEndElement(); // предыдущая сцена
+            alreadyInScene = false; // вышли из сцены
         }
-
-        alreadyInScene = false; // вышли из сцены
 
         _writer.writeStartElement(toString(TextFolderType::Sequence));
         _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
@@ -600,12 +626,17 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
     }
 
     case TextParagraphType::SequenceFooter: {
+        if (alreadyInBeat) {
+            _writer.writeEndElement(); // контент предыдущего бита
+            _writer.writeEndElement(); // предыдущий бит
+            alreadyInBeat = false; // вышли из бита
+        }
+
         if (alreadyInScene) {
             _writer.writeEndElement(); // контент предыдущей сцены
             _writer.writeEndElement(); // предыдущая сцена
+            alreadyInScene = false; // вышли из сцены
         }
-
-        alreadyInScene = false; // вышли из сцены
 
         _writer.writeEndElement(); // контент текущей папки
         _writer.writeEndElement(); // текущая папка
@@ -613,6 +644,12 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
     }
 
     case TextParagraphType::SceneHeading: {
+        if (alreadyInBeat) {
+            _writer.writeEndElement(); // контент предыдущего бита
+            _writer.writeEndElement(); // предыдущий бит
+            alreadyInBeat = false; // вышли из бита
+        }
+
         if (alreadyInScene) {
             _writer.writeEndElement(); // контент предыдущей сцены
             _writer.writeEndElement(); // предыдущая сцена
@@ -621,6 +658,20 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
         alreadyInScene = true; // вошли в новую сцену
 
         _writer.writeStartElement(toString(TextGroupType::Scene));
+        _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
+        _writer.writeStartElement(xml::kContentTag);
+        break;
+    }
+
+    case TextParagraphType::BeatHeading: {
+        if (alreadyInBeat) {
+            _writer.writeEndElement(); // контент предыдущего бита
+            _writer.writeEndElement(); // предыдущий бит
+        }
+
+        alreadyInBeat = true; // вошли в новый бит
+
+        _writer.writeStartElement(toString(TextGroupType::Beat));
         _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
         _writer.writeStartElement(xml::kContentTag);
         break;
@@ -663,6 +714,8 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
         formats.clear();
     }
 
+    lastBlockText = blockText;
+
     //
     // Не закрываем блок, чтобы можно было добавить редакторских заметок
     //
@@ -677,15 +730,19 @@ void ScreenplayFountainImporter::Implementation::appendComments(QXmlStreamWriter
     _writer.writeStartElement(xml::kReviewMarksTag);
 
     for (int i = 0; i != notes.size(); ++i) {
-        if (std::get<2>(notes[i]) != 0) {
-            if (i != 0) {
-                _writer.writeEndElement(); // review mark
-            }
-            _writer.writeStartElement(xml::kReviewMarkTag);
-            _writer.writeAttribute(xml::kFromAttribute, QString::number(std::get<1>(notes[i])));
-            _writer.writeAttribute(xml::kLengthAttribute, QString::number(std::get<2>(notes[i])));
-            _writer.writeAttribute(xml::kBackgroundColorAttribute, "#FFD302");
+        int endPos = std::get<2>(notes[i]);
+        if (endPos == 0) {
+            endPos = lastBlockText.length();
         }
+
+        if (i != 0) {
+            _writer.writeEndElement(); // review mark
+        }
+        _writer.writeStartElement(xml::kReviewMarkTag);
+        _writer.writeAttribute(xml::kFromAttribute, QString::number(std::get<1>(notes[i])));
+        _writer.writeAttribute(xml::kLengthAttribute, QString::number(endPos));
+        _writer.writeAttribute(xml::kBackgroundColorAttribute, "#FFD302");
+
         _writer.writeStartElement(xml::kCommentTag);
         _writer.writeAttribute(xml::kAuthorAttribute, "fountain author");
         _writer.writeAttribute(xml::kDateAttribute,
@@ -1090,6 +1147,10 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
             }
         }
 
+        if (str.endsWith("\r")) {
+            str.chop(1);
+        }
+
         if (isTitle) {
             //
             // Титульная страница заканчивается пустой строкой
@@ -1098,10 +1159,6 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 isTitle = false;
             }
         } else {
-            if (str.endsWith("\r")) {
-                str.chop(1);
-            }
-
             if (str == kDoubleWhitespace) {
                 //
                 // Если строка состоит из 2 пробелов, то это нужно сохранить
@@ -1198,12 +1255,8 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 continue;
             }
             if (!isPageBreak) {
-                //
-                // TODO: тритмент подгружается тут
-                //
-                continue;
-                //                    blockType = TextParagraphType::SceneDescription;
-                //                    paragraphText = paragraphs[i].mid(1);
+                blockType = TextParagraphType::BeatHeading;
+                paragraphText = paragraphs[i].mid(1);
             }
             break;
         }
@@ -1235,7 +1288,6 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                     d->processBlock({}, TextParagraphType::SequenceFooter, writer);
                     dirs.pop();
                 }
-                prevBlockType = TextParagraphType::SequenceFooter;
             }
             //
             // И откроем новую
@@ -1250,7 +1302,6 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
             // надо
             //
             continue;
-            break;
         }
 
         default: {

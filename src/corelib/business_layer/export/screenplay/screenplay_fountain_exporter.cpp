@@ -241,6 +241,11 @@ void ScreenplayFountainExporter::exportTo(TextModel* _model, ExportOptions& _exp
             }
 
             //
+            // Разрывы строк преобразуем в переносы строк
+            //
+            paragraphText = paragraphText.replace(QChar::LineSeparator, QChar::LineFeed);
+
+            //
             // Пропустить запись текущего блока
             //
             bool skipBlock = false;
@@ -322,7 +327,7 @@ void ScreenplayFountainExporter::exportTo(TextModel* _model, ExportOptions& _exp
                 //
                 // Обернем в /* и */
                 //
-                paragraphText = "\n/*\n" + paragraphText + "\n*/";
+                paragraphText = "\n/* " + paragraphText + " */";
                 break;
             }
 
@@ -336,16 +341,13 @@ void ScreenplayFountainExporter::exportTo(TextModel* _model, ExportOptions& _exp
                 break;
             }
 
+            case TextParagraphType::BeatHeading: {
                 //
-                // TODO: добавить экспорт описания сцен
+                // Блоки описания сцены предворяются = и расставляются обособлено
                 //
-                //            case TextParagraphType::SceneDescription: {
-                //                //
-                //                // Блоки описания сцены предворяются = и расставляются обособлено
-                //                //
-                //                paragraphText.prepend("\n= ");
-                //                break;
-                //            }
+                paragraphText.prepend("\n= ");
+                break;
+            }
 
             case TextParagraphType::Lyrics: {
                 //
