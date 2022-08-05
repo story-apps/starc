@@ -218,7 +218,12 @@ void AccountNavigator::setConnected(bool _connected)
 void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
 {
     //
-    // Изначально всё скрыавем
+    // Преднастроим видимость разных элементов
+    //
+    d->freeTitle->show();
+    d->freeSubtitle->show();
+    d->proTitleIcon->show();
+    d->proTitle->show();
     //
     d->proSubtitle->hide();
     d->tryProButton->hide();
@@ -251,6 +256,8 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
 
         case Domain::SubscriptionType::ProLifetime: {
+            d->freeTitle->hide();
+            d->freeSubtitle->hide();
             d->proSubscriptionEnds = {};
             d->updateProSubtitleLabel();
             d->proSubtitle->show();
@@ -267,6 +274,10 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
 
         case Domain::SubscriptionType::TeamLifetime: {
+            d->freeTitle->hide();
+            d->freeSubtitle->hide();
+            d->proTitleIcon->hide();
+            d->proTitle->hide();
             d->teamSubscriptionEnds = {};
             d->updateTeamSubtitleLabel();
             d->teamSpaceStats->show();
