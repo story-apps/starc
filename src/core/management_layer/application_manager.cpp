@@ -1952,6 +1952,10 @@ void ApplicationManager::initConnections()
     //
     connect(d->projectsManager.data(), &ProjectsManager::menuRequested, this,
             [this] { d->showMenu(); });
+    connect(d->projectsManager.data(), &ProjectsManager::signInRequested, d->accountManager.data(),
+            &AccountManager::signIn);
+    connect(d->projectsManager.data(), &ProjectsManager::renewTeamSubscriptionRequested,
+            d->accountManager.data(), &AccountManager::renewTeam);
     connect(d->projectsManager.data(), &ProjectsManager::createProjectRequested, this,
             [this] { d->createProject(); });
     connect(d->projectsManager.data(), &ProjectsManager::createLocalProjectRequested, this,
@@ -2094,6 +2098,7 @@ void ApplicationManager::initConnections()
         Log::trace("Connection status changed. %1.", _connected ? "Conected" : "Disconnected");
         d->accountManager->setConnected(_connected);
         d->connectionStatus->setConnectionAvailable(_connected);
+        d->projectsManager->setConnected(_connected);
     };
     connect(d->cloudServiceManager.data(), &CloudServiceManager::connected, d->connectionStatus,
             [configureConnectionStatus] { configureConnectionStatus(true); });

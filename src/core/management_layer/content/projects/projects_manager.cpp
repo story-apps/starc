@@ -28,6 +28,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMenu>
+#include <QPointer>
 #include <QStandardPaths>
 #include <QTimer>
 #include <QWidget>
@@ -41,6 +42,7 @@ public:
     explicit Implementation(QWidget* _parent);
 
 
+    bool isConnected = false;
     bool isUserAuthorized = false;
     bool canCreateCloudProject = false;
 
@@ -52,6 +54,8 @@ public:
     Ui::ProjectsToolBar* toolBar = nullptr;
     Ui::ProjectsNavigator* navigator = nullptr;
     Ui::ProjectsView* view = nullptr;
+
+    QPointer<Ui::CreateProjectDialog> createProjectDialog;
 };
 
 ProjectsManager::Implementation::Implementation(QWidget* _parent)
@@ -230,38 +234,68 @@ void ProjectsManager::saveChanges()
     d->projects->updateProject(d->currentProject);
 }
 
+void ProjectsManager::setConnected(bool _connected)
+{
+    d->isConnected = _connected;
+
+    if (!d->createProjectDialog.isNull()) {
+        d->createProjectDialog->configureCloudProjectCreationAbility(
+            d->isConnected, d->isUserAuthorized, d->canCreateCloudProject);
+    }
+}
+
 void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized,
                                                      Domain::SubscriptionType _subscritionType)
 {
     d->isUserAuthorized = _authorized;
     d->canCreateCloudProject = _subscritionType == Domain::SubscriptionType::TeamMonthly
         || _subscritionType == Domain::SubscriptionType::TeamLifetime;
+
+    if (!d->createProjectDialog.isNull()) {
+        d->createProjectDialog->configureCloudProjectCreationAbility(
+            d->isConnected, d->isUserAuthorized, d->canCreateCloudProject);
+    }
 }
 
 void ProjectsManager::createProject()
 {
     Log::debug("Create new project");
 
+    if (!d->createProjectDialog.isNull()) {
+        Log::warning("Create new project dialog is already visible, avoid double dialog appearing");
+        return;
+    }
+
     //
     // Создаём и настраиваем диалог
     //
-    auto dialog = new Ui::CreateProjectDialog(d->topLevelWidget);
-    dialog->setProjectType(settingsValue(DataStorageLayer::kProjectTypeKey).toInt());
-    dialog->setProjectFolder(settingsValue(DataStorageLayer::kProjectSaveFolderKey).toString());
-    dialog->setImportFolder(settingsValue(DataStorageLayer::kProjectImportFolderKey).toString());
-    dialog->configureCloudProjectCreationAbility(d->isUserAuthorized, d->canCreateCloudProject);
+    d->createProjectDialog = new Ui::CreateProjectDialog(d->topLevelWidget);
+    d->createProjectDialog->setProjectType(
+        settingsValue(DataStorageLayer::kProjectTypeKey).toInt());
+    d->createProjectDialog->setProjectFolder(
+        settingsValue(DataStorageLayer::kProjectSaveFolderKey).toString());
+    d->createProjectDialog->setImportFolder(
+        settingsValue(DataStorageLayer::kProjectImportFolderKey).toString());
+    d->createProjectDialog->configureCloudProjectCreationAbility(
+        d->isConnected, d->isUserAuthorized, d->canCreateCloudProject);
 
     //
     // Настраиваем соединения диалога
     //
-    connect(dialog, &Ui::CreateProjectDialog::createProjectPressed, this, [this, dialog] {
-        setSettingsValue(DataStorageLayer::kProjectTypeKey, dialog->projectType());
-        setSettingsValue(DataStorageLayer::kProjectSaveFolderKey, dialog->projectFolder());
-        setSettingsValue(DataStorageLayer::kProjectImportFolderKey, dialog->importFilePath());
+    connect(d->createProjectDialog, &Ui::CreateProjectDialog::loginPressed, this,
+            &ProjectsManager::signInRequested);
+    connect(d->createProjectDialog, &Ui::CreateProjectDialog::renewSubscriptionPressed, this,
+            &ProjectsManager::renewTeamSubscriptionRequested);
+    connect(d->createProjectDialog, &Ui::CreateProjectDialog::createProjectPressed, this, [this] {
+        setSettingsValue(DataStorageLayer::kProjectTypeKey, d->createProjectDialog->projectType());
+        setSettingsValue(DataStorageLayer::kProjectSaveFolderKey,
+                         d->createProjectDialog->projectFolder());
+        setSettingsValue(DataStorageLayer::kProjectImportFolderKey,
+                         d->createProjectDialog->importFilePath());
 
-        if (dialog->isLocal()) {
-            const auto projectPathPrefix = dialog->projectFolder() + "/"
-                + FileHelper::systemSavebleFileName(dialog->projectName());
+        if (d->createProjectDialog->isLocal()) {
+            const auto projectPathPrefix = d->createProjectDialog->projectFolder() + "/"
+                + FileHelper::systemSavebleFileName(d->createProjectDialog->projectName());
             auto projectPath = projectPathPrefix + Project::extension();
             //
             // Ситуация, что файл с таким названием уже существует крайне редка, хотя и
@@ -276,20 +310,21 @@ void ProjectsManager::createProject()
                     + QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss")
                     + Project::extension();
             }
-            emit createLocalProjectRequested(dialog->projectName(), projectPath,
-                                             dialog->importFilePath());
+            emit createLocalProjectRequested(d->createProjectDialog->projectName(), projectPath,
+                                             d->createProjectDialog->importFilePath());
         } else {
-            emit createCloudProjectRequested(dialog->projectName(), dialog->importFilePath());
+            emit createCloudProjectRequested(d->createProjectDialog->projectName(),
+                                             d->createProjectDialog->importFilePath());
         }
-        dialog->hideDialog();
+        d->createProjectDialog->hideDialog();
     });
-    connect(dialog, &Ui::CreateProjectDialog::disappeared, dialog,
+    connect(d->createProjectDialog, &Ui::CreateProjectDialog::disappeared, d->createProjectDialog,
             &Ui::CreateProjectDialog::deleteLater);
 
     //
     // Отображаем диалог
     //
-    dialog->showDialog();
+    d->createProjectDialog->showDialog();
 }
 
 void ProjectsManager::openProject()

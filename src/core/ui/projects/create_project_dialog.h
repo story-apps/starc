@@ -42,7 +42,8 @@ public:
     /**
      * @brief Настроить возможность создавать проекты в облаке
      */
-    void configureCloudProjectCreationAbility(bool _isLogged, bool _isSubscriptionActive);
+    void configureCloudProjectCreationAbility(bool _isConnected, bool _isLogged,
+                                              bool _isSubscriptionActive);
 
     /**
      * @brief Где пользователь хочет разместить проект true - локально, false - в облаке

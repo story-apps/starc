@@ -46,6 +46,11 @@ public:
     void saveChanges();
 
     /**
+     * @brief Скорректировать интерфейс в зависимости от того есть ли подключение к серверу
+     */
+    void setConnected(bool _connected);
+
+    /**
      * @brief Можно ли создавать проекты в облаке
      */
     void setProjectsInCloudCanBeCreated(bool _authorized,
@@ -114,6 +119,16 @@ signals:
      * @brief Запрос на отображение меню
      */
     void menuRequested();
+
+    /**
+     * @brief Пользователь хочет авторизоваться
+     */
+    void signInRequested();
+
+    /**
+     * @brief Пользователь хочет оформить ТИМ подписку
+     */
+    void renewTeamSubscriptionRequested();
 
     /**
      * @brief Пользователь хочет создать проект

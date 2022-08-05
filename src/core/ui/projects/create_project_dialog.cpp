@@ -242,19 +242,36 @@ void CreateProjectDialog::setImportFolder(const QString& _path)
     d->importFolder = _path;
 }
 
-void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isLogged,
+void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isConnected, bool _isLogged,
                                                                bool _isSubscriptionActive)
 {
 
     //
-    // TODO: Обработать вариант, когда пользователь в офлайне
-    //       - нужно запретить создавать проект в облаке, но показать другую подсказку
+    // Если нет соединения, то нет и возможности создавать проект в облаке
     //
+    if (!_isConnected) {
+        d->localProject->setChecked(true);
+        d->localProject->hide();
+        d->cloudProject->hide();
+
+        d->cloudProjectCreationNote->setText(
+            tr("Since connection to the cloud service unavailable, you only can create new story "
+               "on the local computer."));
+        d->cloudProjectCreationNote->show();
+        d->cloudProjectCreationAction->hide();
+        d->cloudProjectCreationActionNote->hide();
+        return;
+    }
 
     //
     // Если пользователь может создавать проект в облаке
     //
     if (_isLogged && _isSubscriptionActive) {
+        //
+        // ... показываем переключатели
+        //
+        d->localProject->show();
+        d->cloudProject->show();
         //
         // ... скроем виджеты с посказками
         //
@@ -272,11 +289,11 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isLogged,
     //
     // ... и настроим подсказки
     //
-
     d->cloudProjectCreationNote->setText(tr("The story will be created on the local computer."));
-    d->cloudProjectCreationActionNote->setText(tr("to create stories on the cloud."));
+    d->cloudProjectCreationActionNote->setText(tr("to create stories in the cloud."));
+    d->cloudProjectCreationAction->disconnect();
     if (_isLogged) {
-        d->cloudProjectCreationAction->setText(tr("Renew subscription"));
+        d->cloudProjectCreationAction->setText(tr("Activate TEAM version"));
         connect(d->cloudProjectCreationAction, &Body1LinkLabel::clicked, this,
                 &CreateProjectDialog::renewSubscriptionPressed);
     } else {
@@ -284,14 +301,6 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isLogged,
         connect(d->cloudProjectCreationAction, &Body1LinkLabel::clicked, this,
                 &CreateProjectDialog::loginPressed);
     }
-
-    //
-    // FIXME: открыть, когда будет работать облако
-    //
-    //    d->cloudProjectCreationNote->hide();
-    d->cloudProjectCreationAction->hide();
-    d->cloudProjectCreationActionNote->hide();
-    return;
 }
 
 bool CreateProjectDialog::isLocal() const
@@ -346,7 +355,7 @@ void CreateProjectDialog::updateTranslations()
     }
 
     d->projectName->setLabel(tr("Name of the story"));
-    d->localProject->setText(tr("Save story in the local computer"));
+    d->localProject->setText(tr("Save story on the local computer"));
     d->cloudProject->setText(tr("Save story in the cloud"));
     d->projectFolder->setLabel(tr("Location of the new story file"));
     d->projectFolder->setTrailingIconToolTip(
