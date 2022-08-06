@@ -1943,9 +1943,6 @@ void ApplicationManager::initConnections()
             [this] { d->showAccount(); });
     connect(d->accountManager.data(), &AccountManager::closeAccountRequested, this,
             [this] { d->showLastContent(); });
-    //    connect(d->accountManager.data(),
-    //    &AccountManager::cloudProjectsCreationAvailabilityChanged,
-    //            d->projectsManager.data(), &ProjectsManager::setProjectsInCloudCanBeCreated);
 
     //
     // Менеджер проектов
@@ -1962,6 +1959,11 @@ void ApplicationManager::initConnections()
             [this](const QString& _projectName, const QString& _projectPath,
                    const QString& _importFilePath) {
                 d->createLocalProject(_projectName, _projectPath, _importFilePath);
+            });
+    connect(d->projectsManager.data(), &ProjectsManager::createCloudProjectRequested, this,
+            [this](const QString& _projectName, const QString& _importFilePath) {
+                //                d->createLocalProject(_projectName, _projectPath,
+                //                _importFilePath);
             });
     connect(d->projectsManager.data(), &ProjectsManager::openProjectRequested, this,
             [this] { d->openProject(); });
