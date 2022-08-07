@@ -1,7 +1,7 @@
 #include "release_view.h"
 
 #include <3rd_party/webloader/src/NetworkRequest.h>
-#include <domain/notification.h>
+#include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/icon_button/icon_button.h>

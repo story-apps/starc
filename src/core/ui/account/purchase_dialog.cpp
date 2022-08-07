@@ -2,8 +2,8 @@
 
 #include "purchase_dialog_option.h"
 
-#include <domain/payment_info.h>
-#include <domain/subscription_info.h>
+#include <domain/starcloud_api.h>
+#include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 

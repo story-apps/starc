@@ -99,14 +99,6 @@ void Project::setLogline(const QString& _logline)
     d->logline = _logline;
 }
 
-QString Project::displayPath() const
-{
-    //
-    // TODO: Remote project path
-    //
-    return d->path;
-}
-
 QString Project::path() const
 {
     return d->path;

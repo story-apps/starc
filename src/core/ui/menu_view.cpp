@@ -3,7 +3,7 @@
 #include "about_application_dialog.h"
 #include "notifications/release_view.h"
 
-#include <domain/notification.h>
+#include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/drawer/drawer.h>

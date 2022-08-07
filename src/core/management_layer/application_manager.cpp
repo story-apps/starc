@@ -20,8 +20,8 @@
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-#include <domain/account_info.h>
 #include <domain/document_object.h>
+#include <domain/starcloud_api.h>
 #include <include/custom_events.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/account/connection_status_tool_bar.h>
@@ -41,6 +41,7 @@
 #include <utils/helpers/image_helper.h>
 #include <utils/logging.h>
 #include <utils/tools/backup_builder.h>
+#include <utils/tools/once.h>
 #include <utils/tools/run_once.h>
 #include <utils/validators/email_validator.h>
 
@@ -194,6 +195,7 @@ public:
     void createProject();
     void createLocalProject(const QString& _projectName, const QString& _projectPath,
                             const QString& _importFilePath);
+    void createRemoteProject(const QString& _projectName, const QString& _importFilePath);
 
     /**
      * @brief Открыть проект по заданному пути
@@ -1170,6 +1172,50 @@ void ApplicationManager::Implementation::createLocalProject(const QString& _proj
     goToEditCurrentProject(_importFilePath);
 }
 
+void ApplicationManager::Implementation::createRemoteProject(const QString& _projectName,
+                                                             const QString& _importFilePath)
+{
+    //
+    // Закроем текущий проект
+    //
+    closeCurrentProject();
+
+    //
+    // Т.к. взаимодействие с сервисом асинхронное, ожидаем ответа с информацией о созданном проекте
+    // и переключаемся на работу с ним уже только тогда
+    //
+    Once::connect(cloudServiceManager.data(), &CloudServiceManager::projectCreated, q,
+                  [this, _projectName, _importFilePath](const Domain::ProjectInfo& _projectInfo) {
+                      if (_projectInfo.name != _projectName) {
+                          return;
+                      }
+
+                      //
+                      // Добавляем проект в список недавних
+                      //
+                      projectsManager->addOrUpdateCloudProject(_projectInfo);
+
+                      //
+                      // Переключаемся на работу с новым проектом
+                      //
+                      projectsManager->setCurrentProject(_projectInfo.id);
+                      projectsManager->setCurrentProjectName(_projectInfo.name);
+                      //
+                      // ... сохраняем новый проект в списке недавних
+                      //
+                      projectsManager->saveProjects();
+                      //
+                      // ... перейдём к редактированию
+                      //
+                      goToEditCurrentProject(_importFilePath);
+                  });
+
+    //
+    // Создаём новый проект в облаке
+    //
+    cloudServiceManager->createProject(_projectName);
+}
+
 void ApplicationManager::Implementation::openProject()
 {
     auto callback = [this] { projectsManager->openProject(); };
@@ -1962,8 +2008,7 @@ void ApplicationManager::initConnections()
             });
     connect(d->projectsManager.data(), &ProjectsManager::createCloudProjectRequested, this,
             [this](const QString& _projectName, const QString& _importFilePath) {
-                //                d->createLocalProject(_projectName, _projectPath,
-                //                _importFilePath);
+                d->createRemoteProject(_projectName, _importFilePath);
             });
     connect(d->projectsManager.data(), &ProjectsManager::openProjectRequested, this,
             [this] { d->openProject(); });

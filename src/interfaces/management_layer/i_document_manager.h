@@ -20,7 +20,7 @@ namespace ManagementLayer {
  * @brief Режим редактирования документа
  */
 enum class DocumentEditingMode {
-    Edit,
+    Edit = 0,
     Comment,
     Read,
 };

@@ -62,7 +62,6 @@ public:
     /**
      * @brief Путь к исходному файлу проекта
      */
-    QString displayPath() const;
     QString path() const;
     void setPath(const QString& _path);
 

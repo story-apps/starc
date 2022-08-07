@@ -4,7 +4,9 @@
 
 namespace Domain {
 enum class SubscriptionType;
-}
+struct ProjectInfo;
+} // namespace Domain
+
 
 namespace ManagementLayer {
 
@@ -67,6 +69,11 @@ public:
     void openProject();
 
     /**
+     * @brief Добавить облачный проект
+     */
+    void addOrUpdateCloudProject(const Domain::ProjectInfo& _projectInfo);
+
+    /**
      * @brief Установить текущий проект
      */
     void setCurrentProject(const QString& _path);
@@ -77,6 +84,11 @@ public:
      *       путь к исходному файлу, а @b _realPath путь к временному файлу проекта
      */
     void setCurrentProject(const QString& _path, const QString& _realPath);
+
+    /**
+     * @brief Установить текущий проект
+     */
+    void setCurrentProject(int _projectId);
 
     /**
      * @brief Установить название текущего проекта

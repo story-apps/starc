@@ -1,6 +1,6 @@
 #include "session_widget.h"
 
-#include <domain/session_info.h>
+#include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>

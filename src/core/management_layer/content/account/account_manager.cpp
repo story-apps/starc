@@ -1,6 +1,6 @@
 #include "account_manager.h"
 
-#include <domain/account_info.h>
+#include <domain/starcloud_api.h>
 #include <ui/account/account_navigator.h>
 #include <ui/account/account_tool_bar.h>
 #include <ui/account/account_view.h>

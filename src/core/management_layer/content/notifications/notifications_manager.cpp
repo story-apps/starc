@@ -1,6 +1,6 @@
 #include "notifications_manager.h"
 
-#include <domain/notification.h>
+#include <domain/starcloud_api.h>
 #include <utils/shugar.h>
 
 #include <QSettings>

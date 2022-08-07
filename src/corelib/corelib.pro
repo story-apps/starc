@@ -462,16 +462,12 @@ HEADERS += \
     data_layer/storage/document_storage.h \
     data_layer/storage/settings_storage.h \
     data_layer/storage/storage_facade.h \
-    domain/account_info.h \
     domain/document_change_object.h \
     domain/document_object.h \
     domain/domain_object.h \
     domain/identifier.h \
-    domain/notification.h \
     domain/objects_builder.h \
-    domain/payment_info.h \
-    domain/session_info.h \
-    domain/subscription_info.h \
+    domain/starcloud_api.h \
     ui/abstract_navigator.h \
     ui/design_system/design_system.h \
     ui/layouts/flow_layout/flow_layout.h \
@@ -594,6 +590,7 @@ HEADERS += \
     utils/tools/backup_builder.h \
     utils/tools/debouncer.h \
     utils/tools/model_index_path.h \
+    utils/tools/once.h \
     utils/tools/run_once.h \
     utils/validators/email_validator.h
 

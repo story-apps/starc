@@ -6,7 +6,7 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
-#include <domain/subscription_info.h>
+#include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/projects/create_project_dialog.h>
 #include <ui/projects/projects_navigator.h>
@@ -41,6 +41,8 @@ class ProjectsManager::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    QString projectPosterPath(const QString& _projectPath);
+
 
     bool isConnected = false;
     bool isUserAuthorized = false;
@@ -71,6 +73,17 @@ ProjectsManager::Implementation::Implementation(QWidget* _parent)
 
     view->setProjects(projects);
     view->hide();
+}
+
+QString ProjectsManager::Implementation::projectPosterPath(const QString& _projectPath)
+{
+    const QString posterDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+        + "/thumbnails/projects/";
+    QDir::root().mkpath(posterDir);
+
+    const QString posterName
+        = QCryptographicHash::hash(_projectPath.toUtf8(), QCryptographicHash::Md5).toHex();
+    return posterDir + posterName;
 }
 
 
@@ -304,7 +317,7 @@ void ProjectsManager::createProject()
             if (QFileInfo::exists(projectPath)) {
                 //
                 // ... в таком случае добавляем метку с датой и временем создания файла, чтобы имена
-                // не пересекались
+                //     не пересекались
                 //
                 projectPath = projectPathPrefix + "_"
                     + QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss")
@@ -353,6 +366,79 @@ void ProjectsManager::openProject()
     // ... и сигнализируем о том, что файл выбран для открытия
     //
     emit openChoosedProjectRequested(projectPath);
+}
+
+void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projectInfo)
+{
+    //
+    // Определим, находится ли устанавливаемый проект уже в списке, или это новый
+    //
+    Project cloudProject;
+
+    //
+    // Проверяем находится ли проект в списке недавно используемых
+    //
+    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
+        const auto& project = d->projects->projectAt(projectRow);
+        if (project.id() == _projectInfo.id) {
+            cloudProject = project;
+            break;
+        }
+    }
+
+    //
+    // Сформируем путь к файлу
+    //
+    const auto projectDir
+        = QString("%1/projects/%2")
+              .arg(QStandardPaths::writableLocation(QStandardPaths::DataLocation),
+                   DataStorageLayer::StorageFacade::settingsStorage()->accountEmail());
+    QDir::root().mkpath(projectDir);
+    const auto projectPath = cloudProject.path().isEmpty()
+        ? QString("%1/%2.%3")
+              .arg(projectDir, QString::number(_projectInfo.id), Project::extension())
+        : cloudProject.path();
+
+    //
+    // Обновим параметры проекта
+    //
+    cloudProject.setName(_projectInfo.name);
+    cloudProject.setLogline(_projectInfo.logline);
+    cloudProject.setLastEditTime(_projectInfo.lastEditTime);
+    if (_projectInfo.poster.isNull()) {
+        d->currentProject.setPosterPath({});
+    } else {
+        const auto posterPath = d->projectPosterPath(projectPath);
+        QFile posterFile(posterPath);
+        posterFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+        posterFile.write(_projectInfo.poster);
+        d->currentProject.setPosterPath(posterPath);
+    }
+
+    //
+    // Если проект не нашёлся в списке недавних, добавляем в начало
+    //
+    if (cloudProject.type() == ProjectType::Invalid) {
+        //
+        // Определим параметры проекта
+        //
+        cloudProject.setId(_projectInfo.id);
+        cloudProject.setType(ProjectType::Cloud);
+        cloudProject.setEditingMode(static_cast<DocumentEditingMode>(_projectInfo.editingMode));
+        cloudProject.setPath(projectPath);
+        cloudProject.setRealPath(projectPath);
+
+        //
+        // Добавляем проект в список
+        //
+        d->projects->prepend(cloudProject);
+    }
+    //
+    // А если нашёлся, то обновим его параметры
+    //
+    else {
+        d->projects->updateProject(cloudProject);
+    }
 }
 
 void ProjectsManager::setCurrentProject(const QString& _path)
@@ -405,9 +491,9 @@ void ProjectsManager::setCurrentProject(const QString& _path, const QString& _re
         //
         // Определим параметры проекта
         //
-        newCurrentProject.setName(fileInfo.completeBaseName());
         newCurrentProject.setType(projectPath == projectRealPath ? ProjectType::Local
                                                                  : ProjectType::LocalShadow);
+        newCurrentProject.setName(fileInfo.completeBaseName());
         newCurrentProject.setPath(projectPath);
         newCurrentProject.setLastEditTime(fileInfo.lastModified());
 
@@ -421,6 +507,28 @@ void ProjectsManager::setCurrentProject(const QString& _path, const QString& _re
     // Запоминаем проект, как текущий
     //
     d->currentProject = newCurrentProject;
+}
+
+void ProjectsManager::setCurrentProject(int _projectId)
+{
+    QString newCurrentProjectPath;
+    for (auto index = 0; index < d->projects->rowCount(); ++index) {
+        const auto& project = d->projects->projectAt(index);
+        if (project.isRemote() && project.id() == _projectId) {
+            newCurrentProjectPath = project.path();
+            break;
+        }
+    }
+    Q_ASSERT(!newCurrentProjectPath.isEmpty());
+    if (newCurrentProjectPath.isEmpty()) {
+        Log::critical("Can't find cloud project with identifier %1", QString::number(_projectId));
+        return;
+    }
+
+    //
+    // ... и установим его текущим
+    //
+    setCurrentProject(newCurrentProjectPath);
 }
 
 void ProjectsManager::setCurrentProjectName(const QString& _name)
@@ -443,14 +551,7 @@ void ProjectsManager::setCurrentProjectCover(const QPixmap& _cover)
         return;
     }
 
-    const QString posterDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-        + "/thumbnails/projects/";
-    QDir::root().mkpath(posterDir);
-
-    const QString posterName
-        = QCryptographicHash::hash(d->currentProject.path().toUtf8(), QCryptographicHash::Md5)
-              .toHex();
-    const QString posterPath = posterDir + posterName;
+    const auto posterPath = d->projectPosterPath(d->currentProject.path());
     _cover.save(posterPath, "PNG");
 
     d->currentProject.setPosterPath(posterPath);
