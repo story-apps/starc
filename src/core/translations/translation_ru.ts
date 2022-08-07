@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
     <name>AppBar</name>
     <message>
@@ -272,7 +270,7 @@
 <context>
     <name>BusinessLayer::CharactersModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/characters/characters_model.cpp" line="180"/>
+        <location filename="../../corelib/business_layer/model/characters/characters_model.cpp" line="173"/>
         <source>New group</source>
         <translation>Новая группа</translation>
     </message>
@@ -280,59 +278,71 @@
 <context>
     <name>BusinessLayer::ComicBookDictionariesModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="107"/>
-        <source>page</source>
-        <translation>страница</translation>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="114"/>
+        <source>Page</source>
+        <extracomment>Comic book single page intro</extracomment>
+        <translation>Страница</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="111"/>
-        <source>pages</source>
-        <extracomment>Comic book title pages</extracomment>
-        <translation>страницы</translation>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="117"/>
+        <source>Pages</source>
+        <extracomment>Comic book double pages intro</extracomment>
+        <translation>Страницы</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="116"/>
-        <source>panel</source>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="121"/>
+        <source>Panel</source>
         <extracomment>Comic book panel intro</extracomment>
-        <translation>кадр</translation>
+        <translation>Кадр</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="121"/>
+        <source>Background panel</source>
+        <translation>Фоновая панель</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="124"/>
+        <source>Panels</source>
+        <extracomment>Comic book multiple panels intro</extracomment>
+        <translation>Кадры</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="127"/>
         <source>CAPTION</source>
         <translation>ТИТР</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="127"/>
         <source>NARRATION</source>
         <translation>ТЕКСТ</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="127"/>
         <source>SFX</source>
         <translation>ЗВУК</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>OFF</source>
         <translation>ЗА КАДРОМ</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>WHISPER</source>
         <translation>ШЕПЧЕТ</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>BURST</source>
         <translation>КРИЧИТ</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>WEAK</source>
         <translation>СЛАБО</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>SINGING</source>
         <translation>ПОЁТ</translation>
     </message>
@@ -487,7 +497,7 @@
 <context>
     <name>BusinessLayer::LocationsModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/locations/locations_model.cpp" line="171"/>
+        <location filename="../../corelib/business_layer/model/locations/locations_model.cpp" line="164"/>
         <source>New group</source>
         <translation>Новая группа</translation>
     </message>
@@ -1096,12 +1106,12 @@
 <context>
     <name>Domain::Project</name>
     <message>
-        <location filename="../management_layer/content/projects/project.cpp" line="170"/>
+        <location filename="../management_layer/content/projects/project.cpp" line="162"/>
         <source>today at</source>
         <translation>сегодня в</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/project.cpp" line="175"/>
+        <location filename="../management_layer/content/projects/project.cpp" line="167"/>
         <source>yesterday at</source>
         <translation>вчера в</translation>
     </message>
@@ -1219,22 +1229,38 @@
 <context>
     <name>ManagementLayer::AccountManager</name>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="415"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="359"/>
         <source>Try PRO version for free</source>
         <translation>Попробовать PRO версию бесплатно</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="416"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="360"/>
         <source>You can try all the features of the PRO version during 30 days for free. After trial period, you can continue to use the PRO version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation>Вы можете бесплатно активировать PRO версию на 30 дней. После, вы сможете продолжить использование PRO версии, оплатив её. А если нет, то ваш аккаунт будет автоматически переведён на FREE версию.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="419"/>
-        <source>Continue with free version</source>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="363"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="444"/>
+        <source>Continue with FREE version</source>
         <translation>Остаться на FREE версии</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="420"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="440"/>
+        <source>Try TEAM version for free</source>
+        <translation>Попробовать TEAM версию бесплатно</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="441"/>
+        <source>You can try all the features of the TEAM version during 30 days for free. After trial period, you can continue to use the TEAM version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
+        <translation>Вы можете бесплатно активировать TEAM версию на 30 дней. После, вы сможете продолжить использование TEAM версии, оплатив её. А если нет, то ваш аккаунт будет автоматически переведён на FREE версию.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="445"/>
+        <source>Activate TEAM</source>
+        <translation>Активировать TEAM</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="364"/>
         <source>Activate PRO</source>
         <translation>Активировать PRO</translation>
     </message>
@@ -1242,114 +1268,114 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="817"/>
+        <location filename="../management_layer/application_manager.cpp" line="821"/>
         <source>Read only</source>
         <translation>Только чтение</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="828"/>
+        <location filename="../management_layer/application_manager.cpp" line="832"/>
         <source> - changed</source>
         <translation> - изменено</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="884"/>
-        <location filename="../management_layer/application_manager.cpp" line="903"/>
-        <location filename="../management_layer/application_manager.cpp" line="1079"/>
+        <location filename="../management_layer/application_manager.cpp" line="888"/>
+        <location filename="../management_layer/application_manager.cpp" line="907"/>
+        <location filename="../management_layer/application_manager.cpp" line="1083"/>
         <source>Saving error</source>
         <translation>Ошибка сохранения</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="885"/>
+        <location filename="../management_layer/application_manager.cpp" line="889"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Не удалось сохранить изменения. Произошла ошибка базы данный: &quot;%1&quot;. Пожалуйста проверьте существует ли файл проекта и есть ли у вас разрешение на запись в него.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="904"/>
+        <location filename="../management_layer/application_manager.cpp" line="908"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Изменения не удалось сохранить, потому что файл проекта, который должен находиться по пути &quot;%1&quot; отстутствует. Пожалуйста верните файл назад и попробуйте сохранить изменения ещё раз.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="963"/>
+        <location filename="../management_layer/application_manager.cpp" line="967"/>
         <source>Project was modified. Save changes?</source>
         <translation>Проект был изменён. Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="964"/>
+        <location filename="../management_layer/application_manager.cpp" line="968"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="965"/>
+        <location filename="../management_layer/application_manager.cpp" line="969"/>
         <source>Don&apos;t save</source>
         <translation>Не сохранять</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="966"/>
+        <location filename="../management_layer/application_manager.cpp" line="970"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1041"/>
+        <location filename="../management_layer/application_manager.cpp" line="1045"/>
         <source>Choose file to save story</source>
         <translation>Выберите файл для сохранения истории</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1080"/>
+        <location filename="../management_layer/application_manager.cpp" line="1084"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Не удалось сохранить историю в файл %1. Проверьте разрешение на запись и попробуйте ещё раз.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1130"/>
+        <location filename="../management_layer/application_manager.cpp" line="1134"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Нельзя создать файл в папке, которой не существует: %1. Пожалуйста, выберите существующую папку.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1135"/>
+        <location filename="../management_layer/application_manager.cpp" line="1139"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Не удалось произвести запись файла. Похоже, что он открыт другой программой. Пожалуйста закроте её и попробуйте ещё раз сохранить изменения.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1139"/>
+        <location filename="../management_layer/application_manager.cpp" line="1143"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Не удалось произвести запись файла. Пожалуйста проверьте разрешение на запись в выбранную папку, или выберите другую папку для сохранения.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1143"/>
+        <location filename="../management_layer/application_manager.cpp" line="1147"/>
         <source>Create project error</source>
         <translation>Ошибка создания проекта</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1240"/>
+        <location filename="../management_layer/application_manager.cpp" line="1288"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>Файл нельзя открыть, т.к. в данный момент он уже открыт в другой копии приложения.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1320"/>
+        <location filename="../management_layer/application_manager.cpp" line="1368"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation>Файл, который вы хотите открыть, не имеет разрешения на запись в него. Проверьте параметры файла и разрешите ему быть редактируемым. А до тех пор, файл будет открыт только для чтения.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1338"/>
+        <location filename="../management_layer/application_manager.cpp" line="1386"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation>Хотите продолжить работу с форматом .%1?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1339"/>
+        <location filename="../management_layer/application_manager.cpp" line="1387"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation>Не все данные можно сохранить в формате .%1. Рекомендуем использовать формат Story Architect .%2, чтобы вся информация о проекте была корректно сохранена.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1342"/>
+        <location filename="../management_layer/application_manager.cpp" line="1390"/>
         <source>Never ask again</source>
         <translation>Больше не спрашивать</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1343"/>
+        <location filename="../management_layer/application_manager.cpp" line="1391"/>
         <source>Keep .%1</source>
         <translation>Оставить .%1</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1344"/>
+        <location filename="../management_layer/application_manager.cpp" line="1392"/>
         <source>Switch to .STARC</source>
         <translation>Переключить на .STARC</translation>
     </message>
@@ -1426,55 +1452,47 @@
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="267"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="314"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation>Промокод с %1% скидкой активирован и будет применён к следующему платежу.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="276"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="323"/>
         <source>PRO version subscription activated for %n month(s).</source>
-        <translation>
-            <numerusform>Подписка на PRO версию активирована на %n месяц.</numerusform>
-            <numerusform>Подписка на PRO версию активирована на %n месяца.</numerusform>
-            <numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform>
-        </translation>
+        <translation><numerusform>Подписка на PRO версию активирована на %n месяц.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяца.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="281"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="328"/>
         <source>PRO version lifetime access granted.</source>
         <translation>Вам предоставлен пожизненный доступ к PRO версии.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="285"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="332"/>
         <source>TEAM version subscription activated for %n month(s).</source>
-        <translation>
-            <numerusform>Подписка на TEAm версию активирована на %n месяц.</numerusform>
-            <numerusform>Подписка на TEAm версию активирована на %n месяца.</numerusform>
-            <numerusform>Подписка на TEAm версию активирована на %n месяцев.</numerusform>
-        </translation>
+        <translation><numerusform>Подписка на TEAm версию активирована на %n месяц.</numerusform><numerusform>Подписка на TEAm версию активирована на %n месяца.</numerusform><numerusform>Подписка на TEAm версию активирована на %n месяцев.</numerusform><numerusform>Подписка на TEAm версию активирована на %n месяцев.</numerusform></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="290"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="337"/>
         <source>TEAM version lifetime access granted.</source>
         <translation>Вам предоставлен пожизненный доступ к TEAM версии.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="328"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="389"/>
         <source>Promocode is incorrect</source>
         <translation>Некорректный промокод</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="332"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="393"/>
         <source>Promocode expired</source>
         <translation>Срок годности промокода истёк</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="336"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="397"/>
         <source>Maximum number of promocode activations done</source>
         <translation>Количество доступных активаций промокода исчерпано</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="340"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="401"/>
         <source>Promocode already used</source>
         <translation>Промокод уже был активирован ранее</translation>
     </message>
@@ -1665,7 +1683,7 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="640"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="701"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="965"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="968"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
@@ -1696,100 +1714,100 @@
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="438"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1317"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1320"/>
         <source>Create new version</source>
         <translation>Создать новую версию</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="641"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="702"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="966"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="969"/>
         <source>Yes, remove</source>
         <translation>Да, удалить</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="781"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="784"/>
         <source>Characters from the text</source>
         <translation>Персонажи обнаруженные в тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="791"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="794"/>
         <source>Characters that are not found in the text</source>
         <translation>Персонажи, которых нет в тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="804"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="807"/>
         <source>Save only characters from the text</source>
         <translation>Сохранить только персонажей из текста</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="805"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="808"/>
         <source>Save all characters</source>
         <translation>Сохранить всех персонажей</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="806"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="908"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="809"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="911"/>
         <source>Change nothing</source>
         <translation>Оставить без изменений</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="883"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="886"/>
         <source>Locations from the text</source>
         <translation>Локации обнаруженные в тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="893"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="896"/>
         <source>Locations that are not found in the text</source>
         <translation>Локации, которых нет в тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="906"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="909"/>
         <source>Save only locations from the text</source>
         <translation>Сохранить только локации из текста</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="907"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="910"/>
         <source>Save all locations</source>
         <translation>Сохранить все локации</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="964"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="967"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Удалить все элементы из корзины без возможности восстановления?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1331"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1334"/>
         <source>Edit</source>
         <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1341"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1344"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1894"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1897"/>
         <source>Title page</source>
         <translation>Титульная страница</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1896"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
         <source>Synopsis</source>
         <translation>Синопсис</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1908"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1911"/>
         <source>Treatment</source>
         <translation>Поэпизодник</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1902"/>
         <source>Screenplay</source>
         <translation>Сценарий</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1902"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1905"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -1797,32 +1815,32 @@
 <context>
     <name>ManagementLayer::ProjectsManager</name>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="96"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="114"/>
         <source>Show in folder</source>
         <translation>Показать в папке</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="102"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="120"/>
         <source>Hide from recent list</source>
         <translation>Скрыть из списка недавних</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="108"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="126"/>
         <source>Do you really want to hide a project from the recent list?</source>
         <translation>Скрыть проект из списка недавних?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="109"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="127"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="110"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="128"/>
         <source>Yes, hide</source>
         <translation>Да, скрыть</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="302"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="353"/>
         <source>Choose the file to open</source>
         <translation>Выберите файл для открытия</translation>
     </message>
@@ -2336,72 +2354,72 @@
 <context>
     <name>Ui::AccountNavigator</name>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="90"/>
+        <location filename="../ui/account/account_navigator.cpp" line="112"/>
+        <location filename="../ui/account/account_navigator.cpp" line="128"/>
+        <location filename="../ui/account/account_navigator.cpp" line="329"/>
         <source>Lifetime access</source>
         <translation>Доступно навсегда</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="91"/>
+        <location filename="../ui/account/account_navigator.cpp" line="113"/>
+        <location filename="../ui/account/account_navigator.cpp" line="129"/>
         <source>Active until %1</source>
         <translation>Активна до %1</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="262"/>
+        <location filename="../ui/account/account_navigator.cpp" line="122"/>
+        <source>Used %1 Gb from %2 Gb</source>
+        <translation>Использовано %1 Гб из %2 Гб</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_navigator.cpp" line="325"/>
         <source>Account</source>
         <translation>Аккаунт</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="263"/>
+        <location filename="../ui/account/account_navigator.cpp" line="326"/>
         <source>Subscription</source>
         <translation>Подписка</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="264"/>
+        <location filename="../ui/account/account_navigator.cpp" line="327"/>
         <source>Sessions</source>
         <translation>Сессии</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="265"/>
+        <location filename="../ui/account/account_navigator.cpp" line="328"/>
         <source>FREE version</source>
         <translation>FREE версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="266"/>
-        <source>Try PRO for free</source>
-        <translation>Попробовать PRO бесплатно</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_navigator.cpp" line="267"/>
-        <source>Upgrade to PRO</source>
-        <translation>Обновить до PRO</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_navigator.cpp" line="268"/>
+        <location filename="../ui/account/account_navigator.cpp" line="330"/>
         <source>PRO version</source>
         <translation>PRO версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="271"/>
+        <location filename="../ui/account/account_navigator.cpp" line="332"/>
+        <location filename="../ui/account/account_navigator.cpp" line="337"/>
+        <source>Try for free</source>
+        <translation>Попробовать бесплатно</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_navigator.cpp" line="334"/>
+        <location filename="../ui/account/account_navigator.cpp" line="338"/>
         <source>Renew</source>
         <translation>Продлить</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="270"/>
+        <location filename="../ui/account/account_navigator.cpp" line="333"/>
         <source>Buy lifetime</source>
         <translation>Купить навсегда</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="272"/>
-        <source>Upgrade to TEAM</source>
-        <translation>Обновить до TEAM</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_navigator.cpp" line="273"/>
+        <location filename="../ui/account/account_navigator.cpp" line="335"/>
         <source>TEAM version</source>
         <translation>TEAM версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="274"/>
+        <location filename="../ui/account/account_navigator.cpp" line="339"/>
         <source>Logout</source>
         <translation>Выйти</translation>
     </message>
@@ -2409,113 +2427,126 @@
 <context>
     <name>Ui::AccountView</name>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="251"/>
+        <location filename="../ui/account/account_view.cpp" line="258"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>Имя пользователя не может быть пустим, пожалуйста заполните его</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="366"/>
+        <location filename="../ui/account/account_view.cpp" line="388"/>
         <source>FREE version</source>
         <translation>FREE версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="379"/>
+        <location filename="../ui/account/account_view.cpp" line="561"/>
+        <source>Compare versions</source>
+        <translation>Сравнить версии</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="563"/>
+        <source>Try TEAM for free</source>
+        <translation>Попробовать TEAM бесплатно</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="567"/>
         <source>Upgrade to PRO</source>
         <translation>Обновить до PRO</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="373"/>
+        <location filename="../ui/account/account_view.cpp" line="562"/>
         <source>Try PRO for free</source>
         <translation>Попробовать PRO бесплатно</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="216"/>
+        <location filename="../ui/account/account_view.cpp" line="223"/>
+        <location filename="../ui/account/account_view.cpp" line="389"/>
         <source>Lifetime access</source>
         <translation>Доступно навсегда</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="217"/>
+        <location filename="../ui/account/account_view.cpp" line="224"/>
         <source>Active until %1</source>
         <translation>Активна до %1</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="389"/>
-        <location filename="../ui/account/account_view.cpp" line="407"/>
+        <location filename="../ui/account/account_view.cpp" line="394"/>
+        <location filename="../ui/account/account_view.cpp" line="400"/>
         <source>PRO version</source>
         <translation>PRO версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="420"/>
+        <location filename="../ui/account/account_view.cpp" line="407"/>
+        <location filename="../ui/account/account_view.cpp" line="414"/>
         <source>TEAM version</source>
         <translation>TEAM версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="489"/>
+        <location filename="../ui/account/account_view.cpp" line="553"/>
         <source>Your name</source>
         <translation>Ваше имя</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="490"/>
+        <location filename="../ui/account/account_view.cpp" line="554"/>
         <source>Your bio</source>
         <translation>Информация о вас</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="491"/>
+        <location filename="../ui/account/account_view.cpp" line="555"/>
         <source>I want to receive project&apos;s news</source>
-        <translation>Хочу получить новости проекта</translation>
+        <translation>Хочу получать новости проекта</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="492"/>
+        <location filename="../ui/account/account_view.cpp" line="556"/>
         <source>Add avatar +</source>
         <translation>Добавить аватар +</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="492"/>
+        <location filename="../ui/account/account_view.cpp" line="556"/>
         <source>Change avatar...</source>
         <translation>Изменить аватар...</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="493"/>
+        <location filename="../ui/account/account_view.cpp" line="557"/>
         <source>Do you want to delete your avatar?</source>
         <translation>Удалить аватар?</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="494"/>
+        <location filename="../ui/account/account_view.cpp" line="558"/>
         <source>Select an area for the avatar</source>
         <translation>Выберите область для аватара</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="495"/>
+        <location filename="../ui/account/account_view.cpp" line="559"/>
         <source>Subscription type</source>
         <translation>Тип подписки</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="497"/>
-        <source>What&apos;s included?</source>
-        <translation>Что включено?</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="498"/>
+        <location filename="../ui/account/account_view.cpp" line="564"/>
         <source>Buy lifetime</source>
         <translation>Купить навсегда</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="499"/>
+        <location filename="../ui/account/account_view.cpp" line="565"/>
+        <location filename="../ui/account/account_view.cpp" line="566"/>
         <source>Renew</source>
         <translation>Продлить</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="500"/>
+        <location filename="../ui/account/account_view.cpp" line="568"/>
+        <source>Upgrade to TEAM</source>
+        <translation>Обновить до TEAM</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="569"/>
         <source>Active sessions</source>
         <translation>Активные сессии</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="501"/>
+        <location filename="../ui/account/account_view.cpp" line="570"/>
         <source>Promotional or gift code</source>
         <translation>Промо или подарочный код</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="502"/>
+        <location filename="../ui/account/account_view.cpp" line="571"/>
         <source>Activate</source>
         <translation>Активировать</translation>
     </message>
@@ -3519,11 +3550,7 @@
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1029"/>
         <source>%n panels</source>
-        <translation>
-            <numerusform>%n кадр</numerusform>
-            <numerusform>%n кадра</numerusform>
-            <numerusform>%n кадров</numerusform>
-        </translation>
+        <translation><numerusform>%n кадр</numerusform><numerusform>%n кадра</numerusform><numerusform>%n кадров</numerusform><numerusform>%n кадров</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1233"/>
@@ -3690,11 +3717,7 @@
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="321"/>
         <source>%n PANELS</source>
-        <translation>
-            <numerusform>%n КАДР</numerusform>
-            <numerusform>%n КАДРА</numerusform>
-            <numerusform>%n КАДРОВ</numerusform>
-        </translation>
+        <translation><numerusform>%n КАДР</numerusform><numerusform>%n КАДРА</numerusform><numerusform>%n КАДРОВ</numerusform><numerusform>%n КАДРОВ</numerusform></translation>
     </message>
 </context>
 <context>
@@ -3735,11 +3758,7 @@
     <message numerus="yes">
         <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="280"/>
         <source>%n reply(s)</source>
-        <translation>
-            <numerusform>%n ответ</numerusform>
-            <numerusform>%n ответа</numerusform>
-            <numerusform>%n ответов</numerusform>
-        </translation>
+        <translation><numerusform>%n ответ</numerusform><numerusform>%n ответа</numerusform><numerusform>%n ответов</numerusform><numerusform>%n ответов</numerusform></translation>
     </message>
 </context>
 <context>
@@ -4291,107 +4310,112 @@
         <translation>Название истории не может быть пустым. Его обязательно нужно заполнить.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="276"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="258"/>
+        <source>Since connection to the cloud service unavailable, you only can create new story on the local computer.</source>
+        <translation>Новую историю можно создать только на компьютере, потому что не удалось подключиться к облачному серверу.</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="292"/>
         <source>The story will be created on the local computer.</source>
         <translation>Новая история будет размещена на компьютере.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="277"/>
-        <source>to create stories on the cloud.</source>
-        <translation>чтобы создать историю в облаке.</translation>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="293"/>
+        <source>to create stories in the cloud.</source>
+        <translation>чтобы создавать истории в облаке.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="279"/>
-        <source>Renew subscription</source>
-        <translation>Продлите подписку</translation>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="296"/>
+        <source>Activate TEAM version</source>
+        <translation>Активировать TEAM версию</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="283"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="300"/>
         <source>Sign in</source>
         <translation>Войти</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="314"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="323"/>
         <source>Create new story</source>
         <translation>Создать новую историю</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="316"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="325"/>
         <source>Type of story</source>
         <translation>Тип истории</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="322"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="331"/>
         <source>Not set</source>
         <translation>Не установлен</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="327"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="336"/>
         <source>Screenplay</source>
         <translation>Сценарий</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="332"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="341"/>
         <source>Comic book</source>
         <translation>Комикс</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="337"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="346"/>
         <source>Audioplay</source>
         <translation>Аудиопостановка</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="342"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="351"/>
         <source>Stageplay</source>
         <translation>Пьеса</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="348"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="357"/>
         <source>Name of the story</source>
         <translation>Название истории</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="349"/>
-        <source>Save story in the local computer</source>
-        <translation>Сохранить историю на локальном компьютере</translation>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="358"/>
+        <source>Save story on the local computer</source>
+        <translation>Сохранить историю на компьютере</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="350"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="359"/>
         <source>Save story in the cloud</source>
         <translation>Сохранить историю в облаке</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="351"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="360"/>
         <source>Location of the new story file</source>
         <translation>Расположение файла новой истории</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="353"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="362"/>
         <source>Choose the folder where the new story will be placed</source>
         <translation>Выбрать папку, куда будет сохранён новый файл истории</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="354"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="363"/>
         <source>Choose file with story to import</source>
         <translation>Выберите файл с историей для импорта</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="355"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="364"/>
         <source>Choose file for importing</source>
         <translation>Выбрать файл для импорта</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="356"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="365"/>
         <source>Advanced options</source>
         <translation>Расширенные параметры</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="357"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="366"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="358"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="367"/>
         <source>Create</source>
         <translation>Создать</translation>
     </message>
@@ -5500,31 +5524,27 @@
 <context>
     <name>Ui::PurchaseDialogOption</name>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="116"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="115"/>
         <source>Pay with:</source>
         <translation>Оплатить с помощью:</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="135"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="134"/>
         <source>%1 lifetime</source>
         <translation>%1 навсегда</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="195"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="194"/>
         <source>%1 for %2</source>
         <translation>%1 на %2</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="195"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="194"/>
         <source>%n month(s)</source>
-        <translation>
-            <numerusform>%n месяц</numerusform>
-            <numerusform>%n месяца</numerusform>
-            <numerusform>%n месяцев</numerusform>
-        </translation>
+        <translation><numerusform>%n месяц</numerusform><numerusform>%n месяца</numerusform><numerusform>%n месяцев</numerusform><numerusform>%n месяцев</numerusform></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="207"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="206"/>
         <source>$%1 per month</source>
         <translation>%1$ в месяц</translation>
     </message>
@@ -5544,11 +5564,7 @@
     <message numerus="yes">
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="75"/>
         <source>There are %n document(s) in the recycle bin.</source>
-        <translation>
-            <numerusform>В корзине %n документ.</numerusform>
-            <numerusform>В корзине %n документа.</numerusform>
-            <numerusform>В корзине %n документов.</numerusform>
-        </translation>
+        <translation><numerusform>В корзине %n документ.</numerusform><numerusform>В корзине %n документа.</numerusform><numerusform>В корзине %n документов.</numerusform><numerusform>В корзине %n документов.</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="76"/>
@@ -6572,7 +6588,7 @@
     <message>
         <location filename="../ui/account/session_widget.cpp" line="136"/>
         <source>was active %1 at %2</source>
-        <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
+        <extracomment>Last active date (%1) and time (%2) of the user's device</extracomment>
         <translation>был активен %1 в %2</translation>
     </message>
     <message>
@@ -6667,15 +6683,6 @@
         <location filename="../ui/settings/settings_view.cpp" line="2063"/>
         <source>Edit</source>
         <translation>Редактировать</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1377"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1534"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1798"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1925"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2070"/>
-        <source>Duplicate</source>
-        <translation>Дублировать</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1384"/>
@@ -7512,6 +7519,15 @@
         <location filename="../ui/settings/settings_view.cpp" line="2787"/>
         <source>Size of the user interface elements:</source>
         <translation>Размер элементов управления:</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1377"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1534"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1798"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1925"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2070"/>
+        <source>Create new based on current</source>
+        <translation>Создать новый на основе текущего</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2788"/>
@@ -8429,20 +8445,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="280"/>
         <source>Done! I&apos;ve just written %n word(s)</source>
-        <translation>
-            <numerusform>Готово! Я только что написал %n слово</numerusform>
-            <numerusform>Готово! Я только что написал %n слова</numerusform>
-            <numerusform>Готово! Я только что написал %n слов</numerusform>
-        </translation>
+        <translation><numerusform>Готово! Я только что написал %n слово</numerusform><numerusform>Готово! Я только что написал %n слова</numerusform><numerusform>Готово! Я только что написал %n слов</numerusform><numerusform>Готово! Я только что написал %n слов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="281"/>
         <source>in %n minute(s)</source>
-        <translation>
-            <numerusform>за %n мунуту</numerusform>
-            <numerusform>за %n минуты</numerusform>
-            <numerusform>за %n минут</numerusform>
-        </translation>
+        <translation><numerusform>за %n мунуту</numerusform><numerusform>за %n минуты</numerusform><numerusform>за %n минут</numerusform><numerusform>за %n минут</numerusform></translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="470"/>

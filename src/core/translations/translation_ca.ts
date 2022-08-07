@@ -272,7 +272,7 @@
 <context>
     <name>BusinessLayer::CharactersModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/characters/characters_model.cpp" line="180"/>
+        <location filename="../../corelib/business_layer/model/characters/characters_model.cpp" line="173"/>
         <source>New group</source>
         <translation>Nou grup</translation>
     </message>
@@ -280,59 +280,85 @@
 <context>
     <name>BusinessLayer::ComicBookDictionariesModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="107"/>
         <source>page</source>
-        <translation>pàgina</translation>
+        <translation type="vanished">pàgina</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="111"/>
         <source>pages</source>
         <extracomment>Comic book title pages</extracomment>
-        <translation>pàgines</translation>
+        <translation type="vanished">pàgines</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="116"/>
         <source>panel</source>
         <extracomment>Comic book panel intro</extracomment>
-        <translation>panell</translation>
+        <translation type="vanished">panell</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="114"/>
+        <source>Page</source>
+        <extracomment>Comic book single page intro</extracomment>
+        <translation type="unfinished">Pàgina</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="117"/>
+        <source>Pages</source>
+        <extracomment>Comic book double pages intro</extracomment>
+        <translation type="unfinished">Pàgines</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="121"/>
+        <source>Panel</source>
+        <extracomment>Comic book panel intro</extracomment>
+        <translation type="unfinished">Panell</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="121"/>
+        <source>Background panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="124"/>
+        <source>Panels</source>
+        <extracomment>Comic book multiple panels intro</extracomment>
+        <translation type="unfinished">Panells</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="127"/>
         <source>CAPTION</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="127"/>
         <source>NARRATION</source>
         <translation>NARRACIÓ</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="127"/>
         <source>SFX</source>
         <translation>SFX</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>OFF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>WHISPER</source>
         <translation>XIUXIUEJAR</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>BURST</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>WEAK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>SINGING</source>
         <translation>CANTANT</translation>
     </message>
@@ -487,7 +513,7 @@
 <context>
     <name>BusinessLayer::LocationsModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/locations/locations_model.cpp" line="171"/>
+        <location filename="../../corelib/business_layer/model/locations/locations_model.cpp" line="164"/>
         <source>New group</source>
         <translation>Nou grup</translation>
     </message>
@@ -1096,12 +1122,12 @@
 <context>
     <name>Domain::Project</name>
     <message>
-        <location filename="../management_layer/content/projects/project.cpp" line="170"/>
+        <location filename="../management_layer/content/projects/project.cpp" line="162"/>
         <source>today at</source>
         <translation>avui a les</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/project.cpp" line="175"/>
+        <location filename="../management_layer/content/projects/project.cpp" line="167"/>
         <source>yesterday at</source>
         <translation>ahir a les</translation>
     </message>
@@ -1219,22 +1245,42 @@
 <context>
     <name>ManagementLayer::AccountManager</name>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="415"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="359"/>
         <source>Try PRO version for free</source>
         <translation>Prova la versió PRO gratis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="416"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="360"/>
         <source>You can try all the features of the PRO version during 30 days for free. After trial period, you can continue to use the PRO version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="419"/>
-        <source>Continue with free version</source>
-        <translation>Continua amb la versió gratuïta</translation>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="363"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="444"/>
+        <source>Continue with FREE version</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="420"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="440"/>
+        <source>Try TEAM version for free</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="441"/>
+        <source>You can try all the features of the TEAM version during 30 days for free. After trial period, you can continue to use the TEAM version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="445"/>
+        <source>Activate TEAM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continue with free version</source>
+        <translation type="vanished">Continua amb la versió gratuïta</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="364"/>
         <source>Activate PRO</source>
         <translation>Activar PRO</translation>
     </message>
@@ -1242,114 +1288,114 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="817"/>
+        <location filename="../management_layer/application_manager.cpp" line="821"/>
         <source>Read only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="828"/>
+        <location filename="../management_layer/application_manager.cpp" line="832"/>
         <source> - changed</source>
         <translation>- canviat</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="884"/>
-        <location filename="../management_layer/application_manager.cpp" line="903"/>
-        <location filename="../management_layer/application_manager.cpp" line="1079"/>
+        <location filename="../management_layer/application_manager.cpp" line="888"/>
+        <location filename="../management_layer/application_manager.cpp" line="907"/>
+        <location filename="../management_layer/application_manager.cpp" line="1083"/>
         <source>Saving error</source>
         <translation>Error en desar</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="885"/>
+        <location filename="../management_layer/application_manager.cpp" line="889"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Els canvis no poden ser escrits. Hi ha un error intern a la base de dades: &quot;%1&quot; Si us plau, comprova si el teu arxiu existeix i tens permisos per escriure&apos;l.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="904"/>
+        <location filename="../management_layer/application_manager.cpp" line="908"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Els canvis no es poden escriure perquè la història situada a &quot;%1&quot; no existeix. Si us plau, mou el fitxer enrere i torna a provar de desar.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="963"/>
+        <location filename="../management_layer/application_manager.cpp" line="967"/>
         <source>Project was modified. Save changes?</source>
         <translation>El projecte ha estat modificat. Voleu desar-ne els canvis?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="964"/>
+        <location filename="../management_layer/application_manager.cpp" line="968"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="965"/>
+        <location filename="../management_layer/application_manager.cpp" line="969"/>
         <source>Don&apos;t save</source>
         <translation>No desis</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="966"/>
+        <location filename="../management_layer/application_manager.cpp" line="970"/>
         <source>Save</source>
         <translation>Desa</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1041"/>
+        <location filename="../management_layer/application_manager.cpp" line="1045"/>
         <source>Choose file to save story</source>
         <translation>Escull el fitxer per desar la història</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1080"/>
+        <location filename="../management_layer/application_manager.cpp" line="1084"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>No es pot desar la història a l&apos;arxiu %1. Si us plau, comproveu els permisos i torneu-ho a provar.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1130"/>
+        <location filename="../management_layer/application_manager.cpp" line="1134"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Ha intentat crear un projecte a la carpeta inexistent %1. Si us plau, esculli una altra localització per al nou projecte.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1135"/>
+        <location filename="../management_layer/application_manager.cpp" line="1139"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>L&apos;arxiu no pot ser escrit. Sembla que és obert per una altra aplicació. Si us plau, tanca&apos;l i intenta crear un nou projecte.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1139"/>
+        <location filename="../management_layer/application_manager.cpp" line="1143"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>L&apos;arxiu no pot ser escrit. Si us plau, comprova i dona permisos a l&apos;app per a escriure a la carpeta seleccionada, o escull una altra carpeta per a desar el nou projecte.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1143"/>
+        <location filename="../management_layer/application_manager.cpp" line="1147"/>
         <source>Create project error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1240"/>
+        <location filename="../management_layer/application_manager.cpp" line="1288"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>Aquest arxiu no es pot obrir perquè és obert amb una altra còpia de l&apos;aplicació.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1320"/>
+        <location filename="../management_layer/application_manager.cpp" line="1368"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1338"/>
+        <location filename="../management_layer/application_manager.cpp" line="1386"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1339"/>
+        <location filename="../management_layer/application_manager.cpp" line="1387"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1342"/>
+        <location filename="../management_layer/application_manager.cpp" line="1390"/>
         <source>Never ask again</source>
         <translation>No tornis a preguntar</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1343"/>
+        <location filename="../management_layer/application_manager.cpp" line="1391"/>
         <source>Keep .%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1344"/>
+        <location filename="../management_layer/application_manager.cpp" line="1392"/>
         <source>Switch to .STARC</source>
         <translation>Canvia a .STARC</translation>
     </message>
@@ -1426,12 +1472,12 @@
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="267"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="314"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="276"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="323"/>
         <source>PRO version subscription activated for %n month(s).</source>
         <translation>
             <numerusform>Accés a la versió PRO activat durant %n mes.</numerusform>
@@ -1439,12 +1485,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="281"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="328"/>
         <source>PRO version lifetime access granted.</source>
         <translation>Accés a la versió PRO activat de per vida.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="285"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="332"/>
         <source>TEAM version subscription activated for %n month(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1452,27 +1498,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="290"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="337"/>
         <source>TEAM version lifetime access granted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="328"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="389"/>
         <source>Promocode is incorrect</source>
         <translation>El codi de descompte és incorrecte</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="332"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="393"/>
         <source>Promocode expired</source>
         <translation>El codi de descompte ha caducat</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="336"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="397"/>
         <source>Maximum number of promocode activations done</source>
         <translation>Has assolit el nombre màxim de codis de descompte</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="340"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="401"/>
         <source>Promocode already used</source>
         <translation>El codi de descompte ja s&apos;ha utilitzat</translation>
     </message>
@@ -1663,7 +1709,7 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="640"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="701"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="965"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="968"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -1694,100 +1740,100 @@
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="438"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1317"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1320"/>
         <source>Create new version</source>
         <translation>Crea una nova versió</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="641"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="702"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="966"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="969"/>
         <source>Yes, remove</source>
         <translation>Sí, esborra&apos;l</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="781"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="784"/>
         <source>Characters from the text</source>
         <translation>Personatges del text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="791"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="794"/>
         <source>Characters that are not found in the text</source>
         <translation>Personatges que no s&apos;han trobat al text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="804"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="807"/>
         <source>Save only characters from the text</source>
         <translation>Desar només els personatges del text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="805"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="808"/>
         <source>Save all characters</source>
         <translation>Desar tots els personatges</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="806"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="908"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="809"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="911"/>
         <source>Change nothing</source>
         <translation>No canviar res</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="883"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="886"/>
         <source>Locations from the text</source>
         <translation>Localitzacions del text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="893"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="896"/>
         <source>Locations that are not found in the text</source>
         <translation>Les localitzacions no s&apos;han trobat al text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="906"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="909"/>
         <source>Save only locations from the text</source>
         <translation>Desa només les localitzacions del text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="907"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="910"/>
         <source>Save all locations</source>
         <translation>Desa totes les localitzacions</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="964"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="967"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>De debò vols eliminar tots els documents de la paperera permanentment?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1331"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1334"/>
         <source>Edit</source>
         <translation>Edita</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1341"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1344"/>
         <source>Remove</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1894"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1897"/>
         <source>Title page</source>
         <translation>Portada</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1896"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
         <source>Synopsis</source>
         <translation>Sinopsi</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1908"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1911"/>
         <source>Treatment</source>
         <translation>Tractament</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1902"/>
         <source>Screenplay</source>
         <translation>Guió</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1902"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1905"/>
         <source>Statistics</source>
         <translation>Estadístiques</translation>
     </message>
@@ -1795,32 +1841,32 @@
 <context>
     <name>ManagementLayer::ProjectsManager</name>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="96"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="114"/>
         <source>Show in folder</source>
         <translation>Mostra a la carpeta</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="102"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="120"/>
         <source>Hide from recent list</source>
         <translation>Amaga de la llista de recents</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="108"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="126"/>
         <source>Do you really want to hide a project from the recent list?</source>
         <translation>Realment voleu amagar un projecte de la llista de recents?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="109"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="127"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="110"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="128"/>
         <source>Yes, hide</source>
         <translation>Sí, amagar.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="302"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="353"/>
         <source>Choose the file to open</source>
         <translation>Escull el fitxer a obrir</translation>
     </message>
@@ -2334,72 +2380,84 @@
 <context>
     <name>Ui::AccountNavigator</name>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="90"/>
+        <location filename="../ui/account/account_navigator.cpp" line="112"/>
+        <location filename="../ui/account/account_navigator.cpp" line="128"/>
+        <location filename="../ui/account/account_navigator.cpp" line="329"/>
         <source>Lifetime access</source>
         <translation>Accés de per vida</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="91"/>
+        <location filename="../ui/account/account_navigator.cpp" line="113"/>
+        <location filename="../ui/account/account_navigator.cpp" line="129"/>
         <source>Active until %1</source>
         <translation>Actiu fins a les %1</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="262"/>
+        <location filename="../ui/account/account_navigator.cpp" line="122"/>
+        <source>Used %1 Gb from %2 Gb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_navigator.cpp" line="325"/>
         <source>Account</source>
         <translation>Compte</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="263"/>
+        <location filename="../ui/account/account_navigator.cpp" line="326"/>
         <source>Subscription</source>
         <translation>Subscripció</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="264"/>
+        <location filename="../ui/account/account_navigator.cpp" line="327"/>
         <source>Sessions</source>
         <translation>Sessions</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="265"/>
+        <location filename="../ui/account/account_navigator.cpp" line="328"/>
         <source>FREE version</source>
         <translation>versió GRATIS</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="266"/>
         <source>Try PRO for free</source>
-        <translation>Prova PRO gratis</translation>
+        <translation type="vanished">Prova PRO gratis</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="267"/>
         <source>Upgrade to PRO</source>
-        <translation>Actualitza a PRO</translation>
+        <translation type="vanished">Actualitza a PRO</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="268"/>
+        <location filename="../ui/account/account_navigator.cpp" line="330"/>
         <source>PRO version</source>
         <translation>Versió PRO</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="271"/>
+        <location filename="../ui/account/account_navigator.cpp" line="332"/>
+        <location filename="../ui/account/account_navigator.cpp" line="337"/>
+        <source>Try for free</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_navigator.cpp" line="334"/>
+        <location filename="../ui/account/account_navigator.cpp" line="338"/>
         <source>Renew</source>
         <translation>Renova</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="270"/>
+        <location filename="../ui/account/account_navigator.cpp" line="333"/>
         <source>Buy lifetime</source>
         <translation>Comprar de per vida</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="272"/>
         <source>Upgrade to TEAM</source>
-        <translation>Actualitza a EQUIP</translation>
+        <translation type="vanished">Actualitza a EQUIP</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="273"/>
+        <location filename="../ui/account/account_navigator.cpp" line="335"/>
         <source>TEAM version</source>
         <translation>Versió EQUIP</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="274"/>
+        <location filename="../ui/account/account_navigator.cpp" line="339"/>
         <source>Logout</source>
         <translation>Tancar Sessió</translation>
     </message>
@@ -2407,113 +2465,130 @@
 <context>
     <name>Ui::AccountView</name>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="251"/>
+        <location filename="../ui/account/account_view.cpp" line="258"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>El nom d&apos;usuari no pot estar buit, omple&apos;l si us plau</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="366"/>
+        <location filename="../ui/account/account_view.cpp" line="388"/>
         <source>FREE version</source>
         <translation>versió GRATIS</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="379"/>
+        <location filename="../ui/account/account_view.cpp" line="561"/>
+        <source>Compare versions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="563"/>
+        <source>Try TEAM for free</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="567"/>
         <source>Upgrade to PRO</source>
         <translation>Actualitza a PRO</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="373"/>
+        <location filename="../ui/account/account_view.cpp" line="562"/>
         <source>Try PRO for free</source>
         <translation>Prova PRO gratis</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="216"/>
+        <location filename="../ui/account/account_view.cpp" line="223"/>
+        <location filename="../ui/account/account_view.cpp" line="389"/>
         <source>Lifetime access</source>
         <translation>Accés de per vida</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="217"/>
+        <location filename="../ui/account/account_view.cpp" line="224"/>
         <source>Active until %1</source>
         <translation>Actiu fins a les %1</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="389"/>
-        <location filename="../ui/account/account_view.cpp" line="407"/>
+        <location filename="../ui/account/account_view.cpp" line="394"/>
+        <location filename="../ui/account/account_view.cpp" line="400"/>
         <source>PRO version</source>
         <translation>Versió PRO</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="420"/>
+        <location filename="../ui/account/account_view.cpp" line="407"/>
+        <location filename="../ui/account/account_view.cpp" line="414"/>
         <source>TEAM version</source>
         <translation>Versió EQUIP</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="489"/>
+        <location filename="../ui/account/account_view.cpp" line="553"/>
         <source>Your name</source>
         <translation>El teu nom</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="490"/>
+        <location filename="../ui/account/account_view.cpp" line="554"/>
         <source>Your bio</source>
         <translation>La teva biografia</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="491"/>
+        <location filename="../ui/account/account_view.cpp" line="555"/>
         <source>I want to receive project&apos;s news</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="492"/>
+        <location filename="../ui/account/account_view.cpp" line="556"/>
         <source>Add avatar +</source>
         <translation>Afegir avatar +</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="492"/>
+        <location filename="../ui/account/account_view.cpp" line="556"/>
         <source>Change avatar...</source>
         <translation>Canvia l&apos;avatar...</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="493"/>
+        <location filename="../ui/account/account_view.cpp" line="557"/>
         <source>Do you want to delete your avatar?</source>
         <translation>Vols eliminar el teu avatar?</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="494"/>
+        <location filename="../ui/account/account_view.cpp" line="558"/>
         <source>Select an area for the avatar</source>
         <translation>Selecciona una àrea per a l&apos;avatar</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="495"/>
+        <location filename="../ui/account/account_view.cpp" line="559"/>
         <source>Subscription type</source>
         <translation>Tipus de subscripció</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="497"/>
         <source>What&apos;s included?</source>
-        <translation>Què hi ha inclòs?</translation>
+        <translation type="vanished">Què hi ha inclòs?</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="498"/>
+        <location filename="../ui/account/account_view.cpp" line="564"/>
         <source>Buy lifetime</source>
         <translation>Comprar de per vida</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="499"/>
+        <location filename="../ui/account/account_view.cpp" line="565"/>
+        <location filename="../ui/account/account_view.cpp" line="566"/>
         <source>Renew</source>
         <translation>Renova</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="500"/>
+        <location filename="../ui/account/account_view.cpp" line="568"/>
+        <source>Upgrade to TEAM</source>
+        <translation type="unfinished">Actualitza a EQUIP</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="569"/>
         <source>Active sessions</source>
         <translation>Sessions actives</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="501"/>
+        <location filename="../ui/account/account_view.cpp" line="570"/>
         <source>Promotional or gift code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="502"/>
+        <location filename="../ui/account/account_view.cpp" line="571"/>
         <source>Activate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4286,107 +4361,124 @@
         <translation>El nom de la història no pot estar buit. Emplena&apos;l si us plau.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="276"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="258"/>
+        <source>Since connection to the cloud service unavailable, you only can create new story on the local computer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="292"/>
         <source>The story will be created on the local computer.</source>
         <translation>La història serà creada a l&apos;ordinador local.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="277"/>
         <source>to create stories on the cloud.</source>
-        <translation>per crear històries al núvol.</translation>
+        <translation type="vanished">per crear històries al núvol.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="279"/>
         <source>Renew subscription</source>
-        <translation>Renova la subscripció</translation>
+        <translation type="vanished">Renova la subscripció</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="283"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="293"/>
+        <source>to create stories in the cloud.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="296"/>
+        <source>Activate TEAM version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="300"/>
         <source>Sign in</source>
         <translation>Inicia sessió</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="314"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="323"/>
         <source>Create new story</source>
         <translation>Crear nova història</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="316"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="325"/>
         <source>Type of story</source>
         <translation>Tipus d&apos;història</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="322"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="331"/>
         <source>Not set</source>
         <translation>No establert</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="327"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="336"/>
         <source>Screenplay</source>
         <translation>Guió</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="332"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="341"/>
         <source>Comic book</source>
         <translation>Còmic</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="337"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="346"/>
         <source>Audioplay</source>
         <translation>Guió d&apos;àudio</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="342"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="351"/>
         <source>Stageplay</source>
         <translation>Obra de teatre</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="348"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="357"/>
         <source>Name of the story</source>
         <translation>Nom de la història</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="349"/>
-        <source>Save story in the local computer</source>
-        <translation>Desar la història a l&apos;ordinador local</translation>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="358"/>
+        <source>Save story on the local computer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="350"/>
+        <source>Save story in the local computer</source>
+        <translation type="vanished">Desar la història a l&apos;ordinador local</translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="359"/>
         <source>Save story in the cloud</source>
         <translation>Desa la història al núvol</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="351"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="360"/>
         <source>Location of the new story file</source>
         <translation>Localització de l&apos;arxiu de la nova història</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="353"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="362"/>
         <source>Choose the folder where the new story will be placed</source>
         <translation>Tria la carpeta on es col·locarà la nova història</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="354"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="363"/>
         <source>Choose file with story to import</source>
         <translation>Escull un fitxer amb una història per a importar-lo</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="355"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="364"/>
         <source>Choose file for importing</source>
         <translation>Escolliu el fitxer per a importar</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="356"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="365"/>
         <source>Advanced options</source>
         <translation>Opcions avançades</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="357"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="366"/>
         <source>Cancel</source>
         <translation>Cancel·lar</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="358"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="367"/>
         <source>Create</source>
         <translation>Crear</translation>
     </message>
@@ -5495,22 +5587,22 @@
 <context>
     <name>Ui::PurchaseDialogOption</name>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="116"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="115"/>
         <source>Pay with:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="135"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="134"/>
         <source>%1 lifetime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="195"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="194"/>
         <source>%1 for %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="195"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="194"/>
         <source>%n month(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -5518,7 +5610,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="207"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="206"/>
         <source>$%1 per month</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6662,13 +6754,8 @@
         <translation>Edita</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1377"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1534"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1798"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1925"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2070"/>
         <source>Duplicate</source>
-        <translation>Duplica</translation>
+        <translation type="vanished">Duplica</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1384"/>
@@ -7505,6 +7592,15 @@
         <location filename="../ui/settings/settings_view.cpp" line="2787"/>
         <source>Size of the user interface elements:</source>
         <translation>Mida dels elements de la interfície d&apos;usuari</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1377"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1534"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1798"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1925"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2070"/>
+        <source>Create new based on current</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2788"/>

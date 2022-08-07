@@ -272,7 +272,7 @@
 <context>
     <name>BusinessLayer::CharactersModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/characters/characters_model.cpp" line="180"/>
+        <location filename="../../corelib/business_layer/model/characters/characters_model.cpp" line="173"/>
         <source>New group</source>
         <translation>گروه جدید</translation>
     </message>
@@ -280,59 +280,85 @@
 <context>
     <name>BusinessLayer::ComicBookDictionariesModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="107"/>
         <source>page</source>
-        <translation>صفحه</translation>
+        <translation type="vanished">صفحه</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="111"/>
         <source>pages</source>
         <extracomment>Comic book title pages</extracomment>
-        <translation>صفحه</translation>
+        <translation type="vanished">صفحه</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="116"/>
         <source>panel</source>
         <extracomment>Comic book panel intro</extracomment>
-        <translation>پنل</translation>
+        <translation type="vanished">پنل</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="114"/>
+        <source>Page</source>
+        <extracomment>Comic book single page intro</extracomment>
+        <translation type="unfinished">صفحه</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="117"/>
+        <source>Pages</source>
+        <extracomment>Comic book double pages intro</extracomment>
+        <translation type="unfinished">صفحه</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="121"/>
+        <source>Panel</source>
+        <extracomment>Comic book panel intro</extracomment>
+        <translation type="unfinished">پنل</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="121"/>
+        <source>Background panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="124"/>
+        <source>Panels</source>
+        <extracomment>Comic book multiple panels intro</extracomment>
+        <translation type="unfinished">پنل‌ها</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="127"/>
         <source>CAPTION</source>
         <translation>توضیح</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="127"/>
         <source>NARRATION</source>
         <translation>نریشن</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="119"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="127"/>
         <source>SFX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>OFF</source>
         <translation>خاموش</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>WHISPER</source>
         <translation>پچ پچ</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>BURST</source>
         <translation>انفجاری</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>WEAK</source>
         <translation>ضعیف</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="123"/>
+        <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="131"/>
         <source>SINGING</source>
         <translation>آواز خواندن</translation>
     </message>
@@ -487,7 +513,7 @@
 <context>
     <name>BusinessLayer::LocationsModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/locations/locations_model.cpp" line="171"/>
+        <location filename="../../corelib/business_layer/model/locations/locations_model.cpp" line="164"/>
         <source>New group</source>
         <translation>گروه جدید</translation>
     </message>
@@ -1096,12 +1122,12 @@
 <context>
     <name>Domain::Project</name>
     <message>
-        <location filename="../management_layer/content/projects/project.cpp" line="170"/>
+        <location filename="../management_layer/content/projects/project.cpp" line="162"/>
         <source>today at</source>
         <translation>امروز در</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/project.cpp" line="175"/>
+        <location filename="../management_layer/content/projects/project.cpp" line="167"/>
         <source>yesterday at</source>
         <translation>دیروز در </translation>
     </message>
@@ -1219,22 +1245,42 @@
 <context>
     <name>ManagementLayer::AccountManager</name>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="415"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="359"/>
         <source>Try PRO version for free</source>
         <translation>استفاده رایگان از نسخه حرفه‌ای</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="416"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="360"/>
         <source>You can try all the features of the PRO version during 30 days for free. After trial period, you can continue to use the PRO version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="419"/>
-        <source>Continue with free version</source>
-        <translation>ادامه با نسخه رایگان</translation>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="363"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="444"/>
+        <source>Continue with FREE version</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="420"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="440"/>
+        <source>Try TEAM version for free</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="441"/>
+        <source>You can try all the features of the TEAM version during 30 days for free. After trial period, you can continue to use the TEAM version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="445"/>
+        <source>Activate TEAM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continue with free version</source>
+        <translation type="vanished">ادامه با نسخه رایگان</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="364"/>
         <source>Activate PRO</source>
         <translation>فعالسازی نسخه حرفه‌ای</translation>
     </message>
@@ -1242,114 +1288,114 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="817"/>
+        <location filename="../management_layer/application_manager.cpp" line="821"/>
         <source>Read only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="828"/>
+        <location filename="../management_layer/application_manager.cpp" line="832"/>
         <source> - changed</source>
         <translation>- تغییر کرد</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="884"/>
-        <location filename="../management_layer/application_manager.cpp" line="903"/>
-        <location filename="../management_layer/application_manager.cpp" line="1079"/>
+        <location filename="../management_layer/application_manager.cpp" line="888"/>
+        <location filename="../management_layer/application_manager.cpp" line="907"/>
+        <location filename="../management_layer/application_manager.cpp" line="1083"/>
         <source>Saving error</source>
         <translation>خطای ذخیره</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="885"/>
+        <location filename="../management_layer/application_manager.cpp" line="889"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>امکان نوشتن تغییرات نیست. یک خطای داخلی پایگاه داده رخ داده است: &quot;%1&quot; لطفاً بررسی کنید که فایل موجود است و شما اجازه نوشتن بر روی آن را دارید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="904"/>
+        <location filename="../management_layer/application_manager.cpp" line="908"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>امکان نوشتن تغییرات نیست زیرا داستان در آدرس &quot;%1&quot; وجود ندارد. لطفاً فایل را به آدرس درست برگردانید و دوباره ذخیره کنید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="963"/>
+        <location filename="../management_layer/application_manager.cpp" line="967"/>
         <source>Project was modified. Save changes?</source>
         <translation>پروژه ویرایش شده است. تغییرات ذخیره شوند؟</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="964"/>
+        <location filename="../management_layer/application_manager.cpp" line="968"/>
         <source>Cancel</source>
         <translation>بی‌خیال</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="965"/>
+        <location filename="../management_layer/application_manager.cpp" line="969"/>
         <source>Don&apos;t save</source>
         <translation>ذخیره نکن</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="966"/>
+        <location filename="../management_layer/application_manager.cpp" line="970"/>
         <source>Save</source>
         <translation>ذخیره</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1041"/>
+        <location filename="../management_layer/application_manager.cpp" line="1045"/>
         <source>Choose file to save story</source>
         <translation>برای ذخیره داستان یک فایل انتخاب کنید</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1080"/>
+        <location filename="../management_layer/application_manager.cpp" line="1084"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>امکان ذخیره فایل داستان %1 وجود ندارد. لطفاً اجازه دستری را بررسی و دوباره امتحان کنید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1130"/>
+        <location filename="../management_layer/application_manager.cpp" line="1134"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>شما اقدام به ساخت پروژه در پوشه %1 که وجود ندارد کردید. لطفاً یک پوشه جدید برای پروژه جدید انتخاب کنید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1135"/>
+        <location filename="../management_layer/application_manager.cpp" line="1139"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>امکان نوشتن روی فایل نیست. به نظر می‌رسد که این فایل توسط برنامه دیگری باز شده است. لطفاً آن را ببندید و دوباره اقدام به ساخت پروژه جدید کنید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1139"/>
+        <location filename="../management_layer/application_manager.cpp" line="1143"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>امکان نوشتن روی فایل نیست. لطفاً به برنامه اجازه دسترسی برای نوشتن در پوشه مورده نظر را بدهید یا یک پوشه دیگر را برای پروژه جدید انتخاب کنید.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1143"/>
+        <location filename="../management_layer/application_manager.cpp" line="1147"/>
         <source>Create project error</source>
         <translation>خطای ایجاد پروژه</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1240"/>
+        <location filename="../management_layer/application_manager.cpp" line="1288"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>در حال حاضر امکان باز کردن فایل نیست. این فایل در کپی دیگری از این برنامه قبلاً باز شده است.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1320"/>
+        <location filename="../management_layer/application_manager.cpp" line="1368"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1338"/>
+        <location filename="../management_layer/application_manager.cpp" line="1386"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1339"/>
+        <location filename="../management_layer/application_manager.cpp" line="1387"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1342"/>
+        <location filename="../management_layer/application_manager.cpp" line="1390"/>
         <source>Never ask again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1343"/>
+        <location filename="../management_layer/application_manager.cpp" line="1391"/>
         <source>Keep .%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1344"/>
+        <location filename="../management_layer/application_manager.cpp" line="1392"/>
         <source>Switch to .STARC</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1426,51 +1472,51 @@
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="267"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="314"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="276"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="323"/>
         <source>PRO version subscription activated for %n month(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="281"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="328"/>
         <source>PRO version lifetime access granted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="285"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="332"/>
         <source>TEAM version subscription activated for %n month(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="290"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="337"/>
         <source>TEAM version lifetime access granted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="328"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="389"/>
         <source>Promocode is incorrect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="332"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="393"/>
         <source>Promocode expired</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="336"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="397"/>
         <source>Maximum number of promocode activations done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="340"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="401"/>
         <source>Promocode already used</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1661,7 +1707,7 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="640"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="701"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="965"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="968"/>
         <source>No</source>
         <translation>خیر</translation>
     </message>
@@ -1692,100 +1738,100 @@
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="438"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1317"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1320"/>
         <source>Create new version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="641"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="702"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="966"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="969"/>
         <source>Yes, remove</source>
         <translation>بله، پاک کن</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="781"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="784"/>
         <source>Characters from the text</source>
         <translation>شخصیت از متن</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="791"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="794"/>
         <source>Characters that are not found in the text</source>
         <translation>شخصیت‌هایی که در متن پیدا نشدند</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="804"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="807"/>
         <source>Save only characters from the text</source>
         <translation>ذخیره فقط شخصیت‌های متن</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="805"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="808"/>
         <source>Save all characters</source>
         <translation>ذخیره همه شخصیت‌ها</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="806"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="908"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="809"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="911"/>
         <source>Change nothing</source>
         <translation>هیچ چیز تغییر نکند</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="883"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="886"/>
         <source>Locations from the text</source>
         <translation>لوکیشن از متن</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="893"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="896"/>
         <source>Locations that are not found in the text</source>
         <translation>لوکیشن‌هایی که در متن پیدا نشدند</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="906"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="909"/>
         <source>Save only locations from the text</source>
         <translation>ذخیره فقط لوکیشن‌های متن</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="907"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="910"/>
         <source>Save all locations</source>
         <translation>ذخیره تمام لوکیشن‌ها</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="964"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="967"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>آیا شما واقعاً می‌خواهید تمام مستندهای زباله‌دان را به صورت دائمی پاک کنید؟</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1331"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1334"/>
         <source>Edit</source>
         <translation>ویرایش</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1341"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1344"/>
         <source>Remove</source>
         <translation>پاک‌کردن</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1894"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1897"/>
         <source>Title page</source>
         <translation>صفحه عنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1896"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
         <source>Synopsis</source>
         <translation>سیناپس</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1908"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1911"/>
         <source>Treatment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1899"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1902"/>
         <source>Screenplay</source>
         <translation>فیلمنامه</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1902"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1905"/>
         <source>Statistics</source>
         <translation>آمار</translation>
     </message>
@@ -1793,32 +1839,32 @@
 <context>
     <name>ManagementLayer::ProjectsManager</name>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="96"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="114"/>
         <source>Show in folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="102"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="120"/>
         <source>Hide from recent list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="108"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="126"/>
         <source>Do you really want to hide a project from the recent list?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="109"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="127"/>
         <source>No</source>
         <translation>خیر</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="110"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="128"/>
         <source>Yes, hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="302"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="353"/>
         <source>Choose the file to open</source>
         <translation>یک فایل انتخاب کنید</translation>
     </message>
@@ -2332,72 +2378,84 @@
 <context>
     <name>Ui::AccountNavigator</name>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="90"/>
+        <location filename="../ui/account/account_navigator.cpp" line="112"/>
+        <location filename="../ui/account/account_navigator.cpp" line="128"/>
+        <location filename="../ui/account/account_navigator.cpp" line="329"/>
         <source>Lifetime access</source>
         <translation>دسترسی مادام‌العمر</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="91"/>
+        <location filename="../ui/account/account_navigator.cpp" line="113"/>
+        <location filename="../ui/account/account_navigator.cpp" line="129"/>
         <source>Active until %1</source>
         <translation>فعال تا %1</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="262"/>
+        <location filename="../ui/account/account_navigator.cpp" line="122"/>
+        <source>Used %1 Gb from %2 Gb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_navigator.cpp" line="325"/>
         <source>Account</source>
         <translation>حساب</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="263"/>
+        <location filename="../ui/account/account_navigator.cpp" line="326"/>
         <source>Subscription</source>
         <translation>اشتراک</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="264"/>
+        <location filename="../ui/account/account_navigator.cpp" line="327"/>
         <source>Sessions</source>
         <translation>نشست‌ها</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="265"/>
+        <location filename="../ui/account/account_navigator.cpp" line="328"/>
         <source>FREE version</source>
         <translation>نسخه رایگان</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="266"/>
         <source>Try PRO for free</source>
-        <translation>امتحان رایگان نسخه حرفه‌ای</translation>
+        <translation type="vanished">امتحان رایگان نسخه حرفه‌ای</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="267"/>
         <source>Upgrade to PRO</source>
-        <translation>ارتقا به نسخه حرفه‌ای</translation>
+        <translation type="vanished">ارتقا به نسخه حرفه‌ای</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="268"/>
+        <location filename="../ui/account/account_navigator.cpp" line="330"/>
         <source>PRO version</source>
         <translation>نسخه حرفه‌ای</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="271"/>
+        <location filename="../ui/account/account_navigator.cpp" line="332"/>
+        <location filename="../ui/account/account_navigator.cpp" line="337"/>
+        <source>Try for free</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_navigator.cpp" line="334"/>
+        <location filename="../ui/account/account_navigator.cpp" line="338"/>
         <source>Renew</source>
         <translation>تمدید اشتراک</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="270"/>
+        <location filename="../ui/account/account_navigator.cpp" line="333"/>
         <source>Buy lifetime</source>
         <translation>خرید مادام‌العمر</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="272"/>
         <source>Upgrade to TEAM</source>
-        <translation>ارتقا به نسخه گروهی</translation>
+        <translation type="vanished">ارتقا به نسخه گروهی</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="273"/>
+        <location filename="../ui/account/account_navigator.cpp" line="335"/>
         <source>TEAM version</source>
         <translation>نسخه گروهی</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="274"/>
+        <location filename="../ui/account/account_navigator.cpp" line="339"/>
         <source>Logout</source>
         <translation>خروج</translation>
     </message>
@@ -2405,113 +2463,130 @@
 <context>
     <name>Ui::AccountView</name>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="251"/>
+        <location filename="../ui/account/account_view.cpp" line="258"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>نام کاربری نمی‌تواند خالی باشد. لطفاً آن را پر کنید.</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="366"/>
+        <location filename="../ui/account/account_view.cpp" line="388"/>
         <source>FREE version</source>
         <translation>نسخه رایگان</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="379"/>
+        <location filename="../ui/account/account_view.cpp" line="561"/>
+        <source>Compare versions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="563"/>
+        <source>Try TEAM for free</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="567"/>
         <source>Upgrade to PRO</source>
         <translation>ارتقا به نسخه حرفه‌ای</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="373"/>
+        <location filename="../ui/account/account_view.cpp" line="562"/>
         <source>Try PRO for free</source>
         <translation>امتحان رایگان نسخه حرفه‌ای</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="216"/>
+        <location filename="../ui/account/account_view.cpp" line="223"/>
+        <location filename="../ui/account/account_view.cpp" line="389"/>
         <source>Lifetime access</source>
         <translation>دسترسی مادام‌العمر</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="217"/>
+        <location filename="../ui/account/account_view.cpp" line="224"/>
         <source>Active until %1</source>
         <translation>فعال تا %1</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="389"/>
-        <location filename="../ui/account/account_view.cpp" line="407"/>
+        <location filename="../ui/account/account_view.cpp" line="394"/>
+        <location filename="../ui/account/account_view.cpp" line="400"/>
         <source>PRO version</source>
         <translation>نسخه حرفه‌ای</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="420"/>
+        <location filename="../ui/account/account_view.cpp" line="407"/>
+        <location filename="../ui/account/account_view.cpp" line="414"/>
         <source>TEAM version</source>
         <translation>نسخه گروهی</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="489"/>
+        <location filename="../ui/account/account_view.cpp" line="553"/>
         <source>Your name</source>
         <translation>نام شما</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="490"/>
+        <location filename="../ui/account/account_view.cpp" line="554"/>
         <source>Your bio</source>
         <translation>بیوگرافی شما</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="491"/>
+        <location filename="../ui/account/account_view.cpp" line="555"/>
         <source>I want to receive project&apos;s news</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="492"/>
+        <location filename="../ui/account/account_view.cpp" line="556"/>
         <source>Add avatar +</source>
         <translation>+ افزودن آواتار</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="492"/>
+        <location filename="../ui/account/account_view.cpp" line="556"/>
         <source>Change avatar...</source>
         <translation>تغییر آواتار...</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="493"/>
+        <location filename="../ui/account/account_view.cpp" line="557"/>
         <source>Do you want to delete your avatar?</source>
         <translation>آیا می‌خواید آواتارتان را پاک کنید؟</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="494"/>
+        <location filename="../ui/account/account_view.cpp" line="558"/>
         <source>Select an area for the avatar</source>
         <translation>انتخاب یک ناحیه برای آواتار</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="495"/>
+        <location filename="../ui/account/account_view.cpp" line="559"/>
         <source>Subscription type</source>
         <translation>نوع اشتراک</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="497"/>
         <source>What&apos;s included?</source>
-        <translation>شامل چه چیزهایی می‌شود؟</translation>
+        <translation type="vanished">شامل چه چیزهایی می‌شود؟</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="498"/>
+        <location filename="../ui/account/account_view.cpp" line="564"/>
         <source>Buy lifetime</source>
         <translation>خرید مادام‌العمر</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="499"/>
+        <location filename="../ui/account/account_view.cpp" line="565"/>
+        <location filename="../ui/account/account_view.cpp" line="566"/>
         <source>Renew</source>
         <translation>تمدید اشتراک</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="500"/>
+        <location filename="../ui/account/account_view.cpp" line="568"/>
+        <source>Upgrade to TEAM</source>
+        <translation type="unfinished">ارتقا به نسخه گروهی</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="569"/>
         <source>Active sessions</source>
         <translation>نشست‌های فعال</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="501"/>
+        <location filename="../ui/account/account_view.cpp" line="570"/>
         <source>Promotional or gift code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="502"/>
+        <location filename="../ui/account/account_view.cpp" line="571"/>
         <source>Activate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4282,107 +4357,124 @@
         <translation>نام داستان نمی‌تواند خالی باشد، لطفاً یک نام وارد کنید</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="276"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="258"/>
+        <source>Since connection to the cloud service unavailable, you only can create new story on the local computer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="292"/>
         <source>The story will be created on the local computer.</source>
         <translation>داستان در کامپیوتر شما ایجاد خواهد شد.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="277"/>
         <source>to create stories on the cloud.</source>
-        <translation>برای ایجاد داستان‌ها در فضای ابری.</translation>
+        <translation type="vanished">برای ایجاد داستان‌ها در فضای ابری.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="279"/>
         <source>Renew subscription</source>
-        <translation>تمدید اشتراک</translation>
+        <translation type="vanished">تمدید اشتراک</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="283"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="293"/>
+        <source>to create stories in the cloud.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="296"/>
+        <source>Activate TEAM version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="300"/>
         <source>Sign in</source>
         <translation>ورود</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="314"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="323"/>
         <source>Create new story</source>
         <translation>ایجاد داستان جدید</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="316"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="325"/>
         <source>Type of story</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="322"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="331"/>
         <source>Not set</source>
         <translation>وارد نشده</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="327"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="336"/>
         <source>Screenplay</source>
         <translation>فیلمنامه</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="332"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="341"/>
         <source>Comic book</source>
         <translation>کامیک بوک</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="337"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="346"/>
         <source>Audioplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="342"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="351"/>
         <source>Stageplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="348"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="357"/>
         <source>Name of the story</source>
         <translation>نام داستان</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="349"/>
-        <source>Save story in the local computer</source>
-        <translation>ذخیره داستان در کامپیوتر </translation>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="358"/>
+        <source>Save story on the local computer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="350"/>
+        <source>Save story in the local computer</source>
+        <translation type="vanished">ذخیره داستان در کامپیوتر </translation>
+    </message>
+    <message>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="359"/>
         <source>Save story in the cloud</source>
         <translation>ذخیره داستان در فضای ابری</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="351"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="360"/>
         <source>Location of the new story file</source>
         <translation>محل فایل داستان جدید</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="353"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="362"/>
         <source>Choose the folder where the new story will be placed</source>
         <translation>انتخاب پوشه‌ای که داستان جدید در آن قرار خواهد گرفت</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="354"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="363"/>
         <source>Choose file with story to import</source>
         <translation>انتخاب فایل داستان برای درون‌ریزی</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="355"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="364"/>
         <source>Choose file for importing</source>
         <translation>انتخاب فایل برای درون‌ریزی </translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="356"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="365"/>
         <source>Advanced options</source>
         <translation>تنظیمات پیشرفته</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="357"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="366"/>
         <source>Cancel</source>
         <translation>لغو</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="358"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="367"/>
         <source>Create</source>
         <translation>ایجاد</translation>
     </message>
@@ -5493,29 +5585,29 @@
 <context>
     <name>Ui::PurchaseDialogOption</name>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="116"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="115"/>
         <source>Pay with:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="135"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="134"/>
         <source>%1 lifetime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="195"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="194"/>
         <source>%1 for %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="195"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="194"/>
         <source>%n month(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="207"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="206"/>
         <source>$%1 per month</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6658,13 +6750,8 @@
         <translation>ویرایش</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1377"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1534"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1798"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1925"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2070"/>
         <source>Duplicate</source>
-        <translation>تکثیر کردن</translation>
+        <translation type="vanished">تکثیر کردن</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="1384"/>
@@ -7501,6 +7588,15 @@
         <location filename="../ui/settings/settings_view.cpp" line="2787"/>
         <source>Size of the user interface elements:</source>
         <translation>اندازه فونت برنامه</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="1377"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1534"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1798"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1925"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2070"/>
+        <source>Create new based on current</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2788"/>
