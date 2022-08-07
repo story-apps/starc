@@ -120,6 +120,12 @@ public:
      * @brief Скрыть проект
      */
     void hideProject(const QString& _path);
+    void hideProject(int _id);
+
+    /**
+     * @brief Удалить проект
+     */
+    void removeProject(int _id);
 
     /**
      * @brief Получить текущий проект
@@ -164,9 +170,19 @@ signals:
     void openProjectRequested();
 
     /**
-     * @brief Пользователь хочет открыть проект по заданному пути
+     * @brief Пользователь хочет открыть локальный проект по заданному пути
      */
-    void openChoosedProjectRequested(const QString& _path);
+    void openLocalProjectRequested(const QString& _path);
+
+    /**
+     * @brief Пользователь хочет открыть облачный проект
+     */
+    void openCloudProjectRequested(int _id, const QString& _path);
+
+    /**
+     * @brief Пользователь хочет удалить облачный проект
+     */
+    void removeCloudProjectRequested(int _id);
 
 private:
     class Implementation;

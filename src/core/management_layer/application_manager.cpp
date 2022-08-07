@@ -1172,6 +1172,7 @@ void ApplicationManager::Implementation::createLocalProject(const QString& _proj
     goToEditCurrentProject(_importFilePath);
 }
 
+#ifdef CLOUD_SERVICE_MANAGER
 void ApplicationManager::Implementation::createRemoteProject(const QString& _projectName,
                                                              const QString& _importFilePath)
 {
@@ -1189,6 +1190,11 @@ void ApplicationManager::Implementation::createRemoteProject(const QString& _pro
                       if (_projectInfo.name != _projectName) {
                           return;
                       }
+
+                      //
+                      // Подписываемся на обновления проекта
+                      //
+
 
                       //
                       // Добавляем проект в список недавних
@@ -1215,6 +1221,7 @@ void ApplicationManager::Implementation::createRemoteProject(const QString& _pro
     //
     cloudServiceManager->createProject(_projectName);
 }
+#endif
 
 void ApplicationManager::Implementation::openProject()
 {
@@ -2006,13 +2013,9 @@ void ApplicationManager::initConnections()
                    const QString& _importFilePath) {
                 d->createLocalProject(_projectName, _projectPath, _importFilePath);
             });
-    connect(d->projectsManager.data(), &ProjectsManager::createCloudProjectRequested, this,
-            [this](const QString& _projectName, const QString& _importFilePath) {
-                d->createRemoteProject(_projectName, _importFilePath);
-            });
     connect(d->projectsManager.data(), &ProjectsManager::openProjectRequested, this,
             [this] { d->openProject(); });
-    connect(d->projectsManager.data(), &ProjectsManager::openChoosedProjectRequested, this,
+    connect(d->projectsManager.data(), &ProjectsManager::openLocalProjectRequested, this,
             [this](const QString& _path) {
                 if (d->projectsManager->currentProject().path() == _path) {
                     d->showProject();
@@ -2231,6 +2234,33 @@ void ApplicationManager::initConnections()
         d->projectManager->checkAvailabilityToEdit();
         d->projectsManager->setProjectsInCloudCanBeCreated(false, Domain::SubscriptionType::Free);
     });
+
+    //
+    // Проекты
+    //
+    connect(d->projectsManager.data(), &ProjectsManager::createCloudProjectRequested, this,
+            [this](const QString& _projectName, const QString& _importFilePath) {
+                d->createRemoteProject(_projectName, _importFilePath);
+            });
+    connect(d->projectsManager.data(), &ProjectsManager::openCloudProjectRequested, this,
+            [this](int _id, const QString& _path) {
+                if (d->projectsManager->currentProject().id() == _id) {
+                    d->showProject();
+                    return;
+                }
+
+                auto callback = [this, _id, _path] {
+                    //
+                    // Подписаться на обновления проекта с облака
+                    //
+                    openProject(_path);
+                };
+                d->saveIfNeeded(callback);
+            });
+    connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,
+            [this](int _id) { d->cloudServiceManager->removeProject(_id); });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::projectRemoved,
+            d->projectsManager.data(), &ProjectsManager::removeProject);
 #endif
 }
 

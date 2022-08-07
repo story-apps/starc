@@ -106,48 +106,101 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->view, &Ui::ProjectsView::openProjectPressed, this,
             &ProjectsManager::openProjectRequested);
     connect(d->view, &Ui::ProjectsView::openProjectRequested, this,
-            [this](const Project& _project) { emit openChoosedProjectRequested(_project.path()); });
+            [this](const Project& _project) {
+                if (_project.isLocal()) {
+                    emit openLocalProjectRequested(_project.path());
+                } else {
+                    emit openCloudProjectRequested(_project.id(), _project.path());
+                }
+            });
     connect(d->view, &Ui::ProjectsView::projectContextMenuRequested, this,
             [this](const Project& _project) {
-                auto showInFolderAction = new QAction;
-                showInFolderAction->setIconText(u8"\U000F178B");
-                showInFolderAction->setText(tr("Show in folder"));
-                connect(showInFolderAction, &QAction::triggered, this,
-                        [_project] { FileHelper::showInGraphicalShell(_project.path()); });
+                QVector<QAction*> actions;
                 //
-                auto hideFromRecentAction = new QAction;
-                hideFromRecentAction->setIconText(u8"\U000F06D1");
-                hideFromRecentAction->setText(tr("Hide from recent list"));
-                connect(hideFromRecentAction, &QAction::triggered, this, [this, _project] {
-                    auto dialog = new Dialog(d->view->topLevelWidget());
-                    constexpr int cancelButtonId = 0;
-                    constexpr int hideButtonId = 1;
-                    dialog->showDialog(
-                        {}, tr("Do you really want to hide a project from the recent list?"),
-                        { { cancelButtonId, tr("No"), Dialog::RejectButton },
-                          { hideButtonId, tr("Yes, hide"), Dialog::AcceptButton } });
-                    connect(dialog, &Dialog::finished, this,
-                            [this, _project, cancelButtonId,
-                             dialog](const Dialog::ButtonInfo& _buttonInfo) {
-                                dialog->hideDialog();
+                // Действия над локальным проектом
+                //
+                if (_project.isLocal()) {
+                    auto showInFolderAction = new QAction;
+                    showInFolderAction->setIconText(u8"\U000F178B");
+                    showInFolderAction->setText(tr("Show in folder"));
+                    connect(showInFolderAction, &QAction::triggered, this,
+                            [_project] { FileHelper::showInGraphicalShell(_project.path()); });
+                    actions.append(showInFolderAction);
+                    //
+                    auto hideFromRecentAction = new QAction;
+                    hideFromRecentAction->setIconText(u8"\U000F06D1");
+                    hideFromRecentAction->setText(tr("Hide from recent list"));
+                    connect(hideFromRecentAction, &QAction::triggered, this, [this, _project] {
+                        auto dialog = new Dialog(d->view->topLevelWidget());
+                        constexpr int cancelButtonId = 0;
+                        constexpr int hideButtonId = 1;
+                        dialog->showDialog(
+                            {}, tr("Do you really want to hide this project from the recent list?"),
+                            { { cancelButtonId, tr("No"), Dialog::RejectButton },
+                              { hideButtonId, tr("Yes, hide"), Dialog::AcceptButton } });
+                        connect(dialog, &Dialog::finished, this,
+                                [this, _project, cancelButtonId,
+                                 dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                                    dialog->hideDialog();
 
-                                //
-                                // Пользователь передумал скрывать
-                                //
-                                if (_buttonInfo.id == cancelButtonId) {
-                                    return;
-                                }
+                                    //
+                                    // Пользователь передумал скрывать
+                                    //
+                                    if (_buttonInfo.id == cancelButtonId) {
+                                        return;
+                                    }
 
-                                //
-                                // Если таки хочет, то скрываем проект
-                                //
-                                d->projects->remove(_project);
-                            });
-                    connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
-                });
+                                    //
+                                    // Если таки хочет, то скрываем проект
+                                    //
+                                    d->projects->remove(_project);
+                                });
+                        connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+                    });
+                    actions.append(hideFromRecentAction);
+                }
+                //
+                // Действия над облачным проектом
+                //
+                else {
+                    //
+                    // TODO: Контекстное меню в зависимости от того, владеет ли пользоваетль файлом
+                    //
+                    auto removeProjectAction = new QAction;
+                    removeProjectAction->setIconText(u8"\U000F01B4");
+                    removeProjectAction->setText(tr("Remove project"));
+                    connect(removeProjectAction, &QAction::triggered, this, [this, _project] {
+                        auto dialog = new Dialog(d->view->topLevelWidget());
+                        constexpr int cancelButtonId = 0;
+                        constexpr int removeButtonId = 1;
+                        dialog->showDialog(
+                            {}, tr("Do you really want to remove this project?"),
+                            { { cancelButtonId, tr("No"), Dialog::RejectButton },
+                              { removeButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
+                        connect(dialog, &Dialog::finished, this,
+                                [this, _project, cancelButtonId,
+                                 dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                                    dialog->hideDialog();
+
+                                    //
+                                    // Пользователь передумал удалять
+                                    //
+                                    if (_buttonInfo.id == cancelButtonId) {
+                                        return;
+                                    }
+                                    //
+                                    // Если таки хочет, то скрываем уведомляем, чтобы удалить проект
+                                    // на сервере
+                                    //
+                                    emit removeCloudProjectRequested(_project.id());
+                                });
+                        connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+                    });
+                    actions.append(removeProjectAction);
+                }
 
                 auto menu = new ContextMenu(d->view);
-                menu->setActions({ showInFolderAction, hideFromRecentAction });
+                menu->setActions(actions);
                 menu->setBackgroundColor(Ui::DesignSystem::color().background());
                 menu->setTextColor(Ui::DesignSystem::color().onBackground());
                 connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
@@ -365,7 +418,7 @@ void ProjectsManager::openProject()
     //
     // ... и сигнализируем о том, что файл выбран для открытия
     //
-    emit openChoosedProjectRequested(projectPath);
+    emit openLocalProjectRequested(projectPath);
 }
 
 void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projectInfo)
@@ -595,6 +648,37 @@ void ProjectsManager::hideProject(const QString& _path)
         const auto& project = d->projects->projectAt(projectRow);
         if (project.path() == _path) {
             d->projects->remove(project);
+            break;
+        }
+    }
+}
+
+void ProjectsManager::hideProject(int _id)
+{
+    if (_id == -1) {
+        return;
+    }
+
+    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
+        const auto& project = d->projects->projectAt(projectRow);
+        if (project.id() == _id) {
+            d->projects->remove(project);
+            break;
+        }
+    }
+}
+
+void ProjectsManager::removeProject(int _id)
+{
+    if (_id == -1) {
+        return;
+    }
+
+    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
+        const auto& project = d->projects->projectAt(projectRow);
+        if (project.id() == _id) {
+            d->projects->remove(project);
+            QFile::remove(project.path());
             break;
         }
     }
