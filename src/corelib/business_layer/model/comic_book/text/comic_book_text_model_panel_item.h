@@ -14,6 +14,15 @@ class CORE_LIBRARY_EXPORT ComicBookTextModelPanelItem : public TextModelGroupIte
 {
 public:
     /**
+     * @brief Номер панели
+     */
+    struct PanelNumber {
+        int fromPanel = 0;
+        int panelCount = 0;
+        QString text;
+    };
+
+    /**
      * @brief Роли данных из модели
      */
     enum {
@@ -23,6 +32,13 @@ public:
 public:
     explicit ComicBookTextModelPanelItem(const ComicBookTextModel* _model);
     ~ComicBookTextModelPanelItem() override;
+
+    /**
+     * @brief Номер панели
+     */
+    std::optional<PanelNumber> panelNumber() const;
+    void setPanelNumber(int& _fromNumber, const QStringList& _singlePanelIntros,
+                        const QStringList& _multiplePanelIntros);
 
     /**
      * @brief Получить количество слов в репликах

@@ -390,7 +390,7 @@ void CharacterHandler::complete(const QString& _currentBlockText,
         //
         // Специфичные для комикса элементы
         //
-        charactersToComplete.append(editor()->dictionaries()->commonCharacters().toList());
+        charactersToComplete.append(editor()->dictionaries()->commonCharacters());
 
         m_completerModel->setStringList(charactersToComplete);
         sectionModel = m_completerModel;
@@ -399,7 +399,7 @@ void CharacterHandler::complete(const QString& _currentBlockText,
     }
 
     case ComicBookCharacterParser::SectionState: {
-        m_completerModel->setStringList(editor()->dictionaries()->characterExtensions().toList());
+        m_completerModel->setStringList(editor()->dictionaries()->characterExtensions());
         sectionModel = m_completerModel;
         sectionText = ComicBookCharacterParser::extension(_currentBlockText);
         break;
@@ -414,14 +414,15 @@ void CharacterHandler::complete(const QString& _currentBlockText,
     // Дополним текст
     //
     int cursorMovement = sectionText.length();
-    while (!_cursorBackwardText.endsWith(sectionText.left(cursorMovement), Qt::CaseInsensitive)) {
+    while (
+        !_cursorBackwardText.endsWith(sectionText.leftRef(cursorMovement), Qt::CaseInsensitive)) {
         --cursorMovement;
     }
     //
     // ... дополняем, когда цикл обработки событий выполнится, чтобы позиция курсора
     //     корректно определилась после изменения текста
     //
-    QTimer::singleShot(0, [this, sectionModel, sectionText, cursorMovement] {
+    QTimer::singleShot(0, editor(), [this, sectionModel, sectionText, cursorMovement] {
         editor()->complete(sectionModel, sectionText, cursorMovement);
     });
 }

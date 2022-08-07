@@ -510,13 +510,12 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
                 //
                 // При необходимости обновляем номер панели
                 //
-                const auto panelItemNumber = QString::number(panelItem->number()->value);
-                if (!sourcePanelTitle.trimmed().endsWith(panelItemNumber)) {
-                    newPanelTitle.remove(QRegularExpression("\\d*$"));
+                if (!sourcePanelTitle.trimmed().endsWith(panelItem->panelNumber()->text)) {
+                    newPanelTitle.remove(QRegularExpression("(\\d|-)*$"));
                     if (!newPanelTitle.endsWith(' ')) {
                         newPanelTitle.append(' ');
                     }
-                    newPanelTitle.append(panelItemNumber);
+                    newPanelTitle.append(panelItem->panelNumber()->text);
 
                     cursor.setPosition(block.position());
                     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,

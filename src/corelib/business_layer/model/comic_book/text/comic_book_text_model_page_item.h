@@ -39,8 +39,8 @@ public:
      * @brief Номер страницы
      */
     std::optional<PageNumber> pageNumber() const;
-    void setPageNumber(int& _fromNumber, const QVector<QString>& _singlePageIntros,
-                       const QVector<QString>& _multiplePageIntros);
+    void setPageNumber(int& _fromNumber, const QStringList& _singlePageIntros,
+                       const QStringList& _multiplePageIntros);
 
     /**
      * @brief Получить количество панелей на странице

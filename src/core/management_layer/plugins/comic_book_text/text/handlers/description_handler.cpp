@@ -87,14 +87,16 @@ void DescriptionHandler::handleEnter(QKeyEvent*)
                         const QString backwardTextCorrected
                             = TextHelper::smartToLower(cursorBackwardText.trimmed());
                         if (editor()->dictionaries()->singlePageIntros().contains(
-                                backwardTextCorrected)
+                                backwardTextCorrected, Qt::CaseInsensitive)
                             || editor()->dictionaries()->multiplePageIntros().contains(
-                                backwardTextCorrected)) {
+                                backwardTextCorrected, Qt::CaseInsensitive)) {
                             editor()->setCurrentParagraphType(TextParagraphType::PageHeading);
                             editor()->addParagraph(jumpForEnter(TextParagraphType::PageHeading));
                             isHandled = true;
-                        } else if (editor()->dictionaries()->panelIntros().contains(
-                                       backwardTextCorrected)) {
+                        } else if (editor()->dictionaries()->singlePanelIntros().contains(
+                                       backwardTextCorrected, Qt::CaseInsensitive)
+                                   || editor()->dictionaries()->multiplePanelIntros().contains(
+                                       backwardTextCorrected, Qt::CaseInsensitive)) {
                             editor()->setCurrentParagraphType(TextParagraphType::PanelHeading);
                             editor()->addParagraph(jumpForEnter(TextParagraphType::PanelHeading));
                             isHandled = true;
@@ -210,10 +212,15 @@ void DescriptionHandler::handleOther(QKeyEvent* _event)
         if (_event->text() == ":") {
             backwardTextCorrected.chop(1);
         }
-        if (editor()->dictionaries()->singlePageIntros().contains(backwardTextCorrected)
-            || editor()->dictionaries()->multiplePageIntros().contains(backwardTextCorrected)) {
+        if (editor()->dictionaries()->singlePageIntros().contains(backwardTextCorrected,
+                                                                  Qt::CaseInsensitive)
+            || editor()->dictionaries()->multiplePageIntros().contains(backwardTextCorrected,
+                                                                       Qt::CaseInsensitive)) {
             editor()->setCurrentParagraphType(TextParagraphType::PageHeading);
-        } else if (editor()->dictionaries()->panelIntros().contains(backwardTextCorrected)) {
+        } else if (editor()->dictionaries()->singlePanelIntros().contains(backwardTextCorrected,
+                                                                          Qt::CaseInsensitive)
+                   || editor()->dictionaries()->multiplePanelIntros().contains(
+                       backwardTextCorrected, Qt::CaseInsensitive)) {
             editor()->setCurrentParagraphType(TextParagraphType::PanelHeading);
         }
     } else {

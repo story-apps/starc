@@ -2,6 +2,8 @@
 
 #include "standard_key_handler.h"
 
+class QStringListModel;
+
 
 namespace KeyProcessingLayer {
 
@@ -13,15 +15,39 @@ class PanelHandler : public StandardKeyHandler
 public:
     explicit PanelHandler(Ui::ComicBookTextEdit* _editor);
 
+    /**
+     * @brief При входе в блок, сразу покажем подсказку
+     */
+    void prehandle() override;
+
 protected:
     /**
      * @brief Реализация интерфейса AbstractKeyHandler
      */
     /** @{ */
-    void handleEnter(QKeyEvent* _event = 0);
-    void handleTab(QKeyEvent* _event = 0);
-    void handleOther(QKeyEvent* _event = 0);
+    void handleEnter(QKeyEvent* _event = nullptr) override;
+    void handleTab(QKeyEvent* _event = nullptr) override;
+    void handleBackspace(QKeyEvent* _event = nullptr) override;
+    void handleOther(QKeyEvent* _event = nullptr) override;
+    void handleInput(QInputMethodEvent* _event) override;
     /** @} */
+
+private:
+    /**
+     * @brief Показать автодополнение, если это возможно
+     */
+    void complete(const QString& _currentBlockText, const QString& _cursorBackwardText);
+
+private:
+    /**
+     * @brief Модель дополнений
+     */
+    QStringListModel* m_completerModel = nullptr;
+
+    /**
+     * @brief Можно ли показать подсказку
+     */
+    bool m_completionAllowed = true;
 };
 
 } // namespace KeyProcessingLayer

@@ -2,10 +2,13 @@
 
 #include "../comic_book_text_edit.h"
 
+#include <business_layer/model/comic_book/comic_book_dictionaries_model.h>
 #include <business_layer/templates/comic_book_template.h>
 
 #include <QKeyEvent>
+#include <QStringListModel>
 #include <QTextBlock>
+#include <QTimer>
 
 using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
@@ -16,10 +19,16 @@ namespace KeyProcessingLayer {
 
 PageHandler::PageHandler(ComicBookTextEdit* _editor)
     : StandardKeyHandler(_editor)
+    , m_completerModel(new QStringListModel(_editor))
 {
 }
 
-void PageHandler::handleEnter(QKeyEvent*)
+void PageHandler::prehandle()
+{
+    handleOther();
+}
+
+void PageHandler::handleEnter(QKeyEvent* _event)
 {
     //
     // Получим необходимые значения
@@ -43,8 +52,31 @@ void PageHandler::handleEnter(QKeyEvent*)
         //! Если открыт подстановщик
 
         //
-        // Ни чего не делаем
+        // Вставить выбранный вариант
         //
+        editor()->applyCompletion();
+
+        //
+        // Обновим курсор, т.к. после автозавершения он смещается
+        //
+        cursor = editor()->textCursor();
+
+        //
+        // Покажем подсказку, если это возможно
+        //
+        handleOther();
+
+        //
+        // Если нужно автоматически перепрыгиваем к следующему блоку
+        //
+        if (_event != nullptr) { // ... чтобы таб не переводил на новую строку
+            //
+            // Переходим к следующему блоку
+            //
+            cursor.movePosition(QTextCursor::EndOfBlock);
+            editor()->setTextCursor(cursor);
+            editor()->addParagraph(jumpForEnter(TextParagraphType::PageHeading));
+        }
     } else {
         //! Подстановщик закрыт
 
@@ -62,7 +94,7 @@ void PageHandler::handleEnter(QKeyEvent*)
                 //! Текст пуст
 
                 //
-                // Меняем стиль блока на описание действия
+                // Меняем стиль блока на панель
                 //
                 editor()->setCurrentParagraphType(changeForEnter(TextParagraphType::PageHeading));
             } else {
@@ -117,8 +149,9 @@ void PageHandler::handleTab(QKeyEvent*)
         //! Если открыт подстановщик
 
         //
-        // Ни чего не делаем
+        // Работаем аналогично нажатию ENTER
         //
+        handleEnter();
     } else {
         //! Подстановщик закрыт
 
@@ -166,7 +199,21 @@ void PageHandler::handleTab(QKeyEvent*)
     }
 }
 
-void PageHandler::handleOther(QKeyEvent* _event)
+void PageHandler::handleBackspace(QKeyEvent* _event)
+{
+    //
+    // Блокируем отображение подсказки при удалении текущего блока
+    //
+    if (editor()->textCursor().positionInBlock() == 0 && !editor()->textCursor().hasSelection()) {
+        m_completionAllowed = false;
+    }
+
+    StandardKeyHandler::handleBackspace(_event);
+
+    m_completionAllowed = true;
+}
+
+void PageHandler::handleOther(QKeyEvent*)
 {
     //
     // Получим необходимые значения
@@ -175,13 +222,46 @@ void PageHandler::handleOther(QKeyEvent* _event)
     QTextCursor cursor = editor()->textCursor();
     // ... блок текста в котором находится курсор
     QTextBlock currentBlock = cursor.block();
+    // ... текст блока
+    QString currentBlockText = currentBlock.text();
     // ... текст до курсора
     QString cursorBackwardText = currentBlock.text().left(cursor.positionInBlock());
-    // ... текст после курсора
-    QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
 
+    //
+    // Покажем подсказку, если это возможно
+    //
+    complete(currentBlockText, cursorBackwardText);
+}
 
-    StandardKeyHandler::handleOther(_event);
+void PageHandler::handleInput(QInputMethodEvent*)
+{
+    handleOther();
+}
+
+void PageHandler::complete(const QString& _currentBlockText, const QString& _cursorBackwardText)
+{
+    if (!m_completionAllowed) {
+        return;
+    }
+
+    m_completerModel->setStringList(editor()->dictionaries()->singlePageIntros()
+                                    + editor()->dictionaries()->multiplePageIntros());
+
+    //
+    // Дополним текст
+    //
+    int cursorMovement = _currentBlockText.length();
+    while (!_cursorBackwardText.endsWith(_currentBlockText.leftRef(cursorMovement),
+                                         Qt::CaseInsensitive)) {
+        --cursorMovement;
+    }
+    //
+    // ... дополняем, когда цикл обработки событий выполнится, чтобы позиция курсора
+    //     корректно определилась после изменения текста
+    //
+    QTimer::singleShot(0, editor(), [this, _currentBlockText, cursorMovement] {
+        editor()->complete(m_completerModel, _currentBlockText, cursorMovement);
+    });
 }
 
 } // namespace KeyProcessingLayer

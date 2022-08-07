@@ -114,9 +114,8 @@ void ComicBookTextModel::Implementation::updateNumbering()
                 } else {
                     updateChildNumbering(childItem);
                     auto panelItem = static_cast<ComicBookTextModelPanelItem*>(childItem);
-                    if (panelItem->setNumber(panelNumber, {})) {
-                        panelNumber++;
-                    }
+                    panelItem->setPanelNumber(panelNumber, dictionariesModel->singlePanelIntros(),
+                                              dictionariesModel->multiplePanelIntros());
                 }
                 break;
             }

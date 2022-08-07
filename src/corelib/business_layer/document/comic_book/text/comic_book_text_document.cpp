@@ -70,7 +70,7 @@ QString ComicBookTextDocument::panelNumber(const QTextBlock& _forBlock) const
     }
 
     const auto panelItem = static_cast<const ComicBookTextModelPanelItem*>(itemParent);
-    return panelItem->number().value_or(TextModelGroupItem::Number()).text;
+    return panelItem->panelNumber()->text;
 }
 
 QString ComicBookTextDocument::dialogueNumber(const QTextBlock& _forBlock) const

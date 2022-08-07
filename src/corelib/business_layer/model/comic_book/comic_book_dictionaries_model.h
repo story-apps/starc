@@ -16,14 +16,15 @@ public:
     explicit ComicBookDictionariesModel(QObject* _parent = nullptr);
     ~ComicBookDictionariesModel() override;
 
-    const QVector<QString>& singlePageIntros() const;
-    const QVector<QString>& multiplePageIntros() const;
+    const QStringList& singlePageIntros() const;
+    const QStringList& multiplePageIntros() const;
 
-    const QVector<QString>& panelIntros() const;
+    const QStringList& singlePanelIntros() const;
+    const QStringList& multiplePanelIntros() const;
 
-    const QVector<QString>& commonCharacters() const;
+    const QStringList& commonCharacters() const;
 
-    const QVector<QString>& characterExtensions() const;
+    const QStringList& characterExtensions() const;
     void addCharacterExtension(const QString& _extension);
     Q_SIGNAL void charactersExtensionsChanged();
 

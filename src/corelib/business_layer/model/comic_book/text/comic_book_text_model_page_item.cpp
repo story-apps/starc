@@ -56,30 +56,25 @@ std::optional<ComicBookTextModelPageItem::PageNumber> ComicBookTextModelPageItem
 }
 
 void ComicBookTextModelPageItem::setPageNumber(int& _fromNumber,
-                                               const QVector<QString>& _singlePageIntros,
-                                               const QVector<QString>& _multiplePageIntros)
+                                               const QStringList& _singlePageIntros,
+                                               const QStringList& _multiplePageIntros)
 {
     Q_UNUSED(_singlePageIntros)
 
-    const auto pageName = TextHelper::smartToLower(heading().split(' ').constFirst().trimmed());
-
-    //
-    // TODO: Парсить номера сцен, которые задал пользователь вручную
-    //
+    const auto pageName = heading().split(' ').constFirst().trimmed();
 
     PageNumber newNumber;
     newNumber.fromPage = _fromNumber;
-    if (_multiplePageIntros.contains(pageName)) {
+    if (_multiplePageIntros.contains(pageName, Qt::CaseInsensitive)) {
         newNumber.pageCount = 2;
         newNumber.text = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1-%2" : "%2-%1")
                              .arg(_fromNumber)
-                             .arg(_fromNumber + 1);
-        _fromNumber += 2;
+                             .arg(_fromNumber + newNumber.pageCount - 1);
     } else {
         newNumber.pageCount = 1;
         newNumber.text = QString::number(_fromNumber);
-        _fromNumber += 1;
     }
+    _fromNumber += newNumber.pageCount;
     if (d->number.has_value() && d->number->text == newNumber.text) {
         return;
     }
@@ -148,7 +143,7 @@ void ComicBookTextModelPageItem::handleChange()
         switch (child->type()) {
         case TextModelItemType::Group: {
             auto childItem = static_cast<ComicBookTextModelPanelItem*>(child);
-            ++d->panelsCount;
+            d->panelsCount += childItem->panelNumber()->panelCount;
             d->dialoguesWordsCount += childItem->dialoguesWordsCount();
             break;
         }
