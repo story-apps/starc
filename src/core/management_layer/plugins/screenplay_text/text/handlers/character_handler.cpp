@@ -48,6 +48,7 @@ void CharacterHandler::prehandle()
 
     complete(currentBlockText, cursorBackwardText);
 }
+
 void CharacterHandler::handleEnter(QKeyEvent* _event)
 {
     //
@@ -391,7 +392,8 @@ void CharacterHandler::complete(const QString& _currentBlockText,
     // Дополним текст
     //
     int cursorMovement = sectionText.length();
-    while (!_cursorBackwardText.endsWith(sectionText.left(cursorMovement), Qt::CaseInsensitive)) {
+    while (
+        !_cursorBackwardText.endsWith(sectionText.leftRef(cursorMovement), Qt::CaseInsensitive)) {
         --cursorMovement;
     }
     //

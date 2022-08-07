@@ -22,6 +22,23 @@ TransitionHandler::TransitionHandler(Ui::ScreenplayTextEdit* _editor)
 {
 }
 
+void TransitionHandler::prehandle()
+{
+    //
+    // Получим необходимые значения
+    //
+    // ... курсор в текущем положении
+    QTextCursor cursor = editor()->textCursor();
+    // ... блок текста в котором находится курсор
+    QTextBlock currentBlock = cursor.block();
+    // ... текст блока
+    QString currentBlockText = currentBlock.text().trimmed();
+    // ... текст до курсора
+    QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
+
+    complete(currentBlockText, cursorBackwardText);
+}
+
 void TransitionHandler::handleEnter(QKeyEvent* _event)
 {
     //
@@ -267,7 +284,7 @@ void TransitionHandler::complete(const QString& _currentBlockText,
     // ... дополняем, когда цикл обработки событий выполнится, чтобы позиция курсора
     //     корректно определилась после изменения текста
     //
-    QTimer::singleShot(0, [this, _currentBlockText] {
+    QTimer::singleShot(0, editor(), [this, _currentBlockText] {
         editor()->complete(m_completerModel, _currentBlockText, 0);
     });
 }

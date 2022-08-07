@@ -15,6 +15,11 @@ class SceneHeadingHandler : public StandardKeyHandler
 public:
     explicit SceneHeadingHandler(Ui::ScreenplayTextEdit* _editor);
 
+    /**
+     * @brief При входе в блок, сразу покажем подсказку
+     */
+    void prehandle() override;
+
 protected:
     /**
      * @brief Реализация интерфейса AbstractKeyHandler
@@ -22,7 +27,7 @@ protected:
     /** @{ */
     void handleEnter(QKeyEvent* _event = nullptr) override;
     void handleTab(QKeyEvent* _event = nullptr) override;
-    void handleBackspace(QKeyEvent* _event = 0) override;
+    void handleBackspace(QKeyEvent* _event = nullptr) override;
     void handleOther(QKeyEvent* _event = nullptr) override;
     void handleInput(QInputMethodEvent* _event) override;
     /** @} */

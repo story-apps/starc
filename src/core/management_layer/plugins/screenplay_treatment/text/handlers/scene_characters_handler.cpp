@@ -236,7 +236,7 @@ void SceneCharactersHandler::complete(const QString& _currentBlockText,
     // Дополним текст
     //
     int cursorMovement = cursorBackwardTextToComma.length();
-    while (!_cursorBackwardText.endsWith(cursorBackwardTextToComma.left(cursorMovement),
+    while (!_cursorBackwardText.endsWith(cursorBackwardTextToComma.leftRef(cursorMovement),
                                          Qt::CaseInsensitive)) {
         --cursorMovement;
     }
@@ -244,7 +244,7 @@ void SceneCharactersHandler::complete(const QString& _currentBlockText,
     // ... дополняем, когда цикл обработки событий выполнится, чтобы позиция курсора
     //     корректно определилась после изменения текста
     //
-    QTimer::singleShot(0, [this, cursorBackwardTextToComma, cursorMovement] {
+    QTimer::singleShot(0, editor(), [this, cursorBackwardTextToComma, cursorMovement] {
         editor()->complete(m_filteredCharactersModel, cursorBackwardTextToComma, cursorMovement);
     });
 }
