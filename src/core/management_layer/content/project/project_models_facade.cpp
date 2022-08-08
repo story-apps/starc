@@ -792,7 +792,9 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             auto characterModel = new BusinessLayer::CharacterModel;
 
             connect(characterModel, &BusinessLayer::CharacterModel::nameChanged, this,
-                    &ProjectModelsFacade::characterNameChanged);
+                    [this, characterModel](const QString& _oldName, const QString& _newName) {
+                        emit characterNameChanged(characterModel, _oldName, _newName);
+                    });
 
             model = characterModel;
             break;
@@ -821,7 +823,9 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             auto locationModel = new BusinessLayer::LocationModel;
 
             connect(locationModel, &BusinessLayer::LocationModel::nameChanged, this,
-                    &ProjectModelsFacade::locationNameChanged);
+                    [this, locationModel](const QString& _oldName, const QString& _newName) {
+                        emit locationNameChanged(locationModel, _oldName, _newName);
+                    });
 
             model = locationModel;
             break;

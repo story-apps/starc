@@ -167,6 +167,17 @@ CharacterModel* CharactersModel::character(int _row) const
     return nullptr;
 }
 
+QVector<CharacterModel*> CharactersModel::characters(const QString& _name) const
+{
+    QVector<CharacterModel*> characters;
+    for (const auto character : std::as_const(d->characterModels)) {
+        if (character->name() == _name) {
+            characters.append(character);
+        }
+    }
+    return characters;
+}
+
 void CharactersModel::createCharactersGroup(const QUuid& _groupId)
 {
     CharactersGroup group{ _groupId };

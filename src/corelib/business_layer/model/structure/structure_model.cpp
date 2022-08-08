@@ -870,6 +870,24 @@ Qt::DropActions StructureModel::supportedDropActions() const
     return Qt::MoveAction;
 }
 
+QModelIndex StructureModel::indexForItem(StructureModelItem* _item) const
+{
+    if (_item == nullptr) {
+        return {};
+    }
+
+    int row = 0;
+    QModelIndex parent;
+    if (_item->hasParent() && _item->parent()->hasParent()) {
+        row = _item->parent()->rowOfChild(_item);
+        parent = indexForItem(_item->parent());
+    } else {
+        row = d->rootItem->rowOfChild(_item);
+    }
+
+    return index(row, 0, parent);
+}
+
 StructureModelItem* StructureModel::itemForIndex(const QModelIndex& _index) const
 {
     if (!_index.isValid()) {
@@ -1093,24 +1111,6 @@ void StructureModel::clearDocument()
 QByteArray StructureModel::toXml() const
 {
     return d->toXml(document());
-}
-
-QModelIndex StructureModel::indexForItem(StructureModelItem* _item) const
-{
-    if (_item == nullptr) {
-        return {};
-    }
-
-    int row = 0;
-    QModelIndex parent;
-    if (_item->hasParent() && _item->parent()->hasParent()) {
-        row = _item->parent()->rowOfChild(_item);
-        parent = indexForItem(_item->parent());
-    } else {
-        row = d->rootItem->rowOfChild(_item);
-    }
-
-    return index(row, 0, parent);
 }
 
 } // namespace BusinessLayer

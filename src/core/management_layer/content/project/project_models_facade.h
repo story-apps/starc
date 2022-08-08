@@ -154,7 +154,8 @@ signals:
     /**
      * @brief Изменилось имя персонажа
      */
-    void characterNameChanged(const QString& _oldName, const QString& _newName);
+    void characterNameChanged(BusinessLayer::AbstractModel* _character, const QString& _oldName,
+                              const QString& _newName);
 
     /**
      * @brief Неоходимо создать локацию с заданным именем
@@ -164,7 +165,8 @@ signals:
     /**
      * @brief Изменилось название локации
      */
-    void locationNameChanged(const QString& _oldName, const QString& _newName);
+    void locationNameChanged(BusinessLayer::AbstractModel* _location, const QString& _oldName,
+                             const QString& _newName);
 
     /**
      * @brief Необходимо очистить корзинку

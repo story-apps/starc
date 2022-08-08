@@ -158,6 +158,17 @@ LocationModel* LocationsModel::location(const QString& _name) const
     return nullptr;
 }
 
+QVector<LocationModel*> LocationsModel::locations(const QString& _name) const
+{
+    QVector<LocationModel*> locations;
+    for (const auto location : std::as_const(d->locationModels)) {
+        if (location->name() == _name) {
+            locations.append(location);
+        }
+    }
+    return locations;
+}
+
 void LocationsModel::createLocationsGroup(const QUuid& _groupId)
 {
     LocationsGroup group{ _groupId };

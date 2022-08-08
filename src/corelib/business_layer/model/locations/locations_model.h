@@ -72,6 +72,11 @@ public:
     LocationModel* location(const QString& _name) const;
 
     /**
+     * @brief Получить все модели локаций с заданным именем
+     */
+    QVector<LocationModel*> locations(const QString& _name) const;
+
+    /**
      * @brief Группы локаций
      */
     void createLocationsGroup(const QUuid& _groupId);

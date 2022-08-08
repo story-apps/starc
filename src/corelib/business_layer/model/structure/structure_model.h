@@ -99,6 +99,11 @@ public:
     /** @} */
 
     /**
+     * @brief Получить индекс заданного элемента
+     */
+    QModelIndex indexForItem(StructureModelItem* _item) const;
+
+    /**
      * @brief Получить элемент находящийся в заданном индексе
      */
     StructureModelItem* itemForIndex(const QModelIndex& _index) const;
@@ -165,12 +170,6 @@ protected:
     void clearDocument() override;
     QByteArray toXml() const override;
     /** @} */
-
-private:
-    /**
-     * @brief Получить индекс заданного элемента
-     */
-    QModelIndex indexForItem(StructureModelItem* _item) const;
 
 private:
     class Implementation;

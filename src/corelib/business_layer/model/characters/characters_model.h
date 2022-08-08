@@ -77,6 +77,11 @@ public:
     CharacterModel* character(int _row) const;
 
     /**
+     * @brief Получить все модели персонажей с заданным именем
+     */
+    QVector<CharacterModel*> characters(const QString& _name) const;
+
+    /**
      * @brief Группы персонажей
      */
     void createCharactersGroup(const QUuid& _groupId);

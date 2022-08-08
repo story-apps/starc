@@ -1308,9 +1308,6 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 [this](int _versionIndex) {
                     const auto currentItemIndex
                         = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
-                    auto item = d->aliasedItemForIndex(currentItemIndex);
-                    auto model = d->modelsFacade.modelFor(item->uuid());
-                    d->projectStructureModel->itemForUuid(model->document()->uuid());
 
                     const auto enabled = d->editingMode == DocumentEditingMode::Edit;
 
@@ -1397,8 +1394,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                                           Domain::DocumentObjectType::Character, _name, _content);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::characterNameChanged, this,
-            [this](const QString& _newName, const QString& _oldName) {
-                if (_oldName.isEmpty()) {
+            [this](BusinessLayer::AbstractModel* _character, const QString& _newName,
+                   const QString& _oldName) {
+                if (_character == nullptr || _oldName.isEmpty()) {
                     return;
                 }
 
@@ -1433,6 +1431,37 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     auto stageplay = qobject_cast<BusinessLayer::StageplayTextModel*>(model);
                     stageplay->updateCharacterName(_oldName, _newName);
                 }
+
+                //
+                // Если персонаж переименовывается в другого существующего, то удалим дубль
+                //
+                const auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
+                    d->modelsFacade.modelFor(Domain::DocumentObjectType::Characters));
+                if (charactersModel->characters(_newName).size() > 1) {
+                    auto document = _character->document();
+                    if (document == nullptr) {
+                        return;
+                    }
+
+                    //
+                    // Сохраняем имя, т.к. ссылка перестанет работать, когда документ будет удалён
+                    //
+                    const auto characterToSelectName = _newName;
+                    const auto item = d->projectStructureModel->itemForUuid(document->uuid());
+                    charactersModel->removeCharacterModel(
+                        qobject_cast<BusinessLayer::CharacterModel*>(_character));
+                    d->modelsFacade.removeModelFor(document);
+                    DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
+                    d->projectStructureModel->removeItem(item);
+
+                    if (!d->navigator->currentIndex().isValid()) {
+                        const auto item = d->projectStructureModel->itemForUuid(
+                            charactersModel->character(characterToSelectName)->document()->uuid());
+                        const auto itemIndex = d->projectStructureModel->indexForItem(item);
+                        d->navigator->setCurrentIndex(
+                            d->projectStructureProxyModel->mapFromSource(itemIndex));
+                    }
+                }
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this,
             [this](const QString& _name, const QByteArray& _content) {
@@ -1440,13 +1469,14 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                                           Domain::DocumentObjectType::Location, _name, _content);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::locationNameChanged, this,
-            [this](const QString& _newName, const QString& _oldName) {
-                if (_oldName.isEmpty()) {
+            [this](BusinessLayer::AbstractModel* _location, const QString& _newName,
+                   const QString& _oldName) {
+                if (_location == nullptr || _oldName.isEmpty()) {
                     return;
                 }
 
                 //
-                // Найти все модели где может встречаться персонаж и заменить в них его имя со
+                // Найти все модели где может встречаться локация и заменить в них её имя со
                 // старого на новое
                 //
                 const auto models
@@ -1454,6 +1484,37 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 for (auto model : models) {
                     auto screenplay = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
                     screenplay->updateLocationName(_oldName, _newName);
+                }
+
+                //
+                // Если локация переименовывается в другую существующую, то удалим дубль
+                //
+                const auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(
+                    d->modelsFacade.modelFor(Domain::DocumentObjectType::Locations));
+                if (locationsModel->locations(_newName).size() > 1) {
+                    auto document = _location->document();
+                    if (document == nullptr) {
+                        return;
+                    }
+
+                    //
+                    // Сохраняем имя, т.к. ссылка перестанет работать, когда документ будет удалён
+                    //
+                    const auto locationToSelectName = _newName;
+                    const auto item = d->projectStructureModel->itemForUuid(document->uuid());
+                    locationsModel->removeLocationModel(
+                        qobject_cast<BusinessLayer::LocationModel*>(_location));
+                    d->modelsFacade.removeModelFor(document);
+                    DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
+                    d->projectStructureModel->removeItem(item);
+
+                    if (!d->navigator->currentIndex().isValid()) {
+                        const auto item = d->projectStructureModel->itemForUuid(
+                            locationsModel->location(locationToSelectName)->document()->uuid());
+                        const auto itemIndex = d->projectStructureModel->indexForItem(item);
+                        d->navigator->setCurrentIndex(
+                            d->projectStructureProxyModel->mapFromSource(itemIndex));
+                    }
                 }
             });
     //
