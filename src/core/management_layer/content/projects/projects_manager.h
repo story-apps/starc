@@ -185,6 +185,15 @@ signals:
     void openCloudProjectRequested(int _id, const QString& _path);
 
     /**
+     * @brief Пользователь обновил параметры облачного проекта
+     */
+    /** @{ */
+    void updateCloudProjectNameRequested(const QString& _name);
+    void updateCloudProjectLoglineRequested(const QString& _logline);
+    void updateCloudProjectCoverRequested(const QPixmap& _cover);
+    /** @} */
+
+    /**
      * @brief Пользователь хочет удалить облачный проект
      */
     void removeCloudProjectRequested(int _id);

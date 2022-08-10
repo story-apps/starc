@@ -16,6 +16,7 @@
 #include <ui/widgets/dialog/dialog.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/file_helper.h>
+#include <utils/helpers/image_helper.h>
 #include <utils/logging.h>
 
 #include <QAction>
@@ -258,6 +259,9 @@ void ProjectsManager::loadProjects()
         }
 
         Project project;
+        if (projectJson.contains("id")) {
+            project.setId(projectJson["id"].toInt());
+        }
         project.setType(static_cast<ProjectType>(projectJson["type"].toInt()));
         project.setName(projectJson["name"].toString());
         project.setLogline(projectJson["logline"].toString());
@@ -277,6 +281,9 @@ void ProjectsManager::saveProjects()
     for (int projectIndex = 0; projectIndex < d->projects->rowCount(); ++projectIndex) {
         const auto& project = d->projects->projectAt(projectIndex);
         QJsonObject projectJson;
+        if (project.isRemote()) {
+            projectJson["id"] = project.id();
+        }
         projectJson["type"] = static_cast<int>(project.type());
         projectJson["name"] = project.name();
         projectJson["logline"] = project.logline();
@@ -491,13 +498,12 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     cloudProject.setLogline(_projectInfo.logline);
     cloudProject.setLastEditTime(_projectInfo.lastEditTime);
     if (_projectInfo.poster.isNull()) {
-        d->currentProject.setPosterPath({});
+        cloudProject.setPosterPath({});
     } else {
         const auto posterPath = d->projectPosterPath(projectPath);
-        QFile posterFile(posterPath);
-        posterFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
-        posterFile.write(_projectInfo.poster);
-        d->currentProject.setPosterPath(posterPath);
+        const auto poster = ImageHelper::imageFromBytes(_projectInfo.poster);
+        poster.save(posterPath, "PNG");
+        cloudProject.setPosterPath(posterPath);
     }
 
     //
@@ -620,12 +626,20 @@ void ProjectsManager::setCurrentProjectName(const QString& _name)
 {
     d->currentProject.setName(_name);
     d->projects->updateProject(d->currentProject);
+
+    if (d->currentProject.isRemote()) {
+        emit updateCloudProjectNameRequested(_name);
+    }
 }
 
 void ProjectsManager::setCurrentProjectLogline(const QString& _logline)
 {
     d->currentProject.setLogline(_logline);
     d->projects->updateProject(d->currentProject);
+
+    if (d->currentProject.isRemote()) {
+        emit updateCloudProjectLoglineRequested(_logline);
+    }
 }
 
 void ProjectsManager::setCurrentProjectCover(const QPixmap& _cover)
@@ -633,14 +647,17 @@ void ProjectsManager::setCurrentProjectCover(const QPixmap& _cover)
     if (_cover.isNull()) {
         d->currentProject.setPosterPath({});
         d->projects->updateProject(d->currentProject);
-        return;
+    } else {
+        const auto posterPath = d->projectPosterPath(d->currentProject.path());
+        _cover.save(posterPath, "PNG");
+
+        d->currentProject.setPosterPath(posterPath);
+        d->projects->updateProject(d->currentProject);
     }
 
-    const auto posterPath = d->projectPosterPath(d->currentProject.path());
-    _cover.save(posterPath, "PNG");
-
-    d->currentProject.setPosterPath(posterPath);
-    d->projects->updateProject(d->currentProject);
+    if (d->currentProject.isRemote()) {
+        emit updateCloudProjectCoverRequested(_cover);
+    }
 }
 
 void ProjectsManager::setCurrentProjectNeverAskAboutSwitch()

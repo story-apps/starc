@@ -957,11 +957,23 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
     //
     // Избегаем зацикливания, проверяя, что диалог уже показан
     //
-    if (saveChangesDialog) {
+    if (!saveChangesDialog.isNull()) {
         return;
     }
 
+    //
+    // Если нет изменений, то просто переходим к следующему действию
+    //
     if (!applicationView->isWindowModified()) {
+        _callback();
+        return;
+    }
+
+    //
+    // Если проект облачный, то сохраняем без вопросов
+    //
+    if (projectsManager->currentProject().isRemote()) {
+        saveChanges();
         _callback();
         return;
     }
@@ -2270,6 +2282,21 @@ void ApplicationManager::initConnections()
                     openProject(_path);
                 };
                 d->saveIfNeeded(callback);
+            });
+    connect(d->projectsManager.data(), &ProjectsManager::updateCloudProjectNameRequested, this,
+            [this](const QString& _name) {
+                d->cloudServiceManager->updateProject(d->projectsManager->currentProject().id(),
+                                                      _name, {}, {});
+            });
+    connect(d->projectsManager.data(), &ProjectsManager::updateCloudProjectLoglineRequested, this,
+            [this](const QString& _logline) {
+                d->cloudServiceManager->updateProject(d->projectsManager->currentProject().id(), {},
+                                                      _logline, {});
+            });
+    connect(d->projectsManager.data(), &ProjectsManager::updateCloudProjectCoverRequested, this,
+            [this](const QPixmap& _cover) {
+                d->cloudServiceManager->updateProject(d->projectsManager->currentProject().id(), {},
+                                                      {}, ImageHelper::bytesFromImage(_cover));
             });
     connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,
             [this](int _id) { d->cloudServiceManager->removeProject(_id); });
