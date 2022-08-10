@@ -292,12 +292,11 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isConnected
     d->cloudProjectCreationNote->setText(tr("The story will be created on the local computer."));
     d->cloudProjectCreationActionNote->setText(tr("to create stories in the cloud."));
     d->cloudProjectCreationAction->disconnect();
+    d->cloudProjectCreationAction->setText(tr("Subscribe to TEAM version"));
     if (_isLogged) {
-        d->cloudProjectCreationAction->setText(tr("Activate TEAM version"));
         connect(d->cloudProjectCreationAction, &Body1LinkLabel::clicked, this,
                 &CreateProjectDialog::renewSubscriptionPressed);
     } else {
-        d->cloudProjectCreationAction->setText(tr("Sign in"));
         connect(d->cloudProjectCreationAction, &Body1LinkLabel::clicked, this,
                 &CreateProjectDialog::loginPressed);
     }
