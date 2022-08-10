@@ -421,6 +421,38 @@ void ProjectsManager::openProject()
     emit openLocalProjectRequested(projectPath);
 }
 
+void ProjectsManager::setCloudProjects(const QVector<Domain::ProjectInfo>& _projects)
+{
+    //
+    // Убираем из закешированного списка проекты, которых более нет для текущего аккаунта
+    //
+    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
+        const auto& project = d->projects->projectAt(projectRow);
+        if (project.isLocal()) {
+            continue;
+        }
+
+        bool hideProject = true;
+        for (int index = 0; index < _projects.size(); ++index) {
+            if (project.id() == _projects.at(index).id) {
+                hideProject = false;
+                break;
+            }
+        }
+
+        if (hideProject) {
+            d->projects->remove(project);
+        }
+    }
+
+    //
+    // Загружаем остальные
+    //
+    for (const auto& project : _projects) {
+        addOrUpdateCloudProject(project);
+    }
+}
+
 void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projectInfo)
 {
     //
@@ -677,8 +709,8 @@ void ProjectsManager::removeProject(int _id)
     for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
         const auto& project = d->projects->projectAt(projectRow);
         if (project.id() == _id) {
-            d->projects->remove(project);
             QFile::remove(project.path());
+            d->projects->remove(project);
             break;
         }
     }

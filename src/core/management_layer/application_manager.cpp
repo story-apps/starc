@@ -496,7 +496,7 @@ void ApplicationManager::Implementation::configureAutoSave()
     autosaveTimer.disconnect();
 
     if (settingsValue(DataStorageLayer::kApplicationUseAutoSaveKey).toBool()) {
-        QObject::connect(&autosaveTimer, &QTimer::timeout, [this] { saveChanges(); });
+        connect(&autosaveTimer, &QTimer::timeout, q, [this] { saveChanges(); });
         autosaveTimer.start(std::chrono::minutes{ 3 });
     }
 }
@@ -516,7 +516,13 @@ void ApplicationManager::Implementation::showContent()
         //
         // Сперва проекты нужно загрузить
         //
+        // ... локальные
+        //
         projectsManager->loadProjects();
+        //
+        // ... облачные
+        //
+        cloudServiceManager->askProjects();
         //
         // ... а затем уже отобразить
         //
@@ -1781,6 +1787,13 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
     QMetaObject::invokeMethod(
         this,
         [this, _fileToOpenPath] {
+#ifdef CLOUD_SERVICE_MANAGER
+            //
+            // Запуск облачного сервиса
+            //
+            d->cloudServiceManager->start();
+#endif
+
             //
             // Настройка
             //
@@ -1790,13 +1803,6 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
             // Отображение
             //
             d->showContent();
-
-#ifdef CLOUD_SERVICE_MANAGER
-            //
-            // Запуск облачного сервиса
-            //
-            d->cloudServiceManager->start();
-#endif
 
             //
             // Открыть заданный проект
@@ -2190,6 +2196,7 @@ void ApplicationManager::initConnections()
                     d->menuView->closeMenu();
                 }
                 d->cloudServiceManager->askNotifications();
+                d->cloudServiceManager->askProjects();
             });
 
     //
@@ -2233,11 +2240,18 @@ void ApplicationManager::initConnections()
         d->menuView->setAccountVisible(false);
         d->projectManager->checkAvailabilityToEdit();
         d->projectsManager->setProjectsInCloudCanBeCreated(false, Domain::SubscriptionType::Free);
+        d->projectsManager->setCloudProjects({});
     });
 
     //
     // Проекты
     //
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::projectsReceived,
+            d->projectsManager.data(), &ProjectsManager::setCloudProjects);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::projectUpdated,
+            d->projectsManager.data(), &ProjectsManager::addOrUpdateCloudProject);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::projectRemoved,
+            d->projectsManager.data(), &ProjectsManager::removeProject);
     connect(d->projectsManager.data(), &ProjectsManager::createCloudProjectRequested, this,
             [this](const QString& _projectName, const QString& _importFilePath) {
                 d->createRemoteProject(_projectName, _importFilePath);
@@ -2259,8 +2273,6 @@ void ApplicationManager::initConnections()
             });
     connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,
             [this](int _id) { d->cloudServiceManager->removeProject(_id); });
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::projectRemoved,
-            d->projectsManager.data(), &ProjectsManager::removeProject);
 #endif
 }
 

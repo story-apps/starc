@@ -69,6 +69,11 @@ public:
     void openProject();
 
     /**
+     * @brief Задать список облачных проектов
+     */
+    void setCloudProjects(const QVector<Domain::ProjectInfo>& _projects);
+
+    /**
      * @brief Добавить облачный проект
      */
     void addOrUpdateCloudProject(const Domain::ProjectInfo& _projectInfo);
