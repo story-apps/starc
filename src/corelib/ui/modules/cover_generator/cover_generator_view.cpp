@@ -103,6 +103,7 @@ CoverGeneratorView::Implementation::Implementation(CoverGeneratorView* _q)
     splitter->setWidgets(coverBackground, sidebar);
     splitter->setSizes({ 7, 3 });
 
+    toolbar->setParent(coverBackground);
     toolbar->setCurtain(true);
 
     saveAction->setIconText(u8"\U000F012C");
@@ -145,7 +146,8 @@ void CoverGeneratorView::Implementation::updateToolbarUi()
 
 void CoverGeneratorView::Implementation::updateToolbarPositon()
 {
-    toolbar->move(QPointF((q->width() - toolbar->width()) / 2.0, Ui::DesignSystem::layout().px24())
+    toolbar->move(QPointF((coverBackground->width() - toolbar->width()) / 2.0,
+                          -Ui::DesignSystem::card().shadowMargins().top())
                       .toPoint());
 }
 
@@ -355,6 +357,7 @@ bool CoverGeneratorView::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_watched == d->coverBackground && _event->type() == QEvent::Resize) {
         d->updateCoverCardSize();
+        d->updateToolbarPositon();
     }
 
     return Widget::eventFilter(_watched, _event);
