@@ -2283,21 +2283,8 @@ void ApplicationManager::initConnections()
                 };
                 d->saveIfNeeded(callback);
             });
-    connect(d->projectsManager.data(), &ProjectsManager::updateCloudProjectNameRequested, this,
-            [this](const QString& _name) {
-                d->cloudServiceManager->updateProject(d->projectsManager->currentProject().id(),
-                                                      _name, {}, {});
-            });
-    connect(d->projectsManager.data(), &ProjectsManager::updateCloudProjectLoglineRequested, this,
-            [this](const QString& _logline) {
-                d->cloudServiceManager->updateProject(d->projectsManager->currentProject().id(), {},
-                                                      _logline, {});
-            });
-    connect(d->projectsManager.data(), &ProjectsManager::updateCloudProjectCoverRequested, this,
-            [this](const QPixmap& _cover) {
-                d->cloudServiceManager->updateProject(d->projectsManager->currentProject().id(), {},
-                                                      {}, ImageHelper::bytesFromImage(_cover));
-            });
+    connect(d->projectsManager.data(), &ProjectsManager::updateCloudProjectRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::updateProject);
     connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,
             [this](int _id) { d->cloudServiceManager->removeProject(_id); });
 #endif

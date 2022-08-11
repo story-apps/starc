@@ -187,11 +187,8 @@ signals:
     /**
      * @brief Пользователь обновил параметры облачного проекта
      */
-    /** @{ */
-    void updateCloudProjectNameRequested(const QString& _name);
-    void updateCloudProjectLoglineRequested(const QString& _logline);
-    void updateCloudProjectCoverRequested(const QPixmap& _cover);
-    /** @} */
+    void updateCloudProjectRequested(int _id, const QString& _name, const QString& _logline,
+                                     const QByteArray& _cover);
 
     /**
      * @brief Пользователь хочет удалить облачный проект

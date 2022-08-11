@@ -7,6 +7,7 @@
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <domain/starcloud_api.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/projects/create_project_dialog.h>
 #include <ui/projects/projects_navigator.h>
@@ -18,6 +19,7 @@
 #include <utils/helpers/file_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/logging.h>
+#include <utils/tools/debouncer.h>
 
 #include <QAction>
 #include <QCryptographicHash>
@@ -59,6 +61,11 @@ public:
     Ui::ProjectsView* view = nullptr;
 
     QPointer<Ui::CreateProjectDialog> createProjectDialog;
+
+    bool isCloudProjectNameChnaged = false;
+    bool isCloudProjectLoglineChnaged = false;
+    bool isCloudProjectCoverChnaged = false;
+    Debouncer cloudProjectChangeDebouncer;
 };
 
 ProjectsManager::Implementation::Implementation(QWidget* _parent)
@@ -67,6 +74,7 @@ ProjectsManager::Implementation::Implementation(QWidget* _parent)
     , toolBar(new Ui::ProjectsToolBar(_parent))
     , navigator(new Ui::ProjectsNavigator(_parent))
     , view(new Ui::ProjectsView(_parent))
+    , cloudProjectChangeDebouncer(500)
 {
     toolBar->hide();
 
@@ -208,6 +216,20 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
 
                 menu->showContextMenu(QCursor::pos());
             });
+    connect(&d->cloudProjectChangeDebouncer, &Debouncer::gotWork, this, [this] {
+        const auto name = d->isCloudProjectNameChnaged ? d->currentProject.name() : QString();
+        const auto logline
+            = d->isCloudProjectLoglineChnaged ? d->currentProject.logline() : QString();
+        const auto cover = d->isCloudProjectCoverChnaged
+            ? ImageHelper::bytesFromImage(d->currentProject.poster())
+            : QByteArray();
+
+        d->isCloudProjectCoverChnaged = false;
+        d->isCloudProjectLoglineChnaged = false;
+        d->isCloudProjectCoverChnaged = false;
+
+        emit updateCloudProjectRequested(d->currentProject.id(), name, logline, cover);
+    });
 }
 
 ProjectsManager::~ProjectsManager() = default;
@@ -497,13 +519,15 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     cloudProject.setName(_projectInfo.name);
     cloudProject.setLogline(_projectInfo.logline);
     cloudProject.setLastEditTime(_projectInfo.lastEditTime);
-    if (_projectInfo.poster.isNull()) {
-        cloudProject.setPosterPath({});
-    } else {
-        const auto posterPath = d->projectPosterPath(projectPath);
-        const auto poster = ImageHelper::imageFromBytes(_projectInfo.poster);
-        poster.save(posterPath, "PNG");
-        cloudProject.setPosterPath(posterPath);
+    if (!_projectInfo.poster.isNull()) {
+        if (_projectInfo.poster.isEmpty()) {
+            cloudProject.setPosterPath({});
+        } else {
+            const auto posterPath = d->projectPosterPath(projectPath);
+            const auto poster = ImageHelper::imageFromBytes(_projectInfo.poster);
+            poster.save(posterPath, "PNG");
+            cloudProject.setPosterPath(posterPath);
+        }
     }
 
     //
@@ -515,7 +539,21 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
         //
         cloudProject.setId(_projectInfo.id);
         cloudProject.setType(ProjectType::Cloud);
-        cloudProject.setEditingMode(static_cast<DocumentEditingMode>(_projectInfo.editingMode));
+        //
+        // Если текущий пользователь является владельцем проекта
+        //
+        if (_projectInfo.accountRole == 0) {
+            cloudProject.setOwner(true);
+            cloudProject.setEditingMode(DocumentEditingMode::Edit);
+        }
+        //
+        // В противном случае
+        //
+        else {
+            cloudProject.setOwner(false);
+            cloudProject.setEditingMode(
+                static_cast<DocumentEditingMode>(_projectInfo.accountRole - 1));
+        }
         cloudProject.setPath(projectPath);
         cloudProject.setRealPath(projectPath);
 
@@ -628,7 +666,8 @@ void ProjectsManager::setCurrentProjectName(const QString& _name)
     d->projects->updateProject(d->currentProject);
 
     if (d->currentProject.isRemote()) {
-        emit updateCloudProjectNameRequested(_name);
+        d->isCloudProjectNameChnaged = true;
+        d->cloudProjectChangeDebouncer.orderWork();
     }
 }
 
@@ -638,7 +677,8 @@ void ProjectsManager::setCurrentProjectLogline(const QString& _logline)
     d->projects->updateProject(d->currentProject);
 
     if (d->currentProject.isRemote()) {
-        emit updateCloudProjectLoglineRequested(_logline);
+        d->isCloudProjectLoglineChnaged = true;
+        d->cloudProjectChangeDebouncer.orderWork();
     }
 }
 
@@ -656,7 +696,8 @@ void ProjectsManager::setCurrentProjectCover(const QPixmap& _cover)
     }
 
     if (d->currentProject.isRemote()) {
-        emit updateCloudProjectCoverRequested(_cover);
+        d->isCloudProjectCoverChnaged = true;
+        d->cloudProjectChangeDebouncer.orderWork();
     }
 }
 
