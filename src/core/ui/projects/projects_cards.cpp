@@ -222,9 +222,10 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     const auto fullLoglinHeight
         = TextHelper::heightForWidth(m_project.logline(), _painter->font(), textRect.width());
     const QFontMetricsF fontMetrics(_painter->font());
-    const QRectF loglineRect(textRect.left(), textRect.bottom() + Ui::DesignSystem::layout().px8(),
-                             textRect.width(),
-                             std::min(fullLoglinHeight, fontMetrics.lineSpacing() * 5));
+    const int loglineMaxLines = m_project.isLocal() ? 5 : 4;
+    const QRectF loglineRect(
+        textRect.left(), textRect.bottom() + Ui::DesignSystem::layout().px8(), textRect.width(),
+        std::min(fullLoglinHeight, fontMetrics.lineSpacing() * loglineMaxLines));
     const QString loglineCorrected
         = TextHelper::elidedText(m_project.logline(), _painter->font(), loglineRect);
     _painter->drawText(loglineRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap,
@@ -242,6 +243,25 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     const QRectF lastDateRect(loglineRect.left(), lastDateTop, loglineRect.width(),
                               fontMetrics.lineSpacing());
     _painter->drawText(lastDateRect, Qt::AlignLeft | Qt::AlignTop, m_project.displayLastEditTime());
+
+    //
+    // Роль в проекте
+    //
+    if (m_project.isRemote()) {
+        _painter->setFont(Ui::DesignSystem::font().subtitle2());
+        const QRectF roleRect(lastDateRect.bottomLeft(),
+                              QPointF(lastDateRect.right(),
+                                      lastDateRect.bottom() + fontMetrics.lineSpacing()
+                                          + Ui::DesignSystem::layout().px(6)));
+        if (m_project.isOwner()) {
+            _painter->drawText(roleRect, Qt::AlignLeft | Qt::AlignBottom,
+                               projectsScene()->tr("Owner"));
+        } else {
+            //
+            // TODO:
+            //
+        }
+    }
 
     //
     // Иконка расположения проекта

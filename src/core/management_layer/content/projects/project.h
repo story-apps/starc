@@ -110,6 +110,12 @@ public:
     void setId(int _id);
 
     /**
+     * @brief Является ли текущий пользователь владельцем проекта
+     */
+    bool isOwner() const;
+    void setOwner(bool _isOwner);
+
+    /**
      * @brief Режим работы с проектом
      */
     DocumentEditingMode editingMode() const;

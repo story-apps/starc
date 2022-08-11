@@ -24,6 +24,7 @@ public:
     QDateTime lastEditTime;
     bool canAskAboutSwitch = true;
     int id = -1;
+    bool isOwner = true;
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
 };
 
@@ -46,6 +47,8 @@ Project::Project(const Project& _other)
 {
 }
 
+Project::~Project() = default;
+
 const Project& Project::operator=(const Project& _other)
 {
     d.reset(new Implementation(*_other.d));
@@ -66,8 +69,6 @@ bool Project::isRemote() const
 {
     return d->type == ProjectType::Cloud;
 }
-
-Project::~Project() = default;
 
 ProjectType Project::type() const
 {
@@ -202,6 +203,16 @@ int Project::id() const
 void Project::setId(int _id)
 {
     d->id = _id;
+}
+
+bool Project::isOwner() const
+{
+    return d->isOwner;
+}
+
+void Project::setOwner(bool _isOwner)
+{
+    d->isOwner = _isOwner;
 }
 
 DocumentEditingMode Project::editingMode() const

@@ -143,7 +143,7 @@ struct ProjectInfo {
     QString name;
     QString logline;
     QByteArray poster;
-    int editingMode = 0;
+    int accountRole = 0;
     QDateTime lastEditTime;
 };
 
