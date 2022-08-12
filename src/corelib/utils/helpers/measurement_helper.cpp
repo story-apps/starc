@@ -1,6 +1,7 @@
 #include "measurement_helper.h"
 
 #include <QApplication>
+#include <QFontMetricsF>
 #include <QPageSize>
 #include <QScreen>
 #include <QtMath>
@@ -8,6 +9,22 @@
 
 qreal MeasurementHelper::mmToPx(qreal _mm, bool _x)
 {
+#ifndef ACCURATE_METRICS_HANDLING
+    static qreal xCoefficient = [] {
+        QFont courierFont("Courier New");
+        courierFont.setPixelSize(ptToPx(12));
+        const QFontMetricsF courierNewMetrics(courierFont);
+        const qreal xCoefficient = courierNewMetrics.width("W") / 2.53;
+        return xCoefficient;
+    }();
+    static qreal yCoefficient = [] {
+        QFont courierFont("Courier New");
+        courierFont.setPixelSize(ptToPx(12));
+        const QFontMetricsF courierNewMetrics(courierFont);
+        const qreal yCoefficient = courierNewMetrics.lineSpacing() / 4.8;
+        return yCoefficient;
+    }();
+#else
     static qreal xCoefficient = [] {
         const auto density = QApplication::primaryScreen()->physicalDotsPerInchX();
         const auto pageSize = QPageSize(QPageSize::A4);
@@ -19,7 +36,7 @@ qreal MeasurementHelper::mmToPx(qreal _mm, bool _x)
         return pageSize.sizePixels(density).height()
             / pageSize.size(QPageSize::Millimeter).height();
     }();
-
+#endif
     return _mm * (_x ? xCoefficient : yCoefficient);
 }
 
