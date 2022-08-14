@@ -1083,7 +1083,8 @@ public:
         /**
          * @brief Ширина панели
          */
-        qreal width() const;
+        qreal minimumWidth() const;
+        qreal maximumWidth() const;
 
         /**
          * @brief Высота одного процесса

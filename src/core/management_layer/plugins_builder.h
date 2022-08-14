@@ -41,7 +41,8 @@ public:
     /**
      * @brief Получить списком инфорацию о доступных редакторах для заданного типа документа
      */
-    QVector<EditorInfo> editorsInfoFor(const QString& _documentMimeType) const;
+    QVector<EditorInfo> editorsInfoFor(const QString& _documentMimeType,
+                                       bool _isProjectRemote) const;
 
     /**
      * @brief Получить описание редактора по заданному майм типу

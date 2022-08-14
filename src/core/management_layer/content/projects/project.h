@@ -3,6 +3,10 @@
 #include <QAbstractListModel>
 
 
+namespace Domain {
+struct ProjectCollaboratorInfo;
+}
+
 namespace ManagementLayer {
 
 enum class DocumentEditingMode;
@@ -121,6 +125,12 @@ public:
     DocumentEditingMode editingMode() const;
     void setEditingMode(DocumentEditingMode _mode);
     bool isReadOnly() const;
+
+    /**
+     * @brief Список соавторов
+     */
+    QVector<Domain::ProjectCollaboratorInfo> collaborators() const;
+    void setCollaborators(const QVector<Domain::ProjectCollaboratorInfo>& _collaborators);
 
     /**
      * @brief Получить данные по роли из модели

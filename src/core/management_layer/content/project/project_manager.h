@@ -15,6 +15,7 @@ enum class DocumentObjectType;
 namespace ManagementLayer {
 
 enum class DocumentEditingMode;
+class Project;
 class PluginsBuilder;
 
 /**
@@ -65,14 +66,10 @@ public:
     void checkAvailabilityToEdit();
 
     /**
-     * @brief Задать режим работы с документами
-     */
-    void setEditingMode(DocumentEditingMode _mode);
-
-    /**
      * @brief Загрузить данные текущего проекта
      */
-    void loadCurrentProject(const QString& _name, const QString& _path);
+    void loadCurrentProject(const Project& _project);
+    void updateCurrentProject(const Project& _project);
     void restoreCurrentProjectState(const QString& _path);
 
     /**
@@ -144,6 +141,11 @@ signals:
      * @brief Изменилась обложка проекта
      */
     void projectCoverChanged(const QPixmap& _cover);
+
+    /**
+     * @brief Пользователь хочет добавить соавтора в проект
+     */
+    void projectCollaboratorInviteRequested(const QString& _email, const QColor& _color, int _role);
 
     /**
      * @brief Сменилась текущая модель документа

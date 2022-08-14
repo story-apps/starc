@@ -1906,7 +1906,8 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     QMarginsF margins = { 24, 24, 24, 24 };
-    qreal width = 260;
+    qreal minimumWidth = 260;
+    qreal maximumWidth = 480;
     qreal taskHeight = 32;
     qreal taskTitleHeight = 18;
     qreal spacing = 4;
@@ -1915,7 +1916,8 @@ public:
 DesignSystem::TaskBar::Implementation::Implementation(qreal _scaleFactor)
 {
     margins *= _scaleFactor;
-    width *= _scaleFactor;
+    minimumWidth *= _scaleFactor;
+    maximumWidth *= _scaleFactor;
     taskHeight *= _scaleFactor;
     taskTitleHeight *= _scaleFactor;
     spacing *= _scaleFactor;
@@ -1932,9 +1934,14 @@ const QMarginsF& DesignSystem::TaskBar::margins() const
     return d->margins;
 }
 
-qreal DesignSystem::TaskBar::width() const
+qreal DesignSystem::TaskBar::minimumWidth() const
 {
-    return d->width;
+    return d->minimumWidth;
+}
+
+qreal DesignSystem::TaskBar::maximumWidth() const
+{
+    return d->maximumWidth;
 }
 
 qreal DesignSystem::TaskBar::taskHeight() const

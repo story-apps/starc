@@ -25,6 +25,10 @@ SUBDIRS = \
     title_page \
     recycle_bin
 
+exists (project_collaborators/project_collaborators.pro) {
+    SUBDIRS += project_collaborators
+}
+
 exists (characters_relations/characters_relations.pro) {
     SUBDIRS += characters_relations
 }

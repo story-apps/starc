@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QColor>
 #include <QDateTime>
 
 
@@ -136,6 +137,22 @@ struct AccountInfo {
 };
 
 /**
+ * @brief Соавторы проекта
+ */
+struct ProjectCollaboratorInfo {
+    QString name;
+    QString email;
+    int role = 0;
+    QColor color;
+};
+
+inline bool operator==(const ProjectCollaboratorInfo& _lhs, const ProjectCollaboratorInfo& _rhs)
+{
+    return _lhs.name == _rhs.name && _lhs.email == _rhs.email && _lhs.role == _rhs.role
+        && _lhs.color == _rhs.color;
+}
+
+/**
  * @brief Информация о проекте
  */
 struct ProjectInfo {
@@ -145,6 +162,7 @@ struct ProjectInfo {
     QByteArray poster;
     int accountRole = 0;
     QDateTime lastEditTime;
+    QVector<ProjectCollaboratorInfo> collaborators;
 };
 
 } // namespace Domain

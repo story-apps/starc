@@ -40,9 +40,16 @@ public:
     }
 
     /**
+     * @brief Задать параметры проекта
+     */
+    virtual void setProjectInfo(bool _isRemote, bool _isOwner)
+    {
+    }
+
+    /**
      * @brief Задать режим редактирования
      */
-    virtual void setEditingMode(ManagementLayer::DocumentEditingMode)
+    virtual void setEditingMode(ManagementLayer::DocumentEditingMode _editingMode)
     {
     }
 };

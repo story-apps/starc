@@ -106,6 +106,11 @@ signals:
     void projectCoverChanged(const QPixmap& _cover);
 
     /**
+     * @brief Пользователь хочет добавить соавтора в проект
+     */
+    void projectCollaboratorInviteRequested(const QString& _email, const QColor& _color, int _role);
+
+    /**
      * @brief Сменилась видимость элемента сценария
      */
     /** @{ */

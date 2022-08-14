@@ -23,9 +23,11 @@
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_change_object.h>
 #include <domain/document_object.h>
+#include <domain/starcloud_api.h>
 #include <include/custom_events.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <interfaces/ui/i_document_view.h>
+#include <management_layer/content/projects/project.h>
 #include <management_layer/plugins_builder.h>
 #include <ui/abstract_navigator.h>
 #include <ui/design_system/design_system.h>
@@ -255,9 +257,24 @@ public:
     const PluginsBuilder& pluginsBuilder;
 
     /**
+     * @brief Работает ли пользователь с облачным проектом
+     */
+    bool isProjectRemote = false;
+
+    /**
+     * @brief Является ли пользователь владельцем проекта
+     */
+    bool isProjectOwner = true;
+
+    /**
      * @brief Текущий режим редактирования документов
      */
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
+
+    /**
+     * @brief Список соавторов текущего проекта
+     */
+    QVector<Domain::ProjectCollaboratorInfo> collaborators;
 
     /**
      * @brief Информация о текущем документе
@@ -1076,7 +1093,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 // ... настроим иконки представлений
                 //
                 d->toolBar->clearViews();
-                const auto views = d->pluginsBuilder.editorsInfoFor(documentMimeType);
+                const auto views
+                    = d->pluginsBuilder.editorsInfoFor(documentMimeType, d->isProjectRemote);
                 for (const auto& view : views) {
                     const auto tooltip
                         = d->pluginsBuilder.editorDescription(documentMimeType, view.mimeType);
@@ -1388,6 +1406,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             &ProjectManager::projectLoglineChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectCoverChanged, this,
             &ProjectManager::projectCoverChanged);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectCollaboratorInviteRequested, this,
+            &ProjectManager::projectCollaboratorInviteRequested);
     connect(&d->modelsFacade, &ProjectModelsFacade::createCharacterRequested, this,
             [this](const QString& _name, const QByteArray& _content) {
                 d->addDocumentToContainer(Domain::DocumentObjectType::Characters,
@@ -1749,27 +1769,19 @@ void ProjectManager::checkAvailabilityToEdit()
     d->pluginsBuilder.checkAvailabilityToEdit();
 }
 
-void ProjectManager::setEditingMode(DocumentEditingMode _mode)
-{
-    if (d->editingMode == _mode) {
-        return;
-    }
-
-    d->editingMode = _mode;
-    d->pluginsBuilder.setEditingMode(_mode);
-    const auto readOnly = d->editingMode == DocumentEditingMode::Read;
-    d->navigator->setReadOnly(readOnly);
-}
-
-void ProjectManager::loadCurrentProject(const QString& _name, const QString& _path)
+void ProjectManager::loadCurrentProject(const Project& _project)
 {
     //
     // Загружаем структуру
     //
-    d->projectStructureModel->setProjectName(_name);
     d->projectStructureModel->setDocument(
         DataStorageLayer::StorageFacade::documentStorage()->document(
             Domain::DocumentObjectType::Structure));
+
+    //
+    // Сохраняем параметры проекта для дальнейшего использования
+    //
+    updateCurrentProject(_project);
 
     //
     // Загружаем информацию о проекте
@@ -1778,13 +1790,12 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
         d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
             Domain::DocumentObjectType::Project)));
     if (projectInformationModel->name().isEmpty()) {
-        projectInformationModel->setName(_name);
+        projectInformationModel->setName(_project.name());
     } else {
         emit projectNameChanged(projectInformationModel->name());
         emit projectLoglineChanged(projectInformationModel->logline());
         emit projectCoverChanged(projectInformationModel->cover());
     }
-
 
     //
     // Синхронизировать структуру с облаком
@@ -1794,7 +1805,7 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     // Открыть структуру
     //
 
-    restoreCurrentProjectState(_path);
+    restoreCurrentProjectState(_project.path());
 
     //
     // Синхронизировать выбранный документ
@@ -1803,6 +1814,23 @@ void ProjectManager::loadCurrentProject(const QString& _name, const QString& _pa
     //
     // Синхрониировать все остальные изменения
     //
+}
+
+void ProjectManager::updateCurrentProject(const Project& _project)
+{
+    d->isProjectRemote = _project.isRemote();
+    d->isProjectOwner = _project.isOwner();
+    d->editingMode = _project.editingMode();
+    d->pluginsBuilder.setEditingMode(d->editingMode);
+    d->navigator->setReadOnly(d->editingMode == DocumentEditingMode::Read);
+    d->collaborators = _project.collaborators();
+
+    d->projectStructureModel->setProjectName(_project.name());
+
+    auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(
+        d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
+            Domain::DocumentObjectType::Project)));
+    projectInformationModel->setCollaborators(_project.collaborators());
 }
 
 void ProjectManager::restoreCurrentProjectState(const QString& _path)
@@ -2225,6 +2253,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         d->view.active->setVersionsVisible(false);
         return;
     }
+    view->setProjectInfo(d->isProjectRemote, d->isProjectOwner);
     view->setEditingMode(d->editingMode);
     d->view.active->setDocumentVersions(item->versions());
     d->view.active->showEditor(view->asQWidget());

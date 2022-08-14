@@ -132,6 +132,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
  */
 const QHash<QString, QString> kMimeToPlugin
     = { { "application/x-starc/editor/project/information", "*projectinformationplugin*" },
+        { "application/x-starc/editor/project/collaborators", "*projectcollaboratorsplugin*" },
         //
         { kSimpleTextEditorMime, "*simpletextplugin*" },
         { kSimpleTextNavigatorMime, "*simpletextstructureplugin*" },
@@ -315,10 +316,19 @@ IDocumentManager* PluginsBuilder::plugin(const QString& _mimeType) const
     return plugin.value();
 }
 
-QVector<PluginsBuilder::EditorInfo> PluginsBuilder::editorsInfoFor(
-    const QString& _documentMimeType) const
+QVector<PluginsBuilder::EditorInfo> PluginsBuilder::editorsInfoFor(const QString& _documentMimeType,
+                                                                   bool _isProjectRemote) const
 {
-    return kDocumentToEditors.value(_documentMimeType);
+    auto editors = kDocumentToEditors.value(_documentMimeType);
+    if (!_isProjectRemote) {
+        editors.erase(std::remove_if(editors.begin(), editors.end(),
+                                     [](const auto& _editorInfo) {
+                                         return _editorInfo.mimeType
+                                             == "application/x-starc/editor/project/collaborators";
+                                     }),
+                      editors.end());
+    }
+    return editors;
 }
 
 QString PluginsBuilder::editorDescription(const QString& _documentMimeType,

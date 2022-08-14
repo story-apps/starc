@@ -1,6 +1,7 @@
 #include "task_bar.h"
 
 #include <ui/design_system/design_system.h>
+#include <utils/helpers/text_helper.h>
 #include <utils/logging.h>
 
 #include <QEvent>
@@ -45,7 +46,18 @@ TaskBar* TaskBar::Implementation::instance = nullptr;
 
 void TaskBar::Implementation::correctGeometry(QWidget* _taskBar)
 {
-    _taskBar->setFixedSize(Ui::DesignSystem::taskBar().width(),
+    qreal width = Ui::DesignSystem::taskBar().minimumWidth();
+    for (const auto& task : std::as_const(tasks)) {
+        const auto taskWidth = std::min(
+            Ui::DesignSystem::taskBar().margins().left()
+                + TextHelper::fineTextWidthF(task.title, Ui::DesignSystem::font().caption())
+                + Ui::DesignSystem::taskBar().margins().right(),
+            Ui::DesignSystem::taskBar().maximumWidth());
+        if (width < taskWidth) {
+            width = taskWidth;
+        }
+    }
+    _taskBar->setFixedSize(width,
                            Ui::DesignSystem::taskBar().margins().top()
                                + Ui::DesignSystem::taskBar().taskHeight() * tasks.size()
                                + Ui::DesignSystem::taskBar().margins().bottom());
@@ -108,6 +120,7 @@ void TaskBar::setTaskTitle(const QString& _taskId, const QString& _title)
         }
     }
 
+    Implementation::instance->d->correctGeometry(Implementation::instance);
     Implementation::instance->update();
 }
 

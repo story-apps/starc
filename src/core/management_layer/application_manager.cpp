@@ -1253,7 +1253,7 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
         return;
     }
 
-    if (!QFileInfo::exists(_path)) {
+    if (projectsManager->currentProject().isLocal() && !QFileInfo::exists(_path)) {
         projectsManager->hideProject(_path);
         return;
     }
@@ -1331,7 +1331,8 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     //
     // Настроим меню
     //
-    menuView->setProjectTitle(projectsManager->currentProject().name());
+    const auto& currentProject = projectsManager->currentProject();
+    menuView->setProjectTitle(currentProject.name());
     menuView->setProjectActionsVisible(true);
 
     //
@@ -1350,11 +1351,8 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     //
     // Загрузим данные текущего проекта
     //
-    projectManager->loadCurrentProject(projectsManager->currentProject().name(),
-                                       projectsManager->currentProject().path());
-    projectManager->setEditingMode(projectsManager->currentProject().editingMode());
-    menuView->setImportAvailable(projectsManager->currentProject().editingMode()
-                                 == DocumentEditingMode::Edit);
+    projectManager->loadCurrentProject(currentProject);
+    menuView->setImportAvailable(currentProject.editingMode() == DocumentEditingMode::Edit);
 
     //
     // Восстанавливаем тип проекта по-умолчанию для будущих свершений
@@ -1373,7 +1371,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
         // ... а после импорта пробуем повторно восстановить состояние,
         //     особенно актуально для кейса с теневым проектом
         //
-        projectManager->restoreCurrentProjectState(projectsManager->currentProject().path());
+        projectManager->restoreCurrentProjectState(currentProject.path());
     }
 
     //
@@ -1386,8 +1384,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     //
     // Для локальных проектов доступных только для чтения, покажем соответствующее уведомление
     //
-    if (projectsManager->currentProject().type() != ProjectType::Cloud
-        && projectsManager->currentProject().isReadOnly()) {
+    if (currentProject.type() != ProjectType::Cloud && currentProject.isReadOnly()) {
         StandardDialog::information(
             applicationView, {},
             tr("A file you are trying to open does not have write permissions. Check out file "
@@ -1395,18 +1392,17 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
                "in a read-only mode."));
     }
 
-    if (projectsManager->currentProject().type() == ProjectType::LocalShadow) {
+    if (currentProject.type() == ProjectType::LocalShadow) {
         //
         // Покажем диалог с предупреждением о том, что не все функции могут работать и предложим
         // сохранить в формате старка
         //
-        if (projectsManager->currentProject().canAskAboutSwitch()) {
+        if (currentProject.canAskAboutSwitch()) {
             const int kNeverAskAgainButtonId = 0;
             const int kKeepButtonId = 1;
             const int kYesButtonId = 2;
             Dialog* informationDialog = new Dialog(applicationView);
-            const auto projectFileSuffix
-                = QFileInfo(projectsManager->currentProject().path()).suffix().toUpper();
+            const auto projectFileSuffix = QFileInfo(currentProject.path()).suffix().toUpper();
             informationDialog->showDialog(
                 tr("Do you want continue to use .%1 file format?").arg(projectFileSuffix),
                 tr("Some project data cannot be saved in .%1 format. We recommend you to use Story "
@@ -1445,8 +1441,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
                                  const auto project = projectsManager->currentProject();
                                  const QString projectPath
                                      = project.path() + "." + ExtensionHelper::starc();
-                                 createLocalProject(projectsManager->currentProject().name(),
-                                                    projectPath, project.path());
+                                 createLocalProject(project.name(), projectPath, project.path());
                                  //
                                  // ... скрываем текущий из списка недавних
                                  //
@@ -2260,8 +2255,13 @@ void ApplicationManager::initConnections()
     //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::projectsReceived,
             d->projectsManager.data(), &ProjectsManager::setCloudProjects);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::projectUpdated,
-            d->projectsManager.data(), &ProjectsManager::addOrUpdateCloudProject);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::projectUpdated, this,
+            [this](const Domain::ProjectInfo& _projectInfo) {
+                d->projectsManager->addOrUpdateCloudProject(_projectInfo);
+                if (_projectInfo.id == d->projectsManager->currentProject().id()) {
+                    d->projectManager->updateCurrentProject(d->projectsManager->currentProject());
+                }
+            });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::projectRemoved,
             d->projectsManager.data(), &ProjectsManager::removeProject);
     connect(d->projectsManager.data(), &ProjectsManager::createCloudProjectRequested, this,
@@ -2285,6 +2285,18 @@ void ApplicationManager::initConnections()
             });
     connect(d->projectsManager.data(), &ProjectsManager::updateCloudProjectRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::updateProject);
+    connect(d->projectManager.data(), &ProjectManager::projectCollaboratorInviteRequested,
+            d->projectsManager.data(),
+            [this](const QString& _email, const QColor& _color, int _role) {
+                Q_UNUSED(_color)
+                //
+                // Добавляем единицу, чтобы смапить с облачным перечислением,
+                // т.к. там 0 - владелец проекта
+                //
+                const auto accountRole = _role + 1;
+                d->cloudServiceManager->addCollaborator(d->projectsManager->currentProject().id(),
+                                                        _email, accountRole);
+            });
     connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,
             [this](int _id) { d->cloudServiceManager->removeProject(_id); });
 #endif

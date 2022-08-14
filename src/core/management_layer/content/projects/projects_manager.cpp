@@ -257,31 +257,24 @@ void ProjectsManager::setHasUnreadNotifications(bool _hasUnreadNotifications)
 void ProjectsManager::loadProjects()
 {
     const auto projectsData = settingsValue(DataStorageLayer::kApplicationProjectsKey);
-    //
-    // TODO: Оставить только голый json
-    //
-    auto projectsJson
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        = QJsonDocument::fromBinaryData(QByteArray::fromHex(projectsData.toByteArray()));
-    if (projectsJson.isEmpty())
-        projectsJson
-#endif
-            = QJsonDocument::fromJson(QByteArray::fromHex(projectsData.toByteArray()));
+    const auto projectsJson
+        = QJsonDocument::fromJson(QByteArray::fromHex(projectsData.toByteArray()));
 
     QVector<Project> projects;
     for (const auto projectJsonValue : projectsJson.array()) {
         const auto projectJson = projectJsonValue.toObject();
 
         //
-        // Если файл проекта удалили, то не пропускаем его
+        // Если локальный файл проекта удалили, то не добавляем его в список недавних проектов
         //
+        const auto isRemote = projectJson.contains("id");
         const auto projectPath = projectJson["path"].toString();
-        if (!QFileInfo::exists(projectPath)) {
+        if (!isRemote && !QFileInfo::exists(projectPath)) {
             continue;
         }
 
         Project project;
-        if (projectJson.contains("id")) {
+        if (isRemote) {
             project.setId(projectJson["id"].toInt());
         }
         project.setType(static_cast<ProjectType>(projectJson["type"].toInt()));
@@ -529,6 +522,7 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
             cloudProject.setPosterPath(posterPath);
         }
     }
+    cloudProject.setCollaborators(_projectInfo.collaborators);
 
     //
     // Если проект не нашёлся в списке недавних, добавляем в начало
@@ -567,6 +561,13 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     //
     else {
         d->projects->updateProject(cloudProject);
+    }
+
+    //
+    // При необходимости также обновим текущий проект
+    //
+    if (d->currentProject.id() == cloudProject.id()) {
+        d->currentProject = cloudProject;
     }
 }
 

@@ -79,12 +79,6 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     _painter->setPen(textColor);
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
-        if (_index.data(Qt::DecorationPropertyRole).isValid()
-            && _index.data(Qt::DecorationPropertyRole).value<QColor>().isValid()) {
-
-            _painter->setPen(_index.data(Qt::DecorationPropertyRole).value<QColor>());
-        }
-
         if (isLeftToRight) {
             iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
                                                Ui::DesignSystem::treeOneLineItem().margins().left())
@@ -99,8 +93,23 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
                               QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
                                      backgroundRect.height()));
         }
-        _painter->setFont(Ui::DesignSystem::font().iconsMid());
-        _painter->drawText(iconRect, Qt::AlignCenter, _index.data(Qt::DecorationRole).toString());
+
+        if (_index.data(Qt::DecorationRole).type() == QVariant::String) {
+            if (_index.data(Qt::DecorationPropertyRole).isValid()
+                && _index.data(Qt::DecorationPropertyRole).value<QColor>().isValid()) {
+
+                _painter->setPen(_index.data(Qt::DecorationPropertyRole).value<QColor>());
+            }
+            _painter->setFont(Ui::DesignSystem::font().iconsMid());
+            _painter->drawText(iconRect, Qt::AlignCenter,
+                               _index.data(Qt::DecorationRole).toString());
+        } else {
+            const auto pixmap = _index.data(Qt::DecorationRole).value<QPixmap>();
+            _painter->drawPixmap(
+                QPointF(iconRect.left() + (iconRect.width() - pixmap.width()) / 2.0,
+                        iconRect.top() + (iconRect.height() - pixmap.height()) / 2.0),
+                pixmap);
+        }
     }
 
     //
@@ -162,8 +171,14 @@ QSize TreeDelegate::sizeHint(const QStyleOptionViewItem& _option, const QModelIn
     Q_UNUSED(_option)
     Q_UNUSED(_index)
 
-    return QSizeF(TextHelper::fineTextWidthF(_index.data().toString(),
-                                             Ui::DesignSystem::font().subtitle2()),
+    return QSizeF(Ui::DesignSystem::treeOneLineItem().margins().left()
+                      + TextHelper::fineTextWidthF(_index.data().toString(),
+                                                   Ui::DesignSystem::font().subtitle2())
+                      + Ui::DesignSystem::treeOneLineItem().margins().right()
+                      // ... для последнего столбца, добавляем дополнительный отступ от края
+                      + (_index.column() == _index.model()->columnCount() - 1
+                             ? Ui::DesignSystem::layout().px24()
+                             : 0.0),
                   Ui::DesignSystem::treeOneLineItem().height())
         .toSize();
 }

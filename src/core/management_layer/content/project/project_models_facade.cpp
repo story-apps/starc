@@ -138,6 +138,9 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                     &ProjectModelsFacade::projectLoglineChanged, Qt::UniqueConnection);
             connect(projectInformationModel, &BusinessLayer::ProjectInformationModel::coverChanged,
                     this, &ProjectModelsFacade::projectCoverChanged, Qt::UniqueConnection);
+            connect(projectInformationModel,
+                    &BusinessLayer::ProjectInformationModel::collaboratorInviteRequested, this,
+                    &ProjectModelsFacade::projectCollaboratorInviteRequested, Qt::UniqueConnection);
             model = projectInformationModel;
             break;
         }

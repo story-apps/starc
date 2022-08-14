@@ -2,6 +2,7 @@
 
 #include <business_layer/model/abstract_image_wrapper.h>
 #include <domain/document_object.h>
+#include <domain/starcloud_api.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -23,6 +24,7 @@ public:
     QString name;
     QString logline;
     Domain::DocumentImage cover;
+    QVector<Domain::ProjectCollaboratorInfo> collaborators;
 };
 
 
@@ -89,6 +91,22 @@ void ProjectInformationModel::setCover(const QPixmap& _cover)
     d->cover.image = _cover;
     d->cover.uuid = imageWrapper()->save(d->cover.image);
     emit coverChanged(d->cover.image);
+}
+
+QVector<Domain::ProjectCollaboratorInfo> ProjectInformationModel::collaborators() const
+{
+    return d->collaborators;
+}
+
+void ProjectInformationModel::setCollaborators(
+    const QVector<Domain::ProjectCollaboratorInfo>& _collaborators)
+{
+    if (d->collaborators == _collaborators) {
+        return;
+    }
+
+    d->collaborators = _collaborators;
+    emit collaboratorsChanged(d->collaborators);
 }
 
 void ProjectInformationModel::initDocument()

@@ -1,5 +1,6 @@
 #include "project.h"
 
+#include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 
 #include <QApplication>
@@ -26,6 +27,7 @@ public:
     int id = -1;
     bool isOwner = true;
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
+    QVector<Domain::ProjectCollaboratorInfo> collaborators;
 };
 
 
@@ -228,6 +230,16 @@ void Project::setEditingMode(DocumentEditingMode _mode)
 bool Project::isReadOnly() const
 {
     return d->editingMode == DocumentEditingMode::Read;
+}
+
+QVector<Domain::ProjectCollaboratorInfo> Project::collaborators() const
+{
+    return d->collaborators;
+}
+
+void Project::setCollaborators(const QVector<Domain::ProjectCollaboratorInfo>& _collaborators)
+{
+    d->collaborators = _collaborators;
 }
 
 QVariant Project::data(int _role) const

@@ -28,3 +28,6 @@
 [submodule "src/core/management_layer/plugins/stageplay_statistics"]
 	path = src/core/management_layer/plugins/stageplay_statistics
 	url = git@github.com:story-apps/starc-stageplay-statistics-plugin.git
+[submodule "src/core/management_layer/plugins/project_collaborators"]
+	path = src/core/management_layer/plugins/project_collaborators
+	url = git@github.com:story-apps/starc-project-collaborators-plugin.git

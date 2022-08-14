@@ -3,6 +3,10 @@
 #include "../abstract_model.h"
 
 
+namespace Domain {
+struct ProjectCollaboratorInfo;
+}
+
 namespace BusinessLayer {
 
 class CORE_LIBRARY_EXPORT ProjectInformationModel : public AbstractModel
@@ -25,6 +29,17 @@ public:
     const QPixmap& cover() const;
     void setCover(const QPixmap& _cover);
     Q_SIGNAL void coverChanged(const QPixmap& _cover);
+
+    QVector<Domain::ProjectCollaboratorInfo> collaborators() const;
+    void setCollaborators(const QVector<Domain::ProjectCollaboratorInfo>& _collaborators);
+    Q_SIGNAL void collaboratorsChanged(
+        const QVector<Domain::ProjectCollaboratorInfo>& _collaborators);
+
+signals:
+    /**
+     * @brief Пользователь хочет добавить соавтора в проект
+     */
+    void collaboratorInviteRequested(const QString& _email, const QColor& _color, int _role);
 
 protected:
     /**
