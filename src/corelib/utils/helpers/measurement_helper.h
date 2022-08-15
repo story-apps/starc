@@ -43,5 +43,5 @@ public:
      * @brief Перевести миллиметры/пиксели в твипсы (мера длины в формате RTF)
      */
     static int mmToTwips(qreal _mm);
-    static int pxToTwips(qreal _px);
+    static int pxToTwips(qreal _px, bool _x = true);
 };

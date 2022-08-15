@@ -35,9 +35,9 @@ int mmToTwips(qreal _mm)
 /**
  * @brief Перевести пиксели в твипсы
  */
-int pxToTwips(qreal _px)
+int pxToTwips(qreal _px, bool _x = true)
 {
-    return MeasurementHelper::pxToTwips(_px);
+    return MeasurementHelper::pxToTwips(_px, _x);
 }
 
 } // namespace
@@ -220,8 +220,8 @@ QString AbstractDocxExporter::Implementation::docxBlockStyle(const TextBlockStyl
     // ... интервалы
     //
     blockStyle.append(QString("<w:spacing w:before=\"%1\" w:after=\"%2\" ")
-                          .arg(pxToTwips(_style.blockFormat(_onHalfPage).topMargin()))
-                          .arg(pxToTwips(_style.blockFormat(_onHalfPage).bottomMargin())));
+                          .arg(pxToTwips(_style.blockFormat(_onHalfPage).topMargin(), false))
+                          .arg(pxToTwips(_style.blockFormat(_onHalfPage).bottomMargin(), false)));
     // ... межстрочный
     int lineSpacing = 240;
     QString lineSpacingType = "auto";
@@ -385,9 +385,23 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
     //
     const QTextBlock block = _cursor.block();
     const auto currentBlockType = TextBlockStyle::forBlock(block);
-    const auto correctedBlockType = currentBlockType == TextParagraphType::PanelHeadingShadow
-        ? TextParagraphType::PanelHeading
-        : currentBlockType;
+    const auto correctedBlockType = [currentBlockType] {
+        switch (currentBlockType) {
+        case TextParagraphType::SceneHeadingShadow:
+        case TextParagraphType::SceneHeadingShadowTreatment: {
+            return TextParagraphType::SceneHeading;
+        }
+        case TextParagraphType::BeatHeadingShadow: {
+            return TextParagraphType::BeatHeading;
+        }
+        case TextParagraphType::PanelHeadingShadow: {
+            return TextParagraphType::PanelHeading;
+        }
+        default: {
+            return currentBlockType;
+        }
+        }
+    }();
 
     //
     // Запишем параграф в документ
@@ -416,8 +430,8 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         if (_cursor.blockFormat().topMargin() != 0 || _cursor.blockFormat().bottomMargin() != 0) {
             documentXml.append(
                 QString("<w:spacing w:before=\"%1\" w:after=\"%2\" w:lineRule=\"auto\"/>")
-                    .arg(pxToTwips(_cursor.blockFormat().topMargin()))
-                    .arg(pxToTwips(_cursor.blockFormat().bottomMargin())));
+                    .arg(pxToTwips(_cursor.blockFormat().topMargin(), false))
+                    .arg(pxToTwips(_cursor.blockFormat().bottomMargin(), false)));
         }
         documentXml.append("<w:rPr/></w:pPr>");
         //

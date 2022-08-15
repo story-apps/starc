@@ -86,10 +86,10 @@ qreal MeasurementHelper::inchToMm(qreal _inch)
 
 int MeasurementHelper::mmToTwips(qreal _mm)
 {
-    return 56.692913386 * _mm;
+    return qCeil(56.692913386 * _mm);
 }
 
-int MeasurementHelper::pxToTwips(qreal _px)
+int MeasurementHelper::pxToTwips(qreal _px, bool _x)
 {
-    return mmToTwips(pxToMm(_px));
+    return mmToTwips(pxToMm(_px, _x));
 }
