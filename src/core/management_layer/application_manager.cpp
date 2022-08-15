@@ -2254,7 +2254,12 @@ void ApplicationManager::initConnections()
     // Проекты
     //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::projectsReceived,
-            d->projectsManager.data(), &ProjectsManager::setCloudProjects);
+            d->projectsManager.data(), [this](const QVector<Domain::ProjectInfo>& _projects) {
+                d->projectsManager->setCloudProjects(_projects);
+                if (d->projectsManager->currentProject().isRemote()) {
+                    d->projectManager->updateCurrentProject(d->projectsManager->currentProject());
+                }
+            });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::projectUpdated, this,
             [this](const Domain::ProjectInfo& _projectInfo) {
                 d->projectsManager->addOrUpdateCloudProject(_projectInfo);
