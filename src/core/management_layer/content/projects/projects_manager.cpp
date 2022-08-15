@@ -506,10 +506,11 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
               .arg(QStandardPaths::writableLocation(QStandardPaths::DataLocation),
                    DataStorageLayer::StorageFacade::settingsStorage()->accountEmail());
     QDir::root().mkpath(projectDir);
-    const auto projectPath = cloudProject.path().isEmpty()
-        ? QString("%1/%2.%3")
-              .arg(projectDir, QString::number(_projectInfo.id), Project::extension())
-        : cloudProject.path();
+    const auto projectPath = QDir::toNativeSeparators(
+        cloudProject.path().isEmpty()
+            ? QString("%1/%2.%3")
+                  .arg(projectDir, QString::number(_projectInfo.id), Project::extension())
+            : cloudProject.path());
 
     //
     // Если текущий пользователь является владельцем проекта
