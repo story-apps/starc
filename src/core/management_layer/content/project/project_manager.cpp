@@ -1408,6 +1408,10 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             &ProjectManager::projectCoverChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectCollaboratorInviteRequested, this,
             &ProjectManager::projectCollaboratorInviteRequested);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectCollaboratorUpdateRequested, this,
+            &ProjectManager::projectCollaboratorUpdateRequested);
+    connect(&d->modelsFacade, &ProjectModelsFacade::projectCollaboratorRemoveRequested, this,
+            &ProjectManager::projectCollaboratorRemoveRequested);
     connect(&d->modelsFacade, &ProjectModelsFacade::createCharacterRequested, this,
             [this](const QString& _name, const QByteArray& _content) {
                 d->addDocumentToContainer(Domain::DocumentObjectType::Characters,

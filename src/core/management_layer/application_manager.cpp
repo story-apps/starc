@@ -2297,6 +2297,23 @@ void ApplicationManager::initConnections()
                 d->cloudServiceManager->addCollaborator(d->projectsManager->currentProject().id(),
                                                         _email, accountRole);
             });
+    connect(d->projectManager.data(), &ProjectManager::projectCollaboratorUpdateRequested,
+            d->projectsManager.data(),
+            [this](const QString& _email, const QColor& _color, int _role) {
+                Q_UNUSED(_color)
+                //
+                // Добавляем единицу, чтобы смапить с облачным перечислением,
+                // т.к. там 0 - владелец проекта
+                //
+                const auto accountRole = _role + 1;
+                d->cloudServiceManager->updateCollaborator(
+                    d->projectsManager->currentProject().id(), _email, accountRole);
+            });
+    connect(d->projectManager.data(), &ProjectManager::projectCollaboratorRemoveRequested,
+            d->projectsManager.data(), [this](const QString& _email) {
+                d->cloudServiceManager->removeCollaborator(
+                    d->projectsManager->currentProject().id(), _email);
+            });
     connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,
             [this](int _id) { d->cloudServiceManager->removeProject(_id); });
 #endif

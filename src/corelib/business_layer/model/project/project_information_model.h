@@ -40,6 +40,8 @@ signals:
      * @brief Пользователь хочет добавить соавтора в проект
      */
     void collaboratorInviteRequested(const QString& _email, const QColor& _color, int _role);
+    void collaboratorUpdateRequested(const QString& _email, const QColor& _color, int _role);
+    void collaboratorRemoveRequested(const QString& _email);
 
 protected:
     /**

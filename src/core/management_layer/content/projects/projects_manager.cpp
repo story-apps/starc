@@ -276,6 +276,8 @@ void ProjectsManager::loadProjects()
         Project project;
         if (isRemote) {
             project.setId(projectJson["id"].toInt());
+            project.setOwner(projectJson["is_owner"].toBool());
+            project.setEditingMode(static_cast<DocumentEditingMode>(projectJson["role"].toInt()));
         }
         project.setType(static_cast<ProjectType>(projectJson["type"].toInt()));
         project.setName(projectJson["name"].toString());
@@ -298,6 +300,8 @@ void ProjectsManager::saveProjects()
         QJsonObject projectJson;
         if (project.isRemote()) {
             projectJson["id"] = project.id();
+            projectJson["is_owner"] = project.isOwner();
+            projectJson["role"] = static_cast<int>(project.editingMode());
         }
         projectJson["type"] = static_cast<int>(project.type());
         projectJson["name"] = project.name();
@@ -464,6 +468,7 @@ void ProjectsManager::setCloudProjects(const QVector<Domain::ProjectInfo>& _proj
 
         if (hideProject) {
             d->projects->remove(project);
+            --projectRow;
         }
     }
 
@@ -507,6 +512,20 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
         : cloudProject.path();
 
     //
+    // Если текущий пользователь является владельцем проекта
+    //
+    if (_projectInfo.accountRole == 0) {
+        cloudProject.setOwner(true);
+        cloudProject.setEditingMode(DocumentEditingMode::Edit);
+    }
+    //
+    // В противном случае
+    //
+    else {
+        cloudProject.setOwner(false);
+        cloudProject.setEditingMode(static_cast<DocumentEditingMode>(_projectInfo.accountRole - 1));
+    }
+    //
     // Обновим параметры проекта
     //
     cloudProject.setName(_projectInfo.name);
@@ -533,21 +552,6 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
         //
         cloudProject.setId(_projectInfo.id);
         cloudProject.setType(ProjectType::Cloud);
-        //
-        // Если текущий пользователь является владельцем проекта
-        //
-        if (_projectInfo.accountRole == 0) {
-            cloudProject.setOwner(true);
-            cloudProject.setEditingMode(DocumentEditingMode::Edit);
-        }
-        //
-        // В противном случае
-        //
-        else {
-            cloudProject.setOwner(false);
-            cloudProject.setEditingMode(
-                static_cast<DocumentEditingMode>(_projectInfo.accountRole - 1));
-        }
         cloudProject.setPath(projectPath);
         cloudProject.setRealPath(projectPath);
 

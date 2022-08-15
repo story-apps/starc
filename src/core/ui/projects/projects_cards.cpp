@@ -1,6 +1,7 @@
 #include "projects_cards.h"
 
 #include <include/custom_events.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <management_layer/content/projects/project.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -105,16 +106,16 @@ ProjectCard::ProjectCard(QGraphicsItem* _parent)
     m_shadowHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
     m_shadowHeightAnimation.setDuration(160);
     QObject::connect(&m_shadowHeightAnimation, &QVariantAnimation::valueChanged,
-                     [this] { update(); });
+                     &m_shadowHeightAnimation, [this] { update(); });
 
     m_decorationRadiusAnimation.setDuration(240);
     QObject::connect(&m_decorationRadiusAnimation, &QVariantAnimation::valueChanged,
-                     [this] { update(); });
+                     &m_decorationRadiusAnimation, [this] { update(); });
 
     m_decorationOpacityAnimation.setEasingCurve(QEasingCurve::InQuad);
     m_decorationOpacityAnimation.setDuration(240);
     QObject::connect(&m_decorationOpacityAnimation, &QVariantAnimation::valueChanged,
-                     [this] { update(); });
+                     &m_decorationOpacityAnimation, [this] { update(); });
 }
 
 ProjectCard::~ProjectCard()
@@ -248,18 +249,51 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     // Роль в проекте
     //
     if (m_project.isRemote()) {
-        _painter->setFont(Ui::DesignSystem::font().subtitle2());
-        const QRectF roleRect(lastDateRect.bottomLeft(),
-                              QPointF(lastDateRect.right(),
-                                      lastDateRect.bottom() + fontMetrics.lineSpacing()
-                                          + Ui::DesignSystem::layout().px(6)));
         if (m_project.isOwner()) {
+            _painter->setFont(Ui::DesignSystem::font().subtitle2());
+            const QRectF roleRect(lastDateRect.bottomLeft(),
+                                  QPointF(lastDateRect.right(),
+                                          lastDateRect.bottom() + fontMetrics.lineSpacing()
+                                              + Ui::DesignSystem::layout().px(6)));
             _painter->drawText(roleRect, Qt::AlignLeft | Qt::AlignBottom,
                                projectsScene()->tr("Owner"));
         } else {
-            //
-            // TODO:
-            //
+            QString roleIcon;
+            QString roleText;
+            switch (m_project.editingMode()) {
+            case ManagementLayer::DocumentEditingMode::Edit: {
+                roleIcon = u8"\U000F03EB";
+                roleText = projectsScene()->tr("Editor");
+                break;
+            }
+
+            case ManagementLayer::DocumentEditingMode::Comment: {
+                roleIcon = u8"\U000F0208";
+                roleText = projectsScene()->tr("Commentator");
+                break;
+            }
+
+            case ManagementLayer::DocumentEditingMode::Read: {
+                roleIcon = u8"\U000F0208";
+                roleText = projectsScene()->tr("Reader");
+                break;
+            }
+            }
+
+            _painter->setFont(Ui::DesignSystem::font().iconsSmall());
+            const QRectF iconRect(
+                lastDateRect.bottomLeft(),
+                QSizeF(Ui::DesignSystem::layout().px24(),
+                       fontMetrics.lineSpacing() + Ui::DesignSystem::layout().px4()));
+            _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignBottom, roleIcon);
+
+
+            _painter->setFont(Ui::DesignSystem::font().subtitle2());
+            const QRectF roleRect(iconRect.topRight(),
+                                  QPointF(lastDateRect.right(),
+                                          lastDateRect.bottom() + fontMetrics.lineSpacing()
+                                              + Ui::DesignSystem::layout().px(6)));
+            _painter->drawText(roleRect, Qt::AlignLeft | Qt::AlignBottom, roleText);
         }
     }
 

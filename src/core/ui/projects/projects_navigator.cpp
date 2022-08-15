@@ -37,7 +37,7 @@ ProjectsNavigator::Implementation::Implementation(QWidget* _parent)
 {
     createProjectButton->setIcon(u8"\U000f0415");
     openProjectButton->setIcon(u8"\U000f0256");
-    helpButton->setIcon(u8"\U000f02d7");
+    helpButton->setIcon(u8"\U000F0625");
 
     layout->setContentsMargins({});
     layout->setSpacing(0);
@@ -61,9 +61,9 @@ ProjectsNavigator::ProjectsNavigator(QWidget* _parent)
             &ProjectsNavigator::createProjectPressed);
     connect(d->openProjectButton, &Button::clicked, this, &ProjectsNavigator::openProjectPressed);
     connect(d->helpButton, &Button::clicked, this, &ProjectsNavigator::helpPressed);
-
-    designSystemChangeEvent(nullptr);
 }
+
+ProjectsNavigator::~ProjectsNavigator() = default;
 
 void ProjectsNavigator::updateTranslations()
 {
@@ -73,10 +73,8 @@ void ProjectsNavigator::updateTranslations()
 
     d->createProjectButton->setText(tr("Create story"));
     d->openProjectButton->setText(tr("Open story"));
-    d->helpButton->setText(tr("How to use application?"));
+    d->helpButton->setText(tr("User guide"));
 }
-
-ProjectsNavigator::~ProjectsNavigator() = default;
 
 void ProjectsNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
