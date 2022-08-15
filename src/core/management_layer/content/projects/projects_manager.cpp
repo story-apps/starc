@@ -536,8 +536,11 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
             cloudProject.setPosterPath({});
         } else {
             const auto posterPath = d->projectPosterPath(projectPath);
-            const auto poster = ImageHelper::imageFromBytes(_projectInfo.poster);
-            poster.save(posterPath, "PNG");
+            QFile posterFile(posterPath);
+            if (posterFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                posterFile.write(_projectInfo.poster);
+                posterFile.close();
+            }
             cloudProject.setPosterPath(posterPath);
         }
     }
