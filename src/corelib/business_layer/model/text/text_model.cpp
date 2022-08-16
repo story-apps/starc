@@ -125,7 +125,7 @@ QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _document) c
     xml += "<document mime-type=\"" + Domain::mimeTypeFor(_document->type())
         + "\" version=\"1.0\">\n";
     for (int childIndex = 0; childIndex < rootItem->childCount(); ++childIndex) {
-        xml += rootItem->childAt(childIndex);
+        xml += rootItem->childAt(childIndex)->toXml();
     }
     xml += "</document>";
     return xml.data();

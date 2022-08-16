@@ -214,6 +214,12 @@ void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader
                 format.isUnderline = formatAttributes.hasAttribute(xml::kUnderlineAttribute);
                 format.isStrikethrough
                     = formatAttributes.hasAttribute(xml::kStrikethroughAttribute);
+                if (formatAttributes.hasAttribute(xml::kFontFamilyAttribute)
+                    && formatAttributes.hasAttribute(xml::kFontSizeAttribute)) {
+                    format.font.family
+                        = formatAttributes.value(xml::kFontFamilyAttribute).toString();
+                    format.font.size = formatAttributes.value(xml::kFontSizeAttribute).toInt();
+                }
 
                 formats.append(format);
             }
@@ -374,7 +380,7 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
     if (!formatsToSave.isEmpty()) {
         xml += QString("<%1>").arg(xml::kFormatsTag).toUtf8();
         for (const auto& format : std::as_const(formatsToSave)) {
-            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8%9/>")
+            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7%8%9%10/>")
                        .arg(xml::kFormatTag, xml::kFromAttribute, QString::number(format.from),
                             xml::kLengthAttribute, QString::number(format.length),
                             (format.isBold ? QString(" %1=\"true\"").arg(xml::kBoldAttribute) : ""),
@@ -385,6 +391,12 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
                                  : ""),
                             (format.isStrikethrough
                                  ? QString(" %1=\"true\"").arg(xml::kStrikethroughAttribute)
+                                 : ""),
+                            (!format.font.family.isEmpty() && format.font.size > 0
+                                 ? QString(" %1=\"%2\" %3=\"%4\"")
+                                       .arg(xml::kFontFamilyAttribute, format.font.family,
+                                            xml::kFontSizeAttribute,
+                                            QString::number(format.font.size))
                                  : ""))
                        .toUtf8();
         }
@@ -427,12 +439,14 @@ bool TextModelTextItem::TextFormat::operator==(const TextModelTextItem::TextForm
 {
     return from == _other.from && length == _other.length && isBold == _other.isBold
         && isItalic == _other.isItalic && isUnderline == _other.isUnderline
-        && isStrikethrough == _other.isStrikethrough;
+        && isStrikethrough == _other.isStrikethrough && font.family == _other.font.family
+        && font.size == _other.font.size;
 }
 
 bool TextModelTextItem::TextFormat::isValid() const
 {
-    return isBold != false || isItalic != false || isUnderline != false || isStrikethrough != false;
+    return isBold != false || isItalic != false || isUnderline != false || isStrikethrough != false
+        || (!font.family.isEmpty() && font.size > 0);
 }
 
 QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
@@ -453,6 +467,12 @@ QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
     }
     if (isStrikethrough) {
         format.setFontStrikeOut(true);
+    }
+    if (!font.family.isEmpty() && font.size > 0) {
+        auto formatFont = format.font();
+        formatFont.setFamily(font.family);
+        formatFont.setPixelSize(font.size);
+        format.setFont(formatFont);
     }
     return format;
 }
@@ -800,6 +820,11 @@ void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _for
         }
         if (format.format.hasProperty(QTextFormat::FontStrikeOut)) {
             newFormat.isStrikethrough = format.format.font().strikeOut();
+        }
+        if (format.format.font().family() != defaultBlockFormat.font().family()
+            || format.format.font().pixelSize() != defaultBlockFormat.font().pixelSize()) {
+            newFormat.font.family = format.format.font().family();
+            newFormat.font.size = format.format.font().pixelSize();
         }
 
         newFormats.append(newFormat);

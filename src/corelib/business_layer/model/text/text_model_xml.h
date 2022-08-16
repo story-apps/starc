@@ -52,6 +52,8 @@ const QLatin1String kBoldAttribute("bold");
 const QLatin1String kItalicAttribute("italic");
 const QLatin1String kUnderlineAttribute("underline");
 const QLatin1String kStrikethroughAttribute("strikethrough");
+const QLatin1String kFontFamilyAttribute("fontf");
+const QLatin1String kFontSizeAttribute("fonts");
 const QLatin1String kAlignAttribute("align");
 const QLatin1String kInFirstColumn("ifc");
 

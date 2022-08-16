@@ -150,9 +150,6 @@ TitlePageView::TitlePageView(QWidget* _parent)
     connect(d->textEdit, &TitlePageEdit::paragraphTypeChanged, this, handleCursorPositionChanged);
     connect(d->textEdit, &TitlePageEdit::cursorPositionChanged, this, handleCursorPositionChanged);
 
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
-
     reconfigure({});
 }
 

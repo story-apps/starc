@@ -31,6 +31,10 @@ public:
         bool isItalic = false;
         bool isUnderline = false;
         bool isStrikethrough = false;
+        struct {
+            QString family = {};
+            int size = 0;
+        } font;
 
         bool operator==(const TextFormat& _other) const;
 
