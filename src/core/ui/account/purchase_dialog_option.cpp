@@ -239,7 +239,8 @@ void PurchaseDialogOption::paintEvent(QPaintEvent* _event)
         // стоимости не заполнялась
         //
         if (isOneMonth) {
-            textRect.moveTop(textRect.bottom() + Ui::DesignSystem::layout().px4());
+            textRect.moveTop(textRect.top() + Ui::DesignSystem::layout().px16()
+                             + Ui::DesignSystem::layout().px4());
         }
         //
         // ... способы оплаты
