@@ -1478,6 +1478,8 @@ void ApplicationManager::Implementation::closeCurrentProject()
     projectManager->closeCurrentProject(projectsManager->currentProject().path());
     projectsManager->closeCurrentProject();
 
+    menuView->setProjectActionsVisible(false);
+
     state = ApplicationState::Working;
 }
 
@@ -2246,8 +2248,12 @@ void ApplicationManager::initConnections()
         d->menuView->setSignInVisible(true);
         d->menuView->setAccountVisible(false);
         d->projectManager->checkAvailabilityToEdit();
-        d->projectsManager->setProjectsInCloudCanBeCreated(false, Domain::SubscriptionType::Free);
+        if (d->projectsManager->currentProject().isRemote()) {
+            d->closeCurrentProject();
+            d->showProjects();
+        }
         d->projectsManager->setCloudProjects({});
+        d->projectsManager->setProjectsInCloudCanBeCreated(false, Domain::SubscriptionType::Free);
     });
 
     //
