@@ -586,11 +586,16 @@ void ProjectsCards::Implementation::reorderCards()
                 //
                 if (moveAnimation->endValue().toPointF() != newItemPosition) {
                     if (moveAnimation->state() == QVariantAnimation::Running) {
-                        moveAnimation->stop();
+                        moveAnimation->pause();
+                    } else {
+                        moveAnimation->setStartValue(card->pos());
                     }
-                    moveAnimation->setStartValue(card->pos());
                     moveAnimation->setEndValue(newItemPosition);
-                    moveAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+                    if (moveAnimation->state() == QVariantAnimation::Paused) {
+                        moveAnimation->resume();
+                    } else {
+                        moveAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+                    }
                 }
             } else {
                 card->setPos(newItemPosition);
