@@ -2274,7 +2274,13 @@ void ApplicationManager::initConnections()
                 }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::projectRemoved,
-            d->projectsManager.data(), &ProjectsManager::removeProject);
+            d->projectsManager.data(), [this](int _projectId) {
+                if (d->projectsManager->currentProject().id() == _projectId) {
+                    d->closeCurrentProject();
+                    d->showProjects();
+                }
+                d->projectsManager->removeProject(_projectId);
+            });
     connect(d->projectsManager.data(), &ProjectsManager::createCloudProjectRequested, this,
             [this](const QString& _projectName, const QString& _importFilePath) {
                 d->createRemoteProject(_projectName, _importFilePath);
