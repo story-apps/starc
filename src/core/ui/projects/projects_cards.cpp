@@ -344,6 +344,16 @@ void ProjectCard::hoverLeaveEvent(QGraphicsSceneHoverEvent* _event)
 
 void ProjectCard::mousePressEvent(QGraphicsSceneMouseEvent* _event)
 {
+    if (!boundingRect().contains(_event->pos())) {
+        if (m_shadowHeightAnimation.direction() == QVariantAnimation::Forward) {
+            m_shadowHeightAnimation.setDirection(QVariantAnimation::Backward);
+            m_shadowHeightAnimation.start();
+
+            m_decorationOpacityAnimation.setEndValue(0.0);
+        }
+        return;
+    }
+
     QGraphicsRectItem::mousePressEvent(_event);
 
     setZValue(nextZValue());
@@ -365,6 +375,10 @@ void ProjectCard::mousePressEvent(QGraphicsSceneMouseEvent* _event)
 
 void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
 {
+    if (!boundingRect().contains(_event->pos())) {
+        return;
+    }
+
     QGraphicsRectItem::mouseReleaseEvent(_event);
 
     if (_event->button() == Qt::RightButton) {
