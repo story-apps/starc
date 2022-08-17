@@ -195,6 +195,11 @@ signals:
      */
     void removeCloudProjectRequested(int _id);
 
+    /**
+     * @brief Пользователь хочет отписаться от облачного проекта
+     */
+    void unsubscribeFromCloudProjectRequested(int _id);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

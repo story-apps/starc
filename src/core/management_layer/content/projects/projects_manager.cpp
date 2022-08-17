@@ -173,39 +173,78 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                 //
                 else {
                     //
-                    // TODO: Контекстное меню в зависимости от того, владеет ли пользоваетль файлом
+                    // Если пользователь владеет проектом
                     //
-                    auto removeProjectAction = new QAction;
-                    removeProjectAction->setIconText(u8"\U000F01B4");
-                    removeProjectAction->setText(tr("Remove project"));
-                    connect(removeProjectAction, &QAction::triggered, this, [this, _project] {
-                        auto dialog = new Dialog(d->view->topLevelWidget());
-                        constexpr int cancelButtonId = 0;
-                        constexpr int removeButtonId = 1;
-                        dialog->showDialog(
-                            {}, tr("Do you really want to remove this project?"),
-                            { { cancelButtonId, tr("No"), Dialog::RejectButton },
-                              { removeButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
-                        connect(dialog, &Dialog::finished, this,
-                                [this, _project, cancelButtonId,
-                                 dialog](const Dialog::ButtonInfo& _buttonInfo) {
-                                    dialog->hideDialog();
+                    if (_project.isOwner()) {
+                        auto removeProjectAction = new QAction;
+                        removeProjectAction->setIconText(u8"\U000F01B4");
+                        removeProjectAction->setText(tr("Remove project"));
+                        connect(removeProjectAction, &QAction::triggered, this, [this, _project] {
+                            auto dialog = new Dialog(d->view->topLevelWidget());
+                            constexpr int cancelButtonId = 0;
+                            constexpr int removeButtonId = 1;
+                            dialog->showDialog(
+                                {}, tr("Do you really want to remove this project?"),
+                                { { cancelButtonId, tr("No"), Dialog::RejectButton },
+                                  { removeButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
+                            connect(dialog, &Dialog::finished, this,
+                                    [this, _project, cancelButtonId,
+                                     dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                                        dialog->hideDialog();
 
-                                    //
-                                    // Пользователь передумал удалять
-                                    //
-                                    if (_buttonInfo.id == cancelButtonId) {
-                                        return;
-                                    }
-                                    //
-                                    // Если таки хочет, то скрываем уведомляем, чтобы удалить проект
-                                    // на сервере
-                                    //
-                                    emit removeCloudProjectRequested(_project.id());
-                                });
-                        connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
-                    });
-                    actions.append(removeProjectAction);
+                                        //
+                                        // Пользователь передумал удалять
+                                        //
+                                        if (_buttonInfo.id == cancelButtonId) {
+                                            return;
+                                        }
+                                        //
+                                        // Если таки хочет, то уведомляем, чтобы удалить проект на
+                                        // сервере
+                                        //
+                                        emit removeCloudProjectRequested(_project.id());
+                                    });
+                            connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+                        });
+                        actions.append(removeProjectAction);
+                    }
+                    //
+                    // Если пользователь не владеет проектом
+                    //
+                    else {
+                        auto unsubscribeAction = new QAction;
+                        unsubscribeAction->setIconText(u8"\U000F01B4");
+                        unsubscribeAction->setText(tr("Unsubscribe"));
+                        connect(unsubscribeAction, &QAction::triggered, this, [this, _project] {
+                            auto dialog = new Dialog(d->view->topLevelWidget());
+                            constexpr int cancelButtonId = 0;
+                            constexpr int unsubscribeButtonId = 1;
+                            dialog->showDialog(
+                                {}, tr("Do you really want to unsubscribe from this project?"),
+                                { { cancelButtonId, tr("No"), Dialog::RejectButton },
+                                  { unsubscribeButtonId, tr("Yes, unsubscribe"),
+                                    Dialog::AcceptButton } });
+                            connect(dialog, &Dialog::finished, this,
+                                    [this, _project, cancelButtonId,
+                                     dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                                        dialog->hideDialog();
+
+                                        //
+                                        // Пользователь передумал отписываться
+                                        //
+                                        if (_buttonInfo.id == cancelButtonId) {
+                                            return;
+                                        }
+                                        //
+                                        // Если таки хочет, то уведомляем, чтобы отписаться от
+                                        // проекта на сервере
+                                        //
+                                        emit unsubscribeFromCloudProjectRequested(_project.id());
+                                    });
+                            connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+                        });
+                        actions.append(unsubscribeAction);
+                    }
                 }
 
                 auto menu = new ContextMenu(d->view);

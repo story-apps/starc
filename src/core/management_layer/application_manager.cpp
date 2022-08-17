@@ -2327,6 +2327,8 @@ void ApplicationManager::initConnections()
             });
     connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,
             [this](int _id) { d->cloudServiceManager->removeProject(_id); });
+    connect(d->projectsManager.data(), &ProjectsManager::unsubscribeFromCloudProjectRequested, this,
+            [this](int _id) { d->cloudServiceManager->unsubscribeFromProject(_id); });
 #endif
 }
 
