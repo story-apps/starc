@@ -1,7 +1,6 @@
 #include "platform_helper.h"
 
 #include <QWidget>
-#include <QtGlobal>
 
 #ifdef Q_OS_WIN
 #include <Windows.h>
