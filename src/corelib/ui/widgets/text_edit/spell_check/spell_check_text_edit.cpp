@@ -12,7 +12,6 @@
 #include <QDir>
 #include <QMenu>
 #include <QRegularExpression>
-#include <QStandardPaths>
 #include <QTimer>
 #include <QtGui/private/qtextdocument_p.h>
 

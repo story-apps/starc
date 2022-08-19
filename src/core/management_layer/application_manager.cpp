@@ -30,6 +30,7 @@
 #include <ui/crash_report_dialog.h>
 #include <ui/design_system/design_system.h>
 #include <ui/menu_view.h>
+#include <ui/modules/avatar_generator/avatar_generator.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
@@ -2255,6 +2256,11 @@ void ApplicationManager::initConnections()
         d->projectsManager->setCloudProjects({});
         d->projectsManager->setProjectsInCloudCanBeCreated(false, Domain::SubscriptionType::Free);
     });
+    //
+    connect(Ui::AvatarGenerator::instance(), &Ui::AvatarGenerator::avatarRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::askAvatar);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::avatarRecieved,
+            Ui::AvatarGenerator::instance(), &Ui::AvatarGenerator::setAvatar);
 
     //
     // Проекты

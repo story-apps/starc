@@ -3,6 +3,7 @@
 #include "chat_message.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/modules/avatar_generator/avatar_generator.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -195,9 +196,8 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
                             : (width() - Ui::DesignSystem::layout().px12() - avatarSize.width()),
                         lastY - avatarSize.height()),
                 avatarSize);
-            const auto avatar = ImageHelper::makeAvatar(lastMessage.author().name(),
-                                                        Ui::DesignSystem::font().body2(),
-                                                        avatarSize.toSize(), Qt::white);
+            const auto avatar = Ui::AvatarGenerator::avatar(lastMessage.author().name(),
+                                                            lastMessage.author().email());
             painter.drawPixmap(avatarRect, avatar, avatar.rect());
         }
     };

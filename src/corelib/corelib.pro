@@ -200,6 +200,7 @@ SOURCES += \
     domain/objects_builder.cpp \
     ui/design_system/design_system.cpp \
     ui/layouts/flow_layout/flow_layout.cpp \
+    ui/modules/avatar_generator/avatar_generator.cpp \
     ui/modules/bookmarks/add_bookmark_view.cpp \
     ui/modules/bookmarks/bookmark_delegate.cpp \
     ui/modules/bookmarks/bookmark_dialog.cpp \
@@ -472,6 +473,7 @@ HEADERS += \
     ui/abstract_navigator.h \
     ui/design_system/design_system.h \
     ui/layouts/flow_layout/flow_layout.h \
+    ui/modules/avatar_generator/avatar_generator.h \
     ui/modules/bookmarks/add_bookmark_view.h \
     ui/modules/bookmarks/bookmark_delegate.h \
     ui/modules/bookmarks/bookmark_dialog.h \

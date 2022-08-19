@@ -321,6 +321,7 @@ void AccountView::setConnected(bool _connected)
 {
     d->name->setEnabled(_connected);
     d->description->setEnabled(_connected);
+    d->newsletterSubscription->setEnabled(_connected);
     d->avatar->setEnabled(_connected);
     d->subscriptionTryProForFree->setEnabled(_connected);
     d->subscriptionTryTeamForFree->setEnabled(_connected);
@@ -329,6 +330,8 @@ void AccountView::setConnected(bool _connected)
     d->subscriptionRenewTeam->setEnabled(_connected);
     d->subscriptionUpgradeToPro->setEnabled(_connected);
     d->subscriptionUpgradeToTeam->setEnabled(_connected);
+    d->promocodeName->setEnabled(_connected);
+    d->activatePromocode->setEnabled(_connected);
 }
 
 void AccountView::setEmail(const QString& _email)

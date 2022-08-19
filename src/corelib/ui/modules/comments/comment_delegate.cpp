@@ -4,6 +4,7 @@
 
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/avatar_generator/avatar_generator.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -94,9 +95,9 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
                                  - Ui::DesignSystem::treeOneLineItem().avatarSize().width()),
                 backgroundRect.top() + Ui::DesignSystem::layout().px16()),
         Ui::DesignSystem::treeOneLineItem().avatarSize());
-    const auto avatar = ImageHelper::makeAvatar(
-        _index.data(CommentsModel::ReviewMarkAuthorNameRole).toString(),
-        Ui::DesignSystem::font().body1(), avatarRect.size().toSize(), Qt::white);
+    const auto avatar
+        = AvatarGenerator::avatar(_index.data(CommentsModel::ReviewMarkAuthorNameRole).toString(),
+                                  _index.data(CommentsModel::ReviewMarkAuthorEmailRole).toString());
     _painter->drawPixmap(avatarRect, avatar, avatar.rect());
 
     //
@@ -212,14 +213,14 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
             //
             // Формируем список комментарторов
             //
-            QVector<QString> commentators;
+            QVector<QPair<QString, QString>> commentators;
             for (const auto& comment : comments) {
                 if (comment == comments.constFirst() || comment == comments.constLast()) {
                     continue;
                 }
 
-                if (!commentators.contains(comment.author)) {
-                    commentators.append(comment.author);
+                if (!commentators.contains({ comment.author, comment.authorEmail })) {
+                    commentators.append({ comment.author, comment.authorEmail });
                 }
 
                 if (commentators.size() == 3) {
@@ -257,13 +258,10 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
                         path.quadTo(avatarRect.center() - clipDelta * 2,
                                     avatarRect.topRight() - clipDelta);
                     }
-                    //                    _painter->setClipPath(path);
                 }
-                const auto avatar = ImageHelper::makeAvatar(
-                    commentator, Ui::DesignSystem::font().body2(), avatarSize.toSize(), Qt::white);
-                _painter->drawPixmap(avatarRect.topLeft(), avatar);
+                const auto avatar = AvatarGenerator::avatar(commentator.first, commentator.second);
+                _painter->drawPixmap(avatarRect, avatar, avatar.rect());
                 avatarXDelta += avatarsDistance;
-                //                _painter->setClipPath({}, Qt::NoClip);
             }
 
             //
@@ -338,10 +336,8 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
         _painter->drawText(lastCommentTextRect, lastComment.text, commentTextOption);
 
         lastCommentAvatarRect.moveBottom(lastCommentRect.bottom());
-        const auto avatar = ImageHelper::makeAvatar(
-            lastComment.author, Ui::DesignSystem::font().body2(), avatarSize.toSize(), Qt::white);
-        _painter->drawPixmap(lastCommentAvatarRect.topLeft(), avatar);
-
+        const auto avatar = AvatarGenerator::avatar(lastComment.author, lastComment.authorEmail);
+        _painter->drawPixmap(lastCommentAvatarRect, avatar, avatar.rect());
 
         //
         // ... декорация слева
