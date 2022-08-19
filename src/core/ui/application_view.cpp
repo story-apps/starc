@@ -8,6 +8,8 @@
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/task_bar/task_bar.h>
+#include <utils/helpers/color_helper.h>
+#include <utils/helpers/platform_helper.h>
 #include <utils/logging.h>
 
 #include <QCloseEvent>
@@ -23,6 +25,7 @@ namespace {
 const QString kSplitterState = "splitter/state";
 const QString kViewGeometry = "view/geometry";
 const QVector<int> kDefaultSizes = { 3, 7 };
+
 } // namespace
 
 class ApplicationView::Implementation
@@ -215,6 +218,9 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     TaskBar::registerTaskBar(this, Ui::DesignSystem::color().primary(),
                              Ui::DesignSystem::color().onPrimary(),
                              Ui::DesignSystem::color().secondary());
+
+    PlatformHelper::setTitleBarTheme(
+        this, ColorHelper::isColorLight(Ui::DesignSystem::color().background()));
 }
 
 } // namespace Ui
