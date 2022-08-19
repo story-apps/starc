@@ -6,7 +6,7 @@
 #ifdef Q_OS_WIN
 #include <Windows.h>
 #include <dwmapi.h>
-#pragma comment (lib, "Dwmapi.lib")
+#pragma comment(lib, "Dwmapi.lib")
 #endif
 
 namespace {
@@ -17,7 +17,7 @@ enum PreferredAppMode {
     AllowDark,
     ForceDark,
     ForceLight,
-    Max
+    Max,
 };
 
 enum WINDOWCOMPOSITIONATTRIB {
@@ -48,7 +48,7 @@ enum WINDOWCOMPOSITIONATTRIB {
     WCA_EXCLUDED_FROM_DDA = 24,
     WCA_PASSIVEUPDATEMODE = 25,
     WCA_USEDARKMODECOLORS = 26,
-    WCA_LAST = 27
+    WCA_LAST = 27,
 };
 
 struct WINDOWCOMPOSITIONATTRIBDATA {
@@ -57,33 +57,31 @@ struct WINDOWCOMPOSITIONATTRIBDATA {
     SIZE_T cbData;
 };
 
-using fnAllowDarkModeForWindow =  BOOL (WINAPI *)(HWND hWnd, BOOL allow);
-using fnSetPreferredAppMode = PreferredAppMode (WINAPI *)(PreferredAppMode appMode);
-using fnSetWindowCompositionAttribute =  BOOL (WINAPI *)(HWND hwnd, WINDOWCOMPOSITIONATTRIBDATA *);
+using fnAllowDarkModeForWindow = BOOL(WINAPI*)(HWND hWnd, BOOL allow);
+using fnSetPreferredAppMode = PreferredAppMode(WINAPI*)(PreferredAppMode appMode);
+using fnSetWindowCompositionAttribute = BOOL(WINAPI*)(HWND hwnd, WINDOWCOMPOSITIONATTRIBDATA*);
 
-static void setTitleBarThemeImpl(HWND hwnd, bool _isLight) {
+static void setTitleBarThemeImpl(HWND hwnd, bool _isLight)
+{
     HMODULE hUxtheme = LoadLibraryExW(L"uxtheme.dll", NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
     HMODULE hUser32 = GetModuleHandleW(L"user32.dll");
-    fnAllowDarkModeForWindow AllowDarkModeForWindow
-        = reinterpret_cast<fnAllowDarkModeForWindow>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(133)));
+    fnAllowDarkModeForWindow AllowDarkModeForWindow = reinterpret_cast<fnAllowDarkModeForWindow>(
+        GetProcAddress(hUxtheme, MAKEINTRESOURCEA(133)));
     fnSetPreferredAppMode SetPreferredAppMode
         = reinterpret_cast<fnSetPreferredAppMode>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(135)));
     fnSetWindowCompositionAttribute SetWindowCompositionAttribute
-        = reinterpret_cast<fnSetWindowCompositionAttribute>(GetProcAddress(hUser32, "SetWindowCompositionAttribute"));
+        = reinterpret_cast<fnSetWindowCompositionAttribute>(
+            GetProcAddress(hUser32, "SetWindowCompositionAttribute"));
 
     SetPreferredAppMode(_isLight ? Default : AllowDark);
     BOOL dark = _isLight ? FALSE : TRUE;
     AllowDarkModeForWindow(hwnd, dark);
-    WINDOWCOMPOSITIONATTRIBDATA data = {
-        WCA_USEDARKMODECOLORS,
-        &dark,
-        sizeof(dark)
-    };
+    WINDOWCOMPOSITIONATTRIBDATA data = { WCA_USEDARKMODECOLORS, &dark, sizeof(dark) };
     SetWindowCompositionAttribute(hwnd, &data);
 }
 #endif
 
-}
+} // namespace
 
 
 void PlatformHelper::setTitleBarTheme(QWidget* _window, bool _isLightTheme)
@@ -91,6 +89,7 @@ void PlatformHelper::setTitleBarTheme(QWidget* _window, bool _isLightTheme)
 #ifdef Q_OS_WIN
     setTitleBarThemeImpl(reinterpret_cast<HWND>(_window->winId()), _isLightTheme);
 #else
+    Q_UNUSED(_window)
     Q_UNUSED(_isLightTheme)
 #endif
 }
