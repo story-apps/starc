@@ -125,6 +125,14 @@ void ReleaseView::Implementation::downloadUpdate()
 #endif
                         ));
                 downloadedFilePath = tempDirPath + QDir::separator() + _url.fileName();
+                QFileInfo tempFileInfo(downloadedFilePath);
+                int copyIndex = 1;
+                while (tempFileInfo.exists()) {
+                    auto fileName = _url.fileName();
+                    fileName.replace(".", QString(".%1.").arg(copyIndex++));
+                    downloadedFilePath = tempDirPath + QDir::separator() + fileName;
+                    tempFileInfo.setFile(downloadedFilePath);
+                }
                 QFile tempFile(downloadedFilePath);
                 if (tempFile.open(QIODevice::WriteOnly)) {
                     tempFile.write(_data);
