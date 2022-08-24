@@ -39,7 +39,6 @@
 #include <utils/3rd_party/WAF/Animation/Animation.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/extension_helper.h>
-#include <utils/helpers/file_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/platform_helper.h>
 #include <utils/logging.h>
@@ -566,7 +565,7 @@ void ApplicationManager::Implementation::askUpdateToLatestVersion()
                             // Т.к. не все линуксы умеют устанавливать AppImage, то просто открываем
                             // папку с файлом
                             //
-                            FileHelper::showInGraphicalShell(downloadedFilePath);
+                            PlatformHelper::showInGraphicalShell(downloadedFilePath);
 #else
                             //
                             // Для остальных операционок запускаем процесс установки обновления
@@ -1749,14 +1748,15 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     const auto logFilePath
         = QString("%1/logs/%2.log")
               .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
-                   QDateTime::currentDateTime().toString(Qt::ISODateWithMs));
+                   PlatformHelper::systemSavebleFileName(
+                       QDateTime::currentDateTime().toString(Qt::ISODateWithMs)));
     const auto loggingLevel =
 #ifdef QT_DEBUG
         Log::Level::Trace;
 #else
         Log::Level::Debug;
 #endif
-    Log::init(loggingLevel, FileHelper::systemSavebleFileName(logFilePath));
+    Log::init(loggingLevel, logFilePath);
 
 
     QString applicationVersion = "0.2.4";

@@ -16,8 +16,8 @@
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <utils/helpers/dialog_helper.h>
-#include <utils/helpers/file_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/platform_helper.h>
 #include <utils/logging.h>
 #include <utils/tools/debouncer.h>
 
@@ -133,7 +133,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                     showInFolderAction->setIconText(u8"\U000F178B");
                     showInFolderAction->setText(tr("Show in folder"));
                     connect(showInFolderAction, &QAction::triggered, this,
-                            [_project] { FileHelper::showInGraphicalShell(_project.path()); });
+                            [_project] { PlatformHelper::showInGraphicalShell(_project.path()); });
                     actions.append(showInFolderAction);
                     //
                     auto hideFromRecentAction = new QAction;
@@ -426,7 +426,7 @@ void ProjectsManager::createProject()
 
         if (d->createProjectDialog->isLocal()) {
             const auto projectPathPrefix = d->createProjectDialog->projectFolder() + "/"
-                + FileHelper::systemSavebleFileName(d->createProjectDialog->projectName());
+                + PlatformHelper::systemSavebleFileName(d->createProjectDialog->projectName());
             auto projectPath = projectPathPrefix + Project::extension();
             //
             // Ситуация, что файл с таким названием уже существует крайне редка, хотя и

@@ -9,7 +9,7 @@
 #include <ui/widgets/label/link_label.h>
 #include <ui/widgets/progress_bar/progress_bar.h>
 #include <utils/helpers/color_helper.h>
-#include <utils/helpers/file_helper.h>
+#include <utils/helpers/platform_helper.h>
 
 #include <QBoxLayout>
 #include <QCoreApplication>
@@ -171,7 +171,7 @@ void ReleaseView::Implementation::installUpdate()
         //
         // Т.к. не все линуксы умеют устанавливать AppImage, то просто открываем папку с файлом
         //
-        FileHelper::showInGraphicalShell(downloadedFilePath);
+        PlatformHelper::showInGraphicalShell(downloadedFilePath);
 #else
         //
         // Для остальных операционок запускаем процесс установки обновления
