@@ -478,6 +478,9 @@ bool Splitter::eventFilter(QObject* _watched, QEvent* _event)
     // При отображении одного из вложенных виджетов, пробуем восстановить его размер
     //
     case QEvent::Show: {
+        d->handle->setCursor(Qt::SplitHCursor);
+        d->handle->installEventFilter(this);
+
         auto widget = qobject_cast<QWidget*>(_watched);
         const auto widgetIndex = d->widgets.indexOf(widget);
         if (widgetIndex == -1) {
@@ -502,6 +505,9 @@ bool Splitter::eventFilter(QObject* _watched, QEvent* _event)
     // При скрытии одного из вложенных виджетов, используем занимаемую им область под видимый
     //
     case QEvent::Hide: {
+        d->handle->setCursor(Qt::ArrowCursor);
+        d->handle->removeEventFilter(this);
+
         auto widget = qobject_cast<QWidget*>(_watched);
         const auto widgetIndex = d->widgets.indexOf(widget);
         if (widgetIndex == -1) {
