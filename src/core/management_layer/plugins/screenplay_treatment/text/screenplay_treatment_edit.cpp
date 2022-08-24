@@ -1065,26 +1065,32 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
                 //
                 if (blockType == TextParagraphType::BeatHeading) {
                     const auto beatColor = d->document.itemColor(block);
-                    setPainterPen(beatColor.isValid() ? beatColor : palette().text().color());
-                    painter.setFont(DesignSystem::font().iconsForEditors());
+                    //
+                    // В поэпизоднике рисуем только имеющие цвета биты
+                    //
+                    if (beatColor.isValid()) {
+                        setPainterPen(beatColor.isValid() ? beatColor : palette().text().color());
+                        painter.setFont(DesignSystem::font().iconsForEditors());
 
-                    //
-                    // Определим область для отрисовки и выведем номер сцены в редактор в
-                    // зависимости от стороны
-                    //
-                    QPointF topLeft(isLeftToRight ? pageLeft + leftDelta : textRight + leftDelta,
-                                    cursorR.top());
-                    QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
-                                                      : pageRight + leftDelta,
-                                        cursorR.bottom());
-                    QRectF rect(topLeft, bottomRight);
-                    const auto textFontMetrics = QFontMetricsF(cursor.charFormat().font());
-                    const auto iconFontMetrics
-                        = QFontMetricsF(DesignSystem::font().iconsForEditors());
-                    const auto yDelta
-                        = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
-                    rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
-                    painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F09DE");
+                        //
+                        // Определим область для отрисовки и выведем номер сцены в редактор в
+                        // зависимости от стороны
+                        //
+                        QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
+                                                      : textRight + leftDelta,
+                                        cursorR.top());
+                        QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
+                                                          : pageRight + leftDelta,
+                                            cursorR.bottom());
+                        QRectF rect(topLeft, bottomRight);
+                        const auto textFontMetrics = QFontMetricsF(cursor.charFormat().font());
+                        const auto iconFontMetrics
+                            = QFontMetricsF(DesignSystem::font().iconsForEditors());
+                        const auto yDelta
+                            = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
+                        rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
+                        painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F09DE");
+                    }
                 }
             }
 
