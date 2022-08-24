@@ -33,6 +33,7 @@
 #include <ui/modules/avatar_generator/avatar_generator.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
+#include <ui/widgets/task_bar/task_bar.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
 #include <utils/3rd_party/WAF/Animation/Animation.h>
@@ -90,9 +91,14 @@ public:
     void sendStartupStatistics();
 
     /**
-     * @brief sendCrashInfo
+     * @brief Отправить краш-репорт
      */
     void sendCrashInfo();
+
+    /**
+     * @brief Предложить обновиться до последней версии
+     */
+    void askUpdateToLatestVersion();
 
     /**
      * @brief Настроить параметры автосохранения
@@ -489,6 +495,90 @@ void ApplicationManager::Implementation::sendCrashInfo()
     // Отображаем диалог
     //
     dialog->showDialog();
+}
+
+void ApplicationManager::Implementation::askUpdateToLatestVersion()
+{
+    auto dialog = new Dialog(applicationView);
+    const int kCancelButtonId = 0;
+    const int kYesButtonId = 1;
+    dialog->showDialog(
+        {},
+        tr("The installed version of the application is outdated and can no longer be used in "
+           "conjunction with the cloud service. You must install an update to continue working "
+           "with cloud projects. Install update?"),
+        { { kCancelButtonId, tr("Continue with outdated version"), Dialog::RejectButton },
+          { kYesButtonId, tr("Update"), Dialog::AcceptButton } });
+    QObject::connect(
+        dialog, &Dialog::finished, dialog,
+        [this, dialog, kCancelButtonId](const Dialog::ButtonInfo& _buttonInfo) {
+            dialog->hideDialog();
+
+            //
+            // Пользователь не хочет обновляться
+            //
+            if (_buttonInfo.id == kCancelButtonId) {
+                return;
+            }
+
+            //
+            // Загружаем апдейт и после загрузки атоматически стартуем его
+            //
+            const auto taskId = Q_FUNC_INFO;
+            TaskBar::addTask(taskId);
+            TaskBar::setTaskTitle(taskId, tr("The last version is downloading"));
+            //
+            auto downloader = new NetworkRequest;
+            connect(downloader, &NetworkRequest::downloadProgress, q,
+                    [taskId](int _progress) { TaskBar::setTaskProgress(taskId, _progress); });
+            connect(downloader, &NetworkRequest::downloadComplete, q,
+                    [taskId](const QByteArray& _data, const QUrl _url) {
+                        TaskBar::finishTask(taskId);
+
+                        const QString tempDirPath
+                            = QDir::toNativeSeparators(QStandardPaths::writableLocation(
+#ifdef Q_OS_LINUX
+                                QStandardPaths::DownloadLocation
+#else
+                                QStandardPaths::TempLocation
+#endif
+                                ));
+                        auto downloadedFilePath = tempDirPath + QDir::separator() + _url.fileName();
+                        QFileInfo tempFileInfo(downloadedFilePath);
+                        int copyIndex = 1;
+                        while (tempFileInfo.exists()) {
+                            auto fileName = _url.fileName();
+                            fileName.replace(".", QString(".%1.").arg(copyIndex++));
+                            downloadedFilePath = tempDirPath + QDir::separator() + fileName;
+                            tempFileInfo.setFile(downloadedFilePath);
+                        }
+                        QFile tempFile(downloadedFilePath);
+                        if (tempFile.open(QIODevice::WriteOnly)) {
+                            tempFile.write(_data);
+                            tempFile.close();
+                        }
+
+                        const bool updateStarted =
+#ifdef Q_OS_LINUX
+                            //
+                            // Т.к. не все линуксы умеют устанавливать AppImage, то просто открываем
+                            // папку с файлом
+                            //
+                            FileHelper::showInGraphicalShell(downloadedFilePath);
+#else
+                            //
+                            // Для остальных операционок запускаем процесс установки обновления
+                            //
+                            QDesktopServices::openUrl(QUrl::fromLocalFile(downloadedFilePath));
+#endif
+                        if (updateStarted) {
+                            QCoreApplication::quit();
+                        }
+                    });
+
+            downloader->loadAsync(notificationsManager->lastVersionDownloadLink());
+        });
+    QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
 void ApplicationManager::Implementation::configureAutoSave()
@@ -2189,6 +2279,11 @@ void ApplicationManager::initConnections()
             &NotificationsManager::setShowDevVersions);
     connect(d->menuView, &Ui::MenuView::notificationsPressed, d->notificationsManager.data(),
             &NotificationsManager::markAllRead);
+    //
+    // Нужно обновить версию приложения для работы с облаком
+    //
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::appVersionUpgradeRequired, this,
+            [this] { d->askUpdateToLatestVersion(); });
     //
     // Проверка регистрация или вход
     //

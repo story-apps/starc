@@ -3,6 +3,8 @@
 #include <domain/starcloud_api.h>
 #include <utils/shugar.h>
 
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QSettings>
 
 
@@ -149,6 +151,32 @@ void NotificationsManager::markAllRead()
 
     QSettings().setValue(kLastReadNotificationDateTimeKey, d->notifications.constFirst().dateTime);
     emit hasUnreadNotificationsChanged(false);
+}
+
+QString NotificationsManager::lastVersionDownloadLink() const
+{
+    //
+    // Определим уведомление о последнем обновлении
+    //
+    Domain::Notification latestUpdate;
+    for (const auto& notification : std::as_const(d->notifications)) {
+        if (notification.type == Domain::NotificationType::UpdateStableLinux
+            || notification.type == Domain::NotificationType::UpdateStableMac
+            || notification.type == Domain::NotificationType::UpdateStableWindows32
+            || notification.type == Domain::NotificationType::UpdateStableWindows64) {
+            latestUpdate = notification;
+            break;
+        }
+    }
+    if (latestUpdate.notification.isEmpty()) {
+        return {};
+    }
+
+    //
+    // Извлечём из него ссылку
+    //
+    const auto json = QJsonDocument::fromJson(latestUpdate.notification.toUtf8()).object();
+    return json["download_link"].toString();
 }
 
 } // namespace ManagementLayer

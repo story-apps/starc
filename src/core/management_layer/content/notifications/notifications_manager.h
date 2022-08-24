@@ -36,6 +36,11 @@ public:
      */
     void markAllRead();
 
+    /**
+     * @brief Ссылка на загрузку самой последней версии
+     */
+    QString lastVersionDownloadLink() const;
+
 signals:
     /**
      * @brief Нужно отобразить заданный список уведомлений
