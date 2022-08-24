@@ -41,6 +41,7 @@
 #include <utils/helpers/extension_helper.h>
 #include <utils/helpers/file_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/platform_helper.h>
 #include <utils/logging.h>
 #include <utils/tools/backup_builder.h>
 #include <utils/tools/once.h>
@@ -48,6 +49,7 @@
 #include <utils/validators/email_validator.h>
 
 #include <QApplication>
+#include <QDesktopServices>
 #include <QDir>
 #include <QFileDialog>
 #include <QFontDatabase>
@@ -1736,6 +1738,11 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     : QObject(_parent)
     , IApplicationManager()
 {
+    //
+    // Настроим вывод лога в консоль на всех платформах
+    //
+    PlatformHelper::initConsoleOutput();
+
     //
     // Первым делом настраиваем сбор логов
     //

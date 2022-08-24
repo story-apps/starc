@@ -83,6 +83,16 @@ static void setTitleBarThemeImpl(HWND hwnd, bool _isLight)
 } // namespace
 
 
+void PlatformHelper::initConsoleOutput()
+{
+#ifdef Q_OS_WIN
+    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+        freopen("CONOUT$", "w", stdout);
+        freopen("CONOUT$", "w", stderr);
+    }
+#endif
+}
+
 void PlatformHelper::setTitleBarTheme(QWidget* _window, bool _isLightTheme)
 {
 #ifdef Q_OS_WIN
