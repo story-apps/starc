@@ -56,11 +56,18 @@ public:
     const QString& userEmail() const;
     void setUserEmail(const QString& _email);
 
+    /**
+     * @brief Синхронизировано ли изменение
+     */
+    bool isSynced() const;
+    void setSynced(bool _synced);
+
 private:
     explicit DocumentChangeObject(const Identifier& _id, const QUuid& _documentUuid,
                                   const QUuid& _uuid, const QByteArray& _undoPatch,
                                   const QByteArray& _redoPatch, const QDateTime& _dateTime,
-                                  const QString& _userEmail, const QString& _userName);
+                                  const QString& _userEmail, const QString& _userName,
+                                  bool _isSynced);
     friend class ObjectsBuilder;
 
     QUuid m_documentUuid;
@@ -70,6 +77,7 @@ private:
     QDateTime m_dateTime;
     QString m_userName;
     QString m_userEmail;
+    bool m_isSynced = false;
 };
 
 } // namespace Domain

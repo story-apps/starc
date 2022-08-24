@@ -14,8 +14,8 @@ using Domain::Identifier;
 namespace DataMappingLayer {
 
 namespace {
-const QString kColumns
-    = " id, fk_document_uuid, uuid, undo_patch, redo_patch, date_time, user_name, user_email ";
+const QString kColumns = " id, fk_document_uuid, uuid, undo_patch, redo_patch, date_time, "
+                         "user_name, user_email, is_synced ";
 const QString kTableName = " documents_changes ";
 const QString kDateTimeFormat = "yyyy-MM-dd hh:mm:ss:zzz";
 QString uuidFilter(const QUuid& _uuid)
@@ -105,7 +105,7 @@ QString DocumentChangeMapper::insertStatement(Domain::DomainObject* _object,
 {
     const QString insertStatement = QString("INSERT INTO " + kTableName + " (" + kColumns
                                             + ") "
-                                              " VALUES(?, ?, ?, ?, ?, ?, ?, ?) ");
+                                              " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) ");
 
     const auto documentChangeObject = static_cast<DocumentChangeObject*>(_object);
     _insertValues.clear();
@@ -117,6 +117,7 @@ QString DocumentChangeMapper::insertStatement(Domain::DomainObject* _object,
     _insertValues.append(documentChangeObject->dateTime().toString(kDateTimeFormat));
     _insertValues.append(documentChangeObject->userName());
     _insertValues.append(documentChangeObject->userEmail());
+    _insertValues.append(documentChangeObject->isSynced());
 
     return insertStatement;
 }
@@ -131,7 +132,8 @@ QString DocumentChangeMapper::updateStatement(Domain::DomainObject* _object,
                                               " redo_patch = ?, "
                                               " date_time = ?, "
                                               " user_name = ?, "
-                                              " user_email = ? "
+                                              " user_email = ?,"
+                                              " is_synced = ?  "
                                               " WHERE id = ? ");
 
     const auto documentChangeObject = static_cast<DocumentChangeObject*>(_object);
@@ -143,6 +145,7 @@ QString DocumentChangeMapper::updateStatement(Domain::DomainObject* _object,
     _updateValues.append(documentChangeObject->dateTime().toString(kDateTimeFormat));
     _updateValues.append(documentChangeObject->userName());
     _updateValues.append(documentChangeObject->userEmail());
+    _updateValues.append(documentChangeObject->isSynced());
     _updateValues.append(documentChangeObject->id().value());
 
     return updateStatement;
@@ -170,9 +173,10 @@ Domain::DomainObject* DocumentChangeMapper::doLoad(const Domain::Identifier& _id
         = QDateTime::fromString(_record.value("date_time").toString(), kDateTimeFormat);
     const auto userName = _record.value("user_name").toString();
     const auto userEmail = _record.value("user_email").toString();
+    const auto isSynced = _record.value("is_synced").toBool();
 
-    return Domain::ObjectsBuilder::createDocumentChange(_id, documentUuid, uuid, undoPatch,
-                                                        redoPatch, dateTime, userName, userEmail);
+    return Domain::ObjectsBuilder::createDocumentChange(
+        _id, documentUuid, uuid, undoPatch, redoPatch, dateTime, userName, userEmail, isSynced);
 }
 
 void DocumentChangeMapper::doLoad(Domain::DomainObject* _object, const QSqlRecord& _record)
@@ -203,6 +207,9 @@ void DocumentChangeMapper::doLoad(Domain::DomainObject* _object, const QSqlRecor
 
     const auto userEmail = _record.value("user_email").toString();
     documentChangeObject->setUserEmail(userEmail);
+
+    const auto isSynced = _record.value("is_synced").toBool();
+    documentChangeObject->setSynced(isSynced);
 }
 
 } // namespace DataMappingLayer

@@ -100,6 +100,7 @@ private:
     static void updateDatabase(QSqlDatabase& _database);
     static void updateDatabaseTo_0_0_10(QSqlDatabase& _database);
     static void updateDatabaseTo_0_1_3(QSqlDatabase& _database);
+    static void updateDatabaseTo_0_2_4(QSqlDatabase& _database);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Database::States)

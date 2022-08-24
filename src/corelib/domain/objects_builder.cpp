@@ -15,10 +15,10 @@ DocumentObject* ObjectsBuilder::createDocument(const Identifier& _id, const QUui
 DocumentChangeObject* ObjectsBuilder::createDocumentChange(
     const Identifier& _id, const QUuid& _documentUuid, const QUuid& _uuid,
     const QByteArray& _undoPatch, const QByteArray& _redoPatch, const QDateTime& _dateTime,
-    const QString& _userName, const QString& _userEmail)
+    const QString& _userName, const QString& _userEmail, bool _isSynced)
 {
     return new DocumentChangeObject(_id, _documentUuid, _uuid, _undoPatch, _redoPatch, _dateTime,
-                                    _userName, _userEmail);
+                                    _userName, _userEmail, _isSynced);
 }
 
 } // namespace Domain

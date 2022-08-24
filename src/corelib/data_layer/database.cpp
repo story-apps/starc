@@ -294,7 +294,8 @@ void Database::createTables(QSqlDatabase& _database)
                "redo_patch BLOB NOT NULL, " // повтор изменения
                "date_time TEXT NOT NULL, " // yyyy.mm.dd.hh.mm.ss.zzz
                "user_name TEXT NOT NULL, "
-               "user_email TEXT DEFAULT(NULL) "
+               "user_email TEXT DEFAULT(NULL), "
+               "is_synced INTEGER NOT NULL DEFAULT(0) "
                ")");
 
     _database.commit();
@@ -352,11 +353,11 @@ void Database::updateDatabase(QSqlDatabase& _database)
     //
     // 0.X.X
     //
-    if (versionMajor == 0) {
+    if (versionMajor <= 0) {
         //
         // 0.0.X
         //
-        if (versionMinor == 0) {
+        if (versionMinor <= 0) {
             if (versionBuild <= 9) {
                 updateDatabaseTo_0_0_10(_database);
             }
@@ -364,12 +365,23 @@ void Database::updateDatabase(QSqlDatabase& _database)
         //
         // 0.1.X
         //
-        if (versionMinor == 1) {
+        if (versionMinor <= 1) {
             //
             // 0.1.2
             //
             if (versionBuild <= 2) {
                 updateDatabaseTo_0_1_3(_database);
+            }
+        }
+        //
+        // 0.2.x
+        //
+        if (versionMinor <= 2) {
+            //
+            // 0.2.3
+            //
+            if (versionBuild <= 3) {
+                updateDatabaseTo_0_2_4(_database);
             }
         }
     }
@@ -493,6 +505,17 @@ void Database::updateDatabaseTo_0_1_3(QSqlDatabase& _database)
             q_updater.exec();
         }
     }
+
+    _database.commit();
+}
+
+void Database::updateDatabaseTo_0_2_4(QSqlDatabase& _database)
+{
+    QSqlQuery q_updater(_database);
+
+    _database.transaction();
+
+    q_updater.exec("ALTER TABLE documents_changes ADD is_synced INTEGER NOT NULL DEFAULT(0)");
 
     _database.commit();
 }

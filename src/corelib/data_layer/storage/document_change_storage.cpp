@@ -26,9 +26,10 @@ Domain::DocumentChangeObject* DocumentChangeStorage::appendDocumentChange(
     const QUuid& _documentUuid, const QUuid& _uuid, const QByteArray& _undoPatch,
     const QByteArray& _redoPatch, const QString& _userEmail, const QString& _userName)
 {
+    const auto isSynced = false;
     auto newDocumentChange = Domain::ObjectsBuilder::createDocumentChange(
         {}, _documentUuid, _uuid, _undoPatch, _redoPatch, QDateTime::currentDateTimeUtc(),
-        _userEmail, _userName);
+        _userEmail, _userName, isSynced);
     d->newDocumentChanges.append(newDocumentChange);
     return newDocumentChange;
 }
