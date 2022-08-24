@@ -570,6 +570,11 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
             if (range.format.fontCapitalization() == QFont::AllUppercase) {
                 formatRangeText = TextHelper::smartToUpper(formatRangeText);
             }
+            formatRangeText = QString("<w:t xml:space=\"preserve\">%2</w:t>")
+                                  .arg(TextHelper::toHtmlEscaped(formatRangeText)
+                                           .replace(QChar::LineSeparator,
+                                                    "</w:t><w:br/><w:t xml:space=\"preserve\">"));
+
             //
             // ... не является редакторской заметкой
             //
@@ -582,8 +587,10 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                     documentXml.append(
                         QString("<w:rtl w:val=\"%1\"/>")
                             .arg(QLocale().textDirection() == Qt::RightToLeft ? "true" : "false"));
-                    documentXml.append(QString("</w:rPr><w:t xml:space=\"preserve\">%2</w:t></w:r>")
-                                           .arg(TextHelper::toHtmlEscaped(formatRangeText)));
+                    documentXml.append("</w:rPr>");
+                    documentXml.append(formatRangeText);
+                    documentXml.append("</w:r>");
+
                 }
                 //
                 // ... не стандартный
@@ -605,9 +612,7 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                     //
                     // Сам текст
                     //
-                    documentXml.append(QString("<w:t xml:space=\"preserve\">%2</w:t>")
-                                           .arg(TextHelper::toHtmlEscaped(
-                                               blockText.mid(range.start, range.length))));
+                    documentXml.append(formatRangeText);
                     documentXml.append("</w:r>");
                 }
             }
@@ -674,9 +679,7 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                 //
                 // Сам текст
                 //
-                documentXml.append(
-                    QString("<w:t xml:space=\"preserve\">%2</w:t>")
-                        .arg(TextHelper::toHtmlEscaped(blockText.mid(range.start, range.length))));
+                documentXml.append(formatRangeText);
                 documentXml.append("</w:r>");
                 //
                 // Текст комментария
