@@ -134,7 +134,9 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
     // Идём через один предыдущий символ до предыдущей строки и ищем в ней лучшее совпадение
     //
     while (!cursor.atStart()) {
-        cursor.movePosition(TextCursor::PreviousCharacter, cursorMoveMode);
+        if (!cursor.movePosition(TextCursor::PreviousCharacter, cursorMoveMode)) {
+            cursor.setPosition(cursor.position() - 1, cursorMoveMode);
+        }
 
         //
         // Если всё в той же строке
@@ -170,7 +172,9 @@ void StandardKeyHandler::handleUp(QKeyEvent* _event)
     const auto previousLineCursorRect = cursorRect();
     auto bestXDelta = findXDelta();
     while (!cursor.atStart()) {
-        cursor.movePosition(TextCursor::PreviousCharacter, cursorMoveMode);
+        if (!cursor.movePosition(TextCursor::PreviousCharacter, cursorMoveMode)) {
+            cursor.setPosition(cursor.position() - 1, cursorMoveMode);
+        }
 
         //
         // Если предыдущий символ находится на другой строке, то прерываем поиск
@@ -224,7 +228,9 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     // Идём через один последующий символ до следующей строки и ищем в ней лучшее совпадение
     //
     while (!cursor.atEnd()) {
-        cursor.movePosition(TextCursor::NextCharacter, cursorMoveMode);
+        if (!cursor.movePosition(TextCursor::NextCharacter, cursorMoveMode)) {
+            cursor.setPosition(cursor.position() + 1, cursorMoveMode);
+        }
 
         //
         // Если всё в той же строке
@@ -260,7 +266,9 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     const auto previousLineCursorRect = cursorRect();
     auto bestXDelta = findXDelta();
     while (!cursor.atEnd()) {
-        cursor.movePosition(TextCursor::NextCharacter, cursorMoveMode);
+        if (!cursor.movePosition(TextCursor::NextCharacter, cursorMoveMode)) {
+            cursor.setPosition(cursor.position() + 1, cursorMoveMode);
+        }
 
         //
         // Если следующий символ находится на другой строке, то прерываем поиск

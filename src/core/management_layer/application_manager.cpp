@@ -504,11 +504,8 @@ void ApplicationManager::Implementation::askUpdateToLatestVersion()
     const int kCancelButtonId = 0;
     const int kYesButtonId = 1;
     dialog->showDialog(
-        {},
-        tr("The installed version of the application is outdated and can no longer be used in "
-           "conjunction with the cloud service. You must install an update to continue working "
-           "with cloud projects. Install update?"),
-        { { kCancelButtonId, tr("Continue with outdated version"), Dialog::RejectButton },
+        {}, tr("Please update to the latest version if you want to use the Cloud."),
+        { { kCancelButtonId, tr("Nope, I’m fine without Cloud"), Dialog::RejectButton },
           { kYesButtonId, tr("Update"), Dialog::AcceptButton } });
     QObject::connect(
         dialog, &Dialog::finished, dialog,
