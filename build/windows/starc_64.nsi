@@ -26,7 +26,7 @@
   BrandingText "Story Apps LLC"
 
   ;Default installation folder
-  InstallDir "$PROGRAMFILES\Starc"
+  InstallDir "$PROGRAMFILES64\Starc"
   InstallDirRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Starc" "UninstallString"
 
   ;Request application privileges for Windows Vista
