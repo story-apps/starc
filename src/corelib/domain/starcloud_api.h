@@ -2,6 +2,7 @@
 
 #include <QColor>
 #include <QDateTime>
+#include <QUuid>
 
 
 namespace Domain {
@@ -163,6 +164,26 @@ struct ProjectInfo {
     int accountRole = 0;
     QDateTime lastEditTime;
     QVector<ProjectCollaboratorInfo> collaborators;
+};
+
+/**
+ * @brief Информация об изменении документа
+ */
+struct DocumentChangeInfo {
+    QUuid uuid;
+    QByteArray redoPatch;
+    QDateTime changedAt;
+};
+
+/**
+ * @brief Информация о документе
+ */
+struct DocumentInfo {
+    QUuid uuid;
+    int type = 0;
+    QByteArray content;
+    QDateTime changedAt;
+    QVector<DocumentChangeInfo> changes;
 };
 
 } // namespace Domain
