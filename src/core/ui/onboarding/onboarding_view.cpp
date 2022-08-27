@@ -407,9 +407,6 @@ OnboardingView::OnboardingView(QWidget* _parent)
     , d(new Implementation(this))
 {
     showLanguagePage();
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 OnboardingView::~OnboardingView() = default;

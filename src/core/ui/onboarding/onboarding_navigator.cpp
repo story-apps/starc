@@ -18,8 +18,6 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
 
     addStep({});
     addStep({});
-
-    designSystemChangeEvent(nullptr);
 }
 
 void OnboardingNavigator::showThemeStep()

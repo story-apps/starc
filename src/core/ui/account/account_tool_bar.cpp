@@ -10,12 +10,10 @@ namespace Ui {
 AccountToolBar::AccountToolBar(QWidget* _parent)
     : AppBar(_parent)
 {
-    QAction* backAction = new QAction(this);
+    auto backAction = new QAction(this);
     backAction->setIconText(u8"\U000F004D");
     addAction(backAction);
     connect(backAction, &QAction::triggered, this, &AccountToolBar::backPressed);
-
-    designSystemChangeEvent(nullptr);
 }
 
 void AccountToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
