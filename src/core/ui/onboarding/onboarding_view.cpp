@@ -145,6 +145,7 @@ void OnboardingView::Implementation::initLanguagePage()
     // ... а если не умеем, то выбираем английский
     //
     if (!isSystemLanguageSupported) {
+        QSignalBlocker blocker(englishLanguage);
         englishLanguage->setChecked(true);
     }
 
