@@ -9,8 +9,10 @@ class StructureModelItem;
 } // namespace BusinessLayer
 
 namespace Domain {
+class DocumentChangeObject;
 enum class DocumentObjectType;
-}
+struct DocumentInfo;
+} // namespace Domain
 
 namespace ManagementLayer {
 
@@ -111,6 +113,21 @@ public:
      */
     BusinessLayer::AbstractModel* firstScriptModel() const;
 
+    /**
+     * @brief Применить данные документа полученные с облака
+     */
+    void setDocumentInfo(const Domain::DocumentInfo& _documentInfo);
+
+    /**
+     * @brief Список изменений документа, которые ещё не были синхронизированы
+     */
+    QVector<Domain::DocumentChangeObject*> unsyncedChanges(const QUuid& _documentUuid) const;
+
+    /**
+     * @brief Пометить отправленные изменения сохранёнными
+     */
+    void markChangesSynced(const QUuid& _documentUuid);
+
 signals:
     /**
      * @brief Запрос на отображение меню
@@ -125,7 +142,8 @@ signals:
     /**
      * @brief Изменились данные
      */
-    void contentsChanged();
+    void contentsChanged(BusinessLayer::AbstractModel* _model,
+                         Domain::DocumentChangeObject* _change);
 
     /**
      * @brief Изменилось название проекта
@@ -148,6 +166,11 @@ signals:
     void projectCollaboratorInviteRequested(const QString& _email, const QColor& _color, int _role);
     void projectCollaboratorUpdateRequested(const QString& _email, const QColor& _color, int _role);
     void projectCollaboratorRemoveRequested(const QString& _email);
+
+    /**
+     * @brief Сменилась модель структуры
+     */
+    void structureModelChanged(BusinessLayer::AbstractModel* _model);
 
     /**
      * @brief Сменилась текущая модель документа

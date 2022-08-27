@@ -283,6 +283,11 @@ public:
         QPointer<BusinessLayer::AbstractModel> model;
         QString viewMimeType;
     } currentDocument;
+
+    /**
+     * @brief Списки изменений, которые были отправлены на синхронизацию
+     */
+    mutable QHash<QUuid, QVector<Domain::DocumentChangeObject*>> changesForSync;
 };
 
 ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _parent,
@@ -1781,6 +1786,7 @@ void ProjectManager::loadCurrentProject(const Project& _project)
     d->projectStructureModel->setDocument(
         DataStorageLayer::StorageFacade::documentStorage()->document(
             Domain::DocumentObjectType::Structure));
+    emit structureModelChanged(d->projectStructureModel);
 
     //
     // Сохраняем параметры проекта для дальнейшего использования
@@ -2003,8 +2009,6 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     d->projectStructureModel->insertItem(
         createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), synopsisItem,
         _treatment.toUtf8());
-
-    emit contentsChanged();
 }
 
 BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
@@ -2095,6 +2099,38 @@ BusinessLayer::AbstractModel* ProjectManager::firstScriptModel() const
     }
 
     return nullptr;
+}
+
+void ProjectManager::setDocumentInfo(const Domain::DocumentInfo& _documentInfo)
+{
+    //
+    // Берём документ и накатываем изменения
+    //
+    //_documentInfo.content
+
+    //
+    // Отправляем контент документа в менеджер
+    //
+}
+
+QVector<Domain::DocumentChangeObject*> ProjectManager::unsyncedChanges(
+    const QUuid& _documentUuid) const
+{
+    const auto unsyncedChanges
+        = DataStorageLayer::StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(
+            _documentUuid);
+    d->changesForSync[_documentUuid] = unsyncedChanges;
+    return unsyncedChanges;
+}
+
+void ProjectManager::markChangesSynced(const QUuid& _documentUuid)
+{
+    const auto changes = d->changesForSync[_documentUuid];
+    for (auto change : changes) {
+        change->setSynced(true);
+        DataStorageLayer::StorageFacade::documentChangeStorage()->updateDocumentChange(change);
+    }
+    d->changesForSync.remove(_documentUuid);
 }
 
 bool ProjectManager::event(QEvent* _event)
@@ -2189,12 +2225,12 @@ void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
                                        const QByteArray& _undo, const QByteArray& _redo)
 {
     using namespace DataStorageLayer;
-    StorageFacade::documentChangeStorage()->appendDocumentChange(
+    auto change = StorageFacade::documentChangeStorage()->appendDocumentChange(
         _model->document()->uuid(), QUuid::createUuid(), _undo, _redo,
         StorageFacade::settingsStorage()->accountName(),
         StorageFacade::settingsStorage()->accountEmail());
 
-    emit contentsChanged();
+    emit contentsChanged(_model, change);
 }
 
 void ProjectManager::undoModelChange(BusinessLayer::AbstractModel* _model, int _undoStep)

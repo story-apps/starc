@@ -62,7 +62,7 @@ public:
 
     QPointer<Ui::CreateProjectDialog> createProjectDialog;
 
-    bool isCloudProjectNameChnaged = false;
+    bool isCloudProjectNameChanged = false;
     bool isCloudProjectLoglineChnaged = false;
     bool isCloudProjectCoverChnaged = false;
     Debouncer cloudProjectChangeDebouncer;
@@ -256,7 +256,11 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                 menu->showContextMenu(QCursor::pos());
             });
     connect(&d->cloudProjectChangeDebouncer, &Debouncer::gotWork, this, [this] {
-        const auto name = d->isCloudProjectNameChnaged ? d->currentProject.name() : QString();
+        if (!d->currentProject.isRemote()) {
+            return;
+        }
+
+        const auto name = d->isCloudProjectNameChanged ? d->currentProject.name() : QString();
         const auto logline
             = d->isCloudProjectLoglineChnaged ? d->currentProject.logline() : QString();
         const auto cover = d->isCloudProjectCoverChnaged
@@ -714,7 +718,7 @@ void ProjectsManager::setCurrentProjectName(const QString& _name)
     d->projects->updateProject(d->currentProject);
 
     if (d->currentProject.isRemote()) {
-        d->isCloudProjectNameChnaged = true;
+        d->isCloudProjectNameChanged = true;
         d->cloudProjectChangeDebouncer.orderWork();
     }
 }

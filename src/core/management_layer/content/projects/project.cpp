@@ -64,7 +64,7 @@ bool Project::isValid() const
 
 bool Project::isLocal() const
 {
-    return d->type == ProjectType::Local;
+    return d->type == ProjectType::Local || d->type == ProjectType::LocalShadow;
 }
 
 bool Project::isRemote() const

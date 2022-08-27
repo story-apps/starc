@@ -30,9 +30,19 @@ public:
         const QByteArray& _redoPatch, const QString& _userEmail, const QString& _userName);
 
     /**
+     * @brief Обновить параметры изменения
+     */
+    void updateDocumentChange(Domain::DocumentChangeObject* _change);
+
+    /**
      * @brief Получить изменение документа с заданным индексом
      */
     Domain::DocumentChangeObject* documentChangeAt(const QUuid& _documentUuid, int _changeIndex);
+
+    /**
+     * @brief Изменения документа, которые ещё не были синхронизированы
+     */
+    QVector<Domain::DocumentChangeObject*> unsyncedDocumentChanges(const QUuid& _documentUuid);
 
     /**
      * @brief Сохранить несохранённые изменения сценарии

@@ -34,15 +34,14 @@ Domain::DocumentChangeObject* DocumentChangeStorage::appendDocumentChange(
     return newDocumentChange;
 }
 
+void DocumentChangeStorage::updateDocumentChange(Domain::DocumentChangeObject* _change)
+{
+    DataMappingLayer::MapperFacade::documentChangeMapper()->update(_change);
+}
+
 Domain::DocumentChangeObject* DocumentChangeStorage::documentChangeAt(const QUuid& _documentUuid,
                                                                       int _changeIndex)
 {
-    //
-    // TODO: Изменения только от текущего пользователя
-    //
-    //    StorageFacade::settingsStorage()->userName(),
-    //    StorageFacade::settingsStorage()->userEmail()
-
     auto correctedChangeIndex = _changeIndex;
 
     //
@@ -62,6 +61,12 @@ Domain::DocumentChangeObject* DocumentChangeStorage::documentChangeAt(const QUui
 
     return DataMappingLayer::MapperFacade::documentChangeMapper()->find(_documentUuid,
                                                                         correctedChangeIndex);
+}
+
+QVector<Domain::DocumentChangeObject*> DocumentChangeStorage::unsyncedDocumentChanges(
+    const QUuid& _documentUuid)
+{
+    return DataMappingLayer::MapperFacade::documentChangeMapper()->findAllUnsynced(_documentUuid);
 }
 
 void DocumentChangeStorage::store()

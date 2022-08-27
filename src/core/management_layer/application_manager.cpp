@@ -20,6 +20,7 @@
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/document_change_object.h>
 #include <domain/document_object.h>
 #include <domain/starcloud_api.h>
 #include <include/custom_events.h>
@@ -1321,6 +1322,10 @@ void ApplicationManager::Implementation::createRemoteProject(const QString& _pro
                       // ... перейдём к редактированию
                       //
                       goToEditCurrentProject(_importFilePath);
+                      //
+                      // ... подпишемся на документ структуры проекта
+                      //
+                      cloudServiceManager->openStructure(_projectInfo.id);
                   });
 
     //
@@ -1564,6 +1569,11 @@ void ApplicationManager::Implementation::closeCurrentProject()
     //
     // Порядок важен
     //
+#ifdef CLOUD_SERVICE_MANAGER
+    if (projectsManager->currentProject().isRemote()) {
+        cloudServiceManager->closeProject(projectsManager->currentProject().id());
+    }
+#endif
     projectManager->closeCurrentProject(projectsManager->currentProject().path());
     projectsManager->closeCurrentProject();
 
@@ -2398,10 +2408,8 @@ void ApplicationManager::initConnections()
                 }
 
                 auto callback = [this, _id, _path] {
-                    //
-                    // Подписаться на обновления проекта с облака
-                    //
                     openProject(_path);
+                    d->cloudServiceManager->openStructure(_id);
                 };
                 d->saveIfNeeded(callback);
             });
@@ -2436,6 +2444,56 @@ void ApplicationManager::initConnections()
                 d->cloudServiceManager->removeCollaborator(
                     d->projectsManager->currentProject().id(), _email);
             });
+    connect(d->projectManager.data(), &ProjectManager::structureModelChanged, this,
+            [this](BusinessLayer::AbstractModel* _model) {
+                const auto currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote()) {
+                    return;
+                }
+
+                d->cloudServiceManager->openDocument(currentProject.id(),
+                                                     _model->document()->uuid(),
+                                                     static_cast<int>(_model->document()->type()));
+            });
+    connect(d->projectManager.data(), &ProjectManager::currentModelChanged, this,
+            [this](BusinessLayer::AbstractModel* _model) {
+                const auto currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote()) {
+                    return;
+                }
+
+                d->cloudServiceManager->openDocument(currentProject.id(),
+                                                     _model->document()->uuid(),
+                                                     static_cast<int>(_model->document()->type()));
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentReceived,
+            d->projectManager.data(), &ProjectManager::setDocumentInfo);
+    connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
+            [this](BusinessLayer::AbstractModel* _model) {
+                const auto currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote()) {
+                    return;
+                }
+
+                //
+                // Запросить отправку изменений
+                //
+                d->cloudServiceManager->startDocumentChange(currentProject.id(),
+                                                            _model->document()->uuid());
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChangeAllowed, this,
+            [this](const QUuid& _documentUuid) {
+                const auto currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote()) {
+                    return;
+                }
+
+                d->cloudServiceManager->pushDocumentChange(
+                    currentProject.id(), _documentUuid,
+                    d->projectManager->unsyncedChanges(_documentUuid));
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChangesPushed,
+            d->projectManager.data(), &ProjectManager::markChangesSynced);
     connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,
             [this](int _id) { d->cloudServiceManager->removeProject(_id); });
     connect(d->projectsManager.data(), &ProjectsManager::unsubscribeFromCloudProjectRequested, this,
