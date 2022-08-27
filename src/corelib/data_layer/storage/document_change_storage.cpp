@@ -66,7 +66,16 @@ Domain::DocumentChangeObject* DocumentChangeStorage::documentChangeAt(const QUui
 QVector<Domain::DocumentChangeObject*> DocumentChangeStorage::unsyncedDocumentChanges(
     const QUuid& _documentUuid)
 {
-    return DataMappingLayer::MapperFacade::documentChangeMapper()->findAllUnsynced(_documentUuid);
+    QVector<Domain::DocumentChangeObject*> changes;
+    for (auto change : std::as_const(d->newDocumentChanges)) {
+        if (change->documentUuid() == _documentUuid && !change->isSynced()) {
+            changes.append(change);
+        }
+    }
+
+    changes.append(
+        DataMappingLayer::MapperFacade::documentChangeMapper()->findAllUnsynced(_documentUuid));
+    return changes;
 }
 
 void DocumentChangeStorage::store()
