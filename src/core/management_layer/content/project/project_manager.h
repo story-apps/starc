@@ -10,6 +10,7 @@ class StructureModelItem;
 
 namespace Domain {
 class DocumentChangeObject;
+class DocumentObject;
 enum class DocumentObjectType;
 struct DocumentInfo;
 } // namespace Domain
@@ -128,6 +129,16 @@ public:
      */
     void markChangesSynced(const QUuid& _documentUuid);
 
+    /**
+     * @brief Запланировать полную синхроинзацию документа
+     */
+    void planDocumentSyncing(const QUuid& _documentUuid);
+
+    /**
+     * @brief Получить данные документа для синхронизации
+     */
+    Domain::DocumentObject* documentToSync(const QUuid& _documentUuid) const;
+
 signals:
     /**
      * @brief Запрос на отображение меню
@@ -176,6 +187,11 @@ signals:
      * @brief Сменилась текущая модель документа
      */
     void currentModelChanged(BusinessLayer::AbstractModel* _model);
+
+    /**
+     * @brief Запрос на полную синхронизацию документа
+     */
+    void documentSyncRequested(const QUuid& _documentUuid);
 
 protected:
     /**

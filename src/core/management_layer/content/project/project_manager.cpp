@@ -285,6 +285,11 @@ public:
     } currentDocument;
 
     /**
+     * @brief Список документов и таймеров для полной синхронизации
+     */
+    mutable QHash<QUuid, QSharedPointer<QTimer>> documentToSyncTimer;
+
+    /**
      * @brief Списки изменений, которые были отправлены на синхронизацию
      */
     mutable QHash<QUuid, QVector<Domain::DocumentChangeObject*>> changesForSync;
@@ -1898,6 +1903,12 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     }
 
     //
+    // Очищаем все карты для синхронизации
+    //
+    d->documentToSyncTimer.clear();
+    d->changesForSync.clear();
+
+    //
     // Очищаем структуру
     //
     d->projectStructureModel->clear();
@@ -2111,6 +2122,39 @@ void ProjectManager::setDocumentInfo(const Domain::DocumentInfo& _documentInfo)
     //
     // Отправляем контент документа в менеджер
     //
+}
+
+void ProjectManager::planDocumentSyncing(const QUuid& _documentUuid)
+{
+    const auto documentToSyncTimer = d->documentToSyncTimer.find(_documentUuid);
+    if (documentToSyncTimer != d->documentToSyncTimer.end()) {
+        return;
+    }
+
+    auto& timer = d->documentToSyncTimer[_documentUuid];
+    timer.reset(new QTimer(this));
+    timer->setSingleShot(true);
+    timer->setInterval(std::chrono::minutes{ 15 });
+    connect(timer.data(), &QTimer::timeout, this, [this, _documentUuid] {
+        //
+        // Убираем таймер
+        //
+        d->documentToSyncTimer.remove(_documentUuid);
+
+        //
+        // Отправляем запрос на синхронизацию
+        //
+        emit documentSyncRequested(_documentUuid);
+    });
+    timer->start();
+}
+
+Domain::DocumentObject* ProjectManager::documentToSync(const QUuid& _documentUuid) const
+{
+    //
+    // Возвращаем документ
+    //
+    return DataStorageLayer::StorageFacade::documentStorage()->document(_documentUuid);
 }
 
 QVector<Domain::DocumentChangeObject*> ProjectManager::unsyncedChanges(

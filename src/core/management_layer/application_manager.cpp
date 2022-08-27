@@ -1300,11 +1300,6 @@ void ApplicationManager::Implementation::createRemoteProject(const QString& _pro
                       }
 
                       //
-                      // Подписываемся на обновления проекта
-                      //
-
-
-                      //
                       // Добавляем проект в список недавних
                       //
                       projectsManager->addOrUpdateCloudProject(_projectInfo);
@@ -1314,6 +1309,12 @@ void ApplicationManager::Implementation::createRemoteProject(const QString& _pro
                       //
                       projectsManager->setCurrentProject(_projectInfo.id);
                       projectsManager->setCurrentProjectName(_projectInfo.name);
+                      //
+                      // ... заблокируем открытие файла в другом приложении
+                      //
+                      if (!tryLockProject(projectsManager->currentProject().path())) {
+                          return;
+                      }
                       //
                       // ... сохраняем новый проект в списке недавних
                       //
@@ -2480,6 +2481,23 @@ void ApplicationManager::initConnections()
                 //
                 d->cloudServiceManager->startDocumentChange(currentProject.id(),
                                                             _model->document()->uuid());
+
+                //
+                // Запустить отсчёт до следующей отправки документа целиком
+                //
+                d->projectManager->planDocumentSyncing(_model->document()->uuid());
+            });
+    connect(d->projectManager.data(), &ProjectManager::documentSyncRequested, this,
+            [this](const QUuid& _documentUuid) {
+                const auto currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote()) {
+                    return;
+                }
+
+                //
+                // Запросить отправку изменений
+                //
+                d->cloudServiceManager->startDocumentChange(currentProject.id(), _documentUuid);
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChangeAllowed, this,
             [this](const QUuid& _documentUuid) {
@@ -2488,9 +2506,22 @@ void ApplicationManager::initConnections()
                     return;
                 }
 
-                d->cloudServiceManager->pushDocumentChange(
-                    currentProject.id(), _documentUuid,
-                    d->projectManager->unsyncedChanges(_documentUuid));
+                //
+                // Если есть изменения, то отправляем их
+                //
+                const auto changes = d->projectManager->unsyncedChanges(_documentUuid);
+                if (!changes.isEmpty()) {
+                    d->cloudServiceManager->pushDocumentChange(currentProject.id(), _documentUuid,
+                                                               changes);
+                }
+                //
+                // В противном случае, отправляем документ целиком
+                //
+                else {
+                    d->cloudServiceManager->pushDocumentChange(
+                        currentProject.id(), _documentUuid,
+                        d->projectManager->documentToSync(_documentUuid)->content());
+                }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChangesPushed,
             d->projectManager.data(), &ProjectManager::markChangesSynced);
