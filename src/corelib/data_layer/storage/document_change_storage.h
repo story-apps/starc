@@ -35,6 +35,11 @@ public:
     void updateDocumentChange(Domain::DocumentChangeObject* _change);
 
     /**
+     * @brief Удалить изменение
+     */
+    void removeDocumentChange(Domain::DocumentChangeObject* _change);
+
+    /**
      * @brief Получить изменение документа с заданным индексом
      */
     Domain::DocumentChangeObject* documentChangeAt(const QUuid& _documentUuid, int _changeIndex);

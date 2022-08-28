@@ -213,6 +213,36 @@ void AbstractModel::redo()
     saveChanges();
 }
 
+bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
+                                         const QVector<QByteArray>& _patches)
+{
+    if (_content.isEmpty() && _patches.isEmpty()) {
+        return false;
+    }
+
+    auto newContent = _content.isEmpty() ? toXml() : _content;
+    for (const auto& patch : _patches) {
+        auto patchedContent = d->dmpController.applyPatch(newContent, patch);
+
+        //
+        // Если патч не принёс успеха, значит ошибка в наложении изменений
+        //
+        if (patchedContent.size() == newContent.size() && patchedContent == newContent) {
+            return false;
+        }
+
+        newContent.swap(patchedContent);
+    }
+
+
+    beginResetModel();
+    clearDocument();
+    document()->setContent(newContent);
+    initDocument();
+    endResetModel();
+    return true;
+}
+
 QModelIndex AbstractModel::index(int _row, int _column, const QModelIndex& _parent) const
 {
     Q_UNUSED(_row)

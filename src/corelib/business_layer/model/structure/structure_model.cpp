@@ -1101,11 +1101,11 @@ void StructureModel::clearDocument()
         return;
     }
 
-    emit beginRemoveRows({}, 0, d->rootItem->childCount() - 1);
+    beginRemoveRows({}, 0, d->rootItem->childCount() - 1);
     while (d->rootItem->childCount() > 0) {
         d->rootItem->removeItem(d->rootItem->childAt(0));
     }
-    emit endRemoveRows();
+    endRemoveRows();
 }
 
 QByteArray StructureModel::toXml() const

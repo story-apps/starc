@@ -257,6 +257,11 @@ public:
     const PluginsBuilder& pluginsBuilder;
 
     /**
+     * @brief Путь текущего проекта
+     */
+    QString projetPath;
+
+    /**
      * @brief Работает ли пользователь с облачным проектом
      */
     bool isProjectRemote = false;
@@ -605,6 +610,10 @@ BusinessLayer::StructureModelItem* ProjectManager::Implementation::aliasedItemFo
     }
 
     auto model = modelsFacade.modelFor(item->uuid());
+    if (model == nullptr) {
+        return item;
+    }
+
     return projectStructureModel->itemForUuid(model->document()->uuid());
 }
 
@@ -1216,6 +1225,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 default:
                     break;
                 }
+
+                documentModel->reassignContent();
+                emit documentSyncRequested(_uuid, true);
             });
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::contentsChanged, this,
             [this](const QByteArray& _undo, const QByteArray& _redo) {
@@ -1791,6 +1803,12 @@ void ProjectManager::loadCurrentProject(const Project& _project)
     d->projectStructureModel->setDocument(
         DataStorageLayer::StorageFacade::documentStorage()->document(
             Domain::DocumentObjectType::Structure));
+    //
+    // ... если структура только была создана, установим в документ болванку данных
+    //
+    if (d->projectStructureModel->document()->content().isEmpty()) {
+        d->projectStructureModel->reassignContent();
+    }
     emit structureModelChanged(d->projectStructureModel);
 
     //
@@ -1833,6 +1851,7 @@ void ProjectManager::loadCurrentProject(const Project& _project)
 
 void ProjectManager::updateCurrentProject(const Project& _project)
 {
+    d->projetPath = _project.path();
     d->isProjectRemote = _project.isRemote();
     d->isProjectOwner = _project.isOwner();
     d->editingMode = _project.editingMode();
@@ -2115,13 +2134,120 @@ BusinessLayer::AbstractModel* ProjectManager::firstScriptModel() const
 void ProjectManager::setDocumentInfo(const Domain::DocumentInfo& _documentInfo)
 {
     //
-    // Берём документ и накатываем изменения
+    // Модели для документов, которые могут быть только в единственном экземпляре, достаём по типу и
+    // применяем к ним помимо содержимого также и идентификатор с облака
     //
-    //_documentInfo.content
+    Domain::DocumentObject* document = nullptr;
+    const auto documentType = static_cast<Domain::DocumentObjectType>(_documentInfo.type);
+    if (documentType == Domain::DocumentObjectType::Structure
+        || documentType == Domain::DocumentObjectType::RecycleBin
+        || documentType == Domain::DocumentObjectType::Project
+        || documentType == Domain::DocumentObjectType::Characters
+        || documentType == Domain::DocumentObjectType::Locations) {
+        document = DataStorageLayer::StorageFacade::documentStorage()->document(documentType);
+        DataStorageLayer::StorageFacade::documentStorage()->updateDocumentUuid(document->uuid(),
+                                                                               _documentInfo.uuid);
+    }
+    //
+    // Остальные документы берём строго по UUID из базы, а в случае, если их нет, то создаём
+    //
+    else {
+        document = DataStorageLayer::StorageFacade::documentStorage()->document(_documentInfo.uuid);
+        if (document == nullptr) {
+            document = DataStorageLayer::StorageFacade::documentStorage()->createDocument(
+                _documentInfo.uuid, documentType);
+        }
+    }
 
     //
-    // Отправляем контент документа в менеджер
+    // Загрузим модель для документа
     //
+    auto documentModel = documentType == Domain::DocumentObjectType::Structure
+        ? d->projectStructureModel
+        : d->modelsFacade.modelFor(document);
+    //    if (documentType == Domain::DocumentObjectType::Character) {
+    //        static_cast<BusinessLayer::CharactersModel*>(
+    //            d->modelsFacade.modelFor(Domain::DocumentObjectType::Characters))
+    //            ->addCharacterModel(static_cast<BusinessLayer::CharacterModel*>(documentModel));
+    //    }
+
+    //
+    // Если есть локальные несинхронизированные изменения данного документа, сохраним копию контента
+    //
+    QByteArray lastDocumentVersion;
+    const auto unsyncedChanges
+        = DataStorageLayer::StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(
+            document->uuid());
+    if (!unsyncedChanges.isEmpty()) {
+        lastDocumentVersion = document->content();
+    }
+
+    //
+    // Загружаем в документ полученный контент и изменения
+    //
+    QVector<QByteArray> changes;
+    for (const auto& change : _documentInfo.changes) {
+        changes.append(change.redoPatch);
+    }
+    documentModel->mergeDocumentChanges(_documentInfo.content, changes);
+
+    //
+    // Пробуем накатить несинхронизированные изменения
+    //
+    if (!unsyncedChanges.isEmpty()) {
+        changes.clear();
+        for (const auto& change : unsyncedChanges) {
+            changes.append(change->redoPatch());
+        }
+        const auto isChangesMerged = documentModel->mergeDocumentChanges({}, changes);
+        //
+        // ... если успех - пушим несинхронизированные изменения
+        //
+        if (isChangesMerged) {
+            //
+            // Симулируем изменение модели, чтобы приложение запушило несинхронизированные изменения
+            //
+            emit contentsChanged(documentModel);
+        }
+        //
+        // ... в противном случае - создаём отдельную версию с документом содержащим конфликт и
+        // дропаем
+        //     офлайновые правки из базы
+        //
+        else {
+            //
+            // TODO: Создать версию документа с конфликтом
+            //
+
+            for (auto change : unsyncedChanges) {
+                DataStorageLayer::StorageFacade::documentChangeStorage()->removeDocumentChange(
+                    change);
+            }
+        }
+    }
+
+    //
+    // Сохраним документ
+    //
+    DataStorageLayer::StorageFacade::documentStorage()->saveDocument(document);
+
+    //
+    // Если обновилась структура, восстановим последний выделенный элемент
+    //
+    if (document->type() == Domain::DocumentObjectType::Structure) {
+        d->view.activeIndex = {};
+        restoreCurrentProjectState(d->projetPath);
+    }
+    //
+    // Если не структура, а какая-либо из моделей, то обновим представление для неё
+    //
+    else {
+        const auto item = d->aliasedItemForIndex(
+            d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex()));
+        if (item && item->uuid() == _documentInfo.uuid) {
+            showView(d->navigator->currentIndex(), d->currentDocument.viewMimeType);
+        }
+    }
 }
 
 void ProjectManager::planDocumentSyncing(const QUuid& _documentUuid)
@@ -2144,7 +2270,7 @@ void ProjectManager::planDocumentSyncing(const QUuid& _documentUuid)
         //
         // Отправляем запрос на синхронизацию
         //
-        emit documentSyncRequested(_documentUuid);
+        emit documentSyncRequested(_documentUuid, false);
     });
     timer->start();
 }
@@ -2269,12 +2395,12 @@ void ProjectManager::handleModelChange(BusinessLayer::AbstractModel* _model,
                                        const QByteArray& _undo, const QByteArray& _redo)
 {
     using namespace DataStorageLayer;
-    auto change = StorageFacade::documentChangeStorage()->appendDocumentChange(
+    StorageFacade::documentChangeStorage()->appendDocumentChange(
         _model->document()->uuid(), QUuid::createUuid(), _undo, _redo,
         StorageFacade::settingsStorage()->accountName(),
         StorageFacade::settingsStorage()->accountEmail());
 
-    emit contentsChanged(_model, change);
+    emit contentsChanged(_model);
 }
 
 void ProjectManager::undoModelChange(BusinessLayer::AbstractModel* _model, int _undoStep)
@@ -2312,6 +2438,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
 
     const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
     const auto item = d->aliasedItemForIndex(sourceItemIndex);
+    emit currentDocumentChanged(item->uuid());
 
     //
     // Определим модель

@@ -46,6 +46,11 @@ public:
     Domain::DocumentObject* createDocument(const QUuid& _uuid, Domain::DocumentObjectType _type);
 
     /**
+     * @brief Изменить гуид документа
+     */
+    void updateDocumentUuid(const QUuid& _old, const QUuid& _new);
+
+    /**
      * @brief Обновить документ
      */
     void saveDocument(Domain::DocumentObject* _document);

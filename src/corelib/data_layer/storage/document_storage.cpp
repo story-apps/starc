@@ -80,6 +80,20 @@ Domain::DocumentObject* DocumentStorage::createDocument(const QUuid& _uuid,
     return newDocument;
 }
 
+void DocumentStorage::updateDocumentUuid(const QUuid& _old, const QUuid& _new)
+{
+    auto document = this->document(_old);
+    if (document == nullptr || document->uuid() == _new) {
+        return;
+    }
+
+    if (d->notSavedDocuments.contains(_old)) {
+        d->notSavedDocuments.remove(_old);
+        d->notSavedDocuments.insert(_new, document);
+    }
+    document->setUuid(_new);
+}
+
 void DocumentStorage::saveDocument(Domain::DocumentObject* _document)
 {
     if (d->notSavedDocuments.contains(_document->uuid())) {

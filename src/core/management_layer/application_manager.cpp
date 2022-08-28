@@ -1327,6 +1327,7 @@ void ApplicationManager::Implementation::createRemoteProject(const QString& _pro
                       // ... подпишемся на документ структуры проекта
                       //
                       cloudServiceManager->openStructure(_projectInfo.id);
+                      cloudServiceManager->openProjectInfo(_projectInfo.id);
                   });
 
     //
@@ -2411,6 +2412,7 @@ void ApplicationManager::initConnections()
                 auto callback = [this, _id, _path] {
                     openProject(_path);
                     d->cloudServiceManager->openStructure(_id);
+                    d->cloudServiceManager->openProjectInfo(_id);
                 };
                 d->saveIfNeeded(callback);
             });
@@ -2452,20 +2454,21 @@ void ApplicationManager::initConnections()
                     return;
                 }
 
-                d->cloudServiceManager->openDocument(currentProject.id(),
-                                                     _model->document()->uuid(),
-                                                     static_cast<int>(_model->document()->type()));
+                d->cloudServiceManager->openDocument(currentProject.id(), _model->document());
             });
-    connect(d->projectManager.data(), &ProjectManager::currentModelChanged, this,
-            [this](BusinessLayer::AbstractModel* _model) {
+    connect(d->projectManager.data(), &ProjectManager::currentDocumentChanged, this,
+            [this](const QUuid& _documentUuid) {
                 const auto currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote()) {
+                if (!currentProject.isRemote() || _documentUuid.isNull()) {
                     return;
                 }
 
-                d->cloudServiceManager->openDocument(currentProject.id(),
-                                                     _model->document()->uuid(),
-                                                     static_cast<int>(_model->document()->type()));
+                const auto document = d->projectManager->documentToSync(_documentUuid);
+                if (document == nullptr) {
+                    d->cloudServiceManager->openDocument(currentProject.id(), _documentUuid);
+                } else {
+                    d->cloudServiceManager->openDocument(currentProject.id(), document);
+                }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentReceived,
             d->projectManager.data(), &ProjectManager::setDocumentInfo);
@@ -2488,16 +2491,25 @@ void ApplicationManager::initConnections()
                 d->projectManager->planDocumentSyncing(_model->document()->uuid());
             });
     connect(d->projectManager.data(), &ProjectManager::documentSyncRequested, this,
-            [this](const QUuid& _documentUuid) {
+            [this](const QUuid& _documentUuid, bool _isNewDocument) {
                 const auto currentProject = d->projectsManager->currentProject();
                 if (!currentProject.isRemote()) {
                     return;
                 }
 
                 //
-                // Запросить отправку изменений
+                // Если был создан новый документ, то кидаем его в облако и подписываемся
                 //
-                d->cloudServiceManager->startDocumentChange(currentProject.id(), _documentUuid);
+                if (_isNewDocument) {
+                    d->cloudServiceManager->openDocument(
+                        currentProject.id(), d->projectManager->documentToSync(_documentUuid));
+                }
+                //
+                // В противном случае, запросим отправку изменений
+                //
+                else {
+                    d->cloudServiceManager->startDocumentChange(currentProject.id(), _documentUuid);
+                }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChangeAllowed, this,
             [this](const QUuid& _documentUuid) {

@@ -39,6 +39,11 @@ void DocumentChangeStorage::updateDocumentChange(Domain::DocumentChangeObject* _
     DataMappingLayer::MapperFacade::documentChangeMapper()->update(_change);
 }
 
+void DocumentChangeStorage::removeDocumentChange(Domain::DocumentChangeObject* _change)
+{
+    DataMappingLayer::MapperFacade::documentChangeMapper()->remove(_change);
+}
+
 Domain::DocumentChangeObject* DocumentChangeStorage::documentChangeAt(const QUuid& _documentUuid,
                                                                       int _changeIndex)
 {

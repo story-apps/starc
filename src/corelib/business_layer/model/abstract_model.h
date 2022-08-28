@@ -94,6 +94,11 @@ public:
     void redo();
 
     /**
+     * @brief Смержить документ с заданным
+     */
+    bool mergeDocumentChanges(const QByteArray _content, const QVector<QByteArray>& _patches);
+
+    /**
      * @brief Реализация базовых вещей для древовидной модели
      */
     /** @{ */

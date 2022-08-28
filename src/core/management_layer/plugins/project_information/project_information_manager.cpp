@@ -95,10 +95,14 @@ void ProjectInformationManager::Implementation::setModelForView(
     // Настраиваем соединения с новой моделью
     //
     if (model != nullptr) {
-        _view->setName(model->name());
-        _view->setLogline(model->logline());
-        _view->setCover(model->cover());
+        auto reloadModel = [_view, model] {
+            _view->setName(model->name());
+            _view->setLogline(model->logline());
+            _view->setCover(model->cover());
+        };
+        reloadModel();
 
+        connect(model, &BusinessLayer::ProjectInformationModel::modelReset, _view, reloadModel);
         connect(model, &BusinessLayer::ProjectInformationModel::nameChanged, _view,
                 &Ui::ProjectInformationView::setName);
         connect(model, &BusinessLayer::ProjectInformationModel::loglineChanged, _view,

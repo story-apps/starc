@@ -153,8 +153,7 @@ signals:
     /**
      * @brief Изменились данные
      */
-    void contentsChanged(BusinessLayer::AbstractModel* _model,
-                         Domain::DocumentChangeObject* _change);
+    void contentsChanged(BusinessLayer::AbstractModel* _model);
 
     /**
      * @brief Изменилось название проекта
@@ -184,6 +183,11 @@ signals:
     void structureModelChanged(BusinessLayer::AbstractModel* _model);
 
     /**
+     * @brief Сменился текущий документа
+     */
+    void currentDocumentChanged(const QUuid& _documentUuid);
+
+    /**
      * @brief Сменилась текущая модель документа
      */
     void currentModelChanged(BusinessLayer::AbstractModel* _model);
@@ -191,7 +195,7 @@ signals:
     /**
      * @brief Запрос на полную синхронизацию документа
      */
-    void documentSyncRequested(const QUuid& _documentUuid);
+    void documentSyncRequested(const QUuid& _documentUuid, bool _isNewDocument);
 
 protected:
     /**
