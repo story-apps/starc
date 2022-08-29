@@ -67,6 +67,12 @@ public:
      */
     int animationDuration() const;
 
+signals:
+    /**
+     * @brief Сменился текущий виджет
+     */
+    void currentWidgetChanged();
+
 protected:
     /**
      * @brief Реализуем собственную отрисовку для реализации эффекста смены текущего виджета

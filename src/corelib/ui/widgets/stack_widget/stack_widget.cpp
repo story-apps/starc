@@ -386,6 +386,8 @@ void StackWidget::setCurrentWidget(QWidget* _widget)
 
     updateGeometry();
 
+    emit currentWidgetChanged();
+
     //
     // Если виджет не виден на экране, просто отображаем новый текущий виджет
     //
