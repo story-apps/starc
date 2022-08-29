@@ -115,9 +115,14 @@ public:
     BusinessLayer::AbstractModel* firstScriptModel() const;
 
     /**
-     * @brief Применить данные документа полученные с облака
+     * @brief Смержить данные документа полученные с облака с текущими
      */
-    void setDocumentInfo(const Domain::DocumentInfo& _documentInfo);
+    void mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo);
+
+    /**
+     * @brief Применить данные документа полученные с облака к текущим
+     */
+    void applyDocumentChanges(const Domain::DocumentInfo& _documentInfo);
 
     /**
      * @brief Список изменений документа, которые ещё не были синхронизированы
@@ -138,6 +143,11 @@ public:
      * @brief Получить данные документа для синхронизации
      */
     Domain::DocumentObject* documentToSync(const QUuid& _documentUuid) const;
+
+    /**
+     * @brief Получить список документов, связанных с заданным
+     */
+    QVector<QUuid> connectedDocuments(const QUuid& _documentUuid) const;
 
 signals:
     /**

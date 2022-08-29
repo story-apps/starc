@@ -210,9 +210,10 @@ QVector<LocationsGroup> LocationsModel::locationsGroups() const
     return d->locationsGroups;
 }
 
-QPointF LocationsModel::locationPosition(const QString& _name) const
+QPointF LocationsModel::locationPosition(const QString& _name,
+                                         const QPointF& _defaultPosition) const
 {
-    return d->locationsPositions.value(_name);
+    return d->locationsPositions.value(_name, _defaultPosition);
 }
 
 void LocationsModel::setLocationPosition(const QString& _name, const QPointF& _position)

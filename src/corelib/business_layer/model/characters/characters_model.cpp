@@ -219,9 +219,10 @@ QVector<CharactersGroup> CharactersModel::charactersGroups() const
     return d->charactersGroups;
 }
 
-QPointF CharactersModel::characterPosition(const QString& _name) const
+QPointF CharactersModel::characterPosition(const QString& _name,
+                                           const QPointF& _defaultPosition) const
 {
-    return d->charactersPositions.value(_name);
+    return d->charactersPositions.value(_name, _defaultPosition);
 }
 
 void CharactersModel::setCharacterPosition(const QString& _name, const QPointF& _position)

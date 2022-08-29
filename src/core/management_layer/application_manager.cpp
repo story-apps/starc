@@ -2464,14 +2464,36 @@ void ApplicationManager::initConnections()
                 }
 
                 const auto document = d->projectManager->documentToSync(_documentUuid);
+
+                //
+                // Для сложных типов документов, нужна подгрузка документов, которые с ним связаны
+                //
+                if (const auto connectedDocuments
+                    = d->projectManager->connectedDocuments(_documentUuid);
+                    !connectedDocuments.isEmpty()) {
+                    for (const auto& connectedDocumentUuid : connectedDocuments) {
+                        d->cloudServiceManager->openDocument(currentProject.id(),
+                                                             connectedDocumentUuid);
+                    }
+                }
+
+                //
+                // Если документ не удалось вытащить из базы, значит он ещё не был синхронизирован
+                //
                 if (document == nullptr) {
                     d->cloudServiceManager->openDocument(currentProject.id(), _documentUuid);
-                } else {
+                }
+                //
+                // А если есть, то значит его инстанс уже есть в базе и его надо обновить
+                //
+                else {
                     d->cloudServiceManager->openDocument(currentProject.id(), document);
                 }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentReceived,
-            d->projectManager.data(), &ProjectManager::setDocumentInfo);
+            d->projectManager.data(), &ProjectManager::mergeDocumentInfo);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChanged,
+            d->projectManager.data(), &ProjectManager::applyDocumentChanges);
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
             [this](BusinessLayer::AbstractModel* _model) {
                 const auto currentProject = d->projectsManager->currentProject();

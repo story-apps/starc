@@ -2131,7 +2131,7 @@ BusinessLayer::AbstractModel* ProjectManager::firstScriptModel() const
     return nullptr;
 }
 
-void ProjectManager::setDocumentInfo(const Domain::DocumentInfo& _documentInfo)
+void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo)
 {
     //
     // Модели для документов, которые могут быть только в единственном экземпляре, достаём по типу и
@@ -2165,11 +2165,6 @@ void ProjectManager::setDocumentInfo(const Domain::DocumentInfo& _documentInfo)
     auto documentModel = documentType == Domain::DocumentObjectType::Structure
         ? d->projectStructureModel
         : d->modelsFacade.modelFor(document);
-    //    if (documentType == Domain::DocumentObjectType::Character) {
-    //        static_cast<BusinessLayer::CharactersModel*>(
-    //            d->modelsFacade.modelFor(Domain::DocumentObjectType::Characters))
-    //            ->addCharacterModel(static_cast<BusinessLayer::CharacterModel*>(documentModel));
-    //    }
 
     //
     // Если есть локальные несинхронизированные изменения данного документа, сохраним копию контента
@@ -2227,6 +2222,54 @@ void ProjectManager::setDocumentInfo(const Domain::DocumentInfo& _documentInfo)
     }
 
     //
+    // Дополнительные действия для полноты модели
+    //
+    switch (documentType) {
+    case Domain::DocumentObjectType::Characters: {
+        auto charactersModel = static_cast<BusinessLayer::CharactersModel*>(documentModel);
+        const auto characterDocuments
+            = DataStorageLayer::StorageFacade::documentStorage()->documents(
+                Domain::DocumentObjectType::Character);
+        for (const auto characterDocument : characterDocuments) {
+            auto characterModel = d->modelsFacade.modelFor(characterDocument);
+            charactersModel->addCharacterModel(
+                qobject_cast<BusinessLayer::CharacterModel*>(characterModel));
+        }
+        break;
+    }
+
+    case Domain::DocumentObjectType::Character: {
+        static_cast<BusinessLayer::CharactersModel*>(
+            d->modelsFacade.modelFor(Domain::DocumentObjectType::Characters))
+            ->addCharacterModel(static_cast<BusinessLayer::CharacterModel*>(documentModel));
+        break;
+    }
+
+    case Domain::DocumentObjectType::Locations: {
+        auto locationsModel = static_cast<BusinessLayer::LocationsModel*>(documentModel);
+        const auto locationDocuments
+            = DataStorageLayer::StorageFacade::documentStorage()->documents(
+                Domain::DocumentObjectType::Location);
+        for (const auto locationDocument : locationDocuments) {
+            auto locationModel = d->modelsFacade.modelFor(locationDocument);
+            locationsModel->addLocationModel(
+                qobject_cast<BusinessLayer::LocationModel*>(locationModel));
+        }
+        break;
+    }
+
+    case Domain::DocumentObjectType::Location: {
+        static_cast<BusinessLayer::LocationsModel*>(
+            d->modelsFacade.modelFor(Domain::DocumentObjectType::Locations))
+            ->addLocationModel(static_cast<BusinessLayer::LocationModel*>(documentModel));
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    //
     // Сохраним документ
     //
     DataStorageLayer::StorageFacade::documentStorage()->saveDocument(document);
@@ -2247,6 +2290,44 @@ void ProjectManager::setDocumentInfo(const Domain::DocumentInfo& _documentInfo)
         if (item && item->uuid() == _documentInfo.uuid) {
             showView(d->navigator->currentIndex(), d->currentDocument.viewMimeType);
         }
+    }
+}
+
+void ProjectManager::applyDocumentChanges(const Domain::DocumentInfo& _documentInfo)
+{
+    //
+    // Модели для документов, которые могут быть только в единственном экземпляре, достаём по типу и
+    // применяем к ним помимо содержимого также и идентификатор с облака
+    //
+    auto document
+        = DataStorageLayer::StorageFacade::documentStorage()->document(_documentInfo.uuid);
+    if (document == nullptr) {
+        return;
+    }
+
+    //
+    // Загрузим модель для документа
+    //
+    const auto documentType = static_cast<Domain::DocumentObjectType>(_documentInfo.type);
+    auto documentModel = documentType == Domain::DocumentObjectType::Structure
+        ? d->projectStructureModel
+        : d->modelsFacade.modelFor(document);
+
+    //
+    // Применяем полученные изменения к модели
+    //
+    QVector<QByteArray> changes;
+    for (const auto& change : _documentInfo.changes) {
+        changes.append(change.redoPatch);
+    }
+    documentModel->applyDocumentChanges(changes);
+
+    //
+    // Если обновилась структура, восстановим последний выделенный элемент
+    //
+    if (document->type() == Domain::DocumentObjectType::Structure) {
+        d->view.activeIndex = {};
+        restoreCurrentProjectState(d->projetPath);
     }
 }
 
@@ -2281,6 +2362,33 @@ Domain::DocumentObject* ProjectManager::documentToSync(const QUuid& _documentUui
     // Возвращаем документ
     //
     return DataStorageLayer::StorageFacade::documentStorage()->document(_documentUuid);
+}
+
+QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) const
+{
+    QVector<QUuid> documents;
+
+    const auto item = d->projectStructureModel->itemForUuid(_documentUuid);
+    switch (item->type()) {
+    case Domain::DocumentObjectType::Characters: {
+        for (int childIndex = 0; childIndex < item->childCount(); ++childIndex) {
+            documents.append(item->childAt(childIndex)->uuid());
+        }
+        break;
+    }
+
+    case Domain::DocumentObjectType::Locations: {
+        for (int childIndex = 0; childIndex < item->childCount(); ++childIndex) {
+            documents.append(item->childAt(childIndex)->uuid());
+        }
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    return documents;
 }
 
 QVector<Domain::DocumentChangeObject*> ProjectManager::unsyncedChanges(

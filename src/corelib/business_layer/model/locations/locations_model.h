@@ -90,7 +90,7 @@ public:
     /**
      * @brief Позиция карточки локации на карте
      */
-    QPointF locationPosition(const QString& _name) const;
+    QPointF locationPosition(const QString& _name, const QPointF& _defaultPosition = {}) const;
     void setLocationPosition(const QString& _name, const QPointF& _position);
     Q_SIGNAL void locationPositionChanged(const QString& _name, const QPointF& _position);
 

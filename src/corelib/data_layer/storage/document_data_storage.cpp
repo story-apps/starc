@@ -44,7 +44,11 @@ QPixmap DocumentImageStorage::load(const QUuid& _uuid) const
     }
 
     if (d->cachedImages.contains(_uuid)) {
-        return *d->cachedImages[_uuid];
+        auto cachedImage = d->cachedImages[_uuid];
+        if (cachedImage == nullptr) {
+            return {};
+        }
+        return *cachedImage;
     }
 
     auto imageDocument = DataMappingLayer::MapperFacade::documentMapper()->find(_uuid);

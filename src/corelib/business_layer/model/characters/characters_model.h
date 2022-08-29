@@ -95,7 +95,7 @@ public:
     /**
      * @brief Позиция карточки персонажа на схеме отношений
      */
-    QPointF characterPosition(const QString& _name) const;
+    QPointF characterPosition(const QString& _name, const QPointF& _defaultPosition = {}) const;
     void setCharacterPosition(const QString& _name, const QPointF& _position);
     Q_SIGNAL void characterPositionChanged(const QString& _name, const QPointF& _position);
 

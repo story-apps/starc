@@ -243,6 +243,13 @@ bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
     return true;
 }
 
+void AbstractModel::applyDocumentChanges(const QVector<QByteArray>& _patches)
+{
+    for (const auto& patch : _patches) {
+        applyPatch(patch);
+    }
+}
+
 QModelIndex AbstractModel::index(int _row, int _column, const QModelIndex& _parent) const
 {
     Q_UNUSED(_row)

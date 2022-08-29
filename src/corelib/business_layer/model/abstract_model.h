@@ -99,6 +99,11 @@ public:
     bool mergeDocumentChanges(const QByteArray _content, const QVector<QByteArray>& _patches);
 
     /**
+     * @brief Наложить заданные изменения на документ
+     */
+    void applyDocumentChanges(const QVector<QByteArray>& _patches);
+
+    /**
      * @brief Реализация базовых вещей для древовидной модели
      */
     /** @{ */
