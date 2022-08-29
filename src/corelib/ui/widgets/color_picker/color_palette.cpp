@@ -81,10 +81,10 @@ void ColorPallete::Implementation::buildPalette()
     // Остальные ряды
     //
     colors.clear();
-    colors << QColor("#FE0000") << QColor("#FF7401") << QColor("#FFD302") << QColor("#A0ED00")
+    colors << QColor("#FE0000") << QColor("#FF7401") << QColor("#FFD302") << QColor("#00FF00")
            << QColor("#01CC01") << QColor("#06E3E4") << QColor("#0046F4") << QColor("#4F18FF")
-           << QColor("#9706E7") << QColor("#EC0085") // ****
-           << QColor("#FE3235") << QColor("#FF9036") << QColor("#FFDB34") << QColor("#B3F134")
+           << QColor("#9706E7") << QColor("#FF00A5") // ****
+           << QColor("#FE3235") << QColor("#FF9036") << QColor("#FFDB34") << QColor("#A3FA14")
            << QColor("#35D533") << QColor("#44D0D1") << QColor("#4174F0") << QColor("#653EE0")
            << QColor("#A048CF") << QColor("#F22B9E") // ****
            << QColor("#FF686A") << QColor("#FFAC66") << QColor("#FCE364") << QColor("#C6F567")
