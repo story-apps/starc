@@ -54,6 +54,7 @@ public:
      * @brief Обновить документ
      */
     void saveDocument(Domain::DocumentObject* _document);
+    void saveDocument(const QUuid& _documentUuid);
 
     /**
      * @brief Удалить документ

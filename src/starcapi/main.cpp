@@ -12,7 +12,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <data_layer/database.h>
-#include <data_layer/storage/document_data_storage.h>
+#include <data_layer/storage/document_image_storage.h>
 #include <data_layer/storage/document_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>

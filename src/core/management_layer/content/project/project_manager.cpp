@@ -17,7 +17,7 @@
 #include <business_layer/model/structure/structure_proxy_model.h>
 #include <data_layer/database.h>
 #include <data_layer/storage/document_change_storage.h>
-#include <data_layer/storage/document_data_storage.h>
+#include <data_layer/storage/document_image_storage.h>
 #include <data_layer/storage/document_storage.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -244,7 +244,7 @@ public:
     /**
      * @brief Хранилище изображений проекта
      */
-    DataStorageLayer::DocumentImageStorage documentDataStorage;
+    DataStorageLayer::DocumentImageStorage documentImageStorage;
 
     /**
      * @brief Фасад доступа к моделям проекта
@@ -315,7 +315,7 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
     , showVersionsAction(new QAction(_parent))
     , projectStructureModel(new BusinessLayer::StructureModel(navigator))
     , projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel))
-    , modelsFacade(projectStructureModel, &documentDataStorage)
+    , modelsFacade(projectStructureModel, &documentImageStorage)
     , pluginsBuilder(_pluginsBuilder)
 {
     toolBar->hide();
@@ -1227,7 +1227,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 }
 
                 documentModel->reassignContent();
-                emit documentSyncRequested(_uuid, true);
+                emit uploadDocumentRequested(_uuid, true);
             });
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::contentsChanged, this,
             [this](const QByteArray& _undo, const QByteArray& _redo) {
@@ -1641,6 +1641,13 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     //
     connect(&d->modelsFacade, &ProjectModelsFacade::emptyRecycleBinRequested, this,
             [this] { d->emptyRecycleBin(); });
+    //
+    // Соединения с хранилищем изображений
+    //
+    connect(&d->documentImageStorage, &DataStorageLayer::DocumentImageStorage::imageAdded, this,
+            [this](const QUuid& _uuid) { emit uploadDocumentRequested(_uuid, true); });
+    connect(&d->documentImageStorage, &DataStorageLayer::DocumentImageStorage::imageRequested, this,
+            [this](const QUuid& _uuid) { emit downloadDocumentRequested(_uuid); });
 }
 
 ProjectManager::~ProjectManager() = default;
@@ -1945,7 +1952,7 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     //
     // Сбрасываем загруженные изображения
     //
-    d->documentDataStorage.clear();
+    d->documentImageStorage.clear();
 }
 
 void ProjectManager::saveChanges()
@@ -1967,7 +1974,7 @@ void ProjectManager::saveChanges()
     //
     // Сохраняем изображения
     //
-    d->documentDataStorage.saveChanges();
+    d->documentImageStorage.saveChanges();
 
     //
     // Сохраняем все изменения документов
@@ -2133,30 +2140,43 @@ BusinessLayer::AbstractModel* ProjectManager::firstScriptModel() const
 
 void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo)
 {
-    //
-    // Модели для документов, которые могут быть только в единственном экземпляре, достаём по типу и
-    // применяем к ним помимо содержимого также и идентификатор с облака
-    //
     Domain::DocumentObject* document = nullptr;
     const auto documentType = static_cast<Domain::DocumentObjectType>(_documentInfo.type);
-    if (documentType == Domain::DocumentObjectType::Structure
-        || documentType == Domain::DocumentObjectType::RecycleBin
-        || documentType == Domain::DocumentObjectType::Project
-        || documentType == Domain::DocumentObjectType::Characters
-        || documentType == Domain::DocumentObjectType::Locations) {
+    switch (documentType) {
+    //
+    // Изображения обрабатываем строго через отдельное хранилище
+    //
+    case Domain::DocumentObjectType::ImageData: {
+        d->documentImageStorage.save(_documentInfo.uuid, _documentInfo.content);
+        return;
+    }
+
+    //
+    // Модели для документов, которые могут быть только в единственном экземпляре, достаём по
+    // типу и применяем к ним помимо содержимого также и идентификатор с облака
+    //
+    case Domain::DocumentObjectType::Structure:
+    case Domain::DocumentObjectType::RecycleBin:
+    case Domain::DocumentObjectType::Project:
+    case Domain::DocumentObjectType::Characters:
+    case Domain::DocumentObjectType::Locations: {
         document = DataStorageLayer::StorageFacade::documentStorage()->document(documentType);
         DataStorageLayer::StorageFacade::documentStorage()->updateDocumentUuid(document->uuid(),
                                                                                _documentInfo.uuid);
+        break;
     }
+
     //
     // Остальные документы берём строго по UUID из базы, а в случае, если их нет, то создаём
     //
-    else {
+    default: {
         document = DataStorageLayer::StorageFacade::documentStorage()->document(_documentInfo.uuid);
         if (document == nullptr) {
             document = DataStorageLayer::StorageFacade::documentStorage()->createDocument(
                 _documentInfo.uuid, documentType);
         }
+        break;
+    }
     }
 
     //
@@ -2351,7 +2371,7 @@ void ProjectManager::planDocumentSyncing(const QUuid& _documentUuid)
         //
         // Отправляем запрос на синхронизацию
         //
-        emit documentSyncRequested(_documentUuid, false);
+        emit uploadDocumentRequested(_documentUuid, false);
     });
     timer->start();
 }
@@ -2366,9 +2386,12 @@ Domain::DocumentObject* ProjectManager::documentToSync(const QUuid& _documentUui
 
 QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) const
 {
-    QVector<QUuid> documents;
-
     const auto item = d->projectStructureModel->itemForUuid(_documentUuid);
+    if (item == nullptr) {
+        return {};
+    }
+
+    QVector<QUuid> documents;
     switch (item->type()) {
     case Domain::DocumentObjectType::Characters: {
         for (int childIndex = 0; childIndex < item->childCount(); ++childIndex) {
@@ -2546,7 +2569,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
 
     const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
     const auto item = d->aliasedItemForIndex(sourceItemIndex);
-    emit currentDocumentChanged(item->uuid());
+    emit downloadDocumentRequested(item->uuid());
 
     //
     // Определим модель

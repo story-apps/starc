@@ -189,7 +189,7 @@ SOURCES += \
     data_layer/mapper/mapper_facade.cpp \
     data_layer/mapper/settings_mapper.cpp \
     data_layer/storage/document_change_storage.cpp \
-    data_layer/storage/document_data_storage.cpp \
+    data_layer/storage/document_image_storage.cpp \
     data_layer/storage/document_storage.cpp \
     data_layer/storage/settings_storage.cpp \
     data_layer/storage/storage_facade.cpp \
@@ -459,7 +459,7 @@ HEADERS += \
     data_layer/mapper/mapper_facade.h \
     data_layer/mapper/settings_mapper.h \
     data_layer/storage/document_change_storage.h \
-    data_layer/storage/document_data_storage.h \
+    data_layer/storage/document_image_storage.h \
     data_layer/storage/document_storage.h \
     data_layer/storage/settings_storage.h \
     data_layer/storage/storage_facade.h \

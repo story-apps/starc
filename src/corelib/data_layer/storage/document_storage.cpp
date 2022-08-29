@@ -104,6 +104,16 @@ void DocumentStorage::saveDocument(Domain::DocumentObject* _document)
     }
 }
 
+void DocumentStorage::saveDocument(const QUuid& _documentUuid)
+{
+    auto documentToSave = document(_documentUuid);
+    if (documentToSave == nullptr) {
+        return;
+    }
+
+    saveDocument(documentToSave);
+}
+
 void DocumentStorage::removeDocument(Domain::DocumentObject* _document)
 {
     if (d->notSavedDocuments.contains(_document->uuid())) {

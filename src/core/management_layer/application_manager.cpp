@@ -2456,7 +2456,7 @@ void ApplicationManager::initConnections()
 
                 d->cloudServiceManager->openDocument(currentProject.id(), _model->document());
             });
-    connect(d->projectManager.data(), &ProjectManager::currentDocumentChanged, this,
+    connect(d->projectManager.data(), &ProjectManager::downloadDocumentRequested, this,
             [this](const QUuid& _documentUuid) {
                 const auto currentProject = d->projectsManager->currentProject();
                 if (!currentProject.isRemote() || _documentUuid.isNull()) {
@@ -2512,7 +2512,7 @@ void ApplicationManager::initConnections()
                 //
                 d->projectManager->planDocumentSyncing(_model->document()->uuid());
             });
-    connect(d->projectManager.data(), &ProjectManager::documentSyncRequested, this,
+    connect(d->projectManager.data(), &ProjectManager::uploadDocumentRequested, this,
             [this](const QUuid& _documentUuid, bool _isNewDocument) {
                 const auto currentProject = d->projectsManager->currentProject();
                 if (!currentProject.isRemote()) {

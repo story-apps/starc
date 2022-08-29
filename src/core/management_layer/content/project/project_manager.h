@@ -193,9 +193,9 @@ signals:
     void structureModelChanged(BusinessLayer::AbstractModel* _model);
 
     /**
-     * @brief Сменился текущий документа
+     * @brief Запрос на загрузку документа
      */
-    void currentDocumentChanged(const QUuid& _documentUuid);
+    void downloadDocumentRequested(const QUuid& _documentUuid);
 
     /**
      * @brief Сменилась текущая модель документа
@@ -203,9 +203,9 @@ signals:
     void currentModelChanged(BusinessLayer::AbstractModel* _model);
 
     /**
-     * @brief Запрос на полную синхронизацию документа
+     * @brief Необходимо отправить данные документа на сервер
      */
-    void documentSyncRequested(const QUuid& _documentUuid, bool _isNewDocument);
+    void uploadDocumentRequested(const QUuid& _documentUuid, bool _isNewDocument);
 
 protected:
     /**
