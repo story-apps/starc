@@ -77,10 +77,19 @@ QPixmap DocumentImageStorage::load(const QUuid& _uuid) const
         return *cachedImage;
     }
 
+    //
+    // Загружаем изображение
+    //
     auto imageDocument = StorageFacade::documentStorage()->document(_uuid);
+    //
+    // ... подписываемся на его обновления (и загружаем, если не был ещё загружен из облака)
+    //
+    d->notifyImageRequested(_uuid);
+    //
+    // ... если изображения пока нет в базе, то поставим в кэш заглушку для него
+    //
     if (imageDocument == nullptr) {
         d->cachedImages.insert(_uuid, {});
-        d->notifyImageRequested(_uuid);
         return {};
     }
 
