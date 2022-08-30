@@ -616,7 +616,7 @@ QString LoglineGeneratorDialog::Implementation::buildLogline() const
             logline += QString("%1 %2 ").arg(text(theme), tr("in order to"));
         }
         //
-        logline += QString("%1 ").arg(text(storyGoal));
+        logline += QString("%1").arg(text(storyGoal));
         // Q7
         if (includeMpr->isChecked()) {
             logline = logline.trimmed(); // убираем пробел в конце
@@ -628,6 +628,8 @@ QString LoglineGeneratorDialog::Implementation::buildLogline() const
                 logline += QString("%1 %2 ").arg(text(theme), tr("in order to"));
             }
             logline += QString("%1 ").arg(text(afterMprEvent));
+        } else {
+            logline += " ";
         }
     }
     // Q9
