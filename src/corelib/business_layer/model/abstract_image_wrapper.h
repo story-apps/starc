@@ -2,13 +2,15 @@
 
 #include <QObject>
 
+#include <corelib_global.h>
+
 
 namespace BusinessLayer {
 
 /**
  * @brief Интерфейс класса для загрузки/сохранения изображений в БД
  */
-class AbstractImageWrapper : public QObject
+class CORE_LIBRARY_EXPORT AbstractImageWrapper : public QObject
 {
     Q_OBJECT
 
