@@ -210,7 +210,7 @@ public:
      * @brief Открыть проект по заданному пути
      */
     void openProject();
-    void openProject(const QString& _path);
+    bool openProject(const QString& _path);
 
     /**
      * @brief Попробовать захватить владение файлом, заблокировав его изменение другими копиями
@@ -1343,20 +1343,20 @@ void ApplicationManager::Implementation::openProject()
     saveIfNeeded(callback);
 }
 
-void ApplicationManager::Implementation::openProject(const QString& _path)
+bool ApplicationManager::Implementation::openProject(const QString& _path)
 {
     if (_path.isEmpty()) {
-        return;
+        return false;
     }
 
     if (projectsManager->currentProject().isLocal() && !QFileInfo::exists(_path)) {
         projectsManager->hideProject(_path);
-        return;
+        return false;
     }
 
     if (projectsManager->currentProject().path() == _path) {
         showProject();
-        return;
+        return false;
     }
 
     //
@@ -1368,7 +1368,7 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
     // ... проверяем открыт ли файл в другом приложении
     //
     if (!tryLockProject(_path)) {
-        return;
+        return false;
     }
 
     //
@@ -1381,7 +1381,7 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
         QTemporaryFile tempProject;
         tempProject.setAutoRemove(false);
         if (!tempProject.open()) {
-            return;
+            return false;
         }
 
         projectFilePath = tempProject.fileName();
@@ -1397,6 +1397,8 @@ void ApplicationManager::Implementation::openProject(const QString& _path)
     // ... перейдём к редактированию
     //
     goToEditCurrentProject(importFilePath);
+
+    return true;
 }
 
 bool ApplicationManager::Implementation::tryLockProject(const QString& _path)
@@ -1943,9 +1945,9 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
         Qt::QueuedConnection);
 }
 
-void ApplicationManager::openProject(const QString& _path)
+bool ApplicationManager::openProject(const QString& _path)
 {
-    d->openProject(_path);
+    return d->openProject(_path);
 }
 
 bool ApplicationManager::event(QEvent* _event)
@@ -2410,7 +2412,11 @@ void ApplicationManager::initConnections()
                 }
 
                 auto callback = [this, _id, _path] {
-                    openProject(_path);
+                    const auto isProjectOpened = openProject(_path);
+                    if (!isProjectOpened) {
+                        return;
+                    }
+
                     d->cloudServiceManager->openStructure(_id);
                     d->cloudServiceManager->openProjectInfo(_id);
                 };

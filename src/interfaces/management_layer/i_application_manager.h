@@ -27,7 +27,7 @@ public:
     /**
      * @brief Открыть проект по заданному пути
      */
-    virtual void openProject(const QString& _path) = 0;
+    virtual bool openProject(const QString& _path) = 0;
 };
 
 } // namespace ManagementLayer

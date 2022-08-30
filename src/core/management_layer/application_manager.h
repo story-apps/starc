@@ -35,7 +35,7 @@ public:
     /**
      * @brief Открытие файла
      */
-    void openProject(const QString& _path) override final;
+    bool openProject(const QString& _path) override final;
 
 protected:
     /**
