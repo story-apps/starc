@@ -1646,6 +1646,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     //
     connect(&d->documentImageStorage, &DataStorageLayer::DocumentImageStorage::imageAdded, this,
             [this](const QUuid& _uuid) { emit uploadDocumentRequested(_uuid, true); });
+    connect(&d->documentImageStorage, &DataStorageLayer::DocumentImageStorage::imageUpdated, this,
+            [this](const QUuid& _uuid) { emit uploadDocumentRequested(_uuid, false); });
     connect(&d->documentImageStorage, &DataStorageLayer::DocumentImageStorage::imageRequested, this,
             [this](const QUuid& _uuid) { emit downloadDocumentRequested(_uuid); });
 }
@@ -2341,14 +2343,6 @@ void ProjectManager::applyDocumentChanges(const Domain::DocumentInfo& _documentI
         changes.append(change.redoPatch);
     }
     documentModel->applyDocumentChanges(changes);
-
-    //
-    // Если обновилась структура, восстановим последний выделенный элемент
-    //
-    if (document->type() == Domain::DocumentObjectType::Structure) {
-        d->view.activeIndex = {};
-        restoreCurrentProjectState(d->projetPath);
-    }
 }
 
 void ProjectManager::planDocumentSyncing(const QUuid& _documentUuid)

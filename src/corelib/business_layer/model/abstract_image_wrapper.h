@@ -1,7 +1,6 @@
 #pragma once
 
-class QPixmap;
-class QUuid;
+#include <QObject>
 
 
 namespace BusinessLayer {
@@ -9,10 +8,13 @@ namespace BusinessLayer {
 /**
  * @brief Интерфейс класса для загрузки/сохранения изображений в БД
  */
-class AbstractImageWrapper
+class AbstractImageWrapper : public QObject
 {
+    Q_OBJECT
+
 public:
-    virtual ~AbstractImageWrapper()
+    explicit AbstractImageWrapper(QObject* _parent = nullptr)
+        : QObject(_parent)
     {
     }
 
@@ -25,6 +27,28 @@ public:
      * @brief Установить изображение
      */
     virtual QUuid save(const QPixmap& _image) = 0;
+
+    /**
+     * @brief Сохранить изображение к существующему гуиду, полученное из внешнего сервиса
+     */
+    virtual void save(const QUuid& _uuid, const QPixmap& _image) = 0;
+    virtual void save(const QUuid& _uuid, const QByteArray& _imageData) = 0;
+
+signals:
+    /**
+     * @brief Добавлено новое изображение
+     */
+    void imageAdded(const QUuid& _uuid);
+
+    /**
+     * @brief Запрос изображения у внешнего поставщика изображений
+     */
+    void imageRequested(const QUuid& _uuid);
+
+    /**
+     * @brief Изображение было обновлено
+     */
+    void imageUpdated(const QUuid& _uuid, const QPixmap& _image);
 };
 
 } // namespace BusinessLayer

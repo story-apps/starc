@@ -28,6 +28,7 @@ public:
 
     const QPixmap& cover() const;
     void setCover(const QPixmap& _cover);
+    void setCover(const QUuid& _uuid, const QPixmap& _cover);
     Q_SIGNAL void coverChanged(const QPixmap& _cover);
 
     QVector<Domain::ProjectCollaboratorInfo> collaborators() const;
@@ -48,9 +49,11 @@ protected:
      * @brief Реализация модели для работы с документами
      */
     /** @{ */
+    void initImageWrapper() override;
     void initDocument() override;
     void clearDocument() override;
     QByteArray toXml() const override;
+    void applyPatch(const QByteArray& _patch) override;
     /** @} */
 
 private:

@@ -151,6 +151,11 @@ signals:
 
 protected:
     /**
+     * @brief Настроить хранилище изображений
+     */
+    virtual void initImageWrapper();
+
+    /**
      * @brief Настроить документ
      */
     virtual void initDocument() = 0;

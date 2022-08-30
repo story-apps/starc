@@ -115,7 +115,7 @@ void ProjectInformationManager::Implementation::setModelForView(
         connect(_view, &Ui::ProjectInformationView::loglineChanged, model,
                 &BusinessLayer::ProjectInformationModel::setLogline);
         connect(_view, &Ui::ProjectInformationView::coverChanged, model,
-                &BusinessLayer::ProjectInformationModel::setCover);
+                qOverload<const QPixmap&>(&BusinessLayer::ProjectInformationModel::setCover));
     }
 }
 

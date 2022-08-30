@@ -52,7 +52,7 @@ void DocumentImageStorage::Implementation::notifyImageRequested(const QUuid& _uu
 
 
 DocumentImageStorage::DocumentImageStorage(QObject* _parent)
-    : QObject(_parent)
+    : AbstractImageWrapper(_parent)
     , d(new Implementation(this))
 {
 }
@@ -118,6 +118,11 @@ QUuid DocumentImageStorage::save(const QPixmap& _image)
     emit imageAdded(uuid);
 
     return uuid;
+}
+
+void DocumentImageStorage::save(const QUuid& _uuid, const QPixmap& _image)
+{
+    save(_uuid, ImageHelper::bytesFromImage(_image));
 }
 
 void DocumentImageStorage::save(const QUuid& _uuid, const QByteArray& _imageData)

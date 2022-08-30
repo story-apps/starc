@@ -12,8 +12,7 @@ namespace DataStorageLayer {
 /**
  * @brief Хранилище документов-изображений
  */
-class CORE_LIBRARY_EXPORT DocumentImageStorage : public QObject,
-                                                 public BusinessLayer::AbstractImageWrapper
+class CORE_LIBRARY_EXPORT DocumentImageStorage : public BusinessLayer::AbstractImageWrapper
 {
     Q_OBJECT
 
@@ -37,7 +36,8 @@ public:
     /**
      * @brief Сохранить изображение к существующему гуиду, полученное из внешнего сервиса
      */
-    void save(const QUuid& _uuid, const QByteArray& _imageData);
+    void save(const QUuid& _uuid, const QPixmap& _image) override;
+    void save(const QUuid& _uuid, const QByteArray& _imageData) override;
 
     /**
      * @brief Очистить хранилище
@@ -48,22 +48,6 @@ public:
      * @brief Сохранить все новые изображения, ещё не сохранённые в базу данных
      */
     void saveChanges();
-
-signals:
-    /**
-     * @brief Добавлено новое изображение
-     */
-    void imageAdded(const QUuid& _uuid);
-
-    /**
-     * @brief Запрос изображения у внешнего поставщика изображений
-     */
-    void imageRequested(const QUuid& _uuid);
-
-    /**
-     * @brief Изображение было обновлено
-     */
-    void imageUpdated(const QUuid& _uuid, const QPixmap& _image);
 
 private:
     class Implementation;

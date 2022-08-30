@@ -126,6 +126,10 @@ void AbstractModel::setDocumentColor(const QColor& _color)
 void AbstractModel::setImageWrapper(AbstractImageWrapper* _image)
 {
     d->image = _image;
+
+    if (d->image != nullptr) {
+        initImageWrapper();
+    }
 }
 
 void AbstractModel::clear()
@@ -286,6 +290,10 @@ QVariant AbstractModel::data(const QModelIndex& _index, int _role) const
     Q_UNUSED(_role)
 
     return {};
+}
+
+void AbstractModel::initImageWrapper()
+{
 }
 
 void AbstractModel::applyPatch(const QByteArray& _patch)

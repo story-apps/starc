@@ -1,10 +1,13 @@
 #include "project_information_model.h"
 
 #include <business_layer/model/abstract_image_wrapper.h>
+#include <business_layer/model/abstract_model_xml.h>
 #include <domain/document_object.h>
 #include <domain/starcloud_api.h>
+#include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/logging.h>
 
 #include <QDomDocument>
 
@@ -88,8 +91,29 @@ const QPixmap& ProjectInformationModel::cover() const
 
 void ProjectInformationModel::setCover(const QPixmap& _cover)
 {
+    if (_cover.cacheKey() == d->cover.image.cacheKey()) {
+        return;
+    }
+
+    if (d->cover.uuid.isNull()) {
+        d->cover.uuid = imageWrapper()->save(d->cover.image);
+    } else {
+        imageWrapper()->save(d->cover.uuid, d->cover.image);
+    }
     d->cover.image = _cover;
-    d->cover.uuid = imageWrapper()->save(d->cover.image);
+    emit coverChanged(d->cover.image);
+}
+
+void ProjectInformationModel::setCover(const QUuid& _uuid, const QPixmap& _cover)
+{
+    if (d->cover.uuid == _uuid && _cover.cacheKey() == d->cover.image.cacheKey()) {
+        return;
+    }
+
+    if (d->cover.uuid != _uuid) {
+        d->cover.uuid = _uuid;
+    }
+    d->cover.image = _cover;
     emit coverChanged(d->cover.image);
 }
 
@@ -107,6 +131,18 @@ void ProjectInformationModel::setCollaborators(
 
     d->collaborators = _collaborators;
     emit collaboratorsChanged(d->collaborators);
+}
+
+void ProjectInformationModel::initImageWrapper()
+{
+    connect(imageWrapper(), &AbstractImageWrapper::imageUpdated, this,
+            [this](const QUuid& _uuid, const QPixmap& _image) {
+                if (_uuid != d->cover.uuid) {
+                    return;
+                }
+
+                setCover(_uuid, _image);
+            });
 }
 
 void ProjectInformationModel::initDocument()
@@ -148,6 +184,35 @@ QByteArray ProjectInformationModel::toXml() const
     xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(kCoverKey, d->cover.uuid.toString()).toUtf8();
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
+}
+
+void ProjectInformationModel::applyPatch(const QByteArray& _patch)
+{
+    //
+    // Определить область изменения в xml
+    //
+    auto changes = dmpController().changedXml(toXml(), _patch);
+    if (changes.first.xml.isEmpty() && changes.second.xml.isEmpty()) {
+        Log::warning("Patch don't lead to any changes");
+        return;
+    }
+
+    changes.second.xml = xml::prepareXml(changes.second.xml);
+
+    QDomDocument domDocument;
+    domDocument.setContent(changes.second.xml);
+    const auto documentNode = domDocument.firstChildElement(kDocumentKey);
+    if (auto nameNode = documentNode.firstChildElement(kNameKey); !nameNode.isNull()) {
+        setName(nameNode.text());
+    }
+    if (auto loglineNode = documentNode.firstChildElement(kLoglineKey); !loglineNode.isNull()) {
+        setLogline(loglineNode.text());
+    }
+    if (auto coverNode = documentNode.firstChildElement(kCoverKey); !coverNode.isNull()) {
+        setCover(coverNode.text(), imageWrapper()->load(coverNode.text()));
+    }
+
+    reassignContent();
 }
 
 } // namespace BusinessLayer
