@@ -127,7 +127,7 @@ void DocumentImageStorage::save(const QUuid& _uuid, const QPixmap& _image)
 
 void DocumentImageStorage::save(const QUuid& _uuid, const QByteArray& _imageData)
 {
-    if (_uuid.isNull() || _imageData.isNull()) {
+    if (_uuid.isNull()) {
         return;
     }
 

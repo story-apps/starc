@@ -95,12 +95,12 @@ void ProjectInformationModel::setCover(const QPixmap& _cover)
         return;
     }
 
+    d->cover.image = _cover;
     if (d->cover.uuid.isNull()) {
         d->cover.uuid = imageWrapper()->save(d->cover.image);
     } else {
         imageWrapper()->save(d->cover.uuid, d->cover.image);
     }
-    d->cover.image = _cover;
     emit coverChanged(d->cover.image);
 }
 
@@ -110,10 +110,10 @@ void ProjectInformationModel::setCover(const QUuid& _uuid, const QPixmap& _cover
         return;
     }
 
+    d->cover.image = _cover;
     if (d->cover.uuid != _uuid) {
         d->cover.uuid = _uuid;
     }
-    d->cover.image = _cover;
     emit coverChanged(d->cover.image);
 }
 
@@ -162,11 +162,7 @@ void ProjectInformationModel::initDocument()
 
 void ProjectInformationModel::clearDocument()
 {
-    QSignalBlocker signalBlocker(this);
-
-    setName({});
-    setLogline({});
-    setCover({});
+    d.reset(new Implementation);
 }
 
 QByteArray ProjectInformationModel::toXml() const
@@ -193,7 +189,7 @@ void ProjectInformationModel::applyPatch(const QByteArray& _patch)
     //
     auto changes = dmpController().changedXml(toXml(), _patch);
     if (changes.first.xml.isEmpty() && changes.second.xml.isEmpty()) {
-        Log::warning("Patch don't lead to any changes");
+        Log::warning("Project information model patch don't lead to any changes");
         return;
     }
 

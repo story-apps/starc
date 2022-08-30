@@ -2327,10 +2327,19 @@ void ProjectManager::applyDocumentChanges(const Domain::DocumentInfo& _documentI
         return;
     }
 
-    //
-    // Загрузим модель для документа
-    //
     const auto documentType = static_cast<Domain::DocumentObjectType>(_documentInfo.type);
+
+    //
+    // Если прилетело обновление картинки, сохраним его
+    //
+    if (documentType == Domain::DocumentObjectType::ImageData) {
+        d->documentImageStorage.save(_documentInfo.uuid, _documentInfo.content);
+        return;
+    }
+
+    //
+    // В остальных случаях загрузим модель для документа
+    //
     auto documentModel = documentType == Domain::DocumentObjectType::Structure
         ? d->projectStructureModel
         : d->modelsFacade.modelFor(document);
