@@ -152,12 +152,18 @@ void DocumentImageStorage::save(const QUuid& _uuid, const QByteArray& _imageData
         d->cachedImages.remove(_uuid);
     }
     //
-    // ... положим или обновим в хранилище
+    // ... положим в хранилище, если ещё не был сохранён
     //
     auto document = StorageFacade::documentStorage()->document(_uuid);
     if (document == nullptr) {
         document = StorageFacade::documentStorage()->createDocument(
             _uuid, Domain::DocumentObjectType::ImageData);
+    }
+    //
+    // ... а если был, проверим, нужно ли его обновлять
+    //
+    else if (document->content() == _imageData) {
+        return;
     }
     document->setContent(_imageData);
     //
