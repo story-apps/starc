@@ -68,6 +68,11 @@ public:
     void moveItem(StructureModelItem* _item, StructureModelItem* _parentItem);
 
     /**
+     * @brief Извлечь заданный элемент без удаления
+     */
+    void takeItem(StructureModelItem* _item);
+
+    /**
      * @brief Удалить элемент
      */
     void removeItem(StructureModelItem* _item);
@@ -169,6 +174,7 @@ protected:
     void initDocument() override;
     void clearDocument() override;
     QByteArray toXml() const override;
+    void applyPatch(const QByteArray& _patch) override;
     /** @} */
 
 private:

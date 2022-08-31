@@ -32,7 +32,7 @@ public:
     const QUuid& uuid() const;
 
     /**
-     * @brief Иконка элемента
+     * @brief Тип элемента
      */
     Domain::DocumentObjectType type() const;
 
@@ -80,6 +80,17 @@ public:
      */
     StructureModelItem* parent() const override;
     StructureModelItem* childAt(int _index) const override;
+
+    /**
+     * @brief Методы необходимые для того, чтобы работало определение списка изменений модели при
+     *        наложении патчей, когда надо сравнить две версии xml-документа
+     */
+    /** @{ */
+    int subtype() const;
+    QByteArray toXml() const;
+    bool isEqual(const StructureModelItem* _other) const;
+    void copyFrom(const StructureModelItem* _other) const;
+    /** @} */
 
 private:
     class Implementation;

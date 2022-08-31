@@ -2,11 +2,15 @@
 
 #include "structure_model_item.h"
 
+#include <business_layer/model/abstract_model_xml.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
+#include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/logging.h>
+#include <utils/tools/edit_distance.h>
 
 #include <QColor>
 #include <QDataStream>
@@ -14,6 +18,10 @@
 #include <QIODevice>
 #include <QMimeData>
 #include <QSet>
+
+#ifdef QT_DEBUG
+#define XML_CHECKS
+#endif
 
 
 namespace BusinessLayer {
@@ -40,6 +48,11 @@ public:
      * @brief Построить модель структуры из xml хранящегося в документе
      */
     void buildModel(Domain::DocumentObject* _structure);
+
+    /**
+     * @brief Построить элемент из заданной ноды xml документа
+     */
+    StructureModelItem* buildItem(const QDomElement& _node);
 
     /**
      * @brief Сформировать xml из данных модели
@@ -85,60 +98,56 @@ void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structu
         return;
     }
 
-    std::function<void(const QDomElement&, StructureModelItem*)> buildItem;
-    buildItem = [&buildItem](const QDomElement& _node, StructureModelItem* _parent) {
-        //
-        // Формируем элемент структуры
-        //
-        const auto readOnly = false;
-        auto item
-            = new StructureModelItem(QUuid::fromString(_node.attribute(kUuidAttribute)),
-                                     Domain::typeFor(_node.attribute(kTypeAttribute).toUtf8()),
-                                     TextHelper::fromHtmlEscaped(_node.attribute(kNameAttribute)),
-                                     ColorHelper::fromString(_node.attribute(kColorAttribute)),
-                                     _node.attribute(kVisibleAttribute) == "true", readOnly);
-        //
-        // ... вкладываем в родителя
-        //
-        _parent->appendItem(item);
-        //
-        // ... определяем его
-        //
-        auto child = _node.firstChildElement();
-        while (!child.isNull()) {
-            //
-            // ... детей
-            //
-            if (child.tagName() == kItemKey) {
-                buildItem(child, item);
-            }
-            //
-            // ... и версии
-            //
-            else if (child.tagName() == kVersionKey) {
-                const auto versionNode = child.toElement();
-                const auto visible = true;
-                const auto readOnly = versionNode.hasAttribute(kReadOnlyAttribute)
-                    && versionNode.attribute(kReadOnlyAttribute) == "true";
-                auto version = new StructureModelItem(
-                    QUuid::fromString(versionNode.attribute(kUuidAttribute)), item->type(),
-                    TextHelper::fromHtmlEscaped(versionNode.attribute(kNameAttribute)),
-                    ColorHelper::fromString(versionNode.attribute(kColorAttribute)), visible,
-                    readOnly);
-                item->addVersion(version);
-            }
-            child = child.nextSiblingElement();
-        }
-    };
-
     QDomDocument domDocument;
     domDocument.setContent(_structure->content());
     auto documentNode = domDocument.firstChildElement(kDocumentKey);
     auto itemNode = documentNode.firstChildElement();
     while (!itemNode.isNull()) {
-        buildItem(itemNode, rootItem);
+        rootItem->appendItem(buildItem(itemNode));
         itemNode = itemNode.nextSiblingElement();
     }
+}
+
+StructureModelItem* StructureModel::Implementation::buildItem(const QDomElement& _node)
+{
+    //
+    // Формируем элемент структуры
+    //
+    const auto readOnly = false;
+    auto item = new StructureModelItem(QUuid::fromString(_node.attribute(kUuidAttribute)),
+                                       Domain::typeFor(_node.attribute(kTypeAttribute).toUtf8()),
+                                       TextHelper::fromHtmlEscaped(_node.attribute(kNameAttribute)),
+                                       ColorHelper::fromString(_node.attribute(kColorAttribute)),
+                                       _node.attribute(kVisibleAttribute) == "true", readOnly);
+    //
+    // ... определяем его
+    //
+    auto child = _node.firstChildElement();
+    while (!child.isNull()) {
+        //
+        // ... детей
+        //
+        if (child.tagName() == kItemKey) {
+            item->appendItem(buildItem(child));
+        }
+        //
+        // ... и версии
+        //
+        else if (child.tagName() == kVersionKey) {
+            const auto versionNode = child.toElement();
+            const auto visible = true;
+            const auto readOnly = versionNode.hasAttribute(kReadOnlyAttribute)
+                && versionNode.attribute(kReadOnlyAttribute) == "true";
+            auto version = new StructureModelItem(
+                QUuid::fromString(versionNode.attribute(kUuidAttribute)), item->type(),
+                TextHelper::fromHtmlEscaped(versionNode.attribute(kNameAttribute)),
+                ColorHelper::fromString(versionNode.attribute(kColorAttribute)), visible, readOnly);
+            item->addVersion(version);
+        }
+        child = child.nextSiblingElement();
+    }
+
+    return item;
 }
 
 QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _structure) const
@@ -450,6 +459,20 @@ void StructureModel::moveItem(StructureModelItem* _item, StructureModelItem* _pa
     sourceParent->takeItem(_item);
     _parentItem->appendItem(_item);
     endMoveRows();
+}
+
+void StructureModel::takeItem(StructureModelItem* _item)
+{
+    if (_item == nullptr || _item->parent() == nullptr) {
+        return;
+    }
+
+    auto itemParent = _item->parent();
+    const QModelIndex itemParentIndex = indexForItem(_item).parent();
+    const int itemRowIndex = itemParent->rowOfChild(_item);
+    beginRemoveRows(itemParentIndex, itemRowIndex, itemRowIndex);
+    itemParent->takeItem(_item);
+    endRemoveRows();
 }
 
 void StructureModel::removeItem(StructureModelItem* _item)
@@ -1111,6 +1134,218 @@ void StructureModel::clearDocument()
 QByteArray StructureModel::toXml() const
 {
     return d->toXml(document());
+}
+
+void StructureModel::applyPatch(const QByteArray& _patch)
+{
+    Q_ASSERT(document());
+
+#ifdef XML_CHECKS
+    const auto newContent = dmpController().applyPatch(toXml(), _patch);
+    qDebug(QString("Before applying patch xml is\n\n%1\n\n").arg(toXml().constData()).toUtf8());
+    qDebug(QString("Patch is\n\n%1\n\n")
+               .arg(QByteArray::fromPercentEncoding(_patch).constData())
+               .toUtf8());
+#endif
+
+    //
+    // Определить область изменения в xml
+    //
+    auto changes = dmpController().changedXml(toXml(), _patch);
+    if (changes.first.xml.isEmpty() && changes.second.xml.isEmpty()) {
+        Log::warning("Patch don't lead to any changes");
+        return;
+    }
+
+    changes.first.xml = xml::prepareXml(changes.first.xml);
+    changes.second.xml = xml::prepareXml(changes.second.xml);
+
+#ifdef XML_CHECKS
+    qDebug(QString("Xml data changes first item\n\n%1\n\n")
+               .arg(changes.first.xml.constData())
+               .toUtf8());
+    qDebug(QString("Xml data changes second item\n\n%1\n\n")
+               .arg(changes.second.xml.constData())
+               .toUtf8());
+#endif
+
+    //
+    // Считываем элементы из обоих изменений для дальнейшего определения необходимых изменений
+    //
+    auto readItems = [this](const QString& _xml) -> QVector<StructureModelItem*> {
+        QVector<StructureModelItem*> items;
+        QDomDocument domDocument;
+        domDocument.setContent(_xml);
+        auto documentNode = domDocument.firstChildElement(kDocumentKey);
+        auto itemNode = documentNode.firstChildElement();
+        while (!itemNode.isNull()) {
+            items.append(d->buildItem(itemNode));
+            itemNode = itemNode.nextSiblingElement();
+        }
+        return items;
+    };
+    const auto oldItems = readItems(changes.first.xml);
+    const auto newItems = readItems(changes.second.xml);
+
+    //
+    // Раскладываем элементы в плоские списки для сравнения
+    //
+    std::function<QVector<StructureModelItem*>(const QVector<StructureModelItem*>&)> makeItemsPlain;
+    makeItemsPlain = [&makeItemsPlain](const QVector<StructureModelItem*>& _items) {
+        QVector<StructureModelItem*> itemsPlain;
+        for (auto item : _items) {
+            itemsPlain.append(item);
+            for (int row = 0; row < item->childCount(); ++row) {
+                itemsPlain.append(makeItemsPlain({ item->childAt(row) }));
+            }
+        }
+        return itemsPlain;
+    };
+    auto oldItemsPlain = makeItemsPlain(oldItems);
+    Q_ASSERT(!oldItemsPlain.isEmpty());
+    auto newItemsPlain = makeItemsPlain(newItems);
+    Q_ASSERT(!newItemsPlain.isEmpty());
+
+    //
+    // Определим необходимые операции для применения изменения
+    //
+    const auto operations = edit_distance::editDistance(oldItemsPlain, newItemsPlain);
+    //
+    auto modelItem = itemForUuid(oldItemsPlain.constFirst()->uuid());
+    StructureModelItem* previousModelItem = nullptr;
+    //
+    std::function<StructureModelItem*(StructureModelItem*, bool)> findNextItemWithChildren;
+    findNextItemWithChildren
+        = [&findNextItemWithChildren](StructureModelItem* _item,
+                                      bool _searchInChildren) -> StructureModelItem* {
+        if (_item == nullptr) {
+            return nullptr;
+        }
+
+        if (_searchInChildren) {
+            //
+            // Если есть дети, идём в дочерний элемент
+            //
+            if (_item->hasChildren()) {
+                return _item->childAt(0);
+            }
+        }
+
+        //
+        // Если детей нет, идём в следующий
+        //
+
+        if (!_item->hasParent()) {
+            return nullptr;
+        }
+        auto parent = _item->parent();
+
+        auto itemIndex = parent->rowOfChild(_item);
+        if (itemIndex < 0 || itemIndex >= parent->childCount()) {
+            return nullptr;
+        }
+
+        //
+        // Не последний в родителе, берём следующий с этого же уровня
+        //
+        if (itemIndex < parent->childCount() - 1) {
+            return parent->childAt(itemIndex + 1);
+        }
+        //
+        // Последний в родителе, берём следующий с предыдущего уровня
+        //
+        else {
+            return findNextItemWithChildren(parent, false);
+        }
+    };
+    auto findNextItem = [&findNextItemWithChildren](StructureModelItem* _item) {
+        return findNextItemWithChildren(_item, true);
+    };
+    //
+    // И применяем их
+    //
+    for (const auto& operation : operations) {
+        //
+        // Собственно применяем операции
+        //
+        auto newItem = operation.value;
+        switch (operation.type) {
+        case edit_distance::OperationType::Skip: {
+            previousModelItem = modelItem;
+            modelItem = findNextItem(modelItem);
+            break;
+        }
+
+        case edit_distance::OperationType::Remove: {
+            //
+            // Выносим детей на предыдущий уровень
+            //
+            while (modelItem->hasChildren()) {
+                auto childItem = modelItem->childAt(modelItem->childCount() - 1);
+                takeItem(childItem);
+                insertItem(childItem, modelItem);
+            }
+            //
+            // ... и удаляем сам элемент
+            //
+            auto nextItem = findNextItem(modelItem);
+            removeItem(modelItem);
+
+            modelItem = nextItem;
+            break;
+        }
+
+        case edit_distance::OperationType::Insert: {
+            //
+            // Создаём новый элемент
+            //
+            auto itemToInsert = new StructureModelItem(*newItem);
+            //
+            // ... и вставляем в нужного родителя
+            //
+            if (newItem->parent() != nullptr
+                && newItem->parent()->uuid() == previousModelItem->uuid()) {
+                prependItem(itemToInsert, previousModelItem);
+            } else {
+                insertItem(itemToInsert, previousModelItem);
+            }
+
+            previousModelItem = itemToInsert;
+            break;
+        }
+
+        case edit_distance::OperationType::Replace: {
+            //
+            // Обновляем элемент
+            //
+            Q_ASSERT(modelItem->type() == newItem->type());
+            if (!modelItem->isEqual(newItem)) {
+                modelItem->copyFrom(newItem);
+                updateItem(modelItem);
+            }
+
+            previousModelItem = modelItem;
+            modelItem = findNextItem(modelItem);
+            break;
+        }
+        }
+    }
+
+    qDeleteAll(oldItems);
+    qDeleteAll(newItems);
+
+    reassignContent();
+
+#ifdef XML_CHECKS
+    //
+    // Делаем проверку на соответствие обновлённой модели прямому наложению патча
+    //
+    if (newContent != toXml()) {
+        qDebug(QString("New content should be\n\n%1\n\n").arg(newContent.constData()).toUtf8());
+        qDebug(QString("New content is\n\n%1\n\n").arg(toXml().constData()).toUtf8());
+    }
+    Q_ASSERT(newContent == toXml());
+#endif
 }
 
 } // namespace BusinessLayer

@@ -17,7 +17,7 @@ public:
                             const QString& _name, const QColor& _color, bool _visible,
                             bool _readOnly);
 
-    const QUuid uuid;
+    QUuid uuid;
     Domain::DocumentObjectType type;
     QString name;
     QColor color;
@@ -56,6 +56,9 @@ StructureModelItem::StructureModelItem(const StructureModelItem& _other)
     , d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->color,
                            _other.d->visible, _other.d->readOnly))
 {
+    for (auto version : std::as_const(_other.d->versions)) {
+        d->versions.append(new StructureModelItem(*version));
+    }
 }
 
 StructureModelItem::~StructureModelItem()
@@ -188,6 +191,41 @@ StructureModelItem* StructureModelItem::parent() const
 StructureModelItem* StructureModelItem::childAt(int _index) const
 {
     return static_cast<StructureModelItem*>(AbstractModelItem::childAt(_index));
+}
+
+int StructureModelItem::subtype() const
+{
+    return 0;
+}
+
+QByteArray StructureModelItem::toXml() const
+{
+    return {};
+}
+
+bool StructureModelItem::isEqual(const StructureModelItem* _other) const
+{
+    return d->uuid == _other->d->uuid && d->type == _other->d->type && d->name == _other->d->name
+        && d->color == _other->d->color && d->visible == _other->d->visible
+        && d->readOnly == _other->d->readOnly && d->versions == _other->d->versions;
+}
+
+void StructureModelItem::copyFrom(const StructureModelItem* _other) const
+{
+    if (_other == nullptr || type() != _other->type()) {
+        Q_ASSERT(false);
+        return;
+    }
+
+    d->uuid = _other->d->uuid;
+    d->type = _other->d->type;
+    d->name = _other->d->name;
+    d->color = _other->d->color;
+    d->visible = _other->d->visible;
+    d->readOnly = _other->d->readOnly;
+    for (auto version : std::as_const(_other->d->versions)) {
+        d->versions.append(new StructureModelItem(*version));
+    }
 }
 
 } // namespace BusinessLayer
