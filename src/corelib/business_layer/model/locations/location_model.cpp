@@ -2,6 +2,7 @@
 
 #include <business_layer/model/abstract_image_wrapper.h>
 #include <domain/document_object.h>
+#include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -164,8 +165,29 @@ const QPixmap& LocationModel::mainPhoto() const
 
 void LocationModel::setMainPhoto(const QPixmap& _photo)
 {
+    if (_photo.cacheKey() == d->mainPhoto.image.cacheKey()) {
+        return;
+    }
+
     d->mainPhoto.image = _photo;
-    d->mainPhoto.uuid = imageWrapper()->save(d->mainPhoto.image);
+    if (d->mainPhoto.uuid.isNull()) {
+        d->mainPhoto.uuid = imageWrapper()->save(d->mainPhoto.image);
+    } else {
+        imageWrapper()->save(d->mainPhoto.uuid, d->mainPhoto.image);
+    }
+    emit mainPhotoChanged(d->mainPhoto.image);
+}
+
+void LocationModel::setMainPhoto(const QUuid& _uuid, const QPixmap& _photo)
+{
+    if (d->mainPhoto.uuid == _uuid && _photo.cacheKey() == d->mainPhoto.image.cacheKey()) {
+        return;
+    }
+
+    d->mainPhoto.image = _photo;
+    if (d->mainPhoto.uuid != _uuid) {
+        d->mainPhoto.uuid = _uuid;
+    }
     emit mainPhotoChanged(d->mainPhoto.image);
 }
 
@@ -230,6 +252,18 @@ QVector<LocationRoute> LocationModel::routes() const
     return d->routes;
 }
 
+void LocationModel::initImageWrapper()
+{
+    connect(imageWrapper(), &AbstractImageWrapper::imageUpdated, this,
+            [this](const QUuid& _uuid, const QPixmap& _image) {
+                if (_uuid != d->mainPhoto.uuid) {
+                    return;
+                }
+
+                setMainPhoto(_uuid, _image);
+            });
+}
+
 void LocationModel::initDocument()
 {
     if (document() == nullptr) {
@@ -255,21 +289,19 @@ void LocationModel::initDocument()
     d->mainPhoto.image = imageWrapper()->load(d->mainPhoto.uuid);
     auto relationsNode = documentNode.firstChildElement(kRoutesKey);
     if (!relationsNode.isNull()) {
-        auto relationNode = relationsNode.firstChildElement(kRouteKey);
-        while (!relationNode.isNull()) {
-            LocationRoute relation;
-            relation.location
-                = QUuid::fromString(relationNode.firstChildElement(kRouteToLocationKey).text());
-            relation.lineType = relationNode.firstChildElement(kLineTypeKey).text().toInt();
-            relation.color
-                = ColorHelper::fromString(relationNode.firstChildElement(kColorKey).text());
-            relation.name
-                = TextHelper::fromHtmlEscaped(relationNode.firstChildElement(kNameKey).text());
-            relation.details
-                = TextHelper::fromHtmlEscaped(relationNode.firstChildElement(kDetailsKey).text());
-            d->routes.append(relation);
+        auto routeNode = relationsNode.firstChildElement(kRouteKey);
+        while (!routeNode.isNull()) {
+            LocationRoute route;
+            route.location
+                = QUuid::fromString(routeNode.firstChildElement(kRouteToLocationKey).text());
+            route.lineType = routeNode.firstChildElement(kLineTypeKey).text().toInt();
+            route.color = ColorHelper::fromString(routeNode.firstChildElement(kColorKey).text());
+            route.name = TextHelper::fromHtmlEscaped(routeNode.firstChildElement(kNameKey).text());
+            route.details
+                = TextHelper::fromHtmlEscaped(routeNode.firstChildElement(kDetailsKey).text());
+            d->routes.append(route);
 
-            relationNode = relationNode.nextSiblingElement();
+            routeNode = routeNode.nextSiblingElement();
         }
     }
 }
@@ -314,6 +346,85 @@ QByteArray LocationModel::toXml() const
     }
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
+}
+
+void LocationModel::applyPatch(const QByteArray& _patch)
+{
+    //
+    // Применяем изменения
+    //
+    const auto newContent = dmpController().applyPatch(toXml(), _patch);
+
+    //
+    // Cчитываем изменённые данные
+    //
+    QDomDocument domDocument;
+    domDocument.setContent(newContent);
+    const auto documentNode = domDocument.firstChildElement(kDocumentKey);
+    auto contains = [&documentNode](const QString& _key) {
+        return !documentNode.firstChildElement(_key).isNull();
+    };
+    auto load = [&documentNode](const QString& _key) {
+        return TextHelper::fromHtmlEscaped(documentNode.firstChildElement(_key).text());
+    };
+    setName(load(kNameKey));
+    if (contains(kStoryRoleKey)) {
+        setStoryRole(static_cast<LocationStoryRole>(load(kStoryRoleKey).toInt()));
+    }
+    setOneSentenceDescription(load(kOneSentenceDescriptionKey));
+    setLongDescription(load(kLongDescriptionKey));
+    setMainPhoto(load(kMainPhotoKey), imageWrapper()->load(load(kMainPhotoKey)));
+
+    //
+    // Cчитываем отношения
+    //
+    auto routesNode = documentNode.firstChildElement(kRoutesKey);
+    QVector<LocationRoute> newRoutes;
+    if (!routesNode.isNull()) {
+        auto routeNode = routesNode.firstChildElement(kRouteKey);
+        while (!routeNode.isNull()) {
+            LocationRoute route;
+            route.location
+                = QUuid::fromString(routeNode.firstChildElement(kRouteToLocationKey).text());
+            route.lineType = routeNode.firstChildElement(kLineTypeKey).text().toInt();
+            route.color = ColorHelper::fromString(routeNode.firstChildElement(kColorKey).text());
+            route.name = TextHelper::fromHtmlEscaped(routeNode.firstChildElement(kNameKey).text());
+            route.details
+                = TextHelper::fromHtmlEscaped(routeNode.firstChildElement(kDetailsKey).text());
+            newRoutes.append(route);
+
+            routeNode = routeNode.nextSiblingElement();
+        }
+    }
+    //
+    // ... корректируем текущие отношения персонажа
+    //
+    for (int routeIndex = 0; routeIndex < d->routes.size(); ++routeIndex) {
+        const auto& route = d->routes.at(routeIndex);
+        //
+        // ... если такое отношение осталось актуальным, то оставим его в списке текущих
+        //     и удалим из списка новых
+        //
+        if (newRoutes.contains(route)) {
+            newRoutes.removeAll(route);
+        }
+        //
+        // ... если такого отношения нет в списке новых, то удалим его из списка текущих
+        //
+        else {
+            removeRoute(route.location);
+            --routeIndex;
+        }
+    }
+    //
+    // ... добавляем новые отношения к персонажу
+    //
+    for (const auto& route : newRoutes) {
+        createRoute(route.location);
+        updateRoute(route);
+    }
+
+    reassignContent();
 }
 
 } // namespace BusinessLayer

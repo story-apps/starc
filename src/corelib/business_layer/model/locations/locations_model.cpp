@@ -3,6 +3,7 @@
 #include "location_model.h"
 
 #include <domain/document_object.h>
+#include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -360,6 +361,112 @@ QByteArray LocationsModel::toXml() const
     }
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
+}
+
+void LocationsModel::applyPatch(const QByteArray& _patch)
+{
+    //
+    // Применяем изменения
+    //
+    const auto newContent = dmpController().applyPatch(toXml(), _patch);
+
+    //
+    // Cчитываем изменённые данные
+    //
+    QDomDocument domDocument;
+    domDocument.setContent(newContent);
+    const auto documentNode = domDocument.firstChildElement(kDocumentKey);
+    //
+    // Группы локаций
+    //
+    auto locationsGroupNode = documentNode.firstChildElement(kLocationsGroupKey);
+    QVector<LocationsGroup> newLocationsGroups;
+    while (!locationsGroupNode.isNull() && locationsGroupNode.nodeName() == kLocationsGroupKey) {
+        LocationsGroup group;
+        group.id = QUuid::fromString(locationsGroupNode.attribute(kIdKey));
+        group.name = TextHelper::fromHtmlEscaped(locationsGroupNode.attribute(kNameKey));
+        group.description
+            = TextHelper::fromHtmlEscaped(locationsGroupNode.attribute(kDescriptionKey));
+        group.rect = rectFromString(locationsGroupNode.attribute(kRectKey));
+        group.lineType = locationsGroupNode.attribute(kLineTypeKey).toInt();
+        if (locationsGroupNode.hasAttribute(kColorKey)) {
+            group.color = locationsGroupNode.attribute(kColorKey);
+        }
+        newLocationsGroups.append(group);
+
+        locationsGroupNode = locationsGroupNode.nextSiblingElement();
+    }
+    //
+    // ... корректируем текущие группы
+    //
+    for (int groupIndex = 0; groupIndex < d->locationsGroups.size(); ++groupIndex) {
+        const auto& group = d->locationsGroups.at(groupIndex);
+        //
+        // ... если такая группа осталось актуальной, то оставим её в списке текущих
+        //     и удалим из списка новых
+        //
+        if (newLocationsGroups.contains(group)) {
+            newLocationsGroups.removeAll(group);
+        }
+        //
+        // ... если такой группы нет в списке новых, то удалим её из списка текущих
+        //
+        else {
+            removeLocationsGroup(group.id);
+            --groupIndex;
+        }
+    }
+    //
+    // ... добавляем новые группы
+    //
+    for (const auto& group : newLocationsGroups) {
+        createLocationsGroup(group.id);
+        updateLocationsGroup(group);
+    }
+    //
+    // Положения локаций
+    //
+    auto locationNode = documentNode.firstChildElement(kLocationKey);
+    QHash<QString, QPointF> newLocationsPositions;
+    while (!locationNode.isNull() && locationNode.nodeName() == kLocationKey) {
+        const auto locationName = TextHelper::fromHtmlEscaped(locationNode.attribute(kNameKey));
+        const auto positionText = locationNode.attribute(kPositionKey).split(";");
+        Q_ASSERT(positionText.size() == 2);
+        const QPointF position(positionText.constFirst().toDouble(),
+                               positionText.constLast().toDouble());
+        newLocationsPositions[locationName] = position;
+
+        locationNode = locationNode.nextSiblingElement();
+    }
+    //
+    // ... корректируем текущие положения
+    //
+    const auto locationNames = d->locationsPositions.keys();
+    for (int positionIndex = 0; positionIndex < locationNames.size(); ++positionIndex) {
+        const auto& location = locationNames.at(positionIndex);
+        const auto& position = d->locationsPositions[location];
+        //
+        // ... если такая позиция осталась актуальной, то оставим её в списке текущих
+        //     и удалим из списка новых
+        //
+        if (newLocationsPositions.value(location) == position) {
+            newLocationsPositions.remove(location);
+        }
+        //
+        // ... если такой позиции нет в списке новых, то удалим её из списка текущих
+        //
+        else {
+            setLocationPosition(location, position);
+        }
+    }
+    //
+    // ... добавляем новые положения
+    //
+    for (auto iter = newLocationsPositions.begin(); iter != newLocationsPositions.end(); ++iter) {
+        setLocationPosition(iter.key(), iter.value());
+    }
+
+    reassignContent();
 }
 
 } // namespace BusinessLayer

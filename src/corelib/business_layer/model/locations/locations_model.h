@@ -120,6 +120,7 @@ protected:
     void initDocument() override;
     void clearDocument() override;
     QByteArray toXml() const override;
+    void applyPatch(const QByteArray& _patch) override;
     /** @} */
 
 private:

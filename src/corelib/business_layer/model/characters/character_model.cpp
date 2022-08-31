@@ -2,6 +2,7 @@
 
 #include <business_layer/model/abstract_image_wrapper.h>
 #include <domain/document_object.h>
+#include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -219,8 +220,29 @@ const QPixmap& CharacterModel::mainPhoto() const
 
 void CharacterModel::setMainPhoto(const QPixmap& _photo)
 {
+    if (_photo.cacheKey() == d->mainPhoto.image.cacheKey()) {
+        return;
+    }
+
     d->mainPhoto.image = _photo;
-    d->mainPhoto.uuid = imageWrapper()->save(d->mainPhoto.image);
+    if (d->mainPhoto.uuid.isNull()) {
+        d->mainPhoto.uuid = imageWrapper()->save(d->mainPhoto.image);
+    } else {
+        imageWrapper()->save(d->mainPhoto.uuid, d->mainPhoto.image);
+    }
+    emit mainPhotoChanged(d->mainPhoto.image);
+}
+
+void CharacterModel::setMainPhoto(const QUuid& _uuid, const QPixmap& _photo)
+{
+    if (d->mainPhoto.uuid == _uuid && _photo.cacheKey() == d->mainPhoto.image.cacheKey()) {
+        return;
+    }
+
+    d->mainPhoto.image = _photo;
+    if (d->mainPhoto.uuid != _uuid) {
+        d->mainPhoto.uuid = _uuid;
+    }
     emit mainPhotoChanged(d->mainPhoto.image);
 }
 
@@ -283,6 +305,18 @@ CharacterRelation CharacterModel::relation(CharacterModel* _withCharacter)
 QVector<CharacterRelation> CharacterModel::relations() const
 {
     return d->relations;
+}
+
+void CharacterModel::initImageWrapper()
+{
+    connect(imageWrapper(), &AbstractImageWrapper::imageUpdated, this,
+            [this](const QUuid& _uuid, const QPixmap& _image) {
+                if (_uuid != d->mainPhoto.uuid) {
+                    return;
+                }
+
+                setMainPhoto(_uuid, _image);
+            });
 }
 
 void CharacterModel::initDocument()
@@ -383,6 +417,94 @@ QByteArray CharacterModel::toXml() const
     }
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
+}
+
+void CharacterModel::applyPatch(const QByteArray& _patch)
+{
+    //
+    // Применяем изменения
+    //
+    const auto newContent = dmpController().applyPatch(toXml(), _patch);
+
+    //
+    // Cчитываем изменённые данные
+    //
+    QDomDocument domDocument;
+    domDocument.setContent(newContent);
+    const auto documentNode = domDocument.firstChildElement(kDocumentKey);
+    auto contains = [&documentNode](const QString& _key) {
+        return !documentNode.firstChildElement(_key).isNull();
+    };
+    auto load = [&documentNode](const QString& _key) {
+        return TextHelper::fromHtmlEscaped(documentNode.firstChildElement(_key).text());
+    };
+    setName(load(kNameKey));
+    if (contains(kColorKey)) {
+        setColor(load(kColorKey));
+    }
+    if (contains(kStoryRoleKey)) {
+        setStoryRole(static_cast<CharacterStoryRole>(load(kStoryRoleKey).toInt()));
+    }
+    setAge(load(kAgeKey));
+    if (contains(kGenderKey)) {
+        setGender(load(kGenderKey).toInt());
+    }
+    setOneSentenceDescription(load(kOneSentenceDescriptionKey));
+    setLongDescription(load(kLongDescriptionKey));
+    setMainPhoto(load(kMainPhotoKey), imageWrapper()->load(load(kMainPhotoKey)));
+
+    //
+    // Cчитываем отношения
+    //
+    auto relationsNode = documentNode.firstChildElement(kRoutesKey);
+    QVector<CharacterRelation> newRelations;
+    if (!relationsNode.isNull()) {
+        auto relationNode = relationsNode.firstChildElement(kRouteKey);
+        while (!relationNode.isNull()) {
+            CharacterRelation relation;
+            relation.character = QUuid::fromString(
+                relationNode.firstChildElement(kRelationWithCharacterKey).text());
+            relation.lineType = relationNode.firstChildElement(kLineTypeKey).text().toInt();
+            relation.color
+                = ColorHelper::fromString(relationNode.firstChildElement(kColorKey).text());
+            relation.feeling
+                = TextHelper::fromHtmlEscaped(relationNode.firstChildElement(kFeelingKey).text());
+            relation.details
+                = TextHelper::fromHtmlEscaped(relationNode.firstChildElement(kDetailsKey).text());
+            newRelations.append(relation);
+
+            relationNode = relationNode.nextSiblingElement();
+        }
+    }
+    //
+    // ... корректируем текущие отношения персонажа
+    //
+    for (int relationIndex = 0; relationIndex < d->relations.size(); ++relationIndex) {
+        const auto& relation = d->relations.at(relationIndex);
+        //
+        // ... если такое отношение осталось актуальным, то оставим его в списке текущих
+        //     и удалим из списка новых
+        //
+        if (newRelations.contains(relation)) {
+            newRelations.removeAll(relation);
+        }
+        //
+        // ... если такого отношения нет в списке новых, то удалим его из списка текущих
+        //
+        else {
+            removeRelationWith(relation.character);
+            --relationIndex;
+        }
+    }
+    //
+    // ... добавляем новые отношения к персонажу
+    //
+    for (const auto& relation : newRelations) {
+        createRelation(relation.character);
+        updateRelation(relation);
+    }
+
+    reassignContent();
 }
 
 } // namespace BusinessLayer

@@ -3,6 +3,7 @@
 #include "character_model.h"
 
 #include <domain/document_object.h>
+#include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
 
@@ -369,6 +370,112 @@ QByteArray CharactersModel::toXml() const
     }
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
+}
+
+void CharactersModel::applyPatch(const QByteArray& _patch)
+{
+    //
+    // Применяем изменения
+    //
+    const auto newContent = dmpController().applyPatch(toXml(), _patch);
+
+    //
+    // Cчитываем изменённые данные
+    //
+    QDomDocument domDocument;
+    domDocument.setContent(newContent);
+    const auto documentNode = domDocument.firstChildElement(kDocumentKey);
+    //
+    // Группы персонажей
+    //
+    auto charactersGroupNode = documentNode.firstChildElement(kCharactersGroupKey);
+    QVector<CharactersGroup> newCharactersGroups;
+    while (!charactersGroupNode.isNull() && charactersGroupNode.nodeName() == kCharactersGroupKey) {
+        CharactersGroup group;
+        group.id = QUuid::fromString(charactersGroupNode.attribute(kIdKey));
+        group.name = TextHelper::fromHtmlEscaped(charactersGroupNode.attribute(kNameKey));
+        group.description
+            = TextHelper::fromHtmlEscaped(charactersGroupNode.attribute(kDescriptionKey));
+        group.rect = rectFromString(charactersGroupNode.attribute(kRectKey));
+        group.lineType = charactersGroupNode.attribute(kLineTypeKey).toInt();
+        if (charactersGroupNode.hasAttribute(kColorKey)) {
+            group.color = charactersGroupNode.attribute(kColorKey);
+        }
+        newCharactersGroups.append(group);
+
+        charactersGroupNode = charactersGroupNode.nextSiblingElement();
+    }
+    //
+    // ... корректируем текущие группы
+    //
+    for (int groupIndex = 0; groupIndex < d->charactersGroups.size(); ++groupIndex) {
+        const auto& group = d->charactersGroups.at(groupIndex);
+        //
+        // ... если такая группа осталось актуальной, то оставим её в списке текущих
+        //     и удалим из списка новых
+        //
+        if (newCharactersGroups.contains(group)) {
+            newCharactersGroups.removeAll(group);
+        }
+        //
+        // ... если такой группы нет в списке новых, то удалим её из списка текущих
+        //
+        else {
+            removeCharactersGroup(group.id);
+            --groupIndex;
+        }
+    }
+    //
+    // ... добавляем новые группы
+    //
+    for (const auto& group : newCharactersGroups) {
+        createCharactersGroup(group.id);
+        updateCharactersGroup(group);
+    }
+    //
+    // Положения персонажей
+    //
+    auto characterNode = documentNode.firstChildElement(kCharacterKey);
+    QHash<QString, QPointF> newCharactersPositions;
+    while (!characterNode.isNull() && characterNode.nodeName() == kCharacterKey) {
+        const auto characterName = TextHelper::fromHtmlEscaped(characterNode.attribute(kNameKey));
+        const auto positionText = characterNode.attribute(kPositionKey).split(";");
+        Q_ASSERT(positionText.size() == 2);
+        const QPointF position(positionText.constFirst().toDouble(),
+                               positionText.constLast().toDouble());
+        newCharactersPositions[characterName] = position;
+
+        characterNode = characterNode.nextSiblingElement();
+    }
+    //
+    // ... корректируем текущие положения
+    //
+    const auto characterNames = d->charactersPositions.keys();
+    for (int positionIndex = 0; positionIndex < characterNames.size(); ++positionIndex) {
+        const auto& character = characterNames.at(positionIndex);
+        const auto& position = d->charactersPositions[character];
+        //
+        // ... если такая позиция осталась актуальной, то оставим её в списке текущих
+        //     и удалим из списка новых
+        //
+        if (newCharactersPositions.value(character) == position) {
+            newCharactersPositions.remove(character);
+        }
+        //
+        // ... если такой позиции нет в списке новых, то удалим её из списка текущих
+        //
+        else {
+            setCharacterPosition(character, position);
+        }
+    }
+    //
+    // ... добавляем новые положения
+    //
+    for (auto iter = newCharactersPositions.begin(); iter != newCharactersPositions.end(); ++iter) {
+        setCharacterPosition(iter.key(), iter.value());
+    }
+
+    reassignContent();
 }
 
 } // namespace BusinessLayer

@@ -78,6 +78,7 @@ public:
 
     const QPixmap& mainPhoto() const;
     void setMainPhoto(const QPixmap& _photo);
+    void setMainPhoto(const QUuid& _uuid, const QPixmap& _photo);
     Q_SIGNAL void mainPhotoChanged(const QPixmap& _photo);
 
     void createRelation(const QUuid& _withCharacter);
@@ -95,9 +96,11 @@ protected:
      * @brief Реализация модели для работы с документами
      */
     /** @{ */
+    void initImageWrapper() override;
     void initDocument() override;
     void clearDocument() override;
     QByteArray toXml() const override;
+    void applyPatch(const QByteArray& _patch) override;
     /** @} */
 
 private:
