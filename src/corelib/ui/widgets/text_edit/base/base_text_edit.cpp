@@ -204,6 +204,11 @@ void BaseTextEdit::setReplaceThreeDots(bool _replace)
     d->replaceThreeDots = _replace;
 }
 
+void BaseTextEdit::setUseSmartQuotes(bool _use)
+{
+    d->smartQuotes = _use;
+}
+
 void BaseTextEdit::setTextBold(bool _bold)
 {
     auto buildFormat = [_bold](const QTextCharFormat& _format) {

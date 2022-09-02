@@ -754,6 +754,11 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->textEdit->setReplaceThreeDots(
             settingsValue(DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey).toBool());
     }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationSmartQuotesKey)) {
+        d->textEdit->setUseSmartQuotes(
+            settingsValue(DataStorageLayer::kApplicationSmartQuotesKey).toBool());
+    }
 }
 
 void SimpleTextView::loadViewSettings()

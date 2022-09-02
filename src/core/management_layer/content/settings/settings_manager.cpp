@@ -117,6 +117,8 @@ void SettingsManager::Implementation::loadApplicationSettings()
         settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
     view->setApplicationReplaceThreeDotsWithEllipsis(
         settingsValue(DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey).toBool());
+    view->setApplicationUseSmartQuotes(
+        settingsValue(DataStorageLayer::kApplicationSmartQuotesKey).toBool());
 }
 
 void SettingsManager::Implementation::loadComponentsSettings()
@@ -486,6 +488,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setApplicationUseTypewriterScrolling);
     connect(d->view, &Ui::SettingsView::applicationReplaceThreeDotsWithEllipsisChanged, this,
             &SettingsManager::setApplicationReplaceThreeDotsWithEllipsis);
+    connect(d->view, &Ui::SettingsView::applicationUseSmartQuotesChanged, this,
+            &SettingsManager::setApplicationUseSmartQuotes);
     //
     // ... простой редактор текста
     //
@@ -1245,6 +1249,16 @@ void SettingsManager::setApplicationReplaceThreeDotsWithEllipsis(bool _replace)
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey });
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey });
+}
+
+void SettingsManager::setApplicationUseSmartQuotes(bool _use)
+{
+    setSettingsValue(DataStorageLayer::kApplicationSmartQuotesKey, _use);
+    emit simpleTextEditorChanged({ DataStorageLayer::kApplicationSmartQuotesKey });
+    emit screenplayEditorChanged({ DataStorageLayer::kApplicationSmartQuotesKey });
+    emit comicBookEditorChanged({ DataStorageLayer::kApplicationSmartQuotesKey });
+    emit audioplayEditorChanged({ DataStorageLayer::kApplicationSmartQuotesKey });
+    emit stageplayEditorChanged({ DataStorageLayer::kApplicationSmartQuotesKey });
 }
 
 void SettingsManager::setSimpleTextAvailable(bool _available)

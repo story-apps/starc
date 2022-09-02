@@ -27,6 +27,11 @@ public:
     void setReplaceThreeDots(bool _replace);
 
     /**
+     * @brief Использовать умные кавычки для текущего языка интерфейса
+     */
+    void setUseSmartQuotes(bool _use);
+
+    /**
      * @brief Настроить форматирование выделенного текста
      */
     /** @{ */

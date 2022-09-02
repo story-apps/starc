@@ -77,6 +77,8 @@ const QString kApplicationUseTypewriterScrollingKey
 // активна ли автозамена трёх точек на символ многоточия
 const QString kApplicationReplaceThreeDotsWithEllipsisKey
     = kApplicationGroupKey + "/replace-three-dots-with-ellipsis";
+// активны ли замены обычных кавычек на умные для текущего языка
+const QString kApplicationSmartQuotesKey = kApplicationGroupKey + "/smart-quotes";
 // список недавних проектов
 const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
 

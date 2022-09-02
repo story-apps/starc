@@ -227,6 +227,7 @@ public:
     CheckBox* useTypewriterScrolling = nullptr;
     Subtitle1Label* applicationTextEditingSubtitle = nullptr;
     CheckBox* replaceThreeDotsWithEllipsis = nullptr;
+    CheckBox* useSmartQuotes = nullptr;
     //
     int applicationCardBottomSpacerIndex = 0;
 
@@ -465,6 +466,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , useTypewriterScrolling(new CheckBox(applicationCard))
     , applicationTextEditingSubtitle(new Subtitle1Label(applicationCard))
     , replaceThreeDotsWithEllipsis(new CheckBox(applicationCard))
+    , useSmartQuotes(new CheckBox(applicationCard))
     //
     , componentsTitle(new H5Label(content))
     //
@@ -727,6 +729,7 @@ void SettingsView::Implementation::initApplicationCard()
     applicationCardLayout->addWidget(highlightCurrentLine, itemIndex++, 0);
     applicationCardLayout->addWidget(applicationTextEditingSubtitle, itemIndex++, 0);
     applicationCardLayout->addWidget(replaceThreeDotsWithEllipsis, itemIndex++, 0);
+    applicationCardLayout->addWidget(useSmartQuotes, itemIndex++, 0);
 
     applicationCardBottomSpacerIndex = itemIndex;
     applicationCard->setLayoutReimpl(applicationCardLayout);
@@ -1331,6 +1334,8 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::applicationUseTypewriterScrollingChanged);
     connect(d->replaceThreeDotsWithEllipsis, &CheckBox::checkedChanged, this,
             &SettingsView::applicationReplaceThreeDotsWithEllipsisChanged);
+    connect(d->useSmartQuotes, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationUseSmartQuotesChanged);
 
     //
     // Компоненты
@@ -2384,6 +2389,11 @@ void SettingsView::setApplicationReplaceThreeDotsWithEllipsis(bool _replace)
     d->replaceThreeDotsWithEllipsis->setChecked(_replace);
 }
 
+void SettingsView::setApplicationUseSmartQuotes(bool _use)
+{
+    d->useSmartQuotes->setChecked(_use);
+}
+
 void SettingsView::setSimpleTextAvailable(bool _available)
 {
     d->simpleTextAvailable->setChecked(_available);
@@ -2934,6 +2944,7 @@ void SettingsView::updateTranslations()
         tr("Use typewriter scrolling (keeps line with the cursor on the screen center)"));
     d->applicationTextEditingSubtitle->setText(tr("Automatic text corrections"));
     d->replaceThreeDotsWithEllipsis->setText(tr("Replace three single dots with ellipsis"));
+    d->useSmartQuotes->setText(tr("Replace vertical quotation marks to curly ones"));
 
     d->componentsTitle->setText(tr("Components"));
     //
@@ -3216,6 +3227,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->focusCurrentParagraph,
              d->useTypewriterScrolling,
              d->replaceThreeDotsWithEllipsis,
+             d->useSmartQuotes,
              //
              d->simpleTextNavigatorShowSceneText,
              //

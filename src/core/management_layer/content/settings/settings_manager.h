@@ -105,6 +105,7 @@ private:
     void setApplicationFocusCurrentParagraph(bool _focus);
     void setApplicationUseTypewriterScrolling(bool _use);
     void setApplicationReplaceThreeDotsWithEllipsis(bool _replace);
+    void setApplicationUseSmartQuotes(bool _use);
 
     //
     // Сохранение параметров редактора сценария
