@@ -2410,6 +2410,48 @@ QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) co
         break;
     }
 
+    case Domain::DocumentObjectType::AudioplayTitlePage:
+    case Domain::DocumentObjectType::AudioplaySynopsis:
+    case Domain::DocumentObjectType::ComicBookSynopsis:
+    case Domain::DocumentObjectType::ScreenplayTitlePage:
+    case Domain::DocumentObjectType::ScreenplaySynopsis:
+    case Domain::DocumentObjectType::StageplayTitlePage:
+    case Domain::DocumentObjectType::StageplaySynopsis:
+    case Domain::DocumentObjectType::ComicBookTitlePage: {
+        documents.append(item->parent()->uuid());
+        break;
+    }
+    case Domain::DocumentObjectType::ScreenplayTreatment:
+    case Domain::DocumentObjectType::ScreenplayStatistics: {
+        for (int index = 0; index < item->parent()->childCount(); ++index) {
+            auto childItem = item->parent()->childAt(index);
+            if (childItem->type() == Domain::DocumentObjectType::ScreenplayText) {
+                documents.append(childItem->uuid());
+                break;
+            }
+        }
+        Q_FALLTHROUGH();
+    }
+    case Domain::DocumentObjectType::ScreenplayText: {
+        documents.append(item->parent()->uuid());
+        //
+        const auto titlePageIndex = 0;
+        documents.append(item->parent()->childAt(titlePageIndex)->uuid());
+        const auto synopsisIndex = 1;
+        documents.append(item->parent()->childAt(synopsisIndex)->uuid());
+        //
+        documents.append(DataStorageLayer::StorageFacade::documentStorage()
+                             ->document(Domain::DocumentObjectType::ScreenplayDictionaries)
+                             ->uuid());
+        documents.append(DataStorageLayer::StorageFacade::documentStorage()
+                             ->document(Domain::DocumentObjectType::Characters)
+                             ->uuid());
+        documents.append(DataStorageLayer::StorageFacade::documentStorage()
+                             ->document(Domain::DocumentObjectType::Locations)
+                             ->uuid());
+        break;
+    }
+
     default:
         break;
     }

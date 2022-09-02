@@ -14,20 +14,25 @@
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/stageplay_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <domain/document_object.h>
 
 using namespace BusinessLayer;
 
 
 void ModelHelper::initTitlePageModel(BusinessLayer::SimpleTextModel* _model)
 {
-    if (_model && _model->rowCount() == 1) {
-        const auto item = _model->itemForIndex(_model->index(0, 0));
-        if (item->type() == BusinessLayer::TextModelItemType::Text) {
-            const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
-            if (textItem->text().isEmpty()) {
-                resetTitlePageModel(_model);
-            }
-        }
+    if (_model == nullptr || _model->rowCount() != 1) {
+        return;
+    }
+
+    const auto item = _model->itemForIndex(_model->index(0, 0));
+    if (item->type() != BusinessLayer::TextModelItemType::Text) {
+        return;
+    }
+
+    const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+    if (textItem->text().isEmpty()) {
+        resetTitlePageModel(_model);
     }
 }
 
@@ -52,5 +57,17 @@ void ModelHelper::resetTitlePageModel(BusinessLayer::SimpleTextModel* _model)
                         .titlePage();
     }
 
+    const auto oldContent = _model->document()->content();
+
+    //
+    // Сначла загрузим в документ содержимое из шаблона, а потом перезапишем его правильным xml,
+    // чтобы не формировался бесполезный патч о добавлении служебных заголовков и замены пробелов на
+    // переносы строк
+    //
     _model->setDocumentContent(titlePage.toUtf8());
+    _model->reassignContent();
+    //
+    // ... а затем восстанавливаем исходный контент, чтобы сформировать правильный патч
+    //
+    _model->document()->setContent(oldContent);
 }
