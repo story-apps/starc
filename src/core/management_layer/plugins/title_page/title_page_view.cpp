@@ -280,6 +280,15 @@ void TitlePageView::setCursorPosition(int _position)
     d->textEdit->ensureCursorVisible(cursor, false);
 }
 
+bool TitlePageView::eventFilter(QObject* _watched, QEvent* _event)
+{
+    if (_watched == d->scalableWrapper && _event->type() == QEvent::Resize) {
+        d->updateToolbarPositon();
+    }
+
+    return Widget::eventFilter(_watched, _event);
+}
+
 void TitlePageView::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);

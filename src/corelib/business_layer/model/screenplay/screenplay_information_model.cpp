@@ -1,13 +1,16 @@
 #include "screenplay_information_model.h"
 
 #include <business_layer/model/abstract_image_wrapper.h>
+#include <business_layer/model/abstract_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
+#include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/logging.h>
 
 #include <QDomDocument>
 
@@ -33,7 +36,7 @@ const QString kScenesNumberingStartAtKey = "scenes_numbering_start_at";
 const QString kOverrideSystemSettingsKey = "override_system_settings";
 const QString kTemplateIdKey = "template_id";
 const QString kShowBlockNumbersKey = "show_scenes_numbers";
-const QString kContinueBlockNumbersKey = "show_scenes_numbers_on_left";
+const QString kShowSceneNumbersOnLeftKey = "show_scenes_numbers_on_left";
 const QString kShowScenesNumbersOnRightKey = "show_scenes_numbers_on_right";
 const QString kShowDialoguesNumbersKey = "show_dialogues_numbers";
 } // namespace
@@ -88,7 +91,7 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
             kOverrideSystemSettingsKey,
             kTemplateIdKey,
             kShowBlockNumbersKey,
-            kContinueBlockNumbersKey,
+            kShowSceneNumbersOnLeftKey,
             kShowScenesNumbersOnRightKey,
             kShowDialoguesNumbersKey,
         },
@@ -524,7 +527,7 @@ void ScreenplayInformationModel::initDocument()
     d->templateId = documentNode.firstChildElement(kTemplateIdKey).text();
     d->showSceneNumbers = documentNode.firstChildElement(kShowBlockNumbersKey).text() == "true";
     d->showSceneNumbersOnLeft
-        = documentNode.firstChildElement(kContinueBlockNumbersKey).text() == "true";
+        = documentNode.firstChildElement(kShowSceneNumbersOnLeftKey).text() == "true";
     d->showSceneNumbersOnRight
         = documentNode.firstChildElement(kShowScenesNumbersOnRightKey).text() == "true";
     d->showDialoguesNumbers
@@ -569,11 +572,73 @@ QByteArray ScreenplayInformationModel::toXml() const
     writeBoolTag(kOverrideSystemSettingsKey, d->overrideCommonSettings);
     writeTag(kTemplateIdKey, d->templateId);
     writeBoolTag(kShowBlockNumbersKey, d->showSceneNumbers);
-    writeBoolTag(kContinueBlockNumbersKey, d->showSceneNumbersOnLeft);
+    writeBoolTag(kShowSceneNumbersOnLeftKey, d->showSceneNumbersOnLeft);
     writeBoolTag(kShowScenesNumbersOnRightKey, d->showSceneNumbersOnRight);
     writeBoolTag(kShowDialoguesNumbersKey, d->showDialoguesNumbers);
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
+}
+
+void ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
+{
+    //
+    // Определить область изменения в xml
+    //
+    auto changes = dmpController().changedXml(toXml(), _patch);
+    if (changes.first.xml.isEmpty() && changes.second.xml.isEmpty()) {
+        Log::warning("Screenplay information model patch don't lead to any changes");
+        return;
+    }
+
+    changes.second.xml = xml::prepareXml(changes.second.xml);
+
+    QDomDocument domDocument;
+    domDocument.setContent(changes.second.xml);
+    const auto documentNode = domDocument.firstChildElement(kDocumentKey);
+    auto setText
+        = [&documentNode](const QString& _key, std::function<void(const QString&)> _setter) {
+              const auto node = documentNode.firstChildElement(_key);
+              if (!node.isNull()) {
+                  _setter(node.text());
+              }
+          };
+    auto setBool = [&documentNode](const QString& _key, std::function<void(bool)> _setter) {
+        const auto node = documentNode.firstChildElement(_key);
+        if (!node.isNull()) {
+            _setter(node.text() == "true");
+        }
+    };
+    auto setInt = [&documentNode](const QString& _key, std::function<void(int)> _setter) {
+        const auto node = documentNode.firstChildElement(_key);
+        if (!node.isNull()) {
+            _setter(node.text().toInt());
+        }
+    };
+    using SIM = ScreenplayInformationModel;
+    const auto _1 = std::placeholders::_1;
+    setText(kNameKey, std::bind(&SIM::setName, this, _1));
+    setText(kTaglineKey, std::bind(&SIM::setTagline, this, _1));
+    setText(kLoglineKey, std::bind(&SIM::setLogline, this, _1));
+    setBool(kTitlePageVisibleKey, std::bind(&SIM::setTitlePageVisible, this, _1));
+    setBool(kSynopsisVisibleKey, std::bind(&SIM::setSynopsisVisible, this, _1));
+    setBool(kTreatmentVisibleKey, std::bind(&SIM::setTreatmentVisible, this, _1));
+    setBool(kScreenplayTextVisibleKey, std::bind(&SIM::setScreenplayTextVisible, this, _1));
+    setBool(kScreenplayStatisticsVisibleKey,
+            std::bind(&SIM::setScreenplayStatisticsVisible, this, _1));
+    setText(kHeaderKey, std::bind(&SIM::setHeader, this, _1));
+    setBool(kPrintHeaderOnTitlePageKey, std::bind(&SIM::setPrintHeaderOnTitlePage, this, _1));
+    setText(kFooterKey, std::bind(&SIM::setFooter, this, _1));
+    setBool(kPrintFooterOnTitlePageKey, std::bind(&SIM::setPrintFooterOnTitlePage, this, _1));
+    setText(kScenesNumbersPrefixKey, std::bind(&SIM::setScenesNumbersPrefix, this, _1));
+    setInt(kScenesNumberingStartAtKey, std::bind(&SIM::setScenesNumberingStartAt, this, _1));
+    setBool(kOverrideSystemSettingsKey, std::bind(&SIM::setOverrideCommonSettings, this, _1));
+    setText(kTemplateIdKey, std::bind(&SIM::setTemplateId, this, _1));
+    setBool(kShowBlockNumbersKey, std::bind(&SIM::setShowSceneNumbers, this, _1));
+    setBool(kShowSceneNumbersOnLeftKey, std::bind(&SIM::setShowSceneNumbersOnLeft, this, _1));
+    setBool(kShowScenesNumbersOnRightKey, std::bind(&SIM::setShowSceneNumbersOnRight, this, _1));
+    setBool(kShowDialoguesNumbersKey, std::bind(&SIM::setShowDialoguesNumbers, this, _1));
+
+    reassignContent();
 }
 
 } // namespace BusinessLayer

@@ -93,9 +93,6 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     });
     connect(d->importButton, &Button::clicked, this, &ImportDialog::importRequested);
     connect(d->cancelButton, &Button::clicked, this, &ImportDialog::canceled);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 ImportDialog::~ImportDialog() = default;

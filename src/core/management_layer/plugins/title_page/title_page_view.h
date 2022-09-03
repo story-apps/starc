@@ -53,6 +53,11 @@ public:
 
 protected:
     /**
+     * @brief Фильтруем события представления, чтобы корректировать положение панели инструментов
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
+    /**
      * @brief Переопределяем для корректировки положения тулбара действий над проектами
      */
     void resizeEvent(QResizeEvent* _event) override;
