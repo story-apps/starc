@@ -34,7 +34,7 @@ struct CORE_LIBRARY_EXPORT ScreenplayImportOptions {
     /**
      * @brief Сохранять номера сцен импортируемого сценария
      */
-    bool keepSceneNumbers = true;
+    bool keepSceneNumbers = false;
 };
 
 } // namespace BusinessLayer
