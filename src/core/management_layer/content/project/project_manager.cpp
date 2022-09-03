@@ -2307,7 +2307,7 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     // Если не структура, а какая-либо из моделей, то обновим представление для неё
     //
     else {
-        const auto item = d->aliasedItemForIndex(
+        const auto item = d->projectStructureModel->itemForIndex(
             d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex()));
         if (item && item->uuid() == _documentInfo.uuid) {
             showView(d->navigator->currentIndex(), d->currentDocument.viewMimeType);
@@ -2394,6 +2394,15 @@ QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) co
         return {};
     }
 
+    auto topLevelParent = item->parent();
+    while (topLevelParent->parent() != nullptr) {
+        topLevelParent = topLevelParent->parent();
+    }
+
+    const QSet<Domain::DocumentObjectType> aliases = {
+        Domain::DocumentObjectType::ScreenplayTreatment,
+    };
+
     QVector<QUuid> documents;
     switch (item->type()) {
     case Domain::DocumentObjectType::Characters: {
@@ -2410,45 +2419,58 @@ QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) co
         break;
     }
 
-    case Domain::DocumentObjectType::AudioplayTitlePage:
-    case Domain::DocumentObjectType::AudioplaySynopsis:
-    case Domain::DocumentObjectType::ComicBookSynopsis:
     case Domain::DocumentObjectType::ScreenplayTitlePage:
     case Domain::DocumentObjectType::ScreenplaySynopsis:
-    case Domain::DocumentObjectType::StageplayTitlePage:
-    case Domain::DocumentObjectType::StageplaySynopsis:
-    case Domain::DocumentObjectType::ComicBookTitlePage: {
-        documents.append(item->parent()->uuid());
-        break;
-    }
     case Domain::DocumentObjectType::ScreenplayTreatment:
+    case Domain::DocumentObjectType::ScreenplayText:
     case Domain::DocumentObjectType::ScreenplayStatistics: {
-        for (int index = 0; index < item->parent()->childCount(); ++index) {
-            auto childItem = item->parent()->childAt(index);
-            if (childItem->type() == Domain::DocumentObjectType::ScreenplayText) {
+        //
+        // Локации
+        //
+        for (int index = 0; index < topLevelParent->childCount(); ++index) {
+            auto childItem = topLevelParent->childAt(index);
+            if (childItem->type() == Domain::DocumentObjectType::Locations) {
                 documents.append(childItem->uuid());
                 break;
             }
         }
+
         Q_FALLTHROUGH();
     }
-    case Domain::DocumentObjectType::ScreenplayText: {
+
+    case Domain::DocumentObjectType::AudioplayTitlePage:
+    case Domain::DocumentObjectType::AudioplaySynopsis:
+    case Domain::DocumentObjectType::AudioplayText:
+    case Domain::DocumentObjectType::AudioplayStatistics:
+    case Domain::DocumentObjectType::ComicBookSynopsis:
+    case Domain::DocumentObjectType::ComicBookTitlePage:
+    case Domain::DocumentObjectType::ComicBookText:
+    case Domain::DocumentObjectType::ComicBookStatistics:
+    case Domain::DocumentObjectType::StageplayTitlePage:
+    case Domain::DocumentObjectType::StageplaySynopsis:
+    case Domain::DocumentObjectType::StageplayText:
+    case Domain::DocumentObjectType::StageplayStatistics: {
+        //
+        // Персонажи
+        //
+        for (int index = 0; index < topLevelParent->childCount(); ++index) {
+            auto childItem = topLevelParent->childAt(index);
+            if (childItem->type() == Domain::DocumentObjectType::Locations) {
+                documents.append(childItem->uuid());
+                break;
+            }
+        }
+
+        //
+        // Полный комплект, кроме себя самого и документов-ссылок
+        //
         documents.append(item->parent()->uuid());
-        //
-        const auto titlePageIndex = 0;
-        documents.append(item->parent()->childAt(titlePageIndex)->uuid());
-        const auto synopsisIndex = 1;
-        documents.append(item->parent()->childAt(synopsisIndex)->uuid());
-        //
-        documents.append(DataStorageLayer::StorageFacade::documentStorage()
-                             ->document(Domain::DocumentObjectType::ScreenplayDictionaries)
-                             ->uuid());
-        documents.append(DataStorageLayer::StorageFacade::documentStorage()
-                             ->document(Domain::DocumentObjectType::Characters)
-                             ->uuid());
-        documents.append(DataStorageLayer::StorageFacade::documentStorage()
-                             ->document(Domain::DocumentObjectType::Locations)
-                             ->uuid());
+        for (int index = 0; index < item->parent()->childCount(); ++index) {
+            auto childItem = item->parent()->childAt(index);
+            if (childItem != item && !aliases.contains(childItem->type())) {
+                documents.append(childItem->uuid());
+            }
+        }
         break;
     }
 
