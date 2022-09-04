@@ -37,6 +37,12 @@ public:
      */
     QString dialogueNumber(const QTextBlock& _forBlock) const;
 
+protected:
+    /**
+     * @brief После сброса модели скроем блоки, которые не должны быть видимы в текущем режиме
+     */
+    void processModelReset() override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

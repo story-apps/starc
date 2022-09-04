@@ -213,4 +213,9 @@ QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) cons
     return textItem->number().value_or(TextModelTextItem::Number()).text;
 }
 
+void ScreenplayTextDocument::processModelReset()
+{
+    d->updateBlocksVisibility(0, characterCount());
+}
+
 } // namespace BusinessLayer

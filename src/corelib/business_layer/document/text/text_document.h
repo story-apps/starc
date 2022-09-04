@@ -110,6 +110,11 @@ protected:
      */
     void setCorrector(AbstractTextCorrector* _corrector);
 
+    /**
+     * @brief Интерфейс для обработки сброса модели
+     */
+    virtual void processModelReset();
+
 private:
     /**
      * @brief Обновить содержимое модели, при изменение текста документа

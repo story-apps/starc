@@ -510,6 +510,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     connect(d->model, &TextModel::modelReset, this, [this] {
         QSignalBlocker signalBlocker(this);
         setModel(d->model);
+        processModelReset();
     });
     connect(
         d->model, &TextModel::dataChanged, this,
@@ -1654,6 +1655,10 @@ void TextDocument::setCorrector(AbstractTextCorrector* _corrector)
     d->corrector.reset(_corrector);
     connect(this, &TextDocument::contentsChange, d->corrector.data(),
             &AbstractTextCorrector::planCorrection);
+}
+
+void TextDocument::processModelReset()
+{
 }
 
 void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded)
