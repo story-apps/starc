@@ -1,13 +1,16 @@
 #include "stageplay_information_model.h"
 
 #include <business_layer/model/abstract_image_wrapper.h>
+#include <business_layer/model/abstract_model_xml.h>
 #include <business_layer/templates/stageplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
+#include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/logging.h>
 
 #include <QDomDocument>
 
@@ -384,6 +387,54 @@ QByteArray StageplayInformationModel::toXml() const
     writeTag(kTemplateIdKey, d->templateId);
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
+}
+
+void StageplayInformationModel::applyPatch(const QByteArray& _patch)
+{
+    //
+    // Определить область изменения в xml
+    //
+    auto changes = dmpController().changedXml(toXml(), _patch);
+    if (changes.first.xml.isEmpty() && changes.second.xml.isEmpty()) {
+        Log::warning("Audioplay information model patch don't lead to any changes");
+        return;
+    }
+
+    changes.second.xml = xml::prepareXml(changes.second.xml);
+
+    QDomDocument domDocument;
+    domDocument.setContent(changes.second.xml);
+    const auto documentNode = domDocument.firstChildElement(kDocumentKey);
+    auto setText
+        = [&documentNode](const QString& _key, std::function<void(const QString&)> _setter) {
+              const auto node = documentNode.firstChildElement(_key);
+              if (!node.isNull()) {
+                  _setter(node.text());
+              }
+          };
+    auto setBool = [&documentNode](const QString& _key, std::function<void(bool)> _setter) {
+        const auto node = documentNode.firstChildElement(_key);
+        if (!node.isNull()) {
+            _setter(node.text() == "true");
+        }
+    };
+    using M = StageplayInformationModel;
+    const auto _1 = std::placeholders::_1;
+    setText(kNameKey, std::bind(&M::setName, this, _1));
+    setText(kTaglineKey, std::bind(&M::setTagline, this, _1));
+    setText(kLoglineKey, std::bind(&M::setLogline, this, _1));
+    setBool(kTitlePageVisibleKey, std::bind(&M::setTitlePageVisible, this, _1));
+    setBool(kSynopsisVisibleKey, std::bind(&M::setSynopsisVisible, this, _1));
+    setBool(kStageplayTextVisibleKey, std::bind(&M::setStageplayTextVisible, this, _1));
+    setBool(kStageplayStatisticsVisibleKey, std::bind(&M::setStageplayStatisticsVisible, this, _1));
+    setText(kHeaderKey, std::bind(&M::setHeader, this, _1));
+    setBool(kPrintHeaderOnTitlePageKey, std::bind(&M::setPrintHeaderOnTitlePage, this, _1));
+    setText(kFooterKey, std::bind(&M::setFooter, this, _1));
+    setBool(kPrintFooterOnTitlePageKey, std::bind(&M::setPrintFooterOnTitlePage, this, _1));
+    setBool(kOverrideSystemSettingsKey, std::bind(&M::setOverrideCommonSettings, this, _1));
+    setText(kTemplateIdKey, std::bind(&M::setTemplateId, this, _1));
+
+    reassignContent();
 }
 
 } // namespace BusinessLayer
