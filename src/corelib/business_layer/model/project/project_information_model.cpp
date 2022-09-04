@@ -207,8 +207,6 @@ void ProjectInformationModel::applyPatch(const QByteArray& _patch)
     if (auto coverNode = documentNode.firstChildElement(kCoverKey); !coverNode.isNull()) {
         setCover(coverNode.text(), imageWrapper()->load(coverNode.text()));
     }
-
-    reassignContent();
 }
 
 } // namespace BusinessLayer

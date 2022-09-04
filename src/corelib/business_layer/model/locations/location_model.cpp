@@ -423,8 +423,6 @@ void LocationModel::applyPatch(const QByteArray& _patch)
         createRoute(route.location);
         updateRoute(route);
     }
-
-    reassignContent();
 }
 
 } // namespace BusinessLayer

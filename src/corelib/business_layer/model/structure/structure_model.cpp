@@ -1399,8 +1399,6 @@ void StructureModel::applyPatch(const QByteArray& _patch)
     qDeleteAll(oldItems);
     qDeleteAll(newItems);
 
-    reassignContent();
-
 #ifdef XML_CHECKS
     //
     // Делаем проверку на соответствие обновлённой модели прямому наложению патча

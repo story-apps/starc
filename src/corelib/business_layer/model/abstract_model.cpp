@@ -254,11 +254,19 @@ bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
 
 void AbstractModel::applyDocumentChanges(const QVector<QByteArray>& _patches)
 {
-    QScopedValueRollback isUndoInProgressRollback(d->isChangesApplyingInProgress, true);
+    QScopedValueRollback isChangesApplyingInProgressRollback(d->isChangesApplyingInProgress, true);
 
+    //
+    // Накладываем изменения
+    //
     for (const auto& patch : _patches) {
         applyPatch(patch);
     }
+
+    //
+    // Чтобы изменения не продуцировали патч, применим новый контент с изменениями к документу
+    //
+    reassignContent();
 }
 
 bool AbstractModel::isChangesApplyingInProcess() const
@@ -333,7 +341,7 @@ void AbstractModel::updateDocumentContent()
     //
     // В режиме отмены/повтора последнего действия сохранение изменений будет делаться вручную
     //
-    if (d->isUndoInProgress || d->isRedoInProgress) {
+    if (d->isUndoInProgress || d->isRedoInProgress || d->isChangesApplyingInProgress) {
         return;
     }
 

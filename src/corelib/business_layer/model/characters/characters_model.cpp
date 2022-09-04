@@ -474,8 +474,6 @@ void CharactersModel::applyPatch(const QByteArray& _patch)
     for (auto iter = newCharactersPositions.begin(); iter != newCharactersPositions.end(); ++iter) {
         setCharacterPosition(iter.key(), iter.value());
     }
-
-    reassignContent();
 }
 
 } // namespace BusinessLayer

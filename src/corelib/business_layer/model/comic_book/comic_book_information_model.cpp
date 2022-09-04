@@ -428,8 +428,6 @@ void ComicBookInformationModel::applyPatch(const QByteArray& _patch)
     setBool(kPrintFooterOnTitlePageKey, std::bind(&M::setPrintFooterOnTitlePage, this, _1));
     setBool(kOverrideSystemSettingsKey, std::bind(&M::setOverrideCommonSettings, this, _1));
     setText(kTemplateIdKey, std::bind(&M::setTemplateId, this, _1));
-
-    reassignContent();
 }
 
 } // namespace BusinessLayer

@@ -494,8 +494,6 @@ void AudioplayInformationModel::applyPatch(const QByteArray& _patch)
     setText(kTemplateIdKey, std::bind(&M::setTemplateId, this, _1));
     setBool(kShowBlockNumbersKey, std::bind(&M::setShowBlockNumbers, this, _1));
     setBool(kContinueBlockNumbersKey, std::bind(&M::setContinueBlockNumbers, this, _1));
-
-    reassignContent();
 }
 
 } // namespace BusinessLayer

@@ -637,8 +637,6 @@ void ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
     setBool(kShowSceneNumbersOnLeftKey, std::bind(&M::setShowSceneNumbersOnLeft, this, _1));
     setBool(kShowScenesNumbersOnRightKey, std::bind(&M::setShowSceneNumbersOnRight, this, _1));
     setBool(kShowDialoguesNumbersKey, std::bind(&M::setShowDialoguesNumbers, this, _1));
-
-    reassignContent();
 }
 
 } // namespace BusinessLayer

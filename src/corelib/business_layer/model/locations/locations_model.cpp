@@ -465,8 +465,6 @@ void LocationsModel::applyPatch(const QByteArray& _patch)
     for (auto iter = newLocationsPositions.begin(); iter != newLocationsPositions.end(); ++iter) {
         setLocationPosition(iter.key(), iter.value());
     }
-
-    reassignContent();
 }
 
 } // namespace BusinessLayer

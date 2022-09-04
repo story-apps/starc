@@ -503,8 +503,6 @@ void CharacterModel::applyPatch(const QByteArray& _patch)
         createRelation(relation.character);
         updateRelation(relation);
     }
-
-    reassignContent();
 }
 
 } // namespace BusinessLayer

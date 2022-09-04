@@ -2042,8 +2042,6 @@ void TextModel::applyPatch(const QByteArray& _patch)
     qDeleteAll(oldItems);
     qDeleteAll(newItems);
 
-    reassignContent();
-
     emit rowsChanged();
 
 #ifdef XML_CHECKS
