@@ -38,6 +38,11 @@ public:
     bool isRedoInProgress = false;
 
     /**
+     * @brief Выполняется ли в данный момент наложение изменений
+     */
+    bool isChangesApplyingInProgress = false;
+
+    /**
      * @brief Список отменённых действий, которые можно повторить
      */
     struct Change {
@@ -249,9 +254,16 @@ bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
 
 void AbstractModel::applyDocumentChanges(const QVector<QByteArray>& _patches)
 {
+    QScopedValueRollback isUndoInProgressRollback(d->isChangesApplyingInProgress, true);
+
     for (const auto& patch : _patches) {
         applyPatch(patch);
     }
+}
+
+bool AbstractModel::isChangesApplyingInProcess() const
+{
+    return d->isChangesApplyingInProgress;
 }
 
 QModelIndex AbstractModel::index(int _row, int _column, const QModelIndex& _parent) const

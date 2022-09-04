@@ -1184,6 +1184,19 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                    const QString& _name, const QByteArray& _content) {
                 Q_UNUSED(_parentUuid);
 
+                //
+                // Если в данный момент накладываются изменения (из облака), то не создаём новые
+                // документы и модели для них, они будут получены, когда пользователь выберет
+                // конкретный документ в структуре проекта
+                //
+                if (d->projectStructureModel->isChangesApplyingInProcess()) {
+                    return;
+                }
+
+                //
+                // Если же измнеения не накладываются, значит мы в состоянии, когда пользователь
+                // локально создаёт новые документы и для них нужно создать соответствующие модели
+                //
                 auto document = DataStorageLayer::StorageFacade::documentStorage()->createDocument(
                     _uuid, _type);
                 if (!_content.isNull()) {

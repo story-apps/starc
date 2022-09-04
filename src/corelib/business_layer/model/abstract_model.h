@@ -104,6 +104,11 @@ public:
     void applyDocumentChanges(const QVector<QByteArray>& _patches);
 
     /**
+     * @brief Применяются ли в данный момент изменения
+     */
+    bool isChangesApplyingInProcess() const;
+
+    /**
      * @brief Реализация базовых вещей для древовидной модели
      */
     /** @{ */

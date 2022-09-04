@@ -1271,6 +1271,30 @@ void StructureModel::applyPatch(const QByteArray& _patch)
         auto newItem = operation.value;
         switch (operation.type) {
         case edit_distance::OperationType::Skip: {
+            //
+            // При необходимости, корректируем положение элемента
+            //
+            if (newItem->parent() == nullptr) {
+                if (modelItem->parent() != d->rootItem) {
+                    while (previousModelItem->parent() != d->rootItem) {
+                        previousModelItem = previousModelItem->parent();
+                    }
+                    takeItem(modelItem);
+                    insertItem(modelItem, previousModelItem);
+                }
+            } else if (newItem->parent()->uuid() != modelItem->parent()->uuid()) {
+                if (newItem->parent()->uuid() == previousModelItem->uuid()) {
+                    moveItem(modelItem, previousModelItem);
+                } else {
+                    while (previousModelItem->parent() != d->rootItem
+                           && newItem->parent()->uuid() != previousModelItem->parent()->uuid()) {
+                        previousModelItem = previousModelItem->parent();
+                    }
+                    takeItem(modelItem);
+                    insertItem(modelItem, previousModelItem);
+                }
+            }
+
             previousModelItem = modelItem;
             modelItem = findNextItem(modelItem);
             break;
@@ -1303,11 +1327,21 @@ void StructureModel::applyPatch(const QByteArray& _patch)
             //
             // ... и вставляем в нужного родителя
             //
-            if (newItem->parent() != nullptr
-                && newItem->parent()->uuid() == previousModelItem->uuid()) {
-                prependItem(itemToInsert, previousModelItem);
-            } else {
+            if (newItem->parent() == nullptr) {
+                while (previousModelItem->parent() != d->rootItem) {
+                    previousModelItem = previousModelItem->parent();
+                }
                 insertItem(itemToInsert, previousModelItem);
+            } else {
+                if (newItem->parent()->uuid() == previousModelItem->uuid()) {
+                    prependItem(itemToInsert, previousModelItem);
+                } else {
+                    while (previousModelItem->parent() != d->rootItem
+                           && newItem->parent()->uuid() != previousModelItem->parent()->uuid()) {
+                        previousModelItem = previousModelItem->parent();
+                    }
+                    insertItem(itemToInsert, previousModelItem);
+                }
             }
 
             previousModelItem = itemToInsert;
@@ -1322,6 +1356,37 @@ void StructureModel::applyPatch(const QByteArray& _patch)
             if (!modelItem->isEqual(newItem)) {
                 modelItem->copyFrom(newItem);
                 updateItem(modelItem);
+                //
+                // Выносим детей на предыдущий уровень, т.к. мог измениться их родитель
+                //
+                while (modelItem->hasChildren()) {
+                    auto childItem = modelItem->childAt(modelItem->childCount() - 1);
+                    takeItem(childItem);
+                    insertItem(childItem, modelItem);
+                }
+            }
+            //
+            // Корректируем положение элемента
+            //
+            if (newItem->parent() == nullptr) {
+                if (modelItem->parent() != d->rootItem) {
+                    while (previousModelItem->parent() != d->rootItem) {
+                        previousModelItem = previousModelItem->parent();
+                    }
+                    takeItem(modelItem);
+                    insertItem(modelItem, previousModelItem);
+                }
+            } else {
+                if (newItem->parent()->uuid() == previousModelItem->uuid()) {
+                    moveItem(modelItem, previousModelItem);
+                } else {
+                    while (previousModelItem->parent() != d->rootItem
+                           && newItem->parent()->uuid() != previousModelItem->parent()->uuid()) {
+                        previousModelItem = previousModelItem->parent();
+                    }
+                    takeItem(modelItem);
+                    insertItem(modelItem, previousModelItem);
+                }
             }
 
             previousModelItem = modelItem;
