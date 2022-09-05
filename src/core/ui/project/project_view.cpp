@@ -165,6 +165,10 @@ void ProjectView::setActive(bool _active)
 
 void ProjectView::setDocumentVersions(const QVector<BusinessLayer::StructureModelItem*>& _versions)
 {
+    if (d->documentVersions->count() == 1 && _versions.isEmpty()) {
+        return;
+    }
+
     const auto lastActiveVersion = d->documentVersions->currentTab();
 
     d->documentVersions->removeAllTabs();

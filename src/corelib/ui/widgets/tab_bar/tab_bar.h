@@ -20,6 +20,11 @@ public:
     void setFixed(bool fixed);
 
     /**
+     * @brief Количество вкладок
+     */
+    int count() const;
+
+    /**
      * @brief Добавить вкладку с заданным названием
      */
     void addTab(const QString& _tabName, const QString& _tabIcon = {}, const QColor& _color = {});

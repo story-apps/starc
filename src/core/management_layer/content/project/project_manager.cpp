@@ -1079,31 +1079,6 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->toolBar, &Ui::ProjectToolBar::viewPressed, this, [this](const QString& _mimeType) {
         showView(d->navigator->currentIndex(), _mimeType);
     });
-    connect(d->splitScreenAction, &QAction::toggled, this, [this](bool _checked) {
-        d->updateOptionsText();
-        if (_checked) {
-            d->view.container->setSizes({ 1, 1 });
-            d->view.right->show();
-            d->switchViews();
-        } else {
-            d->view.container->setSizes({ 1, 0 });
-            d->view.right->hide();
-            if (d->view.active == d->view.right) {
-                d->switchViews();
-            }
-        }
-    });
-    connect(d->splitScreenShortcut, &QShortcut::activated, this, [this] {
-        if (!d->view.container->isVisible()) {
-            return;
-        }
-
-        d->splitScreenAction->toggle();
-    });
-    connect(d->showVersionsAction, &QAction::toggled, this, [this](bool _checked) {
-        d->updateOptionsText();
-        d->view.active->setVersionsVisible(_checked);
-    });
 
     //
     // Отображаем необходимый редактор при выборе документа в списке
@@ -1190,6 +1165,39 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             [this] { d->emptyRecycleBin(); });
 
     //
+    // Разделение экрана на две панели
+    //
+    connect(d->splitScreenAction, &QAction::toggled, this, [this](bool _checked) {
+        d->updateOptionsText();
+        if (_checked) {
+            d->view.container->setSizes({ 1, 1 });
+            d->view.right->show();
+            d->switchViews();
+        } else {
+            d->view.container->setSizes({ 1, 0 });
+            d->view.right->hide();
+            if (d->view.active == d->view.right) {
+                d->switchViews();
+            }
+        }
+    });
+    connect(d->splitScreenShortcut, &QShortcut::activated, this, [this] {
+        if (!d->view.container->isVisible()) {
+            return;
+        }
+
+        d->splitScreenAction->toggle();
+    });
+
+    //
+    // Отобразить панель со списком версий
+    //
+    connect(d->showVersionsAction, &QAction::toggled, this, [this](bool _checked) {
+        d->updateOptionsText();
+        d->view.active->setVersionsVisible(_checked);
+    });
+
+    //
     // Соединения с моделью структуры проекта
     //
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAdded, this,
@@ -1258,6 +1266,21 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::contentsChanged, this,
             [this](const QByteArray& _undo, const QByteArray& _redo) {
                 handleModelChange(d->projectStructureModel, _undo, _redo);
+            });
+    connect(d->projectStructureModel, &BusinessLayer::StructureModel::dataChanged, this,
+            [this](const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
+                if (_topLeft != _bottomRight) {
+                    return;
+                }
+
+                const auto sourceIndex
+                    = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
+                if (sourceIndex != _topLeft) {
+                    return;
+                }
+
+                auto item = d->aliasedItemForIndex(sourceIndex);
+                d->view.active->setDocumentVersions(item->versions());
             });
     connect(
         d->projectStructureModel, &BusinessLayer::StructureModel::rowsAboutToBeMoved, this,
@@ -2335,8 +2358,14 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     else {
         const auto item = d->projectStructureModel->itemForIndex(
             d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex()));
-        if (item && item->uuid() == _documentInfo.uuid) {
-            showView(d->navigator->currentIndex(), d->currentDocument.viewMimeType);
+        if (item != nullptr) {
+            if (d->view.active->currentVersion() == 0 && item->uuid() == _documentInfo.uuid) {
+                showView(d->navigator->currentIndex(), d->currentDocument.viewMimeType);
+            } else if (const auto versionItem
+                       = item->versions().value(d->view.active->currentVersion() - 1);
+                       versionItem != nullptr && versionItem->uuid() == _documentInfo.uuid) {
+                showViewForVersion(versionItem);
+            }
         }
     }
 }

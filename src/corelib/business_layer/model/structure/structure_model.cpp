@@ -1384,7 +1384,7 @@ void StructureModel::applyPatch(const QByteArray& _patch)
                     takeItem(modelItem);
                     insertItem(modelItem, previousModelItem);
                 }
-            } else {
+            } else if (newItem->parent()->uuid() != modelItem->parent()->uuid()) {
                 if (newItem->parent()->uuid() == previousModelItem->uuid()) {
                     moveItem(modelItem, previousModelItem);
                 } else {

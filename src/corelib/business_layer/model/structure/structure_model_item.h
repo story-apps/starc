@@ -67,7 +67,6 @@ public:
     const QVector<StructureModelItem*>& versions() const;
     StructureModelItem* addVersion(StructureModelItem* _version);
     StructureModelItem* addVersion(const QString& _name, const QColor& _color, bool _readOnly);
-    void setVersions(const QVector<StructureModelItem*>& _versions);
     void removeVersion(int _versionIndex);
 
     /**

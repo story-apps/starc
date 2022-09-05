@@ -281,6 +281,11 @@ void TabBar::setFixed(bool fixed)
     update();
 }
 
+int TabBar::count() const
+{
+    return d->tabs.size();
+}
+
 void TabBar::addTab(const QString& _tabName, const QString& _tabIcon, const QColor& _color)
 {
     const bool visible = true;

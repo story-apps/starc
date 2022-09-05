@@ -56,9 +56,10 @@ StructureModelItem::StructureModelItem(const StructureModelItem& _other)
     , d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->color,
                            _other.d->visible, _other.d->readOnly))
 {
-    for (auto version : std::as_const(_other.d->versions)) {
-        d->versions.append(new StructureModelItem(*version));
-    }
+    //
+    // Я не знаю зачем это может понадобится, по идее новый элемент должен создаваться без версий
+    //
+    Q_ASSERT(_other.versions().isEmpty());
 }
 
 StructureModelItem::~StructureModelItem()
@@ -140,14 +141,6 @@ StructureModelItem* StructureModelItem::addVersion(const QString& _name, const Q
     return version;
 }
 
-void StructureModelItem::setVersions(const QVector<StructureModelItem*>& _versions)
-{
-    qDeleteAll(d->versions);
-    d->versions.clear();
-
-    d->versions = _versions;
-}
-
 void StructureModelItem::removeVersion(int _versionIndex)
 {
     if (d->versions.isEmpty()) {
@@ -223,8 +216,13 @@ void StructureModelItem::copyFrom(const StructureModelItem* _other) const
     d->color = _other->d->color;
     d->visible = _other->d->visible;
     d->readOnly = _other->d->readOnly;
+
+    qDeleteAll(d->versions);
+    d->versions.clear();
     for (auto version : std::as_const(_other->d->versions)) {
-        d->versions.append(new StructureModelItem(*version));
+        auto newVersion = new StructureModelItem(*version);
+        newVersion->setParent(parent());
+        d->versions.append(newVersion);
     }
 }
 
