@@ -99,6 +99,7 @@ ScalableWrapper::ScalableWrapper(PageTextEdit* _editor, QWidget* _parent)
     //
     d->editor->setParent(nullptr);
     d->editor->installEventFilter(this);
+    d->scene->installEventFilter(this);
 
     //
     // Настраиваем само представление
@@ -119,7 +120,7 @@ ScalableWrapper::ScalableWrapper(PageTextEdit* _editor, QWidget* _parent)
     connect(zoomOutShortcut, &QShortcut::activated, this, &ScalableWrapper::zoomOut);
 
     if (auto editor = qobject_cast<CompleterTextEdit*>(d->editor.data())) {
-        connect(editor, &CompleterTextEdit::popupShowed, [this, editor] {
+        connect(editor, &CompleterTextEdit::popupShowed, this, [this, editor] {
             const QPointF point = d->editorProxy->mapToScene(editor->completer()->popup()->pos());
             editor->completer()->popup()->move(mapToGlobal(mapFromScene(point)));
         });
@@ -341,6 +342,22 @@ void ScalableWrapper::gestureEvent(QGestureEvent* _event)
 
 bool ScalableWrapper::eventFilter(QObject* _object, QEvent* _event)
 {
+    //
+    // Перехватываем события сцены, иногда случается проблема с лишним событием WindowDeactivate,
+    // которое приводит к тому, что сцена более никогда не активируется и виджеты внутри больше
+    // никогда не могут получить фокус, поэтому отлавливаем это событие и пропускаем его
+    //
+    if (_object == d->scene) {
+        if (_event->type() == QEvent::WindowDeactivate && !d->scene->isActive()) {
+            return true;
+        }
+        return QGraphicsView::eventFilter(_object, _event);
+    }
+
+    //
+    // Тут обрабатыавем события поступающие во вложенный виджет текстового редактора
+    //
+
     bool needShowMenu = false;
     QPoint cursorGlobalPos = QCursor::pos();
     switch (_event->type()) {

@@ -49,12 +49,12 @@ signals:
     /**
      * @brief Изменился коэффициент масштабирования
      */
-    void zoomRangeChanged(qreal _zoomRange) const;
+    void zoomRangeChanged(qreal _zoomRange);
 
     /**
      * @brief Сменилась позиция курсора оборачиваемого редактора текста
      */
-    void cursorPositionChanged() const;
+    void cursorPositionChanged();
 
 protected:
     /**
