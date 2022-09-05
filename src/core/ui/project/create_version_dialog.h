@@ -14,6 +14,11 @@ public:
     ~CreateVersionDialog() override;
 
     /**
+     * @brief Задать список версий из которых можно создать новую
+     */
+    void setVersions(const QStringList& _versions, int _selectVersionIndex);
+
+    /**
      * @brief Редактировать версию с заданными параметрами
      */
     void edit(const QString& _name, const QColor& _color, bool _readOnly);
@@ -22,7 +27,8 @@ signals:
     /**
      * @brief Пользователь нажал кнопку создания новой версии/сохранения редактируемой
      */
-    void savePressed(const QString& _versionName, const QColor& _color, bool _readOnly);
+    void savePressed(const QString& _versionName, const QColor& _color, int _sourceVersionIndex,
+                     bool _readOnly);
 
 protected:
     /**

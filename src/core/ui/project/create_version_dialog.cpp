@@ -4,9 +4,11 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/color_picker/color_picker_popup.h>
+#include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/text_field/text_field.h>
 
 #include <QBoxLayout>
+#include <QStringListModel>
 
 
 namespace Ui {
@@ -31,6 +33,8 @@ public:
 
     TextField* versionName = nullptr;
     ColorPickerPopup* versionColorPopup = nullptr;
+    ComboBox* sourceVersion = nullptr;
+    QStringListModel* sourceVersionModel = nullptr;
     CheckBox* allowEditVersion = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -43,6 +47,8 @@ public:
 CreateVersionDialog::Implementation::Implementation(QWidget* _parent)
     : versionName(new TextField(_parent))
     , versionColorPopup(new ColorPickerPopup(_parent))
+    , sourceVersion(new ComboBox(_parent))
+    , sourceVersionModel(new QStringListModel(sourceVersion))
     , allowEditVersion(new CheckBox(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
@@ -53,6 +59,7 @@ CreateVersionDialog::Implementation::Implementation(QWidget* _parent)
     versionName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     versionName->setTrailingIcon(u8"\U000F0765");
     versionName->setTrailingIconColor(versionColorPopup->selectedColor());
+    sourceVersion->setModel(sourceVersionModel);
     createButton->setEnabled(false);
 
     buttonsLayout->setContentsMargins({});
@@ -74,9 +81,11 @@ CreateVersionDialog::CreateVersionDialog(QWidget* _parent)
 
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
-    contentsLayout()->addWidget(d->versionName, 0, 0);
-    contentsLayout()->addWidget(d->allowEditVersion, 1, 0);
-    contentsLayout()->addLayout(d->buttonsLayout, 2, 0);
+    int row = 0;
+    contentsLayout()->addWidget(d->versionName, row++, 0);
+    contentsLayout()->addWidget(d->sourceVersion, row++, 0);
+    contentsLayout()->addWidget(d->allowEditVersion, row++, 0);
+    contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
 
     connect(d->versionName, &TextField::textChanged, this,
             [this] { d->createButton->setEnabled(!d->versionName->text().isEmpty()); });
@@ -87,9 +96,19 @@ CreateVersionDialog::CreateVersionDialog(QWidget* _parent)
             [this](const QColor& _color) { d->versionName->setTrailingIconColor(_color); });
     connect(d->createButton, &Button::clicked, this, [this] {
         emit savePressed(d->versionName->text(), d->versionColorPopup->selectedColor(),
-                         !d->allowEditVersion->isChecked());
+                         d->sourceVersion->currentIndex().row(), !d->allowEditVersion->isChecked());
     });
     connect(d->cancelButton, &Button::clicked, this, &CreateVersionDialog::hideDialog);
+}
+
+CreateVersionDialog::~CreateVersionDialog() = default;
+
+void CreateVersionDialog::setVersions(const QStringList& _versions, int _selectVersionIndex)
+{
+    d->sourceVersion->setVisible(_versions.size() > 1);
+
+    d->sourceVersionModel->setStringList(_versions);
+    d->sourceVersion->setCurrentText(_versions.at(_selectVersionIndex));
 }
 
 void CreateVersionDialog::edit(const QString& _name, const QColor& _color, bool _readOnly)
@@ -99,11 +118,10 @@ void CreateVersionDialog::edit(const QString& _name, const QColor& _color, bool 
 
     d->versionName->setText(_name);
     d->versionName->setTrailingIconColor(_color);
+    d->sourceVersion->hide();
     d->versionColorPopup->setSelectedColor(_color);
     d->allowEditVersion->setChecked(!_readOnly);
 }
-
-CreateVersionDialog::~CreateVersionDialog() = default;
 
 QWidget* CreateVersionDialog::focusedWidgetAfterShow() const
 {
@@ -120,6 +138,7 @@ void CreateVersionDialog::updateTranslations()
     setTitle(d->state == AddNew ? tr("Create new document version") : tr("Edit document version"));
 
     d->versionName->setLabel(tr("Version name"));
+    d->sourceVersion->setLabel(tr("New version based on"));
     d->allowEditVersion->setText(tr("Allow to edit version"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(d->state == AddNew ? tr("Create") : tr("Save"));
@@ -133,6 +152,12 @@ void CreateVersionDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
     d->versionName->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     d->versionColorPopup->setBackgroundColor(Ui::DesignSystem::color().background());
     d->versionColorPopup->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->sourceVersion->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->sourceVersion->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+    d->sourceVersion->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+    d->sourceVersion->setCustomMargins({ Ui::DesignSystem::layout().px24(),
+                                         Ui::DesignSystem::layout().px12(),
+                                         Ui::DesignSystem::layout().px24(), 0.0 });
     d->allowEditVersion->setTextColor(Ui::DesignSystem::color().onBackground());
     d->allowEditVersion->setBackgroundColor(Ui::DesignSystem::color().background());
 

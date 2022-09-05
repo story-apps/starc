@@ -398,24 +398,23 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
     }
 
     d->cloudProjectCreationNote->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px24(),
-                                                              Ui::DesignSystem::layout().px12(),
+                                                              Ui::DesignSystem::layout().px8(),
                                                               Ui::DesignSystem::layout().px24(), 0)
                                                         .toMargins());
     d->cloudProjectCreationAction->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px2(),
-                  Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px12())
+        QMarginsF(Ui::DesignSystem::layout().px24(), 0.0, Ui::DesignSystem::layout().px4(),
+                  Ui::DesignSystem::layout().px12())
             .toMargins());
     d->cloudProjectCreationAction->setTextColor(Ui::DesignSystem::color().secondary());
     d->cloudProjectCreationActionNote->setContentsMargins(
-        QMarginsF(0, Ui::DesignSystem::layout().px2(), Ui::DesignSystem::layout().px24(),
-                  Ui::DesignSystem::layout().px12())
+        QMarginsF(0, 0.0, Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12())
             .toMargins());
     for (auto button : { d->cancelButton, d->createButton }) {
         button->setBackgroundColor(Ui::DesignSystem::color().secondary());
         button->setTextColor(Ui::DesignSystem::color().secondary());
     }
 
-    contentsLayout()->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
+    contentsLayout()->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px12()));
     d->buttonsLayout->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
                   Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12())

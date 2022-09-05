@@ -620,12 +620,25 @@ BusinessLayer::StructureModelItem* ProjectManager::Implementation::aliasedItemFo
 void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIndex)
 {
     auto dialog = new Ui::CreateVersionDialog(topLevelWidget);
+    dialog->setVersions(
+        [this, _itemIndex] {
+            const auto item = aliasedItemForIndex(_itemIndex);
+            QStringList versions = { tr("Current version") };
+            for (const auto version : item->versions()) {
+                versions.append(version->name());
+            }
+            return versions;
+        }(),
+        view.active->currentVersion());
     connect(dialog, &Ui::CreateVersionDialog::savePressed, view.active,
-            [this, _itemIndex, dialog](const QString& _name, const QColor& _color, bool _readOnly) {
+            [this, _itemIndex, dialog](const QString& _name, const QColor& _color,
+                                       int _versionIndex, bool _readOnly) {
                 dialog->hideDialog();
 
                 const auto item = aliasedItemForIndex(_itemIndex);
-                const auto model = modelsFacade.modelFor(item->uuid());
+                const auto model = modelsFacade.modelFor(
+                    _versionIndex == 0 ? item->uuid()
+                                       : item->versions().at(_versionIndex - 1)->uuid());
                 projectStructureModel->addItemVersion(item, _name, _color, _readOnly,
                                                       model->document()->content());
                 view.active->setDocumentVersions(item->versions());
@@ -2648,10 +2661,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
 
     const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
-    auto item = d->aliasedItemForIndex(sourceItemIndex);
-    if (d->view.active->currentVersion() > 0) {
-        item = item->versions().at(d->view.active->currentVersion() - 1);
-    }
+    const auto item = d->aliasedItemForIndex(sourceItemIndex);
     emit downloadDocumentRequested(item->uuid());
 
     //
@@ -2785,8 +2795,9 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     }
 
     auto item = d->aliasedItemForIndex(sourceItemIndex);
-    if (d->view.active->currentVersion() > 0) {
-        item = item->versions().at(d->view.active->currentVersion() - 1);
+    if (int versionIndex = d->view.active->currentVersion() - 1;
+        versionIndex != -1 && item->versions().size() > versionIndex) {
+        item = item->versions().at(versionIndex);
     }
 
     //
