@@ -2648,7 +2648,10 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
 
     const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
-    const auto item = d->aliasedItemForIndex(sourceItemIndex);
+    auto item = d->aliasedItemForIndex(sourceItemIndex);
+    if (d->view.active->currentVersion() > 0) {
+        item = item->versions().at(d->view.active->currentVersion() - 1);
+    }
     emit downloadDocumentRequested(item->uuid());
 
     //
@@ -2735,6 +2738,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
 
 void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item)
 {
+    emit downloadDocumentRequested(_item->uuid());
+
     const auto viewMimeType = d->currentDocument.viewMimeType;
 
     //
@@ -2773,13 +2778,16 @@ void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item
 
 void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType)
 {
-    const auto mappedItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
-    if (!mappedItemIndex.isValid()) {
+    const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
+    if (!sourceItemIndex.isValid()) {
         d->navigator->showProjectNavigator();
         return;
     }
 
-    const auto item = d->projectStructureModel->itemForIndex(mappedItemIndex);
+    auto item = d->aliasedItemForIndex(sourceItemIndex);
+    if (d->view.active->currentVersion() > 0) {
+        item = item->versions().at(d->view.active->currentVersion() - 1);
+    }
 
     //
     // Определим модель

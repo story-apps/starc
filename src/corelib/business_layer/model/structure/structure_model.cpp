@@ -28,15 +28,15 @@ namespace BusinessLayer {
 
 namespace {
 const char* kMimeType = "application/x-starc/document";
-const QString kDocumentKey = QLatin1String("document");
-const QString kItemKey = QLatin1String("item");
-const QString kVersionKey = QLatin1String("version");
-const QString kUuidAttribute = QLatin1String("uuid");
-const QString kTypeAttribute = QLatin1String("type");
-const QString kNameAttribute = QLatin1String("name");
-const QString kColorAttribute = QLatin1String("color");
-const QString kVisibleAttribute = QLatin1String("visible");
-const QString kReadOnlyAttribute = QLatin1String("readonly");
+const QLatin1String kDocumentKey("document");
+const QLatin1String kItemKey("item");
+const QLatin1String kVersionKey("version");
+const QLatin1String kUuidAttribute("uuid");
+const QLatin1String kTypeAttribute("type");
+const QLatin1String kNameAttribute("name");
+const QLatin1String kColorAttribute("color");
+const QLatin1String kVisibleAttribute("visible");
+const QLatin1String kReadOnlyAttribute("readonly");
 } // namespace
 
 class StructureModel::Implementation
@@ -52,7 +52,7 @@ public:
     /**
      * @brief Построить элемент из заданной ноды xml документа
      */
-    StructureModelItem* buildItem(const QDomElement& _node);
+    StructureModelItem* buildItem(const QDomElement& _node, StructureModelItem* _parent = nullptr);
 
     /**
      * @brief Сформировать xml из данных модели
@@ -103,12 +103,13 @@ void StructureModel::Implementation::buildModel(Domain::DocumentObject* _structu
     auto documentNode = domDocument.firstChildElement(kDocumentKey);
     auto itemNode = documentNode.firstChildElement();
     while (!itemNode.isNull()) {
-        rootItem->appendItem(buildItem(itemNode));
+        buildItem(itemNode, rootItem);
         itemNode = itemNode.nextSiblingElement();
     }
 }
 
-StructureModelItem* StructureModel::Implementation::buildItem(const QDomElement& _node)
+StructureModelItem* StructureModel::Implementation::buildItem(const QDomElement& _node,
+                                                              StructureModelItem* _parent)
 {
     //
     // Формируем элемент структуры
@@ -120,6 +121,13 @@ StructureModelItem* StructureModel::Implementation::buildItem(const QDomElement&
                                        ColorHelper::fromString(_node.attribute(kColorAttribute)),
                                        _node.attribute(kVisibleAttribute) == "true", readOnly);
     //
+    // ... вкладываем в родителя
+    //
+    if (_parent != nullptr) {
+        _parent->appendItem(item);
+    }
+
+    //
     // ... определяем его
     //
     auto child = _node.firstChildElement();
@@ -128,7 +136,7 @@ StructureModelItem* StructureModel::Implementation::buildItem(const QDomElement&
         // ... детей
         //
         if (child.tagName() == kItemKey) {
-            item->appendItem(buildItem(child));
+            buildItem(child, item);
         }
         //
         // ... и версии
