@@ -122,6 +122,11 @@ public:
     void closeCurrentProject();
 
     /**
+     * @brief Получить проект по заданному пути
+     */
+    Project project(const QString& _path) const;
+
+    /**
      * @brief Скрыть проект
      */
     void hideProject(const QString& _path);

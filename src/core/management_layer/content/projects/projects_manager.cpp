@@ -784,6 +784,17 @@ void ProjectsManager::closeCurrentProject()
     d->currentProject = {};
 }
 
+Project ProjectsManager::project(const QString& _path) const
+{
+    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
+        const auto& project = d->projects->projectAt(projectRow);
+        if (project.path() == _path) {
+            return project;
+        }
+    }
+    return {};
+}
+
 void ProjectsManager::hideProject(const QString& _path)
 {
     for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {

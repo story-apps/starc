@@ -1349,7 +1349,7 @@ bool ApplicationManager::Implementation::openProject(const QString& _path)
         return false;
     }
 
-    if (projectsManager->currentProject().isLocal() && !QFileInfo::exists(_path)) {
+    if (projectsManager->project(_path).isLocal() && !QFileInfo::exists(_path)) {
         projectsManager->hideProject(_path);
         return false;
     }
