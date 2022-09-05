@@ -59,12 +59,13 @@ void CharacterImageCard::Implementation::generateCharacterPhoto()
     //
     // Загружаем первую страницу, чтобы узнать суммарное количество страниц по запросу
     //
-    QString keywords = "face";
+    QString keywords;
     if (characterGender == 0) {
-        keywords.append(",male");
+        keywords.append("male,");
     } else if (characterGender == 1) {
-        keywords.append(",female");
+        keywords.append("female,");
     }
+    keywords.append("face");
     const auto url
         = QString("https://starc.app/api/services/unsplash/search?text=%1").arg(keywords);
     //
