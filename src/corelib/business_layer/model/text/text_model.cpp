@@ -2015,6 +2015,13 @@ void TextModel::applyPatch(const QByteArray& _patch)
             //
             const auto isPlacementChanged = updateItemPlacement(newItem, modelItem);
             //
+            // Если обновляемый элемент находился в списке элементов на перемещение, удалим его
+            // оттуда, т.к. он уже был обработан и расположен в правильном месте
+            //
+            if (const auto index = movedSiblingItems.indexOf(modelItem); index != -1) {
+                movedSiblingItems.removeAt(index);
+            }
+            //
             // В противном случае просто обновим его в модели
             //
             if (!isPlacementChanged) {
