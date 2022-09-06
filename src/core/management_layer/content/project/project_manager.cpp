@@ -2485,7 +2485,16 @@ QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) co
         for (int index = 0; index < topLevelParent->childCount(); ++index) {
             auto childItem = topLevelParent->childAt(index);
             if (childItem->type() == Domain::DocumentObjectType::Locations) {
+                //
+                // ... сам группирующий документ
+                //
                 documents.append(childItem->uuid());
+                //
+                // ... каждая из локаций
+                //
+                for (int index = 0; index < childItem->childCount(); ++index) {
+                    documents.append(childItem->childAt(index)->uuid());
+                }
                 break;
             }
         }
@@ -2510,8 +2519,17 @@ QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) co
         //
         for (int index = 0; index < topLevelParent->childCount(); ++index) {
             auto childItem = topLevelParent->childAt(index);
-            if (childItem->type() == Domain::DocumentObjectType::Locations) {
+            if (childItem->type() == Domain::DocumentObjectType::Characters) {
+                //
+                // ... сам группирующий документ
+                //
                 documents.append(childItem->uuid());
+                //
+                // ... каждая из локаций
+                //
+                for (int index = 0; index < childItem->childCount(); ++index) {
+                    documents.append(childItem->childAt(index)->uuid());
+                }
                 break;
             }
         }
@@ -2690,13 +2708,19 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
 
     const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
-    const auto item = d->aliasedItemForIndex(sourceItemIndex);
+    auto item = d->aliasedItemForIndex(sourceItemIndex);
+    auto itemForShow = item;
+    if (const auto versionIndex
+        = settingsValue(documentSettingsKey(item->uuid(), kCurrentVersionKey), 0).toInt() - 1;
+        versionIndex != -1) {
+        itemForShow = item->versions().at(versionIndex);
+    }
     emit downloadDocumentRequested(item->uuid());
 
     //
     // Определим модель
     //
-    updateCurrentDocument(d->modelsFacade.modelFor(item->uuid()), _viewMimeType);
+    updateCurrentDocument(d->modelsFacade.modelFor(itemForShow->uuid()), _viewMimeType);
     if (d->currentDocument.model == nullptr) {
         d->view.active->showNotImplementedPage();
         d->view.active->setVersionsVisible(false);

@@ -169,6 +169,11 @@ void ProjectView::setDocumentVersions(const QVector<BusinessLayer::StructureMode
         return;
     }
 
+    //
+    // Блокируем сигналы, чтобы менеджер не думал, что мы переключаемся тут между разными версиями
+    //
+    QSignalBlocker blocker(this);
+
     const auto lastActiveVersion = d->documentVersions->currentTab();
 
     d->documentVersions->removeAllTabs();
