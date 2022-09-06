@@ -68,6 +68,11 @@ Domain::DocumentChangeObject* DocumentChangeStorage::documentChangeAt(const QUui
                                                                         correctedChangeIndex);
 }
 
+QVector<QUuid> DocumentChangeStorage::unsyncedDocuments()
+{
+    return DataMappingLayer::MapperFacade::documentChangeMapper()->unsyncedDocuments();
+}
+
 QVector<Domain::DocumentChangeObject*> DocumentChangeStorage::unsyncedDocumentChanges(
     const QUuid& _documentUuid)
 {

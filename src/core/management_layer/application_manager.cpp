@@ -1551,6 +1551,14 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
             QApplication::alert(applicationView);
         }
     }
+
+    //
+    // Для облачных проектов делаем синхронизацию офлайн изменений
+    //
+    const auto unsyncedDocuments = projectManager->unsyncedDocuments();
+    for (const auto document : unsyncedDocuments) {
+        cloudServiceManager->openDocument(projectsManager->currentProject().id(), document);
+    }
 }
 
 void ApplicationManager::Implementation::closeCurrentProject()
@@ -2273,6 +2281,25 @@ void ApplicationManager::initConnections()
         d->accountManager->setConnected(_connected);
         d->connectionStatus->setConnectionAvailable(_connected);
         d->projectsManager->setConnected(_connected);
+
+        //
+        // Если поймали подключение и сейчас работаем с облачным проектом
+        //
+        if (_connected && d->projectsManager->currentProject().isRemote()) {
+            //
+            // ... то синхронизируем все документы, у которых есть офлайн правки
+            //
+            const auto unsyncedDocuments = d->projectManager->unsyncedDocuments();
+            for (const auto document : unsyncedDocuments) {
+                d->cloudServiceManager->openDocument(d->projectsManager->currentProject().id(),
+                                                     document);
+            }
+            //
+            // ... а также текущий открытый документ
+            //
+            d->cloudServiceManager->openDocument(d->projectsManager->currentProject().id(),
+                                                 d->projectManager->currentDocument());
+        }
     };
     connect(d->cloudServiceManager.data(), &CloudServiceManager::connected, d->connectionStatus,
             [configureConnectionStatus] { configureConnectionStatus(true); });

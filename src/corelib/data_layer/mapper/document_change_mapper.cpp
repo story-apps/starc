@@ -41,6 +41,10 @@ QString unsyncedFilter(const QUuid& _documentUuid)
     return QString(" WHERE fk_document_uuid = '%1' AND is_synced = 0")
         .arg(_documentUuid.toString());
 }
+QString unsyncedFilter()
+{
+    return QString(" WHERE is_synced = 0 GROUP BY fk_document_uuid");
+}
 } // namespace
 
 DocumentChangeObject* DocumentChangeMapper::find(const Domain::Identifier& _id)
@@ -82,6 +86,20 @@ QVector<Domain::DocumentChangeObject*> DocumentChangeMapper::findAllUnsynced(
         changes.append(static_cast<DocumentChangeObject*>(domainObject));
     }
     return changes;
+}
+
+QVector<QUuid> DocumentChangeMapper::unsyncedDocuments()
+{
+    const auto domainObjects = abstractFind(unsyncedFilter());
+    if (domainObjects.isEmpty()) {
+        return {};
+    }
+
+    QVector<QUuid> documents;
+    for (auto domainObject : domainObjects) {
+        documents.append(static_cast<DocumentChangeObject*>(domainObject)->documentUuid());
+    }
+    return documents;
 }
 
 void DocumentChangeMapper::insert(DocumentChangeObject* _object)

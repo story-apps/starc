@@ -2189,6 +2189,26 @@ BusinessLayer::AbstractModel* ProjectManager::firstScriptModel() const
     return nullptr;
 }
 
+Domain::DocumentObject* ProjectManager::currentDocument() const
+{
+    if (d->currentDocument.model == nullptr) {
+        return nullptr;
+    }
+
+    return d->currentDocument.model->document();
+}
+
+QVector<Domain::DocumentObject*> ProjectManager::unsyncedDocuments() const
+{
+    QVector<Domain::DocumentObject*> documents;
+    const auto unsyncedDocuments
+        = DataStorageLayer::StorageFacade::documentChangeStorage()->unsyncedDocuments();
+    for (const auto& document : unsyncedDocuments) {
+        documents.append(DataStorageLayer::StorageFacade::documentStorage()->document(document));
+    }
+    return documents;
+}
+
 void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo)
 {
     Domain::DocumentObject* document = nullptr;

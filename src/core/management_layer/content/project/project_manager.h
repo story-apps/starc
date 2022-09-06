@@ -115,6 +115,16 @@ public:
     BusinessLayer::AbstractModel* firstScriptModel() const;
 
     /**
+     * @brief Текущий открытый документ
+     */
+    Domain::DocumentObject* currentDocument() const;
+
+    /**
+     * @brief Получить список документов, у которых есть несинхроинизированные изменения
+     */
+    QVector<Domain::DocumentObject*> unsyncedDocuments() const;
+
+    /**
      * @brief Смержить данные документа полученные с облака с текущими
      */
     void mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo);

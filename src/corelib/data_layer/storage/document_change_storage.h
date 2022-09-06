@@ -45,6 +45,11 @@ public:
     Domain::DocumentChangeObject* documentChangeAt(const QUuid& _documentUuid, int _changeIndex);
 
     /**
+     * @brief Список не синхронизированных документов
+     */
+    QVector<QUuid> unsyncedDocuments();
+
+    /**
      * @brief Изменения документа, которые ещё не были синхронизированы
      */
     QVector<Domain::DocumentChangeObject*> unsyncedDocumentChanges(const QUuid& _documentUuid);
