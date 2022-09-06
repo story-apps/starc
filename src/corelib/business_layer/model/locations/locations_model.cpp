@@ -105,6 +105,10 @@ void LocationsModel::removeLocationModel(LocationModel* _locationModel)
     }
 
     const int itemRowIndex = d->locationModels.indexOf(_locationModel);
+    if (itemRowIndex == -1) {
+        return;
+    }
+
     beginRemoveRows({}, itemRowIndex, itemRowIndex);
     d->locationModels.remove(itemRowIndex);
     endRemoveRows();

@@ -1283,6 +1283,92 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 d->view.active->setDocumentVersions(item->versions());
             });
     connect(
+        d->projectStructureModel, &BusinessLayer::StructureModel::rowsInserted, this,
+        [this](const QModelIndex& _parent, int _first, int _last) {
+            const auto insertedInItem = d->projectStructureModel->itemForIndex(_parent);
+            if (insertedInItem == nullptr) {
+                return;
+            }
+
+            //
+            // Восстанавливаем персонажей
+            //
+            if (insertedInItem->type() == Domain::DocumentObjectType::Characters) {
+                const auto charactersDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Characters);
+                auto charactersModel = d->modelsFacade.modelFor(charactersDocument);
+                auto characters = qobject_cast<BusinessLayer::CharactersModel*>(charactersModel);
+                for (int row = _first; row <= _last; ++row) {
+                    const auto removedItemIndex = d->projectStructureModel->index(row, 0, _parent);
+                    const auto removedItem
+                        = d->projectStructureModel->itemForIndex(removedItemIndex);
+                    characters->addCharacterModel(qobject_cast<BusinessLayer::CharacterModel*>(
+                        d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
+            //
+            // Восстанавливаем локации
+            //
+            else if (insertedInItem->type() == Domain::DocumentObjectType::Locations) {
+                const auto locationsDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Locations);
+                auto locationsModel = d->modelsFacade.modelFor(locationsDocument);
+                auto locations = qobject_cast<BusinessLayer::LocationsModel*>(locationsModel);
+                for (int row = _first; row <= _last; ++row) {
+                    const auto removedItemIndex = d->projectStructureModel->index(row, 0, _parent);
+                    const auto removedItem
+                        = d->projectStructureModel->itemForIndex(removedItemIndex);
+                    locations->addLocationModel(qobject_cast<BusinessLayer::LocationModel*>(
+                        d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
+        });
+    connect(
+        d->projectStructureModel, &BusinessLayer::StructureModel::rowsAboutToBeRemoved, this,
+        [this](const QModelIndex& _parent, int _first, int _last) {
+            const auto removedFromItem = d->projectStructureModel->itemForIndex(_parent);
+            if (removedFromItem == nullptr) {
+                return;
+            }
+
+            //
+            // Удаляем персонажа
+            //
+            if (removedFromItem->type() == Domain::DocumentObjectType::Characters) {
+                const auto charactersDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Characters);
+                auto charactersModel = d->modelsFacade.modelFor(charactersDocument);
+                auto characters = qobject_cast<BusinessLayer::CharactersModel*>(charactersModel);
+                for (int row = _first; row <= _last; ++row) {
+                    const auto removedItemIndex = d->projectStructureModel->index(row, 0, _parent);
+                    const auto removedItem
+                        = d->projectStructureModel->itemForIndex(removedItemIndex);
+                    characters->removeCharacterModel(qobject_cast<BusinessLayer::CharacterModel*>(
+                        d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
+            //
+            // Удаляем локации
+            //
+            else if (removedFromItem->type() == Domain::DocumentObjectType::Locations) {
+                const auto locationsDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Locations);
+                auto locationsModel = d->modelsFacade.modelFor(locationsDocument);
+                auto locations = qobject_cast<BusinessLayer::LocationsModel*>(locationsModel);
+                for (int row = _first; row <= _last; ++row) {
+                    const auto removedItemIndex = d->projectStructureModel->index(row, 0, _parent);
+                    const auto removedItem
+                        = d->projectStructureModel->itemForIndex(removedItemIndex);
+                    locations->removeLocationModel(qobject_cast<BusinessLayer::LocationModel*>(
+                        d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
+        });
+    connect(
         d->projectStructureModel, &BusinessLayer::StructureModel::rowsAboutToBeMoved, this,
         [this](const QModelIndex& _sourceParent, int _sourceStart, int _sourceEnd,
                const QModelIndex& _destination) {

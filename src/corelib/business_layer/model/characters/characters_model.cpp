@@ -107,6 +107,10 @@ void CharactersModel::removeCharacterModel(CharacterModel* _characterModel)
     }
 
     const int itemRowIndex = d->characterModels.indexOf(_characterModel);
+    if (itemRowIndex == -1) {
+        return;
+    }
+
     beginRemoveRows({}, itemRowIndex, itemRowIndex);
     d->characterModels.remove(itemRowIndex);
     endRemoveRows();
