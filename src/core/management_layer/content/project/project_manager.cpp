@@ -165,7 +165,7 @@ public:
      * @brief Удалить документ
      */
     void removeDocument(const QModelIndex& _itemIndex);
-    void removeDocument(BusinessLayer::StructureModelItem* _item);
+    void removeDocument(BusinessLayer::StructureModelItem* _item, bool _force);
 
     /**
      * @brief Найти всех персонажей
@@ -186,10 +186,10 @@ public:
     // Данные
     //
 
+    ProjectManager* q = nullptr;
+
     QWidget* topLevelWidget = nullptr;
-
     Ui::ProjectToolBar* toolBar = nullptr;
-
     Ui::ProjectNavigator* navigator = nullptr;
 
     /**
@@ -302,7 +302,8 @@ public:
 
 ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _parent,
                                                const PluginsBuilder& _pluginsBuilder)
-    : topLevelWidget(_parent)
+    : q(_q)
+    , topLevelWidget(_parent)
     , toolBar(new Ui::ProjectToolBar(_parent))
     , navigator(new Ui::ProjectNavigator(_parent))
     , view({
@@ -716,11 +717,71 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
         return;
     }
 
-    removeDocument(item);
+    const bool forceRemove = false;
+    removeDocument(item, forceRemove);
 }
 
-void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureModelItem* _item)
+void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureModelItem* _item,
+                                                    bool _force)
 {
+    auto removeImpl = [this](BusinessLayer::StructureModelItem* _item) {
+        //
+        // NOTE: порядок удаления важен
+        //
+        // ... перед удалением сформируем список документов, которые должны быть удалены
+        //
+        QVector<QUuid> documentsToRemove = { _item->uuid() };
+        auto document = DataStorageLayer::StorageFacade::documentStorage()->document(_item->uuid());
+        if (document != nullptr) {
+            auto model = modelsFacade.modelFor(document);
+            switch (document->type()) {
+            case Domain::DocumentObjectType::Character: {
+                auto character = static_cast<BusinessLayer::CharacterModel*>(model);
+                documentsToRemove.append(character->mainPhotoUuid());
+                break;
+            }
+            case Domain::DocumentObjectType::Location: {
+                auto location = static_cast<BusinessLayer::LocationModel*>(model);
+                documentsToRemove.append(location->mainPhotoUuid());
+                break;
+            }
+            default: {
+                break;
+            }
+            }
+            //
+            // ... удалим все невалидные айдишники
+            //
+            documentsToRemove.removeAll({});
+            //
+            // ... собственно удаляем модель и документ
+            //
+            modelsFacade.removeModelFor(document);
+            DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
+        }
+        //
+        // ... удаляем из структуры
+        //
+        projectStructureModel->removeItem(_item);
+        //
+        // ... уведомляем об удалённых документах
+        //
+        for (const auto& documentUuid : std::as_const(documentsToRemove)) {
+            emit q->documentRemoved(documentUuid);
+        }
+    };
+
+    //
+    // Если тут нужно принудительное удаление, то удаляем сразу без лишних вопросов
+    //
+    if (_force) {
+        removeImpl(_item);
+        return;
+    }
+
+    //
+    // В противном случае идём по обобщённой схеме: корзина - вопрос - удаление
+    //
     auto itemTopLevelParent = _item->parent();
     if (itemTopLevelParent == nullptr) {
         return;
@@ -751,7 +812,7 @@ void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureMode
                          { kRemoveButtonId, tr("Yes, remove"), Dialog::NormalButton } });
     QObject::connect(
         dialog, &Dialog::finished,
-        [this, _item, kCancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
+        [removeImpl, _item, kCancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
             dialog->hideDialog();
 
             //
@@ -763,16 +824,8 @@ void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureMode
 
             //
             // Если таки хочет, то удаляем документ
-            // NOTE: порядок удаления важен
             //
-            auto document
-                = DataStorageLayer::StorageFacade::documentStorage()->document(_item->uuid());
-            if (document == nullptr) {
-                return;
-            }
-            modelsFacade.removeModelFor(document);
-            DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
-            projectStructureModel->removeItem(_item);
+            removeImpl(_item);
         });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
@@ -878,7 +931,8 @@ void ProjectManager::Implementation::findAllCharacters()
                     const auto characterModel = charactersModel->character(characterName);
                     auto item
                         = projectStructureModel->itemForUuid(characterModel->document()->uuid());
-                    removeDocument(item);
+                    const auto forceRemove = true;
+                    removeDocument(item, forceRemove);
                 }
             }
 
@@ -980,7 +1034,8 @@ void ProjectManager::Implementation::findAllLocations()
                     const auto locationModel = locationsModel->location(locationName);
                     auto item
                         = projectStructureModel->itemForUuid(locationModel->document()->uuid());
-                    removeDocument(item);
+                    const auto forceRemove = true;
+                    removeDocument(item, forceRemove);
                 }
             }
 
@@ -1044,14 +1099,8 @@ void ProjectManager::Implementation::emptyRecycleBin()
                 //
                 // ... а потом сам элемент
                 //
-                auto documentToRemove
-                    = DataStorageLayer::StorageFacade::documentStorage()->document(_item->uuid());
-                if (documentToRemove != nullptr) {
-                    modelsFacade.removeModelFor(documentToRemove);
-                    DataStorageLayer::StorageFacade::documentStorage()->removeDocument(
-                        documentToRemove);
-                }
-                projectStructureModel->removeItem(_item);
+                const auto forceRemove = true;
+                removeDocument(_item, forceRemove);
             };
             while (recycleBin->hasChildren()) {
                 auto itemToRemove = recycleBin->childAt(0);
@@ -1555,7 +1604,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(&d->modelsFacade, &ProjectModelsFacade::modelRemoveRequested, this,
             [this](BusinessLayer::AbstractModel* _model) {
                 auto item = d->projectStructureModel->itemForUuid(_model->document()->uuid());
-                d->removeDocument(item);
+                const auto forceRemove = false;
+                d->removeDocument(item, forceRemove);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this,
             &ProjectManager::projectNameChanged);
@@ -2525,12 +2575,20 @@ void ProjectManager::planDocumentSyncing(const QUuid& _documentUuid)
     auto& timer = d->documentToSyncTimer[_documentUuid];
     timer.reset(new QTimer(this));
     timer->setSingleShot(true);
-    timer->setInterval(std::chrono::minutes{ 15 });
+    timer->setInterval(std::chrono::minutes{ 1 });
     connect(timer.data(), &QTimer::timeout, this, [this, _documentUuid] {
         //
         // Убираем таймер
         //
         d->documentToSyncTimer.remove(_documentUuid);
+
+        //
+        // Если документ был удалён, пока мы ждали, не выполняем никаких запросов для него
+        //
+        if (DataStorageLayer::StorageFacade::documentStorage()->document(_documentUuid)
+            == nullptr) {
+            return;
+        }
 
         //
         // Отправляем запрос на синхронизацию

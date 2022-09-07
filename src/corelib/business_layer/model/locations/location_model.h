@@ -65,6 +65,7 @@ public:
     Q_SIGNAL void longDescriptionChanged(const QString& _text);
 
     const QPixmap& mainPhoto() const;
+    const QUuid& mainPhotoUuid() const;
     void setMainPhoto(const QPixmap& _photo);
     void setMainPhoto(const QUuid& _uuid, const QPixmap& _photo);
     Q_SIGNAL void mainPhotoChanged(const QPixmap& _photo);

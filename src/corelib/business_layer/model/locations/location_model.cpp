@@ -163,6 +163,11 @@ const QPixmap& LocationModel::mainPhoto() const
     return d->mainPhoto.image;
 }
 
+const QUuid& LocationModel::mainPhotoUuid() const
+{
+    return d->mainPhoto.uuid;
+}
+
 void LocationModel::setMainPhoto(const QPixmap& _photo)
 {
     if (_photo.cacheKey() == d->mainPhoto.image.cacheKey()) {

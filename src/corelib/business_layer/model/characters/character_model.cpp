@@ -218,6 +218,11 @@ const QPixmap& CharacterModel::mainPhoto() const
     return d->mainPhoto.image;
 }
 
+const QUuid& CharacterModel::mainPhotoUuid() const
+{
+    return d->mainPhoto.uuid;
+}
+
 void CharacterModel::setMainPhoto(const QPixmap& _photo)
 {
     if (_photo.cacheKey() == d->mainPhoto.image.cacheKey()) {

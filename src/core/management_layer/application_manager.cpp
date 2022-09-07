@@ -2283,23 +2283,8 @@ void ApplicationManager::initConnections()
         d->projectsManager->setConnected(_connected);
 
         //
-        // Если поймали подключение и сейчас работаем с облачным проектом
+        // Синхронизация офлайн правок будет сделана, после проверки ключа сессии на сервере
         //
-        if (_connected && d->projectsManager->currentProject().isRemote()) {
-            //
-            // ... то синхронизируем все документы, у которых есть офлайн правки
-            //
-            const auto unsyncedDocuments = d->projectManager->unsyncedDocuments();
-            for (const auto document : unsyncedDocuments) {
-                d->cloudServiceManager->openDocument(d->projectsManager->currentProject().id(),
-                                                     document);
-            }
-            //
-            // ... а также текущий открытый документ
-            //
-            d->cloudServiceManager->openDocument(d->projectsManager->currentProject().id(),
-                                                 d->projectManager->currentDocument());
-        }
     };
     connect(d->cloudServiceManager.data(), &CloudServiceManager::connected, d->connectionStatus,
             [configureConnectionStatus] { configureConnectionStatus(true); });
@@ -2347,6 +2332,25 @@ void ApplicationManager::initConnections()
                 }
                 d->cloudServiceManager->askNotifications();
                 d->cloudServiceManager->askProjects();
+
+                //
+                // Если поймали подключение и сейчас работаем с облачным проектом
+                //
+                if (d->projectsManager->currentProject().isRemote()) {
+                    //
+                    // ... то синхронизируем все документы, у которых есть офлайн правки
+                    //
+                    const auto unsyncedDocuments = d->projectManager->unsyncedDocuments();
+                    for (const auto document : unsyncedDocuments) {
+                        d->cloudServiceManager->openDocument(
+                            d->projectsManager->currentProject().id(), document);
+                    }
+                    //
+                    // ... а также текущий открытый документ
+                    //
+                    d->cloudServiceManager->openDocument(d->projectsManager->currentProject().id(),
+                                                         d->projectManager->currentDocument());
+                }
             });
 
     //
@@ -2584,14 +2588,23 @@ void ApplicationManager::initConnections()
                 //
                 // В противном случае, отправляем документ целиком
                 //
-                else {
-                    d->cloudServiceManager->pushDocumentChange(
-                        currentProject.id(), _documentUuid,
-                        d->projectManager->documentToSync(_documentUuid)->content());
+                else if (auto document = d->projectManager->documentToSync(_documentUuid);
+                         document != nullptr) {
+                    d->cloudServiceManager->pushDocumentChange(currentProject.id(), _documentUuid,
+                                                               document->content());
                 }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChangesPushed,
             d->projectManager.data(), &ProjectManager::markChangesSynced);
+    connect(d->projectManager.data(), &ProjectManager::documentRemoved, this,
+            [this](const QUuid& _documentUuid) {
+                const auto currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote()) {
+                    return;
+                }
+
+                d->cloudServiceManager->removeDocument(currentProject.id(), _documentUuid);
+            });
     connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,
             [this](int _id) { d->cloudServiceManager->removeProject(_id); });
     connect(d->projectsManager.data(), &ProjectsManager::unsubscribeFromCloudProjectRequested, this,

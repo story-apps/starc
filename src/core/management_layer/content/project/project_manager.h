@@ -217,6 +217,11 @@ signals:
      */
     void uploadDocumentRequested(const QUuid& _documentUuid, bool _isNewDocument);
 
+    /**
+     * @brief Документ был удалён
+     */
+    void documentRemoved(const QUuid& _uuid);
+
 protected:
     /**
      * @brief Переопределяем для обработки события простоя пользователя
