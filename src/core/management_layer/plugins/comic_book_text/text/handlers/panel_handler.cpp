@@ -34,7 +34,7 @@ void PanelHandler::prehandle()
     // ... блок текста в котором находится курсор
     QTextBlock currentBlock = cursor.block();
     // ... текст блока
-    QString currentBlockText = currentBlock.text().trimmed();
+    QString currentBlockText = currentBlock.text();
     // ... текст до курсора
     QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
 

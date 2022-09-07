@@ -24,19 +24,7 @@ TransitionHandler::TransitionHandler(Ui::ScreenplayTextEdit* _editor)
 
 void TransitionHandler::prehandle()
 {
-    //
-    // Получим необходимые значения
-    //
-    // ... курсор в текущем положении
-    QTextCursor cursor = editor()->textCursor();
-    // ... блок текста в котором находится курсор
-    QTextBlock currentBlock = cursor.block();
-    // ... текст блока
-    QString currentBlockText = currentBlock.text().trimmed();
-    // ... текст до курсора
-    QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
-
-    complete(currentBlockText, cursorBackwardText);
+    handleOther();
 }
 
 void TransitionHandler::handleEnter(QKeyEvent* _event)
