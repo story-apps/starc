@@ -1555,9 +1555,11 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     //
     // Для облачных проектов делаем синхронизацию офлайн изменений
     //
-    const auto unsyncedDocuments = projectManager->unsyncedDocuments();
-    for (const auto document : unsyncedDocuments) {
-        cloudServiceManager->openDocument(projectsManager->currentProject().id(), document);
+    if (currentProject.isRemote()) {
+        const auto unsyncedDocuments = projectManager->unsyncedDocuments();
+        for (const auto document : unsyncedDocuments) {
+            cloudServiceManager->openDocument(projectsManager->currentProject().id(), document);
+        }
     }
 }
 
