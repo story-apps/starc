@@ -2486,6 +2486,14 @@ void ApplicationManager::initConnections()
                 d->cloudServiceManager->removeCollaborator(
                     d->projectsManager->currentProject().id(), _email);
             });
+    connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,
+            [this](int _id) { d->cloudServiceManager->removeProject(_id); });
+    connect(d->projectsManager.data(), &ProjectsManager::unsubscribeFromCloudProjectRequested, this,
+            [this](int _id) { d->cloudServiceManager->unsubscribeFromProject(_id); });
+
+    //
+    // Документы
+    //
     connect(d->projectManager.data(), &ProjectManager::structureModelChanged, this,
             [this](BusinessLayer::AbstractModel* _model) {
                 const auto currentProject = d->projectsManager->currentProject();
@@ -2607,10 +2615,22 @@ void ApplicationManager::initConnections()
 
                 d->cloudServiceManager->removeDocument(currentProject.id(), _documentUuid);
             });
-    connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,
-            [this](int _id) { d->cloudServiceManager->removeProject(_id); });
-    connect(d->projectsManager.data(), &ProjectsManager::unsubscribeFromCloudProjectRequested, this,
-            [this](int _id) { d->cloudServiceManager->unsubscribeFromProject(_id); });
+
+    //
+    // Курсоры
+    //
+    connect(d->projectManager.data(), &ProjectManager::cursorChanged, this,
+            [this](const QUuid& _documentUuid, const QByteArray& _cursorData) {
+                const auto currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote()) {
+                    return;
+                }
+
+                d->cloudServiceManager->updateCursor(currentProject.id(), _documentUuid,
+                                                     _cursorData);
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::cursorsChanged,
+            d->projectManager.data(), &ProjectManager::setCursors);
 #endif
 }
 

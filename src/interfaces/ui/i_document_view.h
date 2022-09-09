@@ -5,6 +5,10 @@
 class QAction;
 class QWidget;
 
+namespace Domain {
+struct CursorInfo;
+}
+
 namespace ManagementLayer {
 enum class DocumentEditingMode;
 }
@@ -50,6 +54,10 @@ public:
      * @brief Задать режим редактирования
      */
     virtual void setEditingMode(ManagementLayer::DocumentEditingMode _editingMode)
+    {
+    }
+
+    virtual void setCursors(const QVector<Domain::CursorInfo>& _cursors)
     {
     }
 };

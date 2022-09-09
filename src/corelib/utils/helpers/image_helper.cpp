@@ -1,5 +1,7 @@
 #include "image_helper.h"
 
+#include "color_helper.h"
+
 #include <QBuffer>
 #include <QByteArray>
 #include <QCache>
@@ -158,12 +160,7 @@ QPixmap ImageHelper::makeAvatar(const QString& _text, const QFont& _font, const 
     //
     // Формируем цвет для подложки заданного текста
     //
-    ushort hash = 0;
-    for (int characterIndex = 0; characterIndex < _text.length(); ++characterIndex) {
-        hash += _text.at(characterIndex).unicode() + ((hash << 5) - hash);
-    }
-    hash = hash % 360;
-    const QColor avatarColor = QColor::fromHsl(hash, 255 * 0.4, 255 * 0.6);
+    const QColor avatarColor = ColorHelper::forText(_text);
 
     //
     // Рисуем фон авки

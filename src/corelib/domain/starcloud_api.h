@@ -186,4 +186,14 @@ struct DocumentInfo {
     QVector<DocumentChangeInfo> changes;
 };
 
+/**
+ * @brief Информация о положении курсора соавтора
+ */
+struct CursorInfo {
+    QString cursorId;
+    QString email;
+    QString name;
+    QByteArray cursorData;
+};
+
 } // namespace Domain

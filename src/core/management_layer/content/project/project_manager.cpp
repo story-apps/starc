@@ -2718,6 +2718,24 @@ QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) co
     return documents;
 }
 
+void ProjectManager::setCursors(const QUuid& _document, const QVector<Domain::CursorInfo>& _cursors)
+{
+    //
+    // Отобразить список активных соавторов
+    //
+
+    //
+    // Если активен редактор документа, где есть соавтор, отобразить в нём его курсор
+    //
+    if (d->currentDocument.model->document()->uuid() == _document) {
+        if (d->view.active == d->view.left) {
+            d->pluginsBuilder.setCursors(_cursors, d->currentDocument.viewMimeType);
+        } else {
+            d->pluginsBuilder.setSecondaryViewCursors(_cursors, d->currentDocument.viewMimeType);
+        }
+    }
+}
+
 QVector<Domain::DocumentChangeObject*> ProjectManager::unsyncedChanges(
     const QUuid& _documentUuid) const
 {
@@ -2921,6 +2939,18 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     d->toolBar->setOptions(viewOptions, AppBarOptionsLevel::View);
 
     //
+    // Настроим уведомления редактора
+    //
+    if (auto viewWidget = view->asQWidget(); viewWidget != nullptr) {
+        const auto invalidSignalIndex = -1;
+        if (viewWidget->metaObject()->indexOfSignal("cursorChanged(QByteArray)")
+            != invalidSignalIndex) {
+            connect(viewWidget, SIGNAL(cursorChanged(QByteArray)), this,
+                    SLOT(notifyCursorChanged(QByteArray)), Qt::UniqueConnection);
+        }
+    }
+
+    //
     // Настроим возможность перехода в навигатор
     //
     const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(_viewMimeType);
@@ -2938,8 +2968,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Настроим уведомления плагина
     //
-    auto documentManager = d->pluginsBuilder.plugin(_viewMimeType)->asQObject();
-    if (documentManager) {
+    if (auto documentManager = d->pluginsBuilder.plugin(_viewMimeType)->asQObject();
+        documentManager != nullptr) {
         const auto invalidSignalIndex = -1;
         if (documentManager->metaObject()->indexOfSignal("upgradeRequested()")
             != invalidSignalIndex) {
@@ -3080,6 +3110,11 @@ void ProjectManager::showNavigatorForVersion(BusinessLayer::StructureModelItem* 
         d->navigator->showProjectNavigator();
         return;
     }
+}
+
+void ProjectManager::notifyCursorChanged(const QByteArray& _cursorData)
+{
+    emit cursorChanged(d->currentDocument.model->document()->uuid(), _cursorData);
 }
 
 void ProjectManager::updateCurrentDocument(BusinessLayer::AbstractModel* _model,

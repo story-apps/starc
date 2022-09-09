@@ -7,6 +7,10 @@ namespace BusinessLayer {
 class AbstractModel;
 }
 
+namespace Domain {
+struct CursorInfo;
+}
+
 namespace Ui {
 class IDocumentView;
 }
@@ -77,6 +81,14 @@ public:
      */
     void toggleViewFullScreen(bool _isFullScreen, const QString& _viewMimeType) const;
     void toggleSecondaryViewFullScreen(bool _isFullScreen, const QString& _viewMimeType) const;
+
+    /**
+     * @brief Активировать полноэкранный режим
+     */
+    void setCursors(const QVector<Domain::CursorInfo>& _cursors,
+                    const QString& _viewMimeType) const;
+    void setSecondaryViewCursors(const QVector<Domain::CursorInfo>& _cursors,
+                                 const QString& _viewMimeType) const;
 
     /**
      * @brief Перенастроить плагины

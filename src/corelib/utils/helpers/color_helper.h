@@ -49,4 +49,9 @@ public:
      * @brief Сформировать цвет из строки
      */
     static QColor fromString(const QString& _colorName);
+
+    /**
+     * @brief Получить цветовой образ заданного текста
+     */
+    static QColor forText(const QString& _text);
 };

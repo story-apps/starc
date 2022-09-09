@@ -59,3 +59,13 @@ QColor ColorHelper::fromString(const QString& _colorName)
 
     return QColor(_colorName);
 }
+
+QColor ColorHelper::forText(const QString& _text)
+{
+    ushort hash = 0;
+    for (int characterIndex = 0; characterIndex < _text.length(); ++characterIndex) {
+        hash += _text.at(characterIndex).unicode() + ((hash << 5) - hash);
+    }
+    hash = hash % 360;
+    return QColor::fromHsl(hash, 255 * 0.4, 255 * 0.6);
+}

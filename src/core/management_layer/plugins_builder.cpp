@@ -520,6 +520,32 @@ void PluginsBuilder::toggleSecondaryViewFullScreen(bool _isFullScreen,
     }
 }
 
+void PluginsBuilder::setCursors(const QVector<Domain::CursorInfo>& _cursors,
+                                const QString& _viewMimeType) const
+{
+    if (!d->plugins.contains(_viewMimeType)) {
+        return;
+    }
+
+    auto view = d->plugins.value(_viewMimeType)->view();
+    if (view != nullptr) {
+        view->setCursors(_cursors);
+    }
+}
+
+void PluginsBuilder::setSecondaryViewCursors(const QVector<Domain::CursorInfo>& _cursors,
+                                             const QString& _viewMimeType) const
+{
+    if (!d->plugins.contains(_viewMimeType)) {
+        return;
+    }
+
+    auto view = d->plugins.value(_viewMimeType)->secondaryView();
+    if (view != nullptr) {
+        view->setCursors(_cursors);
+    }
+}
+
 void PluginsBuilder::reconfigureAll() const
 {
     for (auto plugin : std::as_const(d->plugins)) {

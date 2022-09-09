@@ -12,6 +12,7 @@ namespace Domain {
 class DocumentChangeObject;
 class DocumentObject;
 enum class DocumentObjectType;
+struct CursorInfo;
 struct DocumentInfo;
 } // namespace Domain
 
@@ -159,6 +160,11 @@ public:
      */
     QVector<QUuid> connectedDocuments(const QUuid& _documentUuid) const;
 
+    /**
+     * @brief Задать курсоры соавторов
+     */
+    void setCursors(const QUuid& _document, const QVector<Domain::CursorInfo>& _cursors);
+
 signals:
     /**
      * @brief Запрос на отображение меню
@@ -220,7 +226,12 @@ signals:
     /**
      * @brief Документ был удалён
      */
-    void documentRemoved(const QUuid& _uuid);
+    void documentRemoved(const QUuid& _documentUuid);
+
+    /**
+     * @brief Изменилась позиция курсора
+     */
+    void cursorChanged(const QUuid& _documentUuid, const QByteArray& _cursorData);
 
 protected:
     /**
@@ -260,7 +271,11 @@ private:
     void showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType = {});
     void showNavigatorForVersion(BusinessLayer::StructureModelItem* _item);
 
-private:
+    /**
+     * @brief Уведомить клиентов об обновлении курсора
+     */
+    Q_SLOT void notifyCursorChanged(const QByteArray& _cursorData);
+
     /**
      * @brief Обновить значение текущей модели и её представления
      */
