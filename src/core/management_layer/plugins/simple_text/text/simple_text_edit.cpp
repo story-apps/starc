@@ -10,6 +10,7 @@
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
@@ -57,6 +58,8 @@ public:
     bool showSceneNumberOnLeft = false;
     bool showSceneNumberOnRight = false;
     bool showDialogueNumber = false;
+
+    QVector<Domain::CursorInfo> collaboratorsCursorInfo;
 };
 
 SimpleTextEdit::Implementation::Implementation(SimpleTextEdit* _q)
@@ -235,6 +238,13 @@ void SimpleTextEdit::addReviewMark(const QColor& _textColor, const QColor& _back
     }
 
     d->document.addReviewMark(_textColor, _backgroundColor, _comment, cursor);
+}
+
+void SimpleTextEdit::setCursors(const QVector<Domain::CursorInfo>& _cursors)
+{
+    d->collaboratorsCursorInfo = _cursors;
+
+    update();
 }
 
 void SimpleTextEdit::keyPressEvent(QKeyEvent* _event)
@@ -497,12 +507,12 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
     //
     // Прорисовка дополнительных элементов редактора
     //
+    QPainter painter(viewport());
     {
         //
         // Декорации текста
         //
         {
-            QPainter painter(viewport());
             clipPageDecorationRegions(&painter);
 
             //
@@ -649,6 +659,51 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
 
                 block = block.next();
             }
+        }
+    }
+
+    //
+    // Курсоры соавторов
+    //
+    if (!d->collaboratorsCursorInfo.isEmpty()) {
+        for (const auto& cursorInfo : std::as_const(d->collaboratorsCursorInfo)) {
+            //
+            // Пропускаем курсоры, которые находятся за пределами экрана
+            //
+            const auto cursorPosition = cursorInfo.cursorData.toInt();
+            if (bottomBlock.isValid()
+                && (cursorPosition < topBlock.position()
+                    || cursorPosition > (bottomBlock.position() + bottomBlock.length()))) {
+                continue;
+            }
+
+
+            TextCursor cursor(document());
+            cursor.setPosition(cursorPosition);
+            const auto cursorR = cursorRect(cursor).adjusted(0, 0, 1, 0);
+
+            const auto backgroundColor = ColorHelper::forText(cursorInfo.name);
+
+            //
+            // ... рисуем его
+            //
+            painter.fillRect(cursorR, backgroundColor);
+
+            //
+            // ... выводим имя соавтора
+            //
+            painter.setFont(DesignSystem::font().subtitle2());
+            const QRect usernameRect(cursorR.left() - Ui::DesignSystem::layout().px4(),
+                                     cursorR.top() - Ui::DesignSystem::layout().px24(),
+                                     TextHelper::fineTextWidth(cursorInfo.name, painter.font())
+                                         + Ui::DesignSystem::layout().px12(),
+                                     Ui::DesignSystem::layout().px24());
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(backgroundColor);
+            painter.drawRoundedRect(usernameRect, Ui::DesignSystem::button().borderRadius(),
+                                    Ui::DesignSystem::button().borderRadius());
+            painter.setPen(ColorHelper::contrasted(backgroundColor));
+            painter.drawText(usernameRect, Qt::AlignCenter, cursorInfo.name);
         }
     }
 }

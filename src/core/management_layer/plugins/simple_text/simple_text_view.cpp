@@ -30,6 +30,7 @@
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/ui_helper.h>
+#include <utils/tools/debouncer.h>
 
 #include <QAction>
 #include <QPointer>
@@ -152,6 +153,11 @@ public:
     // Действия опций редактора
     //
     QAction* showBookmarksAction = nullptr;
+
+    /**
+     * @brief Группируем события об изменении положения курсора, чтобы сильно не спамить сервер
+     */
+    Debouncer cursorChangeNotificationsDebounser;
 };
 
 SimpleTextView::Implementation::Implementation(SimpleTextView* _q)
@@ -175,6 +181,7 @@ SimpleTextView::Implementation::Implementation(SimpleTextView* _q)
     , bookmarksView(new BookmarksView(_q))
     , splitter(new Splitter(_q))
     , showBookmarksAction(new QAction(_q))
+    , cursorChangeNotificationsDebounser(500)
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
 
@@ -612,6 +619,10 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
         //
         const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(screenplayModelIndex);
         d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
+        //
+        // Запланируем уведомление внешних клиентов о смене позиции курсора
+        //
+        d->cursorChangeNotificationsDebounser.orderWork();
     };
     connect(d->textEdit, &SimpleTextEdit::paragraphTypeChanged, this, handleCursorPositionChanged);
     connect(d->textEdit, &SimpleTextEdit::cursorPositionChanged, this, handleCursorPositionChanged);
@@ -670,6 +681,10 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
         }
         d->updateSideBarVisibility(this);
     });
+    //
+    connect(&d->cursorChangeNotificationsDebounser, &Debouncer::gotWork, this, [this] {
+        emit cursorChanged(QString::number(d->textEdit->textCursor().position()).toUtf8());
+    });
 
     reconfigure({});
 }
@@ -704,6 +719,11 @@ void SimpleTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
     const auto enabled = !readOnly;
     d->shortcutsManager.setEnabled(enabled);
     d->fastFormatWidget->setEnabled(enabled);
+}
+
+void SimpleTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
+{
+    d->textEdit->setCursors(_cursors);
 }
 
 void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)

@@ -29,6 +29,7 @@ public:
     void toggleFullScreen(bool _isFullScreen) override;
     QVector<QAction*> options() const override;
     void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
+    void setCursors(const QVector<Domain::CursorInfo>& _cursors) override;
     /** @{ */
 
     /**
@@ -92,6 +93,11 @@ signals:
      * @brief Пользователь хочет удалить закладку
      */
     void removeBookmarkRequested();
+
+    /**
+     * @brief Изменилась позиция курсора
+     */
+    void cursorChanged(const QByteArray& _cursorData);
 
 protected:
     /**
