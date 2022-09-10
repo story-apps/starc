@@ -925,6 +925,12 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     // и извлекаем остающийся в блоке текст, если нужно
     //
     int mimeLength = 0;
+    auto increaseMimeLength = [&mimeLength](int _length) {
+        if (mimeLength > 0) {
+            ++mimeLength;
+        }
+        mimeLength += _length;
+    };
     QString sourceBlockEndContent;
     QVector<TextModelItem*> lastItemsFromSourceScene;
     QString correctedMimeData = _mimeData;
@@ -1010,7 +1016,6 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             // В противном случае
             //
             else {
-                ++mimeLength;
                 //
                 // ... если курсор стоит посередине блока, дробим блок на две части
                 //
@@ -1109,7 +1114,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             newItem = createFolderItem(contentReader);
         } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
             auto newGroupItem = createGroupItem(contentReader);
-            mimeLength += newGroupItem->length();
+            increaseMimeLength(newGroupItem->length());
 
             //
             // Если группа вставляется после группы, учитываем уровень группы, и при необходимости
@@ -1134,7 +1139,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             newItem = createSplitterItem(contentReader);
         } else {
             auto newTextItem = createTextItem(contentReader);
-            mimeLength += newTextItem->text().length();
+            increaseMimeLength(newTextItem->text().length());
             //
             // Если вставляется текстовый элемент внутрь уже существующего элемента
             //
@@ -1166,7 +1171,6 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             //
             else {
                 newItem = newTextItem;
-                ++mimeLength; // +1 за перенос строки
             }
         }
 
