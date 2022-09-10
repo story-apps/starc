@@ -2024,7 +2024,14 @@ void ProjectManager::loadCurrentProject(const Project& _project)
         d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
             Domain::DocumentObjectType::Project)));
     if (projectInformationModel->name().isEmpty()) {
+        //
+        // При создании нового проекта, применим его название и сразу сохраним изменения в документ
+        // инфомации о проекте и структуре, чтобы эта информация сразу попала в облако, а не была
+        // заменена на пустую
+        //
         projectInformationModel->setName(_project.name());
+        projectInformationModel->saveChanges();
+        d->projectStructureModel->saveChanges();
     } else {
         emit projectNameChanged(projectInformationModel->name());
         emit projectLoglineChanged(projectInformationModel->logline());
