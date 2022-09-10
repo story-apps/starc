@@ -26,19 +26,7 @@ PanelHandler::PanelHandler(ComicBookTextEdit* _editor)
 
 void PanelHandler::prehandle()
 {
-    //
-    // Получим необходимые значения
-    //
-    // ... курсор в текущем положении
-    QTextCursor cursor = editor()->textCursor();
-    // ... блок текста в котором находится курсор
-    QTextBlock currentBlock = cursor.block();
-    // ... текст блока
-    QString currentBlockText = currentBlock.text();
-    // ... текст до курсора
-    QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
-
-    complete(currentBlockText, cursorBackwardText);
+    handleOther();
 }
 
 void PanelHandler::handleEnter(QKeyEvent* _event)
@@ -266,7 +254,7 @@ void PanelHandler::handleOther(QKeyEvent* _event)
     //
     // Обработка
     //
-    if (cursorBackwardText.endsWith(" ") && _event != 0 && _event->text() == " ") {
+    if (_event != nullptr && _event->text() == " " && cursorBackwardText.endsWith(" ")) {
         //
         // Потенциально была введена страница
         //
