@@ -16,6 +16,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
@@ -34,6 +35,7 @@
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/ui_helper.h>
+#include <utils/tools/debouncer.h>
 
 #include <QAction>
 #include <QPointer>
@@ -162,6 +164,11 @@ public:
     //
     QAction* showBookmarksAction = nullptr;
     QAction* showDictionariesAction = nullptr;
+
+    /**
+     * @brief Группируем события об изменении положения курсора, чтобы сильно не спамить сервер
+     */
+    Debouncer cursorChangeNotificationsDebounser;
 };
 
 ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
@@ -186,9 +193,9 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     , bookmarksView(new BookmarksView(_q))
     , dictionariesView(new DictionariesView(_q))
     , splitter(new Splitter(_q))
-    //
     , showBookmarksAction(new QAction(_q))
     , showDictionariesAction(new QAction(_q))
+    , cursorChangeNotificationsDebounser(500)
 
 {
     commentsModel->setParagraphTypesFiler({
@@ -728,6 +735,10 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         //
         const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(screenplayModelIndex);
         d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
+        //
+        // Запланируем уведомление внешних клиентов о смене позиции курсора
+        //
+        d->cursorChangeNotificationsDebounser.orderWork();
     };
     connect(d->textEdit, &ScreenplayTextEdit::paragraphTypeChanged, this,
             handleCursorPositionChanged);
@@ -799,6 +810,10 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         }
         d->updateSideBarVisibility(this);
     });
+    //
+    connect(&d->cursorChangeNotificationsDebounser, &Debouncer::gotWork, this, [this] {
+        emit cursorChanged(QString::number(d->textEdit->textCursor().position()).toUtf8());
+    });
 
     reconfigure({});
 }
@@ -836,6 +851,11 @@ void ScreenplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mo
     const auto enabled = !readOnly;
     d->shortcutsManager.setEnabled(enabled);
     d->fastFormatWidget->setEnabled(enabled);
+}
+
+void ScreenplayTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
+{
+    d->textEdit->setCursors(_cursors);
 }
 
 DictionariesView* ScreenplayTextView::dictionariesView() const
@@ -999,6 +1019,7 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
                 [this] { d->reconfigureDialoguesNumbersVisibility(); });
     }
 
+    d->textEdit->setCursors({});
     d->textEdit->initWithModel(d->model);
     d->screenplayTextScrollbarManager->setModel(d->model);
     d->commentsModel->setTextModel(d->model);

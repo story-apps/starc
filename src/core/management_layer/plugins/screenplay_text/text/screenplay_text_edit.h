@@ -10,6 +10,10 @@ class ScreenplayTemplate;
 enum class TextParagraphType;
 } // namespace BusinessLayer
 
+namespace Domain {
+struct CursorInfo;
+}
+
 
 namespace Ui {
 
@@ -132,6 +136,11 @@ public:
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
                        const QString& _comment);
+
+    /**
+     * @brief Задать курсоры соавторов
+     */
+    void setCursors(const QVector<Domain::CursorInfo>& _cursors);
 
 signals:
     /**

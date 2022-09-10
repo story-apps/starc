@@ -14,6 +14,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
@@ -32,6 +33,7 @@
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/ui_helper.h>
+#include <utils/tools/debouncer.h>
 
 #include <QAction>
 #include <QPointer>
@@ -153,6 +155,11 @@ public:
     // Действия опций редактора
     //
     QAction* showBookmarksAction = nullptr;
+
+    /**
+     * @brief Группируем события об изменении положения курсора, чтобы сильно не спамить сервер
+     */
+    Debouncer cursorChangeNotificationsDebounser;
 };
 
 StageplayTextView::Implementation::Implementation(StageplayTextView* _q)
@@ -175,8 +182,8 @@ StageplayTextView::Implementation::Implementation(StageplayTextView* _q)
     , commentsView(new CommentsView(_q))
     , bookmarksView(new BookmarksView(_q))
     , splitter(new Splitter(_q))
-    //
     , showBookmarksAction(new QAction(_q))
+    , cursorChangeNotificationsDebounser(500)
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
@@ -628,6 +635,10 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
         //
         const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(stageplayModelIndex);
         d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
+        //
+        // Запланируем уведомление внешних клиентов о смене позиции курсора
+        //
+        d->cursorChangeNotificationsDebounser.orderWork();
     };
     connect(d->textEdit, &StageplayTextEdit::paragraphTypeChanged, this,
             handleCursorPositionChanged);
@@ -688,9 +699,10 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
         }
         d->updateSideBarVisibility(this);
     });
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
+    //
+    connect(&d->cursorChangeNotificationsDebounser, &Debouncer::gotWork, this, [this] {
+        emit cursorChanged(QString::number(d->textEdit->textCursor().position()).toUtf8());
+    });
 
     reconfigure({});
 }
@@ -725,6 +737,11 @@ void StageplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mod
     const auto enabled = !readOnly;
     d->shortcutsManager.setEnabled(enabled);
     d->fastFormatWidget->setEnabled(enabled);
+}
+
+void StageplayTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
+{
+    d->textEdit->setCursors(_cursors);
 }
 
 void StageplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
@@ -848,6 +865,7 @@ void StageplayTextView::setModel(BusinessLayer::StageplayTextModel* _model)
                 [this] { d->reconfigureTemplate(); });
     }
 
+    d->textEdit->setCursors({});
     d->textEdit->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);
