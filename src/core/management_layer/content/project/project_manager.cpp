@@ -3147,6 +3147,16 @@ void ProjectManager::showNavigatorForVersion(BusinessLayer::StructureModelItem* 
 
 void ProjectManager::notifyCursorChanged(const QByteArray& _cursorData)
 {
+    if (d->currentDocument.model == nullptr || d->currentDocument.model->document() == nullptr) {
+        return;
+    }
+
+    const auto widget = qobject_cast<QWidget*>(sender());
+    Q_ASSERT(widget);
+    if (!widget->isVisible()) {
+        return;
+    }
+
     emit cursorChanged(d->currentDocument.model->document()->uuid(), _cursorData);
 }
 
