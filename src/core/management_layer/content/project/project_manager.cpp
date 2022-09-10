@@ -2057,7 +2057,7 @@ void ProjectManager::updateCurrentProject(const Project& _project)
     d->isProjectOwner = _project.isOwner();
     d->editingMode = _project.editingMode();
     d->pluginsBuilder.setEditingMode(d->editingMode);
-    d->navigator->setReadOnly(d->editingMode == DocumentEditingMode::Read);
+    d->navigator->setReadOnly(d->editingMode != DocumentEditingMode::Edit);
 
     d->projectStructureModel->setProjectName(_project.name());
 
