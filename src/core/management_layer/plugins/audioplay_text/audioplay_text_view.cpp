@@ -15,6 +15,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
@@ -33,6 +34,7 @@
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/ui_helper.h>
+#include <utils/tools/debouncer.h>
 
 #include <QAction>
 #include <QPointer>
@@ -156,6 +158,11 @@ public:
     // Действия опций редактора
     //
     QAction* showBookmarksAction = nullptr;
+
+    /**
+     * @brief Группируем события об изменении положения курсора, чтобы сильно не спамить сервер
+     */
+    Debouncer cursorChangeNotificationsDebounser;
 };
 
 AudioplayTextView::Implementation::Implementation(AudioplayTextView* _q)
@@ -179,8 +186,8 @@ AudioplayTextView::Implementation::Implementation(AudioplayTextView* _q)
     , commentsView(new CommentsView(_q))
     , bookmarksView(new BookmarksView(_q))
     , splitter(new Splitter(_q))
-    //
     , showBookmarksAction(new QAction(_q))
+    , cursorChangeNotificationsDebounser(500)
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
@@ -653,6 +660,10 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
         //
         const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(audioplayModelIndex);
         d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
+        //
+        // Запланируем уведомление внешних клиентов о смене позиции курсора
+        //
+        d->cursorChangeNotificationsDebounser.orderWork();
     };
     connect(d->textEdit, &AudioplayTextEdit::paragraphTypeChanged, this,
             handleCursorPositionChanged);
@@ -713,6 +724,10 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
         }
         d->updateSideBarVisibility(this);
     });
+    //
+    connect(&d->cursorChangeNotificationsDebounser, &Debouncer::gotWork, this, [this] {
+        emit cursorChanged(QString::number(d->textEdit->textCursor().position()).toUtf8());
+    });
 
     reconfigure({});
 }
@@ -748,6 +763,11 @@ void AudioplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mod
     const auto enabled = !readOnly;
     d->shortcutsManager.setEnabled(enabled);
     d->fastFormatWidget->setEnabled(enabled);
+}
+
+void AudioplayTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
+{
+    d->textEdit->setCursors(_cursors);
 }
 
 void AudioplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
@@ -885,6 +905,7 @@ void AudioplayTextView::setModel(BusinessLayer::AudioplayTextModel* _model)
                 [this] { d->reconfigureBlockNumbersVisibility(); });
     }
 
+    d->textEdit->setCursors({});
     d->textEdit->initWithModel(d->model);
     d->audioplayTextScrollbarManager->setModel(d->model);
     d->commentsModel->setTextModel(d->model);

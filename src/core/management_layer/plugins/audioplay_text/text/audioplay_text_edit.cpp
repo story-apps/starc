@@ -15,6 +15,7 @@
 #include <business_layer/model/characters/characters_model.h>
 #include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
@@ -54,6 +55,8 @@ public:
 
     bool showBlockNumbers = false;
     bool continueBlockNumber = false;
+
+    QVector<Domain::CursorInfo> collaboratorsCursorInfo;
 };
 
 AudioplayTextEdit::Implementation::Implementation(AudioplayTextEdit* _q)
@@ -464,6 +467,13 @@ void AudioplayTextEdit::addReviewMark(const QColor& _textColor, const QColor& _b
     d->document.addReviewMark(_textColor, _backgroundColor, _comment, cursor);
 }
 
+void AudioplayTextEdit::setCursors(const QVector<Domain::CursorInfo>& _cursors)
+{
+    d->collaboratorsCursorInfo = _cursors;
+
+    update();
+}
+
 void AudioplayTextEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {
@@ -733,12 +743,12 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
     //
     // Прорисовка дополнительных элементов редактора
     //
+    QPainter painter(viewport());
 
     //
     // Декорации текста
     //
     {
-        QPainter painter(viewport());
         clipPageDecorationRegions(&painter);
 
         //
@@ -1160,78 +1170,50 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
         }
     }
 
-    //        //
-    //        // Курсоры соавторов
-    //        //
-    //        {
-    //            //
-    //            // Ширина области курсора, для отображения имени автора курсора
-    //            //
-    //            const unsigned cursorAreaWidth = 20;
+    //
+    // Курсоры соавторов
+    //
+    if (!d->collaboratorsCursorInfo.isEmpty()) {
+        for (const auto& cursorInfo : std::as_const(d->collaboratorsCursorInfo)) {
+            //
+            // Пропускаем курсоры, которые находятся за пределами экрана
+            //
+            const auto cursorPosition = cursorInfo.cursorData.toInt();
+            if (bottomBlock.isValid()
+                && (cursorPosition < topBlock.position()
+                    || cursorPosition > (bottomBlock.position() + bottomBlock.length()))) {
+                continue;
+            }
 
-    //            if (!m_additionalCursors.isEmpty()
-    //                && m_document != nullptr) {
-    //                QPainter painter(viewport());
-    //                painter.setFont(QFont("Sans", 8));
-    //                setPainterPen(Qt::white);
 
-    //                const QRectF viewportGeometry = viewport()->geometry();
-    //                QPoint mouseCursorPos = mapFromGlobal(QCursor::pos());
-    //                mouseCursorPos.setY(mouseCursorPos.y() +
-    //                viewport()->mapFromParent(QPoint(0,0)).y()); int cursorIndex = 0; foreach
-    //                (const QString& username, m_additionalCursorsCorrected.keys()) {
-    //                    QTextCursor cursor(m_document);
-    //                    m_document->setCursorPosition(cursor,
-    //                    m_additionalCursorsCorrected.value(username)); const QRect cursorR =
-    //                    cursorRect(cursor).adjusted(0, 0, 1, 0);
+            QTextCursor cursor(document());
+            cursor.setPosition(cursorPosition);
+            const auto cursorR = cursorRect(cursor).adjusted(0, 0, 1, 0);
 
-    //                    //
-    //                    // Если курсор на экране
-    //                    //
-    //                    // ... ниже верхней границы
-    //                    if ((cursorR.top() > 0 || cursorR.bottom() > 0)
-    //                        // ... и выше нижней
-    //                        && cursorR.top() < viewportGeometry.bottom()) {
-    //                        //
-    //                        // ... рисуем его
-    //                        //
-    //                        painter.fillRect(cursorR, ColorHelper::cursorColor(cursorIndex));
+            const auto backgroundColor = ColorHelper::forText(cursorInfo.name);
 
-    //                        //
-    //                        // ... декорируем
-    //                        //
-    //                        {
-    //                            //
-    //                            // Если мышь около него, то выводим имя соавтора
-    //                            //
-    //                            QRect extandedCursorR = cursorR;
-    //                            extandedCursorR.setLeft(extandedCursorR.left() -
-    //                            cursorAreaWidth/2); extandedCursorR.setWidth(cursorAreaWidth);
-    //                            if (extandedCursorR.contains(mouseCursorPos)) {
-    //                                const QRect usernameRect(
-    //                                    cursorR.left() - 1,
-    //                                    cursorR.top() - painter.fontMetrics().height() - 2,
-    //                                    painter.fontMetrics().width(username) + 2,
-    //                                    painter.fontMetrics().height() + 2);
-    //                                painter.fillRect(usernameRect,
-    //                                ColorHelper::cursorColor(cursorIndex));
-    //                                painter.drawText(usernameRect, Qt::AlignCenter, username);
-    //                            }
-    //                            //
-    //                            // Если нет, то рисуем небольшой квадратик
-    //                            //
-    //                            else {
-    //                                painter.fillRect(cursorR.left() - 2, cursorR.top() - 5, 5,
-    //                                5,
-    //                                    ColorHelper::cursorColor(cursorIndex));
-    //                            }
-    //                        }
-    //                    }
+            //
+            // ... рисуем его
+            //
+            painter.fillRect(cursorR, backgroundColor);
 
-    //                    ++cursorIndex;
-    //                }
-    //            }
-    //        }
+            //
+            // ... выводим имя соавтора
+            //
+            painter.setFont(DesignSystem::font().subtitle2());
+            const QRect usernameRect(cursorR.left() - Ui::DesignSystem::layout().px4(),
+                                     cursorR.top() - Ui::DesignSystem::layout().px24(),
+                                     TextHelper::fineTextWidth(cursorInfo.name, painter.font())
+                                         + Ui::DesignSystem::layout().px12(),
+                                     Ui::DesignSystem::layout().px24());
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(backgroundColor);
+            painter.drawRoundedRect(usernameRect, Ui::DesignSystem::button().borderRadius(),
+                                    Ui::DesignSystem::button().borderRadius());
+            painter.setPen(ColorHelper::contrasted(backgroundColor));
+            painter.drawText(usernameRect, Qt::AlignCenter, cursorInfo.name);
+        }
+    }
 }
 
 ContextMenu* AudioplayTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
