@@ -165,6 +165,11 @@ public:
      */
     void setCursors(const QUuid& _document, const QVector<Domain::CursorInfo>& _cursors);
 
+    /**
+     * @brief Очистить курсоры соавторов
+     */
+    void clearCursors();
+
 signals:
     /**
      * @brief Запрос на отображение меню

@@ -194,6 +194,7 @@ struct CursorInfo {
     QString email;
     QString name;
     QByteArray cursorData;
+    QDateTime updatedAt;
 };
 
 } // namespace Domain

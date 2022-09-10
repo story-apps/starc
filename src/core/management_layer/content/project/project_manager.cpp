@@ -30,6 +30,7 @@
 #include <management_layer/content/projects/project.h>
 #include <management_layer/plugins_builder.h>
 #include <ui/abstract_navigator.h>
+#include <ui/account/collaborators_tool_bar.h>
 #include <ui/design_system/design_system.h>
 #include <ui/project/create_document_dialog.h>
 #include <ui/project/create_version_dialog.h>
@@ -225,6 +226,11 @@ public:
     } view;
 
     /**
+     * @brief Панель со список соавторов
+     */
+    Ui::CollaboratorsToolBar* collaboratorsToolBar = nullptr;
+
+    /**
      * @brief Действие разделения экрана напополам
      */
     QAction* splitScreenAction = nullptr;
@@ -277,11 +283,6 @@ public:
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
 
     /**
-     * @brief Список соавторов текущего проекта
-     */
-    QVector<Domain::ProjectCollaboratorInfo> collaborators;
-
-    /**
      * @brief Информация о текущем документе
      */
     struct {
@@ -298,6 +299,11 @@ public:
      * @brief Списки изменений, которые были отправлены на синхронизацию
      */
     mutable QHash<QUuid, QVector<Domain::DocumentChangeObject*>> changesForSync;
+
+    /**
+     * @brief Список активных соавторов
+     */
+    QHash<QString, Domain::CursorInfo> collaboratorsCursors;
 };
 
 ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _parent,
@@ -311,6 +317,7 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
           new Ui::ProjectView(_parent),
           new Ui::ProjectView(_parent),
       })
+    , collaboratorsToolBar(new Ui::CollaboratorsToolBar(_parent))
     , splitScreenAction(new QAction(_parent))
     , splitScreenShortcut(new QShortcut(_parent))
     , showVersionsAction(new QAction(_parent))
@@ -2051,7 +2058,6 @@ void ProjectManager::updateCurrentProject(const Project& _project)
     d->editingMode = _project.editingMode();
     d->pluginsBuilder.setEditingMode(d->editingMode);
     d->navigator->setReadOnly(d->editingMode == DocumentEditingMode::Read);
-    d->collaborators = _project.collaborators();
 
     d->projectStructureModel->setProjectName(_project.name());
 
@@ -2723,6 +2729,27 @@ void ProjectManager::setCursors(const QUuid& _document, const QVector<Domain::Cu
     //
     // Отобразить список активных соавторов
     //
+    // ... но сперва фильтранём всех
+    //
+    const auto showThreshold = QDateTime::currentDateTime().addSecs(-3 * 60);
+    for (auto cursorIter = d->collaboratorsCursors.begin();
+         cursorIter != d->collaboratorsCursors.end();) {
+        if (cursorIter->updatedAt < showThreshold) {
+            cursorIter = d->collaboratorsCursors.erase(cursorIter);
+        } else {
+            ++cursorIter;
+        }
+    }
+    //
+    // ... добавим новопришедших
+    //
+    for (const auto& cursor : _cursors) {
+        d->collaboratorsCursors[cursor.cursorId] = cursor;
+    }
+    //
+    // ... и обновим
+    //
+    d->collaboratorsToolBar->setCollaborators(d->collaboratorsCursors.values().toVector());
 
     //
     // Если активен редактор документа, где есть соавтор, отобразить в нём его курсор
@@ -2734,6 +2761,12 @@ void ProjectManager::setCursors(const QUuid& _document, const QVector<Domain::Cu
             d->pluginsBuilder.setSecondaryViewCursors(_cursors, d->currentDocument.viewMimeType);
         }
     }
+}
+
+void ProjectManager::clearCursors()
+{
+    d->collaboratorsToolBar->setCollaborators({});
+    d->collaboratorsCursors.clear();
 }
 
 QVector<Domain::DocumentChangeObject*> ProjectManager::unsyncedChanges(

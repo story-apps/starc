@@ -66,6 +66,7 @@ SOURCES += \
     ui/account/account_navigator.cpp \
     ui/account/account_tool_bar.cpp \
     ui/account/account_view.cpp \
+    ui/account/collaborators_tool_bar.cpp \
     ui/account/connection_status_tool_bar.cpp \
     ui/account/login_dialog.cpp \
     ui/account/purchase_dialog.cpp \
@@ -130,6 +131,7 @@ HEADERS += \
     ui/account/account_navigator.h \
     ui/account/account_tool_bar.h \
     ui/account/account_view.h \
+    ui/account/collaborators_tool_bar.h \
     ui/account/connection_status_tool_bar.h \
     ui/account/login_dialog.h \
     ui/account/purchase_dialog.h \
