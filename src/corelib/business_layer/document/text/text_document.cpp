@@ -266,8 +266,11 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
         // Если новый блок должен быть в другой колонке
         //
         if (_cursor.inTable() && _cursor.inFirstColumn()) {
-            Q_ASSERT(textItem->isInFirstColumn().has_value());
-            if (*textItem->isInFirstColumn() == false) {
+            //
+            // Если флаг размещения в таблице ещё не задан, то оставляем в той колонке,
+            // в которой работаем в данный момент
+            //
+            if (textItem->isInFirstColumn().value_or(true) == false) {
                 //
                 // Переходим к следующей колонке
                 //
