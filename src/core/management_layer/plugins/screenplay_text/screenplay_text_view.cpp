@@ -426,7 +426,7 @@ void ScreenplayTextView::Implementation::updateTextEditPageMargins()
 
 void ScreenplayTextView::Implementation::updateCommentsToolbar()
 {
-    if (textEdit->isReadOnly() || !toolbar->isCommentsModeEnabled()
+    if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()
         || !textEdit->textCursor().hasSelection()) {
         commentsToolbar->hideToolbar();
         return;
@@ -830,7 +830,7 @@ void ScreenplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mo
     d->textEdit->setReadOnly(readOnly);
     d->toolbar->setReadOnly(readOnly);
     d->searchManager->setReadOnly(readOnly);
-    d->commentsView->setReadOnly(readOnly);
+    d->commentsView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->bookmarksView->setReadOnly(readOnly);
     d->dictionariesView->setReadOnly(readOnly);
     const auto enabled = !readOnly;

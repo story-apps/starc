@@ -305,6 +305,11 @@ CommentsView::CommentsView(QWidget* _parent)
 
 CommentsView::~CommentsView() = default;
 
+bool CommentsView::isReadOnly() const
+{
+    return d->isReadOnly;
+}
+
 void CommentsView::setReadOnly(bool _readOnly)
 {
     d->isReadOnly = _readOnly;

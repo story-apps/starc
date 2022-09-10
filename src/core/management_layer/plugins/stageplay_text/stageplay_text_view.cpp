@@ -333,7 +333,7 @@ void StageplayTextView::Implementation::updateTextEditPageMargins()
 
 void StageplayTextView::Implementation::updateCommentsToolbar()
 {
-    if (textEdit->isReadOnly() || !toolbar->isCommentsModeEnabled()
+    if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()
         || !textEdit->textCursor().hasSelection()) {
         commentsToolbar->hideToolbar();
         return;
@@ -720,7 +720,7 @@ void StageplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mod
     d->textEdit->setReadOnly(readOnly);
     d->toolbar->setReadOnly(readOnly);
     d->searchManager->setReadOnly(readOnly);
-    d->commentsView->setReadOnly(readOnly);
+    d->commentsView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->bookmarksView->setReadOnly(readOnly);
     const auto enabled = !readOnly;
     d->shortcutsManager.setEnabled(enabled);

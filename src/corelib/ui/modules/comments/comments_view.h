@@ -22,6 +22,7 @@ public:
     /**
      * @brief Задать возможность редактирования
      */
+    bool isReadOnly() const;
     void setReadOnly(bool _readOnly);
 
     /**

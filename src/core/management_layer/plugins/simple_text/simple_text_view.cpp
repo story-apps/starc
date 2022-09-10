@@ -13,6 +13,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
@@ -326,7 +327,7 @@ void SimpleTextView::Implementation::updateTextEditPageMargins()
 
 void SimpleTextView::Implementation::updateCommentsToolbar()
 {
-    if (textEdit->isReadOnly() || !toolbar->isCommentsModeEnabled()
+    if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()
         || !textEdit->textCursor().hasSelection()) {
         commentsToolbar->hideToolbar();
         return;
@@ -714,7 +715,7 @@ void SimpleTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
     d->textEdit->setReadOnly(readOnly);
     d->toolbar->setReadOnly(readOnly);
     d->searchManager->setReadOnly(readOnly);
-    d->commentsView->setReadOnly(readOnly);
+    d->commentsView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->bookmarksView->setReadOnly(readOnly);
     const auto enabled = !readOnly;
     d->shortcutsManager.setEnabled(enabled);
@@ -828,6 +829,7 @@ void SimpleTextView::setModel(BusinessLayer::SimpleTextModel* _model)
         d->reconfigureTemplate(!reinitModel);
     }
 
+    d->textEdit->setCursors({});
     d->textEdit->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);
