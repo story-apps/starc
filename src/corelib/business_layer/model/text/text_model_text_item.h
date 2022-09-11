@@ -50,6 +50,11 @@ public:
         bool isEdited = false;
 
         bool operator==(const ReviewComment& _other) const;
+
+        /**
+         * @brief Определить одинаков ли автор и дата создания коммента
+         */
+        bool isPartiallyEqual(const ReviewComment& _other) const;
     };
     struct CORE_LIBRARY_EXPORT ReviewMark : TextPart {
         QColor textColor;
@@ -60,7 +65,7 @@ public:
         bool operator==(const ReviewMark& _other) const;
 
         /**
-         * @brief Определить одинаково ли форматирование и комментарии редакторских заметок
+         * @brief Определить одинаково ли форматирование и первый комментарий
          */
         bool isPartiallyEqual(const ReviewMark& _other) const;
 

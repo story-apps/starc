@@ -484,6 +484,11 @@ bool TextModelTextItem::ReviewComment::operator==(
         && text == _other.text && isEdited == _other.isEdited;
 }
 
+bool TextModelTextItem::ReviewComment::isPartiallyEqual(const ReviewComment& _other) const
+{
+    return author == _other.author && authorEmail == _other.authorEmail && date == _other.date;
+}
+
 bool TextModelTextItem::ReviewMark::operator==(const TextModelTextItem::ReviewMark& _other) const
 {
     return from == _other.from && length == _other.length && textColor == _other.textColor
@@ -494,7 +499,10 @@ bool TextModelTextItem::ReviewMark::operator==(const TextModelTextItem::ReviewMa
 bool TextModelTextItem::ReviewMark::isPartiallyEqual(const ReviewMark& _other) const
 {
     return textColor == _other.textColor && backgroundColor == _other.backgroundColor
-        && isDone == _other.isDone && comments == _other.comments;
+        && isDone == _other.isDone
+        && ((comments.isEmpty() && _other.comments.isEmpty())
+            || (!comments.isEmpty() && !_other.comments.isEmpty()
+                && comments.constFirst().isPartiallyEqual(_other.comments.constFirst())));
 }
 
 QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const

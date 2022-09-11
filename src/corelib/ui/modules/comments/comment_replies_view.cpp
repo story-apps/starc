@@ -36,6 +36,8 @@ class CommentRepliesView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    void fillComments();
+
 
     QModelIndex commentIndex;
     int editedReplyIndex = kInvalidIndex;
@@ -84,6 +86,25 @@ CommentRepliesView::Implementation::Implementation(QWidget* _parent)
     replyTextField->setUnderlineDecorationVisible(false);
     replyTextField->setLabelVisible(false);
     replyTextField->setDefaultMarginsEnabled(false);
+}
+
+void CommentRepliesView::Implementation::fillComments()
+{
+    //
+    // Собираем ответы на комментарий и помещаем их во вьюху
+    //
+    const auto comments = commentIndex.data(CommentsModel::ReviewMarkRepliesRole)
+                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
+    QVector<ChatMessage> replies;
+    for (const auto& comment : comments) {
+        if (comment == comments.first()) {
+            continue;
+        }
+
+        replies.append({ QDateTime::fromString(comment.date, Qt::ISODate), comment.text,
+                         User(comment.author, comment.authorEmail) });
+    }
+    repliesView->setMessages(replies);
 }
 
 
@@ -166,29 +187,41 @@ QModelIndex CommentRepliesView::commentIndex() const
 void CommentRepliesView::setCommentIndex(const QModelIndex& _index)
 {
     //
-    // Если сменился индекс, отобразим вверху текущий комментарий
+    // Если сменился индекс
     //
     const bool isIndexChanged = d->commentIndex != _index;
     if (isIndexChanged) {
+        //
+        // ... отсоединим от старой модели
+        //
+        if (d->commentIndex.model() != nullptr) {
+            d->commentIndex.model()->disconnect(this);
+        }
+        //
+        // ... отобразим вверху текущий комментарий
+        //
         d->commentIndex = _index;
         d->headerView->setCommentIndex(d->commentIndex);
+        //
+        // ... и присоединим к новой модели
+        //
+        if (d->commentIndex.model() != nullptr) {
+            connect(d->commentIndex.model(), &QAbstractItemModel::dataChanged, this,
+                    [this](const QModelIndex& _topLeft) {
+                        if (_topLeft != d->commentIndex) {
+                            return;
+                        }
+
+                        d->headerView->repaint();
+                        d->fillComments();
+                    });
+        }
     }
 
     //
     // Собираем ответы на комментарий и помещаем их во вьюху
     //
-    const auto comments = _index.data(CommentsModel::ReviewMarkRepliesRole)
-                              .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
-    QVector<ChatMessage> replies;
-    for (const auto& comment : comments) {
-        if (comment == comments.first()) {
-            continue;
-        }
-
-        replies.append({ QDateTime::fromString(comment.date, Qt::ISODate), comment.text,
-                         User(comment.author, comment.authorEmail) });
-    }
-    d->repliesView->setMessages(replies);
+    d->fillComments();
 
     //
     // Если это установка нового индекса, то предрасчитаем размер скролбара,
