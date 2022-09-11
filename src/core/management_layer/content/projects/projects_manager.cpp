@@ -759,6 +759,12 @@ void ProjectsManager::setCurrentProjectNeverAskAboutSwitch()
     d->projects->updateProject(d->currentProject);
 }
 
+void ProjectsManager::setCurrentProjectCanBeSynced(bool _can)
+{
+    d->currentProject.setCanBeSynced(_can);
+    d->projects->updateProject(d->currentProject);
+}
+
 void ProjectsManager::closeCurrentProject()
 {
     //

@@ -108,6 +108,12 @@ public:
     void setCanAskAboutSwitch(bool _can);
 
     /**
+     * @brief Может ли проект быть синхронизированным
+     */
+    bool canBeSynced() const;
+    void setCanBeSynced(bool _can);
+
+    /**
      * @brief Идентификатор проекта
      */
     int id() const;

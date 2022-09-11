@@ -24,6 +24,7 @@ public:
     QString logline;
     QDateTime lastEditTime;
     bool canAskAboutSwitch = true;
+    bool canBeSynced = true;
     int id = -1;
     bool isOwner = true;
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
@@ -195,6 +196,16 @@ bool Project::canAskAboutSwitch() const
 void Project::setCanAskAboutSwitch(bool _can)
 {
     d->canAskAboutSwitch = _can;
+}
+
+bool Project::canBeSynced() const
+{
+    return d->canBeSynced;
+}
+
+void Project::setCanBeSynced(bool _can)
+{
+    d->canBeSynced = _can;
 }
 
 int Project::id() const

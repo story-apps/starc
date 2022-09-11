@@ -40,7 +40,7 @@ signals:
     /**
      * @brief Диалог завершился с установленным выбором пользователя
      */
-    void finished(const ButtonInfo& _pressedButton);
+    void finished(const Dialog::ButtonInfo& _pressedButton);
 
 protected:
     /**

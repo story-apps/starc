@@ -117,6 +117,11 @@ public:
     void setCurrentProjectNeverAskAboutSwitch();
 
     /**
+     * @brief Может ли текущий проект быть синхронизирован
+     */
+    void setCurrentProjectCanBeSynced(bool _can);
+
+    /**
      * @brief Закрыть текущий проект
      */
     void closeCurrentProject();

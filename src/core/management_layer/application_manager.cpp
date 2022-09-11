@@ -1556,6 +1556,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     // Для облачных проектов делаем синхронизацию офлайн изменений
     //
     if (currentProject.isRemote()) {
+        projectsManager->setCurrentProjectCanBeSynced(true);
         const auto unsyncedDocuments = projectManager->unsyncedDocuments();
         for (const auto document : unsyncedDocuments) {
             cloudServiceManager->openDocument(projectsManager->currentProject().id(), document);
@@ -2490,14 +2491,61 @@ void ApplicationManager::initConnections()
             [this](int _id) { d->cloudServiceManager->removeProject(_id); });
     connect(d->projectsManager.data(), &ProjectsManager::unsubscribeFromCloudProjectRequested, this,
             [this](int _id) { d->cloudServiceManager->unsubscribeFromProject(_id); });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::projectCantBeSynced, this, [this] {
+        const auto& currentProject = d->projectsManager->currentProject();
+
+        //
+        // Если проект уже в состоянии проблем синхронизации, то не показываем диалог вновь,
+        // чтобы не поймать эффект множественного наложения диалогов
+        //
+        if (!currentProject.canBeSynced()) {
+            return;
+        }
+
+        d->projectsManager->setCurrentProjectCanBeSynced(false);
+
+        if (currentProject.isOwner()) {
+            auto dialog = new Dialog(d->applicationView);
+            const int kCancelButtonId = 0;
+            const int kAcceptButtonId = 1;
+            dialog->showDialog(
+                {},
+                tr("Your cloud service subscription ended. Renew subscription to continue working "
+                   "with the project."),
+                { { kCancelButtonId, tr("Continue offline"), Dialog::RejectButton },
+                  { kAcceptButtonId, tr("Renew subscription"), Dialog::AcceptButton } });
+            QObject::connect(
+                dialog, &Dialog::finished, dialog,
+                [this, dialog, kCancelButtonId](const Dialog::ButtonInfo& _pressedButton) {
+                    dialog->hideDialog();
+
+                    if (_pressedButton.id == kCancelButtonId) {
+                        return;
+                    }
+
+                    d->accountManager->renewTeam();
+                });
+            QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+        } else {
+            auto dialog = new Dialog(d->applicationView);
+            const int kCancelButtonId = 0;
+            dialog->showDialog(
+                {},
+                tr("Project owner cloud service subscription ended. Ask them to renew subscription "
+                   "to you can continue working with the project."),
+                { { kCancelButtonId, tr("Continue offline"), Dialog::RejectButton } });
+            QObject::connect(dialog, &Dialog::finished, dialog, &Dialog::hideDialog);
+            QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+        }
+    });
 
     //
     // Документы
     //
     connect(d->projectManager.data(), &ProjectManager::structureModelChanged, this,
             [this](BusinessLayer::AbstractModel* _model) {
-                const auto currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote()) {
+                const auto& currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote() || !currentProject.canBeSynced()) {
                     return;
                 }
 
@@ -2505,8 +2553,9 @@ void ApplicationManager::initConnections()
             });
     connect(d->projectManager.data(), &ProjectManager::downloadDocumentRequested, this,
             [this](const QUuid& _documentUuid) {
-                const auto currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote() || _documentUuid.isNull()) {
+                const auto& currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote() || !currentProject.canBeSynced()
+                    || _documentUuid.isNull()) {
                     return;
                 }
 
@@ -2543,8 +2592,8 @@ void ApplicationManager::initConnections()
             d->projectManager.data(), &ProjectManager::applyDocumentChanges);
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
             [this](BusinessLayer::AbstractModel* _model) {
-                const auto currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote()) {
+                const auto& currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote() || !currentProject.canBeSynced()) {
                     return;
                 }
 
@@ -2561,8 +2610,8 @@ void ApplicationManager::initConnections()
             });
     connect(d->projectManager.data(), &ProjectManager::uploadDocumentRequested, this,
             [this](const QUuid& _documentUuid, bool _isNewDocument) {
-                const auto currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote()) {
+                const auto& currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote() || !currentProject.canBeSynced()) {
                     return;
                 }
 
@@ -2582,8 +2631,8 @@ void ApplicationManager::initConnections()
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChangeAllowed, this,
             [this](const QUuid& _documentUuid) {
-                const auto currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote()) {
+                const auto& currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote() || !currentProject.canBeSynced()) {
                     return;
                 }
 
@@ -2608,8 +2657,8 @@ void ApplicationManager::initConnections()
             d->projectManager.data(), &ProjectManager::markChangesSynced);
     connect(d->projectManager.data(), &ProjectManager::documentRemoved, this,
             [this](const QUuid& _documentUuid) {
-                const auto currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote()) {
+                const auto& currentProject = d->projectsManager->currentProject();
+                if (!currentProject.isRemote() || !currentProject.canBeSynced()) {
                     return;
                 }
 
@@ -2622,7 +2671,7 @@ void ApplicationManager::initConnections()
     connect(d->projectManager.data(), &ProjectManager::cursorChanged, this,
             [this](const QUuid& _documentUuid, const QByteArray& _cursorData) {
                 const auto currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote()) {
+                if (!currentProject.isRemote() || !currentProject.canBeSynced()) {
                     return;
                 }
 
