@@ -63,11 +63,10 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
             if (_cursor.hasSelection()) {
                 _cursor.deleteChar();
             }
-            if (!_cursor.atEnd()) {
-                _cursor.deleteChar();
-            } else {
-                _cursor.deletePreviousChar();
-            }
+            _cursor.movePosition(!_cursor.atEnd() ? QTextCursor::NextCharacter
+                                                  : QTextCursor::PreviousCharacter,
+                                 QTextCursor::KeepAnchor);
+            _cursor.deleteChar();
             return true;
         }
     }
