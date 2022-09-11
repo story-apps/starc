@@ -146,8 +146,11 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                                exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
-                    while (!modelExportFile.endsWith('.')) {
-                        modelExportFile.chop(1);
+                    const auto dotIndex = modelExportFile.lastIndexOf('.');
+                    if (dotIndex == -1) {
+                        modelExportFile += '.';
+                    } else {
+                        modelExportFile = modelExportFile.mid(0, dotIndex + 1);
                     }
                     modelExportFile += exportExtension;
                 }
@@ -310,8 +313,11 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                                exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
-                    while (!modelExportFile.endsWith('.')) {
-                        modelExportFile.chop(1);
+                    const auto dotIndex = modelExportFile.lastIndexOf('.');
+                    if (dotIndex == -1) {
+                        modelExportFile += '.';
+                    } else {
+                        modelExportFile = modelExportFile.mid(0, dotIndex + 1);
                     }
                     modelExportFile += exportExtension;
                 }
@@ -447,8 +453,11 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
                                exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
-                    while (!modelExportFile.endsWith('.')) {
-                        modelExportFile.chop(1);
+                    const auto dotIndex = modelExportFile.lastIndexOf('.');
+                    if (dotIndex == -1) {
+                        modelExportFile += '.';
+                    } else {
+                        modelExportFile = modelExportFile.mid(0, dotIndex + 1);
                     }
                     modelExportFile += exportExtension;
                 }
@@ -590,8 +599,11 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
                                exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
-                    while (!modelExportFile.endsWith('.')) {
-                        modelExportFile.chop(1);
+                    const auto dotIndex = modelExportFile.lastIndexOf('.');
+                    if (dotIndex == -1) {
+                        modelExportFile += '.';
+                    } else {
+                        modelExportFile = modelExportFile.mid(0, dotIndex + 1);
                     }
                     modelExportFile += exportExtension;
                 }
@@ -730,8 +742,11 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
                           .arg(projectExportFolder, simpleTextModel->name(), exportExtension);
                 modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
-                    while (!modelExportFile.endsWith('.')) {
-                        modelExportFile.chop(1);
+                    const auto dotIndex = modelExportFile.lastIndexOf('.');
+                    if (dotIndex == -1) {
+                        modelExportFile += '.';
+                    } else {
+                        modelExportFile = modelExportFile.mid(0, dotIndex + 1);
                     }
                     modelExportFile += exportExtension;
                 }
