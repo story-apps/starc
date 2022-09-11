@@ -17,6 +17,7 @@
 
 #include <QFileDialog>
 #include <QGridLayout>
+#include <QSettings>
 #include <QStandardItemModel>
 #include <QTimer>
 
@@ -25,7 +26,8 @@ namespace Ui {
 
 namespace {
 const int kTypeRole = Qt::UserRole + 1;
-}
+const char* kProjectStoreInCloudKey = "/widgets/create-project-dialog/store-in-cloud";
+} // namespace
 
 class CreateProjectDialog::Implementation
 {
@@ -194,9 +196,14 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
 
         emit createProjectPressed();
     });
+
+    d->cloudProject->setChecked(QSettings().value(kProjectStoreInCloudKey, false).toBool());
 }
 
-CreateProjectDialog::~CreateProjectDialog() = default;
+CreateProjectDialog::~CreateProjectDialog()
+{
+    QSettings().setValue(kProjectStoreInCloudKey, d->cloudProject->isChecked());
+}
 
 int CreateProjectDialog::projectType() const
 {
@@ -309,7 +316,7 @@ bool CreateProjectDialog::isLocal() const
 
 QWidget* CreateProjectDialog::focusedWidgetAfterShow() const
 {
-    return d->projectType;
+    return d->projectName;
 }
 
 QWidget* CreateProjectDialog::lastFocusableWidget() const
