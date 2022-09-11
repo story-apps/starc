@@ -220,7 +220,7 @@ void ScreenplayTreatmentEdit::initWithModel(BusinessLayer::ScreenplayTextModel* 
     //
     if (d->model && d->model->dictionariesModel()) {
         for (const auto& sceneIntro : d->model->dictionariesModel()->sceneIntros()) {
-            ignoreWord(sceneIntro.chopped(1));
+            ignoreWord(sceneIntro.endsWith('.') ? sceneIntro.chopped(1) : sceneIntro);
         }
     }
 }
