@@ -67,6 +67,11 @@ public:
 
 protected:
     /**
+     * @brief Игнорировать заданное слово
+     */
+    void ignoreWord(const QString& _word);
+
+    /**
      * @brief Пересоздание подсвечивающего класса
      */
     void setHighlighterDocument(QTextDocument* _document);

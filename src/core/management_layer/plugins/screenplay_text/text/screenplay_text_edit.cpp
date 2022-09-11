@@ -9,6 +9,7 @@
 #include <business_layer/import/screenplay/screenplay_fountain_importer.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
+#include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
@@ -216,6 +217,14 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
         connect(d->model->informationModel(),
                 &BusinessLayer::ScreenplayInformationModel::footerChanged, this,
                 &ScreenplayTextEdit::setFooter);
+    }
+    //
+    // Добавляем словарные термины в список исключений для проверки орфографии
+    //
+    if (d->model && d->model->dictionariesModel()) {
+        for (const auto& sceneIntro : d->model->dictionariesModel()->sceneIntros()) {
+            ignoreWord(sceneIntro.chopped(1));
+        }
     }
 }
 

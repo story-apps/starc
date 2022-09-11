@@ -229,7 +229,8 @@ ContextMenu* SpellCheckTextEdit::createContextMenu(const QPoint& _position, QWid
     auto ignoreWordAction = new QAction;
     ignoreWordAction->setText(tr("Ignore word"));
     ignoreWordAction->setIconText(u8"\U000F68C0");
-    connect(ignoreWordAction, &QAction::triggered, this, &SpellCheckTextEdit::ignoreWord);
+    connect(ignoreWordAction, &QAction::triggered, this,
+            qOverload<>(&SpellCheckTextEdit::ignoreWord));
     actions.append(ignoreWordAction);
 
     auto menu = new ContextMenu(_parent == nullptr ? this : _parent);
@@ -237,6 +238,11 @@ ContextMenu* SpellCheckTextEdit::createContextMenu(const QPoint& _position, QWid
     menu->setBackgroundColor(Ui::DesignSystem::color().background());
     menu->setTextColor(Ui::DesignSystem::color().onBackground());
     return menu;
+}
+
+void SpellCheckTextEdit::ignoreWord(const QString& _word)
+{
+    d->spellChecker.ignoreWord(_word);
 }
 
 void SpellCheckTextEdit::setHighlighterDocument(QTextDocument* _document)
