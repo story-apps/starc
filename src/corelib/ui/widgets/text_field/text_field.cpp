@@ -820,8 +820,8 @@ void TextField::paintEvent(QPaintEvent* _event)
     painter.begin(viewport());
     QRectF backgroundRect = rect().marginsRemoved(d->contentMargins().toMargins());
     if (!d->helper.isEmpty() || !d->error.isEmpty()) {
-        backgroundRect.moveBottom(backgroundRect.bottom()
-                                  - Ui::DesignSystem::textField().helperHeight());
+        backgroundRect.setBottom(backgroundRect.bottom()
+                                 - Ui::DesignSystem::textField().helperHeight());
     }
     painter.setPen(Qt::NoPen);
     painter.setBrush(underMouse() || hasFocus()
@@ -947,7 +947,7 @@ void TextField::paintEvent(QPaintEvent* _event)
             = !d->error.isEmpty() ? Ui::DesignSystem::color().error() : d->textDisabledColor;
         painter.setPen(color);
         const QRectF textRect(d->contentMargins().left() + d->margins().left(),
-                              height() - d->contentMargins().top() - d->contentMargins().bottom()
+                              height() - d->contentMargins().bottom()
                                   - Ui::DesignSystem::textField().helperHeight(),
                               width() - d->contentMargins().left() - d->margins().left()
                                   - d->margins().right() - d->contentMargins().right(),
