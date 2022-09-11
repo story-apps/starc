@@ -35,8 +35,19 @@
 ;--------------------------------
 ;Interface Settings
 
+  Function createShortcutsFunction
+  CreateDirectory "$SMPROGRAMS\Starc"
+  CreateShortCut "$SMPROGRAMS\Starc\Story Architect.lnk" "$INSTDIR\starcapp.exe"
+  CreateShortCut "$SMPROGRAMS\Starc\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+  CreateShortcut "$DESKTOP\Story Architect.lnk" "$INSTDIR\starcapp.exe" "" "$INSTDIR\starcapp.exe" 0
+  FunctionEnd
+
   !define MUI_ABORTWARNING
   !define MUI_FINISHPAGE_RUN "$INSTDIR\starcapp.exe"
+  !define MUI_FINISHPAGE_SHOWREADME ""
+  !define MUI_FINISHPAGE_SHOWREADME_CHECKED
+  !define MUI_FINISHPAGE_SHOWREADME_TEXT "Create Desktop and Start Menu Shortcuts"
+  !define MUI_FINISHPAGE_SHOWREADME_FUNCTION createShortcutsFunction
 
 ;--------------------------------
 ;Pages
@@ -88,21 +99,6 @@ Section "App files section" SecFiles
 
 SectionEnd
 
-; Optional section (can be disabled by the user)
-Section "Start Menu Shortcuts"
-
-  CreateDirectory "$SMPROGRAMS\Starc"
-  CreateShortCut "$SMPROGRAMS\Starc\Story Architect.lnk" "$INSTDIR\starcapp.exe"
-  CreateShortCut "$SMPROGRAMS\Starc\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-  
-SectionEnd
-
-Section "Desctop Shortcut"
-
-  CreateShortcut "$DESKTOP\Story Architect.lnk" "$INSTDIR\starcapp.exe" "" "$INSTDIR\starcapp.exe" 0
-  
-SectionEnd
-
 ;--------------------------------
 ;Uninstaller Section
 
@@ -150,8 +146,6 @@ Function .onInit
     MessageBox MB_OK|MB_ICONEXCLAMATION "Story Architect already running. Please close it and restart installation." /SD IDOK
     Abort
   notRunning:
-
-  ;Language selection dialog
 
   InitPluginsDir
   !insertmacro MUI_LANGDLL_DISPLAY
