@@ -2515,8 +2515,8 @@ void ApplicationManager::initConnections()
             const int kAcceptButtonId = 1;
             dialog->showDialog(
                 {},
-                tr("Your cloud service subscription ended. Renew subscription to continue working "
-                   "with the project."),
+                tr("Your cloud service subscription is expired. Activate subscription to continue "
+                   "working with the project."),
                 { { kCancelButtonId, tr("Continue offline"), Dialog::RejectButton },
                   { kAcceptButtonId, tr("Renew subscription"), Dialog::AcceptButton } });
             QObject::connect(
@@ -2536,8 +2536,8 @@ void ApplicationManager::initConnections()
             const int kCancelButtonId = 0;
             dialog->showDialog(
                 {},
-                tr("Project owner cloud service subscription ended. Ask them to renew subscription "
-                   "to you can continue working with the project."),
+                tr("Cloud service subscription of the project owners is expired. You can continue "
+                   "working with the project as soon as they renew the subscription."),
                 { { kCancelButtonId, tr("Continue offline"), Dialog::RejectButton } });
             QObject::connect(dialog, &Dialog::finished, dialog, &Dialog::hideDialog);
             QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);

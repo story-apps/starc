@@ -112,18 +112,18 @@ void SubscriptionView::updateTranslations()
     if (d->notification.type == Domain::NotificationType::ProSubscriptionEnds) {
         d->bodyLabel->setText(
             daysLeft == 0
-                ? tr("Your subscription to the PRO version ends today.")
-                : (daysLeft > 0 ? tr("Your subscription to the PRO version ends in %n day(s)", "",
+                ? tr("Your PRO version subscription expires today.")
+                : (daysLeft > 0 ? tr("Your PRO version subscription expires in %n day(s)", "",
                                      std::max(1, daysLeft))
-                                : tr("Your subscription to the PRO version ended. Account was "
-                                     "moved to the FREE version.")));
+                                : tr("Your PRO version subscription is expired. Account is "
+                                     "switched to the FREE Version.")));
     } else {
         d->bodyLabel->setText(
             daysLeft == 0
-                ? tr("Your subscription to the TEAM version ends today.")
-                : (daysLeft > 0 ? tr("Your subscription to the TEAM version ends in %n day(s)", "",
+                ? tr("Your TEAM version subscription expires today.")
+                : (daysLeft > 0 ? tr("Your TEAM version subscription expires in %n day(s)", "",
                                      std::max(1, daysLeft))
-                                : tr("Your subscription to the TEAM version ended. Your cloud "
+                                : tr("Your TEAM version subscription is expired. Your cloud "
                                      "projects will be stored for 30 days and then removed if you "
                                      "don't reactivate TEAM subscription.")));
     }

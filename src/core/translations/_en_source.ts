@@ -1242,22 +1242,22 @@
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="363"/>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="444"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="446"/>
         <source>Continue with FREE version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="440"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="442"/>
         <source>Try TEAM version for free</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="441"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="443"/>
         <source>You can try all the features of the TEAM version during 30 days for free. After trial period, you can continue to use the TEAM version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="445"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="447"/>
         <source>Activate TEAM</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1402,24 +1402,24 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2513"/>
-        <source>Your cloud service subscription ended. Renew subscription to continue working with the project.</source>
+        <location filename="../management_layer/application_manager.cpp" line="2539"/>
+        <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2515"/>
-        <location filename="../management_layer/application_manager.cpp" line="2536"/>
+        <location filename="../management_layer/application_manager.cpp" line="2520"/>
+        <location filename="../management_layer/application_manager.cpp" line="2541"/>
         <source>Continue offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2516"/>
-        <source>Renew subscription</source>
+        <location filename="../management_layer/application_manager.cpp" line="2518"/>
+        <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2534"/>
-        <source>Project owner cloud service subscription ended. Ask them to renew subscription to you can continue working with the project.</source>
+        <location filename="../management_layer/application_manager.cpp" line="2521"/>
+        <source>Renew subscription</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5305,105 +5305,105 @@
     <name>Ui::MenuView</name>
     <message>
         <location filename="../ui/menu_view.cpp" line="320"/>
-        <location filename="../ui/menu_view.cpp" line="533"/>
+        <location filename="../ui/menu_view.cpp" line="536"/>
         <source>Hide developers version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="321"/>
-        <location filename="../ui/menu_view.cpp" line="534"/>
+        <location filename="../ui/menu_view.cpp" line="537"/>
         <source>Show developers version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="392"/>
-        <location filename="../ui/menu_view.cpp" line="508"/>
+        <location filename="../ui/menu_view.cpp" line="511"/>
         <source>All changes saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="392"/>
-        <location filename="../ui/menu_view.cpp" line="507"/>
+        <location filename="../ui/menu_view.cpp" line="510"/>
         <source>Save changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="503"/>
+        <location filename="../ui/menu_view.cpp" line="506"/>
         <source>Sign in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="504"/>
+        <location filename="../ui/menu_view.cpp" line="507"/>
         <source>Stories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="505"/>
+        <location filename="../ui/menu_view.cpp" line="508"/>
         <source>Create story</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="506"/>
+        <location filename="../ui/menu_view.cpp" line="509"/>
         <source>Open story</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="511"/>
+        <location filename="../ui/menu_view.cpp" line="514"/>
         <source>Save current story as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="512"/>
+        <location filename="../ui/menu_view.cpp" line="515"/>
         <source>Import...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="514"/>
+        <location filename="../ui/menu_view.cpp" line="517"/>
         <source>Export current document...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="517"/>
+        <location filename="../ui/menu_view.cpp" line="520"/>
         <source>Toggle full screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="520"/>
+        <location filename="../ui/menu_view.cpp" line="523"/>
         <source>Application settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="522"/>
+        <location filename="../ui/menu_view.cpp" line="525"/>
         <source>Show writing sprint timer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="523"/>
+        <location filename="../ui/menu_view.cpp" line="526"/>
         <source>Show notifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="526"/>
+        <location filename="../ui/menu_view.cpp" line="529"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="527"/>
+        <location filename="../ui/menu_view.cpp" line="530"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="529"/>
+        <location filename="../ui/menu_view.cpp" line="532"/>
         <source>Back to main menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="530"/>
+        <location filename="../ui/menu_view.cpp" line="533"/>
         <source>Notifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="531"/>
+        <location filename="../ui/menu_view.cpp" line="534"/>
         <source>Notifications preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8536,34 +8536,44 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <source>Subscription ended</source>
         <translation type="unfinished"></translation>
     </message>
-    <message numerus="yes">
-        <location filename="../ui/notifications/subscription_view.cpp" line="114"/>
-        <source>Your subscription to the PRO version ends in %n day(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
+        <location filename="../ui/notifications/subscription_view.cpp" line="115"/>
+        <source>Your PRO version subscription expires today.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
         <location filename="../ui/notifications/subscription_view.cpp" line="116"/>
-        <source>Your subscription to the PRO version ended. Account was moved to the FREE version.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../ui/notifications/subscription_view.cpp" line="120"/>
-        <source>Your subscription to the TEAM version ends in %n day(s)</source>
+        <source>Your PRO version subscription expires in %n day(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/notifications/subscription_view.cpp" line="122"/>
-        <source>Your subscription to the TEAM version ended. Cloud projects will be removed from the cloud in 30 days.</source>
+        <location filename="../ui/notifications/subscription_view.cpp" line="118"/>
+        <source>Your PRO version subscription is expired. Account is switched to the FREE Version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/notifications/subscription_view.cpp" line="125"/>
+        <location filename="../ui/notifications/subscription_view.cpp" line="123"/>
+        <source>Your TEAM version subscription expires today.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/notifications/subscription_view.cpp" line="124"/>
+        <source>Your TEAM version subscription expires in %n day(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../ui/notifications/subscription_view.cpp" line="126"/>
+        <source>Your TEAM version subscription is expired. Your cloud projects will be stored for 30 days and then removed if you don&apos;t reactivate TEAM subscription.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/notifications/subscription_view.cpp" line="130"/>
         <source>Renew</source>
         <translation type="unfinished"></translation>
     </message>
