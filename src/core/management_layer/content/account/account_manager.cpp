@@ -397,8 +397,6 @@ void AccountManager::buyProLifetme()
 
 void AccountManager::renewPro()
 {
-    d->initPurchaseDialog();
-
     auto proPaymentOptions = d->accountInfo.paymentOptions;
     for (int index = proPaymentOptions.size() - 1; index >= 0; --index) {
         const auto& option = proPaymentOptions.at(index);
@@ -408,7 +406,11 @@ void AccountManager::renewPro()
             proPaymentOptions.removeAt(index);
         }
     }
+    if (proPaymentOptions.isEmpty()) {
+        return;
+    }
 
+    d->initPurchaseDialog();
     d->purchaseDialog->setPaymentOptions(proPaymentOptions);
     d->purchaseDialog->selectOption(proPaymentOptions.constLast());
     d->purchaseDialog->showDialog();
@@ -459,8 +461,6 @@ bool AccountManager::tryTeamForFree()
 
 void AccountManager::renewTeam()
 {
-    d->initPurchaseDialog();
-
     auto teamPaymentOptions = d->accountInfo.paymentOptions;
     for (int index = teamPaymentOptions.size() - 1; index >= 0; --index) {
         const auto& option = teamPaymentOptions.at(index);
@@ -470,7 +470,11 @@ void AccountManager::renewTeam()
             teamPaymentOptions.removeAt(index);
         }
     }
+    if (teamPaymentOptions.isEmpty()) {
+        return;
+    }
 
+    d->initPurchaseDialog();
     d->purchaseDialog->setPaymentOptions(teamPaymentOptions);
     d->purchaseDialog->selectOption(teamPaymentOptions.constLast());
     d->purchaseDialog->showDialog();

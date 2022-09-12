@@ -12,6 +12,7 @@ namespace Domain {
  */
 enum class NotificationType {
     Undefined,
+    //
     UpdateDevLinux,
     UpdateDevMac,
     UpdateDevWindows32,
@@ -20,6 +21,9 @@ enum class NotificationType {
     UpdateStableMac,
     UpdateStableWindows32,
     UpdateStableWindows64,
+    //
+    ProSubscriptionEnds,
+    TeamSubscriptionEnds,
 };
 
 /**

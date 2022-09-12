@@ -324,9 +324,70 @@ IconsMidLabel::IconsMidLabel(QWidget* _parent)
 {
 }
 
+void IconsMidLabel::setDecorationVisible(bool _visible)
+{
+    if (m_isDecorationVisible == _visible) {
+        return;
+    }
+
+    m_isDecorationVisible = _visible;
+    updateGeometry();
+    update();
+}
+
+QSize IconsMidLabel::sizeHint() const
+{
+    if (m_isDecorationVisible) {
+        return QSize(Ui::DesignSystem::layout().px48(), Ui::DesignSystem::layout().px48());
+    }
+
+    return AbstractIconsLabel::sizeHint();
+}
+
+int IconsMidLabel::heightForWidth(int _width) const
+{
+    if (m_isDecorationVisible) {
+        return sizeHint().height();
+    }
+
+    return AbstractIconsLabel::heightForWidth(_width);
+}
+
 const QFont& IconsMidLabel::textFont() const
 {
     return Ui::DesignSystem::font().iconsMid();
+}
+
+void IconsMidLabel::paintEvent(QPaintEvent* _event)
+{
+    if (!m_isDecorationVisible) {
+        AbstractIconsLabel::paintEvent(_event);
+        return;
+    }
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    //
+    // Рисуем фон
+    //
+    painter.fillRect(_event->rect(), backgroundColor());
+
+    //
+    // Рисуем декорацию
+    //
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(
+        ColorHelper::transparent(textColor(), Ui::DesignSystem::focusBackgroundOpacity()));
+    painter.drawEllipse(contentsRect());
+
+    //
+    // Рисуем текст
+    //
+    painter.setFont(textFont());
+    painter.setPen(textColor());
+    painter.setOpacity(isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity());
+    painter.drawText(contentsRect(), Qt::AlignCenter, text());
 }
 
 
@@ -361,7 +422,7 @@ QSize IconsBigLabel::sizeHint() const
 int IconsBigLabel::heightForWidth(int _width) const
 {
     if (m_isDecorationVisible) {
-        return Ui::DesignSystem::layout().px62();
+        return sizeHint().height();
     }
 
     return AbstractIconsLabel::heightForWidth(_width);

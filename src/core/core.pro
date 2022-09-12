@@ -83,6 +83,7 @@ SOURCES += \
     ui/import/import_dialog.cpp \
     ui/menu_view.cpp \
     ui/notifications/release_view.cpp \
+    ui/notifications/subscription_view.cpp \
     ui/onboarding/onboarding_navigator.cpp \
     ui/onboarding/onboarding_tool_bar.cpp \
     ui/onboarding/onboarding_view.cpp \
@@ -148,6 +149,7 @@ HEADERS += \
     ui/import/import_dialog.h \
     ui/menu_view.h \
     ui/notifications/release_view.h \
+    ui/notifications/subscription_view.h \
     ui/onboarding/onboarding_navigator.h \
     ui/onboarding/onboarding_tool_bar.h \
     ui/onboarding/onboarding_view.h \

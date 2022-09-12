@@ -17,13 +17,8 @@ class ReleaseView : public Widget
     Q_OBJECT
 
 public:
-    explicit ReleaseView(QWidget* _parent = nullptr);
+    explicit ReleaseView(QWidget* _parent, const Domain::Notification& _notification);
     ~ReleaseView() override;
-
-    /**
-     * @brief Задать уведомление для отображения
-     */
-    void setNotification(const Domain::Notification& _notification);
 
 protected:
     /**

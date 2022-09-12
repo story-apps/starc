@@ -189,6 +189,16 @@ signals:
      */
     void showDevVersionsChanged(bool _show);
 
+    /**
+     * @brief Пользователь нажал кнопку продления PRO версии
+     */
+    void renewProPressed();
+
+    /**
+     * @brief Пользователь нажал кнопку продления TEAM версии
+     */
+    void renewTeamPressed();
+
 protected:
     /**
      * @brief Обработка нажатия клавиатуры (Закрытие при нажатии esc)

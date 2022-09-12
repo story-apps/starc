@@ -2,6 +2,7 @@
 
 #include "about_application_dialog.h"
 #include "notifications/release_view.h"
+#include "notifications/subscription_view.h"
 
 #include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
@@ -431,9 +432,36 @@ void MenuView::setNotifications(const QVector<Domain::Notification>& _notificati
     // просто вставлять уведомления в начало списка
     //
     for (const auto& notification : reversed(_notifications)) {
-        auto releaseView = new ReleaseView(this);
-        releaseView->setNotification(notification);
-        d->notificationsLayout->insertWidget(0, releaseView);
+        QWidget* notificationView = nullptr;
+        switch (notification.type) {
+        case Domain::NotificationType::UpdateDevLinux:
+        case Domain::NotificationType::UpdateDevMac:
+        case Domain::NotificationType::UpdateDevWindows32:
+        case Domain::NotificationType::UpdateDevWindows64:
+        case Domain::NotificationType::UpdateStableLinux:
+        case Domain::NotificationType::UpdateStableMac:
+        case Domain::NotificationType::UpdateStableWindows32:
+        case Domain::NotificationType::UpdateStableWindows64: {
+            notificationView = new ReleaseView(this, notification);
+            break;
+        }
+
+        case Domain::NotificationType::ProSubscriptionEnds:
+        case Domain::NotificationType::TeamSubscriptionEnds: {
+            auto view = new SubscriptionView(this, notification);
+            connect(view, &SubscriptionView::renewProPressed, this, &MenuView::renewProPressed);
+            connect(view, &SubscriptionView::renewTeamPressed, this, &MenuView::renewTeamPressed);
+            notificationView = view;
+            break;
+        }
+
+        default: {
+            break;
+        }
+        }
+        if (notificationView != nullptr) {
+            d->notificationsLayout->insertWidget(0, notificationView);
+        }
     }
     d->notificationsLayout->addStretch();
 }

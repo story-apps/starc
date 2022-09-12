@@ -35,7 +35,7 @@ enum State {
 class ReleaseView::Implementation
 {
 public:
-    explicit Implementation(ReleaseView* _q);
+    Implementation(ReleaseView* _q, const Domain::Notification& _notification);
 
     /**
      * @brief Загрузить обновление
@@ -79,8 +79,10 @@ public:
     QHBoxLayout* buttonsLayout = nullptr;
 };
 
-ReleaseView::Implementation::Implementation(ReleaseView* _q)
+ReleaseView::Implementation::Implementation(ReleaseView* _q,
+                                            const Domain::Notification& _notification)
     : q(_q)
+    , notification(_notification)
     , avatarLabel(new ImageLabel(_q))
     , dateTimeLabel(new CaptionLabel(_q))
     , titleLabel(new Subtitle2Label(_q))
@@ -185,8 +187,8 @@ void ReleaseView::Implementation::installUpdate()
 
 void ReleaseView::Implementation::updateState()
 {
-    const auto json = QJsonDocument::fromJson(notification.notification.toUtf8()).object();
     dateTimeLabel->setText(notification.dateTime.toLocalTime().toString("dd.MM.yyyy hh:mm"));
+    const auto json = QJsonDocument::fromJson(notification.notification.toUtf8()).object();
     const auto version = json.value("version").toString();
     //
     // Dev версия
@@ -270,9 +272,9 @@ void ReleaseView::Implementation::updateState()
 // ****
 
 
-ReleaseView::ReleaseView(QWidget* _parent)
+ReleaseView::ReleaseView(QWidget* _parent, const Domain::Notification& _notification)
     : Widget(_parent)
-    , d(new Implementation(this))
+    , d(new Implementation(this, _notification))
 {
     auto titleLayout = new QVBoxLayout;
     titleLayout->setContentsMargins({});
@@ -319,13 +321,6 @@ ReleaseView::ReleaseView(QWidget* _parent)
 }
 
 ReleaseView::~ReleaseView() = default;
-
-void ReleaseView::setNotification(const Domain::Notification& _notification)
-{
-    d->notification = _notification;
-
-    updateTranslations();
-}
 
 void ReleaseView::updateTranslations()
 {

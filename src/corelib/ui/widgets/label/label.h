@@ -247,8 +247,33 @@ class CORE_LIBRARY_EXPORT IconsMidLabel : public AbstractIconsLabel
 public:
     explicit IconsMidLabel(QWidget* _parent = nullptr);
 
+    /**
+     * @brief Необходимо ли рисовать декорацию
+     */
+    void setDecorationVisible(bool _visible);
+
+    /**
+     * @brief Учитываем размер декорации при определении идеального размера
+     */
+    QSize sizeHint() const override;
+    int heightForWidth(int _width) const override;
+
 protected:
+    /**
+     * @brief Необходимый шрифт для отрисовки лейбла
+     */
     const QFont& textFont() const override;
+
+    /**
+     * @brief Сначала рисуем декорацию, а потом иконку
+     */
+    void paintEvent(QPaintEvent* _event) override;
+
+private:
+    /**
+     * @brief Необходимо ли отображать декорацию
+     */
+    bool m_isDecorationVisible = false;
 };
 
 

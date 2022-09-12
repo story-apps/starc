@@ -2101,6 +2101,11 @@ void ApplicationManager::initConnections()
     //
     connect(d->menuView, &Ui::MenuView::writingSprintPressed, this,
             [this] { d->writingSessionManager->showSprintPanel(); });
+    //
+    connect(d->menuView, &Ui::MenuView::renewProPressed, d->accountManager.data(),
+            &AccountManager::renewPro);
+    connect(d->menuView, &Ui::MenuView::renewTeamPressed, d->accountManager.data(),
+            &AccountManager::renewTeam);
 
     //
     // Менеджер посадки
