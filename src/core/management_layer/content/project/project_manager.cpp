@@ -2349,11 +2349,21 @@ Domain::DocumentObject* ProjectManager::currentDocument() const
 
 QVector<Domain::DocumentObject*> ProjectManager::unsyncedDocuments() const
 {
+    using namespace DataStorageLayer;
+
+    const auto unsyncedDocuments = StorageFacade::documentChangeStorage()->unsyncedDocuments();
     QVector<Domain::DocumentObject*> documents;
-    const auto unsyncedDocuments
-        = DataStorageLayer::StorageFacade::documentChangeStorage()->unsyncedDocuments();
-    for (const auto& document : unsyncedDocuments) {
-        documents.append(DataStorageLayer::StorageFacade::documentStorage()->document(document));
+    for (const auto& documentUuid : unsyncedDocuments) {
+        auto document = StorageFacade::documentStorage()->document(documentUuid);
+        if (document != nullptr) {
+            documents.append(document);
+        } else {
+            const auto unsyncedDocumentChanges
+                = StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(documentUuid);
+            for (auto change : unsyncedDocumentChanges) {
+                StorageFacade::documentChangeStorage()->removeDocumentChange(change);
+            }
+        }
     }
     return documents;
 }
