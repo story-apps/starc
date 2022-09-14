@@ -1,5 +1,8 @@
 #include "text_helper.h"
 
+#include "measurement_helper.h"
+
+#include <QDebug>
 #include <QFontMetricsF>
 #include <QRegularExpression>
 #include <QTextBlock>
@@ -7,6 +10,86 @@
 #include <QTextLayout>
 #include <QtMath>
 
+
+namespace {
+/**
+ * @brief Протестировать корректность тюнинга метрик шрифтов для текущей системы
+ */
+void testFontsMetrics()
+{
+    //
+    // В 249 миллиметров должны влезать 51,5 строка Courier New, или 58 строк Courier Prime
+    // В 155 миллиметров должен влезать 61 символ обоих шрифтов
+    //
+    for (const auto& fn : { "Courier New", "Courier Prime" }) {
+        QFont f(fn);
+        f.setPixelSize(MeasurementHelper::ptToPx(12));
+        qDebug() << f.family() << "|"
+                 << (249.0 / MeasurementHelper::pxToMm(TextHelper::fineLineSpacing(f), false))
+                 << "lines per page"
+                 << "|"
+                 << MeasurementHelper::pxToMm(
+                        TextHelper::fineTextWidthF(QString().fill('W', 61), f), true)
+                 << "from 155";
+    }
+}
+
+/**
+ * @brief Дельты для высоты строки, которые должны учитываться на данной системе
+ */
+static QHash<QString, qreal> sFontToLineSpacing;
+
+/**
+ * @brief Настраиваем метрики шрифтов и коэффициент масштабровнаия таким образом,
+ *        чтобы текст на всех платформах выглядел одинаково
+ */
+static void initFontMetrics()
+{
+    if (!sFontToLineSpacing.isEmpty()) {
+        return;
+    }
+
+    //
+    // Значения высоты шрифта из файла самого шрифта, платформы тут могут выдавать разные значения
+    //
+    constexpr auto courierNewHeight = 2320.0;
+    constexpr auto courierPrimeHeight = 2060.0;
+
+    //
+    // Отстраиваем параметры по Courier New, а все остальные адаптируем исходя из этой настройки
+    //
+    QFont courierNewFont("Courier New");
+    courierNewFont.setPixelSize(MeasurementHelper::ptToPx(12));
+    QFontMetricsF courierNewMetrics(courierNewFont);
+    qreal courierNewLineSpacing = courierNewMetrics.lineSpacing();
+    qreal courierNewDelta = 0.0;
+    //
+    // ... в 249 миллиметров должны вмещаться 51.5 строки шрифтом Courier New
+    //
+    while ((249.0 / MeasurementHelper::pxToMm(courierNewLineSpacing, false)) > 51.8) {
+        courierNewDelta += 0.1;
+        courierNewLineSpacing = courierNewMetrics.lineSpacing() + courierNewDelta;
+    }
+    sFontToLineSpacing[courierNewFont.family()] = courierNewDelta;
+
+    //
+    // Высчитываем дельту для Courier Prime
+    //
+    QFont courierPrimeFont("Courier Prime");
+    courierPrimeFont.setPixelSize(MeasurementHelper::ptToPx(12));
+    QFontMetricsF courierPrimeMetrics(courierPrimeFont);
+    qreal courierPrimeDelta =
+        //
+        // ... такой Line Spacing должен быть у Courier Prime
+        //
+        courierNewLineSpacing * (courierPrimeHeight / courierNewHeight)
+        //
+        // ... вычитая из него Line Spacing из метрики, получим дельту
+        //
+        - courierPrimeMetrics.lineSpacing();
+    sFontToLineSpacing["Courier Prime"] = courierPrimeDelta;
+}
+} // namespace
 
 qreal TextHelper::fineTextWidthF(const QString& _text, const QFont& _font)
 {
@@ -16,11 +99,9 @@ qreal TextHelper::fineTextWidthF(const QString& _text, const QFont& _font)
 qreal TextHelper::fineTextWidthF(const QString& _text, const QFontMetricsF& _metrics)
 {
     //
-    // Чтобы корректно разместить текст нужна максимальная ширина, которую текст может занимать
-    // используемые методы реализуют разные механизмы определения ширины, поэтому выбираем больший
-    // и не забываем прибавить волшебную единичку, а то так не работает :)
+    // Не забываем прибавить волшебную единичку, а то так не работает :)
     //
-    return qMax(_metrics.boundingRect(_text).width(), _metrics.horizontalAdvance(_text)) + 1.0;
+    return _metrics.horizontalAdvance(_text) + 1.0;
 }
 
 int TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
@@ -29,16 +110,15 @@ int TextHelper::fineTextWidth(const QString& _text, const QFont& _font)
     // Из-за того, что шрифт в целых пикселях, а масштабирование в дробных, чуть увеличиваем ширину,
     // чтобы при отрисовке, текст всегда точно влезал
     //
-    return qCeil(fineTextWidthF(_text, _font)) + 1;
+    return qCeil(fineTextWidthF(_text, _font));
 }
 
 qreal TextHelper::fineLineSpacing(const QFont& _font)
 {
-    return fineLineSpacing(QFontMetricsF(_font));
-}
+    initFontMetrics();
 
-qreal TextHelper::fineLineSpacing(const QFontMetricsF& _metrics)
-{
+    const QFontMetricsF metrics(_font);
+
     const qreal platformDelta =
 #ifdef Q_OS_LINUX
         //
@@ -47,11 +127,11 @@ qreal TextHelper::fineLineSpacing(const QFontMetricsF& _metrics)
         // только при нём получается такой же вывод как и в ворде для разных шрифтов
         // тестировал как минимум на Courier New, Courier Prime и ещё паре каких были в системе
         //
-        0.4;
+        0.2;
 #else
         0;
 #endif
-    return _metrics.lineSpacing() + platformDelta;
+    return metrics.lineSpacing() + sFontToLineSpacing.value(_font.family(), platformDelta);
 }
 
 qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal _width)

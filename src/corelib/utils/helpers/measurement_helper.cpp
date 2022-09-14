@@ -14,7 +14,8 @@ qreal MeasurementHelper::mmToPx(qreal _mm, bool _x)
         QFont courierFont("Courier New");
         courierFont.setPixelSize(ptToPx(12));
         const QFontMetricsF courierNewMetrics(courierFont);
-        const qreal xCoefficient = courierNewMetrics.width("W") / 2.53;
+        const qreal xCoefficient
+            = courierNewMetrics.horizontalAdvance(QString().fill('W', 60)) / 60.0 / 2.53;
         return xCoefficient;
     }();
     static qreal yCoefficient = [] {

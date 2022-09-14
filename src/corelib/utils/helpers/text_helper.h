@@ -31,7 +31,6 @@ public:
      * @brief Определить правильную высоту строки для заданного шрифта
      */
     static qreal fineLineSpacing(const QFont& _font);
-    static qreal fineLineSpacing(const QFontMetricsF& _metrics);
 
     /**
      * Возвращает высоту текста

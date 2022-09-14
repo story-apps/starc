@@ -2617,9 +2617,12 @@ void TextDocument::insertTable(const TextCursor& _cursor)
 {
     const auto& scriptTemplate = d->documentTemplate();
     const auto pageSplitterWidth = scriptTemplate.pageSplitterWidth();
-    const int qtTableBorderWidth = 2; // эта однопиксельная рамка никак не убирается...
+    //
+    // Эта двухпиксельная рамка никак не убирается...
+    //
+    const int qtTableBorderWidth = 2;
     const qreal tableWidth = pageSize().width() - rootFrame()->frameFormat().leftMargin()
-        - rootFrame()->frameFormat().rightMargin() - qtTableBorderWidth + pageSplitterWidth;
+        - rootFrame()->frameFormat().rightMargin() - qtTableBorderWidth * 3 + pageSplitterWidth;
     const qreal leftColumnWidth = tableWidth * scriptTemplate.leftHalfOfPageWidthPercents() / 100.0;
     const qreal rightColumnWidth = tableWidth - leftColumnWidth;
     QTextTableFormat format;
@@ -2629,7 +2632,10 @@ void TextDocument::insertTable(const TextCursor& _cursor)
     format.setColumnWidthConstraints({ QTextLength{ QTextLength::FixedLength, leftColumnWidth },
                                        QTextLength{ QTextLength::FixedLength, rightColumnWidth } });
     format.setLeftMargin(-1 * pageSplitterWidth);
-
+    //
+    // Делаем негативный отступ, чтобы отыграть место, которое занимает рамка сверху и снизу таблицы
+    //
+    format.setTopMargin(-1 * qtTableBorderWidth * 2);
     auto cursor = _cursor;
     cursor.insertTable(1, 2, format);
 }
