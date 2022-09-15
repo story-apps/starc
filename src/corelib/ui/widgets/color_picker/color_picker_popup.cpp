@@ -53,10 +53,8 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
     popupLayout->addWidget(d->colorPicker);
     setLayoutReimpl(popupLayout);
 
-    connect(d->colorPicker, &ColorPicker::selectedColorChanged, this, [this](const QColor& _color) {
-        hidePopup();
-        emit selectedColorChanged(_color);
-    });
+    connect(d->colorPicker, &ColorPicker::selectedColorChanged, this,
+            [this](const QColor& _color) { emit selectedColorChanged(_color); });
     connect(&d->heightAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) {
                 const auto height = _value.toInt();

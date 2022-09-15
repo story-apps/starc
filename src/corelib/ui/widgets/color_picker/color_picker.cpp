@@ -8,6 +8,10 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/text_field/text_field.h>
 
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QKeyEvent>
+#include <QScreen>
 #include <QVBoxLayout>
 
 
@@ -15,6 +19,8 @@ class ColorPicker::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
+
+    QColor grabScreenColor(const QPoint& _position);
 
     ColorPallete* colorPallete = nullptr;
     Widget* customColorPanel = nullptr;
@@ -24,6 +30,8 @@ public:
     Button* cancelButton = nullptr;
     Button* addButton = nullptr;
     QHBoxLayout* buttonsLayout = nullptr;
+
+    bool screenColorPicking = false;
 };
 
 ColorPicker::Implementation::Implementation(QWidget* _parent)
@@ -37,6 +45,7 @@ ColorPicker::Implementation::Implementation(QWidget* _parent)
     , buttonsLayout(new QHBoxLayout)
 {
     customColorPanel->hide();
+    colorCode->setTrailingIcon(u8"\U000F020A");
     cancelButton->setFocusPolicy(Qt::NoFocus);
     addButton->setFocusPolicy(Qt::NoFocus);
 
@@ -45,6 +54,14 @@ ColorPicker::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton);
     buttonsLayout->addWidget(addButton);
+}
+
+QColor ColorPicker::Implementation::grabScreenColor(const QPoint& _position)
+{
+    const auto desk = QApplication::desktop();
+    const auto screen = QGuiApplication::primaryScreen();
+    const auto sceenPixmap = screen->grabWindow(desk->winId(), _position.x(), _position.y(), 1, 1);
+    return sceenPixmap.toImage().pixel(0, 0);
 }
 
 
@@ -101,6 +118,13 @@ ColorPicker::ColorPicker(QWidget* _parent)
         QSignalBlocker colorBlocker(d->colorSlider);
         d->colorSlider->setColor(color);
     });
+    connect(d->colorCode, &TextField::trailingIconPressed, this, [this] {
+        d->screenColorPicking = true;
+        setCursor(Qt::CrossCursor);
+        grabMouse(Qt::CrossCursor);
+        grabKeyboard();
+        setMouseTracking(true);
+    });
     connect(d->colorSlider, &color_widgets::Color2DSlider::colorChanged, this,
             [this](const QColor& _color) {
                 QSignalBlocker blocker(d->colorCode);
@@ -110,12 +134,12 @@ ColorPicker::ColorPicker(QWidget* _parent)
             [this](qreal _hue) { d->colorSlider->setHue(_hue); });
     connect(d->cancelButton, &Button::clicked, this, [this] { setCurrentWidget(d->colorPallete); });
     connect(d->addButton, &Button::clicked, this, [this] {
-        d->colorPallete->addCustomColor(d->colorSlider->color());
+        const auto color = d->colorSlider->color();
+        d->colorPallete->setSelectedColor(color);
         setCurrentWidget(d->colorPallete);
-    });
 
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
+        emit selectedColorChanged(color);
+    });
 }
 
 ColorPicker::~ColorPicker() = default;
@@ -133,6 +157,48 @@ QColor ColorPicker::selectedColor() const
 void ColorPicker::setSelectedColor(const QColor& _color)
 {
     d->colorPallete->setSelectedColor(_color);
+}
+
+void ColorPicker::mouseMoveEvent(QMouseEvent* _event)
+{
+    if (d->screenColorPicking) {
+        d->colorCode->setText(d->grabScreenColor(_event->globalPos()).name());
+        return;
+    }
+
+    StackWidget::mouseMoveEvent(_event);
+}
+
+void ColorPicker::mouseReleaseEvent(QMouseEvent* _event)
+{
+    if (d->screenColorPicking) {
+        d->screenColorPicking = false;
+        releaseMouse();
+        releaseKeyboard();
+        d->colorCode->setText(d->grabScreenColor(_event->globalPos()).name());
+        setCursor(Qt::ArrowCursor);
+        setMouseTracking(false);
+        return;
+    }
+
+    StackWidget::mouseReleaseEvent(_event);
+}
+
+void ColorPicker::keyPressEvent(QKeyEvent* _event)
+{
+    if (d->screenColorPicking) {
+        if (_event->key() == Qt::Key_Escape) {
+            d->screenColorPicking = false;
+            releaseMouse();
+            releaseKeyboard();
+            setCursor(Qt::ArrowCursor);
+            setMouseTracking(false);
+        }
+        _event->accept();
+        return;
+    }
+
+    StackWidget::keyPressEvent(_event);
 }
 
 void ColorPicker::processBackgroundColorChange()

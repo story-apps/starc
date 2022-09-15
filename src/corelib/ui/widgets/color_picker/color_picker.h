@@ -39,6 +39,13 @@ signals:
 
 protected:
     /**
+     * @brief Переопределяем методы для реализации экранной пипетки
+     */
+    void mouseMoveEvent(QMouseEvent* _event) override;
+    void mouseReleaseEvent(QMouseEvent* _event) override;
+    void keyPressEvent(QKeyEvent* _event) override;
+
+    /**
      * @brief Реализуем реакцию на задание кастомного цвета
      */
     void processBackgroundColorChange() override;

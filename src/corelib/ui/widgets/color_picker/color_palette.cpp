@@ -187,7 +187,6 @@ void ColorPallete::setSelectedColor(const QColor& _color)
             if (color.color != _color) {
                 continue;
             }
-
             d->selectedColor = color;
             break;
         }
@@ -198,13 +197,11 @@ void ColorPallete::setSelectedColor(const QColor& _color)
 
 void ColorPallete::addCustomColor(const QColor& _color)
 {
-    const auto colorInRgb = _color.toRgb();
-
     //
     // Если такой цвет уже есть, переместим его в конец
     //
-    if (d->customColors.contains(colorInRgb)) {
-        d->customColors.move(d->customColors.indexOf(colorInRgb), d->customColors.size() - 1);
+    if (d->customColors.contains(_color)) {
+        d->customColors.move(d->customColors.indexOf(_color), d->customColors.size() - 1);
     }
     //
     // Если же цвета не было, то добавим его в пределах допустимой нормы цветов
@@ -214,7 +211,7 @@ void ColorPallete::addCustomColor(const QColor& _color)
         if (d->customColors.size() == maxColorsSize) {
             d->customColors.removeFirst();
         }
-        d->customColors.append(colorInRgb);
+        d->customColors.append(_color);
     }
 
     //
