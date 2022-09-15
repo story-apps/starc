@@ -134,6 +134,21 @@ void ProjectCard::setProject(const ManagementLayer::Project& _project)
     // Всегда обновляем проект, т.к. мог измениться постер, а мы не сравниваем картинки
     //
     m_project = _project;
+
+    //
+    // Если название не влезает, то установим его тултипом
+    //
+    const QRectF backgroundRect = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins());
+    const QSizeF posterSize
+        = m_project.poster().size().scaled(backgroundRect.size().toSize(), Qt::KeepAspectRatio);
+    const auto textWidth
+        = backgroundRect.width() - posterSize.width() - Ui::DesignSystem::layout().px12() * 2;
+    if (TextHelper::fineTextWidthF(m_project.name(), Ui::DesignSystem::font().h6()) > textWidth) {
+        setToolTip(m_project.name());
+    } else {
+        setToolTip({});
+    }
+
     update();
 }
 
