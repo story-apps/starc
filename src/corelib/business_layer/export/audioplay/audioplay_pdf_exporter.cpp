@@ -8,6 +8,7 @@
 #include <business_layer/model/audioplay/text/audioplay_text_model_text_item.h>
 #include <business_layer/templates/audioplay_template.h>
 #include <utils/helpers/measurement_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QLocale>
 #include <QPainter>
@@ -71,7 +72,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                                 ? (_pageYPos
                                    + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
                                 : _blockRect.top(),
-                            numberDelta, _blockRect.height());
+                            numberDelta, TextHelper::fineLineSpacing(_painter->font()));
                     } else {
                         const int distanceBetweenSceneNumberAndText = 10;
                         dialogueNumberRect = QRectF(
@@ -82,7 +83,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                                 : _blockRect.top(),
                             MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
                                 - distanceBetweenSceneNumberAndText,
-                            _blockRect.height());
+                            TextHelper::fineLineSpacing(_painter->font()));
                     }
                 } else {
                     if (_block.blockFormat().rightMargin() > numberDelta) {
@@ -93,7 +94,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                                 ? (_pageYPos
                                    + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
                                 : _blockRect.top(),
-                            numberDelta, _blockRect.height());
+                            numberDelta, TextHelper::fineLineSpacing(_painter->font()));
                     } else {
                         const int distanceBetweenSceneNumberAndText = 10;
                         dialogueNumberRect = QRectF(
@@ -105,7 +106,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                                 : _blockRect.top(),
                             MeasurementHelper::mmToPx(exportTemplate.pageMargins().right())
                                 - distanceBetweenSceneNumberAndText,
-                            _blockRect.height());
+                            TextHelper::fineLineSpacing(_painter->font()));
                     }
                 }
                 _painter->drawText(dialogueNumberRect, Qt::AlignRight | Qt::AlignTop,
@@ -136,7 +137,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                     : _blockRect.top(),
                 _block.blockFormat().leftMargin()
                     - MeasurementHelper::mmToPx(characterBlockStyle.marginsOnHalfPage().left()),
-                _blockRect.height());
+                TextHelper::fineLineSpacing(_painter->font()));
         } else {
             //
             // FIXME: RTL
