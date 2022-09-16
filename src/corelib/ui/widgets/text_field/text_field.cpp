@@ -305,12 +305,16 @@ QRectF TextField::Implementation::inputTextRect() const
     QPointF labelTopLeft = QPointF(Ui::DesignSystem::textField().labelTopLeft().x(), 0)
         + QPointF(contentMargins().left() + (q->isRightToLeft() ? offset : 0),
                   contentMargins().top() + margins().top());
+    const qreal additionalBottomMargin = !error.isEmpty() || !helper.isEmpty()
+        ? Ui::DesignSystem::textField().helperHeight()
+        : 0.0;
 
     return QRectF(labelTopLeft,
                   QSizeF(q->width() - labelTopLeft.x() - contentMargins().left() - margins().right()
                              - (q->isRightToLeft() ? 0 : offset),
                          q->height() - contentMargins().top() - margins().top()
-                             - contentMargins().bottom() - margins().bottom()));
+                             - contentMargins().bottom() - margins().bottom()
+                             - additionalBottomMargin));
 }
 
 QRectF TextField::Implementation::labelRect(const qreal fontHeight) const
@@ -342,8 +346,14 @@ QRectF TextField::Implementation::suffixRect() const
         topLeft = QPointF(q->width() - contentMargins().right() - margins().right() - suffixWidth,
                           margins().top());
     }
+    const qreal additionalBottomMargin = !error.isEmpty() || !helper.isEmpty()
+        ? Ui::DesignSystem::textField().helperHeight()
+        : 0.0;
 
-    return QRectF(topLeft, QSizeF(suffixWidth, q->height() - margins().top() - margins().bottom()));
+    return QRectF(
+        topLeft,
+        QSizeF(suffixWidth,
+               q->height() - margins().top() - margins().bottom() - additionalBottomMargin));
 }
 
 QRectF TextField::Implementation::trailingIconRect() const
