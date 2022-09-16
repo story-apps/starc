@@ -1786,6 +1786,11 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     applicationVersion += QString(" dev %1").arg(DEV_BUILD);
 #endif
     QApplication::setApplicationVersion(applicationVersion);
+
+    Log::info("%1 version %2, %3, %4", QApplication::applicationName(),
+              QApplication::applicationVersion(), QSysInfo().prettyProductName(),
+              QSysInfo().currentCpuArchitecture());
+
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
 
 
@@ -1879,10 +1884,6 @@ QString ApplicationManager::logFilePath() const
 
 void ApplicationManager::exec(const QString& _fileToOpenPath)
 {
-    Log::info("%1 version %2, %3, %4", QApplication::applicationName(),
-              QApplication::applicationVersion(), QSysInfo().prettyProductName(),
-              QSysInfo().currentCpuArchitecture());
-
     //
     // Самое главное - настроить заголовок!
     //
