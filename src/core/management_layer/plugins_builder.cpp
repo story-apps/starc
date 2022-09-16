@@ -37,6 +37,7 @@ const QString kScreenplayTreatmentEditorMime = QStringLiteral("application/x-sta
 const QString kScreenplayTreatmentNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/treatment");
 const QString kScreenplayTextEditorMime = QStringLiteral("application/x-starc/editor/screenplay/text");
 const QString kScreenplayTextNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/text");
+const QString kScreenplayTextCardsMime = QStringLiteral("application/x-starc/editor/screenplay/cards");
 const QString kScreenplayStatisticsViewMime = QStringLiteral("application/x-starc/view/screenplay/statistics");
 const QString kScreenplayStatisticsNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/statistics");
 //
@@ -66,7 +67,7 @@ const QHash<QString, QString> kEditorToNavigator
     = { { kSimpleTextEditorMime, kSimpleTextNavigatorMime },
         { kScreenplayTreatmentEditorMime, kScreenplayTreatmentNavigatorMime },
         { kScreenplayTextEditorMime, kScreenplayTextNavigatorMime },
-        { "application/x-starc/editor/screenplay/cards", kScreenplayTextNavigatorMime },
+        { kScreenplayTextCardsMime, kScreenplayTextNavigatorMime },
 //        { kScreenplayStatisticsViewMime, kScreenplayStatisticsNavigatorMime },
         { kComicBookTextEditorMime, kComicBookTextNavigatorMime },
         { kAudioplayTextEditorMime, kAudioplayTextNavigatorMime },
@@ -85,11 +86,10 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         { "application/x-starc/document/screenplay/title-page", { { kScreenplayTitlePageEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/screenplay/synopsis",   { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/screenplay/treatment",  { { kScreenplayTreatmentEditorMime, u8"\U000f09ed" },
-                                                                  { "application/x-starc/editor/screenplay/beatboard", u8"\U000F13D2" },
-                                                                  { "application/x-starc/editor/screenplay/treatmentcards", u8"\U000f0554" } } },
+                                                                  /*{ "application/x-starc/editor/screenplay/beatboard", u8"\U000F13D2" }*/ } },
         { "application/x-starc/document/screenplay/text",       { { kScreenplayTextEditorMime, u8"\U000f09ed" },
-                                                                  { "application/x-starc/editor/screenplay/cards", u8"\U000f0554" },
-                                                                  { "application/x-starc/editor/screenplay/timeline", u8"\U000F066C" } } },
+                                                                  { kScreenplayTextCardsMime, u8"\U000f0554" },
+                                                                  /*{ "application/x-starc/editor/screenplay/timeline", u8"\U000F066C" }*/ } },
         { "application/x-starc/document/screenplay/statistics", { { kScreenplayStatisticsViewMime, u8"\U000f0127" } } },
         //
         { "application/x-starc/document/comicbook",  { { "application/x-starc/editor/comicbook/information", u8"\U000f02fd" },
@@ -145,7 +145,7 @@ const QHash<QString, QString> kMimeToPlugin
         { "application/x-starc/editor/screenplay/treatment-cards", "*screenplaytreatmentcardsplugin*" },
         { kScreenplayTextEditorMime, "*screenplaytextplugin*" },
         { kScreenplayTextNavigatorMime, "*screenplaytextstructureplugin*" },
-        { "application/x-starc/editor/screenplay/cards", "*screenplaycardsplugin*" },
+        { kScreenplayTextCardsMime, "*screenplaycardsplugin*" },
         { kScreenplayStatisticsViewMime, "*screenplaystatisticsplugin*" },
         { kScreenplayStatisticsNavigatorMime, "*screenplaystatisticsstructureplugin*" },
         //
@@ -363,7 +363,7 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
             { "application/x-starc/document/screenplay/text",
               { { kScreenplayTextEditorMime,
                   QApplication::translate("ProjectPluginsBuilder", "Screenplay text") },
-                { "application/x-starc/editor/screenplay/cards",
+                { kScreenplayTextCardsMime,
                   QApplication::translate("ProjectPluginsBuilder", "Cards") },
                 { "application/x-starc/editor/screenplay/timeline",
                   QApplication::translate("ProjectPluginsBuilder", "Timeline") } } },

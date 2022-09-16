@@ -266,7 +266,8 @@ private:
     /**
      * @brief Отобразить представление заданного типа для заданного элемента
      */
-    void showView(const QModelIndex& _itemIndex, const QString& _viewMimeType);
+    void showView(const QModelIndex& _itemIndex, const QString& _viewMimeType,
+                  const QString& _defaultMimeType = {});
     void showViewForVersion(BusinessLayer::StructureModelItem* _item);
 
     /**

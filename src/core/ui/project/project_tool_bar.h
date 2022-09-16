@@ -26,9 +26,10 @@ public:
                  bool _isActive = false);
 
     /**
-     * @brief Получить майм-тип текущего представления
+     * @brief Майм-тип текущего представления
      */
     QString currentViewMimeType() const;
+    void setCurrentViewMimeType(const QString& _mimeType);
 
 signals:
     /**

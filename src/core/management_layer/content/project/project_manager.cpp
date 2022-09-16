@@ -57,6 +57,7 @@ namespace ManagementLayer {
 
 namespace {
 
+const QLatin1String kCurrentViewMimeTypeKey("view-mime-type");
 const QLatin1String kVersionsVisibleKey("versions-visible");
 const QLatin1String kCurrentVersionKey("current-version");
 
@@ -1172,7 +1173,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     d->view.active->showNotImplementedPage();
                     return;
                 }
-                showView(_index, views.first().mimeType);
+                showView(_index, {}, views.first().mimeType);
 
                 //
                 // Для корзины и вложенных элементов вместо кнопки добавления документов показываем
@@ -2917,18 +2918,33 @@ void ProjectManager::undoModelChange(BusinessLayer::AbstractModel* _model, int _
     _model->undoChange(change->undoPatch(), change->redoPatch());
 }
 
-void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType)
+void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType,
+                              const QString& _defaultMimeType)
 {
-    Log::info("Activate plugin \"%1\"", _viewMimeType);
+    Log::info("Activate plugin \"%1\" (default %2)", _viewMimeType, _defaultMimeType);
+
+    const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
 
     //
-    // Сохранить состояние отображения версий для текущего документа
+    // Сохранить состояние представления текущего документа
     //
     if (!d->currentDocument.model.isNull() && d->currentDocument.model->document() != nullptr) {
-        const auto previousActiveItem = d->aliasedItemForIndex(d->view.activeIndex);
-        setSettingsValue(documentSettingsKey(previousActiveItem->uuid(), kVersionsVisibleKey),
-                         d->showVersionsAction->isChecked());
-        setSettingsValue(documentSettingsKey(previousActiveItem->uuid(), kCurrentVersionKey),
+        //
+        // Если сменился выделенный элемент в навигаторе проекта
+        //
+        if (sourceItemIndex != d->view.activeIndex) {
+            const auto previousActiveSourceItem
+                = d->projectStructureModel->itemForIndex(d->view.activeIndex);
+            setSettingsValue(
+                documentSettingsKey(previousActiveSourceItem->uuid(), kCurrentViewMimeTypeKey),
+                d->currentDocument.viewMimeType);
+        }
+
+        const auto previousActiveAliasedItem = d->aliasedItemForIndex(d->view.activeIndex);
+        setSettingsValue(
+            documentSettingsKey(previousActiveAliasedItem->uuid(), kVersionsVisibleKey),
+            d->showVersionsAction->isChecked());
+        setSettingsValue(documentSettingsKey(previousActiveAliasedItem->uuid(), kCurrentVersionKey),
                          d->view.active->currentVersion());
     }
 
@@ -2939,20 +2955,33 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         return;
     }
 
-    const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
-    auto item = d->aliasedItemForIndex(sourceItemIndex);
-    auto itemForShow = item;
+    auto aliasedItem = d->aliasedItemForIndex(sourceItemIndex);
+    auto itemForShow = aliasedItem;
     if (const auto versionIndex
-        = settingsValue(documentSettingsKey(item->uuid(), kCurrentVersionKey), 0).toInt() - 1;
+        = settingsValue(documentSettingsKey(aliasedItem->uuid(), kCurrentVersionKey), 0).toInt()
+            - 1;
         versionIndex != -1) {
-        itemForShow = item->versions().at(versionIndex);
+        itemForShow = aliasedItem->versions().at(versionIndex);
     }
-    emit downloadDocumentRequested(item->uuid());
+    emit downloadDocumentRequested(aliasedItem->uuid());
+
+    //
+    // Определим редактор для отображения
+    //
+    QString viewMimeType = _viewMimeType;
+    if (viewMimeType.isEmpty()) {
+        const auto sourceItem = d->projectStructureModel->itemForIndex(sourceItemIndex);
+        viewMimeType
+            = settingsValue(documentSettingsKey(sourceItem->uuid(), kCurrentViewMimeTypeKey),
+                            _defaultMimeType)
+                  .toString();
+        d->toolBar->setCurrentViewMimeType(viewMimeType);
+    }
 
     //
     // Определим модель
     //
-    updateCurrentDocument(d->modelsFacade.modelFor(itemForShow->uuid()), _viewMimeType);
+    updateCurrentDocument(d->modelsFacade.modelFor(itemForShow->uuid()), viewMimeType);
     if (d->currentDocument.model == nullptr) {
         d->view.active->showNotImplementedPage();
         d->view.active->setVersionsVisible(false);
@@ -2964,9 +2993,9 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     Ui::IDocumentView* view = nullptr;
     if (d->view.active == d->view.left) {
-        view = d->pluginsBuilder.activateView(_viewMimeType, d->currentDocument.model);
+        view = d->pluginsBuilder.activateView(viewMimeType, d->currentDocument.model);
     } else {
-        view = d->pluginsBuilder.activateSecondView(_viewMimeType, d->currentDocument.model);
+        view = d->pluginsBuilder.activateSecondView(viewMimeType, d->currentDocument.model);
     }
     if (view == nullptr) {
         d->view.active->showNotImplementedPage();
@@ -2975,7 +3004,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
     view->setProjectInfo(d->isProjectRemote, d->isProjectOwner);
     view->setEditingMode(d->editingMode);
-    d->view.active->setDocumentVersions(item->versions());
+    d->view.active->setDocumentVersions(aliasedItem->versions());
     d->view.active->showEditor(view->asQWidget());
     d->view.activeIndex = sourceItemIndex;
 
@@ -2983,7 +3012,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Настроим опции редактора
     //
     auto viewOptions = view->options();
-    if (isTextItem(item)) {
+    if (isTextItem(aliasedItem)) {
         viewOptions.prepend(d->showVersionsAction);
     }
     d->toolBar->setOptions(viewOptions, AppBarOptionsLevel::View);
@@ -3003,7 +3032,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Настроим возможность перехода в навигатор
     //
-    const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(_viewMimeType);
+    const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(viewMimeType);
     d->projectStructureModel->setNavigatorAvailableFor(sourceItemIndex,
                                                        !navigatorMimeType.isEmpty());
 
@@ -3012,13 +3041,13 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // редактору
     //
     if (!d->navigator->isProjectNavigatorShown() && d->view.active == d->view.left) {
-        showNavigator(_itemIndex, _viewMimeType);
+        showNavigator(_itemIndex, viewMimeType);
     }
 
     //
     // Настроим уведомления плагина
     //
-    if (auto documentManager = d->pluginsBuilder.plugin(_viewMimeType)->asQObject();
+    if (auto documentManager = d->pluginsBuilder.plugin(viewMimeType)->asQObject();
         documentManager != nullptr) {
         const auto invalidSignalIndex = -1;
         if (documentManager->metaObject()->indexOfSignal("upgradeRequested()")
@@ -3032,9 +3061,10 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Отобразим версии документа и выберем нужную, если необходимо
     //
     d->showVersionsAction->setChecked(
-        settingsValue(documentSettingsKey(item->uuid(), kVersionsVisibleKey), false).toBool());
+        settingsValue(documentSettingsKey(aliasedItem->uuid(), kVersionsVisibleKey), false)
+            .toBool());
     d->view.active->setCurrentVersion(
-        settingsValue(documentSettingsKey(item->uuid(), kCurrentVersionKey), 0).toInt());
+        settingsValue(documentSettingsKey(aliasedItem->uuid(), kCurrentVersionKey), 0).toInt());
 
     //
     // Фокусируем представление

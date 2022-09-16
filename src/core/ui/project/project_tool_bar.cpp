@@ -14,8 +14,6 @@ ProjectToolBar::ProjectToolBar(QWidget* _parent)
     menuAction->setText(u8"\U000f035c");
     addAction(menuAction);
     connect(menuAction, &QAction::triggered, this, &ProjectToolBar::menuPressed);
-
-    designSystemChangeEvent(nullptr);
 }
 
 void ProjectToolBar::clearViews()
@@ -23,9 +21,9 @@ void ProjectToolBar::clearViews()
     //
     // Оставляем только кнопку меню
     //
-
-    while (actions().size() > 1) {
-        auto action = actions().last();
+    auto actions = this->actions();
+    while (actions.size() > 1) {
+        auto action = actions.takeLast();
         removeAction(action);
         action->deleteLater();
     }
@@ -59,6 +57,24 @@ QString ProjectToolBar::currentViewMimeType() const
     }
 
     return {};
+}
+
+void ProjectToolBar::setCurrentViewMimeType(const QString& _mimeType)
+{
+    for (int actionIndex = 1; actionIndex < actions().size(); ++actionIndex) {
+        const auto action = actions().at(actionIndex);
+        QSignalBlocker signalBlocker(action);
+
+        if (action->data().toString() == _mimeType) {
+            if (action->isChecked()) {
+                return;
+            }
+
+            action->setChecked(true);
+        } else {
+            action->setChecked(false);
+        }
+    }
 }
 
 void ProjectToolBar::updateTranslations()
