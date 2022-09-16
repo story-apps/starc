@@ -749,6 +749,16 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             }
             if (cursor.hasSelection()) {
                 cursor.deleteChar();
+                //
+                // ... если текст в получившемся блоке нет, то восстанавливаем его формат, т.к. в
+                //     этом случае в блоке будет сохранятся форматирование удалённого блока
+                //
+                if (cursor.block().text().isEmpty()) {
+                    const auto blockType = TextBlockStyle::forBlock(cursor);
+                    const auto blockStyle = TemplatesFacade::screenplayTemplate(q->templateId())
+                                                .paragraphStyle(blockType);
+                    cursor.setBlockCharFormat(blockStyle.charFormat());
+                }
             } else {
                 QTextBlockFormat breakStartFormat = cursor.blockFormat();
                 breakStartFormat.clearProperty(TextBlockStyle::PropertyIsCorrection);
