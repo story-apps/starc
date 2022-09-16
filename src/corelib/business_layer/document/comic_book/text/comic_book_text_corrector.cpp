@@ -99,7 +99,7 @@ public:
     /**
      * @brief Скорректировать номера блоков
      */
-    void correctBlocksNumbers(int _position = -1, int _charsChanged = 0);
+    void correctBlocksNumbers();
 
     /**
      * @brief Скорректировать текст сценария
@@ -397,7 +397,7 @@ void ComicBookTextCorrector::Implementation::correctCharactersNames(int _positio
     cursor.endEditBlock();
 }
 
-void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position, int _charsChanged)
+void ComicBookTextCorrector::Implementation::correctBlocksNumbers()
 {
     //
     // Определим границы работы алгоритма
@@ -432,7 +432,6 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
     //
     // Корректируем имена пресонажей в изменённой части документа
     //
-    QString lastCharacterName;
     auto itemFromBlock = [](const QTextBlock& _block) -> TextModelItem* {
         if (_block.userData() == nullptr) {
             return {};
@@ -449,13 +448,9 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
         const auto blockType = TextBlockStyle::forBlock(block);
 
         //
-        // Если этот блок редактируется в данный момент, то не трогаем его
+        // Не трогаем пустые блоки
         //
-        const auto changeEnd = _position + _charsChanged;
-        const auto blockEndPosition = block.position() + block.text().length() + 1;
-        if (block.text().isEmpty()
-            || (block.position() <= _position && _position <= blockEndPosition
-                && block.position() <= changeEnd && changeEnd <= blockEndPosition)) {
+        if (block.text().isEmpty()) {
             block = block.next();
             continue;
         }
@@ -1830,7 +1825,7 @@ void ComicBookTextCorrector::correct(int _position, int _charsChanged)
     }
 
     if (d->needToCorrectBlocksNumbers) {
-        d->correctBlocksNumbers(_position, _charsChanged);
+        d->correctBlocksNumbers();
     }
 
     if (d->needToCorrectPageBreaks) {
