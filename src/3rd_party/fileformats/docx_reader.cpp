@@ -33,7 +33,7 @@ qreal pixelsFromTwips(qint32 _twips)
     return pixels;
 }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6,0,0))
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 static bool readBool(QStringView value)
 #else
 static bool readBool(const QStringRef& value)
@@ -188,7 +188,7 @@ void DocxReader::readStyles()
                 }
             } else if (m_xml.qualifiedName() == QLatin1String("w:pPrDefault")) {
                 if (m_xml.readNextStartElement()) {
-                    if (m_xml.qualifiedName() == QLatin1String("w:pPr") ){
+                    if (m_xml.qualifiedName() == QLatin1String("w:pPr")) {
                         readParagraphProperties(m_current_style);
                     } else {
                         m_xml.skipCurrentElement();
@@ -258,7 +258,8 @@ void DocxReader::readStyles()
                     }
                     style_tree[parent_style_id] += style_id;
                     m_xml.skipCurrentElement();
-                } else if ((style.type == Style::Paragraph) && (m_xml.qualifiedName() == QLatin1String("w:pPr"))) {
+                } else if ((style.type == Style::Paragraph)
+                           && (m_xml.qualifiedName() == QLatin1String("w:pPr"))) {
                     readParagraphProperties(style, false);
                 } else if (m_xml.qualifiedName() == QLatin1String("w:rPr")) {
                     readRunProperties(style, false);
@@ -583,21 +584,30 @@ void DocxReader::readRunProperties(Style& style, bool allowstyles)
 {
     while (m_xml.readNextStartElement()) {
         const auto value = m_xml.attributes().value("w:val");
-        if ((m_xml.qualifiedName() == QLatin1String("w:b")) || (m_xml.qualifiedName() == QLatin1String("w:bCs"))) {
+        if ((m_xml.qualifiedName() == QLatin1String("w:b"))
+            || (m_xml.qualifiedName() == QLatin1String("w:bCs"))) {
             style.char_format.setFontWeight(readBool(value) ? QFont::Bold : QFont::Normal);
-        } else if ((m_xml.qualifiedName() == QLatin1String("w:i")) || (m_xml.qualifiedName() == QLatin1String("w:iCs"))) {
+        } else if ((m_xml.qualifiedName() == QLatin1String("w:i"))
+                   || (m_xml.qualifiedName() == QLatin1String("w:iCs"))) {
             style.char_format.setFontItalic(readBool(value));
         } else if (m_xml.qualifiedName() == QLatin1String("w:u")) {
             if (value == QLatin1String("single")) {
                 style.char_format.setFontUnderline(true);
             } else if (value == QLatin1String("none")) {
                 style.char_format.setFontUnderline(false);
-            } else if ((value == QLatin1String("dash")) || (value == QLatin1String("dashDotDotHeavy"))
-                       || (value == QLatin1String("dashDotHeavy")) || (value == QLatin1String("dashedHeavy"))
-                       || (value == QLatin1String("dashLong")) || (value == QLatin1String("dashLongHeavy"))
-                       || (value == QLatin1String("dotDash")) || (value == QLatin1String("dotDotDash")) || (value == QLatin1String("dotted"))
-                       || (value == QLatin1String("dottedHeavy")) || (value == QLatin1String("double")) || (value == QLatin1String("thick"))
-                       || (value == QLatin1String("wave")) || (value == QLatin1String("wavyDouble")) || (value == QLatin1String("wavyHeavy"))
+            } else if ((value == QLatin1String("dash"))
+                       || (value == QLatin1String("dashDotDotHeavy"))
+                       || (value == QLatin1String("dashDotHeavy"))
+                       || (value == QLatin1String("dashedHeavy"))
+                       || (value == QLatin1String("dashLong"))
+                       || (value == QLatin1String("dashLongHeavy"))
+                       || (value == QLatin1String("dotDash"))
+                       || (value == QLatin1String("dotDotDash"))
+                       || (value == QLatin1String("dotted"))
+                       || (value == QLatin1String("dottedHeavy"))
+                       || (value == QLatin1String("double")) || (value == QLatin1String("thick"))
+                       || (value == QLatin1String("wave")) || (value == QLatin1String("wavyDouble"))
+                       || (value == QLatin1String("wavyHeavy"))
                        || (value == QLatin1String("words"))) {
                 style.char_format.setFontUnderline(true);
             }
@@ -672,12 +682,22 @@ void DocxReader::readText()
 {
     const bool keepws = (m_xml.attributes().value("xml:space") == QLatin1String("preserve"));
 
+    //
+    // Иногда попадаются файлы странно оформленными, они внутри могут содержать разный шлак, поэтому
+    // будем читать, пока не дойдём до конца текстового блока, а всё лишнее просто игнорируем
+    //
     QString text;
-    while (m_xml.readNext() == QXmlStreamReader::Characters) {
+    do {
+        const auto tokenType = m_xml.readNext();
+        if (tokenType != QXmlStreamReader::Characters) {
+            continue;
+        }
+
         if (keepws || !m_xml.isWhitespace()) {
             text += m_xml.text();
         }
-    }
+    } while (!m_xml.isEndElement() || m_xml.qualifiedName() != QLatin1String("w:t"));
+
     if (!text.isEmpty()) {
         m_cursor.insertText(text, m_current_style.char_format);
     }
