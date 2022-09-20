@@ -413,6 +413,9 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         // ... настройки абзаца
         //
         documentXml = "<w:p><w:pPr><w:pStyle w:val=\"Normal\"/>";
+        if (block.textDirection() == Qt::RightToLeft) {
+            documentXml.append("<w:bidi/>");
+        }
         documentXml.append(
             QString("<w:rPr><w:rFonts w:ascii=\"%1\" w:hAnsi=\"%1\"/><w:sz w:val=\"%2\"/><w:szCs "
                     "w:val=\"%2\"/></w:rPr>")
@@ -446,13 +449,15 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
             }
             documentXml.append(
                 QString("<w:r><w:rPr><w:rFonts w:ascii=\"%1\" w:hAnsi=\"%1\"/><w:b "
-                        "w:val=\"%2\"/><w:i w:val=\"%3\"/><w:sz w:val=\"%4\"/><w:szCs "
-                        "w:val=\"%4\"/><w:u w:val=\"%5\"/></w:rPr><w:t>%6</w:t></w:r>")
+                        "w:val=\"%2\"/><w:bCs w:val=\"%2\"/><w:i w:val=\"%3\"/><w:iCs "
+                        "w:val=\"%3\"/><w:sz w:val=\"%4\"/><w:szCs w:val=\"%4\"/><w:u "
+                        "w:val=\"%5\"/><w:rtl val=\"%6\"/></w:rPr><w:t>%7</w:t></w:r>")
                     .arg(formatRange.format.font().family())
                     .arg(formatRange.format.font().bold() ? "true" : "false")
                     .arg(formatRange.format.font().italic() ? "true" : "false")
                     .arg(MeasurementHelper::pxToPt(formatRange.format.font().pixelSize()) * 2)
                     .arg(formatRange.format.font().underline() ? "single" : "none")
+                    .arg(_cursor.block().textDirection() == Qt::RightToLeft ? "true" : "false")
                     .arg(TextHelper::toHtmlEscaped(formatRangeText)));
         }
         documentXml.append("</w:p>");
@@ -527,7 +532,12 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         const QString suffix = _cursor.inTable() ? "_splitted" : "";
         documentXml.append(QString("<w:p><w:pPr><w:pStyle w:val=\"%1\"/>")
                                .arg(paragraphTypeName(correctedBlockType, suffix)));
-
+        //
+        // ... признак RTL
+        //
+        if (block.textDirection() == Qt::RightToLeft) {
+            documentXml.append("<w:bidi/>");
+        }
         //
         // ... начинать с новой страницы
         //
@@ -566,7 +576,8 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         documentXml.append("<w:rPr/></w:pPr>");
         const auto textFormats = block.textFormats();
         for (const auto& range : textFormats) {
-            auto formatRangeText = blockText.mid(range.start, range.length);
+            const auto formatRangeSourceText = blockText.mid(range.start, range.length);
+            auto formatRangeText = formatRangeSourceText;
             if (range.format.fontCapitalization() == QFont::AllUppercase) {
                 formatRangeText = TextHelper::smartToUpper(formatRangeText);
             }
@@ -583,11 +594,10 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                 // ... стандартный для абзаца
                 //
                 if (range.format == block.charFormat()) {
-                    documentXml.append("<w:r><w:rPr>");
-                    documentXml.append(
-                        QString("<w:rtl w:val=\"%1\"/>")
-                            .arg(QLocale().textDirection() == Qt::RightToLeft ? "true" : "false"));
-                    documentXml.append("</w:rPr>");
+                    documentXml.append("<w:r>");
+                    if (formatRangeSourceText.isRightToLeft()) {
+                        documentXml.append("<w:rPr><w:rtl/></w:rPr>");
+                    }
                     documentXml.append(formatRangeText);
                     documentXml.append("</w:r>");
 
@@ -598,16 +608,18 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                 else {
                     documentXml.append("<w:r>");
                     documentXml.append("<w:rPr>");
-                    documentXml.append(QString("<w:b w:val=\"%1\"/>")
-                                           .arg(range.format.font().bold() ? "true" : "false"));
-                    documentXml.append(QString("<w:i w:val=\"%1\"/>")
-                                           .arg(range.format.font().italic() ? "true" : "false"));
-                    documentXml.append(
-                        QString("<w:u w:val=\"%1\"/>")
-                            .arg(range.format.font().underline() ? "single" : "none"));
-                    documentXml.append(
-                        QString("<w:rtl w:val=\"%1\"/>")
-                            .arg(QLocale().textDirection() == Qt::RightToLeft ? "true" : "false"));
+                    if (range.format.font().bold()) {
+                        documentXml.append("<w:b/><w:bCs/>");
+                    }
+                    if (range.format.font().italic()) {
+                        documentXml.append("<w:i/><w:iCs/>");
+                    }
+                    if (range.format.font().underline()) {
+                        documentXml.append("<w:u w:val=\"single\"/>");
+                    }
+                    if (formatRangeSourceText.isRightToLeft()) {
+                        documentXml.append("<w:rtl/>");
+                    }
                     documentXml.append("</w:rPr>");
                     //
                     // Сам текст
@@ -666,15 +678,18 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                                            // код цвета без решётки
                                            .arg(range.format.foreground().color().name().mid(1)));
                 }
-                documentXml.append(QString("<w:b w:val=\"%1\"/>")
-                                       .arg(range.format.font().bold() ? "true" : "false"));
-                documentXml.append(QString("<w:i w:val=\"%1\"/>")
-                                       .arg(range.format.font().italic() ? "true" : "false"));
-                documentXml.append(QString("<w:u w:val=\"%1\"/>")
-                                       .arg(range.format.font().underline() ? "single" : "none"));
-                documentXml.append(
-                    QString("<w:rtl w:val=\"%1\"/>")
-                        .arg(QLocale().textDirection() == Qt::RightToLeft ? "true" : "false"));
+                if (range.format.font().bold()) {
+                    documentXml.append("<w:b/><w:bCs/>");
+                }
+                if (range.format.font().italic()) {
+                    documentXml.append("<w:i/><w:iCs/>");
+                }
+                if (range.format.font().underline()) {
+                    documentXml.append("<w:u w:val=\"single\"/>");
+                }
+                if (formatRangeSourceText.isRightToLeft()) {
+                    documentXml.append("<w:rtl/>");
+                }
                 documentXml.append("</w:rPr>");
                 //
                 // Сам текст
