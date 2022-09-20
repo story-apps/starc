@@ -40,12 +40,12 @@ ScalableGraphicsView::ScalableGraphicsView(QWidget* _parent)
 
 void ScalableGraphicsView::zoomIn()
 {
-    scaleView(qreal(0.02));
+    scaleView(qreal(0.05));
 }
 
 void ScalableGraphicsView::zoomOut()
 {
-    scaleView(qreal(-0.02));
+    scaleView(qreal(-0.05));
 }
 
 void ScalableGraphicsView::animateCenterOn(QGraphicsItem* _item)
