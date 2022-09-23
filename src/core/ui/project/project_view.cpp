@@ -49,7 +49,9 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
     , documentEditor(new StackWidget(documentEditorPage))
     , overlay(new Widget(_parent))
 {
+    defaultPage->setFocusPolicy(Qt::StrongFocus);
     defaultPageBodyLabel->setAlignment(Qt::AlignCenter);
+    notImplementedPage->setFocusPolicy(Qt::StrongFocus);
     notImplementedPageBodyLabel->setAlignment(Qt::AlignCenter);
     documentVersions->hide();
     documentVersions->setContextMenuPolicy(Qt::CustomContextMenu);
