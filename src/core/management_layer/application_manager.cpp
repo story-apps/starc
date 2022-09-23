@@ -57,6 +57,8 @@
 #include <QKeyEvent>
 #include <QLocale>
 #include <QLockFile>
+#include <QMenu>
+#include <QProcess>
 #include <QScopedPointer>
 #include <QShortcut>
 #include <QSoundEffect>
@@ -86,6 +88,11 @@ class ApplicationManager::Implementation
 public:
     explicit Implementation(ApplicationManager* _q);
     ~Implementation();
+
+    /**
+     * @brief Настроить док-меню
+     */
+    void initDockMenu();
 
     /**
      * @brief Отправить инфу о запуске приложения в статистику
@@ -261,10 +268,15 @@ public:
 
     ApplicationManager* q = nullptr;
 
-    //
-    // Используем для блокировки файла во время работы
-    //
+    /**
+     * @brief Используем для блокировки файла во время работы
+     */
     QScopedPointer<QLockFile> lockFile;
+
+    /**
+     * @brief Док-меню
+     */
+    QMenu* dockMenu = nullptr;
 
     /**
      * @brief Интерфейс приложения
@@ -337,6 +349,8 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     , cloudServiceManager(new CloudServiceManager)
 #endif
 {
+    initDockMenu();
+
     menuView->setShowDevVersions(notificationsManager->showDevversions());
 
     settingsManager->setThemeSetupView(applicationView->themeSetupView());
@@ -367,6 +381,38 @@ ApplicationManager::Implementation::~Implementation()
          }) {
         object->disconnect();
     }
+}
+
+void ApplicationManager::Implementation::initDockMenu()
+{
+#ifdef Q_OS_MAC
+    //
+    // Добавляем в маке возможность открытия ещё одного окна приложения
+    //
+
+    //
+    // Если меню, ещё не было создано, то конфигурируем его
+    //
+    if (dockMenu == nullptr) {
+        dockMenu = new QMenu(applicationView);
+        auto openNewWindow = dockMenu->addAction(tr("Open new window"));
+        connect(openNewWindow, &QAction::triggered, [=] {
+            QString appPath = QApplication::applicationFilePath();
+            appPath = appPath.split(".app").first();
+            appPath += ".app";
+            QProcess::startDetached("open", { "-na", appPath });
+        });
+        dockMenu->setAsDockMenu();
+    }
+    //
+    // А если оно уже создано, то обновим переводы
+    //
+    else {
+        constexpr int openNewWindowIndex = 0;
+        dockMenu->actions().at(openNewWindowIndex)->setText(tr("Open new window"));
+    }
+
+#endif
 }
 
 void ApplicationManager::Implementation::sendStartupStatistics()
@@ -872,6 +918,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     //
     Ui::DesignSystem::updateLanguage();
     QApplication::postEvent(q, new DesignSystemChangeEvent);
+
+    //
+    // Настроим/обновим переводы для док-меню
+    //
+    initDockMenu();
 }
 
 void ApplicationManager::Implementation::setTheme(Ui::ApplicationTheme _theme)
