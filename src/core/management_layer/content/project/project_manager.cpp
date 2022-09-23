@@ -673,12 +673,19 @@ void ProjectManager::Implementation::editVersion(const QModelIndex& _itemIndex, 
     dialog->edit(version->name(), version->color(), version->isReadOnly());
     connect(dialog, &Ui::CreateVersionDialog::savePressed, view.active,
             [this, item, _versionIndex, dialog](const QString& _name, const QColor& _color,
-                                                bool _readOnly) {
+                                                int _sourceVersionIndex, bool _readOnly) {
+                Q_UNUSED(_sourceVersionIndex)
+
                 dialog->hideDialog();
 
                 projectStructureModel->updateItemVersion(item, _versionIndex, _name, _color,
                                                          _readOnly);
                 view.active->setDocumentVersions(item->versions());
+
+                //
+                // Пеерзагрузим отображение, чтобы обновить флаг редактируемости версии
+                //
+                q->showViewForVersion(item->versions().at(_versionIndex));
             });
     connect(dialog, &Ui::CreateVersionDialog::disappeared, dialog,
             &Ui::CreateVersionDialog::deleteLater);
@@ -2960,7 +2967,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     if (const auto versionIndex
         = settingsValue(documentSettingsKey(aliasedItem->uuid(), kCurrentVersionKey), 0).toInt()
             - 1;
-        versionIndex != -1) {
+        versionIndex != -1 && !aliasedItem->versions().isEmpty()
+        && versionIndex < aliasedItem->versions().size()) {
         itemForShow = aliasedItem->versions().at(versionIndex);
     }
     emit downloadDocumentRequested(aliasedItem->uuid());
