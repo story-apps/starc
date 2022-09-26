@@ -30,4 +30,7 @@
 	url = git@github.com:story-apps/starc-stageplay-statistics-plugin.git
 [submodule "src/core/management_layer/plugins/project_collaborators"]
 	path = src/core/management_layer/plugins/project_collaborators
-	url = git@github.com:story-apps/starc-project-collaborators-plugin.git
+	url = git@github.com:story-apps/starc-project-collaborators-plugin.git  
+[submodule "src/core/management_layer/plugins/screenplay_cards"]
+	path = src/core/management_layer/plugins/screenplay_cards
+	url = git@github.com:story-apps/starc-screenplay-cards-plugin.git
