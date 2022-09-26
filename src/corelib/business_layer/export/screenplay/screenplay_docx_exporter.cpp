@@ -7,6 +7,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/templates/text_template.h>
 #include <utils/helpers/measurement_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QFontMetricsF>
 
@@ -68,13 +69,14 @@ void ScreenplayDocxExporter::processBlock(const TextCursor& _cursor,
     else if (currentBlockType == TextParagraphType::Parenthetical && !block.text().isEmpty()) {
         const QLatin1String prefix("(");
         const QLatin1String postfix(")");
-        const QFontMetrics fontMetrics(block.charFormat().font());
         _documentXml.append(
             QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"%3\" />")
                 .arg(MeasurementHelper::pxToTwips(block.blockFormat().leftMargin()))
-                .arg(MeasurementHelper::pxToTwips(block.blockFormat().rightMargin()
-                                                  - fontMetrics.horizontalAdvance(postfix)))
-                .arg(MeasurementHelper::pxToTwips(fontMetrics.horizontalAdvance(prefix))));
+                .arg(MeasurementHelper::pxToTwips(
+                    block.blockFormat().rightMargin()
+                    - TextHelper::fineTextWidthF(postfix, block.charFormat().font())))
+                .arg(MeasurementHelper::pxToTwips(
+                    TextHelper::fineTextWidthF(prefix, block.charFormat().font()))));
 
         auto cursor = _cursor;
         cursor.setPosition(block.position());

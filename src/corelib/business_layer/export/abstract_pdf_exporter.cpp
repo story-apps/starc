@@ -253,10 +253,8 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
         font.setBold(true);
         font.setPixelSize(600);
         const int maxWidth = static_cast<int>(sqrt(pow(_body.height(), 2) + pow(_body.width(), 2)));
-        QFontMetrics fontMetrics(font);
-        while (fontMetrics.horizontalAdvance(watermark) > maxWidth) {
+        while (TextHelper::fineTextWidthF(watermark, font) > maxWidth) {
             font.setPixelSize(font.pixelSize() - 4);
-            fontMetrics = QFontMetrics(font);
         }
 
         //

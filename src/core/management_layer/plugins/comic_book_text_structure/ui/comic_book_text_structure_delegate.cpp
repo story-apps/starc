@@ -97,8 +97,8 @@ QRectF ComicBookTextStructureDelegate::Implementation::paintItemWordsCount(
 
     _painter->setFont(Ui::DesignSystem::font().body2());
 
-    const auto durationText = QString("(%1)").arg(QString::number(_wordsCount));
-    const qreal durationWidth = _painter->fontMetrics().horizontalAdvance(durationText);
+    const auto wordsCountText = QString("(%1)").arg(QString::number(_wordsCount));
+    const qreal durationWidth = TextHelper::fineTextWidthF(wordsCountText, _painter->font());
 
     const QRectF backgroundRect = _option.rect;
     const QRectF durationRect(
@@ -109,7 +109,7 @@ QRectF ComicBookTextStructureDelegate::Implementation::paintItemWordsCount(
                 backgroundRect.top() + Ui::DesignSystem::layout().px16()),
         QSizeF(durationWidth, Ui::DesignSystem::layout().px24()));
     if (_wordsCount != kInvalidWordsCount) {
-        _painter->drawText(durationRect, Qt::AlignLeft | Qt::AlignVCenter, durationText);
+        _painter->drawText(durationRect, Qt::AlignLeft | Qt::AlignVCenter, wordsCountText);
     }
 
     return durationRect;
@@ -442,7 +442,7 @@ void ComicBookTextStructureDelegate::Implementation::paintPanel(QPainter* _paint
                                               : (iconRect.right() - dialoguesWordsCountRect.left());
         textRect
             = QRectF(QPointF(textLeft, headingRect.bottom() + Ui::DesignSystem::layout().px8()),
-                     QSizeF(textWidth, _painter->fontMetrics().lineSpacing() * textLines));
+                     QSizeF(textWidth, TextHelper::fineLineSpacing(_painter->font()) * textLines));
         panelText = TextHelper::elidedText(panelText, Ui::DesignSystem::font().body2(), textRect);
         _painter->drawText(textRect, Qt::TextWordWrap, panelText);
     }
@@ -553,10 +553,10 @@ QSize ComicBookTextStructureDelegate::Implementation::panelSizeHint(
     //
     // Считаем высоту
     //
-    const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body2());
     int height = Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24();
     if (textLines > 0) {
-        height += Ui::DesignSystem::layout().px8() + fontMetrics.lineSpacing() * textLines
+        height += Ui::DesignSystem::layout().px8()
+            + TextHelper::fineLineSpacing(Ui::DesignSystem::font().body2()) * textLines
             + Ui::DesignSystem::layout().px16();
     } else {
         height += Ui::DesignSystem::layout().px16();

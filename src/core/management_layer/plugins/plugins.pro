@@ -60,3 +60,7 @@ exists (audioplay_statistics/audioplay_statistics.pro) {
 exists (stageplay_statistics/stageplay_statistics.pro) {
     SUBDIRS += stageplay_statistics
 }
+
+exists (screenplay_cards/screenplay_cards.pro) {
+    SUBDIRS += screenplay_cards
+}

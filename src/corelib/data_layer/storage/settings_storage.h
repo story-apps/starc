@@ -234,6 +234,22 @@ const QString kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSce
 const QString kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey
     = kComponentsScreenplayDurationKey
     + QStringLiteral("/configurable-secsonds-per-every50-for-scene-heading");
+// ... редактор карточек
+const QString kComponentsScreenplayCardsKey = kComponentsScreenplayKey + QStringLiteral("/cards");
+const QString kComponentsScreenplayCardsSplitterStateKey
+    = kComponentsScreenplayCardsKey + QStringLiteral("/splitter-state");
+const QString kComponentsScreenplayCardsLockCardsKey
+    = kComponentsScreenplayCardsKey + QStringLiteral("/lock-cards");
+const QString kComponentsScreenplayCardsArrangeByRowsKey
+    = kComponentsScreenplayCardsKey + QStringLiteral("/arrange-by-rows");
+const QString kComponentsScreenplayCardsCardsSizeKey
+    = kComponentsScreenplayCardsKey + QStringLiteral("/cards-size");
+const QString kComponentsScreenplayCardsCardsRatioKey
+    = kComponentsScreenplayCardsKey + QStringLiteral("/cards-ratio");
+const QString kComponentsScreenplayCardsCardsSpacingKey
+    = kComponentsScreenplayCardsKey + QStringLiteral("/cards-spacing");
+const QString kComponentsScreenplayCardsCardsInRowKey
+    = kComponentsScreenplayCardsKey + QStringLiteral("/cards-in-row");
 //
 // комикс
 const QString kComponentsComicBookKey = kComponentsGroupKey + QStringLiteral("/comicbook");

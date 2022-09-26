@@ -1051,7 +1051,7 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
                         else {
                             const qreal x = splitterX - cursor.currentTable()->format().border();
                             const QPointF topLeft(
-                                x - painter.fontMetrics().horizontalAdvance(emptyLineMark),
+                                x - TextHelper::fineTextWidthF(emptyLineMark, painter.font()),
                                 cursorR.top());
                             const QPointF bottomRight(x, cursorR.bottom() + 2);
                             const QRectF rect(topLeft, bottomRight);
@@ -1081,12 +1081,13 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
                                                           : pageRight + leftDelta,
                                             cursorR.bottom());
                         QRectF rect(topLeft, bottomRight);
-                        const auto textFontMetrics = QFontMetricsF(cursor.charFormat().font());
-                        const auto iconFontMetrics
-                            = QFontMetricsF(DesignSystem::font().iconsForEditors());
-                        const auto yDelta
-                            = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
-                        rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
+                        const auto yDelta = (TextHelper::fineLineSpacing(cursor.charFormat().font())
+                                             - TextHelper::fineLineSpacing(
+                                                 DesignSystem::font().iconsForEditors()))
+                            / 2.0;
+                        rect.adjust(
+                            0, yDelta,
+                            -TextHelper::fineTextWidthF(".", cursor.charFormat().font()) / 2, 0);
                         painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F024B");
                     }
                     //
@@ -1113,7 +1114,7 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
                             // редактор
                             //
                             const int numberDelta
-                                = painter.fontMetrics().horizontalAdvance(dialogueNumber);
+                                = TextHelper::fineTextWidthF(dialogueNumber, painter.font());
                             QRectF numberRect;
                             //
                             // ... если у стиля персонажа есть пустое пространство слева, то

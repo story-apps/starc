@@ -290,7 +290,8 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
                         + Ui::DesignSystem::layout().px16()),
             avatarSize);
 
-        const QFontMetricsF titleFontMetrics(Ui::DesignSystem::font().subtitle2());
+        _painter->setFont(Ui::DesignSystem::font().subtitle2());
+        const auto titleFontLineSpacing = TextHelper::fineLineSpacing(_painter->font());
         const auto maximumTextWidth
             = (isLeftToRight ? (commentRect.right() - lastCommentAvatarRect.right())
                              : (lastCommentAvatarRect.left() - commentRect.left()))
@@ -300,11 +301,10 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
             = std::max(std::min(maximumTextWidth,
                                 TextHelper::fineTextWidthF(lastComment.text,
                                                            Ui::DesignSystem::font().body2())),
-                       TextHelper::fineTextWidthF(lastComment.author, titleFontMetrics));
+                       TextHelper::fineTextWidthF(lastComment.author, _painter->font()));
         const auto lastCommentTextHeight = TextHelper::heightForWidth(
             lastComment.text, Ui::DesignSystem::font().body2(), lastCommentTextWidth);
-        const auto lastCommentHeightDelta
-            = titleFontMetrics.lineSpacing() + Ui::DesignSystem::layout().px4();
+        const auto lastCommentHeightDelta = titleFontLineSpacing + Ui::DesignSystem::layout().px4();
         const auto lastCommentWidth = lastCommentTextWidth + Ui::DesignSystem::layout().px24();
         const auto lastCommentHeight = lastCommentTextHeight + Ui::DesignSystem::layout().px24();
         const QRectF lastCommentRect(
@@ -321,15 +321,13 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
         _painter->setBrush(ColorHelper::nearby(backgroundColor));
         _painter->drawRoundedRect(lastCommentRect, Ui::DesignSystem::card().borderRadius(),
                                   Ui::DesignSystem::card().borderRadius());
-        _painter->setFont(Ui::DesignSystem::font().subtitle2());
         _painter->setPen(textColor);
         QTextOption commentTextOption;
         commentTextOption.setAlignment(isLeftToRight ? Qt::AlignLeft : Qt::AlignRight);
-        _painter->drawText(
-            QRectF(QPointF(lastCommentTextRect.left(),
-                           lastCommentRect.top() + Ui::DesignSystem::layout().px8()),
-                   QSizeF(lastCommentTextRect.width(), titleFontMetrics.lineSpacing())),
-            lastComment.author, commentTextOption);
+        _painter->drawText(QRectF(QPointF(lastCommentTextRect.left(),
+                                          lastCommentRect.top() + Ui::DesignSystem::layout().px8()),
+                                  QSizeF(lastCommentTextRect.width(), titleFontLineSpacing)),
+                           lastComment.author, commentTextOption);
         _painter->setFont(Ui::DesignSystem::font().body2());
         _painter->setPen(textColor);
         commentTextOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
@@ -406,7 +404,7 @@ QSize CommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
                 height += Ui::DesignSystem::layout().px16();
             }
 
-            height += QFontMetricsF(Ui::DesignSystem::font().subtitle2()).lineSpacing()
+            height += TextHelper::fineLineSpacing(Ui::DesignSystem::font().subtitle2())
                 + Ui::DesignSystem::layout().px4();
 
             const auto lastComment = comments.constLast();

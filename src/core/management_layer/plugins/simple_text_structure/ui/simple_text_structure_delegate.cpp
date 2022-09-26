@@ -164,15 +164,15 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
             const qreal textLeft = iconRect.left();
             const qreal textWidth = backgroundRect.right() - textLeft
                 - Ui::DesignSystem::treeOneLineItem().margins().right();
-            textRect
-                = QRectF(QPointF(textLeft, headingRect.bottom() + Ui::DesignSystem::layout().px8()),
-                         QSizeF(textWidth, _painter->fontMetrics().lineSpacing() * textLines));
+            textRect = QRectF(
+                QPointF(textLeft, headingRect.bottom() + Ui::DesignSystem::layout().px8()),
+                QSizeF(textWidth, TextHelper::fineLineSpacing(_painter->font()) * textLines));
         } else {
             const qreal textLeft = headingRect.left();
             const qreal textWidth = iconRect.right() - textLeft;
-            textRect
-                = QRectF(QPointF(textLeft, headingRect.bottom() + Ui::DesignSystem::layout().px8()),
-                         QSizeF(textWidth, _painter->fontMetrics().lineSpacing() * textLines));
+            textRect = QRectF(
+                QPointF(textLeft, headingRect.bottom() + Ui::DesignSystem::layout().px8()),
+                QSizeF(textWidth, TextHelper::fineLineSpacing(_painter->font()) * textLines));
         }
         chapterText
             = TextHelper::elidedText(chapterText, Ui::DesignSystem::font().body2(), textRect);
@@ -255,10 +255,10 @@ QSize SimpleTextStructureDelegate::Implementation::chapterSizeHint(
     //
     // Считаем высоту
     //
-    const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body2());
     int height = Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24();
     if (textLines > 0) {
-        height += Ui::DesignSystem::layout().px8() + fontMetrics.lineSpacing() * textLines
+        height += Ui::DesignSystem::layout().px8()
+            + TextHelper::fineLineSpacing(Ui::DesignSystem::font().body2()) * textLines
             + Ui::DesignSystem::layout().px16();
     } else {
         height += Ui::DesignSystem::layout().px16();

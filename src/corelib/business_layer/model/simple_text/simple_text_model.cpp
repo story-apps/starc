@@ -119,7 +119,7 @@ void SimpleTextModel::Implementation::updateNumbering()
 
 
 SimpleTextModel::SimpleTextModel(QObject* _parent)
-    : TextModel(_parent, createFolderItem(TextFolderType::Sequence))
+    : TextModel(_parent, createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
     connect(this, &SimpleTextModel::dataChanged, this,

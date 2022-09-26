@@ -77,7 +77,7 @@ QSize AbstractLabel::sizeHint() const
     for (const auto& line : lines) {
         width = std::max(width, TextHelper::fineTextWidth(line, textFont()));
     }
-    const int height = QFontMetrics(textFont()).lineSpacing() * lines.size();
+    const int height = TextHelper::fineLineSpacing(textFont()) * lines.size();
     return QRect(QPoint(0, 0), QSize(width, height)).marginsAdded(contentsMargins()).size();
 }
 

@@ -125,7 +125,8 @@ void ScreenplayTextModel::Implementation::updateNumbering()
                       auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
                       if (textItem->paragraphType() == TextParagraphType::Character
                           && !textItem->isCorrection()) {
-                          textItem->setNumber(dialogueNumber++);
+                          textItem->setNumber(dialogueNumber);
+                          ++dialogueNumber;
                       }
                       break;
                   }
@@ -166,7 +167,7 @@ void ScreenplayTextModel::Implementation::updateChildrenDuration(const TextModel
 
 
 ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
-    : TextModel(_parent, createFolderItem(TextFolderType::Sequence))
+    : TextModel(_parent, ScreenplayTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
     auto updateCounters = [this](const QModelIndex& _index) {

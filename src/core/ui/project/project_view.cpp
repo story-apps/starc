@@ -179,7 +179,7 @@ void ProjectView::setDocumentVersions(const QVector<BusinessLayer::StructureMode
     const auto lastActiveVersion = d->documentVersions->currentTab();
 
     d->documentVersions->removeAllTabs();
-    d->documentVersions->addTab(tr("Current version"));
+    d->documentVersions->addTab(tr("Current draft"));
     for (const auto version : _versions) {
         d->documentVersions->addTab(version->name(),
                                     version->isReadOnly() ? u8"\U000F033E" : u8"\U000F0765",
@@ -241,7 +241,7 @@ void ProjectView::updateTranslations()
     d->notImplementedPageBodyLabel->setText(
         tr("But don't worry, it will be here in one of the future updates!"));
 
-    d->documentVersions->setTabName(0, tr("Current version"));
+    d->documentVersions->setTabName(0, tr("Current draft"));
 }
 
 void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

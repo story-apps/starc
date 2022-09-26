@@ -135,11 +135,11 @@ QWidget* CreateVersionDialog::lastFocusableWidget() const
 
 void CreateVersionDialog::updateTranslations()
 {
-    setTitle(d->state == AddNew ? tr("Create new document version") : tr("Edit document version"));
+    setTitle(d->state == AddNew ? tr("Create new document draft") : tr("Edit document draft"));
 
-    d->versionName->setLabel(tr("Version name"));
-    d->sourceVersion->setLabel(tr("New version based on"));
-    d->allowEditVersion->setText(tr("Allow to edit version"));
+    d->versionName->setLabel(tr("Draft name"));
+    d->sourceVersion->setLabel(tr("New draft based on"));
+    d->allowEditVersion->setText(tr("Allow to edit draft"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(d->state == AddNew ? tr("Create") : tr("Save"));
 }

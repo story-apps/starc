@@ -91,7 +91,7 @@ QRectF AudioplayTextStructureDelegate::Implementation::paintItemDuration(
     _painter->setFont(Ui::DesignSystem::font().body2());
 
     const auto durationText = QString("(%1)").arg(TimeHelper::toString(_duration));
-    const qreal durationWidth = _painter->fontMetrics().horizontalAdvance(durationText);
+    const qreal durationWidth = TextHelper::fineTextWidthF(durationText, _painter->font());
 
     const QRectF backgroundRect = _option.rect;
     const QRectF durationRect(
@@ -332,7 +332,7 @@ void AudioplayTextStructureDelegate::Implementation::paintScene(QPainter* _paint
                                               : (iconRect.right() - durationRect.left());
         textRect
             = QRectF(QPointF(textLeft, headingRect.bottom() + Ui::DesignSystem::layout().px8()),
-                     QSizeF(textWidth, _painter->fontMetrics().lineSpacing() * textLines));
+                     QSizeF(textWidth, TextHelper::fineLineSpacing(_painter->font()) * textLines));
         sceneText = TextHelper::elidedText(sceneText, Ui::DesignSystem::font().body2(), textRect);
         _painter->drawText(textRect, Qt::TextWordWrap, sceneText);
     }
@@ -523,10 +523,10 @@ QSize AudioplayTextStructureDelegate::Implementation::sceneSizeHint(
     //
     // Считаем высоту
     //
-    const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body2());
     int height = Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24();
     if (textLines > 0) {
-        height += Ui::DesignSystem::layout().px8() + fontMetrics.lineSpacing() * textLines
+        height += Ui::DesignSystem::layout().px8()
+            + TextHelper::fineLineSpacing(Ui::DesignSystem::font().body2()) * textLines
             + Ui::DesignSystem::layout().px16();
     } else {
         height += Ui::DesignSystem::layout().px16();

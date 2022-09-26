@@ -536,6 +536,15 @@ SettingsStorage::Implementation::Implementation()
             kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey, 2.0);
         defaultValues.insert(
             kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey, 0.0);
+        //
+        // Параметры карточек сценария
+        //
+        defaultValues.insert(kComponentsScreenplayCardsLockCardsKey, true);
+        defaultValues.insert(kComponentsScreenplayCardsArrangeByRowsKey, true);
+        defaultValues.insert(kComponentsScreenplayCardsCardsSizeKey, 10);
+        defaultValues.insert(kComponentsScreenplayCardsCardsRatioKey, 2);
+        defaultValues.insert(kComponentsScreenplayCardsCardsSpacingKey, 20);
+        defaultValues.insert(kComponentsScreenplayCardsCardsInRowKey, -1);
     }
     //
     // Параметры редактора комикса

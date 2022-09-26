@@ -295,9 +295,9 @@ void TextModel::insertItems(const QVector<TextModelItem*>& _items, TextModelItem
     updateItem(parentItem);
 }
 
-void TextModel::takeItem(TextModelItem* _item, TextModelItem* _parentItem)
+void TextModel::takeItem(TextModelItem* _item)
 {
-    takeItems(_item, _item, _parentItem);
+    takeItems(_item, _item, _item->parent());
 }
 
 void TextModel::takeItems(TextModelItem* _fromItem, TextModelItem* _toItem,
@@ -348,6 +348,72 @@ void TextModel::removeItems(TextModelItem* _fromItem, TextModelItem* _toItem)
     endRemoveRows();
 
     updateItem(parentItem);
+}
+
+void TextModel::moveItem(TextModelItem* _item, TextModelItem* _afterSiblingItem,
+                         TextModelItem* _parentItem)
+{
+    //
+    // Попытка переметить тот же самый элемент
+    //
+    if (_item == _afterSiblingItem) {
+        return;
+    }
+
+    //
+    // Элемент не принадлежит модели
+    //
+    const auto itemIndex = indexForItem(_item);
+    if (!itemIndex.isValid()) {
+        return;
+    }
+
+    //
+    // Определим родителя, если не задан и его индекс
+    //
+    if (_parentItem == nullptr) {
+        _parentItem = _afterSiblingItem != nullptr ? _afterSiblingItem->parent() : d->rootItem;
+    }
+
+    //
+    // Перемещение в самое начало
+    //
+    if (_afterSiblingItem == nullptr) {
+        //
+        // Если элемент и так самый первый
+        //
+        if (_item->parent() == _parentItem && itemIndex.row() == 0) {
+            return;
+        }
+
+        emit rowsAboutToBeChanged();
+        takeItem(_item);
+        prependItem(_item, _parentItem);
+        emit rowsChanged();
+        return;
+    }
+
+    //
+    // Перемещение внутри списка
+    //
+    const auto afterSiblingItemIndex = indexForItem(_afterSiblingItem);
+    if (!afterSiblingItemIndex.isValid()) {
+        return;
+    }
+    //
+    // ... если элементы и так идут друг за другом
+    //
+    if (afterSiblingItemIndex.parent() == itemIndex.parent()
+        && afterSiblingItemIndex.row() == itemIndex.row() - 1) {
+        return;
+    }
+    //
+    // ... собственно перемещение
+    //
+    emit rowsAboutToBeChanged();
+    takeItem(_item);
+    insertItem(_item, _afterSiblingItem);
+    emit rowsChanged();
 }
 
 void TextModel::updateItem(TextModelItem* _item)
@@ -1231,7 +1297,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         for (auto item : lastItemsFromSourceScene) {
             if (item->hasParent()) {
                 auto itemParent = item->parent();
-                takeItem(item, itemParent);
+                takeItem(item);
 
                 //
                 // Удалим родителя, если у него больше не осталось детей
@@ -1757,7 +1823,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
                         while (modelItemParent->childCount() > modelItemIndex) {
                             auto childItem
                                 = modelItemParent->childAt(modelItemParent->childCount() - 1);
-                            takeItem(childItem, modelItemParent);
+                            takeItem(childItem);
                             insertItem(childItem, _item);
                             movedSiblingItems.prepend(childItem);
                         }
@@ -1799,7 +1865,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
                 //
                 // ... а если не находится, то корректируем
                 //
-                takeItem(_item, _item->parent());
+                takeItem(_item);
                 insertItem(_item, previousModelItem);
             }
             //
@@ -1816,7 +1882,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
                 //
                 // ... а если родитель, другой, то просто перемещаем элемент внутрь предыдушего
                 //
-                takeItem(_item, _item->parent());
+                takeItem(_item);
                 appendItem(_item, previousModelItem);
             }
             //
@@ -1845,7 +1911,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
                 auto itemParent = _item->parent();
                 const int itemIndex = itemParent->rowOfChild(_item);
 
-                takeItem(_item, itemParent);
+                takeItem(_item);
                 insertItem(_item, insertAfterItem);
 
                 //
@@ -1857,7 +1923,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
                         break;
                     }
 
-                    takeItem(childItem, itemParent);
+                    takeItem(childItem);
                     insertItem(childItem, _item);
                     movedSiblingItems.prepend(childItem);
                 }
@@ -1876,7 +1942,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
             // То перенесём их в след за предводителем
             //
             for (auto siblingItem : reversed(movedSiblingItems)) {
-                takeItem(siblingItem, siblingItem->parent());
+                takeItem(siblingItem);
                 insertItem(siblingItem, _item);
             }
             //
@@ -1940,7 +2006,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
             //
             while (modelItem->hasChildren()) {
                 auto childItem = modelItem->childAt(modelItem->childCount() - 1);
-                takeItem(childItem, modelItem);
+                takeItem(childItem);
                 insertItem(childItem, modelItem);
                 movedSiblingItems.prepend(childItem);
             }
@@ -2045,7 +2111,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
     if (!movedSiblingItems.isEmpty() && previousModelItem != nullptr
         && movedSiblingItems.constFirst()->parent() != previousModelItem->parent()) {
         for (auto siblingItem : reversed(movedSiblingItems)) {
-            takeItem(siblingItem, siblingItem->parent());
+            takeItem(siblingItem);
             insertItem(siblingItem, previousModelItem);
         }
     }

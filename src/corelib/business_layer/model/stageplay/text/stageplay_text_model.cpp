@@ -123,7 +123,7 @@ void StageplayTextModel::Implementation::updateNumbering()
 
 
 StageplayTextModel::StageplayTextModel(QObject* _parent)
-    : TextModel(_parent, createFolderItem(TextFolderType::Sequence))
+    : TextModel(_parent, createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
     auto updateNumbering = [this] { d->updateNumbering(); };

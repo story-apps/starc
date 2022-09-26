@@ -189,7 +189,7 @@ void TextField::Implementation::reconfigure()
     const QPointF labelCurrentTopLeft(
         labelNewTopLeft.x(),
         contentMargins().top()
-            + (backgroundHeight - QFontMetricsF(Ui::DesignSystem::font().body1()).lineSpacing())
+            + (backgroundHeight - TextHelper::fineLineSpacing(Ui::DesignSystem::font().body1()))
                 / 2);
     labelTopLeftAnimation.setStartValue(labelCurrentTopLeft);
     labelTopLeftAnimation.setEndValue(labelNewTopLeft);
@@ -891,7 +891,7 @@ void TextField::paintEvent(QPaintEvent* _event)
             labelColor = d->labelColorAnimation.currentValue().value<QColor>();
         }
         painter.setPen(labelColor);
-        const auto labelRect = d->labelRect(QFontMetricsF(labelFont).lineSpacing());
+        const auto labelRect = d->labelRect(TextHelper::fineLineSpacing(labelFont));
         painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignVCenter, d->label);
     }
     //

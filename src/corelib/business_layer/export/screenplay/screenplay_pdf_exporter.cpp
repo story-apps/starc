@@ -98,7 +98,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
                 if (textItem && textItem->number().has_value()) {
                     const QString dialogueNumber = textItem->number()->text;
                     const int numberDelta
-                        = _painter->fontMetrics().horizontalAdvance(dialogueNumber);
+                        = TextHelper::fineTextWidthF(dialogueNumber, _painter->font());
                     QRectF dialogueNumberRect;
                     if (QLocale().textDirection() == Qt::LeftToRight) {
                         if (_block.blockFormat().leftMargin() > numberDelta) {

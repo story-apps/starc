@@ -17,6 +17,7 @@ namespace BusinessLayer {
  */
 enum class TextFolderType {
     Undefined = 0,
+    Root,
     Act,
     Sequence,
 };

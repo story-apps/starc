@@ -59,15 +59,20 @@ public:
     /**
      * @brief Извлечь заданный элемент без удаления
      */
-    void takeItem(TextModelItem* _item, TextModelItem* _parentItem = nullptr);
-    void takeItems(TextModelItem* _fromItem, TextModelItem* _toItem,
-                   TextModelItem* _parentItem = nullptr);
+    void takeItem(TextModelItem* _item);
+    void takeItems(TextModelItem* _fromItem, TextModelItem* _toItem, TextModelItem* _parentItem);
 
     /**
      * @brief Удалить заданный элемент
      */
     void removeItem(TextModelItem* _item);
     void removeItems(TextModelItem* _fromItem, TextModelItem* _toItem);
+
+    /**
+     * @brief Переместить элемент в заданный родитель после заданного элемента
+     */
+    void moveItem(TextModelItem* _item, TextModelItem* _afterSiblingItem,
+                  TextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Обновить заданный элемент

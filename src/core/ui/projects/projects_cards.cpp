@@ -17,7 +17,8 @@
 #include <QResizeEvent>
 #include <QStyleOption>
 #include <QVariantAnimation>
-#include <QtMath>
+
+#include <cmath>
 
 
 namespace Ui {
@@ -219,16 +220,15 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     //
     _painter->setPen(Ui::DesignSystem::color().onBackground());
     _painter->setFont(Ui::DesignSystem::font().h6());
-    const QFontMetricsF textFontMetrics(Ui::DesignSystem::font().h6());
     const QRectF textRect(isLeftToRight ? posterRect.right() + Ui::DesignSystem::layout().px16()
                                         : backgroundRect.left() + Ui::DesignSystem::layout().px12(),
                           backgroundRect.top() + Ui::DesignSystem::layout().px8(),
                           backgroundRect.width() - posterRect.width()
                               - Ui::DesignSystem::layout().px12() * 2,
-                          textFontMetrics.lineSpacing());
+                          TextHelper::fineLineSpacing(_painter->font()));
     _painter->drawText(
         textRect, Qt::AlignLeft | Qt::AlignVCenter,
-        textFontMetrics.elidedText(m_project.name(), Qt::ElideRight, textRect.width()));
+        TextHelper::elidedText(m_project.name(), _painter->font(), textRect.width()));
 
     //
     // Логлайн
@@ -237,11 +237,11 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     _painter->setFont(Ui::DesignSystem::font().body2());
     const auto fullLoglinHeight
         = TextHelper::heightForWidth(m_project.logline(), _painter->font(), textRect.width());
-    const QFontMetricsF fontMetrics(_painter->font());
+    const auto fontLineSpacing = TextHelper::fineLineSpacing(_painter->font());
     const int loglineMaxLines = m_project.isLocal() ? 5 : 4;
-    const QRectF loglineRect(
-        textRect.left(), textRect.bottom() + Ui::DesignSystem::layout().px8(), textRect.width(),
-        std::min(fullLoglinHeight, fontMetrics.lineSpacing() * loglineMaxLines));
+    const QRectF loglineRect(textRect.left(), textRect.bottom() + Ui::DesignSystem::layout().px8(),
+                             textRect.width(),
+                             std::min(fullLoglinHeight, fontLineSpacing * loglineMaxLines));
     const QString loglineCorrected
         = TextHelper::elidedText(m_project.logline(), _painter->font(), loglineRect);
     _painter->drawText(loglineRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap,
@@ -257,7 +257,7 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
         ? loglineRect.top()
         : loglineRect.bottom() + Ui::DesignSystem::layout().px4();
     const QRectF lastDateRect(loglineRect.left(), lastDateTop, loglineRect.width(),
-                              fontMetrics.lineSpacing());
+                              fontLineSpacing);
     _painter->drawText(lastDateRect, Qt::AlignLeft | Qt::AlignTop, m_project.displayLastEditTime());
 
     //
@@ -268,7 +268,7 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
             _painter->setFont(Ui::DesignSystem::font().subtitle2());
             const QRectF roleRect(lastDateRect.bottomLeft(),
                                   QPointF(lastDateRect.right(),
-                                          lastDateRect.bottom() + fontMetrics.lineSpacing()
+                                          lastDateRect.bottom() + fontLineSpacing
                                               + Ui::DesignSystem::layout().px(6)));
             _painter->drawText(roleRect, Qt::AlignLeft | Qt::AlignBottom,
                                projectsScene()->tr("Owner"));
@@ -296,17 +296,16 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
             }
 
             _painter->setFont(Ui::DesignSystem::font().iconsSmall());
-            const QRectF iconRect(
-                lastDateRect.bottomLeft(),
-                QSizeF(Ui::DesignSystem::layout().px24(),
-                       fontMetrics.lineSpacing() + Ui::DesignSystem::layout().px4()));
+            const QRectF iconRect(lastDateRect.bottomLeft(),
+                                  QSizeF(Ui::DesignSystem::layout().px24(),
+                                         fontLineSpacing + Ui::DesignSystem::layout().px4()));
             _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignBottom, roleIcon);
 
 
             _painter->setFont(Ui::DesignSystem::font().subtitle2());
             const QRectF roleRect(iconRect.topRight(),
                                   QPointF(lastDateRect.right(),
-                                          lastDateRect.bottom() + fontMetrics.lineSpacing()
+                                          lastDateRect.bottom() + fontLineSpacing
                                               + Ui::DesignSystem::layout().px(6)));
             _painter->drawText(roleRect, Qt::AlignLeft | Qt::AlignBottom, roleText);
         }
@@ -721,7 +720,7 @@ void ProjectsCards::Implementation::reorderCard(QGraphicsItem* _cardItem)
         movedCard->project(),
         previousCard != nullptr ? previousCard->project() : ManagementLayer::Project());
     //
-    // В случае, сли проект не был перемещён, нужно вернуть его на место на доске
+    // В случае, если проект не был перемещён, нужно вернуть его на место на доске
     //
     if (!isProjectMoved) {
         reorderCards();

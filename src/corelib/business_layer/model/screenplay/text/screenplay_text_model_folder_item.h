@@ -2,6 +2,8 @@
 
 #include <business_layer/model/text/text_model_folder_item.h>
 
+#include <QRectF>
+
 #include <chrono>
 
 
@@ -25,6 +27,16 @@ public:
 public:
     explicit ScreenplayTextModelFolderItem(const ScreenplayTextModel* _model, TextFolderType _type);
     ~ScreenplayTextModelFolderItem() override;
+
+    /**
+     * @brief Параметры отображения карточки
+     */
+    struct CardInfo {
+        QRectF geometry;
+        bool isOpened = false;
+    };
+    const CardInfo& cardInfo() const;
+    void setCardInfo(const CardInfo& _info);
 
     /**
      * @brief Длительность папки

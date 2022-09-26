@@ -413,10 +413,10 @@ QSize ScreenplayTreatmentStructureDelegate::Implementation::sceneSizeHint(
     //
     // Считаем высоту
     //
-    const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body2());
     int height = Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24();
     if (textLines > 0) {
-        height += Ui::DesignSystem::layout().px8() + fontMetrics.lineSpacing() * textLines
+        height += Ui::DesignSystem::layout().px8()
+            + TextHelper::fineLineSpacing(Ui::DesignSystem::font().body2()) * textLines
             + Ui::DesignSystem::layout().px16();
     } else {
         height += Ui::DesignSystem::layout().px16();

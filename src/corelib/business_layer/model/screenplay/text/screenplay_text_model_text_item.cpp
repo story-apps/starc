@@ -48,6 +48,13 @@ void ScreenplayTextModelTextItem::updateDuration()
         return;
     }
 
+    //
+    // Если элемент не менялся после последнего подсчёта хронометража, не делаем лишнюю работу
+    //
+    if (d->duration != std::chrono::milliseconds{ 0 } && !isChanged()) {
+        return;
+    }
+
     const auto screenplayModel = qobject_cast<const ScreenplayTextModel*>(model());
     Q_ASSERT(screenplayModel);
     const auto duration = ScreenplayChronometer::duration(

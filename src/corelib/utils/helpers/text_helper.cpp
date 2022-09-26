@@ -202,7 +202,6 @@ QString TextHelper::lastLineText(const QString& _text, const QFont& _font, qreal
 
 QString TextHelper::elidedText(const QString& _text, const QFont& _font, const QRectF& _rect)
 {
-    const QFontMetricsF metrics(_font);
     const qreal lineHeight = fineLineSpacing(_font);
     qreal height = 0;
 
@@ -231,8 +230,9 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
         //
         // Если строка влезает, то оставляем её без изменений
         //
-        if (height < _rect.height()) {
-            elidedText += _text.mid(line.textStart(), line.textLength());
+        const auto heightWithNextLine = height + lineHeight;
+        if (heightWithNextLine <= _rect.height()) {
+            elidedText += _text.midRef(line.textStart(), line.textLength());
         }
         //
         // А если это последняя строка, то многоточим её
@@ -247,7 +247,7 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
             //
             // ... если весь текст влез, не надо добавлять многоточие в конце
             //
-            if (metrics.horizontalAdvance(lastLine) <= _rect.width() && _text.endsWith(lastLine)) {
+            if (fineTextWidthF(lastLine, _font) <= _rect.width() && _text.endsWith(lastLine)) {
                 elidedText += lastLine;
                 break;
             }
@@ -256,7 +256,7 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
             // ... многоточим
             //
             lastLine += "…";
-            while (lastLine.length() > 1 && metrics.horizontalAdvance(lastLine) > _rect.width()) {
+            while (lastLine.length() > 1 && fineTextWidthF(lastLine, _font) > _rect.width()) {
                 lastLine.remove(lastLine.length() - 2, 1);
             }
             elidedText += lastLine;
@@ -266,6 +266,11 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
     textLayout.endLayout();
 
     return elidedText;
+}
+
+QString TextHelper::elidedText(const QString& _text, const QFont& _font, qreal _width)
+{
+    return elidedText(_text, _font, QRectF(0, 0, _width, fineLineSpacing(_font)));
 }
 
 QString TextHelper::toHtmlEscaped(const QString& _text)

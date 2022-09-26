@@ -60,7 +60,8 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
             const auto textItem = static_cast<TextModelTextItem*>(blockData->item());
             if (textItem && textItem->number().has_value()) {
                 const QString dialogueNumber = textItem->number()->text;
-                const int numberDelta = _painter->fontMetrics().horizontalAdvance(dialogueNumber);
+                const int numberDelta
+                    = TextHelper::fineTextWidthF(dialogueNumber, _painter->font());
                 const auto characterBlockStyle
                     = exportTemplate.paragraphStyle(TextParagraphType::Character);
                 QRectF dialogueNumberRect;

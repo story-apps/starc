@@ -13,6 +13,11 @@ namespace BusinessLayer {
 class ScreenplayTextModelFolderItem::Implementation
 {
 public:
+    /**
+     * @brief Параметры отображения папки на доске с карточками
+     */
+    CardInfo cardInfo;
+
     //
     // Ридонли свойства, которые формируются по ходу работы с текстом
     //
@@ -36,6 +41,21 @@ ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const ScreenplayTex
 }
 
 ScreenplayTextModelFolderItem::~ScreenplayTextModelFolderItem() = default;
+
+const ScreenplayTextModelFolderItem::CardInfo& ScreenplayTextModelFolderItem::cardInfo() const
+{
+    return d->cardInfo;
+}
+
+void ScreenplayTextModelFolderItem::setCardInfo(const CardInfo& _info)
+{
+    if (d->cardInfo.geometry == _info.geometry && d->cardInfo.isOpened == _info.isOpened) {
+        return;
+    }
+
+    d->cardInfo = _info;
+    setChanged(true);
+}
 
 std::chrono::milliseconds ScreenplayTextModelFolderItem::duration() const
 {

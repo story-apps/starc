@@ -1010,7 +1010,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         else {
                             const qreal x = splitterX - cursor.currentTable()->format().border();
                             const QPointF topLeft(
-                                x - painter.fontMetrics().horizontalAdvance(emptyLineMark),
+                                x - TextHelper::fineTextWidthF(emptyLineMark, painter.font()),
                                 cursorR.top());
                             const QPointF bottomRight(x, cursorR.bottom() + 2);
                             const QRectF rect(topLeft, bottomRight);
@@ -1061,12 +1061,13 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                                           : pageRight + leftDelta,
                                             cursorR.bottom());
                         QRectF rect(topLeft, bottomRight);
-                        const auto textFontMetrics = QFontMetricsF(cursor.charFormat().font());
-                        const auto iconFontMetrics
-                            = QFontMetricsF(DesignSystem::font().iconsForEditors());
-                        const auto yDelta
-                            = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
-                        rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
+                        const auto yDelta = (TextHelper::fineLineSpacing(cursor.charFormat().font())
+                                             - TextHelper::fineLineSpacing(
+                                                 DesignSystem::font().iconsForEditors()))
+                            / 2;
+                        rect.adjust(
+                            0, yDelta,
+                            -TextHelper::fineTextWidthF(".", cursor.charFormat().font()) / 2, 0);
                         painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
                                          blockType == TextParagraphType::ActHeading
                                              ? u8"\U000F0253"
@@ -1138,7 +1139,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             QRectF rect;
                             if (!cursor.inTable() || cursor.inFirstColumn()) {
                                 const int numberDelta
-                                    = painter.fontMetrics().horizontalAdvance(dialogueNumber);
+                                    = TextHelper::fineTextWidthF(dialogueNumber, painter.font());
                                 //
                                 // ... поместим номер реплики внутри текстовой области,
                                 //     чтобы их было удобно отличать от номеров сцен
@@ -1164,7 +1165,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                 const qreal x = splitterX + spaceBetweenSceneNumberAndText
                                     + cursor.currentTable()->format().border();
                                 const int numberDelta
-                                    = painter.fontMetrics().horizontalAdvance(dialogueNumber);
+                                    = TextHelper::fineTextWidthF(dialogueNumber, painter.font());
                                 const QPointF topLeft(x, cursorR.top());
                                 const QPointF bottomRight(x + numberDelta, cursorR.bottom());
                                 rect = QRectF(topLeft, bottomRight);
@@ -1194,8 +1195,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Определим место положение конца имени персонажа
                         //
-                        const int continuedTermWidth = painter.fontMetrics().horizontalAdvance(
-                            BusinessLayer::ScreenplayTextCorrector::continuedTerm());
+                        const int continuedTermWidth = TextHelper::fineTextWidthF(
+                            BusinessLayer::ScreenplayTextCorrector::continuedTerm(),
+                            painter.font());
                         const QPoint topLeft = isLeftToRight
                             ? cursorREnd.topLeft()
                             : cursorREnd.topRight() - QPoint(continuedTermWidth, 0);
@@ -1225,12 +1227,13 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                                       : pageRight + leftDelta,
                                         cursorR.bottom());
                     QRectF rect(topLeft, bottomRight);
-                    const auto textFontMetrics = QFontMetricsF(cursor.charFormat().font());
-                    const auto iconFontMetrics
-                        = QFontMetricsF(DesignSystem::font().iconsForEditors());
                     const auto yDelta
-                        = (textFontMetrics.lineSpacing() - iconFontMetrics.lineSpacing()) / 2;
-                    rect.adjust(0, yDelta, -textFontMetrics.horizontalAdvance(".") / 2, 0);
+                        = (TextHelper::fineLineSpacing(cursor.charFormat().font())
+                           - TextHelper::fineLineSpacing(DesignSystem::font().iconsForEditors()))
+                        / 2;
+                    rect.adjust(0, yDelta,
+                                -TextHelper::fineTextWidthF(".", cursor.charFormat().font()) / 2,
+                                0);
                     painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F09DE");
                 }
 
@@ -1249,10 +1252,10 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             = block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
                         const QPoint topLeft = block.text().isRightToLeft()
                             ? QPoint(cursorREnd.left()
-                                         - painter.fontMetrics().horizontalAdvance(prefix),
+                                         - TextHelper::fineTextWidthF(prefix, painter.font()),
                                      cursorREnd.top())
                             : QPoint(cursorR.left()
-                                         - painter.fontMetrics().horizontalAdvance(prefix),
+                                         - TextHelper::fineTextWidthF(prefix, painter.font()),
                                      cursorR.top());
                         const QPoint bottomRight = block.text().isRightToLeft()
                             ? QPoint(cursorREnd.left(), cursorREnd.bottom())
@@ -1271,10 +1274,10 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             : QPoint(cursorREnd.left(), cursorREnd.top());
                         const QPoint bottomRight = block.text().isRightToLeft()
                             ? QPoint(cursorR.left()
-                                         + painter.fontMetrics().horizontalAdvance(postfix),
+                                         + TextHelper::fineTextWidthF(postfix, painter.font()),
                                      cursorR.bottom())
                             : QPoint(cursorREnd.left()
-                                         + painter.fontMetrics().horizontalAdvance(postfix),
+                                         + TextHelper::fineTextWidthF(postfix, painter.font()),
                                      cursorREnd.bottom());
                         const QRect rect(topLeft, bottomRight);
                         painter.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, postfix);

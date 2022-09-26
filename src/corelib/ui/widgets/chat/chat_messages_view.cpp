@@ -34,8 +34,10 @@ ChatMessagesView::ChatMessagesView(QWidget* _parent)
 
     connect(
         this, &ChatMessagesView::customContextMenuRequested, this, [this](const QPoint& _position) {
-            const QFontMetricsF titleFontMetrics(Ui::DesignSystem::font().subtitle2());
-            const QFontMetricsF textFontMetrics(Ui::DesignSystem::font().body2());
+            const auto titleFont = Ui::DesignSystem::font().subtitle2();
+            const auto titleFontLineSpacing = TextHelper::fineLineSpacing(titleFont);
+            const auto textFont = Ui::DesignSystem::font().body2();
+            const auto textFontLineSpacing = TextHelper::fineLineSpacing(textFont);
             const qreal maximumTextWidth = width()
                 - Ui::DesignSystem::layout().px48() // отступ слева под авку и между авкой и текстом
                 - Ui::DesignSystem::layout().px24() // марджины текста от балуна
@@ -52,13 +54,14 @@ ChatMessagesView::ChatMessagesView(QWidget* _parent)
                 isCurrentAuthor = message.author() == d->currectUser;
 
                 if (isDateChanged) {
-                    lastY += Ui::DesignSystem::layout().px16() + textFontMetrics.lineSpacing();
+                    lastY += Ui::DesignSystem::layout().px16() + textFontLineSpacing;
                 }
 
-                const qreal messageTextWidth = std::max(
-                    std::min(maximumTextWidth, textFontMetrics.horizontalAdvance(message.text())),
-                    TextHelper::fineTextWidthF(isCurrentAuthor ? "" : message.author().name(),
-                                               titleFontMetrics));
+                const qreal messageTextWidth
+                    = std::max(std::min(maximumTextWidth,
+                                        TextHelper::fineTextWidthF(message.text(), textFont)),
+                               TextHelper::fineTextWidthF(
+                                   isCurrentAuthor ? "" : message.author().name(), titleFont));
                 const qreal messageTextHeight = TextHelper::heightForWidth(
                     message.text(), Ui::DesignSystem::font().body2(), messageTextWidth);
                 const qreal messageTopDelta = isDateChanged
@@ -66,7 +69,7 @@ ChatMessagesView::ChatMessagesView(QWidget* _parent)
                     : (isAuthorChanged ? Ui::DesignSystem::layout().px8()
                                        : Ui::DesignSystem::layout().px2());
                 const qreal messageHeightDelta = isAuthorChanged && !isCurrentAuthor
-                    ? titleFontMetrics.lineSpacing() + Ui::DesignSystem::layout().px4()
+                    ? titleFontLineSpacing + Ui::DesignSystem::layout().px4()
                     : 0.0;
 
                 if (lastY <= _position.y()
@@ -108,8 +111,10 @@ int ChatMessagesView::heightForWidth(int _width) const
     // NOTE: тут многое повторяется с методом отрисовки, при изменении быть внимательным
     //
 
-    const QFontMetricsF titleFontMetrics(Ui::DesignSystem::font().subtitle2());
-    const QFontMetricsF textFontMetrics(Ui::DesignSystem::font().body2());
+    const auto titleFont = Ui::DesignSystem::font().subtitle2();
+    const auto titleFontLineSpacing = TextHelper::fineLineSpacing(titleFont);
+    const auto textFont = Ui::DesignSystem::font().body2();
+    const auto textFontLineSpacing = TextHelper::fineLineSpacing(textFont);
     const qreal maximumTextWidth = _width
         - Ui::DesignSystem::layout().px48() // отступ слева под авку и между авкой и текстом
         - Ui::DesignSystem::layout().px24() // марджины текста от балуна
@@ -125,13 +130,12 @@ int ChatMessagesView::heightForWidth(int _width) const
         isCurrentAuthor = message.author() == d->currectUser;
 
         if (isDateChanged) {
-            lastY += Ui::DesignSystem::layout().px16() + textFontMetrics.lineSpacing();
+            lastY += Ui::DesignSystem::layout().px16() + textFontLineSpacing;
         }
 
         const qreal messageTextWidth = std::max(
-            std::min(maximumTextWidth, textFontMetrics.horizontalAdvance(message.text())),
-            TextHelper::fineTextWidthF(isCurrentAuthor ? "" : message.author().name(),
-                                       titleFontMetrics));
+            std::min(maximumTextWidth, TextHelper::fineTextWidthF(message.text(), textFont)),
+            TextHelper::fineTextWidthF(isCurrentAuthor ? "" : message.author().name(), titleFont));
         const qreal messageTextHeight = TextHelper::heightForWidth(
             message.text(), Ui::DesignSystem::font().body2(), messageTextWidth);
         const qreal messageTopDelta = isDateChanged
@@ -139,7 +143,7 @@ int ChatMessagesView::heightForWidth(int _width) const
             : (isAuthorChanged ? Ui::DesignSystem::layout().px8()
                                : Ui::DesignSystem::layout().px2());
         const qreal messageHeightDelta = isAuthorChanged && !isCurrentAuthor
-            ? titleFontMetrics.lineSpacing() + Ui::DesignSystem::layout().px4()
+            ? titleFontLineSpacing + Ui::DesignSystem::layout().px4()
             : 0.0;
         lastY += messageTopDelta + messageTextHeight + messageHeightDelta
             + Ui::DesignSystem::layout().px24();
@@ -165,8 +169,10 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
     // Рисуем сообщения
     //
 
-    const QFontMetricsF titleFontMetrics(Ui::DesignSystem::font().subtitle2());
-    const QFontMetricsF textFontMetrics(Ui::DesignSystem::font().body2());
+    const auto titleFont = Ui::DesignSystem::font().subtitle2();
+    const auto titleFontLineSpacing = TextHelper::fineLineSpacing(titleFont);
+    const auto textFont = Ui::DesignSystem::font().body2();
+    const auto textFontLineSpacing = TextHelper::fineLineSpacing(textFont);
     const QColor defaultBaloonColor = ColorHelper::nearby(backgroundColor());
     const QColor currentAuthorBaloonColor = ColorHelper::nearby(defaultBaloonColor);
     const qreal maximumTextWidth = width()
@@ -230,7 +236,7 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
         if (isDateChanged) {
             painter.setPen(textColor());
             const QRectF dateRect(0.0, lastY + Ui::DesignSystem::layout().px16(), width(),
-                                  textFontMetrics.lineSpacing());
+                                  textFontLineSpacing);
             painter.drawText(dateRect, Qt::AlignCenter, message.dateTime().toString("d MMMM"));
 
             lastY = dateRect.bottom();
@@ -241,9 +247,8 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
         // Определим область текста
         //
         const qreal messageTextWidth = std::max(
-            std::min(maximumTextWidth, textFontMetrics.horizontalAdvance(message.text())),
-            TextHelper::fineTextWidthF(isCurrentAuthor ? "" : message.author().name(),
-                                       titleFontMetrics));
+            std::min(maximumTextWidth, TextHelper::fineTextWidthF(message.text(), textFont)),
+            TextHelper::fineTextWidthF(isCurrentAuthor ? "" : message.author().name(), titleFont));
         const qreal messageTextHeight = TextHelper::heightForWidth(
             message.text(), Ui::DesignSystem::font().body2(), messageTextWidth);
         //
@@ -260,7 +265,7 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
             : (isLeftToRight() ? Ui::DesignSystem::layout().px48()
                                : (width() - messageWidth - Ui::DesignSystem::layout().px48()));
         const qreal messageHeightDelta = isAuthorChanged && !isCurrentAuthor
-            ? titleFontMetrics.lineSpacing() + Ui::DesignSystem::layout().px4()
+            ? titleFontLineSpacing + Ui::DesignSystem::layout().px4()
             : 0.0;
         const QRectF messageRect(messageX, lastY + messageTopDelta, messageWidth,
                                  messageTextHeight + messageHeightDelta
@@ -280,11 +285,10 @@ void ChatMessagesView::paintEvent(QPaintEvent* _event)
         if (isAuthorChanged && !isCurrentAuthor) {
             painter.setFont(Ui::DesignSystem::font().subtitle2());
             painter.setPen(message.author().avatarColor());
-            painter.drawText(
-                QRectF(QPointF(messageTextRect.left(),
-                               messageRect.top() + Ui::DesignSystem::layout().px8()),
-                       QSizeF(messageTextRect.width(), titleFontMetrics.lineSpacing())),
-                message.author().name(), textOption);
+            painter.drawText(QRectF(QPointF(messageTextRect.left(),
+                                            messageRect.top() + Ui::DesignSystem::layout().px8()),
+                                    QSizeF(messageTextRect.width(), titleFontLineSpacing)),
+                             message.author().name(), textOption);
             painter.setFont(Ui::DesignSystem::font().body2());
             painter.setPen(textColor());
         }

@@ -51,6 +51,7 @@ public:
      * @brief Сформировать замноготоченный текст из исходного в рамках заданной области
      */
     static QString elidedText(const QString& _text, const QFont& _font, const QRectF& _rect);
+    static QString elidedText(const QString& _text, const QFont& _font, qreal _width);
 
     /**
      * @brief Преобразовать специфичные символы к html-виду
