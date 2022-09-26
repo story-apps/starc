@@ -10,6 +10,7 @@
 #include <domain/document_object.h>
 #include <ui/dictionaries_view.h>
 #include <ui/modules/bookmarks/bookmark_dialog.h>
+#include <utils/logging.h>
 
 #include <QApplication>
 #include <QFileDialog>
@@ -116,6 +117,7 @@ ScreenplayTextManager::Implementation::Implementation(ScreenplayTextManager* _q)
 Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
     BusinessLayer::AbstractModel* _model)
 {
+    Log::info("Create screenplay text view for model");
     auto view = new Ui::ScreenplayTextView;
     view->installEventFilter(q);
     view->dictionariesView()->setTypes(dictionariesTypesModel);
@@ -290,12 +292,16 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
 
     updateTranslations();
 
+    Log::info("Screenplay text view created");
+
     return view;
 }
 
 void ScreenplayTextManager::Implementation::setModelForView(BusinessLayer::AbstractModel* _model,
                                                             Ui::ScreenplayTextView* _view)
 {
+    Log::info("Set model for view");
+
     constexpr int invalidIndex = -1;
     int viewIndex = invalidIndex;
     for (int index = 0; index < allViews.size(); ++index) {
@@ -387,6 +393,8 @@ void ScreenplayTextManager::Implementation::setModelForView(BusinessLayer::Abstr
                     }
                 });
     }
+
+    Log::info("Model for view set");
 }
 
 QPointer<BusinessLayer::ScreenplayTextModel> ScreenplayTextManager::Implementation::modelForView(
@@ -475,6 +483,7 @@ ScreenplayTextManager::ScreenplayTextManager(QObject* _parent)
     : QObject(_parent)
     , d(new Implementation(this))
 {
+    Log::info("Init screenplay text manager");
 }
 
 ScreenplayTextManager::~ScreenplayTextManager() = default;

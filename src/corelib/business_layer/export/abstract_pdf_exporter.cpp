@@ -267,7 +267,7 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
             painter.rotate(qRadiansToDegrees(atan(_body.height() / _body.width())));
             painter.setFont(font);
             painter.setPen(_exportOptions.watermarkColor);
-            const int delta = fontMetrics.height() / 4;
+            const int delta = TextHelper::fineLineSpacing(font) / 4;
             painter.drawText(delta, delta, watermark);
         }
         //
