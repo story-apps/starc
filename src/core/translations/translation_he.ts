@@ -997,7 +997,7 @@
 <context>
     <name>ColorPallete</name>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_palette.cpp" line="313"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_palette.cpp" line="310"/>
         <source>User colors</source>
         <translation>צבעי משתמש</translation>
     </message>
@@ -1005,17 +1005,17 @@
 <context>
     <name>ColorPicker</name>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="157"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="223"/>
         <source>Color hex code</source>
         <translation>קוד צבע HEX</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="158"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="224"/>
         <source>Cancel</source>
         <translation>בטל</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="159"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="225"/>
         <source>Add</source>
         <translation>הוסף</translation>
     </message>
@@ -1270,155 +1270,161 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="508"/>
+        <location filename="../management_layer/application_manager.cpp" line="554"/>
         <source>Please update to the latest version if you want to use the Cloud.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="509"/>
+        <location filename="../management_layer/application_manager.cpp" line="555"/>
         <source>Nope, I’m fine without Cloud</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="510"/>
+        <location filename="../management_layer/application_manager.cpp" line="556"/>
         <source>Update</source>
         <translation>עדכן</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="528"/>
+        <location filename="../management_layer/application_manager.cpp" line="574"/>
         <source>The last version is downloading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="917"/>
+        <location filename="../management_layer/application_manager.cpp" line="968"/>
         <source>Read only</source>
         <translation>קריאה בלבד</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="928"/>
+        <location filename="../management_layer/application_manager.cpp" line="979"/>
         <source> - changed</source>
         <translation>- שונה</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="984"/>
-        <location filename="../management_layer/application_manager.cpp" line="1003"/>
-        <location filename="../management_layer/application_manager.cpp" line="1191"/>
+        <location filename="../management_layer/application_manager.cpp" line="1035"/>
+        <location filename="../management_layer/application_manager.cpp" line="1054"/>
+        <location filename="../management_layer/application_manager.cpp" line="1242"/>
         <source>Saving error</source>
         <translation>שגיאת שמירה</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="985"/>
+        <location filename="../management_layer/application_manager.cpp" line="1036"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>לא ניתן לשמור שינויים. יש שגיאת מסד נתונים פנימית: &quot;%1&quot; אנא בדוק אם הקובץ שלך קיים ואם יש לך הרשאה לכתוב.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1004"/>
+        <location filename="../management_layer/application_manager.cpp" line="1055"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>לא ניתן לשמור שינויים מכיוון שסיפור הממוקם ב-&quot;%1&quot; אינו קיים. אנא העבר את הקובץ בחזרה ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1075"/>
+        <location filename="../management_layer/application_manager.cpp" line="1126"/>
         <source>Project was modified. Save changes?</source>
         <translation>הפרויקט שונה. שמור שינויים?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1076"/>
+        <location filename="../management_layer/application_manager.cpp" line="1127"/>
         <source>Cancel</source>
         <translation>בטל</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1077"/>
+        <location filename="../management_layer/application_manager.cpp" line="1128"/>
         <source>Don&apos;t save</source>
         <translation>אל תשמור</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1078"/>
+        <location filename="../management_layer/application_manager.cpp" line="1129"/>
         <source>Save</source>
         <translation>שמור</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1153"/>
+        <location filename="../management_layer/application_manager.cpp" line="1204"/>
         <source>Choose file to save story</source>
         <translation>בחר קובץ לשמירת סיפור</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1192"/>
+        <location filename="../management_layer/application_manager.cpp" line="1243"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>לא ניתן לשמור את הסיפור בקובץ %1. אנא בדוק את ההרשאות ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1242"/>
+        <location filename="../management_layer/application_manager.cpp" line="1293"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>ניסית ליצור פרויקט בתיקיה לא קיימת %1. אנא בחר מיקום אחר לפרויקט.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1247"/>
+        <location filename="../management_layer/application_manager.cpp" line="1298"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>לא ניתן לשמור את הקובץ. נראה שהוא פתוח באפליקציה אחרת. אנא סגור אותה ונסה שוב.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1251"/>
+        <location filename="../management_layer/application_manager.cpp" line="1302"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>לא ניתן לשמור את הקובץ. אנא, בדוק ותן הרשאות ליישום לכתוב לתיקיה שנבחרה, או בחר תיקיה אחרת לשמירה.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1255"/>
+        <location filename="../management_layer/application_manager.cpp" line="1306"/>
         <source>Create project error</source>
         <translation>שגיאה ביצירת הפרויקט</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1411"/>
+        <location filename="../management_layer/application_manager.cpp" line="1462"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>לא ניתן לפתוח קובץ זה, מכיוון שהוא כבר פתוח בעותק אחר של היישום.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1488"/>
+        <location filename="../management_layer/application_manager.cpp" line="1539"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation>לקובץ שאתה מנסה לפתוח אין הרשאות כתיבה. בדוק את מאפייני הקובץ ואפשר לערוך אותו. מכיוון שהוא לא ניתן לעריכה, הוא ייפתח במצב קריאה בלבד.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1505"/>
+        <location filename="../management_layer/application_manager.cpp" line="1556"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation>האם ברצונך להמשיך להשתמש בפורמט קובץ ‎.%1?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1506"/>
+        <location filename="../management_layer/application_manager.cpp" line="1557"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation>לא ניתן לשמור חלק מנתוני הפרויקט בפורמט %1.. אנו ממליצים לך להשתמש בפורמט Story Architect .%2 כדי שכל נתוני הפרויקט יישמרו כהלכה.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1509"/>
+        <location filename="../management_layer/application_manager.cpp" line="1560"/>
         <source>Never ask again</source>
         <translation>אל תשאל שוב</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1510"/>
+        <location filename="../management_layer/application_manager.cpp" line="1561"/>
         <source>Keep .%1</source>
         <translation>שמור %1.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1511"/>
+        <location filename="../management_layer/application_manager.cpp" line="1562"/>
         <source>Switch to .STARC</source>
         <translation>שנה ל- STARC.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2539"/>
+        <location filename="../management_layer/application_manager.cpp" line="2591"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2520"/>
-        <location filename="../management_layer/application_manager.cpp" line="2541"/>
+        <location filename="../management_layer/application_manager.cpp" line="2572"/>
+        <location filename="../management_layer/application_manager.cpp" line="2593"/>
         <source>Continue offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2518"/>
+        <location filename="../management_layer/application_manager.cpp" line="398"/>
+        <location filename="../management_layer/application_manager.cpp" line="412"/>
+        <source>Open new window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="2570"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2521"/>
+        <location filename="../management_layer/application_manager.cpp" line="2573"/>
         <source>Renew subscription</source>
         <translation>חדש מינוי</translation>
     </message>
@@ -1693,198 +1699,206 @@
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="389"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="390"/>
         <source>Find all characters</source>
         <translation>מצא את כל הדמויות</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="396"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="397"/>
         <source>Add character</source>
         <translation>הוסף דמות</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="401"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="402"/>
         <source>Find all locations</source>
         <translation>מצא את כל הלוקיישנים</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="408"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="409"/>
         <source>Add location</source>
         <translation>הוסף לוקיישן</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="414"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="415"/>
         <source>Empty recycle bin</source>
         <translation>רוקן סל מיחזור</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="433"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="434"/>
         <source>Add document</source>
         <translation>הוסף מסמך</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="463"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="464"/>
         <source>Remove document</source>
         <translation>הסר מסמך</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="493"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="479"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1556"/>
+        <source>Create new draft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="494"/>
         <source>Open in new window</source>
         <translation>פתח בחלון חדש</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="557"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="558"/>
         <source>Character with this name already exists</source>
         <translation>דמות בשם זה כבר קיימת</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="567"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="568"/>
         <source>Location with this name already exists</source>
         <translation>לוקיישן בשם זה כבר קיים</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="696"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="635"/>
+        <source>Current draft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="704"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation>האם באמת תרצה להסיר את גרסת המסמך &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="817"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="825"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>האם ברצונך להסיר לצמיתות את המסמך?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="697"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="818"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1079"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="705"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="826"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1087"/>
         <source>No</source>
         <translation>לא</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="354"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="355"/>
         <source>Remove split</source>
         <translation>הסר פיצול</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="355"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="356"/>
         <source>Split window</source>
         <translation>חלון מפוצל</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="356"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="357"/>
         <source>Hide document versions</source>
         <translation>הסתר את גרסאות המסמך</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="357"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="358"/>
         <source>Show document versions</source>
         <translation>הצג את גרסאות המסמך</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="426"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="427"/>
         <source>Add folder</source>
         <translation>הוסף תיקיה</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="478"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1548"/>
         <source>Create new version</source>
-        <translation>צור גרסה חדשה</translation>
+        <translation type="vanished">צור גרסה חדשה</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="634"/>
         <source>Current version</source>
-        <translation>גרסה נוכחית</translation>
+        <translation type="vanished">גרסה נוכחית</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="698"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="819"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1080"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="706"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="827"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1088"/>
         <source>Yes, remove</source>
         <translation>כן, הסר</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="893"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="901"/>
         <source>Characters from the text</source>
         <translation>דמויות מהטקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="903"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="911"/>
         <source>Characters that are not found in the text</source>
         <translation>דמויות שאינן נמצאות בטקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="916"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="924"/>
         <source>Save only characters from the text</source>
         <translation>שמור רק דמויות מהטקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="917"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="925"/>
         <source>Save all characters</source>
         <translation>שמור את כל הדמויות</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="918"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1021"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="926"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1029"/>
         <source>Change nothing</source>
         <translation>אל תשנה כלום</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="996"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1004"/>
         <source>Locations from the text</source>
         <translation>לוקיישנים מהטקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1006"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1014"/>
         <source>Locations that are not found in the text</source>
         <translation>לוקיישנים שאינם נמצאים בטקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1019"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1027"/>
         <source>Save only locations from the text</source>
         <translation>שמור רק לוקיישנים מהטקסט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1020"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1028"/>
         <source>Save all locations</source>
         <translation>שמור את כל הלוקיישנים</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1078"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1086"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>האם ברצונך להסיר לצמיתות את כל המסמכים מסל המיחזור?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1562"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1570"/>
         <source>Edit</source>
         <translation>ערוך</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1572"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1580"/>
         <source>Remove</source>
         <translation>הסר</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2233"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2241"/>
         <source>Title page</source>
         <translation>עמוד שער</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2235"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2243"/>
         <source>Synopsis</source>
         <translation>סינופסיס</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2247"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2255"/>
         <source>Treatment</source>
         <translation>טריטמנט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2238"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2246"/>
         <source>Screenplay</source>
         <translation>תסריט</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2241"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2249"/>
         <source>Statistics</source>
         <translation>סטטיסטיקה</translation>
     </message>
@@ -1955,24 +1969,42 @@
     </message>
 </context>
 <context>
+    <name>ManagementLayer::ScreenplayCardsManager</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="132"/>
+        <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
+        <translation type="unfinished">כדי לערוך את גרף קשרי הדמויות, עליך לשדרג לגרסה PRO.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="134"/>
+        <source>Maybe later</source>
+        <translation type="unfinished">אולי מאוחר יותר</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="135"/>
+        <source>Upgrade</source>
+        <translation type="unfinished">שדרג</translation>
+    </message>
+</context>
+<context>
     <name>ManagementLayer::ScreenplayTextManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="426"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="434"/>
         <source>Scene intro</source>
         <translation>פתיח סצינה</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="427"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="435"/>
         <source>Scene time</source>
         <translation>זמן סצנה</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="428"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="436"/>
         <source>Character extension</source>
         <translation>מצב הדמות</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="429"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="437"/>
         <source>Transition</source>
         <translation>מעבר</translation>
     </message>
@@ -2889,27 +2921,27 @@
 <context>
     <name>Ui::AudioplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1236"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1237"/>
         <source>Bookmark</source>
         <translation>סימניה</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1240"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1241"/>
         <source>Add</source>
         <translation>הוסף</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1246"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1247"/>
         <source>Edit</source>
         <translation>ערוך</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1251"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1252"/>
         <source>Remove</source>
         <translation>הסר</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1258"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1259"/>
         <source>Show/hide list</source>
         <translation>הצג/הסתר רשימה</translation>
     </message>
@@ -3665,27 +3697,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1207"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1210"/>
         <source>Bookmark</source>
         <translation>סימניה</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1211"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1214"/>
         <source>Add</source>
         <translation>הוסף</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1217"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1220"/>
         <source>Edit</source>
         <translation>ערוך</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1222"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1225"/>
         <source>Remove</source>
         <translation>הסר</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1229"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1232"/>
         <source>Show/hide list</source>
         <translation>הצג/הסתר רשימה</translation>
     </message>
@@ -4536,29 +4568,45 @@
 <context>
     <name>Ui::CreateVersionDialog</name>
     <message>
-        <location filename="../ui/project/create_version_dialog.cpp" line="138"/>
         <source>Create new document version</source>
-        <translation>צור גרסת מסמך חדשה</translation>
+        <translation type="vanished">צור גרסת מסמך חדשה</translation>
+    </message>
+    <message>
+        <source>Edit document version</source>
+        <translation type="vanished">ערוך את גרסת המסמך</translation>
+    </message>
+    <message>
+        <source>Version name</source>
+        <translation type="vanished">שם גרסה</translation>
+    </message>
+    <message>
+        <source>Allow to edit version</source>
+        <translation type="vanished">אפשר לערוך גרסה</translation>
     </message>
     <message>
         <location filename="../ui/project/create_version_dialog.cpp" line="138"/>
-        <source>Edit document version</source>
-        <translation>ערוך את גרסת המסמך</translation>
+        <source>Create new document draft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_version_dialog.cpp" line="138"/>
+        <source>Edit document draft</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/project/create_version_dialog.cpp" line="140"/>
-        <source>Version name</source>
-        <translation>שם גרסה</translation>
+        <source>Draft name</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/project/create_version_dialog.cpp" line="141"/>
-        <source>New version based on</source>
+        <source>New draft based on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/project/create_version_dialog.cpp" line="142"/>
-        <source>Allow to edit version</source>
-        <translation>אפשר לערוך גרסה</translation>
+        <source>Allow to edit draft</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/project/create_version_dialog.cpp" line="143"/>
@@ -5477,22 +5525,22 @@
 <context>
     <name>Ui::ProjectCard</name>
     <message>
-        <location filename="../ui/projects/projects_cards.cpp" line="259"/>
+        <location filename="../ui/projects/projects_cards.cpp" line="274"/>
         <source>Owner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/projects_cards.cpp" line="266"/>
+        <location filename="../ui/projects/projects_cards.cpp" line="281"/>
         <source>Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/projects_cards.cpp" line="272"/>
+        <location filename="../ui/projects/projects_cards.cpp" line="287"/>
         <source>Commentator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/projects/projects_cards.cpp" line="278"/>
+        <location filename="../ui/projects/projects_cards.cpp" line="293"/>
         <source>Reader</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5627,7 +5675,7 @@
 <context>
     <name>Ui::ProjectToolBar</name>
     <message>
-        <location filename="../ui/project/project_tool_bar.cpp" line="66"/>
+        <location filename="../ui/project/project_tool_bar.cpp" line="82"/>
         <source>Show main menu</source>
         <translation>הצג תפריט ראשי</translation>
     </message>
@@ -5635,33 +5683,37 @@
 <context>
     <name>Ui::ProjectView</name>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="180"/>
-        <location filename="../ui/project/project_view.cpp" line="242"/>
         <source>Current version</source>
-        <translation>גרסה נוכחית</translation>
+        <translation type="vanished">גרסה נוכחית</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="233"/>
+        <location filename="../ui/project/project_view.cpp" line="182"/>
+        <location filename="../ui/project/project_view.cpp" line="244"/>
+        <source>Current draft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/project_view.cpp" line="235"/>
         <source>Here will be an editor of the document you choose in the navigator (at left).</source>
         <translation>כאן יהיה עורך המסמך שתבחר בנווט (משמאל).</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="234"/>
+        <location filename="../ui/project/project_view.cpp" line="236"/>
         <source>Choose an item to edit, or</source>
         <translation>בחר פריט לעריכה, או</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="235"/>
+        <location filename="../ui/project/project_view.cpp" line="237"/>
         <source>create a new one</source>
         <translation>צור אחד חדש</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="238"/>
+        <location filename="../ui/project/project_view.cpp" line="240"/>
         <source>Ooops... looks like editor of this document not implemented yet.</source>
         <translation>אופס... נראה שעורך המסמך הזה עדיין לא יושם.</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="240"/>
+        <location filename="../ui/project/project_view.cpp" line="242"/>
         <source>But don&apos;t worry, it will be here in one of the future updates!</source>
         <translation>אבל אל דאגה, זה יהיה כאן באחד העדכונים העתידיים!</translation>
     </message>
@@ -5846,6 +5898,241 @@
         <location filename="../ui/notifications/release_view.cpp" line="258"/>
         <source>Install</source>
         <translation>התקן</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScreenplayCardsSidebar</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="411"/>
+        <source>Apply new character name</source>
+        <translation type="unfinished">החל שם דמות חדשה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="417"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="982"/>
+        <source>Select character color</source>
+        <translation type="unfinished">בחר צבע דמות</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="491"/>
+        <source>Please enter positive number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="952"/>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="953"/>
+        <source>Lock cards positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="954"/>
+        <source>Arrange cards in rows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="955"/>
+        <source>Arrange cards in columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="956"/>
+        <source>Card size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="957"/>
+        <source>Card ratio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="958"/>
+        <source>Space between cards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="959"/>
+        <source>Arrange cards by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="960"/>
+        <source>in row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="961"/>
+        <source>Keep empty to fit cards on screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="970"/>
+        <source>Border line type</source>
+        <translation type="unfinished">סוג קו גבול</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="971"/>
+        <source>Group name</source>
+        <translation type="unfinished">שם קבוצה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="972"/>
+        <source>Group description</source>
+        <translation type="unfinished">תיאור קבוצה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="974"/>
+        <source>Profile</source>
+        <translation type="unfinished">פרופיל</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="975"/>
+        <source>Relations</source>
+        <translation type="unfinished">קשרי דמויות</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="978"/>
+        <source>Add photo +</source>
+        <translation type="unfinished">הוסף תמונה +</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="978"/>
+        <source>Change photo...</source>
+        <translation type="unfinished">החלף תמונה...</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="979"/>
+        <source>Do you want to delete the character&apos;s main photo?</source>
+        <translation type="unfinished">האם תרצה למחוק את התמונה הראשית של הדמות?</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="980"/>
+        <source>Select an area for the character main photo</source>
+        <translation type="unfinished">בחר אזור לתמונת דמות</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="981"/>
+        <source>Name</source>
+        <translation type="unfinished">שם</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="983"/>
+        <source>Story role</source>
+        <translation type="unfinished">תפקיד</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="986"/>
+        <source>Primary</source>
+        <translation type="unfinished">ראשי</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="986"/>
+        <source>Secondary</source>
+        <translation type="unfinished">משני</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="986"/>
+        <source>Tertiary</source>
+        <translation type="unfinished">שלישוני</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="986"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="992"/>
+        <source>Undefined</source>
+        <translation type="unfinished">לא מוגדר</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="988"/>
+        <source>Age</source>
+        <translation type="unfinished">גיל</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="989"/>
+        <source>Gender</source>
+        <translation type="unfinished">מין</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="992"/>
+        <source>Male</source>
+        <translation type="unfinished">זכר</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="992"/>
+        <source>Female</source>
+        <translation type="unfinished">נקבה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="992"/>
+        <source>Other</source>
+        <translation type="unfinished">אחר</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="994"/>
+        <source>One sentence description</source>
+        <translation type="unfinished">תיאור במשפט אחד</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="995"/>
+        <source>Long description</source>
+        <translation type="unfinished">תיאור ארוך</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="998"/>
+        <source>Open relation details</source>
+        <translation type="unfinished">פתח את פרטי הקשר</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="1001"/>
+        <source>Line type</source>
+        <translation type="unfinished">סוג קו</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="1002"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="1004"/>
+        <source>Feeling</source>
+        <translation type="unfinished">הרגשה</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="1003"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="1005"/>
+        <source>Details</source>
+        <translation type="unfinished">פרטים</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScreenplayCardsView</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="298"/>
+        <source>Unlock ability to edit screenplay cards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="299"/>
+        <source>Add structure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="300"/>
+        <source>Add sequence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="301"/>
+        <source>Add scene</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="302"/>
+        <source>Remove selected item</source>
+        <translation type="unfinished">הסר פריט שנבחר</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="303"/>
+        <source>Print cards</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6376,37 +6663,37 @@
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1353"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1356"/>
         <source>Merge paragraph</source>
         <translation>מזג פסקה</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1356"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1359"/>
         <source>Split paragraph</source>
         <translation>פצל פסקה</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1392"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1395"/>
         <source>Bookmark</source>
         <translation>סימניה</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1396"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1399"/>
         <source>Add</source>
         <translation>הוסף</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1402"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1405"/>
         <source>Edit</source>
         <translation>ערוך</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1408"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1411"/>
         <source>Remove</source>
         <translation>הסר</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1415"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1418"/>
         <source>Show/hide list</source>
         <translation>הצג/הסתר רשימה</translation>
     </message>
@@ -6604,27 +6891,27 @@
 <context>
     <name>Ui::ScreenplayTreatmentEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1204"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1206"/>
         <source>Bookmark</source>
         <translation>סימניה</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1208"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1210"/>
         <source>Add</source>
         <translation>הוסף</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1214"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1216"/>
         <source>Edit</source>
         <translation>ערוך</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1220"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1222"/>
         <source>Remove</source>
         <translation>הסר</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1227"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1229"/>
         <source>Show/hide list</source>
         <translation>הצג/הסתר רשימה</translation>
     </message>
@@ -8344,27 +8631,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1286"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1289"/>
         <source>Bookmark</source>
         <translation>סימניה</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1290"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1293"/>
         <source>Add</source>
         <translation>הוסף</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1296"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1299"/>
         <source>Edit</source>
         <translation>ערוך</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1301"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1304"/>
         <source>Remove</source>
         <translation>הסר</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1308"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1311"/>
         <source>Show/hide list</source>
         <translation>הצג/הסתר רשימה</translation>
     </message>
