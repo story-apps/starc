@@ -195,19 +195,17 @@ AudioplayTextSearchManager::AudioplayTextSearchManager(QWidget* _parent,
             return;
         }
 
-        const int diffSize = replaceText.size() - searchText.size();
         d->findText();
         auto cursor = d->textEdit->textCursor();
-        cursor.beginEditBlock();
         int firstCursorPosition = cursor.selectionStart();
+        const int diffBefore
+            = replaceText.startsWith(searchText) ? 0 : replaceText.indexOf(searchText);
+        const int diffAfter
+            = replaceText.size() - replaceText.indexOf(searchText) - searchText.size();
+        firstCursorPosition += diffBefore;
+        cursor.beginEditBlock();
         while (cursor.hasSelection()) {
             cursor.insertText(replaceText);
-
-            //
-            // Корректируем начальную позицию поиска, для корректного завершения при втором проходе
-            // по документу
-            //
-            firstCursorPosition += diffSize;
 
             d->findText();
             cursor = d->textEdit->textCursor();
@@ -219,6 +217,14 @@ AudioplayTextSearchManager::AudioplayTextSearchManager(QWidget* _parent,
             //
             if (cursor.selectionStart() == firstCursorPosition) {
                 break;
+            }
+
+            //
+            // Корректируем начальную позицию поиска, для корректного завершения при втором проходе
+            // по документу
+            //
+            if (cursor.selectionStart() < firstCursorPosition) {
+                firstCursorPosition += diffBefore + diffAfter;
             }
         }
         cursor.endEditBlock();
