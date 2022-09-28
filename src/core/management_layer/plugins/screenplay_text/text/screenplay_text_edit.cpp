@@ -1019,6 +1019,26 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     }
 
                     //
+                    // Для заголовка сцены, если он не задан, рисуем название сцены
+                    //
+                    if (blockType == BusinessLayer::TextParagraphType::SceneHeading) {
+                        const auto title = d->document.groupTitle(block);
+                        if (!title.isEmpty()) {
+                            painter.setFont(block.charFormat().font());
+                            const QPoint topLeft
+                                = QPoint(textLeft + leftDelta + spaceBetweenSceneNumberAndText,
+                                         cursorR.top());
+                            const QPoint bottomRight
+                                = QPoint(textRight + leftDelta - spaceBetweenSceneNumberAndText,
+                                         cursorR.bottom());
+                            const QRect rect(topLeft, bottomRight);
+                            painter.drawText(rect, block.blockFormat().alignment(),
+                                             painter.fontMetrics().elidedText(title, Qt::ElideRight,
+                                                                              rect.width()));
+                        }
+                    }
+
+                    //
                     // Для первого блока бита, если там ещё нет текста, рисуем текст бита
                     //
                     if (!lastBeat.text.isEmpty()) {

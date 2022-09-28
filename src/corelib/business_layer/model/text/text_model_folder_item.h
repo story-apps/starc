@@ -24,6 +24,7 @@ public:
     enum {
         FolderHeadingRole = Qt::UserRole + 1,
         FolderColorRole,
+        FolderStampRole,
         FolderUserRole,
     };
 
@@ -43,15 +44,21 @@ public:
     void setFolderType(TextFolderType _type);
 
     /**
-     * @brief Название папки
-     */
-    QString heading() const;
-
-    /**
      * @brief Цвет папки
      */
     QColor color() const;
     void setColor(const QColor& _color);
+
+    /**
+     * @brief Штамп папки
+     */
+    QString stamp() const;
+    void setStamp(const QString& _stamp);
+
+    /**
+     * @brief Название папки
+     */
+    QString heading() const;
 
     /**
      * @brief Определяем интерфейс получения данных папки

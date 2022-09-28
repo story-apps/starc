@@ -308,7 +308,8 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
             = QRectF(QPointF(hadingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
                      QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
     }
-    auto sceneHeading = _index.data(TextModelGroupItem::GroupHeadingRole).toString();
+    auto sceneHeading
+        = TextHelper::smartToUpper(_index.data(TextModelGroupItem::GroupHeadingRole).toString());
     if (showSceneNumber) {
         sceneHeading.prepend(_index.data(TextModelGroupItem::GroupNumberRole).toString() + " ");
     }

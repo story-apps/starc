@@ -117,9 +117,9 @@ void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader
             alignment = alignmentFromString(
                 _contentReader.attributes().value(xml::kAlignAttribute).toString());
         }
-        if (_contentReader.attributes().hasAttribute(xml::kInFirstColumn)) {
+        if (_contentReader.attributes().hasAttribute(xml::kInFirstColumnAttribute)) {
             isInFirstColumn
-                = _contentReader.attributes().value(xml::kInFirstColumn).toString() == "true";
+                = _contentReader.attributes().value(xml::kInFirstColumnAttribute).toString() == "true";
         }
         xml::readNextElement(_contentReader); // end
         currentTag = xml::readNextElement(_contentReader); // next
@@ -266,7 +266,7 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
                              : ""),
                         (isInFirstColumn.has_value()
                              ? QString(" %1=\"%2\"")
-                                   .arg(xml::kInFirstColumn, *isInFirstColumn ? "true" : "false")
+                                   .arg(xml::kInFirstColumnAttribute, *isInFirstColumn ? "true" : "false")
                              : ""))
                    .toUtf8();
     }

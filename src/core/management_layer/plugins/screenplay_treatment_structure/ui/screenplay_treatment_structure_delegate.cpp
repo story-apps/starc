@@ -264,7 +264,8 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintScene(
             = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
                      QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
     }
-    auto sceneHeading = _index.data(TextModelGroupItem::GroupHeadingRole).toString();
+    auto sceneHeading
+        = TextHelper::smartToUpper(_index.data(TextModelGroupItem::GroupHeadingRole).toString());
     if (showSceneNumber) {
         sceneHeading.prepend(_index.data(TextModelGroupItem::GroupNumberRole).toString() + " ");
     }
@@ -365,8 +366,8 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintBeat(
                      QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
     }
     const auto heading = _painter->fontMetrics().elidedText(
-        _index.data(TextModelGroupItem::GroupHeadingRole).toString(), Qt::ElideRight,
-        static_cast<int>(headingRect.width()));
+        TextHelper::smartToUpper(_index.data(TextModelGroupItem::GroupHeadingRole).toString()),
+        Qt::ElideRight, static_cast<int>(headingRect.width()));
     _painter->drawText(headingRect, Qt::AlignLeft | Qt::AlignVCenter, heading);
 }
 

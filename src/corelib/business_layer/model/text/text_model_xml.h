@@ -17,6 +17,7 @@ const QLatin1String kNumberValueAttribute("value");
 const QLatin1String kNumberGroupAttribute("group");
 const QLatin1String kNumberGroupIndexAttribute("group_index");
 const QLatin1String kColorTag("color");
+const QLatin1String kTitleTag("title");
 const QLatin1String kStampTag("stamp");
 const QLatin1String kPlannedDurationTag("planned_duration");
 
@@ -55,7 +56,7 @@ const QLatin1String kStrikethroughAttribute("strikethrough");
 const QLatin1String kFontFamilyAttribute("fontf");
 const QLatin1String kFontSizeAttribute("fonts");
 const QLatin1String kAlignAttribute("align");
-const QLatin1String kInFirstColumn("ifc");
+const QLatin1String kInFirstColumnAttribute("ifc");
 
 } // namespace xml
 } // namespace BusinessLayer

@@ -35,6 +35,11 @@ public:
      */
     QColor color;
 
+    /**
+     * @brief Штамп
+     */
+    QString stamp;
+
     //
     // Ридонли свойства, которые формируются по ходу работы с текстом
     //
@@ -77,11 +82,6 @@ void TextModelFolderItem::setFolderType(TextFolderType _type)
     setChanged(true);
 }
 
-QString TextModelFolderItem::heading() const
-{
-    return d->heading;
-}
-
 QColor TextModelFolderItem::color() const
 {
     return d->color;
@@ -97,6 +97,25 @@ void TextModelFolderItem::setColor(const QColor& _color)
     setChanged(true);
 }
 
+QString TextModelFolderItem::stamp() const
+{
+    return d->stamp;
+}
+
+void TextModelFolderItem::setStamp(const QString& _stamp)
+{
+    if (d->stamp == _stamp) {
+        return;
+    }
+    d->stamp = _stamp;
+    setChanged(true);
+}
+
+QString TextModelFolderItem::heading() const
+{
+    return d->heading;
+}
+
 QVariant TextModelFolderItem::data(int _role) const
 {
     switch (_role) {
@@ -110,6 +129,10 @@ QVariant TextModelFolderItem::data(int _role) const
 
     case FolderColorRole: {
         return d->color;
+    }
+
+    case FolderStampRole: {
+        return d->stamp;
     }
 
     default: {
@@ -131,6 +154,12 @@ void TextModelFolderItem::readContent(QXmlStreamReader& _contentReader)
 
     if (currentTag == xml::kColorTag) {
         d->color = xml::readContent(_contentReader).toString();
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
+
+    if (currentTag == xml::kStampTag) {
+        d->stamp = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
         xml::readNextElement(_contentReader); // end
         currentTag = xml::readNextElement(_contentReader); // next
     }
@@ -217,8 +246,8 @@ QByteArray TextModelFolderItem::toXml(TextModelItem* _from, int _fromPosition, T
                     auto folder = static_cast<TextModelFolderItem*>(child);
                     xml += folder->toXml(_from, _fromPosition, _to, _toPosition, _clearUuid);
                 } else if (child->type() == TextModelItemType::Group) {
-                    auto scene = static_cast<TextModelGroupItem*>(child);
-                    xml += scene->toXml(_from, _fromPosition, _to, _toPosition, _clearUuid);
+                    auto group = static_cast<TextModelGroupItem*>(child);
+                    xml += group->toXml(_from, _fromPosition, _to, _toPosition, _clearUuid);
                 } else {
                     Q_ASSERT(false);
                 }
@@ -281,6 +310,11 @@ QByteArray TextModelFolderItem::xmlHeader(bool _clearUuid) const
                .toUtf8();
     if (d->color.isValid()) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(xml::kColorTag, d->color.name()).toUtf8();
+    }
+    if (!d->stamp.isEmpty()) {
+        xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                   .arg(xml::kStampTag, TextHelper::toHtmlEscaped(d->stamp))
+                   .toUtf8();
     }
     xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
 

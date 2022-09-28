@@ -53,6 +53,11 @@ public:
     QColor itemColor(const QTextBlock& _forBlock) const;
 
     /**
+     * @brief Получить заголовк сцены для заданного блока
+     */
+    QString groupTitle(const QTextBlock& _forBlock) const;
+
+    /**
      * @brief Сформировать mime-данные сценария в заданном диапазоне
      */
     QString mimeFromSelection(int _fromPosition, int _toPosition) const;

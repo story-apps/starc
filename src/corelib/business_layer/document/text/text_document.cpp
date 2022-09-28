@@ -893,9 +893,9 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                         //
                         // ... если всё ещё в одной колонке, то удаляем текущий пустой блок
                         //
-                        const auto currentBlockInFirstColumn = cursor.inFirstColumn();
+                        const auto currentBlockInFirstColumnAttribute = cursor.inFirstColumn();
                         if (cursor.movePosition(TextCursor::NextBlock, TextCursor::KeepAnchor)) {
-                            if (currentBlockInFirstColumn == cursor.inFirstColumn()) {
+                            if (currentBlockInFirstColumnAttribute == cursor.inFirstColumn()) {
                                 cursor.deleteChar();
                                 d->correctPositionsToItems(cursor.position(), -1);
                             }
@@ -1159,6 +1159,30 @@ QColor TextDocument::itemColor(const QTextBlock& _forBlock) const
     }
 
     return color;
+}
+
+QString TextDocument::groupTitle(const QTextBlock& _forBlock) const
+{
+    if (_forBlock.userData() == nullptr) {
+        return {};
+    }
+
+    const auto blockData = static_cast<TextBlockData*>(_forBlock.userData());
+    if (blockData == nullptr) {
+        return {};
+    }
+
+    const auto itemParent = blockData->item()->parent();
+    if (itemParent == nullptr) {
+        return {};
+    }
+    QString title;
+    if (itemParent->type() == TextModelItemType::Group) {
+        const auto groupItem = static_cast<const TextModelGroupItem*>(itemParent);
+        title = groupItem->title();
+    }
+
+    return title;
 }
 
 QString TextDocument::mimeFromSelection(int _fromPosition, int _toPosition) const

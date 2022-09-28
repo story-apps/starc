@@ -61,6 +61,11 @@ public:
     //    QVector<StoryLine> storyLines;
 
     /**
+     * @brief Название группы
+     */
+    QString title;
+
+    /**
      * @brief Штамп на группе
      */
     QString stamp;
@@ -206,6 +211,36 @@ void TextModelGroupItem::setColor(const QColor& _color)
     setChanged(true);
 }
 
+QString TextModelGroupItem::title() const
+{
+    return d->title;
+}
+
+void TextModelGroupItem::setTitle(const QString& _title)
+{
+    if (d->title == _title) {
+        return;
+    }
+
+    d->title = _title;
+    setChanged(true);
+}
+
+QString TextModelGroupItem::stamp() const
+{
+    return d->stamp;
+}
+
+void TextModelGroupItem::setStamp(const QString& _stamp)
+{
+    if (d->stamp == _stamp) {
+        return;
+    }
+
+    d->stamp = _stamp;
+    setChanged(true);
+}
+
 QString TextModelGroupItem::heading() const
 {
     return d->heading;
@@ -253,8 +288,12 @@ QVariant TextModelGroupItem::data(int _role) const
         return d->color;
     }
 
+    case GroupStampRole: {
+        return d->stamp;
+    }
+
     case GroupHeadingRole: {
-        return d->heading;
+        return d->title.isEmpty() ? d->heading : d->title;
     }
 
     case GroupTextRole: {
@@ -301,6 +340,12 @@ void TextModelGroupItem::readContent(QXmlStreamReader& _contentReader)
 
     if (currentTag == xml::kColorTag) {
         d->color = xml::readContent(_contentReader).toString();
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
+
+    if (currentTag == xml::kTitleTag) {
+        d->title = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
         xml::readNextElement(_contentReader); // end
         currentTag = xml::readNextElement(_contentReader); // next
     }
@@ -422,6 +467,11 @@ QByteArray TextModelGroupItem::xmlHeader(bool _clearUuid) const
     //    }
     if (d->color.isValid()) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(xml::kColorTag, d->color.name()).toUtf8();
+    }
+    if (!d->title.isEmpty()) {
+        xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                   .arg(xml::kTitleTag, TextHelper::toHtmlEscaped(d->title))
+                   .toUtf8();
     }
     if (!d->stamp.isEmpty()) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n")

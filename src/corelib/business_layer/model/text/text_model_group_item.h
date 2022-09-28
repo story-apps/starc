@@ -41,6 +41,7 @@ public:
         GroupHeadingRole,
         GroupTextRole,
         GroupColorRole,
+        GroupStampRole,
         GroupInlineNotesSizeRole,
         GroupReviewMarksSizeRole,
         GroupUserRole,
@@ -83,6 +84,18 @@ public:
      */
     QColor color() const;
     void setColor(const QColor& _color);
+
+    /**
+     * @brief Название группы
+     */
+    QString title() const;
+    void setTitle(const QString& _title);
+
+    /**
+     * @brief Штамп папки
+     */
+    QString stamp() const;
+    void setStamp(const QString& _stamp);
 
     /**
      * @brief Заголовок группы
