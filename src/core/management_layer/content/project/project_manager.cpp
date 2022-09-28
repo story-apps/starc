@@ -354,8 +354,8 @@ void ProjectManager::Implementation::updateOptionsText()
 {
     splitScreenAction->setText(splitScreenAction->isChecked() ? tr("Remove split")
                                                               : tr("Split window"));
-    showVersionsAction->setText(showVersionsAction->isChecked() ? tr("Hide document versions")
-                                                                : tr("Show document versions"));
+    showVersionsAction->setText(showVersionsAction->isChecked() ? tr("Hide document drafts")
+                                                                : tr("Show document drafts"));
 }
 
 void ProjectManager::Implementation::switchViews()
