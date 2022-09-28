@@ -2928,7 +2928,7 @@ void ProjectManager::undoModelChange(BusinessLayer::AbstractModel* _model, int _
 void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType,
                               const QString& _defaultMimeType)
 {
-    Log::info("Activate plugin \"%1\" (default %2)", _viewMimeType, _defaultMimeType);
+    Log::info("Activate plugin \"%1\" (default \"%2\")", _viewMimeType, _defaultMimeType);
 
     const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
 
@@ -2936,16 +2936,6 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Сохранить состояние представления текущего документа
     //
     if (!d->currentDocument.model.isNull() && d->currentDocument.model->document() != nullptr) {
-        //
-        // Если сменился выделенный элемент в навигаторе проекта
-        //
-        if (sourceItemIndex != d->view.activeIndex) {
-            const auto previousActiveSourceItem
-                = d->projectStructureModel->itemForIndex(d->view.activeIndex);
-            setSettingsValue(
-                documentSettingsKey(previousActiveSourceItem->uuid(), kCurrentViewMimeTypeKey),
-                d->currentDocument.viewMimeType);
-        }
 
         const auto previousActiveAliasedItem = d->aliasedItemForIndex(d->view.activeIndex);
         setSettingsValue(
@@ -2962,6 +2952,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         return;
     }
 
+    const auto sourceItem = d->projectStructureModel->itemForIndex(sourceItemIndex);
     auto aliasedItem = d->aliasedItemForIndex(sourceItemIndex);
     auto itemForShow = aliasedItem;
     if (const auto versionIndex
@@ -2978,13 +2969,17 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     QString viewMimeType = _viewMimeType;
     if (viewMimeType.isEmpty()) {
-        const auto sourceItem = d->projectStructureModel->itemForIndex(sourceItemIndex);
         viewMimeType
             = settingsValue(documentSettingsKey(sourceItem->uuid(), kCurrentViewMimeTypeKey),
                             _defaultMimeType)
                   .toString();
         d->toolBar->setCurrentViewMimeType(viewMimeType);
     }
+    //
+    // ... сохраним последний используемый с данным документом редактор
+    //
+    setSettingsValue(documentSettingsKey(sourceItem->uuid(), kCurrentViewMimeTypeKey),
+                     viewMimeType);
 
     //
     // Определим модель
