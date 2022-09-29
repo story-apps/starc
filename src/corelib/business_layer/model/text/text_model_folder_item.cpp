@@ -331,6 +331,7 @@ void TextModelFolderItem::copyFrom(TextModelItem* _item)
     auto folderItem = static_cast<TextModelFolderItem*>(_item);
     d->uuid = folderItem->d->uuid;
     d->color = folderItem->d->color;
+    d->stamp = folderItem->d->stamp;
 }
 
 bool TextModelFolderItem::isEqual(TextModelItem* _item) const
@@ -340,7 +341,8 @@ bool TextModelFolderItem::isEqual(TextModelItem* _item) const
     }
 
     const auto folderItem = static_cast<TextModelFolderItem*>(_item);
-    return d->uuid == folderItem->d->uuid && d->color == folderItem->d->color;
+    return d->uuid == folderItem->d->uuid && d->color == folderItem->d->color
+        && d->stamp == folderItem->d->stamp;
 }
 
 void TextModelFolderItem::setHeading(const QString& _heading)

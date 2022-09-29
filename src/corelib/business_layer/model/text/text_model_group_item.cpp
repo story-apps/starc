@@ -496,6 +496,7 @@ void TextModelGroupItem::copyFrom(TextModelItem* _item)
     d->isOmited = sceneItem->d->isOmited;
     d->number = sceneItem->d->number;
     d->color = sceneItem->d->color;
+    d->title = sceneItem->title();
     d->stamp = sceneItem->d->stamp;
 }
 
@@ -512,7 +513,8 @@ bool TextModelGroupItem::isEqual(TextModelItem* _item) const
         // TODO: тут нужно сравнивать, только когда номера зафиксированы
         //
         //            && d->number == sceneItem->d->number
-        && d->color == sceneItem->d->color && d->stamp == sceneItem->d->stamp;
+        && d->color == sceneItem->d->color && d->title == sceneItem->d->title
+        && d->stamp == sceneItem->d->stamp;
 }
 
 void TextModelGroupItem::setHeading(const QString& _heading)
