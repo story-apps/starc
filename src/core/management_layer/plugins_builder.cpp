@@ -581,6 +581,7 @@ void PluginsBuilder::reconfigureScreenplayEditor(const QStringList& _changedSett
     reconfigurePlugin(kScreenplayTitlePageEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTreatmentEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTextEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kScreenplayTextCardsMime, _changedSettingsKeys);
 }
 
 void PluginsBuilder::reconfigureScreenplayNavigator() const
