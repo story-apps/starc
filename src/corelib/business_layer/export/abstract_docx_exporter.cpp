@@ -1015,11 +1015,11 @@ void AbstractDocxExporter::Implementation::writeDocument(QtZipWriter* _zip,
     //
     TextCursor documentCursor(_audioplayText);
     do {
-        documentXml.append(docxText(_comments, documentCursor, _exportOptions));
+        if (!documentCursor.block().isVisible()) {
+            continue;
+        }
 
-        //
-        // Переходим к следующему параграфу
-        //
+        documentXml.append(docxText(_comments, documentCursor, _exportOptions));
     } while (documentCursor.movePosition(QTextCursor::NextBlock));
 
     //
