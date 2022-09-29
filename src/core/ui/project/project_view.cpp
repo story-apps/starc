@@ -285,7 +285,7 @@ void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->documentEditor->setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->overlay->setBackgroundColor(
-        ColorHelper::transparent(backgroundColor(), Ui::DesignSystem::inactiveItemOpacity()));
+        ColorHelper::transparent(backgroundColor(), Ui::DesignSystem::focusBackgroundOpacity()));
 }
 
 void ProjectView::setCurrentWidget(QWidget* _widget)
