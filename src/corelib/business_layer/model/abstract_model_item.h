@@ -70,6 +70,11 @@ public:
     void setParent(AbstractModelItem* _parent);
 
     /**
+     * @brief Является ли элемент ребёнком заданного (рекурсивная проверка)
+     */
+    bool isChildOf(AbstractModelItem* _parent) const;
+
+    /**
      * @brief Имеет ли элемент детей
      */
     bool hasChildren() const;

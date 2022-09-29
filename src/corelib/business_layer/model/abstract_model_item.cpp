@@ -151,6 +151,19 @@ void AbstractModelItem::setParent(AbstractModelItem* _parent)
     d->parent = _parent;
 }
 
+bool AbstractModelItem::isChildOf(AbstractModelItem* _parent) const
+{
+    auto parent = this->parent();
+    while (parent != nullptr) {
+        if (parent == _parent) {
+            return true;
+        }
+
+        parent = parent->parent();
+    }
+    return false;
+}
+
 bool AbstractModelItem::hasChildren() const
 {
     return !d->children.isEmpty();

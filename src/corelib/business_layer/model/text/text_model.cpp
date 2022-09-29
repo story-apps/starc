@@ -1817,7 +1817,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
                     // И вытаскиваем все последующие элементы на уровень нового, если есть откуда
                     // вытянуть конечно же
                     //
-                    if (modelItem != nullptr && modelItem->parent() != _item->parent()) {
+                    if (modelItem != nullptr && modelItem->isChildOf(insertAfterItem)) {
                         auto modelItemParent = modelItem->parent();
                         const int modelItemIndex = modelItemParent->rowOfChild(modelItem);
                         while (modelItemParent->childCount() > modelItemIndex) {
