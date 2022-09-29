@@ -48,6 +48,25 @@ std::chrono::milliseconds ScreenplayTextModelSceneItem::duration() const
     return d->duration;
 }
 
+QVector<QString> ScreenplayTextModelSceneItem::beats() const
+{
+    QVector<QString> beats;
+    for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
+        auto child = childAt(childIndex);
+        if (child->type() != TextModelItemType::Group) {
+            continue;
+        }
+
+        auto group = static_cast<TextModelGroupItem*>(child);
+        if (group->groupType() != TextGroupType::Beat) {
+            continue;
+        }
+
+        beats.append(group->heading());
+    }
+    return beats;
+}
+
 QVariant ScreenplayTextModelSceneItem::data(int _role) const
 {
     switch (_role) {

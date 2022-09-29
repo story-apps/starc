@@ -152,7 +152,7 @@ public:
 
 protected:
     /**
-     * @brief Задать заголовок группы
+     * @brief Сохранить заданный заголовок группы
      */
     void setHeading(const QString& _heading);
 

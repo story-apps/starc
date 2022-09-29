@@ -32,6 +32,11 @@ public:
     std::chrono::milliseconds duration() const;
 
     /**
+     * @brief Список битов
+     */
+    QVector<QString> beats() const;
+
+    /**
      * @brief Определяем интерфейс получения данных сцены
      */
     QVariant data(int _role) const override;
