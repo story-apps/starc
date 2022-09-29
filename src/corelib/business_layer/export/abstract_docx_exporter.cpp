@@ -441,24 +441,33 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         // ... текст блока
         //
         const auto textFormats = _cursor.block().textFormats();
-        for (const auto& formatRange : textFormats) {
-            auto formatRangeText
-                = _cursor.block().text().mid(formatRange.start, formatRange.length);
-            if (formatRange.format.fontCapitalization() == QFont::AllUppercase) {
+        for (const auto& range : textFormats) {
+            const auto formatRangeSourceText
+                = _cursor.block().text().mid(range.start, range.length);
+            auto formatRangeText = formatRangeSourceText;
+            if (range.format.fontCapitalization() == QFont::AllUppercase) {
                 formatRangeText = TextHelper::smartToUpper(formatRangeText);
             }
             documentXml.append(
-                QString("<w:r><w:rPr><w:rFonts w:ascii=\"%1\" w:hAnsi=\"%1\"/><w:b "
-                        "w:val=\"%2\"/><w:bCs w:val=\"%2\"/><w:i w:val=\"%3\"/><w:iCs "
-                        "w:val=\"%3\"/><w:sz w:val=\"%4\"/><w:szCs w:val=\"%4\"/><w:u "
-                        "w:val=\"%5\"/><w:rtl val=\"%6\"/></w:rPr><w:t>%7</w:t></w:r>")
-                    .arg(formatRange.format.font().family())
-                    .arg(formatRange.format.font().bold() ? "true" : "false")
-                    .arg(formatRange.format.font().italic() ? "true" : "false")
-                    .arg(MeasurementHelper::pxToPt(formatRange.format.font().pixelSize()) * 2)
-                    .arg(formatRange.format.font().underline() ? "single" : "none")
-                    .arg(_cursor.block().textDirection() == Qt::RightToLeft ? "true" : "false")
-                    .arg(TextHelper::toHtmlEscaped(formatRangeText)));
+                QString(
+                    "<w:r><w:rPr><w:rFonts w:ascii=\"%1\" w:hAnsi=\"%1\"/><w:szCs w:val=\"%2\"/>")
+                    .arg(range.format.font().family())
+                    .arg(MeasurementHelper::pxToPt(range.format.font().pixelSize()) * 2));
+            if (range.format.font().bold()) {
+                documentXml.append("<w:b/><w:bCs/>");
+            }
+            if (range.format.font().italic()) {
+                documentXml.append("<w:i/><w:iCs/>");
+            }
+            if (range.format.font().underline()) {
+                documentXml.append("<w:u w:val=\"single\"/>");
+            }
+            if (formatRangeSourceText.isRightToLeft()) {
+                documentXml.append("<w:rtl/>");
+            }
+
+            documentXml.append(QString("</w:rPr><w:t>%1</w:t></w:r>")
+                                   .arg(TextHelper::toHtmlEscaped(formatRangeText)));
         }
         documentXml.append("</w:p>");
     }
@@ -514,9 +523,7 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                 documentXml.append(
                     "<w:tcBorders/></w:tcPr>"
                     "<w:p><w:pPr><w:pStyle w:val=\"Normal\"/><w:rPr/></w:pPr>"
-                    "<w:r><w:rPr><w:b w:val=\"false\"/><w:i w:val=\"false\"/><w:u "
-                    "w:val=\"none\"/><w:rtl w:val=\"false\"/></w:rPr><w:t "
-                    "xml:space=\"preserve\"></w:t></w:r></w:p></w:tc><w:tc><w:tcPr>");
+                    "<w:r><w:t xml:space=\"preserve\"></w:t></w:r></w:p></w:tc><w:tc><w:tcPr>");
                 const int leftColumnWidth = (fullTableWidth - middleColumnWidth)
                     * audioplayTemplate.leftHalfOfPageWidthPercents() / 100.;
                 const int rightColumnWidth = fullTableWidth - leftColumnWidth - middleColumnWidth;
