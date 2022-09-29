@@ -923,6 +923,12 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                     && blockType != TextParagraphType::PageSplitter
                     && block.text().simplified().isEmpty()) {
                     //
+                    // Настроим цвет
+                    //
+                    setPainterPen(ColorHelper::transparent(
+                        palette().text().color(), Ui::DesignSystem::inactiveItemOpacity()));
+
+                    //
                     // Для пустого футера рисуем плейсхолдер
                     //
                     if (blockType == TextParagraphType::SequenceFooter) {

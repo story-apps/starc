@@ -636,7 +636,7 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
                         // Настроим цвет
                         //
                         setPainterPen(ColorHelper::transparent(
-                            palette().text().color(), Ui::DesignSystem::inactiveTextOpacity()));
+                            palette().text().color(), Ui::DesignSystem::inactiveItemOpacity()));
 
                         //
                         // Рисуем индикатор пустой строки

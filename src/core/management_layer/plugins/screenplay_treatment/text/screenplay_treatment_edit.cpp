@@ -907,12 +907,13 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
                     // Настроим цвет
                     //
                     setPainterPen(ColorHelper::transparent(
-                        palette().text().color(), Ui::DesignSystem::inactiveTextOpacity()));
+                        palette().text().color(), Ui::DesignSystem::inactiveItemOpacity()));
 
                     //
                     // Для пустого футера рисуем плейсхолдер
                     //
-                    if (blockType == TextParagraphType::SequenceFooter) {
+                    if (blockType == TextParagraphType::ActFooter
+                        || blockType == TextParagraphType::SequenceFooter) {
                         painter.setFont(block.charFormat().font());
 
                         //
