@@ -1212,8 +1212,8 @@
     <message>
         <location filename="../../corelib/business_layer/export/abstract_exporter.cpp" line="273"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1016"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="955"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="944"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="961"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="945"/>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="973"/>
         <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1021"/>
         <source>END OF</source>
@@ -1787,16 +1787,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="357"/>
-        <source>Hide document versions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="358"/>
-        <source>Show document versions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="427"/>
         <source>Add folder</source>
         <translation type="unfinished"></translation>
@@ -1890,6 +1880,16 @@
         <translation>Guión</translation>
     </message>
     <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="357"/>
+        <source>Hide document drafts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="358"/>
+        <source>Show document drafts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="2249"/>
         <source>Statistics</source>
         <translation>Estatísticas</translation>
@@ -1963,19 +1963,19 @@
 <context>
     <name>ManagementLayer::ScreenplayCardsManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="132"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="104"/>
         <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished">Para editar o gráfico de relacións de personaxes, cómpre actualizar á versión PRO.</translation>
+        <translation>Para editar o gráfico de relacións de personaxes, cómpre actualizar á versión PRO.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="134"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="106"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Quizais máis tarde</translation>
+        <translation>Quizais máis tarde</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="135"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="107"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Actualizar</translation>
+        <translation>Actualizar</translation>
     </message>
 </context>
 <context>
@@ -3681,7 +3681,7 @@
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1033"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1039"/>
         <source>%n panels</source>
         <translation>
             <numerusform>%n panels</numerusform>
@@ -3689,27 +3689,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1210"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1216"/>
         <source>Bookmark</source>
         <translation>Marcador</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1214"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1220"/>
         <source>Add</source>
         <translation>Engadir</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1220"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1226"/>
         <source>Edit</source>
         <translation>Editar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1225"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1231"/>
         <source>Remove</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1232"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1238"/>
         <source>Show/hide list</source>
         <translation>Mostrar/Ocultar lista</translation>
     </message>
@@ -5875,234 +5875,146 @@
 <context>
     <name>Ui::ScreenplayCardsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="411"/>
-        <source>Apply new character name</source>
-        <translation type="unfinished">Cambiar o nome do personaxe</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="417"/>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="982"/>
-        <source>Select character color</source>
-        <translation type="unfinished">Seleccionar a cor do personaxe</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="491"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="304"/>
         <source>Please enter positive number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="952"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="589"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="953"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="590"/>
         <source>Lock cards positions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="954"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="591"/>
         <source>Arrange cards in rows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="955"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="592"/>
         <source>Arrange cards in columns</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="956"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="593"/>
         <source>Card size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="957"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="594"/>
         <source>Card ratio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="958"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="595"/>
         <source>Space between cards</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="959"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="596"/>
         <source>Arrange cards by</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="960"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="597"/>
         <source>in row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="961"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="598"/>
         <source>Keep empty to fit cards on screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="970"/>
-        <source>Border line type</source>
-        <translation type="unfinished">Tipo de liña de marxe</translation>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="600"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="604"/>
+        <source>Heading</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="971"/>
-        <source>Group name</source>
-        <translation type="unfinished">Nome de grupo</translation>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="601"/>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="972"/>
-        <source>Group description</source>
-        <translation type="unfinished">Descrición de grupo</translation>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="602"/>
+        <source>Human-readable name (hidden in screenplay)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="974"/>
-        <source>Profile</source>
-        <translation type="unfinished">Perfil</translation>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="603"/>
+        <source>Select card color</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="975"/>
-        <source>Relations</source>
-        <translation type="unfinished">Relacións</translation>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="605"/>
+        <source>Header text (visible in screenplay)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="978"/>
-        <source>Add photo +</source>
-        <translation type="unfinished">Engadir foto +</translation>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="221"/>
+        <source>Description</source>
+        <translation>Descrición</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="978"/>
-        <source>Change photo...</source>
-        <translation type="unfinished">Cambiar foto…</translation>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="225"/>
+        <source>Each line is a separate beat</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="979"/>
-        <source>Do you want to delete the character&apos;s main photo?</source>
-        <translation type="unfinished">Queres borrar a foto principal do personaxe?</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="980"/>
-        <source>Select an area for the character main photo</source>
-        <translation type="unfinished">Seleccionar unha área da foto principal do personaxe</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="981"/>
-        <source>Name</source>
-        <translation type="unfinished">Nome</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="983"/>
-        <source>Story role</source>
-        <translation type="unfinished">Papel na historia</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="986"/>
-        <source>Primary</source>
-        <translation type="unfinished">Principal</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="986"/>
-        <source>Secondary</source>
-        <translation type="unfinished">Secundario</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="986"/>
-        <source>Tertiary</source>
-        <translation type="unfinished">Incidental</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="986"/>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="992"/>
-        <source>Undefined</source>
-        <translation type="unfinished">Sen definir</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="988"/>
-        <source>Age</source>
-        <translation type="unfinished">Idade</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="989"/>
-        <source>Gender</source>
-        <translation type="unfinished">Xénero</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="992"/>
-        <source>Male</source>
-        <translation type="unfinished">Masculino</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="992"/>
-        <source>Female</source>
-        <translation type="unfinished">Feminino</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="992"/>
-        <source>Other</source>
-        <translation type="unfinished">Outro</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="994"/>
-        <source>One sentence description</source>
-        <translation type="unfinished">Descrición nunha frase</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="995"/>
-        <source>Long description</source>
-        <translation type="unfinished">Descrición longa</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="998"/>
-        <source>Open relation details</source>
-        <translation type="unfinished">Abrir detalles da relación</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="1001"/>
-        <source>Line type</source>
-        <translation type="unfinished">Tipo de liña</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="1002"/>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="1004"/>
-        <source>Feeling</source>
-        <translation type="unfinished">Sensación</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="1003"/>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="1005"/>
-        <source>Details</source>
-        <translation type="unfinished">Detalles</translation>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="607"/>
+        <source>Stamp</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayCardsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="298"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="764"/>
         <source>Unlock ability to edit screenplay cards</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="299"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="767"/>
+        <source>Undo last change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="772"/>
+        <source>Redo last change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="775"/>
         <source>Add structure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="300"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="776"/>
+        <source>Add act</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="777"/>
         <source>Add sequence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="301"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="778"/>
         <source>Add scene</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="302"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="779"/>
         <source>Remove selected item</source>
-        <translation type="unfinished">Borra o elemento seleccionado</translation>
+        <translation>Borra o elemento seleccionado</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="303"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="780"/>
         <source>Print cards</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6635,37 +6547,37 @@
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1356"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1376"/>
         <source>Merge paragraph</source>
         <translation>Xuntar parágrafo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1359"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1379"/>
         <source>Split paragraph</source>
         <translation>Separar parágrafos</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1395"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1415"/>
         <source>Bookmark</source>
         <translation>Marcador</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1399"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1419"/>
         <source>Add</source>
         <translation>Engadir</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1405"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1425"/>
         <source>Edit</source>
         <translation>Editar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1411"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1431"/>
         <source>Remove</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1418"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1438"/>
         <source>Show/hide list</source>
         <translation>Mostrar/Ocultar lista</translation>
     </message>
@@ -6863,27 +6775,27 @@
 <context>
     <name>Ui::ScreenplayTreatmentEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1206"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1227"/>
         <source>Bookmark</source>
         <translation>Marcador</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1210"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1231"/>
         <source>Add</source>
         <translation>Engadir</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1216"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1237"/>
         <source>Edit</source>
         <translation>Editar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1222"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1243"/>
         <source>Remove</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1229"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1250"/>
         <source>Show/hide list</source>
         <translation>Mostrar/Ocultar lista</translation>
     </message>
