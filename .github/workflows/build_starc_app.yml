@@ -1,7 +1,7 @@
 name: Build Starc
 
 env:
-  APP_VERSION: 0.2.5
+  APP_VERSION: 0.3.0
 
 on:
   push:
@@ -15,7 +15,7 @@ on:
 jobs:
   build_linux:
     name: Build Linux version
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
       - name: Checkout Sources for push or create tag event
@@ -36,7 +36,7 @@ jobs:
           echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: 5.15.2
           target: desktop
@@ -113,7 +113,7 @@ jobs:
           echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: 5.15.2
           arch: win64_msvc2019_64
@@ -229,7 +229,7 @@ jobs:
           echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: 5.15.2
           arch: win32_msvc2019
