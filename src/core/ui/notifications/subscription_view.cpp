@@ -19,6 +19,11 @@ class SubscriptionView::Implementation
 public:
     Implementation(SubscriptionView* _q, const Domain::Notification& _notification);
 
+    /**
+     * @brief Настроить представление и тексты в соответствии с уведомлением
+     */
+    void setupView();
+
 
     SubscriptionView* q = nullptr;
 
@@ -52,6 +57,85 @@ SubscriptionView::Implementation::Implementation(SubscriptionView* _q,
     buttonsLayout->setSpacing(0);
     buttonsLayout->addWidget(renewButton);
     buttonsLayout->addStretch();
+}
+
+void SubscriptionView::Implementation::setupView()
+{
+    dateTimeLabel->setText(notification.dateTime.toLocalTime().toString("dd.MM.yyyy hh:mm"));
+    const auto json = QJsonDocument::fromJson(notification.notification.toUtf8()).object();
+    const auto endDateTime
+        = QDateTime::fromString(json.value("end_date").toString(), Qt::ISODateWithMs);
+    const int daysLeft = notification.dateTime.daysTo(endDateTime);
+    avatarLabel->setTextColor(daysLeft >= 0 ? Ui::DesignSystem::color().error()
+                                            : Ui::DesignSystem::color().secondary());
+    QString title;
+    QString body;
+    bool isButtonVisible = true;
+
+    //
+    // Удаление проектов
+    //
+    if (daysLeft < -1) {
+        title = tr("Cloud projects removal");
+        body = tr("Your Story Architect cloud projects will be removed yesterday if you don't "
+                  "renew TEAm subscription.");
+    }
+    //
+    // Подписка закончилась
+    //
+    else if (daysLeft == -1) {
+        title = tr("Subscription ended");
+        body = notification.type == Domain::NotificationType::ProSubscriptionEnds
+            ? tr("Your PRO version subscription is expired. Account is switched to the FREE "
+                 "version.")
+            : tr("Your TEAM version subscription is expired. Your cloud projects will be stored "
+                 "for 30 days and then removed if you don't reactivate TEAM subscription.");
+    }
+    //
+    // Последний день подписки
+    //
+    else if (daysLeft == 0) {
+        title = tr("Subscription ends");
+        body = notification.type == Domain::NotificationType::ProSubscriptionEnds
+            ? tr("Your PRO version subscription expires today.")
+            : tr("Your TEAM version subscription expires today.");
+    }
+    //
+    // Подписка скоро закончится
+    //
+    else if (daysLeft < 10) {
+        title = tr("Subscription ends");
+        body = notification.type == Domain::NotificationType::ProSubscriptionEnds
+            ? tr("Your PRO version subscription expires in %n day(s).", "", std::max(1, daysLeft))
+            : tr("Your TEAM version subscription expires in %n day(s).", "", std::max(1, daysLeft));
+    }
+    //
+    // Подписка продлена на период
+    //
+    else if (daysLeft < 1000) {
+        title = tr("Subscription renewed");
+        body = notification.type == Domain::NotificationType::ProSubscriptionEnds
+            ? tr("Your PRO version subscription active until %1.")
+                  .arg(endDateTime.toString("dd.MM.yyyy"))
+            : tr("Your TEAM version subscription active until %1.")
+                  .arg(endDateTime.toString("dd.MM.yyyy"));
+        isButtonVisible = false;
+    }
+    //
+    // Подписка продлена навсегда
+    //
+    else {
+        title = tr("Subscription renewed");
+        body = notification.type == Domain::NotificationType::ProSubscriptionEnds
+            ? tr("Your PRO version lifetime subscription activated.")
+            : tr("Your TEAM version lifetime subscription activated.");
+        isButtonVisible = false;
+    }
+
+    titleLabel->setText(title);
+    bodyLabel->setText(body);
+    renewButton->setText(tr("Renew"));
+    renewButton->setVisible(isButtonVisible);
 }
 
 SubscriptionView::SubscriptionView(QWidget* _parent, const Domain::Notification& _notification)
@@ -101,33 +185,7 @@ SubscriptionView::~SubscriptionView() = default;
 
 void SubscriptionView::updateTranslations()
 {
-    d->dateTimeLabel->setText(d->notification.dateTime.toLocalTime().toString("dd.MM.yyyy hh:mm"));
-    const auto json = QJsonDocument::fromJson(d->notification.notification.toUtf8()).object();
-    const auto endDateTime
-        = QDateTime::fromString(json.value("end_date").toString(), Qt::ISODateWithMs);
-    const int daysLeft = QDateTime ::currentDateTimeUtc().daysTo(endDateTime);
-    d->avatarLabel->setTextColor(daysLeft >= 0 ? Ui::DesignSystem::color().error()
-                                               : Ui::DesignSystem::color().secondary());
-    d->titleLabel->setText(daysLeft >= 0 ? tr("Subscription ends") : tr("Subscription ended"));
-    if (d->notification.type == Domain::NotificationType::ProSubscriptionEnds) {
-        d->bodyLabel->setText(
-            daysLeft == 0
-                ? tr("Your PRO version subscription expires today.")
-                : (daysLeft > 0 ? tr("Your PRO version subscription expires in %n day(s)", "",
-                                     std::max(1, daysLeft))
-                                : tr("Your PRO version subscription is expired. Account is "
-                                     "switched to the FREE Version.")));
-    } else {
-        d->bodyLabel->setText(
-            daysLeft == 0
-                ? tr("Your TEAM version subscription expires today.")
-                : (daysLeft > 0 ? tr("Your TEAM version subscription expires in %n day(s)", "",
-                                     std::max(1, daysLeft))
-                                : tr("Your TEAM version subscription is expired. Your cloud "
-                                     "projects will be stored for 30 days and then removed if you "
-                                     "don't reactivate TEAM subscription.")));
-    }
-    d->renewButton->setText(tr("Renew"));
+    d->setupView();
 }
 
 void SubscriptionView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
