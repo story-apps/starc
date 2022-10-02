@@ -150,7 +150,7 @@ TextParagraphType typeForTextCursor(const QTextCursor& _cursor, TextParagraphTyp
                 // 2. выровнено по левому краю
                 //
                 else if (blockFormat.alignment().testFlag(Qt::AlignLeft) && !isCentered) {
-                    blockType = TextParagraphType::UnformattedText;
+                    blockType = TextParagraphType::Action;
                 }
                 //
                 // Переход
