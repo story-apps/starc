@@ -253,7 +253,11 @@ void ThemePreview::mousePressEvent(QMouseEvent* _event)
         auto copyAction = new QAction;
         copyAction->setText(tr("Copy theme HASH"));
         connect(copyAction, &QAction::triggered, this, [this] {
-            QGuiApplication::clipboard()->setText(Ui::DesignSystem::color(d->theme).toString());
+            QGuiApplication::clipboard()->setText(
+                (d->theme == Ui::ApplicationTheme::Custom ? Ui::DesignSystem::Color(
+                     settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString())
+                                                          : Ui::DesignSystem::color(d->theme))
+                    .toString());
         });
 
         auto menu = new ContextMenu(this);
