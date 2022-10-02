@@ -145,9 +145,6 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
             }
         }
     });
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 void SettingsNavigator::showDefaultPage()

@@ -26,6 +26,11 @@ ScreenplayStatisticsModel::ScreenplayStatisticsModel(QObject* _parent)
 
 ScreenplayStatisticsModel::~ScreenplayStatisticsModel() = default;
 
+ScreenplayTextModel* ScreenplayStatisticsModel::textModel() const
+{
+    return d->textModel;
+}
+
 void ScreenplayStatisticsModel::setScreenplayTextModel(ScreenplayTextModel* _model)
 {
     d->textModel = _model;

@@ -68,7 +68,7 @@ const QHash<QString, QString> kEditorToNavigator
         { kScreenplayTreatmentEditorMime, kScreenplayTreatmentNavigatorMime },
         { kScreenplayTextEditorMime, kScreenplayTextNavigatorMime },
         { kScreenplayTextCardsMime, kScreenplayTextNavigatorMime },
-//        { kScreenplayStatisticsViewMime, kScreenplayStatisticsNavigatorMime },
+        { kScreenplayStatisticsViewMime, kScreenplayStatisticsNavigatorMime },
         { kComicBookTextEditorMime, kComicBookTextNavigatorMime },
         { kAudioplayTextEditorMime, kAudioplayTextNavigatorMime },
         { kStageplayTextEditorMime, kStageplayTextNavigatorMime },

@@ -20,8 +20,9 @@ public:
     ~ScreenplayStatisticsModel() override;
 
     /**
-     * @brief Задать мМодель текста сценария
+     * @brief Модель текста сценария
      */
+    ScreenplayTextModel* textModel() const;
     void setScreenplayTextModel(ScreenplayTextModel* _model);
 
     /**
