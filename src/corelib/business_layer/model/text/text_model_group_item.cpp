@@ -180,9 +180,7 @@ bool TextModelGroupItem::setNumber(int _number, const QString& _prefix)
         return false;
     }
 
-    const auto newNumberText
-        = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1%2." : ".%2%1")
-              .arg(_prefix, QString::number(_number));
+    const auto newNumberText = QString("%1%2.").arg(_prefix, QString::number(_number));
     if (d->number.has_value() && d->number->text == newNumberText) {
         return true;
     }
