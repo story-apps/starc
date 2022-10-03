@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<style id="he" default="true" page_format="A4" page_margins="20,20,30,25" numbering_alignment="bottom,center" left_half_of_page_width="50">
+<style id="he" default="true" page_format="A4" page_margins="20,20,30,25" page_numbers_alignment="bottom,center" left_half_of_page_width="50">
     <titlepage>
         <document mime-type="application/x-starc/document/screenplay/title-page" version="1.0">
             <text><v><![CDATA[]]></v></text>
