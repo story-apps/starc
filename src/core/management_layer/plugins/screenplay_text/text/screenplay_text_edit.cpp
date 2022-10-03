@@ -1260,48 +1260,56 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Прорисовка префикса/постфикса для блока текста, если это не пустая декорация
                 //
-                if (!block.text().isEmpty()
-                    || !block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
+                if ((!block.text().isEmpty()
+                     || !block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection))
+                    && (block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)
+                        || block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix))) {
                     setPainterPen(palette().text().color());
                     painter.setFont(block.charFormat().font());
+
                     //
-                    // ... префикс
+                    // Из-за того, что при смешивании RTL и LTR текста курсор в параграфе может
+                    // находиться в разных местах, проходим каждый символ абзаца и выбираем крайние
+                    // положения текста по углам в соответствии с направлением
                     //
-                    if (block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)) {
-                        const auto prefix
-                            = block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
-                        const QPoint topLeft = block.text().isRightToLeft()
-                            ? QPoint(cursorREnd.left()
-                                         - TextHelper::fineTextWidthF(prefix, painter.font()),
-                                     cursorREnd.top())
-                            : QPoint(cursorR.left()
-                                         - TextHelper::fineTextWidthF(prefix, painter.font()),
-                                     cursorR.top());
-                        const QPoint bottomRight = block.text().isRightToLeft()
-                            ? QPoint(cursorREnd.left(), cursorREnd.bottom())
-                            : QPoint(cursorR.left(), cursorR.bottom());
-                        const QRect rect(topLeft, bottomRight);
-                        painter.drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, prefix);
+                    auto decorationCursor = cursor;
+                    decorationCursor.setPosition(block.position());
+                    auto decorationCursorR = cursorRect(decorationCursor);
+                    auto prefixTopLeft = decorationCursorR.topLeft();
+                    auto postfixTopRight = decorationCursorR.topRight();
+                    while (!decorationCursor.atBlockEnd()) {
+                        decorationCursor.movePosition(BusinessLayer::TextCursor::NextCharacter);
+                        decorationCursorR = cursorRect(decorationCursor);
+                        if (prefixTopLeft.x() > decorationCursorR.left()
+                            || (block.text().isRightToLeft()
+                                && prefixTopLeft.y() < decorationCursorR.top())) {
+                            prefixTopLeft = decorationCursorR.topLeft();
+                        }
+                        if (postfixTopRight.x() < decorationCursorR.right()
+                            || (!block.text().isRightToLeft()
+                                && postfixTopRight.y() < decorationCursorR.top())) {
+                            postfixTopRight = decorationCursorR.topRight();
+                        }
                     }
-                    //
-                    // ... постфикс
-                    //
-                    if (block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix)) {
-                        const auto postfix
-                            = block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
-                        const QPoint topLeft = block.text().isRightToLeft()
-                            ? QPoint(cursorR.left(), cursorR.top())
-                            : QPoint(cursorREnd.left(), cursorREnd.top());
-                        const QPoint bottomRight = block.text().isRightToLeft()
-                            ? QPoint(cursorR.left()
-                                         + TextHelper::fineTextWidthF(postfix, painter.font()),
-                                     cursorR.bottom())
-                            : QPoint(cursorREnd.left()
-                                         + TextHelper::fineTextWidthF(postfix, painter.font()),
-                                     cursorREnd.bottom());
-                        const QRect rect(topLeft, bottomRight);
-                        painter.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, postfix);
-                    }
+
+                    const auto prefix
+                        = block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
+                    const QRectF prefixRect(
+                        prefixTopLeft.x() - TextHelper::fineTextWidthF(prefix, painter.font()),
+                        prefixTopLeft.y(), TextHelper::fineTextWidthF(prefix, painter.font()),
+                        decorationCursorR.height());
+                    painter.drawText(prefixRect,
+                                     Qt::AlignLeft | Qt::AlignVCenter | Qt::TextForceLeftToRight,
+                                     prefix);
+
+                    const auto postfix
+                        = block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
+                    const QRectF postfixRect(postfixTopRight.x(), postfixTopRight.y(),
+                                             TextHelper::fineTextWidthF(postfix, painter.font()),
+                                             decorationCursorR.height());
+                    painter.drawText(postfixRect,
+                                     Qt::AlignLeft | Qt::AlignVCenter | Qt::TextForceLeftToRight,
+                                     postfix);
                 }
             }
 
