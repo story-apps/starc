@@ -2,6 +2,7 @@
 
 #include "text/screenplay_text_model.h"
 
+#include <business_layer/reports/screenplay/screenplay_cast_report.h>
 #include <business_layer/reports/screenplay/screenplay_summary_report.h>
 
 
@@ -12,10 +13,8 @@ class ScreenplayStatisticsModel::Implementation
 public:
     ScreenplayTextModel* textModel = nullptr;
 
-    /**
-     * @brief Сводный отчёт
-     */
     ScreenplaySummaryReport summaryReport;
+    ScreenplayCastReport castReport;
 };
 
 ScreenplayStatisticsModel::ScreenplayStatisticsModel(QObject* _parent)
@@ -45,11 +44,17 @@ void ScreenplayStatisticsModel::updateReports()
     }
 
     d->summaryReport.build(d->textModel);
+    d->castReport.build(d->textModel);
 }
 
 const ScreenplaySummaryReport& ScreenplayStatisticsModel::summaryReport() const
 {
     return d->summaryReport;
+}
+
+const ScreenplayCastReport& ScreenplayStatisticsModel::castReport() const
+{
+    return d->castReport;
 }
 
 void ScreenplayStatisticsModel::initDocument()

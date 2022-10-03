@@ -173,6 +173,7 @@ SOURCES += \
     business_layer/model/text/text_model_xml_writer.cpp \
     business_layer/reports/audioplay/audioplay_summary_report.cpp \
     business_layer/reports/comic_book/comic_book_summary_report.cpp \
+    business_layer/reports/screenplay/screenplay_cast_report.cpp \
     business_layer/reports/screenplay/screenplay_summary_report.cpp \
     business_layer/reports/stageplay/stageplay_summary_report.cpp \
     business_layer/templates/audioplay_template.cpp \
@@ -442,6 +443,7 @@ HEADERS += \
     business_layer/reports/abstract_report.h \
     business_layer/reports/audioplay/audioplay_summary_report.h \
     business_layer/reports/comic_book/comic_book_summary_report.h \
+    business_layer/reports/screenplay/screenplay_cast_report.h \
     business_layer/reports/screenplay/screenplay_summary_report.h \
     business_layer/reports/stageplay/stageplay_summary_report.h \
     business_layer/templates/audioplay_template.h \

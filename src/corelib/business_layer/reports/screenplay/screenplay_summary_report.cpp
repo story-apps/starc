@@ -11,6 +11,7 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QCoreApplication>
+#include <QRegularExpression>
 #include <QStandardItemModel>
 
 #include <set>
@@ -83,6 +84,11 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
         return;
     }
 
+    auto screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
+    if (screenplayModel == nullptr) {
+        return;
+    }
+
     //
     // Подготовим необходимые структуры для сбора статистики
     //
@@ -106,87 +112,117 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
     QVector<QString> scenes;
     // - персонаж - кол-во реплик
     QHash<QString, int> charactersToDialogues;
-    QString lastCharacter;
+
+    //
+    // Сформируем регулярное выражение для выуживания молчаливых персонажей
+    //
+    QString rxPattern;
+    auto charactersModel = screenplayModel->charactersModel();
+    for (int index = 0; index < charactersModel->rowCount(); ++index) {
+        auto characterName = charactersModel->index(index, 0).data().toString();
+        if (!rxPattern.isEmpty()) {
+            rxPattern.append("|");
+        }
+        rxPattern.append(characterName);
+    }
+    if (!rxPattern.isEmpty()) {
+        rxPattern.prepend("(^|\\W)(");
+        rxPattern.append(")($|\\W)");
+    }
+    const QRegularExpression rxCharacterFinder(
+        rxPattern,
+        QRegularExpression::CaseInsensitiveOption | QRegularExpression::UseUnicodePropertiesOption);
 
     //
     // Собираем статистику
     //
     std::function<void(const TextModelItem*)> includeInReport;
-    includeInReport
-        = [&includeInReport, &paragraphsToCounters, &totalWords, &totalCharacters, &scenes,
-           &charactersToDialogues, &lastCharacter](const TextModelItem* _item) {
-              for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-                  auto childItem = _item->childAt(childIndex);
-                  switch (childItem->type()) {
-                  case TextModelItemType::Folder:
-                  case TextModelItemType::Group: {
-                      includeInReport(childItem);
-                      break;
-                  }
+    includeInReport = [&includeInReport, &paragraphsToCounters, &totalWords, &totalCharacters,
+                       &scenes, &charactersToDialogues,
+                       &rxCharacterFinder](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case TextModelItemType::Folder:
+            case TextModelItemType::Group: {
+                includeInReport(childItem);
+                break;
+            }
 
-                  case TextModelItemType::Text: {
-                      auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                      //
-                      // ... счётчики
-                      //
-                      if (paragraphsToCounters.contains(textItem->paragraphType())) {
-                          auto& paragraphCounters = paragraphsToCounters[textItem->paragraphType()];
-                          ++paragraphCounters.occurrences;
-                          const auto paragraphWords = TextHelper::wordsCount(textItem->text());
-                          paragraphCounters.words += paragraphWords;
-                          totalWords += paragraphWords;
-                          totalCharacters.withSpaces += textItem->text().length();
-                          totalCharacters.withoutSpaces
-                              += textItem->text().length() - textItem->text().count(' ');
-                      }
+            case TextModelItemType::Text: {
+                auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+                //
+                // ... счётчики
+                //
+                if (paragraphsToCounters.contains(textItem->paragraphType())) {
+                    auto& paragraphCounters = paragraphsToCounters[textItem->paragraphType()];
+                    ++paragraphCounters.occurrences;
+                    const auto paragraphWords = TextHelper::wordsCount(textItem->text());
+                    paragraphCounters.words += paragraphWords;
+                    totalWords += paragraphWords;
+                    totalCharacters.withSpaces += textItem->text().length();
+                    totalCharacters.withoutSpaces
+                        += textItem->text().length() - textItem->text().count(' ');
+                }
 
-                      //
-                      // ... стата по объектам
-                      //
-                      switch (textItem->paragraphType()) {
-                      case TextParagraphType::SceneHeading: {
-                          scenes.append(TextHelper::smartToUpper(textItem->text()));
-                          break;
-                      }
+                //
+                // ... стата по объектам
+                //
+                switch (textItem->paragraphType()) {
+                case TextParagraphType::SceneHeading: {
+                    scenes.append(TextHelper::smartToUpper(textItem->text()));
+                    break;
+                }
 
-                      case TextParagraphType::SceneCharacters: {
-                          const auto sceneCharacters
-                              = ScreenplaySceneCharactersParser::characters(textItem->text());
-                          for (const auto& character : sceneCharacters) {
-                              if (!charactersToDialogues.contains(character)) {
-                                  charactersToDialogues.insert(character, 0);
-                              }
-                          }
-                          break;
-                      }
+                case TextParagraphType::SceneCharacters: {
+                    const auto sceneCharacters
+                        = ScreenplaySceneCharactersParser::characters(textItem->text());
+                    for (const auto& character : sceneCharacters) {
+                        if (!charactersToDialogues.contains(character)) {
+                            charactersToDialogues.insert(character, 0);
+                        }
+                    }
+                    break;
+                }
 
-                      case TextParagraphType::Character: {
-                          lastCharacter = ScreenplayCharacterParser::name(textItem->text());
-                          if (!charactersToDialogues.contains(lastCharacter)) {
-                              charactersToDialogues.insert(lastCharacter, 0);
-                          }
-                          break;
-                      }
+                case TextParagraphType::Character: {
+                    const auto character = ScreenplayCharacterParser::name(textItem->text());
+                    if (!charactersToDialogues.contains(character)) {
+                        charactersToDialogues.insert(character, 1);
+                    } else {
+                        ++charactersToDialogues[character];
+                    }
+                    break;
+                }
 
-                      case TextParagraphType::Dialogue:
-                      case TextParagraphType::Lyrics: {
-                          charactersToDialogues[lastCharacter] += 1;
-                          break;
-                      }
+                case TextParagraphType::Action: {
+                    auto match = rxCharacterFinder.match(textItem->text());
+                    while (match.hasMatch()) {
+                        const QString character = TextHelper::smartToUpper(match.captured(2));
+                        if (!charactersToDialogues.contains(character)) {
+                            charactersToDialogues.insert(character, 0);
+                        }
 
-                      default:
-                          break;
-                      }
+                        //
+                        // Ищем дальше
+                        //
+                        match = rxCharacterFinder.match(textItem->text(), match.capturedEnd());
+                    }
+                    break;
+                }
 
-                      break;
-                  }
+                default:
+                    break;
+                }
 
-                  default:
-                      break;
-                  }
-              }
-          };
-    auto screenplayModel = static_cast<ScreenplayTextModel*>(_model);
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
     includeInReport(screenplayModel->itemForIndex({}));
 
     //
