@@ -1,6 +1,7 @@
 #include "screenplay_text_model_folder_item.h"
 
 #include "screenplay_text_model.h"
+#include "screenplay_text_model_beat_item.h"
 #include "screenplay_text_model_scene_item.h"
 #include "screenplay_text_model_text_item.h"
 
@@ -91,8 +92,14 @@ void ScreenplayTextModelFolderItem::handleChange()
         }
 
         case TextModelItemType::Group: {
-            auto childItem = static_cast<ScreenplayTextModelSceneItem*>(child);
-            d->duration += childItem->duration();
+            auto childItem = static_cast<TextModelGroupItem*>(child);
+            if (childItem->groupType() == TextGroupType::Scene) {
+                const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
+                d->duration += sceneItem->duration();
+            } else {
+                const auto beatItem = static_cast<ScreenplayTextModelBeatItem*>(childItem);
+                d->duration += beatItem->duration();
+            }
             break;
         }
 

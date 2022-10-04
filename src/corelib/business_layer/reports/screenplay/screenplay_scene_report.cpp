@@ -150,7 +150,7 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
                     //
                     if (lastScene.page != invalidPage) {
                         scenes.append(lastScene);
-                        lastScene = {};
+                        lastScene = SceneData();
                     }
 
                     const auto sceneItem
