@@ -1216,7 +1216,6 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     return;
                 }
 
-                //                if (mappedIndex.child())
                 showNavigator(_index);
             });
     connect(d->navigator, &Ui::ProjectNavigator::itemNavigationRequested, this,
@@ -1234,9 +1233,19 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->splitScreenAction, &QAction::toggled, this, [this](bool _checked) {
         d->updateOptionsText();
         if (_checked) {
+            const bool isFirstSplit = !d->view.inactiveIndex.isValid();
+            if (isFirstSplit) {
+                d->view.inactiveIndex = d->view.activeIndex;
+            }
+
             d->view.container->setSizes({ 1, 1 });
             d->view.right->show();
             d->switchViews();
+
+            if (isFirstSplit) {
+                showView(d->projectStructureProxyModel->mapFromSource(d->view.inactiveIndex),
+                         d->currentDocument.viewMimeType);
+            }
         } else {
             d->view.container->setSizes({ 1, 0 });
             d->view.right->hide();
