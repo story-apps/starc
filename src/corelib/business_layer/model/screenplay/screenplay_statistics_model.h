@@ -6,6 +6,7 @@
 namespace BusinessLayer {
 
 class ScreenplayCastReport;
+class ScreenplaySceneReport;
 class ScreenplaySummaryReport;
 class ScreenplayTextModel;
 
@@ -35,6 +36,11 @@ public:
      * @brief Суммарный отчёт по сценарию
      */
     const ScreenplaySummaryReport& summaryReport() const;
+
+    /**
+     * @brief Отчёт по сценам
+     */
+    const ScreenplaySceneReport& sceneReport() const;
 
     /**
      * @brief Отчёт по персонажам

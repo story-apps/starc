@@ -88,6 +88,20 @@ QAbstractItemModel* Tree::model() const
     return d->tree->model();
 }
 
+int Tree::recursiveRowCount() const
+{
+    int count = 0;
+    std::function<void(const QModelIndex&)> recursiveCount;
+    recursiveCount = [this, &count, &recursiveCount](const QModelIndex& _parent) {
+        for (int row = 0; row < model()->rowCount(_parent); ++row) {
+            ++count;
+            recursiveCount(model()->index(row, 0, _parent));
+        }
+    };
+    recursiveCount({});
+    return count;
+}
+
 void Tree::setRootIsDecorated(bool _decorated)
 {
     d->tree->setRootIsDecorated(_decorated);

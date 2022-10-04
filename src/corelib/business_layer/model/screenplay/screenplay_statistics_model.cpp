@@ -3,6 +3,7 @@
 #include "text/screenplay_text_model.h"
 
 #include <business_layer/reports/screenplay/screenplay_cast_report.h>
+#include <business_layer/reports/screenplay/screenplay_scene_report.h>
 #include <business_layer/reports/screenplay/screenplay_summary_report.h>
 
 
@@ -14,6 +15,7 @@ public:
     ScreenplayTextModel* textModel = nullptr;
 
     ScreenplaySummaryReport summaryReport;
+    ScreenplaySceneReport sceneReport;
     ScreenplayCastReport castReport;
 };
 
@@ -44,12 +46,18 @@ void ScreenplayStatisticsModel::updateReports()
     }
 
     d->summaryReport.build(d->textModel);
+    d->sceneReport.build(d->textModel);
     d->castReport.build(d->textModel);
 }
 
 const ScreenplaySummaryReport& ScreenplayStatisticsModel::summaryReport() const
 {
     return d->summaryReport;
+}
+
+const ScreenplaySceneReport& ScreenplayStatisticsModel::sceneReport() const
+{
+    return d->sceneReport;
 }
 
 const ScreenplayCastReport& ScreenplayStatisticsModel::castReport() const

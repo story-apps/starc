@@ -29,6 +29,11 @@ public:
     QAbstractItemModel* model() const;
 
     /**
+     * @brief Все строки модели (включая вложенные)
+     */
+    int recursiveRowCount() const;
+
+    /**
      * @brief Задать необходимость отображения декорации у корневых элементов
      */
     void setRootIsDecorated(bool _decorated);

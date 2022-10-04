@@ -200,71 +200,65 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
         return item;
     };
     //
-    // ... персонажи
+    // Сортируем персонажей
     //
-    {
-        //
-        // Сортируем персонажей
-        //
-        QVector<QPair<QString, CharacterData>> charactersSorted;
-        for (auto iter = charactersData.begin(); iter != charactersData.end(); ++iter) {
-            charactersSorted.append({ iter.key(), iter.value() });
-        }
-        std::sort(charactersSorted.begin(), charactersSorted.end(),
-                  [](const QPair<QString, CharacterData>& _lhs,
-                     const QPair<QString, CharacterData>& _rhs) {
-                      return _lhs.second.totalDialogues == _rhs.second.totalDialogues
-                          ? _lhs.first < _rhs.first
-                          : _lhs.second.totalDialogues > _rhs.second.totalDialogues;
-                  });
-
-        //
-        // Формируем таблицу
-        //
-        if (d->castModel.isNull()) {
-            d->castModel.reset(new QStandardItemModel);
-        } else {
-            d->castModel->clear();
-        }
-        //
-        auto addCharacterItemToReport
-            = [this, &createModelItem](const QString& _name, const CharacterData& _count) {
-                  auto characterItem = createModelItem(_name);
-                  d->castModel->appendRow({
-                      characterItem,
-                      createModelItem(QString::number(_count.totalDialogues)),
-                      createModelItem(QString::number(_count.speakingScenesCount)),
-                      createModelItem(QString::number(_count.nonspeakingScenesCount)),
-                      createModelItem(QString::number(_count.speakingScenesCount
-                                                      + _count.nonspeakingScenesCount)),
-                  });
-              };
-        for (const auto& character : charactersSorted) {
-            addCharacterItemToReport(character.first, character.second);
-        }
-        //
-        d->castModel->setHeaderData(
-            0, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Character name"),
-            Qt::DisplayRole);
-        d->castModel->setHeaderData(
-            1, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Total dialogues"),
-            Qt::DisplayRole);
-        d->castModel->setHeaderData(
-            2, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Speaking scenes"),
-            Qt::DisplayRole);
-        d->castModel->setHeaderData(
-            3, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplayCastReport",
-                                        "Nonspeaking scenes"),
-            Qt::DisplayRole);
-        d->castModel->setHeaderData(
-            4, Qt::Horizontal,
-            QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Total scenes"),
-            Qt::DisplayRole);
+    QVector<QPair<QString, CharacterData>> charactersSorted;
+    for (auto iter = charactersData.begin(); iter != charactersData.end(); ++iter) {
+        charactersSorted.append({ iter.key(), iter.value() });
     }
+    std::sort(
+        charactersSorted.begin(), charactersSorted.end(),
+        [](const QPair<QString, CharacterData>& _lhs, const QPair<QString, CharacterData>& _rhs) {
+            return _lhs.second.totalDialogues == _rhs.second.totalDialogues
+                ? _lhs.first < _rhs.first
+                : _lhs.second.totalDialogues > _rhs.second.totalDialogues;
+        });
+
+    //
+    // Формируем таблицу
+    //
+    if (d->castModel.isNull()) {
+        d->castModel.reset(new QStandardItemModel);
+    } else {
+        d->castModel->clear();
+    }
+    //
+    auto addCharacterItemToReport
+        = [this, &createModelItem](const QString& _name, const CharacterData& _count) {
+              auto characterItem = createModelItem(_name);
+              d->castModel->appendRow({
+                  characterItem,
+                  createModelItem(QString::number(_count.totalDialogues)),
+                  createModelItem(QString::number(_count.speakingScenesCount)),
+                  createModelItem(QString::number(_count.nonspeakingScenesCount)),
+                  createModelItem(
+                      QString::number(_count.speakingScenesCount + _count.nonspeakingScenesCount)),
+              });
+          };
+    for (const auto& character : charactersSorted) {
+        addCharacterItemToReport(character.first, character.second);
+    }
+    //
+    d->castModel->setHeaderData(
+        0, Qt::Horizontal,
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Character name"),
+        Qt::DisplayRole);
+    d->castModel->setHeaderData(
+        1, Qt::Horizontal,
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Total dialogues"),
+        Qt::DisplayRole);
+    d->castModel->setHeaderData(
+        2, Qt::Horizontal,
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Speaking scenes"),
+        Qt::DisplayRole);
+    d->castModel->setHeaderData(
+        3, Qt::Horizontal,
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Nonspeaking scenes"),
+        Qt::DisplayRole);
+    d->castModel->setHeaderData(
+        4, Qt::Horizontal,
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Total scenes"),
+        Qt::DisplayRole);
 }
 
 QAbstractItemModel* ScreenplayCastReport::castModel() const
