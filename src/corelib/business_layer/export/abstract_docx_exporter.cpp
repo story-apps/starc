@@ -207,15 +207,9 @@ QString AbstractDocxExporter::Implementation::docxBlockStyle(const TextBlockStyl
     //
     // ... отступы
     //
-    if (QLocale().textDirection() == Qt::LeftToRight) {
-        blockStyle.append(QString("<w:ind w:left=\"%1\" w:right=\"%2\"/>")
-                              .arg(pxToTwips(_style.blockFormat(_onHalfPage).leftMargin()))
-                              .arg(pxToTwips(_style.blockFormat(_onHalfPage).rightMargin())));
-    } else {
-        blockStyle.append(QString("<w:ind w:left=\"%1\" w:right=\"%2\"/>")
-                              .arg(pxToTwips(_style.blockFormat(_onHalfPage).rightMargin()))
-                              .arg(pxToTwips(_style.blockFormat(_onHalfPage).leftMargin())));
-    }
+    blockStyle.append(QString("<w:ind w:left=\"%1\" w:right=\"%2\"/>")
+                          .arg(pxToTwips(_style.blockFormat(_onHalfPage).leftMargin()))
+                          .arg(pxToTwips(_style.blockFormat(_onHalfPage).rightMargin())));
     //
     // ... интервалы
     //
@@ -370,12 +364,12 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
     //
     QSignalBlocker documentSignalBlocker(_cursor.document());
 
-    const auto& audioplayTemplate = q->documentTemplate(_exportOptions);
-    auto tableWidth = [&audioplayTemplate] {
+    const auto& documentTemplate = q->documentTemplate(_exportOptions);
+    auto tableWidth = [&documentTemplate] {
         const QSizeF paperSize
-            = QPageSize(audioplayTemplate.pageSizeId()).size(QPageSize::Millimeter);
-        return mmToTwips(paperSize.width() - audioplayTemplate.pageMargins().left()
-                         - audioplayTemplate.pageMargins().right());
+            = QPageSize(documentTemplate.pageSizeId()).size(QPageSize::Millimeter);
+        return mmToTwips(paperSize.width() - documentTemplate.pageMargins().left()
+                         - documentTemplate.pageMargins().right());
     };
 
     QString documentXml;
@@ -488,9 +482,9 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                     "w:type=\"dxa\"/><w:tblCellMar><w:top w:w=\"0\" w:type=\"dxa\"/><w:left "
                     "w:w=\"0\" w:type=\"dxa\"/><w:bottom w:w=\"0\" w:type=\"dxa\"/><w:right "
                     "w:w=\"0\" w:type=\"dxa\"/></w:tblCellMar></w:tblPr><w:tblGrid>");
-                const int middleColumnWidth = pxToTwips(audioplayTemplate.pageSplitterWidth());
+                const int middleColumnWidth = pxToTwips(documentTemplate.pageSplitterWidth());
                 const int leftColumnWidth = (fullTableWidth - middleColumnWidth)
-                    * audioplayTemplate.leftHalfOfPageWidthPercents() / 100.;
+                    * documentTemplate.leftHalfOfPageWidthPercents() / 100.;
                 documentXml.append(QString("<w:gridCol w:w=\"%1\"/>").arg(leftColumnWidth));
                 documentXml.append(QString("<w:gridCol w:w=\"%1\"/>").arg(middleColumnWidth));
                 const int rightColumnWidth = fullTableWidth - leftColumnWidth - middleColumnWidth;
@@ -517,7 +511,7 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
             if (cursor.inFirstColumn()) {
                 documentXml.append("</w:tc><w:tc><w:tcPr>");
                 const auto fullTableWidth = tableWidth();
-                const int middleColumnWidth = pxToTwips(audioplayTemplate.pageSplitterWidth());
+                const int middleColumnWidth = pxToTwips(documentTemplate.pageSplitterWidth());
                 documentXml.append(
                     QString("<w:tcW w:w=\"%1\" w:type=\"dxa\"/>").arg(middleColumnWidth));
                 documentXml.append(
@@ -525,7 +519,7 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                     "<w:p><w:pPr><w:pStyle w:val=\"Normal\"/><w:rPr/></w:pPr>"
                     "<w:r><w:t xml:space=\"preserve\"></w:t></w:r></w:p></w:tc><w:tc><w:tcPr>");
                 const int leftColumnWidth = (fullTableWidth - middleColumnWidth)
-                    * audioplayTemplate.leftHalfOfPageWidthPercents() / 100.;
+                    * documentTemplate.leftHalfOfPageWidthPercents() / 100.;
                 const int rightColumnWidth = fullTableWidth - leftColumnWidth - middleColumnWidth;
                 documentXml.append(
                     QString("<w:tcW w:w=\"%1\" w:type=\"dxa\"/>").arg(rightColumnWidth));
@@ -540,9 +534,14 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         documentXml.append(QString("<w:p><w:pPr><w:pStyle w:val=\"%1\"/>")
                                .arg(paragraphTypeName(correctedBlockType, suffix)));
         //
-        // ... признак RTL
+        // ... признак RTL и разворачиваем отступы
         //
         if (block.textDirection() == Qt::RightToLeft) {
+            const auto blockStyle = documentTemplate.paragraphStyle(correctedBlockType);
+            documentXml.append(
+                QString("<w:ind w:left=\"%1\" w:right=\"%2\"/>")
+                    .arg(pxToTwips(blockStyle.blockFormat(_cursor.inTable()).rightMargin()))
+                    .arg(pxToTwips(blockStyle.blockFormat(_cursor.inTable()).leftMargin())));
             documentXml.append("<w:bidi/>");
         }
         //
@@ -907,7 +906,7 @@ void AbstractDocxExporter::Implementation::writeHeader(QtZipWriter* _zip,
     headerXml.append("<w:p><w:pPr><w:jc w:val=\"");
     if (audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignLeft) || !needPrintPageNumbers) {
         headerXml.append("left");
-    } else if (audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignCenter)) {
+    } else if (audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignHCenter)) {
         headerXml.append("center");
     } else {
         headerXml.append("right");
@@ -967,7 +966,7 @@ void AbstractDocxExporter::Implementation::writeFooter(QtZipWriter* _zip,
     footerXml.append("<w:p><w:pPr><w:jc w:val=\"");
     if (audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignLeft) || !needPrintPageNumbers) {
         footerXml.append("left");
-    } else if (audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignCenter)) {
+    } else if (audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignHCenter)) {
         footerXml.append("center");
     } else {
         footerXml.append("right");

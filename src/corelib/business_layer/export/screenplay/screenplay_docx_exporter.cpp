@@ -51,12 +51,17 @@ void ScreenplayDocxExporter::processBlock(const TextCursor& _cursor,
             const auto sceneItem
                 = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
             const auto sceneNumber = sceneItem->number()->text + " ";
-            const QFontMetricsF fontMetrics(block.charFormat().font());
-            _documentXml.append(
-                QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"%3\" />")
-                    .arg(MeasurementHelper::pxToTwips(block.blockFormat().leftMargin()))
-                    .arg(MeasurementHelper::pxToTwips(block.blockFormat().rightMargin()))
-                    .arg(MeasurementHelper::pxToTwips(fontMetrics.horizontalAdvance(sceneNumber))));
+            const auto leftMargin = block.textDirection() == Qt::LeftToRight
+                ? block.blockFormat().leftMargin()
+                : block.blockFormat().rightMargin();
+            const auto rightMargin = block.textDirection() == Qt::LeftToRight
+                ? block.blockFormat().rightMargin()
+                : block.blockFormat().leftMargin();
+            _documentXml.append(QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"%3\" />")
+                                    .arg(MeasurementHelper::pxToTwips(leftMargin))
+                                    .arg(MeasurementHelper::pxToTwips(rightMargin))
+                                    .arg(MeasurementHelper::pxToTwips(TextHelper::fineTextWidthF(
+                                        sceneNumber, block.charFormat().font()))));
 
             auto cursor = _cursor;
             cursor.setPosition(block.position());
@@ -69,12 +74,17 @@ void ScreenplayDocxExporter::processBlock(const TextCursor& _cursor,
     else if (currentBlockType == TextParagraphType::Parenthetical && !block.text().isEmpty()) {
         const QLatin1String prefix("(");
         const QLatin1String postfix(")");
+        const auto leftMargin = block.textDirection() == Qt::LeftToRight
+            ? block.blockFormat().leftMargin()
+            : block.blockFormat().rightMargin();
+        const auto rightMargin = block.textDirection() == Qt::LeftToRight
+            ? block.blockFormat().rightMargin()
+            : block.blockFormat().leftMargin();
         _documentXml.append(
             QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"%3\" />")
-                .arg(MeasurementHelper::pxToTwips(block.blockFormat().leftMargin()))
+                .arg(MeasurementHelper::pxToTwips(leftMargin))
                 .arg(MeasurementHelper::pxToTwips(
-                    block.blockFormat().rightMargin()
-                    - TextHelper::fineTextWidthF(postfix, block.charFormat().font())))
+                    rightMargin - TextHelper::fineTextWidthF(postfix, block.charFormat().font())))
                 .arg(MeasurementHelper::pxToTwips(
                     TextHelper::fineTextWidthF(prefix, block.charFormat().font()))));
 
