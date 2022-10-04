@@ -128,7 +128,7 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
     //
     std::function<void(const TextModelItem*)> includeInReport;
     includeInReport = [&includeInReport, &scenes, &lastScene, &characters, &rxCharacterFinder,
-                       textItemPage](const TextModelItem* _item) {
+                       textItemPage, invalidPage](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
