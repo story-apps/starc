@@ -717,10 +717,37 @@ void ProjectManager::Implementation::removeVersion(const QModelIndex& _itemIndex
             }
 
             //
-            // Если таки хочет, то удаляем версию
+            // Если таки хочет, то сперва выберем другой документ для редактирования
             //
+            if ((view.active->currentVersion() - 1) == _versionIndex) {
+                //
+                // ... если удалена последняя версия, то покажем текущую
+                //
+                if (_versionIndex == 0) {
+                    q->showViewForVersion(item);
+                }
+                //
+                // ... если удалена не последняя, то покажем предыдущую
+                //
+                else {
+                    q->showViewForVersion(item->versions().at(_versionIndex - 1));
+                }
+                //
+                // ... уменьшим на один индекс вкладки выбранной версии
+                //
+                view.active->setCurrentVersion(_versionIndex);
+            }
+            //
+            // ... а потом собственно удалим заданную версию
+            //
+            const auto documentUuid = item->versions().at(_versionIndex)->uuid();
+            auto document
+                = DataStorageLayer::StorageFacade::documentStorage()->document(documentUuid);
+            modelsFacade.removeModelFor(document);
+            DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
             projectStructureModel->removeItemVersion(item, _versionIndex);
             view.active->setDocumentVersions(item->versions());
+            emit q->documentRemoved(documentUuid);
         });
     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }

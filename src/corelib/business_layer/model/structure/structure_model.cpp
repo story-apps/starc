@@ -1078,10 +1078,6 @@ void StructureModel::removeItemVersion(StructureModelItem* _item, int _versionIn
     const auto itemIndex = indexForItem(_item);
     _item->removeVersion(_versionIndex);
     emit dataChanged(itemIndex, itemIndex);
-
-    //
-    // TODO: Удалить документ из базы данных
-    //
 }
 
 void StructureModel::setNavigatorAvailableFor(const QModelIndex& _index, bool isAvailable)
