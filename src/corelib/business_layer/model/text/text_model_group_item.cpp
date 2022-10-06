@@ -484,35 +484,35 @@ QByteArray TextModelGroupItem::xmlHeader(bool _clearUuid) const
 
 void TextModelGroupItem::copyFrom(TextModelItem* _item)
 {
-    if (_item == nullptr || type() != _item->type()) {
+    if (_item == nullptr || type() != _item->type() || subtype() != _item->subtype()) {
         Q_ASSERT(false);
         return;
     }
 
-    auto sceneItem = static_cast<TextModelGroupItem*>(_item);
-    d->uuid = sceneItem->d->uuid;
-    d->isOmited = sceneItem->d->isOmited;
-    d->number = sceneItem->d->number;
-    d->color = sceneItem->d->color;
-    d->title = sceneItem->title();
-    d->stamp = sceneItem->d->stamp;
+    auto groupItem = static_cast<TextModelGroupItem*>(_item);
+    d->uuid = groupItem->d->uuid;
+    d->isOmited = groupItem->d->isOmited;
+    d->number = groupItem->d->number;
+    d->color = groupItem->d->color;
+    d->title = groupItem->title();
+    d->stamp = groupItem->d->stamp;
 }
 
 bool TextModelGroupItem::isEqual(TextModelItem* _item) const
 {
-    if (_item == nullptr || type() != _item->type()) {
+    if (_item == nullptr || type() != _item->type() || subtype() != _item->subtype()) {
         return false;
     }
 
-    const auto sceneItem = static_cast<TextModelGroupItem*>(_item);
-    return d->uuid == sceneItem->d->uuid
-        && d->isOmited == sceneItem->d->isOmited
+    const auto groupItem = static_cast<TextModelGroupItem*>(_item);
+    return d->uuid == groupItem->d->uuid
+        && d->isOmited == groupItem->d->isOmited
         //
         // TODO: тут нужно сравнивать, только когда номера зафиксированы
         //
         //            && d->number == sceneItem->d->number
-        && d->color == sceneItem->d->color && d->title == sceneItem->d->title
-        && d->stamp == sceneItem->d->stamp;
+        && d->color == groupItem->d->color && d->title == groupItem->d->title
+        && d->stamp == groupItem->d->stamp;
 }
 
 void TextModelGroupItem::setHeading(const QString& _heading)

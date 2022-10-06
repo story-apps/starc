@@ -323,7 +323,7 @@ QByteArray TextModelFolderItem::xmlHeader(bool _clearUuid) const
 
 void TextModelFolderItem::copyFrom(TextModelItem* _item)
 {
-    if (_item == nullptr || type() != _item->type()) {
+    if (_item == nullptr || type() != _item->type() || subtype() != _item->subtype()) {
         Q_ASSERT(false);
         return;
     }
@@ -336,7 +336,7 @@ void TextModelFolderItem::copyFrom(TextModelItem* _item)
 
 bool TextModelFolderItem::isEqual(TextModelItem* _item) const
 {
-    if (_item == nullptr || type() != _item->type()) {
+    if (_item == nullptr || type() != _item->type() || subtype() != _item->subtype()) {
         return false;
     }
 

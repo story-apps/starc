@@ -83,7 +83,7 @@ QVariant ScreenplayTextModelSceneItem::data(int _role) const
 
 void ScreenplayTextModelSceneItem::copyFrom(TextModelItem* _item)
 {
-    if (_item == nullptr || type() != _item->type()) {
+    if (_item == nullptr || type() != _item->type() || subtype() != _item->subtype()) {
         Q_ASSERT(false);
         return;
     }
@@ -96,7 +96,7 @@ void ScreenplayTextModelSceneItem::copyFrom(TextModelItem* _item)
 
 bool ScreenplayTextModelSceneItem::isEqual(TextModelItem* _item) const
 {
-    if (_item == nullptr || type() != _item->type()) {
+    if (_item == nullptr || type() != _item->type() || subtype() != _item->subtype()) {
         return false;
     }
 
