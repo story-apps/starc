@@ -623,8 +623,11 @@ void TextBlockStyle::updateLineHeight()
 
 void TextBlockStyle::updateTopMargin()
 {
-    m_blockFormat.setTopMargin(m_blockFormat.lineHeight() * m_linesBefore
-                               + MeasurementHelper::mmToPx(m_margins.top()));
+    m_blockFormat.setTopMargin(m_blockFormat.pageBreakPolicy()
+                                       == QTextFormat::PageBreak_AlwaysBefore
+                                   ? 0.0
+                                   : (m_blockFormat.lineHeight() * m_linesBefore
+                                      + MeasurementHelper::mmToPx(m_margins.top())));
     m_blockFormatOnHalfPage.setTopMargin(m_blockFormat.topMargin());
 }
 
