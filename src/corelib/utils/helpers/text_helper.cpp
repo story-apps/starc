@@ -53,7 +53,6 @@ static void initFontMetrics()
     // Значения высоты шрифта из файла самого шрифта, платформы тут могут выдавать разные значения
     //
     constexpr auto courierNewHeight = 2320.0;
-    constexpr auto courierPrimeHeight = 2060.0;
 
     //
     // Отстраиваем параметры по Courier New, а все остальные адаптируем исходя из этой настройки
@@ -75,6 +74,7 @@ static void initFontMetrics()
     //
     // Высчитываем дельту для Courier Prime
     //
+    constexpr auto courierPrimeHeight = 2060.0;
     QFont courierPrimeFont("Courier Prime");
     courierPrimeFont.setPixelSize(MeasurementHelper::ptToPx(12));
     QFontMetricsF courierPrimeMetrics(courierPrimeFont);
@@ -88,6 +88,24 @@ static void initFontMetrics()
         //
         - courierPrimeMetrics.lineSpacing();
     sFontToLineSpacing["Courier Prime"] = courierPrimeDelta;
+
+    //
+    // Высчитываем дельту для Arial
+    //
+    constexpr auto arialHeight = 2370.0;
+    QFont arialFont("Arial");
+    arialFont.setPixelSize(MeasurementHelper::ptToPx(12));
+    QFontMetricsF arialMetrics(arialFont);
+    qreal arialDelta =
+        //
+        // ... такой Line Spacing должен быть у Arial
+        //
+        courierNewLineSpacing * (arialHeight / courierNewHeight)
+        //
+        // ... вычитая из него Line Spacing из метрики, получим дельту
+        //
+        - arialMetrics.lineSpacing();
+    sFontToLineSpacing["Arial"] = arialDelta;
 }
 } // namespace
 
