@@ -54,4 +54,9 @@ public:
      * @brief Получить цветовой образ заданного текста
      */
     static QColor forText(const QString& _text);
+
+    /**
+     * @brief Получить цвет для заданного числа
+     */
+    static QColor forNumber(int _number);
 };

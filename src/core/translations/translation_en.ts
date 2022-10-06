@@ -213,7 +213,7 @@
         <translation>Text</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="981"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="984"/>
         <source>Copy of </source>
         <translation>Copy of </translation>
     </message>
@@ -538,6 +538,34 @@
     </message>
 </context>
 <context>
+    <name>BusinessLayer::ScreenplayCastReport</name>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="244"/>
+        <source>Character name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="248"/>
+        <source>Total dialogues</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="252"/>
+        <source>Speaking scenes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="256"/>
+        <source>Nonspeaking scenes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="260"/>
+        <source>Total scenes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BusinessLayer::ScreenplayDictionariesModel</name>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="283"/>
@@ -676,45 +704,111 @@
     </message>
 </context>
 <context>
+    <name>BusinessLayer::ScreenplayGenderReport</name>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="266"/>
+        <source>Male</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="267"/>
+        <source>Female</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="268"/>
+        <source>Other</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="270"/>
+        <source>Undefined</source>
+        <translation type="unfinished">Undefined</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="282"/>
+        <source>Gender</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="286"/>
+        <source>Occurrences</source>
+        <translation type="unfinished">Occurrences</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="290"/>
+        <source>Percents</source>
+        <translation type="unfinished">Percents</translation>
+    </message>
+</context>
+<context>
+    <name>BusinessLayer::ScreenplaySceneReport</name>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="265"/>
+        <source>Scene/characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="269"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="273"/>
+        <source>Page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="277"/>
+        <source>Characters</source>
+        <translation type="unfinished">Characters</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="281"/>
+        <source>Duration</source>
+        <translation type="unfinished">Duration</translation>
+    </message>
+</context>
+<context>
     <name>BusinessLayer::ScreenplaySummaryReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="257"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="259"/>
         <source>Paragraph</source>
         <translation>Paragraph</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="261"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="263"/>
         <source>Words</source>
         <translation>Words</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="265"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="326"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="387"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="451"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="267"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="328"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="389"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="453"/>
         <source>Occurrences</source>
         <translation>Occurrences</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="269"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="330"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="391"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="455"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="271"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="332"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="393"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="457"/>
         <source>Percents</source>
         <translation>Percents</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="322"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="324"/>
         <source>Scene time</source>
         <translation>Scene time</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="383"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="385"/>
         <source>Scene intro</source>
         <translation>Scene intro</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="447"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="449"/>
         <source>Character type</source>
         <translation>Character type</translation>
     </message>
@@ -1007,23 +1101,23 @@
 <context>
     <name>BusinessLogic::ScreenplaySummaryReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="308"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="369"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="310"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="371"/>
         <source>[UNDEFINED]</source>
         <translation>[UNDEFINED]</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="434"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="436"/>
         <source>More then 10 dialogues</source>
         <translation>More then 10 dialogues</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="438"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="440"/>
         <source>About 10 dialogues</source>
         <translation>About 10 dialogues</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="442"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="444"/>
         <source>Nonspeaking</source>
         <translation>Nonspeaking</translation>
     </message>
@@ -1870,7 +1964,7 @@
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="479"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1556"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1592"/>
         <source>Create new draft</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1900,14 +1994,14 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="825"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="852"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Do you really want to permanently remove document?</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="705"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="826"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1087"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="853"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1114"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -1928,89 +2022,89 @@
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="706"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="827"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1088"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="854"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1115"/>
         <source>Yes, remove</source>
         <translation>Yes, remove</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="901"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="928"/>
         <source>Characters from the text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="911"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="938"/>
         <source>Characters that are not found in the text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="924"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="951"/>
         <source>Save only characters from the text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="925"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="952"/>
         <source>Save all characters</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="926"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1029"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="953"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1056"/>
         <source>Change nothing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1004"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1031"/>
         <source>Locations from the text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1014"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1041"/>
         <source>Locations that are not found in the text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1027"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1054"/>
         <source>Save only locations from the text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1028"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1055"/>
         <source>Save all locations</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1086"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1113"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Do you really want to permanently remove all documents from the recycle bin?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1570"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1606"/>
         <source>Edit</source>
         <translation>Edit</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1580"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1616"/>
         <source>Remove</source>
         <translation>Remove</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2241"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2277"/>
         <source>Title page</source>
         <translation>Title page</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2243"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2279"/>
         <source>Synopsis</source>
         <translation>Synopsis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2255"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2291"/>
         <source>Treatment</source>
         <translation>Treatment</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2246"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2282"/>
         <source>Screenplay</source>
         <translation>Screenplay</translation>
     </message>
@@ -2025,7 +2119,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2249"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2285"/>
         <source>Statistics</source>
         <translation>Statistics</translation>
     </message>
@@ -2111,6 +2205,14 @@
         <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="107"/>
         <source>Upgrade</source>
         <translation type="unfinished">Upgrade</translation>
+    </message>
+</context>
+<context>
+    <name>ManagementLayer::ScreenplayStatisticsStructureManager</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_manager.cpp" line="130"/>
+        <source>Statistics</source>
+        <translation type="unfinished">Statistics</translation>
     </message>
 </context>
 <context>
@@ -3080,32 +3182,32 @@ from 2 Gb</translation>
 <context>
     <name>Ui::AudioplayStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="232"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="234"/>
         <source>Duration</source>
         <translation>Duration</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="233"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="235"/>
         <source>Pages</source>
         <translation>Pages</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="234"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="236"/>
         <source>Words</source>
         <translation>Words</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="235"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="237"/>
         <source>Characters with/without spaces</source>
         <translation>Characters with/without spaces</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="237"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="239"/>
         <source>Text statistics</source>
         <translation>Text statistics</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="238"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="240"/>
         <source>Characters statistics</source>
         <translation>Characters statistics</translation>
     </message>
@@ -3887,27 +3989,27 @@ from 2 Gb</translation>
 <context>
     <name>Ui::ComicBookStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="211"/>
+        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="213"/>
         <source>Pages</source>
         <translation>Pages</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="212"/>
+        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="214"/>
         <source>Panels</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="213"/>
+        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="215"/>
         <source>Words</source>
         <translation>Words</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="214"/>
+        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="216"/>
         <source>Characters with/without spaces</source>
         <translation>Characters with/without spaces</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="216"/>
+        <location filename="../management_layer/plugins/comic_book_statistics/comic_book_statistics_view.cpp" line="218"/>
         <source>Text statistics</source>
         <translation>Text statistics</translation>
     </message>
@@ -6712,6 +6814,47 @@ from 2 Gb</translation>
     </message>
 </context>
 <context>
+    <name>Ui::ScreenplayGenderReportView</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="202"/>
+        <source>Does not pass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="202"/>
+        <source>Passed %n time(s)</source>
+        <translation type="unfinished">
+            <numerusform>Passed %n time</numerusform>
+            <numerusform>Passed %n times</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="245"/>
+        <source>Bechdel test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="246"/>
+        <source>Reverse Bechdel test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="248"/>
+        <source>Scenes statistics</source>
+        <translation type="unfinished">Scenes statistics</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="249"/>
+        <source>Dialogues statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="250"/>
+        <source>Characters</source>
+        <translation type="unfinished">Characters</translation>
+    </message>
+</context>
+<context>
     <name>Ui::ScreenplayInformationView</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="212"/>
@@ -6823,46 +6966,129 @@ from 2 Gb</translation>
     </message>
 </context>
 <context>
+    <name>Ui::ScreenplayStatisticsStructureView</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="139"/>
+        <source>Reports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="141"/>
+        <source>Summary statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="142"/>
+        <source>Scene report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="143"/>
+        <source>Location report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="144"/>
+        <source>Cast report</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="145"/>
+        <source>Gender analisys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="147"/>
+        <source>Plots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="149"/>
+        <source>Story structure analisys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="150"/>
+        <source>Characters activity</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ui::ScreenplayStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="283"/>
         <source>Duration</source>
-        <translation>Duration</translation>
+        <translation type="vanished">Duration</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="284"/>
         <source>Pages</source>
-        <translation>Pages</translation>
+        <translation type="vanished">Pages</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="285"/>
         <source>Words</source>
-        <translation>Words</translation>
+        <translation type="vanished">Words</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="286"/>
         <source>Characters with/without spaces</source>
-        <translation>Characters with/without spaces</translation>
+        <translation type="vanished">Characters with/without spaces</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="288"/>
         <source>Text statistics</source>
-        <translation>Text statistics</translation>
+        <translation type="vanished">Text statistics</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="289"/>
         <source>Scenes statistics</source>
-        <translation>Scenes statistics</translation>
+        <translation type="vanished">Scenes statistics</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="290"/>
         <source>Locations statistics</source>
-        <translation>Locations statistics</translation>
+        <translation type="vanished">Locations statistics</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="291"/>
         <source>Characters statistics</source>
-        <translation>Characters statistics</translation>
+        <translation type="vanished">Characters statistics</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScreenplaySummaryReportView</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="279"/>
+        <source>Duration</source>
+        <translation type="unfinished">Duration</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="280"/>
+        <source>Pages</source>
+        <translation type="unfinished">Pages</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="281"/>
+        <source>Words</source>
+        <translation type="unfinished">Words</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="282"/>
+        <source>Characters with/without spaces</source>
+        <translation type="unfinished">Characters with/without spaces</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="284"/>
+        <source>Text statistics</source>
+        <translation type="unfinished">Text statistics</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="285"/>
+        <source>Scenes statistics</source>
+        <translation type="unfinished">Scenes statistics</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="286"/>
+        <source>Locations statistics</source>
+        <translation type="unfinished">Locations statistics</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_summary_report_view.cpp" line="287"/>
+        <source>Characters statistics</source>
+        <translation type="unfinished">Characters statistics</translation>
     </message>
 </context>
 <context>
@@ -7244,37 +7470,37 @@ from 2 Gb</translation>
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1376"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1384"/>
         <source>Merge paragraph</source>
         <translation>Merge paragraph</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1379"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1387"/>
         <source>Split paragraph</source>
         <translation>Split paragraph</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1415"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1423"/>
         <source>Bookmark</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1419"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1427"/>
         <source>Add</source>
         <translation>Add</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1425"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1433"/>
         <source>Edit</source>
         <translation>Edit</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1431"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1439"/>
         <source>Remove</source>
         <translation>Remove</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1438"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1446"/>
         <source>Show/hide list</source>
         <translation></translation>
     </message>
@@ -7793,57 +8019,57 @@ from 2 Gb</translation>
 <context>
     <name>Ui::SettingsNavigator</name>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="161"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="158"/>
         <source>Application settings</source>
         <translation>Application settings</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="164"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="161"/>
         <source>User interface</source>
         <translation>User interface</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="167"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="164"/>
         <source>Save changes &amp; backups</source>
         <translation>Save changes &amp; backups</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="170"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="167"/>
         <source>Text editing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="171"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="168"/>
         <source>Components</source>
         <translation>Components</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="172"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="169"/>
         <source>Simple text</source>
         <translation>Simple text</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="173"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="170"/>
         <source>Screenplay</source>
         <translation>Screenplay</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="174"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="171"/>
         <source>Comic book</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="175"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="172"/>
         <source>Audioplay</source>
         <translation>Audio drama</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="176"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="173"/>
         <source>Stageplay</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_navigator.cpp" line="177"/>
+        <location filename="../ui/settings/settings_navigator.cpp" line="174"/>
         <source>Shortcuts</source>
         <translation>Shortcuts</translation>
     </message>
@@ -9350,27 +9576,27 @@ If you work with no interruptions it saves the project every 3 minutes.</transla
 <context>
     <name>Ui::StageplayStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="224"/>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="226"/>
         <source>Pages</source>
         <translation>Pages</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="225"/>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="227"/>
         <source>Words</source>
         <translation>Words</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="226"/>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="228"/>
         <source>Characters with/without spaces</source>
         <translation>Characters with/without spaces</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="228"/>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="230"/>
         <source>Text statistics</source>
         <translation>Text statistics</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="229"/>
+        <location filename="../management_layer/plugins/stageplay_statistics/stageplay_statistics_view.cpp" line="231"/>
         <source>Characters statistics</source>
         <translation>Characters statistics</translation>
     </message>
@@ -9563,48 +9789,85 @@ If you work with no interruptions it saves the project every 3 minutes.</transla
 <context>
     <name>Ui::SubscriptionView</name>
     <message>
-        <location filename="../ui/notifications/subscription_view.cpp" line="111"/>
+        <location filename="../ui/notifications/subscription_view.cpp" line="98"/>
+        <location filename="../ui/notifications/subscription_view.cpp" line="107"/>
         <source>Subscription ends</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/notifications/subscription_view.cpp" line="111"/>
+        <location filename="../ui/notifications/subscription_view.cpp" line="87"/>
         <source>Subscription ended</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/notifications/subscription_view.cpp" line="115"/>
+        <location filename="../ui/notifications/subscription_view.cpp" line="79"/>
+        <source>Cloud projects removal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/notifications/subscription_view.cpp" line="80"/>
+        <source>Your Story Architect cloud projects will be removed yesterday if you don&apos;t renew TEAm subscription.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/notifications/subscription_view.cpp" line="89"/>
+        <source>Your PRO version subscription is expired. Account is switched to the FREE version.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/notifications/subscription_view.cpp" line="100"/>
         <source>Your PRO version subscription expires today.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/notifications/subscription_view.cpp" line="116"/>
-        <source>Your PRO version subscription expires in %n day(s)</source>
+        <location filename="../ui/notifications/subscription_view.cpp" line="109"/>
+        <source>Your PRO version subscription expires in %n day(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/notifications/subscription_view.cpp" line="110"/>
+        <source>Your TEAM version subscription expires in %n day(s).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../ui/notifications/subscription_view.cpp" line="116"/>
+        <location filename="../ui/notifications/subscription_view.cpp" line="128"/>
+        <source>Subscription renewed</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="118"/>
-        <source>Your PRO version subscription is expired. Account is switched to the FREE Version.</source>
+        <source>Your PRO version subscription active until %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/notifications/subscription_view.cpp" line="123"/>
+        <location filename="../ui/notifications/subscription_view.cpp" line="120"/>
+        <source>Your TEAM version subscription active until %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/notifications/subscription_view.cpp" line="130"/>
+        <source>Your PRO version lifetime subscription activated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/notifications/subscription_view.cpp" line="131"/>
+        <source>Your TEAM version lifetime subscription activated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/notifications/subscription_view.cpp" line="101"/>
         <source>Your TEAM version subscription expires today.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message numerus="yes">
-        <location filename="../ui/notifications/subscription_view.cpp" line="124"/>
-        <source>Your TEAM version subscription expires in %n day(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../ui/notifications/subscription_view.cpp" line="126"/>
+        <location filename="../ui/notifications/subscription_view.cpp" line="91"/>
         <source>Your TEAM version subscription is expired. Your cloud projects will be stored for 30 days and then removed if you don&apos;t reactivate TEAM subscription.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9623,7 +9886,7 @@ If you work with no interruptions it saves the project every 3 minutes.</transla
         </translation>
     </message>
     <message>
-        <location filename="../ui/notifications/subscription_view.cpp" line="130"/>
+        <location filename="../ui/notifications/subscription_view.cpp" line="137"/>
         <source>Renew</source>
         <translation>Renew</translation>
     </message>

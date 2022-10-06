@@ -8,6 +8,7 @@
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QCoreApplication>
@@ -17,41 +18,6 @@
 #include <set>
 
 namespace BusinessLayer {
-
-namespace {
-
-QColor makeColor(int _index)
-{
-    const int kMax = 9;
-    while (_index > kMax) {
-        _index = _index % kMax;
-    }
-    switch (_index) {
-    default:
-    case 0:
-        return "#41AEFF";
-    case 1:
-        return "#B2E82A";
-    case 2:
-        return "#1E844F";
-    case 3:
-        return "#3D2AA7";
-    case 4:
-        return "#E64C4D";
-    case 5:
-        return "#F8B50D";
-    case 6:
-        return "#A245E0";
-    case 7:
-        return "#41D089";
-    case 8:
-        return "#6843FE";
-    case 9:
-        return "#EB0E4D";
-    }
-}
-
-} // namespace
 
 class ScreenplaySummaryReport::Implementation
 {
@@ -280,7 +246,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
 
             auto paragraphItem = createModelItem(toDisplayString(paragraphType));
             paragraphItem->setData(u8"\U000F0766", Qt::DecorationRole);
-            paragraphItem->setData(makeColor(index), Qt::DecorationPropertyRole);
+            paragraphItem->setData(ColorHelper::forNumber(index), Qt::DecorationPropertyRole);
 
             d->textInfoModel->appendRow(
                 { paragraphItem, createModelItem(QString::number(paragraphCounters.words)),
@@ -345,7 +311,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
                                           "BusinessLogic::ScreenplaySummaryReport", "[UNDEFINED]")
                                                      : time);
                 timeName->setData(u8"\U000F0766", Qt::DecorationRole);
-                timeName->setData(makeColor(index++), Qt::DecorationPropertyRole);
+                timeName->setData(ColorHelper::forNumber(index++), Qt::DecorationPropertyRole);
 
                 d->scenesInfoModel->appendRow(
                     { timeName, createModelItem(QString::number(count)),
@@ -406,7 +372,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
                                           "BusinessLogic::ScreenplaySummaryReport", "[UNDEFINED]")
                                                       : place);
                 placeName->setData(u8"\U000F0766", Qt::DecorationRole);
-                placeName->setData(makeColor(index++), Qt::DecorationPropertyRole);
+                placeName->setData(ColorHelper::forNumber(index++), Qt::DecorationPropertyRole);
 
                 d->locationsInfoModel->appendRow(
                     { placeName, createModelItem(QString::number(count)),
@@ -460,7 +426,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
                                          &totalCount, &index](const QString& _name, int _count) {
             auto characterItem = createModelItem(_name);
             characterItem->setData(u8"\U000F0766", Qt::DecorationRole);
-            characterItem->setData(makeColor(index++), Qt::DecorationPropertyRole);
+            characterItem->setData(ColorHelper::forNumber(index++), Qt::DecorationPropertyRole);
 
             d->charactersInfoModel->appendRow(
                 { characterItem, createModelItem(QString::number(_count)),

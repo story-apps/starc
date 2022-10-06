@@ -174,6 +174,7 @@ SOURCES += \
     business_layer/reports/audioplay/audioplay_summary_report.cpp \
     business_layer/reports/comic_book/comic_book_summary_report.cpp \
     business_layer/reports/screenplay/screenplay_cast_report.cpp \
+    business_layer/reports/screenplay/screenplay_gender_report.cpp \
     business_layer/reports/screenplay/screenplay_scene_report.cpp \
     business_layer/reports/screenplay/screenplay_summary_report.cpp \
     business_layer/reports/stageplay/stageplay_summary_report.cpp \
@@ -445,6 +446,7 @@ HEADERS += \
     business_layer/reports/audioplay/audioplay_summary_report.h \
     business_layer/reports/comic_book/comic_book_summary_report.h \
     business_layer/reports/screenplay/screenplay_cast_report.h \
+    business_layer/reports/screenplay/screenplay_gender_report.h \
     business_layer/reports/screenplay/screenplay_scene_report.h \
     business_layer/reports/screenplay/screenplay_summary_report.h \
     business_layer/reports/stageplay/stageplay_summary_report.h \

@@ -69,3 +69,34 @@ QColor ColorHelper::forText(const QString& _text)
     hash = hash % 360;
     return QColor::fromHsl(hash, 255 * 0.4, 255 * 0.6);
 }
+
+QColor ColorHelper::forNumber(int _number)
+{
+    const int kMax = 9;
+    while (_number > kMax) {
+        _number = _number % kMax;
+    }
+    switch (_number) {
+    default:
+    case 0:
+        return "#41AEFF";
+    case 1:
+        return "#B2E82A";
+    case 2:
+        return "#1E844F";
+    case 3:
+        return "#3D2AA7";
+    case 4:
+        return "#E64C4D";
+    case 5:
+        return "#F8B50D";
+    case 6:
+        return "#A245E0";
+    case 7:
+        return "#41D089";
+    case 8:
+        return "#6843FE";
+    case 9:
+        return "#EB0E4D";
+    }
+}
