@@ -196,6 +196,10 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
                 }
 
                 case TextParagraphType::Action: {
+                    if (rxCharacterFinder.pattern().isEmpty()) {
+                        break;
+                    }
+
                     auto match = rxCharacterFinder.match(textItem->text());
                     while (match.hasMatch()) {
                         const QString character = TextHelper::smartToUpper(match.captured(2));
