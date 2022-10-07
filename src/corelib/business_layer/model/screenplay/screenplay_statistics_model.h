@@ -10,6 +10,9 @@ class ScreenplayGenderReport;
 class ScreenplayLocationReport;
 class ScreenplaySceneReport;
 class ScreenplaySummaryReport;
+//
+class ScreenplayStructureAnalysisPlot;
+//
 class ScreenplayTextModel;
 
 /**
@@ -58,6 +61,11 @@ public:
      * @brief Гнедерный анализ
      */
     const ScreenplayGenderReport& genderReport() const;
+
+    /**
+     * @brief График структурного анализа
+     */
+    const ScreenplayStructureAnalysisPlot& structureAnalisysPlot() const;
 
 protected:
     /**

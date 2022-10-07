@@ -2,6 +2,7 @@
 
 #include "text/screenplay_text_model.h"
 
+#include <business_layer/plots/screenplay/screenplay_structure_analysis_plot.h>
 #include <business_layer/reports/screenplay/screenplay_cast_report.h>
 #include <business_layer/reports/screenplay/screenplay_gender_report.h>
 #include <business_layer/reports/screenplay/screenplay_location_report.h>
@@ -21,6 +22,8 @@ public:
     ScreenplayLocationReport locationReport;
     ScreenplayCastReport castReport;
     ScreenplayGenderReport genderReport;
+    //
+    ScreenplayStructureAnalysisPlot structureAnalysisPlot;
 };
 
 ScreenplayStatisticsModel::ScreenplayStatisticsModel(QObject* _parent)
@@ -54,6 +57,7 @@ void ScreenplayStatisticsModel::updateReports()
     d->castReport.build(d->textModel);
     d->locationReport.build(d->textModel);
     d->genderReport.build(d->textModel);
+    d->structureAnalysisPlot.build(d->textModel);
 }
 
 const ScreenplaySummaryReport& ScreenplayStatisticsModel::summaryReport() const
@@ -79,6 +83,11 @@ const ScreenplayCastReport& ScreenplayStatisticsModel::castReport() const
 const ScreenplayGenderReport& ScreenplayStatisticsModel::genderReport() const
 {
     return d->genderReport;
+}
+
+const ScreenplayStructureAnalysisPlot& ScreenplayStatisticsModel::structureAnalisysPlot() const
+{
+    return d->structureAnalysisPlot;
 }
 
 void ScreenplayStatisticsModel::initDocument()

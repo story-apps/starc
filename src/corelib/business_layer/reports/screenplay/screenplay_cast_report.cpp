@@ -14,7 +14,6 @@
 #include <QRegularExpression>
 #include <QStandardItemModel>
 
-#include <set>
 
 namespace BusinessLayer {
 

@@ -171,6 +171,7 @@ SOURCES += \
     business_layer/model/text/text_model_splitter_item.cpp \
     business_layer/model/text/text_model_text_item.cpp \
     business_layer/model/text/text_model_xml_writer.cpp \
+    business_layer/plots/screenplay/screenplay_structure_analysis_plot.cpp \
     business_layer/reports/audioplay/audioplay_summary_report.cpp \
     business_layer/reports/comic_book/comic_book_summary_report.cpp \
     business_layer/reports/screenplay/screenplay_cast_report.cpp \
@@ -255,6 +256,8 @@ SOURCES += \
     ui/widgets/label/label.cpp \
     ui/widgets/label/link_label.cpp \
     ui/widgets/pie/pie.cpp \
+    ui/widgets/plot/plot.cpp \
+    ui/widgets/plot/qcustomplot.cpp \
     ui/widgets/progress_bar/progress_bar.cpp \
     ui/widgets/radio_button/percent_radio_button.cpp \
     ui/widgets/radio_button/radio_button.cpp \
@@ -443,6 +446,8 @@ HEADERS += \
     business_layer/model/text/text_model_text_item.h \
     business_layer/model/text/text_model_xml.h \
     business_layer/model/text/text_model_xml_writer.h \
+    business_layer/plots/abstract_plot.h \
+    business_layer/plots/screenplay/screenplay_structure_analysis_plot.h \
     business_layer/reports/abstract_report.h \
     business_layer/reports/audioplay/audioplay_summary_report.h \
     business_layer/reports/comic_book/comic_book_summary_report.h \
@@ -531,6 +536,8 @@ HEADERS += \
     ui/widgets/label/label.h \
     ui/widgets/label/link_label.h \
     ui/widgets/pie/pie.h \
+    ui/widgets/plot/plot.h \
+    ui/widgets/plot/qcustomplot.h \
     ui/widgets/progress_bar/progress_bar.h \
     ui/widgets/radio_button/percent_radio_button.h \
     ui/widgets/radio_button/radio_button.h \
