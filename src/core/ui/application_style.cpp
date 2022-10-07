@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <QAbstractItemView>
 #include <QPainter>
 #include <QStyleOption>
 
@@ -154,6 +155,21 @@ void ApplicationStyle::drawPrimitive(QStyle::PrimitiveElement _element, const QS
         // Если у элемента есть дети, рисуем сам индикатор
         //
         if (_option->state & State_Children) {
+            //
+            // Если для элемент задан цвет фона используем его и для цвета фона индикатора
+            //
+            if (!_option->state.testFlag(State_Selected)
+                && !_option->state.testFlag(State_MouseOver)) {
+                const auto itemView = qobject_cast<const QAbstractItemView*>(_widget);
+                if (itemView != nullptr) {
+                    const auto index = itemView->indexAt(_option->rect.center());
+                    if (index.isValid() && index.data(Qt::BackgroundRole).isValid()) {
+                        _painter->fillRect(_option->rect,
+                                           index.data(Qt::BackgroundRole).value<QColor>());
+                    }
+                }
+            }
+
             //
             // Кисть для рисования треугольника
             //

@@ -42,8 +42,12 @@ void TreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option
     //
     _painter->setRenderHint(QPainter::Antialiasing, true);
 
-    auto backgroundColor = opt.palette.color(QPalette::Base);
-    auto textColor = opt.palette.color(QPalette::Text);
+    auto backgroundColor = _index.data(Qt::BackgroundRole).isValid()
+        ? _index.data(Qt::BackgroundRole).value<QColor>()
+        : opt.palette.color(QPalette::Base);
+    auto textColor = _index.data(Qt::ForegroundRole).isValid()
+        ? _index.data(Qt::ForegroundRole).value<QColor>()
+        : opt.palette.color(QPalette::Text);
     const auto isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
 
     //

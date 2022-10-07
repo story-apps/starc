@@ -7,6 +7,7 @@ namespace BusinessLayer {
 
 class ScreenplayCastReport;
 class ScreenplayGenderReport;
+class ScreenplayLocationReport;
 class ScreenplaySceneReport;
 class ScreenplaySummaryReport;
 class ScreenplayTextModel;
@@ -42,6 +43,11 @@ public:
      * @brief Отчёт по сценам
      */
     const ScreenplaySceneReport& sceneReport() const;
+
+    /**
+     * @brief Отчёт по локациям
+     */
+    const ScreenplayLocationReport& locationReport() const;
 
     /**
      * @brief Отчёт по персонажам

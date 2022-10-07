@@ -4,6 +4,7 @@
 
 #include <business_layer/reports/screenplay/screenplay_cast_report.h>
 #include <business_layer/reports/screenplay/screenplay_gender_report.h>
+#include <business_layer/reports/screenplay/screenplay_location_report.h>
 #include <business_layer/reports/screenplay/screenplay_scene_report.h>
 #include <business_layer/reports/screenplay/screenplay_summary_report.h>
 
@@ -17,6 +18,7 @@ public:
 
     ScreenplaySummaryReport summaryReport;
     ScreenplaySceneReport sceneReport;
+    ScreenplayLocationReport locationReport;
     ScreenplayCastReport castReport;
     ScreenplayGenderReport genderReport;
 };
@@ -50,6 +52,7 @@ void ScreenplayStatisticsModel::updateReports()
     d->summaryReport.build(d->textModel);
     d->sceneReport.build(d->textModel);
     d->castReport.build(d->textModel);
+    d->locationReport.build(d->textModel);
     d->genderReport.build(d->textModel);
 }
 
@@ -61,6 +64,11 @@ const ScreenplaySummaryReport& ScreenplayStatisticsModel::summaryReport() const
 const ScreenplaySceneReport& ScreenplayStatisticsModel::sceneReport() const
 {
     return d->sceneReport;
+}
+
+const ScreenplayLocationReport& ScreenplayStatisticsModel::locationReport() const
+{
+    return d->locationReport;
 }
 
 const ScreenplayCastReport& ScreenplayStatisticsModel::castReport() const

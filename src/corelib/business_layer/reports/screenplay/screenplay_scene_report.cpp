@@ -10,6 +10,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/time_helper.h>
 
@@ -228,9 +229,12 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
     //
     // Формируем отчёт
     //
-    auto createModelItem = [](const QString& _text) {
+    auto createModelItem = [](const QString& _text, const QVariant& _backgroundColor = {}) {
         auto item = new QStandardItem(_text);
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        if (_backgroundColor.isValid()) {
+            item->setData(_backgroundColor, Qt::BackgroundRole);
+        }
         return item;
     };
     //
@@ -241,8 +245,10 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
     } else {
         d->sceneModel->clear();
     }
+    const auto titleBackgroundColor = QVariant::fromValue(ColorHelper::transparent(
+        Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::elevationEndOpacity()));
     for (const auto& scene : scenes) {
-        auto sceneItem = createModelItem(scene.name);
+        auto sceneItem = createModelItem(scene.name, titleBackgroundColor);
         for (const auto& character : scene.characters) {
             auto characterItem = createModelItem(
                 QString("%1 (%2)").arg(character.name, QString::number(character.totalDialogues)));
@@ -257,10 +263,10 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
 
         d->sceneModel->appendRow({
             sceneItem,
-            createModelItem(scene.number),
-            createModelItem(QString::number(scene.page)),
-            createModelItem(QString::number(scene.characters.size())),
-            createModelItem(TimeHelper::toString(scene.duration)),
+            createModelItem(scene.number, titleBackgroundColor),
+            createModelItem(QString::number(scene.page), titleBackgroundColor),
+            createModelItem(QString::number(scene.characters.size()), titleBackgroundColor),
+            createModelItem(TimeHelper::toString(scene.duration), titleBackgroundColor),
         });
     }
     //
