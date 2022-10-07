@@ -27,7 +27,6 @@ Plot::Plot(QWidget* _parent)
     : QCustomPlot(_parent)
     , d(new Implementation)
 {
-    setMouseTracking(true);
     setAttribute(Qt::WA_Hover);
 }
 
@@ -90,11 +89,12 @@ void Plot::paintEvent(QPaintEvent* _event)
                 //
                 // Определим область заголовка
                 //
-                QRect titleBoundingRect
-                    = QFontMetrics(Ui::DesignSystem::font().subtitle2()).boundingRect(infoTitle);
-                titleBoundingRect.moveTo(d->mousePos.x() + 20, d->mousePos.y());
-                titleBoundingRect.setBottom(titleBoundingRect.bottom()
-                                            + Ui::DesignSystem::layout().px12());
+                QRect titleBoundingRect(
+                    d->mousePos.x() + 20, d->mousePos.y(),
+                    TextHelper::fineTextWidthF(infoTitle, Ui::DesignSystem::font().subtitle2())
+                        + Ui::DesignSystem::layout().px24(),
+                    TextHelper::fineLineSpacing(Ui::DesignSystem::font().subtitle2())
+                        + Ui::DesignSystem::layout().px24());
 
                 //
                 // Определим область текста

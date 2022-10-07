@@ -9621,7 +9621,8 @@ void QCPAxis::wheelEvent(QWheelEvent *event)
   // Mouse range zooming interaction:
   if (!mParentPlot->interactions().testFlag(QCP::iRangeZoom) ||
       !mAxisRect->rangeZoom().testFlag(orientation()) ||
-      !mAxisRect->rangeZoomAxes(orientation()).contains(this))
+      !mAxisRect->rangeZoomAxes(orientation()).contains(this) ||
+      !event->modifiers().testFlag(Qt::ControlModifier))
   {
     event->ignore();
     return;
@@ -13625,7 +13626,6 @@ QCustomPlot::QCustomPlot(QWidget *parent) :
   mOpenGlAntialiasedElementsBackup(QCP::aeNone),
   mOpenGlCacheLabelsBackup(true)
 {
-  setAttribute(Qt::WA_NoMousePropagation);
   setAttribute(Qt::WA_OpaquePaintEvent);
   setFocusPolicy(Qt::ClickFocus);
   setMouseTracking(true);
@@ -15705,7 +15705,6 @@ void QCustomPlot::wheelEvent(QWheelEvent *event)
     if (event->isAccepted())
       break;
   }
-  event->accept(); // in case QCPLayerable reimplementation manipulates event accepted state. In QWidget event system, QCustomPlot wants to accept the event.
 }
 
 /*! \internal
@@ -18654,32 +18653,36 @@ void QCPAxisRect::wheelEvent(QWheelEvent *event)
 #endif
   
   // Mouse range zooming interaction:
-  if (mParentPlot->interactions().testFlag(QCP::iRangeZoom))
+  if (!mParentPlot->interactions().testFlag(QCP::iRangeZoom) ||
+      !event->modifiers().testFlag(Qt::ControlModifier))
   {
-    if (mRangeZoom != 0)
+      event->ignore();
+      return;
+  }
+
+  if (mRangeZoom != 0)
+  {
+    double factor;
+    double wheelSteps = delta/120.0; // a single step delta is +/-120 usually
+    if (mRangeZoom.testFlag(Qt::Horizontal))
     {
-      double factor;
-      double wheelSteps = delta/120.0; // a single step delta is +/-120 usually
-      if (mRangeZoom.testFlag(Qt::Horizontal))
+      factor = qPow(mRangeZoomFactorHorz, wheelSteps);
+      foreach (QPointer<QCPAxis> axis, mRangeZoomHorzAxis)
       {
-        factor = qPow(mRangeZoomFactorHorz, wheelSteps);
-        foreach (QPointer<QCPAxis> axis, mRangeZoomHorzAxis)
-        {
-          if (!axis.isNull())
-            axis->scaleRange(factor, axis->pixelToCoord(pos.x()));
-        }
+        if (!axis.isNull())
+          axis->scaleRange(factor, axis->pixelToCoord(pos.x()));
       }
-      if (mRangeZoom.testFlag(Qt::Vertical))
-      {
-        factor = qPow(mRangeZoomFactorVert, wheelSteps);
-        foreach (QPointer<QCPAxis> axis, mRangeZoomVertAxis)
-        {
-          if (!axis.isNull())
-            axis->scaleRange(factor, axis->pixelToCoord(pos.y()));
-        }
-      }
-      mParentPlot->replot();
     }
+    if (mRangeZoom.testFlag(Qt::Vertical))
+    {
+      factor = qPow(mRangeZoomFactorVert, wheelSteps);
+      foreach (QPointer<QCPAxis> axis, mRangeZoomVertAxis)
+      {
+        if (!axis.isNull())
+          axis->scaleRange(factor, axis->pixelToCoord(pos.y()));
+      }
+    }
+    mParentPlot->replot();
   }
 }
 /* end of 'src/layoutelements/layoutelement-axisrect.cpp' */

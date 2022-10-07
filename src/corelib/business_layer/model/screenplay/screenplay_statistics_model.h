@@ -11,6 +11,7 @@ class ScreenplayLocationReport;
 class ScreenplaySceneReport;
 class ScreenplaySummaryReport;
 //
+class ScreenplayCharactersActivityPlot;
 class ScreenplayStructureAnalysisPlot;
 //
 class ScreenplayTextModel;
@@ -66,6 +67,11 @@ public:
      * @brief График структурного анализа
      */
     const ScreenplayStructureAnalysisPlot& structureAnalisysPlot() const;
+
+    /**
+     * @brief График активности персонажей
+     */
+    const ScreenplayCharactersActivityPlot& charactersActivityPlot() const;
 
 protected:
     /**

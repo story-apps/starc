@@ -171,6 +171,7 @@ SOURCES += \
     business_layer/model/text/text_model_splitter_item.cpp \
     business_layer/model/text/text_model_text_item.cpp \
     business_layer/model/text/text_model_xml_writer.cpp \
+    business_layer/plots/screenplay/screenplay_characters_activity_plot.cpp \
     business_layer/plots/screenplay/screenplay_structure_analysis_plot.cpp \
     business_layer/reports/audioplay/audioplay_summary_report.cpp \
     business_layer/reports/comic_book/comic_book_summary_report.cpp \
@@ -447,6 +448,7 @@ HEADERS += \
     business_layer/model/text/text_model_xml.h \
     business_layer/model/text/text_model_xml_writer.h \
     business_layer/plots/abstract_plot.h \
+    business_layer/plots/screenplay/screenplay_characters_activity_plot.h \
     business_layer/plots/screenplay/screenplay_structure_analysis_plot.h \
     business_layer/reports/abstract_report.h \
     business_layer/reports/audioplay/audioplay_summary_report.h \

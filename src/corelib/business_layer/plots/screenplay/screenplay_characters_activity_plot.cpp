@@ -1,4 +1,4 @@
-#include "screenplay_structure_analysis_plot.h"
+#include "screenplay_characters_activity_plot.h"
 
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
@@ -20,7 +20,7 @@
 namespace BusinessLayer {
 
 
-class ScreenplayStructureAnalysisPlot::Implementation
+class ScreenplayCharactersActivityPlot::Implementation
 {
 public:
     Plot plot;
@@ -30,14 +30,14 @@ public:
 // ****
 
 
-ScreenplayStructureAnalysisPlot::ScreenplayStructureAnalysisPlot()
+ScreenplayCharactersActivityPlot::ScreenplayCharactersActivityPlot()
     : d(new Implementation)
 {
 }
 
-ScreenplayStructureAnalysisPlot::~ScreenplayStructureAnalysisPlot() = default;
+ScreenplayCharactersActivityPlot::~ScreenplayCharactersActivityPlot() = default;
 
-void ScreenplayStructureAnalysisPlot::build(QAbstractItemModel* _model) const
+void ScreenplayCharactersActivityPlot::build(QAbstractItemModel* _model) const
 {
     if (_model == nullptr) {
         return;
@@ -57,13 +57,11 @@ void ScreenplayStructureAnalysisPlot::build(QAbstractItemModel* _model) const
         int page = invalidPage;
         QString number;
         std::chrono::milliseconds duration = std::chrono::milliseconds{ 0 };
-        std::chrono::milliseconds actionDuration = std::chrono::milliseconds{ 0 };
-        std::chrono::milliseconds dialoguesDuration = std::chrono::milliseconds{ 0 };
         QSet<QString> characters;
-        int dialoguesCount = 0;
     };
     QVector<SceneData> scenes;
     SceneData lastScene;
+    QStringList characters;
 
     //
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
@@ -111,8 +109,8 @@ void ScreenplayStructureAnalysisPlot::build(QAbstractItemModel* _model) const
     // Собираем статистику
     //
     std::function<void(const TextModelItem*)> includeInReport;
-    includeInReport = [&includeInReport, &scenes, &lastScene, &rxCharacterFinder, textItemPage,
-                       invalidPage](const TextModelItem* _item) {
+    includeInReport = [&includeInReport, &scenes, &lastScene, &characters, &rxCharacterFinder,
+                       textItemPage, invalidPage](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
@@ -151,34 +149,34 @@ void ScreenplayStructureAnalysisPlot::build(QAbstractItemModel* _model) const
                         = ScreenplaySceneCharactersParser::characters(textItem->text());
                     for (const auto& character : sceneCharacters) {
                         lastScene.characters.insert(character);
+                        if (!characters.contains(character)) {
+                            characters.append(character);
+                        }
                     }
                     break;
                 }
 
                 case TextParagraphType::Character: {
-                    lastScene.dialoguesDuration += textItem->duration();
-                    lastScene.characters.insert(ScreenplayCharacterParser::name(textItem->text()));
-                    ++lastScene.dialoguesCount;
-                    break;
-                }
-
-                case TextParagraphType::Parenthetical:
-                case TextParagraphType::Dialogue:
-                case TextParagraphType::Lyrics: {
-                    lastScene.dialoguesDuration += textItem->duration();
+                    const auto character = ScreenplayCharacterParser::name(textItem->text());
+                    lastScene.characters.insert(character);
+                    if (!characters.contains(character)) {
+                        characters.append(character);
+                    }
                     break;
                 }
 
                 case TextParagraphType::Action: {
-                    lastScene.actionDuration += textItem->duration();
-
                     if (rxCharacterFinder.pattern().isEmpty()) {
                         break;
                     }
 
                     auto match = rxCharacterFinder.match(textItem->text());
                     while (match.hasMatch()) {
-                        lastScene.characters.insert(TextHelper::smartToUpper(match.captured(2)));
+                        const auto character = TextHelper::smartToUpper(match.captured(2));
+                        lastScene.characters.insert(character);
+                        if (!characters.contains(character)) {
+                            characters.append(character);
+                        }
 
                         //
                         // Ищем дальше
@@ -212,135 +210,71 @@ void ScreenplayStructureAnalysisPlot::build(QAbstractItemModel* _model) const
     // ... х - общий для всех
     auto x = initializedVector;
     // ... y
-    auto sceneChronY = initializedVector;
-    auto actionChronY = initializedVector;
-    auto dialogsChronY = initializedVector;
-    auto charactersCountY = initializedVector;
-    auto dialogsCountY = initializedVector;
+    QList<QVector<qreal>> charactersY;
+    for (int characterIndex = 0; characterIndex < characters.size(); ++characterIndex) {
+        charactersY.append({ std::numeric_limits<qreal>::quiet_NaN() });
+    }
     //
     const auto millisecondsInMinute = 60000.0;
     auto lastX = 0.0;
     QMap<qreal, QStringList> info;
     info.insert(lastX, {});
-    for (const auto& scene : scenes) {
+    for (int sceneIndex = 0; sceneIndex < scenes.size(); ++sceneIndex) {
+        const auto& scene = scenes.at(sceneIndex);
         //
         // Информация
         //
         QString infoTitle = QString("%1 %2").arg(scene.number, scene.name);
         QString infoText;
-        {
-            infoText.append(QString("%1: %2").arg(
-                QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
-                                            "Scene duration"),
-                TimeHelper::toString(scene.duration)));
-            infoText.append("\n");
-            infoText.append(QString("%1: %2").arg(
-                QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
-                                            "Action duration"),
-                TimeHelper::toString(scene.actionDuration)));
-            infoText.append("\n");
-            infoText.append(QString("%1: %2").arg(
-                QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
-                                            "Dialogues duration"),
-                TimeHelper::toString(scene.dialoguesDuration)));
-            infoText.append("\n");
-            infoText.append(QString("%1: %2").arg(
-                QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
-                                            "Characters count"),
-                QString::number(scene.characters.size())));
-            infoText.append("\n");
-            infoText.append(QString("%1: %2").arg(
-                QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
-                                            "Dialogues count"),
-                QString::number(scene.dialoguesCount)));
+        for (const auto& character : scene.characters) {
+            if (!infoText.isEmpty()) {
+                infoText.append("\n");
+            }
+            infoText.append(character);
         }
         info.insert(lastX, { infoTitle, infoText });
 
         //
         // По иксу откладываем длительность
         //
+        x << lastX + 1000 / millisecondsInMinute;
         x << lastX + scene.duration.count() / millisecondsInMinute;
         lastX = x.last();
         //
-        // Хронометраж считаем в минутах
+        // По игрику активность персонажей
         //
-        sceneChronY << scene.duration.count() / millisecondsInMinute;
-        actionChronY << scene.actionDuration.count() / millisecondsInMinute;
-        dialogsChronY << scene.dialoguesDuration.count() / millisecondsInMinute;
+        // Позицию по игрику наращиваем, потому что мы будем строить графики один над другим
         //
-        // Количества как есть
-        //
-        charactersCountY << scene.characters.size();
-        dialogsCountY << scene.dialoguesCount;
+        int lastY = 0;
+        for (int characterIndex = 0; characterIndex < characters.size(); ++characterIndex) {
+            const auto character = characters.at(characterIndex);
+            auto currentY = std::numeric_limits<qreal>::quiet_NaN();
+            if (scene.characters.contains(character)) {
+                currentY = lastY;
+            }
+            charactersY[characterIndex] << currentY << currentY;
+
+            lastY += 1;
+        }
     }
     info.insert(lastX, {});
     //
     d->plot = {};
     d->plot.info = info;
-    int plotIndex = 0;
     //
-    // ... хронометраж сцены
+    // ... Формируем список графиков снизу вверх, чтоби они не закрашивались при выводе
     //
-    {
+    for (int characterIndex = characters.size() - 1; characterIndex >= 0; --characterIndex) {
         PlotData data;
-        data.name = QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
-                                                "Scene duration");
-        data.color = ColorHelper::forNumber(plotIndex++);
+        data.name = characters.at(characterIndex);
+        data.color = ColorHelper::forNumber(characterIndex);
         data.x = x;
-        data.y = sceneChronY;
-        d->plot.data.append(data);
-    }
-    //
-    // ... хронометраж действий
-    //
-    {
-        PlotData data;
-        data.name = QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
-                                                "Action duration");
-        data.color = ColorHelper::forNumber(plotIndex++);
-        data.x = x;
-        data.y = actionChronY;
-        d->plot.data.append(data);
-    }
-    //
-    // ... хронометраж реплик
-    //
-    {
-        PlotData data;
-        data.name = QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
-                                                "Dialogues duration");
-        data.color = ColorHelper::forNumber(plotIndex++);
-        data.x = x;
-        data.y = dialogsChronY;
-        d->plot.data.append(data);
-    }
-    //
-    // ... количество персонажей
-    //
-    {
-        PlotData data;
-        data.name = QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
-                                                "Characters count");
-        data.color = ColorHelper::forNumber(plotIndex++);
-        data.x = x;
-        data.y = charactersCountY;
-        d->plot.data.append(data);
-    }
-    //
-    // ... хронометраж действий
-    //
-    {
-        PlotData data;
-        data.name = QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
-                                                "Dialogues count");
-        data.color = ColorHelper::forNumber(plotIndex++);
-        data.x = x;
-        data.y = dialogsCountY;
+        data.y = charactersY.at(characterIndex);
         d->plot.data.append(data);
     }
 }
 
-Plot ScreenplayStructureAnalysisPlot::plot() const
+Plot ScreenplayCharactersActivityPlot::plot() const
 {
     return d->plot;
 }
