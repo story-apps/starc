@@ -60,19 +60,19 @@ QHBoxLayout* makeLayout()
  * @link https://www.softmaker.com/en/dictionaries
  */
 const QVector<QString> kSpellCheckerLanguagesNameToCode = {
-    "af",         "an",          "ar",    "az",       "be",    "bg",    "bn",    "bo",    "br",
-    "bs",         "ca-valencia", "ca",    "cs",       "cy",    "da",    "de-AT", "de-CH", "de",
-    "el-polyton", "el",          "en-AU", "en-CA",    "en-GB", "en-NZ", "en-ZA", "en",    "eo",
-    "es-AR",      "es-BO",       "es-CL", "es-CO",    "es-CR", "es-CU", "es-DO", "es-EC", "es-GT",
-    "es-HN",      "es-MX",       "es-NI", "es-PA",    "es-PE", "es-PH", "es-PR", "es-PY", "es-SV",
-    "es-US",      "es-UY",       "es-VE", "es",       "et",    "eu",    "fa",    "fo",    "fr",
-    "fur",        "fy",          "ga",    "gd",       "gl",    "gu",    "gug",   "he",    "hi",
-    "hr",         "hu",          "hy",    "hyw",      "ia",    "id",    "is",    "it",    "ka",
-    "kk",         "kmr",         "ko",    "la",       "lb",    "lo",    "lt",    "ltg",   "lv",
-    "mk",         "mn",          "mt",    "nb",       "nds",   "ne",    "nl",    "nn",    "oc",
-    "pl",         "pt-BR",       "pt",    "qu",       "ro",    "ru-yo", "ru",    "rw",    "si",
-    "sk",         "sl",          "sq",    "sr-Latn",  "sr",    "sv-FI", "sv",    "sw",    "ta",
-    "te",         "th",          "tk",    "tlh-Latn", "tlh",   "tr",    "uk",    "vi"
+    "af",    "an",         "ar",          "ast",   "az",       "be",    "bg",    "bn",    "bo",
+    "br",    "bs",         "ca-valencia", "ca",    "cs",       "cy",    "da",    "de-AT", "de-CH",
+    "de",    "el-polyton", "el",          "en-AU", "en-CA",    "en-GB", "en-NZ", "en-ZA", "en",
+    "eo",    "es-AR",      "es-BO",       "es-CL", "es-CO",    "es-CR", "es-CU", "es-DO", "es-EC",
+    "es-GT", "es-HN",      "es-MX",       "es-NI", "es-PA",    "es-PE", "es-PH", "es-PR", "es-PY",
+    "es-SV", "es-US",      "es-UY",       "es-VE", "es",       "et",    "eu",    "fa",    "fo",
+    "fr",    "fur",        "fy",          "ga",    "gd",       "gl",    "gu",    "gug",   "he",
+    "hi",    "hr",         "hu",          "hy",    "hyw",      "ia",    "id",    "is",    "it",
+    "ka",    "kk",         "kmr",         "ko",    "la",       "lb",    "lo",    "lt",    "ltg",
+    "lv",    "mk",         "mn",          "mt",    "nb",       "nds",   "ne",    "nl",    "nn",
+    "oc",    "pl",         "pt-BR",       "pt",    "qu",       "ro",    "ru-yo", "ru",    "rw",
+    "si",    "sk",         "sl",          "sq",    "sr-Latn",  "sr",    "sv-FI", "sv",    "sw",
+    "ta",    "te",         "th",          "tk",    "tlh-Latn", "tlh",   "tr",    "uk",    "vi"
 };
 
 /**
@@ -2814,6 +2814,7 @@ void SettingsView::updateTranslations()
         const QVector<QString> languages = { tr("Afrikaans"),
                                              tr("Aragonese"),
                                              tr("Arabic"),
+                                             tr("Asturian"),
                                              tr("Azerbaijani"),
                                              tr("Belarusian"),
                                              tr("Bulgarian"),

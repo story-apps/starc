@@ -3360,7 +3360,8 @@ inline bool qcpLessThanSortKey(const DataType& a, const DataType& b)
 }
 
 template<class DataType>
-class QCPDataContainer // no CORE_LIBRARY_EXPORT, template class ends up in header (cpp included below)
+class QCPDataContainer // no CORE_LIBRARY_EXPORT, template class ends up in header (cpp included
+                       // below)
 {
 public:
     typedef typename QVector<DataType>::const_iterator const_iterator;
@@ -5201,8 +5202,8 @@ public:
 template<class DataType>
 class QCPAbstractPlottable1D
     : public QCPAbstractPlottable,
-      public QCPPlottableInterface1D // no CORE_LIBRARY_EXPORT, template class ends up in header (cpp
-                                     // included below)
+      public QCPPlottableInterface1D // no CORE_LIBRARY_EXPORT, template class ends up in header
+                                     // (cpp included below)
 {
     // No Q_OBJECT macro due to template class
 
