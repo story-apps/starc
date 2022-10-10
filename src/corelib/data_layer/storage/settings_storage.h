@@ -250,6 +250,11 @@ const QString kComponentsScreenplayCardsCardsSpacingKey
     = kComponentsScreenplayCardsKey + QStringLiteral("/cards-spacing");
 const QString kComponentsScreenplayCardsCardsInRowKey
     = kComponentsScreenplayCardsKey + QStringLiteral("/cards-in-row");
+// ... статистика
+const QString kComponentsScreenplayStatisticsKey
+    = kComponentsScreenplayKey + QStringLiteral("/statistics");
+const QString kComponentsScreenplayStatisticsSplitterStateKey
+    = kComponentsScreenplayStatisticsKey + QStringLiteral("/splitter-state");
 //
 // комикс
 const QString kComponentsComicBookKey = kComponentsGroupKey + QStringLiteral("/comicbook");

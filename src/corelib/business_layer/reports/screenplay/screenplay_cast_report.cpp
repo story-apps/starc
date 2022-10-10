@@ -20,7 +20,15 @@ namespace BusinessLayer {
 class ScreenplayCastReport::Implementation
 {
 public:
+    /**
+     * @brief Модель персонажей
+     */
     QScopedPointer<QStandardItemModel> castModel;
+
+    /**
+     * @brief Порядок сортировки
+     */
+    int sortBy = 0;
 };
 
 
@@ -52,11 +60,16 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
         int totalDialogues = 0;
         int speakingScenesCount = 0;
         int nonspeakingScenesCount = 0;
+        int totalScenes() const
+        {
+            return speakingScenesCount + nonspeakingScenesCount;
+        }
     };
     // - персонаж - кол-во реплик
     QHash<QString, CharacterData> charactersData;
     QSet<QString> lastSceneNonspeakingCharacters;
     QSet<QString> lastSceneSpeakingCharacters;
+    QVector<QString> charactersOrder;
 
     //
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
@@ -83,7 +96,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
     //
     std::function<void(const TextModelItem*)> includeInReport;
     includeInReport = [&includeInReport, &charactersData, &lastSceneNonspeakingCharacters,
-                       &lastSceneSpeakingCharacters,
+                       &lastSceneSpeakingCharacters, &charactersOrder,
                        &rxCharacterFinder](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
@@ -119,6 +132,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
                         //
                         if (!charactersData.contains(character)) {
                             charactersData.insert(character, { 0, 0, 1 });
+                            charactersOrder.append(character);
                         }
                         //
                         // Не первое упоминание - плюс одна молчаливая сцена
@@ -134,6 +148,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
                     const auto character = ScreenplayCharacterParser::name(textItem->text());
                     if (!charactersData.contains(character)) {
                         charactersData.insert(character, { 1, 1, 0 });
+                        charactersOrder.append(character);
                         lastSceneSpeakingCharacters.insert(character);
                     } else {
                         auto& characterData = charactersData[character];
@@ -161,6 +176,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
                         const QString character = TextHelper::smartToUpper(match.captured(2));
                         if (!charactersData.contains(character)) {
                             charactersData.insert(character, { 0, 0, 1 });
+                            charactersOrder.append(character);
                         } else {
                             //
                             // Если он ещё не добавлен в текущую сцену
@@ -202,6 +218,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         return item;
     };
+
     //
     // Сортируем персонажей
     //
@@ -209,13 +226,56 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
     for (auto iter = charactersData.begin(); iter != charactersData.end(); ++iter) {
         charactersSorted.append({ iter.key(), iter.value() });
     }
-    std::sort(
-        charactersSorted.begin(), charactersSorted.end(),
-        [](const QPair<QString, CharacterData>& _lhs, const QPair<QString, CharacterData>& _rhs) {
-            return _lhs.second.totalDialogues == _rhs.second.totalDialogues
-                ? _lhs.first < _rhs.first
-                : _lhs.second.totalDialogues > _rhs.second.totalDialogues;
-        });
+    switch (d->sortBy) {
+    default:
+    case 0: {
+        break;
+    }
+
+    case 1: {
+        std::sort(
+            charactersSorted.begin(), charactersSorted.end(),
+            [](const QPair<QString, CharacterData>& _lhs,
+               const QPair<QString, CharacterData>& _rhs) { return _lhs.first < _rhs.first; });
+        break;
+    }
+
+    case 2: {
+        std::sort(charactersSorted.begin(), charactersSorted.end(),
+                  [](const QPair<QString, CharacterData>& _lhs,
+                     const QPair<QString, CharacterData>& _rhs) {
+                      return _lhs.second.totalScenes() > _rhs.second.totalScenes();
+                  });
+        break;
+    }
+
+    case 3: {
+        std::sort(charactersSorted.begin(), charactersSorted.end(),
+                  [](const QPair<QString, CharacterData>& _lhs,
+                     const QPair<QString, CharacterData>& _rhs) {
+                      return _lhs.second.totalScenes() < _rhs.second.totalScenes();
+                  });
+        break;
+    }
+
+    case 4: {
+        std::sort(charactersSorted.begin(), charactersSorted.end(),
+                  [](const QPair<QString, CharacterData>& _lhs,
+                     const QPair<QString, CharacterData>& _rhs) {
+                      return _lhs.second.totalDialogues > _rhs.second.totalDialogues;
+                  });
+        break;
+    }
+
+    case 5: {
+        std::sort(charactersSorted.begin(), charactersSorted.end(),
+                  [](const QPair<QString, CharacterData>& _lhs,
+                     const QPair<QString, CharacterData>& _rhs) {
+                      return _lhs.second.totalDialogues < _rhs.second.totalDialogues;
+                  });
+        break;
+    }
+    }
 
     //
     // Формируем таблицу
@@ -234,8 +294,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
                   createModelItem(QString::number(_count.totalDialogues)),
                   createModelItem(QString::number(_count.speakingScenesCount)),
                   createModelItem(QString::number(_count.nonspeakingScenesCount)),
-                  createModelItem(
-                      QString::number(_count.speakingScenesCount + _count.nonspeakingScenesCount)),
+                  createModelItem(QString::number(_count.totalScenes())),
               });
           };
     for (const auto& character : charactersSorted) {
@@ -262,6 +321,11 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
         4, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Total scenes"),
         Qt::DisplayRole);
+}
+
+void ScreenplayCastReport::setParameters(int _sortBy)
+{
+    d->sortBy = _sortBy;
 }
 
 QAbstractItemModel* ScreenplayCastReport::castModel() const

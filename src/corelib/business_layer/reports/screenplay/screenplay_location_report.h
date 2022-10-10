@@ -22,6 +22,11 @@ public:
     void build(QAbstractItemModel* _model) override;
 
     /**
+     * @brief Задать параметры отчёта
+     */
+    void setParameters(int _sortBy);
+
+    /**
      * @brief Получить информацию о локациях
      */
     QAbstractItemModel* sceneModel() const;

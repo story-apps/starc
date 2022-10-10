@@ -65,7 +65,7 @@ void Plot::paintEvent(QPaintEvent* _event)
     //
     // Мониторим положение мыши
     //
-    painter.setPen(QPen(Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::layout().px()));
+    painter.setPen(QPen(Ui::DesignSystem::color().secondary(), Ui::DesignSystem::layout().px()));
     painter.drawLine(QPoint(d->mousePos.x(), axisRect()->rect().top()),
                      QPoint(d->mousePos.x(), axisRect()->rect().bottom()));
 

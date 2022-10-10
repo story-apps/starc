@@ -47,16 +47,19 @@ public:
      * @brief Отчёт по сценам
      */
     const ScreenplaySceneReport& sceneReport() const;
+    void setSceneReportParameters(int _sortBy);
 
     /**
      * @brief Отчёт по локациям
      */
     const ScreenplayLocationReport& locationReport() const;
+    void setLocationReportParameters(int _sortBy);
 
     /**
      * @brief Отчёт по персонажам
      */
     const ScreenplayCastReport& castReport() const;
+    void setCastReportParameters(int _sortBy);
 
     /**
      * @brief Гнедерный анализ
@@ -67,11 +70,15 @@ public:
      * @brief График структурного анализа
      */
     const ScreenplayStructureAnalysisPlot& structureAnalisysPlot() const;
+    void setStructureAnalysisPlotParameters(bool _sceneDuration, bool _actionDuration,
+                                            bool _dialoguesDuration, bool _charactersCount,
+                                            bool _dialoguesCount);
 
     /**
      * @brief График активности персонажей
      */
     const ScreenplayCharactersActivityPlot& charactersActivityPlot() const;
+    void setCharactersActivityPlotParameters(const QVector<QString>& _visibleCharacters);
 
 protected:
     /**

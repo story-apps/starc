@@ -73,14 +73,32 @@ const ScreenplaySceneReport& ScreenplayStatisticsModel::sceneReport() const
     return d->sceneReport;
 }
 
+void ScreenplayStatisticsModel::setSceneReportParameters(int _sortBy)
+{
+    d->sceneReport.setParameters(_sortBy);
+    d->sceneReport.build(d->textModel);
+}
+
 const ScreenplayLocationReport& ScreenplayStatisticsModel::locationReport() const
 {
     return d->locationReport;
 }
 
+void ScreenplayStatisticsModel::setLocationReportParameters(int _sortBy)
+{
+    d->locationReport.setParameters(_sortBy);
+    d->locationReport.build(d->textModel);
+}
+
 const ScreenplayCastReport& ScreenplayStatisticsModel::castReport() const
 {
     return d->castReport;
+}
+
+void ScreenplayStatisticsModel::setCastReportParameters(int _sortBy)
+{
+    d->castReport.setParameters(_sortBy);
+    d->castReport.build(d->textModel);
 }
 
 const ScreenplayGenderReport& ScreenplayStatisticsModel::genderReport() const
@@ -93,9 +111,27 @@ const ScreenplayStructureAnalysisPlot& ScreenplayStatisticsModel::structureAnali
     return d->structureAnalysisPlot;
 }
 
+void ScreenplayStatisticsModel::setStructureAnalysisPlotParameters(bool _sceneDuration,
+                                                                   bool _actionDuration,
+                                                                   bool _dialoguesDuration,
+                                                                   bool _charactersCount,
+                                                                   bool _dialoguesCount)
+{
+    d->structureAnalysisPlot.setParameters(_sceneDuration, _actionDuration, _dialoguesDuration,
+                                           _charactersCount, _dialoguesCount);
+    d->structureAnalysisPlot.build(d->textModel);
+}
+
 const ScreenplayCharactersActivityPlot& ScreenplayStatisticsModel::charactersActivityPlot() const
 {
     return d->charactersActivityPlot;
+}
+
+void ScreenplayStatisticsModel::setCharactersActivityPlotParameters(
+    const QVector<QString>& _visibleCharacters)
+{
+    d->charactersActivityPlot.setParameters(_visibleCharacters);
+    d->charactersActivityPlot.build(d->textModel);
 }
 
 void ScreenplayStatisticsModel::initDocument()

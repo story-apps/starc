@@ -31,7 +31,7 @@ public:
     /**
      * @brief Все строки модели (включая вложенные)
      */
-    int recursiveRowCount() const;
+    int recursiveRowCount(bool _onlyExpanded = false) const;
 
     /**
      * @brief Задать необходимость отображения декорации у корневых элементов
@@ -57,6 +57,11 @@ public:
      * @brief Установить ширину колонки
      */
     void setColumnWidth(int _column, int _width);
+
+    /**
+     * @brief Настроить видимость колонки
+     */
+    void setColumnVisible(int _column, bool _visible);
 
     /**
      * @brief Включить/отключить возможность перетаскивания элементов
@@ -115,9 +120,10 @@ public:
     void expand(const QModelIndex& _index);
 
     /**
-     * @brief Развернуть все элементы
+     * @brief Развернуть/свернуть все элементы
      */
     void expandAll();
+    void collapseAll();
 
     /**
      * @brief Установить необходимость пересчитывать размер элементов в делегате
@@ -175,6 +181,16 @@ signals:
      * @brief Пользователь сделал двойной клик на элемента
      */
     void doubleClicked(const QModelIndex& _index);
+
+    /**
+     * @brief Элемент был раскрыт
+     */
+    void expanded(const QModelIndex& _index);
+
+    /**
+     * @brief Элемент был свёрнут
+     */
+    void collapsed(const QModelIndex& _index);
 
 protected:
     /**

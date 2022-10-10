@@ -26,6 +26,12 @@ public:
      */
     Plot plot() const override;
 
+    /**
+     * @brief Задать параметры графика
+     */
+    void setParameters(bool _sceneDuration, bool _actionDuration, bool _dialoguesDuration,
+                       bool _charactersCount, bool _dialoguesCount);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

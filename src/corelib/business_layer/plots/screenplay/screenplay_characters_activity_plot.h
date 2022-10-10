@@ -26,6 +26,16 @@ public:
      */
     Plot plot() const override;
 
+    /**
+     * @brief Получить список персонажей из отчёта
+     */
+    QVector<QString> characters() const;
+
+    /**
+     * @brief Задать параметры отчёта
+     */
+    void setParameters(const QVector<QString>& _characters);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

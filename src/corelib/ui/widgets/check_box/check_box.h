@@ -18,9 +18,21 @@ public:
     void setChecked(bool _checked);
 
     /**
-     * @brief Задать текст переключателя
+     * @brief Включён ли переключатель частично
      */
+    bool isIndeterminate() const;
+    void setIndeterminate();
+
+    /**
+     * @brief Текст переключателя
+     */
+    QString text() const;
     void setText(const QString& _text);
+
+    /**
+     * @brief Задать цвет для открисовки галочки
+     */
+    void setCheckMarkColor(const QColor& _color);
 
     /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
@@ -32,7 +44,7 @@ signals:
     /**
      * @brief Изменилось состояние включённости переключателя
      */
-    void checkedChanged(bool _checked);
+    void checkedChanged(bool _checked, bool _indeterminate);
 
 protected:
     /**

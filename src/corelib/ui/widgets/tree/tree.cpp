@@ -64,6 +64,8 @@ Tree::Tree(QWidget* _parent)
         emit clicked(_index, firstClick);
     });
     connect(d->tree, &TreeView::doubleClicked, this, &Tree::doubleClicked);
+    connect(d->tree, &TreeView::expanded, this, &Tree::expanded);
+    connect(d->tree, &TreeView::collapsed, this, &Tree::collapsed);
 }
 
 Tree::~Tree() = default;
@@ -88,14 +90,18 @@ QAbstractItemModel* Tree::model() const
     return d->tree->model();
 }
 
-int Tree::recursiveRowCount() const
+int Tree::recursiveRowCount(bool _onlyExpanded) const
 {
     int count = 0;
     std::function<void(const QModelIndex&)> recursiveCount;
-    recursiveCount = [this, &count, &recursiveCount](const QModelIndex& _parent) {
+    recursiveCount = [this, _onlyExpanded, &count, &recursiveCount](const QModelIndex& _parent) {
         for (int row = 0; row < model()->rowCount(_parent); ++row) {
+            const auto index = model()->index(row, 0, _parent);
             ++count;
-            recursiveCount(model()->index(row, 0, _parent));
+
+            if (!_onlyExpanded || isExpanded(index)) {
+                recursiveCount(index);
+            }
         }
     };
     recursiveCount({});
@@ -126,6 +132,11 @@ void Tree::setColumnWidth(int _column, int _width)
 {
     d->header->setSectionResizeMode(_column, QHeaderView::Fixed);
     d->header->resizeSection(_column, _width);
+}
+
+void Tree::setColumnVisible(int _column, bool _visible)
+{
+    d->header->setSectionHidden(_column, !_visible);
 }
 
 void Tree::setDragDropEnabled(bool _enabled)
@@ -203,6 +214,11 @@ void Tree::expand(const QModelIndex& _index)
 void Tree::expandAll()
 {
     d->tree->expandAll();
+}
+
+void Tree::collapseAll()
+{
+    d->tree->collapseAll();
 }
 
 void Tree::setAutoAdjustSize(bool _auto)

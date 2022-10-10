@@ -24,6 +24,12 @@ class ScreenplayStructureAnalysisPlot::Implementation
 {
 public:
     Plot plot;
+
+    bool sceneDuration = true;
+    bool actionDuration = true;
+    bool dialoguesDuration = true;
+    bool charactersCount = true;
+    bool dialoguesCount = true;
 };
 
 
@@ -277,15 +283,15 @@ void ScreenplayStructureAnalysisPlot::build(QAbstractItemModel* _model) const
     //
     d->plot = {};
     d->plot.info = info;
-    int plotIndex = 0;
     //
     // ... хронометраж сцены
     //
-    {
+    int plotIndex = 0;
+    if (d->sceneDuration) {
         PlotData data;
         data.name = QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
                                                 "Scene duration");
-        data.color = ColorHelper::forNumber(plotIndex++);
+        data.color = ColorHelper::forNumber(plotIndex);
         data.x = x;
         data.y = sceneChronY;
         d->plot.data.append(data);
@@ -293,11 +299,12 @@ void ScreenplayStructureAnalysisPlot::build(QAbstractItemModel* _model) const
     //
     // ... хронометраж действий
     //
-    {
+    ++plotIndex;
+    if (d->actionDuration) {
         PlotData data;
         data.name = QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
                                                 "Action duration");
-        data.color = ColorHelper::forNumber(plotIndex++);
+        data.color = ColorHelper::forNumber(plotIndex);
         data.x = x;
         data.y = actionChronY;
         d->plot.data.append(data);
@@ -305,11 +312,12 @@ void ScreenplayStructureAnalysisPlot::build(QAbstractItemModel* _model) const
     //
     // ... хронометраж реплик
     //
-    {
+    ++plotIndex;
+    if (d->dialoguesDuration) {
         PlotData data;
         data.name = QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
                                                 "Dialogues duration");
-        data.color = ColorHelper::forNumber(plotIndex++);
+        data.color = ColorHelper::forNumber(plotIndex);
         data.x = x;
         data.y = dialogsChronY;
         d->plot.data.append(data);
@@ -317,23 +325,25 @@ void ScreenplayStructureAnalysisPlot::build(QAbstractItemModel* _model) const
     //
     // ... количество персонажей
     //
-    {
+    ++plotIndex;
+    if (d->charactersCount) {
         PlotData data;
         data.name = QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
                                                 "Characters count");
-        data.color = ColorHelper::forNumber(plotIndex++);
+        data.color = ColorHelper::forNumber(plotIndex);
         data.x = x;
         data.y = charactersCountY;
         d->plot.data.append(data);
     }
     //
-    // ... хронометраж действий
+    // ... количество реплик
     //
-    {
+    ++plotIndex;
+    if (d->dialoguesCount) {
         PlotData data;
         data.name = QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
                                                 "Dialogues count");
-        data.color = ColorHelper::forNumber(plotIndex++);
+        data.color = ColorHelper::forNumber(plotIndex);
         data.x = x;
         data.y = dialogsCountY;
         d->plot.data.append(data);
@@ -343,6 +353,17 @@ void ScreenplayStructureAnalysisPlot::build(QAbstractItemModel* _model) const
 Plot ScreenplayStructureAnalysisPlot::plot() const
 {
     return d->plot;
+}
+
+void ScreenplayStructureAnalysisPlot::setParameters(bool _sceneDuration, bool _actionDuration,
+                                                    bool _dialoguesDuration, bool _charactersCount,
+                                                    bool _dialoguesCount)
+{
+    d->sceneDuration = _sceneDuration;
+    d->actionDuration = _actionDuration;
+    d->dialoguesDuration = _dialoguesDuration;
+    d->charactersCount = _charactersCount;
+    d->dialoguesCount = _dialoguesCount;
 }
 
 } // namespace BusinessLayer

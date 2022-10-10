@@ -24,6 +24,8 @@ class ScreenplayCharactersActivityPlot::Implementation
 {
 public:
     Plot plot;
+    QVector<QString> characters;
+    std::optional<QVector<QString>> visibleCharacters;
 };
 
 
@@ -61,7 +63,7 @@ void ScreenplayCharactersActivityPlot::build(QAbstractItemModel* _model) const
     };
     QVector<SceneData> scenes;
     SceneData lastScene;
-    QStringList characters;
+    QVector<QString> characters;
 
     //
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
@@ -247,9 +249,14 @@ void ScreenplayCharactersActivityPlot::build(QAbstractItemModel* _model) const
         //
         int lastY = 0;
         for (int characterIndex = 0; characterIndex < characters.size(); ++characterIndex) {
-            const auto character = characters.at(characterIndex);
+            const auto characterName = characters.at(characterIndex);
+            if (d->visibleCharacters.has_value()
+                && !d->visibleCharacters->contains(characterName)) {
+                continue;
+            }
+
             auto currentY = std::numeric_limits<qreal>::quiet_NaN();
-            if (scene.characters.contains(character)) {
+            if (scene.characters.contains(characterName)) {
                 currentY = lastY;
             }
             charactersY[characterIndex] << currentY << currentY;
@@ -264,19 +271,37 @@ void ScreenplayCharactersActivityPlot::build(QAbstractItemModel* _model) const
     //
     // ... Формируем список графиков снизу вверх, чтоби они не закрашивались при выводе
     //
+    int plotColorIndex = 0;
     for (int characterIndex = characters.size() - 1; characterIndex >= 0; --characterIndex) {
+        const auto characterName = characters.at(characterIndex);
+        if (d->visibleCharacters.has_value() && !d->visibleCharacters->contains(characterName)) {
+            continue;
+        }
+
         PlotData data;
         data.name = characters.at(characterIndex);
-        data.color = ColorHelper::forNumber(characterIndex);
+        data.color = ColorHelper::forNumber(plotColorIndex++);
         data.x = x;
         data.y = charactersY.at(characterIndex);
         d->plot.data.append(data);
     }
+    //
+    d->characters = characters;
 }
 
 Plot ScreenplayCharactersActivityPlot::plot() const
 {
     return d->plot;
+}
+
+QVector<QString> ScreenplayCharactersActivityPlot::characters() const
+{
+    return d->characters;
+}
+
+void ScreenplayCharactersActivityPlot::setParameters(const QVector<QString>& _characters)
+{
+    d->visibleCharacters = _characters;
 }
 
 } // namespace BusinessLayer

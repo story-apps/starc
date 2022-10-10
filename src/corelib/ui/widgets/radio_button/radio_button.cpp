@@ -66,6 +66,11 @@ void RadioButton::setText(const QString& _text)
     update();
 }
 
+QSize RadioButton::minimumSizeHint() const
+{
+    return sizeHint();
+}
+
 QSize RadioButton::sizeHint() const
 {
     return QSize(

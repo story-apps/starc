@@ -12,8 +12,21 @@
 class CheckBox::Implementation
 {
 public:
+    /**
+     * @brief Установлена ли галочка
+     */
     bool isChecked = false;
+    bool isIndeterminate = false;
+
+    /**
+     * @brief Текст
+     */
     QString text;
+
+    /**
+     * @brief Цвет галочки
+     */
+    QColor checkMarkColor;
 
     /**
      * @brief  Декорации переключателя при клике
@@ -45,13 +58,36 @@ bool CheckBox::isChecked() const
 
 void CheckBox::setChecked(bool _checked)
 {
-    if (d->isChecked == _checked) {
+    if ((_checked && d->isChecked) || (!_checked && !d->isChecked && !d->isIndeterminate)) {
         return;
     }
 
     d->isChecked = _checked;
-    emit checkedChanged(d->isChecked);
+    d->isIndeterminate = false;
+    emit checkedChanged(d->isChecked, d->isIndeterminate);
     update();
+}
+
+bool CheckBox::isIndeterminate() const
+{
+    return d->isIndeterminate;
+}
+
+void CheckBox::setIndeterminate()
+{
+    if (d->isIndeterminate) {
+        return;
+    }
+
+    d->isIndeterminate = true;
+    d->isChecked = false;
+    emit checkedChanged(d->isChecked, d->isIndeterminate);
+    update();
+}
+
+QString CheckBox::text() const
+{
+    return d->text;
 }
 
 void CheckBox::setText(const QString& _text)
@@ -65,9 +101,19 @@ void CheckBox::setText(const QString& _text)
     update();
 }
 
+void CheckBox::setCheckMarkColor(const QColor& _color)
+{
+    if (d->checkMarkColor == _color) {
+        return;
+    }
+
+    d->checkMarkColor = _color;
+    update();
+}
+
 QSize CheckBox::minimumSizeHint() const
 {
-    return {};
+    return sizeHint();
 }
 
 QSize CheckBox::sizeHint() const
@@ -95,7 +141,6 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     // Настраиваем размещение текста для разных языков
     //
     qreal textRectX = 0;
-    qreal textWidth = 0;
     QRectF iconRect;
     QRectF textRect;
 
@@ -106,10 +151,9 @@ void CheckBox::paintEvent(QPaintEvent* _event)
                          Ui::DesignSystem::checkBox().iconSize().height());
 
         textRectX = iconRect.right() + Ui::DesignSystem::checkBox().spacing();
-        textWidth = width() - textRectX - Ui::DesignSystem::checkBox().margins().right();
         textRect.setRect(textRectX, 0, width() - textRectX, sizeHint().height());
     } else {
-        textWidth = width() - Ui::DesignSystem::checkBox().margins().left()
+        const auto textWidth = width() - Ui::DesignSystem::checkBox().margins().left()
             - Ui::DesignSystem::checkBox().spacing()
             - Ui::DesignSystem::checkBox().iconSize().width()
             - Ui::DesignSystem::checkBox().margins().right();
@@ -125,9 +169,11 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     //
     // Рисуем декорацию переключателя
     //
+    const auto checkMarkColor
+        = d->checkMarkColor.isValid() ? d->checkMarkColor : Ui::DesignSystem::color().secondary();
     if (underMouse() || hasFocus()) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
+        painter.setBrush(isChecked() || isIndeterminate() ? checkMarkColor : textColor());
         painter.setOpacity(hasFocus() ? Ui::DesignSystem::focusBackgroundOpacity()
                                       : Ui::DesignSystem::hoverBackgroundOpacity());
         const auto radius = d->decorationAnimation.maximumRadius();
@@ -136,7 +182,7 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     }
     if (d->decorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
+        painter.setBrush(isChecked() ? checkMarkColor : textColor());
         painter.setOpacity(d->decorationAnimation.opacity());
         const auto radius = d->decorationAnimation.radius();
         painter.drawEllipse(iconRect.center(), radius, radius);
@@ -151,8 +197,10 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     // Рисуем сам переключатель
     //
     painter.setFont(Ui::DesignSystem::font().iconsMid());
-    painter.setPen(isEnabled() && d->isChecked ? Ui::DesignSystem::color().secondary() : penColor);
-    painter.drawText(iconRect, Qt::AlignCenter, d->isChecked ? u8"\U000f0c52" : u8"\U000f0131");
+    painter.setPen(isEnabled() && (isChecked() || isIndeterminate()) ? checkMarkColor : penColor);
+    painter.drawText(iconRect, Qt::AlignCenter,
+                     d->isChecked ? u8"\U000F0132"
+                                  : (d->isIndeterminate ? u8"\U000F0375" : u8"\U000F0131"));
 
 
     //
@@ -176,7 +224,11 @@ void CheckBox::mouseReleaseEvent(QMouseEvent* _event)
         return;
     }
 
-    setChecked(!d->isChecked);
+    if (d->isChecked || d->isIndeterminate) {
+        setChecked(false);
+    } else {
+        setChecked(true);
+    }
 }
 
 void CheckBox::keyPressEvent(QKeyEvent* _event)

@@ -25,7 +25,15 @@ namespace BusinessLayer {
 class ScreenplaySceneReport::Implementation
 {
 public:
+    /**
+     * @brief Модель сцен
+     */
     QScopedPointer<QStandardItemModel> sceneModel;
+
+    /**
+     * @brief Тип сортировки
+     */
+    int sortBy = 0;
 };
 
 
@@ -227,6 +235,51 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
     }
 
     //
+    // Сортируем
+    //
+    switch (d->sortBy) {
+    default:
+    case 0: {
+        break;
+    }
+
+    case 1: {
+        std::sort(scenes.begin(), scenes.end(), [](const SceneData& _lhs, const SceneData& _rhs) {
+            return _lhs.name < _rhs.name;
+        });
+        break;
+    }
+
+    case 2: {
+        std::sort(scenes.begin(), scenes.end(), [](const SceneData& _lhs, const SceneData& _rhs) {
+            return _lhs.duration > _rhs.duration;
+        });
+        break;
+    }
+
+    case 3: {
+        std::sort(scenes.begin(), scenes.end(), [](const SceneData& _lhs, const SceneData& _rhs) {
+            return _lhs.duration < _rhs.duration;
+        });
+        break;
+    }
+
+    case 4: {
+        std::sort(scenes.begin(), scenes.end(), [](const SceneData& _lhs, const SceneData& _rhs) {
+            return _lhs.characters.size() > _rhs.characters.size();
+        });
+        break;
+    }
+
+    case 5: {
+        std::sort(scenes.begin(), scenes.end(), [](const SceneData& _lhs, const SceneData& _rhs) {
+            return _lhs.characters.size() < _rhs.characters.size();
+        });
+        break;
+    }
+    }
+
+    //
     // Формируем отчёт
     //
     auto createModelItem = [](const QString& _text, const QVariant& _backgroundColor = {}) {
@@ -290,6 +343,11 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
         4, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplaySceneReport", "Duration"),
         Qt::DisplayRole);
+}
+
+void ScreenplaySceneReport::setParameters(int _sortBy)
+{
+    d->sortBy = _sortBy;
 }
 
 QAbstractItemModel* ScreenplaySceneReport::sceneModel() const

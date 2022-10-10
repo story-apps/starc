@@ -25,7 +25,15 @@ namespace BusinessLayer {
 class ScreenplayLocationReport::Implementation
 {
 public:
-    QScopedPointer<QStandardItemModel> sceneModel;
+    /**
+     * @brief Модель локаций
+     */
+    QScopedPointer<QStandardItemModel> locationModel;
+
+    /**
+     * @brief Порядок сортировки
+     */
+    int sortBy = 0;
 };
 
 
@@ -194,6 +202,64 @@ void ScreenplayLocationReport::build(QAbstractItemModel* _model)
     }
 
     //
+    // Сортируем локации
+    //
+    QVector<QPair<QString, LocationData>> locationsSorted;
+    for (auto iter = locations.begin(); iter != locations.end(); ++iter) {
+        locationsSorted.append({ iter.key(), iter.value() });
+    }
+    switch (d->sortBy) {
+    default:
+    case 0: {
+        break;
+    }
+
+    case 1: {
+        std::sort(locationsSorted.begin(), locationsSorted.end(),
+                  [](const QPair<QString, LocationData>& _lhs,
+                     const QPair<QString, LocationData>& _rhs) { return _lhs.first < _rhs.first; });
+        break;
+    }
+
+    case 2: {
+        std::sort(
+            locationsSorted.begin(), locationsSorted.end(),
+            [](const QPair<QString, LocationData>& _lhs, const QPair<QString, LocationData>& _rhs) {
+                return _lhs.second.scenes() > _rhs.second.scenes();
+            });
+        break;
+    }
+
+    case 3: {
+        std::sort(
+            locationsSorted.begin(), locationsSorted.end(),
+            [](const QPair<QString, LocationData>& _lhs, const QPair<QString, LocationData>& _rhs) {
+                return _lhs.second.scenes() < _rhs.second.scenes();
+            });
+        break;
+    }
+
+    case 4: {
+        std::sort(
+            locationsSorted.begin(), locationsSorted.end(),
+            [](const QPair<QString, LocationData>& _lhs, const QPair<QString, LocationData>& _rhs) {
+                return _lhs.second.duration() > _rhs.second.duration();
+            });
+        break;
+    }
+
+    case 5: {
+        std::sort(
+            locationsSorted.begin(), locationsSorted.end(),
+            [](const QPair<QString, LocationData>& _lhs, const QPair<QString, LocationData>& _rhs) {
+                return _lhs.second.duration() < _rhs.second.duration();
+            });
+        break;
+    }
+    }
+
+
+    //
     // Формируем отчёт
     //
     auto createModelItem = [](const QString& _text, const QVariant _backgroundColor = {}) {
@@ -207,18 +273,19 @@ void ScreenplayLocationReport::build(QAbstractItemModel* _model)
     //
     // ... наполняем таблицу
     //
-    if (d->sceneModel.isNull()) {
-        d->sceneModel.reset(new QStandardItemModel);
+    if (d->locationModel.isNull()) {
+        d->locationModel.reset(new QStandardItemModel);
     } else {
-        d->sceneModel->clear();
+        d->locationModel->clear();
     }
     const auto titleBackgroundColor = QVariant::fromValue(ColorHelper::transparent(
         Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::elevationEndOpacity()));
-    for (const auto& locationName : locationsOrder) {
+    for (const auto& locationData : locationsSorted) {
         //
         // ... локация
         //
-        const auto& location = locations[locationName];
+        const auto locationName = locationData.first;
+        const auto& location = locationData.second;
         auto locationItem = createModelItem(location.name, titleBackgroundColor);
         //
         // ... время
@@ -251,7 +318,7 @@ void ScreenplayLocationReport::build(QAbstractItemModel* _model)
             });
         }
 
-        d->sceneModel->appendRow({
+        d->locationModel->appendRow({
             locationItem,
             createModelItem({}, titleBackgroundColor),
             createModelItem({}, titleBackgroundColor),
@@ -260,31 +327,36 @@ void ScreenplayLocationReport::build(QAbstractItemModel* _model)
         });
     }
     //
-    d->sceneModel->setHeaderData(
+    d->locationModel->setHeaderData(
         0, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplayLocationReport", "Location/scene"),
         Qt::DisplayRole);
-    d->sceneModel->setHeaderData(
+    d->locationModel->setHeaderData(
         1, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplayLocationReport", "Number"),
         Qt::DisplayRole);
-    d->sceneModel->setHeaderData(
+    d->locationModel->setHeaderData(
         2, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplayLocationReport", "Page"),
         Qt::DisplayRole);
-    d->sceneModel->setHeaderData(
+    d->locationModel->setHeaderData(
         3, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplayLocationReport", "Scenes"),
         Qt::DisplayRole);
-    d->sceneModel->setHeaderData(
+    d->locationModel->setHeaderData(
         4, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplayLocationReport", "Duration"),
         Qt::DisplayRole);
 }
 
+void ScreenplayLocationReport::setParameters(int _sortBy)
+{
+    d->sortBy = _sortBy;
+}
+
 QAbstractItemModel* ScreenplayLocationReport::sceneModel() const
 {
-    return d->sceneModel.data();
+    return d->locationModel.data();
 }
 
 } // namespace BusinessLayer
