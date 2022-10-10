@@ -15525,7 +15525,7 @@ bool QCustomPlot::savePdf(const QString& fileName, int width, int height, QCP::E
                           const QString& pdfCreator, const QString& pdfTitle)
 {
     bool success = false;
-#ifdef QT_NO_PRINTER
+#ifdef QCP_NO_PRINTER
     Q_UNUSED(fileName)
     Q_UNUSED(exportPen)
     Q_UNUSED(width)
@@ -15533,7 +15533,7 @@ bool QCustomPlot::savePdf(const QString& fileName, int width, int height, QCP::E
     Q_UNUSED(pdfCreator)
     Q_UNUSED(pdfTitle)
     qDebug() << Q_FUNC_INFO
-             << "Qt was built without printer support (QT_NO_PRINTER). PDF not created.";
+             << "QCustomPlot was built without printer support (QCP_NO_PRINTER). PDF not created.";
 #else
     int newWidth, newHeight;
     if (width == 0 || height == 0) {

@@ -67,6 +67,11 @@ DEPENDPATH += $$PWD/../3rd_party/webloader
 PRE_TARGETDEPS += $$PWD/../3rd_party/webloader
 #
 
+#
+# Отключаем принтер в QCustomPlot
+#
+DEFINES += QCP_NO_PRINTER
+
 SOURCES += \
     business_layer/chronometry/chronometer.cpp \
     business_layer/document/audioplay/text/audioplay_text_corrector.cpp \
