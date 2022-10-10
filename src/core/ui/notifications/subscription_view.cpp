@@ -77,8 +77,8 @@ void SubscriptionView::Implementation::setupView()
     //
     if (daysLeft < -1) {
         title = tr("Cloud projects removal");
-        body = tr("Your Story Architect cloud projects will be removed yesterday if you don't "
-                  "renew TEAm subscription.");
+        body = tr("Your Story Architect cloud projects will be removed tomorrow if you don't "
+                  "renew TEAM subscription.");
     }
     //
     // Подписка закончилась
