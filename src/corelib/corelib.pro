@@ -22,6 +22,11 @@ LIBSDIR = ../_build/libs
 INCLUDEPATH += ..
 
 #
+# Настраиваем QCustomPlot
+#
+DEFINES += QCP_LIB_DECL QCP_NO_PRINTER
+
+#
 # Подключаем библиотеку fileformats
 #
 LIBS += -L$$LIBSDIR/ -lfileformats
@@ -66,11 +71,6 @@ INCLUDEPATH += $$PWD/../3rd_party/webloader/src
 DEPENDPATH += $$PWD/../3rd_party/webloader
 PRE_TARGETDEPS += $$PWD/../3rd_party/webloader
 #
-
-#
-# Отключаем принтер в QCustomPlot
-#
-DEFINES += QCP_NO_PRINTER
 
 SOURCES += \
     business_layer/chronometry/chronometer.cpp \
