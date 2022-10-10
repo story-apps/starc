@@ -3030,6 +3030,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Определим представление и отобразим
     //
+    Log::info("Activate plugin view");
     Ui::IDocumentView* view = nullptr;
     if (d->view.active == d->view.left) {
         view = d->pluginsBuilder.activateView(viewMimeType, d->currentDocument.model);
@@ -3050,6 +3051,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Настроим опции редактора
     //
+    Log::info("Activate plugin view options");
     auto viewOptions = view->options();
     if (isTextItem(aliasedItem)) {
         viewOptions.prepend(d->showVersionsAction);
@@ -3076,7 +3078,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
                                                        !navigatorMimeType.isEmpty());
 
     //
-    // Если в данный момент отображён кастомный навигатов, откроем навигатор соответствующий
+    // Если в данный момент отображён кастомный навигатор, откроем навигатор соответствующий
     // редактору
     //
     if (!d->navigator->isProjectNavigatorShown() && d->view.active == d->view.left) {
@@ -3086,6 +3088,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Настроим уведомления плагина
     //
+    Log::info("Activate plugin manager");
     if (auto documentManager = d->pluginsBuilder.plugin(viewMimeType)->asQObject();
         documentManager != nullptr) {
         const auto invalidSignalIndex = -1;
@@ -3110,6 +3113,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     QTimer::singleShot(d->view.active->animationDuration() * 1.3, this,
                        [this] { d->view.active->setFocus(); });
+
+    Log::info("Plugin activated");
 }
 
 void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item)
