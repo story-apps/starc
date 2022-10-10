@@ -136,15 +136,7 @@ class QCPPolarGraph;
 #define QCUSTOMPLOT_VERSION 0x020100
 
 // decl definitions for shared library compilation/usage:
-#if defined(QT_STATIC_BUILD)
-#define QCP_LIB_DECL
-#elif defined(QCUSTOMPLOT_COMPILE_LIBRARY)
-#define QCP_LIB_DECL Q_DECL_EXPORT
-#elif defined(QCUSTOMPLOT_USE_LIBRARY)
-#define QCP_LIB_DECL Q_DECL_IMPORT
-#else
-#define QCP_LIB_DECL
-#endif
+#include <corelib_global.h>
 
 // define empty macro for Q_DECL_OVERRIDE if it doesn't exist (Qt < 5)
 #ifndef Q_DECL_OVERRIDE
@@ -500,7 +492,7 @@ Q_DECLARE_METATYPE(QCP::SelectionType)
 /* including file 'src/vector2d.h'         */
 /* modified 2021-03-29T02:30:44, size 4988 */
 
-class QCP_LIB_DECL QCPVector2D
+class CORE_LIBRARY_EXPORT QCPVector2D
 {
 public:
     QCPVector2D();
@@ -635,7 +627,7 @@ inline QDebug operator<<(QDebug d, const QCPVector2D& vec)
 /* including file 'src/painter.h'          */
 /* modified 2021-03-29T02:30:44, size 4035 */
 
-class QCP_LIB_DECL QCPPainter : public QPainter
+class CORE_LIBRARY_EXPORT QCPPainter : public QPainter
 {
     Q_GADGET
 public:
@@ -712,7 +704,7 @@ Q_DECLARE_METATYPE(QCPPainter::PainterMode)
 /* including file 'src/paintbuffer.h'      */
 /* modified 2021-03-29T02:30:44, size 5006 */
 
-class QCP_LIB_DECL QCPAbstractPaintBuffer
+class CORE_LIBRARY_EXPORT QCPAbstractPaintBuffer
 {
 public:
     explicit QCPAbstractPaintBuffer(const QSize& size, double devicePixelRatio);
@@ -758,7 +750,7 @@ protected:
 };
 
 
-class QCP_LIB_DECL QCPPaintBufferPixmap : public QCPAbstractPaintBuffer
+class CORE_LIBRARY_EXPORT QCPPaintBufferPixmap : public QCPAbstractPaintBuffer
 {
 public:
     explicit QCPPaintBufferPixmap(const QSize& size, double devicePixelRatio);
@@ -779,7 +771,7 @@ protected:
 
 
 #ifdef QCP_OPENGL_PBUFFER
-class QCP_LIB_DECL QCPPaintBufferGlPbuffer : public QCPAbstractPaintBuffer
+class CORE_LIBRARY_EXPORT QCPPaintBufferGlPbuffer : public QCPAbstractPaintBuffer
 {
 public:
     explicit QCPPaintBufferGlPbuffer(const QSize& size, double devicePixelRatio, int multisamples);
@@ -802,7 +794,7 @@ protected:
 
 
 #ifdef QCP_OPENGL_FBO
-class QCP_LIB_DECL QCPPaintBufferGlFbo : public QCPAbstractPaintBuffer
+class CORE_LIBRARY_EXPORT QCPPaintBufferGlFbo : public QCPAbstractPaintBuffer
 {
 public:
     explicit QCPPaintBufferGlFbo(const QSize& size, double devicePixelRatio,
@@ -833,7 +825,7 @@ protected:
 /* including file 'src/layer.h'            */
 /* modified 2021-03-29T02:30:44, size 7038 */
 
-class QCP_LIB_DECL QCPLayer : public QObject
+class CORE_LIBRARY_EXPORT QCPLayer : public QObject
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -923,7 +915,7 @@ private:
 };
 Q_DECLARE_METATYPE(QCPLayer::LayerMode)
 
-class QCP_LIB_DECL QCPLayerable : public QObject
+class CORE_LIBRARY_EXPORT QCPLayerable : public QObject
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -1022,7 +1014,7 @@ private:
 /* including file 'src/axis/range.h'       */
 /* modified 2021-03-29T02:30:44, size 5280 */
 
-class QCP_LIB_DECL QCPRange
+class CORE_LIBRARY_EXPORT QCPRange
 {
 public:
     double lower, upper;
@@ -1178,7 +1170,7 @@ inline const QCPRange operator/(const QCPRange& range, double value)
 /* including file 'src/selection.h'        */
 /* modified 2021-03-29T02:30:44, size 8569 */
 
-class QCP_LIB_DECL QCPDataRange
+class CORE_LIBRARY_EXPORT QCPDataRange
 {
 public:
     QCPDataRange();
@@ -1247,7 +1239,7 @@ private:
 Q_DECLARE_TYPEINFO(QCPDataRange, Q_MOVABLE_TYPE);
 
 
-class QCP_LIB_DECL QCPDataSelection
+class CORE_LIBRARY_EXPORT QCPDataSelection
 {
 public:
     explicit QCPDataSelection();
@@ -1433,7 +1425,7 @@ inline QDebug operator<<(QDebug d, const QCPDataSelection& selection)
 /* including file 'src/selectionrect.h'    */
 /* modified 2021-03-29T02:30:44, size 3354 */
 
-class QCP_LIB_DECL QCPSelectionRect : public QCPLayerable
+class CORE_LIBRARY_EXPORT QCPSelectionRect : public QCPLayerable
 {
     Q_OBJECT
 public:
@@ -1499,7 +1491,7 @@ protected:
 /* including file 'src/layout.h'            */
 /* modified 2021-03-29T02:30:44, size 14279 */
 
-class QCP_LIB_DECL QCPMarginGroup : public QObject
+class CORE_LIBRARY_EXPORT QCPMarginGroup : public QObject
 {
     Q_OBJECT
 public:
@@ -1533,7 +1525,7 @@ private:
 };
 
 
-class QCP_LIB_DECL QCPLayoutElement : public QCPLayerable
+class CORE_LIBRARY_EXPORT QCPLayoutElement : public QCPLayerable
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -1684,7 +1676,7 @@ private:
 Q_DECLARE_METATYPE(QCPLayoutElement::UpdatePhase)
 
 
-class QCP_LIB_DECL QCPLayout : public QCPLayoutElement
+class CORE_LIBRARY_EXPORT QCPLayout : public QCPLayoutElement
 {
     Q_OBJECT
 public:
@@ -1725,7 +1717,7 @@ private:
 };
 
 
-class QCP_LIB_DECL QCPLayoutGrid : public QCPLayout
+class CORE_LIBRARY_EXPORT QCPLayoutGrid : public QCPLayout
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -1847,7 +1839,7 @@ private:
 Q_DECLARE_METATYPE(QCPLayoutGrid::FillOrder)
 
 
-class QCP_LIB_DECL QCPLayoutInset : public QCPLayout
+class CORE_LIBRARY_EXPORT QCPLayoutInset : public QCPLayout
 {
     Q_OBJECT
 public:
@@ -1909,7 +1901,7 @@ Q_DECLARE_METATYPE(QCPLayoutInset::InsetPlacement)
 /* including file 'src/lineending.h'       */
 /* modified 2021-03-29T02:30:44, size 4426 */
 
-class QCP_LIB_DECL QCPLineEnding
+class CORE_LIBRARY_EXPORT QCPLineEnding
 {
     Q_GADGET
 public:
@@ -2188,7 +2180,7 @@ Q_DECLARE_METATYPE(QCPLabelPainterPrivate::AnchorSide)
 /* including file 'src/axis/axisticker.h'  */
 /* modified 2021-03-29T02:30:44, size 4230 */
 
-class QCP_LIB_DECL QCPAxisTicker
+class CORE_LIBRARY_EXPORT QCPAxisTicker
 {
     Q_GADGET
 public:
@@ -2268,7 +2260,7 @@ Q_DECLARE_METATYPE(QSharedPointer<QCPAxisTicker>)
 /* including file 'src/axis/axistickerdatetime.h' */
 /* modified 2021-03-29T02:30:44, size 3600        */
 
-class QCP_LIB_DECL QCPAxisTickerDateTime : public QCPAxisTicker
+class CORE_LIBRARY_EXPORT QCPAxisTickerDateTime : public QCPAxisTicker
 {
 public:
     QCPAxisTickerDateTime();
@@ -2329,7 +2321,7 @@ protected:
 /* including file 'src/axis/axistickertime.h' */
 /* modified 2021-03-29T02:30:44, size 3542    */
 
-class QCP_LIB_DECL QCPAxisTickerTime : public QCPAxisTicker
+class CORE_LIBRARY_EXPORT QCPAxisTickerTime : public QCPAxisTicker
 {
     Q_GADGET
 public:
@@ -2393,7 +2385,7 @@ Q_DECLARE_METATYPE(QCPAxisTickerTime::TimeUnit)
 /* including file 'src/axis/axistickerfixed.h' */
 /* modified 2021-03-29T02:30:44, size 3308     */
 
-class QCP_LIB_DECL QCPAxisTickerFixed : public QCPAxisTicker
+class CORE_LIBRARY_EXPORT QCPAxisTickerFixed : public QCPAxisTicker
 {
     Q_GADGET
 public:
@@ -2448,7 +2440,7 @@ Q_DECLARE_METATYPE(QCPAxisTickerFixed::ScaleStrategy)
 /* including file 'src/axis/axistickertext.h' */
 /* modified 2021-03-29T02:30:44, size 3090    */
 
-class QCP_LIB_DECL QCPAxisTickerText : public QCPAxisTicker
+class CORE_LIBRARY_EXPORT QCPAxisTickerText : public QCPAxisTicker
 {
 public:
     QCPAxisTickerText();
@@ -2494,7 +2486,7 @@ protected:
 /* including file 'src/axis/axistickerpi.h' */
 /* modified 2021-03-29T02:30:44, size 3911  */
 
-class QCP_LIB_DECL QCPAxisTickerPi : public QCPAxisTicker
+class CORE_LIBRARY_EXPORT QCPAxisTickerPi : public QCPAxisTicker
 {
     Q_GADGET
 public:
@@ -2572,7 +2564,7 @@ Q_DECLARE_METATYPE(QCPAxisTickerPi::FractionStyle)
 /* including file 'src/axis/axistickerlog.h' */
 /* modified 2021-03-29T02:30:44, size 2594   */
 
-class QCP_LIB_DECL QCPAxisTickerLog : public QCPAxisTicker
+class CORE_LIBRARY_EXPORT QCPAxisTickerLog : public QCPAxisTicker
 {
 public:
     QCPAxisTickerLog();
@@ -2611,7 +2603,7 @@ protected:
 /* including file 'src/axis/axis.h'         */
 /* modified 2021-03-29T02:30:44, size 20913 */
 
-class QCP_LIB_DECL QCPGrid : public QCPLayerable
+class CORE_LIBRARY_EXPORT QCPGrid : public QCPLayerable
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -2680,7 +2672,7 @@ protected:
 };
 
 
-class QCP_LIB_DECL QCPAxis : public QCPLayerable
+class CORE_LIBRARY_EXPORT QCPAxis : public QCPLayerable
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -3192,7 +3184,7 @@ protected:
 /* including file 'src/scatterstyle.h'     */
 /* modified 2021-03-29T02:30:44, size 7275 */
 
-class QCP_LIB_DECL QCPScatterStyle
+class CORE_LIBRARY_EXPORT QCPScatterStyle
 {
     Q_GADGET
 public:
@@ -3368,7 +3360,7 @@ inline bool qcpLessThanSortKey(const DataType& a, const DataType& b)
 }
 
 template<class DataType>
-class QCPDataContainer // no QCP_LIB_DECL, template class ends up in header (cpp included below)
+class QCPDataContainer // no CORE_LIBRARY_EXPORT, template class ends up in header (cpp included below)
 {
 public:
     typedef typename QVector<DataType>::const_iterator const_iterator;
@@ -4249,7 +4241,7 @@ void QCPDataContainer<DataType>::performAutoSqueeze()
 /* including file 'src/plottable.h'        */
 /* modified 2021-03-29T02:30:44, size 8461 */
 
-class QCP_LIB_DECL QCPSelectionDecorator
+class CORE_LIBRARY_EXPORT QCPSelectionDecorator
 {
     Q_GADGET
 public:
@@ -4310,7 +4302,7 @@ private:
 Q_DECLARE_METATYPE(QCPSelectionDecorator*)
 
 
-class QCP_LIB_DECL QCPAbstractPlottable : public QCPLayerable
+class CORE_LIBRARY_EXPORT QCPAbstractPlottable : public QCPLayerable
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -4463,7 +4455,7 @@ private:
 /* including file 'src/item.h'             */
 /* modified 2021-03-29T02:30:44, size 9425 */
 
-class QCP_LIB_DECL QCPItemAnchor
+class CORE_LIBRARY_EXPORT QCPItemAnchor
 {
     Q_GADGET
 public:
@@ -4509,7 +4501,7 @@ private:
 };
 
 
-class QCP_LIB_DECL QCPItemPosition : public QCPItemAnchor
+class CORE_LIBRARY_EXPORT QCPItemPosition : public QCPItemAnchor
 {
     Q_GADGET
 public:
@@ -4626,7 +4618,7 @@ private:
 Q_DECLARE_METATYPE(QCPItemPosition::PositionType)
 
 
-class QCP_LIB_DECL QCPAbstractItem : public QCPLayerable
+class CORE_LIBRARY_EXPORT QCPAbstractItem : public QCPLayerable
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -4720,7 +4712,7 @@ private:
 /* including file 'src/core.h'              */
 /* modified 2021-03-29T02:30:44, size 19304 */
 
-class QCP_LIB_DECL QCustomPlot : public QWidget
+class CORE_LIBRARY_EXPORT QCustomPlot : public QWidget
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -5209,7 +5201,7 @@ public:
 template<class DataType>
 class QCPAbstractPlottable1D
     : public QCPAbstractPlottable,
-      public QCPPlottableInterface1D // no QCP_LIB_DECL, template class ends up in header (cpp
+      public QCPPlottableInterface1D // no CORE_LIBRARY_EXPORT, template class ends up in header (cpp
                                      // included below)
 {
     // No Q_OBJECT macro due to template class
@@ -5800,7 +5792,7 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter* painter,
 /* including file 'src/colorgradient.h'    */
 /* modified 2021-03-29T02:30:44, size 7262 */
 
-class QCP_LIB_DECL QCPColorGradient
+class CORE_LIBRARY_EXPORT QCPColorGradient
 {
     Q_GADGET
 public:
@@ -5960,7 +5952,7 @@ Q_DECLARE_METATYPE(QCPColorGradient::GradientPreset)
 /* including file 'src/selectiondecorator-bracket.h' */
 /* modified 2021-03-29T02:30:44, size 4458           */
 
-class QCP_LIB_DECL QCPSelectionDecoratorBracket : public QCPSelectionDecorator
+class CORE_LIBRARY_EXPORT QCPSelectionDecoratorBracket : public QCPSelectionDecorator
 {
     Q_GADGET
 public:
@@ -6057,7 +6049,7 @@ Q_DECLARE_METATYPE(QCPSelectionDecoratorBracket::BracketStyle)
 /* including file 'src/layoutelements/layoutelement-axisrect.h' */
 /* modified 2021-03-29T02:30:44, size 7529                      */
 
-class QCP_LIB_DECL QCPAxisRect : public QCPLayoutElement
+class CORE_LIBRARY_EXPORT QCPAxisRect : public QCPLayoutElement
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -6242,7 +6234,7 @@ private:
 /* including file 'src/layoutelements/layoutelement-legend.h' */
 /* modified 2021-03-29T02:30:44, size 10425                   */
 
-class QCP_LIB_DECL QCPAbstractLegendItem : public QCPLayoutElement
+class CORE_LIBRARY_EXPORT QCPAbstractLegendItem : public QCPLayoutElement
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -6329,7 +6321,7 @@ private:
 };
 
 
-class QCP_LIB_DECL QCPPlottableLegendItem : public QCPAbstractLegendItem
+class CORE_LIBRARY_EXPORT QCPPlottableLegendItem : public QCPAbstractLegendItem
 {
     Q_OBJECT
 public:
@@ -6356,7 +6348,7 @@ protected:
 };
 
 
-class QCP_LIB_DECL QCPLegend : public QCPLayoutGrid
+class CORE_LIBRARY_EXPORT QCPLegend : public QCPLayoutGrid
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -6532,7 +6524,7 @@ Q_DECLARE_METATYPE(QCPLegend::SelectablePart)
 /* including file 'src/layoutelements/layoutelement-textelement.h' */
 /* modified 2021-03-29T02:30:44, size 5359                         */
 
-class QCP_LIB_DECL QCPTextElement : public QCPLayoutElement
+class CORE_LIBRARY_EXPORT QCPTextElement : public QCPLayoutElement
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -6671,7 +6663,7 @@ protected:
 };
 
 
-class QCP_LIB_DECL QCPColorScale : public QCPLayoutElement
+class CORE_LIBRARY_EXPORT QCPColorScale : public QCPLayoutElement
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -6773,7 +6765,7 @@ private:
 /* including file 'src/plottables/plottable-graph.h' */
 /* modified 2021-03-29T02:30:44, size 9316           */
 
-class QCP_LIB_DECL QCPGraphData
+class CORE_LIBRARY_EXPORT QCPGraphData
 {
 public:
     QCPGraphData();
@@ -6822,7 +6814,7 @@ Q_DECLARE_TYPEINFO(QCPGraphData, Q_PRIMITIVE_TYPE);
 */
 typedef QCPDataContainer<QCPGraphData> QCPGraphDataContainer;
 
-class QCP_LIB_DECL QCPGraph : public QCPAbstractPlottable1D<QCPGraphData>
+class CORE_LIBRARY_EXPORT QCPGraph : public QCPAbstractPlottable1D<QCPGraphData>
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -6977,7 +6969,7 @@ Q_DECLARE_METATYPE(QCPGraph::LineStyle)
 /* including file 'src/plottables/plottable-curve.h' */
 /* modified 2021-03-29T02:30:44, size 7434           */
 
-class QCP_LIB_DECL QCPCurveData
+class CORE_LIBRARY_EXPORT QCPCurveData
 {
 public:
     QCPCurveData();
@@ -7027,7 +7019,7 @@ Q_DECLARE_TYPEINFO(QCPCurveData, Q_PRIMITIVE_TYPE);
 */
 typedef QCPDataContainer<QCPCurveData> QCPCurveDataContainer;
 
-class QCP_LIB_DECL QCPCurve : public QCPAbstractPlottable1D<QCPCurveData>
+class CORE_LIBRARY_EXPORT QCPCurve : public QCPAbstractPlottable1D<QCPCurveData>
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -7143,7 +7135,7 @@ Q_DECLARE_METATYPE(QCPCurve::LineStyle)
 /* including file 'src/plottables/plottable-bars.h' */
 /* modified 2021-03-29T02:30:44, size 8955          */
 
-class QCP_LIB_DECL QCPBarsGroup : public QObject
+class CORE_LIBRARY_EXPORT QCPBarsGroup : public QObject
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -7229,7 +7221,7 @@ private:
 Q_DECLARE_METATYPE(QCPBarsGroup::SpacingType)
 
 
-class QCP_LIB_DECL QCPBarsData
+class CORE_LIBRARY_EXPORT QCPBarsData
 {
 public:
     QCPBarsData();
@@ -7279,7 +7271,7 @@ Q_DECLARE_TYPEINFO(QCPBarsData, Q_PRIMITIVE_TYPE);
 */
 typedef QCPDataContainer<QCPBarsData> QCPBarsDataContainer;
 
-class QCP_LIB_DECL QCPBars : public QCPAbstractPlottable1D<QCPBarsData>
+class CORE_LIBRARY_EXPORT QCPBars : public QCPAbstractPlottable1D<QCPBarsData>
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -7405,7 +7397,7 @@ Q_DECLARE_METATYPE(QCPBars::WidthType)
 /* including file 'src/plottables/plottable-statisticalbox.h' */
 /* modified 2021-03-29T02:30:44, size 7522                    */
 
-class QCP_LIB_DECL QCPStatisticalBoxData
+class CORE_LIBRARY_EXPORT QCPStatisticalBoxData
 {
 public:
     QCPStatisticalBoxData();
@@ -7462,7 +7454,7 @@ Q_DECLARE_TYPEINFO(QCPStatisticalBoxData, Q_MOVABLE_TYPE);
 */
 typedef QCPDataContainer<QCPStatisticalBoxData> QCPStatisticalBoxDataContainer;
 
-class QCP_LIB_DECL QCPStatisticalBox : public QCPAbstractPlottable1D<QCPStatisticalBoxData>
+class CORE_LIBRARY_EXPORT QCPStatisticalBox : public QCPAbstractPlottable1D<QCPStatisticalBoxData>
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -7580,7 +7572,7 @@ protected:
 /* including file 'src/plottables/plottable-colormap.h' */
 /* modified 2021-03-29T02:30:44, size 7092              */
 
-class QCP_LIB_DECL QCPColorMapData
+class CORE_LIBRARY_EXPORT QCPColorMapData
 {
 public:
     QCPColorMapData(int keySize, int valueSize, const QCPRange& keyRange,
@@ -7656,7 +7648,7 @@ protected:
 };
 
 
-class QCP_LIB_DECL QCPColorMap : public QCPAbstractPlottable
+class CORE_LIBRARY_EXPORT QCPColorMap : public QCPAbstractPlottable
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -7761,7 +7753,7 @@ protected:
 /* including file 'src/plottables/plottable-financial.h' */
 /* modified 2021-03-29T02:30:44, size 8644               */
 
-class QCP_LIB_DECL QCPFinancialData
+class CORE_LIBRARY_EXPORT QCPFinancialData
 {
 public:
     QCPFinancialData();
@@ -7810,7 +7802,7 @@ Q_DECLARE_TYPEINFO(QCPFinancialData, Q_PRIMITIVE_TYPE);
 */
 typedef QCPDataContainer<QCPFinancialData> QCPFinancialDataContainer;
 
-class QCP_LIB_DECL QCPFinancial : public QCPAbstractPlottable1D<QCPFinancialData>
+class CORE_LIBRARY_EXPORT QCPFinancial : public QCPAbstractPlottable1D<QCPFinancialData>
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -7970,7 +7962,7 @@ Q_DECLARE_METATYPE(QCPFinancial::ChartStyle)
 /* including file 'src/plottables/plottable-errorbar.h' */
 /* modified 2021-03-29T02:30:44, size 7749              */
 
-class QCP_LIB_DECL QCPErrorBarsData
+class CORE_LIBRARY_EXPORT QCPErrorBarsData
 {
 public:
     QCPErrorBarsData();
@@ -7999,7 +7991,7 @@ Q_DECLARE_TYPEINFO(QCPErrorBarsData, Q_PRIMITIVE_TYPE);
 */
 typedef QVector<QCPErrorBarsData> QCPErrorBarsDataContainer;
 
-class QCP_LIB_DECL QCPErrorBars : public QCPAbstractPlottable, public QCPPlottableInterface1D
+class CORE_LIBRARY_EXPORT QCPErrorBars : public QCPAbstractPlottable, public QCPPlottableInterface1D
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -8124,7 +8116,7 @@ protected:
 /* including file 'src/items/item-straightline.h' */
 /* modified 2021-03-29T02:30:44, size 3137        */
 
-class QCP_LIB_DECL QCPItemStraightLine : public QCPAbstractItem
+class CORE_LIBRARY_EXPORT QCPItemStraightLine : public QCPAbstractItem
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -8175,7 +8167,7 @@ protected:
 /* including file 'src/items/item-line.h'  */
 /* modified 2021-03-29T02:30:44, size 3429 */
 
-class QCP_LIB_DECL QCPItemLine : public QCPAbstractItem
+class CORE_LIBRARY_EXPORT QCPItemLine : public QCPAbstractItem
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -8239,7 +8231,7 @@ protected:
 /* including file 'src/items/item-curve.h' */
 /* modified 2021-03-29T02:30:44, size 3401 */
 
-class QCP_LIB_DECL QCPItemCurve : public QCPAbstractItem
+class CORE_LIBRARY_EXPORT QCPItemCurve : public QCPAbstractItem
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -8303,7 +8295,7 @@ protected:
 /* including file 'src/items/item-rect.h'  */
 /* modified 2021-03-29T02:30:44, size 3710 */
 
-class QCP_LIB_DECL QCPItemRect : public QCPAbstractItem
+class CORE_LIBRARY_EXPORT QCPItemRect : public QCPAbstractItem
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -8375,7 +8367,7 @@ protected:
 /* including file 'src/items/item-text.h'  */
 /* modified 2021-03-29T02:30:44, size 5576 */
 
-class QCP_LIB_DECL QCPItemText : public QCPAbstractItem
+class CORE_LIBRARY_EXPORT QCPItemText : public QCPAbstractItem
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -8522,7 +8514,7 @@ protected:
 /* including file 'src/items/item-ellipse.h' */
 /* modified 2021-03-29T02:30:44, size 3890   */
 
-class QCP_LIB_DECL QCPItemEllipse : public QCPAbstractItem
+class CORE_LIBRARY_EXPORT QCPItemEllipse : public QCPAbstractItem
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -8607,7 +8599,7 @@ protected:
 /* including file 'src/items/item-pixmap.h' */
 /* modified 2021-03-29T02:30:44, size 4407  */
 
-class QCP_LIB_DECL QCPItemPixmap : public QCPAbstractItem
+class CORE_LIBRARY_EXPORT QCPItemPixmap : public QCPAbstractItem
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -8697,7 +8689,7 @@ protected:
 /* including file 'src/items/item-tracer.h' */
 /* modified 2021-03-29T02:30:44, size 4811  */
 
-class QCP_LIB_DECL QCPItemTracer : public QCPAbstractItem
+class CORE_LIBRARY_EXPORT QCPItemTracer : public QCPAbstractItem
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -8817,7 +8809,7 @@ Q_DECLARE_METATYPE(QCPItemTracer::TracerStyle)
 /* including file 'src/items/item-bracket.h' */
 /* modified 2021-03-29T02:30:44, size 3991   */
 
-class QCP_LIB_DECL QCPItemBracket : public QCPAbstractItem
+class CORE_LIBRARY_EXPORT QCPItemBracket : public QCPAbstractItem
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -8902,7 +8894,7 @@ Q_DECLARE_METATYPE(QCPItemBracket::BracketStyle)
 /* modified 2021-03-29T02:30:44, size 12227 */
 
 
-class QCP_LIB_DECL QCPPolarAxisRadial : public QCPLayerable
+class CORE_LIBRARY_EXPORT QCPPolarAxisRadial : public QCPLayerable
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -9275,7 +9267,7 @@ Q_DECLARE_METATYPE(QCPPolarAxisRadial::SelectablePart)
 /* including file 'src/polar/layoutelement-angularaxis.h' */
 /* modified 2021-03-29T02:30:44, size 13461               */
 
-class QCP_LIB_DECL QCPPolarAxisAngular : public QCPLayoutElement
+class CORE_LIBRARY_EXPORT QCPPolarAxisAngular : public QCPLayoutElement
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -9732,7 +9724,7 @@ Q_DECLARE_METATYPE(QCPPolarAxisAngular::SelectablePart)
 /* including file 'src/polar/polargrid.h'  */
 /* modified 2021-03-29T02:30:44, size 4506 */
 
-class QCP_LIB_DECL QCPPolarGrid : public QCPLayerable
+class CORE_LIBRARY_EXPORT QCPPolarGrid : public QCPLayerable
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
@@ -9848,7 +9840,7 @@ Q_DECLARE_METATYPE(QCPPolarGrid::GridType)
 /* modified 2021-03-29T02:30:44, size 9606 */
 
 
-class QCP_LIB_DECL QCPPolarLegendItem : public QCPAbstractLegendItem
+class CORE_LIBRARY_EXPORT QCPPolarLegendItem : public QCPAbstractLegendItem
 {
     Q_OBJECT
 public:
@@ -9875,7 +9867,7 @@ protected:
 };
 
 
-class QCP_LIB_DECL QCPPolarGraph : public QCPLayerable
+class CORE_LIBRARY_EXPORT QCPPolarGraph : public QCPLayerable
 {
     Q_OBJECT
     /// \cond INCLUDE_QPROPERTIES
