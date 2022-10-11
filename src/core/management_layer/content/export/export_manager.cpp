@@ -878,6 +878,7 @@ bool ExportManager::canExportDocument(BusinessLayer::AbstractModel* _model) cons
     case Domain::DocumentObjectType::ScreenplaySynopsis:
     case Domain::DocumentObjectType::ScreenplayTreatment:
     case Domain::DocumentObjectType::ScreenplayText:
+    case Domain::DocumentObjectType::ScreenplayStatistics:
     //
     case Domain::DocumentObjectType::Stageplay:
     case Domain::DocumentObjectType::StageplayTitlePage:

@@ -2335,7 +2335,8 @@ BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
         return scriptTextModel(item);
     }
     case Domain::DocumentObjectType::ScreenplayTitlePage:
-    case Domain::DocumentObjectType::ScreenplaySynopsis: {
+    case Domain::DocumentObjectType::ScreenplaySynopsis:
+    case Domain::DocumentObjectType::ScreenplayStatistics: {
         if (item == nullptr) {
             break;
         }
@@ -3030,7 +3031,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Определим представление и отобразим
     //
-    Log::info("Activate plugin view");
+    Log::debug("Activate plugin view");
     Ui::IDocumentView* view = nullptr;
     if (d->view.active == d->view.left) {
         view = d->pluginsBuilder.activateView(viewMimeType, d->currentDocument.model);
@@ -3042,16 +3043,20 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         d->view.active->setVersionsVisible(false);
         return;
     }
+    Log::debug("Set project info");
     view->setProjectInfo(d->isProjectRemote, d->isProjectOwner);
+    Log::debug("Set editing mode");
     view->setEditingMode(d->editingMode);
+    Log::debug("Set document versions");
     d->view.active->setDocumentVersions(aliasedItem->versions());
+    Log::debug("Show view");
     d->view.active->showEditor(view->asQWidget());
     d->view.activeIndex = sourceItemIndex;
 
     //
     // Настроим опции редактора
     //
-    Log::info("Activate plugin view options");
+    Log::debug("Activate plugin view options");
     auto viewOptions = view->options();
     if (isTextItem(aliasedItem)) {
         viewOptions.prepend(d->showVersionsAction);
@@ -3088,7 +3093,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Настроим уведомления плагина
     //
-    Log::info("Activate plugin manager");
+    Log::debug("Activate plugin manager");
     if (auto documentManager = d->pluginsBuilder.plugin(viewMimeType)->asQObject();
         documentManager != nullptr) {
         const auto invalidSignalIndex = -1;
