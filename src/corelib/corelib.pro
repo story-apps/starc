@@ -72,6 +72,17 @@ DEPENDPATH += $$PWD/../3rd_party/webloader
 PRE_TARGETDEPS += $$PWD/../3rd_party/webloader
 #
 
+#
+# Подключаем библиотеку QtXlsxWriter
+#
+LIBS += -L$$LIBSDIR/ -lqtxlsxwriter
+win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$LIBSDIR/qtxlsxwriter.lib
+
+INCLUDEPATH += $$PWD/../3rd_party/qtxlsxwriter
+DEPENDPATH += $$PWD/../3rd_party/qtxlsxwriter
+PRE_TARGETDEPS += $$PWD/../3rd_party/qtxlsxwriter
+#
+
 SOURCES += \
     business_layer/chronometry/chronometer.cpp \
     business_layer/document/audioplay/text/audioplay_text_corrector.cpp \

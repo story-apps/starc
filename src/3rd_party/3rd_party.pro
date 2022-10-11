@@ -6,4 +6,5 @@ SUBDIRS = \
     libavoid \
     qbreakpad/qBreakpad.pro \
     qgumboparser \
-    webloader
+    webloader \
+    qtxlsxwriter
