@@ -60,6 +60,11 @@ public:
      */
     BusinessLayer::TextModelItem* currentItem() const;
 
+    /**
+     * @brief Можно ли разделить параграф, в котором установлен курсор
+     */
+    bool canSplitParagraph(const BusinessLayer::TextCursor& _cursor) const;
+
 
     ScreenplayTextEdit* q = nullptr;
 
@@ -130,6 +135,22 @@ BusinessLayer::TextModelItem* ScreenplayTextEdit::Implementation::currentItem() 
 
     auto screenplayBlockData = static_cast<BusinessLayer::TextBlockData*>(userData);
     return screenplayBlockData->item();
+}
+
+bool ScreenplayTextEdit::Implementation::canSplitParagraph(
+    const BusinessLayer::TextCursor& _cursor) const
+{
+    //
+    // FIXME: Проверять все параграфы попадающие в выделение
+    //
+    const auto blockType = TextBlockStyle::forBlock(_cursor.block());
+    return blockType != TextParagraphType::SceneHeading
+        && blockType != TextParagraphType::SceneHeadingShadow
+        && blockType != TextParagraphType::BeatHeading
+        && blockType != TextParagraphType::BeatHeadingShadow
+        && blockType != TextParagraphType::ActHeading && blockType != TextParagraphType::ActFooter
+        && blockType != TextParagraphType::SequenceHeading
+        && blockType != TextParagraphType::SequenceFooter;
 }
 
 
@@ -541,6 +562,26 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     else if (_event == QKeySequence::Paste) {
         paste();
         d->model->saveChanges();
+    }
+    //
+    // ... разделить/сшить параграф
+    //
+    else if (_event->key() == Qt::Key_D && _event->modifiers().testFlag(Qt::ControlModifier)) {
+        BusinessLayer::TextCursor cursor = textCursor();
+        if (d->canSplitParagraph(cursor)) {
+            if (cursor.inTable()) {
+                d->document.mergeParagraph(cursor);
+            } else {
+                d->document.splitParagraph(cursor);
+
+                //
+                // После разделения, возвращаемся в первую ячейку таблицы
+                //
+                moveCursor(QTextCursor::PreviousBlock);
+                moveCursor(QTextCursor::PreviousBlock);
+                moveCursor(QTextCursor::EndOfBlock);
+            }
+        }
     }
     //
     // Обрабатываем в базовом классе
@@ -1380,6 +1421,7 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
 
     auto splitAction = new QAction(this);
     splitAction->setSeparator(true);
+    splitAction->setShortcut(QKeySequence("Ctrl+D"));
     if (cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
         splitAction->setIconText(u8"\U000f10e7");
@@ -1390,15 +1432,7 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
         //
         // Запрещаем разделять некоторые блоки
         //
-        const auto blockType = TextBlockStyle::forBlock(cursor.block());
-        splitAction->setEnabled(blockType != TextParagraphType::SceneHeading
-                                && blockType != TextParagraphType::SceneHeadingShadow
-                                && blockType != TextParagraphType::BeatHeading
-                                && blockType != TextParagraphType::BeatHeadingShadow
-                                && blockType != TextParagraphType::ActHeading
-                                && blockType != TextParagraphType::ActFooter
-                                && blockType != TextParagraphType::SequenceHeading
-                                && blockType != TextParagraphType::SequenceFooter);
+        splitAction->setEnabled(d->canSplitParagraph(cursor));
     }
     connect(splitAction, &QAction::triggered, this, [this] {
         BusinessLayer::TextCursor cursor = textCursor();
