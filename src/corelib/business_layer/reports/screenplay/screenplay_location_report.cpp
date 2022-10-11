@@ -1,5 +1,6 @@
 #include "screenplay_location_report.h"
 
+#include <3rd_party/qtxlsxwriter/xlsxdocument.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
@@ -349,12 +350,69 @@ void ScreenplayLocationReport::build(QAbstractItemModel* _model)
         Qt::DisplayRole);
 }
 
+void ScreenplayLocationReport::saveToFile(const QString& _fileName) const
+{
+    QXlsx::Document xlsx;
+    QXlsx::Format headerFormat;
+    headerFormat.setFontBold(true);
+    QXlsx::Format textHeaderFormat;
+    textHeaderFormat.setFillPattern(QXlsx::Format::PatternLightUp);
+
+    constexpr int firstRow = 1;
+    constexpr int firstColumn = 1;
+    int reportRow = firstRow;
+    auto writeHeader = [&xlsx, &headerFormat, &reportRow](int _column, const QVariant& _text) {
+        xlsx.write(reportRow, _column, _text, headerFormat);
+    };
+    auto writeTextHeader
+        = [&xlsx, &reportRow, &textHeaderFormat](int _column, const QVariant& _text) {
+              xlsx.write(reportRow, _column, _text, textHeaderFormat);
+          };
+    auto writeText = [&xlsx, &reportRow](int _column, const QVariant& _text) {
+        xlsx.write(reportRow, _column, _text);
+    };
+
+    for (int column = firstColumn; column < firstColumn + locationModel()->columnCount(); ++column) {
+        writeHeader(column, locationModel()->headerData(column - firstColumn, Qt::Horizontal));
+    }
+    for (int row = 0; row < locationModel()->rowCount(); ++row) {
+        ++reportRow;
+        for (int column = firstColumn; column < firstColumn + locationModel()->columnCount();
+             ++column) {
+            writeTextHeader(column, locationModel()->index(row, column - firstColumn).data());
+        }
+
+        const auto locationIndex = locationModel()->index(row, 0);
+        for (int sceneTimeRow = 0; sceneTimeRow < locationModel()->rowCount(locationIndex);
+             ++sceneTimeRow) {
+            ++reportRow;
+            for (int sceneTimeColumn = 0;
+                 sceneTimeColumn < locationModel()->columnCount(locationIndex); ++sceneTimeColumn) {
+                writeText(sceneTimeColumn + firstColumn,
+                          locationModel()->index(sceneTimeRow, sceneTimeColumn, locationIndex).data());
+            }
+
+            const auto sceneTimeIndex = locationModel()->index(sceneTimeRow, 0, locationIndex);
+            for (int sceneRow = 0; sceneRow < locationModel()->rowCount(sceneTimeIndex); ++sceneRow) {
+                ++reportRow;
+                for (int sceneColumn = 0; sceneColumn < locationModel()->columnCount(sceneTimeIndex);
+                     ++sceneColumn) {
+                    writeText(sceneColumn + firstColumn,
+                              locationModel()->index(sceneRow, sceneColumn, sceneTimeIndex).data());
+                }
+            }
+        }
+    }
+
+    xlsx.saveAs(_fileName);
+}
+
 void ScreenplayLocationReport::setParameters(int _sortBy)
 {
     d->sortBy = _sortBy;
 }
 
-QAbstractItemModel* ScreenplayLocationReport::sceneModel() const
+QAbstractItemModel* ScreenplayLocationReport::locationModel() const
 {
     return d->locationModel.data();
 }

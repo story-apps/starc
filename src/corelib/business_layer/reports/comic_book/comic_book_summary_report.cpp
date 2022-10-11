@@ -225,6 +225,11 @@ void ComicBookSummaryReport::build(QAbstractItemModel* _model)
     }
 }
 
+void ComicBookSummaryReport::saveToFile(const QString& _fileName) const
+{
+    Q_UNUSED(_fileName)
+}
+
 int ComicBookSummaryReport::pagesCount() const
 {
     return d->pagesCount;

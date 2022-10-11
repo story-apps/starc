@@ -1,5 +1,6 @@
 #include "screenplay_cast_report.h"
 
+#include <3rd_party/qtxlsxwriter/xlsxdocument.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
@@ -321,6 +322,36 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
         4, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Total scenes"),
         Qt::DisplayRole);
+}
+
+void ScreenplayCastReport::saveToFile(const QString& _fileName) const
+{
+    QXlsx::Document xlsx;
+    QXlsx::Format headerFormat;
+    headerFormat.setFontBold(true);
+
+    constexpr int firstRow = 1;
+    constexpr int firstColumn = 1;
+    int reportRow = firstRow;
+    auto writeHeader = [&xlsx, &headerFormat, &reportRow](int _column, const QVariant& _text) {
+        xlsx.write(reportRow, _column, _text, headerFormat);
+    };
+    auto writeText = [&xlsx, &reportRow](int _column, const QVariant& _text) {
+        xlsx.write(reportRow, _column, _text);
+    };
+
+    for (int column = firstColumn; column < firstColumn + castModel()->columnCount(); ++column) {
+        writeHeader(column, castModel()->headerData(column - firstColumn, Qt::Horizontal));
+    }
+    for (int row = 0; row < castModel()->rowCount(); ++row) {
+        ++reportRow;
+        for (int column = firstColumn; column < firstColumn + castModel()->columnCount();
+             ++column) {
+            writeText(column, castModel()->index(row, column - firstColumn).data());
+        }
+    }
+
+    xlsx.saveAs(_fileName);
 }
 
 void ScreenplayCastReport::setParameters(int _sortBy)

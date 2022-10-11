@@ -27,6 +27,11 @@ public:
     Plot plot() const override;
 
     /**
+     * @brief Сохранить график в файл
+     */
+    void saveToFile(const QString& _fileName) const override;
+
+    /**
      * @brief Задать параметры графика
      */
     void setParameters(bool _sceneDuration, bool _actionDuration, bool _dialoguesDuration,

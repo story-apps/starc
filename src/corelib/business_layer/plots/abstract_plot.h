@@ -70,6 +70,11 @@ public:
      * @brief Получить данные графика
      */
     virtual Plot plot() const = 0;
+
+    /**
+     * @brief Сохранить график в файл
+     */
+    virtual void saveToFile(const QString& _fileName) const = 0;
 };
 
 } // namespace BusinessLayer

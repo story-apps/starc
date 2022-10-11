@@ -1,5 +1,6 @@
 #include "screenplay_gender_report.h"
 
+#include <3rd_party/qtxlsxwriter/xlsxdocument.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
@@ -361,6 +362,104 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
         makeRow(3, undefined.size(), totalCharacters, d->charactersInfoModel.data());
         makeHeader(d->charactersInfoModel.data());
     }
+}
+
+void ScreenplayGenderReport::saveToFile(const QString& _fileName) const
+{
+    QXlsx::Document xlsx;
+    QXlsx::Format headerFormat;
+    headerFormat.setFontBold(true);
+
+    constexpr int firstRow = 1;
+    constexpr int firstColumn = 1;
+    int reportRow = firstRow;
+    auto writeTitle = [&xlsx, &headerFormat, &reportRow](const QString& _text) {
+        xlsx.write(reportRow++, 1, _text, headerFormat);
+        ++reportRow;
+    };
+    auto writeHeader = [&xlsx, &headerFormat, &reportRow](int _column, const QVariant& _text) {
+        xlsx.write(reportRow, _column, _text, headerFormat);
+    };
+    auto writeText = [&xlsx, &reportRow](int _column, const QVariant& _text) {
+        xlsx.write(reportRow, _column, _text);
+    };
+
+    //
+    // Сводка
+    //
+    writeTitle(
+        QCoreApplication::translate("BusinessLayer::ScreenplayGenderReport", "Gender analysis"));
+    int reportColumn = firstColumn;
+    auto testResult = [](int _passedTimes) {
+        return _passedTimes == 0
+            ? QCoreApplication::translate("BusinessLayer::ScreenplayGenderReport", "Does not pass")
+            : QCoreApplication::translate("BusinessLayer::ScreenplayGenderReport",
+                                          "Passed %n time(s)", "", _passedTimes);
+    };
+    writeHeader(
+        reportColumn++,
+        QCoreApplication::translate("BusinessLayer::ScreenplayGenderReport", "Bechdel test"));
+    writeText(reportColumn, testResult(bechdelTest()));
+    ++reportRow;
+    reportColumn = firstColumn;
+    writeHeader(reportColumn++,
+                QCoreApplication::translate("BusinessLayer::ScreenplayGenderReport",
+                                            "Reverse Bechdel test"));
+    writeText(reportColumn, testResult(reverseBechdelTest()));
+
+    //
+    // Статистика по персонажам
+    //
+    reportRow += 2;
+    writeTitle(QCoreApplication::translate("BusinessLayer::ScreenplayGenderReport",
+                                           "Characters statistics"));
+    for (int column = firstColumn; column < firstColumn + charactersInfoModel()->columnCount();
+         ++column) {
+        writeHeader(column,
+                    charactersInfoModel()->headerData(column - firstColumn, Qt::Horizontal));
+    }
+    for (int row = 0; row < charactersInfoModel()->rowCount(); ++row) {
+        ++reportRow;
+        for (int column = firstColumn; column < firstColumn + 4; ++column) {
+            writeText(column, charactersInfoModel()->index(row, column - firstColumn).data());
+        }
+    }
+
+    //
+    // Статистика по репликам
+    //
+    reportRow += 2;
+    writeTitle(QCoreApplication::translate("BusinessLayer::ScreenplayGenderReport",
+                                           "Dialogues statistics"));
+    for (int column = firstColumn; column < firstColumn + dialoguesInfoModel()->columnCount();
+         ++column) {
+        writeHeader(column, dialoguesInfoModel()->headerData(column - firstColumn, Qt::Horizontal));
+    }
+    for (int row = 0; row < dialoguesInfoModel()->rowCount(); ++row) {
+        ++reportRow;
+        for (int column = firstColumn; column < firstColumn + 3; ++column) {
+            writeText(column, dialoguesInfoModel()->index(row, column - firstColumn).data());
+        }
+    }
+
+    //
+    // Статистика по сценам
+    //
+    reportRow += 2;
+    writeTitle(
+        QCoreApplication::translate("BusinessLayer::ScreenplayGenderReport", "Scenes statistics"));
+    for (int column = firstColumn; column < firstColumn + scenesInfoModel()->columnCount();
+         ++column) {
+        writeHeader(column, scenesInfoModel()->headerData(column - firstColumn, Qt::Horizontal));
+    }
+    for (int row = 0; row < scenesInfoModel()->rowCount(); ++row) {
+        ++reportRow;
+        for (int column = firstColumn; column < firstColumn + 3; ++column) {
+            writeText(column, scenesInfoModel()->index(row, column - firstColumn).data());
+        }
+    }
+
+    xlsx.saveAs(_fileName);
 }
 
 int ScreenplayGenderReport::bechdelTest() const

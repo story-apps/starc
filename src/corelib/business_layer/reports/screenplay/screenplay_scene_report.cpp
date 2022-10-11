@@ -1,5 +1,7 @@
 #include "screenplay_scene_report.h"
 
+#include <3rd_party/qtxlsxwriter/xlsxdocument.h>
+#include <3rd_party/qtxlsxwriter/xlsxrichstring.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
@@ -343,6 +345,57 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
         4, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplaySceneReport", "Duration"),
         Qt::DisplayRole);
+}
+
+void ScreenplaySceneReport::saveToFile(const QString& _fileName) const
+{
+    QXlsx::Document xlsx;
+    QXlsx::Format headerFormat;
+    headerFormat.setFontBold(true);
+    QXlsx::Format textHeaderFormat;
+    textHeaderFormat.setFillPattern(QXlsx::Format::PatternLightUp);
+    QXlsx::Format underlineFormat;
+    underlineFormat.setFontUnderline(QXlsx::Format::FontUnderlineSingle);
+
+    constexpr int firstRow = 1;
+    constexpr int firstColumn = 1;
+    int reportRow = firstRow;
+    auto writeHeader = [&xlsx, &headerFormat, &reportRow](int _column, const QVariant& _text) {
+        xlsx.write(reportRow, _column, _text, headerFormat);
+    };
+    auto writeTextHeader
+        = [&xlsx, &reportRow, &textHeaderFormat](int _column, const QVariant& _text) {
+              xlsx.write(reportRow, _column, _text, textHeaderFormat);
+          };
+
+    for (int column = firstColumn; column < firstColumn + sceneModel()->columnCount(); ++column) {
+        writeHeader(column, sceneModel()->headerData(column - firstColumn, Qt::Horizontal));
+    }
+    for (int row = 0; row < sceneModel()->rowCount(); ++row) {
+        ++reportRow;
+        for (int column = firstColumn; column < firstColumn + sceneModel()->columnCount();
+             ++column) {
+            writeTextHeader(column, sceneModel()->index(row, column - firstColumn).data());
+        }
+
+        ++reportRow;
+        QXlsx::RichString rich;
+        const auto itemIndex = sceneModel()->index(row, 0);
+        for (int childRow = 0; childRow < sceneModel()->rowCount(itemIndex); ++childRow) {
+            if (childRow > 0) {
+                rich.addFragment(", ", {});
+            }
+            const auto childIndex = sceneModel()->index(childRow, 0, itemIndex);
+            if (!childIndex.data(Qt::DecorationRole).isNull()) {
+                rich.addFragment(childIndex.data().toString(), underlineFormat);
+            } else {
+                rich.addFragment(childIndex.data().toString(), {});
+            }
+        }
+        xlsx.write(reportRow, firstColumn, rich);
+    }
+
+    xlsx.saveAs(_fileName);
 }
 
 void ScreenplaySceneReport::setParameters(int _sortBy)

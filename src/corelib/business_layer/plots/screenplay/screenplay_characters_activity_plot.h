@@ -27,6 +27,11 @@ public:
     Plot plot() const override;
 
     /**
+     * @brief Сохранить график в файл
+     */
+    void saveToFile(const QString& _fileName) const override;
+
+    /**
      * @brief Получить список персонажей из отчёта
      */
     QVector<QString> characters() const;

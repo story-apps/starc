@@ -317,6 +317,11 @@ void AudioplaySummaryReport::build(QAbstractItemModel* _model)
     }
 }
 
+void AudioplaySummaryReport::saveToFile(const QString& _fileName) const
+{
+    Q_UNUSED(_fileName);
+}
+
 std::chrono::milliseconds AudioplaySummaryReport::duration() const
 {
     return d->duration;

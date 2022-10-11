@@ -23,6 +23,11 @@ public:
     void build(QAbstractItemModel* _model) override;
 
     /**
+     * @brief Сохранить отчёт в файл
+     */
+    void saveToFile(const QString& _fileName) const override;
+
+    /**
      * @brief Количество страниц
      */
     int pagesCount() const;

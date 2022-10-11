@@ -317,6 +317,11 @@ void StageplaySummaryReport::build(QAbstractItemModel* _model)
     }
 }
 
+void StageplaySummaryReport::saveToFile(const QString& _fileName) const
+{
+    Q_UNUSED(_fileName)
+}
+
 int StageplaySummaryReport::pagesCount() const
 {
     return d->pagesCount;

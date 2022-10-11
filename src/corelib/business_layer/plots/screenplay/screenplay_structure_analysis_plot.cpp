@@ -1,5 +1,6 @@
 #include "screenplay_structure_analysis_plot.h"
 
+#include <3rd_party/qtxlsxwriter/xlsxdocument.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
@@ -353,6 +354,74 @@ void ScreenplayStructureAnalysisPlot::build(QAbstractItemModel* _model) const
 Plot ScreenplayStructureAnalysisPlot::plot() const
 {
     return d->plot;
+}
+
+void ScreenplayStructureAnalysisPlot::saveToFile(const QString& _fileName) const
+{
+    QXlsx::Document xlsx;
+    QXlsx::Format headerFormat;
+    headerFormat.setFontBold(true);
+
+    constexpr int firstRow = 1;
+    constexpr int firstColumn = 1;
+    int reportRow = firstRow;
+    auto writeHeader = [&xlsx, &headerFormat, &reportRow](int _column, const QVariant& _text) {
+        xlsx.write(reportRow, _column, _text, headerFormat);
+    };
+    auto writeText = [&xlsx, &reportRow](int _column, const QVariant& _text) {
+        xlsx.write(reportRow, _column, _text);
+    };
+
+    int column = firstColumn;
+    writeHeader(
+        column++,
+        QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot", "Scene"));
+    for (const auto& plotData : std::as_const(d->plot.data)) {
+        writeHeader(column++, plotData.name);
+    }
+
+    ++reportRow;
+    int firstColumnWidth = 10;
+    if (!d->plot.data.isEmpty()) {
+        const auto scenePoints = d->plot.data.constFirst().x;
+        QStringList lastSceneInfo;
+        for (int index = 0; index < scenePoints.size(); ++index) {
+            const auto& scenePoint = scenePoints.at(index);
+            const auto sceneInfo = d->plot.info.lowerBound(scenePoint);
+            if (sceneInfo == d->plot.info.end() || sceneInfo.value() == lastSceneInfo
+                || sceneInfo.value().isEmpty()) {
+                continue;
+            }
+
+            lastSceneInfo = sceneInfo.value();
+            column = firstColumn;
+            writeText(column++, sceneInfo->constFirst());
+            for (const auto& plotData : std::as_const(d->plot.data)) {
+                const auto isDuration = QSet<QString>{QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
+                                                                                  "Scene duration"),
+                                        QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
+                                                                                  "Action duration"),
+                                        QCoreApplication::translate("BusinessLayer::ScreenplayStructureAnalysisPlot",
+                                                                                  "Dialogues duration"),}.contains(plotData.name);
+                //
+                // +1, чтобы не брать начальную нулевую точку графика
+                //
+                auto value = plotData.y.at(index + 1);
+                const auto millisecondsInMinute = 60000.0;
+                writeText(column++,
+                          isDuration ? TimeHelper::toString(std::chrono::milliseconds{
+                              static_cast<int>(value * millisecondsInMinute) })
+                                     : QString::number(value));
+            }
+            ++reportRow;
+
+            firstColumnWidth = std::max(firstColumnWidth, sceneInfo->constFirst().size());
+        }
+    }
+
+    xlsx.setColumnWidth(firstColumn, firstColumnWidth);
+
+    xlsx.saveAs(_fileName);
 }
 
 void ScreenplayStructureAnalysisPlot::setParameters(bool _sceneDuration, bool _actionDuration,
