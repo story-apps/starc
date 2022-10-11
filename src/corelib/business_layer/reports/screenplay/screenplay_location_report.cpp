@@ -372,7 +372,8 @@ void ScreenplayLocationReport::saveToFile(const QString& _fileName) const
         xlsx.write(reportRow, _column, _text);
     };
 
-    for (int column = firstColumn; column < firstColumn + locationModel()->columnCount(); ++column) {
+    for (int column = firstColumn; column < firstColumn + locationModel()->columnCount();
+         ++column) {
         writeHeader(column, locationModel()->headerData(column - firstColumn, Qt::Horizontal));
     }
     for (int row = 0; row < locationModel()->rowCount(); ++row) {
@@ -388,15 +389,17 @@ void ScreenplayLocationReport::saveToFile(const QString& _fileName) const
             ++reportRow;
             for (int sceneTimeColumn = 0;
                  sceneTimeColumn < locationModel()->columnCount(locationIndex); ++sceneTimeColumn) {
-                writeText(sceneTimeColumn + firstColumn,
-                          locationModel()->index(sceneTimeRow, sceneTimeColumn, locationIndex).data());
+                writeText(
+                    sceneTimeColumn + firstColumn,
+                    locationModel()->index(sceneTimeRow, sceneTimeColumn, locationIndex).data());
             }
 
             const auto sceneTimeIndex = locationModel()->index(sceneTimeRow, 0, locationIndex);
-            for (int sceneRow = 0; sceneRow < locationModel()->rowCount(sceneTimeIndex); ++sceneRow) {
+            for (int sceneRow = 0; sceneRow < locationModel()->rowCount(sceneTimeIndex);
+                 ++sceneRow) {
                 ++reportRow;
-                for (int sceneColumn = 0; sceneColumn < locationModel()->columnCount(sceneTimeIndex);
-                     ++sceneColumn) {
+                for (int sceneColumn = 0;
+                     sceneColumn < locationModel()->columnCount(sceneTimeIndex); ++sceneColumn) {
                     writeText(sceneColumn + firstColumn,
                               locationModel()->index(sceneRow, sceneColumn, sceneTimeIndex).data());
                 }

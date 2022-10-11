@@ -142,11 +142,11 @@ void ScreenplayStatisticsStructureView::updateTranslations()
     reportsModel->item(kSceneReportIndex)->setText(tr("Scene report"));
     reportsModel->item(kLocationReportIndex)->setText(tr("Location report"));
     reportsModel->item(kCastReportIndex)->setText(tr("Cast report"));
-    reportsModel->item(kGenderReportIndex)->setText(tr("Gender analisys"));
+    reportsModel->item(kGenderReportIndex)->setText(tr("Gender analysis"));
     //
     d->plotsTitle->setText(tr("Plots"));
     auto plotsModel = qobject_cast<QStandardItemModel*>(d->plots->model());
-    plotsModel->item(kStoryStructureAnalysisPlotIndex)->setText(tr("Story structure analisys"));
+    plotsModel->item(kStoryStructureAnalysisPlotIndex)->setText(tr("Story structure analysis"));
     plotsModel->item(kCharactersActivityPlotIndex)->setText(tr("Characters activity"));
 }
 

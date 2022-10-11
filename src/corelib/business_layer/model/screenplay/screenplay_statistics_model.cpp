@@ -106,7 +106,7 @@ const ScreenplayGenderReport& ScreenplayStatisticsModel::genderReport() const
     return d->genderReport;
 }
 
-const ScreenplayStructureAnalysisPlot& ScreenplayStatisticsModel::structureAnalisysPlot() const
+const ScreenplayStructureAnalysisPlot& ScreenplayStatisticsModel::structureAnalysisPlot() const
 {
     return d->structureAnalysisPlot;
 }

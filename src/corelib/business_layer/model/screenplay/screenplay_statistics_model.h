@@ -69,7 +69,7 @@ public:
     /**
      * @brief График структурного анализа
      */
-    const ScreenplayStructureAnalysisPlot& structureAnalisysPlot() const;
+    const ScreenplayStructureAnalysisPlot& structureAnalysisPlot() const;
     void setStructureAnalysisPlotParameters(bool _sceneDuration, bool _actionDuration,
                                             bool _dialoguesDuration, bool _charactersCount,
                                             bool _dialoguesCount);
