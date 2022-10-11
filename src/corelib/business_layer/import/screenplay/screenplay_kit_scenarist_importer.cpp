@@ -164,6 +164,8 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
     QDomElement rootElement = kitDocument.documentElement();
     QDomNode paragraph = rootElement.firstChild();
     bool alreadyInScene = false;
+    bool alreadyInBeat = false;
+    bool alreadyInText = false;
     while (!paragraph.isNull()) {
         //
         // Определим тип блока
@@ -193,11 +195,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
         } else if (paragraphType == "folder_footer") {
             blockType = TextParagraphType::SequenceFooter;
         } else if (paragraphType == "scene_description") {
-            //
-            // TODO:
-            //
-            paragraph = paragraph.nextSibling();
-            continue;
+            blockType = TextParagraphType::BeatHeading;
         } else if (paragraphType == "lyrics") {
             blockType = TextParagraphType::Lyrics;
         }
@@ -291,11 +289,23 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
         //
         switch (blockType) {
         case TextParagraphType::SequenceHeading: {
+            if (alreadyInBeat) {
+                if (!alreadyInText) {
+                    writer.writeStartElement(toString(TextParagraphType::Action));
+                    writer.writeStartElement(xml::kValueTag);
+                    writer.writeCDATA({});
+                    writer.writeEndElement(); // value
+                    writer.writeEndElement(); // action
+                }
+                writer.writeEndElement(); // контент предыдущего бита
+                writer.writeEndElement(); // предыдущий бит
+            }
+            alreadyInBeat = false; // вышли из бита
+
             if (alreadyInScene) {
                 writer.writeEndElement(); // контент предыдущей сцены
                 writer.writeEndElement(); // предыдущая сцена
             }
-
             alreadyInScene = false; // вышли из сцены
 
             writer.writeStartElement(toString(TextFolderType::Sequence));
@@ -305,34 +315,96 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
         }
 
         case TextParagraphType::SequenceFooter: {
+            if (alreadyInBeat) {
+                if (!alreadyInText) {
+                    writer.writeStartElement(toString(TextParagraphType::Action));
+                    writer.writeStartElement(xml::kValueTag);
+                    writer.writeCDATA({});
+                    writer.writeEndElement(); // value
+                    writer.writeEndElement(); // action
+                }
+                writer.writeEndElement(); // контент предыдущего бита
+                writer.writeEndElement(); // предыдущий бит
+            }
+            alreadyInBeat = false; // вышли из бита
+
             if (alreadyInScene) {
                 writer.writeEndElement(); // контент предыдущей сцены
                 writer.writeEndElement(); // предыдущая сцена
             }
-
             alreadyInScene = false; // вышли из сцены
 
-            writer.writeEndElement(); // контент текущей папки
-            writer.writeEndElement(); // текущая папка
             break;
         }
 
         case TextParagraphType::SceneHeading: {
+            if (alreadyInBeat) {
+                if (!alreadyInText) {
+                    writer.writeStartElement(toString(TextParagraphType::Action));
+                    writer.writeStartElement(xml::kValueTag);
+                    writer.writeCDATA({});
+                    writer.writeEndElement(); // value
+                    writer.writeEndElement(); // action
+                }
+                writer.writeEndElement(); // контент предыдущего бита
+                writer.writeEndElement(); // предыдущий бит
+            }
+            alreadyInBeat = false; // вышли из бита
+
             if (alreadyInScene) {
                 writer.writeEndElement(); // контент предыдущей сцены
                 writer.writeEndElement(); // предыдущая сцена
             }
-
             alreadyInScene = true; // вошли в новую сцену
+            alreadyInText = false;
 
             writer.writeStartElement(toString(TextGroupType::Scene));
+            writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
+            if (paragraph.attributes().contains("color")) {
+                writer.writeStartElement(xml::kColorAttribute);
+                writer.writeCDATA(paragraph.attributes().namedItem("color").nodeValue());
+                writer.writeEndElement();
+            }
+            if (paragraph.attributes().contains("title")) {
+                writer.writeStartElement(xml::kTitleTag);
+                writer.writeCDATA(paragraph.attributes().namedItem("title").nodeValue());
+                writer.writeEndElement();
+            }
+            if (paragraph.attributes().contains("stamp")) {
+                writer.writeStartElement(xml::kStampTag);
+                writer.writeCDATA(paragraph.attributes().namedItem("stamp").nodeValue());
+                writer.writeEndElement();
+            }
+            writer.writeStartElement(xml::kContentTag);
+            break;
+        }
+
+        case TextParagraphType::BeatHeading: {
+            if (alreadyInBeat) {
+                if (!alreadyInText) {
+                    writer.writeStartElement(toString(TextParagraphType::Action));
+                    writer.writeStartElement(xml::kValueTag);
+                    writer.writeCDATA({});
+                    writer.writeEndElement(); // value
+                    writer.writeEndElement(); // action
+                }
+                writer.writeEndElement(); // контент предыдущего бита
+                writer.writeEndElement(); // предыдущий бит
+            }
+
+            alreadyInBeat = true; // вошли в новый бит
+            alreadyInText = false;
+
+            writer.writeStartElement(toString(TextGroupType::Beat));
             writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
             writer.writeStartElement(xml::kContentTag);
             break;
         }
 
-        default:
+        default: {
+            alreadyInText = true;
             break;
+        }
         }
         writer.writeStartElement(toString(blockType));
         writer.writeStartElement(xml::kValueTag);
@@ -387,6 +459,15 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
             writer.writeEndElement(); // formats
         }
         writer.writeEndElement(); // block type
+
+        //
+        // Если пишем футер папки, то нужно закрыть и саму папку
+        //
+        if (blockType == TextParagraphType::SequenceFooter) {
+            writer.writeEndElement(); // контент текущей папки
+            writer.writeEndElement(); // текущая папка
+            break;
+        }
 
         //
         // Переходим к следующему
