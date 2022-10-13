@@ -1132,6 +1132,13 @@ void ProjectManager::Implementation::emptyRecycleBin()
             std::function<void(BusinessLayer::StructureModelItem*)> removeItem;
             removeItem = [this, &removeItem](BusinessLayer::StructureModelItem* _item) {
                 //
+                // Сформируем модели детей, чтобы они не формировались на этапе удаления, т.к. часть
+                // связанных между собой документов уже будет удалена
+                //
+                for (int index = 0; index < _item->childCount(); ++index) {
+                    modelsFacade.modelFor(_item->childAt(index)->uuid());
+                }
+                //
                 // Сначала удаляем детей
                 //
                 while (_item->hasChildren()) {
