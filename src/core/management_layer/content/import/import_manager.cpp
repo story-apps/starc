@@ -123,7 +123,10 @@ void ImportManager::Implementation::import(const BusinessLayer::ScreenplayImport
     //
     const auto screenplays = importer->importScreenplays(_options);
     for (const auto& screenplay : screenplays) {
-        emit q->screenplayImported(screenplay.name, screenplay.titlePage, screenplay.synopsis,
+        const auto screenplayName = !screenplay.name.isEmpty()
+            ? screenplay.name
+            : QFileInfo(_options.filePath).completeBaseName();
+        emit q->screenplayImported(screenplayName, screenplay.titlePage, screenplay.synopsis,
                                    screenplay.treatment, screenplay.text);
     }
 }
