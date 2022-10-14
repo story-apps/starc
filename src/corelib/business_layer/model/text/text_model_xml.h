@@ -19,6 +19,8 @@ const QLatin1String kNumberGroupIndexAttribute("group_index");
 const QLatin1String kColorTag("color");
 const QLatin1String kTitleTag("title");
 const QLatin1String kStampTag("stamp");
+const QLatin1String kTagsTag("tags");
+const QLatin1String kTagTag("tag");
 const QLatin1String kPlannedDurationTag("planned_duration");
 
 //

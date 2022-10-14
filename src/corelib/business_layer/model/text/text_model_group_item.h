@@ -3,6 +3,7 @@
 #include "text_model_item.h"
 
 #include <QString>
+#include <QtContainerFwd>
 
 #include <chrono>
 #include <optional>
@@ -92,10 +93,16 @@ public:
     void setTitle(const QString& _title);
 
     /**
-     * @brief Штамп папки
+     * @brief Штамп группы
      */
     QString stamp() const;
     void setStamp(const QString& _stamp);
+
+    /**
+     * @brief Тэги группы
+     */
+    QVector<QPair<QString, QColor>> tags() const;
+    void setTags(const QVector<QPair<QString, QColor>>& _tags);
 
     /**
      * @brief Заголовок группы

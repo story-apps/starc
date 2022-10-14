@@ -1,11 +1,13 @@
 #include "tree_delegate.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/key_sequence_edit/key_sequence_edit.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QPainter>
+#include <QScopedValueRollback>
 
 
 TreeDelegate::TreeDelegate(QObject* _parent)
@@ -265,6 +267,11 @@ void TextFieldItemDelegate::setLabel(const QString& _label)
     m_label = _label;
 }
 
+void TextFieldItemDelegate::setTrailingIconPickColor(bool _isPickColor)
+{
+    m_isTrailingIconPickColor = _isPickColor;
+}
+
 QWidget* TextFieldItemDelegate::createEditor(QWidget* _parent, const QStyleOptionViewItem& _option,
                                              const QModelIndex& _index) const
 {
@@ -275,27 +282,63 @@ QWidget* TextFieldItemDelegate::createEditor(QWidget* _parent, const QStyleOptio
     editor->setBackgroundColor(_parent->palette().text().color());
     editor->setTextColor(_parent->palette().text().color());
     editor->setDefaultMarginsEnabled(false);
+    editor->setCapitalizeWords(false);
     editor->setLabel(m_label);
+    if (m_isTrailingIconPickColor) {
+        editor->setTrailingIcon(u8"\U000f0766");
+        auto colorPicker = new ColorPickerPopup(editor);
+        colorPicker->setColorCanBeDeselected(true);
+        colorPicker->setBackgroundColor(_parent->palette().base().color());
+        colorPicker->setTextColor(_parent->palette().text().color());
+        connect(editor, &TextField::trailingIconPressed, colorPicker, [editor, colorPicker] {
+            QSignalBlocker signalBlocker(colorPicker);
+            if (editor->trailingIconColor().isValid()) {
+                colorPicker->setSelectedColor(editor->trailingIconColor());
+            }
+            colorPicker->showPopup(editor, Qt::AlignBottom | Qt::AlignRight);
+        });
+        connect(colorPicker, &ColorPickerPopup::selectedColorChanged, editor,
+                [editor](const QColor& _color) {
+                    editor->setTrailingIcon(_color.isValid() ? u8"\U000F0765" : u8"\U000f0766");
+                    editor->setTrailingIconColor(_color);
+                });
+    }
     editor->setPlaceholderText(" ");
     return editor;
 }
 
 void TextFieldItemDelegate::setEditorData(QWidget* _editor, const QModelIndex& _index) const
 {
+    if (m_isInSetModelData) {
+        return;
+    }
+
     TreeDelegate::setEditorData(_editor, _index);
 
-    const QString value = _index.model()->data(_index, Qt::EditRole).toString();
-
-    auto textField = qobject_cast<TextField*>(_editor);
-    textField->setText(value);
+    auto editor = qobject_cast<TextField*>(_editor);
+    const auto text = _index.model()->data(_index, Qt::EditRole).toString();
+    editor->setText(text);
+    //
+    if (m_isTrailingIconPickColor) {
+        const auto color = _index.model()->data(_index, Qt::DecorationPropertyRole).value<QColor>();
+        editor->setTrailingIcon(color.isValid() ? u8"\U000F0765" : u8"\U000f0766");
+        editor->setTrailingIconColor(color);
+    }
 }
 
 void TextFieldItemDelegate::setModelData(QWidget* _editor, QAbstractItemModel* _model,
                                          const QModelIndex& _index) const
 {
-    auto textField = qobject_cast<TextField*>(_editor);
-    const QString value = textField->text();
-    _model->setData(_index, value, Qt::EditRole);
+    QScopedValueRollback<bool> isInSetModelData(m_isInSetModelData, true);
+
+    auto editor = qobject_cast<TextField*>(_editor);
+    const auto text = editor->text();
+    const auto color = editor->trailingIconColor();
+
+    _model->setData(_index, text, Qt::EditRole);
+    if (m_isTrailingIconPickColor) {
+        _model->setData(_index, color, Qt::DecorationPropertyRole);
+    }
 }
 
 

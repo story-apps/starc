@@ -20,6 +20,11 @@ public:
     void setColorCanBeDeselected(bool _can);
 
     /**
+     * @brief Задать необходимость закрытия попапа после выборе цвета
+     */
+    void setAutoHideOnSelection(bool _autoHide);
+
+    /**
      * @brief Выбранный пользователем цвет
      */
     QColor selectedColor() const;

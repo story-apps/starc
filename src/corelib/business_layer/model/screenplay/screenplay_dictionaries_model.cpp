@@ -9,13 +9,15 @@
 namespace BusinessLayer {
 
 namespace {
-const QString kDocumentKey = "document";
-const QString kPageIntrosKey = "scene_intros";
-const QString kSceneTimesKey = "scene_times";
-const QString kStoryDaysKey = "story_days";
-const QString kCharacterExtensionsKey = "character_extensions";
-const QString kPanelIntrosKey = "transitions";
-const QString kItemKey = "v";
+const QLatin1String kDocumentKey("document");
+const QLatin1String kPageIntrosKey("scene_intros");
+const QLatin1String kSceneTimesKey("scene_times");
+const QLatin1String kStoryDaysKey("story_days");
+const QLatin1String kCharacterExtensionsKey("character_extensions");
+const QLatin1String kPanelIntrosKey("transitions");
+const QLatin1String kTagsKey("transitions");
+const QLatin1String kTagColorKey("color");
+const QLatin1String kItemKey("v");
 } // namespace
 
 class ScreenplayDictionariesModel::Implementation
@@ -26,6 +28,7 @@ public:
     QVector<QString> storyDays;
     QVector<QString> characterExtensions;
     QVector<QString> transitions;
+    QVector<QPair<QString, QColor>> tags;
 };
 
 
@@ -47,6 +50,8 @@ ScreenplayDictionariesModel::ScreenplayDictionariesModel(QObject* _parent)
     connect(this, &ScreenplayDictionariesModel::charactersExtensionsChanged, this,
             &ScreenplayDictionariesModel::updateDocumentContent);
     connect(this, &ScreenplayDictionariesModel::transitionsChanged, this,
+            &ScreenplayDictionariesModel::updateDocumentContent);
+    connect(this, &ScreenplayDictionariesModel::tagsChanged, this,
             &ScreenplayDictionariesModel::updateDocumentContent);
 }
 
@@ -257,6 +262,35 @@ void ScreenplayDictionariesModel::removeTransition(int _index)
     emit transitionsChanged();
 }
 
+const QVector<QPair<QString, QColor>>& ScreenplayDictionariesModel::tags() const
+{
+    return d->tags;
+}
+
+void ScreenplayDictionariesModel::addTag(const QString& _tag, const QColor& _color)
+{
+    if (d->tags.contains({ _tag, _color })) {
+        return;
+    }
+
+    d->tags.append({ _tag, _color });
+    std::sort(d->tags.begin(), d->tags.end(),
+              [](const QPair<QString, QColor>& _lhs, const QPair<QString, QColor>& _rhs) {
+                  return _lhs.first < _rhs.first;
+              });
+    emit transitionsChanged();
+}
+
+void ScreenplayDictionariesModel::removeTag(int _index)
+{
+    if (_index < 0 || d->tags.size() <= _index) {
+        return;
+    }
+
+    d->tags.removeAt(_index);
+    emit tagsChanged();
+}
+
 void ScreenplayDictionariesModel::initDocument()
 {
     if (document() == nullptr) {
@@ -306,6 +340,16 @@ void ScreenplayDictionariesModel::initDocument()
         tr("MATCH CUT TO:"), tr("JUMP CUT TO:"), tr("FADE TO BLACK"),
     };
     fillDictionary(kPanelIntrosKey, defaultTransitions, d->transitions);
+    //
+    {
+        const auto tagsNode = documentNode.firstChildElement(kTagsKey);
+        auto tagNode = tagsNode.firstChildElement();
+        while (!tagNode.isNull()) {
+            d->tags.append({ TextHelper::fromHtmlEscaped(tagNode.text()),
+                             tagNode.attributeNode(kTagColorKey).value() });
+            tagNode = tagNode.nextSiblingElement();
+        }
+    }
 }
 
 void ScreenplayDictionariesModel::clearDocument()
@@ -316,6 +360,7 @@ void ScreenplayDictionariesModel::clearDocument()
     d->sceneTimes.clear();
     d->characterExtensions.clear();
     d->transitions.clear();
+    d->tags.clear();
 }
 
 QByteArray ScreenplayDictionariesModel::toXml() const
@@ -342,6 +387,16 @@ QByteArray ScreenplayDictionariesModel::toXml() const
     writeDictionary(kStoryDaysKey, d->storyDays);
     writeDictionary(kCharacterExtensionsKey, d->characterExtensions);
     writeDictionary(kPanelIntrosKey, d->transitions);
+    {
+        xml += QString("<%1>\n").arg(kTagsKey).toUtf8();
+        for (const auto& tag : std::as_const(d->tags)) {
+            xml += QString("<%1 %2=\"%3\"><![CDATA[%4]]></%1>\n")
+                       .arg(kItemKey, kTagColorKey, tag.second.name(),
+                            TextHelper::toHtmlEscaped(tag.first))
+                       .toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kTagsKey).toUtf8();
+    }
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }

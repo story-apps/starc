@@ -232,6 +232,8 @@ ThemeSetupView::Implementation::Implementation(QWidget* _parent)
     copyHash->setIcon(u8"\U000F018F");
     pasteHash->setIcon(u8"\U000F0192");
 
+    colorPickerPopup->setAutoHideOnSelection(false);
+
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(copyHash);

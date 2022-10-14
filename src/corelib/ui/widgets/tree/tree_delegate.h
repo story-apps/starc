@@ -87,6 +87,11 @@ public:
      */
     void setLabel(const QString& _label);
 
+    /**
+     * @brief Задать необходимость иконке действия быть способом выбрать цвет
+     */
+    void setTrailingIconPickColor(bool _isPickColor);
+
     QWidget* createEditor(QWidget* _parent, const QStyleOptionViewItem& _option,
                           const QModelIndex& _index) const override;
     void setEditorData(QWidget* _editor, const QModelIndex& _index) const override;
@@ -98,6 +103,16 @@ private:
      * @brief Лейбл текстового поля
      */
     QString m_label;
+
+    /**
+     * @brief Иконка действия текстового поля
+     */
+    bool m_isTrailingIconPickColor = false;
+
+    /**
+     * @brief Устанавливаются ли в данный момент данные в модель
+     */
+    mutable bool m_isInSetModelData = false;
 };
 
 /**

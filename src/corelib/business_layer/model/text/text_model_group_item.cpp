@@ -70,6 +70,11 @@ public:
      */
     QString stamp;
 
+    /**
+     * @brief Тэги группы
+     */
+    QVector<QPair<QString, QColor>> tags;
+
     //
     // Ридонли свойства, которые формируются по ходу работы со сценарием
     //
@@ -239,6 +244,21 @@ void TextModelGroupItem::setStamp(const QString& _stamp)
     setChanged(true);
 }
 
+QVector<QPair<QString, QColor>> TextModelGroupItem::tags() const
+{
+    return d->tags;
+}
+
+void TextModelGroupItem::setTags(const QVector<QPair<QString, QColor>>& _tags)
+{
+    if (d->tags == _tags) {
+        return;
+    }
+
+    d->tags = _tags;
+    setChanged(true);
+}
+
 QString TextModelGroupItem::heading() const
 {
     return d->heading;
@@ -351,6 +371,22 @@ void TextModelGroupItem::readContent(QXmlStreamReader& _contentReader)
     if (currentTag == xml::kStampTag) {
         d->stamp = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
         xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
+
+    if (currentTag == xml::kTagsTag) {
+        d->tags.clear();
+        currentTag = xml::readNextElement(_contentReader); // next
+        while (currentTag == xml::kTagTag) {
+            const auto tagColor
+                = _contentReader.attributes().value(xml::kColorAttribute).toString();
+            const auto tagName
+                = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
+            d->tags.append({ tagName, tagColor });
+
+            xml::readNextElement(_contentReader); // end
+            currentTag = xml::readNextElement(_contentReader); // next tag or tags end
+        }
         currentTag = xml::readNextElement(_contentReader); // next
     }
 
@@ -476,6 +512,16 @@ QByteArray TextModelGroupItem::xmlHeader(bool _clearUuid) const
                    .arg(xml::kStampTag, TextHelper::toHtmlEscaped(d->stamp))
                    .toUtf8();
     }
+    if (!d->tags.isEmpty()) {
+        xml += QString("<%1>\n").arg(xml::kTagsTag).toUtf8();
+        for (const auto& tag : std::as_const(d->tags)) {
+            xml += QString("<%1 %2=\"%3\"><![CDATA[%4]]></%1>\n")
+                       .arg(xml::kTagTag, xml::kColorAttribute, tag.second.name(),
+                            TextHelper::toHtmlEscaped(tag.first))
+                       .toUtf8();
+        }
+        xml += QString("</%1>\n").arg(xml::kTagsTag).toUtf8();
+    }
     xml += customContent();
     xml += QString("<%1>\n").arg(xml::kContentTag).toUtf8();
 
@@ -496,6 +542,7 @@ void TextModelGroupItem::copyFrom(TextModelItem* _item)
     d->color = groupItem->d->color;
     d->title = groupItem->title();
     d->stamp = groupItem->d->stamp;
+    d->tags = groupItem->d->tags;
 }
 
 bool TextModelGroupItem::isEqual(TextModelItem* _item) const
@@ -512,7 +559,7 @@ bool TextModelGroupItem::isEqual(TextModelItem* _item) const
         //
         //            && d->number == sceneItem->d->number
         && d->color == groupItem->d->color && d->title == groupItem->d->title
-        && d->stamp == groupItem->d->stamp;
+        && d->stamp == groupItem->d->stamp && d->tags == groupItem->d->tags;
 }
 
 void TextModelGroupItem::setHeading(const QString& _heading)

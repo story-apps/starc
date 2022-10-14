@@ -14,6 +14,7 @@ public:
     explicit Implementation(ColorPickerPopup* _q);
 
     bool isPopupShown = false;
+    bool autoHide = true;
     ColorPicker* colorPicker = nullptr;
     QVariantAnimation heightAnimation;
 
@@ -53,8 +54,12 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
     popupLayout->addWidget(d->colorPicker);
     setLayoutReimpl(popupLayout);
 
-    connect(d->colorPicker, &ColorPicker::selectedColorChanged, this,
-            [this](const QColor& _color) { emit selectedColorChanged(_color); });
+    connect(d->colorPicker, &ColorPicker::selectedColorChanged, this, [this](const QColor& _color) {
+        emit selectedColorChanged(_color);
+        if (_color.isValid() && d->autoHide) {
+            hidePopup();
+        }
+    });
     connect(&d->heightAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) {
                 const auto height = _value.toInt();
@@ -72,6 +77,11 @@ ColorPickerPopup::~ColorPickerPopup() = default;
 void ColorPickerPopup::setColorCanBeDeselected(bool _can)
 {
     d->colorPicker->setColorCanBeDeselected(_can);
+}
+
+void ColorPickerPopup::setAutoHideOnSelection(bool _autoHide)
+{
+    d->autoHide = _autoHide;
 }
 
 QColor ColorPickerPopup::selectedColor() const

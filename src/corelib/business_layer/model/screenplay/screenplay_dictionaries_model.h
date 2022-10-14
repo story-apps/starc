@@ -43,6 +43,11 @@ public:
     void removeTransition(int _index);
     Q_SIGNAL void transitionsChanged();
 
+    const QVector<QPair<QString, QColor>>& tags() const;
+    void addTag(const QString& _tag, const QColor& _color);
+    void removeTag(int _index);
+    Q_SIGNAL void tagsChanged();
+
 protected:
     /**
      * @brief Реализация модели для работы с документами
