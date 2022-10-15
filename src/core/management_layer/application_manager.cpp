@@ -1356,6 +1356,16 @@ void ApplicationManager::Implementation::createRemoteProject(const QString& _pro
                       projectsManager->addOrUpdateCloudProject(_projectInfo);
 
                       //
+                      // Если в новый проект должны быть импортированы данные другого проекта,
+                      // то просто создаём новый, как копию импортируемого файла
+                      //
+                      if (_importFilePath.endsWith(ExtensionHelper::starc())) {
+                          const auto project = projectsManager->project(_projectInfo.id);
+                          QFile::copy(QDir::toNativeSeparators(_importFilePath),
+                                      QDir::toNativeSeparators(project.realPath()));
+                      }
+
+                      //
                       // Переключаемся на работу с новым проектом
                       //
                       projectsManager->setCurrentProject(_projectInfo.id);
@@ -1489,10 +1499,18 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     //
     const auto projectType = static_cast<Domain::DocumentObjectType>(
         settingsValue(DataStorageLayer::kProjectTypeKey).toInt());
+
+    //
+    // Импортировать будем всё, кроме старковских файлов, т.к. данные из них копируются на
+    // предыдущем шаге
+    //
+    const auto shouldPerformImport
+        = !_importFilePath.isEmpty() && !_importFilePath.endsWith(ExtensionHelper::starc());
+
     //
     // Если будет импорт, то сбросим умолчальный тип проекта, чтобы не создавать лишних документов
     //
-    if (!_importFilePath.isEmpty()) {
+    if (shouldPerformImport) {
         setSettingsValue(DataStorageLayer::kProjectTypeKey,
                          static_cast<int>(Domain::DocumentObjectType::Undefined));
     }
@@ -1506,14 +1524,14 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     //
     // Восстанавливаем тип проекта по-умолчанию для будущих свершений
     //
-    if (!_importFilePath.isEmpty()) {
+    if (shouldPerformImport) {
         setSettingsValue(DataStorageLayer::kProjectTypeKey, static_cast<int>(projectType));
     }
 
     //
     // При необходимости импортируем данные из заданного файла
     //
-    if (!_importFilePath.isEmpty()) {
+    if (shouldPerformImport) {
         importManager->import(_importFilePath);
 
         //

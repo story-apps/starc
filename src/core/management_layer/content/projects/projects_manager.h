@@ -127,9 +127,10 @@ public:
     void closeCurrentProject();
 
     /**
-     * @brief Получить проект по заданному пути
+     * @brief Получить проект
      */
     Project project(const QString& _path) const;
+    Project project(int _id) const;
 
     /**
      * @brief Скрыть проект

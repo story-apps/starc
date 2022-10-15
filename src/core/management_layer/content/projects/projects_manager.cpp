@@ -122,139 +122,229 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                     emit openCloudProjectRequested(_project.id(), _project.path());
                 }
             });
-    connect(d->view, &Ui::ProjectsView::projectContextMenuRequested, this,
-            [this](const Project& _project) {
-                QVector<QAction*> actions;
-                //
-                // Действия над локальным проектом
-                //
-                if (_project.isLocal()) {
-                    auto showInFolderAction = new QAction;
-                    showInFolderAction->setIconText(u8"\U000F178B");
-                    showInFolderAction->setText(tr("Show in folder"));
-                    connect(showInFolderAction, &QAction::triggered, this,
-                            [_project] { PlatformHelper::showInGraphicalShell(_project.path()); });
-                    actions.append(showInFolderAction);
+    connect(
+        d->view, &Ui::ProjectsView::projectContextMenuRequested, this,
+        [this](const Project& _project) {
+            QVector<QAction*> actions;
+            //
+            // Действия над локальным проектом
+            //
+            if (_project.isLocal()) {
+                auto moveToCloudAction = new QAction;
+                moveToCloudAction->setIconText(u8"\U000F0167");
+                moveToCloudAction->setText(tr("Move to the cloud"));
+                connect(moveToCloudAction, &QAction::triggered, this, [this, _project] {
                     //
-                    auto hideFromRecentAction = new QAction;
-                    hideFromRecentAction->setIconText(u8"\U000F06D1");
-                    hideFromRecentAction->setText(tr("Hide from recent list"));
-                    connect(hideFromRecentAction, &QAction::triggered, this, [this, _project] {
+                    // Если пользователь не авторизован, предлагаем авторизоваться
+                    //
+                    if (!d->isUserAuthorized) {
+                        auto dialog = new Dialog(d->view->topLevelWidget());
+                        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+                        dialog->showDialog(
+                            {}, tr("To move a project to the cloud, you should be authorized."),
+                            { { 0, tr("Maybe later"), Dialog::RejectButton },
+                              { 1, tr("Sign in"), Dialog::AcceptButton } });
+                        QObject::connect(dialog, &Dialog::finished, this,
+                                         [this, dialog](const Dialog::ButtonInfo& _presedButton) {
+                                             dialog->hideDialog();
+                                             if (_presedButton.type == Dialog::AcceptButton) {
+                                                 emit signInRequested();
+                                             }
+                                         });
+                        QObject::connect(dialog, &Dialog::disappeared, dialog,
+                                         &Dialog::deleteLater);
+                    }
+                    //
+                    // Если у пользователя нет активной подписки на TEAM версию,
+                    // покажем соответствующее уведомление с предложением обновиться
+                    //
+                    else if (!d->canCreateCloudProject) {
+                        auto dialog = new Dialog(d->view->topLevelWidget());
+                        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+                        dialog->showDialog({},
+                                           tr("To move a project to the cloud, you need to upgrade "
+                                              "to the TEAM version."),
+                                           { { 0, tr("Maybe later"), Dialog::RejectButton },
+                                             { 1, tr("Upgrade"), Dialog::AcceptButton } });
+                        QObject::connect(dialog, &Dialog::finished, this,
+                                         [this, dialog](const Dialog::ButtonInfo& _presedButton) {
+                                             dialog->hideDialog();
+                                             if (_presedButton.type == Dialog::AcceptButton) {
+                                                 emit renewTeamSubscriptionRequested();
+                                             }
+                                         });
+                        QObject::connect(dialog, &Dialog::disappeared, dialog,
+                                         &Dialog::deleteLater);
+                    }
+                    //
+                    // Если проект может быть создан в облаке, то делаем это
+                    //
+                    else {
+                        emit createCloudProjectRequested(_project.name(), _project.path());
+                    }
+                });
+                actions.append(moveToCloudAction);
+                //
+                auto showInFolderAction = new QAction;
+                showInFolderAction->setSeparator(true);
+                showInFolderAction->setIconText(u8"\U000F178A");
+                showInFolderAction->setText(tr("Show in folder"));
+                connect(showInFolderAction, &QAction::triggered, this,
+                        [_project] { PlatformHelper::showInGraphicalShell(_project.path()); });
+                actions.append(showInFolderAction);
+                //
+                auto hideFromRecentAction = new QAction;
+                hideFromRecentAction->setIconText(u8"\U000F0209");
+                hideFromRecentAction->setText(tr("Hide from recent list"));
+                connect(hideFromRecentAction, &QAction::triggered, this, [this, _project] {
+                    auto dialog = new Dialog(d->view->topLevelWidget());
+                    constexpr int cancelButtonId = 0;
+                    constexpr int hideButtonId = 1;
+                    dialog->showDialog(
+                        {}, tr("Do you really want to hide this project from the recent list?"),
+                        { { cancelButtonId, tr("No"), Dialog::RejectButton },
+                          { hideButtonId, tr("Yes, hide"), Dialog::AcceptButton } });
+                    connect(dialog, &Dialog::finished, this,
+                            [this, _project, cancelButtonId,
+                             dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                                dialog->hideDialog();
+
+                                //
+                                // Пользователь передумал скрывать
+                                //
+                                if (_buttonInfo.id == cancelButtonId) {
+                                    return;
+                                }
+
+                                //
+                                // Если таки хочет, то скрываем проект
+                                //
+                                d->projects->remove(_project);
+                            });
+                    connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+                });
+                actions.append(hideFromRecentAction);
+                //
+                auto removeProjectAction = new QAction;
+                removeProjectAction->setIconText(u8"\U000F01B4");
+                removeProjectAction->setText(tr("Remove project"));
+                connect(removeProjectAction, &QAction::triggered, this, [this, _project] {
+                    auto dialog = new Dialog(d->view->topLevelWidget());
+                    constexpr int cancelButtonId = 0;
+                    constexpr int hideButtonId = 1;
+                    dialog->showDialog(
+                        {}, tr("Do you really want to remove this project from the computer?"),
+                        { { cancelButtonId, tr("No"), Dialog::RejectButton },
+                          { hideButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
+                    connect(dialog, &Dialog::finished, this,
+                            [this, _project, cancelButtonId,
+                             dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                                dialog->hideDialog();
+
+                                //
+                                // Пользователь передумал удалять
+                                //
+                                if (_buttonInfo.id == cancelButtonId) {
+                                    return;
+                                }
+
+                                //
+                                // Если таки хочет, то удаляем проект
+                                //
+                                d->projects->remove(_project);
+                                QFile::remove(_project.realPath());
+                            });
+                    connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+                });
+                actions.append(removeProjectAction);
+            }
+            //
+            // Действия над облачным проектом
+            //
+            else {
+                //
+                // Если пользователь владеет проектом
+                //
+                if (_project.isOwner()) {
+                    auto removeProjectAction = new QAction;
+                    removeProjectAction->setIconText(u8"\U000F01B4");
+                    removeProjectAction->setText(tr("Remove project"));
+                    connect(removeProjectAction, &QAction::triggered, this, [this, _project] {
                         auto dialog = new Dialog(d->view->topLevelWidget());
                         constexpr int cancelButtonId = 0;
-                        constexpr int hideButtonId = 1;
+                        constexpr int removeButtonId = 1;
                         dialog->showDialog(
-                            {}, tr("Do you really want to hide this project from the recent list?"),
+                            {}, tr("Do you really want to remove this project?"),
                             { { cancelButtonId, tr("No"), Dialog::RejectButton },
-                              { hideButtonId, tr("Yes, hide"), Dialog::AcceptButton } });
+                              { removeButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
                         connect(dialog, &Dialog::finished, this,
                                 [this, _project, cancelButtonId,
                                  dialog](const Dialog::ButtonInfo& _buttonInfo) {
                                     dialog->hideDialog();
 
                                     //
-                                    // Пользователь передумал скрывать
+                                    // Пользователь передумал удалять
                                     //
                                     if (_buttonInfo.id == cancelButtonId) {
                                         return;
                                     }
-
                                     //
-                                    // Если таки хочет, то скрываем проект
+                                    // Если таки хочет, то уведомляем, чтобы удалить проект на
+                                    // сервере
                                     //
-                                    d->projects->remove(_project);
+                                    emit removeCloudProjectRequested(_project.id());
                                 });
                         connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
                     });
-                    actions.append(hideFromRecentAction);
+                    actions.append(removeProjectAction);
                 }
                 //
-                // Действия над облачным проектом
+                // Если пользователь не владеет проектом
                 //
                 else {
-                    //
-                    // Если пользователь владеет проектом
-                    //
-                    if (_project.isOwner()) {
-                        auto removeProjectAction = new QAction;
-                        removeProjectAction->setIconText(u8"\U000F01B4");
-                        removeProjectAction->setText(tr("Remove project"));
-                        connect(removeProjectAction, &QAction::triggered, this, [this, _project] {
-                            auto dialog = new Dialog(d->view->topLevelWidget());
-                            constexpr int cancelButtonId = 0;
-                            constexpr int removeButtonId = 1;
-                            dialog->showDialog(
-                                {}, tr("Do you really want to remove this project?"),
-                                { { cancelButtonId, tr("No"), Dialog::RejectButton },
-                                  { removeButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
-                            connect(dialog, &Dialog::finished, this,
-                                    [this, _project, cancelButtonId,
-                                     dialog](const Dialog::ButtonInfo& _buttonInfo) {
-                                        dialog->hideDialog();
+                    auto unsubscribeAction = new QAction;
+                    unsubscribeAction->setIconText(u8"\U000F01B4");
+                    unsubscribeAction->setText(tr("Unsubscribe"));
+                    connect(unsubscribeAction, &QAction::triggered, this, [this, _project] {
+                        auto dialog = new Dialog(d->view->topLevelWidget());
+                        constexpr int cancelButtonId = 0;
+                        constexpr int unsubscribeButtonId = 1;
+                        dialog->showDialog(
+                            {}, tr("Do you really want to unsubscribe from this project?"),
+                            { { cancelButtonId, tr("No"), Dialog::RejectButton },
+                              { unsubscribeButtonId, tr("Yes, unsubscribe"),
+                                Dialog::AcceptButton } });
+                        connect(dialog, &Dialog::finished, this,
+                                [this, _project, cancelButtonId,
+                                 dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                                    dialog->hideDialog();
 
-                                        //
-                                        // Пользователь передумал удалять
-                                        //
-                                        if (_buttonInfo.id == cancelButtonId) {
-                                            return;
-                                        }
-                                        //
-                                        // Если таки хочет, то уведомляем, чтобы удалить проект на
-                                        // сервере
-                                        //
-                                        emit removeCloudProjectRequested(_project.id());
-                                    });
-                            connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
-                        });
-                        actions.append(removeProjectAction);
-                    }
-                    //
-                    // Если пользователь не владеет проектом
-                    //
-                    else {
-                        auto unsubscribeAction = new QAction;
-                        unsubscribeAction->setIconText(u8"\U000F01B4");
-                        unsubscribeAction->setText(tr("Unsubscribe"));
-                        connect(unsubscribeAction, &QAction::triggered, this, [this, _project] {
-                            auto dialog = new Dialog(d->view->topLevelWidget());
-                            constexpr int cancelButtonId = 0;
-                            constexpr int unsubscribeButtonId = 1;
-                            dialog->showDialog(
-                                {}, tr("Do you really want to unsubscribe from this project?"),
-                                { { cancelButtonId, tr("No"), Dialog::RejectButton },
-                                  { unsubscribeButtonId, tr("Yes, unsubscribe"),
-                                    Dialog::AcceptButton } });
-                            connect(dialog, &Dialog::finished, this,
-                                    [this, _project, cancelButtonId,
-                                     dialog](const Dialog::ButtonInfo& _buttonInfo) {
-                                        dialog->hideDialog();
-
-                                        //
-                                        // Пользователь передумал отписываться
-                                        //
-                                        if (_buttonInfo.id == cancelButtonId) {
-                                            return;
-                                        }
-                                        //
-                                        // Если таки хочет, то уведомляем, чтобы отписаться от
-                                        // проекта на сервере
-                                        //
-                                        emit unsubscribeFromCloudProjectRequested(_project.id());
-                                    });
-                            connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
-                        });
-                        actions.append(unsubscribeAction);
-                    }
+                                    //
+                                    // Пользователь передумал отписываться
+                                    //
+                                    if (_buttonInfo.id == cancelButtonId) {
+                                        return;
+                                    }
+                                    //
+                                    // Если таки хочет, то уведомляем, чтобы отписаться от
+                                    // проекта на сервере
+                                    //
+                                    emit unsubscribeFromCloudProjectRequested(_project.id());
+                                });
+                        connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+                    });
+                    actions.append(unsubscribeAction);
                 }
+            }
 
-                auto menu = new ContextMenu(d->view);
-                menu->setActions(actions);
-                menu->setBackgroundColor(Ui::DesignSystem::color().background());
-                menu->setTextColor(Ui::DesignSystem::color().onBackground());
-                connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
+            auto menu = new ContextMenu(d->view);
+            menu->setActions(actions);
+            menu->setBackgroundColor(Ui::DesignSystem::color().background());
+            menu->setTextColor(Ui::DesignSystem::color().onBackground());
+            connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
 
-                menu->showContextMenu(QCursor::pos());
-            });
+            menu->showContextMenu(QCursor::pos());
+        });
     connect(&d->cloudProjectChangeDebouncer, &Debouncer::gotWork, this, [this] {
         if (!d->currentProject.isRemote()) {
             return;
@@ -795,6 +885,21 @@ Project ProjectsManager::project(const QString& _path) const
     for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
         const auto& project = d->projects->projectAt(projectRow);
         if (project.path() == _path) {
+            return project;
+        }
+    }
+    return {};
+}
+
+Project ProjectsManager::project(int _id) const
+{
+    if (_id == -1) {
+        return {};
+    }
+
+    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
+        const auto& project = d->projects->projectAt(projectRow);
+        if (project.id() == _id) {
             return project;
         }
     }

@@ -577,7 +577,7 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         if (action->isSeparator()) {
             actionY += Ui::DesignSystem::drawer().separatorSpacing();
 
-            QColor separatorColor = Ui::DesignSystem::color().onPrimary();
+            QColor separatorColor = textColor();
             separatorColor.setAlphaF(Ui::DesignSystem::disabledTextOpacity());
             painter.setPen(QPen(separatorColor, Ui::DesignSystem::drawer().separatorHeight()));
             painter.drawLine(QPointF(actionX, actionY), QPointF(actionX + actionWidth, actionY));
