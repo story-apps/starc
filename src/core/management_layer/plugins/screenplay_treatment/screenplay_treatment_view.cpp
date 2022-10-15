@@ -14,6 +14,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
@@ -32,6 +33,7 @@
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/ui_helper.h>
+#include <utils/tools/debouncer.h>
 
 #include <QAction>
 #include <QPointer>
@@ -153,6 +155,11 @@ public:
     // Действия опций редактора
     //
     QAction* showBookmarksAction = nullptr;
+
+    /**
+     * @brief Группируем события об изменении положения курсора, чтобы сильно не спамить сервер
+     */
+    Debouncer cursorChangeNotificationsDebounser;
 };
 
 ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
@@ -174,8 +181,8 @@ ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
     , commentsView(new CommentsView(_parent))
     , bookmarksView(new BookmarksView(_parent))
     , splitter(new Splitter(_parent))
-    //
     , showBookmarksAction(new QAction(_parent))
+    , cursorChangeNotificationsDebounser(500)
 {
     commentsModel->setParagraphTypesFiler({
         BusinessLayer::TextParagraphType::SceneHeading,
@@ -660,6 +667,10 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
         //
         const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(screenplayModelIndex);
         d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
+        //
+        // Запланируем уведомление внешних клиентов о смене позиции курсора
+        //
+        d->cursorChangeNotificationsDebounser.orderWork();
     };
     connect(d->textEdit, &ScreenplayTreatmentEdit::paragraphTypeChanged, this,
             handleCursorPositionChanged);
@@ -720,9 +731,10 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
         }
         d->updateSideBarVisibility(this);
     });
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
+    //
+    connect(&d->cursorChangeNotificationsDebounser, &Debouncer::gotWork, this, [this] {
+        emit cursorChanged(QString::number(d->textEdit->textCursor().position()).toUtf8());
+    });
 
     reconfigure({});
 }
@@ -757,6 +769,11 @@ void ScreenplayTreatmentView::setEditingMode(ManagementLayer::DocumentEditingMod
     const auto enabled = !readOnly;
     d->shortcutsManager.setEnabled(enabled);
     d->fastFormatWidget->setEnabled(enabled);
+}
+
+void ScreenplayTreatmentView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
+{
+    d->textEdit->setCursors(_cursors);
 }
 
 void ScreenplayTreatmentView::reconfigure(const QStringList& _changedSettingsKeys)
@@ -904,6 +921,7 @@ void ScreenplayTreatmentView::setModel(BusinessLayer::ScreenplayTextModel* _mode
                 [this] { d->reconfigureDialoguesNumbersVisibility(); });
     }
 
+    d->textEdit->setCursors({});
     d->textEdit->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);
