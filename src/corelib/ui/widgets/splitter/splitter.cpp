@@ -593,4 +593,6 @@ void Splitter::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->showHiddenPanelToolbar->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->hideVisiblePanelToolbar->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->hideVisiblePanelToolbar->setTextColor(Ui::DesignSystem::color().onPrimary());
+
+    d->resize(this, d->sizes);
 }
