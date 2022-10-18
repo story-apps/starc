@@ -2204,6 +2204,11 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     // Сбрасываем загруженные изображения
     //
     d->documentImageStorage.clear();
+
+    //
+    // Сбрасываем название последнего открытого проекта
+    //
+    d->projectStructureModel->setProjectName({});
 }
 
 void ProjectManager::saveChanges()

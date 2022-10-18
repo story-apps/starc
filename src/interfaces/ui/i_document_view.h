@@ -57,6 +57,9 @@ public:
     {
     }
 
+    /**
+     * @brief Задать список курсоров соавторов в редакторе
+     */
     virtual void setCursors(const QVector<Domain::CursorInfo>& _cursors)
     {
     }
