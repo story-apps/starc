@@ -99,7 +99,7 @@ public:
     /**
      * @brief Скорректировать номера блоков
      */
-    void correctBlocksNumbers();
+    void correctBlocksNumbers(int _position = -1, int _charsChanged = 0);
 
     /**
      * @brief Скорректировать текст сценария
@@ -397,7 +397,7 @@ void ComicBookTextCorrector::Implementation::correctCharactersNames(int _positio
     cursor.endEditBlock();
 }
 
-void ComicBookTextCorrector::Implementation::correctBlocksNumbers()
+void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position, int _charsChanged)
 {
     //
     // Определим границы работы алгоритма
@@ -430,7 +430,7 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers()
     }
 
     //
-    // Корректируем имена пресонажей в изменённой части документа
+    // Корректируем номера блоков в изменённой части документа
     //
     auto itemFromBlock = [](const QTextBlock& _block) -> TextModelItem* {
         if (_block.userData() == nullptr) {
@@ -448,9 +448,17 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers()
         const auto blockType = TextBlockStyle::forBlock(block);
 
         //
-        // Не трогаем пустые блоки
+        // Пропускаем пустые блоки и блоки, которые редактируется в данный момент
         //
-        if (block.text().isEmpty()) {
+        const auto changeEnd = _position + _charsChanged;
+        const auto blockEndPosition = block.position() + block.text().length() + 1;
+        if ( // пустые строки
+            block.text().isEmpty()
+            // строки, которые редактируются в данный момент, за исключением кейса, когда нажимается
+            // энтер/таб в конце строки и курсор переходит на следующую строку
+            || (block.position() <= _position && changeEnd <= blockEndPosition)
+            || (_position <= block.position() && changeEnd <= blockEndPosition)
+            || (_position <= block.position() && blockEndPosition <= changeEnd)) {
             block = block.next();
             continue;
         }
@@ -1825,7 +1833,7 @@ void ComicBookTextCorrector::correct(int _position, int _charsChanged)
     }
 
     if (d->needToCorrectBlocksNumbers) {
-        d->correctBlocksNumbers();
+        d->correctBlocksNumbers(_position, _charsChanged);
     }
 
     if (d->needToCorrectPageBreaks) {
