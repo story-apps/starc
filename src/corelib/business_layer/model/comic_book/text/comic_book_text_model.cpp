@@ -111,6 +111,7 @@ void ComicBookTextModel::Implementation::updateNumbering()
                     auto pageItem = static_cast<ComicBookTextModelPageItem*>(childItem);
                     pageItem->setPageNumber(pageNumber, dictionariesModel->singlePageIntros(),
                                             dictionariesModel->multiplePageIntros());
+                    pageItem->updateCounters();
                 } else {
                     updateChildNumbering(childItem);
                     auto panelItem = static_cast<ComicBookTextModelPanelItem*>(childItem);

@@ -53,6 +53,11 @@ public:
     int dialoguesWordsCount() const;
 
     /**
+     * @brief Обновить счётчики
+     */
+    void updateCounters();
+
+    /**
      * @brief Определяем интерфейс получения данных страницы
      */
     QVariant data(int _role) const override;

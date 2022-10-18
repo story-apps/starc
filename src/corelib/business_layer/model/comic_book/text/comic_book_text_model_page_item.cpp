@@ -96,6 +96,11 @@ int ComicBookTextModelPageItem::dialoguesWordsCount() const
     return d->dialoguesWordsCount;
 }
 
+void ComicBookTextModelPageItem::updateCounters()
+{
+    handleChange();
+}
+
 QVariant ComicBookTextModelPageItem::data(int _role) const
 {
     switch (_role) {
