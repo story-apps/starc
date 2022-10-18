@@ -115,7 +115,7 @@ void PanelHandler::handleEnter(QKeyEvent* _event)
                     bool isHandled = false;
 
                     //
-                    // Если введён персонаж, меняем стиль блока и переходим к реплике
+                    // Если введён какой-то текст
                     //
                     if (cursorForwardText.isEmpty()) {
                         //
@@ -191,9 +191,6 @@ void PanelHandler::handleTab(QKeyEvent*)
             if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
-                //
-                // Ни чего не делаем
-                //
                 editor()->setCurrentParagraphType(changeForTab(TextParagraphType::PanelHeading));
             } else {
                 //! Текст не пуст
@@ -207,10 +204,13 @@ void PanelHandler::handleTab(QKeyEvent*)
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
-                    //
-                    // Действуем как нажатие клавиши ENTER
-                    //
-                    editor()->addParagraph(jumpForTab(TextParagraphType::PanelHeading));
+                    if (!cursorBackwardText.contains(":")) {
+                        cursor.movePosition(QTextCursor::EndOfBlock);
+                        cursor.insertText(": ");
+                        editor()->setTextCursor(cursor);
+                    } else {
+                        editor()->addParagraph(jumpForTab(TextParagraphType::PanelHeading));
+                    }
                 } else {
                     //! Внутри блока
 
