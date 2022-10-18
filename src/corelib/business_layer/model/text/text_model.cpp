@@ -2004,11 +2004,14 @@ void TextModel::applyPatch(const QByteArray& _patch)
             //
             // Выносим детей на предыдущий уровень
             //
-            while (modelItem->hasChildren()) {
-                auto childItem = modelItem->childAt(modelItem->childCount() - 1);
-                takeItem(childItem);
-                insertItem(childItem, modelItem);
-                movedSiblingItems.prepend(childItem);
+            if (modelItem->hasChildren()) {
+                for (int index = 0; index < modelItem->childCount(); ++index) {
+                    auto childItem = modelItem->childAt(index);
+                    movedSiblingItems.append(childItem);
+                }
+
+                takeItems(movedSiblingItems.constFirst(), movedSiblingItems.constLast(), modelItem);
+                insertItems(movedSiblingItems, modelItem);
             }
             //
             // ... и удаляем сам элемент
