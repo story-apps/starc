@@ -120,6 +120,10 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
     d->commentAction->setIconText(u8"\U000f0188");
     addAction(d->commentAction);
 
+    auto separatorAction = new QAction(this);
+    separatorAction->setSeparator(true);
+    addAction(separatorAction);
+
     d->colorAction->setIconText(u8"\U000f0765");
     addAction(d->colorAction);
     if (QSettings settings; settings.value(kColorKey).isValid()) {

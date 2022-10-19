@@ -135,7 +135,13 @@ QAction* FloatingToolBar::Implementation::actionAt(const QPoint& _coordinate) co
             - (Ui::DesignSystem::floatingToolBar().spacing() / 2.0)
         : 0.0;
     for (QAction* action : q->actions()) {
-        if (!action->isVisible() || action->isSeparator()) {
+        if (!action->isVisible()) {
+            continue;
+        }
+
+        if (action->isSeparator()) {
+            actionLeft += (q->isLeftToRight() || orientation == Qt::Vertical ? 1 : -1)
+                * Ui::DesignSystem::floatingToolBar().spacing();
             continue;
         }
 
@@ -268,6 +274,22 @@ int FloatingToolBar::actionCustomWidth(QAction* _action) const
 QSize FloatingToolBar::sizeHint() const
 {
     const auto allActions = actions();
+    const qreal additionalSize = [allActions] {
+        qreal size = 0.0;
+        for (const auto action : allActions) {
+            if (!action->isVisible()) {
+                continue;
+            }
+
+            if (action->isSeparator()) {
+                size -= Ui::DesignSystem::floatingToolBar().spacing();
+            } else if (!action->property(kActionWidthKey).isNull()) {
+                size += action->property(kActionWidthKey).toReal();
+                size -= Ui::DesignSystem::floatingToolBar().iconSize().width();
+            }
+        }
+        return size;
+    }();
     const auto visibleActionsSize
         = std::count_if(allActions.begin(), allActions.end(),
                         [](QAction* _action) { return _action->isVisible(); });
@@ -276,29 +298,12 @@ QSize FloatingToolBar::sizeHint() const
         + Ui::DesignSystem::floatingToolBar().iconSize().width() * visibleActionsSize
         + Ui::DesignSystem::floatingToolBar().spacing() * (visibleActionsSize - 1)
         + Ui::DesignSystem::floatingToolBar().margins().right()
-        + Ui::DesignSystem::floatingToolBar().shadowMargins().right();
-    const qreal additionalWidth = [allActions] {
-        qreal width = 0.0;
-        for (const auto action : allActions) {
-            if (!action->isVisible()) {
-                continue;
-            }
-
-            if (action->isSeparator()) {
-                width -= Ui::DesignSystem::floatingToolBar().iconSize().width()
-                    + Ui::DesignSystem::floatingToolBar().spacing();
-            } else if (!action->property(kActionWidthKey).isNull()) {
-                width += action->property(kActionWidthKey).toReal();
-                width -= Ui::DesignSystem::floatingToolBar().iconSize().width();
-            }
-        }
-        return width;
-    }();
+        + Ui::DesignSystem::floatingToolBar().shadowMargins().right() + additionalSize;
     const qreal height = Ui::DesignSystem::floatingToolBar().shadowMargins().top()
         + Ui::DesignSystem::floatingToolBar().height()
         + Ui::DesignSystem::floatingToolBar().shadowMargins().bottom();
     if (d->orientation == Qt::Horizontal) {
-        return QSize(static_cast<int>(width + additionalWidth), static_cast<int>(height));
+        return QSize(static_cast<int>(width), static_cast<int>(height));
     } else {
         return QSize(static_cast<int>(height), static_cast<int>(width));
     }
@@ -438,14 +443,21 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         //
         if (action->isSeparator()) {
             const auto separatorX = isLeftToRight() || d->orientation == Qt::Vertical
-                ? actionIconX - Ui::DesignSystem::floatingToolBar().spacing() / 2.0
-                : actionIconX + actionIconSize.width()
-                    + Ui::DesignSystem::floatingToolBar().spacing() / 2.0;
+                ? actionIconX
+                : (actionIconX + actionIconSize.width());
             painter.setPen(
                 QPen(ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()),
                      Ui::DesignSystem::scaleFactor()));
-            painter.drawLine(separatorX, actionIconY, separatorX,
-                             actionIconSize.height() + actionIconY);
+            if (d->orientation == Qt::Horizontal) {
+                painter.drawLine(separatorX, actionIconY, separatorX,
+                                 actionIconSize.height() + actionIconY);
+            } else {
+                painter.drawLine(actionIconY, separatorX, actionIconSize.width() + actionIconY,
+                                 separatorX);
+            }
+
+            actionIconX += (isLeftToRight() || d->orientation == Qt::Vertical ? 1 : -1)
+                * Ui::DesignSystem::floatingToolBar().spacing();
             continue;
         }
 
