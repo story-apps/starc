@@ -378,6 +378,8 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
     }
     }
 
+    fontFamilies.append("Noto Color Emoji");
+
     auto initFont
         = [_scaleFactor, fontFamilies](QFont::Weight _weight, QFont::Capitalization _capitalization,
                                        int _pixelSize, qreal _letterSpacing, QFont& _font) {

@@ -1884,6 +1884,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     fontDatabase.addApplicationFont(":/fonts/noto-sans-tamil-medium");
     fontDatabase.addApplicationFont(":/fonts/noto-sans-tamil-regular");
     fontDatabase.addApplicationFont(":/fonts/noto-sans-korean-regular");
+    fontDatabase.addApplicationFont(":/fonts/noto-color-emoji-regular");
     //
     fontDatabase.addApplicationFont(":/fonts/arial");
     fontDatabase.addApplicationFont(":/fonts/arial-bold");
