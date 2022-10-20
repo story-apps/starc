@@ -24,7 +24,7 @@ cp $APP_BIN_DIR/plugins/*.so $APP_IMAGE_DIR/plugins/
 #
 # Copy flathub required files
 #
-FLATHUB_DIR="../../dist/share"
+FLATHUB_DIR="flathub/share"
 ls -l $FLATHUB_DIR
 cp -R $FLATHUB_DIR $APP_IMAGE_DIR
 
@@ -33,5 +33,5 @@ cp -R $FLATHUB_DIR $APP_IMAGE_DIR
 #
 wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
 chmod a+x linuxdeployqt
-./linuxdeployqt appdir/starc -no-copy-copyright-files -no-translations -always-overwrite -executable=appdir/plugins/libcoreplugin.so -appimage
+./linuxdeployqt appdir/starc -no-copy-copyright-files -no-translations -always-overwrite -extra-plugins=platforms/ -executable=appdir/plugins/libcoreplugin.so -appimage
 mv *.AppImage starc-setup.AppImage

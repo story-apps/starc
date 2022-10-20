@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-    <id type="desktop">dev.story_apps.starc</id>
-    <launchable type="desktop-id">dev.story_apps.starc.desktop</launchable>
+    <id type="desktop">dev.storyapps.starc</id>
+    <launchable type="desktop-id">dev.storyapps.starc.desktop</launchable>
     <name>Story Architect (STARC)</name>
     <summary>All-in-One Screenwriting App</summary>
     <metadata_license>CC0-1.0</metadata_license>
