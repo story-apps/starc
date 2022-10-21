@@ -456,9 +456,11 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
             block.text().isEmpty()
             // строки, которые редактируются в данный момент, за исключением кейса, когда нажимается
             // энтер/таб в конце строки и курсор переходит на следующую строку
-            || (block.position() <= _position && changeEnd <= blockEndPosition)
-            || (_position <= block.position() && changeEnd <= blockEndPosition)
-            || (_position <= block.position() && blockEndPosition <= changeEnd)) {
+            || (block.position() <= _position
+                && changeEnd <= blockEndPosition) // изменение внутри блока
+            || (_position <= block.position()
+                && blockEndPosition <= changeEnd) // входит в блок слева
+        ) {
             block = block.next();
             continue;
         }
