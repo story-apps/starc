@@ -124,6 +124,20 @@ void TaskBar::setTaskTitle(const QString& _taskId, const QString& _title)
     Implementation::instance->update();
 }
 
+qreal TaskBar::taskProgress(const QString& _taskId)
+{
+    Q_ASSERT(Implementation::instance);
+
+    auto& tasks = Implementation::instance->d->tasks;
+    for (auto& task : tasks) {
+        if (task.id == _taskId) {
+            return task.progress;
+        }
+    }
+
+    return std::numeric_limits<qreal>::quiet_NaN();
+}
+
 void TaskBar::setTaskProgress(const QString& _taskId, qreal _progress)
 {
     Q_ASSERT(Implementation::instance);

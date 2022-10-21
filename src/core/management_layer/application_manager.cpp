@@ -16,6 +16,7 @@
 #include <cloud/cloud_service_manager.h>
 #endif
 
+#include <3rd_party/webloader/src/NetworkRequestLoader.h>
 #include <business_layer/model/abstract_model.h>
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
@@ -103,6 +104,11 @@ public:
      * @brief Отправить краш-репорт
      */
     void sendCrashInfo();
+
+    /**
+     * @brief Загрузить недостающие шрифты
+     */
+    void loadMissedFonts();
 
     /**
      * @brief Предложить обновиться до последней версии
@@ -481,7 +487,7 @@ void ApplicationManager::Implementation::sendCrashInfo()
         //
         // Сформируем пары <дамп, лог>
         //
-        const auto logs = QFileInfo(Log::logFilePath()).dir().entryInfoList(QDir::Files);
+        const auto logs = QDir(Log::logFilePath()).entryInfoList(QDir::Files);
         QVector<QPair<QString, QString>> dumpsAndLogs;
         for (const auto& dump : crashDumps) {
             for (const auto& log : logs) {
@@ -543,6 +549,108 @@ void ApplicationManager::Implementation::sendCrashInfo()
     // Отображаем диалог
     //
     dialog->showDialog();
+}
+
+void ApplicationManager::Implementation::loadMissedFonts()
+{
+    //
+    // Сформировать список ссылок для загрузки
+    //
+    const auto missedFonts = Ui::DesignSystem::font().missedFonts();
+    if (missedFonts.isEmpty()) {
+        return;
+    }
+
+    //
+    // Загрузить
+    //
+    const QHash<QString, QVector<QString>> fontsToUlsMap = {
+        { QLatin1String("Noto Sans Arabic"),
+          {
+              QLatin1String("noto-sans-arabic-light.ttf"),
+              QLatin1String("noto-sans-arabic-regular.ttf"),
+              QLatin1String("noto-sans-arabic-medium.ttf"),
+          } },
+        { QLatin1String("Noto Sans SC"),
+          {
+              QLatin1String("noto-sans-sc-light.otf"),
+              QLatin1String("noto-sans-sc-regular.otf"),
+              QLatin1String("noto-sans-sc-medium.otf"),
+          } },
+        { QLatin1String("Noto Sans Hebrew"),
+          {
+              QLatin1String("noto-sans-hebrew-light.ttf"),
+              QLatin1String("noto-sans-hebrew-regular.ttf"),
+              QLatin1String("noto-sans-hebrew-medium.ttf"),
+          } },
+        { QLatin1String("Noto Sans Tamil"),
+          {
+              QLatin1String("noto-sans-tamil-light.ttf"),
+              QLatin1String("noto-sans-tamil-regular.ttf"),
+              QLatin1String("noto-sans-tamil-medium.ttf"),
+          } },
+        { QLatin1String("Noto Sans KR"),
+          {
+              QLatin1String("noto-sans-kr-light.otf"),
+              QLatin1String("noto-sans-kr-regular.otf"),
+              QLatin1String("noto-sans-kr-medium.otf"),
+          } },
+        { QLatin1String("Noto Color Emoji"),
+          {
+              QLatin1String("noto-color-emoji-regular.ttf"),
+          } },
+    };
+    QVector<QString> fontsUrls;
+    for (const auto& fontFamily : missedFonts) {
+        fontsUrls.append(fontsToUlsMap.value(fontFamily));
+    }
+    for (auto& url : fontsUrls) {
+        url.prepend("https://starc.app/downloads/fonts/");
+    }
+    const auto taskId = "fonts-loading";
+    TaskBar::addTask(taskId);
+    TaskBar::setTaskTitle(taskId, tr("Loading missed fonts"));
+    const auto taskStep = 100.0 / missedFonts.size();
+    NetworkRequestLoader::loadAsync(
+        fontsUrls, [this, taskId, taskStep](const QByteArray& _data, const QUrl& _url) {
+            auto taskProgress = TaskBar::taskProgress(taskId);
+            taskProgress += taskStep;
+            TaskBar::setTaskProgress(taskId, taskProgress);
+
+            //
+            // Сохраняем шрифт в файл
+            //
+            const auto fontsFolderPath
+                = QString("%1/fonts")
+                      .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+            QDir::root().mkpath(fontsFolderPath);
+            const auto fontFilePath = QString("%1/%2").arg(fontsFolderPath, _url.fileName());
+            QFile fontFile(fontFilePath);
+            if (fontFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                fontFile.write(_data);
+                fontFile.close();
+
+                //
+                // ... и добавляем шрифт в библиотеку
+                //
+                QFontDatabase().addApplicationFont(fontFilePath);
+            }
+
+            //
+            // Когда все шрифты были загружены
+            //
+            if (qFuzzyCompare(taskProgress, 100.0)) {
+                TaskBar::finishTask(taskId);
+                //
+                // ... обновить дизайн систему
+                //
+                Ui::DesignSystem::updateLanguage();
+                //
+                // ... и основное окно приложения
+                //
+                applicationView->update();
+            }
+        });
 }
 
 void ApplicationManager::Implementation::askUpdateToLatestVersion()
@@ -918,6 +1026,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     //
     Ui::DesignSystem::updateLanguage();
     QApplication::postEvent(q, new DesignSystemChangeEvent);
+
+    //
+    // При необходимости загрузим недостающие шрифты
+    //
+    loadMissedFonts();
 
     //
     // Настроим/обновим переводы для док-меню
@@ -1866,6 +1979,8 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     // Загрузим шрифты в базу шрифтов программы, если их там ещё нет
     //
+    // ... встроенные в бинарник
+    //
     QFontDatabase fontDatabase;
     fontDatabase.addApplicationFont(":/fonts/materialdesignicons");
     fontDatabase.addApplicationFont(":/fonts/roboto-light");
@@ -1874,17 +1989,6 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     fontDatabase.addApplicationFont(":/fonts/noto-sans");
     fontDatabase.addApplicationFont(":/fonts/noto-sans-light");
     fontDatabase.addApplicationFont(":/fonts/noto-sans-medium");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-arabic-light");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-arabic-medium");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-arabic-regular");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-hebrew-light");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-hebrew-medium");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-hebrew-regular");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-tamil-light");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-tamil-medium");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-tamil-regular");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-korean-regular");
-    fontDatabase.addApplicationFont(":/fonts/noto-color-emoji-regular");
     //
     fontDatabase.addApplicationFont(":/fonts/arial");
     fontDatabase.addApplicationFont(":/fonts/arial-bold");
@@ -1906,6 +2010,16 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     fontDatabase.addApplicationFont(":/fonts/montserrat-italic");
     fontDatabase.addApplicationFont(":/fonts/montserrat-bold-italic");
     fontDatabase.addApplicationFont(":/fonts/sf-movie-poster");
+    //
+    // ... скаченные
+    //
+    const auto fontsFolderPath
+        = QString("%1/fonts")
+              .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    const auto fonts = QDir(fontsFolderPath).entryInfoList(QDir::Files);
+    for (const auto& font : fonts) {
+        fontDatabase.addApplicationFont(font.absoluteFilePath());
+    }
 
     //
     // Инициилизируем данные после подгрузки шрифтов, чтобы они сразу подхватились системой
@@ -1958,6 +2072,11 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
     // Самое главное - настроить заголовок!
     //
     d->updateWindowTitle();
+
+    //
+    // Сразу регистрируем панель уведомлений
+    //
+    TaskBar::registerTaskBar(d->applicationView, {}, {}, {});
 
     //
     // Установим размер экрана по-умолчанию, на случай, если это первый запуск
@@ -2018,6 +2137,11 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
             // Покажем диалог отправки сообщения об ошибке
             //
             d->sendCrashInfo();
+
+            //
+            // Загружаем недостающие шрифты
+            //
+            d->loadMissedFonts();
 
             //
             // Переводим состояние приложение в рабочий режим

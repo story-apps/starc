@@ -18,24 +18,13 @@
         <file alias="arial-bold">fonts/arial-bold.ttf</file>
         <file alias="arial-bold-italic">fonts/arial-bold-italic.ttf</file>
         <file alias="arial-italic">fonts/arial-italic.ttf</file>
-        <file alias="noto-sans-arabic-light">fonts/noto-sans-arabic-light.ttf</file>
-        <file alias="noto-sans-arabic-medium">fonts/noto-sans-arabic-medium.ttf</file>
-        <file alias="noto-sans-arabic-regular">fonts/noto-sans-arabic-regular.ttf</file>
-        <file alias="noto-sans-hebrew-light">fonts/noto-sans-hebrew-light.ttf</file>
-        <file alias="noto-sans-hebrew-medium">fonts/noto-sans-hebrew-medium.ttf</file>
-        <file alias="noto-sans-hebrew-regular">fonts/noto-sans-hebrew-regular.ttf</file>
         <file alias="noto-sans-light">fonts/noto-sans-light.ttf</file>
         <file alias="noto-sans-medium">fonts/noto-sans-medium.ttf</file>
-        <file alias="noto-sans-tamil-light">fonts/noto-sans-tamil-light.ttf</file>
-        <file alias="noto-sans-tamil-medium">fonts/noto-sans-tamil-medium.ttf</file>
-        <file alias="noto-sans-tamil-regular">fonts/noto-sans-tamil-regular.ttf</file>
         <file alias="roboto-light">fonts/roboto-light.ttf</file>
         <file alias="montserrat-bold">fonts/montserrat-bold.ttf</file>
         <file alias="montserrat-bold-italic">fonts/montserrat-bold-italic.ttf</file>
         <file alias="montserrat-italic">fonts/montserrat-italic.ttf</file>
         <file alias="montserrat-regular">fonts/montserrat-regular.ttf</file>
         <file alias="sf-movie-poster">fonts/sf-movie-poster.ttf</file>
-        <file alias="noto-sans-korean-regular">fonts/noto-sans-korean-regular.otf</file>
-        <file alias="noto-color-emoji-regular">fonts/noto-color-emoji-regular.ttf</file>
     </qresource>
 </RCC>

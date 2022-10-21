@@ -95,6 +95,11 @@ public:
     public:
         ~Font();
 
+        /**
+         * @brief Получить список недостающих шрифтов для корректной работы приложения
+         */
+        QVector<QString> missedFonts() const;
+
         const QFont& h1() const;
         const QFont& h2() const;
         const QFont& h3() const;

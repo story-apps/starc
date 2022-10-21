@@ -507,7 +507,11 @@ TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
     //
     // ... настройки шрифта
     //
-    m_font.setFamilies({ _blockAttributes.value("font_family").toString(), "Noto Color Emoji" });
+    m_font.setFamilies({
+        _blockAttributes.value("font_family").toString(),
+        "Apple Color Emoji",
+        "Noto Color Emoji",
+    });
     m_font.setPixelSize(MeasurementHelper::ptToPx(_blockAttributes.value("font_size").toDouble()));
     //
     // ... начертание

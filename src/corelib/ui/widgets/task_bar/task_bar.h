@@ -28,9 +28,9 @@ public:
     static void setTaskTitle(const QString& _taskId, const QString& _title);
 
     /**
-     * @brief Задать прогресс выполнения процесса с заданным идентификатором в интервале [0.0,
-     * 100.0]
+     * @brief Прогресс выполнения процесса с заданным идентификатором в интервале [0.0, 100.0]
      */
+    static qreal taskProgress(const QString& _taskId);
     static void setTaskProgress(const QString& _taskId, qreal _progress);
 
     /**
