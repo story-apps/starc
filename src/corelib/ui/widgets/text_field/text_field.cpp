@@ -197,6 +197,7 @@ void TextField::Implementation::reconfigure()
     iconDecorationAnimation.setRadiusInterval(Ui::DesignSystem::textField().iconSize().height()
                                                   / 2.0,
                                               Ui::DesignSystem::radioButton().height() / 2.0);
+    q->document()->clearUndoRedoStacks();
 }
 
 void TextField::Implementation::animateLabelToTop()
@@ -567,6 +568,7 @@ void TextField::setText(const QString& _text)
     cursor.select(QTextCursor::Document);
     cursor.insertText(_text);
     cursor.endEditBlock();
+    document()->clearUndoRedoStacks();
 
     //
     // Анимируем только в случае, когда текста не было и его установили
@@ -707,6 +709,7 @@ void TextField::clear()
     QTextCursor cursor = textCursor();
     cursor.select(QTextCursor::Document);
     cursor.deleteChar();
+    document()->clearUndoRedoStacks();
 
     d->animateLabelToBottom();
     d->finishAnimationIfInvisible();
