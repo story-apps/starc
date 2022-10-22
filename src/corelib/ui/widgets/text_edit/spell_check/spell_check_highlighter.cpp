@@ -120,19 +120,22 @@ void SpellCheckHighlighter::highlightBlock(const QString& _text)
     //
     // Убираем пустоты из проверяемого текста
     //
-    QRegularExpression notWord("([^\\w'’-]|·)+", QRegularExpression::UseUnicodePropertiesOption);
+    const static QRegularExpression notWord("([^\\w'’-]|·)+",
+                                            QRegularExpression::UseUnicodePropertiesOption);
     //
     // Проверяем каждое слово
     //
     int wordPos = 0;
+    int notWordLength = 1;
     int notWordPos = 0;
-    for (wordPos = 0; wordPos < _text.length(); wordPos = notWordPos + 1) {
+    for (wordPos = 0; wordPos < _text.length(); wordPos = notWordPos + notWordLength) {
         //
         // Получим окончание слова
         //
         const auto match = notWord.match(_text, wordPos);
         if (match.hasMatch()) {
             notWordPos = match.capturedStart();
+            notWordLength = std::max(1, match.capturedLength());
         } else {
             notWordPos = _text.length();
         }
