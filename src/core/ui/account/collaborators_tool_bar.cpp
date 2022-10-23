@@ -143,7 +143,9 @@ QSize CollaboratorsToolBar::sizeHint() const
 {
     const auto size = d->avatarSize();
     const auto spacing = d->spacing();
-    return QSize(d->collaborators.size() * size + (d->collaborators.size() - 1) * spacing, size);
+    return QSize(
+        std::max(0.0, d->collaborators.size() * size + (d->collaborators.size() - 1) * spacing),
+        size);
 }
 
 bool CollaboratorsToolBar::eventFilter(QObject* _watched, QEvent* _event)
