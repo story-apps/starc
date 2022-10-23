@@ -30,6 +30,11 @@ public:
     ~SpellChecker();
 
     /**
+     * @brief Доступна ли проверка орфографии
+     */
+    bool isAvailable() const;
+
+    /**
      * @brief Язык для проверки орфографии
      */
     QString spellingLanguage() const;

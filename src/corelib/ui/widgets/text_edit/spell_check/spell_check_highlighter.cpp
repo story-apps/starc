@@ -81,7 +81,7 @@ SpellCheckHighlighter::~SpellCheckHighlighter() = default;
 
 void SpellCheckHighlighter::setUseSpellChecker(bool _use)
 {
-    if (d->useSpellChecker == _use) {
+    if (d->useSpellChecker == _use || !d->spellChecker.isAvailable()) {
         return;
     }
 

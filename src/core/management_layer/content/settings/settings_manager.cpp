@@ -1127,7 +1127,7 @@ void SettingsManager::loadSpellingDictionaryAffFile(const QString& _languageCode
                     QString("%1/hunspell/%2")
                         .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
                              affFileName));
-                affFile.open(QIODevice::WriteOnly);
+                affFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
                 affFile.write(_data);
                 affFile.close();
 
@@ -1183,7 +1183,7 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
                     QString("%1/hunspell/%2")
                         .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
                              dicFileName));
-                affFile.open(QIODevice::WriteOnly);
+                affFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
                 affFile.write(_data);
                 affFile.close();
 

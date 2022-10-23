@@ -28,7 +28,7 @@ public:
      * @param Тип словаря
      * @return Путь к файлу словаря
      */
-    QString hunspellFilePath(SpellCheckerFileType _fileType) const;
+    QString hunspellFilePath(const QString& _fileName, SpellCheckerFileType _fileType) const;
 
     /**
      * @brief Добавить слово в словарный запас проверяющего
@@ -72,12 +72,13 @@ SpellChecker::Implementation::Implementation()
         = hunspellDictionariesFolderPath + QDir::separator() + "user_dictionary.dict";
 }
 
-QString SpellChecker::Implementation::hunspellFilePath(SpellCheckerFileType _fileType) const
+QString SpellChecker::Implementation::hunspellFilePath(const QString& _fileName,
+                                                       SpellCheckerFileType _fileType) const
 {
     //
     // Получим файл со словарём в зависимости от выбранного языка
     //
-    QString fileName = languageCode;
+    QString fileName = _fileName;
 
     //
     // Определим расширение файла, в зависимости от словаря
@@ -123,6 +124,11 @@ SpellChecker& SpellChecker::instance()
 
 SpellChecker::~SpellChecker() = default;
 
+bool SpellChecker::isAvailable() const
+{
+    return !d->checker.isNull();
+}
+
 QString SpellChecker::spellingLanguage() const
 {
     return d->languageCode;
@@ -130,11 +136,10 @@ QString SpellChecker::spellingLanguage() const
 
 void SpellChecker::setSpellingLanguage(const QString& _languageCode)
 {
-    if (d->languageCode == _languageCode && d->checker && d->checkerTextCodec) {
+    if (d->languageCode == _languageCode && !d->checker.isNull()
+        && d->checkerTextCodec != nullptr) {
         return;
     }
-
-    d->languageCode = _languageCode;
 
     //
     // Удаляем предыдущего проверяющего
@@ -144,12 +149,18 @@ void SpellChecker::setSpellingLanguage(const QString& _languageCode)
     //
     // Получаем пути к файлам словарей
     //
-    const QFileInfo affFileInfo(d->hunspellFilePath(SpellCheckerFileType::Affinity));
-    const QFileInfo dicFileInfo(d->hunspellFilePath(SpellCheckerFileType::Dictionary));
+    const QFileInfo affFileInfo(d->hunspellFilePath(_languageCode, SpellCheckerFileType::Affinity));
+    const QFileInfo dicFileInfo(
+        d->hunspellFilePath(_languageCode, SpellCheckerFileType::Dictionary));
     if (!affFileInfo.exists() || affFileInfo.size() == 0 || !dicFileInfo.exists()
         || dicFileInfo.size() == 0) {
         return;
     }
+
+    //
+    // Сохраняем значение установленного языка, только если файлы со словарями существуют
+    //
+    d->languageCode = _languageCode;
 
     //
     // Создаём нового проверяющего
