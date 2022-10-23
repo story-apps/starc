@@ -23,7 +23,6 @@
 #include <QDateTime>
 #include <QDomDocument>
 #include <QMimeData>
-#include <QRegularExpression>
 #include <QStringListModel>
 #include <QXmlStreamReader>
 
