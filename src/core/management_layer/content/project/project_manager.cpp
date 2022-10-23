@@ -1267,6 +1267,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->splitScreenAction, &QAction::toggled, this, [this](bool _checked) {
         d->updateOptionsText();
         if (_checked) {
+            Log::info("Split screen turned on");
+
             const bool isFirstSplit = !d->view.inactiveIndex.isValid();
             if (isFirstSplit) {
                 d->view.inactiveIndex = d->view.activeIndex;
@@ -1281,6 +1283,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                          d->currentDocument.viewMimeType);
             }
         } else {
+            Log::info("Split screen turned off");
+
             d->view.container->setSizes({ 1, 0 });
             d->view.right->hide();
             if (d->view.active == d->view.right) {
