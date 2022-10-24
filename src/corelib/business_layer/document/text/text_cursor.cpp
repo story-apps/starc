@@ -499,12 +499,15 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
     }
     //
     // Если в верхнем блоке нет текста, а в нижнем есть
-    // Или верхний блок полностью удаляется и при этом не является разрывом блока
+    // Или верхний блок полностью удаляется и при этом не является разрывом блока,
+    //     а нижний не является декорацией
     //
     else if ((topBlock.text().isEmpty() && !bottomBlock.text().isEmpty())
              || (topBlock.position() == topCursorPosition
                  && topBlock.position() + topBlock.text().length() < bottomCursorPosition
-                 && topParagraphType != TextParagraphType::PageSplitter)) {
+                 && topParagraphType != TextParagraphType::PageSplitter
+                 && !bottomBlock.blockFormat().boolProperty(
+                     TextBlockStyle::PropertyIsCorrection))) {
         //
         // ... то результирующим стилем будет стиль нижнего блока
         //
