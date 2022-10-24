@@ -968,10 +968,15 @@ void TextTemplate::load(const QString& _fromFile)
         auto sceneHeadingShadowStyle = d->paragraphsStyles.value(TextParagraphType::SceneHeading);
         sceneHeadingShadowStyle.setType(TextParagraphType::SceneHeadingShadow);
         setParagraphStyle(sceneHeadingShadowStyle);
+        //
+        auto sceneHeadingShadowTreatmentStyle = sceneHeadingShadowStyle;
+        sceneHeadingShadowTreatmentStyle.setType(TextParagraphType::SceneHeadingShadowTreatment);
+        setParagraphStyle(sceneHeadingShadowTreatmentStyle);
+        //
         auto beatHeadingShadowStyle = d->paragraphsStyles.value(TextParagraphType::BeatHeading);
         beatHeadingShadowStyle.setType(TextParagraphType::BeatHeadingShadow);
         setParagraphStyle(beatHeadingShadowStyle);
-        //
+
         auto panelHeadingShadowStyle = d->paragraphsStyles.value(TextParagraphType::PanelHeading);
         panelHeadingShadowStyle.setType(TextParagraphType::PanelHeadingShadow);
         setParagraphStyle(panelHeadingShadowStyle);

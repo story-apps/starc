@@ -451,8 +451,11 @@ TextDocument::TextDocument(QObject* _parent)
 {
     connect(this, &TextDocument::contentsChange, this, &TextDocument::updateModelOnContentChange);
     connect(this, &TextDocument::contentsChanged, this, [this] { d->tryToCorrectDocument(); });
-    connect(&d->modelChangeCorrectionDebouncer, &Debouncer::gotWork, this,
-            [this] { d->tryToCorrectDocument(); });
+    //
+    // FIXME: Раскоментить при реализации SAD-760
+    //
+    //    connect(&d->modelChangeCorrectionDebouncer, &Debouncer::gotWork, this,
+    //            [this] { d->tryToCorrectDocument(); });
 }
 
 TextDocument::~TextDocument() = default;
