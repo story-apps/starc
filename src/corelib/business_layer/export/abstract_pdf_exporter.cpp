@@ -74,10 +74,16 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
         const QRectF fullWidthPageRect(0, pageYPos, _body.width(), _body.height());
         _painter->setClipRect(fullWidthPageRect);
 
-        const int blockPos = layout->hitTest(QPointF(0, pageYPos), Qt::FuzzyHit);
+        const int blockPos = pageYPos == 0
+            ? 0
+            : layout->hitTest(
+                QPointF(0,
+                        pageYPos
+                            + MeasurementHelper::mmToPx(
+                                q->documentTemplate(_exportOptions).pageMargins().top())),
+                Qt::FuzzyHit);
         QTextBlock block = _document->findBlock(std::max(0, blockPos));
         while (block.isValid()) {
-
             const auto paragraphType = TextBlockStyle::forBlock(block);
             QRectF blockRect = layout->blockBoundingRect(block);
             if (q->documentTemplate(_exportOptions).paragraphStyle(paragraphType).lineSpacingType()
@@ -85,6 +91,7 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
                 blockRect.setTop((int)blockRect.top() + block.blockFormat().lineHeight()
                                  - TextHelper::fineLineSpacing(block.charFormat().font()));
             }
+
             if (blockRect.bottom()
                 > pageYPos + _body.height()
                     - MeasurementHelper::mmToPx(

@@ -2807,7 +2807,6 @@ QTextCursor PageTextEdit::cursorForPosition(const QPoint& pos) const
         auto y = posMappedToContents.y();
         constexpr int repeats = 20;
         bool success = false;
-        ;
         for (int repeat = 0; repeat < repeats; ++repeat) {
             cursor.setPosition(
                 d->control->hitTest(QPoint(posMappedToContents.x(), y), Qt::FuzzyHit));

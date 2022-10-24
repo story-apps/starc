@@ -38,6 +38,10 @@ void ScreenplayPdfExporter::printBlockDecorations(
     QPainter* _painter, qreal _pageYPos, const QRectF& _body, TextParagraphType _paragraphType,
     const QRectF& _blockRect, const QTextBlock& _block, const ExportOptions& _exportOptions) const
 {
+    if (!_block.isVisible()) {
+        return;
+    }
+
     const auto& exportTemplate = documentTemplate(_exportOptions);
     const auto& exportOptions = static_cast<const ScreenplayExportOptions&>(_exportOptions);
 
