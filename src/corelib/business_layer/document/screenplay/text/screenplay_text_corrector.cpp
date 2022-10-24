@@ -957,7 +957,6 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             // Если это время и место, бит, кадр или начало папки
             //
             case TextParagraphType::SceneHeading:
-            case TextParagraphType::BeatHeading:
             case TextParagraphType::Shot:
             case TextParagraphType::ActHeading:
             case TextParagraphType::SequenceHeading: {
@@ -1004,7 +1003,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             //
             // Если это участники сцены
             //
-            case TextParagraphType::SceneCharacters: {
+            case TextParagraphType::SceneCharacters:
+            case TextParagraphType::BeatHeading: {
                 //
                 // Определим предыдущий блок
                 //
