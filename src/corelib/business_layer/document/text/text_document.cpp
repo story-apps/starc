@@ -16,6 +16,7 @@
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/shugar.h>
+#include <utils/tools/debouncer.h>
 
 #include <QDateTime>
 #include <QPointer>
@@ -87,10 +88,19 @@ public:
     bool canChangeModel = true;
     std::map<int, TextModelItem*> positionsToItems;
     QScopedPointer<AbstractTextCorrector> corrector;
+
+    /**
+     * @brief Дебаунсер для корректировки текста после изменений в модели
+     * @note Тут нужен именно дебаунсинг, т.к. некоторые изменения в модели могут быть
+     *       несгруппированными, поэтому чтобы на каждое изменение не делать корректировки
+     *       группируем их в конце очереди событий
+     */
+    Debouncer modelChangeCorrectionDebouncer;
 };
 
 TextDocument::Implementation::Implementation(TextDocument* _document)
     : q(_document)
+    , modelChangeCorrectionDebouncer(0)
 {
 }
 
@@ -441,6 +451,8 @@ TextDocument::TextDocument(QObject* _parent)
 {
     connect(this, &TextDocument::contentsChange, this, &TextDocument::updateModelOnContentChange);
     connect(this, &TextDocument::contentsChanged, this, [this] { d->tryToCorrectDocument(); });
+    connect(&d->modelChangeCorrectionDebouncer, &Debouncer::gotWork, this,
+            [this] { d->tryToCorrectDocument(); });
 }
 
 TextDocument::~TextDocument() = default;
@@ -525,6 +537,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
             Q_ASSERT(_topLeft == _bottomRight);
 
             QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+            d->modelChangeCorrectionDebouncer.orderWork();
 
             const auto position = itemStartPosition(_topLeft);
             if (position < 0) {
@@ -701,7 +714,6 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                                         isFirstParagraph);
             }
 
-
             cursor.endEditBlock();
         });
     connect(d->model, &TextModel::rowsInserted, this,
@@ -711,6 +723,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                 }
 
                 QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+                d->modelChangeCorrectionDebouncer.orderWork();
 
                 //
                 // Игнорируем добавление пустых сцен и папок
@@ -815,6 +828,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
             }
 
             QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+            d->modelChangeCorrectionDebouncer.orderWork();
 
             const QModelIndex fromIndex = d->model->index(_from, 0, _parent);
             if (!fromIndex.isValid()) {

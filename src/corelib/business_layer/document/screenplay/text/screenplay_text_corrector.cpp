@@ -91,6 +91,17 @@ public:
     QTextDocument* document() const;
 
     /**
+     * @brief Получить список видимых блоков в зависимости от режима отображения поэпизодника или
+     * сценария
+     */
+    QSet<TextParagraphType> visibleBlocksTypes() const;
+
+    /**
+     * @brief Обновить видимость блоков в заданном интервале
+     */
+    void updateBlocksVisibility(int _from);
+
+    /**
      * @brief Скорректировать имена персонажей
      */
     void correctCharactersNames(int _position = -1, int _charsChanged = 0);
@@ -279,6 +290,84 @@ QTextDocument* ScreenplayTextCorrector::Implementation::document() const
     return q->document();
 }
 
+QSet<TextParagraphType> ScreenplayTextCorrector::Implementation::visibleBlocksTypes() const
+{
+    auto screenplayDocument = qobject_cast<ScreenplayTextDocument*>(document());
+    if (screenplayDocument->isTreatmentVisible()) {
+        return {
+            TextParagraphType::SceneHeading,      TextParagraphType::SceneHeadingShadowTreatment,
+            TextParagraphType::SceneCharacters,   TextParagraphType::BeatHeading,
+            TextParagraphType::BeatHeadingShadow, TextParagraphType::ActHeading,
+            TextParagraphType::ActFooter,         TextParagraphType::SequenceHeading,
+            TextParagraphType::SequenceFooter,
+        };
+    }
+
+    return {
+        TextParagraphType::SceneHeading,
+        TextParagraphType::SceneHeadingShadow,
+        TextParagraphType::SceneCharacters,
+        TextParagraphType::Action,
+        TextParagraphType::Character,
+        TextParagraphType::Parenthetical,
+        TextParagraphType::Dialogue,
+        TextParagraphType::Lyrics,
+        TextParagraphType::Shot,
+        TextParagraphType::Transition,
+        TextParagraphType::InlineNote,
+        TextParagraphType::UnformattedText,
+        TextParagraphType::ActHeading,
+        TextParagraphType::ActFooter,
+        TextParagraphType::SequenceHeading,
+        TextParagraphType::SequenceFooter,
+        TextParagraphType::PageSplitter,
+    };
+}
+
+void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
+{
+    //
+    // Сформируем список типов блоков для отображения
+    //
+    const auto visibleBlocksTypes = this->visibleBlocksTypes();
+
+    //
+    // Пробегаем документ и настраиваем видимые и невидимые блоки
+    //
+    TextCursor cursor(document());
+    cursor.setPosition(std::max(0, _from));
+    cursor.beginEditBlock();
+
+    auto block = cursor.block();
+    while (block.isValid()) {
+        const auto blockType = TextBlockStyle::forBlock(block);
+
+        //
+        // В некоторых случаях, мы попадаем сюда, когда документ не до конца настроен, поэтому
+        // когда обнаруживается такая ситация, завершаем выполнение
+        //
+        if (blockType == TextParagraphType::Undefined) {
+            break;
+        }
+
+        //
+        // ... уберём отступы у скрытых блоков, чтобы они не ломали компановку документа
+        //
+        block.setVisible(visibleBlocksTypes.contains(blockType));
+        if (!block.isVisible()) {
+            cursor.setPosition(block.position());
+            auto blockFormat = cursor.blockFormat();
+            blockFormat.setTopMargin(0);
+            blockFormat.setBottomMargin(0);
+            cursor.setBlockFormat(blockFormat);
+        }
+
+        block = block.next();
+    }
+
+    cursor.endEditBlock();
+}
+
 void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _position,
                                                                      int _charsChanged)
 {
@@ -296,7 +385,6 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
     // Начинаем работу с документом
     //
     TextCursor cursor(document());
-    cursor.beginEditBlock();
 
     //
     // Расширим выделение
@@ -392,8 +480,6 @@ void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _positi
 
         block = block.next();
     } while (block.isValid() && block.position() < endPosition);
-
-    cursor.endEditBlock();
 }
 
 void ScreenplayTextCorrector::Implementation::clearCharacterNamesCorrections()
@@ -517,7 +603,6 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     // Начинаем работу с документом
     //
     TextCursor cursor(document());
-    cursor.beginEditBlock();
 
     //
     // Идём по каждому блоку документа с самого начала
@@ -1536,8 +1621,6 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
 
         block = block.next();
     }
-
-    cursor.endEditBlock();
 }
 
 void ScreenplayTextCorrector::Implementation::clearPageBreaksCorrections()
@@ -1995,6 +2078,11 @@ void ScreenplayTextCorrector::correct(int _position, int _charsChanged)
         return;
     }
 
+    TextCursor cursor(document());
+    cursor.beginEditBlock();
+
+    d->updateBlocksVisibility(_position);
+
     if (d->needToCorrectCharactersNames) {
         d->correctCharactersNames(_position, _charsChanged);
     }
@@ -2002,6 +2090,8 @@ void ScreenplayTextCorrector::correct(int _position, int _charsChanged)
     if (d->needToCorrectPageBreaks) {
         d->correctPageBreaks(_position);
     }
+
+    cursor.endEditBlock();
 }
 
 } // namespace BusinessLayer
