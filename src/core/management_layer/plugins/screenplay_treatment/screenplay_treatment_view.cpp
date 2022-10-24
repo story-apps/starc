@@ -958,6 +958,7 @@ int ScreenplayTreatmentView::verticalScroll() const
 
 void ScreenplayTreatmentView::setverticalScroll(int _value)
 {
+    d->textEdit->stopVerticalScrollAnimation();
     d->textEdit->verticalScrollBar()->setValue(_value);
 }
 

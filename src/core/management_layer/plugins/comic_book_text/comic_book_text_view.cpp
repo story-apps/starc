@@ -942,6 +942,7 @@ int ComicBookTextView::verticalScroll() const
 
 void ComicBookTextView::setverticalScroll(int _value)
 {
+    d->textEdit->stopVerticalScrollAnimation();
     d->textEdit->verticalScrollBar()->setValue(_value);
 }
 

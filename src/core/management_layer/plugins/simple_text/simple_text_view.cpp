@@ -866,6 +866,7 @@ int SimpleTextView::verticalScroll() const
 
 void SimpleTextView::setverticalScroll(int _value)
 {
+    d->textEdit->stopVerticalScrollAnimation();
     d->textEdit->verticalScrollBar()->setValue(_value);
 }
 

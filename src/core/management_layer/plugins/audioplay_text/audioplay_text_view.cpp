@@ -943,6 +943,7 @@ int AudioplayTextView::verticalScroll() const
 
 void AudioplayTextView::setverticalScroll(int _value)
 {
+    d->textEdit->stopVerticalScrollAnimation();
     d->textEdit->verticalScrollBar()->setValue(_value);
 }
 

@@ -239,6 +239,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     commentsToolbar->hide();
 
     textEdit->setVerticalScrollBar(new ScrollBar);
+    textEdit->verticalScrollBar()->setObjectName("screenplay-vertical-scroll-bar");
     textEdit->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
     //
@@ -1055,8 +1056,9 @@ int ScreenplayTextView::verticalScroll() const
     return d->textEdit->verticalScrollBar()->value();
 }
 
-void ScreenplayTextView::setverticalScroll(int _value)
+void ScreenplayTextView::setVerticalScroll(int _value)
 {
+    d->textEdit->stopVerticalScrollAnimation();
     d->textEdit->verticalScrollBar()->setValue(_value);
 }
 

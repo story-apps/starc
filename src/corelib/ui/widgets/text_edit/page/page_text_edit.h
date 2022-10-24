@@ -390,6 +390,11 @@ public:
     void setUseTypewriterScrolling(bool _use);
 
     /**
+     * @brief Остановить анимацию вертикального скрола
+     */
+    void stopVerticalScrollAnimation();
+
+    /**
      * @brief Создать контекстное меню в заданной позиции
      */
     virtual ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr);

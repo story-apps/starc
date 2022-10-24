@@ -3880,6 +3880,12 @@ void PageTextEdit::setUseTypewriterScrolling(bool _use)
     d->useTypewriterScrolling = _use;
 }
 
+void PageTextEdit::stopVerticalScrollAnimation()
+{
+    Q_D(PageTextEdit);
+    d->scrollAnimation.stop();
+}
+
 ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
     if (isReadOnly()) {

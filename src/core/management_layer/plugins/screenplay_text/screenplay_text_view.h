@@ -74,7 +74,7 @@ public:
      * @brief Положение прокрутки
      */
     int verticalScroll() const;
-    void setverticalScroll(int _value);
+    void setVerticalScroll(int _value);
 
     /**
      * @brief Вставить заданный текст

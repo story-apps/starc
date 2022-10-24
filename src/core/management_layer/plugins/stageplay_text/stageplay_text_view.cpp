@@ -902,6 +902,7 @@ int StageplayTextView::verticalScroll() const
 
 void StageplayTextView::setverticalScroll(int _value)
 {
+    d->textEdit->stopVerticalScrollAnimation();
     d->textEdit->verticalScrollBar()->setValue(_value);
 }
 
