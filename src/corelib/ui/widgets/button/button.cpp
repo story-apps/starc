@@ -247,7 +247,7 @@ void Button::paintEvent(QPaintEvent* _event)
             const QPixmap shadow = ImageHelper::dropShadow(
                 backgroundImage, Ui::DesignSystem::button().shadowMargins(), shadowBlurRadius,
                 Ui::DesignSystem::color().shadow());
-            painter.drawPixmap(0, 0, shadow);
+            painter.drawPixmap(contentsRect().topLeft(), shadow);
         }
         //
         // ... собственно отрисовка фона

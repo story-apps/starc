@@ -484,6 +484,11 @@ void TextField::setLabel(const QString& _text)
     update();
 }
 
+QString TextField::helper() const
+{
+    return d->helper;
+}
+
 void TextField::setHelper(const QString& _text)
 {
     if (d->helper == _text) {
@@ -493,6 +498,11 @@ void TextField::setHelper(const QString& _text)
     d->helper = _text;
     updateGeometry();
     update();
+}
+
+QString TextField::error() const
+{
+    return d->error;
 }
 
 void TextField::setError(const QString& _text)

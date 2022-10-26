@@ -4,17 +4,35 @@
 #include <ui/widgets/animations/click_animation.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/icon_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QPaintEvent>
 #include <QPainter>
+
+#include <optional>
 
 
 class IconButton::Implementation
 {
 public:
+    explicit Implementation(IconButton* _q);
+
+    /**
+     * @brief Обновить радиус анимации в зависимости от шрифта
+     */
+    void updateAnimationRadius();
+
+
+    IconButton* q = nullptr;
+
     bool isCheckable = false;
     bool isChecked = false;
     QString icon;
+
+    /**
+     * @brief Кастомный шрифт
+     */
+    std::optional<QFont> customFont;
 
     /**
      * @brief  Декорации переключателя при клике
@@ -22,21 +40,30 @@ public:
     ClickAnimation decorationAnimation;
 };
 
+IconButton::Implementation::Implementation(IconButton* _q)
+    : q(_q)
+{
+}
+
+void IconButton::Implementation::updateAnimationRadius()
+{
+    const auto height = std::max(q->minimumHeight(), q->sizeHint().height());
+    decorationAnimation.setRadiusInterval(height / 4.0, height / 2.5);
+}
+
 
 // ****
 
 
 IconButton::IconButton(QWidget* _parent)
     : Widget(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     connect(&d->decorationAnimation, &ClickAnimation::valueChanged, this,
             qOverload<>(&IconButton::update));
-
-    designSystemChangeEvent(nullptr);
 }
 
 IconButton::~IconButton() = default;
@@ -81,6 +108,18 @@ void IconButton::setIcon(const QString& _icon)
     update();
 }
 
+void IconButton::setCustomFont(const QFont& _font)
+{
+    if (d->customFont == _font) {
+        return;
+    }
+
+    d->customFont = _font;
+    d->updateAnimationRadius();
+    updateGeometry();
+    update();
+}
+
 QSize IconButton::sizeHint() const
 {
     return QRectF({}, Ui::DesignSystem::toggleButton().size())
@@ -103,9 +142,11 @@ void IconButton::paintEvent(QPaintEvent* _event)
     //
     // Рисуем декорацию кнопки
     //
-    const QRectF iconRect(QPointF(Ui::DesignSystem::toggleButton().margins().left(),
-                                  Ui::DesignSystem::toggleButton().margins().top()),
-                          Ui::DesignSystem::toggleButton().iconSize());
+    const auto iconRect = d->customFont.has_value()
+        ? contentsRect()
+        : QRectF(QPointF(Ui::DesignSystem::toggleButton().margins().left(),
+                         Ui::DesignSystem::toggleButton().margins().top()),
+                 Ui::DesignSystem::toggleButton().iconSize());
     if (d->decorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
         painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
@@ -118,12 +159,23 @@ void IconButton::paintEvent(QPaintEvent* _event)
     //
     // Рисуем иконку
     //
-    painter.setFont(Ui::DesignSystem::font().iconsMid());
+    painter.setFont(d->customFont.value_or(Ui::DesignSystem::font().iconsMid()));
     const auto iconColor = d->isChecked ? Ui::DesignSystem::color().secondary() : textColor();
     painter.setPen(
         isEnabled() ? iconColor
                     : ColorHelper::transparent(iconColor, Ui::DesignSystem::disabledTextOpacity()));
     painter.drawText(iconRect, Qt::AlignCenter, IconHelper::directedIcon(d->icon));
+}
+
+void IconButton::mousePressEvent(QMouseEvent* _event)
+{
+    Q_UNUSED(_event)
+
+    if (!rect().contains(_event->pos())) {
+        return;
+    }
+
+    d->decorationAnimation.start();
 }
 
 void IconButton::mouseReleaseEvent(QMouseEvent* _event)
@@ -135,8 +187,6 @@ void IconButton::mouseReleaseEvent(QMouseEvent* _event)
     }
 
     setChecked(!d->isChecked);
-    d->decorationAnimation.start();
-
     emit clicked();
 }
 
@@ -144,9 +194,7 @@ void IconButton::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event);
 
-    d->decorationAnimation.setRadiusInterval(
-        Ui::DesignSystem::toggleButton().iconSize().height() / 2.0,
-        Ui::DesignSystem::toggleButton().size().height() / 2.5);
+    d->updateAnimationRadius();
 
     updateGeometry();
     update();

@@ -7,6 +7,10 @@
 
 namespace ManagementLayer {
 
+namespace {
+constexpr int kInvalidConfirmationCodeLength = -1;
+}
+
 class OnboardingManager::Implementation
 {
 public:
@@ -15,6 +19,8 @@ public:
     Ui::OnboardingToolBar* toolBar = nullptr;
     Ui::OnboardingNavigator* navigator = nullptr;
     Ui::OnboardingView* view = nullptr;
+
+    int confirmationCodeLength = kInvalidConfirmationCodeLength;
 };
 
 OnboardingManager::Implementation::Implementation(QWidget* _parent)
@@ -35,32 +41,30 @@ OnboardingManager::OnboardingManager(QObject* _parent, QWidget* _parentWidget)
     : QObject(_parent)
     , d(new Implementation(_parentWidget))
 {
-    connect(d->navigator, &Ui::OnboardingNavigator::currentIndexChanged, this,
-            [this](int _currentIndex) {
-                switch (_currentIndex) {
-                case 0: {
-                    d->view->showLanguagePage();
-                    break;
+    connect(d->navigator, &Ui::OnboardingNavigator::languageChanged, this,
+            &OnboardingManager::languageChanged);
+    connect(d->navigator, &Ui::OnboardingNavigator::themeChanged, this,
+            &OnboardingManager::themeChanged);
+    connect(d->navigator, &Ui::OnboardingNavigator::scaleFactorChanged, this,
+            &OnboardingManager::scaleFactorChanged);
+    connect(d->navigator, &Ui::OnboardingNavigator::signInPressed, this,
+            [this] { emit askConfirmationCodeRequested(d->navigator->email()); });
+    connect(d->navigator, &Ui::OnboardingNavigator::confirmationCodeChanged, this,
+            [this](const QString& _code) {
+                if (d->confirmationCodeLength == kInvalidConfirmationCodeLength
+                    || _code.length() != d->confirmationCodeLength) {
+                    return;
                 }
 
-                case 1: {
-                    d->view->showThemePage();
-                    break;
-                }
-                }
+                emit checkConfirmationCodeRequested(_code);
             });
-    connect(d->view, &Ui::OnboardingView::languageChanged, this,
-            &OnboardingManager::languageChanged);
-    connect(d->view, &Ui::OnboardingView::showThemePageRequested, d->navigator,
-            &Ui::OnboardingNavigator::showThemeStep);
-    connect(d->view, &Ui::OnboardingView::themeChanged, this, &OnboardingManager::themeChanged);
-    connect(d->view, &Ui::OnboardingView::scaleFactorChanged, this,
-            &OnboardingManager::scaleFactorChanged);
-    connect(d->view, &Ui::OnboardingView::skipOnboardingRequested, this,
-            &OnboardingManager::finished);
-    connect(d->view, &Ui::OnboardingView::finishOnboardingRequested, this,
+    connect(d->navigator, &Ui::OnboardingNavigator::accountInfoChanged, this,
+            &OnboardingManager::updateAccountInfoRequested);
+    connect(d->navigator, &Ui::OnboardingNavigator::finishOnboardingRequested, this,
             &OnboardingManager::finished);
 }
+
+OnboardingManager::~OnboardingManager() = default;
 
 QWidget* OnboardingManager::toolBar() const
 {
@@ -77,6 +81,19 @@ QWidget* OnboardingManager::view() const
     return d->view;
 }
 
-OnboardingManager::~OnboardingManager() = default;
+void OnboardingManager::setConfirmationCodeInfo(int _codeLength)
+{
+    d->confirmationCodeLength = _codeLength;
+}
+
+void OnboardingManager::completeSignIn()
+{
+    d->navigator->showAccountPage();
+}
+
+void OnboardingManager::setAccountInfo(const Domain::AccountInfo& _accountInfo)
+{
+    d->navigator->setAccountInfo(_accountInfo);
+}
 
 } // namespace ManagementLayer

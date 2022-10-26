@@ -80,7 +80,6 @@ protected:
      * @brief Реализуем отображение/скрытие попапа
      */
     void mousePressEvent(QMouseEvent* _event) override;
-    ;
 
 private:
     class Implementation;

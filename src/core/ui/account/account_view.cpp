@@ -270,7 +270,6 @@ AccountView::AccountView(QWidget* _parent)
     //
     connect(d->newsletterSubscription, &CheckBox::checkedChanged, this,
             &AccountView::newsletterSubscriptionChanged);
-    ;
     //
     connect(d->avatar, &ImageCard::imageChanged, this, &AccountView::avatarChanged);
 

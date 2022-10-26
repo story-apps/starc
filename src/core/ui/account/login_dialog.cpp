@@ -139,9 +139,6 @@ LoginDialog::LoginDialog(QWidget* _parent)
         emit signInPressed();
     });
     connect(d->cancelButton, &Button::clicked, this, &LoginDialog::cancelPressed);
-
-    LoginDialog::updateTranslations();
-    LoginDialog::designSystemChangeEvent(nullptr);
 }
 
 LoginDialog::~LoginDialog() = default;
@@ -153,7 +150,9 @@ void LoginDialog::showEmailStep()
     d->confirmationCode->hide();
     d->resendCodeButton->hide();
 
-    d->email->setFocus();
+    if (isVisible()) {
+        d->email->setFocus();
+    }
 }
 
 QString LoginDialog::email() const

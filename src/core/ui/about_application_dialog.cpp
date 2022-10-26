@@ -61,10 +61,10 @@ AboutApplicationDialog::Implementation::Implementation(QWidget* _parent)
     authorsLink->setLink(QUrl("https://storyapps.dev/"));
     partnerLink->setLink(QUrl("https://scriptwriting.courses/"));
 
-    twitterButton->setIcon(u8"\U000F0544");
-    discordButton->setIcon(u8"\U000F066F");
-    telegramButton->setIcon(u8"\U000F0501");
-    vkButton->setIcon(u8"\U000F0579");
+    twitterButton->setIcon(u8"\U0000f099");
+    discordButton->setIcon(u8"\U0000f392");
+    telegramButton->setIcon(u8"\U0000f3fe");
+    vkButton->setIcon(u8"\U0000f189");
     mailButton->setIcon(u8"\U000F01EE");
 
     buttonsLayout->setContentsMargins({});
@@ -127,10 +127,6 @@ AboutApplicationDialog::AboutApplicationDialog(QWidget* _parent)
     connect(d->mailButton, &IconButton::clicked, this,
             [] { QDesktopServices::openUrl(QUrl("https://starc.app/contacts")); });
     connect(d->closeButton, &Button::clicked, this, &AboutApplicationDialog::hideDialog);
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 AboutApplicationDialog::~AboutApplicationDialog() = default;
@@ -216,11 +212,13 @@ void AboutApplicationDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
              d->discordButton,
              d->telegramButton,
              d->vkButton,
-             d->mailButton,
          }) {
         iconButton->setBackgroundColor(Ui::DesignSystem::color().background());
         iconButton->setTextColor(Ui::DesignSystem::color().onBackground());
+        iconButton->setCustomFont(Ui::DesignSystem::font().brandsMid());
     }
+    d->mailButton->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->mailButton->setTextColor(Ui::DesignSystem::color().onBackground());
 
     d->closeButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
     d->closeButton->setTextColor(Ui::DesignSystem::color().secondary());

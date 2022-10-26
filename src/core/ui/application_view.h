@@ -29,6 +29,11 @@ public:
     QWidget* view() const;
 
     /**
+     * @brief Выдвинуть представление
+     */
+    void slideViewOut();
+
+    /**
      * @brief Задать доступность кнопки скрытия навигационной панели сплитера
      */
     void setHideNavigationButtonAvailable(bool _available);
@@ -41,7 +46,7 @@ public:
     /**
      * @brief Восстановить состояние
      */
-    void restoreState(const QVariantMap& _state);
+    void restoreState(bool _onboaringPassed, const QVariantMap& _state);
 
     /**
      * @brief Показать заданный контент

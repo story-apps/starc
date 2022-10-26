@@ -11,7 +11,6 @@
 #include <ui/widgets/dialog/standard_dialog.h>
 #include <utils/helpers/image_helper.h>
 
-#include <QFileDialog>
 #include <QTimer>
 #include <QWidget>
 

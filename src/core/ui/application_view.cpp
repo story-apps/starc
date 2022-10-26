@@ -14,9 +14,12 @@
 
 #include <QCloseEvent>
 #include <QPainter>
+#include <QParallelAnimationGroup>
+#include <QScreen>
 #include <QTimer>
 #include <QToolTip>
 #include <QVBoxLayout>
+#include <QVariantAnimation>
 
 
 namespace Ui {
@@ -107,6 +110,49 @@ QWidget* ApplicationView::view() const
     return d->view;
 }
 
+void ApplicationView::slideViewOut()
+{
+    const auto finalWidth = DesignSystem::layout().px(1200);
+    auto navigatorWidthAnimation = new QVariantAnimation(this);
+    navigatorWidthAnimation->setDuration(40);
+    navigatorWidthAnimation->setEasingCurve(QEasingCurve::OutQuart);
+    navigatorWidthAnimation->setStartValue(width());
+    navigatorWidthAnimation->setEndValue(
+        static_cast<int>(finalWidth / std::accumulate(kDefaultSizes.begin(), kDefaultSizes.end(), 0)
+                         * kDefaultSizes.constFirst()));
+    auto fullWidthAnimation = new QVariantAnimation(this);
+    fullWidthAnimation->setDuration(260);
+    fullWidthAnimation->setEasingCurve(QEasingCurve::OutQuad);
+    fullWidthAnimation->setStartValue(width());
+    fullWidthAnimation->setEndValue(static_cast<int>(finalWidth));
+    connect(fullWidthAnimation, &QVariantAnimation::valueChanged, this,
+            [this, navigatorWidthAnimation](const QVariant& _value) {
+                const auto width = _value.toInt();
+                resize(width, height());
+                const auto navigatorWidth = navigatorWidthAnimation->currentValue().toInt();
+                d->splitter->setSizes({ navigatorWidth, width - navigatorWidth });
+
+                move(screen()->availableGeometry().center() - QPoint(width / 2, height() / 2));
+            });
+    auto animation = new QParallelAnimationGroup(this);
+    animation->addAnimation(fullWidthAnimation);
+    animation->addAnimation(navigatorWidthAnimation);
+    connect(
+        animation, &QParallelAnimationGroup::stateChanged, this,
+        [this, fullWidthAnimation, navigatorWidthAnimation](QAbstractAnimation::State _newState) {
+            if (_newState == QAbstractAnimation::Running) {
+                d->view->setMinimumSize(fullWidthAnimation->endValue().toInt()
+                                            - navigatorWidthAnimation->endValue().toInt(),
+                                        height());
+            } else if (_newState == QAbstractAnimation::Stopped) {
+                d->view->setMinimumSize(0, 0);
+            }
+        });
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+    d->view->show();
+}
+
 void ApplicationView::setHideNavigationButtonAvailable(bool _available)
 {
     d->splitter->setHidePanelButtonAvailable(_available);
@@ -120,8 +166,19 @@ QVariantMap ApplicationView::saveState() const
     return state;
 }
 
-void ApplicationView::restoreState(const QVariantMap& _state)
+void ApplicationView::restoreState(bool _onboaringPassed, const QVariantMap& _state)
 {
+    //
+    // Если это первый запуск, то конфигурируем геометрию под онбординг
+    //
+    if (!_onboaringPassed || _state.isEmpty()) {
+        d->splitter->setSizes({ 1, 0 });
+        d->view->hide();
+        resize(Ui::DesignSystem::layout().px(468), Ui::DesignSystem::layout().px(740));
+        move(screen()->availableGeometry().center() - QPoint(width() / 2, height() / 2));
+        return;
+    }
+
     if (_state.contains(kSplitterState)) {
         d->splitter->restoreState(_state[kSplitterState].toByteArray());
     }

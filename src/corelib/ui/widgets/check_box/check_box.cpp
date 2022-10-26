@@ -138,6 +138,11 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     painter.fillRect(_event->rect(), backgroundColor());
 
     //
+    // Позиционируем рисовальщика
+    //
+    painter.translate(contentsRect().topLeft());
+
+    //
     // Настраиваем размещение текста для разных языков
     //
     qreal textRectX = 0;

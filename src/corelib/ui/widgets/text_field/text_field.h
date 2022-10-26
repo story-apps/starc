@@ -35,11 +35,13 @@ public:
     /**
      * @brief Установить текст впомогательной подсказки
      */
+    QString helper() const;
     void setHelper(const QString& _text);
 
     /**
-     * @brief Установить текст ошибки
+     * @brief Текст ошибки
      */
+    QString error() const;
     void setError(const QString& _text);
     void clearError();
 

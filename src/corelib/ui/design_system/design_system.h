@@ -120,6 +120,10 @@ public:
         const QFont& iconsBig() const;
         const QFont& iconsForEditors() const;
 
+        // Cheat sheet - https://fontawesome.com/v5/cheatsheet/free/brands
+        const QFont& brandsMid() const;
+        const QFont& brandsBig() const;
+
     private:
         explicit Font(qreal _scaleFactor);
         friend class DesignSystemPrivate;

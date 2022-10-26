@@ -63,9 +63,12 @@ void ComboBox::Implementation::showPopup(ComboBox* _parent)
     width += Ui::DesignSystem::card().shadowMargins().left()
         + Ui::DesignSystem::card().shadowMargins().right();
 
-    const auto posBottomDelta = _parent->isDefaultMarginsEnabled()
-        ? Ui::DesignSystem::textField().contentsMargins().bottom()
-        : _parent->customMargins().bottom();
+    const auto posBottomDelta = (_parent->isDefaultMarginsEnabled()
+                                     ? Ui::DesignSystem::textField().contentsMargins().bottom()
+                                     : _parent->customMargins().bottom())
+        + (!_parent->helper().isEmpty() || !_parent->error().isEmpty()
+               ? Ui::DesignSystem::textField().helperHeight()
+               : 0);
     auto pos = _parent->mapToGlobal(_parent->rect().bottomLeft() - QPoint(0, posBottomDelta))
         + QPointF(leftMargin - Ui::DesignSystem::card().shadowMargins().left(),
                   -Ui::DesignSystem::textField().margins().bottom());

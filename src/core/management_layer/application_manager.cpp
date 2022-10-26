@@ -1983,6 +1983,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     QFontDatabase fontDatabase;
     fontDatabase.addApplicationFont(":/fonts/materialdesignicons");
+    fontDatabase.addApplicationFont(":/fonts/font-awesome-brands");
     fontDatabase.addApplicationFont(":/fonts/roboto-light");
     fontDatabase.addApplicationFont(":/fonts/roboto-medium");
     fontDatabase.addApplicationFont(":/fonts/roboto-regular");
@@ -2079,11 +2080,7 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
     TaskBar::registerTaskBar(d->applicationView, {}, {}, {});
 
     //
-    // Установим размер экрана по-умолчанию, на случай, если это первый запуск
-    //
-    d->applicationView->resize(1024, 640);
-    //
-    // ... затем пробуем загрузить геометрию и состояние приложения
+    // Пробуем загрузить геометрию и состояние приложения
     //
     d->setTranslation(
         settingsValue(DataStorageLayer::kApplicationLanguagedKey).value<QLocale::Language>());
@@ -2092,7 +2089,9 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
     d->setCustomThemeColors(Ui::DesignSystem::Color(
         settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString()));
     d->setScaleFactor(settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
-    d->applicationView->restoreState(settingsValues(DataStorageLayer::kApplicationViewStateKey));
+    d->applicationView->restoreState(
+        settingsValue(DataStorageLayer::kApplicationConfiguredKey).toBool(),
+        settingsValues(DataStorageLayer::kApplicationViewStateKey));
 
     //
     // Покажем интерфейс
@@ -2321,7 +2320,9 @@ void ApplicationManager::initConnections()
                          static_cast<int>(Ui::DesignSystem::theme()));
         setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey,
                          Ui::DesignSystem::scaleFactor());
+
         d->showContent();
+        d->applicationView->slideViewOut();
     });
 
     //
@@ -2520,15 +2521,23 @@ void ApplicationManager::initConnections()
     //
     // Проверка регистрация или вход
     //
+    connect(d->onboardingManager.data(), &OnboardingManager::askConfirmationCodeRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::askConfirmationCode);
     connect(d->accountManager.data(), &AccountManager::askConfirmationCodeRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::askConfirmationCode);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::confirmationCodeInfoRecieved,
-            d->accountManager.data(), &AccountManager::setConfirmationCodeInfo);
+            d->accountManager.data(), [this](int _codeLength) {
+                d->onboardingManager->setConfirmationCodeInfo(_codeLength);
+                d->accountManager->setConfirmationCodeInfo(_codeLength);
+            });
+    connect(d->onboardingManager.data(), &OnboardingManager::checkConfirmationCodeRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::checkConfirmationCode);
     connect(d->accountManager.data(), &AccountManager::checkConfirmationCodeRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::checkConfirmationCode);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::loginCompleted,
             d->accountManager.data(), [this](bool _isNewAccount) {
                 d->cloudServiceManager->askAccountInfo();
+                d->onboardingManager->completeSignIn();
                 d->accountManager->completeSignIn(_isNewAccount);
                 if (_isNewAccount) {
                     d->menuView->closeMenu();
@@ -2561,6 +2570,7 @@ void ApplicationManager::initConnections()
     //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::accountInfoReceived, this,
             [this](const Domain::AccountInfo& _accountInfo) {
+                d->onboardingManager->setAccountInfo(_accountInfo);
                 d->accountManager->setAccountInfo(_accountInfo);
 
                 d->menuView->setSignInVisible(false);
@@ -2580,6 +2590,8 @@ void ApplicationManager::initConnections()
             d->accountManager.data(), &AccountManager::logoutRequested);
     connect(d->accountManager.data(), &AccountManager::askAccountInfoRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::askAccountInfo);
+    connect(d->onboardingManager.data(), &OnboardingManager::updateAccountInfoRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::setAccountInfo);
     connect(d->accountManager.data(), &AccountManager::updateAccountInfoRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::setAccountInfo);
     connect(d->accountManager.data(), &AccountManager::activatePaymentOptionRequested,

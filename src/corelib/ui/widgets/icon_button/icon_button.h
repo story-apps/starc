@@ -33,6 +33,11 @@ public:
     void setIcon(const QString& _icon);
 
     /**
+     * @brief Задать кастомный шрифт
+     */
+    void setCustomFont(const QFont& _font);
+
+    /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
      */
     QSize sizeHint() const override;
@@ -57,6 +62,7 @@ protected:
     /**
      * @brief Реализуем включение переключателя при клике на нём
      */
+    void mousePressEvent(QMouseEvent* _event) override;
     void mouseReleaseEvent(QMouseEvent* _event) override;
 
     /**
