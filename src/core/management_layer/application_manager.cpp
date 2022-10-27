@@ -357,7 +357,7 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
 {
     initDockMenu();
 
-    menuView->setShowDevVersions(notificationsManager->showDevversions());
+    menuView->setShowDevVersions(notificationsManager->showDevVersions());
 
     settingsManager->setThemeSetupView(applicationView->themeSetupView());
 

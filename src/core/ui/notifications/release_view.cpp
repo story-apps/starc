@@ -210,7 +210,20 @@ void ReleaseView::Implementation::updateState()
         bodyLabel->setText(json.value("info").toString());
         readMoreLink->setText(tr("Read more about release"));
     }
-    readMoreLink->setLink(json.value("read_more_link").toString());
+    auto readMoreUrl = json.value("read_more_link").toString();
+    switch (QLocale().language()) {
+    case QLocale::Russian:
+    case QLocale::Belarusian:
+    case QLocale::Ukrainian: {
+        readMoreUrl = readMoreUrl.replace("starc.app/", "starc.app/ru/");
+        break;
+    }
+
+    default: {
+        break;
+    }
+    }
+    readMoreLink->setLink(readMoreUrl);
 
     switch (state) {
     default:

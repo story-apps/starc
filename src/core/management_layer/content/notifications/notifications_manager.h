@@ -23,7 +23,7 @@ public:
     /**
      * @brief Необходимо ли отображения дев-версий
      */
-    bool showDevversions() const;
+    bool showDevVersions() const;
     void setShowDevVersions(bool _show);
 
     /**

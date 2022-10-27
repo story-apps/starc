@@ -36,7 +36,7 @@ NotificationsManager::NotificationsManager(QObject* _parent)
 
 NotificationsManager::~NotificationsManager() = default;
 
-bool NotificationsManager::showDevversions() const
+bool NotificationsManager::showDevVersions() const
 {
     return d->showDevVersions;
 }
