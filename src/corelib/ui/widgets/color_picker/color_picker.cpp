@@ -31,7 +31,9 @@ public:
     Button* addButton = nullptr;
     QHBoxLayout* buttonsLayout = nullptr;
 
-    bool screenColorPicking = false;
+    QVector<Widget*> screenOverlays;
+
+    bool isScreenColorPicking = false;
 };
 
 ColorPicker::Implementation::Implementation(QWidget* _parent)
@@ -54,13 +56,25 @@ ColorPicker::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton);
     buttonsLayout->addWidget(addButton);
+
+    for (auto screen : QApplication::screens()) {
+        auto overlay = new Widget;
+        overlay->move(screen->geometry().topLeft());
+        overlay->setAttribute(Qt::WA_TranslucentBackground);
+        overlay->setMouseTracking(true);
+        overlay->setBackgroundColor(Qt::transparent);
+        overlay->setCursor(Qt::CrossCursor);
+        overlay->hide();
+        screenOverlays.append(overlay);
+    }
 }
 
 QColor ColorPicker::Implementation::grabScreenColor(const QPoint& _position)
 {
-    const auto desk = QApplication::desktop();
-    const auto screen = QGuiApplication::primaryScreen();
-    const auto sceenPixmap = screen->grabWindow(desk->winId(), _position.x(), _position.y(), 1, 1);
+    const auto desktop = QApplication::desktop();
+    const auto screen = QGuiApplication::screenAt(_position);
+    const auto sceenPixmap
+        = screen->grabWindow(desktop->winId(), _position.x(), _position.y(), 1, 1);
     return sceenPixmap.toImage().pixel(0, 0);
 }
 
@@ -72,6 +86,9 @@ ColorPicker::ColorPicker(QWidget* _parent)
     : StackWidget(_parent)
     , d(new Implementation(this))
 {
+    for (auto screenOverlay : std::as_const(d->screenOverlays)) {
+        screenOverlay->installEventFilter(this);
+    }
 
     QVBoxLayout* customColorPanelLayout = new QVBoxLayout(d->customColorPanel);
     customColorPanelLayout->setContentsMargins({});
@@ -119,11 +136,11 @@ ColorPicker::ColorPicker(QWidget* _parent)
         d->colorSlider->setColor(color);
     });
     connect(d->colorCode, &TextField::trailingIconPressed, this, [this] {
-        d->screenColorPicking = true;
-        setCursor(Qt::CrossCursor);
-        grabMouse(Qt::CrossCursor);
-        grabKeyboard();
-        setMouseTracking(true);
+        d->isScreenColorPicking = true;
+        for (auto screenOverlay : std::as_const(d->screenOverlays)) {
+            screenOverlay->raise();
+            screenOverlay->showFullScreen();
+        }
     });
     connect(d->colorSlider, &color_widgets::Color2DSlider::colorChanged, this,
             [this](const QColor& _color) {
@@ -142,7 +159,10 @@ ColorPicker::ColorPicker(QWidget* _parent)
     });
 }
 
-ColorPicker::~ColorPicker() = default;
+ColorPicker::~ColorPicker()
+{
+    qDeleteAll(d->screenOverlays);
+}
 
 void ColorPicker::setColorCanBeDeselected(bool _can)
 {
@@ -159,46 +179,43 @@ void ColorPicker::setSelectedColor(const QColor& _color)
     d->colorPallete->setSelectedColor(_color);
 }
 
-void ColorPicker::mouseMoveEvent(QMouseEvent* _event)
+bool ColorPicker::eventFilter(QObject* _watched, QEvent* _event)
 {
-    if (d->screenColorPicking) {
-        d->colorCode->setText(d->grabScreenColor(_event->globalPos()).name());
-        return;
-    }
-
-    StackWidget::mouseMoveEvent(_event);
-}
-
-void ColorPicker::mouseReleaseEvent(QMouseEvent* _event)
-{
-    if (d->screenColorPicking) {
-        d->screenColorPicking = false;
-        releaseMouse();
-        releaseKeyboard();
-        d->colorCode->setText(d->grabScreenColor(_event->globalPos()).name());
-        setCursor(Qt::ArrowCursor);
-        setMouseTracking(false);
-        return;
-    }
-
-    StackWidget::mouseReleaseEvent(_event);
-}
-
-void ColorPicker::keyPressEvent(QKeyEvent* _event)
-{
-    if (d->screenColorPicking) {
-        if (_event->key() == Qt::Key_Escape) {
-            d->screenColorPicking = false;
-            releaseMouse();
-            releaseKeyboard();
-            setCursor(Qt::ArrowCursor);
-            setMouseTracking(false);
+    if (auto overlay = qobject_cast<Widget*>(_watched);
+        overlay != nullptr && overlay->isVisible() && d->screenOverlays.contains(overlay)) {
+        switch (_event->type()) {
+        case QEvent::MouseMove: {
+            if (d->isScreenColorPicking) {
+                d->colorCode->setText(d->grabScreenColor(QCursor::pos()).name());
+            }
+            break;
         }
-        _event->accept();
-        return;
+
+        case QEvent::KeyPress: {
+            auto keyEvent = static_cast<QKeyEvent*>(_event);
+            if (keyEvent->key() != Qt::Key_Escape) {
+                break;
+            }
+
+            Q_FALLTHROUGH();
+        }
+
+        case QEvent::MouseButtonRelease: {
+            d->isScreenColorPicking = false;
+            for (auto screenOverlay : std::as_const(d->screenOverlays)) {
+                screenOverlay->hide();
+            }
+            break;
+        }
+
+
+        default: {
+            break;
+        }
+        }
     }
 
-    StackWidget::keyPressEvent(_event);
+    return StackWidget::eventFilter(_watched, _event);
 }
 
 void ColorPicker::processBackgroundColorChange()

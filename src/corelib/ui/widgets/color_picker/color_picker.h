@@ -39,11 +39,9 @@ signals:
 
 protected:
     /**
-     * @brief Переопределяем методы для реализации экранной пипетки
+     * @brief Следим за движением мыши по виджетам-оверлеям
      */
-    void mouseMoveEvent(QMouseEvent* _event) override;
-    void mouseReleaseEvent(QMouseEvent* _event) override;
-    void keyPressEvent(QKeyEvent* _event) override;
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
 
     /**
      * @brief Реализуем реакцию на задание кастомного цвета
