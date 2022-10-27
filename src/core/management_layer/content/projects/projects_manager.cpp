@@ -24,6 +24,7 @@
 #include <QAction>
 #include <QCryptographicHash>
 #include <QDateTime>
+#include <QDesktopServices>
 #include <QDir>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -362,6 +363,25 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
         d->isCloudProjectCoverChnaged = false;
 
         emit updateCloudProjectRequested(d->currentProject.id(), name, logline, cover);
+    });
+
+    connect(d->navigator, &Ui::ProjectsNavigator::helpPressed, this, [] {
+        QString helpUrl;
+        switch (QLocale().language()) {
+        case QLocale::Russian:
+        case QLocale::Belarusian:
+        case QLocale::Ukrainian: {
+            helpUrl = "https://starc.app/ru/help/";
+            break;
+        }
+
+        default: {
+            helpUrl = "https://starc.app/help/";
+            break;
+        }
+        }
+
+        QDesktopServices::openUrl(helpUrl);
     });
 }
 
