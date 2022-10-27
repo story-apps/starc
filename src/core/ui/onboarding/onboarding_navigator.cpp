@@ -604,12 +604,11 @@ void OnboardingNavigator::updateTranslations()
 
     d->socialTitle->setText(tr("Follow us on social media"));
     d->socialSubtitle->setText(tr("Let's unite to make the best app for writers"));
-    d->socialDescription->setText(
-        tr("Be the first to get our news, fresh updates and educational stuff.\n\n"
-           "Ask product questions and get technical support. Suggest ideas and share your "
-           "feedback.\n\n"
-           "Discuss everything with a friendly community of writers. Share your work in progress "
-           "projects and stuff."));
+    d->socialDescription->setText(tr(
+        "Be the first to know our news, fresh updates and special offers.\n\n"
+        "Get in touch with our technical support, share your feedback and suggest improvements.\n\n"
+        "Discuss everything with fellow community of writers, share your work in progress and chat "
+        "about life."));
     const auto isRussianSpeaking = QLocale().language() == QLocale::Russian
         || QLocale().language() == QLocale::Belarusian
         || QLocale().language() == QLocale::Ukrainian;
