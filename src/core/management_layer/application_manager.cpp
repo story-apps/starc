@@ -12,6 +12,12 @@
 #include "content/writing_session/writing_session_manager.h"
 #include "plugins_builder.h"
 
+#include <business_layer/model/text/text_model_xml.h>
+#include <business_layer/templates/text_template.h>
+#include <data_layer/mapper/document_change_mapper.h>
+#include <data_layer/mapper/mapper_facade.h>
+#include <utils/diff_match_patch/diff_match_patch_controller.h>
+
 #ifdef CLOUD_SERVICE_MANAGER
 #include <cloud/cloud_service_manager.h>
 #endif
@@ -1744,6 +1750,74 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
             cloudServiceManager->openDocument(projectsManager->currentProject().id(), document);
         }
     }
+
+    //    using namespace BusinessLayer;
+    //    auto changes = DataMappingLayer::MapperFacade::documentChangeMapper()->findAll(
+    //        QUuid("{849de48a-0866-4f13-acb0-fe68aa799b91}"));
+    //    DiffMatchPatchController dmp({
+    //        xml::kDocumentTag,
+    //        toString(TextFolderType::Act),
+    //        toString(TextFolderType::Sequence),
+    //        toString(TextGroupType::Scene),
+    //        toString(TextGroupType::Beat),
+    //        toString(TextGroupType::Page),
+    //        toString(TextGroupType::Panel),
+    //        toString(TextGroupType::Chapter1),
+    //        toString(TextGroupType::Chapter2),
+    //        toString(TextGroupType::Chapter3),
+    //        toString(TextGroupType::Chapter4),
+    //        toString(TextGroupType::Chapter5),
+    //        toString(TextGroupType::Chapter6),
+    //        toString(TextParagraphType::UnformattedText),
+    //        toString(TextParagraphType::InlineNote),
+    //        toString(TextParagraphType::ActHeading),
+    //        toString(TextParagraphType::ActFooter),
+    //        toString(TextParagraphType::SequenceHeading),
+    //        toString(TextParagraphType::SequenceFooter),
+    //        toString(TextParagraphType::PageSplitter),
+    //        toString(TextParagraphType::SceneHeading),
+    //        toString(TextParagraphType::SceneCharacters),
+    //        toString(TextParagraphType::BeatHeading),
+    //        toString(TextParagraphType::Action),
+    //        toString(TextParagraphType::Character),
+    //        toString(TextParagraphType::Parenthetical),
+    //        toString(TextParagraphType::Dialogue),
+    //        toString(TextParagraphType::Lyrics),
+    //        toString(TextParagraphType::Transition),
+    //        toString(TextParagraphType::Shot),
+    //        toString(TextParagraphType::Sound),
+    //        toString(TextParagraphType::Music),
+    //        toString(TextParagraphType::Cue),
+    //        toString(TextParagraphType::PageHeading),
+    //        toString(TextParagraphType::PanelHeading),
+    //        toString(TextParagraphType::Description),
+    //        toString(TextParagraphType::ChapterHeading1),
+    //        toString(TextParagraphType::ChapterHeading2),
+    //        toString(TextParagraphType::ChapterHeading3),
+    //        toString(TextParagraphType::ChapterHeading4),
+    //        toString(TextParagraphType::ChapterHeading5),
+    //        toString(TextParagraphType::ChapterHeading6),
+    //        toString(TextParagraphType::Text),
+    //    });
+    //    qDebug() << changes.constFirst()->redoPatch();
+    //    QByteArray data = "<?xml version=\"1.0\"?>\n\
+//<document mime-type=\"application/x-starc/document/screenplay/text\" version=\"1.0\">\n\
+//<scene uuid=\"{f6bb1479-ef33-42cc-8c51-c6cd29c209d9}\" plots=\"\" >\n\
+//<content>\n\
+//<scene_heading><v><![CDATA[]]></v></scene_heading>\n\
+//</content>\n\
+//</scene>\n\
+//</document>";
+    //    int i = 0;
+    //    for (auto change : changes) {
+    //        if (i > 1164) {
+    //            qDebug() << qUtf8Printable(QByteArray::fromPercentEncoding(change->redoPatch()));
+    //        } else {
+    //            data = dmp.applyPatch(data, change->redoPatch());
+    //            qDebug() << i++ << data.size();
+    //        }
+    //    }
+    //    qDebug() << qUtf8Printable(QByteArray::fromPercentEncoding(data));
 }
 
 void ApplicationManager::Implementation::closeCurrentProject()
