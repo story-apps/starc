@@ -357,7 +357,7 @@ void AbstractDialog::mousePressEvent(QMouseEvent* _event)
 
 void AbstractDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Q_UNUSED(_event)
+    Widget::designSystemChangeEvent(_event);
 
     if (!d->isContentMinimumWidthChanged) {
         d->content->setMinimumWidth(static_cast<int>(Ui::DesignSystem::dialog().minimumWidth()));

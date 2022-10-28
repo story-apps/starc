@@ -165,17 +165,12 @@ void TextField::Implementation::reconfigure()
     //
     // Переконфигурируем цвет и размер лейблов
     //
-    if (q->hasFocus()) {
-        labelColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
+    labelColorAnimation.setEndValue(textDisabledColor);
+    if (q->text().isEmpty() && q->placeholderText().isEmpty()) {
+        animateLabelToBottom();
     } else {
-        labelColorAnimation.setEndValue(textDisabledColor);
-        if (q->text().isEmpty() && q->placeholderText().isEmpty()) {
-            animateLabelToBottom();
-        } else {
-            animateLabelToTop();
-        }
+        animateLabelToTop();
     }
-    finishAnimationIfInvisible();
 
     //
     // Анимация лейбла
@@ -197,6 +192,9 @@ void TextField::Implementation::reconfigure()
     iconDecorationAnimation.setRadiusInterval(Ui::DesignSystem::textField().iconSize().height()
                                                   / 2.0,
                                               Ui::DesignSystem::radioButton().height() / 2.0);
+
+    finishAnimationIfInvisible();
+
     q->document()->clearUndoRedoStacks();
 }
 
@@ -238,14 +236,14 @@ void TextField::Implementation::animateLabelToBottom()
 
 void TextField::Implementation::finishAnimation()
 {
-    labelFontSizeAnimation.setCurrentTime(labelFontSizeAnimation.direction()
-                                                  == QVariantAnimation::Forward
-                                              ? labelFontSizeAnimation.duration()
-                                              : 0);
-    labelTopLeftAnimation.setCurrentTime(labelTopLeftAnimation.direction()
-                                                 == QVariantAnimation::Forward
-                                             ? labelTopLeftAnimation.duration()
-                                             : 0);
+    auto finishAnimation = [](QVariantAnimation& animation) {
+        animation.setCurrentTime(
+            animation.direction() == QVariantAnimation::Forward ? animation.duration() : 0);
+    };
+    finishAnimation(labelColorAnimation);
+    finishAnimation(labelFontSizeAnimation);
+    finishAnimation(labelTopLeftAnimation);
+    finishAnimation(decorationAnimation);
 }
 
 void TextField::Implementation::finishAnimationIfInvisible()
@@ -1037,6 +1035,8 @@ void TextField::focusInEvent(QFocusEvent* _event)
         d->decorationAnimation.setEndValue(decorationRect);
         d->decorationAnimation.start();
     }
+
+    d->finishAnimationIfInvisible();
 }
 
 void TextField::focusOutEvent(QFocusEvent* _event)
@@ -1062,6 +1062,8 @@ void TextField::focusOutEvent(QFocusEvent* _event)
     d->decorationAnimation.setEndValue(
         decorationRect.adjusted(contentsWidth, 0, -1 * contentsWidth, 0));
     d->decorationAnimation.start();
+
+    d->finishAnimationIfInvisible();
 }
 
 void TextField::mousePressEvent(QMouseEvent* _event)
