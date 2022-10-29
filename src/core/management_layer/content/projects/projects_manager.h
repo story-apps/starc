@@ -211,6 +211,11 @@ signals:
      */
     void unsubscribeFromCloudProjectRequested(int _id);
 
+    /**
+     * @brief Запрос на закрытие текущего проекта
+     */
+    void closeCurrentProjectRequested();
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

@@ -2361,6 +2361,12 @@ void ApplicationManager::initConnections()
                 auto callback = [this, _path] { openProject(_path); };
                 d->saveIfNeeded(callback);
             });
+    connect(d->projectsManager.data(), &ProjectsManager::closeCurrentProjectRequested, this,
+            [this] {
+                d->saveChanges();
+                d->closeCurrentProject();
+                d->updateWindowTitle();
+            });
 
     //
     // Менеджер проекта

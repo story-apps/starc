@@ -252,6 +252,9 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                                 //
                                 // Если таки хочет, то удаляем проект
                                 //
+                                if (currentProject() == _project) {
+                                    emit closeCurrentProjectRequested();
+                                }
                                 d->projects->remove(_project);
                                 QFile::remove(_project.realPath());
                             });
