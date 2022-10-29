@@ -29,6 +29,9 @@ enum ViewType {
 /**
  * @brief Майм-типы плагинов
  */
+const QString kCharacterEditorMime = QStringLiteral("application/x-starc/editor/character/information");
+const QString kCharacterNavigatorMime = QStringLiteral("application/x-starc/navigator/character/information");
+//
 const QString kSimpleTextEditorMime = QStringLiteral("application/x-starc/editor/text/text");
 const QString kSimpleTextNavigatorMime = QStringLiteral("application/x-starc/navigator/text/text");
 //
@@ -64,7 +67,8 @@ const QString kStageplayStatisticsViewMime = QStringLiteral("application/x-starc
  * @brief Карта соотвествия майм-типов редактора к навигатору
  */
 const QHash<QString, QString> kEditorToNavigator
-    = { { kSimpleTextEditorMime, kSimpleTextNavigatorMime },
+    = { { kCharacterEditorMime, kCharacterNavigatorMime },
+        { kSimpleTextEditorMime, kSimpleTextNavigatorMime },
         { kScreenplayTreatmentEditorMime, kScreenplayTreatmentNavigatorMime },
         { kScreenplayTextEditorMime, kScreenplayTextNavigatorMime },
         { kScreenplayTextCardsMime, kScreenplayTextNavigatorMime },
@@ -114,7 +118,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         { "application/x-starc/document/stageplay/statistics",  { { kStageplayStatisticsViewMime, u8"\U000f0127" } } },
         //
         { "application/x-starc/document/characters",  { { "application/x-starc/editor/characters/relations", u8"\U000F0D3D" } } },
-        { "application/x-starc/document/character",  { { "application/x-starc/editor/character/information", u8"\U000f02fd" } } },
+        { "application/x-starc/document/character",  { { kCharacterEditorMime, u8"\U000f02fd" } } },
         //
         { "application/x-starc/document/locations",  { { "application/x-starc/editor/locations/map", u8"\U000F0982" } } },
         { "application/x-starc/document/location",   { { "application/x-starc/editor/location/information", u8"\U000f02fd" } } },
@@ -171,7 +175,8 @@ const QHash<QString, QString> kMimeToPlugin
         { kStageplayStatisticsViewMime, "*stageplaystatisticsplugin*" },
         //
         { "application/x-starc/editor/characters/relations", "*charactersrelationsplugin*" },
-        { "application/x-starc/editor/character/information", "*characterinformationplugin*" },
+        { kCharacterEditorMime, "*characterinformationplugin*" },
+        { kCharacterNavigatorMime, "*characterstructureplugin*" },
         //
         { "application/x-starc/editor/locations/map", "*locationsmapplugin*" },
         { "application/x-starc/editor/location/information", "*locationinformationplugin*" },
@@ -435,7 +440,7 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
               { { "application/x-starc/editor/characters/relations",
                   QApplication::translate("ProjectPluginsBuilder", "Characters relations") } } },
             { "application/x-starc/document/character",
-              { { "application/x-starc/editor/character/information",
+              { { kCharacterEditorMime,
                   QApplication::translate("ProjectPluginsBuilder", "Character information") } } },
             //
             { "application/x-starc/document/locations",
