@@ -138,7 +138,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     accountInfoLastRow = row;
     accountInfoLayout->setRowMinimumHeight(accountInfoLastRow,
                                            1); // добавляем пустую строку, вместо отступа снизу
-    accountInfo->setLayoutReimpl(accountInfoLayout);
+    accountInfo->setContentLayout(accountInfoLayout);
 
     subscriptionDetails->setLink(QUrl("https://starc.app/pricing"));
     //
@@ -165,12 +165,12 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     subscriptionInfoLastRow = row;
     subscriptionInfoLayout->setRowMinimumHeight(subscriptionInfoLastRow,
                                                 1); // добавляем пустую строку, вместо отступа снизу
-    subscriptionInfo->setLayoutReimpl(subscriptionInfoLayout);
+    subscriptionInfo->setContentLayout(subscriptionInfoLayout);
     //
     promocodeInfoLayout->addWidget(promocodeName, 0, 0);
     promocodeInfoLayout->addWidget(activatePromocode, 0, 1, Qt::AlignBottom);
     promocodeInfoLayout->setColumnStretch(0, 1);
-    promocodeInfo->setLayoutReimpl(promocodeInfoLayout);
+    promocodeInfo->setContentLayout(promocodeInfoLayout);
 
     auto contentWidget = new QWidget;
     content->setWidget(contentWidget);

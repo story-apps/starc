@@ -75,7 +75,7 @@ ComicBookParametersView::Implementation::Implementation(QWidget* _parent)
     infoLayout->addWidget(comicBookTemplate, row++, 0);
     infoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку внизу
     infoLayout->setColumnStretch(0, 1);
-    comicBookInfo->setLayoutReimpl(infoLayout);
+    comicBookInfo->setContentLayout(infoLayout);
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);

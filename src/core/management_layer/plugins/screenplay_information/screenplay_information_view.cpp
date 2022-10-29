@@ -75,7 +75,7 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
     screenplayInfoLayout->addWidget(screenplayStatisticsVisiblity, row++, 0);
     screenplayInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку внизу
     screenplayInfoLayout->setColumnStretch(0, 1);
-    screenplayInfo->setLayoutReimpl(screenplayInfoLayout);
+    screenplayInfo->setContentLayout(screenplayInfoLayout);
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);

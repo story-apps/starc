@@ -732,7 +732,7 @@ void SettingsView::Implementation::initApplicationCard()
     applicationCardLayout->addWidget(useSmartQuotes, itemIndex++, 0);
 
     applicationCardBottomSpacerIndex = itemIndex;
-    applicationCard->setLayoutReimpl(applicationCardLayout);
+    applicationCard->setContentLayout(applicationCardLayout);
 }
 
 void SettingsView::Implementation::initSimpleTextCard()
@@ -796,7 +796,7 @@ void SettingsView::Implementation::initSimpleTextCard()
     }
     //
     simpleTextCardBottomSpacerIndex = itemIndex;
-    simpleTextCard->setLayoutReimpl(simpleTextCardLayout);
+    simpleTextCard->setContentLayout(simpleTextCardLayout);
 }
 
 void SettingsView::Implementation::initScreenplayCard()
@@ -975,7 +975,7 @@ void SettingsView::Implementation::initScreenplayCard()
     }
     //
     screenplayCardBottomSpacerIndex = itemIndex;
-    screenplayCard->setLayoutReimpl(screenplayCardLayout);
+    screenplayCard->setContentLayout(screenplayCardLayout);
 }
 
 void SettingsView::Implementation::initComicBookCard()
@@ -1041,7 +1041,7 @@ void SettingsView::Implementation::initComicBookCard()
     }
     //
     comicBookCardBottomSpacerIndex = itemIndex;
-    comicBookCard->setLayoutReimpl(comicBookCardLayout);
+    comicBookCard->setContentLayout(comicBookCardLayout);
 }
 
 void SettingsView::Implementation::initAudioplayCard()
@@ -1131,7 +1131,7 @@ void SettingsView::Implementation::initAudioplayCard()
     }
     //
     audioplayCardBottomSpacerIndex = itemIndex;
-    audioplayCard->setLayoutReimpl(audioplayCardLayout);
+    audioplayCard->setContentLayout(audioplayCardLayout);
 }
 
 void SettingsView::Implementation::initStageplayCard()
@@ -1198,7 +1198,7 @@ void SettingsView::Implementation::initStageplayCard()
     }
     //
     stageplayCardBottomSpacerIndex = itemIndex;
-    stageplayCard->setLayoutReimpl(stageplayCardLayout);
+    stageplayCard->setContentLayout(stageplayCardLayout);
 }
 
 void SettingsView::Implementation::initShortcutsCard()
@@ -1214,7 +1214,7 @@ void SettingsView::Implementation::initShortcutsCard()
     shortcutsCardLayout->addWidget(shortcutsForScreenplay, itemIndex++, 0);
     //
     shortcutsCardBottomSpacerIndex = itemIndex;
-    shortcutsCard->setLayoutReimpl(shortcutsCardLayout);
+    shortcutsCard->setContentLayout(shortcutsCardLayout);
 }
 
 void SettingsView::Implementation::scrollToTitle(AbstractLabel* title)

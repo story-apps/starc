@@ -66,7 +66,7 @@ ProjectInformationView::Implementation::Implementation(QWidget* _parent)
     projectInfoLayout->addWidget(projectName, row++, 0);
     projectInfoLayout->addWidget(projectLogline, row++, 0);
     projectInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку под логлайном
-    projectInfo->setLayoutReimpl(projectInfoLayout);
+    projectInfo->setContentLayout(projectInfoLayout);
 
     projectName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     projectLogline->setEnterMakesNewLine(true);

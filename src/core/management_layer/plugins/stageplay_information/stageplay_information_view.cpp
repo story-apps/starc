@@ -72,7 +72,7 @@ StageplayInformationView::Implementation::Implementation(QWidget* _parent)
     stageplayInfoLayout->addWidget(stageplayStatisticsVisiblity, row++, 0);
     stageplayInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку внизу
     stageplayInfoLayout->setColumnStretch(0, 1);
-    stageplayInfo->setLayoutReimpl(stageplayInfoLayout);
+    stageplayInfo->setContentLayout(stageplayInfoLayout);
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);

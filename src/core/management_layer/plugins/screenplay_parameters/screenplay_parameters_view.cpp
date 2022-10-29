@@ -106,7 +106,7 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
         infoLayout->addLayout(layout);
     }
     infoLayout->addWidget(showDialoguesNumbers);
-    screenplayInfo->setLayoutReimpl(infoLayout);
+    screenplayInfo->setContentLayout(infoLayout);
 
     //
     // TODO: С лёту не завелось, т.к. при отображении скрытых виджетов, виджеты, которые были видны,

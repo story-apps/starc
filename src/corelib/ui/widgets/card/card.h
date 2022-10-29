@@ -17,9 +17,10 @@ public:
     void setLayout(QLayout* _layout);
 
     /**
-     * @brief Собственная реализация метода установки компоновщика
+     * @brief Настроить компоновщик содержимого
      */
-    void setLayoutReimpl(QLayout* _layout) const;
+    QLayout* contentLayout() const;
+    void setContentLayout(QLayout* _layout) const;
 
 protected:
     /**

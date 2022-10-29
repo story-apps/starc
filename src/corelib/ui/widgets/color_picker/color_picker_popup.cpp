@@ -52,7 +52,7 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
     popupLayout->setContentsMargins({});
     popupLayout->setSpacing(0);
     popupLayout->addWidget(d->colorPicker);
-    setLayoutReimpl(popupLayout);
+    setContentLayout(popupLayout);
 
     connect(d->colorPicker, &ColorPicker::selectedColorChanged, this, [this](const QColor& _color) {
         emit selectedColorChanged(_color);

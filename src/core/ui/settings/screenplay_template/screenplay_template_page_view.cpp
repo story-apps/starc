@@ -142,7 +142,7 @@ ScreenplayTemplatePageView::Implementation::Implementation(QWidget* _parent)
     cardLayout->setColumnStretch(0, 1);
     cardLayout->setColumnStretch(1, 1);
     cardLayout->setColumnStretch(2, 2);
-    card->setLayoutReimpl(cardLayout);
+    card->setContentLayout(cardLayout);
 
     auto contentWidget = new QWidget;
     content->setWidget(contentWidget);

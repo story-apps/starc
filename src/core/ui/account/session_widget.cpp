@@ -62,7 +62,7 @@ SessionWidget::SessionWidget(QWidget* _parent)
     lastUsedLayout->addWidget(d->lastUsed, 1);
     d->layout->addLayout(lastUsedLayout);
     d->layout->addWidget(d->terinateSession, 0, Qt::AlignRight);
-    setLayoutReimpl(d->layout);
+    setContentLayout(d->layout);
 
 
     connect(d->terinateSession, &Button::clicked, this, [this] {

@@ -50,19 +50,26 @@ Card::Card(QWidget* _parent)
 
     connect(&d->shadowOpacityAnimation, &QVariantAnimation::valueChanged, this,
             qOverload<>(&Card::update));
-
-    designSystemChangeEvent(nullptr);
 }
 
 Card::~Card() = default;
 
 void Card::setLayout(QLayout* _layout)
 {
-    Q_ASSERT_X(false, Q_FUNC_INFO, "You should use setLayoutReimpl method");
+    Q_ASSERT_X(false, Q_FUNC_INFO, "You should use setContentLayout method");
     ResizableWidget::setLayout(_layout);
 }
 
-void Card::setLayoutReimpl(QLayout* _layout) const
+QLayout* Card::contentLayout() const
+{
+    if (d->layout->count() == 0) {
+        return nullptr;
+    }
+
+    return d->layout->itemAt(0)->layout();
+}
+
+void Card::setContentLayout(QLayout* _layout) const
 {
     Q_ASSERT_X(d->layout->count() == 0, Q_FUNC_INFO, "Widget already contains layout");
 

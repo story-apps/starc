@@ -72,7 +72,7 @@ AudioplayInformationView::Implementation::Implementation(QWidget* _parent)
     audioplayInfoLayout->addWidget(audioplayStatisticsVisiblity, row++, 0);
     audioplayInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку внизу
     audioplayInfoLayout->setColumnStretch(0, 1);
-    audioplayInfo->setLayoutReimpl(audioplayInfoLayout);
+    audioplayInfo->setContentLayout(audioplayInfoLayout);
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);

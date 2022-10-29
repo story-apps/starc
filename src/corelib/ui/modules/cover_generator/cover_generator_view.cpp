@@ -126,7 +126,7 @@ CoverGeneratorView::Implementation::Implementation(CoverGeneratorView* _q)
     coverCardLayout->setContentsMargins({});
     coverCardLayout->setSpacing(0);
     coverCardLayout->addWidget(coverImage);
-    coverCard->setLayoutReimpl(coverCardLayout);
+    coverCard->setContentLayout(coverCardLayout);
 
     auto coverLayout = new QHBoxLayout;
     coverLayout->setContentsMargins({});

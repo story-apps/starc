@@ -138,7 +138,7 @@ WritingSprintPanel::Implementation::Implementation(WritingSprintPanel* _q)
     sprintResultsLayout->addWidget(sprintResultWords, 0, Qt::AlignHCenter);
     sprintResultsLayout->addWidget(sprintResultSubtitle, 0, Qt::AlignHCenter);
     sprintResultsLayout->addWidget(restartSprint, 0, Qt::AlignHCenter);
-    sprintOptions->setLayoutReimpl(sprintResultsLayout);
+    sprintOptions->setContentLayout(sprintResultsLayout);
 }
 
 bool WritingSprintPanel::Implementation::isSprintActive() const

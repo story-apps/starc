@@ -72,7 +72,7 @@ StageplayParametersView::Implementation::Implementation(QWidget* _parent)
     infoLayout->addWidget(printFooterOnTitlePage);
     infoLayout->addWidget(overrideCommonSettings, 1, Qt::AlignTop);
     infoLayout->addWidget(stageplayTemplate);
-    stageplayInfo->setLayoutReimpl(infoLayout);
+    stageplayInfo->setContentLayout(infoLayout);
 
     //
     // TODO: С лёту не завелось, т.к. при отображении скрытых виджетов, виджеты, которые были видны,

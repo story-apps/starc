@@ -89,7 +89,7 @@ AudioplayParametersView::Implementation::Implementation(QWidget* _parent)
         layout->addStretch();
         infoLayout->addLayout(layout);
     }
-    audioplayInfo->setLayoutReimpl(infoLayout);
+    audioplayInfo->setContentLayout(infoLayout);
 
     //
     // TODO: С лёту не завелось, т.к. при отображении скрытых виджетов, виджеты, которые были видны,
