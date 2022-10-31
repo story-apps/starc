@@ -496,6 +496,20 @@ QVector<Domain::DocumentImage> CharacterModel::photos() const
     return d->photos;
 }
 
+void CharacterModel::addPhoto(const Domain::DocumentImage& _photo)
+{
+    if (_photo.uuid.isNull() && _photo.image.isNull()) {
+        return;
+    }
+
+    const bool isMainPhotoAdded = d->photos.isEmpty();
+    d->photos.append(_photo);
+    if (isMainPhotoAdded) {
+        emit mainPhotoChanged(d->photos.constFirst());
+    }
+    emit photosChanged(d->photos);
+}
+
 void CharacterModel::addPhotos(const QVector<QPixmap>& _photos)
 {
     if (_photos.isEmpty()) {
@@ -1641,10 +1655,46 @@ void CharacterModel::applyPatch(const QByteArray& _patch)
     setOneSentenceDescription(load(kOneSentenceDescriptionKey));
     setLongDescription(load(kLongDescriptionKey));
     //
-    // TODO: Реализовать синхронизацию фотографий и остального контента SAD-761
+    // Считываем фотографии
     //
-    //    setMainPhoto(load(kMainPhotoKey), imageWrapper()->load(load(kMainPhotoKey)));
+    auto photosNode = documentNode.firstChildElement(kPhotosKey);
+    QVector<QUuid> newPhotosUuids;
+    if (!photosNode.isNull()) {
+        auto photoNode = photosNode.firstChildElement(kPhotoKey);
+        while (!photoNode.isNull()) {
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            newPhotosUuids.append(uuid);
 
+            photoNode = photoNode.nextSiblingElement();
+        }
+    }
+    //
+    // ... корректируем текущие фотографии персонажа
+    //
+    for (int photoIndex = 0; photoIndex < d->photos.size(); ++photoIndex) {
+        const auto& photo = d->photos.at(photoIndex);
+        //
+        // ... если такое отношение осталось актуальным, то оставим его в списке текущих
+        //     и удалим из списка новых
+        //
+        if (newPhotosUuids.contains(photo.uuid)) {
+            newPhotosUuids.removeAll(photo.uuid);
+        }
+        //
+        // ... если такого отношения нет в списке новых, то удалим его из списка текущих
+        //
+        else {
+            removePhoto(photo.uuid);
+            --photoIndex;
+        }
+    }
+    //
+    // ... добавляем новые фотографии к персонажу
+    //
+    for (const auto& photoUuid : newPhotosUuids) {
+        addPhoto({ photoUuid });
+        imageWrapper()->load(photoUuid);
+    }
     //
     // Cчитываем отношения
     //
@@ -1695,6 +1745,69 @@ void CharacterModel::applyPatch(const QByteArray& _patch)
         createRelation(relation.character);
         updateRelation(relation);
     }
+    //
+    setNickname(load(kNicknameKey));
+    setDateOfBirth(load(kDateOfBirthKey));
+    setPlaceOfBirth(load(kPlaceOfBirthKey));
+    setEthnicity(load(kEthnicityKey));
+    setFamily(load(kFamilyKey));
+    setHeight(load(kHeightKey));
+    setWeight(load(kWeightKey));
+    setBody(load(kBodyKey));
+    setSkinTone(load(kSkinToneKey));
+    setHairStyle(load(kHairStyleKey));
+    setHairColor(load(kHairColorKey));
+    setEyeShape(load(kEyeShapeKey));
+    setEyeColor(load(kEyeColorKey));
+    setFacialShape(load(kFacialShapeKey));
+    setDistinguishFeature(load(kDistinguishFeatureKey));
+    setOtherFacialFeatures(load(kOtherFacialFeaturesKey));
+    setPosture(load(kPostureKey));
+    setOtherPhysicalAppearance(load(kOtherPhysicalAppearanceKey));
+    setSkills(load(kSkillsKey));
+    setHowItDeveloped(load(kHowItDevelopedKey));
+    setIncompetence(load(kIncompetenceKey));
+    setStrength(load(kStrengthKey));
+    setWeakness(load(kWeaknessKey));
+    setHobbies(load(kHobbiesKey));
+    setHabits(load(kHabitsKey));
+    setHealth(load(kHealthKey));
+    setPet(load(kPetKey));
+    setDress(load(kDressKey));
+    setSomethingAlwaysCarried(load(kSomethingAlwaysCarriedKey));
+    setAccessories(load(kAccessoriesKey));
+    setAreaOfResidence(load(kAreaOfResidenceKey));
+    setHomeDescription(load(kHomeDescriptionKey));
+    setNeighborhood(load(kNeighborhoodKey));
+    setOrganizationInvolved(load(kOrganizationInvolvedKey));
+    setIncome(load(kIncomeKey));
+    setJobOccupation(load(kJobOccupationKey));
+    setJobRank(load(kJobRankKey));
+    setJobSatisfaction(load(kJobSatisfactionKey));
+    setPersonality(load(kPersonalityKey));
+    setMoral(load(kMoralKey));
+    setMotivation(load(kMotivationKey));
+    setDiscouragement(load(kDiscouragementKey));
+    setPhilosophy(load(kPhilosophyKey));
+    setGreatestFear(load(kGreatestFearKey));
+    setSelfControl(load(kSelfControlKey));
+    setIntelligenceLevel(load(kIntelligenceLevelKey));
+    setConfidenceLevel(load(kConfidenceLevelKey));
+    setChildhood(load(kChildhoodKey));
+    setImportantPastEvent(load(kImportantPastEventKey));
+    setBestAccomplishment(load(kBestAccomplishmentKey));
+    setOtherAccomplishment(load(kOtherAccomplishmentKey));
+    setWorstMoment(load(kWorstMomentKey));
+    setFailure(load(kFailureKey));
+    setSecrets(load(kSecretsKey));
+    setBestMemories(load(kBestMemoriesKey));
+    setWorstMemories(load(kWorstMemoriesKey));
+    setShortTermGoal(load(kShortTermGoalKey));
+    setLongTermGoal(load(kLongTermGoalKey));
+    setFirstAppearance(load(kFirstAppearanceKey));
+    setPlotInvolvement(load(kPlotInvolvementKey));
+    setConflict(load(kConflictKey));
+    setMostDefiningMoment(load(kMostDefiningMomentKey));
 }
 
 } // namespace BusinessLayer

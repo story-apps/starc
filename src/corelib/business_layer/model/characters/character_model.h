@@ -86,6 +86,7 @@ public:
     Q_SIGNAL void mainPhotoChanged(const Domain::DocumentImage& _photo);
 
     QVector<Domain::DocumentImage> photos() const;
+    void addPhoto(const Domain::DocumentImage& _photo);
     void addPhotos(const QVector<QPixmap>& _photos);
     void removePhoto(const QUuid& _photoUuid);
     Q_SIGNAL void photosChanged(const QVector<Domain::DocumentImage>& _images);
