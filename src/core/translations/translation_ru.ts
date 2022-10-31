@@ -213,7 +213,7 @@
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="984"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="993"/>
         <source>Copy of </source>
         <translation>Копия </translation>
     </message>
@@ -300,7 +300,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="121"/>
         <source>Background panel</source>
-        <translation>Фоновая панель</translation>
+        <translation>Фоновый кадр</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/comic_book/comic_book_dictionaries_model.cpp" line="124"/>
@@ -1266,17 +1266,17 @@
 <context>
     <name>ColorPicker</name>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="223"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="240"/>
         <source>Color hex code</source>
         <translation>HEX-код цвета</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="224"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="241"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="225"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="242"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
@@ -1492,38 +1492,38 @@
 <context>
     <name>ManagementLayer::AccountManager</name>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="359"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="358"/>
         <source>Try PRO version for free</source>
         <translation>Попробовать PRO версию бесплатно</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="360"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="359"/>
         <source>You can try all the features of the PRO version during 30 days for free. After trial period, you can continue to use the PRO version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation>Вы можете бесплатно активировать PRO версию на 30 дней. После, вы сможете продолжить использование PRO версии, оплатив её. А если нет, то ваш аккаунт будет автоматически переведён на FREE версию.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="363"/>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="446"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="362"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="445"/>
         <source>Continue with FREE version</source>
         <translation>Остаться на FREE версии</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="442"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="441"/>
         <source>Try TEAM version for free</source>
         <translation>Попробовать TEAM версию бесплатно</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="443"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="442"/>
         <source>You can try all the features of the TEAM version during 30 days for free. After trial period, you can continue to use the TEAM version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation>Вы можете бесплатно активировать TEAM версию на 30 дней. После, вы сможете продолжить использование TEAM версии, оплатив её. А если нет, то ваш аккаунт будет автоматически переведён на FREE версию.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="447"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="446"/>
         <source>Activate TEAM</source>
         <translation>Активировать TEAM</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="364"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="363"/>
         <source>Activate PRO</source>
         <translation>Активировать PRO</translation>
     </message>
@@ -1531,161 +1531,166 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="554"/>
+        <location filename="../management_layer/application_manager.cpp" line="662"/>
         <source>Please update to the latest version if you want to use the Cloud.</source>
         <translation>Пожалуйста, обновите приложение до последней версии, чтобы иметь возможность работать с облаком.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="555"/>
+        <location filename="../management_layer/application_manager.cpp" line="663"/>
         <source>Nope, I’m fine without Cloud</source>
         <translation>Нет, мне не нужно облако</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="556"/>
+        <location filename="../management_layer/application_manager.cpp" line="664"/>
         <source>Update</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="574"/>
+        <location filename="../management_layer/application_manager.cpp" line="682"/>
         <source>The last version is downloading</source>
         <translation>Загружается свежая версия</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="968"/>
+        <location filename="../management_layer/application_manager.cpp" line="1081"/>
         <source>Read only</source>
         <translation>Только чтение</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="979"/>
+        <location filename="../management_layer/application_manager.cpp" line="1092"/>
         <source> - changed</source>
         <translation> - изменено</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1035"/>
-        <location filename="../management_layer/application_manager.cpp" line="1054"/>
-        <location filename="../management_layer/application_manager.cpp" line="1242"/>
+        <location filename="../management_layer/application_manager.cpp" line="1148"/>
+        <location filename="../management_layer/application_manager.cpp" line="1167"/>
+        <location filename="../management_layer/application_manager.cpp" line="1355"/>
         <source>Saving error</source>
         <translation>Ошибка сохранения</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1036"/>
+        <location filename="../management_layer/application_manager.cpp" line="1149"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Не удалось сохранить изменения. Произошла ошибка базы данный: &quot;%1&quot;. Пожалуйста проверьте существует ли файл проекта и есть ли у вас разрешение на запись в него.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1055"/>
+        <location filename="../management_layer/application_manager.cpp" line="1168"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Изменения не удалось сохранить, потому что файл проекта, который должен находиться по пути &quot;%1&quot; отстутствует. Пожалуйста верните файл назад и попробуйте сохранить изменения ещё раз.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1126"/>
+        <location filename="../management_layer/application_manager.cpp" line="1239"/>
         <source>Project was modified. Save changes?</source>
         <translation>Проект был изменён. Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1127"/>
+        <location filename="../management_layer/application_manager.cpp" line="1240"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1128"/>
+        <location filename="../management_layer/application_manager.cpp" line="1241"/>
         <source>Don&apos;t save</source>
         <translation>Не сохранять</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1129"/>
+        <location filename="../management_layer/application_manager.cpp" line="1242"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1204"/>
+        <location filename="../management_layer/application_manager.cpp" line="1317"/>
         <source>Choose file to save story</source>
         <translation>Выберите файл для сохранения истории</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1243"/>
+        <location filename="../management_layer/application_manager.cpp" line="1356"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Не удалось сохранить историю в файл %1. Проверьте разрешение на запись и попробуйте ещё раз.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1293"/>
+        <location filename="../management_layer/application_manager.cpp" line="1406"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Нельзя создать файл в папке, которой не существует: %1. Пожалуйста, выберите существующую папку.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1298"/>
+        <location filename="../management_layer/application_manager.cpp" line="1411"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Не удалось произвести запись файла. Похоже, что он открыт другой программой. Пожалуйста закроте её и попробуйте ещё раз сохранить изменения.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1302"/>
+        <location filename="../management_layer/application_manager.cpp" line="1415"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Не удалось произвести запись файла. Пожалуйста проверьте разрешение на запись в выбранную папку, или выберите другую папку для сохранения.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1306"/>
+        <location filename="../management_layer/application_manager.cpp" line="1419"/>
         <source>Create project error</source>
         <translation>Ошибка создания проекта</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1472"/>
+        <location filename="../management_layer/application_manager.cpp" line="1585"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>Файл нельзя открыть, т.к. в данный момент он уже открыт в другой копии приложения.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1557"/>
+        <location filename="../management_layer/application_manager.cpp" line="1670"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation>Файл, который вы хотите открыть, не имеет разрешения на запись в него. Проверьте параметры файла и разрешите ему быть редактируемым. А до тех пор, файл будет открыт только для чтения.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1574"/>
+        <location filename="../management_layer/application_manager.cpp" line="1687"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation>Хотите продолжить работу с форматом .%1?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1575"/>
+        <location filename="../management_layer/application_manager.cpp" line="1688"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation>Не все данные можно сохранить в формате .%1. Рекомендуем использовать формат Story Architect .%2, чтобы вся информация о проекте была корректно сохранена.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1578"/>
+        <location filename="../management_layer/application_manager.cpp" line="1691"/>
         <source>Never ask again</source>
         <translation>Больше не спрашивать</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1579"/>
+        <location filename="../management_layer/application_manager.cpp" line="1692"/>
         <source>Keep .%1</source>
         <translation>Оставить .%1</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1580"/>
+        <location filename="../management_layer/application_manager.cpp" line="1693"/>
         <source>Switch to .STARC</source>
         <translation>Переключить на .STARC</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2609"/>
+        <location filename="../management_layer/application_manager.cpp" line="2752"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>У владельца проекта закончилась подписка на облачный сервис. Вы сможете продолжить работу с проектом, как только она будет возобновлена.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2590"/>
-        <location filename="../management_layer/application_manager.cpp" line="2611"/>
+        <location filename="../management_layer/application_manager.cpp" line="2733"/>
+        <location filename="../management_layer/application_manager.cpp" line="2754"/>
         <source>Continue offline</source>
         <translation>Продолжить в офлайн</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="398"/>
-        <location filename="../management_layer/application_manager.cpp" line="412"/>
+        <location filename="../management_layer/application_manager.cpp" line="404"/>
+        <location filename="../management_layer/application_manager.cpp" line="418"/>
         <source>Open new window</source>
         <translation>Открыть новое окно</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2588"/>
+        <location filename="../management_layer/application_manager.cpp" line="612"/>
+        <source>Loading missed fonts</source>
+        <translation>Загрузка необходимых шрифтов</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="2731"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>Подписка на облачный сервис закончилась. Активируйте подписку, чтобы продолжить работу с проектом.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2591"/>
+        <location filename="../management_layer/application_manager.cpp" line="2734"/>
         <source>Renew subscription</source>
         <translation>Продлите подписку</translation>
     </message>
@@ -1706,42 +1711,68 @@
 <context>
     <name>ManagementLayer::CharacterInformationManager</name>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="162"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="72"/>
+        <source>To access extended character profile, you need to upgrade to the PRO version.</source>
+        <translation>Для доступа к расширенной анкете персонажа, необходимо активировать PRO версию.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="73"/>
+        <source>Maybe later</source>
+        <translation>В другой раз</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="74"/>
+        <source>Upgrade</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="394"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Имя персонажа изменено с &quot;%1&quot; на &quot;%2&quot;. Применить изменения?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="164"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="396"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="442"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="165"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="397"/>
         <source>Yes</source>
         <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="441"/>
+        <source>Do you want to delete the character&apos;s photo?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="443"/>
+        <source>Yes, delete</source>
+        <translation type="unfinished">Да, удалить</translation>
     </message>
 </context>
 <context>
     <name>ManagementLayer::CharactersRelationsManager</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="539"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="541"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Имя персонажа изменено с &quot;%1&quot; на &quot;%2&quot;. Применить изменения?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="541"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="543"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="542"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="544"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="142"/>
         <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
-        <translation>Чтобы редактировать схему отношений персонажей, необходимо обновиться до PRO версии.</translation>
+        <translation>Чтобы редактировать схему отношений персонажей, необходимо активировать PRO версию.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="143"/>
@@ -1918,7 +1949,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="140"/>
         <source>To edit the location map, you need to upgrade to the PRO version.</source>
-        <translation>Чтобы редактировать карту локаций, необходимо обновиться до PRO версии.</translation>
+        <translation>Чтобы редактировать карту локаций, необходимо активировать PRO версию.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="141"/>
@@ -1998,7 +2029,7 @@
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="479"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1599"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1605"/>
         <source>Create new draft</source>
         <translation>Создать новый драфт</translation>
     </message>
@@ -2028,14 +2059,14 @@
         <translation>Вы действительно хотите удалить версию документа &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="852"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="854"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Вы действительно хотите удалить документ из корзины?</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="705"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="853"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1114"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="855"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1116"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
@@ -2056,89 +2087,89 @@
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="706"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="854"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1115"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="856"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1117"/>
         <source>Yes, remove</source>
         <translation>Да, удалить</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="928"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="930"/>
         <source>Characters from the text</source>
         <translation>Персонажи обнаруженные в тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="938"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="940"/>
         <source>Characters that are not found in the text</source>
         <translation>Персонажи, которых нет в тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="951"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="953"/>
         <source>Save only characters from the text</source>
         <translation>Сохранить только персонажей из текста</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="952"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="954"/>
         <source>Save all characters</source>
         <translation>Сохранить всех персонажей</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="953"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1056"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="955"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1058"/>
         <source>Change nothing</source>
         <translation>Оставить без изменений</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1031"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1033"/>
         <source>Locations from the text</source>
         <translation>Локации обнаруженные в тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1041"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1043"/>
         <source>Locations that are not found in the text</source>
         <translation>Локации, которых нет в тексте</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1054"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1056"/>
         <source>Save only locations from the text</source>
         <translation>Сохранить только локации из текста</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1055"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1057"/>
         <source>Save all locations</source>
         <translation>Сохранить все локации</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1113"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1115"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Удалить все элементы из корзины без возможности восстановления?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1613"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1619"/>
         <source>Edit</source>
         <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1623"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1629"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2284"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2295"/>
         <source>Title page</source>
         <translation>Титульная страница</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2286"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2297"/>
         <source>Synopsis</source>
         <translation>Синопсис</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2298"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2309"/>
         <source>Treatment</source>
         <translation>Поэпизодник</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2289"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2300"/>
         <source>Screenplay</source>
         <translation>Сценарий</translation>
     </message>
@@ -2153,7 +2184,7 @@
         <translation>Показать драфты документа</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2292"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2303"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -2161,103 +2192,103 @@
 <context>
     <name>ManagementLayer::ProjectsManager</name>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="191"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="192"/>
         <source>Show in folder</source>
         <translation>Показать в папке</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="198"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="199"/>
         <source>Hide from recent list</source>
         <translation>Скрыть из списка недавних</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="204"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="205"/>
         <source>Do you really want to hide this project from the recent list?</source>
         <translation>Скрыть проект из списка недавних?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="205"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="237"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="278"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="314"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="206"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="238"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="282"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="318"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="206"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="207"/>
         <source>Yes, hide</source>
         <translation>Да, скрыть</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="230"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="271"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="231"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="275"/>
         <source>Remove project</source>
         <translation>Удалить проект</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="277"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="281"/>
         <source>Do you really want to remove this project?</source>
         <translation>Вы действительно хотите удалить данный проект?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="238"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="279"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="239"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="283"/>
         <source>Yes, remove</source>
         <translation>Да, удалить</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="135"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="136"/>
         <source>Move to the cloud</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="144"/>
-        <source>To move a project to the cloud, you should be authorized.</source>
-        <translation type="unfinished"></translation>
+        <translation>Переместить в облако</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="145"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="167"/>
-        <source>Maybe later</source>
-        <translation type="unfinished">В другой раз</translation>
+        <source>To move a project to the cloud, you should be authorized.</source>
+        <translation>Чтобы переместить проект в облако, необходимо авторизоваться.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="146"/>
-        <source>Sign in</source>
-        <translation type="unfinished">Войти</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="165"/>
-        <source>To move a project to the cloud, you need to upgrade to the TEAM version.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="168"/>
+        <source>Maybe later</source>
+        <translation>В другой раз</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="147"/>
+        <source>Sign in</source>
+        <translation>Войти</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="166"/>
+        <source>To move a project to the cloud, you need to upgrade to the TEAM version.</source>
+        <translation>Чтобы перенести проект в облако, необходимо активировать TEAM версию.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="169"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Обновить</translation>
+        <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="236"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="237"/>
         <source>Do you really want to remove this project from the computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы действительно хотите удалить данный проект с компьютера?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="307"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="311"/>
         <source>Unsubscribe</source>
         <translation>Отписаться</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="313"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="317"/>
         <source>Do you really want to unsubscribe from this project?</source>
         <translation>Вы действительно хотите отписаться от данного проекта?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="315"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="319"/>
         <source>Yes, unsubscribe</source>
         <translation>Да, отписаться</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="565"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="588"/>
         <source>Choose the file to open</source>
         <translation>Выберите файл для открытия</translation>
     </message>
@@ -2265,13 +2296,9 @@
 <context>
     <name>ManagementLayer::ScreenplayCardsManager</name>
     <message>
-        <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
-        <translation type="vanished">Чтобы редактировать схему отношений персонажей, необходимо обновиться до PRO версии.</translation>
-    </message>
-    <message>
         <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="104"/>
         <source>To edit screenplay cards, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Чтобы редактировать карточки, необходимо активировать PRO версию.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="105"/>
@@ -2287,13 +2314,9 @@
 <context>
     <name>ManagementLayer::ScreenplayStatisticsManager</name>
     <message>
-        <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
-        <translation type="vanished">Чтобы редактировать схему отношений персонажей, необходимо обновиться до PRO версии.</translation>
-    </message>
-    <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="103"/>
         <source>To access screenplay statistics, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для полного доступа к статистике, необходимо активировать PRO версию.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="104"/>
@@ -2482,22 +2505,22 @@
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3904"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3909"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3911"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3916"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3917"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3922"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3924"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3929"/>
         <source>Select all</source>
         <translation>Выбрать всё</translation>
     </message>
@@ -2505,155 +2528,155 @@
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="341"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="346"/>
         <source>Information about project</source>
         <translation>Информация о проекте</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="343"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="348"/>
         <source>Project collaborators</source>
         <translation>Соавторы</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="347"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="352"/>
         <source>Information about screenplay</source>
         <translation>Информация о сценарии</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="349"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="354"/>
         <source>Screenplay parameters</source>
         <translation>Параметры сценария</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="352"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="381"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="401"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="421"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="357"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="386"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="406"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="426"/>
         <source>Title page text</source>
         <translation>Текст титульной страницы</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="355"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="384"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="404"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="424"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="360"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="389"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="409"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="429"/>
         <source>Synopsis text</source>
         <translation>Текст синопсиса</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="360"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="365"/>
         <source>Beats</source>
         <translation>Биты</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="369"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="374"/>
         <source>Timeline</source>
         <translation>Таймлайн</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="376"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="381"/>
         <source>Information about comic book</source>
         <translation>Информация о комиксе</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="378"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="383"/>
         <source>Comic book parameters</source>
         <translation>Параметры комикса</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="387"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="392"/>
         <source>Comic book text</source>
         <translation>Текст комикса</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="396"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="401"/>
         <source>Information about audioplay</source>
         <translation>Информация об аудиопостановке</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="398"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="403"/>
         <source>Audioplay parameters</source>
         <translation>Параметры аудиопостановки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="407"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="412"/>
         <source>Audioplay text</source>
         <translation>Текст аудиопостановки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="416"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="421"/>
         <source>Information about stageplay</source>
         <translation>Информация о пьесе</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="418"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="423"/>
         <source>Stageplay parameters</source>
         <translation>Параметры пьесы</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="427"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="432"/>
         <source>Stageplay text</source>
         <translation>Текст пьесы</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="436"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="441"/>
         <source>Characters relations</source>
         <translation>Отношения персонажей</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="439"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="444"/>
         <source>Character information</source>
         <translation>Информация о персонаже</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="443"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="448"/>
         <source>Locations map</source>
         <translation>Карта локаций</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="446"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="451"/>
         <source>Location information</source>
         <translation>Информация о локации</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="450"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="455"/>
         <source>Folder text</source>
         <translation>Текст папки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="453"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="458"/>
         <source>Document text</source>
         <translation>Текст документа</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="457"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="462"/>
         <source>Recycle bin summary info</source>
         <translation>Общая информация о корзине</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="358"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="363"/>
         <source>Treatment text</source>
         <translation>Текст поэпизодника</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="365"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="370"/>
         <source>Screenplay text</source>
         <translation>Текст сценария</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="362"/>
         <location filename="../management_layer/plugins_builder.cpp" line="367"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="389"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="409"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="429"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="372"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="394"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="414"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="434"/>
         <source>Cards</source>
         <translation>Карточки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="372"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="392"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="412"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="432"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="377"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="397"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="417"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="437"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -2805,32 +2828,32 @@
 <context>
     <name>Ui::AboutApplicationDialog</name>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="158"/>
+        <location filename="../ui/about_application_dialog.cpp" line="154"/>
         <source>version</source>
         <translation>версия</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="160"/>
+        <location filename="../ui/about_application_dialog.cpp" line="156"/>
         <source>Designed, coded and crafted with love at the</source>
         <translation>Спроектировано и разработано с любовью в</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="162"/>
+        <location filename="../ui/about_application_dialog.cpp" line="158"/>
         <source>company</source>
         <translation>company</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="163"/>
+        <location filename="../ui/about_application_dialog.cpp" line="159"/>
         <source>The Logline Generator is powered by</source>
         <translation>Генератор логлайна заряжен в</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="167"/>
+        <location filename="../ui/about_application_dialog.cpp" line="163"/>
         <source>Starc is being developed with strong authors’ involvement and support so we won’t waste the app performance on the features you don’t need.</source>
         <translation>Starc создан в тесном сотрудничестве с авторами. Мы объединили современные технологии и только нужные функции, чтобы создать приложение, которым действительно удобно пользоваться.</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="170"/>
+        <location filename="../ui/about_application_dialog.cpp" line="166"/>
         <source>Feel free to contact us at any point of your creative journey to share your thoughts about the app, suggest ideas and report issues you met.</source>
         <translation>Если у вас есть идеи, как можно улучшить приложение, замечания, или вы столкнулись с проблемой, пишите нам и мы с удовольствием ответим на ваше письмо.</translation>
     </message>
@@ -2916,33 +2939,33 @@
         <translation>Имя пользователя не может быть пустим, пожалуйста заполните его</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="391"/>
+        <location filename="../ui/account/account_view.cpp" line="390"/>
         <source>FREE version</source>
         <translation>FREE версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="564"/>
+        <location filename="../ui/account/account_view.cpp" line="563"/>
         <source>Compare versions</source>
         <translation>Сравнить версии</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="566"/>
+        <location filename="../ui/account/account_view.cpp" line="565"/>
         <source>Try TEAM for free</source>
         <translation>Попробовать TEAM бесплатно</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="570"/>
+        <location filename="../ui/account/account_view.cpp" line="569"/>
         <source>Upgrade to PRO</source>
         <translation>Обновить до PRO</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="565"/>
+        <location filename="../ui/account/account_view.cpp" line="564"/>
         <source>Try PRO for free</source>
         <translation>Попробовать PRO бесплатно</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="223"/>
-        <location filename="../ui/account/account_view.cpp" line="392"/>
+        <location filename="../ui/account/account_view.cpp" line="391"/>
         <source>Lifetime access</source>
         <translation>Доступно навсегда</translation>
     </message>
@@ -2952,85 +2975,85 @@
         <translation>Активна до %1</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="397"/>
-        <location filename="../ui/account/account_view.cpp" line="403"/>
+        <location filename="../ui/account/account_view.cpp" line="396"/>
+        <location filename="../ui/account/account_view.cpp" line="402"/>
         <source>PRO version</source>
         <translation>PRO версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="410"/>
-        <location filename="../ui/account/account_view.cpp" line="417"/>
+        <location filename="../ui/account/account_view.cpp" line="409"/>
+        <location filename="../ui/account/account_view.cpp" line="416"/>
         <source>TEAM version</source>
         <translation>TEAM версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="556"/>
+        <location filename="../ui/account/account_view.cpp" line="555"/>
         <source>Your name</source>
         <translation>Ваше имя</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="557"/>
+        <location filename="../ui/account/account_view.cpp" line="556"/>
         <source>Your bio</source>
         <translation>Информация о вас</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="558"/>
+        <location filename="../ui/account/account_view.cpp" line="557"/>
         <source>I want to receive project&apos;s news</source>
         <translation>Хочу получать новости проекта</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="559"/>
+        <location filename="../ui/account/account_view.cpp" line="558"/>
         <source>Add avatar +</source>
         <translation>Добавить аватар +</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="559"/>
+        <location filename="../ui/account/account_view.cpp" line="558"/>
         <source>Change avatar...</source>
         <translation>Изменить аватар...</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="560"/>
+        <location filename="../ui/account/account_view.cpp" line="559"/>
         <source>Do you want to delete your avatar?</source>
         <translation>Удалить аватар?</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="561"/>
+        <location filename="../ui/account/account_view.cpp" line="560"/>
         <source>Select an area for the avatar</source>
         <translation>Выберите область для аватара</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="562"/>
+        <location filename="../ui/account/account_view.cpp" line="561"/>
         <source>Subscription type</source>
         <translation>Тип подписки</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="567"/>
+        <location filename="../ui/account/account_view.cpp" line="566"/>
         <source>Buy lifetime</source>
         <translation>Купить навсегда</translation>
     </message>
     <message>
+        <location filename="../ui/account/account_view.cpp" line="567"/>
         <location filename="../ui/account/account_view.cpp" line="568"/>
-        <location filename="../ui/account/account_view.cpp" line="569"/>
         <source>Renew</source>
         <translation>Продлить</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="571"/>
+        <location filename="../ui/account/account_view.cpp" line="570"/>
         <source>Upgrade to TEAM</source>
         <translation>Обновить до TEAM</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="572"/>
+        <location filename="../ui/account/account_view.cpp" line="571"/>
         <source>Active sessions</source>
         <translation>Активные сессии</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="573"/>
+        <location filename="../ui/account/account_view.cpp" line="572"/>
         <source>Promotional or gift code</source>
         <translation>Промо или подарочный код</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="574"/>
+        <location filename="../ui/account/account_view.cpp" line="573"/>
         <source>Activate</source>
         <translation>Активировать</translation>
     </message>
@@ -3079,7 +3102,7 @@
 <context>
     <name>Ui::ApplicationView</name>
     <message>
-        <location filename="../ui/application_view.cpp" line="187"/>
+        <location filename="../ui/application_view.cpp" line="244"/>
         <source>Turn off full screen</source>
         <translation>Включить полноэкранный режим</translation>
     </message>
@@ -3426,17 +3449,17 @@
         <translation>Скрыть список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="979"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="980"/>
         <source>Formatting</source>
         <translation>Форматирование</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="980"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="981"/>
         <source>Comments</source>
         <translation>Комментарии</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="981"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="982"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
@@ -3521,103 +3544,493 @@
     </message>
 </context>
 <context>
+    <name>Ui::CharacterInformationStructureView</name>
+    <message>
+        <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="111"/>
+        <source>Main</source>
+        <translation>Главное</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="112"/>
+        <source>Personal info</source>
+        <translation>Личные данные</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="113"/>
+        <source>Physique</source>
+        <translation>Внешность</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="114"/>
+        <source>Life</source>
+        <translation>Жизнь</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="115"/>
+        <source>Attitude</source>
+        <translation>Мироощущение</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="116"/>
+        <source>Biography</source>
+        <translation>Биография</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="117"/>
+        <source>Story</source>
+        <translation>История</translation>
+    </message>
+</context>
+<context>
     <name>Ui::CharacterInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="144"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="540"/>
         <source>Apply new character name</source>
         <translation>Применить новое имя персонажа</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="150"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="323"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="546"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1690"/>
         <source>Select character color</source>
         <translation>Выбрать цвет персонажа</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="322"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1689"/>
         <source>Name</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="324"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1691"/>
         <source>Story role</source>
         <translation>Роль в истории</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="131"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="414"/>
         <source>Primary</source>
         <translation>Главная</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="131"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="414"/>
         <source>Secondary</source>
         <translation>Второстепенная</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="131"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="414"/>
         <source>Tertiary</source>
         <translation>Эпизодическая</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="131"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="136"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="414"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="419"/>
         <source>Undefined</source>
         <translation>Не установлено</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="328"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="562"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1695"/>
         <source>Age</source>
         <translation>Возраст</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="329"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="568"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1696"/>
         <source>Gender</source>
         <translation>Пол</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="136"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="419"/>
         <source>Male</source>
         <translation>Мужчина</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="136"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="419"/>
         <source>Female</source>
         <translation>Женщина</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="136"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="419"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="333"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1687"/>
+        <source>Unlock ability to edit screenplay cards</source>
+        <translation>Разблокировать возможность редактировать карточки сценария</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1700"/>
         <source>One sentence description</source>
         <translation>Краткое описание</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="334"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1701"/>
         <source>Long description</source>
         <translation>Подробное описание</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="336"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1703"/>
         <source>Add photo +</source>
         <translation>Добавить фото +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="336"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1703"/>
         <source>Change photo...</source>
         <translation>Изменить фото...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="337"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1704"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
         <translation>Хотите удалить главное фото персонажа?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="338"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1705"/>
         <source>Select an area for the character main photo</source>
         <translation>Выберите область для основного фото персонажа</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1707"/>
+        <source>Photos</source>
+        <translation>Фотографии</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1709"/>
+        <source>Personal info</source>
+        <translation>Личные данные</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1710"/>
+        <source>Real name</source>
+        <translation>Настоящее имя</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1711"/>
+        <source>Date of birth</source>
+        <translation>Дата рождения</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1712"/>
+        <source>Place of birth</source>
+        <translation>Место рождения</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1713"/>
+        <source>Ethnicity/race</source>
+        <translation>Этнос/раса</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1714"/>
+        <source>Family</source>
+        <translation>Семейное положение</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1716"/>
+        <source>Physique</source>
+        <translation>Внешность</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1717"/>
+        <source>Height</source>
+        <translation>Рост</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1718"/>
+        <source>Weight</source>
+        <translation>Вес</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1719"/>
+        <source>Body</source>
+        <translation>Телосложение</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1720"/>
+        <source>Skin tone</source>
+        <translation>Цвет кожи</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1721"/>
+        <source>Hair style</source>
+        <translation>Причёска</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1722"/>
+        <source>Hair color</source>
+        <translation>Цвет волос</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1723"/>
+        <source>Eye shape</source>
+        <translation>Форма глаз</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1724"/>
+        <source>Eye color</source>
+        <translation>Цвет глаз</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1725"/>
+        <source>Facial shape</source>
+        <translation>Форма лица</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1726"/>
+        <source>Distinguish feature</source>
+        <translation>Отличительные черты внешности</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1727"/>
+        <source>Other facial features</source>
+        <translation>Прочие особенности лица</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1728"/>
+        <source>Posture</source>
+        <translation>Осанка</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1729"/>
+        <source>Other physical appearance</source>
+        <translation>Прочие особенности внешности</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1731"/>
+        <source>Life</source>
+        <translation>Жизнь</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1732"/>
+        <source>Skills</source>
+        <translation>Навыки</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1733"/>
+        <source>How skills developed</source>
+        <translation>Как получены навыки</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1734"/>
+        <source>Incompetence</source>
+        <translation>Некомпетентность</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1735"/>
+        <source>Strength/talent</source>
+        <translation>Сила/талант</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1736"/>
+        <source>Weakness</source>
+        <translation>Слабость</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1737"/>
+        <source>Hobbies</source>
+        <translation>Увлечения</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1738"/>
+        <source>Habits</source>
+        <translation>Привычки</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1739"/>
+        <source>Health</source>
+        <translation>Здоровье</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1740"/>
+        <source>Pet</source>
+        <translation>Домашнее животное</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1741"/>
+        <source>Dress</source>
+        <translation>Одежда</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1742"/>
+        <source>Something always carried/weapon/tools</source>
+        <translation>Особые интересы/оружие/приспособления</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1743"/>
+        <source>Accessories</source>
+        <translation>Аксессуары</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1744"/>
+        <source>Area of residence/environment</source>
+        <translation>Место проживания/среда</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1745"/>
+        <source>Home description</source>
+        <translation>Описание дома</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1746"/>
+        <source>Neighborhood</source>
+        <translation>Соседи</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1747"/>
+        <source>Organization involved</source>
+        <translation>Участие в организациях</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1748"/>
+        <source>Income</source>
+        <translation>Доход</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1749"/>
+        <source>Job/occupation</source>
+        <translation>Работа/род действий</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1750"/>
+        <source>Job rank/position</source>
+        <translation>Должность на работе</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1751"/>
+        <source>Job satisfaction</source>
+        <translation>Удовлетворённость работой</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1753"/>
+        <source>Attitude</source>
+        <translation>Мироощущение</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1754"/>
+        <source>Personality</source>
+        <translation>Черты характера</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1755"/>
+        <source>Moral</source>
+        <translation>Моральные установки</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1756"/>
+        <source>Motivation</source>
+        <translation>Движущая сила</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1757"/>
+        <source>Discouragement</source>
+        <translation>Что приводит к упадку духа</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1758"/>
+        <source>Philosophy</source>
+        <translation>Философские взгляды</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1759"/>
+        <source>Greatest fear</source>
+        <translation>Самый сильный страх</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1760"/>
+        <source>Self control</source>
+        <translation>Самоконтроль</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1761"/>
+        <source>Intelligence level</source>
+        <translation>Уровень интеллекта</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1762"/>
+        <source>Confidence level</source>
+        <translation>Уровень уверенности</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1764"/>
+        <source>Biography</source>
+        <translation>Биография</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1765"/>
+        <source>Childhood</source>
+        <translation>Детство</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1766"/>
+        <source>Important past event</source>
+        <translation>Важное событие из прошлого</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1767"/>
+        <source>Best accomplishment</source>
+        <translation>Лучшее достижение</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1768"/>
+        <source>Other accomplishment</source>
+        <translation>Другие достижения</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1769"/>
+        <source>Worst moment</source>
+        <translation>Худший момент</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1770"/>
+        <source>Failure</source>
+        <translation>Неудачи</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1771"/>
+        <source>Secrets</source>
+        <translation>Секреты</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1772"/>
+        <source>Best memories</source>
+        <translation>Лучшие воспоминания</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1773"/>
+        <source>Worst memories</source>
+        <translation>Худшие воспоминания</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1775"/>
+        <source>Story</source>
+        <translation>История</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1776"/>
+        <source>Short term goal</source>
+        <translation>Внешняя цель</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1777"/>
+        <source>Long term goal</source>
+        <translation>Внутренняя цель</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1778"/>
+        <source>First appearance</source>
+        <translation>Первое появление</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1779"/>
+        <source>Plot involvement</source>
+        <translation>Вовлечённость в сюжет</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1780"/>
+        <source>Conflict</source>
+        <translation>Конфликт</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1781"/>
+        <source>Most defining moment</source>
+        <translation>Решающий момент</translation>
     </message>
 </context>
 <context>
@@ -4220,17 +4633,17 @@
         <translation>Скрыть список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="978"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="979"/>
         <source>Formatting</source>
         <translation>Форматирование</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="979"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="980"/>
         <source>Comments</source>
         <translation>Комментарии</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="980"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="981"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
@@ -4278,22 +4691,22 @@
 <context>
     <name>Ui::CommentsToolbar</name>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="239"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="243"/>
         <source>Change text color</source>
         <translation>Изменить цвет текста</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="240"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="244"/>
         <source>Change text highlight color</source>
         <translation>Изменить цвет выделения текста</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="241"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="245"/>
         <source>Add comment</source>
         <translation>Добавить комментарий</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="243"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="247"/>
         <source>Choose color for the action</source>
         <extracomment>This allow user to choose color for the review mode actions like text higlight or comments</extracomment>
         <translation>Выберите цвет действия</translation>
@@ -4981,6 +5394,19 @@
     </message>
 </context>
 <context>
+    <name>Ui::ImagesList</name>
+    <message>
+        <location filename="../../corelib/ui/modules/images_list/images_list.cpp" line="470"/>
+        <source>Choose image</source>
+        <translation>Выберите изображение</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/images_list/images_list.cpp" line="471"/>
+        <source>Images</source>
+        <translation>Изображения</translation>
+    </message>
+</context>
+<context>
     <name>Ui::ImportDialog</name>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="124"/>
@@ -5345,37 +5771,37 @@
         <translation>Письмо с кодом подтверждения отправлено на указанный адрес электронной почты, пожалуйста введите его для подтверждения</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="195"/>
+        <location filename="../ui/account/login_dialog.cpp" line="194"/>
         <source>Get into your account</source>
         <translation>Вход в аккаунт</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="197"/>
+        <location filename="../ui/account/login_dialog.cpp" line="196"/>
         <source>Sign in to get access to the extended free and pro features</source>
         <translation>Авторизуйтесь, чтобы получить доступ к расширенным возможностям FREE и PRO версий</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="198"/>
+        <location filename="../ui/account/login_dialog.cpp" line="197"/>
         <source>Email</source>
         <translation>Электронная почта</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="200"/>
+        <location filename="../ui/account/login_dialog.cpp" line="199"/>
         <source>Confirmation code</source>
         <translation>Код подтвержения</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="201"/>
+        <location filename="../ui/account/login_dialog.cpp" line="200"/>
         <source>Sign in</source>
         <translation>Войти</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="202"/>
+        <location filename="../ui/account/login_dialog.cpp" line="201"/>
         <source>Send code again</source>
         <translation>Отправить код повторно</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="203"/>
+        <location filename="../ui/account/login_dialog.cpp" line="202"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -5789,14 +6215,180 @@
 <context>
     <name>Ui::OnboardingNavigator</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="30"/>
-        <source>Choose language</source>
-        <translation>Выберите язык</translation>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="390"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="579"/>
+        <source>Translation is ready for %1%</source>
+        <translation>Перевод готов на %1%</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="31"/>
-        <source>Setup user interface</source>
-        <translation>Настройте внешний вид</translation>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="430"/>
+        <source>The confirmation code we&apos;ve sent expired.</source>
+        <translation>Срок действия кода подтверждения истёк.</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="438"/>
+        <source>Email invalid</source>
+        <translation>Адрес электронной почты некорректен</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="442"/>
+        <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
+        <translation>Письмо с кодом подтверждения отправлено на указанный адрес электронной почты, пожалуйста введите его для подтверждения</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="466"/>
+        <source>Choose image</source>
+        <translation>Выберите изображение</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="467"/>
+        <source>Images</source>
+        <translation>Изображения</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="476"/>
+        <source>Select an area for the avatar</source>
+        <translation>Выберите область для аватара</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="491"/>
+        <source>Username can&apos;t be empty, please fill it</source>
+        <translation>Имя пользователя не может быть пустим, пожалуйста заполните его</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="573"/>
+        <source>Welcome to the Story Architect</source>
+        <translation>Добро пожаловать в Story Architect</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="574"/>
+        <source>Let&apos;s configure something before start</source>
+        <translation>Давайте настроем кое-что перед началом</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="575"/>
+        <source>Language</source>
+        <translation>Язык</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="581"/>
+        <source>Choose application theme</source>
+        <translation>Выберите тему приложения</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="582"/>
+        <source>Setup size of the user interface elements</source>
+        <translation>Настройте размер элементов управления</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="583"/>
+        <source>small</source>
+        <translation>маленький</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="584"/>
+        <source>big</source>
+        <translation>большой</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="585"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="603"/>
+        <source>Continue</source>
+        <translation>Продолжить</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="588"/>
+        <source>Sign in to get access to the extended
+FREE, PRO and TEAM features</source>
+        <translation>Авторизуйтесь, чтобы получить доступ к расширенным возможностям FREE, PRO и TEAM версий</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="589"/>
+        <source>Such as writing sprints, writing statistics, worldbuilding tools, story development tools, collaboration and more</source>
+        <translation>Таким как писательские спринты, статистика продуктивности, инструменты для разработки мира и структуры истории, а также возможности соавторства</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="591"/>
+        <source>Email</source>
+        <translation>Электронная почта</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="592"/>
+        <source>Confirmation code</source>
+        <translation>Код подтвержения</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="593"/>
+        <source>Sign up</source>
+        <translation>Зарегистрироваться</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="594"/>
+        <source>Send code again</source>
+        <translation>Отправить код повторно</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="595"/>
+        <source>Continue without sign in</source>
+        <translation>Продолжить без авторизации</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="597"/>
+        <source>Set up your account</source>
+        <translation>Настройте свой аккаунт</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="598"/>
+        <source>Personalize your workspace</source>
+        <translation>Подстройте своё рабочее окружение под себя</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="599"/>
+        <source>Change avatar</source>
+        <translation>Сменить аватар</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="600"/>
+        <source>Your name</source>
+        <translation>Ваше имя</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="601"/>
+        <source>Your bio</source>
+        <translation>Информация о вас</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="602"/>
+        <source>I want to receive project&apos;s news</source>
+        <translation>Хочу получать новости проекта</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="605"/>
+        <source>Follow us on social media</source>
+        <translation>Подписывайтесь на нас в соцсетях</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="606"/>
+        <source>Let&apos;s unite to make the best app for writers</source>
+        <translation>Давайте вместе создавать лучшее приложение для авторов</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="607"/>
+        <source>Be the first to know our news, fresh updates and special offers.
+
+Get in touch with our technical support, share your feedback and suggest improvements.
+
+Discuss everything with fellow community of writers, share your work in progress and chat about life.</source>
+        <translation>Узнавайте о новостях, свежих обновлениях и специальных предложениях одним из первых.
+
+Обращайтесь за помощью, делитесь своими впечатлениями и предлагайте улучшения.
+
+Общайтесь с дружественным сообществом авторов, делитесь своими рабочими моментами и вдохновляйте других.</translation>
+    </message>
+    <message>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="618"/>
+        <source>Start writing</source>
+        <translation>Приступить к работе</translation>
     </message>
 </context>
 <context>
@@ -6203,27 +6795,27 @@
         <translation>Подробнее о релизе</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="218"/>
+        <location filename="../ui/notifications/release_view.cpp" line="231"/>
         <source>Download</source>
         <translation>Скачать</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="219"/>
+        <location filename="../ui/notifications/release_view.cpp" line="232"/>
         <source>Installed</source>
         <translation>Установлено</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="238"/>
+        <location filename="../ui/notifications/release_view.cpp" line="251"/>
         <source>Cancel downloading</source>
         <translation>Отменить загрузку</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="257"/>
+        <location filename="../ui/notifications/release_view.cpp" line="270"/>
         <source>Downloaded</source>
         <translation>Файл загружен</translation>
     </message>
     <message>
-        <location filename="../ui/notifications/release_view.cpp" line="258"/>
+        <location filename="../ui/notifications/release_view.cpp" line="271"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
@@ -7396,42 +7988,42 @@
 <context>
     <name>Ui::ScreenplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="345"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="346"/>
         <source>Hide bookmarks list</source>
         <translation>Скрыть список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="348"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="349"/>
         <source>Hide screenplay dictionaries</source>
         <translation>Скрыть справочники сценария</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="349"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="350"/>
         <source>Show screenplay dictionaries</source>
         <translation>Показать справочники сценария</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1098"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1100"/>
         <source>Formatting</source>
         <translation>Форматирование</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1099"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1101"/>
         <source>Comments</source>
         <translation>Комментарии</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1100"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1102"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1101"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1103"/>
         <source>Dictionaries</source>
         <translation>Словари</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="346"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="347"/>
         <source>Show bookmarks list</source>
         <translation>Показать список закладок</translation>
     </message>
@@ -7611,17 +8203,17 @@
         <translation>Показать список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="994"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="995"/>
         <source>Formatting</source>
         <translation>Форматирование</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="995"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="996"/>
         <source>Comments</source>
         <translation>Комментарии</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="996"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="997"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
@@ -9004,17 +9596,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>Показать список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="902"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="903"/>
         <source>Formatting</source>
         <translation>Форматирование</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="903"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="904"/>
         <source>Comments</source>
         <translation>Комментарии</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="904"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="905"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
@@ -9351,17 +9943,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>Показать список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="938"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="939"/>
         <source>Formatting</source>
         <translation>Форматирование</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="939"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="940"/>
         <source>Comments</source>
         <translation>Комментарии</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="940"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="941"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
