@@ -127,8 +127,8 @@ QString CORE_LIBRARY_EXPORT iconForType(DocumentObjectType _type);
  * @brief Изображение связанное с документом
  */
 struct DocumentImage {
-    QUuid uuid;
-    QPixmap image;
+    QUuid uuid = {};
+    QPixmap image = {};
 };
 
 /**

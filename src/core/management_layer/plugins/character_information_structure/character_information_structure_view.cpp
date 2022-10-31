@@ -50,13 +50,13 @@ CharacterInformationStructureView::Implementation::Implementation(QWidget* _pare
         return item;
     };
     auto reportsModel = new QStandardItemModel(traits);
-    reportsModel->appendRow(createItem(u8"\U000F0B77"));
-    reportsModel->appendRow(createItem(u8"\U000F0B77"));
-    reportsModel->appendRow(createItem(u8"\U000F0B77"));
-    reportsModel->appendRow(createItem(u8"\U000F0B77"));
-    reportsModel->appendRow(createItem(u8"\U000F0B77"));
-    reportsModel->appendRow(createItem(u8"\U000F0B77"));
-    reportsModel->appendRow(createItem(u8"\U000F0B77"));
+    reportsModel->appendRow(createItem(u8"\U000F0007"));
+    reportsModel->appendRow(createItem(u8"\U000F1570"));
+    reportsModel->appendRow(createItem(u8"\U000F0FD7"));
+    reportsModel->appendRow(createItem(u8"\U000F1744"));
+    reportsModel->appendRow(createItem(u8"\U000F133E"));
+    reportsModel->appendRow(createItem(u8"\U000F06BC"));
+    reportsModel->appendRow(createItem(u8"\U000F0306"));
     traits->setModel(reportsModel);
     traits->setCurrentIndex(reportsModel->index(0, 0));
 }
@@ -109,7 +109,7 @@ void CharacterInformationStructureView::updateTranslations()
 {
     auto reportsModel = qobject_cast<QStandardItemModel*>(d->traits->model());
     reportsModel->item(kMainIndex)->setText(tr("Main"));
-    reportsModel->item(kBasicIndex)->setText(tr("Basic"));
+    reportsModel->item(kBasicIndex)->setText(tr("Personal info"));
     reportsModel->item(kPhysiqueIndex)->setText(tr("Physique"));
     reportsModel->item(kLifeIndex)->setText(tr("Life"));
     reportsModel->item(kAttitudeIndex)->setText(tr("Attitude"));

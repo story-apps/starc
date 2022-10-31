@@ -40,6 +40,11 @@ public:
     void save(const QUuid& _uuid, const QByteArray& _imageData) override;
 
     /**
+     * @brief Удалить заданное изображение
+     */
+    void remove(const QUuid& _uuid) override;
+
+    /**
      * @brief Очистить хранилище
      */
     void clear();

@@ -172,6 +172,14 @@ void DocumentImageStorage::save(const QUuid& _uuid, const QByteArray& _imageData
     emit imageUpdated(_uuid, image);
 }
 
+void DocumentImageStorage::remove(const QUuid& _uuid)
+{
+    StorageFacade::documentStorage()->removeDocument(
+        StorageFacade::documentStorage()->document(_uuid));
+
+    emit imageRemoved(_uuid);
+}
+
 void DocumentImageStorage::clear()
 {
     //

@@ -25,7 +25,7 @@
 
 
 namespace {
-const QString kImagesPathKey = QLatin1String("widgets/image-card/files-path");
+const QString kImagesPathKey = QLatin1String("widgets/image-files-path");
 }
 
 class ImageCard::Implementation

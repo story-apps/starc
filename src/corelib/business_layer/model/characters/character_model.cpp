@@ -21,8 +21,10 @@ const QLatin1String kGenderKey("gender");
 const QLatin1String kOneSentenceDescriptionKey("one_sentence_description");
 const QLatin1String kLongDescriptionKey("long_description");
 const QLatin1String kMainPhotoKey("main_photo");
-const QLatin1String kRoutesKey("relations");
-const QLatin1String kRouteKey("relation");
+const QLatin1String kPhotosKey("photos");
+const QLatin1String kPhotoKey("photo");
+const QLatin1String kRelationsKey("relations");
+const QLatin1String kRelationKey("relation");
 const QLatin1String kRelationWithCharacterKey("with");
 const QLatin1String kLineTypeKey("line_type");
 const QLatin1String kFeelingKey("feeling");
@@ -32,6 +34,7 @@ const QLatin1String kNicknameKey("nickname");
 const QLatin1String kDateOfBirthKey("date_of_birth");
 const QLatin1String kPlaceOfBirthKey("place_of_birth");
 const QLatin1String kEthnicityKey("ethnicity");
+const QLatin1String kFamilyKey("family");
 const QLatin1String kHeightKey("height");
 const QLatin1String kWeightKey("weight");
 const QLatin1String kBodyKey("body");
@@ -102,13 +105,14 @@ public:
     int gender = 3;
     QString oneSentenceDescription;
     QString longDescription;
-    Domain::DocumentImage mainPhoto;
+    QVector<Domain::DocumentImage> photos;
     QVector<CharacterRelation> relations;
 
     QString nickname;
     QString dateOfBirth;
     QString placeOfBirth;
     QString ethnicity;
+    QString family;
     QString height;
     QString weight;
     QString body;
@@ -200,8 +204,8 @@ CharacterModel::CharacterModel(QObject* _parent)
             kOneSentenceDescriptionKey,
             kLongDescriptionKey,
             kMainPhotoKey,
-            kRoutesKey,
-            kRouteKey,
+            kRelationsKey,
+            kRelationKey,
         },
         _parent)
     , d(new Implementation)
@@ -216,6 +220,7 @@ CharacterModel::CharacterModel(QObject* _parent)
     connect(this, &CharacterModel::longDescriptionChanged, this,
             &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::mainPhotoChanged, this, &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::photosChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::relationAdded, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::relationChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::relationRemoved, this, &CharacterModel::updateDocumentContent);
@@ -225,6 +230,7 @@ CharacterModel::CharacterModel(QObject* _parent)
     connect(this, &CharacterModel::placeOfBirthChanged, this,
             &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::ethnicityChanged, this, &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::familyChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::heightChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::weightChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::bodyChanged, this, &CharacterModel::updateDocumentContent);
@@ -317,7 +323,7 @@ CharacterModel::CharacterModel(QObject* _parent)
 
 CharacterModel::~CharacterModel() = default;
 
-const QString& CharacterModel::name() const
+QString CharacterModel::name() const
 {
     return d->name;
 }
@@ -371,7 +377,7 @@ void CharacterModel::setStoryRole(CharacterStoryRole _role)
     emit storyRoleChanged(d->storyRole);
 }
 
-const QString& CharacterModel::age() const
+QString CharacterModel::age() const
 {
     return d->age;
 }
@@ -431,42 +437,99 @@ void CharacterModel::setLongDescription(const QString& _text)
     emit longDescriptionChanged(d->longDescription);
 }
 
-const QPixmap& CharacterModel::mainPhoto() const
+Domain::DocumentImage CharacterModel::mainPhoto() const
 {
-    return d->mainPhoto.image;
-}
+    if (d->photos.isEmpty()) {
+        return {};
+    }
 
-const QUuid& CharacterModel::mainPhotoUuid() const
-{
-    return d->mainPhoto.uuid;
+    return d->photos.constFirst();
 }
 
 void CharacterModel::setMainPhoto(const QPixmap& _photo)
 {
-    if (_photo.cacheKey() == d->mainPhoto.image.cacheKey()) {
+    if (d->photos.isEmpty()) {
+        if (_photo.isNull()) {
+            return;
+        }
+
+        d->photos.append(Domain::DocumentImage());
+    }
+
+    auto& mainPhoto = d->photos.first();
+    if (mainPhoto.image.cacheKey() == _photo.cacheKey()) {
         return;
     }
 
-    d->mainPhoto.image = _photo;
-    if (d->mainPhoto.uuid.isNull()) {
-        d->mainPhoto.uuid = imageWrapper()->save(d->mainPhoto.image);
+    mainPhoto.image = _photo;
+    if (mainPhoto.uuid.isNull()) {
+        mainPhoto.uuid = imageWrapper()->save(mainPhoto.image);
     } else {
-        imageWrapper()->save(d->mainPhoto.uuid, d->mainPhoto.image);
+        if (!mainPhoto.image.isNull()) {
+            imageWrapper()->save(mainPhoto.uuid, mainPhoto.image);
+        } else {
+            imageWrapper()->remove(mainPhoto.uuid);
+            d->photos.removeFirst();
+        }
     }
-    emit mainPhotoChanged(d->mainPhoto.image);
+    emit mainPhotoChanged(d->photos.isEmpty() ? Domain::DocumentImage() : d->photos.constFirst());
+    emit photosChanged(d->photos);
 }
 
-void CharacterModel::setMainPhoto(const QUuid& _uuid, const QPixmap& _photo)
+void CharacterModel::setMainPhoto(const Domain::DocumentImage& _photo)
 {
-    if (d->mainPhoto.uuid == _uuid && _photo.cacheKey() == d->mainPhoto.image.cacheKey()) {
+    if (d->photos.isEmpty()) {
+        d->photos.append(Domain::DocumentImage());
+    }
+
+    auto& mainPhoto = d->photos.first();
+    if (mainPhoto.uuid == _photo.uuid && mainPhoto.image.cacheKey() == _photo.image.cacheKey()) {
         return;
     }
 
-    d->mainPhoto.image = _photo;
-    if (d->mainPhoto.uuid != _uuid) {
-        d->mainPhoto.uuid = _uuid;
+    mainPhoto = _photo;
+    emit mainPhotoChanged(mainPhoto);
+}
+
+QVector<Domain::DocumentImage> CharacterModel::photos() const
+{
+    return d->photos;
+}
+
+void CharacterModel::addPhotos(const QVector<QPixmap>& _photos)
+{
+    if (_photos.isEmpty()) {
+        return;
     }
-    emit mainPhotoChanged(d->mainPhoto.image);
+
+    const bool isMainPhotoAdded = d->photos.isEmpty();
+    for (const auto& photo : _photos) {
+        d->photos.append({ imageWrapper()->save(photo), photo });
+    }
+    if (isMainPhotoAdded) {
+        emit mainPhotoChanged(d->photos.constFirst());
+    }
+    emit photosChanged(d->photos);
+}
+
+void CharacterModel::removePhoto(const QUuid& _photoUuid)
+{
+    for (int index = 0; index < d->photos.size(); ++index) {
+        if (d->photos.at(index).uuid != _photoUuid) {
+            continue;
+        }
+
+        imageWrapper()->remove(_photoUuid);
+        d->photos.removeAt(index);
+        const bool isMainPhotoChanged = index == 0;
+        if (isMainPhotoChanged) {
+            emit mainPhotoChanged(d->photos.isEmpty() ? Domain::DocumentImage()
+                                                      : d->photos.constFirst());
+        }
+        emit photosChanged(d->photos);
+
+        break;
+    }
 }
 
 void CharacterModel::createRelation(const QUuid& _withCharacter)
@@ -578,6 +641,19 @@ void CharacterModel::setEthnicity(const QString& _text)
     }
     d->ethnicity = _text;
     emit ethnicityChanged(d->ethnicity);
+}
+
+QString CharacterModel::family() const
+{
+    return d->family;
+}
+void CharacterModel::setFamily(const QString& _text)
+{
+    if (d->family == _text) {
+        return;
+    }
+    d->family = _text;
+    emit familyChanged(d->family);
 }
 QString CharacterModel::height() const
 {
@@ -1269,11 +1345,18 @@ void CharacterModel::initImageWrapper()
 {
     connect(imageWrapper(), &AbstractImageWrapper::imageUpdated, this,
             [this](const QUuid& _uuid, const QPixmap& _image) {
-                if (_uuid != d->mainPhoto.uuid) {
-                    return;
-                }
+                for (auto& photo : d->photos) {
+                    if (photo.uuid == _uuid) {
+                        photo.image = _image;
 
-                setMainPhoto(_uuid, _image);
+                        if (photo.uuid == d->photos.constFirst().uuid) {
+                            emit mainPhotoChanged(photo);
+                        }
+                        emit photosChanged(d->photos);
+
+                        break;
+                    }
+                }
             });
 }
 
@@ -1305,11 +1388,27 @@ void CharacterModel::initDocument()
     }
     d->oneSentenceDescription = load(kOneSentenceDescriptionKey);
     d->longDescription = load(kLongDescriptionKey);
-    d->mainPhoto.uuid = QUuid::fromString(load(kMainPhotoKey));
-    d->mainPhoto.image = imageWrapper()->load(d->mainPhoto.uuid);
-    auto relationsNode = documentNode.firstChildElement(kRoutesKey);
+    //
+    // TODO: выпилить старый метод на считываниме главного изображения в версии 0.4.0
+    //
+    if (contains(kMainPhotoKey)) {
+        const auto uuid = QUuid::fromString(load(kMainPhotoKey));
+        d->photos.append({ uuid, imageWrapper()->load(uuid) });
+    } else {
+        const auto photosNode = documentNode.firstChildElement(kPhotosKey);
+        if (!photosNode.isNull()) {
+            auto photoNode = photosNode.firstChildElement(kPhotoKey);
+            while (!photoNode.isNull()) {
+                const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+                d->photos.append({ uuid, imageWrapper()->load(uuid) });
+
+                photoNode = photoNode.nextSiblingElement();
+            }
+        }
+    }
+    const auto relationsNode = documentNode.firstChildElement(kRelationsKey);
     if (!relationsNode.isNull()) {
-        auto relationNode = relationsNode.firstChildElement(kRouteKey);
+        auto relationNode = relationsNode.firstChildElement(kRelationKey);
         while (!relationNode.isNull()) {
             CharacterRelation relation;
             relation.character = QUuid::fromString(
@@ -1330,6 +1429,7 @@ void CharacterModel::initDocument()
     d->dateOfBirth = load(kDateOfBirthKey);
     d->placeOfBirth = load(kPlaceOfBirthKey);
     d->ethnicity = load(kEthnicityKey);
+    d->family = load(kFamilyKey);
     d->height = load(kHeightKey);
     d->weight = load(kWeightKey);
     d->body = load(kBodyKey);
@@ -1418,11 +1518,19 @@ QByteArray CharacterModel::toXml() const
     save(kGenderKey, QString::number(d->gender));
     save(kOneSentenceDescriptionKey, d->oneSentenceDescription);
     save(kLongDescriptionKey, d->longDescription);
-    save(kMainPhotoKey, d->mainPhoto.uuid.toString());
+    if (!d->photos.isEmpty()) {
+        xml += QString("<%1>\n").arg(kPhotosKey).toUtf8();
+        for (const auto& photo : std::as_const(d->photos)) {
+            xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                       .arg(kPhotoKey, TextHelper::toHtmlEscaped(photo.uuid.toString()))
+                       .toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kPhotosKey).toUtf8();
+    }
     if (!d->relations.isEmpty()) {
-        xml += QString("<%1>\n").arg(kRoutesKey).toUtf8();
+        xml += QString("<%1>\n").arg(kRelationsKey).toUtf8();
         for (const auto& relation : std::as_const(d->relations)) {
-            xml += QString("<%1>\n").arg(kRouteKey).toUtf8();
+            xml += QString("<%1>\n").arg(kRelationKey).toUtf8();
             save(kRelationWithCharacterKey, relation.character.toString());
             save(kLineTypeKey, QString::number(relation.lineType));
             if (relation.color.isValid()) {
@@ -1430,14 +1538,15 @@ QByteArray CharacterModel::toXml() const
             }
             save(kFeelingKey, relation.feeling);
             save(kDetailsKey, relation.details);
-            xml += QString("</%1>\n").arg(kRouteKey).toUtf8();
+            xml += QString("</%1>\n").arg(kRelationKey).toUtf8();
         }
-        xml += QString("</%1>\n").arg(kRoutesKey).toUtf8();
+        xml += QString("</%1>\n").arg(kRelationsKey).toUtf8();
     }
     save(kNicknameKey, d->nickname);
     save(kDateOfBirthKey, d->dateOfBirth);
     save(kPlaceOfBirthKey, d->placeOfBirth);
     save(kEthnicityKey, d->ethnicity);
+    save(kFamilyKey, d->family);
     save(kHeightKey, d->height);
     save(kWeightKey, d->weight);
     save(kBodyKey, d->body);
@@ -1531,15 +1640,18 @@ void CharacterModel::applyPatch(const QByteArray& _patch)
     }
     setOneSentenceDescription(load(kOneSentenceDescriptionKey));
     setLongDescription(load(kLongDescriptionKey));
-    setMainPhoto(load(kMainPhotoKey), imageWrapper()->load(load(kMainPhotoKey)));
+    //
+    // TODO: Реализовать синхронизацию фотографий и остального контента SAD-761
+    //
+    //    setMainPhoto(load(kMainPhotoKey), imageWrapper()->load(load(kMainPhotoKey)));
 
     //
     // Cчитываем отношения
     //
-    auto relationsNode = documentNode.firstChildElement(kRoutesKey);
+    auto relationsNode = documentNode.firstChildElement(kRelationsKey);
     QVector<CharacterRelation> newRelations;
     if (!relationsNode.isNull()) {
-        auto relationNode = relationsNode.firstChildElement(kRouteKey);
+        auto relationNode = relationsNode.firstChildElement(kRelationKey);
         while (!relationNode.isNull()) {
             CharacterRelation relation;
             relation.character = QUuid::fromString(

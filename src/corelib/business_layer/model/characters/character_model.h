@@ -5,6 +5,10 @@
 #include <QColor>
 #include <QUuid>
 
+namespace Domain {
+struct DocumentImage;
+}
+
 
 namespace BusinessLayer {
 
@@ -47,7 +51,7 @@ public:
     explicit CharacterModel(QObject* _parent = nullptr);
     ~CharacterModel() override;
 
-    const QString& name() const;
+    QString name() const;
     void setName(const QString& _name);
     Q_SIGNAL void nameChanged(const QString& _newName, const QString& _oldName);
     void setDocumentName(const QString& _name) override;
@@ -60,7 +64,7 @@ public:
     void setStoryRole(CharacterStoryRole _role);
     Q_SIGNAL void storyRoleChanged(BusinessLayer::CharacterStoryRole _role);
 
-    const QString& age() const;
+    QString age() const;
     void setAge(const QString& _age);
     Q_SIGNAL void ageChanged(const QString& _age);
 
@@ -76,11 +80,15 @@ public:
     void setLongDescription(const QString& _text);
     Q_SIGNAL void longDescriptionChanged(const QString& _text);
 
-    const QPixmap& mainPhoto() const;
-    const QUuid& mainPhotoUuid() const;
+    Domain::DocumentImage mainPhoto() const;
     void setMainPhoto(const QPixmap& _photo);
-    void setMainPhoto(const QUuid& _uuid, const QPixmap& _photo);
-    Q_SIGNAL void mainPhotoChanged(const QPixmap& _photo);
+    void setMainPhoto(const Domain::DocumentImage& _photo);
+    Q_SIGNAL void mainPhotoChanged(const Domain::DocumentImage& _photo);
+
+    QVector<Domain::DocumentImage> photos() const;
+    void addPhotos(const QVector<QPixmap>& _photos);
+    void removePhoto(const QUuid& _photoUuid);
+    Q_SIGNAL void photosChanged(const QVector<Domain::DocumentImage>& _images);
 
     void createRelation(const QUuid& _withCharacter);
     void updateRelation(const CharacterRelation& _relation);
@@ -111,6 +119,10 @@ public:
     QString ethnicity() const;
     void setEthnicity(const QString& _text);
     Q_SIGNAL void ethnicityChanged(const QString& _text);
+
+    QString family() const;
+    void setFamily(const QString& _text);
+    Q_SIGNAL void familyChanged(const QString& _text);
 
     //
     // PHISIQUE

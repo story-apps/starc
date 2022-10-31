@@ -239,6 +239,8 @@ SOURCES += \
     ui/modules/cover_generator/cover_generator_sidebar.cpp \
     ui/modules/cover_generator/cover_generator_view.cpp \
     ui/modules/cover_generator/unsplash_images_view.cpp \
+    ui/modules/images_list/images_list.cpp \
+    ui/modules/images_list/images_list_preview.cpp \
     ui/modules/logline_generator/logline_generator_dialog.cpp \
     ui/modules/script_text_edit/script_text_edit.cpp \
     ui/widgets/animations/click_animation.cpp \
@@ -520,6 +522,8 @@ HEADERS += \
     ui/modules/cover_generator/cover_generator_sidebar.h \
     ui/modules/cover_generator/cover_generator_view.h \
     ui/modules/cover_generator/unsplash_images_view.h \
+    ui/modules/images_list/images_list.h \
+    ui/modules/images_list/images_list_preview.h \
     ui/modules/logline_generator/logline_generator_dialog.h \
     ui/modules/script_text_edit/script_text_edit.h \
     ui/widgets/animations/click_animation.h \

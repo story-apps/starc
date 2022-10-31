@@ -779,7 +779,9 @@ void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureMode
             switch (document->type()) {
             case Domain::DocumentObjectType::Character: {
                 auto character = static_cast<BusinessLayer::CharacterModel*>(model);
-                documentsToRemove.append(character->mainPhotoUuid());
+                for (const auto& photo : character->photos()) {
+                    documentsToRemove.append(photo.uuid);
+                }
                 break;
             }
             case Domain::DocumentObjectType::Location: {

@@ -36,6 +36,11 @@ public:
     virtual void save(const QUuid& _uuid, const QPixmap& _image) = 0;
     virtual void save(const QUuid& _uuid, const QByteArray& _imageData) = 0;
 
+    /**
+     * @brief Удалить заданное изображение
+     */
+    virtual void remove(const QUuid& _uuid) = 0;
+
 signals:
     /**
      * @brief Добавлено новое изображение
@@ -51,6 +56,11 @@ signals:
      * @brief Изображение было обновлено
      */
     void imageUpdated(const QUuid& _uuid, const QPixmap& _image);
+
+    /**
+     * @brief Изображение было удалено
+     */
+    void imageRemoved(const QUuid& _uuid);
 };
 
 } // namespace BusinessLayer
