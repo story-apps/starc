@@ -56,6 +56,7 @@ protected:
     /**
      * @brief Реализуем интерактив при помощи мыши
      */
+    void leaveEvent(QEvent* _event) override;
     void mousePressEvent(QMouseEvent* _event) override;
     void mouseMoveEvent(QMouseEvent* _event) override;
     void mouseReleaseEvent(QMouseEvent* _event) override;
