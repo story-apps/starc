@@ -91,16 +91,30 @@ const QPixmap& ProjectInformationModel::cover() const
 
 void ProjectInformationModel::setCover(const QPixmap& _cover)
 {
-    if (_cover.cacheKey() == d->cover.image.cacheKey()) {
+    //
+    // Если изображения одинаковые, или если оба пусты, то ничего не делаем
+    //
+    if (_cover.cacheKey() == d->cover.image.cacheKey()
+        || (_cover.isNull() && d->cover.image.isNull())) {
         return;
     }
 
-    d->cover.image = _cover;
-    if (d->cover.uuid.isNull()) {
-        d->cover.uuid = imageWrapper()->save(d->cover.image);
-    } else {
-        imageWrapper()->save(d->cover.uuid, d->cover.image);
+    //
+    // Если ранее обложка была задана, то удалим её
+    //
+    if (!d->cover.uuid.isNull()) {
+        imageWrapper()->remove(d->cover.uuid);
+        d->cover = {};
     }
+
+    //
+    // Если задана новая обложка, то добавляем её
+    //
+    if (!_cover.isNull()) {
+        d->cover.uuid = imageWrapper()->save(_cover);
+        d->cover.image = _cover;
+    }
+
     emit coverChanged(d->cover.image);
 }
 
