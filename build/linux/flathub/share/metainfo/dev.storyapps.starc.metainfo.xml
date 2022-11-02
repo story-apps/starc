@@ -7,10 +7,30 @@
     <metadata_license>CC0-1.0</metadata_license>
     <project_license>LicenseRef-proprietary</project_license>
     <developer_name>Story Apps</developer_name>
+    <keywords>
+        <keyword>screenplay</keyword>
+        <keyword>screenwriting</keyword>
+        <keyword>scriptwriting</keyword>
+        <keyword>comic book</keyword>
+        <keyword>comicbook</keyword>
+        <keyword>comicwriting</keyword>
+        <keyword>audioplay</keyword>
+        <keyword>audio play</keyword>
+        <keyword>radio drama</keyword>
+        <keyword>radio play</keyword>
+        <keyword>stageplay</keyword>
+        <keyword>stage play</keyword>
+        <keyword>stage</keyword>
+        <keyword>character</keyword>
+        <keyword>location</keyword>
+        <keyword>series</keyword>
+        <keyword>episode</keyword>
+    </keywords>
     <url type="homepage">https://starc.app</url>
+    <url type="bugtracker">https://github.com/story-apps/starc/issues</url>
     <url type="help">https://starc.app/help</url>
     <url type="translate">https://starc.app/translate</url>
-    <url type="bugtracker">https://github.com/story-apps/starc/issues</url>
+    <url type="contact">https://starc.app/cotacts</url>
     <description>
         <p>Story Architect is a modern application for authors that combines flexibility and simplicity of the user interface with an incredibly rich set of features. It allows you to work on projects of different genres and forms, store all the information about your stories inside one project, and provides many opportunities to improve the life of authors.</p>
         <p>The main features of the application:</p>
@@ -70,6 +90,7 @@
         </screenshot>
     </screenshots>
     <releases>
+        <release version="0.3.1" date="2022-10-31"/>
         <release version="0.3.0" date="2022-10-15"/>
     </releases>
     <categories>
