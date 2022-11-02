@@ -487,7 +487,7 @@ void ApplicationManager::Implementation::sendCrashInfo()
         //
         // Сформируем пары <дамп, лог>
         //
-        const auto logs = QDir(Log::logFilePath()).entryInfoList(QDir::Files);
+        const auto logs = QFileInfo(Log::logFilePath()).dir().entryInfoList(QDir::Files);
         QVector<QPair<QString, QString>> dumpsAndLogs;
         for (const auto& dump : crashDumps) {
             for (const auto& log : logs) {
