@@ -82,7 +82,6 @@ public:
 
     Domain::DocumentImage mainPhoto() const;
     void setMainPhoto(const QPixmap& _photo);
-    void setMainPhoto(const Domain::DocumentImage& _photo);
     Q_SIGNAL void mainPhotoChanged(const Domain::DocumentImage& _photo);
 
     QVector<Domain::DocumentImage> photos() const;

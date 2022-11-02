@@ -448,47 +448,47 @@ Domain::DocumentImage CharacterModel::mainPhoto() const
 
 void CharacterModel::setMainPhoto(const QPixmap& _photo)
 {
-    if (d->photos.isEmpty()) {
-        if (_photo.isNull()) {
+    //
+    // Если прилетела пустая картинка
+    //
+    if (_photo.isNull()) {
+        if (d->photos.isEmpty()) {
             return;
         }
 
-        d->photos.append(Domain::DocumentImage());
+        imageWrapper()->remove(d->photos.constFirst().uuid);
+        d->photos.removeFirst();
     }
+    //
+    // А если картинка не пустая
+    //
+    else {
+        //
+        // ... если фоток ещё не было, то создаём первую и сохраняем её в списке
+        //
+        if (d->photos.isEmpty()) {
+            d->photos.append({ imageWrapper()->save(_photo), _photo });
+        }
+        //
+        // ... а если уже были, то проверяем, действительно ли она изменилась
+        //
+        else {
+            auto& mainPhoto = d->photos.first();
+            if (mainPhoto.image.cacheKey() == _photo.cacheKey()) {
+                return;
+            }
 
-    auto& mainPhoto = d->photos.first();
-    if (mainPhoto.image.cacheKey() == _photo.cacheKey()) {
-        return;
-    }
-
-    mainPhoto.image = _photo;
-    if (mainPhoto.uuid.isNull()) {
-        mainPhoto.uuid = imageWrapper()->save(mainPhoto.image);
-    } else {
-        if (!mainPhoto.image.isNull()) {
-            imageWrapper()->save(mainPhoto.uuid, mainPhoto.image);
-        } else {
+            //
+            // ... если изменилась, то удаляем старую и сохраняем новую
+            //
             imageWrapper()->remove(mainPhoto.uuid);
-            d->photos.removeFirst();
+            mainPhoto.uuid = imageWrapper()->save(_photo);
+            mainPhoto.image = _photo;
         }
     }
+
     emit mainPhotoChanged(d->photos.isEmpty() ? Domain::DocumentImage() : d->photos.constFirst());
     emit photosChanged(d->photos);
-}
-
-void CharacterModel::setMainPhoto(const Domain::DocumentImage& _photo)
-{
-    if (d->photos.isEmpty()) {
-        d->photos.append(Domain::DocumentImage());
-    }
-
-    auto& mainPhoto = d->photos.first();
-    if (mainPhoto.uuid == _photo.uuid && mainPhoto.image.cacheKey() == _photo.image.cacheKey()) {
-        return;
-    }
-
-    mainPhoto = _photo;
-    emit mainPhotoChanged(mainPhoto);
 }
 
 QVector<Domain::DocumentImage> CharacterModel::photos() const
@@ -1407,14 +1407,18 @@ void CharacterModel::initDocument()
     //
     if (contains(kMainPhotoKey)) {
         const auto uuid = QUuid::fromString(load(kMainPhotoKey));
-        d->photos.append({ uuid, imageWrapper()->load(uuid) });
+        if (!uuid.isNull()) {
+            d->photos.append({ uuid, imageWrapper()->load(uuid) });
+        }
     } else {
         const auto photosNode = documentNode.firstChildElement(kPhotosKey);
         if (!photosNode.isNull()) {
             auto photoNode = photosNode.firstChildElement(kPhotoKey);
             while (!photoNode.isNull()) {
                 const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
-                d->photos.append({ uuid, imageWrapper()->load(uuid) });
+                if (!uuid.isNull()) {
+                    d->photos.append({ uuid, imageWrapper()->load(uuid) });
+                }
 
                 photoNode = photoNode.nextSiblingElement();
             }
