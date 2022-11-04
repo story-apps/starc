@@ -582,12 +582,43 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                 parentItem = projectStructureModel->itemForIndex(parentIndex);
             }
 
+            //
+            // Определим индекс элемента для выделения
+            //
             const auto addedItemIndex
                 = projectStructureModel->addDocument(_type, _name, parentIndex);
+            QModelIndex itemForSelectIndex = addedItemIndex;
+            //
+            // ... в зависимости от типа, выбираем потенциально желаемый к редактированию документ
+            //     сейчас это просто выбор сценария для всех видов бандлов
+            //
+            constexpr int invalidIndex = -1;
+            int childIndex = invalidIndex;
+            switch (_type) {
+            case Domain::DocumentObjectType::Screenplay: {
+                childIndex = 3;
+                break;
+            }
+            case Domain::DocumentObjectType::Audioplay:
+            case Domain::DocumentObjectType::ComicBook:
+            case Domain::DocumentObjectType::Stageplay: {
+                childIndex = 2;
+                break;
+            }
+            default: {
+                break;
+            }
+            }
+            if (childIndex != invalidIndex) {
+                itemForSelectIndex = projectStructureModel->index(3, 0, itemForSelectIndex);
+            }
             const auto mappedAddedItemIndex
-                = projectStructureProxyModel->mapFromSource(addedItemIndex);
+                = projectStructureProxyModel->mapFromSource(itemForSelectIndex);
             navigator->setCurrentIndex(mappedAddedItemIndex);
 
+            //
+            // Скрываем сам диалог
+            //
             dialog->hideDialog();
         });
     connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog,
