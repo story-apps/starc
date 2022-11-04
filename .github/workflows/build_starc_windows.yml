@@ -41,6 +41,7 @@ jobs:
           version: 5.15.2
           arch: win64_msvc2019_64
           target: desktop
+          setup-python: false
 
       - name: Install dependencies
         shell: bash
@@ -157,6 +158,7 @@ jobs:
           version: 5.15.2
           arch: win32_msvc2019
           target: desktop
+          setup-python: false
 
       - name: Install dependencies
         shell: bash
