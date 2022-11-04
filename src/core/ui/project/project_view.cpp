@@ -156,6 +156,15 @@ void ProjectView::showEditor(QWidget* _widget)
     setCurrentWidget(d->documentEditorPage);
 }
 
+void ProjectView::focusEditor()
+{
+    if (currentWidget() != d->documentEditorPage) {
+        return;
+    }
+
+    d->documentEditor->currentWidget()->setFocus();
+}
+
 void ProjectView::setActive(bool _active)
 {
     const bool isVisible = !_active;

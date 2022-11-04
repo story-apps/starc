@@ -36,6 +36,11 @@ public:
     void showEditor(QWidget* _widget);
 
     /**
+     * @brief Сфокусировать текущий редактор
+     */
+    void focusEditor();
+
+    /**
      * @brief Активно ли представление в данный момент
      */
     void setActive(bool _active);

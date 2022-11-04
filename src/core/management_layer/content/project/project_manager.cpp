@@ -3135,7 +3135,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Фокусируем представление
     //
     QTimer::singleShot(d->view.active->animationDuration() * 1.3, this,
-                       [this] { d->view.active->setFocus(); });
+                       [this] { d->view.active->focusEditor(); });
 
     Log::info("Plugin activated");
 }
