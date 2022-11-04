@@ -1,6 +1,7 @@
 #include "scroll_bar.h"
 
 #include <ui/design_system/design_system.h>
+#include <utils/tools/debouncer.h>
 
 #include <QPainter>
 #include <QTimer>
@@ -19,9 +20,12 @@ public:
     QColor handleColor;
 
     QVariantAnimation widthAnimation;
+    Debouncer widthAnimationDebouncer;
+    QAbstractAnimation::Direction widthAnimationDirection;
 };
 
 ScrollBar::Implementation::Implementation()
+    : widthAnimationDebouncer(120)
 {
     widthAnimation.setDuration(120);
     widthAnimation.setStartValue(Ui::DesignSystem::scrollBar().minimumSize());
@@ -31,16 +35,32 @@ ScrollBar::Implementation::Implementation()
 
 void ScrollBar::Implementation::maximizeScrollbar()
 {
-    widthAnimation.stop();
-    widthAnimation.setDirection(QVariantAnimation::Forward);
-    widthAnimation.start();
+    //
+    // Если пользователь просто пронёс курсор мимо, то игнорируем это событие
+    //
+    if (widthAnimationDebouncer.hasPendingWork()
+        && widthAnimationDirection == QVariantAnimation::Backward) {
+        widthAnimationDebouncer.abortWork();
+        return;
+    }
+
+    widthAnimationDirection = QVariantAnimation::Forward;
+    widthAnimationDebouncer.orderWork();
 }
 
 void ScrollBar::Implementation::minimizeScrollbar()
 {
-    widthAnimation.stop();
-    widthAnimation.setDirection(QVariantAnimation::Backward);
-    widthAnimation.start();
+    //
+    // Если пользователь просто пронёс курсор мимо, то игнорируем это событие
+    //
+    if (widthAnimationDebouncer.hasPendingWork()
+        && widthAnimationDirection == QVariantAnimation::Forward) {
+        widthAnimationDebouncer.abortWork();
+        return;
+    }
+
+    widthAnimationDirection = QVariantAnimation::Backward;
+    widthAnimationDebouncer.orderWork();
 }
 
 
@@ -56,6 +76,17 @@ ScrollBar::ScrollBar(QWidget* _parent)
 
     connect(&d->widthAnimation, &QVariantAnimation::valueChanged, this,
             [this] { updateGeometry(); });
+    connect(&d->widthAnimationDebouncer, &Debouncer::gotWork, this, [this] {
+        d->widthAnimation.setDirection(d->widthAnimationDirection);
+        d->widthAnimation.start();
+
+        //
+        // Настраиваем длительность ожидания таким образом, чтобы полоса прокрутки сжималась
+        // не так быстро и пользователь мог вернуться для взаимодействия с ней
+        //
+        d->widthAnimationDebouncer.setDelay(
+            d->widthAnimationDirection == QVariantAnimation::Forward ? 800 : 120);
+    });
 }
 
 ScrollBar::~ScrollBar() = default;

@@ -19,7 +19,11 @@ public:
      */
     explicit Debouncer(int _delayInMs, QObject* _parent = nullptr);
 
-public slots:
+    /**
+     * @brief Задать задержку
+     */
+    void setDelay(int _delayInMs);
+
     /**
      * @brief Заказать некоторое действие, этот слот принимает сигналы от пользователя
      */
@@ -29,6 +33,11 @@ public slots:
      * @brief Прервать ожидание заказанного действия
      */
     void abortWork();
+
+    /**
+     * @brief Есть ли запланированная работа
+     */
+    bool hasPendingWork() const;
 
 signals:
     /**
