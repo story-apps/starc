@@ -1287,8 +1287,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
         } else {
             Log::info("Split screen turned off");
 
-            d->view.container->setSizes({ 1, 0 });
             d->view.right->hide();
+            d->view.container->setSizes({ 1, 0 });
             if (d->view.active == d->view.right) {
                 d->switchViews();
             }
