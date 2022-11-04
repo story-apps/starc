@@ -498,6 +498,26 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
         targetBlockData = cloneBlockData(targetBlock);
     }
     //
+    // Если оба блока пусты и ни один из них не разрыв и не декорация
+    //
+    else if (topBlock.text().isEmpty() && bottomBlock.text().isEmpty()
+             && topParagraphType != TextParagraphType::PageSplitter
+             && bottomParagraphType != TextParagraphType::PageSplitter
+             && !topBlock.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
+             && !bottomBlock.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
+        //
+        // ... результирующим будет более "старший"
+        //
+        if (topParagraphType < bottomParagraphType) {
+            targetStyle = topStyle;
+            targetBlockData = cloneBlockData(topBlock);
+        } else {
+            targetStyle = bottomStyle;
+            targetBlockData = cloneBlockData(bottomBlock);
+            isTopBlockShouldBeRemoved = true;
+        }
+    }
+    //
     // Если в верхнем блоке нет текста, а в нижнем есть
     // Или верхний блок полностью удаляется и при этом не является разрывом блока,
     //     а нижний не является декорацией
@@ -725,7 +745,9 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
         //
         // Если первый блок не будет удалён, то пропускаем его, т.к. он остаётся с текущим стилем
         //
-        if (!isTopBlockShouldBeRemoved) {
+        if (const auto cursorParagraphType = TextBlockStyle::forBlock(cursor);
+            !isTopBlockShouldBeRemoved || cursorParagraphType == TextParagraphType::ActFooter
+            || cursorParagraphType == TextParagraphType::SequenceFooter) {
             cursor.movePosition(QTextCursor::NextBlock);
         }
 
@@ -792,8 +814,10 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
         //
         // Если первый блок не будет удалён, то пропускаем его, т.к. он остаётся с текущим стилем
         //
-        if (!isTopBlockShouldBeRemoved) {
-            cursor.movePosition(QTextCursor::NextBlock);
+        if (const auto cursorParagraphType = TextBlockStyle::forBlock(cursor);
+            !isTopBlockShouldBeRemoved || cursorParagraphType == TextParagraphType::ActHeading
+            || cursorParagraphType == TextParagraphType::SequenceHeading) {
+            cursor.movePosition(QTextCursor::PreviousBlock);
         }
 
         //
