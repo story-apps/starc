@@ -58,6 +58,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
     // Подготовим необходимые структуры для сбора статистики
     //
     struct CharacterData {
+        int totalWords = 0;
         int totalDialogues = 0;
         int speakingScenesCount = 0;
         int nonspeakingScenesCount = 0;
@@ -71,6 +72,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
     QSet<QString> lastSceneNonspeakingCharacters;
     QSet<QString> lastSceneSpeakingCharacters;
     QVector<QString> charactersOrder;
+    QString lastSpeakingCharacter;
 
     //
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
@@ -97,7 +99,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
     //
     std::function<void(const TextModelItem*)> includeInReport;
     includeInReport = [&includeInReport, &charactersData, &lastSceneNonspeakingCharacters,
-                       &lastSceneSpeakingCharacters, &charactersOrder,
+                       &lastSceneSpeakingCharacters, &charactersOrder, &lastSpeakingCharacter,
                        &rxCharacterFinder](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
@@ -147,6 +149,10 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
 
                 case TextParagraphType::Character: {
                     const auto character = ScreenplayCharacterParser::name(textItem->text());
+                    if (character.isEmpty()) {
+                        break;
+                    }
+
                     if (!charactersData.contains(character)) {
                         charactersData.insert(character, { 1, 1, 0 });
                         charactersOrder.append(character);
@@ -164,6 +170,18 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
                         }
                         ++characterData.totalDialogues;
                     }
+                    lastSpeakingCharacter = character;
+                    break;
+                }
+
+                case TextParagraphType::Dialogue:
+                case TextParagraphType::Lyrics: {
+                    if (lastSpeakingCharacter.isEmpty()) {
+                        break;
+                    }
+
+                    auto& characterData = charactersData[lastSpeakingCharacter];
+                    characterData.totalWords += TextHelper::wordsCount(textItem->text());
                     break;
                 }
 
@@ -199,6 +217,17 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
 
                 default:
                     break;
+                }
+
+                //
+                // Очищаем последнего говорящего персонажа, если ушли из реплики
+                //
+                if (!lastSpeakingCharacter.isEmpty()
+                    && textItem->paragraphType() != TextParagraphType::Character
+                    && textItem->paragraphType() != TextParagraphType::Parenthetical
+                    && textItem->paragraphType() != TextParagraphType::Dialogue
+                    && textItem->paragraphType() != TextParagraphType::Lyrics) {
+                    lastSpeakingCharacter.clear();
                 }
 
                 break;
@@ -292,6 +321,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
               auto characterItem = createModelItem(_name);
               d->castModel->appendRow({
                   characterItem,
+                  createModelItem(QString::number(_count.totalWords)),
                   createModelItem(QString::number(_count.totalDialogues)),
                   createModelItem(QString::number(_count.speakingScenesCount)),
                   createModelItem(QString::number(_count.nonspeakingScenesCount)),
@@ -308,18 +338,22 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
         Qt::DisplayRole);
     d->castModel->setHeaderData(
         1, Qt::Horizontal,
-        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Total dialogues"),
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Total words"),
         Qt::DisplayRole);
     d->castModel->setHeaderData(
         2, Qt::Horizontal,
-        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Speaking scenes"),
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Total dialogues"),
         Qt::DisplayRole);
     d->castModel->setHeaderData(
         3, Qt::Horizontal,
-        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Nonspeaking scenes"),
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Speaking scenes"),
         Qt::DisplayRole);
     d->castModel->setHeaderData(
         4, Qt::Horizontal,
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Nonspeaking scenes"),
+        Qt::DisplayRole);
+    d->castModel->setHeaderData(
+        5, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Total scenes"),
         Qt::DisplayRole);
 }
