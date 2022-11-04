@@ -2103,13 +2103,13 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     if (previousItemRow >= 0
                         && previousItemRow < previousItem->parent()->childCount() - 1) {
                         const int nextItemRow = previousItemRow + 1;
-                        auto nextItem = previousItem->parent()->childAt(nextItemRow);
                         //
                         // Подготовим элементы для переноса
                         //
                         QVector<TextModelItem*> itemsToMove;
                         for (int itemRow = nextItemRow;
                              itemRow < previousItem->parent()->childCount(); ++itemRow) {
+                            const auto nextItem = previousItem->parent()->childAt(itemRow);
                             if (nextItem == nullptr
                                 || (nextItem->type() != TextModelItemType::Text
                                     && nextItem->type() != TextModelItemType::Splitter)) {
@@ -2117,7 +2117,6 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                             }
 
                             itemsToMove.append(previousItem->parent()->childAt(itemRow));
-                            nextItem = previousItem->parent()->childAt(itemRow);
                         }
                         if (!itemsToMove.isEmpty()) {
                             d->model->takeItems(itemsToMove.constFirst(), itemsToMove.constLast(),
