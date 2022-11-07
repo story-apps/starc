@@ -41,11 +41,12 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
     //
     // ... отсоединяем документ от модели, что изменения в документе не привели к изменениям модели
     //
-    textDocument->disconnect();
+    textDocument->disconnect(_model);
     //
     // ... корректируем текст сценария
     //
     TextCursor cursor(textDocument);
+    cursor.beginEditBlock();
     //
     // ... вставляем титульную страницу
     //
@@ -334,6 +335,8 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
         cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
         cursor.deleteChar();
     }
+
+    cursor.endEditBlock();
 
     return textDocument;
 }
