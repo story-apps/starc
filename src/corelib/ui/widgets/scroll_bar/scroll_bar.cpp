@@ -25,7 +25,7 @@ public:
 };
 
 ScrollBar::Implementation::Implementation()
-    : widthAnimationDebouncer(120)
+    : widthAnimationDebouncer(60)
 {
     widthAnimation.setDuration(120);
     widthAnimation.setStartValue(Ui::DesignSystem::scrollBar().minimumSize());
@@ -77,6 +77,10 @@ ScrollBar::ScrollBar(QWidget* _parent)
     connect(&d->widthAnimation, &QVariantAnimation::valueChanged, this,
             [this] { updateGeometry(); });
     connect(&d->widthAnimationDebouncer, &Debouncer::gotWork, this, [this] {
+        if (d->widthAnimationDirection == QVariantAnimation::Forward && maximum() <= minimum()) {
+            return;
+        }
+
         d->widthAnimation.setDirection(d->widthAnimationDirection);
         d->widthAnimation.start();
 
@@ -85,7 +89,7 @@ ScrollBar::ScrollBar(QWidget* _parent)
         // не так быстро и пользователь мог вернуться для взаимодействия с ней
         //
         d->widthAnimationDebouncer.setDelay(
-            d->widthAnimationDirection == QVariantAnimation::Forward ? 800 : 120);
+            d->widthAnimationDirection == QVariantAnimation::Forward ? 800 : 60);
     });
 }
 
@@ -133,6 +137,10 @@ void ScrollBar::paintEvent(QPaintEvent* _event)
 
     QPainter painter(this);
     painter.fillRect(rect(), Qt::transparent);
+
+    if (maximum() <= minimum()) {
+        return;
+    }
 
     //
     // Настраиваем видимость полосы прокрутки
