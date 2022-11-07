@@ -228,7 +228,7 @@ void OnboardingNavigator::Implementation::initUiPage()
     uiDarkTheme->setTheme(ApplicationTheme::Dark);
     uiScaleSlider->setMaximumValue(3500);
     uiScaleSlider->setValue(500);
-    uiScaleSlider->setDefaultPosition(500);
+    uiScaleSlider->setDefaultValue(500);
     uiContinueButton->setContained(true);
 
     auto pageLayout = new QVBoxLayout;
@@ -529,6 +529,13 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
 }
 
 OnboardingNavigator::~OnboardingNavigator() = default;
+
+void OnboardingNavigator::showWelcomePage()
+{
+    d->uiScaleSlider->setValue(d->uiScaleSlider->defaultValue());
+
+    setCurrentWidget(d->uiPage);
+}
 
 QString OnboardingNavigator::email() const
 {

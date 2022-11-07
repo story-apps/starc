@@ -37,6 +37,11 @@ signals:
     void componentsStageplayPressed();
     void shortcutsPressed();
 
+    /**
+     * @brief Пользователь хочет сбросить настройки до заводских
+     */
+    void resetToDefaultsPressed();
+
 protected:
     /**
      * @brief Обновить переводы

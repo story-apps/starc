@@ -17,6 +17,7 @@
 #include <ui/settings/settings_tool_bar.h>
 #include <ui/settings/settings_view.h>
 #include <ui/settings/theme_setup_view.h>
+#include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/task_bar/task_bar.h>
 #include <ui/widgets/tree/tree_header_view.h>
 #include <utils/helpers/dialog_helper.h>
@@ -421,6 +422,34 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &Ui::SettingsView::showComponentsStageplay);
     connect(d->navigator, &Ui::SettingsNavigator::shortcutsPressed, d->view,
             &Ui::SettingsView::showShortcuts);
+    connect(d->navigator, &Ui::SettingsNavigator::resetToDefaultsPressed, this, [this] {
+        auto dialog = new Dialog(d->view->topLevelWidget());
+        const int kCancelButtonId = 0;
+        const int kYesButtonId = 1;
+        dialog->showDialog({},
+                           tr("Do you want to revert all changes in settings to the default state? "
+                              "This action can't be undone."),
+                           { { kCancelButtonId, tr("Cancel"), Dialog::RejectButton },
+                             { kYesButtonId, tr("Reset"), Dialog::AcceptButton } });
+        QObject::connect(dialog, &Dialog::finished, dialog,
+                         [this, dialog, kCancelButtonId](const Dialog::ButtonInfo& _buttonInfo) {
+                             dialog->hideDialog();
+
+                             if (_buttonInfo.id == kCancelButtonId) {
+                                 return;
+                             }
+
+                             //
+                             // Вызываем сигнал о желании пользователя сбросить настройки после
+                             // того, как диалог завершится, чтобы в него не прилетели события о
+                             // смене дизайн системы
+                             //
+                             connect(dialog, &Dialog::disappeared, this,
+                                     &SettingsManager::resetToDefaultsRequested,
+                                     Qt::QueuedConnection);
+                         });
+        QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+    });
 
     connect(d->view, &Ui::SettingsView::applicationLanguagePressed, this, [this, _parentWidget] {
         auto dialog = new Ui::LanguageDialog(_parentWidget);

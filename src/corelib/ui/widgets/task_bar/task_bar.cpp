@@ -82,6 +82,10 @@ void TaskBar::registerTaskBar(QWidget* _parent, const QColor& _backgroundColor,
     if (Implementation::instance == nullptr) {
         Implementation::instance = new TaskBar(_parent);
     } else {
+        if (Implementation::instance->parent() == _parent) {
+            return;
+        }
+
         Implementation::instance->setParent(_parent);
     }
 

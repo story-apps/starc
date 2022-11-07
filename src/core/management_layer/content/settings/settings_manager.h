@@ -76,6 +76,11 @@ signals:
     void stageplayEditorChanged(const QStringList& _changedSettingsKeys);
     void stageplayNavigatorChanged();
 
+    /**
+     * @brief Пользователь хочет сбросить настройки к заводским
+     */
+    void resetToDefaultsRequested();
+
 protected:
     /**
      * @brief Реализуем фильтр на событие смены языка и дизайн системы, чтобы обновить значения в

@@ -1166,6 +1166,12 @@ void SettingsStorage::setDocumentFolderPath(const QString& _key, const QString& 
     setValue(_key, QFileInfo(_filePath).absoluteDir().absolutePath(), SettingsPlace::Application);
 }
 
+void SettingsStorage::resetToDefaults()
+{
+    d->appSettings.clear();
+    d->cachedValuesApp.clear();
+}
+
 SettingsStorage::SettingsStorage()
     : d(new Implementation)
 {

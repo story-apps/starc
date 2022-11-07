@@ -81,6 +81,11 @@ QWidget* OnboardingManager::view() const
     return d->view;
 }
 
+void OnboardingManager::showWelcomePage()
+{
+    d->navigator->showWelcomePage();
+}
+
 void OnboardingManager::setConfirmationCodeInfo(int _codeLength)
 {
     d->confirmationCodeLength = _codeLength;

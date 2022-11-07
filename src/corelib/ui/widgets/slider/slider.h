@@ -27,14 +27,15 @@ public:
     void setValue(int _value);
 
     /**
-     * @brief Задать позицию по-умолчанию слайдера
+     * @brief Позицию по-умолчанию слайдера
      */
-    void setDefaultPosition(int _value);
+    int defaultValue() const;
+    void setDefaultValue(int _value);
 
     /**
      * @brief Отменить использование позиции по-умолчанию
      */
-    void resetDefaultPosition();
+    void resetDefaultValue();
 
     /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках

@@ -30,6 +30,11 @@ public:
     QWidget* view() const;
 
     /**
+     * @brief Показать начальную страницу онбординга
+     */
+    void showWelcomePage();
+
+    /**
      * @brief Задать параметры кода активации
      */
     void setConfirmationCodeInfo(int _codeLength);

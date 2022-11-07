@@ -110,7 +110,7 @@ ScreenplayTemplatePageView::Implementation::Implementation(QWidget* _parent)
     pageNumbersAlignLeft->setChecked(true);
 
     pageSplitter->setMaximumValue(100);
-    pageSplitter->setDefaultPosition(50);
+    pageSplitter->setDefaultValue(50);
     pageSplitterLeft->setText("50%");
     pageSplitterRight->setText("50%");
 

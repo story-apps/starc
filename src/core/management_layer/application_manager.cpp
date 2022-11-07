@@ -791,6 +791,7 @@ void ApplicationManager::Implementation::showAccount()
 void ApplicationManager::Implementation::showOnboarding()
 {
     Log::info("Show onboarding screen");
+    onboardingManager->showWelcomePage();
     showContent(onboardingManager.data());
 }
 
@@ -2480,6 +2481,21 @@ void ApplicationManager::initConnections()
             });
     connect(d->settingsManager.data(), &SettingsManager::stageplayNavigatorChanged, this,
             [this] { d->projectManager->reconfigureStageplayNavigator(); });
+    //
+    connect(d->settingsManager.data(), &SettingsManager::resetToDefaultsRequested, this, [this] {
+        //
+        // Если пользователь хочет сбросить все настройки, закроем текущий проект
+        //
+        d->closeCurrentProject();
+        //
+        // ... сбросим все настройки
+        //
+        DataStorageLayer::StorageFacade::settingsStorage()->resetToDefaults();
+        //
+        // Начнём процесс работы с приложением с самого начала
+        //
+        exec({});
+    });
 
 #ifdef CLOUD_SERVICE_MANAGER
     //

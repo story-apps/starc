@@ -422,6 +422,12 @@ public:
      */
     void setDocumentFolderPath(const QString& _key, const QString& _filePath);
 
+
+    /**
+     * @brief Сбросить все заданные пользователем настройки (по-сути удаляем файл с настройками)
+     */
+    void resetToDefaults();
+
 private:
     SettingsStorage();
     friend class StorageFacade;

@@ -24,6 +24,11 @@ public:
     ~OnboardingNavigator() override;
 
     /**
+     * @brief Показать приветственную страницу
+     */
+    void showWelcomePage();
+
+    /**
      * @brief Email, который ввёл пользователь
      */
     QString email() const;

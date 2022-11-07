@@ -34,7 +34,7 @@ public:
     int maximum = 100;
     int current = 50;
 
-    std::optional<int> defaultPosition;
+    std::optional<int> defaultValue;
     qreal defaultPositionDelta = 0;
 
     /**
@@ -106,7 +106,7 @@ void Slider::setMaximumValue(int _maximum)
 
     d->maximum = _maximum;
 
-    if (d->defaultPosition.has_value()) {
+    if (d->defaultValue.has_value()) {
         d->calcDefaultPositionDelta();
     }
 
@@ -124,10 +124,9 @@ void Slider::setValue(int _value)
         return;
     }
 
-    if (d->defaultPosition.has_value()
-        && (_value >= d->defaultPosition.value() - d->defaultPositionDelta)
-        && (_value <= d->defaultPosition.value() + d->defaultPositionDelta)) {
-        d->current = d->defaultPosition.value();
+    if (d->defaultValue.has_value() && (_value >= d->defaultValue.value() - d->defaultPositionDelta)
+        && (_value <= d->defaultValue.value() + d->defaultPositionDelta)) {
+        d->current = d->defaultValue.value();
     } else {
         d->current = _value;
     }
@@ -136,19 +135,24 @@ void Slider::setValue(int _value)
     update();
 }
 
-void Slider::setDefaultPosition(int _value)
+int Slider::defaultValue() const
+{
+    return d->defaultValue.value_or(-1);
+}
+
+void Slider::setDefaultValue(int _value)
 {
     if (d->minimum > _value || _value > d->maximum) {
         return;
     }
 
-    d->defaultPosition = _value;
+    d->defaultValue = _value;
     d->calcDefaultPositionDelta();
 }
 
-void Slider::resetDefaultPosition()
+void Slider::resetDefaultValue()
 {
-    d->defaultPosition.reset();
+    d->defaultValue.reset();
 }
 
 QSize Slider::sizeHint() const
@@ -192,8 +196,8 @@ void Slider::paintEvent(QPaintEvent* _event)
     rightTrackColor.setAlphaF(Ui::DesignSystem::slider().unfilledPartOpacity());
     painter.fillRect(rightTrackRect, rightTrackColor);
 
-    if (d->defaultPosition.has_value()) {
-        const qreal startTrackWidth = trackWidth * d->defaultPosition.value() / d->maximum;
+    if (d->defaultValue.has_value()) {
+        const qreal startTrackWidth = trackWidth * d->defaultValue.value() / d->maximum;
 
         const QPointF startCenter(isRightToLeft() ? trackWidth - startTrackWidth + leftMargin
                                                   : leftMargin + startTrackWidth,

@@ -1,6 +1,8 @@
 #include "settings_navigator.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/button/button.h>
+#include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/tree/tree.h>
 
 #include <QStandardItemModel>
@@ -29,11 +31,15 @@ class SettingsNavigator::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    Widget* content = nullptr;
     Tree* tree = nullptr;
+    Button* resetToDefaults = nullptr;
 };
 
 SettingsNavigator::Implementation::Implementation(QWidget* _parent)
-    : tree(new Tree(_parent))
+    : content(new Widget(_parent))
+    , tree(new Tree(content))
+    , resetToDefaults(new Button(content))
 {
     auto createItem = [](const QString& _icon) {
         auto item = new QStandardItem;
@@ -58,6 +64,17 @@ SettingsNavigator::Implementation::Implementation(QWidget* _parent)
     tree->setModel(model);
     tree->setCurrentIndex(model->index(0, 0));
     tree->expandAll();
+    new Shadow(Qt::TopEdge, tree);
+    new Shadow(Qt::BottomEdge, tree);
+
+    resetToDefaults->setIcon(u8"\U000F0450");
+
+    auto layout = new QVBoxLayout;
+    layout->setContentsMargins({});
+    layout->setSpacing(0);
+    layout->addWidget(tree, 1);
+    layout->addWidget(resetToDefaults);
+    content->setLayout(layout);
 }
 
 
@@ -68,8 +85,6 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
     : StackWidget(_parent)
     , d(new Implementation(this))
 {
-    showDefaultPage();
-
     connect(d->tree, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
         if (_index.parent().isValid()) {
             switch (_index.parent().row()) {
@@ -145,11 +160,16 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
             }
         }
     });
+    connect(d->resetToDefaults, &Button::clicked, this, &SettingsNavigator::resetToDefaultsPressed);
+
+    showDefaultPage();
 }
+
+SettingsNavigator::~SettingsNavigator() = default;
 
 void SettingsNavigator::showDefaultPage()
 {
-    setCurrentWidget(d->tree);
+    setCurrentWidget(d->content);
 }
 
 void SettingsNavigator::updateTranslations()
@@ -172,17 +192,23 @@ void SettingsNavigator::updateTranslations()
     model->item(kComponentsIndex)->child(kComponentsAudioplayIndex)->setText(tr("Audioplay"));
     model->item(kComponentsIndex)->child(kComponentsStageplayIndex)->setText(tr("Stageplay"));
     model->item(kShortcutsIndex)->setText(tr("Shortcuts"));
+
+    d->resetToDefaults->setText(tr("Reset to defaults"));
 }
 
 void SettingsNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Widget::designSystemChangeEvent(_event);
+    StackWidget::designSystemChangeEvent(_event);
 
     setBackgroundColor(DesignSystem::color().primary());
+    d->content->setBackgroundColor(DesignSystem::color().primary());
     d->tree->setBackgroundColor(DesignSystem::color().primary());
     d->tree->setTextColor(DesignSystem::color().onPrimary());
+    d->resetToDefaults->setBackgroundColor(DesignSystem::color().secondary());
+    d->resetToDefaults->setTextColor(DesignSystem::color().secondary());
+    d->resetToDefaults->setContentsMargins(
+        DesignSystem::layout().px12(), DesignSystem::layout().px24(), DesignSystem::layout().px12(),
+        DesignSystem::layout().px12());
 }
-
-SettingsNavigator::~SettingsNavigator() = default;
 
 } // namespace Ui
