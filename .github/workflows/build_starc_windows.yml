@@ -102,7 +102,7 @@ jobs:
           dest: build/windows/starc-64.zip
 
       - name: Collect artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: windows_64 packages
           path: |
@@ -219,7 +219,7 @@ jobs:
           dest: build/windows/starc-32.zip
 
       - name: Collect artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: windows_32 packages
           path: |
