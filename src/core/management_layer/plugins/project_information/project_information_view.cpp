@@ -8,6 +8,7 @@
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/text_helper.h>
 #include <utils/helpers/ui_helper.h>
 
 #include <QAction>
@@ -100,8 +101,29 @@ ProjectInformationView::ProjectInformationView(QWidget* _parent)
 
     connect(d->projectName, &TextField::textChanged, this,
             [this] { emit nameChanged(d->projectName->text()); });
-    connect(d->projectLogline, &TextField::textChanged, this,
-            [this] { emit loglineChanged(d->projectLogline->text()); });
+    connect(d->projectLogline, &TextField::textChanged, this, [this] {
+        //
+        // Покажем статистику по количеству знаков
+        //
+        const auto wordsCount = TextHelper::wordsCount(d->projectLogline->text());
+        QString loglineInfo;
+        if (wordsCount > 0) {
+            if (wordsCount <= 25) {
+                loglineInfo = tr("Perfect logline length");
+            } else if (wordsCount <= 30) {
+                loglineInfo = tr("Good logline length");
+            } else {
+                loglineInfo = tr("Recommended logline length is 30 words");
+            }
+            loglineInfo.append(QString(" (%1)").arg(tr("%n word(s)", 0, wordsCount)));
+        }
+        d->projectLogline->setHelper(loglineInfo);
+
+        //
+        // Уведомим клиентов об изменении
+        //
+        emit loglineChanged(d->projectLogline->text());
+    });
     connect(d->projectCover, &CoverImageCard::generateCoverPressed, this,
             [this] { d->content->setCurrentWidget(d->generatorPage); });
     connect(d->projectCover, &CoverImageCard::imageChanged, this,

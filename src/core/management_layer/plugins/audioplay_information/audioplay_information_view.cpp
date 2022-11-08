@@ -7,6 +7,7 @@
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/text_helper.h>
 #include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
@@ -103,8 +104,29 @@ AudioplayInformationView::AudioplayInformationView(QWidget* _parent)
             [this] { emit nameChanged(d->audioplayName->text()); });
     connect(d->audioplayTagline, &TextField::textChanged, this,
             [this] { emit taglineChanged(d->audioplayTagline->text()); });
-    connect(d->audioplayLogline, &TextField::textChanged, this,
-            [this] { emit loglineChanged(d->audioplayLogline->text()); });
+    connect(d->audioplayLogline, &TextField::textChanged, this, [this] {
+        //
+        // Покажем статистику по количеству знаков
+        //
+        const auto wordsCount = TextHelper::wordsCount(d->audioplayLogline->text());
+        QString loglineInfo;
+        if (wordsCount > 0) {
+            if (wordsCount <= 25) {
+                loglineInfo = tr("Perfect logline length");
+            } else if (wordsCount <= 30) {
+                loglineInfo = tr("Good logline length");
+            } else {
+                loglineInfo = tr("Recommended logline length is 30 words");
+            }
+            loglineInfo.append(QString(" (%1)").arg(tr("%n word(s)", 0, wordsCount)));
+        }
+        d->audioplayLogline->setHelper(loglineInfo);
+
+        //
+        // Уведомим клиентов об изменении
+        //
+        emit loglineChanged(d->audioplayLogline->text());
+    });
     connect(d->audioplayLogline, &TextField::trailingIconPressed, this, [this] {
         auto dialog = new LoglineGeneratorDialog(topLevelWidget());
         connect(dialog, &LoglineGeneratorDialog::donePressed, this, [this, dialog] {

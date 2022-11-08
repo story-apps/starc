@@ -7,6 +7,7 @@
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/text_helper.h>
 #include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
@@ -103,8 +104,29 @@ ComicBookInformationView::ComicBookInformationView(QWidget* _parent)
             [this] { emit nameChanged(d->comicBookName->text()); });
     connect(d->comicBookTagline, &TextField::textChanged, this,
             [this] { emit taglineChanged(d->comicBookTagline->text()); });
-    connect(d->comicBookLogline, &TextField::textChanged, this,
-            [this] { emit loglineChanged(d->comicBookLogline->text()); });
+    connect(d->comicBookLogline, &TextField::textChanged, this, [this] {
+        //
+        // Покажем статистику по количеству знаков
+        //
+        const auto wordsCount = TextHelper::wordsCount(d->comicBookLogline->text());
+        QString loglineInfo;
+        if (wordsCount > 0) {
+            if (wordsCount <= 25) {
+                loglineInfo = tr("Perfect logline length");
+            } else if (wordsCount <= 30) {
+                loglineInfo = tr("Good logline length");
+            } else {
+                loglineInfo = tr("Recommended logline length is 30 words");
+            }
+            loglineInfo.append(QString(" (%1)").arg(tr("%n word(s)", 0, wordsCount)));
+        }
+        d->comicBookLogline->setHelper(loglineInfo);
+
+        //
+        // Уведомим клиентов об изменении
+        //
+        emit loglineChanged(d->comicBookLogline->text());
+    });
     connect(d->comicBookLogline, &TextField::trailingIconPressed, this, [this] {
         auto dialog = new LoglineGeneratorDialog(topLevelWidget());
         connect(dialog, &LoglineGeneratorDialog::donePressed, this, [this, dialog] {
