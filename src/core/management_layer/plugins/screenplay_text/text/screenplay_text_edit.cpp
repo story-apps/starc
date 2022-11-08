@@ -1421,7 +1421,7 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
 
     auto splitAction = new QAction(this);
     splitAction->setSeparator(true);
-    splitAction->setShortcut(QKeySequence("Ctrl+D"));
+    splitAction->setWhatsThis(QKeySequence("Ctrl+D").toString(QKeySequence::NativeText));
     if (cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
         splitAction->setIconText(u8"\U000f10e7");

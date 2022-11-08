@@ -610,7 +610,6 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
                         actionRect.top()),
                 QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
                        actionRect.height()));
-            auto it = action->iconText(), t = action->text();
             configurePen(action,
                          action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
             painter.setFont(Ui::DesignSystem::font().iconsMid());
