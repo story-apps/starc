@@ -2492,9 +2492,12 @@ void ApplicationManager::initConnections()
         //
         DataStorageLayer::StorageFacade::settingsStorage()->resetToDefaults();
         //
-        // Начнём процесс работы с приложением с самого начала
+        // Перезапустим приложение
         //
-        exec({});
+        QApplication::quit();
+        if (QApplication::arguments().size() > 0) {
+            QProcess::startDetached(QApplication::arguments().constFirst(), {});
+        }
     });
 
 #ifdef CLOUD_SERVICE_MANAGER

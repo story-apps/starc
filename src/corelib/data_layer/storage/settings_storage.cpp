@@ -55,6 +55,11 @@ public:
 
 
     /**
+     * @brief Возможно ли сохранять параметры
+     */
+    bool isReadOnly = false;
+
+    /**
      * @brief Настройки приложения
      */
     QSettings appSettings;
@@ -960,6 +965,10 @@ SettingsStorage::~SettingsStorage() = default;
 void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
                                SettingsStorage::SettingsPlace _settingsPlace)
 {
+    if (d->isReadOnly) {
+        return;
+    }
+
     //
     // Кэшируем значение
     //
@@ -979,6 +988,10 @@ void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
 void SettingsStorage::setValues(const QString& _valuesGroup, const QVariantMap& _values,
                                 SettingsStorage::SettingsPlace _settingsPlace)
 {
+    if (d->isReadOnly) {
+        return;
+    }
+
     //
     // Кэшируем значение
     //
@@ -1168,8 +1181,16 @@ void SettingsStorage::setDocumentFolderPath(const QString& _key, const QString& 
 
 void SettingsStorage::resetToDefaults()
 {
+    //
+    // Запрещаем писать настройки до перезагрузки приложения
+    //
+    d->isReadOnly = true;
+
+    //
+    // Стираем всё, что было изменено
+    //
     d->appSettings.clear();
-    d->cachedValuesApp.clear();
+    d->appSettings.sync();
 }
 
 SettingsStorage::SettingsStorage()
