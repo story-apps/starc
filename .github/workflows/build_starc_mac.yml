@@ -16,7 +16,7 @@ jobs:
   build_mac:
     name: Build Mac OS X version
     runs-on: macos-12
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - name: Checkout Sources for push or create tag event
         if: ${{ github.event_name != 'pull_request' }}
