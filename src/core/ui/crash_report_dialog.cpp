@@ -73,6 +73,7 @@ CrashReportDialog::Implementation::Implementation(QWidget* _parent)
 
     crashDetails->setEnterMakesNewLine(true);
 
+    contactEmail->setCapitalizeWords(false);
     contactEmail->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
     buttonsLayout->setContentsMargins({});
