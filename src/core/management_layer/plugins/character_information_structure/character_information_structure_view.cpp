@@ -13,12 +13,12 @@ namespace Ui {
 namespace {
 enum {
     kMainIndex = 0,
+    kStoryIndex,
     kBasicIndex,
     kPhysiqueIndex,
     kLifeIndex,
     kAttitudeIndex,
     kBiographyIndex,
-    kStoryIndex,
 };
 } // namespace
 
@@ -49,16 +49,16 @@ CharacterInformationStructureView::Implementation::Implementation(QWidget* _pare
         item->setEditable(false);
         return item;
     };
-    auto reportsModel = new QStandardItemModel(traits);
-    reportsModel->appendRow(createItem(u8"\U000F0007"));
-    reportsModel->appendRow(createItem(u8"\U000F1570"));
-    reportsModel->appendRow(createItem(u8"\U000F0FD7"));
-    reportsModel->appendRow(createItem(u8"\U000F1744"));
-    reportsModel->appendRow(createItem(u8"\U000F133E"));
-    reportsModel->appendRow(createItem(u8"\U000F06BC"));
-    reportsModel->appendRow(createItem(u8"\U000F0306"));
-    traits->setModel(reportsModel);
-    traits->setCurrentIndex(reportsModel->index(0, 0));
+    auto traitsModel = new QStandardItemModel(traits);
+    traitsModel->appendRow(createItem(u8"\U000F0007"));
+    traitsModel->appendRow(createItem(u8"\U000F0306"));
+    traitsModel->appendRow(createItem(u8"\U000F1570"));
+    traitsModel->appendRow(createItem(u8"\U000F0FD7"));
+    traitsModel->appendRow(createItem(u8"\U000F1744"));
+    traitsModel->appendRow(createItem(u8"\U000F133E"));
+    traitsModel->appendRow(createItem(u8"\U000F06BC"));
+    traits->setModel(traitsModel);
+    traits->setCurrentIndex(traitsModel->index(0, 0));
 }
 
 
@@ -107,14 +107,14 @@ void CharacterInformationStructureView::setTitle(const QString& _title)
 
 void CharacterInformationStructureView::updateTranslations()
 {
-    auto reportsModel = qobject_cast<QStandardItemModel*>(d->traits->model());
-    reportsModel->item(kMainIndex)->setText(tr("Main"));
-    reportsModel->item(kBasicIndex)->setText(tr("Personal info"));
-    reportsModel->item(kPhysiqueIndex)->setText(tr("Physique"));
-    reportsModel->item(kLifeIndex)->setText(tr("Life"));
-    reportsModel->item(kAttitudeIndex)->setText(tr("Attitude"));
-    reportsModel->item(kBiographyIndex)->setText(tr("Biography"));
-    reportsModel->item(kStoryIndex)->setText(tr("Story"));
+    auto traitsModel = qobject_cast<QStandardItemModel*>(d->traits->model());
+    traitsModel->item(kStoryIndex)->setText(tr("Story"));
+    traitsModel->item(kMainIndex)->setText(tr("Main"));
+    traitsModel->item(kBasicIndex)->setText(tr("Personal info"));
+    traitsModel->item(kPhysiqueIndex)->setText(tr("Physique"));
+    traitsModel->item(kLifeIndex)->setText(tr("Life"));
+    traitsModel->item(kAttitudeIndex)->setText(tr("Attitude"));
+    traitsModel->item(kBiographyIndex)->setText(tr("Biography"));
 }
 
 void CharacterInformationStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
