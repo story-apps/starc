@@ -26,15 +26,14 @@ const QLatin1String kImagesPathKey("widgets/image-files-path");
 constexpr int kInvalidImageIndex = -1;
 constexpr int kAddImageIndex = std::numeric_limits<int>::max();
 
-QSizeF imageSize()
+qreal finalImageSize(qreal _size)
 {
-    qreal size = DesignSystem::layout().px(90);
-    return { size, size };
+    return _size > 0 ? _size : DesignSystem::layout().px(90);
 }
 
-qreal imagesSpacing()
+qreal finalImageSpacing(qreal _spacing)
 {
-    return DesignSystem::layout().px16();
+    return _spacing > 0 ? _spacing : DesignSystem::layout().px16();
 }
 
 } // namespace
@@ -49,6 +48,11 @@ public:
      * @brief Сколько всего элементов нужно отображать (включая кнопку добавления)
      */
     int totalImages() const;
+
+    /**
+     * @brief Шрифт кнопки очистки
+     */
+    QFont clearButtonFont() const;
 
     /**
      * @brief Область кнопку удаления в заданной области изображения
@@ -91,6 +95,17 @@ public:
     bool isReadOnly = false;
 
     /**
+     * @brief Видна ли кнопка добавления изображений
+     */
+    bool isAddButtonVisible = true;
+
+    /**
+     * @brief Параметры внешнего вида изображений
+     */
+    qreal imageSize = 0.0;
+    qreal imageSpacing = 0.0;
+
+    /**
      * @brief Список изображений для отображения
      */
     QVector<Domain::DocumentImage> images;
@@ -118,13 +133,22 @@ ImagesList::Implementation::Implementation(ImagesList* _q)
 
 int ImagesList::Implementation::totalImages() const
 {
-    return images.size() + (isReadOnly ? 0 : 1);
+    return images.size() + (isReadOnly || !isAddButtonVisible ? 0 : 1);
+}
+
+QFont ImagesList::Implementation::clearButtonFont() const
+{
+    return finalImageSize(imageSize) > Ui::DesignSystem::layout().px(100)
+        ? Ui::DesignSystem::font().iconsMid()
+        : Ui::DesignSystem::font().iconsSmall();
 }
 
 QRectF ImagesList::Implementation::clearButtonRect(const QRectF& _buttonRect) const
 {
     const qreal iconMargin = Ui::DesignSystem::layout().px4();
-    const qreal iconSize = Ui::DesignSystem::layout().px16();
+    const qreal iconSize = finalImageSize(imageSize) > Ui::DesignSystem::layout().px(100)
+        ? Ui::DesignSystem::layout().px24()
+        : Ui::DesignSystem::layout().px16();
     const qreal left = _buttonRect.right() - iconSize - iconMargin;
     const qreal top = _buttonRect.top() + iconMargin;
     return { left, top, iconSize, iconSize };
@@ -133,8 +157,8 @@ QRectF ImagesList::Implementation::clearButtonRect(const QRectF& _buttonRect) co
 ImagesList::Implementation::ButtonInfo ImagesList::Implementation::buttonInfo(
     const QPoint& _position) const
 {
-    const auto size = imageSize().width();
-    const auto spacing = imagesSpacing();
+    const auto size = finalImageSize(imageSize);
+    const auto spacing = finalImageSpacing(imageSpacing);
     auto x = q->contentsRect().x();
     auto y = q->contentsRect().y();
     for (int index = 0; index < images.size(); ++index) {
@@ -160,8 +184,8 @@ ImagesList::Implementation::ButtonInfo ImagesList::Implementation::buttonInfo(
 
 QRectF ImagesList::Implementation::imageRect(int _imageIndex) const
 {
-    const auto size = imageSize().width();
-    const auto spacing = imagesSpacing();
+    const auto size = finalImageSize(imageSize);
+    const auto spacing = finalImageSpacing(imageSpacing);
     auto x = q->contentsRect().x();
     auto y = q->contentsRect().y();
     for (int index = 0; index < images.size(); ++index) {
@@ -183,13 +207,12 @@ QRectF ImagesList::Implementation::imageRect(int _imageIndex) const
 void ImagesList::Implementation::updateDisplayImages()
 {
     displayImages.clear();
-    const auto size = imageSize().toSize();
+    const auto size = finalImageSize(imageSize);
     for (const auto& image : std::as_const(images)) {
-        const auto scaledImage
-            = image.image.scaled(size, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-        displayImages.append(scaledImage.copy((scaledImage.width() - size.width()) / 2,
-                                              (scaledImage.height() - size.height()) / 2,
-                                              size.width(), size.height()));
+        const auto scaledImage = image.image.scaled(size, size, Qt::KeepAspectRatioByExpanding,
+                                                    Qt::SmoothTransformation);
+        displayImages.append(scaledImage.copy((scaledImage.width() - size) / 2,
+                                              (scaledImage.height() - size) / 2, size, size));
     }
 
     q->update();
@@ -235,8 +258,39 @@ ImagesList::ImagesList(QWidget* _parent)
     });
 }
 
-ImagesList::~ImagesList()
+ImagesList::~ImagesList() = default;
+
+void ImagesList::setAddButtonVisible(bool _visible)
 {
+    if (d->isAddButtonVisible == _visible) {
+        return;
+    }
+
+    d->isAddButtonVisible = _visible;
+    updateGeometry();
+    update();
+}
+
+void ImagesList::setImageSize(qreal _size)
+{
+    if (qFuzzyCompare(d->imageSize, _size)) {
+        return;
+    }
+
+    d->imageSize = _size;
+    updateGeometry();
+    update();
+}
+
+void ImagesList::setImageSpacing(qreal _spacing)
+{
+    if (qFuzzyCompare(d->imageSpacing, _spacing)) {
+        return;
+    }
+
+    d->imageSpacing = _spacing;
+    updateGeometry();
+    update();
 }
 
 void ImagesList::setImages(const QVector<Domain::DocumentImage>& _images)
@@ -275,11 +329,41 @@ void ImagesList::setReadOnly(bool _readOnly)
     update();
 }
 
+void ImagesList::addImages()
+{
+    QSettings settings;
+    const auto imagesFolder = settings.value(kImagesPathKey).toString();
+    const auto images = QFileDialog::getOpenFileNames(
+        window(), tr("Choose image"), imagesFolder,
+        QString("%1 (*.png *.jpeg *.jpg *.bmp *.tiff *.tif *.gif)").arg(tr("Images")));
+    if (images.isEmpty()) {
+        return;
+    }
+
+    settings.setValue(kImagesPathKey, images.constLast());
+
+    QVector<QPixmap> addedImages;
+    for (const auto& imagePath : images) {
+        QPixmap image(imagePath);
+        if (image.isNull()) {
+            continue;
+        }
+
+        addedImages.append(image);
+    }
+
+    if (addedImages.isEmpty()) {
+        return;
+    }
+
+    emit imagesAdded(addedImages);
+}
+
 QSize ImagesList::sizeHint() const
 {
-    const auto size = imageSize();
-    return QRect(0, 0, d->totalImages() * (size.width() + imagesSpacing()) - imagesSpacing(),
-                 size.height())
+    const auto size = finalImageSize(d->imageSize);
+    const auto spacing = finalImageSpacing(d->imageSpacing);
+    return QRect(0, 0, d->totalImages() * (size + spacing) - spacing, size)
         .marginsAdded(contentsMargins())
         .size();
 }
@@ -288,8 +372,8 @@ int ImagesList::heightForWidth(int _width) const
 {
     const int availableWidth = _width - contentsMargins().left() - contentsMargins().right();
     const auto totalImages = d->totalImages();
-    const auto size = imageSize().width();
-    const auto spacing = imagesSpacing();
+    const auto size = finalImageSize(d->imageSize);
+    const auto spacing = finalImageSpacing(d->imageSpacing);
     auto x = 0.0;
     int imagesInRow = 1;
     for (; imagesInRow < totalImages; ++imagesInRow) {
@@ -313,8 +397,8 @@ void ImagesList::paintEvent(QPaintEvent* _event)
     //
     // Рисуем изображения
     //
-    const auto size = imageSize().width();
-    const auto spacing = imagesSpacing();
+    const auto size = finalImageSize(d->imageSize);
+    const auto spacing = finalImageSpacing(d->imageSpacing);
     const auto radius = DesignSystem::button().borderRadius();
     auto x = contentsRect().x();
     auto y = contentsRect().y();
@@ -337,7 +421,7 @@ void ImagesList::paintEvent(QPaintEvent* _event)
             //
             if (!d->isReadOnly) {
                 painter.setPen(Ui::DesignSystem::color().onShadow());
-                painter.setFont(Ui::DesignSystem::font().iconsSmall());
+                painter.setFont(d->clearButtonFont());
                 painter.drawText(d->clearButtonRect(imageRect), Qt::AlignCenter, u8"\U000F0156");
             }
 
@@ -355,7 +439,7 @@ void ImagesList::paintEvent(QPaintEvent* _event)
     //
     // Рисуем кнопку добавления изображений
     //
-    if (!d->isReadOnly) {
+    if (!d->isReadOnly && d->isAddButtonVisible) {
         const QRectF addButtonRect(x, y, size, size);
         painter.setPen(Qt::NoPen);
         painter.setBrush(ColorHelper::nearby(backgroundColor()));
@@ -412,6 +496,8 @@ void ImagesList::mouseMoveEvent(QMouseEvent* _event)
                 animation = imageAnimationIter.value();
             } else {
                 animation = new QVariantAnimation(this);
+                animation->setDuration(240);
+                animation->setEasingCurve(QEasingCurve::OutQuad);
                 animation->setStartValue(0.0);
                 animation->setEndValue(1.0);
                 connect(animation, &QVariantAnimation::valueChanged, this,
@@ -464,32 +550,7 @@ void ImagesList::mouseReleaseEvent(QMouseEvent* _event)
     // Нажата кнопка добалвения фотографий
     //
     if (buttonInfo.isAddButton) {
-        QSettings settings;
-        const auto imagesFolder = settings.value(kImagesPathKey).toString();
-        const auto images = QFileDialog::getOpenFileNames(
-            window(), tr("Choose image"), imagesFolder,
-            QString("%1 (*.png *.jpeg *.jpg *.bmp *.tiff *.tif *.gif)").arg(tr("Images")));
-        if (images.isEmpty()) {
-            return;
-        }
-
-        settings.setValue(kImagesPathKey, images.constLast());
-
-        QVector<QPixmap> addedImages;
-        for (const auto& imagePath : images) {
-            QPixmap image(imagePath);
-            if (image.isNull()) {
-                continue;
-            }
-
-            addedImages.append(image);
-        }
-
-        if (addedImages.isEmpty()) {
-            return;
-        }
-
-        emit imagesAdded(addedImages);
+        addImages();
     }
     //
     // Нажато изображения

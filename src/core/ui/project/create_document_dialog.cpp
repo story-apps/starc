@@ -84,6 +84,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     if (settingsValue(DataStorageLayer::kComponentsStageplayAvailableKey).toBool()) {
         typesModel->appendRow(makeItem(Domain::DocumentObjectType::Stageplay));
     }
+    typesModel->appendRow(makeItem(Domain::DocumentObjectType::ImagesGallery));
 
     UiHelper::setFocusPolicyRecursively(documentType, Qt::NoFocus);
     documentType->setModel(typesModel);
@@ -121,6 +122,8 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
           tr("Create a document set to streamline your work on the audio drama, or podcast.") },
         { Domain::DocumentObjectType::Stageplay,
           tr("Create a document set to streamline your work on the stage play, or musical.") },
+        { Domain::DocumentObjectType::ImagesGallery,
+          tr("Create a moodboard with atmospheric images or photos.") },
     };
 
     const auto documentTypeData = static_cast<Domain::DocumentObjectType>(
@@ -288,6 +291,11 @@ void CreateDocumentDialog::updateTranslations()
 
         case Domain::DocumentObjectType::Stageplay: {
             item->setText(tr("Stageplay"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::ImagesGallery: {
+            item->setText(tr("Images gallery"));
             break;
         }
 

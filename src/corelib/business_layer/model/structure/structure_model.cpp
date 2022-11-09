@@ -353,6 +353,12 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         break;
     }
 
+    case DocumentObjectType::ImagesGallery: {
+        appendItem(createItem(_type, !_name.isEmpty() ? _name : tr("Images gallery")), parentItem,
+                   _content);
+        break;
+    }
+
     default: {
         Q_ASSERT(false);
         break;
@@ -597,7 +603,8 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     //
     // Элемент можно только перемещать
     //
-    case Domain::DocumentObjectType::SimpleText: {
+    case Domain::DocumentObjectType::SimpleText:
+    case Domain::DocumentObjectType::ImagesGallery: {
         return defaultFlags | Qt::ItemIsDragEnabled;
     }
 

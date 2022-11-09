@@ -66,3 +66,7 @@ exists (stageplay_statistics/stageplay_statistics.pro) {
 exists (screenplay_cards/screenplay_cards.pro) {
     SUBDIRS += screenplay_cards
 }
+
+exists (screenplay_cards/images_gallery.pro) {
+    SUBDIRS += images_gallery
+}

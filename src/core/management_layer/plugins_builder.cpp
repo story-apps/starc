@@ -62,6 +62,8 @@ const QString kStageplayTitlePageEditorMime = QStringLiteral("application/x-star
 const QString kStageplayTextEditorMime = QStringLiteral("application/x-starc/editor/stageplay/text");
 const QString kStageplayTextNavigatorMime = QStringLiteral("application/x-starc/navigator/stageplay/text");
 const QString kStageplayStatisticsViewMime = QStringLiteral("application/x-starc/view/stageplay/statistics");
+//
+const QString kImagesGalleryMime = QStringLiteral("application/x-starc/editor/images/images-gallery");
 
 /**
  * @brief Карта соотвествия майм-типов редактора к навигатору
@@ -125,6 +127,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         //
         { "application/x-starc/document/folder",     { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/text",       { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
+        { "application/x-starc/document/images-gallery",  { { kImagesGalleryMime, u8"\U000F02F9" } } },
         //,
         { "application/x-starc/document/recycle-bin",       { { "application/x-starc/editor/recycle-bin", u8"\U000f01b4" } } }
       };
@@ -180,6 +183,8 @@ const QHash<QString, QString> kMimeToPlugin
         //
         { "application/x-starc/editor/locations/map", "*locationsmapplugin*" },
         { "application/x-starc/editor/location/information", "*locationinformationplugin*" },
+        //
+        { kImagesGalleryMime, "*imagesgalleryplugin*" },
         //
         { "application/x-starc/editor/recycle-bin", "*recyclebinplugin*" },
       };
@@ -459,7 +464,10 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
             //,
             { "application/x-starc/document/recycle-bin",
               { { "application/x-starc/editor/recycle-bin",
-                  QApplication::translate("ProjectPluginsBuilder", "Recycle bin summary info") } } }
+                  QApplication::translate("ProjectPluginsBuilder", "Recycle bin summary info") } } },
+            { "application/x-starc/document/images-gallery",
+              { { kImagesGalleryMime,
+                  QApplication::translate("ProjectPluginsBuilder", "Images gallery") } } },
              };
     // clang-format on
     return descriptions.value(_documentMimeType).value(_editorMimeType);

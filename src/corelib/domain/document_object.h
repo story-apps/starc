@@ -82,7 +82,8 @@ enum class DocumentObjectType {
     SimpleText = 100002,
     MindMap = 100003,
     Image = 100004,
-    Link = 100005,
+    ImagesGallery = 100005,
+    Link = 100006,
 
     /**
     //    Item = 301,

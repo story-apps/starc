@@ -13,6 +13,7 @@
 #include <business_layer/model/comic_book/comic_book_synopsis_model.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
+#include <business_layer/model/images/images_gallery_model.h>
 #include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/project/project_information_model.h>
@@ -843,6 +844,11 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         case Domain::DocumentObjectType::Folder:
         case Domain::DocumentObjectType::SimpleText: {
             model = new BusinessLayer::SimpleTextModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::ImagesGallery: {
+            model = new BusinessLayer::ImagesGalleryModel;
             break;
         }
 

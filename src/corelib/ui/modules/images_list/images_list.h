@@ -21,6 +21,21 @@ public:
     ~ImagesList() override;
 
     /**
+     * @brief Задать видимость кнопки добавления изображений
+     */
+    void setAddButtonVisible(bool _visible);
+
+    /**
+     * @brief Задать размер изображений (т.к. изображения квадратные, используется единое значение)
+     */
+    void setImageSize(qreal _size);
+
+    /**
+     * @brief Задать расстояние между изображениями
+     */
+    void setImageSpacing(qreal _spacing);
+
+    /**
      * @brief Задать список изображений
      */
     void setImages(const QVector<Domain::DocumentImage>& _images);
@@ -29,6 +44,11 @@ public:
      * @brief Задать возможность редактирования изображений
      */
     void setReadOnly(bool _readOnly);
+
+    /**
+     * @brief Активировать процесс добавления изображения
+     */
+    void addImages();
 
     /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
