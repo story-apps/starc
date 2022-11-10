@@ -105,7 +105,11 @@ void CommentsModel::Implementation::saveReviewMark(TextModelTextItem* _textItem,
             //
             // Смотрим заметки которые есть в предыдущем блоке
             //
-            auto previousTextItem = modelTextItems.at(modelTextItems.indexOf(_textItem) - 1);
+            const auto previewTextItemIndex = modelTextItems.indexOf(_textItem) - 1;
+            if (previewTextItemIndex < 0) {
+                break;
+            }
+            auto previousTextItem = modelTextItems.at(previewTextItemIndex);
             QVector<ReviewMarkWrapper> previosTextItemReviewMarkWrappers;
             for (const auto& reviewMarkWrapper : std::as_const(reviewMarks)) {
                 if (reviewMarkWrapper.items.contains(previousTextItem)) {
