@@ -612,6 +612,11 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
     // ... значение нижней позиции последнего блока относительно начала страницы
     //
     qreal lastBlockHeight = 0.0;
+    qreal beforeLastBlockHeight = 0.0;
+    auto setLastBlockHeight = [&lastBlockHeight, &beforeLastBlockHeight](qreal _height) {
+        beforeLastBlockHeight = lastBlockHeight;
+        lastBlockHeight = _height;
+    };
     currentBlockInfo = {};
     bool isFirstChangedBlock = true;
     while (block.isValid()) {
@@ -649,7 +654,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             // и очищаем параметры относящиеся к таблице
             //
             else {
-                lastBlockHeight = currentBlockInfo.tableBottom;
+                setLastBlockHeight(currentBlockInfo.tableBottom);
                 currentBlockInfo.inTable = false;
                 currentBlockInfo.inFirstColumn = false;
                 currentBlockInfo.tableTop = std::numeric_limits<qreal>::min();
@@ -674,7 +679,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             cursor.setPosition(block.position());
             if (!cursor.inFirstColumn()) {
                 currentBlockInfo.inFirstColumn = false;
-                lastBlockHeight = currentBlockInfo.tableTop;
+                setLastBlockHeight(currentBlockInfo.tableTop);
             }
         }
 
@@ -683,7 +688,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         // о высоте предыдущего блока, какой бы она ни была
         //
         if (block.blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
-            lastBlockHeight = 0;
+            setLastBlockHeight(0);
         }
 
         //
@@ -755,11 +760,11 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             // ... то корректируем позицию
             //
             if (atPageEnd) {
-                lastBlockHeight = 0;
+                setLastBlockHeight(0);
             } else if (atPageBreak) {
-                lastBlockHeight += blockHeight - pageHeight;
+                setLastBlockHeight(lastBlockHeight + blockHeight - pageHeight);
             } else {
-                lastBlockHeight += blockHeight;
+                setLastBlockHeight(lastBlockHeight + blockHeight);
             }
             //
             // ... и переходим к следующему блоку
@@ -786,7 +791,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             const auto maxDecorationBlocks = 2;
             for (int i = 0; i < maxDecorationBlocks; ++i) {
                 if (topIndex == 0) {
-                    lastBlockHeight = 0;
+                    setLastBlockHeight(0);
                     break;
                 }
 
@@ -799,7 +804,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
 
                 block = block.previous();
                 --topIndex;
-                lastBlockHeight = blockItems[topIndex].top;
+                setLastBlockHeight(blockItems[topIndex].top);
             }
             currentBlockInfo.number = topIndex;
 
@@ -850,9 +855,16 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 cursor.setBlockFormat(breakStartFormat);
             }
             //
-            // ... и продолжим со следующего блока
+            // ... и продолжим с предыдущего блока, т.к. тут мог быть разрыв в реплике например
             //
-            block = cursor.block();
+            block = cursor.block().previous();
+            --currentBlockInfo.number;
+            lastBlockHeight = beforeLastBlockHeight;
+            //
+            // ... а также сбрасываем закешированную информацию о предыдущем блоке, чтобы он
+            //     пересчитывался со следующими за ним блоками
+            //
+            blockItems[currentBlockInfo.number] = {};
             continue;
         }
         //
@@ -878,7 +890,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                     //
                     // ... восстанавливаем последнюю высоту от предыдущего элемента
                     //
-                    lastBlockHeight = blockItems[currentBlockInfo.number].top;
+                    setLastBlockHeight(blockItems[currentBlockInfo.number].top);
                 } while (cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                          && !cursor.blockFormat().boolProperty(
                              TextBlockStyle::PropertyIsBreakCorrectionStart));
@@ -987,7 +999,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                     //
                     // и идём дальше
                     //
-                    lastBlockHeight = 0;
+                    setLastBlockHeight(0);
                 }
                 //
                 // В противном случае, просто переносим блок на следующую страницу
@@ -1208,7 +1220,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                     //
                     // и идём дальше
                     //
-                    lastBlockHeight = 0;
+                    setLastBlockHeight(0);
                 }
                 //
                 // В противном случае разрываем
@@ -1251,7 +1263,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                                 + blockFormat.topMargin() + blockFormat.bottomMargin();
                             blockItems[currentBlockInfo.number++]
                                 = BlockInfo{ breakStartBlockHeight, lastBlockHeight, blockType };
-                            lastBlockHeight += breakStartBlockHeight;
+                            setLastBlockHeight(lastBlockHeight + breakStartBlockHeight);
                             //
                             // ... если после разрыва остался пробел, уберём его
                             //
@@ -1291,7 +1303,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                             block = block.next();
                             blockItems[currentBlockInfo.number++]
                                 = BlockInfo{ breakEndBlockHeight, lastBlockHeight, blockType };
-                            lastBlockHeight += breakEndBlockHeight;
+                            setLastBlockHeight(lastBlockHeight + breakEndBlockHeight);
                             //
                             // ... помечаем, что разорвать удалось
                             //
@@ -1403,7 +1415,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                                         * previousBlock.layout()->lineCount()
                                     + previousBlockFormat.topMargin()
                                     + previousBlockFormat.bottomMargin();
-                                lastBlockHeight -= previousBlockHeight;
+                                setLastBlockHeight(lastBlockHeight - previousBlockHeight);
                                 --currentBlockInfo.number;
                                 breakDialogue(previousBlockFormat, previousBlockHeight, pageHeight,
                                               currentBlockWidth(), cursor, previousBlock,
@@ -1442,7 +1454,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                     //
                     // и идём дальше
                     //
-                    lastBlockHeight = 0;
+                    setLastBlockHeight(0);
                 }
                 //
                 // Если на разрыве между страниц
@@ -1528,7 +1540,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                             //
                             // ... обозначаем последнюю высоту
                             //
-                            lastBlockHeight = breakEndBlockHeight;
+                            setLastBlockHeight(breakEndBlockHeight);
                             //
                             // ... помечаем, что разорвать удалось
                             //
@@ -1616,7 +1628,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             //
             // и идём дальше
             //
-            lastBlockHeight += blockHeight;
+            setLastBlockHeight(lastBlockHeight + blockHeight);
         }
 
         block = block.next();
