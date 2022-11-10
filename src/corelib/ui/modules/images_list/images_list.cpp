@@ -2,12 +2,15 @@
 
 #include "images_list_preview.h"
 
+#include <3rd_party/webloader/src/NetworkRequestLoader.h>
 #include <domain/document_object.h>
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QFileDialog>
+#include <QMimeData>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPixmap>
@@ -119,6 +122,12 @@ public:
     QHash<int, QVariantAnimation*> imageToOverlayAnimation;
 
     /**
+     * @brief Параметры визуализации затаскивания картинок на виджет мышкой
+     */
+    bool isDragActive = false;
+    QVariantAnimation dragIndicationOpacityAnimation;
+
+    /**
      * @brief Виджет для предспросмотра фотографий
      */
     ImagesListPreview* preview = nullptr;
@@ -128,6 +137,11 @@ ImagesList::Implementation::Implementation(ImagesList* _q)
     : q(_q)
     , preview(new ImagesListPreview(q->topLevelWidget()))
 {
+    dragIndicationOpacityAnimation.setStartValue(0.0);
+    dragIndicationOpacityAnimation.setEndValue(1.0);
+    dragIndicationOpacityAnimation.setDuration(240);
+    dragIndicationOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
+
     preview->hide();
 }
 
@@ -245,12 +259,15 @@ ImagesList::ImagesList(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
+    setAcceptDrops(true);
     setAttribute(Qt::WA_Hover);
     setMouseTracking(true);
     QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     sizePolicy.setHeightForWidth(true);
     setSizePolicy(sizePolicy);
 
+    connect(&d->dragIndicationOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&ImagesList::update));
     connect(d->preview, &ImagesListPreview::currentItemIndexChanged, this, [this](int _imageIndex) {
         const auto imageRect = d->imageRect(_imageIndex);
         d->preview->setCurrentImageSourceRect(
@@ -455,6 +472,34 @@ void ImagesList::paintEvent(QPaintEvent* _event)
             painter.drawText(addButtonRect, Qt::AlignCenter, u8"\U000F0EDB");
         }
     }
+
+    //
+    // Если в режиме вставки из буфера
+    //
+    if (!d->isReadOnly
+        && (d->isDragActive
+            || d->dragIndicationOpacityAnimation.state() == QVariantAnimation::Running)) {
+        painter.setOpacity(d->dragIndicationOpacityAnimation.currentValue().toReal());
+        //
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(Ui::DesignSystem::color().secondary());
+        const auto cardRect = contentsRect();
+        const auto borderRadius = Ui::DesignSystem::card().borderRadius();
+        painter.drawRoundedRect(cardRect, borderRadius, borderRadius);
+        //
+        painter.setPen(Ui::DesignSystem::color().onSecondary());
+        painter.setBrush(Qt::NoBrush);
+        auto iconFont = Ui::DesignSystem::font().iconsForEditors();
+        iconFont.setPixelSize(Ui::DesignSystem::layout().px(82));
+        if (TextHelper::fineLineSpacing(iconFont) > cardRect.height() / 2) {
+            iconFont.setPixelSize(Ui::DesignSystem::layout().px48());
+        }
+        painter.setFont(iconFont);
+        painter.drawText(cardRect, Qt::AlignCenter, u8"\U000F01DA");
+        //
+        painter.setOpacity(1.0);
+        return;
+    }
 }
 
 void ImagesList::leaveEvent(QEvent* _event)
@@ -573,6 +618,106 @@ void ImagesList::mouseReleaseEvent(QMouseEvent* _event)
                        buttonInfo.imageRect.size()));
         }
     }
+}
+
+void ImagesList::dragEnterEvent(QDragEnterEvent* _event)
+{
+    if (d->isReadOnly) {
+        _event->ignore();
+        return;
+    }
+
+    _event->acceptProposedAction();
+
+    d->isDragActive = true;
+    d->dragIndicationOpacityAnimation.setDirection(QVariantAnimation::Forward);
+    d->dragIndicationOpacityAnimation.start();
+}
+
+void ImagesList::dragMoveEvent(QDragMoveEvent* _event)
+{
+    if (d->isReadOnly) {
+        _event->ignore();
+        return;
+    }
+
+    _event->acceptProposedAction();
+}
+
+void ImagesList::dragLeaveEvent(QDragLeaveEvent* _event)
+{
+    if (d->isReadOnly) {
+        _event->ignore();
+        return;
+    }
+
+    _event->accept();
+    d->isDragActive = false;
+    d->dragIndicationOpacityAnimation.setDirection(QVariantAnimation::Backward);
+    d->dragIndicationOpacityAnimation.start();
+}
+
+void ImagesList::dropEvent(QDropEvent* _event)
+{
+    if (d->isReadOnly) {
+        _event->ignore();
+        return;
+    }
+
+    QVector<QPixmap> droppedImages;
+    const QMimeData* mimeData = _event->mimeData();
+    //
+    // Первым делом проверяем список ссылок, возможно выбраны сразу несколько фотогафий
+    //
+    if (mimeData->hasUrls()) {
+        for (const auto& url : mimeData->urls()) {
+            //
+            // Обрабатываем только изображения
+            //
+            const QString urlString = url.toString().toLower();
+            if (urlString.contains(".png") || urlString.contains(".jpg")
+                || urlString.contains(".jpeg") || urlString.contains(".gif")
+                || urlString.contains(".tiff") || urlString.contains(".bmp")) {
+                //
+                // ... локальные считываем из файла
+                //
+                if (url.isLocalFile()) {
+                    droppedImages.append(url.toLocalFile());
+                }
+                //
+                // ... подгружаем картинки с инета
+                //
+                else {
+                    //
+                    // TODO: сделать асинхронно
+                    //
+                    const QByteArray pixmapData = NetworkRequestLoader::loadSync(url);
+                    QPixmap pixmap;
+                    pixmap.loadFromData(pixmapData);
+                    droppedImages.append(pixmap);
+                }
+            }
+        }
+    } else if (mimeData->hasImage()) {
+        droppedImages.append(qvariant_cast<QPixmap>(mimeData->imageData()));
+    }
+
+    //
+    // Удалим все обхекты, в которых по-факту нет картинок
+    //
+    droppedImages.removeAll(QPixmap());
+    //
+    // ... и если, что-то удалось подгрузить, уведомляем клиентов
+    //
+    if (!droppedImages.isEmpty()) {
+        emit imagesAdded(droppedImages);
+    }
+
+    _event->acceptProposedAction();
+
+    d->isDragActive = false;
+    d->dragIndicationOpacityAnimation.setDirection(QVariantAnimation::Backward);
+    d->dragIndicationOpacityAnimation.start();
 }
 
 void ImagesList::designSystemChangeEvent(DesignSystemChangeEvent* _event)

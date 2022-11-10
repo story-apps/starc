@@ -458,13 +458,9 @@ void ImageCard::paintEvent(QPaintEvent* _event)
         painter.setPen(Ui::DesignSystem::color().onSecondary());
         painter.setBrush(Qt::NoBrush);
         auto iconFont = Ui::DesignSystem::font().iconsForEditors();
-        iconFont.setPixelSize(Ui::DesignSystem::scaleFactor() * Ui::DesignSystem::layout().px48()
-                              * 2);
-        const auto icon = u8"\U000F01DA";
-        const auto iconHeight = QFontMetricsF(iconFont).boundingRect(icon).height();
-        const auto iconRect = QRectF(0.0, (height() - iconHeight) / 2.0, width(), iconHeight);
+        iconFont.setPixelSize(Ui::DesignSystem::layout().px(82));
         painter.setFont(iconFont);
-        painter.drawText(iconRect, Qt::AlignCenter, icon);
+        painter.drawText(cardRect, Qt::AlignCenter, u8"\U000F01DA");
         //
         painter.setOpacity(1.0);
     }
@@ -582,6 +578,9 @@ void ImageCard::dropEvent(QDropEvent* _event)
                 // ... подгружаем картинки с инета
                 //
                 else {
+                    //
+                    // TODO: сделать асинхронно
+                    //
                     const QByteArray pixmapData = NetworkRequestLoader::loadSync(url);
                     droppedImage.loadFromData(pixmapData);
                 }

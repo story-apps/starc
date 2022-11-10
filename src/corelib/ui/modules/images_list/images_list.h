@@ -82,6 +82,16 @@ protected:
     void mouseReleaseEvent(QMouseEvent* _event) override;
 
     /**
+     * @brief Переопределяются для возможности затаскивания изображений
+     */
+    /** @{ */
+    void dragEnterEvent(QDragEnterEvent* _event) override;
+    void dragMoveEvent(QDragMoveEvent* _event) override;
+    void dragLeaveEvent(QDragLeaveEvent* _event) override;
+    void dropEvent(QDropEvent* _event) override;
+    /** @} */
+
+    /**
      * @brief Обновляем отображаемые изображения при изменении дизайн системы
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
