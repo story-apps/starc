@@ -60,6 +60,11 @@ protected:
     void paintEvent(QPaintEvent* _event) override;
 
     /**
+     * @brief Реализуем навигацию при помощи клавиатуры
+     */
+    void keyPressEvent(QKeyEvent* _event) override;
+
+    /**
      * @brief Переопределяем, чтобы реализовать интерактив
      */
     void mouseMoveEvent(QMouseEvent* _event) override;

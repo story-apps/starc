@@ -112,9 +112,11 @@ ImagesListPreview::ImagesListPreview(QWidget* _parent)
     , d(new Implementation(this))
 {
     Q_ASSERT(_parent);
+
     _parent->installEventFilter(this);
-    resize(_parent->size());
+    setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
+    resize(_parent->size());
 
     connect(&d->opacityAnimation, &QVariantAnimation::valueChanged, this,
             qOverload<>(&ImagesListPreview::update));
@@ -122,6 +124,7 @@ ImagesListPreview::ImagesListPreview(QWidget* _parent)
             qOverload<>(&ImagesListPreview::update));
     connect(&d->geometryAnimation, &QVariantAnimation::finished, this, [this] {
         if (d->geometryAnimation.direction() == QVariantAnimation::Backward) {
+            d->currentImageIndex = kInvalidImageIndex;
             hide();
         }
     });
@@ -145,6 +148,10 @@ void ImagesListPreview::showPreview(int _imageIndex, const QRectF& _sourceRect)
         return;
     }
 
+    if (_imageIndex < 0 || _imageIndex >= d->images.size()) {
+        return;
+    }
+
     d->currentImageIndex = _imageIndex;
     d->currentImage = d->images.at(_imageIndex).image;
 
@@ -160,6 +167,7 @@ void ImagesListPreview::showPreview(int _imageIndex, const QRectF& _sourceRect)
         raise();
         move(0, 0);
         show();
+        setFocus();
 
         //
         // Прозрачность
@@ -179,6 +187,7 @@ void ImagesListPreview::showPreview(int _imageIndex, const QRectF& _sourceRect)
     //
     else {
         emit currentItemIndexChanged(d->currentImageIndex);
+        update();
     }
 }
 
@@ -197,8 +206,6 @@ void ImagesListPreview::hidePreview()
     d->opacityAnimation.start();
     d->geometryAnimation.setDirection(QAbstractAnimation::Backward);
     d->geometryAnimation.start();
-
-    d->currentImageIndex = kInvalidImageIndex;
 }
 
 bool ImagesListPreview::event(QEvent* _event)
@@ -267,6 +274,37 @@ void ImagesListPreview::paintEvent(QPaintEvent* _event)
     painter.drawPixmap(
         imageRect.topLeft(),
         d->currentImage.scaled(imageRect.size().toSize(), Qt::KeepAspectRatio, mode));
+}
+
+void ImagesListPreview::keyPressEvent(QKeyEvent* _event)
+{
+    Widget::keyPressEvent(_event);
+
+    switch (_event->key()) {
+    case Qt::Key_Escape: {
+        hidePreview();
+        _event->accept();
+        break;
+    }
+
+    case Qt::Key_Left:
+    case Qt::Key_Backspace: {
+        showPreview(d->currentImageIndex - 1);
+        _event->accept();
+        break;
+    }
+
+    case Qt::Key_Right:
+    case Qt::Key_Space: {
+        showPreview(d->currentImageIndex + 1);
+        _event->accept();
+        break;
+    }
+
+    default: {
+        break;
+    }
+    }
 }
 
 void ImagesListPreview::mouseMoveEvent(QMouseEvent* _event)
