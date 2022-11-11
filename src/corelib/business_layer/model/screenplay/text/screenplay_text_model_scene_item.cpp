@@ -105,6 +105,38 @@ bool ScreenplayTextModelSceneItem::isEqual(TextModelItem* _item) const
         && d->plannedDuration == sceneItem->d->plannedDuration;
 }
 
+bool ScreenplayTextModelSceneItem::isFilterAccepted(const QString& _text, bool _isCaseSensitive,
+                                                    int _filterType) const
+{
+    auto contains = [text = _text, cs = _isCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive](
+                        const QString& _text) { return _text.contains(text, cs); };
+    auto tagsString = [tags = this->tags()] {
+        return std::accumulate(tags.begin(), tags.end(), QString(),
+                               [](const QString& _lhs, const QPair<QString, QColor>& _rhs) {
+                                   return _lhs + _rhs.first + " ";
+                               });
+    };
+    switch (_filterType) {
+    default:
+    case 0: {
+        return contains(title()) || contains(heading()) || contains(text()) || contains(stamp())
+            || contains(tagsString());
+    }
+
+    case 1: {
+        return contains(title()) || contains(heading());
+    }
+
+    case 2: {
+        return contains(text());
+    }
+
+    case 3: {
+        return contains(tagsString());
+    }
+    }
+}
+
 QStringRef ScreenplayTextModelSceneItem::readCustomContent(QXmlStreamReader& _contentReader)
 {
     auto currentTag = _contentReader.name();

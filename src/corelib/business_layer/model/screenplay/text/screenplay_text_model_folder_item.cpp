@@ -77,6 +77,28 @@ QVariant ScreenplayTextModelFolderItem::data(int _role) const
     }
 }
 
+bool ScreenplayTextModelFolderItem::isFilterAccepted(const QString& _text, bool _isCaseSensitive,
+                                                     int _filterType) const
+{
+    auto contains = [text = _text, cs = _isCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive](
+                        const QString& _text) { return _text.contains(text, cs); };
+    switch (_filterType) {
+    default:
+    case 0: {
+        return contains(heading()) || contains(stamp());
+    }
+
+    case 1: {
+        return contains(heading());
+    }
+
+    case 2:
+    case 3: {
+        return false;
+    }
+    }
+}
+
 void ScreenplayTextModelFolderItem::handleChange()
 {
     setHeading({});

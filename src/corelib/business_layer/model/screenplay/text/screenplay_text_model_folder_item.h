@@ -48,6 +48,12 @@ public:
      */
     QVariant data(int _role) const override;
 
+    /**
+     * @brief Подходит ли элемент под условия заданного фильтра
+     */
+    bool isFilterAccepted(const QString& _text, bool _isCaseSensitive,
+                          int _filterType) const override;
+
 protected:
     /**
      * @brief Обновляем текст папки при изменении кого-то из детей

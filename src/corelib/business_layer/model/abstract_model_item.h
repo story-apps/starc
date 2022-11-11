@@ -105,6 +105,12 @@ public:
     bool isChanged() const;
     void setChanged(bool _changed);
 
+    /**
+     * @brief Подходит ли элемент под условия заданного фильтра
+     */
+    virtual bool isFilterAccepted(const QString& _text, bool _isCaseSensitive,
+                                  int _filterType) const;
+
 protected:
     /**
      * @brief Возможность обработки изменния для дочерних классов
