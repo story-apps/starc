@@ -32,6 +32,9 @@ enum ViewType {
 const QString kCharacterEditorMime = QStringLiteral("application/x-starc/editor/character/information");
 const QString kCharacterNavigatorMime = QStringLiteral("application/x-starc/navigator/character/information");
 //
+const QString kLocationEditorMime = QStringLiteral("application/x-starc/editor/location/information");
+const QString kLocationNavigatorMime = QStringLiteral("application/x-starc/navigator/location/information");
+//
 const QString kSimpleTextEditorMime = QStringLiteral("application/x-starc/editor/text/text");
 const QString kSimpleTextNavigatorMime = QStringLiteral("application/x-starc/navigator/text/text");
 //
@@ -70,6 +73,7 @@ const QString kImagesGalleryMime = QStringLiteral("application/x-starc/editor/im
  */
 const QHash<QString, QString> kEditorToNavigator
     = { { kCharacterEditorMime, kCharacterNavigatorMime },
+        { kLocationEditorMime, kLocationNavigatorMime },
         { kSimpleTextEditorMime, kSimpleTextNavigatorMime },
         { kScreenplayTreatmentEditorMime, kScreenplayTreatmentNavigatorMime },
         { kScreenplayTextEditorMime, kScreenplayTextNavigatorMime },
@@ -123,7 +127,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         { "application/x-starc/document/character",  { { kCharacterEditorMime, u8"\U000f02fd" } } },
         //
         { "application/x-starc/document/locations",  { { "application/x-starc/editor/locations/map", u8"\U000F0982" } } },
-        { "application/x-starc/document/location",   { { "application/x-starc/editor/location/information", u8"\U000f02fd" } } },
+        { "application/x-starc/document/location",   { { kLocationEditorMime, u8"\U000f02fd" } } },
         //
         { "application/x-starc/document/folder",     { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/text",       { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
@@ -182,7 +186,8 @@ const QHash<QString, QString> kMimeToPlugin
         { kCharacterNavigatorMime, "*characterstructureplugin*" },
         //
         { "application/x-starc/editor/locations/map", "*locationsmapplugin*" },
-        { "application/x-starc/editor/location/information", "*locationinformationplugin*" },
+        { kLocationEditorMime, "*locationinformationplugin*" },
+        { kLocationNavigatorMime, "*locationstructureplugin*" },
         //
         { kImagesGalleryMime, "*imagesgalleryplugin*" },
         //
@@ -452,7 +457,7 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
               { { "application/x-starc/editor/locations/map",
                   QApplication::translate("ProjectPluginsBuilder", "Locations map") } } },
             { "application/x-starc/document/location",
-              { { "application/x-starc/editor/location/information",
+              { { kLocationEditorMime,
                   QApplication::translate("ProjectPluginsBuilder", "Location information") } } },
             //
             { "application/x-starc/document/folder",

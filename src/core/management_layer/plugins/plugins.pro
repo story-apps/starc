@@ -10,6 +10,7 @@ SUBDIRS = \
     comic_book_parameters \
     comic_book_text \
     comic_book_text_structure \
+    location_information_structure \
     project_information \
     screenplay_information \
     screenplay_parameters \

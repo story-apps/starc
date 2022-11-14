@@ -1,4 +1,4 @@
-#include "character_information_structure_view.h"
+#include "location_information_structure_view.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/label/label.h>
@@ -13,16 +13,13 @@ namespace Ui {
 namespace {
 enum {
     kMainIndex = 0,
-    kStoryIndex,
-    kBasicIndex,
-    kPhysiqueIndex,
-    kLifeIndex,
-    kAttitudeIndex,
-    kBiographyIndex,
+    kSenseIndex,
+    kGeographyIndex,
+    kBackgroundIndex,
 };
 } // namespace
 
-class CharacterInformationStructureView::Implementation
+class LocationInformationStructureView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -33,7 +30,7 @@ public:
     Tree* traits = nullptr;
 };
 
-CharacterInformationStructureView::Implementation::Implementation(QWidget* _parent)
+LocationInformationStructureView::Implementation::Implementation(QWidget* _parent)
     : backIcon(new IconsMidLabel(_parent))
     , backText(new Subtitle2Label(_parent))
     , traits(new Tree(_parent))
@@ -54,9 +51,6 @@ CharacterInformationStructureView::Implementation::Implementation(QWidget* _pare
     traitsModel->appendRow(createItem(u8"\U000F0306"));
     traitsModel->appendRow(createItem(u8"\U000F1570"));
     traitsModel->appendRow(createItem(u8"\U000F0FD7"));
-    traitsModel->appendRow(createItem(u8"\U000F1744"));
-    traitsModel->appendRow(createItem(u8"\U000F133E"));
-    traitsModel->appendRow(createItem(u8"\U000F06BC"));
     traits->setModel(traitsModel);
     traits->setCurrentIndex(traitsModel->index(0, 0));
 }
@@ -65,7 +59,7 @@ CharacterInformationStructureView::Implementation::Implementation(QWidget* _pare
 // ****
 
 
-CharacterInformationStructureView::CharacterInformationStructureView(QWidget* _parent)
+LocationInformationStructureView::LocationInformationStructureView(QWidget* _parent)
     : AbstractNavigator(_parent)
     , d(new Implementation(this))
 {
@@ -84,40 +78,37 @@ CharacterInformationStructureView::CharacterInformationStructureView(QWidget* _p
 
 
     connect(d->backIcon, &AbstractLabel::clicked, this,
-            &CharacterInformationStructureView::backPressed);
+            &LocationInformationStructureView::backPressed);
     connect(d->backText, &AbstractLabel::clicked, this,
-            &CharacterInformationStructureView::backPressed);
+            &LocationInformationStructureView::backPressed);
     connect(d->traits, &Tree::clicked, this,
-            &CharacterInformationStructureView::traitsCategoryIndexChanged);
+            &LocationInformationStructureView::traitsCategoryIndexChanged);
     connect(d->traits, &Tree::doubleClicked, this,
-            &CharacterInformationStructureView::traitsCategoryIndexChanged);
+            &LocationInformationStructureView::traitsCategoryIndexChanged);
 }
 
-CharacterInformationStructureView::~CharacterInformationStructureView() = default;
+LocationInformationStructureView::~LocationInformationStructureView() = default;
 
-QWidget* CharacterInformationStructureView::asQWidget()
+QWidget* LocationInformationStructureView::asQWidget()
 {
     return this;
 }
 
-void CharacterInformationStructureView::setTitle(const QString& _title)
+void LocationInformationStructureView::setTitle(const QString& _title)
 {
     d->backText->setText(_title);
 }
 
-void CharacterInformationStructureView::updateTranslations()
+void LocationInformationStructureView::updateTranslations()
 {
     auto traitsModel = qobject_cast<QStandardItemModel*>(d->traits->model());
     traitsModel->item(kMainIndex)->setText(tr("Main"));
-    traitsModel->item(kStoryIndex)->setText(tr("Story"));
-    traitsModel->item(kBasicIndex)->setText(tr("Personal info"));
-    traitsModel->item(kPhysiqueIndex)->setText(tr("Physique"));
-    traitsModel->item(kLifeIndex)->setText(tr("Life"));
-    traitsModel->item(kAttitudeIndex)->setText(tr("Attitude"));
-    traitsModel->item(kBiographyIndex)->setText(tr("Biography"));
+    traitsModel->item(kSenseIndex)->setText(tr("Sense"));
+    traitsModel->item(kGeographyIndex)->setText(tr("Geography"));
+    traitsModel->item(kBackgroundIndex)->setText(tr("Background"));
 }
 
-void CharacterInformationStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void LocationInformationStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
