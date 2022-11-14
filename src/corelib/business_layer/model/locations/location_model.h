@@ -5,6 +5,10 @@
 #include <QColor>
 #include <QUuid>
 
+namespace Domain {
+struct DocumentImage;
+}
+
 
 namespace BusinessLayer {
 
@@ -64,11 +68,15 @@ public:
     void setLongDescription(const QString& _text);
     Q_SIGNAL void longDescriptionChanged(const QString& _text);
 
-    const QPixmap& mainPhoto() const;
-    const QUuid& mainPhotoUuid() const;
+    Domain::DocumentImage mainPhoto() const;
     void setMainPhoto(const QPixmap& _photo);
-    void setMainPhoto(const QUuid& _uuid, const QPixmap& _photo);
-    Q_SIGNAL void mainPhotoChanged(const QPixmap& _photo);
+    Q_SIGNAL void mainPhotoChanged(const Domain::DocumentImage& _photo);
+
+    QVector<Domain::DocumentImage> photos() const;
+    void addPhoto(const Domain::DocumentImage& _photo);
+    void addPhotos(const QVector<QPixmap>& _photos);
+    void removePhoto(const QUuid& _photoUuid);
+    Q_SIGNAL void photosChanged(const QVector<Domain::DocumentImage>& _images);
 
     void createRoute(const QUuid& _toLocation);
     void updateRoute(const LocationRoute& _way);
@@ -79,6 +87,58 @@ public:
     Q_SIGNAL void routeAdded(const BusinessLayer::LocationRoute& _route);
     Q_SIGNAL void routeChanged(const BusinessLayer::LocationRoute& _route);
     Q_SIGNAL void routeRemoved(const BusinessLayer::LocationRoute& _route);
+
+    //
+    // SENSE
+    //
+
+    QString sight() const;
+    void setSight(const QString& _text);
+    Q_SIGNAL void sightChanged(const QString& _text);
+
+    QString smell() const;
+    void setSmell(const QString& _text);
+    Q_SIGNAL void smellChanged(const QString& _text);
+
+    QString sound() const;
+    void setSound(const QString& _text);
+    Q_SIGNAL void soundChanged(const QString& _text);
+
+    QString taste() const;
+    void setTaste(const QString& _text);
+    Q_SIGNAL void tasteChanged(const QString& _text);
+
+    QString touch() const;
+    void setTouch(const QString& _text);
+    Q_SIGNAL void touchChanged(const QString& _text);
+
+    //
+    // GEOGRAPHY
+    //
+
+    QString location() const;
+    void setLocation(const QString& _text);
+    Q_SIGNAL void locationChanged(const QString& _text);
+
+    QString climate() const;
+    void setClimate(const QString& _text);
+    Q_SIGNAL void climateChanged(const QString& _text);
+
+    QString landmark() const;
+    void setLandmark(const QString& _text);
+    Q_SIGNAL void landmarkChanged(const QString& _text);
+
+    QString nearbyPlaces() const;
+    void setNearbyPlaces(const QString& _text);
+    Q_SIGNAL void nearbyPlacesChanged(const QString& _text);
+
+    //
+    // BACKGROUND
+    //
+
+    QString history() const;
+    void setHistory(const QString& _text);
+    Q_SIGNAL void historyChanged(const QString& _text);
 
 protected:
     /**

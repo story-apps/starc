@@ -817,7 +817,9 @@ void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureMode
             }
             case Domain::DocumentObjectType::Location: {
                 auto location = static_cast<BusinessLayer::LocationModel*>(model);
-                documentsToRemove.append(location->mainPhotoUuid());
+                for (const auto& photo : location->photos()) {
+                    documentsToRemove.append(photo.uuid);
+                }
                 break;
             }
             default: {
