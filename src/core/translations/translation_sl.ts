@@ -514,7 +514,7 @@
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="341"/>
         <source>Total words</source>
-        <translation type="unfinished"></translation>
+        <translation>Skupaj besed</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="345"/>
@@ -635,7 +635,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="333"/>
         <source>CONT&apos;D</source>
-        <translation>NADALJEVANJE</translation>
+        <translation>NADALJ.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="338"/>
@@ -1127,7 +1127,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="357"/>
         <source>Images gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Galerija slik</translation>
     </message>
 </context>
 <context>
@@ -1209,7 +1209,7 @@
         <location filename="../../corelib/business_layer/document/stageplay/text/stageplay_text_corrector.cpp" line="38"/>
         <source>CONT&apos;D</source>
         <extracomment>Continued</extracomment>
-        <translation>NADALJEVANJE</translation>
+        <translation>NADALJ.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/document/audioplay/text/audioplay_text_corrector.cpp" line="43"/>
@@ -1737,30 +1737,30 @@
         <translation>Nadgradi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="393"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="402"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Ime lika je spremenjeno iz »%1« v »%2«. Ali želite uveljaviti spremembe?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="395"/>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="441"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="404"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="450"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="396"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="405"/>
         <source>Yes</source>
         <translation>Da</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="440"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="449"/>
         <source>Do you want to delete the character&apos;s photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ali želite izbrisati fotografijo lika?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="442"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="451"/>
         <source>Yes, delete</source>
-        <translation type="unfinished">Da, izbriši</translation>
+        <translation>Da, izbriši</translation>
     </message>
 </context>
 <context>
@@ -1911,32 +1911,32 @@
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="74"/>
         <source>To edit the images gallery, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za urejanje galerije slik morate program nadgraditi na različico PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="75"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Morda kasneje</translation>
+        <translation>Morda kasneje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="76"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Nadgradi</translation>
+        <translation>Nadgradi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="154"/>
         <source>Do you want to delete the character&apos;s photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ali želite izbrisati fotografijo lika?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="155"/>
         <source>No</source>
-        <translation type="unfinished">Ne</translation>
+        <translation>Ne</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="156"/>
         <source>Yes, delete</source>
-        <translation type="unfinished">Da, izbriši</translation>
+        <translation>Da, izbriši</translation>
     </message>
 </context>
 <context>
@@ -1962,17 +1962,17 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="71"/>
         <source>To access extended location profile, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za dostop do razširjenega profila lokacij morate program nadgraditi na različico PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="72"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Morda kasneje</translation>
+        <translation>Morda kasneje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="73"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Nadgradi</translation>
+        <translation>Nadgradi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="226"/>
@@ -1993,12 +1993,12 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="269"/>
         <source>Do you want to delete the location&apos;s photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ali želite izbrisati fotografijo prizorišča?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="271"/>
         <source>Yes, delete</source>
-        <translation type="unfinished">Da, izbriši</translation>
+        <translation>Da, izbriši</translation>
     </message>
 </context>
 <context>
@@ -2478,17 +2478,17 @@
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="430"/>
         <source>Do you want to revert all changes in settings to the default state? This action can&apos;t be undone.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ali želite povrniti vse spremembe nastavitev na privzeto stanje? Tega dejanja ni mogoče povrniti.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="432"/>
         <source>Cancel</source>
-        <translation type="unfinished">Prekliči</translation>
+        <translation>Prekliči</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="433"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Ponastavi</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="673"/>
@@ -2743,7 +2743,7 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="475"/>
         <source>Images gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Galerija slik</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="373"/>
@@ -3277,11 +3277,11 @@
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="121"/>
         <source>%n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n beseda</numerusform>
+            <numerusform>%n besedi</numerusform>
+            <numerusform>%n besede</numerusform>
+            <numerusform>%n besed</numerusform>
         </translation>
     </message>
     <message>
@@ -3701,455 +3701,466 @@
 <context>
     <name>Ui::CharacterInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="541"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="550"/>
         <source>Apply new character name</source>
         <translation>Uveljavi novo ime lika</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="547"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1693"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="556"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1741"/>
         <source>Select character color</source>
         <translation>Izberite barvo lika</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1690"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1738"/>
         <source>Unlock access to extended character profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1692"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1740"/>
         <source>Name</source>
         <translation>Ime</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1694"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1742"/>
         <source>Story role</source>
         <translation>Vloga v zgodbi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="415"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="421"/>
         <source>Primary</source>
         <translation>primarna</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="415"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="421"/>
         <source>Secondary</source>
         <translation>sekundarna</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="415"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="421"/>
         <source>Tertiary</source>
         <translation>terciarna</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="415"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="421"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="426"/>
         <source>Undefined</source>
         <translation>Nedoločeno</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="562"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1698"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="571"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1746"/>
         <source>Age</source>
         <translation>Starost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="568"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1699"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="577"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1747"/>
         <source>Gender</source>
         <translation>Spol</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="426"/>
         <source>Male</source>
         <translation>Moški</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="426"/>
         <source>Female</source>
         <translation>Ženski</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="426"/>
         <source>Other</source>
         <translation>Drugo</translation>
     </message>
     <message>
-        <source>Unlock ability to edit screenplay cards</source>
-        <translation type="vanished">Odkleni možnost urejanja kartončkov scenarija</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1703"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1751"/>
         <source>One sentence description</source>
         <translation>Opis v eni povedi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1704"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1752"/>
         <source>Long description</source>
         <translation>Daljši opis</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1706"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1754"/>
         <source>Add photo +</source>
         <translation>Dodaj fotografijo +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1706"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1754"/>
         <source>Change photo...</source>
         <translation>Spremeni fotografijo ...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1707"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1755"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
         <translation>Ali želite izbrisati glavno fotografijo lika?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1708"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1756"/>
         <source>Select an area for the character main photo</source>
         <translation>Izberite področje za glavno fotografijo lika</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1710"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1758"/>
         <source>Photos</source>
         <translation>Fotografije</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1712"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1760"/>
         <source>Personal info</source>
         <translation>Osebni podatki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1713"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1761"/>
         <source>Real name</source>
         <translation>Resnično ime</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1714"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1762"/>
         <source>Date of birth</source>
         <translation>Datum rojstva</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1715"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1763"/>
         <source>Place of birth</source>
         <translation>Kraj rojstva</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1716"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1764"/>
         <source>Ethnicity/race</source>
         <translation>Etničnost/rasa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1717"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1765"/>
         <source>Family</source>
         <translation>Družina</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1719"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1767"/>
         <source>Physique</source>
         <translation>Fizična pojavnost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1720"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1768"/>
         <source>Height</source>
         <translation>Višina</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1721"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1769"/>
         <source>Weight</source>
         <translation>Teža</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1722"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1770"/>
         <source>Body</source>
         <translation>Telo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1723"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1771"/>
         <source>Skin tone</source>
         <translation>Barva kože</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1724"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1772"/>
         <source>Hair style</source>
         <translation>Vrsta frizure</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1725"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1773"/>
         <source>Hair color</source>
         <translation>Barva las</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1726"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1774"/>
         <source>Eye shape</source>
         <translation>Oblika oči</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1727"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1775"/>
         <source>Eye color</source>
         <translation>Barva oči</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1728"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1776"/>
         <source>Facial shape</source>
         <translation>Oblika obraza</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1729"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1777"/>
         <source>Distinguish feature</source>
         <translation>Razločevalna poteza</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1730"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1778"/>
         <source>Other facial features</source>
         <translation>Druge poteze obraza</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1731"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1779"/>
         <source>Posture</source>
         <translation>Drža</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1732"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1780"/>
         <source>Other physical appearance</source>
         <translation>Druge fizične značilnosti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1734"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1782"/>
         <source>Life</source>
         <translation>Življenje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1735"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1783"/>
         <source>Skills</source>
         <translation>Veščine</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1736"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1784"/>
         <source>How skills developed</source>
         <translation>Kako je razvil_a spretnosti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1737"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1785"/>
         <source>Incompetence</source>
         <translation>Nekompetentnost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1738"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1786"/>
         <source>Strength/talent</source>
         <translation>Prednost/talent</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1739"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1787"/>
         <source>Weakness</source>
         <translation>Slabost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1740"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1788"/>
         <source>Hobbies</source>
         <translation>Hobiji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1741"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1789"/>
         <source>Habits</source>
         <translation>Navade</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1742"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1790"/>
         <source>Health</source>
         <translation>Zdravje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1743"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1791"/>
         <source>Pet</source>
         <translation>Domača žival</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1744"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1792"/>
         <source>Dress</source>
         <translation>Oblačila</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1745"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1793"/>
         <source>Something always carried/weapon/tools</source>
         <translation>Nekaj, kar ima vedno pri sebi/orožje/orodje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1746"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1794"/>
         <source>Accessories</source>
         <translation>Dodatki (uhani, šali, ...)</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1747"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1795"/>
         <source>Area of residence/environment</source>
         <translation>Območje stanovanja/okolje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1748"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1796"/>
         <source>Home description</source>
         <translation>Opis doma</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1749"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1797"/>
         <source>Neighborhood</source>
         <translation>Soseska</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1750"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1798"/>
         <source>Organization involved</source>
         <translation>Zahtevana organiziranost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1751"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1799"/>
         <source>Income</source>
         <translation>Prihodki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1752"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1800"/>
         <source>Job/occupation</source>
         <translation>Služba/poklic</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1753"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1801"/>
         <source>Job rank/position</source>
         <translation>Položaj v službi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1754"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1802"/>
         <source>Job satisfaction</source>
         <translation>Zadovoljstvo v službi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1756"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1804"/>
         <source>Attitude</source>
         <translation>Način razmišljanja/stališče</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1757"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1805"/>
         <source>Personality</source>
         <translation>Osebnost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1758"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1806"/>
         <source>Moral</source>
         <translation>Morala</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1759"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1807"/>
         <source>Motivation</source>
         <translation>Motivacija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1760"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1808"/>
         <source>Discouragement</source>
         <translation>Razočaranje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1761"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1809"/>
         <source>Philosophy</source>
         <translation>Filozofija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1762"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1810"/>
         <source>Greatest fear</source>
         <translation>Največji strah</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1763"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1811"/>
         <source>Self control</source>
         <translation>Samonadzor</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1764"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1812"/>
         <source>Intelligence level</source>
         <translation>Raven inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1765"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1813"/>
         <source>Confidence level</source>
         <translation>Raven zaupanja</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1767"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1815"/>
         <source>Biography</source>
         <translation>Biografija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1768"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1816"/>
         <source>Childhood</source>
         <translation>Otroštvo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1769"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1817"/>
         <source>Important past event</source>
         <translation>Pomemben dogodek iz preteklosti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1770"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1818"/>
         <source>Best accomplishment</source>
         <translation>Največji dosežek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1771"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1819"/>
         <source>Other accomplishment</source>
         <translation>Drug dosežek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1772"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1820"/>
         <source>Worst moment</source>
         <translation>Najhujši trenutek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1773"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1821"/>
         <source>Failure</source>
         <translation>Neuspeh</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1774"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1822"/>
         <source>Secrets</source>
         <translation>Skrivnosti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1775"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1823"/>
         <source>Best memories</source>
         <translation>Najlepši spomin</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1776"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1824"/>
         <source>Worst memories</source>
         <translation>Najhujši spomin</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1778"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1826"/>
         <source>Story</source>
         <translation>Zgodba</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1779"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1827"/>
         <source>Short term goal</source>
         <translation>Kratkoročni cilj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1780"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1828"/>
         <source>Long term goal</source>
         <translation>Dolgoročni cilj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1781"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1829"/>
+        <source>Initial beliefs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1830"/>
+        <source>Changed beliefs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1831"/>
+        <source>What leads to change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1832"/>
         <source>First appearance</source>
         <translation>Prvi vtis</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1782"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1833"/>
         <source>Plot involvement</source>
         <translation>Vpletenost v zaplet</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1783"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1834"/>
         <source>Conflict</source>
         <translation>Konflikt</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1784"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1835"/>
         <source>Most defining moment</source>
         <translation>Najbolj določujoč trenutek</translation>
     </message>
@@ -4479,11 +4490,11 @@
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="121"/>
         <source>%n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n beseda</numerusform>
+            <numerusform>%n besedi</numerusform>
+            <numerusform>%n besede</numerusform>
+            <numerusform>%n besed</numerusform>
         </translation>
     </message>
     <message>
@@ -5304,7 +5315,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="298"/>
         <source>Images gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Galerija slik</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="309"/>
@@ -5557,17 +5568,17 @@
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="203"/>
         <source>Unlock ability to edit screenplay cards</source>
-        <translation type="unfinished">Odkleni možnost urejanja kartončkov scenarija</translation>
+        <translation>Odkleni možnost urejanja kartončkov scenarija</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="204"/>
         <source>Add images to the gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj slike v galerijo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="206"/>
         <source>Name</source>
-        <translation type="unfinished">Ime</translation>
+        <translation>Ime</translation>
     </message>
 </context>
 <context>
@@ -5664,22 +5675,22 @@
     <message>
         <location filename="../management_layer/plugins/location_information_structure/location_information_structure_view.cpp" line="105"/>
         <source>Main</source>
-        <translation type="unfinished">Glavno</translation>
+        <translation>Glavno</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information_structure/location_information_structure_view.cpp" line="106"/>
         <source>Sense</source>
-        <translation type="unfinished"></translation>
+        <translation>Čuti</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information_structure/location_information_structure_view.cpp" line="107"/>
         <source>Geography</source>
-        <translation type="unfinished"></translation>
+        <translation>Zemljepis</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information_structure/location_information_structure_view.cpp" line="108"/>
         <source>Background</source>
-        <translation type="unfinished">Ozadje</translation>
+        <translation>Ozadje</translation>
     </message>
 </context>
 <context>
@@ -5757,62 +5768,62 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="694"/>
         <source>Photos</source>
-        <translation type="unfinished">Fotografije</translation>
+        <translation>Fotografije</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="696"/>
         <source>Sense info</source>
-        <translation type="unfinished"></translation>
+        <translation>Podatki o čutih</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="697"/>
         <source>Sight</source>
-        <translation type="unfinished"></translation>
+        <translation>Vid</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="698"/>
         <source>Smell</source>
-        <translation type="unfinished"></translation>
+        <translation>Vonj</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="699"/>
         <source>Sound</source>
-        <translation type="unfinished">Zvok</translation>
+        <translation>Zvok</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="700"/>
         <source>Taste</source>
-        <translation type="unfinished"></translation>
+        <translation>Okus</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="701"/>
         <source>Touch</source>
-        <translation type="unfinished"></translation>
+        <translation>Dotik</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="703"/>
         <source>Geography info</source>
-        <translation type="unfinished"></translation>
+        <translation>Zemljepisni podatki</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="704"/>
         <source>Location</source>
-        <translation type="unfinished">Prizorišče</translation>
+        <translation>Prizorišče</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="705"/>
         <source>Climate</source>
-        <translation type="unfinished"></translation>
+        <translation>Klima</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="706"/>
         <source>Landmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Znamenitost</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="707"/>
         <source>Nearby places</source>
-        <translation type="unfinished"></translation>
+        <translation>Bližnji kraji</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="709"/>
@@ -5822,7 +5833,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="710"/>
         <source>History</source>
-        <translation type="unfinished"></translation>
+        <translation>Zgodovina</translation>
     </message>
 </context>
 <context>
@@ -6834,11 +6845,11 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message numerus="yes">
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="118"/>
         <source>%n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n beseda</numerusform>
+            <numerusform>%n besedi</numerusform>
+            <numerusform>%n besede</numerusform>
+            <numerusform>%n besed</numerusform>
         </translation>
     </message>
     <message>
@@ -7128,42 +7139,42 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="286"/>
         <source>Print cards</source>
-        <translation type="unfinished">Natisni kartončke</translation>
+        <translation>Natisni kartončke</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="288"/>
         <source>Page orientation</source>
-        <translation type="unfinished"></translation>
+        <translation>Usmeritev strani</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="289"/>
         <source>Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokončno</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="290"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Ležeče</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="291"/>
         <source>Cards count</source>
-        <translation type="unfinished"></translation>
+        <translation>Število kartončkov</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="292"/>
         <source>Print colored cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Natisni barvne kartončke</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="294"/>
         <source>Cancel</source>
-        <translation type="unfinished">Prekliči</translation>
+        <translation>Prekliči</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="295"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Natisni</translation>
     </message>
 </context>
 <context>
@@ -7172,53 +7183,53 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="121"/>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="241"/>
         <source>Search without case sensitive</source>
-        <translation type="unfinished">Pri iskanju ne razlikuj malih/velikih črk</translation>
+        <translation>Pri iskanju ne razlikuj malih/velikih črk</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="122"/>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="242"/>
         <source>Search with case sensitive</source>
-        <translation type="unfinished">Pri iskanju razlikuj male/velike črke</translation>
+        <translation>Pri iskanju razlikuj male/velike črke</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="127"/>
         <source>In the whole text</source>
-        <translation type="unfinished">V celotnem besedilu</translation>
+        <translation>V celotnem besedilu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="230"/>
         <source>Exit from search</source>
-        <translation type="unfinished">Izhod iz iskanja</translation>
+        <translation>Izhod iz iskanja</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="233"/>
         <source>Search</source>
-        <translation type="unfinished">Najdi</translation>
+        <translation>Najdi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="234"/>
         <source>Enter search phrase here</source>
-        <translation type="unfinished">Tukaj vnesite iskani niz</translation>
+        <translation>Tukaj vnesite iskani niz</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="236"/>
         <source>In the whole card content</source>
-        <translation type="unfinished"></translation>
+        <translation>V celotni vsebini kartončka</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="236"/>
         <source>In titles &amp; headings</source>
-        <translation type="unfinished"></translation>
+        <translation>V naslovih</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="237"/>
         <source>In text</source>
-        <translation type="unfinished"></translation>
+        <translation>V besedilu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="237"/>
         <source>In tags</source>
-        <translation type="unfinished"></translation>
+        <translation>V značkah</translation>
     </message>
 </context>
 <context>
@@ -7340,86 +7351,47 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="166"/>
         <source>Unlock ability to edit screenplay cards</source>
-        <translation type="unfinished">Odkleni možnost urejanja kartončkov scenarija</translation>
+        <translation>Odkleni možnost urejanja kartončkov scenarija</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="168"/>
         <source>Undo last action</source>
-        <translation type="unfinished">Razveljavi zadnje dejanje</translation>
+        <translation>Razveljavi zadnje dejanje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="172"/>
         <source>Redo last action</source>
-        <translation type="unfinished">Ponovi zadnje dejanje</translation>
+        <translation>Ponovi zadnje dejanje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="175"/>
         <source>Add act</source>
-        <translation type="unfinished">Dodaj dejanje</translation>
+        <translation>Dodaj dejanje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="176"/>
         <source>Add sequence</source>
-        <translation type="unfinished">Dodaj sekvenco</translation>
+        <translation>Dodaj sekvenco</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="177"/>
         <source>Add scene</source>
-        <translation type="unfinished">Dodaj prizor</translation>
+        <translation>Dodaj prizor</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="178"/>
         <source>Remove selected item</source>
-        <translation type="unfinished">Odstrani izbrani element</translation>
+        <translation>Odstrani izbrani element</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="180"/>
         <source>Search cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Išči med kartončki</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="184"/>
         <source>Print cards</source>
-        <translation type="unfinished">Natisni kartončke</translation>
-    </message>
-</context>
-<context>
-    <name>Ui::ScreenplayCardsView</name>
-    <message>
-        <source>Unlock ability to edit screenplay cards</source>
-        <translation type="vanished">Odkleni možnost urejanja kartončkov scenarija</translation>
-    </message>
-    <message>
-        <source>Undo last action</source>
-        <translation type="vanished">Razveljavi zadnje dejanje</translation>
-    </message>
-    <message>
-        <source>Redo last action</source>
-        <translation type="vanished">Ponovi zadnje dejanje</translation>
-    </message>
-    <message>
-        <source>Add structure</source>
-        <translation type="vanished">Dodaj strukturo</translation>
-    </message>
-    <message>
-        <source>Add act</source>
-        <translation type="vanished">Dodaj dejanje</translation>
-    </message>
-    <message>
-        <source>Add sequence</source>
-        <translation type="vanished">Dodaj sekvenco</translation>
-    </message>
-    <message>
-        <source>Add scene</source>
-        <translation type="vanished">Dodaj prizor</translation>
-    </message>
-    <message>
-        <source>Remove selected item</source>
-        <translation type="vanished">Odstrani izbrani element</translation>
-    </message>
-    <message>
-        <source>Print cards</source>
-        <translation type="vanished">Natisni kartončke</translation>
+        <translation>Natisni kartončke</translation>
     </message>
 </context>
 <context>
@@ -7571,11 +7543,11 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="124"/>
         <source>%n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n beseda</numerusform>
+            <numerusform>%n besedi</numerusform>
+            <numerusform>%n besede</numerusform>
+            <numerusform>%n besed</numerusform>
         </translation>
     </message>
     <message>
@@ -7793,7 +7765,7 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="699"/>
         <source>Show words count</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaži števec besed</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="700"/>
@@ -8778,7 +8750,7 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="196"/>
         <source>Reset to defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Ponastavi na privzete vrednosti</translation>
     </message>
 </context>
 <context>
@@ -10165,11 +10137,11 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="121"/>
         <source>%n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n beseda</numerusform>
+            <numerusform>%n besedi</numerusform>
+            <numerusform>%n besede</numerusform>
+            <numerusform>%n besed</numerusform>
         </translation>
     </message>
     <message>

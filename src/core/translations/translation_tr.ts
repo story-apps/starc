@@ -1721,7 +1721,7 @@
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="71"/>
         <source>To access extended character profile, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Genişletilmiş karakter profiline erişmek için PRO sürümüne yükseltmeniz gerekir.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="72"/>
@@ -1734,30 +1734,30 @@
         <translation>Yükselt</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="393"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="402"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>&quot;%1&quot; olan karakter adı &quot;%2&quot; olarak değiştirildi. Değişiklikleri uygulansın mı?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="395"/>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="441"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="404"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="450"/>
         <source>No</source>
         <translation>Hayır</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="396"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="405"/>
         <source>Yes</source>
         <translation>Evet</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="440"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="449"/>
         <source>Do you want to delete the character&apos;s photo?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="442"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="451"/>
         <source>Yes, delete</source>
-        <translation type="unfinished">Evet, sil</translation>
+        <translation>Evet, sil</translation>
     </message>
 </context>
 <context>
@@ -1907,12 +1907,12 @@
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="75"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Belki sonra</translation>
+        <translation>Belki sonra</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="76"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Yükselt</translation>
+        <translation>Yükselt</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="154"/>
@@ -1922,12 +1922,12 @@
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="155"/>
         <source>No</source>
-        <translation type="unfinished">Hayır</translation>
+        <translation>Hayır</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="156"/>
         <source>Yes, delete</source>
-        <translation type="unfinished">Evet, sil</translation>
+        <translation>Evet, sil</translation>
     </message>
 </context>
 <context>
@@ -1958,12 +1958,12 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="72"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Belki sonra</translation>
+        <translation>Belki sonra</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="73"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Yükselt</translation>
+        <translation>Yükselt</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="226"/>
@@ -1989,7 +1989,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="271"/>
         <source>Yes, delete</source>
-        <translation type="unfinished">Evet, sil</translation>
+        <translation>Evet, sil</translation>
     </message>
 </context>
 <context>
@@ -2474,7 +2474,7 @@
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="432"/>
         <source>Cancel</source>
-        <translation type="unfinished">İptal</translation>
+        <translation>İptal</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="433"/>
@@ -3653,493 +3653,504 @@
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="111"/>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="113"/>
         <source>Personal info</source>
-        <translation type="unfinished"></translation>
+        <translation>Kişisel Bilgi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="114"/>
         <source>Physique</source>
-        <translation type="unfinished"></translation>
+        <translation>Fiziksel özellikler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="115"/>
         <source>Life</source>
-        <translation type="unfinished"></translation>
+        <translation>Yaşam</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="116"/>
         <source>Attitude</source>
-        <translation type="unfinished"></translation>
+        <translation>Davranış</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="117"/>
         <source>Biography</source>
-        <translation type="unfinished"></translation>
+        <translation>Biyografi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="112"/>
         <source>Story</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikaye</translation>
     </message>
 </context>
 <context>
     <name>Ui::CharacterInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="541"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="550"/>
         <source>Apply new character name</source>
         <translation>Yeni karakter adını uygula</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="547"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1693"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="556"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1741"/>
         <source>Select character color</source>
         <translation>Karakter rengini seç</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1690"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1738"/>
         <source>Unlock access to extended character profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1692"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1740"/>
         <source>Name</source>
         <translation>Ad</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1694"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1742"/>
         <source>Story role</source>
         <translation>Hikaye rolü</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="415"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="421"/>
         <source>Primary</source>
         <translation>Başrol</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="415"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="421"/>
         <source>Secondary</source>
         <translation>İkincil Oyuncu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="415"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="421"/>
         <source>Tertiary</source>
         <translation>Üçüncül Oyuncu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="415"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="421"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="426"/>
         <source>Undefined</source>
         <translation>Bilinmiyor</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="562"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1698"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="571"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1746"/>
         <source>Age</source>
         <translation>Yaş</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="568"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1699"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="577"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1747"/>
         <source>Gender</source>
         <translation>Cinsiyet</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="426"/>
         <source>Male</source>
         <translation>Erkek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="426"/>
         <source>Female</source>
         <translation>Kadın</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="426"/>
         <source>Other</source>
         <translation>Diğer</translation>
     </message>
     <message>
-        <source>Unlock ability to edit screenplay cards</source>
-        <translation type="vanished">Senaryo kartlarını düzenleme yeteneğinin kilidini açın</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1703"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1751"/>
         <source>One sentence description</source>
         <translation>Tek cümle ile özetle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1704"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1752"/>
         <source>Long description</source>
         <translation>Uzun tanımlama</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1706"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1754"/>
         <source>Add photo +</source>
         <translation>Fotoğraf ekle</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1706"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1754"/>
         <source>Change photo...</source>
         <translation>Fotoğrafı değiştir</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1707"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1755"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
         <translation>Karakterin ana fotoğrafını silmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1708"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1756"/>
         <source>Select an area for the character main photo</source>
         <translation>Karakterin ana fotoğrafı için bir alan seçin</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1710"/>
-        <source>Photos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1712"/>
-        <source>Personal info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1713"/>
-        <source>Real name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1714"/>
-        <source>Date of birth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1715"/>
-        <source>Place of birth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1716"/>
-        <source>Ethnicity/race</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1717"/>
-        <source>Family</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1719"/>
-        <source>Physique</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1720"/>
-        <source>Height</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1721"/>
-        <source>Weight</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1722"/>
-        <source>Body</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1723"/>
-        <source>Skin tone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1724"/>
-        <source>Hair style</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1725"/>
-        <source>Hair color</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1726"/>
-        <source>Eye shape</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1727"/>
-        <source>Eye color</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1728"/>
-        <source>Facial shape</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1729"/>
-        <source>Distinguish feature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1730"/>
-        <source>Other facial features</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1731"/>
-        <source>Posture</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1732"/>
-        <source>Other physical appearance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1734"/>
-        <source>Life</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1735"/>
-        <source>Skills</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1736"/>
-        <source>How skills developed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1737"/>
-        <source>Incompetence</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1738"/>
-        <source>Strength/talent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1739"/>
-        <source>Weakness</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1740"/>
-        <source>Hobbies</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1741"/>
-        <source>Habits</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1742"/>
-        <source>Health</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1743"/>
-        <source>Pet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1744"/>
-        <source>Dress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1745"/>
-        <source>Something always carried/weapon/tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1746"/>
-        <source>Accessories</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1747"/>
-        <source>Area of residence/environment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1748"/>
-        <source>Home description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1749"/>
-        <source>Neighborhood</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1750"/>
-        <source>Organization involved</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1751"/>
-        <source>Income</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1752"/>
-        <source>Job/occupation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1753"/>
-        <source>Job rank/position</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1754"/>
-        <source>Job satisfaction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1756"/>
-        <source>Attitude</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1757"/>
-        <source>Personality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1758"/>
-        <source>Moral</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1759"/>
-        <source>Motivation</source>
-        <translation type="unfinished"></translation>
+        <source>Photos</source>
+        <translation>Fotoğraflar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1760"/>
-        <source>Discouragement</source>
-        <translation type="unfinished"></translation>
+        <source>Personal info</source>
+        <translation>Kişisel Bilgi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1761"/>
-        <source>Philosophy</source>
-        <translation type="unfinished"></translation>
+        <source>Real name</source>
+        <translation>Gerçek İsim</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1762"/>
-        <source>Greatest fear</source>
-        <translation type="unfinished"></translation>
+        <source>Date of birth</source>
+        <translation>Doğum günü</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1763"/>
-        <source>Self control</source>
-        <translation type="unfinished"></translation>
+        <source>Place of birth</source>
+        <translation>Doğum saati</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1764"/>
-        <source>Intelligence level</source>
-        <translation type="unfinished"></translation>
+        <source>Ethnicity/race</source>
+        <translation>Etnik köken</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1765"/>
-        <source>Confidence level</source>
-        <translation type="unfinished"></translation>
+        <source>Family</source>
+        <translation>Aile</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1767"/>
-        <source>Biography</source>
-        <translation type="unfinished"></translation>
+        <source>Physique</source>
+        <translation>Fizik</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1768"/>
-        <source>Childhood</source>
-        <translation type="unfinished"></translation>
+        <source>Height</source>
+        <translation>Boy</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1769"/>
-        <source>Important past event</source>
-        <translation type="unfinished"></translation>
+        <source>Weight</source>
+        <translation>Kilo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1770"/>
-        <source>Best accomplishment</source>
-        <translation type="unfinished"></translation>
+        <source>Body</source>
+        <translation>Vücut</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1771"/>
-        <source>Other accomplishment</source>
-        <translation type="unfinished"></translation>
+        <source>Skin tone</source>
+        <translation>Cilt rengi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1772"/>
-        <source>Worst moment</source>
-        <translation type="unfinished"></translation>
+        <source>Hair style</source>
+        <translation>Saç stili</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1773"/>
-        <source>Failure</source>
-        <translation type="unfinished"></translation>
+        <source>Hair color</source>
+        <translation>Saç rengi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1774"/>
-        <source>Secrets</source>
-        <translation type="unfinished"></translation>
+        <source>Eye shape</source>
+        <translation>Göz şekli</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1775"/>
-        <source>Best memories</source>
-        <translation type="unfinished"></translation>
+        <source>Eye color</source>
+        <translation>Göz rengi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1776"/>
-        <source>Worst memories</source>
-        <translation type="unfinished"></translation>
+        <source>Facial shape</source>
+        <translation>Yüz şekli</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1777"/>
+        <source>Distinguish feature</source>
+        <translation>Ayırt edici özellik</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1778"/>
-        <source>Story</source>
-        <translation type="unfinished"></translation>
+        <source>Other facial features</source>
+        <translation>Diğer özellikler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1779"/>
-        <source>Short term goal</source>
-        <translation type="unfinished"></translation>
+        <source>Posture</source>
+        <translation>Duruş</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1780"/>
-        <source>Long term goal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1781"/>
-        <source>First appearance</source>
-        <translation type="unfinished"></translation>
+        <source>Other physical appearance</source>
+        <translation>Diğer fiziksel özellikler</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1782"/>
-        <source>Plot involvement</source>
-        <translation type="unfinished"></translation>
+        <source>Life</source>
+        <translation>Yaşam</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1783"/>
-        <source>Conflict</source>
-        <translation type="unfinished"></translation>
+        <source>Skills</source>
+        <translation>Yetenek</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1784"/>
-        <source>Most defining moment</source>
+        <source>How skills developed</source>
+        <translation>Hangi yetenekleri gelişmiş?</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1785"/>
+        <source>Incompetence</source>
+        <translation>Beceriksizlikler</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1786"/>
+        <source>Strength/talent</source>
+        <translation>Güç / Zeka</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1787"/>
+        <source>Weakness</source>
+        <translation>Zayıf taraflar</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1788"/>
+        <source>Hobbies</source>
+        <translation>Hobiler</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1789"/>
+        <source>Habits</source>
+        <translation>Alışkanlıklar</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1790"/>
+        <source>Health</source>
+        <translation>Sağlık</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1791"/>
+        <source>Pet</source>
+        <translation>Evcil hayvan</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1792"/>
+        <source>Dress</source>
+        <translation>Kıyafet</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1793"/>
+        <source>Something always carried/weapon/tools</source>
+        <translation>Her zaman taşınan bir şey, silah/araçlar</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1794"/>
+        <source>Accessories</source>
+        <translation>Aksesuarlar</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1795"/>
+        <source>Area of residence/environment</source>
+        <translation>İkamet alanı/çevre</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1796"/>
+        <source>Home description</source>
+        <translation>Ev </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1797"/>
+        <source>Neighborhood</source>
+        <translation>Komşular</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1798"/>
+        <source>Organization involved</source>
+        <translation>İlgili kuruluş</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1799"/>
+        <source>Income</source>
+        <translation>Gelir</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1800"/>
+        <source>Job/occupation</source>
+        <translation>Meslek</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1801"/>
+        <source>Job rank/position</source>
+        <translation>Meslek statüsü</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1802"/>
+        <source>Job satisfaction</source>
+        <translation>İş memnuniyeti</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1804"/>
+        <source>Attitude</source>
+        <translation>Davranış</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1805"/>
+        <source>Personality</source>
+        <translation>Kişilik</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1806"/>
+        <source>Moral</source>
+        <translation>Moral</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1807"/>
+        <source>Motivation</source>
+        <translation>Motivasyon</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1808"/>
+        <source>Discouragement</source>
+        <translation>Cesaretsizlik</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1809"/>
+        <source>Philosophy</source>
+        <translation>Felsefe</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1810"/>
+        <source>Greatest fear</source>
+        <translation>En büyük korku</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1811"/>
+        <source>Self control</source>
+        <translation>İrade</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1812"/>
+        <source>Intelligence level</source>
+        <translation>Zeka seviyesi</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1813"/>
+        <source>Confidence level</source>
+        <translation>Özgüven seviyesi</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1815"/>
+        <source>Biography</source>
+        <translation>Biyografi</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1816"/>
+        <source>Childhood</source>
+        <translation>Çocukluk</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1817"/>
+        <source>Important past event</source>
+        <translation>Geçmişteki önemli olay</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1818"/>
+        <source>Best accomplishment</source>
+        <translation>En iyi başarı</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1819"/>
+        <source>Other accomplishment</source>
+        <translation>Diğer başarılar</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1820"/>
+        <source>Worst moment</source>
+        <translation>En kötü an</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1821"/>
+        <source>Failure</source>
+        <translation>Başarısızlık</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1822"/>
+        <source>Secrets</source>
+        <translation>Sırlar</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1823"/>
+        <source>Best memories</source>
+        <translation>En iyi anılar</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1824"/>
+        <source>Worst memories</source>
+        <translation>En kötü anılar</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1826"/>
+        <source>Story</source>
+        <translation>Hikaye</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1827"/>
+        <source>Short term goal</source>
+        <translation>Kısa vadeli hedef</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1828"/>
+        <source>Long term goal</source>
+        <translation>Uzun vadeli hedef</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1829"/>
+        <source>Initial beliefs</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1830"/>
+        <source>Changed beliefs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1831"/>
+        <source>What leads to change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1832"/>
+        <source>First appearance</source>
+        <translation>İlk görünüş</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1833"/>
+        <source>Plot involvement</source>
+        <translation>Senaryoya katılım</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1834"/>
+        <source>Conflict</source>
+        <translation>Fikir ayrılığı</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1835"/>
+        <source>Most defining moment</source>
+        <translation>En belirleyici an</translation>
     </message>
 </context>
 <context>
@@ -5533,7 +5544,7 @@
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="203"/>
         <source>Unlock ability to edit screenplay cards</source>
-        <translation type="unfinished">Senaryo kartlarını düzenleme yeteneğinin kilidini açın</translation>
+        <translation>Senaryo kartlarını düzenleme yeteneğinin kilidini açın</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="204"/>
@@ -5543,7 +5554,7 @@
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="206"/>
         <source>Name</source>
-        <translation type="unfinished">Ad</translation>
+        <translation>Ad</translation>
     </message>
 </context>
 <context>
@@ -5640,7 +5651,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information_structure/location_information_structure_view.cpp" line="105"/>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information_structure/location_information_structure_view.cpp" line="106"/>
@@ -5655,7 +5666,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information_structure/location_information_structure_view.cpp" line="108"/>
         <source>Background</source>
-        <translation type="unfinished">Arka plan </translation>
+        <translation>Arka plan </translation>
     </message>
 </context>
 <context>
@@ -5733,7 +5744,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="694"/>
         <source>Photos</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotoğraflar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="696"/>
@@ -5753,7 +5764,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="699"/>
         <source>Sound</source>
-        <translation type="unfinished">Ses</translation>
+        <translation>Ses</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="700"/>
@@ -5773,7 +5784,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="704"/>
         <source>Location</source>
-        <translation type="unfinished">Mekan</translation>
+        <translation>Mekan</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="705"/>
@@ -7095,7 +7106,7 @@ Her şeyi yazar topluluğuyla tartışın, devam eden çalışmanızı paylaşı
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="286"/>
         <source>Print cards</source>
-        <translation type="unfinished">Kartları yazdır</translation>
+        <translation>Kartları yazdır</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="288"/>
@@ -7125,7 +7136,7 @@ Her şeyi yazar topluluğuyla tartışın, devam eden çalışmanızı paylaşı
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="294"/>
         <source>Cancel</source>
-        <translation type="unfinished">İptal</translation>
+        <translation>İptal</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="295"/>
@@ -7139,33 +7150,33 @@ Her şeyi yazar topluluğuyla tartışın, devam eden çalışmanızı paylaşı
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="121"/>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="241"/>
         <source>Search without case sensitive</source>
-        <translation type="unfinished">Büyük/küçük harfe duyarlı olmadan ara</translation>
+        <translation>Büyük/küçük harfe duyarlı olmadan ara</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="122"/>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="242"/>
         <source>Search with case sensitive</source>
-        <translation type="unfinished">Büyük/küçük harfe duyarlı olarak ara</translation>
+        <translation>Büyük/küçük harfe duyarlı olarak ara</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="127"/>
         <source>In the whole text</source>
-        <translation type="unfinished">Tüm metinde</translation>
+        <translation>Tüm metinde</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="230"/>
         <source>Exit from search</source>
-        <translation type="unfinished">Aramadan çık</translation>
+        <translation>Aramadan çık</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="233"/>
         <source>Search</source>
-        <translation type="unfinished">Ara</translation>
+        <translation>Ara</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="234"/>
         <source>Enter search phrase here</source>
-        <translation type="unfinished">Arama metnini buraya girin</translation>
+        <translation>Arama metnini buraya girin</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="236"/>
@@ -7307,37 +7318,37 @@ Her şeyi yazar topluluğuyla tartışın, devam eden çalışmanızı paylaşı
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="166"/>
         <source>Unlock ability to edit screenplay cards</source>
-        <translation type="unfinished">Senaryo kartlarını düzenleme yeteneğinin kilidini açın</translation>
+        <translation>Senaryo kartlarını düzenleme yeteneğinin kilidini açın</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="168"/>
         <source>Undo last action</source>
-        <translation type="unfinished">Son eylemi geri al</translation>
+        <translation>Son eylemi geri al</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="172"/>
         <source>Redo last action</source>
-        <translation type="unfinished">Son eylemi yinele</translation>
+        <translation>Son eylemi yinele</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="175"/>
         <source>Add act</source>
-        <translation type="unfinished">Eylem ekle</translation>
+        <translation>Eylem ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="176"/>
         <source>Add sequence</source>
-        <translation type="unfinished">Sekans ekle</translation>
+        <translation>Sekans ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="177"/>
         <source>Add scene</source>
-        <translation type="unfinished">Sahne ekle</translation>
+        <translation>Sahne ekle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="178"/>
         <source>Remove selected item</source>
-        <translation type="unfinished">Seçili öğeleri sil</translation>
+        <translation>Seçili öğeleri sil</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="180"/>
@@ -7347,46 +7358,7 @@ Her şeyi yazar topluluğuyla tartışın, devam eden çalışmanızı paylaşı
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="184"/>
         <source>Print cards</source>
-        <translation type="unfinished">Kartları yazdır</translation>
-    </message>
-</context>
-<context>
-    <name>Ui::ScreenplayCardsView</name>
-    <message>
-        <source>Unlock ability to edit screenplay cards</source>
-        <translation type="vanished">Senaryo kartlarını düzenleme yeteneğinin kilidini açın</translation>
-    </message>
-    <message>
-        <source>Undo last action</source>
-        <translation type="vanished">Son eylemi geri al</translation>
-    </message>
-    <message>
-        <source>Redo last action</source>
-        <translation type="vanished">Son eylemi yinele</translation>
-    </message>
-    <message>
-        <source>Add structure</source>
-        <translation type="vanished">Yapı ekle</translation>
-    </message>
-    <message>
-        <source>Add act</source>
-        <translation type="vanished">Eylem ekle</translation>
-    </message>
-    <message>
-        <source>Add sequence</source>
-        <translation type="vanished">Sekans ekle</translation>
-    </message>
-    <message>
-        <source>Add scene</source>
-        <translation type="vanished">Sahne ekle</translation>
-    </message>
-    <message>
-        <source>Remove selected item</source>
-        <translation type="vanished">Seçili öğeleri sil</translation>
-    </message>
-    <message>
-        <source>Print cards</source>
-        <translation type="vanished">Kartları yazdır</translation>
+        <translation>Kartları yazdır</translation>
     </message>
 </context>
 <context>

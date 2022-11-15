@@ -1735,30 +1735,30 @@
         <translation>Actualitza</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="393"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="402"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>El nom del personatge ha canviat de &quot;%1&quot; a &quot;%2&quot;. Aplicar els canvis?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="395"/>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="441"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="404"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="450"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="396"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="405"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="440"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="449"/>
         <source>Do you want to delete the character&apos;s photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voleu esborrar la foto del personatge?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="442"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="451"/>
         <source>Yes, delete</source>
-        <translation type="unfinished">Sí, esborra</translation>
+        <translation>Sí, esborra</translation>
     </message>
 </context>
 <context>
@@ -1781,7 +1781,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="142"/>
         <source>To edit the character relations graph, you need to upgrade to the PRO version.</source>
-        <translation>Per a editar el gràfic de relacions entre personatges, has d&apos;actualitzar a la versió PRO.</translation>
+        <translation>Per a editar el gràfic de relacions entre personatges, heu d&apos;actualitzar a la versió PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="143"/>
@@ -1830,7 +1830,7 @@
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="352"/>
         <source>TEAM version lifetime access granted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Accés a la versió EQUIP activat de per vida.</translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="505"/>
@@ -1845,7 +1845,7 @@
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="513"/>
         <source>Maximum number of promocode activations done</source>
-        <translation>Has assolit el nombre màxim de codis de descompte</translation>
+        <translation>Heu assolit el nombre màxim de codis de descompte</translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="517"/>
@@ -1910,27 +1910,27 @@
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="75"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Potser més tard</translation>
+        <translation>Potser més tard</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="76"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Actualitza</translation>
+        <translation>Actualitza</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="154"/>
         <source>Do you want to delete the character&apos;s photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voleu esborrar la foto del personatge?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="155"/>
         <source>No</source>
-        <translation type="unfinished">No</translation>
+        <translation>No</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="156"/>
         <source>Yes, delete</source>
-        <translation type="unfinished">Sí, esborra</translation>
+        <translation>Sí, esborra</translation>
     </message>
 </context>
 <context>
@@ -1961,12 +1961,12 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="72"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Potser més tard</translation>
+        <translation>Potser més tard</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="73"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Actualitza</translation>
+        <translation>Actualitza</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="226"/>
@@ -1987,12 +1987,12 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="269"/>
         <source>Do you want to delete the location&apos;s photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voleu esborrar la foto de la localització?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="271"/>
         <source>Yes, delete</source>
-        <translation type="unfinished">Sí, esborra</translation>
+        <translation>Sí, esborra</translation>
     </message>
 </context>
 <context>
@@ -2015,7 +2015,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="140"/>
         <source>To edit the location map, you need to upgrade to the PRO version.</source>
-        <translation>Per a poder editar el mapa de localitzacions, has d&apos;actualitzar a la versió PRO.</translation>
+        <translation>Per a poder editar el mapa de localitzacions, heu d&apos;actualitzar a la versió PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="141"/>
@@ -2305,12 +2305,12 @@
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="136"/>
         <source>Move to the cloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Mou-la al núvol</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="145"/>
         <source>To move a project to the cloud, you should be authorized.</source>
-        <translation type="unfinished"></translation>
+        <translation>Per a moure un projecte al núvol heu d&apos;estar autoritzat.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="146"/>
@@ -2326,7 +2326,7 @@
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="166"/>
         <source>To move a project to the cloud, you need to upgrade to the TEAM version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Per a moure un projecte al núvol, heu d&apos;actualitzar a la versió EQUIP.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="169"/>
@@ -2477,7 +2477,7 @@
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="432"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel·la</translation>
     </message>
     <message>
         <location filename="../management_layer/content/settings/settings_manager.cpp" line="433"/>
@@ -3100,7 +3100,7 @@
     <message>
         <location filename="../ui/account/account_view.cpp" line="559"/>
         <source>Do you want to delete your avatar?</source>
-        <translation>Vols eliminar el teu avatar?</translation>
+        <translation>Voleu esborrar el vostre avatar?</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="560"/>
@@ -3662,7 +3662,7 @@
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="113"/>
         <source>Personal info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informació personal</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="114"/>
@@ -3672,7 +3672,7 @@
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="115"/>
         <source>Life</source>
-        <translation type="unfinished"></translation>
+        <translation>Vida</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="116"/>
@@ -3682,466 +3682,477 @@
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="117"/>
         <source>Biography</source>
-        <translation type="unfinished"></translation>
+        <translation>Biografia</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="112"/>
         <source>Story</source>
-        <translation type="unfinished"></translation>
+        <translation>Història</translation>
     </message>
 </context>
 <context>
     <name>Ui::CharacterInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="541"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="550"/>
         <source>Apply new character name</source>
         <translation>Aplicar el nou nom del personatge</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="547"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1693"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="556"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1741"/>
         <source>Select character color</source>
         <translation>Selecciona el color del personatge</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1690"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1738"/>
         <source>Unlock access to extended character profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1692"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1740"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1694"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1742"/>
         <source>Story role</source>
         <translation>Rol a la història</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="415"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="421"/>
         <source>Primary</source>
         <translation>Primari</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="415"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="421"/>
         <source>Secondary</source>
         <translation>Secundari</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="415"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="421"/>
         <source>Tertiary</source>
         <translation>Terciari</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="415"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="421"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="426"/>
         <source>Undefined</source>
         <translation>Indefinit</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="562"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1698"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="571"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1746"/>
         <source>Age</source>
         <translation>Edat</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="568"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1699"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="577"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1747"/>
         <source>Gender</source>
         <translation>Genere</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="426"/>
         <source>Male</source>
         <translation>Home</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="426"/>
         <source>Female</source>
         <translation>Dona</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="426"/>
         <source>Other</source>
         <translation>Altre</translation>
     </message>
     <message>
-        <source>Unlock ability to edit screenplay cards</source>
-        <translation type="vanished">Desbloqueja l&apos;habilitat d&apos;editar les targetes del guió</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1703"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1751"/>
         <source>One sentence description</source>
         <translation>Descripció en una frase</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1704"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1752"/>
         <source>Long description</source>
         <translation>Descripció llarga</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1706"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1754"/>
         <source>Add photo +</source>
         <translation>Afegir foto +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1706"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1754"/>
         <source>Change photo...</source>
         <translation>Canviar foto... </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1707"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1755"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
-        <translation>Vols eliminar la foto principal del principal?</translation>
+        <translation>Voleu esborrar la foto principal del personatge?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1708"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1756"/>
         <source>Select an area for the character main photo</source>
         <translation>Selecciona una àrea per a la foto principal del personatge</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1710"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1758"/>
         <source>Photos</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotografies</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1712"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1760"/>
         <source>Personal info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informació personal</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1713"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1761"/>
         <source>Real name</source>
         <translation>Nom real</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1714"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1762"/>
         <source>Date of birth</source>
         <translation>Data de naixement </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1715"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1763"/>
         <source>Place of birth</source>
         <translation>Lloc de naixement</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1716"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1764"/>
         <source>Ethnicity/race</source>
         <translation>Ètnia/raça</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1717"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1765"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Família</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1719"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1767"/>
         <source>Physique</source>
         <translation>Físic</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1720"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1768"/>
         <source>Height</source>
         <translation>Alçada</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1721"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1769"/>
         <source>Weight</source>
         <translation>Pes</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1722"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1770"/>
         <source>Body</source>
         <translation>Cos</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1723"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1771"/>
         <source>Skin tone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1724"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1772"/>
         <source>Hair style</source>
-        <translation type="unfinished"></translation>
+        <translation>Estil de cabell</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1725"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1773"/>
         <source>Hair color</source>
-        <translation type="unfinished"></translation>
+        <translation>Color del cabell</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1726"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1774"/>
         <source>Eye shape</source>
-        <translation type="unfinished"></translation>
+        <translation>Forma dels ulls</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1727"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1775"/>
         <source>Eye color</source>
-        <translation type="unfinished"></translation>
+        <translation>Color dels ulls</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1728"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1776"/>
         <source>Facial shape</source>
-        <translation type="unfinished"></translation>
+        <translation>Forma de la cara</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1729"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1777"/>
         <source>Distinguish feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1730"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1778"/>
         <source>Other facial features</source>
-        <translation type="unfinished"></translation>
+        <translation>Altres característiques facials</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1731"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1779"/>
         <source>Posture</source>
-        <translation type="unfinished"></translation>
+        <translation>Postura</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1732"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1780"/>
         <source>Other physical appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Altres aspectes físics</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1734"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1782"/>
         <source>Life</source>
-        <translation type="unfinished"></translation>
+        <translation>Vida</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1735"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1783"/>
         <source>Skills</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitats</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1736"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1784"/>
         <source>How skills developed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1737"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1785"/>
         <source>Incompetence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1738"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1786"/>
         <source>Strength/talent</source>
-        <translation type="unfinished"></translation>
+        <translation>Força/talent</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1739"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1787"/>
         <source>Weakness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1740"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1788"/>
         <source>Hobbies</source>
-        <translation type="unfinished"></translation>
+        <translation>Aficions</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1741"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1789"/>
         <source>Habits</source>
-        <translation type="unfinished"></translation>
+        <translation>Hàbits</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1742"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1790"/>
         <source>Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Salut</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1743"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1791"/>
         <source>Pet</source>
-        <translation type="unfinished"></translation>
+        <translation>Mascota</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1744"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1792"/>
         <source>Dress</source>
-        <translation type="unfinished"></translation>
+        <translation>Vestimenta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1745"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1793"/>
         <source>Something always carried/weapon/tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Sempre porta alguna cosa/armes/eines</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1746"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1794"/>
         <source>Accessories</source>
-        <translation type="unfinished"></translation>
+        <translation>Accessoris</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1747"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1795"/>
         <source>Area of residence/environment</source>
-        <translation type="unfinished"></translation>
+        <translation>Lloc on resideix/entorn</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1748"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1796"/>
         <source>Home description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descripció de la llar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1749"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1797"/>
         <source>Neighborhood</source>
-        <translation type="unfinished"></translation>
+        <translation>Barri</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1750"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1798"/>
         <source>Organization involved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1751"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1799"/>
         <source>Income</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1752"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1800"/>
         <source>Job/occupation</source>
-        <translation type="unfinished"></translation>
+        <translation>Feina/ocupació</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1753"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1801"/>
         <source>Job rank/position</source>
-        <translation type="unfinished"></translation>
+        <translation>Posició/classificació a la feina</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1754"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1802"/>
         <source>Job satisfaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Satisfacció a la feina</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1756"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1804"/>
         <source>Attitude</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1757"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1805"/>
         <source>Personality</source>
-        <translation type="unfinished"></translation>
+        <translation>Personalitat</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1758"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1806"/>
         <source>Moral</source>
-        <translation type="unfinished"></translation>
+        <translation>Moral</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1759"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1807"/>
         <source>Motivation</source>
-        <translation type="unfinished"></translation>
+        <translation>Motivació</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1760"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1808"/>
         <source>Discouragement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1761"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1809"/>
         <source>Philosophy</source>
-        <translation type="unfinished"></translation>
+        <translation>Filosofia</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1762"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1810"/>
         <source>Greatest fear</source>
-        <translation type="unfinished"></translation>
+        <translation>La por més gran</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1763"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1811"/>
         <source>Self control</source>
-        <translation type="unfinished"></translation>
+        <translation>Autocontrol</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1764"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1812"/>
         <source>Intelligence level</source>
-        <translation type="unfinished"></translation>
+        <translation>Nivell d&apos;intel·ligència</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1765"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1813"/>
         <source>Confidence level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1767"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1815"/>
         <source>Biography</source>
-        <translation type="unfinished"></translation>
+        <translation>Biografia</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1768"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1816"/>
         <source>Childhood</source>
-        <translation type="unfinished"></translation>
+        <translation>Infància</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1769"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1817"/>
         <source>Important past event</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1770"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1818"/>
         <source>Best accomplishment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1771"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1819"/>
         <source>Other accomplishment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1772"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1820"/>
         <source>Worst moment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1773"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1821"/>
         <source>Failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1774"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1822"/>
         <source>Secrets</source>
-        <translation type="unfinished"></translation>
+        <translation>Secrets</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1775"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1823"/>
         <source>Best memories</source>
-        <translation type="unfinished"></translation>
+        <translation>Els millors records</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1776"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1824"/>
         <source>Worst memories</source>
-        <translation type="unfinished"></translation>
+        <translation>Els pitjors records</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1778"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1826"/>
         <source>Story</source>
-        <translation type="unfinished"></translation>
+        <translation>Història</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1779"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1827"/>
         <source>Short term goal</source>
-        <translation type="unfinished"></translation>
+        <translation>Objectiu a curt termini</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1780"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1828"/>
         <source>Long term goal</source>
+        <translation>Objectiu a llarg termini</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1829"/>
+        <source>Initial beliefs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1781"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1830"/>
+        <source>Changed beliefs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1831"/>
+        <source>What leads to change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1832"/>
         <source>First appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1782"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1833"/>
         <source>Plot involvement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1783"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1834"/>
         <source>Conflict</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1784"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1835"/>
         <source>Most defining moment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4244,7 +4255,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="816"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
-        <translation>Vols eliminar la foto principal del principal?</translation>
+        <translation>Voleu esborrar la foto principal del personatge?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="817"/>
@@ -5541,17 +5552,17 @@
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="203"/>
         <source>Unlock ability to edit screenplay cards</source>
-        <translation type="unfinished">Desbloqueja l&apos;habilitat d&apos;editar les targetes del guió</translation>
+        <translation>Desbloqueja l&apos;habilitat d&apos;editar les targetes del guió</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="204"/>
         <source>Add images to the gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Afegir imatges a la galeria</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="206"/>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
 </context>
 <context>
@@ -5663,7 +5674,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information_structure/location_information_structure_view.cpp" line="108"/>
         <source>Background</source>
-        <translation type="unfinished">Fons</translation>
+        <translation>Fons</translation>
     </message>
 </context>
 <context>
@@ -5731,7 +5742,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="691"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
-        <translation>Vols esborrar la imatge principal de la localització?</translation>
+        <translation>Voleu esborrar la imatge principal de la localització?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="692"/>
@@ -5741,7 +5752,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="694"/>
         <source>Photos</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotografies</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="696"/>
@@ -5761,7 +5772,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="699"/>
         <source>Sound</source>
-        <translation type="unfinished">So</translation>
+        <translation>So</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="700"/>
@@ -5781,7 +5792,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="704"/>
         <source>Location</source>
-        <translation type="unfinished">Localització</translation>
+        <translation>Localització</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="705"/>
@@ -5915,7 +5926,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="738"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
-        <translation>Vols esborrar la imatge principal de la localització?</translation>
+        <translation>Voleu esborrar la imatge principal de la localització?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="739"/>
@@ -6070,7 +6081,7 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="485"/>
         <source>Every successful screen story has a central character. Describe it!</source>
-        <translation type="unfinished"></translation>
+        <translation>Tota història exitosa té un personatge principal. Descriviu-lo!</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="495"/>
@@ -6086,12 +6097,12 @@
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="516"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="521"/>
         <source>Untick if you don&apos;t want to include MPR.</source>
-        <translation>Desmarca si no voleu incloure un CPM.</translation>
+        <translation>Desmarqueu si no voleu incloure un CPM.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="532"/>
         <source>Untick if you don&apos;t want to include special rules.</source>
-        <translation>Desmarca si no voleu incloure les normes especials.</translation>
+        <translation>Desmarqueu si no voleu incloure les normes especials.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="542"/>
@@ -7136,7 +7147,7 @@ Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xer
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="294"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel·la</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="295"/>
@@ -7150,33 +7161,33 @@ Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xer
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="121"/>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="241"/>
         <source>Search without case sensitive</source>
-        <translation type="unfinished">Cerca sense distingir entre majúscules i minúscules</translation>
+        <translation>Cerca sense distingir entre majúscules i minúscules</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="122"/>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="242"/>
         <source>Search with case sensitive</source>
-        <translation type="unfinished">Cerca distingint entre majúscules i minúscules</translation>
+        <translation>Cerca distingint entre majúscules i minúscules</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="127"/>
         <source>In the whole text</source>
-        <translation type="unfinished">En tot el text</translation>
+        <translation>En tot el text</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="230"/>
         <source>Exit from search</source>
-        <translation type="unfinished">Surt de la cerca</translation>
+        <translation>Surt de la cerca</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="233"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerca</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="234"/>
         <source>Enter search phrase here</source>
-        <translation type="unfinished">Entra la frase a cercar aquí</translation>
+        <translation>Entra la frase a cercar aquí</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_search_toolbar.cpp" line="236"/>
@@ -7318,37 +7329,37 @@ Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xer
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="166"/>
         <source>Unlock ability to edit screenplay cards</source>
-        <translation type="unfinished">Desbloqueja l&apos;habilitat d&apos;editar les targetes del guió</translation>
+        <translation>Desbloqueja l&apos;habilitat d&apos;editar les targetes del guió</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="168"/>
         <source>Undo last action</source>
-        <translation type="unfinished">Desfés la darrera acció</translation>
+        <translation>Desfés la darrera acció</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="172"/>
         <source>Redo last action</source>
-        <translation type="unfinished">Recupera la darrera acció</translation>
+        <translation>Recupera la darrera acció</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="175"/>
         <source>Add act</source>
-        <translation type="unfinished">Afegiu acte</translation>
+        <translation>Afegiu acte</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="176"/>
         <source>Add sequence</source>
-        <translation type="unfinished">Afegiu seqüència</translation>
+        <translation>Afegiu seqüència</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="177"/>
         <source>Add scene</source>
-        <translation type="unfinished">Afegiu escena</translation>
+        <translation>Afegiu escena</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="178"/>
         <source>Remove selected item</source>
-        <translation type="unfinished">Esborra l&apos;ítem seleccionat</translation>
+        <translation>Esborra l&apos;ítem seleccionat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="180"/>
@@ -7359,37 +7370,6 @@ Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xer
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="184"/>
         <source>Print cards</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Ui::ScreenplayCardsView</name>
-    <message>
-        <source>Unlock ability to edit screenplay cards</source>
-        <translation type="vanished">Desbloqueja l&apos;habilitat d&apos;editar les targetes del guió</translation>
-    </message>
-    <message>
-        <source>Undo last action</source>
-        <translation type="vanished">Desfés la darrera acció</translation>
-    </message>
-    <message>
-        <source>Redo last action</source>
-        <translation type="vanished">Recupera la darrera acció</translation>
-    </message>
-    <message>
-        <source>Add act</source>
-        <translation type="vanished">Afegiu acte</translation>
-    </message>
-    <message>
-        <source>Add sequence</source>
-        <translation type="vanished">Afegiu seqüència</translation>
-    </message>
-    <message>
-        <source>Add scene</source>
-        <translation type="vanished">Afegiu escena</translation>
-    </message>
-    <message>
-        <source>Remove selected item</source>
-        <translation type="vanished">Esborra l&apos;ítem seleccionat</translation>
     </message>
 </context>
 <context>
@@ -7615,12 +7595,12 @@ Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xer
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="350"/>
         <source>Scenes numbers&apos; prefix</source>
-        <translation type="unfinished"></translation>
+        <translation>Prefix dels nombres d&apos;escenes</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="351"/>
         <source>Scenes numbering start at</source>
-        <translation type="unfinished"></translation>
+        <translation>La numeració d&apos;escenes comença per</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="352"/>
@@ -7685,7 +7665,7 @@ Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xer
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="681"/>
         <source>Sort scenes</source>
-        <translation type="unfinished"></translation>
+        <translation>Endreça les escenes</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="682"/>
@@ -7729,7 +7709,7 @@ Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xer
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="690"/>
         <source>Sort locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Endreça les localitzacions</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="693"/>
@@ -7824,7 +7804,7 @@ Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xer
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="719"/>
         <source>All characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Tots els personatges</translation>
     </message>
 </context>
 <context>
@@ -8851,7 +8831,7 @@ Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xer
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2817"/>
         <source>Asturian</source>
-        <translation type="unfinished"></translation>
+        <translation>Asturià</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="2818"/>
