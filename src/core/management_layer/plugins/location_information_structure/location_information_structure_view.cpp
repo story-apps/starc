@@ -47,10 +47,10 @@ LocationInformationStructureView::Implementation::Implementation(QWidget* _paren
         return item;
     };
     auto traitsModel = new QStandardItemModel(traits);
-    traitsModel->appendRow(createItem(u8"\U000F0007"));
-    traitsModel->appendRow(createItem(u8"\U000F0306"));
-    traitsModel->appendRow(createItem(u8"\U000F1570"));
-    traitsModel->appendRow(createItem(u8"\U000F0FD7"));
+    traitsModel->appendRow(createItem(u8"\U000F06A1"));
+    traitsModel->appendRow(createItem(u8"\U000F0C68"));
+    traitsModel->appendRow(createItem(u8"\U000F1A48"));
+    traitsModel->appendRow(createItem(u8"\U000F0DD4"));
     traits->setModel(traitsModel);
     traits->setCurrentIndex(traitsModel->index(0, 0));
 }
