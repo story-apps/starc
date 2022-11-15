@@ -88,6 +88,9 @@ const QLatin1String kBestMemoriesKey("best_memories");
 const QLatin1String kWorstMemoriesKey("worst_memories");
 const QLatin1String kShortTermGoalKey("short_term_goal");
 const QLatin1String kLongTermGoalKey("long_term_goal");
+const QLatin1String kInitialBeliefsKey("initial_beliefs");
+const QLatin1String kChangedBeliefsKey("changed_beliefs");
+const QLatin1String kWhatLeadsToChangeKey("what_leads_to_change");
 const QLatin1String kFirstAppearanceKey("first_appearance");
 const QLatin1String kPlotInvolvementKey("plot_involvement");
 const QLatin1String kConflictKey("conflict");
@@ -166,6 +169,9 @@ public:
     QString worstMemories;
     QString shortTermGoal;
     QString longTermGoal;
+    QString initialBeliefs;
+    QString changedBeliefs;
+    QString whatLeadsToChange;
     QString firstAppearance;
     QString plotInvolvement;
     QString conflict;
@@ -311,6 +317,12 @@ CharacterModel::CharacterModel(QObject* _parent)
     connect(this, &CharacterModel::shortTermGoalChanged, this,
             &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::longTermGoalChanged, this,
+            &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::initialBeliefsChanged, this,
+            &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::changedBeliefsChanged, this,
+            &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::whatLeadsToChangeChanged, this,
             &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::firstAppearanceChanged, this,
             &CharacterModel::updateDocumentContent);
@@ -1305,6 +1317,48 @@ void CharacterModel::setLongTermGoal(const QString& _text)
     d->longTermGoal = _text;
     emit longTermGoalChanged(d->longTermGoal);
 }
+
+QString CharacterModel::initialBeliefs() const
+{
+    return d->initialBeliefs;
+}
+
+void CharacterModel::setInitialBeliefs(const QString& _text)
+{
+    if (d->initialBeliefs == _text) {
+        return;
+    }
+    d->initialBeliefs = _text;
+    emit initialBeliefsChanged(d->initialBeliefs);
+}
+
+QString CharacterModel::changedBeliefs() const
+{
+    return d->changedBeliefs;
+}
+
+void CharacterModel::setChangedBeliefs(const QString& _text)
+{
+    if (d->changedBeliefs == _text) {
+        return;
+    }
+    d->changedBeliefs = _text;
+    emit changedBeliefsChanged(d->changedBeliefs);
+}
+
+QString CharacterModel::whatLeadsToChange() const
+{
+    return d->whatLeadsToChange;
+}
+
+void CharacterModel::setWhatLeadsToChange(const QString& _text)
+{
+    if (d->whatLeadsToChange == _text) {
+        return;
+    }
+    d->whatLeadsToChange = _text;
+    emit whatLeadsToChangeChanged(d->whatLeadsToChange);
+}
 QString CharacterModel::firstAppearance() const
 {
     return d->firstAppearance;
@@ -1501,6 +1555,9 @@ void CharacterModel::initDocument()
     d->worstMemories = load(kWorstMemoriesKey);
     d->shortTermGoal = load(kShortTermGoalKey);
     d->longTermGoal = load(kLongTermGoalKey);
+    d->initialBeliefs = load(kInitialBeliefsKey);
+    d->changedBeliefs = load(kChangedBeliefsKey);
+    d->whatLeadsToChange = load(kWhatLeadsToChangeKey);
     d->firstAppearance = load(kFirstAppearanceKey);
     d->plotInvolvement = load(kPlotInvolvementKey);
     d->conflict = load(kConflictKey);
@@ -1618,6 +1675,9 @@ QByteArray CharacterModel::toXml() const
     save(kWorstMemoriesKey, d->worstMemories);
     save(kShortTermGoalKey, d->shortTermGoal);
     save(kLongTermGoalKey, d->longTermGoal);
+    save(kInitialBeliefsKey, d->initialBeliefs);
+    save(kChangedBeliefsKey, d->changedBeliefs);
+    save(kWhatLeadsToChangeKey, d->whatLeadsToChange);
     save(kFirstAppearanceKey, d->firstAppearance);
     save(kPlotInvolvementKey, d->plotInvolvement);
     save(kConflictKey, d->conflict);
@@ -1808,6 +1868,9 @@ void CharacterModel::applyPatch(const QByteArray& _patch)
     setWorstMemories(load(kWorstMemoriesKey));
     setShortTermGoal(load(kShortTermGoalKey));
     setLongTermGoal(load(kLongTermGoalKey));
+    setInitialBeliefs(load(kInitialBeliefsKey));
+    setChangedBeliefs(load(kChangedBeliefsKey));
+    setWhatLeadsToChange(load(kWhatLeadsToChangeKey));
     setFirstAppearance(load(kFirstAppearanceKey));
     setPlotInvolvement(load(kPlotInvolvementKey));
     setConflict(load(kConflictKey));

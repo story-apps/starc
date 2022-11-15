@@ -356,6 +356,18 @@ public:
     void setLongTermGoal(const QString& _text);
     Q_SIGNAL void longTermGoalChanged(const QString& _text);
 
+    QString initialBeliefs() const;
+    void setInitialBeliefs(const QString& _text);
+    Q_SIGNAL void initialBeliefsChanged(const QString& _text);
+
+    QString changedBeliefs() const;
+    void setChangedBeliefs(const QString& _text);
+    Q_SIGNAL void changedBeliefsChanged(const QString& _text);
+
+    QString whatLeadsToChange() const;
+    void setWhatLeadsToChange(const QString& _text);
+    Q_SIGNAL void whatLeadsToChangeChanged(const QString& _text);
+
     QString firstAppearance() const;
     void setFirstAppearance(const QString& _text);
     Q_SIGNAL void firstAppearanceChanged(const QString& _text);
