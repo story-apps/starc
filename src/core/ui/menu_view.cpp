@@ -349,7 +349,11 @@ void MenuView::setAccountEmail(const QString& _email)
 
 void MenuView::setSignInVisible(bool _visible)
 {
+#ifdef CLOUD_SERVICE_MANAGER
     d->signIn->setVisible(_visible);
+#else
+    Q_UNUSED(_visible)
+#endif
 }
 
 void MenuView::checkProjects()

@@ -763,10 +763,12 @@ void ApplicationManager::Implementation::showContent()
         // ... локальные
         //
         projectsManager->loadProjects();
+#ifdef CLOUD_SERVICE_MANAGER
         //
         // ... облачные
         //
         cloudServiceManager->askProjects();
+#endif
         //
         // ... а затем уже отобразить
         //
@@ -1735,6 +1737,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
         }
     }
 
+#ifdef CLOUD_SERVICE_MANAGER
     //
     // Для облачных проектов делаем синхронизацию офлайн изменений
     //
@@ -1745,6 +1748,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
             cloudServiceManager->openDocument(projectsManager->currentProject().id(), document);
         }
     }
+#endif
 }
 
 void ApplicationManager::Implementation::closeCurrentProject()
