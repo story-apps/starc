@@ -167,6 +167,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
                                                 1); // добавляем пустую строку, вместо отступа снизу
     subscriptionInfo->setContentLayout(subscriptionInfoLayout);
     //
+    promocodeName->setCapitalizeWords(false);
     promocodeInfoLayout->addWidget(promocodeName, 0, 0);
     promocodeInfoLayout->addWidget(activatePromocode, 0, 1, Qt::AlignBottom);
     promocodeInfoLayout->setColumnStretch(0, 1);
