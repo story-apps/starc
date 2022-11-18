@@ -191,10 +191,7 @@ bool TextModelGroupItem::setNumber(int _number, const QString& _prefix)
     }
 
     d->number = { _number, newNumberText };
-    //
-    // Т.к. пока мы не сохраняем номера, в указании, что произошли изменения нет смысла
-    //
-    //    setChanged(true);
+    setChanged(true);
 
     return true;
 }

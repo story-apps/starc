@@ -115,6 +115,7 @@ void ScreenplayTextModel::Implementation::updateNumbering()
                       if (groupItem->groupType() == TextGroupType::Scene) {
                           if (groupItem->setNumber(sceneNumber,
                                                    informationModel->scenesNumbersPrefix())) {
+                              q->updateItem(groupItem);
                               ++sceneNumber;
                           }
                       }
@@ -126,6 +127,7 @@ void ScreenplayTextModel::Implementation::updateNumbering()
                       if (textItem->paragraphType() == TextParagraphType::Character
                           && !textItem->isCorrection()) {
                           textItem->setNumber(dialogueNumber);
+                          q->updateItem(textItem);
                           ++dialogueNumber;
                       }
                       break;
