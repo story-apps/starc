@@ -1867,7 +1867,8 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             // Если элемент удаляется целиком, то его и запишем на удаление,
             // за исключением случая, если это самый верхнеуровневый элемент
             //
-            if (itemsGroup.constFirst().item->parent()->childCount() == itemsGroup.size()
+            if (itemsGroup.constFirst().item->hasParent()
+                && itemsGroup.constFirst().item->parent()->childCount() == itemsGroup.size()
                 && itemsGroup.constFirst().item->parent()->hasParent()) {
                 itemsToDeleteCompressed.emplace(itemsGroup.constFirst().position,
                                                 itemsGroup.constFirst().item->parent());
@@ -1909,7 +1910,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             //
             // Будем удалять только если элемент лежит в руте, или является папкой, или сценой
             //
-            if (removeIter->second->parent()->hasParent()
+            if (removeIter->second->hasParent() && removeIter->second->parent()->hasParent()
                 && removeIter->second->type() != TextModelItemType::Folder
                 && removeIter->second->type() != TextModelItemType::Group) {
                 removeGroup();
