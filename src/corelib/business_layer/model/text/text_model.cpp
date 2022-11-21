@@ -1824,7 +1824,12 @@ void TextModel::applyPatch(const QByteArray& _patch)
                                 = modelItemParent->childAt(modelItemParent->childCount() - 1);
                             takeItem(childItem);
                             insertItem(childItem, _item);
-                            movedSiblingItems.prepend(childItem);
+                            const auto siblingChildIndex = movedSiblingItems.indexOf(childItem);
+                            if (siblingChildIndex == -1) {
+                                movedSiblingItems.prepend(childItem);
+                            } else if (siblingChildIndex > 0) {
+                                movedSiblingItems.move(siblingChildIndex, 0);
+                            }
                         }
                     }
                 }
@@ -1924,7 +1929,12 @@ void TextModel::applyPatch(const QByteArray& _patch)
 
                     takeItem(childItem);
                     insertItem(childItem, _item);
-                    movedSiblingItems.prepend(childItem);
+                    const auto siblingChildIndex = movedSiblingItems.indexOf(childItem);
+                    if (siblingChildIndex == -1) {
+                        movedSiblingItems.prepend(childItem);
+                    } else if (siblingChildIndex > 0) {
+                        movedSiblingItems.move(siblingChildIndex, 0);
+                    }
                 }
             }
         }
@@ -1952,7 +1962,6 @@ void TextModel::applyPatch(const QByteArray& _patch)
 
         return true;
     };
-
 
     for (const auto& operation : operations) {
         //
@@ -2004,13 +2013,16 @@ void TextModel::applyPatch(const QByteArray& _patch)
             // Выносим детей на предыдущий уровень
             //
             if (modelItem->hasChildren()) {
+                QVector<BusinessLayer::TextModelItem*> childItems;
                 for (int index = 0; index < modelItem->childCount(); ++index) {
                     auto childItem = modelItem->childAt(index);
-                    movedSiblingItems.append(childItem);
+                    childItems.append(childItem);
                 }
 
-                takeItems(movedSiblingItems.constFirst(), movedSiblingItems.constLast(), modelItem);
-                insertItems(movedSiblingItems, modelItem);
+                takeItems(childItems.constFirst(), childItems.constLast(), modelItem);
+                insertItems(childItems, modelItem);
+
+                movedSiblingItems.append(childItems);
             }
             //
             // ... и удаляем сам элемент
