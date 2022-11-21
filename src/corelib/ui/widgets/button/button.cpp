@@ -273,7 +273,7 @@ void Button::paintEvent(QPaintEvent* _event)
     //
     if (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
         || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
-        painter.setClipRect(contentsRect());
+        painter.setClipRect(backgroundRect);
         painter.setPen(Qt::NoPen);
         painter.setBrush(textColor());
         painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
