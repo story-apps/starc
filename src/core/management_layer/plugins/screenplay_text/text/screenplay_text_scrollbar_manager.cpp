@@ -27,6 +27,11 @@ public:
     void updateTimelineGeometry();
 
     /**
+     * @brief Обновить размер отображаемой области таймлайна
+     */
+    void updateTimelineDisplayRange();
+
+    /**
      * @brief Запустить анимацию отображения таймлайна
      */
     void showTimelineAnimated();
@@ -65,6 +70,23 @@ void ScreenplayTextScrollBarManager::Implementation::updateTimelineGeometry()
                    0);
     timeline->resize(timeline->sizeHint().width(), timeline->parentWidget()->size().height());
     scrollbar->setFixedWidth(timeline->width());
+
+    updateTimelineDisplayRange();
+}
+
+void ScreenplayTextScrollBarManager::Implementation::updateTimelineDisplayRange()
+{
+    if (model.isNull() || scrollbar->maximum() == 0) {
+        return;
+    }
+
+    //
+    // В pageStep текстовый документ задаёт высоту видимой области текста,
+    // а в maximum всю высоту документа за вычетом одной страницы,
+    // поэтому тут рассчёт идёт исходя из этого знания
+    //
+    timeline->setDisplayRange(model->duration() * scrollbar->pageStep()
+                              / (scrollbar->maximum() + scrollbar->pageStep()));
 }
 
 void ScreenplayTextScrollBarManager::Implementation::showTimelineAnimated()
@@ -115,6 +137,7 @@ ScreenplayTextScrollBarManager::ScreenplayTextScrollBarManager(QAbstractScrollAr
         d->timeline->setMaximum(d->model->duration());
         d->timeline->setColors(d->model->itemsColors());
         d->timeline->setBookmarks(d->model->itemsBookmarks());
+        d->updateTimelineDisplayRange();
     });
 }
 
@@ -124,6 +147,7 @@ void ScreenplayTextScrollBarManager::initScrollBarsSyncing()
 {
     connect(d->scrollbar, &QScrollBar::rangeChanged, this, [this](int _minimum, int _maximum) {
         d->timeline->setScrollable(_minimum < _maximum);
+        d->updateTimelineDisplayRange();
     });
     auto updateTimelineValue = [this] {
         if (d->model == nullptr) {
@@ -221,7 +245,8 @@ public:
     bool scrollable = true;
     const std::chrono::milliseconds minimum = std::chrono::seconds{ 0 };
     std::chrono::milliseconds maximum = std::chrono::seconds{ 10 };
-    std::chrono::milliseconds current = std::chrono::seconds{ 5 };
+    std::chrono::milliseconds current = std::chrono::seconds{ 0 };
+    std::chrono::milliseconds displayRange = std::chrono::seconds{ 5 };
     std::map<std::chrono::milliseconds, QColor> colors;
     std::map<std::chrono::milliseconds, QColor> bookmarks;
 };
@@ -274,6 +299,16 @@ void ScreenplayTextTimeline::setValue(std::chrono::milliseconds _value)
     update();
 }
 
+void ScreenplayTextTimeline::setDisplayRange(std::chrono::milliseconds _value)
+{
+    if (d->minimum > _value || _value > d->maximum || d->displayRange == _value) {
+        return;
+    }
+
+    d->displayRange = _value;
+    update();
+}
+
 void ScreenplayTextTimeline::setColors(const std::map<std::chrono::milliseconds, QColor>& _colors)
 {
     if (d->colors == _colors) {
@@ -310,12 +345,10 @@ QSize ScreenplayTextTimeline::sizeHint() const
 
 void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
 {
-    Q_UNUSED(_event)
-
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setOpacity(opacity());
-    painter.fillRect(rect(), Qt::transparent);
+    painter.fillRect(_event->rect(), Qt::transparent);
 
     painter.setFont(Ui::DesignSystem::font().caption());
 
@@ -415,7 +448,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     painter.fillRect(scrollbarBackgroundRect, Ui::DesignSystem::color().surface());
 
     //
-    // Рисуем хэндл
+    // Рассчитываем хэндл
     //
     const qreal handleX = scrollbarRect.center().x();
     const qreal handleY = d->maximum > std::chrono::milliseconds{ 0 }
@@ -423,12 +456,32 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
            + painter.fontMetrics().lineSpacing() / 2)
         : 0;
     const qreal handleSize = Ui::DesignSystem::layout().px12();
-    const QRectF handleRect
-        = QRectF(handleX - handleSize / 2, handleY - handleSize / 2, handleSize, handleSize);
-    if (d->scrollable) {
-        painter.setPen(
-            QPen(Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::layout().px2()));
-        painter.drawEllipse(handleRect);
+    QRectF handleRect(handleX - handleSize / 2, handleY - handleSize / 2, handleSize, handleSize);
+    QRectF handleEllipseRect;
+    std::chrono::duration<float> handleTopValue = std::chrono::milliseconds{ 0 };
+    if (d->scrollable && d->maximum > std::chrono::milliseconds{ 0 }) {
+        handleTopValue
+            = d->current - d->current / std::chrono::duration<float>(d->maximum) * d->displayRange;
+        const qreal handleTop = height() * handleTopValue / d->maximum;
+        const qreal handleBottom = height() * (handleTopValue + d->displayRange) / d->maximum;
+        const auto handleHeight = handleBottom - handleTop - Ui::DesignSystem::layout().px() * 2;
+        const auto minimumHeight = painter.fontMetrics().lineSpacing() * 2.0;
+        if (handleHeight >= minimumHeight) {
+            handleRect
+                = QRectF(scrollbarRect.left() - Ui::DesignSystem::layout().px(),
+                         handleTop + Ui::DesignSystem::layout().px(),
+                         scrollbarRect.width() + Ui::DesignSystem::layout().px() * 2, handleHeight);
+        } else {
+            handleEllipseRect = handleRect;
+
+            const auto heightDelta = (minimumHeight - handleRect.height()) / 2.0;
+            handleRect.adjust(0, -heightDelta, 0, heightDelta);
+            if (handleRect.top() < 0) {
+                handleRect.moveTop(0);
+            } else if (handleRect.bottom() > height()) {
+                handleRect.moveBottom(height());
+            }
+        }
     }
 
     //
@@ -439,8 +492,11 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     const qreal handleTextWidth = isLeftToRight()
         ? (contentRect.width() - handleTextLeft)
         : handleRect.left() - Ui::DesignSystem::layout().px8();
-    const QRectF handleTextRect(handleTextLeft, handleRect.top(), handleTextWidth,
-                                handleRect.height());
+    const QRectF handleTopTextRect(handleTextLeft, handleRect.top(), handleTextWidth,
+                                   painter.fontMetrics().lineSpacing());
+    const QRectF handleBottomTextRect(handleTextLeft,
+                                      handleRect.bottom() - painter.fontMetrics().lineSpacing(),
+                                      handleTextWidth, painter.fontMetrics().lineSpacing());
 
     //
     // Рисуем метки на таймлайне
@@ -460,7 +516,9 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
         const QRectF markTextRect(handleTextLeft, top, handleTextWidth,
                                   painter.fontMetrics().lineSpacing());
         const auto duartionAtMark = d->maximum * (static_cast<qreal>(markIndex) / marksCount);
-        if (d->scrollable && markTextRect.intersects(handleTextRect)) {
+        if (d->scrollable
+            && (markTextRect.intersects(handleTopTextRect)
+                || markTextRect.intersects(handleBottomTextRect))) {
             painter.setOpacity(opacity() * Ui::DesignSystem::focusBackgroundOpacity());
         }
         painter.setPen(QPen(scrollbarColor, Ui::DesignSystem::layout().px2()));
@@ -470,7 +528,8 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
         painter.drawText(
             markTextRect, Qt::AlignLeft | Qt::AlignVCenter,
             TimeHelper::toString(std::chrono::duration_cast<std::chrono::seconds>(duartionAtMark)));
-        if (markTextRect.intersects(handleTextRect)) {
+        if (markTextRect.intersects(handleTopTextRect)
+            || markTextRect.intersects(handleBottomTextRect)) {
             painter.setOpacity(opacity());
         }
 
@@ -478,13 +537,28 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     }
 
     //
-    // Рисуем метку хэндла
+    // Рисуем хэндл
     //
     if (d->scrollable) {
         painter.setPen(Ui::DesignSystem::color().onTextEditor());
+        //
+        // ... область
+        //
+        if (handleEllipseRect.isValid()) {
+            painter.drawEllipse(handleEllipseRect);
+        } else {
+            painter.drawRoundedRect(handleRect, DesignSystem::layout().px2(),
+                                    DesignSystem::layout().px2());
+        }
+        //
+        // ... метка
+        //
         painter.drawText(
-            handleTextRect, Qt::AlignLeft | Qt::AlignVCenter,
-            TimeHelper::toString(std::chrono::duration_cast<std::chrono::seconds>(d->current)));
+            handleTopTextRect, Qt::AlignLeft | Qt::AlignVCenter,
+            TimeHelper::toString(std::chrono::duration_cast<std::chrono::seconds>(handleTopValue)));
+        painter.drawText(handleBottomTextRect, Qt::AlignLeft | Qt::AlignVCenter,
+                         TimeHelper::toString(std::chrono::duration_cast<std::chrono::seconds>(
+                             handleTopValue + d->displayRange)));
     }
 }
 

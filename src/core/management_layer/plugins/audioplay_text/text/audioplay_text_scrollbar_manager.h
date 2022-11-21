@@ -81,6 +81,11 @@ public:
     void setValue(std::chrono::milliseconds _value);
 
     /**
+     * @brief Задать размер отображаемой области
+     */
+    void setDisplayRange(std::chrono::milliseconds _value);
+
+    /**
      * @brief Задать цвета слайдера
      */
     void setColors(const std::map<std::chrono::milliseconds, QColor>& _colors);
