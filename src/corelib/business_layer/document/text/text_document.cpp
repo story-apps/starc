@@ -451,11 +451,8 @@ TextDocument::TextDocument(QObject* _parent)
 {
     connect(this, &TextDocument::contentsChange, this, &TextDocument::updateModelOnContentChange);
     connect(this, &TextDocument::contentsChanged, this, [this] { d->tryToCorrectDocument(); });
-    //
-    // FIXME: Раскоментить при реализации SAD-760
-    //
-    //    connect(&d->modelChangeCorrectionDebouncer, &Debouncer::gotWork, this,
-    //            [this] { d->tryToCorrectDocument(); });
+    connect(&d->modelChangeCorrectionDebouncer, &Debouncer::gotWork, this,
+            [this] { d->tryToCorrectDocument(); });
 }
 
 TextDocument::~TextDocument() = default;
@@ -1132,6 +1129,9 @@ int TextDocument::itemPosition(const QModelIndex& _index, bool _fromStart)
     while (item->childCount() > 0) {
         item = item->childAt(_fromStart ? 0 : item->childCount() - 1);
     }
+    //
+    // FIXME: оптимизировать это место
+    //
     for (const auto& [key, value] : d->positionsToItems) {
         if (value == item) {
             return key;

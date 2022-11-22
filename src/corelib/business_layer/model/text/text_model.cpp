@@ -1531,7 +1531,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
     // Если элеметов очень много, то обсчитывать все изменения будет очень дорого,
     // поэтому применяем грубую силу - просто накатываем патч и обновляем модель целиком
     //
-    const auto operationsLimit = 1000;
+    const auto operationsLimit = 300;
     if (oldItemsPlain.size() * newItemsPlain.size() / 2 > operationsLimit) {
         Log::trace("Apply patch operations to much, avoid step by step procesing.");
 

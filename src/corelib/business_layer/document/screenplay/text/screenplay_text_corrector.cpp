@@ -336,7 +336,6 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
     //
     TextCursor cursor(document());
     cursor.setPosition(std::max(0, _from));
-    cursor.beginEditBlock();
 
     auto block = cursor.block();
     while (block.isValid()) {
@@ -351,7 +350,7 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
         }
 
         //
-        // ... уберём отступы у скрытых блоков, чтобы они не ломали компановку документа
+        // ... уберём отступы у скрытых блоков, чтобы они не ломали компоновку документа
         //
         block.setVisible(visibleBlocksTypes.contains(blockType));
         if (!block.isVisible()) {
@@ -364,8 +363,6 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
 
         block = block.next();
     }
-
-    cursor.endEditBlock();
 }
 
 void ScreenplayTextCorrector::Implementation::correctCharactersNames(int _position,
