@@ -318,9 +318,12 @@ void ScreenplayTextStructureDelegate::Implementation::paintScene(
     _painter->drawText(headingRect, Qt::AlignLeft | Qt::AlignVCenter, sceneHeading);
 
     //
-    // ... текст сцены
+    // ... описание, или текст сцены
     //
-    auto sceneText = _index.data(TextModelGroupItem::GroupTextRole).toString();
+    auto sceneText = _index.data(ScreenplayTextModelSceneItem::SceneDescriptionRole).toString();
+    if (sceneText.isEmpty()) {
+        sceneText = _index.data(TextModelGroupItem::GroupTextRole).toString();
+    }
     if (sceneText.isEmpty()) {
         return;
     }

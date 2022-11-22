@@ -20,6 +20,7 @@ public:
      */
     enum {
         SceneDurationRole = TextModelGroupItem::GroupUserRole + 1,
+        SceneDescriptionRole,
     };
 
 public:
@@ -35,6 +36,11 @@ public:
      * @brief Список битов
      */
     QVector<QString> beats() const;
+
+    /**
+     * @brief Описание сцены (объединённые биты)
+     */
+    QString description() const;
 
     /**
      * @brief Определяем интерфейс получения данных сцены

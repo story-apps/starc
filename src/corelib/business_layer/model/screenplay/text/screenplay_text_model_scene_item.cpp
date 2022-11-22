@@ -67,12 +67,38 @@ QVector<QString> ScreenplayTextModelSceneItem::beats() const
     return beats;
 }
 
+QString ScreenplayTextModelSceneItem::description() const
+{
+    QString description;
+    for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
+        auto child = childAt(childIndex);
+        if (child->type() != TextModelItemType::Group) {
+            continue;
+        }
+
+        auto group = static_cast<TextModelGroupItem*>(child);
+        if (group->groupType() != TextGroupType::Beat || group->heading().isEmpty()) {
+            continue;
+        }
+
+        if (!description.isEmpty()) {
+            description.append(" ");
+        }
+        description.append(group->heading());
+    }
+    return description;
+}
+
 QVariant ScreenplayTextModelSceneItem::data(int _role) const
 {
     switch (_role) {
     case SceneDurationRole: {
         const int duration = std::chrono::duration_cast<std::chrono::seconds>(d->duration).count();
         return duration;
+    }
+
+    case SceneDescriptionRole: {
+        return description();
     }
 
     default: {
