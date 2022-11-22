@@ -325,26 +325,25 @@ void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
         //
     }
     //
-    // Добавляем новый блок после всех невидимых блоков идущих за текущим
+    // Если в середине блока, то вырежем контент идущий до конца блока
     //
-    else {
+    else if (cursor.positionInBlock() < cursor.block().text().length() - 1) {
         //
-        // Если в середине блока, то вырежем контент идущий до конца блока
+        // Выделяем до конца, плюс захватываем начало следующего блока
         //
-        if (cursor.positionInBlock() < cursor.block().text().length()) {
-            //
-            // Выделяем до конца, плюс захватываем начало следующего блока
-            //
-            cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
-            const auto selection = cursor.selectionInterval();
-            blockEndMime = d->document.mimeFromSelection(selection.from, selection.to);
-            //
-            // Возвращаемся в конец предыдущего блока, чтобы удалять только контент заголовка бита
-            //
-            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-            cursor.removeSelectedText();
-        }
-
+        cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+        const auto selection = cursor.selectionInterval();
+        blockEndMime = d->document.mimeFromSelection(selection.from, selection.to);
+        //
+        // Возвращаемся в конец предыдущего блока, чтобы удалять только контент заголовка бита
+        //
+        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
+    }
+    //
+    // А если в конце блока заголовка бита, то вставляем новый бит после текущего
+    //
+    else if (TextBlockStyle::forBlock(cursor) == TextParagraphType::BeatHeading) {
         //
         // ... собственно передвигаем курсор для добавления нового блока
         //
@@ -373,8 +372,22 @@ void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
         // В противном случае вложим к нему блок описания действия и скроем его
         //
         else {
-            d->document.addParagraph(TextParagraphType::Action, textCursor());
-            moveCursor(QTextCursor::PreviousCharacter);
+            //
+            // ... если дальше есть блоки с текстом сценария, они будут вложены внутрь
+            //
+            cursor = textCursor();
+            if (cursor.block().next().isValid() && !cursor.block().next().isVisible()) {
+                //
+                // ... поэтому тут ничего не делаем
+                //
+            }
+            //
+            // ... а если таких блоков нет, то добавим пустой блок с описанием действия
+            //
+            else {
+                d->document.addParagraph(TextParagraphType::Action, cursor);
+                moveCursor(QTextCursor::PreviousCharacter);
+            }
         }
     }
 
