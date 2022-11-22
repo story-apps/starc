@@ -69,6 +69,7 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     content->setContextMenuPolicy(Qt::CustomContextMenu);
     content->setDragDropEnabled(true);
     content->setSelectionMode(QAbstractItemView::ContiguousSelection);
+    content->setAutoAdjustSize(true);
     content->setItemDelegate(contentDelegate);
 
     new Shadow(Qt::TopEdge, content);
@@ -164,6 +165,11 @@ void ScreenplayTextStructureView::setEditingMode(ManagementLayer::DocumentEditin
 
 void ScreenplayTextStructureView::reconfigure()
 {
+    const bool showFullBeatText
+        = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowFullBeatTextKey)
+              .toBool();
+    d->contentDelegate->setShowFullBeatText(showFullBeatText);
+
     const bool showSceneNumber
         = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey)
               .toBool();

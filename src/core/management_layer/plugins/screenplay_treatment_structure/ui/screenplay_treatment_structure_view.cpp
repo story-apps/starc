@@ -97,6 +97,12 @@ void ScreenplayTreatmentStructureView::setEditingMode(ManagementLayer::DocumentE
 
 void ScreenplayTreatmentStructureView::reconfigure()
 {
+
+    const bool showFullBeatText
+        = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowFullBeatTextKey)
+              .toBool();
+    d->contentDelegate->setShowFullBeatText(showFullBeatText);
+
     const bool showSceneNumber
         = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey)
               .toBool();

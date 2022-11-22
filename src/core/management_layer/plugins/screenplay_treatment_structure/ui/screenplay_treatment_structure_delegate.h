@@ -15,6 +15,11 @@ public:
     ~ScreenplayTreatmentStructureDelegate() override;
 
     /**
+     * @brief Задать необходимость отображения текста бита целиком
+     */
+    void setShowFullBeatText(bool _showFull);
+
+    /**
      * @brief Задать необходимость отображать номер сцены
      */
     void showSceneNumber(bool _show);

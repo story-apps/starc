@@ -443,6 +443,10 @@ ScreenplayTreatmentStructureDelegate::ScreenplayTreatmentStructureDelegate(QObje
 
 ScreenplayTreatmentStructureDelegate::~ScreenplayTreatmentStructureDelegate() = default;
 
+void ScreenplayTreatmentStructureDelegate::setShowFullBeatText(bool _showFull)
+{
+}
+
 void ScreenplayTreatmentStructureDelegate::showSceneNumber(bool _show)
 {
     d->showSceneNumber = _show;

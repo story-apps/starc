@@ -197,6 +197,8 @@ const QString kComponentsScreenplayNavigatorKey
     = kComponentsScreenplayKey + QStringLiteral("/navigator");
 const QString kComponentsScreenplayNavigatorShowBeatsKey
     = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-beats");
+const QString kComponentsScreenplayNavigatorShowFullBeatTextKey
+    = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-full-beat-text");
 const QString kComponentsScreenplayNavigatorShowSceneNumberKey
     = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-scene-number");
 const QString kComponentsScreenplayNavigatorShowSceneTextKey

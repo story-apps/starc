@@ -286,6 +286,7 @@ public:
     //
     H6Label* screenplayNavigatorTitle = nullptr;
     CheckBox* screenplayNavigatorShowBeats = nullptr;
+    CheckBox* screenplayNavigatorShowFullBeatText = nullptr;
     CheckBox* screenplayNavigatorShowSceneNumber = nullptr;
     CheckBox* screenplayNavigatorShowSceneText = nullptr;
     RadioButton* screenplayNavigatorSceneDescriptionLines1 = nullptr;
@@ -502,6 +503,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(screenplayCard))
     , screenplayNavigatorTitle(new H6Label(screenplayCard))
     , screenplayNavigatorShowBeats(new CheckBox(screenplayCard))
+    , screenplayNavigatorShowFullBeatText(new CheckBox(screenplayCard))
     , screenplayNavigatorShowSceneNumber(new CheckBox(screenplayCard))
     , screenplayNavigatorShowSceneText(new CheckBox(screenplayCard))
     , screenplayNavigatorSceneDescriptionLines1(new RadioButton(screenplayCard))
@@ -907,7 +909,13 @@ void SettingsView::Implementation::initScreenplayCard()
     // ... навигатор сценария
     //
     screenplayCardLayout->addWidget(screenplayNavigatorTitle, itemIndex++, 0);
-    screenplayCardLayout->addWidget(screenplayNavigatorShowBeats, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(screenplayNavigatorShowBeats);
+        layout->addWidget(screenplayNavigatorShowFullBeatText);
+        layout->addStretch();
+        screenplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     screenplayCardLayout->addWidget(screenplayNavigatorShowSceneNumber, itemIndex++, 0);
     {
         auto layout = makeLayout();
@@ -1471,6 +1479,7 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->screenplayEditorShowCharacterSuggestionsInEmptyBlock,
                  d->screenplayNavigatorTitle,
                  d->screenplayNavigatorShowBeats,
+                 d->screenplayNavigatorShowFullBeatText,
                  d->screenplayNavigatorShowSceneNumber,
                  d->screenplayNavigatorShowSceneText,
                  d->screenplayNavigatorSceneDescriptionLines1,
@@ -1621,8 +1630,17 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(d->screenplayNavigatorShowSceneText, &CheckBox::checkedChanged,
             d->screenplayNavigatorSceneDescriptionLines5, &RadioButton::setEnabled);
     //
+    connect(d->screenplayNavigatorShowBeats, &CheckBox::checkedChanged,
+            d->screenplayNavigatorShowFullBeatText, &CheckBox::setEnabled);
+    auto notifyScreenplyaNavigatorShowBeats = [this] {
+        emit screenplayNavigatorShowBeatsChanged(
+            d->screenplayNavigatorShowBeats->isChecked(),
+            d->screenplayNavigatorShowFullBeatText->isChecked());
+    };
     connect(d->screenplayNavigatorShowBeats, &CheckBox::checkedChanged, this,
-            &SettingsView::screenplayNavigatorShowBeatsChanged);
+            notifyScreenplyaNavigatorShowBeats);
+    connect(d->screenplayNavigatorShowFullBeatText, &CheckBox::checkedChanged, this,
+            notifyScreenplyaNavigatorShowBeats);
     connect(d->screenplayNavigatorShowSceneNumber, &CheckBox::checkedChanged, this,
             &SettingsView::screenplayNavigatorShowSceneNumberChanged);
     auto notifyScreenplayNavigatorShowSceneTextChanged = [this] {
@@ -2480,9 +2498,10 @@ void SettingsView::setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool 
     d->screenplayEditorShowCharacterSuggestionsInEmptyBlock->setChecked(_show);
 }
 
-void SettingsView::setScreenplayNavigatorShowBeats(bool _show)
+void SettingsView::setScreenplayNavigatorShowBeats(bool _show, bool _withFullText)
 {
     d->screenplayNavigatorShowBeats->setChecked(_show);
+    d->screenplayNavigatorShowFullBeatText->setChecked(_withFullText);
 }
 
 void SettingsView::setScreenplayNavigatorShowSceneNumber(bool _show)
@@ -2985,6 +3004,7 @@ void SettingsView::updateTranslations()
         tr("Show characters suggestions in empty paragraph"));
     d->screenplayNavigatorTitle->setText(tr("Screenplay navigator"));
     d->screenplayNavigatorShowBeats->setText(tr("Show beats"));
+    d->screenplayNavigatorShowFullBeatText->setText(tr("with full text"));
     d->screenplayNavigatorShowSceneNumber->setText(tr("Show scene number"));
     d->screenplayNavigatorShowSceneText->setText(tr("Show scene text, lines"));
     d->screenplayNavigatorSceneDescriptionLines1->setText("1");
@@ -3241,6 +3261,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayEditorUseCharactersFromText,
              d->screenplayEditorShowCharacterSuggestionsInEmptyBlock,
              d->screenplayNavigatorShowBeats,
+             d->screenplayNavigatorShowFullBeatText,
              d->screenplayNavigatorShowSceneNumber,
              d->screenplayNavigatorShowSceneText,
              d->screenplayDurationByCharactersIncludingSpaces,
