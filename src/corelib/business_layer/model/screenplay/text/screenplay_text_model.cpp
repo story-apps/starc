@@ -181,7 +181,7 @@ void ScreenplayTextModel::setInformationModel(ScreenplayInformationModel* _model
     if (d->informationModel) {
         connect(d->informationModel, &ScreenplayInformationModel::scenesNumberingStartAtChanged,
                 this, &ScreenplayTextModel::updateNumbering);
-        connect(d->informationModel, &ScreenplayInformationModel::scenesNumbersPrefixChanged, this,
+        connect(d->informationModel, &ScreenplayInformationModel::scenesNumbersTemplateChanged, this,
                 &ScreenplayTextModel::updateNumbering);
         connect(d->informationModel, &ScreenplayInformationModel::isSceneNumbersLockedChanged, this,
                 &ScreenplayTextModel::setScenesNumbersLocked);
@@ -572,7 +572,7 @@ void ScreenplayTextModel::updateNumbering()
                     //
                     // После того, как номер сформирован, декорируем его
                     //
-                    groupItem->prepareNumberText(d->informationModel->scenesNumbersPrefix());
+                    groupItem->prepareNumberText(d->informationModel->scenesNumbersTemplate());
                 }
                 break;
             }

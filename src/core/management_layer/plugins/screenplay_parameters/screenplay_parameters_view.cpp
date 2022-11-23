@@ -37,7 +37,7 @@ public:
     CheckBox* printFooterOnTitlePage = nullptr;
 
     H6Label* scenesNumbersTitle = nullptr;
-    TextField* scenesNumbersPrefix = nullptr;
+    TextField* scenesNumbersTemplate = nullptr;
     TextField* scenesNumberingStartAt = nullptr;
     Button* lockScenesNumbers = nullptr;
     Button* relockScenesNumbers = nullptr;
@@ -60,7 +60,7 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
     , footer(new TextField(screenplayInfo))
     , printFooterOnTitlePage(new CheckBox(screenplayInfo))
     , scenesNumbersTitle(new H6Label(screenplayInfo))
-    , scenesNumbersPrefix(new TextField(screenplayInfo))
+    , scenesNumbersTemplate(new TextField(screenplayInfo))
     , scenesNumberingStartAt(new TextField(screenplayInfo))
     , lockScenesNumbers(new Button(screenplayInfo))
     , relockScenesNumbers(new Button(screenplayInfo))
@@ -84,7 +84,7 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
 
     header->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     footer->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    scenesNumbersPrefix->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    scenesNumbersTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     scenesNumberingStartAt->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
     lockScenesNumbers->setContained(true);
@@ -112,7 +112,7 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
     infoLayout->addWidget(footer);
     infoLayout->addWidget(printFooterOnTitlePage);
     infoLayout->addWidget(scenesNumbersTitle);
-    infoLayout->addWidget(scenesNumbersPrefix);
+    infoLayout->addWidget(scenesNumbersTemplate);
     infoLayout->addWidget(scenesNumberingStartAt);
     {
         auto layout = new QHBoxLayout;
@@ -183,8 +183,8 @@ ScreenplayParametersView::ScreenplayParametersView(QWidget* _parent)
             [this] { emit footerChanged(d->footer->text()); });
     connect(d->printFooterOnTitlePage, &CheckBox::checkedChanged, this,
             &ScreenplayParametersView::printFooterOnTitlePageChanged);
-    connect(d->scenesNumbersPrefix, &TextField::textChanged, this,
-            [this] { emit scenesNumbersPrefixChanged(d->scenesNumbersPrefix->text()); });
+    connect(d->scenesNumbersTemplate, &TextField::textChanged, this,
+            [this] { emit scenesNumbersTemplateChanged(d->scenesNumbersTemplate->text()); });
     connect(d->scenesNumberingStartAt, &TextField::textChanged, this, [this] {
         bool isNumberValid = false;
         const auto startNumber = d->scenesNumberingStartAt->text().toInt(&isNumberValid);
@@ -269,7 +269,7 @@ void ScreenplayParametersView::setEditingMode(ManagementLayer::DocumentEditingMo
     const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
     d->header->setReadOnly(readOnly);
     d->footer->setReadOnly(readOnly);
-    d->scenesNumbersPrefix->setReadOnly(readOnly);
+    d->scenesNumbersTemplate->setReadOnly(readOnly);
     d->scenesNumberingStartAt->setReadOnly(readOnly);
     d->screenplayTemplate->setReadOnly(readOnly);
     const auto enabled = !readOnly;
@@ -318,13 +318,13 @@ void ScreenplayParametersView::setPrintFooterOnTitlePage(bool _print)
     d->printFooterOnTitlePage->setChecked(_print);
 }
 
-void ScreenplayParametersView::setScenesNumbersPrefix(const QString& _prefix)
+void ScreenplayParametersView::setScenesNumbersTemplate(const QString& _template)
 {
-    if (d->scenesNumbersPrefix->text() == _prefix) {
+    if (d->scenesNumbersTemplate->text() == _template) {
         return;
     }
 
-    d->scenesNumbersPrefix->setText(_prefix);
+    d->scenesNumbersTemplate->setText(_template);
 }
 
 void ScreenplayParametersView::setScenesNumberingStartAt(int _startNumber)
@@ -422,7 +422,8 @@ void ScreenplayParametersView::updateTranslations()
     d->footer->setLabel(tr("Footer"));
     d->printFooterOnTitlePage->setText(tr("Print footer on title page"));
     d->scenesNumbersTitle->setText(tr("Scenes numbering"));
-    d->scenesNumbersPrefix->setLabel(tr("Scenes numbers' prefix"));
+    d->scenesNumbersTemplate->setLabel(tr("Scenes numbers' template"));
+    d->scenesNumbersTemplate->setHelper(tr("Use # mark for the scene number"));
     d->scenesNumberingStartAt->setLabel(tr("Scenes numbering start at"));
     d->lockScenesNumbers->setText(tr("Lock numbering"));
     d->relockScenesNumbers->setText(tr("Lock numbering agian"));
@@ -450,7 +451,7 @@ void ScreenplayParametersView::designSystemChangeEvent(DesignSystemChangeEvent* 
     for (auto textField : std::vector<TextField*>{
              d->header,
              d->footer,
-             d->scenesNumbersPrefix,
+             d->scenesNumbersTemplate,
              d->scenesNumberingStartAt,
              d->screenplayTemplate,
          }) {

@@ -32,6 +32,7 @@ const QLatin1String kPrintHeaderOnTitlePageKey("print_header_on_title");
 const QLatin1String kFooterKey("footer");
 const QLatin1String kPrintFooterOnTitlePageKey("print_footer_on_title");
 const QLatin1String kScenesNumbersPrefixKey("scenes_numbers_prefix");
+const QLatin1String kScenesNumbersTemplateKey("scenes_numbers_template");
 const QLatin1String kScenesNumberingStartAtKey("scenes_numbering_start_at");
 const QLatin1String kIsScenesNumberingLockedKey("is_scenes_numbering_locked");
 const QLatin1String kOverrideSystemSettingsKey("override_system_settings");
@@ -57,7 +58,7 @@ public:
     bool printHeaderOnTitlePage = false;
     QString footer;
     bool printFooterOnTitlePage = false;
-    QString scenesNumbersPrefix;
+    QString scenesNumbersTemplate = "#.";
     int scenesNumberingStartAt = 1;
     bool isScenesNumbersLocked = false;
     bool overrideCommonSettings = false;
@@ -88,7 +89,7 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
             kPrintHeaderOnTitlePageKey,
             kFooterKey,
             kPrintFooterOnTitlePageKey,
-            kScenesNumbersPrefixKey,
+            kScenesNumbersTemplateKey,
             kScenesNumberingStartAtKey,
             kIsScenesNumberingLockedKey,
             kOverrideSystemSettingsKey,
@@ -125,7 +126,7 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
             &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::printFooterOnTitlePageChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
-    connect(this, &ScreenplayInformationModel::scenesNumbersPrefixChanged, this,
+    connect(this, &ScreenplayInformationModel::scenesNumbersTemplateChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::scenesNumberingStartAtChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
@@ -333,19 +334,19 @@ void ScreenplayInformationModel::setPrintFooterOnTitlePage(bool _print)
     emit printFooterOnTitlePageChanged(d->printFooterOnTitlePage);
 }
 
-const QString& ScreenplayInformationModel::scenesNumbersPrefix() const
+const QString& ScreenplayInformationModel::scenesNumbersTemplate() const
 {
-    return d->scenesNumbersPrefix;
+    return d->scenesNumbersTemplate;
 }
 
-void ScreenplayInformationModel::setScenesNumbersPrefix(const QString& _prefix)
+void ScreenplayInformationModel::setScenesNumbersTemplate(const QString& _template)
 {
-    if (d->scenesNumbersPrefix == _prefix) {
+    if (d->scenesNumbersTemplate == _template) {
         return;
     }
 
-    d->scenesNumbersPrefix = _prefix;
-    emit scenesNumbersPrefixChanged(d->scenesNumbersPrefix);
+    d->scenesNumbersTemplate = _template;
+    emit scenesNumbersTemplateChanged(d->scenesNumbersTemplate);
 }
 
 int ScreenplayInformationModel::scenesNumberingStartAt() const
@@ -536,7 +537,15 @@ void ScreenplayInformationModel::initDocument()
     d->footer = documentNode.firstChildElement(kFooterKey).text();
     d->printFooterOnTitlePage
         = documentNode.firstChildElement(kPrintFooterOnTitlePageKey).text() == "true";
-    d->scenesNumbersPrefix = documentNode.firstChildElement(kScenesNumbersPrefixKey).text();
+    //
+    // TODO: выпилить в одной из будущих версий
+    //
+    if (!documentNode.firstChildElement(kScenesNumbersPrefixKey).isNull()) {
+        d->scenesNumbersTemplate
+            = documentNode.firstChildElement(kScenesNumbersPrefixKey).text() + "#.";
+    } else {
+        d->scenesNumbersTemplate = documentNode.firstChildElement(kScenesNumbersTemplateKey).text();
+    }
     const auto scenesNumberingStartAtNode
         = documentNode.firstChildElement(kScenesNumberingStartAtKey);
     if (!scenesNumberingStartAtNode.isNull()) {
@@ -589,7 +598,7 @@ QByteArray ScreenplayInformationModel::toXml() const
     writeBoolTag(kPrintHeaderOnTitlePageKey, d->printHeaderOnTitlePage);
     writeTag(kFooterKey, d->footer);
     writeBoolTag(kPrintFooterOnTitlePageKey, d->printFooterOnTitlePage);
-    writeTag(kScenesNumbersPrefixKey, d->scenesNumbersPrefix);
+    writeTag(kScenesNumbersTemplateKey, d->scenesNumbersTemplate);
     writeTag(kScenesNumberingStartAtKey, QString::number(d->scenesNumberingStartAt));
     writeBoolTag(kIsScenesNumberingLockedKey, d->isScenesNumbersLocked);
     writeBoolTag(kOverrideSystemSettingsKey, d->overrideCommonSettings);
@@ -652,7 +661,7 @@ void ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
     setBool(kPrintHeaderOnTitlePageKey, std::bind(&M::setPrintHeaderOnTitlePage, this, _1));
     setText(kFooterKey, std::bind(&M::setFooter, this, _1));
     setBool(kPrintFooterOnTitlePageKey, std::bind(&M::setPrintFooterOnTitlePage, this, _1));
-    setText(kScenesNumbersPrefixKey, std::bind(&M::setScenesNumbersPrefix, this, _1));
+    setText(kScenesNumbersTemplateKey, std::bind(&M::setScenesNumbersTemplate, this, _1));
     setInt(kScenesNumberingStartAtKey, std::bind(&M::setScenesNumberingStartAt, this, _1));
     setBool(kIsScenesNumberingLockedKey, std::bind(&M::setScenesNumbersLocked, this, _1));
     setBool(kOverrideSystemSettingsKey, std::bind(&M::setOverrideCommonSettings, this, _1));

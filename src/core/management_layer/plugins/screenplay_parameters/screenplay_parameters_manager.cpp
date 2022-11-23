@@ -126,7 +126,7 @@ void ScreenplayParametersManager::Implementation::setModelForView(
         _view->setPrintHeaderOnTitlePage(model->printHeaderOnTitlePage());
         _view->setFooter(model->footer());
         _view->setPrintFooterOnTitlePage(model->printFooterOnTitlePage());
-        _view->setScenesNumbersPrefix(model->scenesNumbersPrefix());
+        _view->setScenesNumbersTemplate(model->scenesNumbersTemplate());
         _view->setScenesNumberingStartAt(model->scenesNumberingStartAt());
         _view->setScenesNumbersLocked(model->isSceneNumbersLocked());
         _view->setOverrideCommonSettings(model->overrideCommonSettings());
@@ -144,8 +144,8 @@ void ScreenplayParametersManager::Implementation::setModelForView(
                 &Ui::ScreenplayParametersView::setFooter);
         connect(model, &BusinessLayer::ScreenplayInformationModel::printFooterOnTitlePageChanged,
                 _view, &Ui::ScreenplayParametersView::setPrintFooterOnTitlePage);
-        connect(model, &BusinessLayer::ScreenplayInformationModel::scenesNumbersPrefixChanged,
-                _view, &Ui::ScreenplayParametersView::setScenesNumbersPrefix);
+        connect(model, &BusinessLayer::ScreenplayInformationModel::scenesNumbersTemplateChanged,
+                _view, &Ui::ScreenplayParametersView::setScenesNumbersTemplate);
         connect(model, &BusinessLayer::ScreenplayInformationModel::scenesNumberingStartAtChanged,
                 _view, &Ui::ScreenplayParametersView::setScenesNumberingStartAt);
         connect(model, &BusinessLayer::ScreenplayInformationModel::isSceneNumbersLockedChanged,
@@ -171,8 +171,8 @@ void ScreenplayParametersManager::Implementation::setModelForView(
                 &BusinessLayer::ScreenplayInformationModel::setFooter);
         connect(_view, &Ui::ScreenplayParametersView::printFooterOnTitlePageChanged, model,
                 &BusinessLayer::ScreenplayInformationModel::setPrintFooterOnTitlePage);
-        connect(_view, &Ui::ScreenplayParametersView::scenesNumbersPrefixChanged, model,
-                &BusinessLayer::ScreenplayInformationModel::setScenesNumbersPrefix);
+        connect(_view, &Ui::ScreenplayParametersView::scenesNumbersTemplateChanged, model,
+                &BusinessLayer::ScreenplayInformationModel::setScenesNumbersTemplate);
         connect(_view, &Ui::ScreenplayParametersView::scenesNumberingStartAtChanged, model,
                 &BusinessLayer::ScreenplayInformationModel::setScenesNumberingStartAt);
         connect(_view, &Ui::ScreenplayParametersView::isScenesNumberingLockedChanged, model,

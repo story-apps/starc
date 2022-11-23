@@ -34,8 +34,8 @@ public:
     void setPrintFooterOnTitlePage(bool _print);
     Q_SIGNAL void printFooterOnTitlePageChanged(bool _print);
 
-    void setScenesNumbersPrefix(const QString& _prefix);
-    Q_SIGNAL void scenesNumbersPrefixChanged(const QString& _prefix);
+    void setScenesNumbersTemplate(const QString& _template);
+    Q_SIGNAL void scenesNumbersTemplateChanged(const QString& _template);
 
     void setScenesNumberingStartAt(int _startNumber);
     Q_SIGNAL void scenesNumberingStartAtChanged(int _startNumber);

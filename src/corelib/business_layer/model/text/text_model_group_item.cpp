@@ -274,8 +274,8 @@ void TextModelGroupItem::prepareNumberText(const QString& _template)
         return;
     }
 
-    const auto newNumberText
-        = QString("%1%2%3.").arg(_template, d->number->followNumber, d->number->value);
+    auto newNumberText = _template;
+    newNumberText.replace('#', d->number->followNumber + d->number->value);
     if (d->number->text == newNumberText) {
         return;
     }
