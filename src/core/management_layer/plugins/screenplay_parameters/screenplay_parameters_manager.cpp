@@ -3,9 +3,11 @@
 #include "screenplay_parameters_view.h"
 
 #include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <ui/widgets/task_bar/task_bar.h>
 
 #include <QApplication>
 #include <QFileDialog>
+#include <QTimeLine>
 
 
 namespace ManagementLayer {
@@ -13,6 +15,8 @@ namespace ManagementLayer {
 class ScreenplayParametersManager::Implementation
 {
 public:
+    explicit Implementation(ScreenplayParametersManager* _q);
+
     /**
      * @brief Создать представление
      */
@@ -23,6 +27,8 @@ public:
      */
     void setModelForView(BusinessLayer::AbstractModel* _model, Ui::ScreenplayParametersView* _view);
 
+
+    ScreenplayParametersManager* q = nullptr;
 
     /**
      * @brief Предаставление для основного окна
@@ -40,11 +46,33 @@ public:
     QVector<ViewAndModel> allViews;
 };
 
+ScreenplayParametersManager::Implementation::Implementation(ScreenplayParametersManager* _q)
+    : q(_q)
+{
+}
+
 Ui::ScreenplayParametersView* ScreenplayParametersManager::Implementation::createView(
     BusinessLayer::AbstractModel* _model)
 {
     auto view = new Ui::ScreenplayParametersView;
     setModelForView(_model, view);
+
+    connect(view, &Ui::ScreenplayParametersView::isScenesNumberingLockedChanged, q,
+            [this](bool _locked) {
+                const auto taskId = QUuid::createUuid().toString();
+                TaskBar::addTask(taskId);
+                TaskBar::setTaskTitle(
+                    taskId, _locked ? tr("Scene numbers locked") : tr("Scene numbers unlocked"));
+                auto timeline = new QTimeLine(3600, q);
+                timeline->setEasingCurve(QEasingCurve::OutQuad);
+                connect(timeline, &QTimeLine::valueChanged, q,
+                        [taskId](qreal _value) { TaskBar::setTaskProgress(taskId, _value * 100); });
+                connect(timeline, &QTimeLine::finished, q,
+                        [taskId] { TaskBar::finishTask(taskId); });
+                connect(timeline, &QTimeLine::finished, timeline, &QTimeLine::deleteLater);
+                timeline->start();
+            });
+
     return view;
 }
 
@@ -170,7 +198,7 @@ void ScreenplayParametersManager::Implementation::setModelForView(
 
 ScreenplayParametersManager::ScreenplayParametersManager(QObject* _parent)
     : QObject(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
 }
 

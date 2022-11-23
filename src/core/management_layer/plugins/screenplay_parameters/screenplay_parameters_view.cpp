@@ -8,6 +8,7 @@
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/combo_box/combo_box.h>
+#include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
@@ -197,8 +198,28 @@ ScreenplayParametersView::ScreenplayParametersView(QWidget* _parent)
             [this] { emit isScenesNumberingLockedChanged(true); });
     connect(d->relockScenesNumbers, &Button::clicked, this,
             [this] { emit isScenesNumberingLockedChanged(true); });
-    connect(d->unlockScenesNumbers, &Button::clicked, this,
-            [this] { emit isScenesNumberingLockedChanged(false); });
+    connect(d->unlockScenesNumbers, &Button::clicked, this, [this] {
+        auto dialog = new Dialog(topLevelWidget());
+        const int kCancelButtonId = 0;
+        const int kYesButtonId = 1;
+        dialog->showDialog({}, tr("Do you want unlock scene numbers?"),
+                           { { kCancelButtonId, tr("Cancel"), Dialog::RejectButton },
+                             { kYesButtonId, tr("Yes, unlock"), Dialog::AcceptButton } });
+        QObject::connect(dialog, &Dialog::finished, dialog,
+                         [this, dialog, kCancelButtonId](const Dialog::ButtonInfo& _buttonInfo) {
+                             dialog->hideDialog();
+
+                             //
+                             // Пользователь не хочет обновляться
+                             //
+                             if (_buttonInfo.id == kCancelButtonId) {
+                                 return;
+                             }
+
+                             emit isScenesNumberingLockedChanged(false);
+                         });
+        QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+    });
     connect(d->overrideCommonSettings, &CheckBox::checkedChanged, this,
             &ScreenplayParametersView::overrideCommonSettingsChanged);
     connect(d->screenplayTemplate, &ComboBox::currentIndexChanged, this,
@@ -318,9 +339,19 @@ void ScreenplayParametersView::setScenesNumberingStartAt(int _startNumber)
 
 void ScreenplayParametersView::setScenesNumbersLocked(bool _locked)
 {
-    d->lockScenesNumbers->setVisible(!_locked);
-    d->relockScenesNumbers->setVisible(_locked);
-    d->unlockScenesNumbers->setVisible(_locked);
+    //
+    // Тут шаманим немного с порядком скрытия/отображения, чтобы фокус не скакал
+    // на следующий за кнопками элемент интерфейса
+    //
+    if (_locked) {
+        d->relockScenesNumbers->setVisible(_locked);
+        d->unlockScenesNumbers->setVisible(_locked);
+        d->lockScenesNumbers->setVisible(!_locked);
+    } else {
+        d->lockScenesNumbers->setVisible(!_locked);
+        d->relockScenesNumbers->setVisible(_locked);
+        d->unlockScenesNumbers->setVisible(_locked);
+    }
 }
 
 void ScreenplayParametersView::setOverrideCommonSettings(bool _override)
