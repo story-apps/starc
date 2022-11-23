@@ -288,7 +288,7 @@ void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _in
     //
     auto indexForSelect = d->structureModel->mapFromSource(_index.parent());
     //
-    // ... когда быти скрыты в навигаторе, берём папку или сцену, в которой они находятся
+    // ... когда биты скрыты в навигаторе, берём папку или сцену, в которой они находятся
     //
     if (!indexForSelect.isValid()) {
         indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());

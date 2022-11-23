@@ -219,6 +219,7 @@ SimpleTextView::Implementation::Implementation(SimpleTextView* _q)
 
     showBookmarksAction->setCheckable(true);
     showBookmarksAction->setIconText(u8"\U000F0E16");
+    showBookmarksAction->setSeparator(true);
 }
 
 void SimpleTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)

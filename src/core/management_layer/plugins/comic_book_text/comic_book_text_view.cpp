@@ -222,6 +222,7 @@ ComicBookTextView::Implementation::Implementation(ComicBookTextView* _q)
 
     showBookmarksAction->setCheckable(true);
     showBookmarksAction->setIconText(u8"\U000F0E16");
+    showBookmarksAction->setSeparator(true);
 }
 
 void ComicBookTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
