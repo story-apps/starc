@@ -79,21 +79,22 @@ void TaskBar::registerTaskBar(QWidget* _parent, const QColor& _backgroundColor,
 {
     Q_ASSERT(_parent);
 
-    if (Implementation::instance == nullptr) {
-        Implementation::instance = new TaskBar(_parent);
+    TaskBar* taskBar = Implementation::instance;
+    if (taskBar == nullptr) {
+        taskBar = new TaskBar(_parent);
+        Implementation::instance = taskBar;
     } else {
-        if (Implementation::instance->parent() == _parent) {
-            return;
+        if (taskBar->parent() != _parent) {
+            taskBar->parent()->removeEventFilter(taskBar);
+            Implementation::instance->setParent(_parent);
         }
-
-        Implementation::instance->setParent(_parent);
     }
+    _parent->installEventFilter(taskBar);
 
-    _parent->installEventFilter(Implementation::instance);
 
-    Implementation::instance->setBackgroundColor(_backgroundColor);
-    Implementation::instance->setTextColor(_textColor);
-    Implementation::instance->setBarColor(_barColor);
+    taskBar->setBackgroundColor(_backgroundColor);
+    taskBar->setTextColor(_textColor);
+    taskBar->setBarColor(_barColor);
 }
 
 void TaskBar::addTask(const QString& _taskId)
