@@ -115,6 +115,11 @@ public:
     void updateNumbering();
 
     /**
+     * @brief Задать блокировку номеров сцен
+     */
+    void setScenesNumbersLocked(bool _locked);
+
+    /**
      * @brief Пересчитать хронометраж
      */
     void recalculateDuration();

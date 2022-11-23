@@ -66,7 +66,7 @@ public:
     /**
      * @brief Номер
      */
-    void setNumber(const QString& _number, bool _isCustom, bool _isEatNumber);
+    void setNumber(const QString& _number, bool _isCustom, bool _isEatNumber, bool _isLocked);
     Q_SIGNAL void numberChanged(const QString& _number, bool _isCustom, bool _isEatNumber);
 
     /**

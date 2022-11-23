@@ -4,11 +4,14 @@
 #include <business_layer/templates/templates_facade.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/button/button.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/combo_box/combo_box.h>
+#include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/color_helper.h>
 
 #include <QGridLayout>
 #include <QScrollArea>
@@ -31,8 +34,14 @@ public:
     CheckBox* printHeaderOnTitlePage = nullptr;
     TextField* footer = nullptr;
     CheckBox* printFooterOnTitlePage = nullptr;
+
+    H6Label* scenesNumbersTitle = nullptr;
     TextField* scenesNumbersPrefix = nullptr;
     TextField* scenesNumberingStartAt = nullptr;
+    Button* lockScenesNumbers = nullptr;
+    Button* relockScenesNumbers = nullptr;
+    Button* unlockScenesNumbers = nullptr;
+
     CheckBox* overrideCommonSettings = nullptr;
     ComboBox* screenplayTemplate = nullptr;
     CheckBox* showSceneNumbers = nullptr;
@@ -49,14 +58,18 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
     , printHeaderOnTitlePage(new CheckBox(screenplayInfo))
     , footer(new TextField(screenplayInfo))
     , printFooterOnTitlePage(new CheckBox(screenplayInfo))
+    , scenesNumbersTitle(new H6Label(screenplayInfo))
     , scenesNumbersPrefix(new TextField(screenplayInfo))
     , scenesNumberingStartAt(new TextField(screenplayInfo))
+    , lockScenesNumbers(new Button(screenplayInfo))
+    , relockScenesNumbers(new Button(screenplayInfo))
+    , unlockScenesNumbers(new Button(screenplayInfo))
     , overrideCommonSettings(new CheckBox(screenplayInfo))
-    , screenplayTemplate(new ComboBox(_parent))
-    , showSceneNumbers(new CheckBox(_parent))
-    , showSceneNumbersOnLeft(new CheckBox(_parent))
-    , showSceneNumbersOnRight(new CheckBox(_parent))
-    , showDialoguesNumbers(new CheckBox(_parent))
+    , screenplayTemplate(new ComboBox(screenplayInfo))
+    , showSceneNumbers(new CheckBox(screenplayInfo))
+    , showSceneNumbersOnLeft(new CheckBox(screenplayInfo))
+    , showSceneNumbersOnRight(new CheckBox(screenplayInfo))
+    , showDialoguesNumbers(new CheckBox(screenplayInfo))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -72,6 +85,12 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
     footer->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     scenesNumbersPrefix->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     scenesNumberingStartAt->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+
+    lockScenesNumbers->setContained(true);
+    relockScenesNumbers->setContained(true);
+    relockScenesNumbers->hide();
+    unlockScenesNumbers->setContained(true);
+    unlockScenesNumbers->hide();
 
     screenplayTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayTemplate->setModel(BusinessLayer::TemplatesFacade::screenplayTemplates());
@@ -91,8 +110,19 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
     infoLayout->addWidget(printHeaderOnTitlePage);
     infoLayout->addWidget(footer);
     infoLayout->addWidget(printFooterOnTitlePage);
+    infoLayout->addWidget(scenesNumbersTitle);
     infoLayout->addWidget(scenesNumbersPrefix);
     infoLayout->addWidget(scenesNumberingStartAt);
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(lockScenesNumbers);
+        layout->addWidget(relockScenesNumbers);
+        layout->addWidget(unlockScenesNumbers);
+        layout->addStretch();
+        infoLayout->addLayout(layout);
+    }
     infoLayout->addWidget(overrideCommonSettings, 1, Qt::AlignTop);
     infoLayout->addWidget(screenplayTemplate);
     {
@@ -163,6 +193,12 @@ ScreenplayParametersView::ScreenplayParametersView(QWidget* _parent)
             d->scenesNumberingStartAt->undo();
         }
     });
+    connect(d->lockScenesNumbers, &Button::clicked, this,
+            [this] { emit isScenesNumberingLockedChanged(true); });
+    connect(d->relockScenesNumbers, &Button::clicked, this,
+            [this] { emit isScenesNumberingLockedChanged(true); });
+    connect(d->unlockScenesNumbers, &Button::clicked, this,
+            [this] { emit isScenesNumberingLockedChanged(false); });
     connect(d->overrideCommonSettings, &CheckBox::checkedChanged, this,
             &ScreenplayParametersView::overrideCommonSettingsChanged);
     connect(d->screenplayTemplate, &ComboBox::currentIndexChanged, this,
@@ -270,7 +306,7 @@ void ScreenplayParametersView::setScenesNumbersPrefix(const QString& _prefix)
     d->scenesNumbersPrefix->setText(_prefix);
 }
 
-void ScreenplayParametersView::setScenesNumbersingStartAt(int _startNumber)
+void ScreenplayParametersView::setScenesNumberingStartAt(int _startNumber)
 {
     const auto startNumberText = QString::number(_startNumber);
     if (d->scenesNumberingStartAt->text() == startNumberText) {
@@ -278,6 +314,13 @@ void ScreenplayParametersView::setScenesNumbersingStartAt(int _startNumber)
     }
 
     d->scenesNumberingStartAt->setText(startNumberText);
+}
+
+void ScreenplayParametersView::setScenesNumbersLocked(bool _locked)
+{
+    d->lockScenesNumbers->setVisible(!_locked);
+    d->relockScenesNumbers->setVisible(_locked);
+    d->unlockScenesNumbers->setVisible(_locked);
 }
 
 void ScreenplayParametersView::setOverrideCommonSettings(bool _override)
@@ -347,8 +390,12 @@ void ScreenplayParametersView::updateTranslations()
     d->printHeaderOnTitlePage->setText(tr("Print header on title page"));
     d->footer->setLabel(tr("Footer"));
     d->printFooterOnTitlePage->setText(tr("Print footer on title page"));
+    d->scenesNumbersTitle->setText(tr("Scenes numbering"));
     d->scenesNumbersPrefix->setLabel(tr("Scenes numbers' prefix"));
     d->scenesNumberingStartAt->setLabel(tr("Scenes numbering start at"));
+    d->lockScenesNumbers->setText(tr("Lock numbering"));
+    d->relockScenesNumbers->setText(tr("Lock numbering agian"));
+    d->unlockScenesNumbers->setText(tr("Unlock numbering"));
     d->overrideCommonSettings->setText(tr("Override common settings for this screenplay"));
     d->screenplayTemplate->setLabel(tr("Template"));
     d->showSceneNumbers->setText(tr("Print scenes numbers"));
@@ -395,6 +442,35 @@ void ScreenplayParametersView::designSystemChangeEvent(DesignSystemChangeEvent* 
          }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
+    }
+    auto titleMargins = Ui::DesignSystem::label().margins();
+    titleMargins.setTop(0.0);
+    titleMargins.setBottom(0.0);
+    for (auto title : {
+             d->scenesNumbersTitle,
+         }) {
+        title->setBackgroundColor(Ui::DesignSystem::color().background());
+        title->setTextColor(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
+                                                     Ui::DesignSystem::inactiveTextOpacity()));
+        title->setContentsMargins(titleMargins.toMargins());
+    }
+    for (auto button : {
+             d->lockScenesNumbers,
+             d->relockScenesNumbers,
+             d->unlockScenesNumbers,
+         }) {
+        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
+        button->setTextColor(Ui::DesignSystem::color().onSecondary());
+    }
+    for (auto button : {
+             d->lockScenesNumbers,
+             d->relockScenesNumbers,
+         }) {
+        if (isLeftToRight()) {
+            button->setContentsMargins(Ui::DesignSystem::layout().px16(), 0, 0, 0);
+        } else {
+            button->setContentsMargins(0, 0, Ui::DesignSystem::layout().px16(), 0);
+        }
     }
     d->infoLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
     d->infoLayout->setContentsMargins(0, static_cast<int>(Ui::DesignSystem::layout().px24()), 0,

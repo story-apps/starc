@@ -16,7 +16,7 @@ const QLatin1String kNumberTag("number");
 const QLatin1String kNumberValueAttribute("value");
 const QLatin1String kNumberIsCustomAttribute("custom");
 const QLatin1String kNumberIsEatNumberAttribute("eat");
-const QLatin1String kNumberIsFixedAttribute("fixed");
+const QLatin1String kNumberIsLockedAttribute("fixed");
 const QLatin1String kColorTag("color");
 const QLatin1String kTitleTag("title");
 const QLatin1String kStampTag("stamp");

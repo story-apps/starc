@@ -37,8 +37,11 @@ public:
     void setScenesNumbersPrefix(const QString& _prefix);
     Q_SIGNAL void scenesNumbersPrefixChanged(const QString& _prefix);
 
-    void setScenesNumbersingStartAt(int _startNumber);
+    void setScenesNumberingStartAt(int _startNumber);
     Q_SIGNAL void scenesNumberingStartAtChanged(int _startNumber);
+
+    void setScenesNumbersLocked(bool _locked);
+    Q_SIGNAL void isScenesNumberingLockedChanged(bool _locked);
 
     void setOverrideCommonSettings(bool _override);
     Q_SIGNAL void overrideCommonSettingsChanged(bool _override);

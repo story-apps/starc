@@ -54,7 +54,7 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
             && blockData->item()->parent()->type() == TextModelItemType::Group) {
             const auto sceneItem
                 = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
-            if (exportOptions.exportScenes.contains(QString::number(sceneItem->number()->value))) {
+            if (exportOptions.exportScenes.contains(sceneItem->number()->value)) {
                 needRemoveBlock = false;
             }
         }

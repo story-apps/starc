@@ -99,7 +99,8 @@ void ScreenplayParametersManager::Implementation::setModelForView(
         _view->setFooter(model->footer());
         _view->setPrintFooterOnTitlePage(model->printFooterOnTitlePage());
         _view->setScenesNumbersPrefix(model->scenesNumbersPrefix());
-        _view->setScenesNumbersingStartAt(model->scenesNumberingStartAt());
+        _view->setScenesNumberingStartAt(model->scenesNumberingStartAt());
+        _view->setScenesNumbersLocked(model->isSceneNumbersLocked());
         _view->setOverrideCommonSettings(model->overrideCommonSettings());
         _view->setScreenplayTemplate(model->templateId());
         _view->setShowSceneNumbers(model->showSceneNumbers());
@@ -118,7 +119,9 @@ void ScreenplayParametersManager::Implementation::setModelForView(
         connect(model, &BusinessLayer::ScreenplayInformationModel::scenesNumbersPrefixChanged,
                 _view, &Ui::ScreenplayParametersView::setScenesNumbersPrefix);
         connect(model, &BusinessLayer::ScreenplayInformationModel::scenesNumberingStartAtChanged,
-                _view, &Ui::ScreenplayParametersView::setScenesNumbersingStartAt);
+                _view, &Ui::ScreenplayParametersView::setScenesNumberingStartAt);
+        connect(model, &BusinessLayer::ScreenplayInformationModel::isSceneNumbersLockedChanged,
+                _view, &Ui::ScreenplayParametersView::setScenesNumbersLocked);
         connect(model, &BusinessLayer::ScreenplayInformationModel::overrideCommonSettingsChanged,
                 _view, &Ui::ScreenplayParametersView::setOverrideCommonSettings);
         connect(model, &BusinessLayer::ScreenplayInformationModel::templateIdChanged, _view,
@@ -144,6 +147,8 @@ void ScreenplayParametersManager::Implementation::setModelForView(
                 &BusinessLayer::ScreenplayInformationModel::setScenesNumbersPrefix);
         connect(_view, &Ui::ScreenplayParametersView::scenesNumberingStartAtChanged, model,
                 &BusinessLayer::ScreenplayInformationModel::setScenesNumberingStartAt);
+        connect(_view, &Ui::ScreenplayParametersView::isScenesNumberingLockedChanged, model,
+                &BusinessLayer::ScreenplayInformationModel::setScenesNumbersLocked);
         connect(_view, &Ui::ScreenplayParametersView::overrideCommonSettingsChanged, model,
                 &BusinessLayer::ScreenplayInformationModel::setOverrideCommonSettings);
         connect(_view, &Ui::ScreenplayParametersView::screenplayTemplateChanged, model,

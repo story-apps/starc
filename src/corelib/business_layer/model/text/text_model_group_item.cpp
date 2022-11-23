@@ -169,7 +169,7 @@ void TextModelGroupItem::resetNumber()
     }
 }
 
-bool TextModelGroupItem::setNumber(int _number, const QString& _prefix)
+bool TextModelGroupItem::setNumber(int _number, const QString& _followNumber)
 {
     if (childCount() == 0) {
         return false;
@@ -192,21 +192,37 @@ bool TextModelGroupItem::setNumber(int _number, const QString& _prefix)
         return false;
     }
 
-    const auto newNumberText = QString("%1%2.").arg(_prefix, QString::number(_number));
-    if (d->number.has_value() && d->number->text == newNumberText) {
-        return true;
+    //
+    // В простом случае, текст номера это его текстовое представление
+    //
+    QString numberText = QString::number(_number);
+    //
+    // ... а в случае подмножества, он представляется буквой,
+    //     если же буквы заканчиваются, то к букве добавляется номер
+    //
+    if (!_followNumber.isEmpty()) {
+        const unsigned alphabetLen = 'Z' - 'A' + 1;
+        unsigned sceneLetter = _number % alphabetLen;
+        unsigned sceneLetterNumber = _number / alphabetLen;
+        numberText = ('A' + sceneLetter);
+        if (sceneLetterNumber != 0) {
+            numberText += QString::number(sceneLetterNumber);
+        }
     }
 
-    d->number = { _number, newNumberText };
+    auto newNumber = d->number.value_or(Number());
+    newNumber.value = numberText;
+    newNumber.followNumber = _followNumber;
+    d->number = newNumber;
     setChanged(true);
 
     return true;
 }
 
-bool TextModelGroupItem::setCustomNumber(const QString& _customNumber, bool _isEatNumber)
+void TextModelGroupItem::setCustomNumber(const QString& _customNumber, bool _isEatNumber)
 {
     if (childCount() == 0) {
-        return false;
+        return;
     }
 
     bool hasContent = false;
@@ -223,19 +239,49 @@ bool TextModelGroupItem::setCustomNumber(const QString& _customNumber, bool _isE
         }
     }
     if (!hasContent) {
-        return false;
+        return;
     }
 
     if (d->number.has_value() && d->number->isCustom && d->number->text == _customNumber
         && d->number->isEatNumber == _isEatNumber) {
-        return true;
+        return;
     }
 
-    bool isCustom = true;
-    d->number = { -1, _customNumber, isCustom, _isEatNumber };
+    auto newNumber = d->number.value_or(Number());
+    newNumber.isCustom = true;
+    newNumber.value = _customNumber;
+    newNumber.followNumber.clear();
+    newNumber.isEatNumber = _isEatNumber;
+    d->number = newNumber;
     setChanged(true);
+}
 
-    return true;
+void TextModelGroupItem::lockNumber()
+{
+    if (childCount() == 0 || !d->number.has_value() || d->number->isLocked) {
+        return;
+    }
+
+    d->number->value.prepend(d->number->followNumber);
+    d->number->followNumber.clear();
+    d->number->isLocked = true;
+    setChanged(true);
+}
+
+void TextModelGroupItem::prepareNumberText(const QString& _template)
+{
+    if (!d->number.has_value()) {
+        return;
+    }
+
+    const auto newNumberText
+        = QString("%1%2%3.").arg(_template, d->number->followNumber, d->number->value);
+    if (d->number->text == newNumberText) {
+        return;
+    }
+
+    d->number->text = newNumberText;
+    setChanged(true);
 }
 
 QColor TextModelGroupItem::color() const
@@ -390,10 +436,11 @@ void TextModelGroupItem::readContent(QXmlStreamReader& _contentReader)
     auto currentTag = _contentReader.name();
     if (currentTag == xml::kNumberTag) {
         const auto attributes = _contentReader.attributes();
-        d->number = { -1, attributes.value(xml::kNumberValueAttribute).toString(),
+        d->number = { attributes.value(xml::kNumberValueAttribute).toString(),
+                      {},
                       attributes.hasAttribute(xml::kNumberIsCustomAttribute),
                       attributes.hasAttribute(xml::kNumberIsEatNumberAttribute),
-                      attributes.hasAttribute(xml::kNumberIsFixedAttribute) };
+                      attributes.hasAttribute(xml::kNumberIsLockedAttribute) };
         xml::readNextElement(_contentReader); // end
         currentTag = xml::readNextElement(_contentReader); // next
     }
@@ -534,9 +581,9 @@ QByteArray TextModelGroupItem::xmlHeader(bool _clearUuid) const
                     xml::kPlotsAttribute, QString(),
                     (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : ""))
                .toUtf8();
-    if (d->number.has_value() && (d->number->isCustom || d->number->isFixed)) {
+    if (d->number.has_value() && (d->number->isCustom || d->number->isLocked)) {
         xml += QString("<%1 %2=\"%3\" %4%5/>\n")
-                   .arg(xml::kNumberTag, xml::kNumberValueAttribute, d->number->text,
+                   .arg(xml::kNumberTag, xml::kNumberValueAttribute, d->number->value,
                         (d->number->isCustom
                              ? QString("%1=\"true\" %2")
                                    .arg(xml::kNumberIsCustomAttribute,
@@ -545,8 +592,8 @@ QByteArray TextModelGroupItem::xmlHeader(bool _clearUuid) const
                                                    .arg(xml::kNumberIsEatNumberAttribute)
                                              : ""))
                              : ""),
-                        (d->number->isFixed
-                             ? QString("%1=\"true\"").arg(xml::kNumberIsFixedAttribute)
+                        (d->number->isLocked
+                             ? QString("%1=\"true\"").arg(xml::kNumberIsLockedAttribute)
                              : ""))
                    .toUtf8();
     }

@@ -33,6 +33,7 @@ const QLatin1String kFooterKey("footer");
 const QLatin1String kPrintFooterOnTitlePageKey("print_footer_on_title");
 const QLatin1String kScenesNumbersPrefixKey("scenes_numbers_prefix");
 const QLatin1String kScenesNumberingStartAtKey("scenes_numbering_start_at");
+const QLatin1String kIsScenesNumberingLockedKey("is_scenes_numbering_locked");
 const QLatin1String kOverrideSystemSettingsKey("override_system_settings");
 const QLatin1String kTemplateIdKey("template_id");
 const QLatin1String kShowSceneNumbersKey("show_scenes_numbers");
@@ -58,6 +59,7 @@ public:
     bool printFooterOnTitlePage = false;
     QString scenesNumbersPrefix;
     int scenesNumberingStartAt = 1;
+    bool isScenesNumbersLocked = false;
     bool overrideCommonSettings = false;
     QString templateId;
     bool showSceneNumbers = false;
@@ -88,6 +90,7 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
             kPrintFooterOnTitlePageKey,
             kScenesNumbersPrefixKey,
             kScenesNumberingStartAtKey,
+            kIsScenesNumberingLockedKey,
             kOverrideSystemSettingsKey,
             kTemplateIdKey,
             kShowSceneNumbersKey,
@@ -125,6 +128,8 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
     connect(this, &ScreenplayInformationModel::scenesNumbersPrefixChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::scenesNumberingStartAtChanged, this,
+            &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::isSceneNumbersLockedChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::overrideCommonSettingsChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
@@ -358,6 +363,21 @@ void ScreenplayInformationModel::setScenesNumberingStartAt(int _startNumber)
     emit scenesNumberingStartAtChanged(d->scenesNumberingStartAt);
 }
 
+bool ScreenplayInformationModel::isSceneNumbersLocked() const
+{
+    return d->isScenesNumbersLocked;
+}
+
+void ScreenplayInformationModel::setScenesNumbersLocked(bool _locked)
+{
+    //
+    // Тут поверх блокировки может прийти ещё одна блокировка, поэтому дополнительной проверки нет
+    //
+
+    d->isScenesNumbersLocked = _locked;
+    emit isSceneNumbersLockedChanged(_locked);
+}
+
 bool ScreenplayInformationModel::overrideCommonSettings() const
 {
     return d->overrideCommonSettings;
@@ -522,6 +542,8 @@ void ScreenplayInformationModel::initDocument()
     if (!scenesNumberingStartAtNode.isNull()) {
         d->scenesNumberingStartAt = scenesNumberingStartAtNode.text().toInt();
     }
+    d->isScenesNumbersLocked
+        = documentNode.firstChildElement(kIsScenesNumberingLockedKey).text() == "true";
     d->overrideCommonSettings
         = documentNode.firstChildElement(kOverrideSystemSettingsKey).text() == "true";
     d->templateId = documentNode.firstChildElement(kTemplateIdKey).text();
@@ -569,6 +591,7 @@ QByteArray ScreenplayInformationModel::toXml() const
     writeBoolTag(kPrintFooterOnTitlePageKey, d->printFooterOnTitlePage);
     writeTag(kScenesNumbersPrefixKey, d->scenesNumbersPrefix);
     writeTag(kScenesNumberingStartAtKey, QString::number(d->scenesNumberingStartAt));
+    writeBoolTag(kIsScenesNumberingLockedKey, d->isScenesNumbersLocked);
     writeBoolTag(kOverrideSystemSettingsKey, d->overrideCommonSettings);
     writeTag(kTemplateIdKey, d->templateId);
     writeBoolTag(kShowSceneNumbersKey, d->showSceneNumbers);
@@ -631,6 +654,7 @@ void ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
     setBool(kPrintFooterOnTitlePageKey, std::bind(&M::setPrintFooterOnTitlePage, this, _1));
     setText(kScenesNumbersPrefixKey, std::bind(&M::setScenesNumbersPrefix, this, _1));
     setInt(kScenesNumberingStartAtKey, std::bind(&M::setScenesNumberingStartAt, this, _1));
+    setBool(kIsScenesNumberingLockedKey, std::bind(&M::setScenesNumbersLocked, this, _1));
     setBool(kOverrideSystemSettingsKey, std::bind(&M::setOverrideCommonSettings, this, _1));
     setText(kTemplateIdKey, std::bind(&M::setTemplateId, this, _1));
     setBool(kShowSceneNumbersKey, std::bind(&M::setShowSceneNumbers, this, _1));

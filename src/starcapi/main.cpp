@@ -544,7 +544,7 @@ QJsonObject getCharacter(const QString& _starcFileName, const QString& _characte
                 scenesData.append(SceneData());
                 auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
                 scenesData.last().uuid = sceneItem->uuid().toString();
-                scenesData.last().number = QString::number(sceneItem->number()->value);
+                scenesData.last().number = sceneItem->number()->value;
                 scenesData.last().heading = sceneItem->heading();
                 scenesData.last().duration
                     = std::chrono::duration_cast<std::chrono::seconds>(sceneItem->duration());
@@ -699,7 +699,7 @@ QJsonObject printScene(const QString& _starcFileName, const QString& _screenplay
                 case TextModelItemType::Group: {
                     auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
                     if (sceneItem->uuid() == QUuid::fromString(_sceneUuid)) {
-                        return QString::number(sceneItem->number()->value);
+                        return sceneItem->number()->value;
                     }
                     break;
                 }

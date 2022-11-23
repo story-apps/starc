@@ -412,16 +412,24 @@ void ScreenplayItemParametersView::setStamp(const QString& _stamp)
 }
 
 void ScreenplayItemParametersView::setNumber(const QString& _number, bool _isCustom,
-                                             bool _isEatNumber)
+                                             bool _isEatNumber, bool _isLocked)
 {
     if (d->autoNumbering->isChecked() == !_isCustom && d->customNumber->text() == _number
-        && d->eatNumber->isChecked() == _isEatNumber) {
+        && d->eatNumber->isChecked() == _isEatNumber && d->autoNumbering->isVisible() == !_isLocked
+        && d->eatNumber->isVisible() == !_isLocked) {
         return;
     }
 
-    d->autoNumbering->setChecked(!_isCustom);
+    d->numberingTitle->setVisible(!_isLocked);
+    d->autoNumbering->setChecked(!_isCustom && !_isLocked);
+    d->autoNumbering->setVisible(!_isLocked);
     d->customNumber->setText(_number);
+    d->customNumber->setCustomMargins({ Ui::DesignSystem::layout().px24(),
+                                        (_isLocked ? Ui::DesignSystem::layout().px16() : 0.0),
+                                        Ui::DesignSystem::layout().px24(), 0.0 });
+    d->customNumber->setVisible(!d->autoNumbering->isChecked() || _isLocked);
     d->eatNumber->setChecked(_isEatNumber);
+    d->eatNumber->setVisible(!d->autoNumbering->isChecked() && !_isLocked);
 }
 
 void ScreenplayItemParametersView::setTags(const QVector<QPair<QString, QColor>>& _tags)

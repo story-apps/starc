@@ -28,10 +28,10 @@ public:
      */
     struct Number {
         /**
-         * @brief Порядковый номер
+         * @brief Порядковый/кастомынй номер
          * @note При блокировке номер незаблокированной группы после последней заблокированной
          */
-        int value = 0;
+        QString value;
 
         /**
          * @brief Текстовое представление номера в соответствии с шаблоном
@@ -51,7 +51,7 @@ public:
         /**
          * @brief Зафиксирован ли номер сцены
          */
-        bool isFixed = false;
+        bool isLocked = false;
 
         /**
          * @brief Номер предыдущей зафиксированной группы, добавляться к нему будет номер текущей
@@ -107,8 +107,10 @@ public:
      */
     std::optional<Number> number() const;
     void resetNumber();
-    bool setNumber(int _number, const QString& _prefix);
-    bool setCustomNumber(const QString& _customNumber, bool _isEatNumber);
+    bool setNumber(int _number, const QString& _followNumber = {});
+    void setCustomNumber(const QString& _customNumber, bool _isEatNumber);
+    void lockNumber();
+    void prepareNumberText(const QString& _template);
 
     /**
      * @brief Цвет группы

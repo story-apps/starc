@@ -183,6 +183,8 @@ void ScreenplayTextModel::setInformationModel(ScreenplayInformationModel* _model
                 this, &ScreenplayTextModel::updateNumbering);
         connect(d->informationModel, &ScreenplayInformationModel::scenesNumbersPrefixChanged, this,
                 &ScreenplayTextModel::updateNumbering);
+        connect(d->informationModel, &ScreenplayInformationModel::isSceneNumbersLockedChanged, this,
+                &ScreenplayTextModel::setScenesNumbersLocked);
     }
 }
 
@@ -521,51 +523,101 @@ void ScreenplayTextModel::updateNumbering()
 {
     int sceneNumber = d->informationModel->scenesNumberingStartAt();
     int dialogueNumber = 1;
+    QString lastLockedSceneFullNumber;
     std::function<void(const TextModelItem*)> updateChildNumbering;
-    updateChildNumbering
-        = [this, &sceneNumber, &dialogueNumber, &updateChildNumbering](const TextModelItem* _item) {
+    updateChildNumbering = [this, &sceneNumber, &dialogueNumber, &lastLockedSceneFullNumber,
+                            &updateChildNumbering](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case TextModelItemType::Folder: {
+                updateChildNumbering(childItem);
+                break;
+            }
+
+            case TextModelItemType::Group: {
+                updateChildNumbering(childItem);
+                auto groupItem = static_cast<TextModelGroupItem*>(childItem);
+                if (groupItem->groupType() == TextGroupType::Scene) {
+                    //
+                    // Если у сцены номер заблокирован, то запоминаем последний заблокированный для
+                    // работы с номерами незаблокированных сцен и сбрасываем счётчик номеров
+                    //
+                    if (groupItem->number().has_value() && groupItem->number()->isLocked) {
+                        lastLockedSceneFullNumber
+                            = groupItem->number()->followNumber + groupItem->number()->value;
+                        sceneNumber = 0;
+                    }
+                    //
+                    // Если у сцены задан кастомный номер, то не меняем его
+                    //
+                    else if (groupItem->number().has_value() && groupItem->number()->isCustom) {
+                        //
+                        // ... но при необходимости переводим счётчик номеров сцен
+                        //
+                        if (groupItem->number()->isEatNumber) {
+                            ++sceneNumber;
+                        }
+                    }
+                    //
+                    // А если номера назначаются автоматически, то задаём очередной номер
+                    //
+                    else {
+                        if (groupItem->setNumber(sceneNumber, lastLockedSceneFullNumber)) {
+                            updateItem(groupItem);
+                            ++sceneNumber;
+                        }
+                    }
+
+                    //
+                    // После того, как номер сформирован, декорируем его
+                    //
+                    groupItem->prepareNumberText(d->informationModel->scenesNumbersPrefix());
+                }
+                break;
+            }
+
+            case TextModelItemType::Text: {
+                auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+                if (textItem->paragraphType() == TextParagraphType::Character
+                    && !textItem->isCorrection()) {
+                    textItem->setNumber(dialogueNumber);
+                    updateItem(textItem);
+                    ++dialogueNumber;
+                }
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
+    updateChildNumbering(d->rootItem());
+}
+
+void ScreenplayTextModel::setScenesNumbersLocked(bool _locked)
+{
+    std::function<void(const TextModelItem*)> setSceneNumbersLockedImpl;
+    setSceneNumbersLockedImpl
+        = [this, _locked, &setSceneNumbersLockedImpl](const TextModelItem* _item) {
               for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
                   auto childItem = _item->childAt(childIndex);
                   switch (childItem->type()) {
                   case TextModelItemType::Folder: {
-                      updateChildNumbering(childItem);
+                      setSceneNumbersLockedImpl(childItem);
                       break;
                   }
 
                   case TextModelItemType::Group: {
-                      updateChildNumbering(childItem);
                       auto groupItem = static_cast<TextModelGroupItem*>(childItem);
                       if (groupItem->groupType() == TextGroupType::Scene) {
-                          //
-                          // Если у сцены задан кастомный номер, то не меняем его
-                          //
-                          if (groupItem->number().has_value() && groupItem->number()->isCustom) {
-                              //
-                              // ... но при необходимости переводим счётчик номеров сцен
-                              //
-                              if (groupItem->number()->isEatNumber) {
-                                  ++sceneNumber;
-                              }
+                          if (_locked) {
+                              groupItem->lockNumber();
+                          } else {
+                              groupItem->resetNumber();
                           }
-                          //
-                          // А если номера назначаются автоматически, то задаём очередной номер
-                          //
-                          else if (groupItem->setNumber(
-                                       sceneNumber, d->informationModel->scenesNumbersPrefix())) {
-                              updateItem(groupItem);
-                              ++sceneNumber;
-                          }
-                      }
-                      break;
-                  }
-
-                  case TextModelItemType::Text: {
-                      auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                      if (textItem->paragraphType() == TextParagraphType::Character
-                          && !textItem->isCorrection()) {
-                          textItem->setNumber(dialogueNumber);
-                          updateItem(textItem);
-                          ++dialogueNumber;
+                          updateItem(groupItem);
                       }
                       break;
                   }
@@ -575,7 +627,14 @@ void ScreenplayTextModel::updateNumbering()
                   }
               }
           };
-    updateChildNumbering(d->rootItem());
+    setSceneNumbersLockedImpl(d->rootItem());
+
+    //
+    // Если номера были разблокированы, то нужно сформировать их заново
+    //
+    if (!_locked) {
+        updateNumbering();
+    }
 }
 
 void ScreenplayTextModel::recalculateDuration()

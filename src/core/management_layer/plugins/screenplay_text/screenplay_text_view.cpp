@@ -554,10 +554,11 @@ void ScreenplayTextView::Implementation::showParametersFor(BusinessLayer::TextMo
         itemParametersView->setBeats(sceneItem->beats());
         itemParametersView->setStamp(sceneItem->stamp());
         if (const auto sceneNumber = sceneItem->number(); sceneNumber.has_value()) {
-            itemParametersView->setNumber(sceneNumber->text, sceneNumber->isCustom,
-                                          sceneNumber->isEatNumber);
+            itemParametersView->setNumber(sceneNumber->followNumber + sceneNumber->value,
+                                          sceneNumber->isCustom, sceneNumber->isEatNumber,
+                                          sceneNumber->isLocked);
         } else {
-            itemParametersView->setNumber({}, false, true);
+            itemParametersView->setNumber({}, false, true, false);
         }
         itemParametersView->setTags(sceneItem->tags());
         break;

@@ -73,6 +73,10 @@ public:
     void setScenesNumberingStartAt(int _startNumber);
     Q_SIGNAL void scenesNumberingStartAtChanged(int _startNumber);
 
+    bool isSceneNumbersLocked() const;
+    void setScenesNumbersLocked(bool _locked);
+    Q_SIGNAL void isSceneNumbersLockedChanged(bool _locked);
+
     bool overrideCommonSettings() const;
     void setOverrideCommonSettings(bool _override);
     Q_SIGNAL void overrideCommonSettingsChanged(bool _override);
