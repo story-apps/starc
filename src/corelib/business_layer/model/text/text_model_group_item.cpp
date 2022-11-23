@@ -162,6 +162,13 @@ std::optional<TextModelGroupItem::Number> TextModelGroupItem::number() const
     return d->number;
 }
 
+void TextModelGroupItem::resetNumber()
+{
+    if (d->number.has_value()) {
+        d->number.reset();
+    }
+}
+
 bool TextModelGroupItem::setNumber(int _number, const QString& _prefix)
 {
     if (childCount() == 0) {
@@ -191,6 +198,41 @@ bool TextModelGroupItem::setNumber(int _number, const QString& _prefix)
     }
 
     d->number = { _number, newNumberText };
+    setChanged(true);
+
+    return true;
+}
+
+bool TextModelGroupItem::setCustomNumber(const QString& _customNumber, bool _isEatNumber)
+{
+    if (childCount() == 0) {
+        return false;
+    }
+
+    bool hasContent = false;
+    for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
+        const auto child = childAt(childIndex);
+        if (child->type() != TextModelItemType::Text) {
+            continue;
+        }
+
+        const auto textItemChild = static_cast<const TextModelTextItem*>(child);
+        if (!textItemChild->isCorrection()) {
+            hasContent = true;
+            break;
+        }
+    }
+    if (!hasContent) {
+        return false;
+    }
+
+    if (d->number.has_value() && d->number->isCustom && d->number->text == _customNumber
+        && d->number->isEatNumber == _isEatNumber) {
+        return true;
+    }
+
+    bool isCustom = true;
+    d->number = { -1, _customNumber, isCustom, _isEatNumber };
     setChanged(true);
 
     return true;
@@ -334,21 +376,24 @@ void TextModelGroupItem::readContent(QXmlStreamReader& _contentReader)
     d->groupType = textGroupTypeFromString(_contentReader.name().toString());
     Q_ASSERT(d->groupType != TextGroupType::Undefined);
 
-    const auto attributes = _contentReader.attributes();
-    if (attributes.hasAttribute(xml::kUuidAttribute)) {
-        d->uuid = QUuid::fromString(attributes.value(xml::kUuidAttribute).toString());
+    const auto groupAttributes = _contentReader.attributes();
+    if (groupAttributes.hasAttribute(xml::kUuidAttribute)) {
+        d->uuid = QUuid::fromString(groupAttributes.value(xml::kUuidAttribute).toString());
     }
 
     //
     // TODO: plots
     //
-    d->isOmited = attributes.hasAttribute(xml::kOmitedAttribute);
+    d->isOmited = groupAttributes.hasAttribute(xml::kOmitedAttribute);
     xml::readNextElement(_contentReader);
 
     auto currentTag = _contentReader.name();
     if (currentTag == xml::kNumberTag) {
-        //        d->number = {
-        //        _contentReader.attributes().value(xml::kNumberValueAttribute).toString() };
+        const auto attributes = _contentReader.attributes();
+        d->number = { -1, attributes.value(xml::kNumberValueAttribute).toString(),
+                      attributes.hasAttribute(xml::kNumberIsCustomAttribute),
+                      attributes.hasAttribute(xml::kNumberIsEatNumberAttribute),
+                      attributes.hasAttribute(xml::kNumberIsFixedAttribute) };
         xml::readNextElement(_contentReader); // end
         currentTag = xml::readNextElement(_contentReader); // next
     }
@@ -489,13 +534,22 @@ QByteArray TextModelGroupItem::xmlHeader(bool _clearUuid) const
                     xml::kPlotsAttribute, QString(),
                     (d->isOmited ? QString("%1=\"true\"").arg(xml::kOmitedAttribute) : ""))
                .toUtf8();
-    //
-    // TODO: Номера будем сохранять только когда они кастомные или фиксированные
-    //
-    //    if (d->number.has_value()) {
-    //        xml += QString("<%1 %2=\"%3\"/>\n")
-    //               .arg(xml::kNumberTag, xml::kNumberValueAttribute, d->number->value).toUtf8();
-    //    }
+    if (d->number.has_value() && (d->number->isCustom || d->number->isFixed)) {
+        xml += QString("<%1 %2=\"%3\" %4%5/>\n")
+                   .arg(xml::kNumberTag, xml::kNumberValueAttribute, d->number->text,
+                        (d->number->isCustom
+                             ? QString("%1=\"true\" %2")
+                                   .arg(xml::kNumberIsCustomAttribute,
+                                        (d->number->isEatNumber
+                                             ? QString("%1=\"true\"")
+                                                   .arg(xml::kNumberIsEatNumberAttribute)
+                                             : ""))
+                             : ""),
+                        (d->number->isFixed
+                             ? QString("%1=\"true\"").arg(xml::kNumberIsFixedAttribute)
+                             : ""))
+                   .toUtf8();
+    }
     if (d->color.isValid()) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(xml::kColorTag, d->color.name()).toUtf8();
     }

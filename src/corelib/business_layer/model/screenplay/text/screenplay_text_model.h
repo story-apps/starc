@@ -110,6 +110,11 @@ public:
     std::map<std::chrono::milliseconds, QColor> itemsBookmarks() const;
 
     /**
+     * @brief Обновить номера сцен и реплик
+     */
+    void updateNumbering();
+
+    /**
      * @brief Пересчитать хронометраж
      */
     void recalculateDuration();

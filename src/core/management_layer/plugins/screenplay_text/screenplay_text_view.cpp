@@ -553,6 +553,12 @@ void ScreenplayTextView::Implementation::showParametersFor(BusinessLayer::TextMo
         itemParametersView->setHeading(sceneItem->heading());
         itemParametersView->setBeats(sceneItem->beats());
         itemParametersView->setStamp(sceneItem->stamp());
+        if (const auto sceneNumber = sceneItem->number(); sceneNumber.has_value()) {
+            itemParametersView->setNumber(sceneNumber->text, sceneNumber->isCustom,
+                                          sceneNumber->isEatNumber);
+        } else {
+            itemParametersView->setNumber({}, false, true);
+        }
         itemParametersView->setTags(sceneItem->tags());
         break;
     }
@@ -1029,6 +1035,50 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                     break;
                 }
             });
+    connect(d->itemParametersView, &ScreenplayItemParametersView::stampChanged, this,
+            [this, findCurrentModelItem](const QString& _stamp) {
+                auto item = findCurrentModelItem();
+                if (item == nullptr) {
+                    return;
+                }
+
+                switch (item->type()) {
+                case BusinessLayer::TextModelItemType::Folder: {
+                    auto folderItem = static_cast<BusinessLayer::TextModelFolderItem*>(item);
+                    folderItem->setStamp(_stamp);
+                    break;
+                }
+
+                case BusinessLayer::TextModelItemType::Group: {
+                    auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+                    groupItem->setStamp(_stamp);
+                    break;
+                }
+
+                default: {
+                    Q_ASSERT(false);
+                }
+                }
+
+                d->model->updateItem(item);
+            });
+    connect(
+        d->itemParametersView, &ScreenplayItemParametersView::numberChanged, this,
+        [this, findCurrentModelItem](const QString& _number, bool _isCustom, bool _isEatNumber) {
+            auto item = findCurrentModelItem();
+            if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
+                return;
+            }
+
+            auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+            if (_isCustom) {
+                groupItem->setCustomNumber(_number, _isEatNumber);
+            } else {
+                groupItem->resetNumber();
+            }
+            d->model->updateItem(groupItem);
+            d->model->updateNumbering();
+        });
     connect(d->itemParametersView, &ScreenplayItemParametersView::tagsChanged, this,
             [this, findCurrentModelItem](const QVector<QPair<QString, QColor>>& _tags) {
                 auto item = findCurrentModelItem();

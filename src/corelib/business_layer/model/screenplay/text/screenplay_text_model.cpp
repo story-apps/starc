@@ -38,11 +38,6 @@ public:
     TextModelItem* rootItem() const;
 
     /**
-     * @brief Обновить номера сцен и реплик
-     */
-    void updateNumbering();
-
-    /**
      * @brief Пересчитать хронометраж элемента и всех детей
      */
     void updateChildrenDuration(const TextModelItem* _item);
@@ -94,53 +89,6 @@ TextModelItem* ScreenplayTextModel::Implementation::rootItem() const
     return q->itemForIndex({});
 }
 
-void ScreenplayTextModel::Implementation::updateNumbering()
-{
-    int sceneNumber = informationModel->scenesNumberingStartAt();
-    int dialogueNumber = 1;
-    std::function<void(const TextModelItem*)> updateChildNumbering;
-    updateChildNumbering
-        = [this, &sceneNumber, &dialogueNumber, &updateChildNumbering](const TextModelItem* _item) {
-              for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-                  auto childItem = _item->childAt(childIndex);
-                  switch (childItem->type()) {
-                  case TextModelItemType::Folder: {
-                      updateChildNumbering(childItem);
-                      break;
-                  }
-
-                  case TextModelItemType::Group: {
-                      updateChildNumbering(childItem);
-                      auto groupItem = static_cast<TextModelGroupItem*>(childItem);
-                      if (groupItem->groupType() == TextGroupType::Scene) {
-                          if (groupItem->setNumber(sceneNumber,
-                                                   informationModel->scenesNumbersPrefix())) {
-                              q->updateItem(groupItem);
-                              ++sceneNumber;
-                          }
-                      }
-                      break;
-                  }
-
-                  case TextModelItemType::Text: {
-                      auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                      if (textItem->paragraphType() == TextParagraphType::Character
-                          && !textItem->isCorrection()) {
-                          textItem->setNumber(dialogueNumber);
-                          q->updateItem(textItem);
-                          ++dialogueNumber;
-                      }
-                      break;
-                  }
-
-                  default:
-                      break;
-                  }
-              }
-          };
-    updateChildNumbering(rootItem());
-}
-
 void ScreenplayTextModel::Implementation::updateChildrenDuration(const TextModelItem* _item)
 {
     for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
@@ -173,7 +121,7 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
     , d(new Implementation(this))
 {
     auto updateCounters = [this](const QModelIndex& _index) {
-        d->updateNumbering();
+        updateNumbering();
         d->updateChildrenDuration(itemForIndex(_index));
     };
     connect(this, &ScreenplayTextModel::rowsInserted, this, updateCounters);
@@ -232,9 +180,9 @@ void ScreenplayTextModel::setInformationModel(ScreenplayInformationModel* _model
 
     if (d->informationModel) {
         connect(d->informationModel, &ScreenplayInformationModel::scenesNumberingStartAtChanged,
-                this, [this] { d->updateNumbering(); });
+                this, &ScreenplayTextModel::updateNumbering);
         connect(d->informationModel, &ScreenplayInformationModel::scenesNumbersPrefixChanged, this,
-                [this] { d->updateNumbering(); });
+                &ScreenplayTextModel::updateNumbering);
     }
 }
 
@@ -569,6 +517,67 @@ std::map<std::chrono::milliseconds, QColor> ScreenplayTextModel::itemsBookmarks(
     return colors;
 }
 
+void ScreenplayTextModel::updateNumbering()
+{
+    int sceneNumber = d->informationModel->scenesNumberingStartAt();
+    int dialogueNumber = 1;
+    std::function<void(const TextModelItem*)> updateChildNumbering;
+    updateChildNumbering
+        = [this, &sceneNumber, &dialogueNumber, &updateChildNumbering](const TextModelItem* _item) {
+              for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+                  auto childItem = _item->childAt(childIndex);
+                  switch (childItem->type()) {
+                  case TextModelItemType::Folder: {
+                      updateChildNumbering(childItem);
+                      break;
+                  }
+
+                  case TextModelItemType::Group: {
+                      updateChildNumbering(childItem);
+                      auto groupItem = static_cast<TextModelGroupItem*>(childItem);
+                      if (groupItem->groupType() == TextGroupType::Scene) {
+                          //
+                          // Если у сцены задан кастомный номер, то не меняем его
+                          //
+                          if (groupItem->number().has_value() && groupItem->number()->isCustom) {
+                              //
+                              // ... но при необходимости переводим счётчик номеров сцен
+                              //
+                              if (groupItem->number()->isEatNumber) {
+                                  ++sceneNumber;
+                              }
+                          }
+                          //
+                          // А если номера назначаются автоматически, то задаём очередной номер
+                          //
+                          else if (groupItem->setNumber(
+                                       sceneNumber, d->informationModel->scenesNumbersPrefix())) {
+                              updateItem(groupItem);
+                              ++sceneNumber;
+                          }
+                      }
+                      break;
+                  }
+
+                  case TextModelItemType::Text: {
+                      auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+                      if (textItem->paragraphType() == TextParagraphType::Character
+                          && !textItem->isCorrection()) {
+                          textItem->setNumber(dialogueNumber);
+                          updateItem(textItem);
+                          ++dialogueNumber;
+                      }
+                      break;
+                  }
+
+                  default:
+                      break;
+                  }
+              }
+          };
+    updateChildNumbering(d->rootItem());
+}
+
 void ScreenplayTextModel::recalculateDuration()
 {
     emit rowsAboutToBeChanged();
@@ -692,7 +701,7 @@ void ScreenplayTextModel::initEmptyDocument()
 void ScreenplayTextModel::finalizeInitialization()
 {
     emit rowsAboutToBeChanged();
-    d->updateNumbering();
+    updateNumbering();
     emit rowsChanged();
 }
 
@@ -700,7 +709,7 @@ void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
 {
     TextModel::applyPatch(_patch);
 
-    d->updateNumbering();
+    updateNumbering();
 }
 
 } // namespace BusinessLayer

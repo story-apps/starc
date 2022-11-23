@@ -234,6 +234,13 @@ ScreenplayItemParametersView::ScreenplayItemParametersView(QWidget* _parent)
         d->customNumber->setVisible(isCustomNumber);
         d->eatNumber->setVisible(isCustomNumber);
     });
+    auto notifyNumberingChanged = [this] {
+        emit numberChanged(d->customNumber->text(), !d->autoNumbering->isChecked(),
+                           d->eatNumber->isChecked());
+    };
+    connect(d->autoNumbering, &Toggle::checkedChanged, this, notifyNumberingChanged);
+    connect(d->customNumber, &TextField::textChanged, this, notifyNumberingChanged);
+    connect(d->eatNumber, &CheckBox::checkedChanged, this, notifyNumberingChanged);
     connect(d->addTagButton, &IconButton::clicked, this, [this] {
         auto tagItem = new QStandardItem;
         tagItem->setData(u8"\U000F0315", Qt::DecorationRole);
@@ -296,8 +303,8 @@ void ScreenplayItemParametersView::setItemType(ScreenplayItemType _type)
         d->stamp->setVisible(true);
         d->numberingTitle->setVisible(true);
         d->autoNumbering->setVisible(true);
-        d->customNumber->setVisible(true);
-        d->eatNumber->setVisible(true);
+        d->customNumber->setVisible(false);
+        d->eatNumber->setVisible(false);
         d->tagsTitle->setVisible(true);
         d->addTagButton->setVisible(true);
         d->tags->setVisible(true);
@@ -402,6 +409,19 @@ void ScreenplayItemParametersView::setStamp(const QString& _stamp)
     }
 
     d->stamp->setText(_stamp);
+}
+
+void ScreenplayItemParametersView::setNumber(const QString& _number, bool _isCustom,
+                                             bool _isEatNumber)
+{
+    if (d->autoNumbering->isChecked() == !_isCustom && d->customNumber->text() == _number
+        && d->eatNumber->isChecked() == _isEatNumber) {
+        return;
+    }
+
+    d->autoNumbering->setChecked(!_isCustom);
+    d->customNumber->setText(_number);
+    d->eatNumber->setChecked(_isEatNumber);
 }
 
 void ScreenplayItemParametersView::setTags(const QVector<QPair<QString, QColor>>& _tags)

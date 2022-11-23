@@ -64,6 +64,12 @@ public:
     Q_SIGNAL void stampChanged(const QString& _stamp);
 
     /**
+     * @brief Номер
+     */
+    void setNumber(const QString& _number, bool _isCustom, bool _isEatNumber);
+    Q_SIGNAL void numberChanged(const QString& _number, bool _isCustom, bool _isEatNumber);
+
+    /**
      * @brief Тэги
      */
     void setTags(const QVector<QPair<QString, QColor>>& _tags);
