@@ -583,7 +583,7 @@ void TextField::setText(const QString& _text)
     //
     if (needAnimate) {
         d->animateLabelToTop();
-        d->finishAnimationIfInvisible();
+        d->finishAnimation();
     }
 }
 

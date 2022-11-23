@@ -243,6 +243,7 @@ SOURCES += \
     ui/modules/images_list/images_list.cpp \
     ui/modules/images_list/images_list_preview.cpp \
     ui/modules/logline_generator/logline_generator_dialog.cpp \
+    ui/modules/screenplay/screenplay_item_parameters_view.cpp \
     ui/modules/script_text_edit/script_text_edit.cpp \
     ui/widgets/animations/click_animation.cpp \
     ui/widgets/app_bar/app_bar.cpp \
@@ -527,6 +528,7 @@ HEADERS += \
     ui/modules/images_list/images_list.h \
     ui/modules/images_list/images_list_preview.h \
     ui/modules/logline_generator/logline_generator_dialog.h \
+    ui/modules/screenplay/screenplay_item_parameters_view.h \
     ui/modules/script_text_edit/script_text_edit.h \
     ui/widgets/animations/click_animation.h \
     ui/widgets/app_bar/app_bar.h \
