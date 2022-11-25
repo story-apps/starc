@@ -30,6 +30,10 @@ cp $APP_BIN_DIR/plugins/*.dll $EXE_APP_DIR/plugins/
 #
 # Copy Qt libraries
 #
+cp $Qt5_Dir/bin/d3dcompiler_47.dll $EXE_APP_DIR/
+cp $Qt5_Dir/bin/libEGL.dll $EXE_APP_DIR/
+cp $Qt5_Dir/bin/libGLESv2.dll $EXE_APP_DIR/
+cp $Qt5_Dir/bin/opengl32sw.dll $EXE_APP_DIR/
 cp $Qt5_Dir/bin/Qt5Concurrent.dll $EXE_APP_DIR/
 cp $Qt5_Dir/bin/Qt5Core.dll $EXE_APP_DIR/
 cp $Qt5_Dir/bin/Qt5DBus.dll $EXE_APP_DIR/
@@ -46,17 +50,28 @@ cp $Qt5_Dir/bin/Qt5Xml.dll $EXE_APP_DIR/
 # Copy Qt plugins
 #
 mkdir $EXE_APP_DIR/audio
-cp $Qt5_Dir/plugins/audio/*.dll $EXE_APP_DIR/audio/
+cp $Qt5_Dir/plugins/audio/qtaudio_wasapi.dll $EXE_APP_DIR/audio/
+cp $Qt5_Dir/plugins/audio/qtaudio_windows.dll $EXE_APP_DIR/audio/
 mkdir $EXE_APP_DIR/iconengines
-cp $Qt5_Dir/plugins/iconengines/*.dll $EXE_APP_DIR/iconengines/
+cp $Qt5_Dir/plugins/iconengines/qsvgicon.dll $EXE_APP_DIR/iconengines/
 mkdir $EXE_APP_DIR/imageformats
-cp $Qt5_Dir/plugins/imageformats/*.dll $EXE_APP_DIR/imageformats/
+cp $Qt5_Dir/plugins/imageformats/qgif.dll $EXE_APP_DIR/imageformats/
+cp $Qt5_Dir/plugins/imageformats/qicns.dll $EXE_APP_DIR/imageformats/
+cp $Qt5_Dir/plugins/imageformats/qico.dll $EXE_APP_DIR/imageformats/
+cp $Qt5_Dir/plugins/imageformats/qjpeg.dll $EXE_APP_DIR/imageformats/
+cp $Qt5_Dir/plugins/imageformats/qsvg.dll $EXE_APP_DIR/imageformats/
+cp $Qt5_Dir/plugins/imageformats/qtga.dll $EXE_APP_DIR/imageformats/
+cp $Qt5_Dir/plugins/imageformats/qtiff.dll $EXE_APP_DIR/imageformats/
+cp $Qt5_Dir/plugins/imageformats/qwbmp.dll $EXE_APP_DIR/imageformats/
+cp $Qt5_Dir/plugins/imageformats/qwebp.dll $EXE_APP_DIR/imageformats/
 mkdir $EXE_APP_DIR/platforms
 cp $Qt5_Dir/plugins/platforms/qwindows.dll $EXE_APP_DIR/platforms/
 mkdir $EXE_APP_DIR/printsupport
-cp $Qt5_Dir/plugins/printsupport/*.dll $EXE_APP_DIR/printsupport/
+cp $Qt5_Dir/plugins/printsupport/windowsprintersupport.dll $EXE_APP_DIR/printsupport/
 mkdir $EXE_APP_DIR/sqldrivers
 cp $Qt5_Dir/plugins/sqldrivers/qsqlite.dll $EXE_APP_DIR/sqldrivers/
+mkdir $EXE_APP_DIR/styles
+cp $Qt5_Dir/plugins/styles/qwindowsvistastyle.dll $EXE_APP_DIR/styles/
 #
 # Copy openssl lib
 #
