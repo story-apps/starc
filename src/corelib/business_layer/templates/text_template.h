@@ -152,6 +152,11 @@ CORE_LIBRARY_EXPORT TextParagraphType textParagraphTypeFromDisplayString(const Q
  */
 CORE_LIBRARY_EXPORT QString textParagraphTitle(TextParagraphType _type);
 
+/**
+ * @brief Является ли блок заголовком
+ */
+CORE_LIBRARY_EXPORT bool isTextParagraphAHeading(TextParagraphType _type);
+
 
 /**
  * @brief Класс стиля блока текста

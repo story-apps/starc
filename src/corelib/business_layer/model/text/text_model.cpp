@@ -1031,7 +1031,11 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                              != TextFolderType::Undefined
                          || textGroupTypeFromString(document.firstChild().nodeName())
                              != TextGroupType::Undefined)
-                     && document.firstChild().firstChild().childNodes().size() == 1) {
+                     && document.firstChild()
+                             .firstChildElement(xml::kContentTag)
+                             .childNodes()
+                             .size()
+                         == 1) {
                 isMimeContainsFolderOrSequence = true;
                 isMimeContainsJustOneBlock = true;
             }
@@ -1071,11 +1075,16 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         else {
             //
-            // Если вставка идёт в пустой блок, то просто переносим блок после вставляемого
-            // фрагмента (в завершении вставки он будет удалён)
+            // Если вставка идёт в пустой блок
             //
             if (textItem->text().isEmpty()) {
-                lastItemsFromSourceScene.append(textItem);
+                //
+                // ... и блок не является заголовком группы или папки, то просто переносим блок
+                //     после вставляемого фрагмента (в завершении вставки он будет удалён)
+                //
+                if (!isTextParagraphAHeading(textItem->paragraphType())) {
+                    lastItemsFromSourceScene.append(textItem);
+                }
             }
             //
             // В противном случае

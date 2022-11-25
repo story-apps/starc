@@ -231,6 +231,19 @@ QString textParagraphTitle(TextParagraphType _type)
     }
 }
 
+bool isTextParagraphAHeading(TextParagraphType _type)
+{
+    const QSet<TextParagraphType> headings = {
+        TextParagraphType::ActHeading,      TextParagraphType::SequenceHeading,
+        TextParagraphType::SceneHeading,    TextParagraphType::BeatHeading,
+        TextParagraphType::PageHeading,     TextParagraphType::PanelHeading,
+        TextParagraphType::ChapterHeading1, TextParagraphType::ChapterHeading2,
+        TextParagraphType::ChapterHeading3, TextParagraphType::ChapterHeading4,
+        TextParagraphType::ChapterHeading5, TextParagraphType::ChapterHeading6,
+    };
+    return headings.contains(_type);
+}
+
 
 // ****
 
