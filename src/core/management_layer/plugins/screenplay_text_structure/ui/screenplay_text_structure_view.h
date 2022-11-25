@@ -22,7 +22,6 @@ public:
      */
     /** @{ */
     QWidget* asQWidget() override;
-    QVector<QAction*> options() const override;
     void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
     /** @} */
 
@@ -30,12 +29,6 @@ public:
      * @brief Настроить навигатор в соответствии с параметрами заданными в настройках
      */
     void reconfigure();
-
-    /**
-     * @brief Работа с параметрами отображения представления
-     */
-    void loadViewSettings();
-    void saveViewSettings();
 
     /**
      * @brief Задать заголовок навигатора
@@ -62,11 +55,6 @@ signals:
      * @brief Пользователь выбрал элемент в навигаторе с заданным индексом
      */
     void currentModelIndexChanged(const QModelIndex& _index);
-
-    /**
-     * @brief Пользователь кликнул на кнопке вставки текста бита
-     */
-    void pasteBeatNamePressed(const QString& _name);
 
 protected:
     /**

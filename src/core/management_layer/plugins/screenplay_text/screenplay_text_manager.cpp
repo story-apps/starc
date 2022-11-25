@@ -567,8 +567,6 @@ void ScreenplayTextManager::bind(IDocumentManager* _manager)
     const auto isConnectedFirstTime
         = connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
                   SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
-    connect(_manager->asQObject(), SIGNAL(pasteBeatNameToEditorRequested(QString)), this,
-            SLOT(pasteBeatNameToEditor(QString)), Qt::UniqueConnection);
 
     //
     // Ставим в очередь событие нотификацию о смене текущей сцены,
@@ -622,11 +620,6 @@ void ScreenplayTextManager::setCurrentModelIndex(const QModelIndex& _index)
 
     d->view->setCurrentModelIndex(_index);
     d->view->setFocus();
-}
-
-void ScreenplayTextManager::pasteBeatNameToEditor(const QString& _name)
-{
-    d->view->insertText(_name);
 }
 
 } // namespace ManagementLayer

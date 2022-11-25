@@ -32,12 +32,6 @@ public:
     Ui::ScreenplayTextStructureView* createView();
 
     /**
-     * @brief Работа с параметрами отображения представления
-     */
-    void loadViewSettings();
-    void saveViewSettings();
-
-    /**
      * @brief Настроить контекстное меню
      */
     void updateContextMenu(const QModelIndexList& _indexes);
@@ -81,24 +75,12 @@ ScreenplayTextStructureManager::Implementation::Implementation()
 {
     view = createView();
     contextMenu = new ContextMenu(view);
-
-    loadViewSettings();
 }
 
 Ui::ScreenplayTextStructureView* ScreenplayTextStructureManager::Implementation::createView()
 {
     allViews.append(new Ui::ScreenplayTextStructureView);
     return allViews.last();
-}
-
-void ScreenplayTextStructureManager::Implementation::loadViewSettings()
-{
-    view->loadViewSettings();
-}
-
-void ScreenplayTextStructureManager::Implementation::saveViewSettings()
-{
-    view->saveViewSettings();
 }
 
 void ScreenplayTextStructureManager::Implementation::updateContextMenu(
@@ -195,8 +177,6 @@ ScreenplayTextStructureManager::ScreenplayTextStructureManager(QObject* _parent)
                 d->updateContextMenu(d->view->selectedIndexes());
                 d->contextMenu->showContextMenu(d->view->mapToGlobal(_pos));
             });
-    connect(d->view, &Ui::ScreenplayTextStructureView::pasteBeatNamePressed, this,
-            &ScreenplayTextStructureManager::pasteBeatNameToEditorRequested);
 }
 
 ScreenplayTextStructureManager::~ScreenplayTextStructureManager() = default;
@@ -259,11 +239,6 @@ void ScreenplayTextStructureManager::bind(IDocumentManager* _manager)
             SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
 }
 
-void ScreenplayTextStructureManager::saveSettings()
-{
-    d->saveViewSettings();
-}
-
 void ScreenplayTextStructureManager::setEditingMode(DocumentEditingMode _mode)
 {
     d->view->setEditingMode(_mode);
@@ -283,10 +258,16 @@ void ScreenplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _in
     QSignalBlocker signalBlocker(this);
 
     //
+    // Из редактора карточек мы получаем индексы сцен и папок
+    //
+    auto indexForSelect = d->structureModel->mapFromSource(_index);
+    //
     // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
     // папок, сцен или битов, которые как раз и отображаются в навигаторе
     //
-    auto indexForSelect = d->structureModel->mapFromSource(_index.parent());
+    if (!indexForSelect.isValid()) {
+        indexForSelect = d->structureModel->mapFromSource(_index.parent());
+    }
     //
     // ... когда биты скрыты в навигаторе, берём папку или сцену, в которой они находятся
     //

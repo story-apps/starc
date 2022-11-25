@@ -35,7 +35,6 @@ public:
     void resetModels() override;
     void reconfigure(const QStringList& _changedSettingsKeys) override;
     void bind(IDocumentManager* _manager) override;
-    void saveSettings() override;
     void setEditingMode(DocumentEditingMode _mode) override;
     /** @} */
 
@@ -44,11 +43,6 @@ signals:
      * @brief Пользователь выбрал элемент в навигаторе с заданным индексом в модели сценария
      */
     void currentModelIndexChanged(const QModelIndex& _index);
-
-    /**
-     * @brief Пользователь хочет вставить текст бита в редактор
-     */
-    void pasteBeatNameToEditorRequested(const QString& _name);
 
 private:
     /**

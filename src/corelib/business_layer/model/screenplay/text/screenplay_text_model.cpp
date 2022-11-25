@@ -181,8 +181,8 @@ void ScreenplayTextModel::setInformationModel(ScreenplayInformationModel* _model
     if (d->informationModel) {
         connect(d->informationModel, &ScreenplayInformationModel::scenesNumberingStartAtChanged,
                 this, &ScreenplayTextModel::updateNumbering);
-        connect(d->informationModel, &ScreenplayInformationModel::scenesNumbersTemplateChanged, this,
-                &ScreenplayTextModel::updateNumbering);
+        connect(d->informationModel, &ScreenplayInformationModel::scenesNumbersTemplateChanged,
+                this, &ScreenplayTextModel::updateNumbering);
         connect(d->informationModel, &ScreenplayInformationModel::isSceneNumbersLockedChanged, this,
                 &ScreenplayTextModel::setScenesNumbersLocked);
     }

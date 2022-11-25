@@ -1463,11 +1463,6 @@ void ScreenplayTextView::setVerticalScroll(int _value)
     d->textEdit->verticalScrollBar()->setValue(_value);
 }
 
-void ScreenplayTextView::insertText(const QString& _text)
-{
-    d->textEdit->insertPlainText(_text);
-}
-
 bool ScreenplayTextView::eventFilter(QObject* _target, QEvent* _event)
 {
     if (_target == d->scalableWrapper) {

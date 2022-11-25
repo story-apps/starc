@@ -1984,6 +1984,8 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     // Загрузим шрифты в базу шрифтов программы, если их там ещё нет
     //
+    Log::info("Loading fonts");
+    //
     // ... встроенные в бинарник
     //
     QFontDatabase fontDatabase;
@@ -2074,6 +2076,8 @@ QString ApplicationManager::logFilePath() const
 
 void ApplicationManager::exec(const QString& _fileToOpenPath)
 {
+    Log::info("Starting the application");
+
     //
     // Самое главное - настроить заголовок!
     //

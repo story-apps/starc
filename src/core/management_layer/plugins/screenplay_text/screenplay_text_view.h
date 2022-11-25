@@ -76,11 +76,6 @@ public:
     int verticalScroll() const;
     void setVerticalScroll(int _value);
 
-    /**
-     * @brief Вставить заданный текст
-     */
-    void insertText(const QString& _text);
-
 signals:
     /**
      * @brief Изменился индекс текущего элемента модели в текстовом документе (перестился курсор)

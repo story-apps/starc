@@ -21,13 +21,6 @@
 
 namespace Ui {
 
-namespace {
-
-const QString kSettingsKey = "screenplay-text-structure";
-const QString kIsBeatTextVisibleKey = kSettingsKey + "/is-beat-text-visible";
-
-} // namespace
-
 class ScreenplayTextStructureView::Implementation
 {
 public:
@@ -38,22 +31,12 @@ public:
      */
     void updateCurrentBeatName(const QModelIndex& _index);
 
-    /**
-     * @brief Обновить переводы дополнительных действий
-     */
-    void updateOptionsTranslations();
-
 
     IconsMidLabel* backIcon = nullptr;
     Subtitle2Label* backText = nullptr;
     Tree* content = nullptr;
     ScreenplayTextStructureDelegate* contentDelegate = nullptr;
     BeatNameWidget* beatNameWidget = nullptr;
-
-    //
-    // Действия опций редактора
-    //
-    QAction* showBeatTextAction = nullptr;
 };
 
 ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
@@ -62,7 +45,6 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     , content(new Tree(_parent))
     , contentDelegate(new ScreenplayTextStructureDelegate(content))
     , beatNameWidget(new BeatNameWidget(_parent))
-    , showBeatTextAction(new QAction(_parent))
 {
     backIcon->setIcon(u8"\U000F0141");
 
@@ -73,11 +55,6 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
 
     new Shadow(Qt::TopEdge, content);
     new Shadow(Qt::BottomEdge, content);
-
-    beatNameWidget->hide();
-
-    showBeatTextAction->setCheckable(true);
-    showBeatTextAction->setIconText(u8"\U000F09A8");
 }
 
 void ScreenplayTextStructureView::Implementation::updateCurrentBeatName(const QModelIndex& _index)
@@ -91,12 +68,6 @@ void ScreenplayTextStructureView::Implementation::updateCurrentBeatName(const QM
     } else {
         beatNameWidget->clearBeatName();
     }
-}
-
-void ScreenplayTextStructureView::Implementation::updateOptionsTranslations()
-{
-    showBeatTextAction->setText(showBeatTextAction->isChecked() ? tr("Hide current beat name")
-                                                                : tr("Show current beat name"));
 }
 
 
@@ -133,12 +104,6 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
     });
     connect(this, &ScreenplayTextStructureView::currentModelIndexChanged, this,
             [this](const QModelIndex& _index) { d->updateCurrentBeatName(_index); });
-    connect(d->beatNameWidget, &BeatNameWidget::pasteBeatNamePressed, this,
-            &ScreenplayTextStructureView::pasteBeatNamePressed);
-    connect(d->showBeatTextAction, &QAction::toggled, this, [this](bool _checked) {
-        d->updateOptionsTranslations();
-        d->beatNameWidget->setVisible(_checked);
-    });
 }
 
 ScreenplayTextStructureView::~ScreenplayTextStructureView() = default;
@@ -146,13 +111,6 @@ ScreenplayTextStructureView::~ScreenplayTextStructureView() = default;
 QWidget* ScreenplayTextStructureView::asQWidget()
 {
     return this;
-}
-
-QVector<QAction*> ScreenplayTextStructureView::options() const
-{
-    return {
-        d->showBeatTextAction,
-    };
 }
 
 void ScreenplayTextStructureView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
@@ -184,17 +142,6 @@ void ScreenplayTextStructureView::reconfigure()
     d->content->setItemDelegate(d->contentDelegate);
 }
 
-void ScreenplayTextStructureView::loadViewSettings()
-{
-    const auto isBeatTextVisible = settingsValue(kIsBeatTextVisibleKey, false).toBool();
-    d->showBeatTextAction->setChecked(isBeatTextVisible);
-}
-
-void ScreenplayTextStructureView::saveViewSettings()
-{
-    setSettingsValue(kIsBeatTextVisibleKey, d->showBeatTextAction->isChecked());
-}
-
 void ScreenplayTextStructureView::setTitle(const QString& _title)
 {
     d->backText->setText(_title);
@@ -219,7 +166,6 @@ QModelIndexList ScreenplayTextStructureView::selectedIndexes() const
 
 void ScreenplayTextStructureView::updateTranslations()
 {
-    d->updateOptionsTranslations();
 }
 
 void ScreenplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
