@@ -610,7 +610,8 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
             }
             }
             if (childIndex != invalidIndex) {
-                itemForSelectIndex = projectStructureModel->index(3, 0, itemForSelectIndex);
+                itemForSelectIndex
+                    = projectStructureModel->index(childIndex, 0, itemForSelectIndex);
             }
             const auto mappedAddedItemIndex
                 = projectStructureProxyModel->mapFromSource(itemForSelectIndex);
