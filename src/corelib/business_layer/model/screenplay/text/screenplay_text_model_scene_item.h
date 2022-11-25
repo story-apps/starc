@@ -28,6 +28,16 @@ public:
     ~ScreenplayTextModelSceneItem() override;
 
     /**
+     * @brief Количество слов
+     */
+    int wordsCount() const;
+
+    /**
+     * @brief Количество символов
+     */
+    QPair<int, int> charactersCount() const;
+
+    /**
      * @brief Длительность сцены
      */
     std::chrono::milliseconds duration() const;

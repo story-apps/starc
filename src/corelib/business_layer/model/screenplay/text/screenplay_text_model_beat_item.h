@@ -27,6 +27,16 @@ public:
     ~ScreenplayTextModelBeatItem() override;
 
     /**
+     * @brief Количество слов
+     */
+    int wordsCount() const;
+
+    /**
+     * @brief Количество символов
+     */
+    QPair<int, int> charactersCount() const;
+
+    /**
      * @brief Длительность бита
      */
     std::chrono::milliseconds duration() const;

@@ -60,7 +60,7 @@ void CountersInfoWidget::Implementation::updateCountersLabelText()
         }
 
         if (!countersText.isEmpty()) {
-            countersText += "; ";
+            countersText += " | ";
         }
         countersText += counter.info;
     }
@@ -173,8 +173,8 @@ void CountersInfoWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event
     }
 
     layout()->setContentsMargins(
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24());
+        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12(),
+        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12());
 }
 
 } // namespace Ui

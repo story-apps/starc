@@ -24,6 +24,16 @@ public:
     //
 
     /**
+     * @brief Количество слов
+     */
+    int wordsCount = 0;
+
+    /**
+     * @brief Количество символов
+     */
+    QPair<int, int> charactersCount;
+
+    /**
      * @brief Длительность папки
      */
     std::chrono::milliseconds duration = std::chrono::milliseconds{ 0 };
@@ -56,6 +66,16 @@ void ScreenplayTextModelFolderItem::setCardInfo(const CardInfo& _info)
 
     d->cardInfo = _info;
     setChanged(true);
+}
+
+int ScreenplayTextModelFolderItem::wordsCount() const
+{
+    return d->wordsCount;
+}
+
+QPair<int, int> ScreenplayTextModelFolderItem::charactersCount() const
+{
+    return d->charactersCount;
 }
 
 std::chrono::milliseconds ScreenplayTextModelFolderItem::duration() const
@@ -102,6 +122,8 @@ bool ScreenplayTextModelFolderItem::isFilterAccepted(const QString& _text, bool 
 void ScreenplayTextModelFolderItem::handleChange()
 {
     setHeading({});
+    d->wordsCount = 0;
+    d->charactersCount = {};
     d->duration = std::chrono::seconds{ 0 };
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
@@ -117,9 +139,15 @@ void ScreenplayTextModelFolderItem::handleChange()
             auto childItem = static_cast<TextModelGroupItem*>(child);
             if (childItem->groupType() == TextGroupType::Scene) {
                 const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(childItem);
+                d->wordsCount += sceneItem->wordsCount();
+                d->charactersCount.first += sceneItem->charactersCount().first;
+                d->charactersCount.second += sceneItem->charactersCount().second;
                 d->duration += sceneItem->duration();
             } else {
                 const auto beatItem = static_cast<ScreenplayTextModelBeatItem*>(childItem);
+                d->wordsCount += beatItem->wordsCount();
+                d->charactersCount.first += beatItem->charactersCount().first;
+                d->charactersCount.second += beatItem->charactersCount().second;
                 d->duration += beatItem->duration();
             }
             break;
@@ -131,6 +159,9 @@ void ScreenplayTextModelFolderItem::handleChange()
                 || childItem->paragraphType() == TextParagraphType::SequenceHeading) {
                 setHeading(TextHelper::smartToUpper(childItem->text()));
             }
+            d->wordsCount += childItem->wordsCount();
+            d->charactersCount.first += childItem->charactersCount().first;
+            d->charactersCount.second += childItem->charactersCount().second;
             d->duration += childItem->duration();
             break;
         }

@@ -18,6 +18,16 @@ public:
     //
 
     /**
+     * @brief Количество слов
+     */
+    int wordsCount = 0;
+
+    /**
+     * @brief Количество символов
+     */
+    QPair<int, int> charactersCount;
+
+    /**
      * @brief Длительность бита
      */
     std::chrono::milliseconds duration = std::chrono::milliseconds{ 0 };
@@ -36,6 +46,16 @@ ScreenplayTextModelBeatItem::ScreenplayTextModelBeatItem(const ScreenplayTextMod
 }
 
 ScreenplayTextModelBeatItem::~ScreenplayTextModelBeatItem() = default;
+
+int ScreenplayTextModelBeatItem::wordsCount() const
+{
+    return d->wordsCount;
+}
+
+QPair<int, int> ScreenplayTextModelBeatItem::charactersCount() const
+{
+    return d->charactersCount;
+}
 
 std::chrono::milliseconds ScreenplayTextModelBeatItem::duration() const
 {
@@ -76,6 +96,8 @@ void ScreenplayTextModelBeatItem::handleChange()
     QString text;
     int inlineNotesSize = 0;
     QVector<TextModelTextItem::ReviewMark> reviewMarks;
+    d->wordsCount = 0;
+    d->charactersCount = {};
     d->duration = std::chrono::seconds{ 0 };
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
@@ -120,8 +142,11 @@ void ScreenplayTextModelBeatItem::handleChange()
         reviewMarks.append(childTextItem->reviewMarks());
 
         //
-        // Собираем хронометраж
+        // Собираем счётчики
         //
+        d->wordsCount += childTextItem->wordsCount();
+        d->charactersCount.first += childTextItem->charactersCount().first;
+        d->charactersCount.second += childTextItem->charactersCount().second;
         d->duration += childTextItem->duration();
     }
 

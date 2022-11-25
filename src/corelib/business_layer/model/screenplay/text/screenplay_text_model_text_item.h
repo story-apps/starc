@@ -18,10 +18,24 @@ public:
     ~ScreenplayTextModelTextItem() override;
 
     /**
+     * @brief Количество слов
+     */
+    int wordsCount() const;
+
+    /**
+     * @brief Количество символов
+     */
+    QPair<int, int> charactersCount() const;
+
+    /**
      * @brief Длительность сцены
      */
     std::chrono::milliseconds duration() const;
-    void updateDuration();
+
+    /**
+     * @brief Обновить счётчики
+     */
+    void updateCounters();
 
     /**
      * @brief Определяем интерфейс получения данных сцены

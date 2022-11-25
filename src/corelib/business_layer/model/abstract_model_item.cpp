@@ -217,11 +217,17 @@ void AbstractModelItem::setChanged(bool _changed)
     d->changed = _changed;
 
     if (_changed) {
+        //
+        // Сначала обрабатываем собственное изменение элемента
+        //
+        handleChange();
+
+        //
+        // А потом уже изменение его родителя, которое будет учитывать текущее изменение тоже
+        //
         if (d->parent != nullptr) {
             d->parent->setChanged(_changed);
         }
-
-        handleChange();
     }
 }
 

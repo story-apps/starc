@@ -4,6 +4,7 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/templates/screenplay_template.h>
 
@@ -41,6 +42,23 @@ ScreenplayTextDocument::ScreenplayTextDocument(QObject* _parent)
     , d(new Implementation(this))
 {
     setCorrector(new ScreenplayTextCorrector(this));
+
+    connect(this, &ScreenplayTextDocument::contentsChanged, this, [this] {
+        if (!canChangeModel()) {
+            return;
+        }
+
+        auto screenplayModel = qobject_cast<ScreenplayTextModel*>(model());
+        if (screenplayModel == nullptr) {
+            return;
+        }
+
+        if (d->isTreatmentVisible) {
+            screenplayModel->setTreatmentPageCount(pageCount());
+        } else {
+            screenplayModel->setScriptPageCount(pageCount());
+        }
+    });
 }
 
 ScreenplayTextDocument::~ScreenplayTextDocument() = default;

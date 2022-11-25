@@ -111,6 +111,11 @@ public:
 
 protected:
     /**
+     * @brief Может ли документ менять модель
+     */
+    bool canChangeModel() const;
+
+    /**
      * @brief Задать корректировщик текста
      */
     void setCorrector(AbstractTextCorrector* _corrector);

@@ -113,7 +113,7 @@ void ScreenplayTextModel::Implementation::updateChildrenDuration(const TextModel
 
         case TextModelItemType::Text: {
             auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-            textItem->updateDuration();
+            textItem->updateCounters();
             break;
         }
 
@@ -467,7 +467,16 @@ int ScreenplayTextModel::treatmentPageCount() const
 
 void ScreenplayTextModel::setTreatmentPageCount(int _count)
 {
+    if (d->treatmentPageCount == _count) {
+        return;
+    }
+
     d->treatmentPageCount = _count;
+
+    //
+    // Создаём фейковое уведомление, чтобы оповестить клиентов
+    //
+    emit dataChanged(index(0, 0), index(0, 0));
 }
 
 int ScreenplayTextModel::scriptPageCount() const
@@ -477,7 +486,16 @@ int ScreenplayTextModel::scriptPageCount() const
 
 void ScreenplayTextModel::setScriptPageCount(int _count)
 {
+    if (d->scriptPageCount == _count) {
+        return;
+    }
+
     d->scriptPageCount = _count;
+
+    //
+    // Создаём фейковое уведомление, чтобы оповестить клиентов
+    //
+    emit dataChanged(index(0, 0), index(0, 0));
 }
 
 int ScreenplayTextModel::scenesCount() const
@@ -487,12 +505,12 @@ int ScreenplayTextModel::scenesCount() const
 
 int ScreenplayTextModel::wordsCount() const
 {
-    return 0;
+    return static_cast<ScreenplayTextModelFolderItem*>(d->rootItem())->wordsCount();
 }
 
 QPair<int, int> ScreenplayTextModel::charactersCount() const
 {
-    return { 0, 0 };
+    return static_cast<ScreenplayTextModelFolderItem*>(d->rootItem())->charactersCount();
 }
 
 std::chrono::milliseconds ScreenplayTextModel::duration() const

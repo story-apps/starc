@@ -1694,6 +1694,11 @@ TextModelTextItem::Bookmark TextDocument::bookmark(const QTextBlock& _forBlock) 
     return textItem->bookmark().value_or(TextModelTextItem::Bookmark());
 }
 
+bool TextDocument::canChangeModel() const
+{
+    return d->canChangeModel;
+}
+
 void TextDocument::setCorrector(AbstractTextCorrector* _corrector)
 {
     d->corrector.reset(_corrector);

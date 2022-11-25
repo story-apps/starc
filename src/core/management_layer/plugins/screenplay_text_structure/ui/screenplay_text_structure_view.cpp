@@ -3,9 +3,12 @@
 #include "counters_info_widget.h"
 #include "screenplay_text_structure_delegate.h"
 
+#include <business_layer/document/screenplay/text/screenplay_text_document.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/text/text_model_group_item.h>
 #include <business_layer/templates/screenplay_template.h>
+#include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <interfaces/management_layer/i_document_manager.h>
@@ -13,6 +16,7 @@
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
+#include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <ui/widgets/tree/tree.h>
 
 #include <QAction>
@@ -72,8 +76,37 @@ void ScreenplayTextStructureView::Implementation::updateCounters()
         return;
     }
 
+    const auto pageCount = [screenplayModel] {
+        //
+        // Если в модели уже задано количество страниц, то используем его
+        //
+        if (screenplayModel->scriptPageCount() > 0) {
+            return screenplayModel->scriptPageCount();
+        }
+
+        //
+        // А если не задано, то придётся считать вручную
+        // NOTE: это возможно, когда не был активирован редактор текста сценария
+        //
+        const auto& screenplayTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(
+            screenplayModel->informationModel()->templateId());
+
+        PageTextEdit textEdit;
+        textEdit.setUsePageMode(true);
+        textEdit.setPageSpacing(0);
+        textEdit.setPageFormat(screenplayTemplate.pageSizeId());
+        textEdit.setPageMarginsMm(screenplayTemplate.pageMargins());
+        BusinessLayer::ScreenplayTextDocument screenplayDocument;
+        textEdit.setDocument(&screenplayDocument);
+
+        const bool kCanChangeModel = false;
+        screenplayDocument.setModel(screenplayModel, kCanChangeModel);
+
+        return screenplayDocument.pageCount();
+    }();
+
     countersWidget->setCounters({
-        tr("%n page(s)", "", screenplayModel->scriptPageCount()),
+        tr("%n page(s)", "", pageCount),
         tr("%n scene(s)", "", screenplayModel->scenesCount()),
         tr("%n word(s)", "", screenplayModel->wordsCount()),
         tr("%n character(s)", "", screenplayModel->charactersCount().first),
