@@ -77,6 +77,17 @@ public:
      * @brief Справочники, которые строятся в рантайме
      */
     QStringListModel* charactersModelFromText = nullptr;
+
+    /**
+     * @brief Количество страниц
+     */
+    int treatmentPageCount = 0;
+    int scriptPageCount = 0;
+
+    /**
+     * @brief Количество сцен
+     */
+    int scenesCount = 0;
 };
 
 ScreenplayTextModel::Implementation::Implementation(ScreenplayTextModel* _q)
@@ -449,6 +460,41 @@ void ScreenplayTextModel::updateLocationName(const QString& _oldName, const QStr
     emit rowsChanged();
 }
 
+int ScreenplayTextModel::treatmentPageCount() const
+{
+    return d->treatmentPageCount;
+}
+
+void ScreenplayTextModel::setTreatmentPageCount(int _count)
+{
+    d->treatmentPageCount = _count;
+}
+
+int ScreenplayTextModel::scriptPageCount() const
+{
+    return d->scriptPageCount;
+}
+
+void ScreenplayTextModel::setScriptPageCount(int _count)
+{
+    d->scriptPageCount = _count;
+}
+
+int ScreenplayTextModel::scenesCount() const
+{
+    return d->scenesCount;
+}
+
+int ScreenplayTextModel::wordsCount() const
+{
+    return 0;
+}
+
+QPair<int, int> ScreenplayTextModel::charactersCount() const
+{
+    return { 0, 0 };
+}
+
 std::chrono::milliseconds ScreenplayTextModel::duration() const
 {
     return static_cast<ScreenplayTextModelFolderItem*>(d->rootItem())->duration();
@@ -521,6 +567,7 @@ std::map<std::chrono::milliseconds, QColor> ScreenplayTextModel::itemsBookmarks(
 
 void ScreenplayTextModel::updateNumbering()
 {
+    d->scenesCount = 0;
     int sceneNumber = d->informationModel->scenesNumberingStartAt();
     int dialogueNumber = 1;
     QString lastLockedSceneFullNumber;
@@ -539,6 +586,8 @@ void ScreenplayTextModel::updateNumbering()
                 updateChildNumbering(childItem);
                 auto groupItem = static_cast<TextModelGroupItem*>(childItem);
                 if (groupItem->groupType() == TextGroupType::Scene) {
+                    ++d->scenesCount;
+
                     //
                     // Если у сцены номер заблокирован, то запоминаем последний заблокированный для
                     // работы с номерами незаблокированных сцен и сбрасываем счётчик номеров

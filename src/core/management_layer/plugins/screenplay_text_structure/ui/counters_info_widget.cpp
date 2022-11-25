@@ -1,4 +1,4 @@
-#include "beat_name_widget.h"
+#include "counters_info_widget.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/icon_button/icon_button.h>
@@ -10,117 +10,113 @@
 
 namespace Ui {
 
-class BeatNameWidget::Implementation
+class CountersInfoWidget::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
 
-    void updateBeatNameTextColor();
+    /**
+     * @brief Обновить текст лейбла со счётчиками в соответствии с выбранными настройками
+     */
+    void updateCountersLabelText();
 
 
-    AbstractLabel* titleLabel = nullptr;
-    IconButton* copyNameButton = nullptr;
-    AbstractLabel* beatNameLabel = nullptr;
-    bool hasBeatName = false;
+    AbstractLabel* countersLabel = nullptr;
+    AbstractLabel* showCountersMenuLabel = nullptr;
+
+    struct CounterInfo {
+        QString info = {};
+        bool isVisible = true;
+    };
+    QVector<CounterInfo> counters;
 };
 
-BeatNameWidget::Implementation::Implementation(QWidget* _parent)
-    : titleLabel(new Subtitle2Label(_parent))
-    , copyNameButton(new IconButton(_parent))
-    , beatNameLabel(new Subtitle2Label(_parent))
+CountersInfoWidget::Implementation::Implementation(QWidget* _parent)
+    : countersLabel(new Subtitle2Label(_parent))
+    , showCountersMenuLabel(new IconsMidLabel(_parent))
 {
-    copyNameButton->setIcon(u8"\U000F0CF9");
-    copyNameButton->setFocusPolicy(Qt::NoFocus);
+    showCountersMenuLabel->setText(u8"\U000F035D");
 }
 
-void BeatNameWidget::Implementation::updateBeatNameTextColor()
+void CountersInfoWidget::Implementation::updateCountersLabelText()
 {
-    beatNameLabel->setTextColor(
-        ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
-                                 hasBeatName ? 1.0 : Ui::DesignSystem::disabledTextOpacity()));
+    QString countersText;
+    for (const auto& counter : std::as_const(counters)) {
+        if (!counter.isVisible || counter.info.isEmpty()) {
+            continue;
+        }
+
+        if (!countersText.isEmpty()) {
+            countersText += "; ";
+        }
+        countersText += counter.info;
+    }
+    countersLabel->setText(countersText);
 }
 
 
 // ****
 
 
-BeatNameWidget::BeatNameWidget(QWidget* _parent)
+CountersInfoWidget::CountersInfoWidget(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
-    auto titleLayout = new QHBoxLayout;
-    titleLayout->setContentsMargins({});
-    titleLayout->setSpacing(0);
-    titleLayout->addWidget(d->titleLabel, 1, Qt::AlignVCenter);
-    titleLayout->addWidget(d->copyNameButton);
-
-    auto layout = new QVBoxLayout;
+    auto layout = new QHBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
-    layout->addLayout(titleLayout);
-    layout->addWidget(d->beatNameLabel);
+    layout->addWidget(d->countersLabel);
+    layout->addWidget(d->showCountersMenuLabel);
+    layout->addStretch();
     setLayout(layout);
 
 
-    connect(d->copyNameButton, &IconButton::clicked, this, [this] {
-        if (d->hasBeatName) {
-            emit pasteBeatNamePressed(d->beatNameLabel->text());
-        }
-    });
+    auto showCountersMenu = [this] {
+
+    };
+    connect(d->countersLabel, &AbstractLabel::clicked, this, showCountersMenu);
+    connect(d->showCountersMenuLabel, &AbstractLabel::clicked, this, showCountersMenu);
 }
 
-BeatNameWidget::~BeatNameWidget() = default;
+CountersInfoWidget::~CountersInfoWidget() = default;
 
-void BeatNameWidget::setBeatName(const QString& _name)
+void CountersInfoWidget::setCounters(const QVector<QString>& _counters)
 {
-    if (_name.isEmpty()) {
-        clearBeatName();
-        return;
+    if (d->counters.size() != _counters.size()) {
+        d->counters.resize(_counters.size());
     }
 
-    if (_name == d->beatNameLabel->text()) {
-        return;
+    for (int index = 0; index < d->counters.size(); ++index) {
+        d->counters[index].info = _counters[index];
     }
 
-    d->hasBeatName = true;
-    d->beatNameLabel->setText(_name);
-    d->updateBeatNameTextColor();
+    d->updateCountersLabelText();
 }
 
-void BeatNameWidget::clearBeatName()
+void CountersInfoWidget::updateTranslations()
 {
-    d->hasBeatName = false;
-    d->beatNameLabel->setText(tr("No one beat selected"));
-    d->updateBeatNameTextColor();
+    d->showCountersMenuLabel->setToolTip(tr("Choose counters to show"));
 }
 
-void BeatNameWidget::updateTranslations()
-{
-    d->titleLabel->setText(tr("Current beat:"));
-    d->copyNameButton->setToolTip(tr("Copy current beat text and paste it to the document"));
-}
-
-void BeatNameWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void CountersInfoWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
     setBackgroundColor(Ui::DesignSystem::color().primary());
 
-    for (auto widget : std::vector<Widget*>{
-             d->titleLabel,
-             d->copyNameButton,
+    for (auto label : {
+             d->countersLabel,
+             d->showCountersMenuLabel,
          }) {
-        widget->setBackgroundColor(Ui::DesignSystem::color().primary());
-        widget->setTextColor(ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
-                                                      Ui::DesignSystem::inactiveTextOpacity()));
+        label->setBackgroundColor(Ui::DesignSystem::color().primary());
+        label->setTextColor(ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
+                                                     Ui::DesignSystem::inactiveTextOpacity()));
+        label->setContentsMargins(0, 0, Ui::DesignSystem::layout().px12(), 0);
     }
-    d->beatNameLabel->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->updateBeatNameTextColor();
-    d->beatNameLabel->setContentsMargins(0, 0, Ui::DesignSystem::layout().px12(), 0);
 
-    layout()->setContentsMargins(Ui::DesignSystem::layout().px24(), 0, 0,
-                                 Ui::DesignSystem::layout().px24());
-    layout()->setSpacing(Ui::DesignSystem::layout().px4());
+    layout()->setContentsMargins(
+        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
+        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24());
 }
 
 } // namespace Ui

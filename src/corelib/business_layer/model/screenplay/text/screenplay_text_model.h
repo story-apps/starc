@@ -95,6 +95,33 @@ public:
     void updateLocationName(const QString& _oldName, const QString& _newName);
 
     /**
+     * @brief Количество страниц текста поэпизодника
+     */
+    int treatmentPageCount() const;
+    void setTreatmentPageCount(int _count);
+
+    /**
+     * @brief Количество страниц текста сценария
+     */
+    int scriptPageCount() const;
+    void setScriptPageCount(int _count);
+
+    /**
+     * @brief Количество сцен
+     */
+    int scenesCount() const;
+
+    /**
+     * @brief Количество слов
+     */
+    int wordsCount() const;
+
+    /**
+     * @brief Количество символов
+     */
+    QPair<int, int> charactersCount() const;
+
+    /**
      * @brief Длительность сценария
      */
     std::chrono::milliseconds duration() const;

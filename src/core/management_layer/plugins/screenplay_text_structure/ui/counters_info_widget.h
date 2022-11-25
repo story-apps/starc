@@ -5,25 +5,21 @@
 
 namespace Ui {
 
-class BeatNameWidget : public Widget
+/**
+ * @brief Виджет с информацией о счётчиках
+ */
+class CountersInfoWidget : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit BeatNameWidget(QWidget* _parent = nullptr);
-    ~BeatNameWidget() override;
+    explicit CountersInfoWidget(QWidget* _parent = nullptr);
+    ~CountersInfoWidget() override;
 
     /**
-     * @brief Задать текст бита
+     * @brief Задать счётчики
      */
-    void setBeatName(const QString& _name);
-    void clearBeatName();
-
-signals:
-    /**
-     * @brief Пользователь кликнул на кнопке вставки текста бита
-     */
-    void pasteBeatNamePressed(const QString& _name);
+    void setCounters(const QVector<QString>& _counters);
 
 protected:
     /**

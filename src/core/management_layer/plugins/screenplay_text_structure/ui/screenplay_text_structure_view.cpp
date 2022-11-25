@@ -1,8 +1,9 @@
 #include "screenplay_text_structure_view.h"
 
-#include "beat_name_widget.h"
+#include "counters_info_widget.h"
 #include "screenplay_text_structure_delegate.h"
 
+#include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/text/text_model_group_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <data_layer/storage/settings_storage.h>
@@ -15,6 +16,7 @@
 #include <ui/widgets/tree/tree.h>
 
 #include <QAction>
+#include <QSortFilterProxyModel>
 #include <QStringListModel>
 #include <QVBoxLayout>
 
@@ -27,16 +29,18 @@ public:
     explicit Implementation(QWidget* _parent);
 
     /**
-     * @brief Обновить название текущего бита
+     * @brief Обновить счётчики
      */
-    void updateCurrentBeatName(const QModelIndex& _index);
+    void updateCounters();
 
+
+    QSortFilterProxyModel* model = nullptr;
 
     IconsMidLabel* backIcon = nullptr;
     Subtitle2Label* backText = nullptr;
     Tree* content = nullptr;
     ScreenplayTextStructureDelegate* contentDelegate = nullptr;
-    BeatNameWidget* beatNameWidget = nullptr;
+    CountersInfoWidget* countersWidget = nullptr;
 };
 
 ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
@@ -44,7 +48,7 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     , backText(new Subtitle2Label(_parent))
     , content(new Tree(_parent))
     , contentDelegate(new ScreenplayTextStructureDelegate(content))
-    , beatNameWidget(new BeatNameWidget(_parent))
+    , countersWidget(new CountersInfoWidget(_parent))
 {
     backIcon->setIcon(u8"\U000F0141");
 
@@ -57,17 +61,24 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     new Shadow(Qt::BottomEdge, content);
 }
 
-void ScreenplayTextStructureView::Implementation::updateCurrentBeatName(const QModelIndex& _index)
+void ScreenplayTextStructureView::Implementation::updateCounters()
 {
-    using namespace BusinessLayer;
-    if (static_cast<TextModelItemType>(_index.data(Qt::UserRole).toInt())
-            == TextModelItemType::Group
-        && static_cast<TextGroupType>(_index.data(TextModelGroupItem::GroupTypeRole).toInt())
-            == TextGroupType::Beat) {
-        beatNameWidget->setBeatName(_index.data(TextModelGroupItem::GroupHeadingRole).toString());
-    } else {
-        beatNameWidget->clearBeatName();
+    if (model == nullptr || model->sourceModel() == nullptr) {
+        return;
     }
+
+    auto screenplayModel = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model->sourceModel());
+    if (screenplayModel == nullptr) {
+        return;
+    }
+
+    countersWidget->setCounters({
+        tr("%n page(s)", "", screenplayModel->scriptPageCount()),
+        tr("%n scene(s)", "", screenplayModel->scenesCount()),
+        tr("%n word(s)", "", screenplayModel->wordsCount()),
+        tr("%n characters(s)", "", screenplayModel->charactersCount().first),
+        tr("%n characters(s) with spaces", "", screenplayModel->charactersCount().second),
+    });
 }
 
 
@@ -89,7 +100,7 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addLayout(topLayout);
     layout->addWidget(d->content);
-    layout->addWidget(d->beatNameWidget);
+    layout->addWidget(d->countersWidget);
     setLayout(layout);
 
 
@@ -102,8 +113,6 @@ ScreenplayTextStructureView::ScreenplayTextStructureView(QWidget* _parent)
     connect(d->content, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
         emit customContextMenuRequested(d->content->mapToParent(_pos));
     });
-    connect(this, &ScreenplayTextStructureView::currentModelIndexChanged, this,
-            [this](const QModelIndex& _index) { d->updateCurrentBeatName(_index); });
 }
 
 ScreenplayTextStructureView::~ScreenplayTextStructureView() = default;
@@ -149,14 +158,30 @@ void ScreenplayTextStructureView::setTitle(const QString& _title)
 
 void ScreenplayTextStructureView::setModel(QAbstractItemModel* _model)
 {
+    if (d->model != nullptr) {
+        d->model->disconnect(this);
+    }
+
     d->content->setModel(_model);
+
+    d->model = qobject_cast<QSortFilterProxyModel*>(_model);
+    if (d->model != nullptr) {
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::modelReset, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::dataChanged, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsInserted, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsMoved, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsRemoved, this,
+                [this] { d->updateCounters(); });
+    }
 }
 
-void ScreenplayTextStructureView::setCurrentModelIndex(const QModelIndex& _sourceIndex,
-                                                       const QModelIndex& _mappedIndex)
+void ScreenplayTextStructureView::setCurrentModelIndex(const QModelIndex& _mappedIndex)
 {
     d->content->setCurrentIndex(_mappedIndex);
-    d->updateCurrentBeatName(_sourceIndex);
 }
 
 QModelIndexList ScreenplayTextStructureView::selectedIndexes() const
@@ -166,6 +191,7 @@ QModelIndexList ScreenplayTextStructureView::selectedIndexes() const
 
 void ScreenplayTextStructureView::updateTranslations()
 {
+    d->updateCounters();
 }
 
 void ScreenplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

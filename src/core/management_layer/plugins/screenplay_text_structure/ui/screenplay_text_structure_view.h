@@ -43,7 +43,7 @@ public:
     /**
      * @brief Установить текущий выделенный элемент в модели
      */
-    void setCurrentModelIndex(const QModelIndex& _sourceIndex, const QModelIndex& _mappedIndex);
+    void setCurrentModelIndex(const QModelIndex& _mappedIndex);
 
     /**
      * @brief Список выделенных элементов
