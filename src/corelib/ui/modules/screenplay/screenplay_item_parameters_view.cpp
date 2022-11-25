@@ -33,6 +33,11 @@ public:
     void initCardBeats();
 
     /**
+     * @brief Обновить отступы поля кастомного номера сцены
+     */
+    void updateCustomNumberMargins();
+
+    /**
      * @brief Обновить размер списка тэгов
      */
     void updateTagsSize();
@@ -178,6 +183,14 @@ void ScreenplayItemParametersView::Implementation::initCardBeats()
                                            Ui::DesignSystem::layout().px16(),
                                            Ui::DesignSystem::layout().px24(), 0 });
     beats.constLast()->setHelper(tr("Each line is a separate beat"));
+}
+
+void ScreenplayItemParametersView::Implementation::updateCustomNumberMargins()
+{
+    const auto isNumberingFixed = !autoNumbering->isVisible();
+    customNumber->setCustomMargins({ Ui::DesignSystem::layout().px24(),
+                                     (isNumberingFixed ? Ui::DesignSystem::layout().px16() : 0.0),
+                                     Ui::DesignSystem::layout().px24(), 0.0 });
 }
 
 void ScreenplayItemParametersView::Implementation::updateTagsSize()
@@ -424,9 +437,7 @@ void ScreenplayItemParametersView::setNumber(const QString& _number, bool _isCus
     d->autoNumbering->setChecked(!_isCustom && !_isLocked);
     d->autoNumbering->setVisible(!_isLocked);
     d->customNumber->setText(_number);
-    d->customNumber->setCustomMargins({ Ui::DesignSystem::layout().px24(),
-                                        (_isLocked ? Ui::DesignSystem::layout().px16() : 0.0),
-                                        Ui::DesignSystem::layout().px24(), 0.0 });
+    d->updateCustomNumberMargins();
     d->customNumber->setVisible(!d->autoNumbering->isChecked() || _isLocked);
     d->eatNumber->setChecked(_isEatNumber);
     d->eatNumber->setVisible(!d->autoNumbering->isChecked() && !_isLocked);
@@ -506,7 +517,7 @@ void ScreenplayItemParametersView::updateTranslations()
     case ScreenplayItemType::Folder: {
         d->title->setLabel(tr("Heading"));
         d->title->setHelper({});
-        d->title->setTrailingIconToolTip(tr("Select folder color"));
+        d->title->setTrailingIconToolTip(tr("Select item color"));
         break;
     }
 
@@ -589,8 +600,7 @@ void ScreenplayItemParametersView::designSystemChangeEvent(DesignSystemChangeEve
                                       Ui::DesignSystem::layout().px16(),
                                       Ui::DesignSystem::layout().px24(), 0.0 });
     }
-    d->customNumber->setCustomMargins(
-        { Ui::DesignSystem::layout().px24(), 0.0, Ui::DesignSystem::layout().px24(), 0.0 });
+    d->updateCustomNumberMargins();
     //
     d->initCardBeats();
     //
