@@ -131,7 +131,8 @@ void Project::setRealPath(const QString& _path)
 const QPixmap& Project::poster() const
 {
     if (d->poster.isNull()) {
-        if (!d->poster.load(d->posterPath)) {
+        d->poster.load(d->posterPath);
+        if (d->poster.isNull()) {
             static const QPixmap kDefaultPoster(":/images/movie-poster");
             d->poster = kDefaultPoster;
         }

@@ -163,6 +163,8 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
 {
     Q_UNUSED(_option)
 
+    _painter->setOpacity(1.0);
+
     const bool isLeftToRight = _widget->isLeftToRight();
     const QRectF backgroundRect = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins());
     if (!backgroundRect.isValid()) {
@@ -314,7 +316,6 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     //
     // Иконка расположения проекта
     //
-    _painter->setOpacity(1.0);
     _painter->setPen(Ui::DesignSystem::color().onBackground());
     _painter->setFont(Ui::DesignSystem::font().iconsMid());
     const QRectF iconRect(
