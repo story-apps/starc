@@ -8174,8 +8174,8 @@ Discuss everything with fellow community of writers, share your work in progress
     </message>
     <message>
         <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="509"/>
-        <source>Select folder color</source>
-        <translation></translation>
+        <source>Select item color</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="514"/>
@@ -9219,7 +9219,7 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayTextStructureView</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="76"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="109"/>
         <source>%n page(s)</source>
         <translation>
             <numerusform>%n page</numerusform>
@@ -9227,7 +9227,7 @@ Discuss everything with fellow community of writers, share your work in progress
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="77"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="110"/>
         <source>%n scene(s)</source>
         <translation>
             <numerusform>%n scene</numerusform>
@@ -9235,7 +9235,7 @@ Discuss everything with fellow community of writers, share your work in progress
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="78"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="111"/>
         <source>%n word(s)</source>
         <translation>
             <numerusform>%n word</numerusform>
@@ -9243,7 +9243,7 @@ Discuss everything with fellow community of writers, share your work in progress
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="79"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="112"/>
         <source>%n character(s)</source>
         <translation>
             <numerusform>%n character</numerusform>
@@ -9251,7 +9251,7 @@ Discuss everything with fellow community of writers, share your work in progress
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="80"/>
+        <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="113"/>
         <source>%n character(s) with spaces</source>
         <translation>
             <numerusform>%n character with spaces</numerusform>
