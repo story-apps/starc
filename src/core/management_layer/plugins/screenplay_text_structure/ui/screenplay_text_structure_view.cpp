@@ -76,8 +76,8 @@ void ScreenplayTextStructureView::Implementation::updateCounters()
         tr("%n page(s)", "", screenplayModel->scriptPageCount()),
         tr("%n scene(s)", "", screenplayModel->scenesCount()),
         tr("%n word(s)", "", screenplayModel->wordsCount()),
-        tr("%n characters(s)", "", screenplayModel->charactersCount().first),
-        tr("%n characters(s) with spaces", "", screenplayModel->charactersCount().second),
+        tr("%n character(s)", "", screenplayModel->charactersCount().first),
+        tr("%n character(s) with spaces", "", screenplayModel->charactersCount().second),
     });
 }
 
