@@ -125,9 +125,13 @@ SimpleTextModel::SimpleTextModel(QObject* _parent)
     connect(this, &SimpleTextModel::dataChanged, this,
             [this](const QModelIndex& _index) { d->updateDocumentName(_index); });
 
+    //
+    // Обновляем счётчики на конце цикла событий, чтобы успевали обработаться внутренние механизмы
+    // прокси-моделей, которые могут работать с моделью документа
+    //
     auto updateNumbering = [this] { d->updateNumbering(); };
-    connect(this, &SimpleTextModel::rowsInserted, this, updateNumbering);
-    connect(this, &SimpleTextModel::rowsRemoved, this, updateNumbering);
+    connect(this, &SimpleTextModel::rowsInserted, this, updateNumbering, Qt::QueuedConnection);
+    connect(this, &SimpleTextModel::rowsRemoved, this, updateNumbering, Qt::QueuedConnection);
 }
 
 SimpleTextModel::~SimpleTextModel() = default;

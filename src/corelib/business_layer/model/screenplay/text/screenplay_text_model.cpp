@@ -131,12 +131,16 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
     : TextModel(_parent, ScreenplayTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
+    //
+    // Обновляем счётчики на конце цикла событий, чтобы успевали обработаться внутренние механизмы
+    // прокси-моделей, которые могут работать с моделью документа
+    //
     auto updateCounters = [this](const QModelIndex& _index) {
         updateNumbering();
         d->updateChildrenDuration(itemForIndex(_index));
     };
-    connect(this, &ScreenplayTextModel::rowsInserted, this, updateCounters);
-    connect(this, &ScreenplayTextModel::rowsRemoved, this, updateCounters);
+    connect(this, &ScreenplayTextModel::rowsInserted, this, updateCounters, Qt::QueuedConnection);
+    connect(this, &ScreenplayTextModel::rowsRemoved, this, updateCounters, Qt::QueuedConnection);
 
     connect(this, &ScreenplayTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });

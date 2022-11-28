@@ -157,12 +157,16 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
     : TextModel(_parent, createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
+    //
+    // Обновляем счётчики на конце цикла событий, чтобы успевали обработаться внутренние механизмы
+    // прокси-моделей, которые могут работать с моделью документа
+    //
     auto updateCounters = [this](const QModelIndex& _index) {
         d->updateNumbering();
         d->updateChildrenDuration(itemForIndex(_index));
     };
-    connect(this, &AudioplayTextModel::rowsInserted, this, updateCounters);
-    connect(this, &AudioplayTextModel::rowsRemoved, this, updateCounters);
+    connect(this, &AudioplayTextModel::rowsInserted, this, updateCounters, Qt::QueuedConnection);
+    connect(this, &AudioplayTextModel::rowsRemoved, this, updateCounters, Qt::QueuedConnection);
 
     connect(this, &AudioplayTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });

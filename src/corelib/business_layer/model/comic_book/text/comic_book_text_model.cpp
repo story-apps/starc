@@ -146,9 +146,13 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
     : TextModel(_parent, ComicBookTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
+    //
+    // Обновляем счётчики на конце цикла событий, чтобы успевали обработаться внутренние механизмы
+    // прокси-моделей, которые могут работать с моделью документа
+    //
     auto updateNumbering = [this] { d->updateNumbering(); };
-    connect(this, &ComicBookTextModel::rowsInserted, this, updateNumbering);
-    connect(this, &ComicBookTextModel::rowsRemoved, this, updateNumbering);
+    connect(this, &ComicBookTextModel::rowsInserted, this, updateNumbering, Qt::QueuedConnection);
+    connect(this, &ComicBookTextModel::rowsRemoved, this, updateNumbering, Qt::QueuedConnection);
 
     connect(this, &ComicBookTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });
