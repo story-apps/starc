@@ -256,7 +256,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                                     emit closeCurrentProjectRequested();
                                 }
                                 d->projects->remove(_project);
-                                QFile::remove(_project.realPath());
+                                QFile::remove(_project.path());
                             });
                     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
                 });
