@@ -126,13 +126,16 @@ StageplayTextModel::StageplayTextModel(QObject* _parent)
     : TextModel(_parent, createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
-    //
-    // Обновляем счётчики на конце цикла событий, чтобы успевали обработаться внутренние механизмы
-    // прокси-моделей, которые могут работать с моделью документа
-    //
     auto updateNumbering = [this] { d->updateNumbering(); };
+    //
+    // При добавлении, обновляем счётчики на конце цикла событий, чтобы успевали обработаться
+    // внутренние механизмы прокси-моделей, которые могут работать с моделью документа
+    //
     connect(this, &StageplayTextModel::rowsInserted, this, updateNumbering, Qt::QueuedConnection);
-    connect(this, &StageplayTextModel::rowsRemoved, this, updateNumbering, Qt::QueuedConnection);
+    //
+    // А при удалении нужно обновить их сразу же, пока индексы не инвалидировались
+    //
+    connect(this, &StageplayTextModel::rowsRemoved, this, updateNumbering);
 
     connect(this, &StageplayTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });

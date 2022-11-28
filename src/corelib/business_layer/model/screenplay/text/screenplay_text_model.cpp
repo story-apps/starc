@@ -102,6 +102,10 @@ TextModelItem* ScreenplayTextModel::Implementation::rootItem() const
 
 void ScreenplayTextModel::Implementation::updateChildrenDuration(const TextModelItem* _item)
 {
+    if (_item == nullptr) {
+        return;
+    }
+
     for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
         auto childItem = _item->childAt(childIndex);
         switch (childItem->type()) {
@@ -131,16 +135,19 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
     : TextModel(_parent, ScreenplayTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
-    //
-    // Обновляем счётчики на конце цикла событий, чтобы успевали обработаться внутренние механизмы
-    // прокси-моделей, которые могут работать с моделью документа
-    //
     auto updateCounters = [this](const QModelIndex& _index) {
         updateNumbering();
         d->updateChildrenDuration(itemForIndex(_index));
     };
+    //
+    // При добавлении, обновляем счётчики на конце цикла событий, чтобы успевали обработаться
+    // внутренние механизмы прокси-моделей, которые могут работать с моделью документа
+    //
     connect(this, &ScreenplayTextModel::rowsInserted, this, updateCounters, Qt::QueuedConnection);
-    connect(this, &ScreenplayTextModel::rowsRemoved, this, updateCounters, Qt::QueuedConnection);
+    //
+    // А при удалении нужно обновить их сразу же, пока индексы не инвалидировались
+    //
+    connect(this, &ScreenplayTextModel::rowsRemoved, this, updateCounters);
 
     connect(this, &ScreenplayTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });
