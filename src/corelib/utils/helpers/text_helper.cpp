@@ -392,7 +392,8 @@ int TextHelper::wordsCount(const QString& _text)
     //        - слова разделённые знаками препинания без пробелов
     //        - не учитывать знаки препинания окружённые пробелами, типа " - "
     //
-    return _text.split(QRegularExpression("[\\s.,!():;]+"), Qt::SkipEmptyParts).count();
+    static QRegularExpression wordCountExpression("[\\s.,!():;]+");
+    return _text.split(wordCountExpression, Qt::SkipEmptyParts).count();
 }
 
 void TextHelper::updateSelectionFormatting(
@@ -409,23 +410,30 @@ void TextHelper::updateSelectionFormatting(
     while (position < lastPosition) {
         const auto block = _cursor.document()->findBlock(position);
         const auto textFormats = block.textFormats();
-        for (const auto& format : textFormats) {
-            const auto formatStart = block.position() + format.start;
-            const auto formatEnd = formatStart + format.length;
-            if (position >= formatEnd) {
-                continue;
-            } else if (formatStart >= lastPosition) {
-                break;
+        if (!textFormats.isEmpty()) {
+            for (const auto& format : textFormats) {
+                const auto formatStart = block.position() + format.start;
+                const auto formatEnd = formatStart + format.length;
+                if (position >= formatEnd) {
+                    continue;
+                } else if (formatStart >= lastPosition) {
+                    break;
+                }
+
+                _cursor.setPosition(std::max(formatStart, position));
+                _cursor.setPosition(std::min(formatEnd, lastPosition), QTextCursor::KeepAnchor);
+
+                const auto newFormat = updateFormat(format.format);
+                _cursor.mergeCharFormat(newFormat);
+
+                _cursor.clearSelection();
+                position = _cursor.position();
             }
+        } else {
+            _cursor.setPosition(block.position());
 
-            _cursor.setPosition(std::max(formatStart, position));
-            _cursor.setPosition(std::min(formatEnd, lastPosition), QTextCursor::KeepAnchor);
-
-            const auto newFormat = updateFormat(format.format);
-            _cursor.mergeCharFormat(newFormat);
-
-            _cursor.clearSelection();
-            position = _cursor.position();
+            const auto newFormat = updateFormat(block.charFormat());
+            _cursor.mergeBlockCharFormat(newFormat);
         }
 
         if (!block.next().isValid()) {
