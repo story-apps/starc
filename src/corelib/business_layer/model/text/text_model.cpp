@@ -871,6 +871,28 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
 
     auto buildXmlFor = [&xml, fromItem, _fromPosition, toItem, _toPosition,
                         _clearUuid](TextModelItem* _fromItemParent, int _fromItemRow) {
+        bool needAddSplitter = false;
+        if (fromItem != toItem && fromItem->type() == TextModelItemType::Text
+            && toItem->type() == TextModelItemType::Text) {
+            const auto fromTextItem = static_cast<TextModelTextItem*>(fromItem);
+            const auto toTextItem = static_cast<TextModelTextItem*>(toItem);
+            needAddSplitter = fromTextItem->isInFirstColumn().has_value()
+                && fromTextItem->isInFirstColumn().value() == true
+                && toTextItem->isInFirstColumn().has_value()
+                && toTextItem->isInFirstColumn().value() == false;
+        }
+
+        auto addSplitterXmlIfNeeded
+            = [&xml, fromItem, needAddSplitter](TextModelSplitterItemType _type) {
+                  if (needAddSplitter) {
+                      TextModelSplitterItem splitterItem(fromItem->model());
+                      splitterItem.setSplitterType(_type);
+                      xml += splitterItem.toXml();
+                  }
+              };
+
+        addSplitterXmlIfNeeded(TextModelSplitterItemType::Start);
+
         for (int childIndex = _fromItemRow; childIndex < _fromItemParent->childCount();
              ++childIndex) {
             const auto childItem = _fromItemParent->childAt(childIndex);
@@ -920,9 +942,12 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
 
             const bool recursively = true;
             if (childItem == toItem || childItem->hasChild(toItem, recursively)) {
+                addSplitterXmlIfNeeded(TextModelSplitterItemType::End);
                 return true;
             }
         }
+
+        addSplitterXmlIfNeeded(TextModelSplitterItemType::End);
 
         return false;
     };
@@ -990,7 +1015,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     // и извлекаем остающийся в блоке текст, если нужно
     //
     int mimeLength = 0;
-    auto increaseMimeLength = [&mimeLength](int _length) {
+    auto increaseMimeLength = [&mimeLength](int _length = 0) {
         if (mimeLength > 0) {
             ++mimeLength;
         }
@@ -1210,6 +1235,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
 
             newItem = newGroupItem;
         } else if (currentTag == xml::kSplitterTag) {
+            increaseMimeLength();
             newItem = createSplitterItem(contentReader);
         } else {
             auto newTextItem = createTextItem(contentReader);
