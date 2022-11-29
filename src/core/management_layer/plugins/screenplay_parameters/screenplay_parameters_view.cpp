@@ -21,6 +21,10 @@
 
 namespace Ui {
 
+namespace {
+const QLatin1String kDefaultSceneNubersTemplate("#.");
+}
+
 class ScreenplayParametersView::Implementation
 {
 public:
@@ -183,8 +187,15 @@ ScreenplayParametersView::ScreenplayParametersView(QWidget* _parent)
             [this] { emit footerChanged(d->footer->text()); });
     connect(d->printFooterOnTitlePage, &CheckBox::checkedChanged, this,
             &ScreenplayParametersView::printFooterOnTitlePageChanged);
-    connect(d->scenesNumbersTemplate, &TextField::textChanged, this,
-            [this] { emit scenesNumbersTemplateChanged(d->scenesNumbersTemplate->text()); });
+    connect(d->scenesNumbersTemplate, &TextField::textChanged, this, [this] {
+        const auto numbersTemplate = d->scenesNumbersTemplate->text();
+        d->scenesNumbersTemplate->setTrailingIcon(
+            numbersTemplate == kDefaultSceneNubersTemplate ? "" : u8"\U000F0450");
+
+        emit scenesNumbersTemplateChanged(numbersTemplate);
+    });
+    connect(d->scenesNumbersTemplate, &TextField::trailingIconPressed, this,
+            [this] { d->scenesNumbersTemplate->setText(kDefaultSceneNubersTemplate); });
     connect(d->scenesNumberingStartAt, &TextField::textChanged, this, [this] {
         bool isNumberValid = false;
         const auto startNumber = d->scenesNumberingStartAt->text().toInt(&isNumberValid);
@@ -424,6 +435,7 @@ void ScreenplayParametersView::updateTranslations()
     d->scenesNumbersTitle->setText(tr("Scenes numbering"));
     d->scenesNumbersTemplate->setLabel(tr("Scenes numbers' template"));
     d->scenesNumbersTemplate->setHelper(tr("Use # mark for the scene number"));
+    d->scenesNumbersTemplate->setTrailingIconToolTip(tr("Reset scene numbers template"));
     d->scenesNumberingStartAt->setLabel(tr("Scenes numbering start at"));
     d->lockScenesNumbers->setText(tr("Lock numbering"));
     d->relockScenesNumbers->setText(tr("Lock numbering agian"));

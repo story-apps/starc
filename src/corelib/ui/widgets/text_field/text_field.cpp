@@ -979,7 +979,8 @@ void TextField::paintEvent(QPaintEvent* _event)
     //
     // ... декорация нажатии на кнопке
     //
-    if (d->iconDecorationAnimation.state() == ClickAnimation::Running) {
+    if (!d->trailingIcon.isEmpty()
+        && d->iconDecorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
         painter.setBrush(d->trailingIconColor.isValid() ? d->trailingIconColor
                                                         : palette().color(QPalette::Text));
