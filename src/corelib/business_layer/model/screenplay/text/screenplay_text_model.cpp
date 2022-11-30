@@ -140,14 +140,12 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
         d->updateChildrenDuration(itemForIndex(_index));
     };
     //
-    // При добавлении, обновляем счётчики на конце цикла событий, чтобы успевали обработаться
-    // внутренние механизмы прокси-моделей, которые могут работать с моделью документа
+    // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
+    // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
+    // приводить к падению внутри них
     //
-    connect(this, &ScreenplayTextModel::rowsInserted, this, updateCounters, Qt::QueuedConnection);
-    //
-    // А при удалении нужно обновить их сразу же, пока индексы не инвалидировались
-    //
-    connect(this, &ScreenplayTextModel::rowsRemoved, this, updateCounters);
+    connect(this, &ScreenplayTextModel::afterRowsInserted, this, updateCounters);
+    connect(this, &ScreenplayTextModel::afterRowsRemoved, this, updateCounters);
 
     connect(this, &ScreenplayTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });

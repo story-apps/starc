@@ -161,15 +161,14 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
         d->updateNumbering();
         d->updateChildrenDuration(itemForIndex(_index));
     };
+
     //
-    // При добавлении, обновляем счётчики на конце цикла событий, чтобы успевали обработаться
-    // внутренние механизмы прокси-моделей, которые могут работать с моделью документа
+    // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
+    // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
+    // приводить к падению внутри них
     //
-    connect(this, &AudioplayTextModel::rowsInserted, this, updateCounters, Qt::QueuedConnection);
-    //
-    // А при удалении нужно обновить их сразу же, пока индексы не инвалидировались
-    //
-    connect(this, &AudioplayTextModel::rowsRemoved, this, updateCounters);
+    connect(this, &AudioplayTextModel::afterRowsInserted, this, updateCounters);
+    connect(this, &AudioplayTextModel::afterRowsRemoved, this, updateCounters);
 
     connect(this, &AudioplayTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });

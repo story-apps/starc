@@ -141,6 +141,13 @@ signals:
     void contentsChanged(const QByteArray& _undo, const QByteArray& _redo);
 
     /**
+     * @brief Сигналы для выполнения действий после изменения модели, чтобы пропустить вперёд
+     *        обработку событий модели в нативных Qt-классах, например в прокси модели
+     */
+    void afterRowsInserted(const QModelIndex& _parent, int _first, int _last);
+    void afterRowsRemoved(const QModelIndex& _parent, int _first, int _last);
+
+    /**
      * @brief Сигналы для обёртки групповых действий над элементами модели,
      *        которые не ложатся в рамки стандартных механизмов Qt
      */

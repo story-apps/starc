@@ -147,12 +147,14 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
     , d(new Implementation(this))
 {
     auto updateNumbering = [this] { d->updateNumbering(); };
+
     //
-    // Для комиксов, нужно обновлять счётчики сразу же в процессе работы, чтобы корректор текста мог
-    // работать с новыми данными об элементах текста (номерами), поэтому тут реакция безотлагательна
+    // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
+    // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
+    // приводить к падению внутри них
     //
-    connect(this, &ComicBookTextModel::rowsInserted, this, updateNumbering);
-    connect(this, &ComicBookTextModel::rowsRemoved, this, updateNumbering);
+    connect(this, &ComicBookTextModel::afterRowsInserted, this, updateNumbering);
+    connect(this, &ComicBookTextModel::afterRowsRemoved, this, updateNumbering);
 
     connect(this, &ComicBookTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });

@@ -242,6 +242,7 @@ void TextModel::appendItems(const QVector<TextModelItem*>& _items, TextModelItem
     beginInsertRows(parentIndex, fromItemRow, toItemRow);
     _parentItem->appendItems({ _items.begin(), _items.end() });
     endInsertRows();
+    emit afterRowsInserted(parentIndex, fromItemRow, toItemRow);
 
     updateItem(_parentItem);
 }
@@ -264,6 +265,7 @@ void TextModel::prependItem(TextModelItem* _item, TextModelItem* _parentItem)
     beginInsertRows(parentIndex, 0, 0);
     _parentItem->prependItem(_item);
     endInsertRows();
+    emit afterRowsInserted(parentIndex, 0, 0);
 
     updateItem(_parentItem);
 }
@@ -290,6 +292,7 @@ void TextModel::insertItems(const QVector<TextModelItem*>& _items, TextModelItem
     beginInsertRows(parentIndex, fromItemRow, toItemRow);
     parentItem->insertItems(fromItemRow, { _items.begin(), _items.end() });
     endInsertRows();
+    emit afterRowsInserted(parentIndex, fromItemRow, toItemRow);
 
     updateItem(parentItem);
 }
@@ -314,13 +317,14 @@ void TextModel::takeItems(TextModelItem* _fromItem, TextModelItem* _toItem,
         return;
     }
 
-    const QModelIndex parentItemIndex = indexForItem(_fromItem).parent();
+    const QModelIndex parentIndex = indexForItem(_fromItem).parent();
     const int fromItemRow = _parentItem->rowOfChild(_fromItem);
     const int toItemRow = _parentItem->rowOfChild(_toItem);
     Q_ASSERT(fromItemRow <= toItemRow);
-    beginRemoveRows(parentItemIndex, fromItemRow, toItemRow);
+    beginRemoveRows(parentIndex, fromItemRow, toItemRow);
     _parentItem->takeItems(fromItemRow, toItemRow);
     endRemoveRows();
+    emit afterRowsRemoved(parentIndex, fromItemRow, toItemRow);
 
     updateItem(_parentItem);
 }
@@ -338,13 +342,14 @@ void TextModel::removeItems(TextModelItem* _fromItem, TextModelItem* _toItem)
     }
 
     auto parentItem = _fromItem->parent();
-    const QModelIndex itemParentIndex = indexForItem(_fromItem).parent();
+    const QModelIndex parentIndex = indexForItem(_fromItem).parent();
     const int fromItemRow = parentItem->rowOfChild(_fromItem);
     const int toItemRow = parentItem->rowOfChild(_toItem);
     Q_ASSERT(fromItemRow <= toItemRow);
-    beginRemoveRows(itemParentIndex, fromItemRow, toItemRow);
+    beginRemoveRows(parentIndex, fromItemRow, toItemRow);
     parentItem->removeItems(fromItemRow, toItemRow);
     endRemoveRows();
+    emit afterRowsRemoved(parentIndex, fromItemRow, toItemRow);
 
     updateItem(parentItem);
 }
