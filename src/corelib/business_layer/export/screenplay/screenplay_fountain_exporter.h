@@ -14,6 +14,12 @@ public:
      * @brief Экспортировать сценарий
      */
     void exportTo(TextModel* _model, ExportOptions& _exportOptions) const override;
+
+    /**
+     * @brief Экспортировать сценарий в заданном интервале текста
+     */
+    void exportTo(TextModel* _model, int _fromPosition, int _toPosition,
+                  ExportOptions& _exportOptions) const;
 };
 
 } // namespace BusinessLayer

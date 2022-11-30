@@ -66,6 +66,13 @@ static QString formatsDiffToString(const QTextCharFormat& _current, const QTextC
 
 void ScreenplayFountainExporter::exportTo(TextModel* _model, ExportOptions& _exportOptions) const
 {
+    constexpr int invalidPosition = -1;
+    exportTo(_model, invalidPosition, invalidPosition, _exportOptions);
+}
+
+void ScreenplayFountainExporter::exportTo(TextModel* _model, int _fromPosition, int _toPosition,
+                                          ExportOptions& _exportOptions) const
+{
     //
     // Открываем документ на запись
     //
@@ -75,6 +82,24 @@ void ScreenplayFountainExporter::exportTo(TextModel* _model, ExportOptions& _exp
     }
 
     QScopedPointer<TextDocument> document(prepareDocument(_model, _exportOptions));
+
+    //
+    // Если задан интервал для экспорта, корректируем документ в соответствии с ним
+    //
+    if (_fromPosition != -1 && _toPosition != -1 && _fromPosition < _toPosition) {
+        TextCursor cursor(document.data());
+        cursor.beginEditBlock();
+        cursor.setPosition(_toPosition);
+        cursor.movePosition(TextCursor::End, TextCursor::KeepAnchor);
+        qDebug(cursor.selectedText().toUtf8());
+        cursor.removeSelectedText();
+        cursor.setPosition(0);
+        cursor.setPosition(_fromPosition, TextCursor::KeepAnchor);
+        qDebug(cursor.selectedText().toUtf8());
+        cursor.removeSelectedText();
+        cursor.endEditBlock();
+    }
+
     const auto& exportOptions = static_cast<const ScreenplayExportOptions&>(_exportOptions);
 
     //

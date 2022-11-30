@@ -6,6 +6,8 @@
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/export/screenplay/screenplay_export_options.h>
+#include <business_layer/export/screenplay/screenplay_fountain_exporter.h>
 #include <business_layer/import/screenplay/screenplay_fountain_importer.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
@@ -25,6 +27,7 @@
 
 #include <QAction>
 #include <QCoreApplication>
+#include <QDir>
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
@@ -1506,34 +1509,59 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
 
     //
     // Сформируем в текстовом виде, для вставки наружу
-    // TODO: экспорт в фонтан
     //
     {
+        //
+        // Подготавливаем опции для экспорта в фонтан
+        //
+        BusinessLayer::ScreenplayExportOptions options;
+        options.filePath = QDir::temp().absoluteFilePath("clipboard.fountain");
+        options.includeTiltePage = false;
+        options.includeSynopsis = false;
+        options.showScenesNumbers = d->model->informationModel()->showSceneNumbers();
+        //
+        // ... сохраняем в формате фонтана
+        //
+        BusinessLayer::ScreenplayFountainExporter().exportTo(d->model, selection.from, selection.to,
+                                                             options);
+        //
+        // ... читаем сохранённый экспорт из файла
+        //
+        QFile file(options.filePath);
         QByteArray text;
-        auto cursor = textCursor();
-        cursor.setPosition(selection.from);
-        do {
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        if (file.open(QIODevice::ReadOnly)) {
+            text = file.readAll();
+            file.close();
+        }
+        //
+        // ... а если не удалось, то формируем простое текстовое представление сценария
+        //
+        else {
+            auto cursor = textCursor();
+            cursor.setPosition(selection.from);
+            do {
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
-            //
-            // Для текстового представления не копируем невидимые блоки с содержанием текста сцен
-            // т.к. пользователи этого не ожидают
-            //
-            if (!cursor.block().isVisible()) {
-                continue;
-            }
+                //
+                // Для текстового представления не копируем невидимые блоки с содержанием текста
+                // сцен т.к. пользователи этого не ожидают
+                //
+                if (!cursor.block().isVisible()) {
+                    continue;
+                }
 
-            if (cursor.position() > selection.to) {
-                cursor.setPosition(selection.to, QTextCursor::KeepAnchor);
-            }
-            if (!text.isEmpty()) {
-                text.append("\r\n");
-            }
-            text.append(cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
-                            ? TextHelper::smartToUpper(cursor.selectedText()).toUtf8()
-                            : cursor.selectedText().toUtf8());
-        } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
-                 && cursor.movePosition(QTextCursor::NextBlock));
+                if (cursor.position() > selection.to) {
+                    cursor.setPosition(selection.to, QTextCursor::KeepAnchor);
+                }
+                if (!text.isEmpty()) {
+                    text.append("\r\n");
+                }
+                text.append(cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
+                                ? TextHelper::smartToUpper(cursor.selectedText()).toUtf8()
+                                : cursor.selectedText().toUtf8());
+            } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
+                     && cursor.movePosition(QTextCursor::NextBlock));
+        }
 
         mimeData->setData("text/plain", text);
     }
@@ -1547,7 +1575,7 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
         // т.к. пользователь может захотеть перенести блоки вырезав и вставив их в другое место
         //
         const auto mime = d->document.mimeFromSelection(selection.from, selection.to);
-        mimeData->setData(d->model->mimeTypes().first(), mime.toUtf8());
+        mimeData->setData(d->model->mimeTypes().constFirst(), mime.toUtf8());
     }
 
     return mimeData;
