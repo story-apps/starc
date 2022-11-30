@@ -788,7 +788,8 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             for (const auto characterDocument : characterDocuments) {
                 const auto characterItem
                     = d->projectStructureModel->itemForUuid(characterDocument->uuid());
-                if (characterItem->parent()->uuid() != _document->uuid()) {
+                if (characterItem == nullptr
+                    || characterItem->parent()->uuid() != _document->uuid()) {
                     continue;
                 }
 
@@ -823,6 +824,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 = DataStorageLayer::StorageFacade::documentStorage()->documents(
                     Domain::DocumentObjectType::Location);
             for (const auto locationDocument : locationDocuments) {
+                const auto locationItem
+                    = d->projectStructureModel->itemForUuid(locationDocument->uuid());
+                if (locationItem == nullptr
+                    || locationItem->parent()->uuid() != _document->uuid()) {
+                    continue;
+                }
+
                 auto locationModel = modelFor(locationDocument);
                 locationsModel->addLocationModel(
                     qobject_cast<BusinessLayer::LocationModel*>(locationModel));
