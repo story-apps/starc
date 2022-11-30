@@ -786,6 +786,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 = DataStorageLayer::StorageFacade::documentStorage()->documents(
                     Domain::DocumentObjectType::Character);
             for (const auto characterDocument : characterDocuments) {
+                const auto characterItem
+                    = d->projectStructureModel->itemForUuid(characterDocument->uuid());
+                if (characterItem->parent()->uuid() != _document->uuid()) {
+                    continue;
+                }
+
                 auto characterModel = modelFor(characterDocument);
                 charactersModel->addCharacterModel(
                     qobject_cast<BusinessLayer::CharacterModel*>(characterModel));
