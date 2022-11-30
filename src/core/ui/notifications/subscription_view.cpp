@@ -66,7 +66,7 @@ void SubscriptionView::Implementation::setupView()
     const auto endDateTime
         = QDateTime::fromString(json.value("end_date").toString(), Qt::ISODateWithMs);
     const int daysLeft = notification.dateTime.daysTo(endDateTime);
-    avatarLabel->setTextColor(daysLeft >= 0 ? Ui::DesignSystem::color().error()
+    avatarLabel->setTextColor(daysLeft <= 0 ? Ui::DesignSystem::color().error()
                                             : Ui::DesignSystem::color().secondary());
     QString title;
     QString body;
