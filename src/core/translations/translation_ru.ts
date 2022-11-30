@@ -1485,7 +1485,7 @@
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1016"/>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="961"/>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="968"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1014"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1017"/>
         <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1021"/>
         <source>END OF</source>
         <translation>КОНЕЦ</translation>
@@ -7537,83 +7537,83 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayItemParametersView</name>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="176"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="181"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="180"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="185"/>
         <source>Each line is a separate beat</source>
         <translation>Каждая строка - отдельный бит</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="507"/>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="526"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="518"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="537"/>
         <source>Heading</source>
         <translation>Заголовок</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="509"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="520"/>
         <source>Select item color</source>
         <translation>Выбрать цвет элемента</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="514"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="525"/>
         <source>Title</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="515"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="526"/>
         <source>Human-readable name (hidden in screenplay)</source>
         <translation>Осмысленное название (скрыто в сценарии)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="516"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="527"/>
         <source>Select scene color</source>
         <translation>Выбрать цвет сцены</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="527"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="538"/>
         <source>Header text (visible in screenplay)</source>
         <translation>Время и место (отображается в сценарии)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="529"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="540"/>
         <source>Stamp</source>
         <translation>Штамп</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="530"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="541"/>
         <source>Auto scene numbering</source>
         <translation>Автоматическая нумерация сцены</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="531"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="542"/>
         <source>Scene number</source>
         <translation>Номер сцены</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="532"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="543"/>
         <source>Skip the number of this scene</source>
         <translation>Пропустить номер этой сцены</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="534"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="545"/>
         <source>Skip logical number of this scene for determining the next scene number</source>
         <translation>Пропустить логический номер сцены при определении номера следующей сцены</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="535"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="546"/>
         <source>Tags</source>
         <translation>Тэги</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="536"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="547"/>
         <source>Add tag to the selected card</source>
         <translation>Добавить тэг для выбранной карточки</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="537"/>
+        <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="548"/>
         <source>Tag name</source>
         <translation>Название тэга</translation>
     </message>
@@ -7621,102 +7621,107 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="420"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="431"/>
         <source>Header</source>
         <translation>Верхний колонтитул</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="421"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="432"/>
         <source>Print header on title page</source>
         <translation>Печатать верхний колонтитул на титульной странице</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="422"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="433"/>
         <source>Footer</source>
         <translation>Нижний колонтитул</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="423"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="434"/>
         <source>Print footer on title page</source>
         <translation>Печатать нижний колонтитул на титульной странице</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="205"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="216"/>
         <source>Do you want unlock scene numbers?</source>
         <translation>Вы хотите разблокировать номера сцен?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="206"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="217"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="207"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="218"/>
         <source>Yes, unlock</source>
         <translation>Да, разблокировать</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="424"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="435"/>
         <source>Scenes numbering</source>
         <translation>Нумерация сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="425"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="436"/>
         <source>Scenes numbers&apos; template</source>
         <translation>Шаблон номеров сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="426"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="437"/>
         <source>Use # mark for the scene number</source>
         <translation>Используйте символ # для номера сцены</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="427"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="438"/>
+        <source>Reset scene numbers template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="439"/>
         <source>Scenes numbering start at</source>
         <translation>Нумерация сцен начинается с</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="428"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="440"/>
         <source>Lock numbering</source>
         <translation>Заблокировать нумерацию</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="429"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="441"/>
         <source>Lock numbering agian</source>
         <translation>Повторно заблокировать нумерацию</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="430"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="442"/>
         <source>Unlock numbering</source>
         <translation>Разблокировать нумерацию</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="431"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="443"/>
         <source>Override common settings for this screenplay</source>
         <translation>Переопределить общие параметры для этого сценария</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="432"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="444"/>
         <source>Template</source>
         <translation>Шаблон</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="433"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="445"/>
         <source>Print scenes numbers</source>
         <translation>Печатать номера сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="434"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="446"/>
         <source>on the left</source>
         <translation>слева</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="435"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="447"/>
         <source>on the right</source>
         <translation>справа</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="436"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="448"/>
         <source>Print dialogues numbers</source>
         <translation>Печатать номера реплик</translation>
     </message>
@@ -8308,37 +8313,37 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1426"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1429"/>
         <source>Merge paragraph</source>
         <translation>Объединить параграф</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1429"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1432"/>
         <source>Split paragraph</source>
         <translation>Разделить параграф</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1457"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1460"/>
         <source>Bookmark</source>
         <translation>Закладка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1461"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1464"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1467"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1470"/>
         <source>Edit</source>
         <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1473"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1476"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1480"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1483"/>
         <source>Show/hide list</source>
         <translation>Показать/скрыть список</translation>
     </message>
