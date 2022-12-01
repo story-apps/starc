@@ -91,11 +91,9 @@ void ScreenplayFountainExporter::exportTo(TextModel* _model, int _fromPosition, 
         cursor.beginEditBlock();
         cursor.setPosition(_toPosition);
         cursor.movePosition(TextCursor::End, TextCursor::KeepAnchor);
-        qDebug(cursor.selectedText().toUtf8());
         cursor.removeSelectedText();
         cursor.setPosition(0);
         cursor.setPosition(_fromPosition, TextCursor::KeepAnchor);
-        qDebug(cursor.selectedText().toUtf8());
         cursor.removeSelectedText();
         cursor.endEditBlock();
     }
