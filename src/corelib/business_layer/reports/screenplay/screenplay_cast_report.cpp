@@ -134,7 +134,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
                         // Первое упоминание персонажа - первая молчаливая сцена
                         //
                         if (!charactersData.contains(character)) {
-                            charactersData.insert(character, { 0, 0, 1 });
+                            charactersData.insert(character, { 0, 0, 0, 1 });
                             charactersOrder.append(character);
                         }
                         //
@@ -154,7 +154,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
                     }
 
                     if (!charactersData.contains(character)) {
-                        charactersData.insert(character, { 1, 1, 0 });
+                        charactersData.insert(character, { 1, 1, 1, 0 });
                         charactersOrder.append(character);
                         lastSceneSpeakingCharacters.insert(character);
                     } else {
@@ -194,7 +194,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
                     while (match.hasMatch()) {
                         const QString character = TextHelper::smartToUpper(match.captured(2));
                         if (!charactersData.contains(character)) {
-                            charactersData.insert(character, { 0, 0, 1 });
+                            charactersData.insert(character, { 0, 0, 0, 1 });
                             charactersOrder.append(character);
                         } else {
                             //
