@@ -93,7 +93,7 @@ void CommentsModel::Implementation::saveReviewMark(TextModelTextItem* _textItem,
             break;
         }
 
-        if (_textItem == modelTextItems.constFirst()) {
+        if (!modelTextItems.isEmpty() && _textItem == modelTextItems.constFirst()) {
             break;
         }
 
