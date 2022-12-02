@@ -187,12 +187,14 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
                 }
 
                 case TextParagraphType::Character: {
-                    const auto character = ScreenplayCharacterParser::name(textItem->text());
-                    auto& characterData = lastScene.character(character);
-                    ++characterData.totalDialogues;
-                    if (!characters.contains(character)) {
-                        characters.insert(character);
-                        characterData.isFirstAppearance = true;
+                    if (!textItem->isCorrection()) {
+                        const auto character = ScreenplayCharacterParser::name(textItem->text());
+                        auto& characterData = lastScene.character(character);
+                        ++characterData.totalDialogues;
+                        if (!characters.contains(character)) {
+                            characters.insert(character);
+                            characterData.isFirstAppearance = true;
+                        }
                     }
                     break;
                 }
