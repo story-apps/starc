@@ -181,18 +181,20 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
                 }
 
                 case TextParagraphType::Character: {
-                    const auto character = ScreenplayCharacterParser::name(textItem->text());
-                    if (male.contains(character)) {
-                        ++dialogues.male;
-                    } else if (female.contains(character)) {
-                        ++dialogues.female;
-                    } else if (other.contains(character)) {
-                        ++dialogues.other;
-                    } else {
-                        undefined.insert(character);
-                        ++dialogues.undefined;
+                    if (!textItem->isCorrection()) {
+                        const auto character = ScreenplayCharacterParser::name(textItem->text());
+                        if (male.contains(character)) {
+                            ++dialogues.male;
+                        } else if (female.contains(character)) {
+                            ++dialogues.female;
+                        } else if (other.contains(character)) {
+                            ++dialogues.other;
+                        } else {
+                            undefined.insert(character);
+                            ++dialogues.undefined;
+                        }
+                        lastScene.hasDialogues = true;
                     }
-                    lastScene.hasDialogues = true;
                     break;
                 }
 
