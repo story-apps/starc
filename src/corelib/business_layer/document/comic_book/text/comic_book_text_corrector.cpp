@@ -1813,7 +1813,7 @@ void ComicBookTextCorrector::setCorrectionOptions(const QStringList& _options)
     d->needToCorrectPageBreaks = needToCorrectPageBreaks;
 
     clear();
-    correct();
+    makeCorrections();
 }
 
 void ComicBookTextCorrector::clear()
@@ -1823,7 +1823,13 @@ void ComicBookTextCorrector::clear()
     d->blockItems.clear();
 }
 
-void ComicBookTextCorrector::correct(int _position, int _charsChanged)
+void ComicBookTextCorrector::makeSoftCorrections(int _position, int _charsChanged)
+{
+    Q_UNUSED(_position)
+    Q_UNUSED(_charsChanged)
+}
+
+void ComicBookTextCorrector::makeCorrections(int _position, int _charsChanged)
 {
     //
     // Избегаем рекурсии, которая может возникать от того, что корректировка происходит

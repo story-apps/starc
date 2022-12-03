@@ -19,7 +19,9 @@
 #include <utils/shugar.h>
 #include <utils/tools/edit_distance.h>
 #include <utils/tools/model_index_path.h>
+#include <utils/tools/run_once.h>
 
+#include <QCryptographicHash>
 #include <QDateTime>
 #include <QDomDocument>
 #include <QMimeData>
@@ -47,6 +49,11 @@ public:
      * @brief Сформировать xml из данных модели
      */
     QByteArray toXml(Domain::DocumentObject* _document) const;
+
+    /**
+     * @brief Обновить значение хеша документа, если оно не задано
+     */
+    void updateContentHash(const QByteArray& _xml = {}) const;
 
 
     /**
@@ -77,6 +84,11 @@ public:
         QModelIndex to;
         QMimeData* data = nullptr;
     } lastMime;
+
+    /**
+     * @brief MD5-хэш текущего состояния контента
+     */
+    mutable QByteArray contentHash;
 };
 
 TextModel::Implementation::Implementation(TextModel* _q, TextModelFolderItem* _rootItem)
@@ -119,6 +131,9 @@ QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _document) c
         return {};
     }
 
+    //
+    // Формируем xml модели
+    //
     const bool addXMlHeader = true;
     xml::TextModelXmlWriter xml(addXMlHeader);
     xml += "<document mime-type=\"" + Domain::mimeTypeFor(_document->type())
@@ -127,7 +142,31 @@ QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _document) c
         xml += rootItem->childAt(childIndex)->toXml();
     }
     xml += "</document>";
-    return xml.data();
+
+    //
+    // Обновляем хэш, если он был сброшен
+    //
+    const auto xmlData = xml.data();
+    updateContentHash(xmlData);
+
+    return xmlData;
+}
+
+void TextModel::Implementation::updateContentHash(const QByteArray& _xml) const
+{
+    if (!contentHash.isEmpty()) {
+        return;
+    }
+
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
+        return;
+    }
+
+    const auto content = !_xml.isEmpty() ? _xml : toXml(q->document());
+    QCryptographicHash hash(QCryptographicHash::Md5);
+    hash.addData(content);
+    contentHash = hash.result();
 }
 
 
@@ -232,6 +271,8 @@ void TextModel::appendItems(const QVector<TextModelItem*>& _items, TextModelItem
         return;
     }
 
+    d->contentHash.clear();
+
     if (_parentItem == nullptr) {
         _parentItem = d->rootItem;
     }
@@ -261,6 +302,8 @@ void TextModel::prependItem(TextModelItem* _item, TextModelItem* _parentItem)
         return;
     }
 
+    d->contentHash.clear();
+
     const QModelIndex parentIndex = indexForItem(_parentItem);
     beginInsertRows(parentIndex, 0, 0);
     _parentItem->prependItem(_item);
@@ -284,6 +327,8 @@ void TextModel::insertItems(const QVector<TextModelItem*>& _items, TextModelItem
     if (_afterSiblingItem == nullptr || _afterSiblingItem->parent() == nullptr) {
         return;
     }
+
+    d->contentHash.clear();
 
     auto parentItem = _afterSiblingItem->parent();
     const QModelIndex parentIndex = indexForItem(parentItem);
@@ -317,6 +362,8 @@ void TextModel::takeItems(TextModelItem* _fromItem, TextModelItem* _toItem,
         return;
     }
 
+    d->contentHash.clear();
+
     const QModelIndex parentIndex = indexForItem(_fromItem).parent();
     const int fromItemRow = _parentItem->rowOfChild(_fromItem);
     const int toItemRow = _parentItem->rowOfChild(_toItem);
@@ -340,6 +387,8 @@ void TextModel::removeItems(TextModelItem* _fromItem, TextModelItem* _toItem)
         || _toItem->parent() == nullptr || _fromItem->parent() != _toItem->parent()) {
         return;
     }
+
+    d->contentHash.clear();
 
     auto parentItem = _fromItem->parent();
     const QModelIndex parentIndex = indexForItem(_fromItem).parent();
@@ -425,6 +474,8 @@ void TextModel::updateItem(TextModelItem* _item)
     if (_item == nullptr || !_item->isChanged()) {
         return;
     }
+
+    d->contentHash.clear();
 
     const QModelIndex indexForUpdate = indexForItem(_item);
     emit dataChanged(indexForUpdate, indexForUpdate);
@@ -1431,6 +1482,12 @@ void TextModel::setSynopsisModel(SimpleTextModel* _model)
 SimpleTextModel* TextModel::synopsisModel() const
 {
     return d->synopsisModel;
+}
+
+QByteArray TextModel::contentHash() const
+{
+    d->updateContentHash();
+    return d->contentHash;
 }
 
 void TextModel::initDocument()

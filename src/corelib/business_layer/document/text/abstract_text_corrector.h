@@ -42,15 +42,25 @@ public:
     virtual void clear() = 0;
 
     /**
-     * @brief Выполнить корректировки
-     */
-    virtual void correct(int _position = -1, int _charsChanged = 0) = 0;
-
-    /**
-     * @brief Подготовиться к корректировке и выполнить подготовленную корректировку
+     * @brief Подготовиться к корректировке
      */
     void planCorrection(int _position, int _charsRemoved, int _charsAdded);
-    void makePlannedCorrection();
+
+    /**
+     * @brief Выполнить корректировку для документа с заданным хэшем
+     */
+    void makePlannedCorrection(const QByteArray& _contentHash);
+
+protected:
+    /**
+     * @brief Выполнить все корректировки
+     */
+    virtual void makeCorrections(int _position = -1, int _charsChanged = 0) = 0;
+
+    /**
+     * @brief Выполнить "мягкие" корректировки
+     */
+    virtual void makeSoftCorrections(int _postion = -1, int _charsChanged = 0) = 0;
 
 private:
     class Implementation;

@@ -133,6 +133,11 @@ public:
     void setSynopsisModel(SimpleTextModel* _model);
     SimpleTextModel* synopsisModel() const;
 
+    /**
+     * @brief MD5-хеш текущего состояния документа
+     */
+    QByteArray contentHash() const;
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

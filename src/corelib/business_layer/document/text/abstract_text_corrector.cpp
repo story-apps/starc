@@ -1,5 +1,6 @@
 #include "abstract_text_corrector.h"
 
+#include <QDebug>
 #include <QTextDocument>
 
 
@@ -9,6 +10,7 @@ class AbstractTextCorrector::Implementation
 {
 public:
     explicit Implementation(QTextDocument* _document);
+
 
     /**
      * @brief Документ который будем корректировать
@@ -32,6 +34,14 @@ public:
             return position + lenght;
         }
     } plannedCorrection;
+
+    /**
+     * @brief Информация о последнем скорректированном документе
+     */
+    struct {
+        QByteArray hash = {};
+        int blockCount = 0;
+    } lastContent;
 };
 
 AbstractTextCorrector::Implementation::Implementation(QTextDocument* _document)
@@ -64,7 +74,7 @@ void AbstractTextCorrector::setTemplateId(const QString& _templateId)
     }
 
     d->templateId = _templateId;
-    correct();
+    makeCorrections();
 }
 
 QString AbstractTextCorrector::templateId() const
@@ -98,13 +108,25 @@ void AbstractTextCorrector::planCorrection(int _position, int _charsRemoved, int
     }
 }
 
-void AbstractTextCorrector::makePlannedCorrection()
+void AbstractTextCorrector::makePlannedCorrection(const QByteArray& _contentHash)
 {
     if (!d->plannedCorrection.isValid) {
         return;
     }
 
-    correct(d->plannedCorrection.position, d->plannedCorrection.lenght);
+    if (d->lastContent.hash == _contentHash
+        && d->lastContent.blockCount == d->document->blockCount()) {
+        makeSoftCorrections(d->plannedCorrection.position, d->plannedCorrection.lenght);
+        return;
+    }
+
+    qDebug() << d->document << d->lastContent.hash << d->lastContent.blockCount;
+
+    makeCorrections(d->plannedCorrection.position, d->plannedCorrection.lenght);
+
+    d->lastContent.hash = _contentHash;
+    d->lastContent.blockCount = d->document->blockCount();
+
     d->plannedCorrection = {};
 }
 

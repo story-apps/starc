@@ -1777,7 +1777,7 @@ void AudioplayTextCorrector::setCorrectionOptions(const QStringList& _options)
     d->needToCorrectPageBreaks = needToCorrectPageBreaks;
 
     clear();
-    correct();
+    makeCorrections();
 }
 
 void AudioplayTextCorrector::clear()
@@ -1787,7 +1787,13 @@ void AudioplayTextCorrector::clear()
     d->blockItems.clear();
 }
 
-void AudioplayTextCorrector::correct(int _position, int _charsChanged)
+void AudioplayTextCorrector::makeSoftCorrections(int _position, int _charsChanged)
+{
+    Q_UNUSED(_position)
+    Q_UNUSED(_charsChanged)
+}
+
+void AudioplayTextCorrector::makeCorrections(int _position, int _charsChanged)
 {
     Q_UNUSED(_charsChanged)
 

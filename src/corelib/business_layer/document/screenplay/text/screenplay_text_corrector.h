@@ -32,10 +32,16 @@ public:
      */
     void clear() override;
 
+protected:
     /**
      * @brief Выполнить корректировки
      */
-    void correct(int _position = -1, int _charsChanged = 0) override;
+    void makeCorrections(int _position = -1, int _charsChanged = 0) override;
+
+    /**
+     * @brief Выполнить "мягкие" корректировки
+     */
+    void makeSoftCorrections(int _position = -1, int _charsChanged = 0) override;
 
 private:
     class Implementation;

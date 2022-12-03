@@ -433,12 +433,12 @@ void TextDocument::Implementation::readModelItemsContent(const QModelIndex& _par
 
 void TextDocument::Implementation::tryToCorrectDocument()
 {
-    if (state != DocumentState::Ready || corrector.isNull()) {
+    if (state != DocumentState::Ready || model.isNull() || corrector.isNull()) {
         return;
     }
 
     QScopedValueRollback temporatryState(state, DocumentState::Correcting);
-    corrector->makePlannedCorrection();
+    corrector->makePlannedCorrection(model->contentHash());
 }
 
 
@@ -523,7 +523,6 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     // Настроим соединения
     //
     connect(d->model, &TextModel::modelReset, this, [this] {
-        QSignalBlocker signalBlocker(this);
         setModel(d->model);
         processModelReset();
     });

@@ -1777,7 +1777,7 @@ void StageplayTextCorrector::setCorrectionOptions(const QStringList& _options)
     d->needToCorrectPageBreaks = needToCorrectPageBreaks;
 
     clear();
-    correct();
+    makeCorrections();
 }
 
 void StageplayTextCorrector::clear()
@@ -1787,7 +1787,13 @@ void StageplayTextCorrector::clear()
     d->blockItems.clear();
 }
 
-void StageplayTextCorrector::correct(int _position, int _charsChanged)
+void StageplayTextCorrector::makeSoftCorrections(int _position, int _charsChanged)
+{
+    Q_UNUSED(_position)
+    Q_UNUSED(_charsChanged)
+}
+
+void StageplayTextCorrector::makeCorrections(int _position, int _charsChanged)
 {
     Q_UNUSED(_charsChanged)
 
