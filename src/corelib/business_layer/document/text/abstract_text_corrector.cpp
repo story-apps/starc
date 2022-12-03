@@ -1,5 +1,7 @@
 #include "abstract_text_corrector.h"
 
+#include <utils/logging.h>
+
 #include <QDebug>
 #include <QTextDocument>
 
@@ -116,13 +118,12 @@ void AbstractTextCorrector::makePlannedCorrection(const QByteArray& _contentHash
 
     if (d->lastContent.hash == _contentHash
         && d->lastContent.blockCount == d->document->blockCount()) {
-        makeSoftCorrections(d->plannedCorrection.position, d->plannedCorrection.lenght);
         return;
     }
 
-    qDebug() << d->document << d->lastContent.hash << d->lastContent.blockCount;
-
+    Log::trace("Start of the correction");
     makeCorrections(d->plannedCorrection.position, d->plannedCorrection.lenght);
+    Log::trace("End of the correction");
 
     d->lastContent.hash = _contentHash;
     d->lastContent.blockCount = d->document->blockCount();

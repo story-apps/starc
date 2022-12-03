@@ -77,6 +77,7 @@ void insertBlock(int _pageWidth, QTextCursor& _cursor)
     _cursor.insertBlock();
     updateBlockLayout(_pageWidth, _cursor.block());
 }
+
 } // namespace
 
 
@@ -726,10 +727,16 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
         // ... и высоту одной строки следующего
         //
         qreal nextBlockOneLineHeight = 0;
-        if (const auto nextBlock = findNextBlock(block); nextBlock.isValid()) {
-            const qreal nextBlockLineHeight = nextBlock.blockFormat().lineHeight();
-            const QTextBlockFormat nextBlockFormat = nextBlock.blockFormat();
-            nextBlockOneLineHeight = nextBlockLineHeight + nextBlockFormat.topMargin();
+        {
+            auto nextBlock = block.next();
+            while (nextBlock.isValid() && !nextBlock.isVisible()) {
+                nextBlock = nextBlock.next();
+            }
+            if (nextBlock.isValid()) {
+                const qreal nextBlockLineHeight = nextBlock.blockFormat().lineHeight();
+                const QTextBlockFormat nextBlockFormat = nextBlock.blockFormat();
+                nextBlockOneLineHeight = nextBlockLineHeight + nextBlockFormat.topMargin();
+            }
         }
 
 
@@ -816,13 +823,18 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
                 //
                 // Контролируем, чтобы расположение блоков не переходило через границу таблицы
                 //
-                const auto previousBlock = findPreviousBlock(block);
+                auto previousBlock = block.previous();
+                int previousBlockCount = 1;
+                while (previousBlock.isValid() && !previousBlock.isVisible()) {
+                    previousBlock = previousBlock.previous();
+                    ++previousBlockCount;
+                }
                 if (TextBlockStyle::forBlock(previousBlock) == TextParagraphType::PageSplitter) {
                     break;
                 }
 
                 block = previousBlock;
-                --topIndex;
+                topIndex -= previousBlockCount;
                 setLastBlockHeight(blockItems[topIndex].top);
             }
             currentBlockInfo.number = topIndex;
@@ -878,6 +890,10 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position)
             //
             block = cursor.block().previous();
             --currentBlockInfo.number;
+            while (block.isValid() && !block.isVisible()) {
+                block = block.previous();
+                --currentBlockInfo.number;
+            }
             lastBlockHeight = beforeLastBlockHeight;
             //
             // ... а также сбрасываем закешированную информацию о предыдущем блоке, чтобы он
@@ -1996,8 +2012,7 @@ void ScreenplayTextCorrector::Implementation::breakDialogue(const QTextBlockForm
 QTextBlock ScreenplayTextCorrector::Implementation::findPreviousBlock(const QTextBlock& _block)
 {
     QTextBlock previousBlock = _block.previous();
-    while (previousBlock.isValid() && !previousBlock.isVisible()
-           && previousBlock.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
+    while (previousBlock.isValid() && !previousBlock.isVisible()) {
         --currentBlockInfo.number;
         previousBlock = previousBlock.previous();
     }
