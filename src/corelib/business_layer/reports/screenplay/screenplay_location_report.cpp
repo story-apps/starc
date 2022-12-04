@@ -206,8 +206,8 @@ void ScreenplayLocationReport::build(QAbstractItemModel* _model)
     // Сортируем локации
     //
     QVector<QPair<QString, LocationData>> locationsSorted;
-    for (auto iter = locations.begin(); iter != locations.end(); ++iter) {
-        locationsSorted.append({ iter.key(), iter.value() });
+    for (const auto& location : locationsOrder) {
+        locationsSorted.append({ location, locations[location] });
     }
     switch (d->sortBy) {
     default:
