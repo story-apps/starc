@@ -43,6 +43,10 @@ using BusinessLayer::TextParagraphType;
 
 namespace Ui {
 
+namespace {
+const QLatin1String kMarkdownMimeType("text/markdown");
+}
+
 class ScreenplayTextEdit::Implementation
 {
 public:
@@ -1511,6 +1515,39 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
     // Сформируем в текстовом виде, для вставки наружу
     //
     {
+        QByteArray text;
+        auto cursor = textCursor();
+        cursor.setPosition(selection.from);
+        do {
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+
+            //
+            // Для текстового представления не копируем невидимые блоки с содержанием текста
+            // сцен т.к. пользователи этого не ожидают
+            //
+            if (!cursor.block().isVisible()) {
+                continue;
+            }
+
+            if (cursor.position() > selection.to) {
+                cursor.setPosition(selection.to, QTextCursor::KeepAnchor);
+            }
+            if (!text.isEmpty()) {
+                text.append("\r\n");
+            }
+            text.append(cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
+                            ? TextHelper::smartToUpper(cursor.selectedText()).toUtf8()
+                            : cursor.selectedText().toUtf8());
+        } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
+                 && cursor.movePosition(QTextCursor::NextBlock));
+
+        mimeData->setData("text/plain", text);
+    }
+
+    //
+    // Добавим фонтан
+    //
+    {
         //
         // Подготавливаем опции для экспорта в фонтан
         //
@@ -1533,37 +1570,10 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
             text = file.readAll();
             file.close();
         }
-        //
-        // ... а если не удалось, то формируем простое текстовое представление сценария
-        //
-        else {
-            auto cursor = textCursor();
-            cursor.setPosition(selection.from);
-            do {
-                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
-                //
-                // Для текстового представления не копируем невидимые блоки с содержанием текста
-                // сцен т.к. пользователи этого не ожидают
-                //
-                if (!cursor.block().isVisible()) {
-                    continue;
-                }
-
-                if (cursor.position() > selection.to) {
-                    cursor.setPosition(selection.to, QTextCursor::KeepAnchor);
-                }
-                if (!text.isEmpty()) {
-                    text.append("\r\n");
-                }
-                text.append(cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
-                                ? TextHelper::smartToUpper(cursor.selectedText()).toUtf8()
-                                : cursor.selectedText().toUtf8());
-            } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
-                     && cursor.movePosition(QTextCursor::NextBlock));
+        if (!text.isEmpty()) {
+            mimeData->setData(kMarkdownMimeType, text);
         }
-
-        mimeData->setData("text/plain", text);
     }
 
     //
@@ -1634,8 +1644,9 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Если простой текст
     //
-    else if (_source->hasText()) {
-        const auto text = _source->text();
+    else if (_source->hasFormat(kMarkdownMimeType) || _source->hasText()) {
+        const auto text = _source->hasFormat(kMarkdownMimeType) ? _source->data(kMarkdownMimeType)
+                                                                : _source->text();
 
         //
         // ... если в тексте всего одна строка и вставка происходит в пустой абзац, то вставим в
