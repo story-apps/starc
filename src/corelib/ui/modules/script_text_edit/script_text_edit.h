@@ -22,6 +22,17 @@ public:
     bool showSuggestionsInEmptyBlocks() const;
     void setShowSuggestionsInEmptyBlocks(bool _show);
 
+    /**
+     * @brief Своя реализация установки курсора
+     */
+    void setTextCursorAndKeepScrollBars(const QTextCursor& _cursor);
+
+protected:
+    /**
+     * @brief Обрабатываем специфичные ситуации для редактора сценария
+     */
+    bool updateEnteredText(const QString& _eventText) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

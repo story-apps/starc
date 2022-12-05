@@ -112,7 +112,7 @@ void TitlePageEdit::Implementation::revertAction(bool previous)
 
 
 TitlePageEdit::TitlePageEdit(QWidget* _parent)
-    : BaseTextEdit(_parent)
+    : ScriptTextEdit(_parent)
     , d(new Implementation(this))
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -331,16 +331,6 @@ void TitlePageEdit::addParagraph(BusinessLayer::TextParagraphType _type)
     emit paragraphTypeChanged();
 }
 
-void TitlePageEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
-{
-    //
-    // TODO: пояснить зачем это необходимо делать?
-    //
-    const int verticalScrollValue = verticalScrollBar()->value();
-    setTextCursor(_cursor);
-    verticalScrollBar()->setValue(verticalScrollValue);
-}
-
 QModelIndex TitlePageEdit::currentModelIndex() const
 {
     if (d->model == nullptr) {
@@ -382,7 +372,7 @@ void TitlePageEdit::addReviewMark(const QColor& _textColor, const QColor& _backg
 void TitlePageEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {
-        BaseTextEdit::keyPressEvent(_event);
+        ScriptTextEdit::keyPressEvent(_event);
         return;
     }
 
@@ -413,7 +403,7 @@ void TitlePageEdit::keyPressEvent(QKeyEvent* _event)
         if (keyPressEventReimpl(_event)) {
             _event->accept();
         } else {
-            BaseTextEdit::keyPressEvent(_event);
+            ScriptTextEdit::keyPressEvent(_event);
             _event->ignore();
         }
 
@@ -485,7 +475,7 @@ bool TitlePageEdit::keyPressEventReimpl(QKeyEvent* _event)
     // Обрабатываем в базовом классе
     //
     else {
-        isEventHandled = BaseTextEdit::keyPressEventReimpl(_event);
+        isEventHandled = ScriptTextEdit::keyPressEventReimpl(_event);
     }
 
     return isEventHandled;

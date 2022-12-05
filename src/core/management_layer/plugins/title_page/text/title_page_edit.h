@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/text_edit/base/base_text_edit.h>
+#include <ui/modules/script_text_edit/script_text_edit.h>
 
 namespace BusinessLayer {
 class SimpleTextModel;
@@ -14,7 +14,7 @@ namespace Ui {
 /**
  * @brief Текстовый редактор
  */
-class TitlePageEdit : public BaseTextEdit
+class TitlePageEdit : public ScriptTextEdit
 {
     Q_OBJECT
 
@@ -59,11 +59,6 @@ public:
      * @param Тип блока
      */
     void addParagraph(BusinessLayer::TextParagraphType _type);
-
-    /**
-     * @brief Своя реализация установки курсора
-     */
-    void setTextCursorAndKeepScrollBars(const QTextCursor& _cursor);
 
     /**
      * @brief Получить индекс элемента модели в текущей позиции курсора

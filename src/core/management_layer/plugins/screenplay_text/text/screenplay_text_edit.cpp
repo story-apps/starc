@@ -404,16 +404,6 @@ BusinessLayer::TextParagraphType ScreenplayTextEdit::currentParagraphType() cons
     return TextBlockStyle::forBlock(textCursor().block());
 }
 
-void ScreenplayTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
-{
-    //
-    // TODO: пояснить зачем это необходимо делать?
-    //
-    const int verticalScrollValue = verticalScrollBar()->value();
-    setTextCursor(_cursor);
-    verticalScrollBar()->setValue(verticalScrollValue);
-}
-
 QModelIndex ScreenplayTextEdit::currentModelIndex() const
 {
     if (d->model == nullptr) {
@@ -598,90 +588,6 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     }
 
     return isEventHandled;
-}
-
-bool ScreenplayTextEdit::updateEnteredText(const QString& _eventText)
-{
-    if (_eventText.isEmpty()) {
-        return false;
-    }
-
-    //
-    // Получим значения
-    //
-    // ... курсора
-    QTextCursor cursor = textCursor();
-    // ... блок текста в котором находится курсор
-    QTextBlock currentBlock = cursor.block();
-    // ... текст блока
-    QString currentBlockText = currentBlock.text();
-    // ... текст до курсора
-    QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
-    // ... текст после курсора
-    QString cursorForwardText = currentBlockText.mid(cursor.positionInBlock());
-    // ... стиль шрифта блока
-    QTextCharFormat currentCharFormat = currentBlock.charFormat();
-
-    //
-    // Определяем необходимость установки верхнего регистра для первого символа блока
-    //
-    if (currentCharFormat.boolProperty(TextBlockStyle::PropertyIsFirstUppercase)
-        && cursorBackwardText != " " && cursorBackwardText == _eventText
-        && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
-        //
-        // Сформируем правильное представление строки
-        //
-        QString correctedText = _eventText;
-        correctedText[0] = TextHelper::smartToUpper(correctedText[0]);
-
-        //
-        // Стираем предыдущий введённый текст
-        //
-        for (int repeats = 0; repeats < _eventText.length(); ++repeats) {
-            cursor.deletePreviousChar();
-        }
-
-        //
-        // Выводим необходимый
-        //
-        cursor.insertText(correctedText);
-        setTextCursor(cursor);
-
-        return true;
-    }
-
-    //
-    // Если перед нами конец предложения
-    // и не сокращение
-    // и после курсора нет текста (для ремарки допустима скобка)
-    //
-    const QString endOfSentancePattern = QString("([.]|[?]|[!]|[…]) %1$").arg(_eventText);
-    if (cursorBackwardText.contains(QRegularExpression(endOfSentancePattern))
-        && cursorForwardText.isEmpty()
-        && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
-        //
-        // Сделаем первую букву заглавной
-        //
-        QString correctedText = _eventText;
-        correctedText[0] = TextHelper::smartToUpper(correctedText[0]);
-
-        //
-        // Стираем предыдущий введённый текст
-        //
-        for (int repeats = 0; repeats < _eventText.length(); ++repeats) {
-            cursor.deletePreviousChar();
-        }
-
-        //
-        // Выводим необходимый
-        //
-        cursor.insertText(correctedText);
-        setTextCursor(cursor);
-
-        return true;
-    }
-
-    return ScriptTextEdit::updateEnteredText(_eventText);
 }
 
 void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)

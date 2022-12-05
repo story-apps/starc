@@ -104,11 +104,6 @@ public:
     BusinessLayer::TextParagraphType currentParagraphType() const;
 
     /**
-     * @brief Своя реализация установки курсора
-     */
-    void setTextCursorAndKeepScrollBars(const QTextCursor& _cursor);
-
-    /**
      * @brief Получить индекс элемента модели в текущей позиции курсора
      */
     QModelIndex currentModelIndex() const;
@@ -169,10 +164,7 @@ protected:
     /**
      * @brief Обрабатываем специфичные ситуации для редактора сценария
      */
-    /** @{ */
     bool keyPressEventReimpl(QKeyEvent* _event) override;
-    bool updateEnteredText(const QString& _eventText) override;
-    /** @} */
 
     /**
      * @brief Реализуем отрисовку дополнительных элементов

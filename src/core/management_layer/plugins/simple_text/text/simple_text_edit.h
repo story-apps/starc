@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ui/widgets/text_edit/base/base_text_edit.h>
+#include <ui/modules/script_text_edit/script_text_edit.h>
 
 namespace BusinessLayer {
 class SimpleTextModel;
@@ -18,7 +18,7 @@ namespace Ui {
 /**
  * @brief Текстовый редактор
  */
-class SimpleTextEdit : public BaseTextEdit
+class SimpleTextEdit : public ScriptTextEdit
 {
     Q_OBJECT
 
@@ -68,11 +68,6 @@ public:
      * @brief Получить тип блока в котором находится курсор
      */
     BusinessLayer::TextParagraphType currentParagraphType() const;
-
-    /**
-     * @brief Своя реализация установки курсора
-     */
-    void setTextCursorAndKeepScrollBars(const QTextCursor& _cursor);
 
     /**
      * @brief Получить индекс элемента модели в текущей позиции курсора
@@ -135,10 +130,7 @@ protected:
     /**
      * @brief Обрабатываем специфичные ситуации для редактора сценария
      */
-    /** @{ */
     bool keyPressEventReimpl(QKeyEvent* _event) override;
-    bool updateEnteredText(const QString& _eventText) override;
-    /** @} */
 
     /**
      * @brief Реализуем отрисовку дополнительных элементов

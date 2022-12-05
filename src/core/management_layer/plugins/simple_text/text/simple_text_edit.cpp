@@ -106,7 +106,7 @@ void SimpleTextEdit::Implementation::revertAction(bool previous)
 
 
 SimpleTextEdit::SimpleTextEdit(QWidget* _parent)
-    : BaseTextEdit(_parent)
+    : ScriptTextEdit(_parent)
     , d(new Implementation(this))
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -192,16 +192,6 @@ BusinessLayer::TextParagraphType SimpleTextEdit::currentParagraphType() const
     return TextBlockStyle::forBlock(textCursor().block());
 }
 
-void SimpleTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
-{
-    //
-    // TODO: пояснить зачем это необходимо делать?
-    //
-    const int verticalScrollValue = verticalScrollBar()->value();
-    setTextCursor(_cursor);
-    verticalScrollBar()->setValue(verticalScrollValue);
-}
-
 QModelIndex SimpleTextEdit::currentModelIndex() const
 {
     if (d->model == nullptr) {
@@ -250,7 +240,7 @@ void SimpleTextEdit::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 void SimpleTextEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {
-        BaseTextEdit::keyPressEvent(_event);
+        ScriptTextEdit::keyPressEvent(_event);
         return;
     }
 
@@ -281,7 +271,7 @@ void SimpleTextEdit::keyPressEvent(QKeyEvent* _event)
         if (keyPressEventReimpl(_event)) {
             _event->accept();
         } else {
-            BaseTextEdit::keyPressEvent(_event);
+            ScriptTextEdit::keyPressEvent(_event);
             _event->ignore();
         }
 
@@ -353,102 +343,15 @@ bool SimpleTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     // Обрабатываем в базовом классе
     //
     else {
-        isEventHandled = BaseTextEdit::keyPressEventReimpl(_event);
+        isEventHandled = ScriptTextEdit::keyPressEventReimpl(_event);
     }
 
     return isEventHandled;
 }
 
-bool SimpleTextEdit::updateEnteredText(const QString& _eventText)
-{
-    if (_eventText.isEmpty()) {
-        return false;
-    }
-
-    //
-    // Получим значения
-    //
-    // ... курсора
-    QTextCursor cursor = textCursor();
-    // ... блок текста в котором находится курсор
-    QTextBlock currentBlock = cursor.block();
-    // ... текст блока
-    QString currentBlockText = currentBlock.text();
-    // ... текст до курсора
-    QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
-    // ... текст после курсора
-    QString cursorForwardText = currentBlockText.mid(cursor.positionInBlock());
-    // ... стиль шрифта блока
-    QTextCharFormat currentCharFormat = currentBlock.charFormat();
-
-    //
-    // Определяем необходимость установки верхнего регистра для первого символа блока
-    //
-    if (currentCharFormat.boolProperty(TextBlockStyle::PropertyIsFirstUppercase)
-        && cursorBackwardText != " " && cursorBackwardText == _eventText
-        && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
-        //
-        // Сформируем правильное представление строки
-        //
-        QString correctedText = _eventText;
-        correctedText[0] = TextHelper::smartToUpper(correctedText[0]);
-
-        //
-        // Стираем предыдущий введённый текст
-        //
-        for (int repeats = 0; repeats < _eventText.length(); ++repeats) {
-            cursor.deletePreviousChar();
-        }
-
-        //
-        // Выводим необходимый
-        //
-        cursor.insertText(correctedText);
-        setTextCursor(cursor);
-
-        return true;
-    }
-
-    //
-    // TODO: Почему-то в наследниках тоже есть этот кусок текста, нужно проверить нельзя ли его
-    // удалить из наследников, оставив только тут
-    //
-    // Если перед нами конец предложения
-    // и не сокращение
-    // и после курсора нет текста (для ремарки допустима скобка)
-    //
-    const QString endOfSentancePattern = QString("([.]|[?]|[!]|[…]) %1$").arg(_eventText);
-    if (cursorBackwardText.contains(QRegularExpression(endOfSentancePattern))
-        && cursorForwardText.isEmpty()
-        && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
-        //
-        // Сделаем первую букву заглавной
-        //
-        QString correctedText = _eventText;
-        correctedText[0] = TextHelper::smartToUpper(correctedText[0]);
-
-        //
-        // Стираем предыдущий введённый текст
-        //
-        for (int repeats = 0; repeats < _eventText.length(); ++repeats) {
-            cursor.deletePreviousChar();
-        }
-
-        //
-        // Выводим необходимый
-        //
-        cursor.insertText(correctedText);
-        setTextCursor(cursor);
-
-        return true;
-    }
-
-    return BaseTextEdit::updateEnteredText(_eventText);
-}
-
 void SimpleTextEdit::paintEvent(QPaintEvent* _event)
 {
-    BaseTextEdit::paintEvent(_event);
+    ScriptTextEdit::paintEvent(_event);
 
     //
     // Определить область прорисовки по краям от текста
@@ -714,7 +617,7 @@ ContextMenu* SimpleTextEdit::createContextMenu(const QPoint& _position, QWidget*
     // Сначала нужно создать контекстное меню в базовом классе, т.к. в этот момент может
     // измениться курсор, который установлен в текстовом редакторе, и использовать его
     //
-    auto menu = BaseTextEdit::createContextMenu(_position, _parent);
+    auto menu = ScriptTextEdit::createContextMenu(_position, _parent);
     if (isReadOnly() || (!textCursor().hasSelection() && isMispelledWordUnderCursor(_position))) {
         return menu;
     }
