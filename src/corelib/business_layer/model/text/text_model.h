@@ -78,6 +78,7 @@ public:
      * @brief Обновить заданный элемент
      */
     void updateItem(TextModelItem* _item);
+    void updateItemForRoles(TextModelItem* _item, const QVector<int>& _roles);
 
     /**
      * @brief Реализация древовидной модели

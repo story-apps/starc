@@ -21,6 +21,13 @@ enum class TextParagraphType;
 class CORE_LIBRARY_EXPORT TextModelTextItem : public TextModelItem
 {
 public:
+    /**
+     * @brief Роли данных из модели
+     */
+    enum {
+        TextNumberRole = Qt::UserRole + 1,
+    };
+
     struct CORE_LIBRARY_EXPORT TextPart {
         int from = 0;
         int length = 0;

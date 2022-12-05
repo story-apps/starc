@@ -42,7 +42,7 @@ public:
      */
     struct {
         QByteArray hash = {};
-        int blockCount = 0;
+        int characterCount = 0;
     } lastContent;
 };
 
@@ -117,16 +117,15 @@ void AbstractTextCorrector::makePlannedCorrection(const QByteArray& _contentHash
     }
 
     if (d->lastContent.hash == _contentHash
-        && d->lastContent.blockCount == d->document->blockCount()) {
+        && d->lastContent.characterCount == d->document->characterCount()) {
+        makeSoftCorrections();
         return;
     }
 
-    Log::trace("Start of the correction");
     makeCorrections(d->plannedCorrection.position, d->plannedCorrection.lenght);
-    Log::trace("End of the correction");
 
     d->lastContent.hash = _contentHash;
-    d->lastContent.blockCount = d->document->blockCount();
+    d->lastContent.characterCount = d->document->characterCount();
 
     d->plannedCorrection = {};
 }

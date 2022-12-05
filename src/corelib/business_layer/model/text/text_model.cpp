@@ -471,6 +471,11 @@ void TextModel::moveItem(TextModelItem* _item, TextModelItem* _afterSiblingItem,
 
 void TextModel::updateItem(TextModelItem* _item)
 {
+    updateItemForRoles(_item, {});
+}
+
+void TextModel::updateItemForRoles(TextModelItem* _item, const QVector<int>& _roles)
+{
     if (_item == nullptr || !_item->isChanged()) {
         return;
     }
@@ -478,11 +483,11 @@ void TextModel::updateItem(TextModelItem* _item)
     d->contentHash.clear();
 
     const QModelIndex indexForUpdate = indexForItem(_item);
-    emit dataChanged(indexForUpdate, indexForUpdate);
+    emit dataChanged(indexForUpdate, indexForUpdate, _roles);
     _item->setChanged(false);
 
     if (_item->parent() != nullptr) {
-        updateItem(_item->parent());
+        updateItemForRoles(_item->parent(), _roles);
     }
 }
 

@@ -658,7 +658,7 @@ void ScreenplayTextModel::updateNumbering()
                 if (textItem->paragraphType() == TextParagraphType::Character
                     && !textItem->isCorrection()) {
                     textItem->setNumber(dialogueNumber);
-                    updateItem(textItem);
+                    updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole });
                     ++dialogueNumber;
                 }
                 break;

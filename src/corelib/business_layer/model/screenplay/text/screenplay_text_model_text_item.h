@@ -12,7 +12,6 @@ class ScreenplayTextModel;
  */
 class CORE_LIBRARY_EXPORT ScreenplayTextModelTextItem : public TextModelTextItem
 {
-
 public:
     explicit ScreenplayTextModelTextItem(const ScreenplayTextModel* _model);
     ~ScreenplayTextModelTextItem() override;

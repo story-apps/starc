@@ -528,8 +528,13 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     });
     connect(
         d->model, &TextModel::dataChanged, this,
-        [this](const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
+        [this](const QModelIndex& _topLeft, const QModelIndex& _bottomRight,
+               const QVector<int>& _roles) {
             if (d->state != DocumentState::Ready) {
+                return;
+            }
+
+            if (_roles.size() == 1 && _roles.constFirst() == TextModelTextItem::TextNumberRole) {
                 return;
             }
 
