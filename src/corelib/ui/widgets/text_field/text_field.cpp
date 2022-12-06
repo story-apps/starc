@@ -1140,7 +1140,13 @@ void TextField::changeEvent(QEvent* _event)
 
 void TextField::insertFromMimeData(const QMimeData* _source)
 {
-    if (_source->hasText()) {
-        insertPlainText(_source->text());
+    if (!_source->hasText()) {
+        return;
     }
+
+    QString text = _source->text();
+    if (wordWrapMode() == QTextOption::NoWrap) {
+        text = text.simplified();
+    }
+    insertPlainText(text);
 }
