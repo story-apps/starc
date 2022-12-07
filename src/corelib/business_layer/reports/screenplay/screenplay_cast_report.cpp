@@ -196,6 +196,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
                         if (!charactersData.contains(character)) {
                             charactersData.insert(character, { 0, 0, 0, 1 });
                             charactersOrder.append(character);
+                            lastSceneNonspeakingCharacters.insert(character);
                         } else {
                             //
                             // Если он ещё не добавлен в текущую сцену
