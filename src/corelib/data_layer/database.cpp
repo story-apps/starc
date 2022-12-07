@@ -357,30 +357,33 @@ void Database::updateDatabase(QSqlDatabase& _database)
         //
         // 0.0.X
         //
-        if (versionMinor <= 0) {
-            if (versionBuild <= 9) {
+        if (versionMajor < 0 || versionMinor <= 0) {
+            //
+            // 0.0.9
+            //
+            if (versionMajor < 0 || versionMinor < 0 || versionBuild <= 9) {
                 updateDatabaseTo_0_0_10(_database);
             }
         }
         //
         // 0.1.X
         //
-        if (versionMinor <= 1) {
+        if (versionMajor < 0 || versionMinor <= 1) {
             //
             // 0.1.2
             //
-            if (versionBuild <= 2) {
+            if (versionMajor < 0 || versionMinor < 1 || versionBuild <= 2) {
                 updateDatabaseTo_0_1_3(_database);
             }
         }
         //
         // 0.2.x
         //
-        if (versionMinor <= 2) {
+        if (versionMajor < 0 || versionMinor <= 2) {
             //
             // 0.2.3
             //
-            if (versionBuild <= 3) {
+            if (versionMajor < 0 || versionMinor < 2 || versionBuild <= 3) {
                 updateDatabaseTo_0_2_4(_database);
             }
         }
