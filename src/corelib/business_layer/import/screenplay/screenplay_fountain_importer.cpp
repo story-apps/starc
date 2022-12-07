@@ -466,13 +466,6 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
         }
         blockText.clear();
     }
-
-    //
-    // Первый блок в тексте может встретиться лишь однажды
-    //
-    if (isFirstBlock) {
-        isFirstBlock = false;
-    }
 }
 
 void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _paragraphText,
@@ -715,6 +708,13 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
     }
 
     lastBlockText = blockText;
+
+    //
+    // Первый блок в тексте может встретиться лишь однажды
+    //
+    if (isFirstBlock) {
+        isFirstBlock = false;
+    }
 
     //
     // Не закрываем блок, чтобы можно было добавить редакторских заметок
