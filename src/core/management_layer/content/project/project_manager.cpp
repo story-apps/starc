@@ -831,16 +831,16 @@ void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureMode
             // ... удалим все невалидные айдишники
             //
             documentsToRemove.removeAll({});
-            //
-            // ... собственно удаляем модель и документ
-            //
-            modelsFacade.removeModelFor(document);
-            DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
         }
         //
         // ... удаляем из структуры
         //
         projectStructureModel->removeItem(_item);
+        //
+        // ... собственно удаляем модель и документ
+        //
+        modelsFacade.removeModelFor(document);
+        DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
         //
         // ... уведомляем об удалённых документах
         //
@@ -1493,8 +1493,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     const auto removedItemIndex = d->projectStructureModel->index(row, 0, _parent);
                     const auto removedItem
                         = d->projectStructureModel->itemForIndex(removedItemIndex);
-                    characters->removeCharacterModel(qobject_cast<BusinessLayer::CharacterModel*>(
-                        d->modelsFacade.modelFor(removedItem->uuid())));
+                    auto chModel = d->modelsFacade.modelFor(removedItem->uuid());
+                    characters->removeCharacterModel(
+                        qobject_cast<BusinessLayer::CharacterModel*>(chModel));
                 }
             }
             //
