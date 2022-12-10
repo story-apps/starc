@@ -62,6 +62,11 @@ public:
     void updateCharacterName(const QString& _oldName, const QString& _newName);
 
     /**
+     * @brief Получить список реплик персонажа
+     */
+    QVector<QModelIndex> characterDialogues(const QString& _name) const;
+
+    /**
      * @brief Найти всех персонажей сценария
      */
     QSet<QString> findCharactersFromText() const;

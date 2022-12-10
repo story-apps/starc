@@ -812,6 +812,9 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                     [this, characterModel](const QString& _oldName, const QString& _newName) {
                         emit characterNameChanged(characterModel, _oldName, _newName);
                     });
+            connect(
+                characterModel, &BusinessLayer::CharacterModel::dialoguesUpdateRequested, this,
+                [this, characterModel] { emit characterDialoguesUpdateRequested(characterModel); });
 
             model = characterModel;
             break;

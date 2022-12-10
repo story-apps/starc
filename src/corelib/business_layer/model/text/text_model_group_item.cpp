@@ -395,6 +395,7 @@ QVariant TextModelGroupItem::data(int _role) const
         return d->stamp;
     }
 
+    case Qt::DisplayRole:
     case GroupHeadingRole: {
         return d->title.isEmpty() ? d->heading : d->title;
     }

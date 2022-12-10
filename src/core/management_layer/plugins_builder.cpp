@@ -31,6 +31,7 @@ enum ViewType {
  */
 const QString kCharacterEditorMime = QStringLiteral("application/x-starc/editor/character/information");
 const QString kCharacterNavigatorMime = QStringLiteral("application/x-starc/navigator/character/information");
+const QString kCharacterDialoguesMime = QStringLiteral("application/x-starc/editor/character/dialogues");
 //
 const QString kLocationEditorMime = QStringLiteral("application/x-starc/editor/location/information");
 const QString kLocationNavigatorMime = QStringLiteral("application/x-starc/navigator/location/information");
@@ -124,7 +125,8 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         { "application/x-starc/document/stageplay/statistics",  { { kStageplayStatisticsViewMime, u8"\U000f0127" } } },
         //
         { "application/x-starc/document/characters",  { { "application/x-starc/editor/characters/relations", u8"\U000F0D3D" } } },
-        { "application/x-starc/document/character",  { { kCharacterEditorMime, u8"\U000f02fd" } } },
+        { "application/x-starc/document/character",  { { kCharacterEditorMime, u8"\U000f02fd" },
+                                                       { kCharacterDialoguesMime, u8"\U000F017C" }} },
         //
         { "application/x-starc/document/locations",  { { "application/x-starc/editor/locations/map", u8"\U000F0982" } } },
         { "application/x-starc/document/location",   { { kLocationEditorMime, u8"\U000f02fd" } } },
@@ -184,6 +186,7 @@ const QHash<QString, QString> kMimeToPlugin
         { "application/x-starc/editor/characters/relations", "*charactersrelationsplugin*" },
         { kCharacterEditorMime, "*characterinformationplugin*" },
         { kCharacterNavigatorMime, "*characterstructureplugin*" },
+        { kCharacterDialoguesMime, "*characterdialoguesplugin*" },
         //
         { "application/x-starc/editor/locations/map", "*locationsmapplugin*" },
         { kLocationEditorMime, "*locationinformationplugin*" },
@@ -451,7 +454,9 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                   QApplication::translate("ProjectPluginsBuilder", "Characters relations") } } },
             { "application/x-starc/document/character",
               { { kCharacterEditorMime,
-                  QApplication::translate("ProjectPluginsBuilder", "Character information") } } },
+                  QApplication::translate("ProjectPluginsBuilder", "Character information") },
+                { kCharacterDialoguesMime,
+                  QApplication::translate("ProjectPluginsBuilder", "Character dialogues") } } },
             //
             { "application/x-starc/document/locations",
               { { "application/x-starc/editor/locations/map",
@@ -561,6 +566,32 @@ void PluginsBuilder::setSecondaryViewCursors(const QVector<Domain::CursorInfo>& 
     auto view = d->plugins.value(_viewMimeType)->secondaryView();
     if (view != nullptr) {
         view->setCursors(_cursors);
+    }
+}
+
+void PluginsBuilder::setViewCurrentIndex(const QModelIndex& _index,
+                                         const QString& _viewMimeType) const
+{
+    if (!d->plugins.contains(_viewMimeType)) {
+        return;
+    }
+
+    auto view = d->plugins.value(_viewMimeType)->view();
+    if (view != nullptr) {
+        view->setCurrentModelIndex(_index);
+    }
+}
+
+void PluginsBuilder::setSecondaryViewCurrentIndex(const QModelIndex& _index,
+                                                  const QString& _viewMimeType) const
+{
+    if (!d->plugins.contains(_viewMimeType)) {
+        return;
+    }
+
+    auto view = d->plugins.value(_viewMimeType)->secondaryView();
+    if (view != nullptr) {
+        view->setCurrentModelIndex(_index);
     }
 }
 

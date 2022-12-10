@@ -3,6 +3,8 @@
 #include <QScopedPointer>
 #include <QVector>
 
+class QModelIndex;
+
 namespace BusinessLayer {
 class AbstractModel;
 }
@@ -89,6 +91,13 @@ public:
                     const QString& _viewMimeType) const;
     void setSecondaryViewCursors(const QVector<Domain::CursorInfo>& _cursors,
                                  const QString& _viewMimeType) const;
+
+    /**
+     * @brief Активировать полноэкранный режим
+     */
+    void setViewCurrentIndex(const QModelIndex& _index, const QString& _viewMimeType) const;
+    void setSecondaryViewCurrentIndex(const QModelIndex& _index,
+                                      const QString& _viewMimeType) const;
 
     /**
      * @brief Перенастроить плагины

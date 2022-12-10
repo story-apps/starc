@@ -266,9 +266,15 @@ private:
     /**
      * @brief Отобразить представление заданного типа для заданного элемента
      */
+    void showView(const QModelIndex& _index);
     void showView(const QModelIndex& _itemIndex, const QString& _viewMimeType,
                   const QString& _defaultMimeType = {});
     void showViewForVersion(BusinessLayer::StructureModelItem* _item);
+
+    /**
+     * @brief Активировать представление заданным элементом и маймом редактора
+     */
+    void activateView(const QModelIndex& _itemIndex, const QString& _viewMimeType);
 
     /**
      * @brief Отобразить навигатор для заданного индекса
@@ -281,6 +287,11 @@ private:
      * @brief Уведомить клиентов об обновлении курсора
      */
     Q_SLOT void notifyCursorChanged(const QByteArray& _cursorData);
+
+    /**
+     * @brief Пользователь хочет активировать ссылку на за документ с заданным индексом элемента
+     */
+    Q_SLOT void activateLink(const QUuid& _documentUuid, const QModelIndex& _index);
 
     /**
      * @brief Обновить значение текущей модели и её представления

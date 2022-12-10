@@ -176,6 +176,12 @@ public:
     QString plotInvolvement;
     QString conflict;
     QString mostDefiningMoment;
+
+    //
+    // Ридонли параметры
+    //
+
+    QVector<CharacterDialogues> dialogues;
 };
 
 
@@ -197,6 +203,20 @@ bool CharacterRelation::operator!=(const CharacterRelation& _other) const
 {
     return !(*this == _other);
 }
+
+
+// ****
+
+
+bool CharacterDialogues::operator==(const CharacterDialogues& _other) const
+{
+    return documentUuid == _other.documentUuid && documentName == _other.documentName
+        && dialoguesIndexes == _other.dialoguesIndexes;
+}
+
+
+// ****
+
 
 CharacterModel::CharacterModel(QObject* _parent)
     : AbstractModel(
@@ -1408,6 +1428,25 @@ void CharacterModel::setMostDefiningMoment(const QString& _text)
     emit mostDefiningMomentChanged(d->mostDefiningMoment);
 }
 
+QVector<CharacterDialogues> CharacterModel::dialogues() const
+{
+    return d->dialogues;
+}
+
+void CharacterModel::setDialogues(const QVector<CharacterDialogues>& _dialogues)
+{
+    if (d->dialogues == _dialogues) {
+        return;
+    }
+
+    d->dialogues = _dialogues;
+    emit dialoguesChanged(d->dialogues);
+}
+
+void CharacterModel::updateDialogues()
+{
+    emit dialoguesUpdateRequested();
+}
 
 void CharacterModel::initImageWrapper()
 {

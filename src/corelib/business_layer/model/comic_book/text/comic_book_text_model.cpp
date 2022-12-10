@@ -305,6 +305,48 @@ void ComicBookTextModel::updateCharacterName(const QString& _oldName, const QStr
     emit rowsChanged();
 }
 
+QVector<QModelIndex> ComicBookTextModel::characterDialogues(const QString& _name) const
+{
+    QVector<QModelIndex> modelIndexes;
+    for (int row = 0; row < rowCount(); ++row) {
+        modelIndexes.append(index(row, 0));
+    }
+    QString lastCharacter;
+    QVector<QModelIndex> dialoguesIndexes;
+    while (!modelIndexes.isEmpty()) {
+        const auto itemIndex = modelIndexes.takeFirst();
+        const auto item = itemForIndex(itemIndex);
+        if (item->type() == TextModelItemType::Text) {
+            const auto textItem = static_cast<TextModelTextItem*>(item);
+            switch (textItem->paragraphType()) {
+            case TextParagraphType::Character: {
+                lastCharacter = ComicBookCharacterParser::name(textItem->text());
+                break;
+            }
+
+            case TextParagraphType::Dialogue:
+            case TextParagraphType::Lyrics: {
+                if (lastCharacter == _name) {
+                    dialoguesIndexes.append(itemIndex);
+                }
+                break;
+            }
+
+            default: {
+                lastCharacter.clear();
+                break;
+            }
+            }
+        }
+
+        for (int childRow = 0; childRow < rowCount(itemIndex); ++childRow) {
+            modelIndexes.append(index(childRow, 0, itemIndex));
+        }
+    }
+
+    return dialoguesIndexes;
+}
+
 QSet<QString> ComicBookTextModel::findCharactersFromText() const
 {
     QSet<QString> characters;

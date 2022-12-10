@@ -123,6 +123,7 @@ QVariant TextModelFolderItem::data(int _role) const
         return d->folderType == TextFolderType::Act ? u8"\U000F0253" : u8"\U000f024b";
     }
 
+    case Qt::DisplayRole:
     case FolderHeadingRole: {
         return d->heading;
     }

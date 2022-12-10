@@ -165,6 +165,11 @@ signals:
                               const QString& _newName);
 
     /**
+     * @brief Запрос на обновление списка всех реплик персонажа
+     */
+    void characterDialoguesUpdateRequested(BusinessLayer::AbstractModel* _model);
+
+    /**
      * @brief Неоходимо создать локацию с заданным именем
      */
     void createLocationRequested(const QString& _name, const QByteArray& _content);

@@ -40,6 +40,17 @@ public:
     QString details = {};
 };
 
+
+class CORE_LIBRARY_EXPORT CharacterDialogues
+{
+public:
+    bool operator==(const CharacterDialogues& _other) const;
+
+    QUuid documentUuid;
+    QString documentName;
+    QVector<QModelIndex> dialoguesIndexes;
+};
+
 /**
  * @brief Модель данных персонажа
  */
@@ -383,6 +394,16 @@ public:
     QString mostDefiningMoment() const;
     void setMostDefiningMoment(const QString& _text);
     Q_SIGNAL void mostDefiningMomentChanged(const QString& _text);
+
+    //
+    // Диалоги
+    //
+    QVector<CharacterDialogues> dialogues() const;
+    void setDialogues(const QVector<CharacterDialogues>& _dialogues);
+    Q_SIGNAL void dialoguesChanged(const QVector<BusinessLayer::CharacterDialogues>& _dialogues);
+    //
+    void updateDialogues();
+    Q_SIGNAL void dialoguesUpdateRequested();
 
 protected:
     /**

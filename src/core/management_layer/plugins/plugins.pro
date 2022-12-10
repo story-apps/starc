@@ -40,6 +40,10 @@ exists (character_information/character_information.pro) {
     SUBDIRS += character_information
 }
 
+exists (character_dialogues/character_dialogues.pro) {
+    SUBDIRS += character_dialogues
+}
+
 exists (locations_map/locations_map.pro) {
     SUBDIRS += locations_map
 }

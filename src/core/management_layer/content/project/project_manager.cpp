@@ -3,18 +3,24 @@
 #include "include/custom_events.h"
 #include "project_models_facade.h"
 
+#include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
+#include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/project/project_information_model.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/stageplay/stageplay_information_model.h>
 #include <business_layer/model/stageplay/text/stageplay_text_model.h>
 #include <business_layer/model/structure/structure_model.h>
 #include <business_layer/model/structure/structure_model_item.h>
 #include <business_layer/model/structure/structure_proxy_model.h>
+#include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/templates/text_template.h>
 #include <data_layer/database.h>
 #include <data_layer/storage/document_change_storage.h>
 #include <data_layer/storage/document_image_storage.h>
@@ -117,7 +123,7 @@ public:
     /**
      * @brief Переключить активное представление
      */
-    void switchViews();
+    void switchViews(bool _withActivation = true);
 
     /**
      * @brief Действия контекстного меню
@@ -224,6 +230,18 @@ public:
         // Состояние контейнера перед входом в полноэкранный режим
         //
         QByteArray stateBeforeFullscreen = {};
+
+        //
+        // Открытая модель
+        //
+        QPointer<BusinessLayer::AbstractModel> activeModel;
+        QPointer<BusinessLayer::AbstractModel> inactiveModel;
+
+        //
+        // Майм-тип редактора открытой модели
+        //
+        QString activeViewMimeType;
+        QString inactiveViewMimeType;
     } view;
 
     /**
@@ -282,14 +300,6 @@ public:
      * @brief Текущий режим редактирования документов
      */
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
-
-    /**
-     * @brief Информация о текущем документе
-     */
-    struct {
-        QPointer<BusinessLayer::AbstractModel> model;
-        QString viewMimeType;
-    } currentDocument;
 
     /**
      * @brief Список документов и таймеров для полной синхронизации
@@ -358,20 +368,30 @@ void ProjectManager::Implementation::updateOptionsText()
                                                                 : tr("Show document drafts"));
 }
 
-void ProjectManager::Implementation::switchViews()
+void ProjectManager::Implementation::switchViews(bool _withActivation)
 {
     std::swap(view.active, view.inactive);
-    view.active->setActive(true);
-    view.inactive->setActive(false);
+    if (_withActivation) {
+        view.active->setActive(true);
+        view.inactive->setActive(false);
+    }
 
     std::swap(view.activeIndex, view.inactiveIndex);
+    std::swap(view.activeModel, view.inactiveModel);
+    std::swap(view.activeViewMimeType, view.inactiveViewMimeType);
+
+    const auto activeIndex = projectStructureProxyModel->mapFromSource(view.activeIndex);
+
+    if (_withActivation) {
+        q->activateView(activeIndex, view.activeViewMimeType);
+    }
 
     //
     // Прежде чем выбрать нужный элемент в навигаторе, заблокируем сигналы, чтобы не было ложных
     // срабатываний и повторной установки плагина редактора
     //
     QSignalBlocker signalBlocker(navigator);
-    navigator->setCurrentIndex(projectStructureProxyModel->mapFromSource(view.activeIndex));
+    navigator->setCurrentIndex(activeIndex);
 }
 
 void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelIndex& _index)
@@ -505,21 +525,20 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
 
 void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
 {
-    if (currentDocument.model == nullptr) {
+    if (view.activeModel == nullptr) {
         return;
     }
 
-    Log::info("Activate plugin \"%1\" in new window", currentDocument.viewMimeType);
-    auto view
-        = pluginsBuilder.activateWindowView(currentDocument.viewMimeType, currentDocument.model);
-    if (auto window = view->asQWidget()) {
+    Log::info("Activate plugin \"%1\" in new window", view.activeViewMimeType);
+    auto windowView = pluginsBuilder.activateWindowView(view.activeViewMimeType, view.activeModel);
+    if (auto window = windowView->asQWidget()) {
         window->resize(800, 600);
         window->show();
         //
         // TODO: Почему-то ни одна из моделей не использует это поле
         //       Ещё сюда нужно писать версию открытого документа, если это не текущая версия
         //
-        window->setWindowTitle(currentDocument.model->documentName());
+        window->setWindowTitle(view.activeModel->documentName());
 
         this->view.windows.append(window);
     }
@@ -1219,38 +1238,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     //
     connect(d->navigator, &Ui::ProjectNavigator::itemSelected, this,
             [this](const QModelIndex& _index) {
-                if (!_index.isValid()) {
-                    d->view.active->showDefaultPage();
-                    return;
-                }
-
-                //
-                // Определим выделенный элемент и скорректируем интерфейс
-                //
-                const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_index);
-                const auto item = d->projectStructureModel->itemForIndex(mappedIndex);
-                const auto documentMimeType = Domain::mimeTypeFor(item->type());
-                //
-                // ... настроим иконки представлений
-                //
-                d->toolBar->clearViews();
-                const auto views
-                    = d->pluginsBuilder.editorsInfoFor(documentMimeType, d->isProjectRemote);
-                for (const auto& view : views) {
-                    const auto tooltip
-                        = d->pluginsBuilder.editorDescription(documentMimeType, view.mimeType);
-                    const bool isActive = view.mimeType == views.first().mimeType;
-                    d->toolBar->addView(view.mimeType, view.icon, tooltip, isActive);
-                }
-
-                //
-                // Откроем документ на редактирование в первом из представлений
-                //
-                if (views.isEmpty()) {
-                    d->view.active->showNotImplementedPage();
-                    return;
-                }
-                showView(_index, {}, views.first().mimeType);
+                showView(_index);
 
                 //
                 // Для корзины и вложенных элементов вместо кнопки добавления документов показываем
@@ -1258,7 +1246,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 //
                 bool isInRecycleBin = false;
                 bool isRecycleBinHasDocuments = false;
-                auto topLevelParent = item;
+                const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_index);
+                auto topLevelParent = d->projectStructureModel->itemForIndex(mappedIndex);
                 while (topLevelParent != nullptr) {
                     if (topLevelParent->type() == Domain::DocumentObjectType::RecycleBin) {
                         isInRecycleBin = true;
@@ -1316,7 +1305,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
 
             if (isFirstSplit) {
                 showView(d->projectStructureProxyModel->mapFromSource(d->view.inactiveIndex),
-                         d->currentDocument.viewMimeType);
+                         d->view.activeViewMimeType);
             }
         } else {
             Log::info("Split screen turned off");
@@ -1793,6 +1782,103 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     }
                 }
             });
+    connect(&d->modelsFacade, &ProjectModelsFacade::characterDialoguesUpdateRequested, this,
+            [this](BusinessLayer::AbstractModel* _character) {
+                if (_character == nullptr) {
+                    return;
+                }
+                auto character = qobject_cast<BusinessLayer::CharacterModel*>(_character);
+
+                //
+                // Найти все модели где может встречаться персонаж и извлечь его реплики
+                //
+                QVector<BusinessLayer::CharacterDialogues> documentDialogues;
+                const auto screenplayModels
+                    = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
+                for (auto model : screenplayModels) {
+                    auto screenplay = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
+                    const auto dialogues = screenplay->characterDialogues(character->name());
+                    if (dialogues.isEmpty()) {
+                        continue;
+                    }
+
+                    QString documentName = screenplay->informationModel()->name();
+                    if (const auto screenplayItem
+                        = d->projectStructureModel->itemForUuid(screenplay->document()->uuid());
+                        screenplayItem->name() != tr("Screenplay")) {
+                        documentName.append(
+                            QString(" [%1 %2]").arg(tr("draft"), screenplayItem->name()));
+                    }
+
+                    documentDialogues.append(
+                        { screenplay->document()->uuid(), documentName, dialogues });
+                }
+                //
+                const auto comicBookModels
+                    = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ComicBookText);
+                for (auto model : comicBookModels) {
+                    auto comicBook = qobject_cast<BusinessLayer::ComicBookTextModel*>(model);
+                    const auto dialogues = comicBook->characterDialogues(character->name());
+                    if (dialogues.isEmpty()) {
+                        continue;
+                    }
+
+                    QString documentName = comicBook->informationModel()->name();
+                    if (const auto screenplayItem
+                        = d->projectStructureModel->itemForUuid(comicBook->document()->uuid());
+                        screenplayItem->name() != tr("Script")) {
+                        documentName.append(
+                            QString(" [%1 %2]").arg(tr("draft"), screenplayItem->name()));
+                    }
+
+                    documentDialogues.append(
+                        { comicBook->document()->uuid(), documentName, dialogues });
+                }
+                //
+                const auto audioplayModels
+                    = d->modelsFacade.modelsFor(Domain::DocumentObjectType::AudioplayText);
+                for (auto model : audioplayModels) {
+                    auto audioplay = qobject_cast<BusinessLayer::AudioplayTextModel*>(model);
+                    const auto dialogues = audioplay->characterDialogues(character->name());
+                    if (dialogues.isEmpty()) {
+                        continue;
+                    }
+
+                    QString documentName = audioplay->informationModel()->name();
+                    if (const auto screenplayItem
+                        = d->projectStructureModel->itemForUuid(audioplay->document()->uuid());
+                        screenplayItem->name() != tr("Script")) {
+                        documentName.append(
+                            QString(" [%1 %2]").arg(tr("draft"), screenplayItem->name()));
+                    }
+
+                    documentDialogues.append(
+                        { audioplay->document()->uuid(), documentName, dialogues });
+                }
+                //
+                const auto stageplayModels
+                    = d->modelsFacade.modelsFor(Domain::DocumentObjectType::StageplayText);
+                for (auto model : stageplayModels) {
+                    auto stageplay = qobject_cast<BusinessLayer::StageplayTextModel*>(model);
+                    const auto dialogues = stageplay->characterDialogues(character->name());
+                    if (dialogues.isEmpty()) {
+                        continue;
+                    }
+
+                    QString documentName = stageplay->informationModel()->name();
+                    if (const auto screenplayItem
+                        = d->projectStructureModel->itemForUuid(stageplay->document()->uuid());
+                        screenplayItem->name() != tr("Script")) {
+                        documentName.append(
+                            QString(" [%1 %2]").arg(tr("draft"), screenplayItem->name()));
+                    }
+
+                    documentDialogues.append(
+                        { stageplay->document()->uuid(), documentName, dialogues });
+                }
+
+                character->setDialogues(documentDialogues);
+            });
     connect(&d->modelsFacade, &ProjectModelsFacade::createLocationRequested, this,
             [this](const QString& _name, const QByteArray& _content) {
                 d->addDocumentToContainer(Domain::DocumentObjectType::Locations,
@@ -1983,10 +2069,9 @@ void ProjectManager::toggleFullScreen(bool _isFullScreen)
     // Собственно активируем полноэкранный режим
     //
     if (d->view.active == d->view.left) {
-        d->pluginsBuilder.toggleViewFullScreen(_isFullScreen, d->currentDocument.viewMimeType);
+        d->pluginsBuilder.toggleViewFullScreen(_isFullScreen, d->view.activeViewMimeType);
     } else {
-        d->pluginsBuilder.toggleSecondaryViewFullScreen(_isFullScreen,
-                                                        d->currentDocument.viewMimeType);
+        d->pluginsBuilder.toggleSecondaryViewFullScreen(_isFullScreen, d->view.activeViewMimeType);
     }
 
     //
@@ -2196,7 +2281,7 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     //
     // Сохранить состояние отображения версий для текущего документа
     //
-    if (d->currentDocument.model != nullptr && d->currentDocument.model->document() != nullptr) {
+    if (d->view.activeModel != nullptr && d->view.activeModel->document() != nullptr) {
         const auto item = d->aliasedItemForIndex(d->view.activeIndex);
         setSettingsValue(documentSettingsKey(item->uuid(), kVersionsVisibleKey),
                          d->showVersionsAction->isChecked());
@@ -2357,7 +2442,7 @@ BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
         return d->modelsFacade.modelFor(_item->childAt(scriptTextIndex)->uuid());
     };
 
-    const auto document = d->currentDocument.model->document();
+    const auto document = d->view.activeModel->document();
     const auto item = d->projectStructureModel->itemForUuid(document->uuid());
     switch (document->type()) {
     case Domain::DocumentObjectType::Audioplay: {
@@ -2414,7 +2499,7 @@ BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
     }
     }
 
-    return d->currentDocument.model;
+    return d->view.activeModel;
 }
 
 BusinessLayer::AbstractModel* ProjectManager::firstScriptModel() const
@@ -2438,11 +2523,11 @@ BusinessLayer::AbstractModel* ProjectManager::firstScriptModel() const
 
 Domain::DocumentObject* ProjectManager::currentDocument() const
 {
-    if (d->currentDocument.model == nullptr) {
+    if (d->view.activeModel == nullptr) {
         return nullptr;
     }
 
-    return d->currentDocument.model->document();
+    return d->view.activeModel->document();
 }
 
 QVector<Domain::DocumentObject*> ProjectManager::unsyncedDocuments() const
@@ -2637,7 +2722,7 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
             d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex()));
         if (item != nullptr) {
             if (d->view.active->currentVersion() == 0 && item->uuid() == _documentInfo.uuid) {
-                showView(d->navigator->currentIndex(), d->currentDocument.viewMimeType);
+                showView(d->navigator->currentIndex(), d->view.activeViewMimeType);
             } else if (const auto versionItem
                        = item->versions().value(d->view.active->currentVersion() - 1);
                        versionItem != nullptr && versionItem->uuid() == _documentInfo.uuid) {
@@ -2869,11 +2954,11 @@ void ProjectManager::setCursors(const QUuid& _document, const QVector<Domain::Cu
     //
     // Если активен редактор документа, где есть соавтор, отобразить в нём его курсор
     //
-    if (d->currentDocument.model->document()->uuid() == _document) {
+    if (d->view.activeModel->document()->uuid() == _document) {
         if (d->view.active == d->view.left) {
-            d->pluginsBuilder.setCursors(_cursors, d->currentDocument.viewMimeType);
+            d->pluginsBuilder.setCursors(_cursors, d->view.activeViewMimeType);
         } else {
-            d->pluginsBuilder.setSecondaryViewCursors(_cursors, d->currentDocument.viewMimeType);
+            d->pluginsBuilder.setSecondaryViewCursors(_cursors, d->view.activeViewMimeType);
         }
     }
 }
@@ -2944,7 +3029,7 @@ bool ProjectManager::event(QEvent* _event)
         // При смене сфокусированного виджета, проверяем не изменился ли активный из редакторов
         //
 
-        if (!d->view.right->isVisible()) {
+        if (!d->view.right->isVisible() || !d->view.active->isAnimationFinished()) {
             break;
         }
 
@@ -3015,6 +3100,41 @@ void ProjectManager::undoModelChange(BusinessLayer::AbstractModel* _model, int _
     _model->undoChange(change->undoPatch(), change->redoPatch());
 }
 
+void ProjectManager::showView(const QModelIndex& _index)
+{
+    d->toolBar->clearViews();
+
+    if (!_index.isValid()) {
+        d->view.active->showDefaultPage();
+        return;
+    }
+
+    //
+    // Определим выделенный элемент и скорректируем интерфейс
+    //
+    const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_index);
+    const auto item = d->projectStructureModel->itemForIndex(mappedIndex);
+    const auto documentMimeType = Domain::mimeTypeFor(item->type());
+    //
+    // ... настроим иконки представлений
+    //
+    const auto views = d->pluginsBuilder.editorsInfoFor(documentMimeType, d->isProjectRemote);
+    for (const auto& view : views) {
+        const auto tooltip = d->pluginsBuilder.editorDescription(documentMimeType, view.mimeType);
+        const bool isActive = view.mimeType == views.first().mimeType;
+        d->toolBar->addView(view.mimeType, view.icon, tooltip, isActive);
+    }
+
+    //
+    // Откроем документ на редактирование в первом из представлений
+    //
+    if (views.isEmpty()) {
+        d->view.active->showNotImplementedPage();
+        return;
+    }
+    showView(_index, {}, views.first().mimeType);
+}
+
 void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _viewMimeType,
                               const QString& _defaultMimeType)
 {
@@ -3025,7 +3145,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Сохранить состояние представления текущего документа
     //
-    if (!d->currentDocument.model.isNull() && d->currentDocument.model->document() != nullptr) {
+    if (!d->view.activeModel.isNull() && d->view.activeModel->document() != nullptr) {
 
         const auto previousActiveAliasedItem = d->aliasedItemForIndex(d->view.activeIndex);
         setSettingsValue(
@@ -3075,7 +3195,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     // Определим модель
     //
     updateCurrentDocument(d->modelsFacade.modelFor(itemForShow->uuid()), viewMimeType);
-    if (d->currentDocument.model == nullptr) {
+    if (d->view.activeModel == nullptr) {
         d->view.active->showNotImplementedPage();
         d->view.active->setVersionsVisible(false);
         return;
@@ -3087,22 +3207,22 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     Log::debug("Activate plugin view");
     Ui::IDocumentView* view = nullptr;
     if (d->view.active == d->view.left) {
-        view = d->pluginsBuilder.activateView(viewMimeType, d->currentDocument.model);
+        view = d->pluginsBuilder.activateView(viewMimeType, d->view.activeModel);
     } else {
-        view = d->pluginsBuilder.activateSecondView(viewMimeType, d->currentDocument.model);
+        view = d->pluginsBuilder.activateSecondView(viewMimeType, d->view.activeModel);
     }
     if (view == nullptr) {
         d->view.active->showNotImplementedPage();
         d->view.active->setVersionsVisible(false);
         return;
     }
-    Log::debug("Set project info");
+    Log::trace("Set project info");
     view->setProjectInfo(d->isProjectRemote, d->isProjectOwner);
-    Log::debug("Set editing mode");
+    Log::trace("Set editing mode");
     view->setEditingMode(d->editingMode);
-    Log::debug("Set document versions");
+    Log::trace("Set document versions");
     d->view.active->setDocumentVersions(aliasedItem->versions());
-    Log::debug("Show view");
+    Log::trace("Show view");
     d->view.active->showEditor(view->asQWidget());
     d->view.activeIndex = sourceItemIndex;
 
@@ -3155,6 +3275,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             connect(documentManager, SIGNAL(upgradeRequested()), this, SIGNAL(upgradeRequested()),
                     Qt::UniqueConnection);
         }
+        if (documentManager->metaObject()->indexOfSignal("linkActivated(QUuid,QModelIndex)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(linkActivated(QUuid, QModelIndex)), this,
+                    SLOT(activateLink(QUuid, QModelIndex)), Qt::UniqueConnection);
+        }
     }
 
     //
@@ -3179,13 +3304,13 @@ void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item
 {
     emit downloadDocumentRequested(_item->uuid());
 
-    const auto viewMimeType = d->currentDocument.viewMimeType;
+    const auto viewMimeType = d->view.activeViewMimeType;
 
     //
     // Определим модель
     //
     updateCurrentDocument(d->modelsFacade.modelFor(_item->uuid()), viewMimeType);
-    if (d->currentDocument.model == nullptr) {
+    if (d->view.activeModel == nullptr) {
         d->view.active->showNotImplementedPage();
         return;
     }
@@ -3195,9 +3320,9 @@ void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item
     //
     Ui::IDocumentView* view = nullptr;
     if (d->view.active == d->view.left) {
-        view = d->pluginsBuilder.activateView(viewMimeType, d->currentDocument.model);
+        view = d->pluginsBuilder.activateView(viewMimeType, d->view.activeModel);
     } else {
-        view = d->pluginsBuilder.activateSecondView(viewMimeType, d->currentDocument.model);
+        view = d->pluginsBuilder.activateSecondView(viewMimeType, d->view.activeModel);
     }
     if (view == nullptr) {
         d->view.active->showNotImplementedPage();
@@ -3213,6 +3338,60 @@ void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item
     if (!d->navigator->isProjectNavigatorShown() && d->view.active == d->view.left) {
         showNavigatorForVersion(_item);
     }
+}
+
+void ProjectManager::activateView(const QModelIndex& _itemIndex, const QString& _viewMimeType)
+{
+    d->toolBar->clearViews();
+
+    if (!_itemIndex.isValid()) {
+        return;
+    }
+
+    //
+    // Определим выделенный элемент и скорректируем интерфейс
+    //
+    const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
+    const auto item = d->projectStructureModel->itemForIndex(mappedIndex);
+    const auto documentMimeType = Domain::mimeTypeFor(item->type());
+    //
+    // ... настроим иконки представлений
+    //
+    const auto views = d->pluginsBuilder.editorsInfoFor(documentMimeType, d->isProjectRemote);
+    for (const auto& view : views) {
+        const auto tooltip = d->pluginsBuilder.editorDescription(documentMimeType, view.mimeType);
+        const bool isActive = view.mimeType == views.first().mimeType;
+        d->toolBar->addView(view.mimeType, view.icon, tooltip, isActive);
+    }
+
+    //
+    // Определим редактор для отображения
+    //
+    d->toolBar->setCurrentViewMimeType(_viewMimeType);
+
+    //
+    // Определим представление и отобразим
+    //
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = d->pluginsBuilder.activateView(_viewMimeType, d->view.activeModel);
+    } else {
+        view = d->pluginsBuilder.activateSecondView(_viewMimeType, d->view.activeModel);
+    }
+    if (view == nullptr) {
+        return;
+    }
+
+    //
+    // Настроим опции редактора
+    //
+    const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
+    auto aliasedItem = d->aliasedItemForIndex(sourceItemIndex);
+    auto viewOptions = view->options();
+    if (isTextItem(aliasedItem)) {
+        viewOptions.prepend(d->showVersionsAction);
+    }
+    d->toolBar->setOptions(viewOptions, AppBarOptionsLevel::View);
 }
 
 void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType)
@@ -3285,7 +3464,7 @@ void ProjectManager::showNavigatorForVersion(BusinessLayer::StructureModelItem* 
     //
     // Определим представление и отобразим
     //
-    const auto viewMimeType = d->currentDocument.viewMimeType;
+    const auto viewMimeType = d->view.activeViewMimeType;
     const auto navigatorMimeType = d->pluginsBuilder.navigatorMimeTypeFor(viewMimeType);
     auto view = d->pluginsBuilder.activateView(navigatorMimeType, model);
     if (view == nullptr) {
@@ -3296,7 +3475,7 @@ void ProjectManager::showNavigatorForVersion(BusinessLayer::StructureModelItem* 
 
 void ProjectManager::notifyCursorChanged(const QByteArray& _cursorData)
 {
-    if (d->currentDocument.model == nullptr || d->currentDocument.model->document() == nullptr) {
+    if (d->view.activeModel == nullptr || d->view.activeModel->document() == nullptr) {
         return;
     }
 
@@ -3306,16 +3485,47 @@ void ProjectManager::notifyCursorChanged(const QByteArray& _cursorData)
         return;
     }
 
-    emit cursorChanged(d->currentDocument.model->document()->uuid(), _cursorData);
+    emit cursorChanged(d->view.activeModel->document()->uuid(), _cursorData);
+}
+
+void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex& _index)
+{
+    const auto item = d->projectStructureModel->itemForUuid(_documentUuid);
+    if (item == nullptr) {
+        return;
+    }
+
+    const auto sourceIndex = d->projectStructureModel->indexForItem(item);
+    if (!sourceIndex.isValid()) {
+        return;
+    }
+
+    const auto itemIndex = d->projectStructureProxyModel->mapFromSource(sourceIndex);
+    if (!itemIndex.isValid()) {
+        return;
+    }
+
+    if (d->view.right->isVisible()) {
+        d->switchViews(false);
+    }
+    d->navigator->setCurrentIndex(itemIndex);
+    if (d->view.active == d->view.left) {
+        d->pluginsBuilder.setViewCurrentIndex(_index, d->view.activeViewMimeType);
+    } else {
+        d->pluginsBuilder.setSecondaryViewCurrentIndex(_index, d->view.activeViewMimeType);
+    }
+    if (d->view.right->isVisible()) {
+        d->switchViews(false);
+    }
 }
 
 void ProjectManager::updateCurrentDocument(BusinessLayer::AbstractModel* _model,
                                            const QString& _viewMimeType)
 {
-    d->currentDocument.model = _model;
-    d->currentDocument.viewMimeType = _viewMimeType;
+    d->view.activeModel = _model;
+    d->view.activeViewMimeType = _viewMimeType;
 
-    emit currentModelChanged(d->currentDocument.model);
+    emit currentModelChanged(d->view.activeModel);
 }
 
 } // namespace ManagementLayer
