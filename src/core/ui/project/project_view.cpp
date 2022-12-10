@@ -34,6 +34,7 @@ public:
     StackWidget* documentEditor = nullptr;
 
     Widget* overlay = nullptr;
+    QVariantAnimation overlayOpacityAnimation;
 };
 
 ProjectView::Implementation::Implementation(QWidget* _parent)
@@ -58,6 +59,10 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
     documentEditor->setAnimationType(AnimationType::FadeThrough);
     overlay->setAttribute(Qt::WA_TransparentForMouseEvents);
     overlay->hide();
+    overlayOpacityAnimation.setDuration(180);
+    overlayOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    overlayOpacityAnimation.setStartValue(0.0);
+    overlayOpacityAnimation.setEndValue(1.0);
 
     {
         QVBoxLayout* layout = new QVBoxLayout(defaultPage);
@@ -112,6 +117,7 @@ ProjectView::ProjectView(QWidget* _parent)
     : StackWidget(_parent)
     , d(new Implementation(this))
 {
+    setFocusPolicy(Qt::StrongFocus);
     setAnimationType(AnimationType::FadeThrough);
 
     addWidget(d->defaultPage);
@@ -136,6 +142,13 @@ ProjectView::ProjectView(QWidget* _parent)
             d->documentVersions->hide();
         }
     });
+    connect(&d->overlayOpacityAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) { d->overlay->setOpacity(_value.toReal()); });
+    connect(&d->overlayOpacityAnimation, &QVariantAnimation::finished, this, [this] {
+        if (d->overlayOpacityAnimation.direction() == QVariantAnimation::Backward) {
+            d->overlay->hide();
+        }
+    });
 }
 
 ProjectView::~ProjectView() = default;
@@ -152,6 +165,7 @@ void ProjectView::showNotImplementedPage()
 
 void ProjectView::showEditor(QWidget* _widget)
 {
+    setFocus();
     d->documentEditor->setCurrentWidget(_widget);
     setCurrentWidget(d->documentEditorPage);
 }
@@ -167,10 +181,13 @@ void ProjectView::focusEditor()
 
 void ProjectView::setActive(bool _active)
 {
-    const bool isVisible = !_active;
-    d->overlay->setVisible(isVisible);
-    if (isVisible) {
+    d->overlayOpacityAnimation.stop();
+    d->overlayOpacityAnimation.setDirection(_active ? QVariantAnimation::Backward
+                                                    : QVariantAnimation::Forward);
+    d->overlayOpacityAnimation.start();
+    if (!_active) {
         d->overlay->raise();
+        d->overlay->show();
     }
 }
 
@@ -293,8 +310,8 @@ void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->documentVersions->setTextColor(Ui::DesignSystem::color().onBackground());
     d->documentEditor->setBackgroundColor(Ui::DesignSystem::color().surface());
 
-    d->overlay->setBackgroundColor(
-        ColorHelper::transparent(backgroundColor(), Ui::DesignSystem::focusBackgroundOpacity()));
+    d->overlay->setBackgroundColor(backgroundColor());
+    d->overlayOpacityAnimation.setEndValue(Ui::DesignSystem::focusBackgroundOpacity());
 }
 
 void ProjectView::setCurrentWidget(QWidget* _widget)
