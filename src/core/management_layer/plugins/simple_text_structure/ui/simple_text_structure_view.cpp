@@ -91,6 +91,11 @@ void SimpleTextStructureView::setEditingMode(ManagementLayer::DocumentEditingMod
     d->content->setDragDropEnabled(!readOnly);
 }
 
+void SimpleTextStructureView::setCurrentModelIndex(const QModelIndex& _index)
+{
+    d->content->setCurrentIndex(_index);
+}
+
 void SimpleTextStructureView::reconfigure()
 {
     const bool showSceneText
@@ -116,11 +121,6 @@ void SimpleTextStructureView::setTitle(const QString& _title)
 void SimpleTextStructureView::setModel(QAbstractItemModel* _model)
 {
     d->content->setModel(_model);
-}
-
-void SimpleTextStructureView::setCurrentModelIndex(const QModelIndex& _index)
-{
-    d->content->setCurrentIndex(_index);
 }
 
 QModelIndexList SimpleTextStructureView::selectedIndexes() const

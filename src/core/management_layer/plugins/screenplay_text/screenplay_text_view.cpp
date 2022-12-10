@@ -1245,6 +1245,11 @@ void ScreenplayTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
     d->textEdit->setCursors(_cursors);
 }
 
+void ScreenplayTextView::setCurrentModelIndex(const QModelIndex& _index)
+{
+    d->textEdit->setCurrentModelIndex(_index);
+}
+
 DictionariesView* ScreenplayTextView::dictionariesView() const
 {
     return d->dictionariesView;
@@ -1433,11 +1438,6 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 QModelIndex ScreenplayTextView::currentModelIndex() const
 {
     return d->textEdit->currentModelIndex();
-}
-
-void ScreenplayTextView::setCurrentModelIndex(const QModelIndex& _index)
-{
-    d->textEdit->setCurrentModelIndex(_index);
 }
 
 int ScreenplayTextView::cursorPosition() const

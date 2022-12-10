@@ -93,6 +93,11 @@ void ComicBookTextStructureView::setEditingMode(ManagementLayer::DocumentEditing
     d->content->setDragDropEnabled(!readOnly);
 }
 
+void ComicBookTextStructureView::setCurrentModelIndex(const QModelIndex& _index)
+{
+    d->content->setCurrentIndex(_index);
+}
+
 void ComicBookTextStructureView::reconfigure()
 {
     const bool showSceneText
@@ -118,11 +123,6 @@ void ComicBookTextStructureView::setTitle(const QString& _title)
 void ComicBookTextStructureView::setModel(QAbstractItemModel* _model)
 {
     d->content->setModel(_model);
-}
-
-void ComicBookTextStructureView::setCurrentModelIndex(const QModelIndex& _index)
-{
-    d->content->setCurrentIndex(_index);
 }
 
 QModelIndexList ComicBookTextStructureView::selectedIndexes() const

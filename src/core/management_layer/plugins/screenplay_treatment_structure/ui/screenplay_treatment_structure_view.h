@@ -23,6 +23,7 @@ public:
     /** @{ */
     QWidget* asQWidget() override;
     void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
+    void setCurrentModelIndex(const QModelIndex& _index) override;
     /** @} */
 
     /**
@@ -39,11 +40,6 @@ public:
      * @brief Задать модель сцен сценария
      */
     void setModel(QAbstractItemModel* _model);
-
-    /**
-     * @brief Установить текущий выделенный элемент в модели
-     */
-    void setCurrentModelIndex(const QModelIndex& _index);
 
     /**
      * @brief Список выделенных элементов

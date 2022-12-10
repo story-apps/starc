@@ -87,6 +87,8 @@ RecycleBinView::RecycleBinView(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
+    setFocusPolicy(Qt::StrongFocus);
+
     auto layout = new QVBoxLayout;
     layout->setContentsMargins(QMargins());
     layout->setSpacing(0);

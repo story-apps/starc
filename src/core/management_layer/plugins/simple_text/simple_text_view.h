@@ -30,7 +30,8 @@ public:
     QVector<QAction*> options() const override;
     void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
     void setCursors(const QVector<Domain::CursorInfo>& _cursors) override;
-    /** @{ */
+    void setCurrentModelIndex(const QModelIndex& _index) override;
+    /** @} */
 
     /**
      * @brief Настроить редактор сценария в соответствии с параметрами заданными в настройках
@@ -52,11 +53,6 @@ public:
      * @brief Получить индекс элемента модели в текущей позиции курсора
      */
     QModelIndex currentModelIndex() const;
-
-    /**
-     * @brief Поставить курсор в позицию элемента с заданным индексом модели текста
-     */
-    void setCurrentModelIndex(const QModelIndex& _index);
 
     /**
      * @brief Позиция курсора

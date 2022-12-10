@@ -96,6 +96,8 @@ ComicBookParametersView::ComicBookParametersView(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
+    setFocusPolicy(Qt::StrongFocus);
+
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);

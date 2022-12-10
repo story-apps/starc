@@ -95,6 +95,11 @@ void AudioplayTextStructureView::setEditingMode(ManagementLayer::DocumentEditing
     d->content->setDragDropEnabled(!readOnly);
 }
 
+void AudioplayTextStructureView::setCurrentModelIndex(const QModelIndex& _index)
+{
+    d->content->setCurrentIndex(_index);
+}
+
 void AudioplayTextStructureView::reconfigure()
 {
     const bool showSceneNumber
@@ -124,13 +129,6 @@ void AudioplayTextStructureView::setTitle(const QString& _title)
 void AudioplayTextStructureView::setModel(QAbstractItemModel* _model)
 {
     d->content->setModel(_model);
-}
-
-void AudioplayTextStructureView::setCurrentModelIndex(const QModelIndex& _sourceIndex,
-                                                      const QModelIndex& _mappedIndex)
-{
-    Q_UNUSED(_sourceIndex)
-    d->content->setCurrentIndex(_mappedIndex);
 }
 
 QModelIndexList AudioplayTextStructureView::selectedIndexes() const

@@ -728,6 +728,11 @@ void SimpleTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
     d->textEdit->setCursors(_cursors);
 }
 
+void SimpleTextView::setCurrentModelIndex(const QModelIndex& _index)
+{
+    d->textEdit->setCurrentModelIndex(_index);
+}
+
 void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     UiHelper::initSpellingFor(d->textEdit);
@@ -841,11 +846,6 @@ void SimpleTextView::setModel(BusinessLayer::SimpleTextModel* _model)
 QModelIndex SimpleTextView::currentModelIndex() const
 {
     return d->textEdit->currentModelIndex();
-}
-
-void SimpleTextView::setCurrentModelIndex(const QModelIndex& _index)
-{
-    d->textEdit->setCurrentModelIndex(_index);
 }
 
 int SimpleTextView::cursorPosition() const

@@ -435,17 +435,12 @@ QModelIndex StageplayTextEdit::currentModelIndex() const
 
 void StageplayTextEdit::setCurrentModelIndex(const QModelIndex& _index)
 {
-    BusinessLayer::TextCursor textCursor(document());
-    textCursor.setPosition(d->document.itemStartPosition(_index));
-
-    //
-    // В кейсе с битами мы попадаем на невидимый блок, но интересует нас следующий за ним -
-    // первый параграф бита
-    //
-    if (!textCursor.block().isVisible()) {
-        textCursor.movePosition(BusinessLayer::TextCursor::NextBlock);
+    if (!_index.isValid() || _index.model() != d->model) {
+        return;
     }
 
+    BusinessLayer::TextCursor textCursor(document());
+    textCursor.setPosition(d->document.itemStartPosition(_index));
     ensureCursorVisible(textCursor);
 }
 

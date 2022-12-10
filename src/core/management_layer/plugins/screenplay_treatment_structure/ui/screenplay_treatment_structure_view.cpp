@@ -95,6 +95,11 @@ void ScreenplayTreatmentStructureView::setEditingMode(ManagementLayer::DocumentE
     d->content->setDragDropEnabled(!readOnly);
 }
 
+void ScreenplayTreatmentStructureView::setCurrentModelIndex(const QModelIndex& _index)
+{
+    d->content->setCurrentIndex(_index);
+}
+
 void ScreenplayTreatmentStructureView::reconfigure()
 {
     const bool showSceneNumber
@@ -126,11 +131,6 @@ void ScreenplayTreatmentStructureView::setTitle(const QString& _title)
 void ScreenplayTreatmentStructureView::setModel(QAbstractItemModel* _model)
 {
     d->content->setModel(_model);
-}
-
-void ScreenplayTreatmentStructureView::setCurrentModelIndex(const QModelIndex& _index)
-{
-    d->content->setCurrentIndex(_index);
 }
 
 QModelIndexList ScreenplayTreatmentStructureView::selectedIndexes() const

@@ -745,6 +745,11 @@ void StageplayTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
     d->textEdit->setCursors(_cursors);
 }
 
+void StageplayTextView::setCurrentModelIndex(const QModelIndex& _index)
+{
+    d->textEdit->setCurrentModelIndex(_index);
+}
+
 void StageplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     UiHelper::initSpellingFor(d->textEdit);
@@ -877,11 +882,6 @@ void StageplayTextView::setModel(BusinessLayer::StageplayTextModel* _model)
 QModelIndex StageplayTextView::currentModelIndex() const
 {
     return d->textEdit->currentModelIndex();
-}
-
-void StageplayTextView::setCurrentModelIndex(const QModelIndex& _index)
-{
-    d->textEdit->setCurrentModelIndex(_index);
 }
 
 int StageplayTextView::cursorPosition() const

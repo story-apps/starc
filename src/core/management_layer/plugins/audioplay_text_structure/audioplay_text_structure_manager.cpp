@@ -253,7 +253,7 @@ void AudioplayTextStructureManager::setCurrentModelIndex(const QModelIndex& _ind
     if (!indexForSelect.isValid()) {
         indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());
     }
-    d->view->setCurrentModelIndex(_index.parent(), indexForSelect);
+    d->view->setCurrentModelIndex(indexForSelect);
     d->modelIndexToSelect = {};
 }
 

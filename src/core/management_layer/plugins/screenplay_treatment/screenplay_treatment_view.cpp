@@ -776,6 +776,11 @@ void ScreenplayTreatmentView::setCursors(const QVector<Domain::CursorInfo>& _cur
     d->textEdit->setCursors(_cursors);
 }
 
+void ScreenplayTreatmentView::setCurrentModelIndex(const QModelIndex& _index)
+{
+    d->textEdit->setCurrentModelIndex(_index);
+}
+
 void ScreenplayTreatmentView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     UiHelper::initSpellingFor(d->textEdit);
@@ -932,11 +937,6 @@ void ScreenplayTreatmentView::setModel(BusinessLayer::ScreenplayTextModel* _mode
 QModelIndex ScreenplayTreatmentView::currentModelIndex() const
 {
     return d->textEdit->currentModelIndex();
-}
-
-void ScreenplayTreatmentView::setCurrentModelIndex(const QModelIndex& _index)
-{
-    d->textEdit->setCurrentModelIndex(_index);
 }
 
 int ScreenplayTreatmentView::cursorPosition() const

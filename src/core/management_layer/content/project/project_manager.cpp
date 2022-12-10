@@ -3029,7 +3029,7 @@ bool ProjectManager::event(QEvent* _event)
         // При смене сфокусированного виджета, проверяем не изменился ли активный из редакторов
         //
 
-        if (!d->view.right->isVisible() || !d->view.active->isAnimationFinished()) {
+        if (!d->view.right->isVisible()) {
             break;
         }
 

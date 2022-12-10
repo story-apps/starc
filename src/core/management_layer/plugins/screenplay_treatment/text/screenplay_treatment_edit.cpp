@@ -493,6 +493,10 @@ QModelIndex ScreenplayTreatmentEdit::currentModelIndex() const
 
 void ScreenplayTreatmentEdit::setCurrentModelIndex(const QModelIndex& _index)
 {
+    if (!_index.isValid() || _index.model() != d->model) {
+        return;
+    }
+
     BusinessLayer::TextCursor textCursor(document());
     textCursor.setPosition(d->document.itemStartPosition(_index));
     ensureCursorVisible(textCursor);

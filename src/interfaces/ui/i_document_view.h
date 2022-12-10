@@ -3,6 +3,7 @@
 #include <QVector>
 
 class QAction;
+class QModelIndex;
 class QWidget;
 
 namespace Domain {
@@ -61,6 +62,13 @@ public:
      * @brief Задать список курсоров соавторов в редакторе
      */
     virtual void setCursors(const QVector<Domain::CursorInfo>& _cursors)
+    {
+    }
+
+    /**
+     * @brief Сделать элемент модели с заданным индексом текущим
+     */
+    virtual void setCurrentModelIndex(const QModelIndex& _index)
     {
     }
 };

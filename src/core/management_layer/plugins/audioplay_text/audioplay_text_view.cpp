@@ -771,6 +771,11 @@ void AudioplayTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
     d->textEdit->setCursors(_cursors);
 }
 
+void AudioplayTextView::setCurrentModelIndex(const QModelIndex& _index)
+{
+    d->textEdit->setCurrentModelIndex(_index);
+}
+
 void AudioplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     UiHelper::initSpellingFor(d->textEdit);
@@ -918,11 +923,6 @@ void AudioplayTextView::setModel(BusinessLayer::AudioplayTextModel* _model)
 QModelIndex AudioplayTextView::currentModelIndex() const
 {
     return d->textEdit->currentModelIndex();
-}
-
-void AudioplayTextView::setCurrentModelIndex(const QModelIndex& _index)
-{
-    d->textEdit->setCurrentModelIndex(_index);
 }
 
 int AudioplayTextView::cursorPosition() const

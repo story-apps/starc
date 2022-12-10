@@ -759,6 +759,11 @@ void ComicBookTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
     d->textEdit->setCursors(_cursors);
 }
 
+void ComicBookTextView::setCurrentModelIndex(const QModelIndex& _index)
+{
+    d->textEdit->setCurrentModelIndex(_index);
+}
+
 void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     UiHelper::initSpellingFor(d->textEdit);
@@ -917,11 +922,6 @@ void ComicBookTextView::setModel(BusinessLayer::ComicBookTextModel* _model)
 QModelIndex ComicBookTextView::currentModelIndex() const
 {
     return d->textEdit->currentModelIndex();
-}
-
-void ComicBookTextView::setCurrentModelIndex(const QModelIndex& _index)
-{
-    d->textEdit->setCurrentModelIndex(_index);
 }
 
 int ComicBookTextView::cursorPosition() const
