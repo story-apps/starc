@@ -56,6 +56,19 @@ protected:
 };
 
 /**
+ * @brief Делегат рисующий текст целиком
+ */
+class CORE_LIBRARY_EXPORT MultilineDelegate : public TreeDelegate
+{
+public:
+    explicit MultilineDelegate(QObject* _parent = nullptr);
+
+    void paint(QPainter* _painter, const QStyleOptionViewItem& _option,
+               const QModelIndex& _index) const override;
+    QSize sizeHint(const QStyleOptionViewItem& _option, const QModelIndex& _index) const override;
+};
+
+/**
  * @brief Делегат для редактирования шорткатов в дереве
  */
 class CORE_LIBRARY_EXPORT KeySequenceDelegate : public TreeDelegate

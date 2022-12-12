@@ -6,6 +6,7 @@
 #include <ui/widgets/key_sequence_edit/key_sequence_edit.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QAbstractItemView>
 #include <QPainter>
 #include <QScopedValueRollback>
 
@@ -209,6 +210,193 @@ void TreeDelegate::destroyEditor(QWidget* editor, const QModelIndex& index) cons
     QStyledItemDelegate::destroyEditor(editor, index);
 
     m_editorActiveFor = {};
+}
+
+
+// ****
+
+
+MultilineDelegate::MultilineDelegate(QObject* _parent)
+    : TreeDelegate(_parent)
+{
+}
+
+void MultilineDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option,
+                              const QModelIndex& _index) const
+{
+    if (m_editorActiveFor == _index) {
+        return;
+    }
+
+    //
+    // Получим настройки стиля
+    //
+    QStyleOptionViewItem opt = _option;
+    initStyleOption(&opt, _index);
+
+    //
+    // Рисуем ручками
+    //
+    _painter->setRenderHint(QPainter::Antialiasing, true);
+
+    auto backgroundColor = _index.data(Qt::BackgroundRole).isValid()
+        ? _index.data(Qt::BackgroundRole).value<QColor>()
+        : opt.palette.color(QPalette::Base);
+    auto textColor = _index.data(Qt::ForegroundRole).isValid()
+        ? _index.data(Qt::ForegroundRole).value<QColor>()
+        : opt.palette.color(QPalette::Text);
+    const auto isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
+
+    //
+    // Рисуем
+    //
+
+    //
+    // ... фон
+    //
+    const QRectF backgroundRect = opt.rect;
+    if (opt.state.testFlag(QStyle::State_Selected)) {
+        //
+        // ... для выделенных элементов
+        //
+        backgroundColor = opt.palette.color(QPalette::Highlight);
+        textColor = opt.palette.color(QPalette::HighlightedText);
+    } else if (opt.state.testFlag(QStyle::State_MouseOver)) {
+        //
+        // ... для элементов на которые наведена мышь
+        //
+        backgroundColor = opt.palette.color(QPalette::AlternateBase);
+    } else {
+        //
+        // ... для остальных элементов
+        //
+        textColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
+    }
+    _painter->fillRect(backgroundRect, backgroundColor);
+
+    //
+    // ... иконка
+    //
+    _painter->setPen(textColor);
+    QRectF iconRect;
+    if (_index.data(Qt::DecorationRole).isValid()) {
+        if (isLeftToRight) {
+            iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
+                                               Ui::DesignSystem::treeOneLineItem().margins().left())
+                                          + m_additionalLeftMargin,
+                                      backgroundRect.top()),
+                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                     backgroundRect.height()));
+        } else {
+            iconRect = QRectF(QPointF(backgroundRect.right() - m_additionalLeftMargin
+                                          - Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                      backgroundRect.top()),
+                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                                     backgroundRect.height()));
+        }
+
+        if (_index.data(Qt::DecorationRole).type() == QVariant::String) {
+            if (_index.data(Qt::DecorationPropertyRole).isValid()
+                && _index.data(Qt::DecorationPropertyRole).value<QColor>().isValid()) {
+
+                _painter->setPen(_index.data(Qt::DecorationPropertyRole).value<QColor>());
+            }
+            _painter->setFont(Ui::DesignSystem::font().iconsMid());
+            _painter->drawText(iconRect, Qt::AlignCenter,
+                               _index.data(Qt::DecorationRole).toString());
+        } else {
+            const auto pixmap = _index.data(Qt::DecorationRole).value<QPixmap>();
+            _painter->drawPixmap(
+                QPointF(iconRect.left() + (iconRect.width() - pixmap.width()) / 2.0,
+                        iconRect.top() + (iconRect.height() - pixmap.height()) / 2.0),
+                pixmap);
+        }
+    }
+
+    //
+    // ... текст
+    //
+    _painter->setPen(textColor);
+    _painter->setFont(Ui::DesignSystem::font().subtitle2());
+    QRectF textRect;
+    if (isLeftToRight) {
+        const qreal textLeft = iconRect.isValid()
+            ? iconRect.right() + Ui::DesignSystem::treeOneLineItem().spacing()
+            : backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left()
+                + m_additionalLeftMargin;
+        textRect = QRectF(QPointF(textLeft, backgroundRect.top()),
+                          QSizeF(backgroundRect.right() - textLeft
+                                     - Ui::DesignSystem::treeOneLineItem().margins().right(),
+                                 backgroundRect.height()));
+        if (!m_hoverTrailingIcon.isEmpty() && opt.state.testFlag(QStyle::State_MouseOver)) {
+            textRect = textRect.adjusted(
+                0, 0, -1 * Ui::DesignSystem::treeOneLineItem().iconSize().width(), 0);
+        }
+    } else {
+        const qreal textRight = iconRect.isValid()
+            ? iconRect.left() - Ui::DesignSystem::treeOneLineItem().spacing()
+            : backgroundRect.right() - Ui::DesignSystem::treeOneLineItem().margins().right()
+                - m_additionalLeftMargin;
+        const auto textLeft
+            = backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
+        textRect = QRectF(QPointF(textLeft, backgroundRect.top()),
+                          QSizeF(textRight - textLeft, backgroundRect.height()));
+        if (!m_hoverTrailingIcon.isEmpty() && opt.state.testFlag(QStyle::State_MouseOver)) {
+            textRect = textRect.adjusted(Ui::DesignSystem::treeOneLineItem().iconSize().width(), 0,
+                                         0, 0);
+        }
+    }
+    const auto text = _index.data().toString();
+    _painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, text);
+
+    //
+    // Рисуем декорацию
+    //
+    if (!m_hoverTrailingIcon.isEmpty() && opt.state.testFlag(QStyle::State_MouseOver)) {
+        auto iconRect = QRectF(
+            QPointF(isLeftToRight ? (backgroundRect.right()
+                                     - Ui::DesignSystem::treeOneLineItem().iconSize().width()
+                                     - Ui::DesignSystem::treeOneLineItem().margins().right())
+                                  : Ui::DesignSystem::treeOneLineItem().margins().left(),
+                    backgroundRect.top()),
+            QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+                   backgroundRect.height()));
+        _painter->setFont(Ui::DesignSystem::font().iconsMid());
+        _painter->drawText(iconRect, Qt::AlignCenter, m_hoverTrailingIcon);
+    }
+}
+
+QSize MultilineDelegate::sizeHint(const QStyleOptionViewItem& _option,
+                                  const QModelIndex& _index) const
+{
+    //
+    // Ширина
+    //
+    int width = _option.widget->width();
+    if (const QAbstractItemView* view = qobject_cast<const QAbstractItemView*>(_option.widget)) {
+        width = view->viewport()->width();
+    }
+    //
+    // ... вручную считаем сколько слева было съедено на декорации дерева
+    //
+    int level = 1;
+    auto parentIndex = _index;
+    while (parentIndex.parent().isValid()) {
+        ++level;
+        parentIndex = parentIndex.parent();
+    }
+    width -= level * Ui::DesignSystem::tree().indicatorWidth();
+
+    const auto availableWidth = width - Ui::DesignSystem::treeOneLineItem().margins().left()
+        - Ui::DesignSystem::treeOneLineItem().margins().right();
+    const auto text = _index.data().toString();
+    const auto textHeight = TextHelper::heightForWidth(
+        _index.data().toString(), Ui::DesignSystem::font().subtitle2(), availableWidth);
+
+    return QSizeF(width,
+                  std::max(Ui::DesignSystem::treeOneLineItem().height(),
+                           textHeight + Ui::DesignSystem::layout().px(32)))
+        .toSize();
 }
 
 
