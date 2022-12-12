@@ -86,6 +86,9 @@ void TextModelSplitterItem::copyFrom(TextModelItem* _item)
         Q_ASSERT(false);
         return;
     }
+
+    const auto splitterItem = static_cast<TextModelSplitterItem*>(_item);
+    d->splitterType = splitterItem->splitterType();
 }
 
 bool TextModelSplitterItem::isEqual(TextModelItem* _item) const

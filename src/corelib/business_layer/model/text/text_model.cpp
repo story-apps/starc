@@ -1201,6 +1201,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     contentReader.readNextStartElement(); // document
     contentReader.readNextStartElement();
     bool isFirstTextItemHandled = false;
+    bool isSplitterStartWasCreated = false;
     TextModelItem* lastItem = item;
     TextModelItem* insertAfterItem = lastItem;
     QVector<TextModelItem*> itemsToInsert;
@@ -1291,16 +1292,81 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                     }
 
                     groupItem = static_cast<TextModelGroupItem*>(insertAfterItem);
-                };
+                }
             }
 
             newItem = newGroupItem;
         } else if (currentTag == xml::kSplitterTag) {
-            increaseMimeLength();
-            newItem = createSplitterItem(contentReader);
+            const auto previousItemType
+                = insertAfterItem != nullptr ? insertAfterItem->type() : TextModelItemType::Folder;
+            switch (previousItemType) {
+            case TextModelItemType::Text: {
+                QScopedPointer<TextModelSplitterItem> newSplitterItem(
+                    createSplitterItem(contentReader));
+                const auto textItem = static_cast<TextModelTextItem*>(insertAfterItem);
+
+                //
+                // Если предыдущий элемент уже в таблице, то не нужно ничего создавать тут
+                //
+                if (textItem->isInFirstColumn().has_value()) {
+                    break;
+                }
+                //
+                // Если создаётся открывающий элемент, запоним этот нюанс
+                //
+                if (newSplitterItem->splitterType() == TextModelSplitterItemType::Start) {
+                    isSplitterStartWasCreated = true;
+                }
+                //
+                // Если создаётся закрывающий элемент, то позволяем этому свершиться,
+                // только если был создал открывающий, иначе пропускаем его
+                //
+                else {
+                    if (!isSplitterStartWasCreated) {
+                        break;
+                    }
+                    //
+                    // ... сбрасываем статус создания открывающего элемента для следующего прохода
+                    //
+                    isSplitterStartWasCreated = false;
+                }
+
+                //
+                // Если всё прошло успешно, добавляем созданный разделитель
+                //
+                increaseMimeLength();
+                newItem = createSplitterItem();
+                newItem->copyFrom(newSplitterItem.data());
+                break;
+            }
+
+            default: {
+                Q_ASSERT(false);
+                break;
+            }
+            }
         } else {
             auto newTextItem = createTextItem(contentReader);
             increaseMimeLength(newTextItem->text().length());
+            //
+            // Смотрим на положение в таблице предыдущего элемента
+            //
+            if (insertAfterItem != nullptr && insertAfterItem->type() == TextModelItemType::Text) {
+                const auto textItem = static_cast<TextModelTextItem*>(insertAfterItem);
+                //
+                // ... если он в таблице, то помещаем добавляемый элемент в ту же колонку
+                //
+                if (textItem->isInFirstColumn().has_value()) {
+                    newTextItem->setInFirstColumn(textItem->isInFirstColumn());
+                }
+                //
+                // ... если не в таблице, и при вставке не было добавлено таблицы,
+                //     то удаляем информацию о таблице в новом текстовом элементе
+                //
+                else if (!isSplitterStartWasCreated) {
+                    newTextItem->setInFirstColumn({});
+                }
+            }
             //
             // Если вставляется текстовый элемент внутрь уже существующего элемента
             //
