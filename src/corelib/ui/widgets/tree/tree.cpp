@@ -196,6 +196,11 @@ QModelIndexList Tree::selectedIndexes() const
     return d->tree->selectionModel()->selectedIndexes();
 }
 
+void Tree::clearSelection()
+{
+    d->tree->clearSelection();
+}
+
 void Tree::setExpandsOnDoubleClick(bool _expand)
 {
     d->tree->setExpandsOnDoubleClick(_expand);
@@ -245,6 +250,11 @@ void Tree::setHeader(QHeaderView* _headerView)
 QHeaderView* Tree::headerView() const
 {
     return d->tree->header();
+}
+
+QSize Tree::viewportSizeHint() const
+{
+    return d->tree->viewportSizeHint();
 }
 
 void Tree::setEditTriggers(QAbstractItemView::EditTriggers _triggers)

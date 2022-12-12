@@ -22,6 +22,11 @@ public:
     void setAutoAdjustSize(bool _auto);
 
     /**
+     * @brief Переопределяем метод, чтобы дать доступ к нему наружу
+     */
+    QSize viewportSizeHint() const override;
+
+    /**
      * @brief Загрузить состояние дерева
      */
     void restoreState(const QVariant& _state);

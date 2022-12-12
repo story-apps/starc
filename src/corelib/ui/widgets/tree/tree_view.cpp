@@ -81,6 +81,11 @@ void TreeView::setAutoAdjustSize(bool _auto)
     d->adjustSizeAutomatically = _auto;
 }
 
+QSize TreeView::viewportSizeHint() const
+{
+    return QTreeView::viewportSizeHint();
+}
+
 void TreeView::restoreState(const QVariant& _state)
 {
     std::function<void(const QDomElement&, const QModelIndex&)> readItem;

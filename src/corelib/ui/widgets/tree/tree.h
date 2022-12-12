@@ -105,6 +105,11 @@ public:
     QModelIndexList selectedIndexes() const;
 
     /**
+     * @brief Очистить выделение
+     */
+    void clearSelection();
+
+    /**
      * @brief Задать возможность раскрывать узлы дерева двойным кликом
      */
     void setExpandsOnDoubleClick(bool _expand);
@@ -140,6 +145,11 @@ public:
      */
     void setHeader(QHeaderView* _headerView);
     QHeaderView* headerView() const;
+
+    /**
+     * @brief Получить размер вьюпорта
+     */
+    QSize viewportSizeHint() const;
 
     /**
      * @brief Задать действия приводящие к редактированию элементов дерева

@@ -1802,7 +1802,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                         continue;
                     }
 
-                    QString documentName = screenplay->informationModel()->name();
+                    auto documentName = screenplay->informationModel()->name();
                     if (const auto screenplayItem
                         = d->projectStructureModel->itemForUuid(screenplay->document()->uuid());
                         screenplayItem->name() != tr("Screenplay")) {
@@ -3495,9 +3495,23 @@ void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex&
         return;
     }
 
-    const auto sourceIndex = d->projectStructureModel->indexForItem(item);
+    auto sourceIndex = d->projectStructureModel->indexForItem(item);
+    constexpr int invalidVersionIndex = -1;
+    int versionIndex = invalidVersionIndex;
     if (!sourceIndex.isValid()) {
-        return;
+        const auto parent = item->parent();
+        for (int childIndex = 0; childIndex < parent->childCount(); ++childIndex) {
+            const auto childItem = parent->childAt(childIndex);
+            if (childItem->versions().contains(item)) {
+                sourceIndex = d->projectStructureModel->indexForItem(childItem);
+                versionIndex = childItem->versions().indexOf(item) + 1;
+                break;
+            }
+        }
+
+        if (!sourceIndex.isValid() || versionIndex == invalidVersionIndex) {
+            return;
+        }
     }
 
     const auto itemIndex = d->projectStructureProxyModel->mapFromSource(sourceIndex);
@@ -3505,17 +3519,44 @@ void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex&
         return;
     }
 
+    //
+    // Откроем ссылку на элемент
+    //
+    const auto withActivation = false;
+    //
+    // ... если работаем в двухпанельном режиме, то открываем её во второй панели, при этом
+    //     активируем вторую панель для установки в неё целевого документа без активации, чтобы это
+    //     прошло незаметно для пользователя
+    //
     if (d->view.right->isVisible()) {
-        d->switchViews(false);
+        d->switchViews(withActivation);
     }
     d->navigator->setCurrentIndex(itemIndex);
+    //
+    // ... если нужно, активируем заданную версию
+    //
+    if (versionIndex != invalidVersionIndex) {
+        d->view.active->setCurrentVersion(versionIndex);
+    }
+    //
+    // ... если работаем с текущей версией, но редактор находится на другой, возвращаемся к текущей
+    //
+    else if (d->view.active->currentVersion() > 0) {
+        d->view.active->setCurrentVersion(0);
+    }
+    //
+    // ... фокусируем в представлении элемент с заданным индексом
+    //
     if (d->view.active == d->view.left) {
         d->pluginsBuilder.setViewCurrentIndex(_index, d->view.activeViewMimeType);
     } else {
         d->pluginsBuilder.setSecondaryViewCurrentIndex(_index, d->view.activeViewMimeType);
     }
+    //
+    // ... возвращаем активность на исходную панель
+    //
     if (d->view.right->isVisible()) {
-        d->switchViews(false);
+        d->switchViews(withActivation);
     }
 }
 
