@@ -37,3 +37,6 @@
 [submodule "src/core/management_layer/plugins/images_gallery"]
 	path = src/core/management_layer/plugins/images_gallery
 	url = git@github.com:story-apps/starc-images-gallery-plugin.git
+[submodule "src/core/management_layer/plugins/character_dialogues"]
+	path = src/core/management_layer/plugins/character_dialogues
+	url = git@github.com:story-apps/starc-character-dialogues-plugin.git
