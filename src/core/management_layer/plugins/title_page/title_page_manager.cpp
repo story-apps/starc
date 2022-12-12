@@ -238,7 +238,11 @@ void TitlePageManager::resetModels()
 
 void TitlePageManager::reconfigure(const QStringList& _changedSettingsKeys)
 {
-    d->view->reconfigure(_changedSettingsKeys);
+    for (const auto& view : std::as_const(d->allViews)) {
+        if (!view.view.isNull()) {
+            view.view->reconfigure(_changedSettingsKeys);
+        }
+    }
 }
 
 void TitlePageManager::saveSettings()

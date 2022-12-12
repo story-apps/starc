@@ -323,7 +323,11 @@ void ScreenplayTreatmentManager::resetModels()
 
 void ScreenplayTreatmentManager::reconfigure(const QStringList& _changedSettingsKeys)
 {
-    d->view->reconfigure(_changedSettingsKeys);
+    for (const auto& view : std::as_const(d->allViews)) {
+        if (!view.view.isNull()) {
+            view.view->reconfigure(_changedSettingsKeys);
+        }
+    }
 }
 
 void ScreenplayTreatmentManager::bind(IDocumentManager* _manager)
