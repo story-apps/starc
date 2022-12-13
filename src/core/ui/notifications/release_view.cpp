@@ -96,14 +96,13 @@ ReleaseView::Implementation::Implementation(ReleaseView* _q,
     , buttonsLayout(new QHBoxLayout)
 {
     avatarLabel->setImage(QPixmap(":/images/logo"));
-    installedIcon->setIcon(u8"\U000F05E0");
     downloadingProgress->hide();
     downloadingAction->hide();
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
     buttonsLayout->addWidget(installedIcon);
-    buttonsLayout->addWidget(installedLabel);
+    buttonsLayout->addWidget(installedLabel, 1, Qt::AlignVCenter);
     buttonsLayout->addWidget(downloadingProgress, 1, Qt::AlignVCenter);
     buttonsLayout->addWidget(downloadingAction);
     buttonsLayout->addWidget(installButton);
@@ -118,6 +117,12 @@ void ReleaseView::Implementation::downloadUpdate()
             [this](int _progress) { downloadingProgress->setProgress(_progress / 100.0); });
     connect(downloader.data(), &NetworkRequest::downloadComplete, q,
             [this](const QByteArray& _data, const QUrl _url) {
+                if (_data.isEmpty()) {
+                    state = DownloadingFailed;
+                    updateState();
+                    return;
+                }
+
                 const QString tempDirPath
                     = QDir::toNativeSeparators(QStandardPaths::writableLocation(
 #ifdef Q_OS_LINUX
@@ -144,6 +149,10 @@ void ReleaseView::Implementation::downloadUpdate()
                     updateState();
                 }
             });
+    connect(downloader.data(), &NetworkRequest::error, q, [this] {
+        state = DownloadingFailed;
+        updateState();
+    });
 
     const auto json = QJsonDocument::fromJson(notification.notification.toUtf8()).object();
     downloader->loadAsync(json["download_link"].toString());
@@ -235,6 +244,8 @@ void ReleaseView::Implementation::updateState()
         downloadingAction->hide();
         if (QCoreApplication::applicationVersion() == version) {
             installButton->hide();
+            installedIcon->setIcon(u8"\U000F05E0");
+            installedIcon->setTextColor(Ui::DesignSystem::color().secondary());
             installedIcon->show();
             installedLabel->show();
         } else {
@@ -260,9 +271,18 @@ void ReleaseView::Implementation::updateState()
     }
 
     case DownloadingFailed: {
-        //
-        // TODO: реализовать отображение сообщения об ошибке
-        //
+        installedIcon->setIcon(u8"\U000F0026");
+        installedIcon->setTextColor(Ui::DesignSystem::color().error());
+        installedLabel->setText(tr("Downloading failed"));
+        downloadingAction->setIcon(u8"\U000F0450");
+        downloadingAction->setToolTip(tr("Retry"));
+
+        installedIcon->show();
+        installedLabel->show();
+        installButton->hide();
+        downloadingProgress->hide();
+        downloadingAction->show();
+
         break;
     }
 
@@ -272,6 +292,8 @@ void ReleaseView::Implementation::updateState()
 
         downloadingProgress->hide();
         downloadingAction->hide();
+        installedIcon->setIcon(u8"\U000F05E0");
+        installedIcon->setTextColor(Ui::DesignSystem::color().secondary());
         installedIcon->show();
         installedLabel->show();
         installButton->show();
