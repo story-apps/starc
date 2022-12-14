@@ -30,6 +30,9 @@ public:
      */
     void calcDefaultPositionDelta();
 
+
+    QColor activeColor;
+
     const int minimum = 0;
     int maximum = 100;
     int current = 50;
@@ -89,8 +92,16 @@ Slider::Slider(QWidget* _parent)
             [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
+}
 
-    designSystemChangeEvent(nullptr);
+void Slider::setActiveColor(const QColor& _color)
+{
+    if (d->activeColor == _color) {
+        return;
+    }
+
+    d->activeColor = _color;
+    update();
 }
 
 int Slider::maximumValue() const
@@ -184,7 +195,9 @@ void Slider::paintEvent(QPaintEvent* _event)
         QPointF(isRightToLeft() ? trackWidth - leftTrackWidth + leftMargin : leftMargin,
                 (height() - Ui::DesignSystem::slider().trackHeight()) / 2.0),
         QSizeF(leftTrackWidth, Ui::DesignSystem::slider().trackHeight()));
-    painter.fillRect(leftTrackRect, Ui::DesignSystem::color().secondary());
+    const auto activeColor
+        = d->activeColor.isValid() ? d->activeColor : Ui::DesignSystem::color().secondary();
+    painter.fillRect(leftTrackRect, activeColor);
 
     //
     // ... справа
@@ -192,7 +205,7 @@ void Slider::paintEvent(QPaintEvent* _event)
     const QRectF rightTrackRect(isRightToLeft() ? QPointF(leftMargin, leftTrackRect.y())
                                                 : leftTrackRect.topRight(),
                                 QSizeF(trackWidth - leftTrackWidth, leftTrackRect.height()));
-    QColor rightTrackColor = Ui::DesignSystem::color().secondary();
+    QColor rightTrackColor = activeColor;
     rightTrackColor.setAlphaF(Ui::DesignSystem::slider().unfilledPartOpacity());
     painter.fillRect(rightTrackRect, rightTrackColor);
 
@@ -206,7 +219,7 @@ void Slider::paintEvent(QPaintEvent* _event)
         const qreal defaultPointRadious = Ui::DesignSystem::slider().thumbRadius() / 2;
 
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setBrush(activeColor);
         painter.drawEllipse(startCenter, defaultPointRadious, defaultPointRadious);
     }
 

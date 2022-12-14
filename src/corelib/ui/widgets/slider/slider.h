@@ -15,6 +15,11 @@ public:
     ~Slider() override;
 
     /**
+     * @brief Задать цвет активной области слайдера (слева от ползунка)
+     */
+    void setActiveColor(const QColor& _color);
+
+    /**
      * @brief Задать максимальное значение слайдера
      */
     int maximumValue() const;
