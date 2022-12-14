@@ -64,6 +64,11 @@ public:
     explicit Implementation(UnsplashImagesView* _q);
 
     /**
+     * @brief Загрузить изображения текущей страницы
+     */
+    void loadCurrentPage();
+
+    /**
      * @brief Обработать список изображений
      */
     void processImagesJson(const QByteArray& _json);
@@ -77,9 +82,29 @@ public:
     UnsplashImagesView* q = nullptr;
 
     /**
+     * @brief Запущена ли в данный момент загрузка изображений
+     */
+    bool isLoadingActive = false;
+
+    /**
+     * @brief Ключевики последнего запроса
+     */
+    QString keywords;
+
+    /**
+     * @brief Текущая страница изображений
+     */
+    int currentImagesPage = 0;
+
+    /**
      * @brief Ссылка на превьюшку - инфо об изображении
      */
     QHash<QString, UnsplashImageInfo> images;
+
+    /**
+     * @brief Сортированный список изображений
+     */
+    QVector<QString> imagesUrlsOrdered;
 
     /**
      * @brief  Декорации изображения при клике
@@ -93,9 +118,20 @@ UnsplashImagesView::Implementation::Implementation(UnsplashImagesView* _q)
     decorationAnimation.setFast(false);
 }
 
+void UnsplashImagesView::Implementation::loadCurrentPage()
+{
+    isLoadingActive = true;
+    const QUrl url(QString("https://starc.app/api/services/unsplash/search?text=%1&page=%2")
+                       .arg(keywords)
+                       .arg(currentImagesPage)
+                       .replace(' ', ','));
+    NetworkRequestLoader::loadAsync(
+        url, q, [this](const QByteArray& _response) { processImagesJson(_response); });
+}
+
 void UnsplashImagesView::Implementation::processImagesJson(const QByteArray& _json)
 {
-    images.clear();
+    isLoadingActive = false;
 
     const auto results = QJsonDocument::fromJson(_json).object()["results"].toArray();
     for (const auto& result : results) {
@@ -105,6 +141,7 @@ void UnsplashImagesView::Implementation::processImagesJson(const QByteArray& _js
         imageInfo.previewUrl = imageData["urls"].toObject()["small"].toString();
         imageInfo.downloadUrl = imageData["links"].toObject()["download_location"].toString();
         images.insert(imageInfo.previewUrl, imageInfo);
+        imagesUrlsOrdered.append(imageInfo.previewUrl);
 
         NetworkRequestLoader::loadAsync(
             imageInfo.previewUrl, q, [this](const QByteArray& _imageData, const QUrl& _url) {
@@ -175,13 +212,31 @@ UnsplashImagesView::UnsplashImagesView(QWidget* _parent)
 
 UnsplashImagesView::~UnsplashImagesView() = default;
 
-void UnsplashImagesView::loadImages(const QString& _keywords)
+bool UnsplashImagesView::loadImages(const QString& _keywords)
 {
-    const QUrl url(QString("https://starc.app/api/services/unsplash/search?text=%1")
-                       .arg(_keywords)
-                       .replace(' ', ','));
-    NetworkRequestLoader::loadAsync(
-        url, this, [this](const QByteArray& _response) { d->processImagesJson(_response); });
+    if (d->keywords == _keywords || d->isLoadingActive) {
+        return false;
+    }
+
+    d->keywords = _keywords;
+    d->currentImagesPage = 1;
+    d->images.clear();
+    d->imagesUrlsOrdered.clear();
+    d->loadCurrentPage();
+
+    return true;
+}
+
+bool UnsplashImagesView::loadNextImagesPage()
+{
+    if (d->isLoadingActive) {
+        return false;
+    }
+
+    ++d->currentImagesPage;
+    d->loadCurrentPage();
+
+    return true;
 }
 
 QSize UnsplashImagesView::sizeHint() const
@@ -220,7 +275,8 @@ void UnsplashImagesView::paintEvent(QPaintEvent* _event)
     const auto imageSize = width() / static_cast<qreal>(columns);
     qreal x = 0.0;
     qreal y = 0.0;
-    for (const auto& imageInfo : std::as_const(d->images)) {
+    for (const auto& imageUrl : std::as_const(d->imagesUrlsOrdered)) {
+        const auto& imageInfo = d->images[imageUrl];
         if (!imageInfo.previewImage.isNull()) {
             const QRectF imageRect(x, y, imageSize, imageSize);
             if (imageRect.intersects(_event->rect())) {

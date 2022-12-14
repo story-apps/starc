@@ -22,6 +22,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QScrollArea>
+#include <QScrollBar>
 #include <QStringListModel>
 
 
@@ -218,6 +219,7 @@ public:
     IconButton* pasteImageFromClipboard = nullptr;
     IconButton* chooseImageFile = nullptr;
     UnsplashImagesView* imagesView = nullptr;
+    QScrollBar* imagesScrollBar = nullptr;
 };
 
 CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
@@ -305,6 +307,7 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
 
     auto imagesScrollArea = UiHelper::createScrollArea(_parent);
     imagesScrollArea->setWidget(imagesView);
+    imagesScrollBar = imagesScrollArea->verticalScrollBar();
 
 
     auto textLayout = qobject_cast<QVBoxLayout*>(textPage->widget()->layout());
@@ -464,6 +467,11 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
                 //
                 d->imagesView->loadImages(keywords);
             });
+    });
+    connect(d->imagesScrollBar, &QScrollBar::valueChanged, this, [this](int _value) {
+        if (_value == d->imagesScrollBar->maximum()) {
+            d->imagesView->loadNextImagesPage();
+        }
     });
     connect(d->imagesView, &UnsplashImagesView::imageSelected, this,
             &CoverGeneratorSidebar::unsplashImageSelected);

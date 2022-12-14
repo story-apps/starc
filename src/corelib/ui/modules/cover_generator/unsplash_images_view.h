@@ -19,8 +19,16 @@ public:
     /**
      * @brief Загрузить изображения для заданной поисковой фразы
      */
-    void loadImages(const QString& _keywords);
+    bool loadImages(const QString& _keywords);
 
+    /**
+     * @brief Загрузить следующую страницу изображений
+     */
+    bool loadNextImagesPage();
+
+    /**
+     * @brief Переопределяем размер
+     */
     QSize sizeHint() const override;
     int heightForWidth(int _width) const override;
 
