@@ -29,6 +29,7 @@ public:
      * @brief Параметры постера
      */
     /** @{ **/
+    QColor textBackgroundColor() const;
     CoverTextParameters top1Text() const;
     CoverTextParameters top2Text() const;
     CoverTextParameters beforeNameText() const;
@@ -41,9 +42,14 @@ public:
 
 signals:
     /**
+     * @brief Изменился цвет перекрытия между текстом и изображением
+     */
+    void textBackgroundColorChanged();
+
+    /**
      * @brief Изменились параметры постера
      */
-    void coverParametersChanged();
+    void textParametersChanged();
 
     /**
      * @brief Выбрано изображение для загрузки

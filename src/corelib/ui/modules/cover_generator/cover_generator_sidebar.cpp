@@ -8,6 +8,8 @@
 #include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/icon_button/icon_button.h>
+#include <ui/widgets/label/label.h>
+#include <ui/widgets/slider/slider.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/tab_bar/tab_bar.h>
 #include <ui/widgets/text_field/text_field.h>
@@ -188,6 +190,11 @@ public:
      * @brief Страница текстовых параметров
      */
     QScrollArea* textPage = nullptr;
+    AbstractLabel* textBackgroundColorTitle = nullptr;
+    Slider* textBackgroundColor = nullptr;
+    AbstractLabel* textBackgroundColorBlack = nullptr;
+    AbstractLabel* textBackgroundColorTransparent = nullptr;
+    AbstractLabel* textBackgroundColorWhite = nullptr;
     TextFiledWithOptions* top1Text = nullptr;
     TextFiledWithOptions* top2Text = nullptr;
     TextFiledWithOptions* beforeNameText = nullptr;
@@ -217,6 +224,11 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
     : tabs(new TabBar(_parent))
     , content(new StackWidget(_parent))
     , textPage(UiHelper::createScrollArea(_parent))
+    , textBackgroundColorTitle(new Body1Label(_parent))
+    , textBackgroundColor(new Slider(_parent))
+    , textBackgroundColorBlack(new Body2Label(_parent))
+    , textBackgroundColorTransparent(new Body2Label(_parent))
+    , textBackgroundColorWhite(new Body2Label(_parent))
     , top1Text(new TextFiledWithOptions(_parent))
     , top2Text(new TextFiledWithOptions(_parent))
     , beforeNameText(new TextFiledWithOptions(_parent))
@@ -241,6 +253,10 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
     content->setCurrentWidget(textPage);
     content->addWidget(imagePage);
 
+    textBackgroundColor->setMaximumValue(200);
+    textBackgroundColor->setDefaultValue(100);
+    textBackgroundColor->setValue(100);
+    textBackgroundColorTransparent->setAlignment(Qt::AlignCenter);
     for (auto textFieldWithOptions : {
              top1Text,
              top2Text,
@@ -293,6 +309,17 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
 
     auto textLayout = qobject_cast<QVBoxLayout*>(textPage->widget()->layout());
     auto stretch = textLayout->takeAt(0);
+    textLayout->addWidget(textBackgroundColorTitle);
+    textLayout->addWidget(textBackgroundColor);
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(textBackgroundColorBlack);
+        layout->addWidget(textBackgroundColorTransparent, 1);
+        layout->addWidget(textBackgroundColorWhite);
+        textLayout->addLayout(layout);
+    }
     textLayout->addWidget(top1Text);
     textLayout->addWidget(top2Text);
     textLayout->addWidget(beforeNameText);
@@ -348,6 +375,8 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
         }
     });
     //
+    connect(d->textBackgroundColor, &Slider::valueChanged, this,
+            &CoverGeneratorSidebar::textBackgroundColorChanged);
     for (auto textFieldWithOptions : {
              d->top1Text,
              d->top2Text,
@@ -359,7 +388,7 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
              d->websiteText,
          }) {
         connect(textFieldWithOptions->text, &TextField::textChanged, this,
-                &CoverGeneratorSidebar::coverParametersChanged);
+                &CoverGeneratorSidebar::textParametersChanged);
         connect(textFieldWithOptions->text, &TextField::trailingIconPressed, this,
                 [textFieldWithOptions] {
                     const auto isOptionsVisible = textFieldWithOptions->fontFamily->isVisible();
@@ -372,9 +401,9 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
                     textFieldWithOptions->setOptionsVisible(!isOptionsVisible);
                 });
         connect(textFieldWithOptions->fontFamily, &ComboBox::currentIndexChanged, this,
-                &CoverGeneratorSidebar::coverParametersChanged);
+                &CoverGeneratorSidebar::textParametersChanged);
         connect(textFieldWithOptions->fontSize, &TextField::textChanged, this,
-                &CoverGeneratorSidebar::coverParametersChanged);
+                &CoverGeneratorSidebar::textParametersChanged);
         connect(
             textFieldWithOptions->fontColor, &IconButton::clicked, this,
             [this, textFieldWithOptions] {
@@ -394,7 +423,7 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
                                     ? _color
                                     : Ui::DesignSystem::color().onPrimary());
 
-                            emit coverParametersChanged();
+                            emit textParametersChanged();
                         });
             });
         for (auto iconButton : {
@@ -406,7 +435,7 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
                  textFieldWithOptions->alignRight,
              }) {
             connect(iconButton, &IconButton::checkedChanged, this,
-                    &CoverGeneratorSidebar::coverParametersChanged);
+                    &CoverGeneratorSidebar::textParametersChanged);
         }
     }
     //
@@ -448,6 +477,7 @@ CoverGeneratorSidebar::~CoverGeneratorSidebar() = default;
 
 void CoverGeneratorSidebar::clear()
 {
+    d->textBackgroundColor->setValue(100);
     d->top1Text->text->clear();
     d->top1Text->fontFamily->setCurrentText("Montserrat");
     d->top1Text->fontSize->setText("16");
@@ -484,6 +514,21 @@ void CoverGeneratorSidebar::clear()
     d->websiteText->fontSize->setText("12");
     d->websiteText->fontBold->setChecked(true);
     d->websiteText->alignCenter->setChecked(true);
+}
+
+QColor CoverGeneratorSidebar::textBackgroundColor() const
+{
+    if (d->textBackgroundColor->value() < 100) {
+        QColor color = Qt::black;
+        color.setAlphaF((100.0 - d->textBackgroundColor->value()) / 100.0);
+        return color;
+    } else if (d->textBackgroundColor->value() == 100) {
+        return {};
+    } else { // > 100
+        QColor color = Qt::white;
+        color.setAlphaF((d->textBackgroundColor->value() - 100.0) / 100.0);
+        return color;
+    }
 }
 
 CoverTextParameters CoverGeneratorSidebar::top1Text() const
@@ -530,6 +575,10 @@ void CoverGeneratorSidebar::updateTranslations()
 {
     d->tabs->setTabName(kTextIndex, tr("Text"));
     d->tabs->setTabName(kImageIndex, tr("Background image"));
+    d->textBackgroundColorTitle->setText(tr("Color between text and image"));
+    d->textBackgroundColorBlack->setText(tr("black"));
+    d->textBackgroundColorTransparent->setText(tr("transparent"));
+    d->textBackgroundColorWhite->setText(tr("white"));
     d->top1Text->text->setLabel(tr("Text of the first top line"));
     d->top2Text->text->setLabel(tr("Text of the second top line"));
     d->beforeNameText->text->setLabel(tr("Text above of the project name"));
@@ -560,6 +609,7 @@ void CoverGeneratorSidebar::updateTranslations()
     }
 
     d->searchImages->setLabel(tr("Search images"));
+    d->searchImages->setHelper(tr("Enter keywords for search"));
     d->pasteImageFromClipboard->setToolTip(
         tr("Paste image from clipboard (image file or image url)"));
     d->chooseImageFile->setToolTip(tr("Choose file with image"));
@@ -577,6 +627,29 @@ void CoverGeneratorSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _ev
     d->textPage->widget()->layout()->setContentsMargins(
         Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
         Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12());
+    for (auto label : {
+             d->textBackgroundColorTitle,
+             d->textBackgroundColorBlack,
+             d->textBackgroundColorTransparent,
+             d->textBackgroundColorWhite,
+         }) {
+        label->setBackgroundColor(DesignSystem::color().primary());
+        label->setTextColor(DesignSystem::color().onPrimary());
+    }
+    d->textBackgroundColorTitle->setContentsMargins(DesignSystem::layout().px16(),
+                                                    DesignSystem::layout().px12(),
+                                                    DesignSystem::layout().px16(), 0);
+    d->textBackgroundColorBlack->setContentsMargins(DesignSystem::layout().px16(), 0,
+                                                    DesignSystem::layout().px16(),
+                                                    DesignSystem::layout().px8());
+    d->textBackgroundColorTransparent->setContentsMargins(0, 0, 0, DesignSystem::layout().px8());
+    d->textBackgroundColorWhite->setContentsMargins(DesignSystem::layout().px16(), 0,
+                                                    DesignSystem::layout().px16(),
+                                                    DesignSystem::layout().px8());
+    d->textBackgroundColor->setBackgroundColor(DesignSystem::color().primary());
+    d->textBackgroundColor->setTextColor(DesignSystem::color().onPrimary());
+    d->textBackgroundColor->setContentsMargins(DesignSystem::layout().px16(), 0,
+                                               DesignSystem::layout().px16(), 0);
     for (auto textFieldWithOptions : {
              d->top1Text,
              d->top2Text,

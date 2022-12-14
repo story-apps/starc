@@ -235,7 +235,15 @@ void CoverGeneratorView::Implementation::updateCover()
     if (!backgroundImage.isNull()) {
         painter.drawPixmap(0, 0, coverSize.width(), coverSize.height(), backgroundImage);
     } else {
-        cover.fill(coverImage->backgroundColor());
+        cover.fill(Qt::white);
+    }
+
+    //
+    // Рисуем оверлей над изображением
+    //
+    if (const auto textBackgroundColor = sidebar->textBackgroundColor();
+        textBackgroundColor.isValid()) {
+        painter.fillRect(cover.rect(), textBackgroundColor);
     }
 
     //
@@ -314,8 +322,10 @@ CoverGeneratorView::CoverGeneratorView(QWidget* _parent)
         d->cover.save(imagePath, "PNG");
     });
     //
-    connect(d->sidebar, &CoverGeneratorSidebar::coverParametersChanged,
-            &d->coverParametersDebouncer, &Debouncer::orderWork);
+    connect(d->sidebar, &CoverGeneratorSidebar::textBackgroundColorChanged, this,
+            [this] { d->updateCover(); });
+    connect(d->sidebar, &CoverGeneratorSidebar::textParametersChanged, &d->coverParametersDebouncer,
+            &Debouncer::orderWork);
     connect(&d->coverParametersDebouncer, &Debouncer::gotWork, this, [this] { d->updateCover(); });
     connect(d->sidebar, &CoverGeneratorSidebar::unsplashImageSelected, this,
             [this](const QString& _url, const QString& _copyright) {
