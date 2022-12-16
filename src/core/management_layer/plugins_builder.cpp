@@ -518,6 +518,35 @@ void PluginsBuilder::bind(const QString& _viewMimeType, const QString& _navigato
     navigatorPlugin->bind(viewPlugin);
 }
 
+void PluginsBuilder::bindEditors(const QString& _viewMimeType) const
+{
+    //
+    // Определеим группу редакторо, чтобы их связать
+    //
+    const auto viewGroupMimeType = _viewMimeType.left(_viewMimeType.lastIndexOf("/"));
+    //
+    // Соберём все редакторы заданной группы
+    //
+    QHash<QString, IDocumentManager*> pluginsFiltered;
+    for (auto iter = d->plugins.begin(); iter != d->plugins.end(); ++iter) {
+        if (iter.key().startsWith(viewGroupMimeType)) {
+            pluginsFiltered.insert(iter.key(), iter.value());
+        }
+    }
+    //
+    // И свяжем их
+    //
+    for (auto i = pluginsFiltered.begin(); i != pluginsFiltered.end(); ++i) {
+        for (auto j = pluginsFiltered.begin(); j != pluginsFiltered.end(); ++j) {
+            if (i.key() == j.key()) {
+                continue;
+            }
+
+            i.value()->bind(j.value());
+        }
+    }
+}
+
 void PluginsBuilder::toggleViewFullScreen(bool _isFullScreen, const QString& _viewMimeType) const
 {
     if (!d->plugins.contains(_viewMimeType)) {

@@ -27,6 +27,7 @@ public:
      */
     /** @{ */
     QObject* asQObject() override;
+    bool isNavigationManager() const override;
     Ui::IDocumentView* view() override;
     Ui::IDocumentView* view(BusinessLayer::AbstractModel* _model) override;
     Ui::IDocumentView* secondaryView() override;

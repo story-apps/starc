@@ -42,6 +42,12 @@ public:
 signals:
     /**
      * @brief Изменился индекс текущего элемента модели в текстовом документе (перестился курсор)
+     *        только для primary представления (для связи с навигатором)
+     */
+    void viewCurrentModelIndexChanged(const QModelIndex& _index);
+
+    /**
+     * @brief Изменился индекс текущего элемента в любом из представлений
      */
     void currentModelIndexChanged(const QModelIndex& _index);
 
@@ -53,8 +59,13 @@ protected:
 
 private:
     /**
-     * @brief Установить в редакторе курсор на позицию соответствующую элементу с заданным индексом
-     *        в модели
+     * @brief Установить в редакторе primary редактора курсор на позицию соответствующую элементу с
+     *        заданным индексом в модели
+     */
+    Q_SLOT void setViewCurrentModelIndex(const QModelIndex& _index);
+
+    /**
+     * @brief Установить курсор во всех редакторах в заданный индекс
      */
     Q_SLOT void setCurrentModelIndex(const QModelIndex& _index);
 

@@ -186,6 +186,11 @@ QObject* ScreenplayTextStructureManager::asQObject()
     return this;
 }
 
+bool ScreenplayTextStructureManager::isNavigationManager() const
+{
+    return true;
+}
+
 Ui::IDocumentView* ScreenplayTextStructureManager::view()
 {
     return d->view;
@@ -235,7 +240,7 @@ void ScreenplayTextStructureManager::bind(IDocumentManager* _manager)
 {
     Q_ASSERT(_manager);
 
-    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
+    connect(_manager->asQObject(), SIGNAL(viewCurrentModelIndexChanged(QModelIndex)), this,
             SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
 }
 

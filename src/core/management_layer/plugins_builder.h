@@ -79,6 +79,11 @@ public:
     void bind(const QString& _viewMimeType, const QString& _navigatorMimeType) const;
 
     /**
+     * @brief Связать редакторы одного типа
+     */
+    void bindEditors(const QString& _viewMimeType) const;
+
+    /**
      * @brief Активировать полноэкранный режим
      */
     void toggleViewFullScreen(bool _isFullScreen, const QString& _viewMimeType) const;

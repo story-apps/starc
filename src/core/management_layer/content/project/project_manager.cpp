@@ -3227,6 +3227,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     d->view.activeIndex = sourceItemIndex;
 
     //
+    // Связываем редакторы
+    //
+    d->pluginsBuilder.bindEditors(_viewMimeType);
+
+    //
     // Настроим опции редактора
     //
     Log::debug("Activate plugin view options");

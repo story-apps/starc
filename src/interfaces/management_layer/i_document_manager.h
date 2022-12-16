@@ -42,6 +42,14 @@ public:
     }
 
     /**
+     * @brief Является ли менеджер управляющим навигатора
+     */
+    virtual bool isNavigationManager() const
+    {
+        return false;
+    }
+
+    /**
      * @brief Представление документа для основного окна приложения
      */
     virtual Ui::IDocumentView* view() = 0;

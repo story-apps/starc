@@ -124,6 +124,9 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
     view->dictionariesView()->setDictionaryItems(dictionaryItemsModel);
     setModelForView(_model, view);
 
+    connect(view, &Ui::ScreenplayTextView::currentModelIndexChanged, q,
+            &ScreenplayTextManager::currentModelIndexChanged);
+    //
     auto showBookmarkDialog = [this, view](Ui::BookmarkDialog::DialogType _type) {
         auto item = modelForView(view)->itemForIndex(view->currentModelIndex());
         if (item->type() != BusinessLayer::TextModelItemType::Text) {
@@ -503,12 +506,8 @@ Ui::IDocumentView* ScreenplayTextManager::view(BusinessLayer::AbstractModel* _mo
     if (d->view == nullptr) {
         d->view = d->createView(_model);
 
-        //
-        // Наружу даём сигналы только от первичного представления, только оно может
-        // взаимодействовать с навигатором документа
-        //
         connect(d->view, &Ui::ScreenplayTextView::currentModelIndexChanged, this,
-                &ScreenplayTextManager::currentModelIndexChanged);
+                &ScreenplayTextManager::viewCurrentModelIndexChanged);
     } else {
         d->setModelForView(_model, d->view);
     }
@@ -559,27 +558,35 @@ void ScreenplayTextManager::reconfigure(const QStringList& _changedSettingsKeys)
 
 void ScreenplayTextManager::bind(IDocumentManager* _manager)
 {
-    //
-    // Т.к. навигатор соединяется только с главным инстансом редактора, проверяем создан ли он
-    //
-    if (d->view == nullptr) {
+    Q_ASSERT(_manager);
+    if (_manager == nullptr || _manager == this) {
         return;
     }
 
-    Q_ASSERT(_manager);
-
-    const auto isConnectedFirstTime
-        = connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
-                  SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
-
     //
-    // Ставим в очередь событие нотификацию о смене текущей сцены,
-    // чтобы навигатор отобразил её при первом открытии
+    // Т.к. навигатор соединяется только с главным инстансом редактора, проверяем создан ли он
     //
-    if (isConnectedFirstTime) {
-        QMetaObject::invokeMethod(
-            this, [this] { emit currentModelIndexChanged(d->view->currentModelIndex()); },
-            Qt::QueuedConnection);
+    if (_manager->isNavigationManager()) {
+        const auto isConnectedFirstTime
+            = connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
+                      SLOT(setViewCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
+
+        //
+        // Ставим в очередь событие нотификацию о смене текущей сцены,
+        // чтобы навигатор отобразил её при первом открытии
+        //
+        if (isConnectedFirstTime && d->view != nullptr) {
+            QMetaObject::invokeMethod(
+                this, [this] { emit viewCurrentModelIndexChanged(d->view->currentModelIndex()); },
+                Qt::QueuedConnection);
+        }
+    }
+    //
+    // Между собой можно соединить любые менеджеры редакторов
+    //
+    else {
+        connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
+                SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
     }
 }
 
@@ -614,6 +621,18 @@ bool ScreenplayTextManager::eventFilter(QObject* _watched, QEvent* _event)
     return QObject::eventFilter(_watched, _event);
 }
 
+void ScreenplayTextManager::setViewCurrentModelIndex(const QModelIndex& _index)
+{
+    QSignalBlocker blocker(this);
+
+    if (!_index.isValid() || d->view == nullptr) {
+        return;
+    }
+
+    d->view->setCurrentModelIndex(_index);
+    d->view->setFocus();
+}
+
 void ScreenplayTextManager::setCurrentModelIndex(const QModelIndex& _index)
 {
     QSignalBlocker blocker(this);
@@ -622,8 +641,11 @@ void ScreenplayTextManager::setCurrentModelIndex(const QModelIndex& _index)
         return;
     }
 
-    d->view->setCurrentModelIndex(_index);
-    d->view->setFocus();
+    for (const auto& viewAndModel : std::as_const(d->allViews)) {
+        if (!viewAndModel.view.isNull()) {
+            viewAndModel.view->setCurrentModelIndex(_index);
+        }
+    }
 }
 
 } // namespace ManagementLayer
