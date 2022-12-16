@@ -5,6 +5,7 @@
 #include <3rd_party/webloader/src/NetworkRequestLoader.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
+#include <ui/widgets/circular_progress_bar/circular_progress_bar.h>
 #include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/icon_button/icon_button.h>
@@ -220,6 +221,8 @@ public:
     IconButton* chooseImageFile = nullptr;
     UnsplashImagesView* imagesView = nullptr;
     QScrollBar* imagesScrollBar = nullptr;
+    Body2Label* imagesLoadingLabel = nullptr;
+    CircularProgressBar* imagesLoadingProgress = nullptr;
 };
 
 CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
@@ -246,6 +249,8 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
     , pasteImageFromClipboard(new IconButton(_parent))
     , chooseImageFile(new IconButton(_parent))
     , imagesView(new UnsplashImagesView(_parent))
+    , imagesLoadingLabel(new Body2Label(_parent))
+    , imagesLoadingProgress(new CircularProgressBar(_parent))
 {
     fontsModel.setStringList(QFontDatabase().families());
 
@@ -308,6 +313,8 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
     auto imagesScrollArea = UiHelper::createScrollArea(_parent);
     imagesScrollArea->setWidget(imagesView);
     imagesScrollBar = imagesScrollArea->verticalScrollBar();
+    imagesLoadingLabel->hide();
+    imagesLoadingProgress->hide();
 
 
     auto textLayout = qobject_cast<QVBoxLayout*>(textPage->widget()->layout());
@@ -344,6 +351,14 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
     imageLayout->setSpacing(0);
     imageLayout->addLayout(imageSourceLayout);
     imageLayout->addWidget(imagesScrollArea, 1);
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(imagesLoadingLabel, 1, Qt::AlignVCenter);
+        layout->addWidget(imagesLoadingProgress);
+        imageLayout->addLayout(layout);
+    }
     imagePage->setLayout(imageLayout);
 }
 
@@ -472,6 +487,18 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
         if (_value == d->imagesScrollBar->maximum()) {
             d->imagesView->loadNextImagesPage();
         }
+    });
+    connect(d->imagesView, &UnsplashImagesView::imagesLoadingProgressChanged, this,
+            [this](qreal _progress) {
+                d->imagesLoadingProgress->setProgress(_progress);
+                d->imagesLoadingLabel->show();
+                d->imagesLoadingProgress->show();
+            });
+    connect(d->imagesView, &UnsplashImagesView::imagesLoaded, this, [this] {
+        d->imagesScrollBar->setValue(d->imagesScrollBar->value()
+                                     + d->imagesLoadingProgress->sizeHint().height());
+        d->imagesLoadingLabel->hide();
+        d->imagesLoadingProgress->hide();
     });
     connect(d->imagesView, &UnsplashImagesView::imageSelected, this,
             &CoverGeneratorSidebar::unsplashImageSelected);
@@ -621,6 +648,7 @@ void CoverGeneratorSidebar::updateTranslations()
     d->pasteImageFromClipboard->setToolTip(
         tr("Paste image from clipboard (image file or image url)"));
     d->chooseImageFile->setToolTip(tr("Choose file with image"));
+    d->imagesLoadingLabel->setText(tr("Locading images"));
 }
 
 void CoverGeneratorSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -740,6 +768,19 @@ void CoverGeneratorSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _ev
         isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px12(), 0,
         isLeftToRight() ? Ui::DesignSystem::layout().px12() : 0.0, 0);
     d->imagesView->setBackgroundColor(Ui::DesignSystem::color().primary());
+    for (auto widget : std::vector<Widget*>{
+             d->imagesLoadingLabel,
+             d->imagesLoadingProgress,
+         }) {
+        widget->setBackgroundColor(Ui::DesignSystem::color().primary());
+        widget->setTextColor(ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
+                                                      Ui::DesignSystem::inactiveTextOpacity()));
+    }
+    d->imagesLoadingLabel->setContentsMargins(Ui::DesignSystem::layout().px24(), 0,
+                                              Ui::DesignSystem::layout().px24(), 0);
+    d->imagesLoadingProgress->setContentsMargins(
+        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12(),
+        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12());
 }
 
 } // namespace Ui

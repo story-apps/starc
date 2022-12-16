@@ -97,6 +97,11 @@ public:
     int currentImagesPage = 0;
 
     /**
+     * @brief Докрутили ли до последней страницы
+     */
+    bool isEndPageReached = false;
+
+    /**
      * @brief Ссылка на превьюшку - инфо об изображении
      */
     QHash<QString, UnsplashImageInfo> images;
@@ -120,13 +125,27 @@ UnsplashImagesView::Implementation::Implementation(UnsplashImagesView* _q)
 
 void UnsplashImagesView::Implementation::loadCurrentPage()
 {
+    if (isEndPageReached) {
+        return;
+    }
+
     isLoadingActive = true;
+
+    NetworkRequest* request = new NetworkRequest;
+    connect(request, &NetworkRequest::downloadProgress, q,
+            [this](int _progress) { emit q->imagesLoadingProgressChanged(_progress / 100.0); });
+    connect(
+        request,
+        static_cast<void (NetworkRequest::*)(QByteArray, QUrl)>(&NetworkRequest::downloadComplete),
+        q, [this](const QByteArray& _response) { processImagesJson(_response); });
+    connect(request, &NetworkRequest::finished, request, &NetworkRequest::deleteLater);
+
     const QUrl url(QString("https://starc.app/api/services/unsplash/search?text=%1&page=%2")
                        .arg(keywords)
                        .arg(currentImagesPage)
                        .replace(' ', ','));
-    NetworkRequestLoader::loadAsync(
-        url, q, [this](const QByteArray& _response) { processImagesJson(_response); });
+    request->loadAsync(url);
+    emit q->imagesLoadingProgressChanged(0.0);
 }
 
 void UnsplashImagesView::Implementation::processImagesJson(const QByteArray& _json)
@@ -134,39 +153,45 @@ void UnsplashImagesView::Implementation::processImagesJson(const QByteArray& _js
     isLoadingActive = false;
 
     const auto results = QJsonDocument::fromJson(_json).object()["results"].toArray();
-    for (const auto& result : results) {
-        const auto imageData = result.toObject();
-        UnsplashImageInfo imageInfo;
-        imageInfo.author = imageData["user"].toObject()["name"].toString();
-        imageInfo.previewUrl = imageData["urls"].toObject()["small"].toString();
-        imageInfo.downloadUrl = imageData["links"].toObject()["download_location"].toString();
-        images.insert(imageInfo.previewUrl, imageInfo);
-        imagesUrlsOrdered.append(imageInfo.previewUrl);
+    if (!results.isEmpty()) {
+        for (const auto& result : results) {
+            const auto imageData = result.toObject();
+            UnsplashImageInfo imageInfo;
+            imageInfo.author = imageData["user"].toObject()["name"].toString();
+            imageInfo.previewUrl = imageData["urls"].toObject()["small"].toString();
+            imageInfo.downloadUrl = imageData["links"].toObject()["download_location"].toString();
+            images.insert(imageInfo.previewUrl, imageInfo);
+            imagesUrlsOrdered.append(imageInfo.previewUrl);
 
-        NetworkRequestLoader::loadAsync(
-            imageInfo.previewUrl, q, [this](const QByteArray& _imageData, const QUrl& _url) {
-                auto& imageInfo = images[_url.toString()];
-                imageInfo.previewImage.loadFromData(_imageData);
+            NetworkRequestLoader::loadAsync(
+                imageInfo.previewUrl, q, [this](const QByteArray& _imageData, const QUrl& _url) {
+                    auto& imageInfo = images[_url.toString()];
+                    imageInfo.previewImage.loadFromData(_imageData);
 
-                auto opacityAnimation = new QVariantAnimation(q);
-                opacityAnimation->setStartValue(0.0);
-                opacityAnimation->setEndValue(1.0);
-                opacityAnimation->setEasingCurve(QEasingCurve::OutQuad);
-                opacityAnimation->setDuration(360);
-                connect(opacityAnimation, &QVariantAnimation::valueChanged, q,
-                        [this, _url](const QVariant& _value) {
-                            if (!images.contains(_url.toString())) {
-                                return;
-                            }
-                            auto& imageInfo = images[_url.toString()];
-                            imageInfo.opacity = _value.toReal();
-                            q->update();
-                        });
-                opacityAnimation->start(QAbstractAnimation::DeleteWhenStopped);
-            });
+                    auto opacityAnimation = new QVariantAnimation(q);
+                    opacityAnimation->setStartValue(0.0);
+                    opacityAnimation->setEndValue(1.0);
+                    opacityAnimation->setEasingCurve(QEasingCurve::OutQuad);
+                    opacityAnimation->setDuration(360);
+                    connect(opacityAnimation, &QVariantAnimation::valueChanged, q,
+                            [this, _url](const QVariant& _value) {
+                                if (!images.contains(_url.toString())) {
+                                    return;
+                                }
+                                auto& imageInfo = images[_url.toString()];
+                                imageInfo.opacity = _value.toReal();
+                                q->update();
+                            });
+                    opacityAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+                });
+        }
+
+        q->updateGeometry();
+    } else {
+        isEndPageReached = true;
     }
 
-    q->updateGeometry();
+    emit q->imagesLoaded();
 }
 
 QPair<UnsplashImageInfo, QRectF> UnsplashImagesView::Implementation::imageInfoFor(
@@ -222,6 +247,7 @@ bool UnsplashImagesView::loadImages(const QString& _keywords)
     d->currentImagesPage = 1;
     d->images.clear();
     d->imagesUrlsOrdered.clear();
+    d->isEndPageReached = false;
     d->loadCurrentPage();
 
     return true;

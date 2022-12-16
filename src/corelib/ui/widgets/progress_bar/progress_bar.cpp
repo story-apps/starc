@@ -24,6 +24,9 @@ ProgressBar::Implementation::Implementation()
 }
 
 
+// ****
+
+
 ProgressBar::ProgressBar(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation)

@@ -4,21 +4,42 @@
 
 #include <QPaintEvent>
 #include <QPainter>
+#include <QVariantAnimation>
 
 
 class CircularProgressBar::Implementation
 {
 public:
+    Implementation();
+
     QColor barColor;
-    qreal value = 0.17;
     QString text;
+    qreal progress = 0;
+    QVariantAnimation progressAnimation;
 };
+
+CircularProgressBar::Implementation::Implementation()
+{
+    progressAnimation.setDuration(180);
+    progressAnimation.setEasingCurve(QEasingCurve::OutQuad);
+}
+
+
+// ****
+
 
 CircularProgressBar::CircularProgressBar(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation)
 {
+    connect(&d->progressAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                d->progress = _value.toReal();
+                update();
+            });
 }
+
+CircularProgressBar::~CircularProgressBar() = default;
 
 void CircularProgressBar::setBarColor(const QColor& _color)
 {
@@ -30,16 +51,32 @@ void CircularProgressBar::setBarColor(const QColor& _color)
     update();
 }
 
-CircularProgressBar::~CircularProgressBar() = default;
-
-void CircularProgressBar::setValue(qreal _value)
+void CircularProgressBar::setProgress(qreal _progress)
 {
-    if (qFuzzyCompare(d->value, _value)) {
+    if (_progress < 0 || _progress > 1.0) {
         return;
     }
 
-    d->value = _value;
-    update();
+    if (qFuzzyCompare(d->progress, _progress)) {
+        return;
+    }
+
+    if (!isVisible()) {
+        d->progressAnimation.setEndValue(_progress);
+        d->progressAnimation.setCurrentTime(d->progressAnimation.duration());
+        d->progress = _progress;
+        return;
+    }
+
+    if (d->progressAnimation.state() == QVariantAnimation::Stopped) {
+        d->progressAnimation.setStartValue(d->progress);
+        d->progressAnimation.setEndValue(_progress);
+        d->progressAnimation.start();
+    } else {
+        d->progressAnimation.pause();
+        d->progressAnimation.setEndValue(_progress);
+        d->progressAnimation.resume();
+    }
 }
 
 void CircularProgressBar::setText(const QString& _text)
@@ -54,7 +91,9 @@ void CircularProgressBar::setText(const QString& _text)
 
 QSize CircularProgressBar::sizeHint() const
 {
-    return QSize(width(), width());
+    return QSize(
+        contentsMargins().left() + Ui::DesignSystem::layout().px24() + contentsMargins().right(),
+        contentsMargins().top() + Ui::DesignSystem::layout().px24() + contentsMargins().bottom());
 }
 
 void CircularProgressBar::paintEvent(QPaintEvent* _event)
@@ -78,24 +117,24 @@ void CircularProgressBar::paintEvent(QPaintEvent* _event)
                            minSideLength, minSideLength);
 
     QPen pen;
-    pen.setColor(d->barColor);
+    pen.setColor(d->barColor.isValid() ? d->barColor : textColor());
     pen.setWidthF(Ui::DesignSystem::progressBar().circularTrackHeight());
     painter.setPen(pen);
 
     //
     // Фон
     //
-    painter.setOpacity(Ui::DesignSystem::progressBar().unfilledPartOpacity());
     int startAngle = 90 * 16;
     int spanAngle = 360 * 360 * 16;
-    painter.drawArc(rectangle, startAngle, spanAngle);
+    //    painter.setOpacity(Ui::DesignSystem::progressBar().unfilledPartOpacity());
+    //    painter.drawArc(rectangle, startAngle, spanAngle);
 
     //
     // Заполнение
     //
     painter.setOpacity(1.0);
     startAngle = 90 * 16;
-    qreal valueCorrected = d->value;
+    qreal valueCorrected = d->progress;
     while (valueCorrected > 1.0) {
         valueCorrected -= 1.0;
     }
@@ -105,9 +144,10 @@ void CircularProgressBar::paintEvent(QPaintEvent* _event)
     //
     // Текст
     //
-    pen.setColor(textColor());
-    painter.setPen(pen);
-    painter.setFont(Ui::DesignSystem::font().button());
-    painter.drawText(rectangle, Qt::AlignCenter,
-                     d->text.isEmpty() ? QString::number(d->value * 100, 'f', 1) + "%" : d->text);
+    if (!d->text.isEmpty()) {
+        pen.setColor(textColor());
+        painter.setPen(pen);
+        painter.setFont(Ui::DesignSystem::font().button());
+        painter.drawText(rectangle, Qt::AlignCenter, d->text);
+    }
 }

@@ -1175,7 +1175,7 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     qreal linearTrackHeight = 2.0;
-    qreal circularTrackHeight = 8.0;
+    qreal circularTrackHeight = 2.0;
     qreal unfilledPartOpacity = 0.24;
 };
 

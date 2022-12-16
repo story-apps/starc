@@ -34,6 +34,16 @@ public:
 
 signals:
     /**
+     * @brief Изменился прогресс загрузки изображений
+     */
+    void imagesLoadingProgressChanged(qreal _progress);
+
+    /**
+     * @brief Завершилась загрузка очередной порции измображений
+     */
+    void imagesLoaded();
+
+    /**
      * @brief Выбрано изображение для загрузки
      */
     void imageSelected(const QString& _url, const QString& _copyright);
