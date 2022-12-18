@@ -23,7 +23,11 @@ QColor ColorHelper::colorBetween(const QColor& _lhs, const QColor& _rhs)
 
 bool ColorHelper::isColorLight(const QColor& _color)
 {
-    return (_color.redF() + _color.greenF() + _color.blueF()) / 3 > 0.55;
+    if ((_color.hue() < 20 || _color.hue() > 220) && _color.saturationF() > 0.7) {
+        return false;
+    } else {
+        return _color.valueF() > 0.55;
+    }
 }
 
 QColor ColorHelper::contrasted(const QColor& _color)
