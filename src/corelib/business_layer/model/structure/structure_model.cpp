@@ -333,6 +333,12 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         parentItem = itemForType(Domain::DocumentObjectType::Characters);
         Q_ASSERT(parentItem);
         appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
+
+        //
+        // Обновляем родителя, т.к. у него видмость зависит от наличия детей
+        //
+        updateItem(parentItem);
+
         break;
     }
 
@@ -344,6 +350,12 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         parentItem = itemForType(Domain::DocumentObjectType::Locations);
         Q_ASSERT(parentItem);
         appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
+
+        //
+        // Обновляем родителя, т.к. у него видмость зависит от наличия детей
+        //
+        updateItem(parentItem);
+
         break;
     }
 
