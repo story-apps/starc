@@ -59,11 +59,19 @@ ColorPicker::Implementation::Implementation(QWidget* _parent)
 
     for (auto screen : QApplication::screens()) {
         auto overlay = new Widget;
-        overlay->move(screen->geometry().topLeft());
+        overlay->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
         overlay->setAttribute(Qt::WA_TranslucentBackground);
-        overlay->setMouseTracking(true);
-        overlay->setBackgroundColor(Qt::transparent);
         overlay->setCursor(Qt::CrossCursor);
+        overlay->setMouseTracking(true);
+
+        //
+        // Если сделать полностью прозрачный фон, то на Windows такое окно автоматом закрывается
+        //
+        QColor backgroundColor = Qt::white;
+        backgroundColor.setAlpha(1);
+        overlay->setBackgroundColor(backgroundColor);
+
+        overlay->move(screen->geometry().topLeft());
         overlay->hide();
         screenOverlays.append(overlay);
     }
@@ -139,7 +147,7 @@ ColorPicker::ColorPicker(QWidget* _parent)
         d->isScreenColorPicking = true;
         for (auto screenOverlay : std::as_const(d->screenOverlays)) {
             screenOverlay->raise();
-            screenOverlay->showFullScreen();
+            screenOverlay->showMaximized();
         }
     });
     connect(d->colorSlider, &color_widgets::Color2DSlider::colorChanged, this,
