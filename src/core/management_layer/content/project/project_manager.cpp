@@ -3186,6 +3186,17 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         d->toolBar->setCurrentViewMimeType(viewMimeType);
     }
     //
+    // FIXME: SAD-810: выпилить в версии 0.5.0
+    //
+    if (viewMimeType == "application/x-starc/editor/screenplay/treatment") {
+        viewMimeType = "application/x-starc/editor/screenplay/treatment/text";
+    } else if (viewMimeType == "application/x-starc/editor/screenplay/text") {
+        viewMimeType = "application/x-starc/editor/screenplay/text/text";
+    } else if (viewMimeType == "application/x-starc/editor/screenplay/cards") {
+        viewMimeType = "application/x-starc/editor/screenplay/text/cards";
+    }
+
+    //
     // ... сохраним последний используемый с данным документом редактор
     //
     setSettingsValue(documentSettingsKey(sourceItem->uuid(), kCurrentViewMimeTypeKey),
@@ -3229,7 +3240,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Связываем редакторы
     //
-    d->pluginsBuilder.bindEditors(_viewMimeType);
+    d->pluginsBuilder.bindEditors(viewMimeType);
 
     //
     // Настроим опции редактора

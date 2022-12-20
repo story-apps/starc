@@ -40,11 +40,11 @@ const QString kSimpleTextEditorMime = QStringLiteral("application/x-starc/editor
 const QString kSimpleTextNavigatorMime = QStringLiteral("application/x-starc/navigator/text/text");
 //
 const QString kScreenplayTitlePageEditorMime = QStringLiteral("application/x-starc/editor/screenplay/title-page");
-const QString kScreenplayTreatmentEditorMime = QStringLiteral("application/x-starc/editor/screenplay/treatment");
+const QString kScreenplayTreatmentEditorMime = QStringLiteral("application/x-starc/editor/screenplay/treatment/text");
 const QString kScreenplayTreatmentNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/treatment");
-const QString kScreenplayTextEditorMime = QStringLiteral("application/x-starc/editor/screenplay/text");
+const QString kScreenplayTextEditorMime = QStringLiteral("application/x-starc/editor/screenplay/text/text");
 const QString kScreenplayTextNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/text");
-const QString kScreenplayTextCardsMime = QStringLiteral("application/x-starc/editor/screenplay/cards");
+const QString kScreenplayTextCardsMime = QStringLiteral("application/x-starc/editor/screenplay/text/cards");
 const QString kScreenplayStatisticsViewMime = QStringLiteral("application/x-starc/view/screenplay/statistics");
 const QString kScreenplayStatisticsNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/statistics");
 //
@@ -520,6 +520,10 @@ void PluginsBuilder::bind(const QString& _viewMimeType, const QString& _navigato
 
 void PluginsBuilder::bindEditors(const QString& _viewMimeType) const
 {
+    if (_viewMimeType.isEmpty()) {
+        return;
+    }
+
     //
     // Определеим группу редакторо, чтобы их связать
     //
