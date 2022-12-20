@@ -162,6 +162,11 @@ public:
     int reviewMarksSize() const;
 
     /**
+     * @brief Пуста ли группа
+     */
+    bool isEmpty() const;
+
+    /**
      * @brief Определяем интерфейс получения данных группы
      */
     QVariant data(int _role) const override;

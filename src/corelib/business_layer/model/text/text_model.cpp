@@ -1474,14 +1474,33 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         // Просто вставляем их внутрь или после последнего элемента
         //
         for (auto item : lastItemsFromSourceScene) {
-            auto textItem = static_cast<TextModelTextItem*>(item);
             //
             // Удаляем пустые элементы модели
             //
-            if (textItem->text().isEmpty()) {
-                delete textItem;
-                textItem = nullptr;
-                continue;
+            switch (item->type()) {
+            case TextModelItemType::Group: {
+                auto groupItem = static_cast<TextModelGroupItem*>(item);
+                if (groupItem->isEmpty()) {
+                    delete groupItem;
+                    groupItem = nullptr;
+                    continue;
+                }
+                break;
+            }
+
+            case TextModelItemType::Text: {
+                auto textItem = static_cast<TextModelTextItem*>(item);
+                if (textItem->text().isEmpty()) {
+                    delete textItem;
+                    textItem = nullptr;
+                    continue;
+                }
+                break;
+            }
+
+            default: {
+                break;
+            }
             }
 
             if (lastItem->type() == TextModelItemType::Group) {

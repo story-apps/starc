@@ -369,6 +369,11 @@ int TextModelGroupItem::reviewMarksSize() const
     return d->reviewMarksSize;
 }
 
+bool TextModelGroupItem::isEmpty() const
+{
+    return d->title.isEmpty() && d->heading.isEmpty() && d->text.isEmpty();
+}
+
 QVariant TextModelGroupItem::data(int _role) const
 {
     switch (_role) {
