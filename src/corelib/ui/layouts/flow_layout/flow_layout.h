@@ -44,7 +44,10 @@
 #include <QLayout>
 #include <QRect>
 #include <QStyle>
-class FlowLayout : public QLayout
+
+#include <corelib_global.h>
+
+class CORE_LIBRARY_EXPORT FlowLayout : public QLayout
 {
 public:
     explicit FlowLayout(QWidget* parent, int margin = -1, int hSpacing = -1, int vSpacing = -1);
