@@ -201,7 +201,8 @@ QPair<UnsplashImageInfo, QRectF> UnsplashImagesView::Implementation::imageInfoFo
     const auto imageSize = q->width() / static_cast<qreal>(columns);
     qreal x = 0.0;
     qreal y = 0.0;
-    for (const auto& imageInfo : std::as_const(images)) {
+    for (const auto& imageUrl : std::as_const(imagesUrlsOrdered)) {
+        const auto& imageInfo = images[imageUrl];
         if (!imageInfo.previewImage.isNull()) {
             const QRectF imageRect(x, y, imageSize, imageSize);
             if (imageRect.contains(_position)) {
