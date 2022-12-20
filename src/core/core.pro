@@ -88,6 +88,7 @@ SOURCES += \
     ui/onboarding/onboarding_tool_bar.cpp \
     ui/onboarding/onboarding_view.cpp \
     ui/project/create_document_dialog.cpp \
+    ui/project/create_document_dialog_option.cpp \
     ui/project/create_version_dialog.cpp \
     ui/project/project_navigator.cpp \
     ui/project/project_tool_bar.cpp \
@@ -154,6 +155,7 @@ HEADERS += \
     ui/onboarding/onboarding_tool_bar.h \
     ui/onboarding/onboarding_view.h \
     ui/project/create_document_dialog.h \
+    ui/project/create_document_dialog_option.h \
     ui/project/create_version_dialog.h \
     ui/project/project_navigator.h \
     ui/project/project_tool_bar.h \

@@ -1,22 +1,21 @@
 #include "create_document_dialog.h"
 
+#include "create_document_dialog_option.h"
+
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
 #include <ui/design_system/design_system.h>
+#include <ui/layouts/flow_layout/flow_layout.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/label/label.h>
-#include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/text_field/text_field.h>
-#include <ui/widgets/tree/tree.h>
 #include <utils/helpers/names_generator.h>
 #include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
-#include <QStandardItemModel>
-#include <QWidgetAction>
 
 
 namespace Ui {
@@ -30,12 +29,17 @@ class CreateDocumentDialog::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
-    void updateDocumentInfo();
+    void updateDocumentInfo(Domain::DocumentObjectType _type);
 
 
-    QStandardItemModel* typesModel = nullptr;
+    Widget* optionsContainer = nullptr;
+    QVBoxLayout* optionsLayout = nullptr;
+    AbstractLabel* storyTitle;
+    AbstractLabel* storyWorldTitle;
+    AbstractLabel* otherTitle;
+    QVector<CreateDocumentDialogOption*> options;
 
-    Tree* documentType = nullptr;
+    H6Label* title = nullptr;
     Body1Label* documentInfo = nullptr;
     TextField* documentName = nullptr;
     bool insertIntoParentEnabled = false;
@@ -47,8 +51,12 @@ public:
 };
 
 CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
-    : typesModel(new QStandardItemModel(_parent))
-    , documentType(new Tree(_parent))
+    : optionsContainer(new Widget(_parent))
+    , optionsLayout(new QVBoxLayout(optionsContainer))
+    , storyTitle(new Subtitle1Label(_parent))
+    , storyWorldTitle(new Subtitle1Label(_parent))
+    , otherTitle(new Subtitle1Label(_parent))
+    , title(new H6Label(_parent))
     , documentInfo(new Body1Label(_parent))
     , documentName(new TextField(_parent))
     , insertIntoParent(new CheckBox(_parent))
@@ -56,39 +64,57 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     , cancelButton(new Button(_parent))
     , createButton(new Button(_parent))
 {
-    new Shadow(Qt::TopEdge, documentType);
-
-    auto makeItem = [](Domain::DocumentObjectType _type) {
-        auto item = new QStandardItem;
-        item->setData(Domain::iconForType(_type), Qt::DecorationRole);
-        item->setData(static_cast<int>(_type), kTypeRole);
-        item->setEditable(false);
-        return item;
+    auto makeOption = [this, &_parent](Domain::DocumentObjectType _type) {
+        auto option = new CreateDocumentDialogOption(_type, _parent);
+        options.append(option);
+        return option;
     };
 
-    if (settingsValue(DataStorageLayer::kComponentsSimpleTextAvailableKey).toBool()) {
-        typesModel->appendRow(makeItem(Domain::DocumentObjectType::Folder));
-        typesModel->appendRow(makeItem(Domain::DocumentObjectType::SimpleText));
+    optionsLayout->setContentsMargins({});
+    optionsLayout->setSpacing(0);
+    optionsLayout->addWidget(storyTitle);
+    {
+        auto layout = new FlowLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        if (settingsValue(DataStorageLayer::kComponentsScreenplayAvailableKey).toBool()) {
+            layout->addWidget(makeOption(Domain::DocumentObjectType::Screenplay));
+        }
+        if (settingsValue(DataStorageLayer::kComponentsComicBookAvailableKey).toBool()) {
+            layout->addWidget(makeOption(Domain::DocumentObjectType::ComicBook));
+        }
+        if (settingsValue(DataStorageLayer::kComponentsAudioplayAvailableKey).toBool()) {
+            layout->addWidget(makeOption(Domain::DocumentObjectType::Audioplay));
+        }
+        if (settingsValue(DataStorageLayer::kComponentsStageplayAvailableKey).toBool()) {
+            layout->addWidget(makeOption(Domain::DocumentObjectType::Stageplay));
+        }
+        optionsLayout->addLayout(layout);
     }
-    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Character));
-    typesModel->appendRow(makeItem(Domain::DocumentObjectType::Location));
-    if (settingsValue(DataStorageLayer::kComponentsScreenplayAvailableKey).toBool()) {
-        typesModel->appendRow(makeItem(Domain::DocumentObjectType::Screenplay));
+    optionsLayout->addWidget(storyWorldTitle);
+    {
+        auto layout = new FlowLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(makeOption(Domain::DocumentObjectType::Character));
+        layout->addWidget(makeOption(Domain::DocumentObjectType::Location));
+        optionsLayout->addLayout(layout);
     }
-    if (settingsValue(DataStorageLayer::kComponentsComicBookAvailableKey).toBool()) {
-        typesModel->appendRow(makeItem(Domain::DocumentObjectType::ComicBook));
+    optionsLayout->addWidget(otherTitle);
+    {
+        auto layout = new FlowLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        if (settingsValue(DataStorageLayer::kComponentsSimpleTextAvailableKey).toBool()) {
+            layout->addWidget(makeOption(Domain::DocumentObjectType::Folder));
+            layout->addWidget(makeOption(Domain::DocumentObjectType::SimpleText));
+        }
+        layout->addWidget(makeOption(Domain::DocumentObjectType::ImagesGallery));
+        optionsLayout->addLayout(layout);
     }
-    if (settingsValue(DataStorageLayer::kComponentsAudioplayAvailableKey).toBool()) {
-        typesModel->appendRow(makeItem(Domain::DocumentObjectType::Audioplay));
-    }
-    if (settingsValue(DataStorageLayer::kComponentsStageplayAvailableKey).toBool()) {
-        typesModel->appendRow(makeItem(Domain::DocumentObjectType::Stageplay));
-    }
-    typesModel->appendRow(makeItem(Domain::DocumentObjectType::ImagesGallery));
 
-    UiHelper::setFocusPolicyRecursively(documentType, Qt::NoFocus);
-    documentType->setModel(typesModel);
-    documentType->setCurrentIndex(typesModel->index(0, 0));
+    UiHelper::setFocusPolicyRecursively(optionsContainer, Qt::NoFocus);
+    options.constFirst()->setChecked(true);
 
     documentName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
@@ -100,8 +126,19 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addWidget(createButton);
 }
 
-void CreateDocumentDialog::Implementation::updateDocumentInfo()
+void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentObjectType _type)
 {
+    const QHash<Domain::DocumentObjectType, QString> documenTypeToTitle = {
+        { Domain::DocumentObjectType::Folder, tr("Add folder") },
+        { Domain::DocumentObjectType::SimpleText, tr("Add text") },
+        { Domain::DocumentObjectType::Character, tr("Add character") },
+        { Domain::DocumentObjectType::Location, tr("Add location") },
+        { Domain::DocumentObjectType::Screenplay, tr("Add screenplay") },
+        { Domain::DocumentObjectType::ComicBook, tr("Add comic book") },
+        { Domain::DocumentObjectType::Audioplay, tr("Add audioplay") },
+        { Domain::DocumentObjectType::Stageplay, tr("Add stageplay") },
+        { Domain::DocumentObjectType::ImagesGallery, tr("Add image gallery") },
+    };
     const QHash<Domain::DocumentObjectType, QString> documenTypeToInfo = {
         { Domain::DocumentObjectType::Folder,
           tr("Create a folder to group documents inside the story.") },
@@ -126,11 +163,10 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo()
           tr("Create a moodboard with atmospheric images or photos.") },
     };
 
-    const auto documentTypeData = static_cast<Domain::DocumentObjectType>(
-        documentType->currentIndex().data(kTypeRole).toInt());
-    documentInfo->setText(documenTypeToInfo.value(documentTypeData));
-    if (documentTypeData == Domain::DocumentObjectType::Character
-        || documentTypeData == Domain::DocumentObjectType::Location) {
+    title->setText(documenTypeToTitle.value(_type));
+    documentInfo->setText(documenTypeToInfo.value(_type));
+    if (_type == Domain::DocumentObjectType::Character
+        || _type == Domain::DocumentObjectType::Location) {
         insertIntoParent->hide();
     } else {
         insertIntoParent->setVisible(insertIntoParentEnabled);
@@ -149,33 +185,42 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
 
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
-    contentsLayout()->addWidget(d->documentType, 0, 0, 5, 1);
-    contentsLayout()->addWidget(d->documentInfo, 0, 1, 1, 1);
-    contentsLayout()->addWidget(d->documentName, 1, 1, 1, 1);
-    contentsLayout()->addWidget(d->insertIntoParent, 2, 1, 1, 1);
-    contentsLayout()->setRowStretch(3, 1);
-    contentsLayout()->addLayout(d->buttonsLayout, 4, 0, 1, 2);
-    contentsLayout()->setColumnStretch(0, 1);
-    contentsLayout()->setColumnStretch(1, 2);
+    contentsLayout()->addWidget(d->optionsContainer, 0, 0, 6, 1);
+    contentsLayout()->addWidget(d->title, 0, 1, 1, 1);
+    contentsLayout()->addWidget(d->documentInfo, 1, 1, 1, 1);
+    contentsLayout()->addWidget(d->documentName, 2, 1, 1, 1);
+    contentsLayout()->addWidget(d->insertIntoParent, 3, 1, 1, 1);
+    contentsLayout()->setRowStretch(4, 1);
+    contentsLayout()->addLayout(d->buttonsLayout, 5, 1, 1, 1);
+    contentsLayout()->setColumnStretch(0, 2);
+    contentsLayout()->setColumnStretch(1, 1);
 
-    connect(d->documentType, &Tree::currentIndexChanged, this, [this] {
-        d->documentName->setFocus();
-        d->updateDocumentInfo();
+    for (auto option : std::as_const(d->options)) {
+        connect(option, &CreateDocumentDialogOption::checkedChanged, this, [this](bool _isChecked) {
+            if (!_isChecked) {
+                return;
+            }
 
-        const auto documentType = static_cast<Domain::DocumentObjectType>(
-            d->documentType->currentIndex().data(kTypeRole).toInt());
-        if (documentType == Domain::DocumentObjectType::Character) {
-            NamesGenerator::bind(d->documentName);
-        } else {
-            NamesGenerator::unbind(d->documentName);
-        }
-    });
+            for (auto option : std::as_const(d->options)) {
+                if (option != sender()) {
+                    option->setChecked(false);
+                    continue;
+                }
+
+                d->updateDocumentInfo(option->documentType());
+            }
+        });
+    }
     connect(d->documentName, &TextField::textChanged, this,
             [this] { d->documentName->setError({}); });
     connect(d->createButton, &Button::clicked, this, [this] {
-        const auto documentTypeData = d->documentType->currentIndex().data(kTypeRole);
-        Q_ASSERT(documentTypeData.isValid());
-        const auto documentType = static_cast<Domain::DocumentObjectType>(documentTypeData.toInt());
+        Domain::DocumentObjectType documentType = Domain::DocumentObjectType::Undefined;
+        for (auto option : std::as_const(d->options)) {
+            if (option->isChecked()) {
+                documentType = option->documentType();
+                break;
+            }
+        }
 
         //
         // Персонажи и локации нельзя создавать без названия
@@ -202,13 +247,10 @@ CreateDocumentDialog::~CreateDocumentDialog() = default;
 
 void CreateDocumentDialog::setDocumentType(Domain::DocumentObjectType _type)
 {
-    const auto typesModel = d->documentType->model();
-    for (int row = 0; row < typesModel->rowCount(); ++row) {
-        const auto typeIndex = typesModel->index(row, 0);
-        if (typeIndex.data(kTypeRole).isValid()
-            && typeIndex.data(kTypeRole).toInt() == static_cast<int>(_type)) {
-            d->documentType->setCurrentIndex(typeIndex);
-            return;
+    for (auto option : std::as_const(d->options)) {
+        if (option->documentType() == _type) {
+            option->setChecked(true);
+            break;
         }
     }
 }
@@ -249,65 +291,18 @@ QWidget* CreateDocumentDialog::lastFocusableWidget() const
 
 void CreateDocumentDialog::updateTranslations()
 {
-    setTitle(tr("Add document to the story"));
+    d->storyTitle->setText(tr("Story"));
+    d->storyWorldTitle->setText(tr("World of story"));
+    d->otherTitle->setText(tr("Structure & notes"));
 
-    for (int row = 0; row < d->typesModel->rowCount(); ++row) {
-        auto item = d->typesModel->item(row);
-        switch (static_cast<Domain::DocumentObjectType>(item->data(kTypeRole).toInt())) {
-        case Domain::DocumentObjectType::Folder: {
-            item->setText(tr("Folder"));
+    d->title->setText(tr("Add document"));
+    for (auto option : std::as_const(d->options)) {
+        if (option->isChecked()) {
+            d->updateDocumentInfo(option->documentType());
             break;
-        }
-
-        case Domain::DocumentObjectType::SimpleText: {
-            item->setText(tr("Text"));
-            break;
-        }
-
-        case Domain::DocumentObjectType::Character: {
-            item->setText(tr("Character"));
-            break;
-        }
-
-        case Domain::DocumentObjectType::Location: {
-            item->setText(tr("Location"));
-            break;
-        }
-
-        case Domain::DocumentObjectType::Screenplay: {
-            item->setText(tr("Screenplay"));
-            break;
-        }
-
-        case Domain::DocumentObjectType::ComicBook: {
-            item->setText(tr("Comic book"));
-            break;
-        }
-
-        case Domain::DocumentObjectType::Audioplay: {
-            item->setText(tr("Audioplay"));
-            break;
-        }
-
-        case Domain::DocumentObjectType::Stageplay: {
-            item->setText(tr("Stageplay"));
-            break;
-        }
-
-        case Domain::DocumentObjectType::ImagesGallery: {
-            item->setText(tr("Images gallery"));
-            break;
-        }
-
-        default: {
-            Q_ASSERT(false);
-            break;
-        }
         }
     }
-
     d->documentName->setLabel(tr("Name"));
-    d->updateDocumentInfo();
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(tr("Create"));
 }
@@ -316,13 +311,34 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    setContentMaximumWidth(Ui::DesignSystem::layout().px(600));
+    setContentFixedWidth(Ui::DesignSystem::layout().px(888));
 
-    d->documentType->setBackgroundColor(DesignSystem::color().background());
-    d->documentType->setTextColor(DesignSystem::color().onBackground());
-    d->documentType->setMinimumWidth(d->documentType->sizeHintForColumn(0));
-    d->documentType->setMinimumHeight(360 * Ui::DesignSystem::scaleFactor());
+    d->optionsContainer->setBackgroundColor(DesignSystem::color().surface());
+    d->optionsContainer->setFixedHeight(DesignSystem::layout().px(542));
+    d->optionsLayout->setContentsMargins(
+        isLeftToRight() ? DesignSystem::layout().px16() : 0.0, DesignSystem::layout().px8(),
+        isLeftToRight() ? 0.0 : DesignSystem::layout().px16(), DesignSystem::layout().px16());
+    for (auto title : std::vector<Widget*>{
+             d->storyTitle,
+             d->storyWorldTitle,
+             d->otherTitle,
+         }) {
+        title->setBackgroundColor(DesignSystem::color().surface());
+        title->setTextColor(DesignSystem::color().onSurface());
+        title->setContentsMargins(DesignSystem::layout().px16(), DesignSystem::layout().px12(),
+                                  DesignSystem::layout().px16(), DesignSystem::layout().px4());
+    }
+    for (auto option : std::as_const(d->options)) {
+        option->setBackgroundColor(DesignSystem::color().surface());
+        option->setTextColor(DesignSystem::color().onSurface());
+        option->setContentsMargins(DesignSystem::layout().px8(), DesignSystem::layout().px8(),
+                                   DesignSystem::layout().px8(), DesignSystem::layout().px8());
+    }
 
+    d->title->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->title->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->title->setContentsMargins(DesignSystem::layout().px24(), DesignSystem::layout().px24(),
+                                 DesignSystem::layout().px24(), DesignSystem::layout().px16());
     d->documentName->setTextColor(Ui::DesignSystem::color().onBackground());
     d->documentName->setBackgroundColor(Ui::DesignSystem::color().onBackground());
 

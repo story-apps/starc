@@ -3,23 +3,25 @@
 #include <ui/widgets/widget/widget.h>
 
 namespace Domain {
-struct PaymentOption;
+enum class DocumentObjectType;
 }
+
 
 namespace Ui {
 
 /**
- * @brief Виджет с параметрами платёжной опции
+ * @brief Виджет с информацией о новом документе
  */
-class PurchaseDialogOption : public Widget
+class CreateDocumentDialogOption : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit PurchaseDialogOption(const Domain::PaymentOption& _option, QWidget* _parent = nullptr);
-    ~PurchaseDialogOption() override;
+    explicit CreateDocumentDialogOption(const Domain::DocumentObjectType& _documentType,
+                                        QWidget* _parent = nullptr);
+    ~CreateDocumentDialogOption() override;
 
-    const Domain::PaymentOption& paymentOption() const;
+    const Domain::DocumentObjectType& documentType() const;
 
     bool isChecked() const;
     void setChecked(bool _checked);
@@ -34,6 +36,8 @@ protected:
 
     void mousePressEvent(QMouseEvent* _event) override;
     void mouseReleaseEvent(QMouseEvent* _event) override;
+
+    void updateTranslations() override;
 
 private:
     class Implementation;
