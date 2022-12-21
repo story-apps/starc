@@ -116,6 +116,10 @@ void DocumentStorage::saveDocument(const QUuid& _documentUuid)
 
 void DocumentStorage::removeDocument(Domain::DocumentObject* _document)
 {
+    if (_document == nullptr) {
+        return;
+    }
+
     if (d->notSavedDocuments.contains(_document->uuid())) {
         d->notSavedDocuments.remove(_document->uuid());
         delete _document;
