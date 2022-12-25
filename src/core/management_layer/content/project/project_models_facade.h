@@ -181,6 +181,11 @@ signals:
                              const QString& _newName);
 
     /**
+     * @brief Неоходимо создать мир с заданным именем
+     */
+    void createWorldRequested(const QString& _name, const QByteArray& _content);
+
+    /**
      * @brief Необходимо очистить корзинку
      */
     void emptyRecycleBinRequested();

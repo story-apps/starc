@@ -351,6 +351,13 @@ const QString kComponentsLocationsMapFocusCurrentLocationKey
     = kComponentsLocationsMapKey + QStringLiteral("/focus-current-location");
 const QString kComponentsLocationsMapSplitterStateKey
     = kComponentsLocationsMapKey + QStringLiteral("/splitter-state");
+//
+// редактор карты миров
+const QString kComponentsWorldsMapKey = kComponentsGroupKey + QStringLiteral("/worlds-map");
+const QString kComponentsWorldsMapFocusCurrentWorldKey
+    = kComponentsWorldsMapKey + QStringLiteral("/focus-current-world");
+const QString kComponentsWorldsMapSplitterStateKey
+    = kComponentsWorldsMapKey + QStringLiteral("/splitter-state");
 
 } // namespace
 

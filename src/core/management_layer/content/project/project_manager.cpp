@@ -20,6 +20,8 @@
 #include <business_layer/model/structure/structure_model_item.h>
 #include <business_layer/model/structure/structure_proxy_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/model/worlds/world_model.h>
+#include <business_layer/model/worlds/worlds_model.h>
 #include <business_layer/templates/text_template.h>
 #include <data_layer/database.h>
 #include <data_layer/storage/document_change_storage.h>
@@ -454,8 +456,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         auto addDocument = new QAction(tr("Add document"));
         addDocument->setIconText(u8"\U000F0415");
         addDocument->setEnabled(enabled);
-        connect(addDocument, &QAction::triggered, topLevelWidget,
-                [this] { this->addDocument(Domain::DocumentObjectType::SimpleText); });
+        connect(addDocument, &QAction::triggered, topLevelWidget, [this] { this->addDocument(); });
         menuActions.append(addDocument);
 
         const QSet<Domain::DocumentObjectType> cantBeRemovedItems = {
@@ -560,8 +561,8 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
         dialog->setDocumentType(Domain::DocumentObjectType::Character);
     } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
         dialog->setDocumentType(Domain::DocumentObjectType::Location);
-    } else {
-        dialog->setDocumentType(Domain::DocumentObjectType::SimpleText);
+    } else if (currentItem->type() == Domain::DocumentObjectType::Worlds) {
+        dialog->setDocumentType(Domain::DocumentObjectType::World);
     }
 
     connect(
@@ -585,6 +586,16 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                 Q_ASSERT(locationsModel);
                 if (locationsModel->exists(_name)) {
                     dialog->setNameError(tr("Location with this name already exists"));
+                    return;
+                }
+            } else if (_type == Domain::DocumentObjectType::World) {
+                auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
+                    Domain::DocumentObjectType::Worlds);
+                auto model = modelsFacade.modelFor(document);
+                auto worldsModel = qobject_cast<BusinessLayer::WorldsModel*>(model);
+                Q_ASSERT(worldsModel);
+                if (worldsModel->exists(_name)) {
+                    dialog->setNameError(tr("World with this name already exists"));
                     return;
                 }
             }
@@ -835,6 +846,7 @@ void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureMode
                 }
                 break;
             }
+
             case Domain::DocumentObjectType::Location: {
                 auto location = static_cast<BusinessLayer::LocationModel*>(model);
                 for (const auto& photo : location->photos()) {
@@ -842,6 +854,15 @@ void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureMode
                 }
                 break;
             }
+
+            case Domain::DocumentObjectType::World: {
+                auto world = static_cast<BusinessLayer::WorldModel*>(model);
+                for (const auto& photo : world->photos()) {
+                    documentsToRemove.append(photo.uuid);
+                }
+                break;
+            }
+
             default: {
                 break;
             }
@@ -1336,69 +1357,80 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     //
     // Соединения с моделью структуры проекта
     //
-    connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAdded, this,
-            [this](const QUuid& _uuid, const QUuid& _parentUuid, Domain::DocumentObjectType _type,
-                   const QString& _name, const QByteArray& _content) {
-                Q_UNUSED(_parentUuid);
+    connect(
+        d->projectStructureModel, &BusinessLayer::StructureModel::documentAdded, this,
+        [this](const QUuid& _uuid, const QUuid& _parentUuid, Domain::DocumentObjectType _type,
+               const QString& _name, const QByteArray& _content) {
+            Q_UNUSED(_parentUuid);
 
-                //
-                // Если в данный момент накладываются изменения (из облака), то не создаём новые
-                // документы и модели для них, они будут получены, когда пользователь выберет
-                // конкретный документ в структуре проекта
-                //
-                if (d->projectStructureModel->isChangesApplyingInProcess()) {
-                    return;
-                }
+            //
+            // Если в данный момент накладываются изменения (из облака), то не создаём новые
+            // документы и модели для них, они будут получены, когда пользователь выберет
+            // конкретный документ в структуре проекта
+            //
+            if (d->projectStructureModel->isChangesApplyingInProcess()) {
+                return;
+            }
 
-                //
-                // Если же измнеения не накладываются, значит мы в состоянии, когда пользователь
-                // локально создаёт новые документы и для них нужно создать соответствующие модели
-                //
-                auto document = DataStorageLayer::StorageFacade::documentStorage()->createDocument(
-                    _uuid, _type);
-                if (!_content.isNull()) {
-                    document->setContent(_content);
-                }
+            //
+            // Если же измнеения не накладываются, значит мы в состоянии, когда пользователь
+            // локально создаёт новые документы и для них нужно создать соответствующие модели
+            //
+            auto document
+                = DataStorageLayer::StorageFacade::documentStorage()->createDocument(_uuid, _type);
+            if (!_content.isNull()) {
+                document->setContent(_content);
+            }
 
-                auto documentModel = d->modelsFacade.modelFor(document);
-                documentModel->setDocumentName(_name);
-                if (!_content.isNull()) {
-                    documentModel->reassignContent();
-                }
-
-                switch (_type) {
-                case Domain::DocumentObjectType::Character: {
-                    auto charactersDocument
-                        = DataStorageLayer::StorageFacade::documentStorage()->document(
-                            Domain::DocumentObjectType::Characters);
-                    auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
-                        d->modelsFacade.modelFor(charactersDocument));
-                    auto characterModel
-                        = qobject_cast<BusinessLayer::CharacterModel*>(documentModel);
-                    charactersModel->addCharacterModel(characterModel);
-
-                    break;
-                }
-
-                case Domain::DocumentObjectType::Location: {
-                    auto locationsDocument
-                        = DataStorageLayer::StorageFacade::documentStorage()->document(
-                            Domain::DocumentObjectType::Locations);
-                    auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(
-                        d->modelsFacade.modelFor(locationsDocument));
-                    auto locationModel = qobject_cast<BusinessLayer::LocationModel*>(documentModel);
-                    locationsModel->addLocationModel(locationModel);
-
-                    break;
-                }
-
-                default:
-                    break;
-                }
-
+            auto documentModel = d->modelsFacade.modelFor(document);
+            documentModel->setDocumentName(_name);
+            if (!_content.isNull()) {
                 documentModel->reassignContent();
-                emit uploadDocumentRequested(_uuid, true);
-            });
+            }
+
+            switch (_type) {
+            case Domain::DocumentObjectType::Character: {
+                auto charactersDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Characters);
+                auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
+                    d->modelsFacade.modelFor(charactersDocument));
+                auto characterModel = qobject_cast<BusinessLayer::CharacterModel*>(documentModel);
+                charactersModel->addCharacterModel(characterModel);
+
+                break;
+            }
+
+            case Domain::DocumentObjectType::Location: {
+                auto locationsDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Locations);
+                auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(
+                    d->modelsFacade.modelFor(locationsDocument));
+                auto locationModel = qobject_cast<BusinessLayer::LocationModel*>(documentModel);
+                locationsModel->addLocationModel(locationModel);
+
+                break;
+            }
+
+            case Domain::DocumentObjectType::World: {
+                auto worldsDocument = DataStorageLayer::StorageFacade::documentStorage()->document(
+                    Domain::DocumentObjectType::Worlds);
+                auto locationsModel = qobject_cast<BusinessLayer::WorldsModel*>(
+                    d->modelsFacade.modelFor(worldsDocument));
+                auto locationModel = qobject_cast<BusinessLayer::WorldModel*>(documentModel);
+                locationsModel->addWorldModel(locationModel);
+
+                break;
+            }
+
+            default:
+                break;
+            }
+
+            documentModel->reassignContent();
+            emit uploadDocumentRequested(_uuid, true);
+        });
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::contentsChanged, this,
             [this](const QByteArray& _undo, const QByteArray& _redo) {
                 handleModelChange(d->projectStructureModel, _undo, _redo);
@@ -1932,6 +1964,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                             d->projectStructureProxyModel->mapFromSource(itemIndex));
                     }
                 }
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::createWorldRequested, this,
+            [this](const QString& _name, const QByteArray& _content) {
+                d->addDocumentToContainer(Domain::DocumentObjectType::Worlds,
+                                          Domain::DocumentObjectType::World, _name, _content);
             });
     //
     auto setDocumentVisible = [this](BusinessLayer::AbstractModel* _screenplayModel,
@@ -2695,6 +2732,24 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         static_cast<BusinessLayer::LocationsModel*>(
             d->modelsFacade.modelFor(Domain::DocumentObjectType::Locations))
             ->addLocationModel(static_cast<BusinessLayer::LocationModel*>(documentModel));
+        break;
+    }
+
+    case Domain::DocumentObjectType::Worlds: {
+        auto worldsModel = static_cast<BusinessLayer::WorldsModel*>(documentModel);
+        const auto worldDocuments = DataStorageLayer::StorageFacade::documentStorage()->documents(
+            Domain::DocumentObjectType::World);
+        for (const auto worldDocument : worldDocuments) {
+            auto worldModel = d->modelsFacade.modelFor(worldDocument);
+            worldsModel->addWorldModel(qobject_cast<BusinessLayer::WorldModel*>(worldModel));
+        }
+        break;
+    }
+
+    case Domain::DocumentObjectType::World: {
+        static_cast<BusinessLayer::WorldsModel*>(
+            d->modelsFacade.modelFor(Domain::DocumentObjectType::Worlds))
+            ->addWorldModel(static_cast<BusinessLayer::WorldModel*>(documentModel));
         break;
     }
 

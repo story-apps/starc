@@ -189,7 +189,7 @@ ImagesList::Implementation::ButtonInfo ImagesList::Implementation::buttonInfo(
             y += size + spacing;
         }
     }
-    if (!isReadOnly && QRectF(x, y, size, size).contains(_position)) {
+    if (!isReadOnly && isAddButtonVisible && QRectF(x, y, size, size).contains(_position)) {
         return { true, true };
     }
 

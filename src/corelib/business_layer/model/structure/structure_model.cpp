@@ -359,6 +359,31 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         break;
     }
 
+    case DocumentObjectType::Worlds: {
+        appendItem(createItem(_type, tr("Worlds")), parentItem, _content);
+        break;
+    }
+    case DocumentObjectType::World: {
+        //
+        // FIXME: SAD-811 выпилить в версии 0.5.0
+        //
+        auto worldsItem = itemForType(Domain::DocumentObjectType::Worlds);
+        if (worldsItem == nullptr) {
+            appendItem(createItem(Domain::DocumentObjectType::Worlds, tr("Worlds")), parentItem);
+        }
+
+        parentItem = itemForType(Domain::DocumentObjectType::Worlds);
+        Q_ASSERT(parentItem);
+        appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
+
+        //
+        // Обновляем родителя, т.к. у него видмость зависит от наличия детей
+        //
+        updateItem(parentItem);
+
+        break;
+    }
+
     case DocumentObjectType::Folder:
     case DocumentObjectType::SimpleText: {
         appendItem(createItem(_type, _name), parentItem, _content);
@@ -598,6 +623,7 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     case Domain::DocumentObjectType::Stageplay:
     case Domain::DocumentObjectType::Character:
     case Domain::DocumentObjectType::Location:
+    case Domain::DocumentObjectType::World:
     case Domain::DocumentObjectType::Folder: {
         return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
     }
@@ -608,7 +634,8 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     case Domain::DocumentObjectType::Project:
     case Domain::DocumentObjectType::RecycleBin:
     case Domain::DocumentObjectType::Characters:
-    case Domain::DocumentObjectType::Locations: {
+    case Domain::DocumentObjectType::Locations:
+    case Domain::DocumentObjectType::Worlds: {
         return defaultFlags | Qt::ItemIsDropEnabled;
     }
 
@@ -717,12 +744,27 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     //
     bool hasCharacters = false;
     bool hasLocations = false;
+    bool hasWorlds = false;
     for (const auto item : std::as_const(d->lastMimeItems)) {
-        if (!hasCharacters && item->type() == Domain::DocumentObjectType::Character) {
+        switch (item->type()) {
+        case Domain::DocumentObjectType::Character: {
             hasCharacters = true;
+            break;
         }
-        if (!hasLocations && item->type() == Domain::DocumentObjectType::Location) {
+
+        case Domain::DocumentObjectType::Location: {
             hasLocations = true;
+            break;
+        }
+
+        case Domain::DocumentObjectType::World: {
+            hasWorlds = true;
+            break;
+        }
+
+        default: {
+            break;
+        }
         }
     }
 
@@ -731,9 +773,9 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     //
     const auto dropTarget = itemForIndex(_parent);
     //
-    // ... eсли среди перемещаемых элементов есть и локации и персонажи, то запрещаем перемещение
+    // ... eсли среди перемещаемых есть хотя бы два из трёх особенных, то запрещаем перемещение
     //
-    if (hasCharacters && hasLocations) {
+    if (hasCharacters + hasLocations + hasWorlds > 1) {
         return false;
     }
     //
@@ -744,6 +786,9 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
             || dropTarget->type() == Domain::DocumentObjectType::RecycleBin;
     } else if (hasLocations) {
         return dropTarget->type() == Domain::DocumentObjectType::Locations
+            || dropTarget->type() == Domain::DocumentObjectType::RecycleBin;
+    } else if (hasWorlds) {
+        return dropTarget->type() == Domain::DocumentObjectType::Worlds
             || dropTarget->type() == Domain::DocumentObjectType::RecycleBin;
     }
     //
@@ -896,7 +941,7 @@ QMimeData* StructureModel::mimeData(const QModelIndexList& _indexes) const
     //
     QByteArray encodedData;
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
-    for (const auto& item : d->lastMimeItems) {
+    for (const auto& item : std::as_const(d->lastMimeItems)) {
         stream << item->uuid();
     }
 
@@ -1119,6 +1164,7 @@ void StructureModel::initDocument()
         addDocument(Domain::DocumentObjectType::Project);
         addDocument(Domain::DocumentObjectType::Characters);
         addDocument(Domain::DocumentObjectType::Locations);
+        addDocument(Domain::DocumentObjectType::Worlds);
 
         //
         // При необходимости добавим дополнительные элементы в первоначальную структуру

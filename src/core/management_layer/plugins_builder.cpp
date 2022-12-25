@@ -29,12 +29,19 @@ enum ViewType {
 /**
  * @brief Майм-типы плагинов
  */
+
+const QString kCharactersRelationsMime = QStringLiteral("application/x-starc/editor/characters/relations");
 const QString kCharacterEditorMime = QStringLiteral("application/x-starc/editor/character/information");
 const QString kCharacterNavigatorMime = QStringLiteral("application/x-starc/navigator/character/information");
 const QString kCharacterDialoguesMime = QStringLiteral("application/x-starc/editor/character/dialogues");
 //
+const QString kLocationsMapMime = QStringLiteral("application/x-starc/editor/locations/map");
 const QString kLocationEditorMime = QStringLiteral("application/x-starc/editor/location/information");
 const QString kLocationNavigatorMime = QStringLiteral("application/x-starc/navigator/location/information");
+//
+const QString kWorldsMapMime = QStringLiteral("application/x-starc/editor/worlds/map");
+const QString kWorldEditorMime = QStringLiteral("application/x-starc/editor/world/information");
+const QString kWorldNavigatorMime = QStringLiteral("application/x-starc/navigator/world/information");
 //
 const QString kSimpleTextEditorMime = QStringLiteral("application/x-starc/editor/text/text");
 const QString kSimpleTextNavigatorMime = QStringLiteral("application/x-starc/navigator/text/text");
@@ -124,12 +131,15 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         { "application/x-starc/document/stageplay/text",        { { kStageplayTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/stageplay/statistics",  { { kStageplayStatisticsViewMime, u8"\U000f0127" } } },
         //
-        { "application/x-starc/document/characters",  { { "application/x-starc/editor/characters/relations", u8"\U000F0D3D" } } },
+        { "application/x-starc/document/characters",  { { kCharactersRelationsMime, u8"\U000F0D3D" } } },
         { "application/x-starc/document/character",  { { kCharacterEditorMime, u8"\U000f02fd" },
                                                        { kCharacterDialoguesMime, u8"\U000F017C" }} },
         //
-        { "application/x-starc/document/locations",  { { "application/x-starc/editor/locations/map", u8"\U000F0982" } } },
+        { "application/x-starc/document/locations",  { { kLocationsMapMime, u8"\U000F0982" } } },
         { "application/x-starc/document/location",   { { kLocationEditorMime, u8"\U000f02fd" } } },
+        //
+        { "application/x-starc/document/worlds",  { { kWorldsMapMime, u8"\U000F01E7" } } },
+        { "application/x-starc/document/world",   { { kWorldEditorMime, u8"\U000F01E7" } } },
         //
         { "application/x-starc/document/folder",     { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/text",       { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
@@ -183,14 +193,18 @@ const QHash<QString, QString> kMimeToPlugin
         { kStageplayTextNavigatorMime, "*stageplaytextstructureplugin*" },
         { kStageplayStatisticsViewMime, "*stageplaystatisticsplugin*" },
         //
-        { "application/x-starc/editor/characters/relations", "*charactersrelationsplugin*" },
+        { kCharactersRelationsMime, "*charactersrelationsplugin*" },
         { kCharacterEditorMime, "*characterinformationplugin*" },
         { kCharacterNavigatorMime, "*characterstructureplugin*" },
         { kCharacterDialoguesMime, "*characterdialoguesplugin*" },
         //
-        { "application/x-starc/editor/locations/map", "*locationsmapplugin*" },
+        { kLocationsMapMime, "*locationsmapplugin*" },
         { kLocationEditorMime, "*locationinformationplugin*" },
         { kLocationNavigatorMime, "*locationstructureplugin*" },
+        //
+        { kWorldsMapMime, "*worldsmapplugin*" },
+        { kWorldEditorMime, "*worldinformationplugin*" },
+        { kWorldNavigatorMime, "*worldstructureplugin*" },
         //
         { kImagesGalleryMime, "*imagesgalleryplugin*" },
         //
@@ -450,7 +464,7 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                   QApplication::translate("ProjectPluginsBuilder", "Statistics") } } },
             //
             { "application/x-starc/document/characters",
-              { { "application/x-starc/editor/characters/relations",
+              { { kCharactersRelationsMime,
                   QApplication::translate("ProjectPluginsBuilder", "Characters relations") } } },
             { "application/x-starc/document/character",
               { { kCharacterEditorMime,
@@ -459,11 +473,18 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                   QApplication::translate("ProjectPluginsBuilder", "Character dialogues") } } },
             //
             { "application/x-starc/document/locations",
-              { { "application/x-starc/editor/locations/map",
+              { { kLocationsMapMime,
                   QApplication::translate("ProjectPluginsBuilder", "Locations map") } } },
             { "application/x-starc/document/location",
               { { kLocationEditorMime,
                   QApplication::translate("ProjectPluginsBuilder", "Location information") } } },
+            //
+            { "application/x-starc/document/worlds",
+              { { kWorldsMapMime,
+                  QApplication::translate("ProjectPluginsBuilder", "Worlds map") } } },
+            { "application/x-starc/document/world",
+              { { kWorldEditorMime,
+                  QApplication::translate("ProjectPluginsBuilder", "World information") } } },
             //
             { "application/x-starc/document/folder",
               { { kSimpleTextEditorMime,

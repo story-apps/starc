@@ -40,3 +40,9 @@
 [submodule "src/core/management_layer/plugins/character_dialogues"]
 	path = src/core/management_layer/plugins/character_dialogues
 	url = git@github.com:story-apps/starc-character-dialogues-plugin.git
+[submodule "src/core/management_layer/plugins/worlds_map"]
+    path = src/core/management_layer/plugins/worlds_map
+    url = git@github.com:story-apps/starc-worlds-map-plugin.git
+[submodule "src/core/management_layer/plugins/world_information"]
+    path = src/core/management_layer/plugins/world_information
+    url = git@github.com:story-apps/starc-world-information-plugin.git

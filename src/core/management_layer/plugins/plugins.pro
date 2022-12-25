@@ -26,7 +26,8 @@ SUBDIRS = \
     stageplay_text \
     stageplay_text_structure \
     title_page \
-    recycle_bin
+    recycle_bin \
+    world_information_structure
 
 exists (project_collaborators/project_collaborators.pro) {
     SUBDIRS += project_collaborators
@@ -50,6 +51,14 @@ exists (locations_map/locations_map.pro) {
 
 exists (location_information/location_information.pro) {
     SUBDIRS += location_information
+}
+
+exists (worlds_map/worlds_map.pro) {
+    SUBDIRS += worlds_map
+}
+
+exists (world_information/world_information.pro) {
+    SUBDIRS += world_information
 }
 
 exists (screenplay_statistics/screenplay_statistics.pro) {

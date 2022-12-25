@@ -98,6 +98,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
         layout->setSpacing(0);
         layout->addWidget(makeOption(Domain::DocumentObjectType::Character));
         layout->addWidget(makeOption(Domain::DocumentObjectType::Location));
+        layout->addWidget(makeOption(Domain::DocumentObjectType::World));
         optionsLayout->addLayout(layout);
     }
     optionsLayout->addWidget(otherTitle);
@@ -133,6 +134,7 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
         { Domain::DocumentObjectType::SimpleText, tr("Add text") },
         { Domain::DocumentObjectType::Character, tr("Add character") },
         { Domain::DocumentObjectType::Location, tr("Add location") },
+        { Domain::DocumentObjectType::World, tr("Add world") },
         { Domain::DocumentObjectType::Screenplay, tr("Add screenplay") },
         { Domain::DocumentObjectType::ComicBook, tr("Add comic book") },
         { Domain::DocumentObjectType::Audioplay, tr("Add audioplay") },
@@ -149,6 +151,8 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
              "follow his journey within the story.") },
         { Domain::DocumentObjectType::Location,
           tr("Create a document to note down the location's description and keep the details.") },
+        { Domain::DocumentObjectType::World,
+          tr("Create a document to note down the world's description and keep the details.") },
         { Domain::DocumentObjectType::Screenplay,
           tr("Create a document set to streamline your work on the feature film, series, or "
              "animation.") },
@@ -231,6 +235,8 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
                 errorMessage = tr("The character should have a name");
             } else if (documentType == Domain::DocumentObjectType::Location) {
                 errorMessage = tr("The location should have a name");
+            } else if (documentType == Domain::DocumentObjectType::World) {
+                errorMessage = tr("The world should have a name");
             }
             if (!errorMessage.isEmpty()) {
                 d->documentName->setError(errorMessage);

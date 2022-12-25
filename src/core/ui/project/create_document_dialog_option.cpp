@@ -194,6 +194,11 @@ void CreateDocumentDialogOption::updateTranslations()
         break;
     }
 
+    case DocumentObjectType::World: {
+        d->documentName = tr("World");
+        break;
+    }
+
     case DocumentObjectType::Screenplay: {
         d->documentName = tr("Screenplay");
         break;

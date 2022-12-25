@@ -1,4 +1,4 @@
-#include "location_information_structure_view.h"
+#include "world_information_structure_view.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/label/label.h>
@@ -19,7 +19,7 @@ enum {
 };
 } // namespace
 
-class LocationInformationStructureView::Implementation
+class WorldInformationStructureView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -30,7 +30,7 @@ public:
     Tree* traits = nullptr;
 };
 
-LocationInformationStructureView::Implementation::Implementation(QWidget* _parent)
+WorldInformationStructureView::Implementation::Implementation(QWidget* _parent)
     : backIcon(new IconsMidLabel(_parent))
     , backText(new Subtitle2Label(_parent))
     , traits(new Tree(_parent))
@@ -59,7 +59,7 @@ LocationInformationStructureView::Implementation::Implementation(QWidget* _paren
 // ****
 
 
-LocationInformationStructureView::LocationInformationStructureView(QWidget* _parent)
+WorldInformationStructureView::WorldInformationStructureView(QWidget* _parent)
     : AbstractNavigator(_parent)
     , d(new Implementation(this))
 {
@@ -78,28 +78,28 @@ LocationInformationStructureView::LocationInformationStructureView(QWidget* _par
 
 
     connect(d->backIcon, &AbstractLabel::clicked, this,
-            &LocationInformationStructureView::backPressed);
+            &WorldInformationStructureView::backPressed);
     connect(d->backText, &AbstractLabel::clicked, this,
-            &LocationInformationStructureView::backPressed);
+            &WorldInformationStructureView::backPressed);
     connect(d->traits, &Tree::clicked, this,
-            &LocationInformationStructureView::traitsCategoryIndexChanged);
+            &WorldInformationStructureView::traitsCategoryIndexChanged);
     connect(d->traits, &Tree::doubleClicked, this,
-            &LocationInformationStructureView::traitsCategoryIndexChanged);
+            &WorldInformationStructureView::traitsCategoryIndexChanged);
 }
 
-LocationInformationStructureView::~LocationInformationStructureView() = default;
+WorldInformationStructureView::~WorldInformationStructureView() = default;
 
-QWidget* LocationInformationStructureView::asQWidget()
+QWidget* WorldInformationStructureView::asQWidget()
 {
     return this;
 }
 
-void LocationInformationStructureView::setTitle(const QString& _title)
+void WorldInformationStructureView::setTitle(const QString& _title)
 {
     d->backText->setText(_title);
 }
 
-void LocationInformationStructureView::updateTranslations()
+void WorldInformationStructureView::updateTranslations()
 {
     auto traitsModel = qobject_cast<QStandardItemModel*>(d->traits->model());
     traitsModel->item(kMainIndex)->setText(tr("Main"));
@@ -108,7 +108,7 @@ void LocationInformationStructureView::updateTranslations()
     traitsModel->item(kBackgroundIndex)->setText(tr("Background"));
 }
 
-void LocationInformationStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void WorldInformationStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
