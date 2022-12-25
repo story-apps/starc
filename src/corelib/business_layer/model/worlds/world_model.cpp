@@ -30,12 +30,30 @@ const QLatin1String kOverviewKey("overview");
 const QLatin1String kEarthLikeKey("earth_like");
 const QLatin1String kHistoryKey("history");
 const QLatin1String kMoodKey("mood");
+//
 const QLatin1String kBiologyKey("biology");
 const QLatin1String kPhisicsKey("phisics");
 const QLatin1String kAstoronomyKey("astronomy");
 const QLatin1String kGeographyKey("geography");
 const QLatin1String kRacesKey("races");
 const QLatin1String kRaceKey("race");
+const QLatin1String kFlorasKey("floras");
+const QLatin1String kFloraKey("flora");
+const QLatin1String kAnimalsKey("animals");
+const QLatin1String kAnimalKey("animal");
+const QLatin1String kNaturalResourcesKey("naturalResources");
+const QLatin1String kNaturalResourceKey("naturalResource");
+const QLatin1String kClimatesKey("climates");
+const QLatin1String kClimateKey("climate");
+//
+const QLatin1String kReligionsKey("religons");
+const QLatin1String kReligionKey("religon");
+const QLatin1String kEthicsKey("ethics");
+const QLatin1String kEthicKey("ethic");
+const QLatin1String kLanguagesKey("languages");
+const QLatin1String kLanguageKey("language");
+const QLatin1String kCastesKey("castes");
+const QLatin1String kCasteKey("caste");
 // const QLatin1String kWorldKey("world");
 // const QLatin1String kClimateKey("climate");
 // const QLatin1String kLandmarkKey("landmark");
@@ -56,11 +74,21 @@ public:
     QString earthLike;
     QString history;
     QString mood;
+
     QString biology;
     QString phisics;
     QString astronomy;
     QString geography;
     QVector<WorldItem> races;
+    QVector<WorldItem> floras;
+    QVector<WorldItem> animals;
+    QVector<WorldItem> naturalResources;
+    QVector<WorldItem> climates;
+
+    QVector<WorldItem> religions;
+    QVector<WorldItem> ethics;
+    QVector<WorldItem> languages;
+    QVector<WorldItem> castes;
     //    QString world;
     //    QString climate;
     //    QString landmark;
@@ -110,6 +138,14 @@ WorldModel::WorldModel(QObject* _parent)
     // Как минимум один элемент должен всегда быть тут
     //
     d->races.append(WorldItem());
+    d->floras.append(WorldItem());
+    d->animals.append(WorldItem());
+    d->naturalResources.append(WorldItem());
+    d->climates.append(WorldItem());
+    d->religions.append(WorldItem());
+    d->ethics.append(WorldItem());
+    d->languages.append(WorldItem());
+    d->castes.append(WorldItem());
 
     connect(this, &WorldModel::nameChanged, this, &WorldModel::updateDocumentContent);
     connect(this, &WorldModel::oneSentenceDescriptionChanged, this,
@@ -129,6 +165,14 @@ WorldModel::WorldModel(QObject* _parent)
     connect(this, &WorldModel::astronomyChanged, this, &WorldModel::updateDocumentContent);
     connect(this, &WorldModel::geographyChanged, this, &WorldModel::updateDocumentContent);
     connect(this, &WorldModel::racesChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::florasChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::animalsChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::naturalResourcesChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::climatesChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::religionsChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::ethicsChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::languagesChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::castesChanged, this, &WorldModel::updateDocumentContent);
     //    connect(this, &WorldModel::worldChanged, this, &WorldModel::updateDocumentContent);
     //    connect(this, &WorldModel::climateChanged, this, &WorldModel::updateDocumentContent);
     //    connect(this, &WorldModel::landmarkChanged, this, &WorldModel::updateDocumentContent);
@@ -482,17 +526,17 @@ QVector<WorldItem> WorldModel::races() const
     return d->races;
 }
 
-void WorldModel::setRaces(const QVector<WorldItem>& _races)
+void WorldModel::setRaces(const QVector<WorldItem>& _items)
 {
     int index = 0;
-    for (; index < _races.size(); ++index) {
+    for (; index < _items.size(); ++index) {
         Q_ASSERT(d->races.size() >= index);
         if (d->races.size() == index) {
             d->races.append(WorldItem());
         }
 
         auto& oldRace = d->races[index];
-        auto& newRace = _races[index];
+        auto& newRace = _items[index];
         if (!oldRace.photo.uuid.isNull() && oldRace.photo.uuid != newRace.photo.uuid) {
             imageWrapper()->remove(oldRace.photo.uuid);
             oldRace.photo = {};
@@ -515,6 +559,332 @@ void WorldModel::setRaces(const QVector<WorldItem>& _races)
     }
 
     emit racesChanged(d->races);
+}
+
+QVector<WorldItem> WorldModel::floras() const
+{
+    return d->floras;
+}
+
+void WorldModel::setFloras(const QVector<WorldItem>& _items)
+{
+    int index = 0;
+    for (; index < _items.size(); ++index) {
+        Q_ASSERT(d->floras.size() >= index);
+        if (d->floras.size() == index) {
+            d->floras.append(WorldItem());
+        }
+
+        auto& oldFlora = d->floras[index];
+        auto& newFlora = _items[index];
+        if (!oldFlora.photo.uuid.isNull() && oldFlora.photo.uuid != newFlora.photo.uuid) {
+            imageWrapper()->remove(oldFlora.photo.uuid);
+            oldFlora.photo = {};
+        }
+        if (newFlora.photo.uuid.isNull() && !newFlora.photo.image.isNull()) {
+            oldFlora.photo = { imageWrapper()->save(newFlora.photo.image), newFlora.photo.image };
+        }
+
+        oldFlora.name = newFlora.name;
+        oldFlora.oneSentenceDescription = newFlora.oneSentenceDescription;
+        oldFlora.longDescription = newFlora.longDescription;
+    }
+
+    for (int lastIndex = d->floras.size() - 1; lastIndex >= index; --lastIndex) {
+        auto& flora = d->floras[lastIndex];
+        if (!flora.photo.uuid.isNull()) {
+            imageWrapper()->remove(flora.photo.uuid);
+        }
+        d->floras.removeLast();
+    }
+
+    emit florasChanged(d->floras);
+}
+
+QVector<WorldItem> WorldModel::animals() const
+{
+    return d->animals;
+}
+
+void WorldModel::setAnimals(const QVector<WorldItem>& _items)
+{
+    int index = 0;
+    for (; index < _items.size(); ++index) {
+        Q_ASSERT(d->animals.size() >= index);
+        if (d->animals.size() == index) {
+            d->animals.append(WorldItem());
+        }
+
+        auto& oldAnimal = d->animals[index];
+        auto& newAnimal = _items[index];
+        if (!oldAnimal.photo.uuid.isNull() && oldAnimal.photo.uuid != newAnimal.photo.uuid) {
+            imageWrapper()->remove(oldAnimal.photo.uuid);
+            oldAnimal.photo = {};
+        }
+        if (newAnimal.photo.uuid.isNull() && !newAnimal.photo.image.isNull()) {
+            oldAnimal.photo
+                = { imageWrapper()->save(newAnimal.photo.image), newAnimal.photo.image };
+        }
+
+        oldAnimal.name = newAnimal.name;
+        oldAnimal.oneSentenceDescription = newAnimal.oneSentenceDescription;
+        oldAnimal.longDescription = newAnimal.longDescription;
+    }
+
+    for (int lastIndex = d->animals.size() - 1; lastIndex >= index; --lastIndex) {
+        auto& animal = d->animals[lastIndex];
+        if (!animal.photo.uuid.isNull()) {
+            imageWrapper()->remove(animal.photo.uuid);
+        }
+        d->animals.removeLast();
+    }
+
+    emit animalsChanged(d->animals);
+}
+
+QVector<WorldItem> WorldModel::naturalResources() const
+{
+    return d->naturalResources;
+}
+
+void WorldModel::setNaturalResources(const QVector<WorldItem>& _items)
+{
+    int index = 0;
+    for (; index < _items.size(); ++index) {
+        Q_ASSERT(d->naturalResources.size() >= index);
+        if (d->naturalResources.size() == index) {
+            d->naturalResources.append(WorldItem());
+        }
+
+        auto& oldNaturalResource = d->naturalResources[index];
+        auto& newNaturalResource = _items[index];
+        if (!oldNaturalResource.photo.uuid.isNull()
+            && oldNaturalResource.photo.uuid != newNaturalResource.photo.uuid) {
+            imageWrapper()->remove(oldNaturalResource.photo.uuid);
+            oldNaturalResource.photo = {};
+        }
+        if (newNaturalResource.photo.uuid.isNull() && !newNaturalResource.photo.image.isNull()) {
+            oldNaturalResource.photo = { imageWrapper()->save(newNaturalResource.photo.image),
+                                         newNaturalResource.photo.image };
+        }
+
+        oldNaturalResource.name = newNaturalResource.name;
+        oldNaturalResource.oneSentenceDescription = newNaturalResource.oneSentenceDescription;
+        oldNaturalResource.longDescription = newNaturalResource.longDescription;
+    }
+
+    for (int lastIndex = d->naturalResources.size() - 1; lastIndex >= index; --lastIndex) {
+        auto& naturalResource = d->naturalResources[lastIndex];
+        if (!naturalResource.photo.uuid.isNull()) {
+            imageWrapper()->remove(naturalResource.photo.uuid);
+        }
+        d->naturalResources.removeLast();
+    }
+
+    emit naturalResourcesChanged(d->naturalResources);
+}
+
+QVector<WorldItem> WorldModel::climates() const
+{
+    return d->climates;
+}
+
+void WorldModel::setClimates(const QVector<WorldItem>& _items)
+{
+    int index = 0;
+    for (; index < _items.size(); ++index) {
+        Q_ASSERT(d->climates.size() >= index);
+        if (d->climates.size() == index) {
+            d->climates.append(WorldItem());
+        }
+
+        auto& oldClimate = d->climates[index];
+        auto& newClimate = _items[index];
+        if (!oldClimate.photo.uuid.isNull() && oldClimate.photo.uuid != newClimate.photo.uuid) {
+            imageWrapper()->remove(oldClimate.photo.uuid);
+            oldClimate.photo = {};
+        }
+        if (newClimate.photo.uuid.isNull() && !newClimate.photo.image.isNull()) {
+            oldClimate.photo
+                = { imageWrapper()->save(newClimate.photo.image), newClimate.photo.image };
+        }
+
+        oldClimate.name = newClimate.name;
+        oldClimate.oneSentenceDescription = newClimate.oneSentenceDescription;
+        oldClimate.longDescription = newClimate.longDescription;
+    }
+
+    for (int lastIndex = d->climates.size() - 1; lastIndex >= index; --lastIndex) {
+        auto& climate = d->climates[lastIndex];
+        if (!climate.photo.uuid.isNull()) {
+            imageWrapper()->remove(climate.photo.uuid);
+        }
+        d->climates.removeLast();
+    }
+
+    emit climatesChanged(d->climates);
+}
+
+QVector<WorldItem> WorldModel::religions() const
+{
+    return d->religions;
+}
+
+void WorldModel::setReligions(const QVector<WorldItem>& _items)
+{
+    int index = 0;
+    for (; index < _items.size(); ++index) {
+        Q_ASSERT(d->religions.size() >= index);
+        if (d->religions.size() == index) {
+            d->religions.append(WorldItem());
+        }
+
+        auto& oldReligion = d->religions[index];
+        auto& newReligion = _items[index];
+        if (!oldReligion.photo.uuid.isNull() && oldReligion.photo.uuid != newReligion.photo.uuid) {
+            imageWrapper()->remove(oldReligion.photo.uuid);
+            oldReligion.photo = {};
+        }
+        if (newReligion.photo.uuid.isNull() && !newReligion.photo.image.isNull()) {
+            oldReligion.photo
+                = { imageWrapper()->save(newReligion.photo.image), newReligion.photo.image };
+        }
+
+        oldReligion.name = newReligion.name;
+        oldReligion.oneSentenceDescription = newReligion.oneSentenceDescription;
+        oldReligion.longDescription = newReligion.longDescription;
+    }
+
+    for (int lastIndex = d->religions.size() - 1; lastIndex >= index; --lastIndex) {
+        auto& religion = d->religions[lastIndex];
+        if (!religion.photo.uuid.isNull()) {
+            imageWrapper()->remove(religion.photo.uuid);
+        }
+        d->religions.removeLast();
+    }
+
+    emit religionsChanged(d->religions);
+}
+
+QVector<WorldItem> WorldModel::ethics() const
+{
+    return d->ethics;
+}
+
+void WorldModel::setEthics(const QVector<WorldItem>& _items)
+{
+    int index = 0;
+    for (; index < _items.size(); ++index) {
+        Q_ASSERT(d->ethics.size() >= index);
+        if (d->ethics.size() == index) {
+            d->ethics.append(WorldItem());
+        }
+
+        auto& oldEthic = d->ethics[index];
+        auto& newEthic = _items[index];
+        if (!oldEthic.photo.uuid.isNull() && oldEthic.photo.uuid != newEthic.photo.uuid) {
+            imageWrapper()->remove(oldEthic.photo.uuid);
+            oldEthic.photo = {};
+        }
+        if (newEthic.photo.uuid.isNull() && !newEthic.photo.image.isNull()) {
+            oldEthic.photo = { imageWrapper()->save(newEthic.photo.image), newEthic.photo.image };
+        }
+
+        oldEthic.name = newEthic.name;
+        oldEthic.oneSentenceDescription = newEthic.oneSentenceDescription;
+        oldEthic.longDescription = newEthic.longDescription;
+    }
+
+    for (int lastIndex = d->ethics.size() - 1; lastIndex >= index; --lastIndex) {
+        auto& ethic = d->ethics[lastIndex];
+        if (!ethic.photo.uuid.isNull()) {
+            imageWrapper()->remove(ethic.photo.uuid);
+        }
+        d->ethics.removeLast();
+    }
+
+    emit ethicsChanged(d->ethics);
+}
+
+QVector<WorldItem> WorldModel::languages() const
+{
+    return d->languages;
+}
+
+void WorldModel::setLanguages(const QVector<WorldItem>& _items)
+{
+    int index = 0;
+    for (; index < _items.size(); ++index) {
+        Q_ASSERT(d->languages.size() >= index);
+        if (d->languages.size() == index) {
+            d->languages.append(WorldItem());
+        }
+
+        auto& oldLanguage = d->languages[index];
+        auto& newLanguage = _items[index];
+        if (!oldLanguage.photo.uuid.isNull() && oldLanguage.photo.uuid != newLanguage.photo.uuid) {
+            imageWrapper()->remove(oldLanguage.photo.uuid);
+            oldLanguage.photo = {};
+        }
+        if (newLanguage.photo.uuid.isNull() && !newLanguage.photo.image.isNull()) {
+            oldLanguage.photo
+                = { imageWrapper()->save(newLanguage.photo.image), newLanguage.photo.image };
+        }
+
+        oldLanguage.name = newLanguage.name;
+        oldLanguage.oneSentenceDescription = newLanguage.oneSentenceDescription;
+        oldLanguage.longDescription = newLanguage.longDescription;
+    }
+
+    for (int lastIndex = d->languages.size() - 1; lastIndex >= index; --lastIndex) {
+        auto& language = d->languages[lastIndex];
+        if (!language.photo.uuid.isNull()) {
+            imageWrapper()->remove(language.photo.uuid);
+        }
+        d->languages.removeLast();
+    }
+
+    emit languagesChanged(d->languages);
+}
+
+QVector<WorldItem> WorldModel::castes() const
+{
+    return d->castes;
+}
+
+void WorldModel::setCastes(const QVector<WorldItem>& _items)
+{
+    int index = 0;
+    for (; index < _items.size(); ++index) {
+        Q_ASSERT(d->castes.size() >= index);
+        if (d->castes.size() == index) {
+            d->castes.append(WorldItem());
+        }
+
+        auto& oldCaste = d->castes[index];
+        auto& newCaste = _items[index];
+        if (!oldCaste.photo.uuid.isNull() && oldCaste.photo.uuid != newCaste.photo.uuid) {
+            imageWrapper()->remove(oldCaste.photo.uuid);
+            oldCaste.photo = {};
+        }
+        if (newCaste.photo.uuid.isNull() && !newCaste.photo.image.isNull()) {
+            oldCaste.photo = { imageWrapper()->save(newCaste.photo.image), newCaste.photo.image };
+        }
+
+        oldCaste.name = newCaste.name;
+        oldCaste.oneSentenceDescription = newCaste.oneSentenceDescription;
+        oldCaste.longDescription = newCaste.longDescription;
+    }
+
+    for (int lastIndex = d->castes.size() - 1; lastIndex >= index; --lastIndex) {
+        auto& caste = d->castes[lastIndex];
+        if (!caste.photo.uuid.isNull()) {
+            imageWrapper()->remove(caste.photo.uuid);
+        }
+        d->castes.removeLast();
+    }
+
+    emit castesChanged(d->castes);
 }
 
 // QString WorldModel::world() const
@@ -678,6 +1048,179 @@ void WorldModel::initDocument()
             raceNode = raceNode.nextSiblingElement();
         }
     }
+    auto florasNode = documentNode.firstChildElement(kFlorasKey);
+    if (!florasNode.isNull()) {
+        d->floras.clear();
+        auto floraNode = florasNode.firstChildElement(kFloraKey);
+        while (!floraNode.isNull()) {
+            WorldItem flora;
+            const auto photoNode = floraNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                flora.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            flora.name = TextHelper::fromHtmlEscaped(floraNode.firstChildElement(kNameKey).text());
+            flora.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                floraNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            flora.longDescription = TextHelper::fromHtmlEscaped(
+                floraNode.firstChildElement(kLongDescriptionKey).text());
+            d->floras.append(flora);
+
+            floraNode = floraNode.nextSiblingElement();
+        }
+    }
+    auto animalsNode = documentNode.firstChildElement(kAnimalsKey);
+    if (!animalsNode.isNull()) {
+        d->animals.clear();
+        auto animalNode = animalsNode.firstChildElement(kAnimalKey);
+        while (!animalNode.isNull()) {
+            WorldItem animal;
+            const auto photoNode = animalNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                animal.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            animal.name
+                = TextHelper::fromHtmlEscaped(animalNode.firstChildElement(kNameKey).text());
+            animal.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                animalNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            animal.longDescription = TextHelper::fromHtmlEscaped(
+                animalNode.firstChildElement(kLongDescriptionKey).text());
+            d->animals.append(animal);
+
+            animalNode = animalNode.nextSiblingElement();
+        }
+    }
+    auto naturalResourcesNode = documentNode.firstChildElement(kNaturalResourcesKey);
+    if (!naturalResourcesNode.isNull()) {
+        d->naturalResources.clear();
+        auto naturalResourceNode = naturalResourcesNode.firstChildElement(kNaturalResourceKey);
+        while (!naturalResourceNode.isNull()) {
+            WorldItem naturalResource;
+            const auto photoNode = naturalResourceNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                naturalResource.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            naturalResource.name = TextHelper::fromHtmlEscaped(
+                naturalResourceNode.firstChildElement(kNameKey).text());
+            naturalResource.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                naturalResourceNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            naturalResource.longDescription = TextHelper::fromHtmlEscaped(
+                naturalResourceNode.firstChildElement(kLongDescriptionKey).text());
+            d->naturalResources.append(naturalResource);
+
+            naturalResourceNode = naturalResourceNode.nextSiblingElement();
+        }
+    }
+    auto climatesNode = documentNode.firstChildElement(kClimatesKey);
+    if (!climatesNode.isNull()) {
+        d->climates.clear();
+        auto climateNode = climatesNode.firstChildElement(kClimateKey);
+        while (!climateNode.isNull()) {
+            WorldItem climate;
+            const auto photoNode = climateNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                climate.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            climate.name
+                = TextHelper::fromHtmlEscaped(climateNode.firstChildElement(kNameKey).text());
+            climate.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                climateNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            climate.longDescription = TextHelper::fromHtmlEscaped(
+                climateNode.firstChildElement(kLongDescriptionKey).text());
+            d->climates.append(climate);
+
+            climateNode = climateNode.nextSiblingElement();
+        }
+    }
+    auto religionsNode = documentNode.firstChildElement(kReligionsKey);
+    if (!religionsNode.isNull()) {
+        d->religions.clear();
+        auto religionNode = religionsNode.firstChildElement(kReligionKey);
+        while (!religionNode.isNull()) {
+            WorldItem religion;
+            const auto photoNode = religionNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                religion.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            religion.name
+                = TextHelper::fromHtmlEscaped(religionNode.firstChildElement(kNameKey).text());
+            religion.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                religionNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            religion.longDescription = TextHelper::fromHtmlEscaped(
+                religionNode.firstChildElement(kLongDescriptionKey).text());
+            d->religions.append(religion);
+
+            religionNode = religionNode.nextSiblingElement();
+        }
+    }
+    auto ethicssNode = documentNode.firstChildElement(kEthicsKey);
+    if (!ethicssNode.isNull()) {
+        d->ethics.clear();
+        auto ethicNode = ethicssNode.firstChildElement(kEthicsKey);
+        while (!ethicNode.isNull()) {
+            WorldItem ethic;
+            const auto photoNode = ethicNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                ethic.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            ethic.name = TextHelper::fromHtmlEscaped(ethicNode.firstChildElement(kNameKey).text());
+            ethic.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                ethicNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            ethic.longDescription = TextHelper::fromHtmlEscaped(
+                ethicNode.firstChildElement(kLongDescriptionKey).text());
+            d->ethics.append(ethic);
+
+            ethicNode = ethicNode.nextSiblingElement();
+        }
+    }
+    auto languagesNode = documentNode.firstChildElement(kLanguagesKey);
+    if (!languagesNode.isNull()) {
+        d->languages.clear();
+        auto languageNode = languagesNode.firstChildElement(kLanguageKey);
+        while (!languageNode.isNull()) {
+            WorldItem language;
+            const auto photoNode = languageNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                language.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            language.name
+                = TextHelper::fromHtmlEscaped(languageNode.firstChildElement(kNameKey).text());
+            language.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                languageNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            language.longDescription = TextHelper::fromHtmlEscaped(
+                languageNode.firstChildElement(kLongDescriptionKey).text());
+            d->languages.append(language);
+
+            languageNode = languageNode.nextSiblingElement();
+        }
+    }
+    auto castesNode = documentNode.firstChildElement(kCastesKey);
+    if (!castesNode.isNull()) {
+        d->castes.clear();
+        auto casteNode = castesNode.firstChildElement(kCasteKey);
+        while (!casteNode.isNull()) {
+            WorldItem caste;
+            const auto photoNode = casteNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                caste.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            caste.name = TextHelper::fromHtmlEscaped(casteNode.firstChildElement(kNameKey).text());
+            caste.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                casteNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            caste.longDescription = TextHelper::fromHtmlEscaped(
+                casteNode.firstChildElement(kLongDescriptionKey).text());
+            d->castes.append(caste);
+
+            casteNode = casteNode.nextSiblingElement();
+        }
+    }
     //    d->world = load(kWorldKey);
     //    d->climate = load(kClimateKey);
     //    d->landmark = load(kLandmarkKey);
@@ -751,6 +1294,119 @@ QByteArray WorldModel::toXml() const
             xml += QString("</%1>\n").arg(kRaceKey).toUtf8();
         }
         xml += QString("</%1>\n").arg(kRacesKey).toUtf8();
+    }
+    if (!d->floras.isEmpty()) {
+        xml += QString("<%1>\n").arg(kFlorasKey).toUtf8();
+        for (const auto& flora : std::as_const(d->floras)) {
+            xml += QString("<%1>\n").arg(kFloraKey).toUtf8();
+            xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                       .arg(kPhotoKey, TextHelper::toHtmlEscaped(flora.photo.uuid.toString()))
+                       .toUtf8();
+            save(kNameKey, flora.name);
+            save(kOneSentenceDescriptionKey, flora.oneSentenceDescription);
+            save(kLongDescriptionKey, flora.longDescription);
+            xml += QString("</%1>\n").arg(kFloraKey).toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kFlorasKey).toUtf8();
+    }
+    if (!d->animals.isEmpty()) {
+        xml += QString("<%1>\n").arg(kAnimalsKey).toUtf8();
+        for (const auto& animal : std::as_const(d->animals)) {
+            xml += QString("<%1>\n").arg(kAnimalKey).toUtf8();
+            xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                       .arg(kPhotoKey, TextHelper::toHtmlEscaped(animal.photo.uuid.toString()))
+                       .toUtf8();
+            save(kNameKey, animal.name);
+            save(kOneSentenceDescriptionKey, animal.oneSentenceDescription);
+            save(kLongDescriptionKey, animal.longDescription);
+            xml += QString("</%1>\n").arg(kAnimalKey).toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kAnimalsKey).toUtf8();
+    }
+    if (!d->naturalResources.isEmpty()) {
+        xml += QString("<%1>\n").arg(kNaturalResourcesKey).toUtf8();
+        for (const auto& naturalResource : std::as_const(d->naturalResources)) {
+            xml += QString("<%1>\n").arg(kNaturalResourceKey).toUtf8();
+            xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                       .arg(kPhotoKey,
+                            TextHelper::toHtmlEscaped(naturalResource.photo.uuid.toString()))
+                       .toUtf8();
+            save(kNameKey, naturalResource.name);
+            save(kOneSentenceDescriptionKey, naturalResource.oneSentenceDescription);
+            save(kLongDescriptionKey, naturalResource.longDescription);
+            xml += QString("</%1>\n").arg(kNaturalResourceKey).toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kNaturalResourcesKey).toUtf8();
+    }
+    if (!d->climates.isEmpty()) {
+        xml += QString("<%1>\n").arg(kClimatesKey).toUtf8();
+        for (const auto& climate : std::as_const(d->climates)) {
+            xml += QString("<%1>\n").arg(kClimateKey).toUtf8();
+            xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                       .arg(kPhotoKey, TextHelper::toHtmlEscaped(climate.photo.uuid.toString()))
+                       .toUtf8();
+            save(kNameKey, climate.name);
+            save(kOneSentenceDescriptionKey, climate.oneSentenceDescription);
+            save(kLongDescriptionKey, climate.longDescription);
+            xml += QString("</%1>\n").arg(kClimateKey).toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kClimatesKey).toUtf8();
+    }
+    if (!d->religions.isEmpty()) {
+        xml += QString("<%1>\n").arg(kReligionsKey).toUtf8();
+        for (const auto& religion : std::as_const(d->religions)) {
+            xml += QString("<%1>\n").arg(kReligionKey).toUtf8();
+            xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                       .arg(kPhotoKey, TextHelper::toHtmlEscaped(religion.photo.uuid.toString()))
+                       .toUtf8();
+            save(kNameKey, religion.name);
+            save(kOneSentenceDescriptionKey, religion.oneSentenceDescription);
+            save(kLongDescriptionKey, religion.longDescription);
+            xml += QString("</%1>\n").arg(kReligionKey).toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kReligionsKey).toUtf8();
+    }
+    if (!d->ethics.isEmpty()) {
+        xml += QString("<%1>\n").arg(kEthicsKey).toUtf8();
+        for (const auto& ethic : std::as_const(d->ethics)) {
+            xml += QString("<%1>\n").arg(kEthicKey).toUtf8();
+            xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                       .arg(kPhotoKey, TextHelper::toHtmlEscaped(ethic.photo.uuid.toString()))
+                       .toUtf8();
+            save(kNameKey, ethic.name);
+            save(kOneSentenceDescriptionKey, ethic.oneSentenceDescription);
+            save(kLongDescriptionKey, ethic.longDescription);
+            xml += QString("</%1>\n").arg(kEthicKey).toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kEthicsKey).toUtf8();
+    }
+    if (!d->languages.isEmpty()) {
+        xml += QString("<%1>\n").arg(kLanguagesKey).toUtf8();
+        for (const auto& language : std::as_const(d->languages)) {
+            xml += QString("<%1>\n").arg(kLanguageKey).toUtf8();
+            xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                       .arg(kPhotoKey, TextHelper::toHtmlEscaped(language.photo.uuid.toString()))
+                       .toUtf8();
+            save(kNameKey, language.name);
+            save(kOneSentenceDescriptionKey, language.oneSentenceDescription);
+            save(kLongDescriptionKey, language.longDescription);
+            xml += QString("</%1>\n").arg(kLanguageKey).toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kLanguagesKey).toUtf8();
+    }
+    if (!d->castes.isEmpty()) {
+        xml += QString("<%1>\n").arg(kCastesKey).toUtf8();
+        for (const auto& caste : std::as_const(d->castes)) {
+            xml += QString("<%1>\n").arg(kCasteKey).toUtf8();
+            xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                       .arg(kPhotoKey, TextHelper::toHtmlEscaped(caste.photo.uuid.toString()))
+                       .toUtf8();
+            save(kNameKey, caste.name);
+            save(kOneSentenceDescriptionKey, caste.oneSentenceDescription);
+            save(kLongDescriptionKey, caste.longDescription);
+            xml += QString("</%1>\n").arg(kCasteKey).toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kCastesKey).toUtf8();
     }
     //    save(kWorldKey, d->world);
     //    save(kClimateKey, d->climate);
@@ -877,8 +1533,6 @@ void WorldModel::applyPatch(const QByteArray& _patch)
     setAstronomy(load(kAstoronomyKey));
     setGeography(load(kGeographyKey));
     //
-    // Cчитываем расы
-    //
     auto racesNode = documentNode.firstChildElement(kRacesKey);
     QVector<WorldItem> newRaces;
     if (!racesNode.isNull()) {
@@ -900,10 +1554,196 @@ void WorldModel::applyPatch(const QByteArray& _patch)
             raceNode = raceNode.nextSiblingElement();
         }
     }
-    //
-    // ... корректируем текущие расы
-    //
     setRaces(newRaces);
+    //
+    auto florasNode = documentNode.firstChildElement(kFlorasKey);
+    QVector<WorldItem> newFloras;
+    if (!florasNode.isNull()) {
+        auto floraNode = florasNode.firstChildElement(kFloraKey);
+        while (!floraNode.isNull()) {
+            WorldItem flora;
+            const auto photoNode = floraNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                flora.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            flora.name = TextHelper::fromHtmlEscaped(floraNode.firstChildElement(kNameKey).text());
+            flora.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                floraNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            flora.longDescription = TextHelper::fromHtmlEscaped(
+                floraNode.firstChildElement(kLongDescriptionKey).text());
+            newFloras.append(flora);
+
+            floraNode = floraNode.nextSiblingElement();
+        }
+    }
+    setFloras(newFloras);
+    //
+    auto animalsNode = documentNode.firstChildElement(kAnimalsKey);
+    QVector<WorldItem> newAnimals;
+    if (!animalsNode.isNull()) {
+        auto animalNode = animalsNode.firstChildElement(kAnimalKey);
+        while (!animalNode.isNull()) {
+            WorldItem animal;
+            const auto photoNode = animalNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                animal.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            animal.name
+                = TextHelper::fromHtmlEscaped(animalNode.firstChildElement(kNameKey).text());
+            animal.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                animalNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            animal.longDescription = TextHelper::fromHtmlEscaped(
+                animalNode.firstChildElement(kLongDescriptionKey).text());
+            newAnimals.append(animal);
+
+            animalNode = animalNode.nextSiblingElement();
+        }
+    }
+    setAnimals(newAnimals);
+    //
+    auto naturalResourcesNode = documentNode.firstChildElement(kNaturalResourcesKey);
+    QVector<WorldItem> newNaturalResources;
+    if (!naturalResourcesNode.isNull()) {
+        auto naturalResourceNode = naturalResourcesNode.firstChildElement(kNaturalResourceKey);
+        while (!naturalResourceNode.isNull()) {
+            WorldItem naturalResource;
+            const auto photoNode = naturalResourceNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                naturalResource.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            naturalResource.name = TextHelper::fromHtmlEscaped(
+                naturalResourceNode.firstChildElement(kNameKey).text());
+            naturalResource.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                naturalResourceNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            naturalResource.longDescription = TextHelper::fromHtmlEscaped(
+                naturalResourceNode.firstChildElement(kLongDescriptionKey).text());
+            newNaturalResources.append(naturalResource);
+
+            naturalResourceNode = naturalResourceNode.nextSiblingElement();
+        }
+    }
+    setNaturalResources(newNaturalResources);
+    //
+    auto climatesNode = documentNode.firstChildElement(kClimatesKey);
+    QVector<WorldItem> newClimates;
+    if (!climatesNode.isNull()) {
+        auto climateNode = climatesNode.firstChildElement(kClimateKey);
+        while (!climateNode.isNull()) {
+            WorldItem climate;
+            const auto photoNode = climateNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                climate.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            climate.name
+                = TextHelper::fromHtmlEscaped(climateNode.firstChildElement(kNameKey).text());
+            climate.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                climateNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            climate.longDescription = TextHelper::fromHtmlEscaped(
+                climateNode.firstChildElement(kLongDescriptionKey).text());
+            newClimates.append(climate);
+
+            climateNode = climateNode.nextSiblingElement();
+        }
+    }
+    setClimates(newClimates);
+    //
+    auto religionsNode = documentNode.firstChildElement(kReligionsKey);
+    QVector<WorldItem> newReligions;
+    if (!religionsNode.isNull()) {
+        auto religionNode = religionsNode.firstChildElement(kReligionKey);
+        while (!religionNode.isNull()) {
+            WorldItem religion;
+            const auto photoNode = religionNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                religion.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            religion.name
+                = TextHelper::fromHtmlEscaped(religionNode.firstChildElement(kNameKey).text());
+            religion.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                religionNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            religion.longDescription = TextHelper::fromHtmlEscaped(
+                religionNode.firstChildElement(kLongDescriptionKey).text());
+            newReligions.append(religion);
+
+            religionNode = religionNode.nextSiblingElement();
+        }
+    }
+    setReligions(newReligions);
+    //
+    auto ethicsNode = documentNode.firstChildElement(kEthicsKey);
+    QVector<WorldItem> newEthics;
+    if (!ethicsNode.isNull()) {
+        auto ethicNode = ethicsNode.firstChildElement(kEthicKey);
+        while (!ethicNode.isNull()) {
+            WorldItem ethic;
+            const auto photoNode = ethicNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                ethic.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            ethic.name = TextHelper::fromHtmlEscaped(ethicNode.firstChildElement(kNameKey).text());
+            ethic.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                ethicNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            ethic.longDescription = TextHelper::fromHtmlEscaped(
+                ethicNode.firstChildElement(kLongDescriptionKey).text());
+            newEthics.append(ethic);
+
+            ethicNode = ethicNode.nextSiblingElement();
+        }
+    }
+    setEthics(newEthics);
+    //
+    auto languagesNode = documentNode.firstChildElement(kLanguagesKey);
+    QVector<WorldItem> newLanguages;
+    if (!languagesNode.isNull()) {
+        auto languageNode = languagesNode.firstChildElement(kLanguageKey);
+        while (!languageNode.isNull()) {
+            WorldItem language;
+            const auto photoNode = languageNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                language.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            language.name
+                = TextHelper::fromHtmlEscaped(languageNode.firstChildElement(kNameKey).text());
+            language.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                languageNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            language.longDescription = TextHelper::fromHtmlEscaped(
+                languageNode.firstChildElement(kLongDescriptionKey).text());
+            newLanguages.append(language);
+
+            languageNode = languageNode.nextSiblingElement();
+        }
+    }
+    setLanguages(newLanguages);
+    //
+    auto castesNode = documentNode.firstChildElement(kCastesKey);
+    QVector<WorldItem> newCastes;
+    if (!castesNode.isNull()) {
+        auto casteNode = castesNode.firstChildElement(kCasteKey);
+        while (!casteNode.isNull()) {
+            WorldItem caste;
+            const auto photoNode = casteNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                caste.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            caste.name = TextHelper::fromHtmlEscaped(casteNode.firstChildElement(kNameKey).text());
+            caste.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                casteNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            caste.longDescription = TextHelper::fromHtmlEscaped(
+                casteNode.firstChildElement(kLongDescriptionKey).text());
+            newCastes.append(caste);
+
+            casteNode = casteNode.nextSiblingElement();
+        }
+    }
+    setCastes(newCastes);
     //    setWorld(load(kWorldKey));
     //    setClimate(load(kClimateKey));
     //    setLandmark(load(kLandmarkKey));

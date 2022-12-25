@@ -125,8 +125,44 @@ public:
     Q_SIGNAL void geographyChanged(const QString& _text);
 
     QVector<WorldItem> races() const;
-    void setRaces(const QVector<WorldItem>& _races);
-    Q_SIGNAL void racesChanged(const QVector<BusinessLayer::WorldItem>& _races);
+    void setRaces(const QVector<WorldItem>& _items);
+    Q_SIGNAL void racesChanged(const QVector<BusinessLayer::WorldItem>& _items);
+
+    QVector<WorldItem> floras() const;
+    void setFloras(const QVector<WorldItem>& _items);
+    Q_SIGNAL void florasChanged(const QVector<BusinessLayer::WorldItem>& _items);
+
+    QVector<WorldItem> animals() const;
+    void setAnimals(const QVector<WorldItem>& _items);
+    Q_SIGNAL void animalsChanged(const QVector<BusinessLayer::WorldItem>& _items);
+
+    QVector<WorldItem> naturalResources() const;
+    void setNaturalResources(const QVector<WorldItem>& _items);
+    Q_SIGNAL void naturalResourcesChanged(const QVector<BusinessLayer::WorldItem>& _items);
+
+    QVector<WorldItem> climates() const;
+    void setClimates(const QVector<WorldItem>& _items);
+    Q_SIGNAL void climatesChanged(const QVector<BusinessLayer::WorldItem>& _items);
+
+    //
+    // CULTURE
+    //
+
+    QVector<WorldItem> religions() const;
+    void setReligions(const QVector<WorldItem>& _items);
+    Q_SIGNAL void religionsChanged(const QVector<BusinessLayer::WorldItem>& _items);
+
+    QVector<WorldItem> ethics() const;
+    void setEthics(const QVector<WorldItem>& _items);
+    Q_SIGNAL void ethicsChanged(const QVector<BusinessLayer::WorldItem>& _items);
+
+    QVector<WorldItem> languages() const;
+    void setLanguages(const QVector<WorldItem>& _items);
+    Q_SIGNAL void languagesChanged(const QVector<BusinessLayer::WorldItem>& _items);
+
+    QVector<WorldItem> castes() const;
+    void setCastes(const QVector<WorldItem>& _items);
+    Q_SIGNAL void castesChanged(const QVector<BusinessLayer::WorldItem>& _items);
 
     //    //
     //    // GEOGRAPHY
