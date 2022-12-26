@@ -2,9 +2,11 @@
 
 #include "measurement_helper.h"
 
+#include <QApplication>
 #include <QDebug>
 #include <QFontMetricsF>
 #include <QRegularExpression>
+#include <QScreen>
 #include <QTextBlock>
 #include <QTextDocument>
 #include <QTextLayout>
@@ -21,17 +23,22 @@ void testFontsMetrics()
     // В 249 миллиметров должны влезать 51,5 строка Courier New, или 58 строк Courier Prime
     // В 155 миллиметров должен влезать 61 символ обоих шрифтов
     //
+    QString str = QString("DPIX: %1 | DPIY: %2\n\n")
+                      .arg(QApplication::primaryScreen()->physicalDotsPerInchX())
+                      .arg(QApplication::primaryScreen()->physicalDotsPerInchY());
     for (const auto& fn : { "Courier New", "Courier Prime" }) {
         QFont f(fn);
         f.setPixelSize(MeasurementHelper::ptToPx(12));
-        qDebug() << f.family() << "|"
-                 << (249.0 / MeasurementHelper::pxToMm(TextHelper::fineLineSpacing(f), false))
-                 << "lines per page"
-                 << "|"
-                 << MeasurementHelper::pxToMm(
-                        TextHelper::fineTextWidthF(QString().fill('W', 61), f), true)
-                 << "from 155";
+        QFontMetricsF fm(f);
+        str += QString("%1 | %2 lines per page | %3 from 155 | horadv for 1 %4 and for 61 %5\n")
+                   .arg(f.family())
+                   .arg(249.0 / MeasurementHelper::pxToMm(TextHelper::fineLineSpacing(f), false))
+                   .arg(MeasurementHelper::pxToMm(
+                       TextHelper::fineTextWidthF(QString().fill('W', 61), f), true))
+                   .arg(fm.horizontalAdvance("W"))
+                   .arg(fm.horizontalAdvance(QString().fill('W', 61)));
     }
+    qDebug() << str;
 }
 
 /**
@@ -88,6 +95,24 @@ static void initFontMetrics()
         //
         - courierPrimeMetrics.lineSpacing();
     sFontToLineSpacing["Courier Prime"] = courierPrimeDelta;
+
+    //
+    // Высчитываем дельту для Courier Screenplay
+    //
+    constexpr auto courierScreenplayHeight = 2370.0;
+    QFont courierScreenplayFont("Courier Screenplay");
+    courierScreenplayFont.setPixelSize(MeasurementHelper::ptToPx(12));
+    QFontMetricsF courierScreenplayMetrics(courierScreenplayFont);
+    qreal courierScreenplayDelta =
+        //
+        // ... такой Line Spacing должен быть у Courier Screenplay
+        //
+        courierNewLineSpacing * (courierScreenplayHeight / courierNewHeight)
+        //
+        // ... вычитая из него Line Spacing из метрики, получим дельту
+        //
+        - courierScreenplayMetrics.lineSpacing();
+    sFontToLineSpacing["Courier Screenplay"] = courierScreenplayDelta;
 
     //
     // Высчитываем дельту для Arial

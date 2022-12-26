@@ -6,23 +6,57 @@
 #include <QScreen>
 #include <QtMath>
 
+#include <cmath>
+
+namespace {
+static QFont trueCourier()
+{
+    QFont courierNewFont("Courier New");
+    courierNewFont.setPixelSize(MeasurementHelper::ptToPx(12));
+#ifndef Q_OS_WIN
+    return courierNewFont;
+#else
+    QFont courierPrimeFont("Courier Prime");
+    courierPrimeFont.setPixelSize(MeasurementHelper::ptToPx(12));
+
+    //
+    // Проверяем всё ли ок с системным Courier New, на некоторых виндах проявляется такая проблема,
+    // что система вместо курьер нью отдаёт ариал и автор видит херню на экране
+    //
+    if (abs(QFontMetricsF(courierNewFont).horizontalAdvance("W")
+            - QFontMetricsF(courierPrimeFont).horizontalAdvance("W"))
+        < 1.0) {
+        //
+        // ... тут всё окей
+        //
+        return courierNewFont;
+    } else {
+        //
+        // ... тут херня, пишем об этом в лог и будем считать за эталон Courier Prime
+        //
+        qCritical("Courier New failed to load for this system.");
+        return courierPrimeFont;
+    }
+#endif
+}
+} // namespace
+
 
 qreal MeasurementHelper::mmToPx(qreal _mm, bool _x)
 {
 #ifndef ACCURATE_METRICS_HANDLING
     static qreal xCoefficient = [] {
-        QFont courierFont("Courier New");
-        courierFont.setPixelSize(ptToPx(12));
+        const auto courierFont = trueCourier();
         const QFontMetricsF courierNewMetrics(courierFont);
         const qreal xCoefficient
             = courierNewMetrics.horizontalAdvance(QString().fill('W', 60)) / 60.0 / 2.53;
         return xCoefficient;
     }();
     static qreal yCoefficient = [] {
-        QFont courierFont("Courier New");
-        courierFont.setPixelSize(ptToPx(12));
+        const auto courierFont = trueCourier();
         const QFontMetricsF courierNewMetrics(courierFont);
-        const qreal yCoefficient = courierNewMetrics.lineSpacing() / 4.8;
+        const qreal coefficient = courierFont.family() == "Courier New" ? 4.8 : 4.26;
+        const qreal yCoefficient = courierNewMetrics.lineSpacing() / coefficient;
         return yCoefficient;
     }();
 #else
