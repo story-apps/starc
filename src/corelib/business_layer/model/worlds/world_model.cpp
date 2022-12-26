@@ -54,11 +54,38 @@ const QLatin1String kLanguagesKey("languages");
 const QLatin1String kLanguageKey("language");
 const QLatin1String kCastesKey("castes");
 const QLatin1String kCasteKey("caste");
-// const QLatin1String kWorldKey("world");
-// const QLatin1String kClimateKey("climate");
-// const QLatin1String kLandmarkKey("landmark");
-// const QLatin1String kNearbyPlacesKey("nearby_places");
-// const QLatin1String kHistoryKey("history");
+//
+const QLatin1String kTechnologyKey("technology");
+const QLatin1String kEconomyKey("economy");
+const QLatin1String kTradeKey("trade");
+const QLatin1String kBusinessKey("business");
+const QLatin1String kIndustryKey("industry");
+const QLatin1String kCurrencyKey("currency");
+const QLatin1String kEducationKey("education");
+const QLatin1String kCommunicationKey("communication");
+const QLatin1String kArtKey("art");
+const QLatin1String kEntertainmentKey("entertainment");
+const QLatin1String kTravelKey("travel");
+const QLatin1String kScienceKey("science");
+//
+const QLatin1String kGovernmentFormatKey("government_format");
+const QLatin1String kGovernmentHistoryKey("government_history");
+const QLatin1String kLawsKey("laws");
+const QLatin1String kForeignRelationsKey("foreign_rRelations");
+const QLatin1String kPerceptionOfGovernmentKey("perception_of_government");
+const QLatin1String kPropagandaKey("propaganda");
+const QLatin1String kAntiGovernmentOrganisationsKey("anti_government_organisations");
+const QLatin1String kPastWarKey("past_war");
+const QLatin1String kCurrentWarKey("current_war");
+const QLatin1String kPotentialWarKey("potential_war");
+//
+const QLatin1String kMagicRuleKey("magic_rule");
+const QLatin1String kWhoCanUseKey("who_can_use");
+const QLatin1String kEffectToWorldKey("effect_to_world");
+const QLatin1String kEffectToSocietyKey("effect_to_society");
+const QLatin1String kEffectToTechnologyKey("effect_to_technology");
+const QLatin1String kMagicTypesKey("magic_types");
+const QLatin1String kMagicTypeKey("magic_type");
 } // namespace
 
 class WorldModel::Implementation
@@ -89,11 +116,37 @@ public:
     QVector<WorldItem> ethics;
     QVector<WorldItem> languages;
     QVector<WorldItem> castes;
-    //    QString world;
-    //    QString climate;
-    //    QString landmark;
-    //    QString nearbyPlaces;
-    //    QString history;
+
+    QString technology;
+    QString economy;
+    QString trade;
+    QString business;
+    QString industry;
+    QString currency;
+    QString education;
+    QString communication;
+    QString art;
+    QString entertainment;
+    QString travel;
+    QString science;
+
+    QString governmentFormat;
+    QString governmentHistory;
+    QString laws;
+    QString foreignRelations;
+    QString perceptionOfGovernment;
+    QString propaganda;
+    QString antiGovernmentOrganisations;
+    QString pastWar;
+    QString currentWar;
+    QString potentialWar;
+
+    QString magicRule;
+    QString whoCanUse;
+    QString effectToWorld;
+    QString effectToSociety;
+    QString effectToTechnology;
+    QVector<WorldItem> magicTypes;
 };
 
 
@@ -146,6 +199,7 @@ WorldModel::WorldModel(QObject* _parent)
     d->ethics.append(WorldItem());
     d->languages.append(WorldItem());
     d->castes.append(WorldItem());
+    d->magicTypes.append(WorldItem());
 
     connect(this, &WorldModel::nameChanged, this, &WorldModel::updateDocumentContent);
     connect(this, &WorldModel::oneSentenceDescriptionChanged, this,
@@ -173,11 +227,36 @@ WorldModel::WorldModel(QObject* _parent)
     connect(this, &WorldModel::ethicsChanged, this, &WorldModel::updateDocumentContent);
     connect(this, &WorldModel::languagesChanged, this, &WorldModel::updateDocumentContent);
     connect(this, &WorldModel::castesChanged, this, &WorldModel::updateDocumentContent);
-    //    connect(this, &WorldModel::worldChanged, this, &WorldModel::updateDocumentContent);
-    //    connect(this, &WorldModel::climateChanged, this, &WorldModel::updateDocumentContent);
-    //    connect(this, &WorldModel::landmarkChanged, this, &WorldModel::updateDocumentContent);
-    //    connect(this, &WorldModel::nearbyPlacesChanged, this, &WorldModel::updateDocumentContent);
-    //    connect(this, &WorldModel::historyChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::technologyChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::economyChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::tradeChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::businessChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::industryChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::currencyChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::educationChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::communicationChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::artChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::entertainmentChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::travelChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::scienceChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::governmentFormatChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::governmentHistoryChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::lawsChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::foreignRelationsChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::perceptionOfGovernmentChanged, this,
+            &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::propagandaChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::antiGovernmentOrganisationsChanged, this,
+            &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::pastWarChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::currentWarChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::potentialWarChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::magicRuleChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::whoCanUseChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::effectToWorldChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::effectToSocietyChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::effectToTechnologyChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::magicTypesChanged, this, &WorldModel::updateDocumentContent);
 }
 
 WorldModel::~WorldModel() = default;
@@ -887,75 +966,425 @@ void WorldModel::setCastes(const QVector<WorldItem>& _items)
     emit castesChanged(d->castes);
 }
 
-// QString WorldModel::world() const
-//{
-//    return d->world;
-//}
+QString WorldModel::technology() const
+{
+    return d->technology;
+}
 
-// void WorldModel::setWorld(const QString& _text)
-//{
-//    if (d->world == _text) {
-//        return;
-//    }
-//    d->world = _text;
-//    emit worldChanged(d->world);
-//}
+void WorldModel::setTechnology(const QString& _text)
+{
+    if (d->technology == _text) {
+        return;
+    }
+    d->technology = _text;
+    emit technologyChanged(d->technology);
+}
 
-// QString WorldModel::climate() const
-//{
-//    return d->climate;
-//}
+QString WorldModel::economy() const
+{
+    return d->economy;
+}
 
-// void WorldModel::setClimate(const QString& _text)
-//{
-//    if (d->climate == _text) {
-//        return;
-//    }
-//    d->climate = _text;
-//    emit climateChanged(d->climate);
-//}
+void WorldModel::setEconomy(const QString& _text)
+{
+    if (d->economy == _text) {
+        return;
+    }
+    d->economy = _text;
+    emit economyChanged(d->economy);
+}
 
-// QString WorldModel::landmark() const
-//{
-//    return d->landmark;
-//}
+QString WorldModel::trade() const
+{
+    return d->trade;
+}
 
-// void WorldModel::setLandmark(const QString& _text)
-//{
-//    if (d->landmark == _text) {
-//        return;
-//    }
-//    d->landmark = _text;
-//    emit landmarkChanged(d->landmark);
-//}
+void WorldModel::setTrade(const QString& _text)
+{
+    if (d->trade == _text) {
+        return;
+    }
+    d->trade = _text;
+    emit tradeChanged(d->trade);
+}
 
-// QString WorldModel::nearbyPlaces() const
-//{
-//    return d->nearbyPlaces;
-//}
+QString WorldModel::business() const
+{
+    return d->business;
+}
 
-// void WorldModel::setNearbyPlaces(const QString& _text)
-//{
-//    if (d->nearbyPlaces == _text) {
-//        return;
-//    }
-//    d->nearbyPlaces = _text;
-//    emit nearbyPlacesChanged(d->nearbyPlaces);
-//}
+void WorldModel::setBusiness(const QString& _text)
+{
+    if (d->business == _text) {
+        return;
+    }
+    d->business = _text;
+    emit businessChanged(d->business);
+}
 
-// QString WorldModel::history() const
-//{
-//    return d->history;
-//}
+QString WorldModel::industry() const
+{
+    return d->industry;
+}
 
-// void WorldModel::setHistory(const QString& _text)
-//{
-//    if (d->history == _text) {
-//        return;
-//    }
-//    d->history = _text;
-//    emit historyChanged(d->history);
-//}
+void WorldModel::setIndustry(const QString& _text)
+{
+    if (d->industry == _text) {
+        return;
+    }
+    d->industry = _text;
+    emit industryChanged(d->industry);
+}
+
+QString WorldModel::currency() const
+{
+    return d->currency;
+}
+
+void WorldModel::setCurrency(const QString& _text)
+{
+    if (d->currency == _text) {
+        return;
+    }
+    d->currency = _text;
+    emit currencyChanged(d->currency);
+}
+
+QString WorldModel::education() const
+{
+    return d->education;
+}
+
+void WorldModel::setEducation(const QString& _text)
+{
+    if (d->education == _text) {
+        return;
+    }
+    d->education = _text;
+    emit educationChanged(d->education);
+}
+
+QString WorldModel::communication() const
+{
+    return d->communication;
+}
+
+void WorldModel::setCommunication(const QString& _text)
+{
+    if (d->communication == _text) {
+        return;
+    }
+    d->communication = _text;
+    emit communicationChanged(d->communication);
+}
+
+QString WorldModel::art() const
+{
+    return d->art;
+}
+
+void WorldModel::setArt(const QString& _text)
+{
+    if (d->art == _text) {
+        return;
+    }
+    d->art = _text;
+    emit artChanged(d->art);
+}
+
+QString WorldModel::entertainment() const
+{
+    return d->entertainment;
+}
+
+void WorldModel::setEntertainment(const QString& _text)
+{
+    if (d->entertainment == _text) {
+        return;
+    }
+    d->entertainment = _text;
+    emit entertainmentChanged(d->entertainment);
+}
+
+QString WorldModel::travel() const
+{
+    return d->travel;
+}
+
+void WorldModel::setTravel(const QString& _text)
+{
+    if (d->travel == _text) {
+        return;
+    }
+    d->travel = _text;
+    emit travelChanged(d->travel);
+}
+
+QString WorldModel::science() const
+{
+    return d->science;
+}
+
+void WorldModel::setScience(const QString& _text)
+{
+    if (d->science == _text) {
+        return;
+    }
+    d->science = _text;
+    emit scienceChanged(d->science);
+}
+
+QString WorldModel::governmentFormat() const
+{
+    return d->governmentFormat;
+}
+
+void WorldModel::setGovernmentFormat(const QString& _text)
+{
+    if (d->governmentFormat == _text) {
+        return;
+    }
+    d->governmentFormat = _text;
+    emit governmentFormatChanged(d->governmentFormat);
+}
+
+QString WorldModel::governmentHistory() const
+{
+    return d->governmentHistory;
+}
+
+void WorldModel::setGovernmentHistory(const QString& _text)
+{
+    if (d->governmentHistory == _text) {
+        return;
+    }
+    d->governmentHistory = _text;
+    emit governmentHistoryChanged(d->governmentHistory);
+}
+
+QString WorldModel::laws() const
+{
+    return d->laws;
+}
+
+void WorldModel::setLaws(const QString& _text)
+{
+    if (d->laws == _text) {
+        return;
+    }
+    d->laws = _text;
+    emit lawsChanged(d->laws);
+}
+
+QString WorldModel::foreignRelations() const
+{
+    return d->foreignRelations;
+}
+
+void WorldModel::setForeignRelations(const QString& _text)
+{
+    if (d->foreignRelations == _text) {
+        return;
+    }
+    d->foreignRelations = _text;
+    emit foreignRelationsChanged(d->foreignRelations);
+}
+
+QString WorldModel::perceptionOfGovernment() const
+{
+    return d->perceptionOfGovernment;
+}
+
+void WorldModel::setPerceptionOfGovernment(const QString& _text)
+{
+    if (d->perceptionOfGovernment == _text) {
+        return;
+    }
+    d->perceptionOfGovernment = _text;
+    emit perceptionOfGovernmentChanged(d->perceptionOfGovernment);
+}
+
+QString WorldModel::propaganda() const
+{
+    return d->propaganda;
+}
+
+void WorldModel::setPropaganda(const QString& _text)
+{
+    if (d->propaganda == _text) {
+        return;
+    }
+    d->propaganda = _text;
+    emit propagandaChanged(d->propaganda);
+}
+
+QString WorldModel::antiGovernmentOrganisations() const
+{
+    return d->antiGovernmentOrganisations;
+}
+
+void WorldModel::setAntiGovernmentOrganisations(const QString& _text)
+{
+    if (d->antiGovernmentOrganisations == _text) {
+        return;
+    }
+    d->antiGovernmentOrganisations = _text;
+    emit antiGovernmentOrganisationsChanged(d->antiGovernmentOrganisations);
+}
+
+QString WorldModel::pastWar() const
+{
+    return d->pastWar;
+}
+
+void WorldModel::setPastWar(const QString& _text)
+{
+    if (d->pastWar == _text) {
+        return;
+    }
+    d->pastWar = _text;
+    emit pastWarChanged(d->pastWar);
+}
+
+QString WorldModel::currentWar() const
+{
+    return d->currentWar;
+}
+
+void WorldModel::setCurrentWar(const QString& _text)
+{
+    if (d->currentWar == _text) {
+        return;
+    }
+    d->currentWar = _text;
+    emit currentWarChanged(d->currentWar);
+}
+
+QString WorldModel::potentialWar() const
+{
+    return d->potentialWar;
+}
+
+void WorldModel::setPotentialWar(const QString& _text)
+{
+    if (d->potentialWar == _text) {
+        return;
+    }
+    d->potentialWar = _text;
+    emit potentialWarChanged(d->potentialWar);
+}
+
+QString WorldModel::magicRule() const
+{
+    return d->magicRule;
+}
+
+void WorldModel::setMagicRule(const QString& _text)
+{
+    if (d->magicRule == _text) {
+        return;
+    }
+    d->magicRule = _text;
+    emit magicRuleChanged(d->magicRule);
+}
+
+QString WorldModel::whoCanUse() const
+{
+    return d->whoCanUse;
+}
+
+void WorldModel::setWhoCanUse(const QString& _text)
+{
+    if (d->whoCanUse == _text) {
+        return;
+    }
+    d->whoCanUse = _text;
+    emit whoCanUseChanged(d->whoCanUse);
+}
+
+QString WorldModel::effectToWorld() const
+{
+    return d->effectToWorld;
+}
+
+void WorldModel::setEffectToWorld(const QString& _text)
+{
+    if (d->effectToWorld == _text) {
+        return;
+    }
+    d->effectToWorld = _text;
+    emit effectToWorldChanged(d->effectToWorld);
+}
+
+QString WorldModel::effectToSociety() const
+{
+    return d->effectToSociety;
+}
+
+void WorldModel::setEffectToSociety(const QString& _text)
+{
+    if (d->effectToSociety == _text) {
+        return;
+    }
+    d->effectToSociety = _text;
+    emit effectToSocietyChanged(d->effectToSociety);
+}
+
+QString WorldModel::effectToTechnology() const
+{
+    return d->effectToTechnology;
+}
+
+void WorldModel::setEffectToTechnology(const QString& _text)
+{
+    if (d->effectToTechnology == _text) {
+        return;
+    }
+    d->effectToTechnology = _text;
+    emit effectToTechnologyChanged(d->effectToTechnology);
+}
+
+QVector<WorldItem> WorldModel::magicTypes() const
+{
+    return d->magicTypes;
+}
+
+void WorldModel::setMagicTypes(const QVector<WorldItem>& _items)
+{
+    int index = 0;
+    for (; index < _items.size(); ++index) {
+        Q_ASSERT(d->magicTypes.size() >= index);
+        if (d->magicTypes.size() == index) {
+            d->magicTypes.append(WorldItem());
+        }
+
+        auto& oldMagicType = d->magicTypes[index];
+        auto& newMagicType = _items[index];
+        if (!oldMagicType.photo.uuid.isNull()
+            && oldMagicType.photo.uuid != newMagicType.photo.uuid) {
+            imageWrapper()->remove(oldMagicType.photo.uuid);
+            oldMagicType.photo = {};
+        }
+        if (newMagicType.photo.uuid.isNull() && !newMagicType.photo.image.isNull()) {
+            oldMagicType.photo
+                = { imageWrapper()->save(newMagicType.photo.image), newMagicType.photo.image };
+        }
+
+        oldMagicType.name = newMagicType.name;
+        oldMagicType.oneSentenceDescription = newMagicType.oneSentenceDescription;
+        oldMagicType.longDescription = newMagicType.longDescription;
+    }
+
+    for (int lastIndex = d->magicTypes.size() - 1; lastIndex >= index; --lastIndex) {
+        auto& magicType = d->magicTypes[lastIndex];
+        if (!magicType.photo.uuid.isNull()) {
+            imageWrapper()->remove(magicType.photo.uuid);
+        }
+        d->magicTypes.removeLast();
+    }
+
+    emit magicTypesChanged(d->magicTypes);
+}
 
 void WorldModel::initImageWrapper()
 {
@@ -1160,7 +1589,7 @@ void WorldModel::initDocument()
     auto ethicssNode = documentNode.firstChildElement(kEthicsKey);
     if (!ethicssNode.isNull()) {
         d->ethics.clear();
-        auto ethicNode = ethicssNode.firstChildElement(kEthicsKey);
+        auto ethicNode = ethicssNode.firstChildElement(kEthicKey);
         while (!ethicNode.isNull()) {
             WorldItem ethic;
             const auto photoNode = ethicNode.firstChildElement(kPhotoKey);
@@ -1221,11 +1650,55 @@ void WorldModel::initDocument()
             casteNode = casteNode.nextSiblingElement();
         }
     }
-    //    d->world = load(kWorldKey);
-    //    d->climate = load(kClimateKey);
-    //    d->landmark = load(kLandmarkKey);
-    //    d->nearbyPlaces = load(kNearbyPlacesKey);
-    //    d->history = load(kHistoryKey);
+    d->technology = load(kTechnologyKey);
+    d->economy = load(kEconomyKey);
+    d->trade = load(kTradeKey);
+    d->business = load(kBusinessKey);
+    d->industry = load(kIndustryKey);
+    d->currency = load(kCurrencyKey);
+    d->education = load(kEducationKey);
+    d->communication = load(kCommunicationKey);
+    d->art = load(kArtKey);
+    d->entertainment = load(kEntertainmentKey);
+    d->travel = load(kTravelKey);
+    d->science = load(kScienceKey);
+    d->governmentFormat = load(kGovernmentFormatKey);
+    d->governmentHistory = load(kGovernmentHistoryKey);
+    d->laws = load(kLawsKey);
+    d->foreignRelations = load(kForeignRelationsKey);
+    d->perceptionOfGovernment = load(kPerceptionOfGovernmentKey);
+    d->propaganda = load(kPropagandaKey);
+    d->antiGovernmentOrganisations = load(kAntiGovernmentOrganisationsKey);
+    d->pastWar = load(kPastWarKey);
+    d->currentWar = load(kCurrentWarKey);
+    d->potentialWar = load(kPotentialWarKey);
+    d->magicRule = load(kMagicRuleKey);
+    d->whoCanUse = load(kWhoCanUseKey);
+    d->effectToWorld = load(kEffectToWorldKey);
+    d->effectToSociety = load(kEffectToSocietyKey);
+    d->effectToTechnology = load(kEffectToTechnologyKey);
+    auto magicTypesNode = documentNode.firstChildElement(kMagicTypesKey);
+    if (!magicTypesNode.isNull()) {
+        d->magicTypes.clear();
+        auto magicTypeNode = magicTypesNode.firstChildElement(kMagicTypeKey);
+        while (!magicTypeNode.isNull()) {
+            WorldItem magicType;
+            const auto photoNode = magicTypeNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                magicType.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            magicType.name
+                = TextHelper::fromHtmlEscaped(magicTypeNode.firstChildElement(kNameKey).text());
+            magicType.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                magicTypeNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            magicType.longDescription = TextHelper::fromHtmlEscaped(
+                magicTypeNode.firstChildElement(kLongDescriptionKey).text());
+            d->magicTypes.append(magicType);
+
+            magicTypeNode = magicTypeNode.nextSiblingElement();
+        }
+    }
 }
 
 void WorldModel::clearDocument()
@@ -1408,11 +1881,48 @@ QByteArray WorldModel::toXml() const
         }
         xml += QString("</%1>\n").arg(kCastesKey).toUtf8();
     }
-    //    save(kWorldKey, d->world);
-    //    save(kClimateKey, d->climate);
-    //    save(kLandmarkKey, d->landmark);
-    //    save(kNearbyPlacesKey, d->nearbyPlaces);
-    //    save(kHistoryKey, d->history);
+    save(kTechnologyKey, d->technology);
+    save(kEconomyKey, d->economy);
+    save(kTradeKey, d->trade);
+    save(kBusinessKey, d->business);
+    save(kIndustryKey, d->industry);
+    save(kCurrencyKey, d->currency);
+    save(kEducationKey, d->education);
+    save(kCommunicationKey, d->communication);
+    save(kArtKey, d->art);
+    save(kEntertainmentKey, d->entertainment);
+    save(kTravelKey, d->travel);
+    save(kScienceKey, d->science);
+    save(kGovernmentFormatKey, d->governmentFormat);
+    save(kGovernmentHistoryKey, d->governmentHistory);
+    save(kLawsKey, d->laws);
+    save(kForeignRelationsKey, d->foreignRelations);
+    save(kPerceptionOfGovernmentKey, d->perceptionOfGovernment);
+    save(kPropagandaKey, d->propaganda);
+    save(kAntiGovernmentOrganisationsKey, d->antiGovernmentOrganisations);
+    save(kPastWarKey, d->pastWar);
+    save(kCurrentWarKey, d->currentWar);
+    save(kPotentialWarKey, d->potentialWar);
+    save(kMagicRuleKey, d->magicRule);
+    save(kWhoCanUseKey, d->whoCanUse);
+    save(kEffectToWorldKey, d->effectToWorld);
+    save(kEffectToSocietyKey, d->effectToSociety);
+    save(kEffectToTechnologyKey, d->effectToTechnology);
+    if (!d->magicTypes.isEmpty()) {
+        xml += QString("<%1>\n").arg(kMagicTypesKey).toUtf8();
+        for (const auto& magicType : std::as_const(d->magicTypes)) {
+            xml += QString("<%1>\n").arg(kMagicTypeKey).toUtf8();
+            xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                       .arg(kPhotoKey, TextHelper::toHtmlEscaped(magicType.photo.uuid.toString()))
+                       .toUtf8();
+            save(kNameKey, magicType.name);
+            save(kOneSentenceDescriptionKey, magicType.oneSentenceDescription);
+            save(kLongDescriptionKey, magicType.longDescription);
+            xml += QString("</%1>\n").arg(kMagicTypeKey).toUtf8();
+        }
+        xml += QString("</%1>\n").arg(kMagicTypesKey).toUtf8();
+    }
+
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }
@@ -1744,11 +2254,59 @@ void WorldModel::applyPatch(const QByteArray& _patch)
         }
     }
     setCastes(newCastes);
-    //    setWorld(load(kWorldKey));
-    //    setClimate(load(kClimateKey));
-    //    setLandmark(load(kLandmarkKey));
-    //    setNearbyPlaces(load(kNearbyPlacesKey));
-    //    setHistory(load(kHistoryKey));
+    //
+    setTechnology(load(kTechnologyKey));
+    setEconomy(load(kEconomyKey));
+    setTrade(load(kTradeKey));
+    setBusiness(load(kBusinessKey));
+    setIndustry(load(kIndustryKey));
+    setCurrency(load(kCurrencyKey));
+    setEducation(load(kEducationKey));
+    setCommunication(load(kCommunicationKey));
+    setArt(load(kArtKey));
+    setEntertainment(load(kEntertainmentKey));
+    setTravel(load(kTravelKey));
+    setScience(load(kScienceKey));
+    //
+    setGovernmentFormat(load(kGovernmentFormatKey));
+    setGovernmentHistory(load(kGovernmentHistoryKey));
+    setLaws(load(kLawsKey));
+    setForeignRelations(load(kForeignRelationsKey));
+    setPerceptionOfGovernment(load(kPerceptionOfGovernmentKey));
+    setPropaganda(load(kPropagandaKey));
+    setAntiGovernmentOrganisations(load(kAntiGovernmentOrganisationsKey));
+    setPastWar(load(kPastWarKey));
+    setCurrentWar(load(kCurrentWarKey));
+    setPotentialWar(load(kPotentialWarKey));
+    //
+    setMagicRule(load(kMagicRuleKey));
+    setWhoCanUse(load(kWhoCanUseKey));
+    setEffectToWorld(load(kEffectToWorldKey));
+    setEffectToSociety(load(kEffectToSocietyKey));
+    setEffectToTechnology(load(kEffectToTechnologyKey));
+    auto magicTypesNode = documentNode.firstChildElement(kMagicTypesKey);
+    QVector<WorldItem> newMagicTypes;
+    if (!magicTypesNode.isNull()) {
+        auto magicTypeNode = magicTypesNode.firstChildElement(kMagicTypeKey);
+        while (!magicTypeNode.isNull()) {
+            WorldItem magicType;
+            const auto photoNode = magicTypeNode.firstChildElement(kPhotoKey);
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                magicType.photo = { uuid, imageWrapper()->load(uuid) };
+            }
+            magicType.name
+                = TextHelper::fromHtmlEscaped(magicTypeNode.firstChildElement(kNameKey).text());
+            magicType.oneSentenceDescription = TextHelper::fromHtmlEscaped(
+                magicTypeNode.firstChildElement(kOneSentenceDescriptionKey).text());
+            magicType.longDescription = TextHelper::fromHtmlEscaped(
+                magicTypeNode.firstChildElement(kLongDescriptionKey).text());
+            newMagicTypes.append(magicType);
+
+            magicTypeNode = magicTypeNode.nextSiblingElement();
+        }
+    }
+    setMagicTypes(newMagicTypes);
 }
 
 } // namespace BusinessLayer

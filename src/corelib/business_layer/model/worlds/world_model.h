@@ -164,33 +164,129 @@ public:
     void setCastes(const QVector<WorldItem>& _items);
     Q_SIGNAL void castesChanged(const QVector<BusinessLayer::WorldItem>& _items);
 
-    //    //
-    //    // GEOGRAPHY
-    //    //
+    //
+    // SYSTEM
+    //
 
-    //    QString world() const;
-    //    void setWorld(const QString& _text);
-    //    Q_SIGNAL void worldChanged(const QString& _text);
+    QString technology() const;
+    void setTechnology(const QString& _text);
+    Q_SIGNAL void technologyChanged(const QString& _text);
 
-    //    QString climate() const;
-    //    void setClimate(const QString& _text);
-    //    Q_SIGNAL void climateChanged(const QString& _text);
+    QString economy() const;
+    void setEconomy(const QString& _text);
+    Q_SIGNAL void economyChanged(const QString& _text);
 
-    //    QString landmark() const;
-    //    void setLandmark(const QString& _text);
-    //    Q_SIGNAL void landmarkChanged(const QString& _text);
+    QString trade() const;
+    void setTrade(const QString& _text);
+    Q_SIGNAL void tradeChanged(const QString& _text);
 
-    //    QString nearbyPlaces() const;
-    //    void setNearbyPlaces(const QString& _text);
-    //    Q_SIGNAL void nearbyPlacesChanged(const QString& _text);
+    QString business() const;
+    void setBusiness(const QString& _text);
+    Q_SIGNAL void businessChanged(const QString& _text);
 
-    //    //
-    //    // BACKGROUND
-    //    //
+    QString industry() const;
+    void setIndustry(const QString& _text);
+    Q_SIGNAL void industryChanged(const QString& _text);
 
-    //    QString history() const;
-    //    void setHistory(const QString& _text);
-    //    Q_SIGNAL void historyChanged(const QString& _text);
+    QString currency() const;
+    void setCurrency(const QString& _text);
+    Q_SIGNAL void currencyChanged(const QString& _text);
+
+    QString education() const;
+    void setEducation(const QString& _text);
+    Q_SIGNAL void educationChanged(const QString& _text);
+
+    QString communication() const;
+    void setCommunication(const QString& _text);
+    Q_SIGNAL void communicationChanged(const QString& _text);
+
+    QString art() const;
+    void setArt(const QString& _text);
+    Q_SIGNAL void artChanged(const QString& _text);
+
+    QString entertainment() const;
+    void setEntertainment(const QString& _text);
+    Q_SIGNAL void entertainmentChanged(const QString& _text);
+
+    QString travel() const;
+    void setTravel(const QString& _text);
+    Q_SIGNAL void travelChanged(const QString& _text);
+
+    QString science() const;
+    void setScience(const QString& _text);
+    Q_SIGNAL void scienceChanged(const QString& _text);
+
+    //
+    // POLITYCS
+    //
+
+    QString governmentFormat() const;
+    void setGovernmentFormat(const QString& _text);
+    Q_SIGNAL void governmentFormatChanged(const QString& _text);
+
+    QString governmentHistory() const;
+    void setGovernmentHistory(const QString& _text);
+    Q_SIGNAL void governmentHistoryChanged(const QString& _text);
+
+    QString laws() const;
+    void setLaws(const QString& _text);
+    Q_SIGNAL void lawsChanged(const QString& _text);
+
+    QString foreignRelations() const;
+    void setForeignRelations(const QString& _text);
+    Q_SIGNAL void foreignRelationsChanged(const QString& _text);
+
+    QString perceptionOfGovernment() const;
+    void setPerceptionOfGovernment(const QString& _text);
+    Q_SIGNAL void perceptionOfGovernmentChanged(const QString& _text);
+
+    QString propaganda() const;
+    void setPropaganda(const QString& _text);
+    Q_SIGNAL void propagandaChanged(const QString& _text);
+
+    QString antiGovernmentOrganisations() const;
+    void setAntiGovernmentOrganisations(const QString& _text);
+    Q_SIGNAL void antiGovernmentOrganisationsChanged(const QString& _text);
+
+    QString pastWar() const;
+    void setPastWar(const QString& _text);
+    Q_SIGNAL void pastWarChanged(const QString& _text);
+
+    QString currentWar() const;
+    void setCurrentWar(const QString& _text);
+    Q_SIGNAL void currentWarChanged(const QString& _text);
+
+    QString potentialWar() const;
+    void setPotentialWar(const QString& _text);
+    Q_SIGNAL void potentialWarChanged(const QString& _text);
+
+    //
+    // MAGIC
+    //
+
+    QString magicRule() const;
+    void setMagicRule(const QString& _text);
+    Q_SIGNAL void magicRuleChanged(const QString& _text);
+
+    QString whoCanUse() const;
+    void setWhoCanUse(const QString& _text);
+    Q_SIGNAL void whoCanUseChanged(const QString& _text);
+
+    QString effectToWorld() const;
+    void setEffectToWorld(const QString& _text);
+    Q_SIGNAL void effectToWorldChanged(const QString& _text);
+
+    QString effectToSociety() const;
+    void setEffectToSociety(const QString& _text);
+    Q_SIGNAL void effectToSocietyChanged(const QString& _text);
+
+    QString effectToTechnology() const;
+    void setEffectToTechnology(const QString& _text);
+    Q_SIGNAL void effectToTechnologyChanged(const QString& _text);
+
+    QVector<WorldItem> magicTypes() const;
+    void setMagicTypes(const QVector<WorldItem>& _items);
+    Q_SIGNAL void magicTypesChanged(const QVector<BusinessLayer::WorldItem>& _items);
 
 protected:
     /**
