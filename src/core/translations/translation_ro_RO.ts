@@ -1459,22 +1459,22 @@
         <translation>Șterge imaginea</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="612"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="609"/>
         <source>Select file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="615"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="612"/>
         <source>Delete</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="614"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="611"/>
         <source>Paste</source>
         <translation>Adaugă conținutul copiat</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="613"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="610"/>
         <source>Copy</source>
         <translation>Copiază</translation>
     </message>
@@ -1742,12 +1742,12 @@
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="74"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Poate, mai târziu</translation>
+        <translation>Poate, mai târziu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="75"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Upgrade</translation>
+        <translation>Upgrade</translation>
     </message>
 </context>
 <context>
@@ -2269,14 +2269,14 @@ Doriți schimbarea?</translation>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1884"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1905"/>
         <source>draft</source>
-        <translation type="unfinished">versiune</translation>
+        <translation>versiune</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1861"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1882"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1903"/>
         <source>Script</source>
-        <translation type="unfinished">Scenariu</translation>
+        <translation>Scenariu</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="2452"/>
@@ -2635,12 +2635,12 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="72"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Poate, mai târziu</translation>
+        <translation>Poate, mai târziu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="73"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Upgrade</translation>
+        <translation>Upgrade</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="329"/>
@@ -2651,12 +2651,12 @@ Doriți schimbarea?</translation>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="331"/>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="371"/>
         <source>No</source>
-        <translation type="unfinished">Nu</translation>
+        <translation>Nu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="332"/>
         <source>Yes</source>
-        <translation type="unfinished">Da</translation>
+        <translation>Da</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="370"/>
@@ -2666,7 +2666,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="372"/>
         <source>Yes, delete</source>
-        <translation type="unfinished">Da, șterge</translation>
+        <translation>Da, șterge</translation>
     </message>
 </context>
 <context>
@@ -2679,12 +2679,12 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="135"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Poate, mai târziu</translation>
+        <translation>Poate, mai târziu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="136"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Upgrade</translation>
+        <translation>Upgrade</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="154"/>
@@ -2699,12 +2699,12 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="515"/>
         <source>No</source>
-        <translation type="unfinished">Nu</translation>
+        <translation>Nu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="516"/>
         <source>Yes</source>
-        <translation type="unfinished">Da</translation>
+        <translation>Da</translation>
     </message>
 </context>
 <context>
@@ -3810,7 +3810,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="339"/>
         <source>Unlock ability to edit characters relations</source>
-        <translation type="unfinished">Activează posibilitatea de editare a relațiilor personajului</translation>
+        <translation>Activează posibilitatea de editare a relațiilor personajului</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="340"/>
@@ -5231,7 +5231,7 @@ Doriți schimbarea?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="651"/>
-        <source>Locading images</source>
+        <source>Loading images</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5417,12 +5417,12 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="135"/>
         <source>Add character</source>
-        <translation type="unfinished">Adaugă personaj</translation>
+        <translation>Adaugă personaj</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="136"/>
         <source>Add location</source>
-        <translation type="unfinished">Adaugă o locație</translation>
+        <translation>Adaugă o locație</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="137"/>
@@ -5542,35 +5542,7 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="305"/>
         <source>Add document</source>
-        <translation type="unfinished">Adaugă un document</translation>
-    </message>
-    <message>
-        <source>Add document to the story</source>
-        <translation type="vanished">Adaugă un document la povestire</translation>
-    </message>
-    <message>
-        <source>Folder</source>
-        <translation type="vanished">Dosar </translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation type="vanished">Text</translation>
-    </message>
-    <message>
-        <source>Character</source>
-        <translation type="vanished">Personaj</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation type="vanished">Locație</translation>
-    </message>
-    <message>
-        <source>Screenplay</source>
-        <translation type="vanished">Scenariu</translation>
-    </message>
-    <message>
-        <source>Comic book</source>
-        <translation type="vanished">Bandă desenată</translation>
+        <translation>Adaugă un document</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="312"/>
@@ -5593,22 +5565,22 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="178"/>
         <source>Folder</source>
-        <translation type="unfinished">Dosar </translation>
+        <translation>Dosar</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="183"/>
         <source>Text</source>
-        <translation type="unfinished">Text</translation>
+        <translation>Text</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="188"/>
         <source>Character</source>
-        <translation type="unfinished">Personaj</translation>
+        <translation>Personaj</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="193"/>
         <source>Location</source>
-        <translation type="unfinished">Locație</translation>
+        <translation>Locație</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="198"/>
@@ -5618,12 +5590,12 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="203"/>
         <source>Screenplay</source>
-        <translation type="unfinished">Scenariu</translation>
+        <translation>Scenariu</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="208"/>
         <source>Comic book</source>
-        <translation type="unfinished">Bandă desenată</translation>
+        <translation>Bandă desenată</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="213"/>
@@ -5865,12 +5837,12 @@ Doriți schimbarea?</translation>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="100"/>
         <source>Cancel</source>
-        <translation type="unfinished">Anulează</translation>
+        <translation>Anulează</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="101"/>
         <source>Create</source>
-        <translation type="unfinished">Creare</translation>
+        <translation>Creare</translation>
     </message>
 </context>
 <context>
@@ -11112,93 +11084,93 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
 <context>
     <name>Ui::WorldInformationStructureView</name>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="153"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="156"/>
         <source>Main</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="154"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="157"/>
         <source>World description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="156"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="159"/>
         <source>Nature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="160"/>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="204"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="163"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="207"/>
         <source>Basic info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="163"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="166"/>
         <source>Races</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="166"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="169"/>
         <source>Flora</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="170"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="173"/>
         <source>Animals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="174"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="177"/>
         <source>Natural resources</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="178"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="181"/>
         <source>Climate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="180"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="183"/>
         <source>Culture</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="184"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="187"/>
         <source>Religions and beliefs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="188"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="191"/>
         <source>Ethics and values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="192"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="195"/>
         <source>Languages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="196"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="199"/>
         <source>Class/caste system</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="197"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="200"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="198"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="201"/>
         <source>Politics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="200"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="203"/>
         <source>Magic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="208"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="211"/>
         <source>Magic types</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11218,27 +11190,27 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1303"/>
         <source>Name</source>
-        <translation type="unfinished">Nume</translation>
+        <translation>Nume</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1304"/>
         <source>One sentence description</source>
-        <translation type="unfinished">Descriere într-o propoziție</translation>
+        <translation>Descriere într-o propoziție</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1305"/>
         <source>Long description</source>
-        <translation type="unfinished">Descriere pe larg</translation>
+        <translation>Descriere pe larg</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1306"/>
         <source>Add photo +</source>
-        <translation type="unfinished">Adaugă o fotografie</translation>
+        <translation>Adaugă o fotografie</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1306"/>
         <source>Change photo...</source>
-        <translation type="unfinished">Schimbă fotografia</translation>
+        <translation>Schimbă fotografia</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1307"/>
@@ -11298,7 +11270,7 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1321"/>
-        <source>Phisics</source>
+        <source>Physics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11530,22 +11502,22 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="116"/>
         <source>Name</source>
-        <translation type="unfinished">Nume</translation>
+        <translation>Nume</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="117"/>
         <source>One sentence description</source>
-        <translation type="unfinished">Descriere într-o propoziție</translation>
+        <translation>Descriere într-o propoziție</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="118"/>
         <source>Long description</source>
-        <translation type="unfinished">Descriere pe larg</translation>
+        <translation>Descriere pe larg</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="119"/>
         <source>Remove</source>
-        <translation type="unfinished">Șterge</translation>
+        <translation>Șterge</translation>
     </message>
 </context>
 <context>
@@ -11604,17 +11576,17 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="699"/>
         <source>Solid line</source>
-        <translation type="unfinished">Linie continuă</translation>
+        <translation>Linie continuă</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="699"/>
         <source>Dash line</source>
-        <translation type="unfinished">Linie întreruptă</translation>
+        <translation>Linie întreruptă</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="699"/>
         <source>Dot line</source>
-        <translation type="unfinished">Linie punctată</translation>
+        <translation>Linie punctată</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="704"/>
@@ -11634,7 +11606,7 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="708"/>
         <source>Profile</source>
-        <translation type="unfinished">Profil</translation>
+        <translation>Profil</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="709"/>
@@ -11644,12 +11616,12 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="711"/>
         <source>Add photo +</source>
-        <translation type="unfinished">Adaugă o fotografie</translation>
+        <translation>Adaugă o fotografie</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="711"/>
         <source>Change photo...</source>
-        <translation type="unfinished">Schimbă fotografia</translation>
+        <translation>Schimbă fotografia</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="712"/>
@@ -11665,27 +11637,27 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="714"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="723"/>
         <source>Name</source>
-        <translation type="unfinished">Nume</translation>
+        <translation>Nume</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="715"/>
         <source>One sentence description</source>
-        <translation type="unfinished">Descriere într-o propoziție</translation>
+        <translation>Descriere într-o propoziție</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="716"/>
         <source>Long description</source>
-        <translation type="unfinished">Descriere pe larg</translation>
+        <translation>Descriere pe larg</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="722"/>
         <source>Line type</source>
-        <translation type="unfinished">Tipul liniei</translation>
+        <translation>Tipul liniei</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="724"/>
         <source>Details</source>
-        <translation type="unfinished">Detalii</translation>
+        <translation>Detalii</translation>
     </message>
 </context>
 <context>
@@ -11708,7 +11680,7 @@ Dacă lucrați fără întrerupere, salvează proiectul la fiecare 3 minute.</tr
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="340"/>
         <source>Remove selected item</source>
-        <translation type="unfinished">Șterge articolul selectat</translation>
+        <translation>Șterge articolul selectat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="343"/>

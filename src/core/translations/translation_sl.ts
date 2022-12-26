@@ -1128,7 +1128,7 @@
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="363"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="372"/>
         <source>Worlds</source>
-        <translation type="unfinished"></translation>
+        <translation>Svetovi</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="394"/>
@@ -1169,7 +1169,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/worlds/worlds_model.cpp" line="176"/>
         <source>New group</source>
-        <translation type="unfinished">Nova skupina</translation>
+        <translation>Nova skupina</translation>
     </message>
 </context>
 <context>
@@ -1460,22 +1460,22 @@
         <translation>Izbriši sliko</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="612"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="609"/>
         <source>Select file</source>
         <translation>Izberite datoteko</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="615"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="612"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="614"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="611"/>
         <source>Paste</source>
         <translation>Prilepi</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="613"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="610"/>
         <source>Copy</source>
         <translation>Kopiraj</translation>
     </message>
@@ -1738,17 +1738,17 @@
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="73"/>
         <source>To access character dialogues module, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za dostop do razširjenega modula dialogov likov morate program nadgraditi na različico PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="74"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Morda kasneje</translation>
+        <translation>Morda kasneje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="75"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Nadgradi</translation>
+        <translation>Nadgradi</translation>
     </message>
 </context>
 <context>
@@ -2192,7 +2192,7 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="598"/>
         <source>World with this name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Svet s tem imenom že obstaja</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="768"/>
@@ -2268,14 +2268,14 @@
         <location filename="../management_layer/content/project/project_manager.cpp" line="1884"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1905"/>
         <source>draft</source>
-        <translation type="unfinished">osnutek</translation>
+        <translation>osnutek</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1861"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1882"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1903"/>
         <source>Script</source>
-        <translation type="unfinished">Scenarij</translation>
+        <translation>Scenarij</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="2452"/>
@@ -2629,43 +2629,43 @@
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="71"/>
         <source>To access extended world profile, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za dostop do razširjenega profila sveta morate program nadgraditi na različico PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="72"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Morda kasneje</translation>
+        <translation>Morda kasneje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="73"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Nadgradi</translation>
+        <translation>Nadgradi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="329"/>
         <source>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ime sveta je spremenjeno iz »%1« v »%2«. Ali želite uveljaviti spremembe?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="331"/>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="371"/>
         <source>No</source>
-        <translation type="unfinished">Ne</translation>
+        <translation>Ne</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="332"/>
         <source>Yes</source>
-        <translation type="unfinished">Da</translation>
+        <translation>Da</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="370"/>
         <source>Do you want to delete the world&apos;s photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ali želite izbrisati fotografijo sveta?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="372"/>
         <source>Yes, delete</source>
-        <translation type="unfinished">Da, izbriši</translation>
+        <translation>Da, izbriši</translation>
     </message>
 </context>
 <context>
@@ -2673,37 +2673,37 @@
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="134"/>
         <source>To edit the world map, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za urejanje zemljevida svetov morate program nadgraditi na različico PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="135"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Morda kasneje</translation>
+        <translation>Morda kasneje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="136"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Nadgradi</translation>
+        <translation>Nadgradi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="154"/>
         <source>World with this name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Svet s tem imenom že obstaja</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="513"/>
         <source>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ime sveta je spremenjeno iz »%1« v »%2«. Ali želite uveljaviti spremembe?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="515"/>
         <source>No</source>
-        <translation type="unfinished">Ne</translation>
+        <translation>Ne</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="516"/>
         <source>Yes</source>
-        <translation type="unfinished">Da</translation>
+        <translation>Da</translation>
     </message>
 </context>
 <context>
@@ -2866,7 +2866,7 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="474"/>
         <source>Character dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogi lika</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="478"/>
@@ -2881,12 +2881,12 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="485"/>
         <source>Worlds map</source>
-        <translation type="unfinished"></translation>
+        <translation>Zemljevid svetov</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="488"/>
         <source>World information</source>
-        <translation type="unfinished"></translation>
+        <translation>Podatki o svetu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="492"/>
@@ -3810,12 +3810,12 @@
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="339"/>
         <source>Unlock ability to edit characters relations</source>
-        <translation type="unfinished">Odklenite možnost urejanja odnosov med liki</translation>
+        <translation>Odklenite možnost urejanja odnosov med liki</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="340"/>
         <source>Update character dialogues list</source>
-        <translation type="unfinished"></translation>
+        <translation>Posodobi seznam dialogov lika</translation>
     </message>
 </context>
 <context>
@@ -5111,22 +5111,22 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="613"/>
         <source>Color between text and image</source>
-        <translation type="unfinished"></translation>
+        <translation>Barva med besedilom in sliko</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="614"/>
         <source>black</source>
-        <translation type="unfinished"></translation>
+        <translation>črna</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="615"/>
         <source>transparent</source>
-        <translation type="unfinished"></translation>
+        <translation>prosojna</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="616"/>
         <source>white</source>
-        <translation type="unfinished"></translation>
+        <translation>bela</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="617"/>
@@ -5221,7 +5221,7 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="647"/>
         <source>Enter keywords for search</source>
-        <translation type="unfinished"></translation>
+        <translation>Vnesite ključne besede za iskanje</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="649"/>
@@ -5235,8 +5235,8 @@
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="651"/>
-        <source>Locading images</source>
-        <translation type="unfinished"></translation>
+        <source>Loading images</source>
+        <translation>Nalaganje slik</translation>
     </message>
 </context>
 <context>
@@ -5411,52 +5411,52 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="133"/>
         <source>Add folder</source>
-        <translation type="unfinished">Dodaj mapo</translation>
+        <translation>Dodaj mapo</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="134"/>
         <source>Add text</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj besedilo</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="135"/>
         <source>Add character</source>
-        <translation type="unfinished">Dodaj lik</translation>
+        <translation>Dodaj lik</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="136"/>
         <source>Add location</source>
-        <translation type="unfinished">Dodaj lokacijo</translation>
+        <translation>Dodaj lokacijo</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="137"/>
         <source>Add world</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj svet</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="138"/>
         <source>Add screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj scenarij</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="139"/>
         <source>Add comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj strip</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="140"/>
         <source>Add audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj radijsko igro</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="141"/>
         <source>Add stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj odrsko besedilo</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="142"/>
         <source>Add image gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj galerijo slik</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="146"/>
@@ -5481,7 +5481,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="155"/>
         <source>Create a document with detailed world description to keep all the notes in one place</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustvarite dokument s podrobnim opisom sveta, da boste hranili vse zapiske na enem mestu</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="158"/>
@@ -5521,7 +5521,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="240"/>
         <source>The world should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>Svet mora imeti ime</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="279"/>
@@ -5531,62 +5531,22 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="301"/>
         <source>Story</source>
-        <translation type="unfinished">Zgodba</translation>
+        <translation>Zgodba</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="302"/>
         <source>World of story</source>
-        <translation type="unfinished"></translation>
+        <translation>Svet zgodbe</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="303"/>
         <source>Structure &amp; notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Struktura in opombe</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="305"/>
         <source>Add document</source>
-        <translation type="unfinished">Dodaj dokument</translation>
-    </message>
-    <message>
-        <source>Add document to the story</source>
-        <translation type="vanished">Dodaj dokument v zgodbo</translation>
-    </message>
-    <message>
-        <source>Folder</source>
-        <translation type="vanished">Mapa</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation type="vanished">Besedilo</translation>
-    </message>
-    <message>
-        <source>Character</source>
-        <translation type="vanished">Lik</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation type="vanished">Prizorišče</translation>
-    </message>
-    <message>
-        <source>Screenplay</source>
-        <translation type="vanished">Scenarij</translation>
-    </message>
-    <message>
-        <source>Comic book</source>
-        <translation type="vanished">Strip</translation>
-    </message>
-    <message>
-        <source>Audioplay</source>
-        <translation type="vanished">Radijska igra</translation>
-    </message>
-    <message>
-        <source>Stageplay</source>
-        <translation type="vanished">Dramsko besedilo</translation>
-    </message>
-    <message>
-        <source>Images gallery</source>
-        <translation type="vanished">Galerija slik</translation>
+        <translation>Dodaj dokument</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="312"/>
@@ -5609,52 +5569,52 @@
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="178"/>
         <source>Folder</source>
-        <translation type="unfinished">Mapa</translation>
+        <translation>Mapa</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="183"/>
         <source>Text</source>
-        <translation type="unfinished">Besedilo</translation>
+        <translation>Besedilo</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="188"/>
         <source>Character</source>
-        <translation type="unfinished">Lik</translation>
+        <translation>Lik</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="193"/>
         <source>Location</source>
-        <translation type="unfinished">Prizorišče</translation>
+        <translation>Prizorišče</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="198"/>
         <source>World</source>
-        <translation type="unfinished"></translation>
+        <translation>Svet</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="203"/>
         <source>Screenplay</source>
-        <translation type="unfinished">Scenarij</translation>
+        <translation>Scenarij</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="208"/>
         <source>Comic book</source>
-        <translation type="unfinished">Strip</translation>
+        <translation>Strip</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="213"/>
         <source>Audioplay</source>
-        <translation type="unfinished">Radijska igra</translation>
+        <translation>Radijska igra</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="218"/>
         <source>Stageplay</source>
-        <translation type="unfinished">Dramsko besedilo</translation>
+        <translation>Dramsko besedilo</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="223"/>
         <source>Image gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Galerija slik</translation>
     </message>
 </context>
 <context>
@@ -5866,27 +5826,27 @@
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="65"/>
         <source>The world should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>Svet mora imeti ime</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="98"/>
         <source>Create new world</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustvari nov svet</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="99"/>
         <source>World name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ime sveta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="100"/>
         <source>Cancel</source>
-        <translation type="unfinished">Prekliči</translation>
+        <translation>Prekliči</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="101"/>
         <source>Create</source>
-        <translation type="unfinished">Ustvari</translation>
+        <translation>Ustvari</translation>
     </message>
 </context>
 <context>
@@ -7478,12 +7438,12 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="276"/>
         <source>Downloading failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Prenašanje je spodletelo</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="278"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Poskusi znova</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="290"/>
@@ -8041,7 +8001,7 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="440"/>
         <source>Reset scene numbers template</source>
-        <translation type="unfinished"></translation>
+        <translation>Ponastavi predlogo številk prizorov</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="441"/>
@@ -11146,95 +11106,95 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
 <context>
     <name>Ui::WorldInformationStructureView</name>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="153"/>
-        <source>Main</source>
-        <translation type="unfinished">Glavno</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="154"/>
-        <source>World description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="156"/>
-        <source>Nature</source>
-        <translation type="unfinished"></translation>
+        <source>Main</source>
+        <translation>Glavno</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="160"/>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="204"/>
-        <source>Basic info</source>
-        <translation type="unfinished"></translation>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="157"/>
+        <source>World description</source>
+        <translation>Opis sveta</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="159"/>
+        <source>Nature</source>
+        <translation>Narava</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="163"/>
-        <source>Races</source>
-        <translation type="unfinished"></translation>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="207"/>
+        <source>Basic info</source>
+        <translation>Osnovni podatki</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="166"/>
+        <source>Races</source>
+        <translation>Rase</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="169"/>
         <source>Flora</source>
-        <translation type="unfinished"></translation>
+        <translation>Rastlinstvo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="170"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="173"/>
         <source>Animals</source>
-        <translation type="unfinished"></translation>
+        <translation>Živalstvo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="174"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="177"/>
         <source>Natural resources</source>
-        <translation type="unfinished"></translation>
+        <translation>Naravni viri</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="178"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="181"/>
         <source>Climate</source>
-        <translation type="unfinished">Klima</translation>
+        <translation>Klima</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="180"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="183"/>
         <source>Culture</source>
-        <translation type="unfinished"></translation>
+        <translation>Kultura</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="184"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="187"/>
         <source>Religions and beliefs</source>
-        <translation type="unfinished"></translation>
+        <translation>Verstva in verovanja</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="188"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="191"/>
         <source>Ethics and values</source>
-        <translation type="unfinished"></translation>
+        <translation>Etika in vrednote</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="192"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="195"/>
         <source>Languages</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeziki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="196"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="199"/>
         <source>Class/caste system</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="197"/>
-        <source>System</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="198"/>
-        <source>Politics</source>
-        <translation type="unfinished"></translation>
+        <translation>Razredni/kastni sistem</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="200"/>
-        <source>Magic</source>
-        <translation type="unfinished"></translation>
+        <source>System</source>
+        <translation>Sistem</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="208"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="201"/>
+        <source>Politics</source>
+        <translation>Politika</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="203"/>
+        <source>Magic</source>
+        <translation>Čarobno</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="211"/>
         <source>Magic types</source>
-        <translation type="unfinished"></translation>
+        <translation>Vrste čarobnega</translation>
     </message>
 </context>
 <context>
@@ -11242,313 +11202,313 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="465"/>
         <source>Apply new world name</source>
-        <translation type="unfinished"></translation>
+        <translation>Uveljavi novo ime sveta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1301"/>
         <source>Unlock access to extended world profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Odkleni dostop do razširjenega profila sveta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1303"/>
         <source>Name</source>
-        <translation type="unfinished">Ime</translation>
+        <translation>Ime</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1304"/>
         <source>One sentence description</source>
-        <translation type="unfinished">Opis v eni povedi</translation>
+        <translation>Opis v eni povedi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1305"/>
         <source>Long description</source>
-        <translation type="unfinished">Daljši opis</translation>
+        <translation>Daljši opis</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1306"/>
         <source>Add photo +</source>
-        <translation type="unfinished">Dodaj fotografijo +</translation>
+        <translation>Dodaj fotografijo +</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1306"/>
         <source>Change photo...</source>
-        <translation type="unfinished">Spremeni fotografijo ...</translation>
+        <translation>Spremeni fotografijo ...</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1307"/>
         <source>Do you want to delete the world&apos;s main photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ali želite izbrisati glavno fotografijo sveta?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1308"/>
         <source>Select an area for the world main photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Izberite področje za glavno fotografijo sveta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1310"/>
         <source>Photos</source>
-        <translation type="unfinished">Fotografije</translation>
+        <translation>Fotografije</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1312"/>
         <source>World description</source>
-        <translation type="unfinished"></translation>
+        <translation>Opis sveta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1313"/>
         <source>Overview</source>
-        <translation type="unfinished"></translation>
+        <translation>Pregled</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1314"/>
         <source>Earth like?</source>
-        <translation type="unfinished"></translation>
+        <translation>Je podoben Zemlji?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1315"/>
         <source>World history</source>
-        <translation type="unfinished"></translation>
+        <translation>Zgodovina sveta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1316"/>
         <source>World mood</source>
-        <translation type="unfinished"></translation>
+        <translation>Vzdušje sveta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1318"/>
         <source>Nature</source>
-        <translation type="unfinished"></translation>
+        <translation>Narava</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1319"/>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1363"/>
         <source>Basic info</source>
-        <translation type="unfinished"></translation>
+        <translation>Osnovni podatki</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1320"/>
         <source>Biology</source>
-        <translation type="unfinished"></translation>
+        <translation>Biologija</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1321"/>
-        <source>Phisics</source>
-        <translation type="unfinished"></translation>
+        <source>Physics</source>
+        <translation>Fizika</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1322"/>
         <source>Astronomy</source>
-        <translation type="unfinished"></translation>
+        <translation>Astronomija</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1323"/>
         <source>Geography</source>
-        <translation type="unfinished">Zemljepis</translation>
+        <translation>Zemljepis</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1324"/>
         <source>Races</source>
-        <translation type="unfinished"></translation>
+        <translation>Rase</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1325"/>
         <source>Flora</source>
-        <translation type="unfinished"></translation>
+        <translation>Rastlinstvo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1326"/>
         <source>Animals</source>
-        <translation type="unfinished"></translation>
+        <translation>Živalstvo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1327"/>
         <source>Natural resources</source>
-        <translation type="unfinished"></translation>
+        <translation>Naravni viri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1328"/>
         <source>Climate</source>
-        <translation type="unfinished">Klima</translation>
+        <translation>Klima</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1330"/>
         <source>Culture</source>
-        <translation type="unfinished"></translation>
+        <translation>Kultura</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1331"/>
         <source>Religions and beliefs</source>
-        <translation type="unfinished"></translation>
+        <translation>Verstva in verovanja</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1332"/>
         <source>Ethics and values</source>
-        <translation type="unfinished"></translation>
+        <translation>Etika in vrednote</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1333"/>
         <source>Languages</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeziki</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1334"/>
         <source>Class/caste system</source>
-        <translation type="unfinished"></translation>
+        <translation>Razredni/kastni sistem</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1336"/>
         <source>System info</source>
-        <translation type="unfinished"></translation>
+        <translation>Podatki o sistemu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1337"/>
         <source>Technology</source>
-        <translation type="unfinished"></translation>
+        <translation>Tehnologija</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1338"/>
         <source>Economy</source>
-        <translation type="unfinished"></translation>
+        <translation>Ekonomija</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1339"/>
         <source>Trade</source>
-        <translation type="unfinished"></translation>
+        <translation>Trgovanje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1340"/>
         <source>Business</source>
-        <translation type="unfinished"></translation>
+        <translation>Poslovanje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1341"/>
         <source>Industry</source>
-        <translation type="unfinished"></translation>
+        <translation>Industrija</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1342"/>
         <source>Currency</source>
-        <translation type="unfinished"></translation>
+        <translation>Valuta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1343"/>
         <source>Education</source>
-        <translation type="unfinished"></translation>
+        <translation>Šolstvo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1344"/>
         <source>Communication method</source>
-        <translation type="unfinished"></translation>
+        <translation>Metoda komuniciranja</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1345"/>
         <source>Art</source>
-        <translation type="unfinished"></translation>
+        <translation>Umetnost</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1346"/>
         <source>Entertainment</source>
-        <translation type="unfinished"></translation>
+        <translation>Zabava</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1347"/>
         <source>Travel</source>
-        <translation type="unfinished"></translation>
+        <translation>Potovanje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1348"/>
         <source>Science</source>
-        <translation type="unfinished"></translation>
+        <translation>Znanost</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1350"/>
         <source>Politics info</source>
-        <translation type="unfinished"></translation>
+        <translation>Podatki o politiki</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1351"/>
         <source>Government format</source>
-        <translation type="unfinished"></translation>
+        <translation>Oblika vladavine</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1352"/>
         <source>Government history</source>
-        <translation type="unfinished"></translation>
+        <translation>Zgodovina vladanja</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1353"/>
         <source>Laws and justice system</source>
-        <translation type="unfinished"></translation>
+        <translation>Zakonodaja in pravosodni sistem</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1354"/>
         <source>Foreign relations</source>
-        <translation type="unfinished"></translation>
+        <translation>Mednarodni odnosti</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1355"/>
         <source>People perception of government</source>
-        <translation type="unfinished"></translation>
+        <translation>Kako ljudje vidijo vladajoče</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1356"/>
         <source>Propaganda</source>
-        <translation type="unfinished"></translation>
+        <translation>Propaganda</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1357"/>
         <source>Anti-government organisations</source>
-        <translation type="unfinished"></translation>
+        <translation>Protivladne organizacije</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1358"/>
         <source>Past war</source>
-        <translation type="unfinished"></translation>
+        <translation>Pretekla vojna</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1359"/>
         <source>Current war</source>
-        <translation type="unfinished"></translation>
+        <translation>Trenutna vojna</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1360"/>
         <source>Potential war</source>
-        <translation type="unfinished"></translation>
+        <translation>Potencialna vojna</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1362"/>
         <source>Magic</source>
-        <translation type="unfinished"></translation>
+        <translation>Magično</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1364"/>
         <source>Magic rule</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravilo čarobnega</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1365"/>
         <source>Who can use</source>
-        <translation type="unfinished"></translation>
+        <translation>Kdo lahko uporablja</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1366"/>
         <source>Effect to world</source>
-        <translation type="unfinished"></translation>
+        <translation>Vpliv na svet</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1367"/>
         <source>Effect to society</source>
-        <translation type="unfinished"></translation>
+        <translation>Vpliv na družbo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1368"/>
         <source>Effect to technology</source>
-        <translation type="unfinished"></translation>
+        <translation>Vpliv na tehnologijo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1369"/>
         <source>Magic types</source>
-        <translation type="unfinished"></translation>
+        <translation>Vrste čarobnega</translation>
     </message>
 </context>
 <context>
@@ -11556,7 +11516,7 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="360"/>
         <source>Add one more</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj še enega</translation>
     </message>
 </context>
 <context>
@@ -11564,22 +11524,22 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="116"/>
         <source>Name</source>
-        <translation type="unfinished">Ime</translation>
+        <translation>Ime</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="117"/>
         <source>One sentence description</source>
-        <translation type="unfinished">Opis v eni povedi</translation>
+        <translation>Opis v eni povedi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="118"/>
         <source>Long description</source>
-        <translation type="unfinished">Daljši opis</translation>
+        <translation>Daljši opis</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="119"/>
         <source>Remove</source>
-        <translation type="unfinished">Odstrani</translation>
+        <translation>Odstrani</translation>
     </message>
 </context>
 <context>
@@ -11587,35 +11547,35 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="335"/>
         <source>Apply new world name</source>
-        <translation type="unfinished"></translation>
+        <translation>Uveljavi novo ime sveta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="562"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="694"/>
         <source>To create a new route, hold the Option button and move one world to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za izdelavo nove poti držite pritisnjeno izmenjalko (tipka Option) in premaknite en svet k drugemu.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="565"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="697"/>
         <source>To create a new route, hold the Alt button and move one world to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za izdelavo nove poti držite pritisnjeno izmenjalko (tipka Alt) in premaknite en svet k drugemu.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="569"/>
         <source>%1 has no routes with other worlds</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 nima nobenih poti do drugih svetov</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="571"/>
         <source>What routes %1 has</source>
-        <translation type="unfinished">Katere poti ima %1</translation>
+        <translation>Katere poti ima %1</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="577"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="719"/>
         <source>Open route details</source>
-        <translation type="unfinished">Odpri podrobnosti poti</translation>
+        <translation>Odpri podrobnosti poti</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="632"/>
@@ -11623,103 +11583,103 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="637"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="638"/>
         <source>Show all %1&apos;s routes</source>
-        <translation type="unfinished">Pokaži vse poti prizorišča %1</translation>
+        <translation>Pokaži vse poti prizorišča %1</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="690"/>
         <source>To see world info and all their routes, select concrete world.</source>
-        <translation type="unfinished"></translation>
+        <translation>Če želite videti podatke o svetu in vse njegove poti, izberite želeni svet.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="691"/>
         <source>To see route details, select concrete route.</source>
-        <translation type="unfinished">Če želite videti podrobnosti poti, izberite posamezno pot.</translation>
+        <translation>Če želite videti podrobnosti poti, izberite posamezno pot.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="699"/>
         <source>Solid line</source>
-        <translation type="unfinished">Zvezna črta</translation>
+        <translation>Zvezna črta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="699"/>
         <source>Dash line</source>
-        <translation type="unfinished">Črtkana črta</translation>
+        <translation>Črtkana črta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="699"/>
         <source>Dot line</source>
-        <translation type="unfinished">Pikasta črta</translation>
+        <translation>Pikasta črta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="704"/>
         <source>Border line type</source>
-        <translation type="unfinished">Vrsta črte obrobe</translation>
+        <translation>Vrsta črte obrobe</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="705"/>
         <source>Group name</source>
-        <translation type="unfinished">Ime skupine</translation>
+        <translation>Ime skupine</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="706"/>
         <source>Group description</source>
-        <translation type="unfinished">Opis skupine</translation>
+        <translation>Opis skupine</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="708"/>
         <source>Profile</source>
-        <translation type="unfinished">Profil</translation>
+        <translation>Profil</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="709"/>
         <source>Routes</source>
-        <translation type="unfinished">Poti</translation>
+        <translation>Poti</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="711"/>
         <source>Add photo +</source>
-        <translation type="unfinished">Dodaj fotografijo +</translation>
+        <translation>Dodaj fotografijo +</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="711"/>
         <source>Change photo...</source>
-        <translation type="unfinished">Spremeni fotografijo ...</translation>
+        <translation>Spremeni fotografijo ...</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="712"/>
         <source>Do you want to delete the world&apos;s main photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ali želite izbrisati glavno fotografijo sveta?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="713"/>
         <source>Select an area for the world main photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Izberite področje za glavno fotografijo sveta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="714"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="723"/>
         <source>Name</source>
-        <translation type="unfinished">Ime</translation>
+        <translation>Ime</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="715"/>
         <source>One sentence description</source>
-        <translation type="unfinished">Opis v eni povedi</translation>
+        <translation>Opis v eni povedi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="716"/>
         <source>Long description</source>
-        <translation type="unfinished">Daljši opis</translation>
+        <translation>Daljši opis</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="722"/>
         <source>Line type</source>
-        <translation type="unfinished">Vrsta črte</translation>
+        <translation>Vrsta črte</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="724"/>
         <source>Details</source>
-        <translation type="unfinished">Podrobnosti</translation>
+        <translation>Podrobnosti</translation>
     </message>
 </context>
 <context>
@@ -11727,37 +11687,37 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="337"/>
         <source>Unlock ability to edit worlds map</source>
-        <translation type="unfinished"></translation>
+        <translation>Odklenite možnost urejanja zemljevida svetov</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="338"/>
         <source>Add world</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj svet</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="339"/>
         <source>Add group</source>
-        <translation type="unfinished">Dodaj skupino</translation>
+        <translation>Dodaj skupino</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="340"/>
         <source>Remove selected item</source>
-        <translation type="unfinished">Odstrani izbrani element</translation>
+        <translation>Odstrani izbrani element</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="343"/>
         <source>Show routes titles only for the selected worlds</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaži naslove poti le za izbrane svetove</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="345"/>
         <source>Here will be a worlds map.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tukaj bo prikazan zemljevid svetov.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="346"/>
         <source>It&apos;s time to create the first world!</source>
-        <translation type="unfinished"></translation>
+        <translation>Čas je, da ustvarite svojo prvi svet!</translation>
     </message>
 </context>
 <context>

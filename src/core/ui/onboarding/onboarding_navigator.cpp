@@ -184,11 +184,11 @@ void OnboardingNavigator::Implementation::initUiPage()
 
         return languageItem;
     };
-    addLanguage("Azərbaycan", QLocale::Azerbaijani, 98);
+    addLanguage("Azərbaycan", QLocale::Azerbaijani, 100);
     addLanguage("Беларуский", QLocale::Belarusian, 51);
     addLanguage("Català", QLocale::Catalan, 88);
     addLanguage("Dansk", QLocale::Danish, 92);
-    addLanguage("Deutsch", QLocale::German, 68);
+    addLanguage("Deutsch", QLocale::German, 100);
     auto englishItem = addLanguage("English", QLocale::English, 100);
     addLanguage("Español", QLocale::Spanish, 91);
     addLanguage("Esperanto", QLocale::Esperanto, 9);

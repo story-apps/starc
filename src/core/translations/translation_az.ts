@@ -1126,7 +1126,7 @@
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="363"/>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="372"/>
         <source>Worlds</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmlər</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="394"/>
@@ -1167,7 +1167,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/worlds/worlds_model.cpp" line="176"/>
         <source>New group</source>
-        <translation type="unfinished">Yeni qrup</translation>
+        <translation>Yeni qrup</translation>
     </message>
 </context>
 <context>
@@ -1458,22 +1458,22 @@
         <translation>Şəkli poz</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="612"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="609"/>
         <source>Select file</source>
         <translation>Faylı seç</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="615"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="612"/>
         <source>Delete</source>
         <translation>Poz</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="614"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="611"/>
         <source>Paste</source>
         <translation>Daxil et</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="613"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="610"/>
         <source>Copy</source>
         <translation>Köçür</translation>
     </message>
@@ -1736,17 +1736,17 @@
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="73"/>
         <source>To access character dialogues module, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Personajın dialoqları moduluna daxil olmaq üçün PRo versiyaya qədər yenilənməlisiz. </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="74"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Bəlkə sonra</translation>
+        <translation>Bəlkə sonra</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="75"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Yenilə</translation>
+        <translation>Yenilə</translation>
     </message>
 </context>
 <context>
@@ -2186,7 +2186,7 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="598"/>
         <source>World with this name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu adla bağlı aləm artıq mövcuddur</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="768"/>
@@ -2262,14 +2262,14 @@
         <location filename="../management_layer/content/project/project_manager.cpp" line="1884"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1905"/>
         <source>draft</source>
-        <translation type="unfinished">eskiz</translation>
+        <translation>eskiz</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1861"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1882"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1903"/>
         <source>Script</source>
-        <translation type="unfinished">Ssenari</translation>
+        <translation>Ssenari</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="2452"/>
@@ -2435,12 +2435,12 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_manager.cpp" line="65"/>
         <source>Scene numbers locked</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnə nömrələri kilidlənib</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_manager.cpp" line="65"/>
         <source>Scene numbers unlocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnə nömrələrinin kilidi açılıb</translation>
     </message>
 </context>
 <context>
@@ -2623,43 +2623,43 @@
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="71"/>
         <source>To access extended world profile, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin genişləndirilmiş profilini əldə etmək üçün sizə PRO versiyaya qədər yenilənmək lazımdır.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="72"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Bəlkə sonra</translation>
+        <translation>Bəlkə sonra</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="73"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Yenilə</translation>
+        <translation>Yenilə</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="329"/>
         <source>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin adı %1 dən %2 yə dəyişib. Dəyişikliyi təsdiqləyirsiz?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="331"/>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="371"/>
         <source>No</source>
-        <translation type="unfinished">Xeyr</translation>
+        <translation>Xeyr</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="332"/>
         <source>Yes</source>
-        <translation type="unfinished">Bəli</translation>
+        <translation>Bəli</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="370"/>
         <source>Do you want to delete the world&apos;s photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu aləmin fotoşəklini pozmaq istəyirsiz?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="372"/>
         <source>Yes, delete</source>
-        <translation type="unfinished">Bəli, poz.</translation>
+        <translation>Bəli, poz.</translation>
     </message>
 </context>
 <context>
@@ -2667,37 +2667,37 @@
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="134"/>
         <source>To edit the world map, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləm xəritəsini redaktə etmək üçün PRO verisyaya qədər yenilənməlisiz. </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="135"/>
         <source>Maybe later</source>
-        <translation type="unfinished">Bəlkə sonra</translation>
+        <translation>Bəlkə sonra</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="136"/>
         <source>Upgrade</source>
-        <translation type="unfinished">Yenilə</translation>
+        <translation>Yenilə</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="154"/>
         <source>World with this name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu adla bağlı aləm artıq mövcuddur</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="513"/>
         <source>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin adı %1 dən %2 yə dəyişib. Dəyişikliyi təsdiqləyirsiz?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="515"/>
         <source>No</source>
-        <translation type="unfinished">Xeyr</translation>
+        <translation>Xeyr</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="516"/>
         <source>Yes</source>
-        <translation type="unfinished">Bəli</translation>
+        <translation>Bəli</translation>
     </message>
 </context>
 <context>
@@ -2860,7 +2860,7 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="474"/>
         <source>Character dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>Personajın dialoqları</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="478"/>
@@ -2875,12 +2875,12 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="485"/>
         <source>Worlds map</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin xəritəsi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="488"/>
         <source>World information</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləm haqqında məlumat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="492"/>
@@ -3802,12 +3802,12 @@
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="339"/>
         <source>Unlock ability to edit characters relations</source>
-        <translation type="unfinished">Personajjları redaktə etmək imkanını açmaq</translation>
+        <translation>Personajjları redaktə etmək imkanını açmaq</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="340"/>
         <source>Update character dialogues list</source>
-        <translation type="unfinished"></translation>
+        <translation>Personajın dialoqlar siyahısını yenilə</translation>
     </message>
 </context>
 <context>
@@ -5072,12 +5072,12 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/counters_info_widget.cpp" line="69"/>
         <source>No counter selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Heç bir sayğac seçilməyib</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/counters_info_widget.cpp" line="155"/>
         <source>Click to select counters to show</source>
-        <translation type="unfinished"></translation>
+        <translation>Göstəriləcək sayğacları seçin</translation>
     </message>
 </context>
 <context>
@@ -5095,22 +5095,22 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="613"/>
         <source>Color between text and image</source>
-        <translation type="unfinished"></translation>
+        <translation>Mətn və şəkil arasındakı rəng</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="614"/>
         <source>black</source>
-        <translation type="unfinished"></translation>
+        <translation>qara</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="615"/>
         <source>transparent</source>
-        <translation type="unfinished"></translation>
+        <translation>şəffaf</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="616"/>
         <source>white</source>
-        <translation type="unfinished"></translation>
+        <translation>ağ</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="617"/>
@@ -5205,7 +5205,7 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="647"/>
         <source>Enter keywords for search</source>
-        <translation type="unfinished"></translation>
+        <translation>Axtarış üçün açar sözü daxil edin</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="649"/>
@@ -5219,8 +5219,8 @@
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="651"/>
-        <source>Locading images</source>
-        <translation type="unfinished"></translation>
+        <source>Loading images</source>
+        <translation>Şəkillərin yüklənməsi</translation>
     </message>
 </context>
 <context>
@@ -5395,52 +5395,52 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="133"/>
         <source>Add folder</source>
-        <translation type="unfinished">Qovluq əlavə et</translation>
+        <translation>Qovluq əlavə et</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="134"/>
         <source>Add text</source>
-        <translation type="unfinished"></translation>
+        <translation>Mətn əlavə et</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="135"/>
         <source>Add character</source>
-        <translation type="unfinished">Personaj əlavə et</translation>
+        <translation>Personaj əlavə et</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="136"/>
         <source>Add location</source>
-        <translation type="unfinished">Məkan əlavə et</translation>
+        <translation>Məkan əlavə et</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="137"/>
         <source>Add world</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləm əlavə et</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="138"/>
         <source>Add screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ssenari əlavə et</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="139"/>
         <source>Add comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>Komiks əlavə et</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="140"/>
         <source>Add audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio pyes əlavə et</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="141"/>
         <source>Add stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Pyes əlavə et</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="142"/>
         <source>Add image gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Şəkil qalereyası əlavə et</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="146"/>
@@ -5465,7 +5465,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="155"/>
         <source>Create a document with detailed world description to keep all the notes in one place</source>
-        <translation type="unfinished"></translation>
+        <translation>Bütün qeydləri bir yerdə saxlamaq üçün aləmin müfəssəl təsviri olan sənəd yarat</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="158"/>
@@ -5505,7 +5505,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="240"/>
         <source>The world should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin adı olmalıdır</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="279"/>
@@ -5515,62 +5515,22 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="301"/>
         <source>Story</source>
-        <translation type="unfinished">Əhvalatı</translation>
+        <translation>Əhvalatı</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="302"/>
         <source>World of story</source>
-        <translation type="unfinished"></translation>
+        <translation>Hekayətin aləmi</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="303"/>
         <source>Structure &amp; notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Struktur və qeydlər</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="305"/>
         <source>Add document</source>
-        <translation type="unfinished">Sənəd əlavə et</translation>
-    </message>
-    <message>
-        <source>Add document to the story</source>
-        <translation type="vanished">Əhvalata sənəd əlavə et</translation>
-    </message>
-    <message>
-        <source>Folder</source>
-        <translation type="vanished">Qovluq</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation type="vanished">Mətn</translation>
-    </message>
-    <message>
-        <source>Character</source>
-        <translation type="vanished">Personaj</translation>
-    </message>
-    <message>
-        <source>Location</source>
-        <translation type="vanished">Məkan</translation>
-    </message>
-    <message>
-        <source>Screenplay</source>
-        <translation type="vanished">Ssenari</translation>
-    </message>
-    <message>
-        <source>Comic book</source>
-        <translation type="vanished">Komiks</translation>
-    </message>
-    <message>
-        <source>Audioplay</source>
-        <translation type="vanished">Audio tamaşa</translation>
-    </message>
-    <message>
-        <source>Stageplay</source>
-        <translation type="vanished">Pyes</translation>
-    </message>
-    <message>
-        <source>Images gallery</source>
-        <translation type="vanished">Şəkillər qalereyası</translation>
+        <translation>Sənəd əlavə et</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="312"/>
@@ -5593,52 +5553,52 @@
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="178"/>
         <source>Folder</source>
-        <translation type="unfinished">Qovluq</translation>
+        <translation>Qovluq</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="183"/>
         <source>Text</source>
-        <translation type="unfinished">Mətn</translation>
+        <translation>Mətn</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="188"/>
         <source>Character</source>
-        <translation type="unfinished">Personaj</translation>
+        <translation>Personaj</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="193"/>
         <source>Location</source>
-        <translation type="unfinished">Məkan</translation>
+        <translation>Məkan</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="198"/>
         <source>World</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləm</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="203"/>
         <source>Screenplay</source>
-        <translation type="unfinished">Ssenari</translation>
+        <translation>Ssenari</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="208"/>
         <source>Comic book</source>
-        <translation type="unfinished">Komiks</translation>
+        <translation>Komiks</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="213"/>
         <source>Audioplay</source>
-        <translation type="unfinished">Audio tamaşa</translation>
+        <translation>Audio tamaşa</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="218"/>
         <source>Stageplay</source>
-        <translation type="unfinished">Pyes</translation>
+        <translation>Pyes</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="223"/>
         <source>Image gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Şəkil qalereyası</translation>
     </message>
 </context>
 <context>
@@ -5850,27 +5810,27 @@
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="65"/>
         <source>The world should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin adı olmalıdır</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="98"/>
         <source>Create new world</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni aləm yarat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="99"/>
         <source>World name</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin adı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="100"/>
         <source>Cancel</source>
-        <translation type="unfinished">İmtina</translation>
+        <translation>İmtina</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="101"/>
         <source>Create</source>
-        <translation type="unfinished">Yarat</translation>
+        <translation>Yarat</translation>
     </message>
 </context>
 <context>
@@ -7456,12 +7416,12 @@ Dili özünüz tərəfinizdən necə əlavə etmək barədə oxuyun. </translati
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="276"/>
         <source>Downloading failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Yükləmə alınmadı</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="278"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir daha cəhd et</translation>
     </message>
     <message>
         <location filename="../ui/notifications/release_view.cpp" line="290"/>
@@ -7897,7 +7857,7 @@ Dili özünüz tərəfinizdən necə əlavə etmək barədə oxuyun. </translati
     <message>
         <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="520"/>
         <source>Select item color</source>
-        <translation type="unfinished"></translation>
+        <translation>Rəngini seçin</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="525"/>
@@ -7912,7 +7872,7 @@ Dili özünüz tərəfinizdən necə əlavə etmək barədə oxuyun. </translati
     <message>
         <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="527"/>
         <source>Select scene color</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnənin rəngini seç</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="538"/>
@@ -7927,22 +7887,22 @@ Dili özünüz tərəfinizdən necə əlavə etmək barədə oxuyun. </translati
     <message>
         <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="541"/>
         <source>Auto scene numbering</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnələrin avtomatik səsləndirilməsi</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="542"/>
         <source>Scene number</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnə nömrəsi</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="543"/>
         <source>Skip the number of this scene</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu səhnənin nömrəsini burax</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="545"/>
         <source>Skip logical number of this scene for determining the next scene number</source>
-        <translation type="unfinished"></translation>
+        <translation>Növbəti səhnə nömrəsini təyin etmək üçün bu səhnənin məntiqi nömrəsini burax</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/screenplay/screenplay_item_parameters_view.cpp" line="546"/>
@@ -7985,7 +7945,7 @@ Dili özünüz tərəfinizdən necə əlavə etmək barədə oxuyun. </translati
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="218"/>
         <source>Do you want unlock scene numbers?</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnəlrin nömrələnməsi kilidinin açılmasını istəyirsiz?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="219"/>
@@ -7995,27 +7955,27 @@ Dili özünüz tərəfinizdən necə əlavə etmək barədə oxuyun. </translati
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="220"/>
         <source>Yes, unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Bəli, kilidi aç</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="437"/>
         <source>Scenes numbering</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnələrin nömrələnməsi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="438"/>
         <source>Scenes numbers&apos; template</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnə nömrələrinin şablonu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="439"/>
         <source>Use # mark for the scene number</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnə nömrələri üçün # simvolunu işlət</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="440"/>
         <source>Reset scene numbers template</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnə nömrələri  şablonunu sıfırla</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="441"/>
@@ -8025,17 +7985,17 @@ Dili özünüz tərəfinizdən necə əlavə etmək barədə oxuyun. </translati
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="442"/>
         <source>Lock numbering</source>
-        <translation type="unfinished"></translation>
+        <translation>Nömrələnməni kilidlə</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="443"/>
         <source>Lock numbering agian</source>
-        <translation type="unfinished"></translation>
+        <translation>Nömrələnməni yenidən kilidlə</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="444"/>
         <source>Unlock numbering</source>
-        <translation type="unfinished"></translation>
+        <translation>Nömrələnmənin kilidini aç</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="445"/>
@@ -8829,41 +8789,41 @@ Dili özünüz tərəfinizdən necə əlavə etmək barədə oxuyun. </translati
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="109"/>
         <source>%n page(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n səhifə(lər)</numerusform>
+            <numerusform>%n səhifə(lər)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="110"/>
         <source>%n scene(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n səhnə(lər)</numerusform>
+            <numerusform>%n səhnə(lər)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="111"/>
         <source>%n word(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n söz(lər)</numerusform>
-            <numerusform>%n söz(lər)</numerusform>
+            <numerusform>%n səhifə(lər)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="112"/>
         <source>%n character(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n personaj(lar)</numerusform>
+            <numerusform>%n səhifə(lər)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="113"/>
         <source>%n character(s) with spaces</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n personaj(lar) aralıqla bir yerdə</numerusform>
+            <numerusform>%nsəhifə(lər)</numerusform>
         </translation>
     </message>
 </context>
@@ -8872,12 +8832,12 @@ Dili özünüz tərəfinizdən necə əlavə etmək barədə oxuyun. </translati
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="372"/>
         <source>Hide scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnə parametrlərini gizlət</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="373"/>
         <source>Show scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnənin parametrlərini göstər</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="374"/>
@@ -8902,7 +8862,7 @@ Dili özünüz tərəfinizdən necə əlavə etmək barədə oxuyun. </translati
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1497"/>
         <source>Scene parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Səhnənin parametrləri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1498"/>
@@ -11104,95 +11064,95 @@ Mouse və ya klaviaturanı işlətmədiyiniz halda o, layihəni hər 3 saniyəd�
 <context>
     <name>Ui::WorldInformationStructureView</name>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="153"/>
-        <source>Main</source>
-        <translation type="unfinished">Əsas</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="154"/>
-        <source>World description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="156"/>
-        <source>Nature</source>
-        <translation type="unfinished"></translation>
+        <source>Main</source>
+        <translation>Əsas</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="160"/>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="204"/>
-        <source>Basic info</source>
-        <translation type="unfinished"></translation>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="157"/>
+        <source>World description</source>
+        <translation>Aləmin təsviri</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="159"/>
+        <source>Nature</source>
+        <translation>Təbiət</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="163"/>
-        <source>Races</source>
-        <translation type="unfinished"></translation>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="207"/>
+        <source>Basic info</source>
+        <translation>Bazis məlumat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="166"/>
+        <source>Races</source>
+        <translation>İrqlər</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="169"/>
         <source>Flora</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitki aləmi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="170"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="173"/>
         <source>Animals</source>
-        <translation type="unfinished"></translation>
+        <translation>Heyvanat aləmi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="174"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="177"/>
         <source>Natural resources</source>
-        <translation type="unfinished"></translation>
+        <translation>Təbii yataqlar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="178"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="181"/>
         <source>Climate</source>
-        <translation type="unfinished">İqlim</translation>
+        <translation>İqlim</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="180"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="183"/>
         <source>Culture</source>
-        <translation type="unfinished"></translation>
+        <translation>Mədəniyyət</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="184"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="187"/>
         <source>Religions and beliefs</source>
-        <translation type="unfinished"></translation>
+        <translation>Regionlar və inanclar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="188"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="191"/>
         <source>Ethics and values</source>
-        <translation type="unfinished"></translation>
+        <translation>Etika və dəyərlər</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="192"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="195"/>
         <source>Languages</source>
-        <translation type="unfinished"></translation>
+        <translation>Dillər</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="196"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="199"/>
         <source>Class/caste system</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="197"/>
-        <source>System</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="198"/>
-        <source>Politics</source>
-        <translation type="unfinished"></translation>
+        <translation>Siniflər/kasta sistemi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="200"/>
-        <source>Magic</source>
-        <translation type="unfinished"></translation>
+        <source>System</source>
+        <translation>Sistem</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="208"/>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="201"/>
+        <source>Politics</source>
+        <translation>Siyasət</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="203"/>
+        <source>Magic</source>
+        <translation>Sehr</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="211"/>
         <source>Magic types</source>
-        <translation type="unfinished"></translation>
+        <translation>Sehr tipləri</translation>
     </message>
 </context>
 <context>
@@ -11200,313 +11160,313 @@ Mouse və ya klaviaturanı işlətmədiyiniz halda o, layihəni hər 3 saniyəd�
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="465"/>
         <source>Apply new world name</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni aləm adını ver</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1301"/>
         <source>Unlock access to extended world profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin genişlənmiş profilinə daxil olmanı aç</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1303"/>
         <source>Name</source>
-        <translation type="unfinished">Ad</translation>
+        <translation>Ad</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1304"/>
         <source>One sentence description</source>
-        <translation type="unfinished">Bir cümləlik təsvir</translation>
+        <translation>Bir cümləlik təsvir</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1305"/>
         <source>Long description</source>
-        <translation type="unfinished">Geniş təsvir</translation>
+        <translation>Geniş təsvir</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1306"/>
         <source>Add photo +</source>
-        <translation type="unfinished">Fotoşəkil əlavə et +</translation>
+        <translation>Fotoşəkil əlavə et +</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1306"/>
         <source>Change photo...</source>
-        <translation type="unfinished">Fotoşəkli dəyiş...</translation>
+        <translation>Fotoşəkli dəyiş...</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1307"/>
         <source>Do you want to delete the world&apos;s main photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin əsas şəklini pozmaq istəyirsiz?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1308"/>
         <source>Select an area for the world main photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin əsas fotoşəkli üçün yeri seçin</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1310"/>
         <source>Photos</source>
-        <translation type="unfinished">Fotoşəkillər</translation>
+        <translation>Fotoşəkillər</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1312"/>
         <source>World description</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin təsviri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1313"/>
         <source>Overview</source>
-        <translation type="unfinished"></translation>
+        <translation>Ümumi baxış</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1314"/>
         <source>Earth like?</source>
-        <translation type="unfinished"></translation>
+        <translation>Yerə bənzər?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1315"/>
         <source>World history</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin tarixi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1316"/>
         <source>World mood</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin abu-havası</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1318"/>
         <source>Nature</source>
-        <translation type="unfinished"></translation>
+        <translation>Təbiət</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1319"/>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1363"/>
         <source>Basic info</source>
-        <translation type="unfinished"></translation>
+        <translation>Bazis məlumat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1320"/>
         <source>Biology</source>
-        <translation type="unfinished"></translation>
+        <translation>Biologiya</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1321"/>
-        <source>Phisics</source>
-        <translation type="unfinished"></translation>
+        <source>Physics</source>
+        <translation>Fizika</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1322"/>
         <source>Astronomy</source>
-        <translation type="unfinished"></translation>
+        <translation>Astronomiya</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1323"/>
         <source>Geography</source>
-        <translation type="unfinished">Coğrafiya</translation>
+        <translation>Coğrafiya</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1324"/>
         <source>Races</source>
-        <translation type="unfinished"></translation>
+        <translation>İrqlər</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1325"/>
         <source>Flora</source>
-        <translation type="unfinished"></translation>
+        <translation>Flora</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1326"/>
         <source>Animals</source>
-        <translation type="unfinished"></translation>
+        <translation>Heyvanat aləmi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1327"/>
         <source>Natural resources</source>
-        <translation type="unfinished"></translation>
+        <translation>Təbii yataqlar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1328"/>
         <source>Climate</source>
-        <translation type="unfinished">İqlim</translation>
+        <translation>İqlim</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1330"/>
         <source>Culture</source>
-        <translation type="unfinished"></translation>
+        <translation>Mədəniyyət</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1331"/>
         <source>Religions and beliefs</source>
-        <translation type="unfinished"></translation>
+        <translation>Regionlar və inanclar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1332"/>
         <source>Ethics and values</source>
-        <translation type="unfinished"></translation>
+        <translation>Etika və dəyərlər</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1333"/>
         <source>Languages</source>
-        <translation type="unfinished"></translation>
+        <translation>Dillər</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1334"/>
         <source>Class/caste system</source>
-        <translation type="unfinished"></translation>
+        <translation>Siniflər/kasta sistemi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1336"/>
         <source>System info</source>
-        <translation type="unfinished"></translation>
+        <translation>Sistem haqqında məlumat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1337"/>
         <source>Technology</source>
-        <translation type="unfinished"></translation>
+        <translation>Texnologiyalar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1338"/>
         <source>Economy</source>
-        <translation type="unfinished"></translation>
+        <translation>İqtisadiyyat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1339"/>
         <source>Trade</source>
-        <translation type="unfinished"></translation>
+        <translation>Bazar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1340"/>
         <source>Business</source>
-        <translation type="unfinished"></translation>
+        <translation>Biznes</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1341"/>
         <source>Industry</source>
-        <translation type="unfinished"></translation>
+        <translation>Sənaye</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1342"/>
         <source>Currency</source>
-        <translation type="unfinished"></translation>
+        <translation>Valyuta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1343"/>
         <source>Education</source>
-        <translation type="unfinished"></translation>
+        <translation>Təhsil</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1344"/>
         <source>Communication method</source>
-        <translation type="unfinished"></translation>
+        <translation>Ünsiyyət metodu</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1345"/>
         <source>Art</source>
-        <translation type="unfinished"></translation>
+        <translation>İncəsənət</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1346"/>
         <source>Entertainment</source>
-        <translation type="unfinished"></translation>
+        <translation>Əyləncə</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1347"/>
         <source>Travel</source>
-        <translation type="unfinished"></translation>
+        <translation>Səyahət</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1348"/>
         <source>Science</source>
-        <translation type="unfinished"></translation>
+        <translation>Elm</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1350"/>
         <source>Politics info</source>
-        <translation type="unfinished"></translation>
+        <translation>Siyasi məlumat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1351"/>
         <source>Government format</source>
-        <translation type="unfinished"></translation>
+        <translation>Hakimiyyət forması</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1352"/>
         <source>Government history</source>
-        <translation type="unfinished"></translation>
+        <translation>Hakimiyyət tarixi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1353"/>
         <source>Laws and justice system</source>
-        <translation type="unfinished"></translation>
+        <translation>Qanunlar və ədliyyə sistemi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1354"/>
         <source>Foreign relations</source>
-        <translation type="unfinished"></translation>
+        <translation>Xarici münasibətlər</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1355"/>
         <source>People perception of government</source>
-        <translation type="unfinished"></translation>
+        <translation>Xalqın hakimiyyətə münasibəti</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1356"/>
         <source>Propaganda</source>
-        <translation type="unfinished"></translation>
+        <translation>Təbliğat</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1357"/>
         <source>Anti-government organisations</source>
-        <translation type="unfinished"></translation>
+        <translation>Hökumətə qarşı olan təşkilatlar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1358"/>
         <source>Past war</source>
-        <translation type="unfinished"></translation>
+        <translation>Keçmiş müharibə</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1359"/>
         <source>Current war</source>
-        <translation type="unfinished"></translation>
+        <translation>Cari müharibə</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1360"/>
         <source>Potential war</source>
-        <translation type="unfinished"></translation>
+        <translation>Potensial müharibə</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1362"/>
         <source>Magic</source>
-        <translation type="unfinished"></translation>
+        <translation>Sehr</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1364"/>
         <source>Magic rule</source>
-        <translation type="unfinished"></translation>
+        <translation>Sehrin qaydası</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1365"/>
         <source>Who can use</source>
-        <translation type="unfinished"></translation>
+        <translation>Kim istifadə edə bilər</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1366"/>
         <source>Effect to world</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmə təsiri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1367"/>
         <source>Effect to society</source>
-        <translation type="unfinished"></translation>
+        <translation>Cəmiyyətə təsiri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1368"/>
         <source>Effect to technology</source>
-        <translation type="unfinished"></translation>
+        <translation>Texnologiyalara təsiri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1369"/>
         <source>Magic types</source>
-        <translation type="unfinished"></translation>
+        <translation>Sehr tipləri</translation>
     </message>
 </context>
 <context>
@@ -11514,7 +11474,7 @@ Mouse və ya klaviaturanı işlətmədiyiniz halda o, layihəni hər 3 saniyəd�
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="360"/>
         <source>Add one more</source>
-        <translation type="unfinished"></translation>
+        <translation>Daha birini əlavə et</translation>
     </message>
 </context>
 <context>
@@ -11522,22 +11482,22 @@ Mouse və ya klaviaturanı işlətmədiyiniz halda o, layihəni hər 3 saniyəd�
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="116"/>
         <source>Name</source>
-        <translation type="unfinished">Ad</translation>
+        <translation>Ad</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="117"/>
         <source>One sentence description</source>
-        <translation type="unfinished">Bir cümləlik təsvir</translation>
+        <translation>Bir cümləlik təsvir</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="118"/>
         <source>Long description</source>
-        <translation type="unfinished">Geniş təsvir</translation>
+        <translation>Geniş təsvir</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="119"/>
         <source>Remove</source>
-        <translation type="unfinished">Poz</translation>
+        <translation>Poz</translation>
     </message>
 </context>
 <context>
@@ -11545,35 +11505,35 @@ Mouse və ya klaviaturanı işlətmədiyiniz halda o, layihəni hər 3 saniyəd�
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="335"/>
         <source>Apply new world name</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni aləm adını ver</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="562"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="694"/>
         <source>To create a new route, hold the Option button and move one world to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni cığır yaratmaq üçün Parametrlər düyməsini saxlayaraq bir aləmi o birinə keçirin.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="565"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="697"/>
         <source>To create a new route, hold the Alt button and move one world to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni cığır yaratmaq üçün Alt düyməsini saxlayaraq bir aləmi o birininə keçirin. </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="569"/>
         <source>%1 has no routes with other worlds</source>
-        <translation type="unfinished"></translation>
+        <translation>Digər aləmlərlə %1 cığır yoxdur</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="571"/>
         <source>What routes %1 has</source>
-        <translation type="unfinished">Cığırların %1 var</translation>
+        <translation>Cığırların %1 var</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="577"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="719"/>
         <source>Open route details</source>
-        <translation type="unfinished">Cığırın detallarını aç</translation>
+        <translation>Cığırın detallarını aç</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="632"/>
@@ -11581,103 +11541,103 @@ Mouse və ya klaviaturanı işlətmədiyiniz halda o, layihəni hər 3 saniyəd�
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="637"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="638"/>
         <source>Show all %1&apos;s routes</source>
-        <translation type="unfinished">Bütün cığırların %1 göstər</translation>
+        <translation>Bütün cığırların %1 göstər</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="690"/>
         <source>To see world info and all their routes, select concrete world.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləm haqqında məlumatı və onun bütün cığırlarını görmək üçün konkret aləmi seçin. </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="691"/>
         <source>To see route details, select concrete route.</source>
-        <translation type="unfinished">Cığırın detallarını görmək üçün konkret cığırı seçin.</translation>
+        <translation>Cığırın detallarını görmək üçün konkret cığırı seçin.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="699"/>
         <source>Solid line</source>
-        <translation type="unfinished">Tam xətt</translation>
+        <translation>Tam xətt</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="699"/>
         <source>Dash line</source>
-        <translation type="unfinished">Tire</translation>
+        <translation>Tire</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="699"/>
         <source>Dot line</source>
-        <translation type="unfinished">Qırıq-qırıq xətt</translation>
+        <translation>Qırıq-qırıq xətt</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="704"/>
         <source>Border line type</source>
-        <translation type="unfinished">Sədd xəttinin növü</translation>
+        <translation>Sədd xəttinin növü</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="705"/>
         <source>Group name</source>
-        <translation type="unfinished">Qrupun adı</translation>
+        <translation>Qrupun adı</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="706"/>
         <source>Group description</source>
-        <translation type="unfinished">Qrupun təsviri</translation>
+        <translation>Qrupun təsviri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="708"/>
         <source>Profile</source>
-        <translation type="unfinished">Profil</translation>
+        <translation>Profil</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="709"/>
         <source>Routes</source>
-        <translation type="unfinished">Cığırlar</translation>
+        <translation>Cığırlar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="711"/>
         <source>Add photo +</source>
-        <translation type="unfinished">Fotoşəkil əlavə et +</translation>
+        <translation>Fotoşəkil əlavə et +</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="711"/>
         <source>Change photo...</source>
-        <translation type="unfinished">Fotoşəkli dəyiş...</translation>
+        <translation>Fotoşəkli dəyiş...</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="712"/>
         <source>Do you want to delete the world&apos;s main photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin əsas şəklini pozmaq istəyirsiz?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="713"/>
         <source>Select an area for the world main photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin əsas fotoşəkli üçün yeri seçin</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="714"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="723"/>
         <source>Name</source>
-        <translation type="unfinished">Ad</translation>
+        <translation>Ad</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="715"/>
         <source>One sentence description</source>
-        <translation type="unfinished">Bir cümləlik təsvir</translation>
+        <translation>Bir cümləlik təsvir</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="716"/>
         <source>Long description</source>
-        <translation type="unfinished">Geniş təsvir</translation>
+        <translation>Geniş təsvir</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="722"/>
         <source>Line type</source>
-        <translation type="unfinished">Xətt növü</translation>
+        <translation>Xətt növü</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="724"/>
         <source>Details</source>
-        <translation type="unfinished">Detallar</translation>
+        <translation>Detallar</translation>
     </message>
 </context>
 <context>
@@ -11685,37 +11645,37 @@ Mouse və ya klaviaturanı işlətmədiyiniz halda o, layihəni hər 3 saniyəd�
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="337"/>
         <source>Unlock ability to edit worlds map</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləmin xəritəsini redaktə etmək imkanını aktivləşdir</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="338"/>
         <source>Add world</source>
-        <translation type="unfinished"></translation>
+        <translation>Aləm əlavə et</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="339"/>
         <source>Add group</source>
-        <translation type="unfinished">Qrup əlavə et</translation>
+        <translation>Qrup əlavə et</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="340"/>
         <source>Remove selected item</source>
-        <translation type="unfinished">Seçilmiş elementi sil</translation>
+        <translation>Seçilmiş elementi sil</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="343"/>
         <source>Show routes titles only for the selected worlds</source>
-        <translation type="unfinished"></translation>
+        <translation>Yalnız seçilmiş aləmlərin cığırlarının adlarını göstər</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="345"/>
         <source>Here will be a worlds map.</source>
-        <translation type="unfinished"></translation>
+        <translation>Burda aləmin xəritəsi olacaq.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="346"/>
         <source>It&apos;s time to create the first world!</source>
-        <translation type="unfinished"></translation>
+        <translation>İlk aləmi yaratmaq vaxtıdır!</translation>
     </message>
 </context>
 <context>
