@@ -561,29 +561,26 @@ void ImageCard::dropEvent(QDropEvent* _event)
     //
     if (mimeData->hasUrls()) {
         for (const auto& url : mimeData->urls()) {
-            //
-            // Обрабатываем только изображения
-            //
             const QString urlString = url.toString().toLower();
-            if (urlString.contains(".png") || urlString.contains(".jpg")
-                || urlString.contains(".jpeg") || urlString.contains(".gif")
-                || urlString.contains(".tiff") || urlString.contains(".bmp")) {
+            //
+            // ... локальные изображения
+            //
+            if ((urlString.contains(".png") || urlString.contains(".jpg")
+                 || urlString.contains(".jpeg") || urlString.contains(".gif")
+                 || urlString.contains(".tiff") || urlString.contains(".bmp")
+                 || urlString.contains(".webp"))
+                && url.isLocalFile()) {
+                droppedImage = QPixmap(url.toLocalFile());
+            }
+            //
+            // ... подгружаем картинки с инета
+            //
+            else {
                 //
-                // ... локальные считываем из файла
+                // TODO: сделать асинхронно
                 //
-                if (url.isLocalFile()) {
-                    droppedImage = QPixmap(url.toLocalFile());
-                }
-                //
-                // ... подгружаем картинки с инета
-                //
-                else {
-                    //
-                    // TODO: сделать асинхронно
-                    //
-                    const QByteArray pixmapData = NetworkRequestLoader::loadSync(url);
-                    droppedImage.loadFromData(pixmapData);
-                }
+                const QByteArray pixmapData = NetworkRequestLoader::loadSync(url);
+                droppedImage.loadFromData(pixmapData);
             }
         }
     } else if (mimeData->hasImage()) {

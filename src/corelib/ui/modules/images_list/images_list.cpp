@@ -675,30 +675,27 @@ void ImagesList::dropEvent(QDropEvent* _event)
     if (mimeData->hasUrls()) {
         for (const auto& url : mimeData->urls()) {
             //
-            // Обрабатываем только изображения
+            // ... локальные изображения
             //
             const QString urlString = url.toString().toLower();
-            if (urlString.contains(".png") || urlString.contains(".jpg")
-                || urlString.contains(".jpeg") || urlString.contains(".gif")
-                || urlString.contains(".tiff") || urlString.contains(".bmp")) {
+            if ((urlString.contains(".png") || urlString.contains(".jpg")
+                 || urlString.contains(".jpeg") || urlString.contains(".gif")
+                 || urlString.contains(".tiff") || urlString.contains(".bmp")
+                 || urlString.contains(".webp"))
+                && url.isLocalFile()) {
+                droppedImages.append(url.toLocalFile());
+            }
+            //
+            // ... подгружаем картинки с инета
+            //
+            else {
                 //
-                // ... локальные считываем из файла
+                // TODO: сделать асинхронно
                 //
-                if (url.isLocalFile()) {
-                    droppedImages.append(url.toLocalFile());
-                }
-                //
-                // ... подгружаем картинки с инета
-                //
-                else {
-                    //
-                    // TODO: сделать асинхронно
-                    //
-                    const QByteArray pixmapData = NetworkRequestLoader::loadSync(url);
-                    QPixmap pixmap;
-                    pixmap.loadFromData(pixmapData);
-                    droppedImages.append(pixmap);
-                }
+                const QByteArray pixmapData = NetworkRequestLoader::loadSync(url);
+                QPixmap pixmap;
+                pixmap.loadFromData(pixmapData);
+                droppedImages.append(pixmap);
             }
         }
     } else if (mimeData->hasImage()) {
