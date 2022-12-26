@@ -217,7 +217,7 @@ public:
     Q_SIGNAL void scienceChanged(const QString& _text);
 
     //
-    // POLITYCS
+    // POLITICS
     //
 
     QString governmentFormat() const;

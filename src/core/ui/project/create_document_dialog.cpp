@@ -152,7 +152,8 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
         { Domain::DocumentObjectType::Location,
           tr("Create a document to note down the location's description and keep the details.") },
         { Domain::DocumentObjectType::World,
-          tr("Create a document to note down the world's description and keep the details.") },
+          tr("Create a document with detailed world description to keep all the notes in one "
+             "place") },
         { Domain::DocumentObjectType::Screenplay,
           tr("Create a document set to streamline your work on the feature film, series, or "
              "animation.") },

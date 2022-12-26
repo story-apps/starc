@@ -17,7 +17,7 @@ enum {
     kNatureIndex,
     kCultureIndex,
     kSystemIndex,
-    kPolitycsIndex,
+    kPoliticsIndex,
     kMagicIndex,
 };
 enum {
@@ -195,7 +195,7 @@ void WorldInformationStructureView::updateTranslations()
             traitsModel->index(kCastesIndex, 0, traitsModel->indexFromItem(cultureItem)))
         ->setText(tr("Class/caste system"));
     traitsModel->item(kSystemIndex)->setText(tr("System"));
-    traitsModel->item(kPolitycsIndex)->setText(tr("Politycs"));
+    traitsModel->item(kPoliticsIndex)->setText(tr("Politics"));
     auto magicItem = traitsModel->item(kMagicIndex);
     magicItem->setText(tr("Magic"));
     traitsModel

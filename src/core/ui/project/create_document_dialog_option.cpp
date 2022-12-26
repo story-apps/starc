@@ -125,7 +125,7 @@ void CreateDocumentDialogOption::paintEvent(QPaintEvent* _event)
         contentsRect().left(), contentsRect().top() + DesignSystem::layout().px(75),
         contentsRect().width(), contentsRect().height() - DesignSystem::layout().px(75));
     painter.setFont(DesignSystem::font().subtitle2());
-    painter.drawText(textRect, Qt::AlignHCenter | Qt::AlignTop, d->documentName);
+    painter.drawText(textRect, Qt::AlignHCenter | Qt::AlignTop | Qt::TextWordWrap, d->documentName);
 
     //
     // Декорация
