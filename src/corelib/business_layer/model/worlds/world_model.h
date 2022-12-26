@@ -112,9 +112,9 @@ public:
     void setBiology(const QString& _text);
     Q_SIGNAL void biologyChanged(const QString& _text);
 
-    QString phisics() const;
-    void setPhisics(const QString& _text);
-    Q_SIGNAL void phisicsChanged(const QString& _text);
+    QString physics() const;
+    void setPhysics(const QString& _text);
+    Q_SIGNAL void physicsChanged(const QString& _text);
 
     QString astronomy() const;
     void setAstronomy(const QString& _text);

@@ -648,7 +648,7 @@ void CoverGeneratorSidebar::updateTranslations()
     d->pasteImageFromClipboard->setToolTip(
         tr("Paste image from clipboard (image file or image url)"));
     d->chooseImageFile->setToolTip(tr("Choose file with image"));
-    d->imagesLoadingLabel->setText(tr("Locading images"));
+    d->imagesLoadingLabel->setText(tr("Loading images"));
 }
 
 void CoverGeneratorSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

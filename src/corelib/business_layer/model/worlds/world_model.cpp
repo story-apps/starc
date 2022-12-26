@@ -32,7 +32,7 @@ const QLatin1String kHistoryKey("history");
 const QLatin1String kMoodKey("mood");
 //
 const QLatin1String kBiologyKey("biology");
-const QLatin1String kPhisicsKey("phisics");
+const QLatin1String kPhysicsKey("physics");
 const QLatin1String kAstoronomyKey("astronomy");
 const QLatin1String kGeographyKey("geography");
 const QLatin1String kRacesKey("races");
@@ -103,7 +103,7 @@ public:
     QString mood;
 
     QString biology;
-    QString phisics;
+    QString physics;
     QString astronomy;
     QString geography;
     QVector<WorldItem> races;
@@ -215,7 +215,7 @@ WorldModel::WorldModel(QObject* _parent)
     connect(this, &WorldModel::historyChanged, this, &WorldModel::updateDocumentContent);
     connect(this, &WorldModel::moodChanged, this, &WorldModel::updateDocumentContent);
     connect(this, &WorldModel::biologyChanged, this, &WorldModel::updateDocumentContent);
-    connect(this, &WorldModel::phisicsChanged, this, &WorldModel::updateDocumentContent);
+    connect(this, &WorldModel::physicsChanged, this, &WorldModel::updateDocumentContent);
     connect(this, &WorldModel::astronomyChanged, this, &WorldModel::updateDocumentContent);
     connect(this, &WorldModel::geographyChanged, this, &WorldModel::updateDocumentContent);
     connect(this, &WorldModel::racesChanged, this, &WorldModel::updateDocumentContent);
@@ -558,18 +558,18 @@ void WorldModel::setBiology(const QString& _text)
     emit biologyChanged(d->biology);
 }
 
-QString WorldModel::phisics() const
+QString WorldModel::physics() const
 {
-    return d->phisics;
+    return d->physics;
 }
 
-void WorldModel::setPhisics(const QString& _text)
+void WorldModel::setPhysics(const QString& _text)
 {
-    if (d->phisics == _text) {
+    if (d->physics == _text) {
         return;
     }
-    d->phisics = _text;
-    emit phisicsChanged(d->phisics);
+    d->physics = _text;
+    emit physicsChanged(d->physics);
 }
 
 QString WorldModel::astronomy() const
@@ -1453,7 +1453,7 @@ void WorldModel::initDocument()
     d->history = load(kHistoryKey);
     d->mood = load(kMoodKey);
     d->biology = load(kBiologyKey);
-    d->phisics = load(kPhisicsKey);
+    d->physics = load(kPhysicsKey);
     d->astronomy = load(kAstoronomyKey);
     d->geography = load(kGeographyKey);
     auto racesNode = documentNode.firstChildElement(kRacesKey);
@@ -1751,7 +1751,7 @@ QByteArray WorldModel::toXml() const
     save(kHistoryKey, d->history);
     save(kMoodKey, d->mood);
     save(kBiologyKey, d->biology);
-    save(kPhisicsKey, d->phisics);
+    save(kPhysicsKey, d->physics);
     save(kAstoronomyKey, d->astronomy);
     save(kGeographyKey, d->geography);
     if (!d->races.isEmpty()) {
@@ -2039,7 +2039,7 @@ void WorldModel::applyPatch(const QByteArray& _patch)
     setHistory(load(kHistoryKey));
     setMood(load(kMoodKey));
     setBiology(load(kBiologyKey));
-    setPhisics(load(kPhisicsKey));
+    setPhysics(load(kPhysicsKey));
     setAstronomy(load(kAstoronomyKey));
     setGeography(load(kGeographyKey));
     //
