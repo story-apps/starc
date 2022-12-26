@@ -456,12 +456,15 @@ void ImagesList::paintEvent(QPaintEvent* _event)
     //
     // Рисуем кнопку добавления изображений
     //
-    if (!d->isReadOnly && d->isAddButtonVisible) {
+    if (d->isAddButtonVisible) {
         const QRectF addButtonRect(x, y, size, size);
         painter.setPen(Qt::NoPen);
         painter.setBrush(ColorHelper::nearby(backgroundColor()));
         painter.drawRoundedRect(addButtonRect, radius, radius);
-        painter.setPen(ColorHelper::transparent(textColor(), DesignSystem::inactiveTextOpacity()));
+        painter.setPen(ColorHelper::transparent(textColor(),
+                                                d->isReadOnly
+                                                    ? DesignSystem::inactiveItemOpacity()
+                                                    : DesignSystem::inactiveTextOpacity()));
         painter.setFont(DesignSystem::font().iconsBig());
         painter.drawText(addButtonRect, Qt::AlignCenter, u8"\U000F0EDB");
 

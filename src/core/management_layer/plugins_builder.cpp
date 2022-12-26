@@ -82,6 +82,7 @@ const QString kImagesGalleryMime = QStringLiteral("application/x-starc/editor/im
 const QHash<QString, QString> kEditorToNavigator
     = { { kCharacterEditorMime, kCharacterNavigatorMime },
         { kLocationEditorMime, kLocationNavigatorMime },
+        { kWorldEditorMime, kWorldNavigatorMime },
         { kSimpleTextEditorMime, kSimpleTextNavigatorMime },
         { kScreenplayTreatmentEditorMime, kScreenplayTreatmentNavigatorMime },
         { kScreenplayTextEditorMime, kScreenplayTextNavigatorMime },

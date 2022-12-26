@@ -13,9 +13,30 @@ namespace Ui {
 namespace {
 enum {
     kMainIndex = 0,
-    kNatureInfoIndex,
-    kGeographyIndex,
-    kBackgroundIndex,
+    kWorldInfoIndex,
+    kNatureIndex,
+    kCultureIndex,
+    kSystemIndex,
+    kPolitycsIndex,
+    kMagicIndex,
+};
+enum {
+    kNatureInfoIndex = 0,
+    kRacesIndex,
+    kFloraIndex,
+    kAnimalsIndex,
+    kNaturalResourcesIndex,
+    kClimateIndex,
+};
+enum {
+    kReligionsIndex = 0,
+    kEthicsIndex,
+    kLanguagesIndex,
+    kCastesIndex,
+};
+enum {
+    kMagicInfoIndex = 0,
+    kMagicTypesIndex,
 };
 } // namespace
 
@@ -40,17 +61,44 @@ WorldInformationStructureView::Implementation::Implementation(QWidget* _parent)
     traits->setContextMenuPolicy(Qt::NoContextMenu);
     traits->setSelectionMode(QAbstractItemView::SingleSelection);
 
+    //
+    // TODO: подобрать иконки
+    //
     auto createItem = [](const QString& _icon) {
         auto item = new QStandardItem;
-        item->setData(_icon, Qt::DecorationRole);
+        //        item->setData(_icon, Qt::DecorationRole);
         item->setEditable(false);
         return item;
     };
     auto traitsModel = new QStandardItemModel(traits);
-    traitsModel->appendRow(createItem(u8"\U000F06A1"));
-    traitsModel->appendRow(createItem(u8"\U000F0C68"));
-    traitsModel->appendRow(createItem(u8"\U000F1A48"));
-    traitsModel->appendRow(createItem(u8"\U000F0DD4"));
+    traitsModel->appendRow(createItem({}));
+    traitsModel->appendRow(createItem({}));
+    auto natureItem = createItem({});
+    natureItem->appendRows({
+        createItem({}),
+        createItem({}),
+        createItem({}),
+        createItem({}),
+        createItem({}),
+        createItem({}),
+    });
+    traitsModel->appendRow(natureItem);
+    auto cultureItem = createItem({});
+    cultureItem->appendRows({
+        createItem({}),
+        createItem({}),
+        createItem({}),
+        createItem({}),
+    });
+    traitsModel->appendRow(cultureItem);
+    traitsModel->appendRow(createItem({}));
+    traitsModel->appendRow(createItem({}));
+    auto magicItem = createItem({});
+    magicItem->appendRows({
+        createItem({}),
+        createItem({}),
+    });
+    traitsModel->appendRow(magicItem);
     traits->setModel(traitsModel);
     traits->setCurrentIndex(traitsModel->index(0, 0));
 }
@@ -103,9 +151,61 @@ void WorldInformationStructureView::updateTranslations()
 {
     auto traitsModel = qobject_cast<QStandardItemModel*>(d->traits->model());
     traitsModel->item(kMainIndex)->setText(tr("Main"));
-    traitsModel->item(kNatureInfoIndex)->setText(tr("Sense"));
-    traitsModel->item(kGeographyIndex)->setText(tr("Geography"));
-    traitsModel->item(kBackgroundIndex)->setText(tr("Background"));
+    traitsModel->item(kWorldInfoIndex)->setText(tr("World description"));
+    auto natureItem = traitsModel->item(kNatureIndex);
+    natureItem->setText(tr("Nature"));
+    traitsModel
+        ->itemFromIndex(
+            traitsModel->index(kNatureInfoIndex, 0, traitsModel->indexFromItem(natureItem)))
+        ->setText(tr("Basic info"));
+    traitsModel
+        ->itemFromIndex(traitsModel->index(kRacesIndex, 0, traitsModel->indexFromItem(natureItem)))
+        ->setText(tr("Races"));
+    traitsModel
+        ->itemFromIndex(traitsModel->index(kFloraIndex, 0, traitsModel->indexFromItem(natureItem)))
+        ->setText(tr("Flora"));
+    traitsModel
+        ->itemFromIndex(
+            traitsModel->index(kAnimalsIndex, 0, traitsModel->indexFromItem(natureItem)))
+        ->setText(tr("Animals"));
+    traitsModel
+        ->itemFromIndex(
+            traitsModel->index(kNaturalResourcesIndex, 0, traitsModel->indexFromItem(natureItem)))
+        ->setText(tr("Natural resources"));
+    traitsModel
+        ->itemFromIndex(
+            traitsModel->index(kClimateIndex, 0, traitsModel->indexFromItem(natureItem)))
+        ->setText(tr("Climate"));
+    auto cultureItem = traitsModel->item(kCultureIndex);
+    cultureItem->setText(tr("Culture"));
+    traitsModel
+        ->itemFromIndex(
+            traitsModel->index(kReligionsIndex, 0, traitsModel->indexFromItem(cultureItem)))
+        ->setText(tr("Religions and beliefs"));
+    traitsModel
+        ->itemFromIndex(
+            traitsModel->index(kEthicsIndex, 0, traitsModel->indexFromItem(cultureItem)))
+        ->setText(tr("Ethics and values"));
+    traitsModel
+        ->itemFromIndex(
+            traitsModel->index(kLanguagesIndex, 0, traitsModel->indexFromItem(cultureItem)))
+        ->setText(tr("Languages"));
+    traitsModel
+        ->itemFromIndex(
+            traitsModel->index(kCastesIndex, 0, traitsModel->indexFromItem(cultureItem)))
+        ->setText(tr("Class/caste system"));
+    traitsModel->item(kSystemIndex)->setText(tr("System"));
+    traitsModel->item(kPolitycsIndex)->setText(tr("Politycs"));
+    auto magicItem = traitsModel->item(kMagicIndex);
+    magicItem->setText(tr("Magic"));
+    traitsModel
+        ->itemFromIndex(
+            traitsModel->index(kMagicInfoIndex, 0, traitsModel->indexFromItem(magicItem)))
+        ->setText(tr("Basic info"));
+    traitsModel
+        ->itemFromIndex(
+            traitsModel->index(kMagicTypesIndex, 0, traitsModel->indexFromItem(magicItem)))
+        ->setText(tr("Magic types"));
 }
 
 void WorldInformationStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
