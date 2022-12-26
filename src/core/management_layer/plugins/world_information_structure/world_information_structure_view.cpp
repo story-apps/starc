@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/tree/tree.h>
 
 #include <QStandardItemModel>
@@ -101,6 +102,8 @@ WorldInformationStructureView::Implementation::Implementation(QWidget* _parent)
     traitsModel->appendRow(magicItem);
     traits->setModel(traitsModel);
     traits->setCurrentIndex(traitsModel->index(0, 0));
+
+    new Shadow(Qt::TopEdge, traits);
 }
 
 
