@@ -52,7 +52,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          make -j$(nproc)
+          make -j2
 
       - name: Make dmg image
         shell: bash
