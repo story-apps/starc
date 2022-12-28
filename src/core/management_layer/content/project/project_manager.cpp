@@ -176,6 +176,7 @@ public:
      */
     void removeDocument(const QModelIndex& _itemIndex);
     void removeDocument(BusinessLayer::StructureModelItem* _item, bool _force);
+    void removeDocumentImpl(BusinessLayer::StructureModelItem* _item);
 
     /**
      * @brief Найти всех персонажей
@@ -828,72 +829,11 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
 void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureModelItem* _item,
                                                     bool _force)
 {
-    auto removeImpl = [this](BusinessLayer::StructureModelItem* _item) {
-        //
-        // NOTE: порядок удаления важен
-        //
-        // ... перед удалением сформируем список документов, которые должны быть удалены
-        //
-        QVector<QUuid> documentsToRemove = { _item->uuid() };
-        auto document = DataStorageLayer::StorageFacade::documentStorage()->document(_item->uuid());
-        if (document != nullptr) {
-            auto model = modelsFacade.modelFor(document);
-            switch (document->type()) {
-            case Domain::DocumentObjectType::Character: {
-                auto character = static_cast<BusinessLayer::CharacterModel*>(model);
-                for (const auto& photo : character->photos()) {
-                    documentsToRemove.append(photo.uuid);
-                }
-                break;
-            }
-
-            case Domain::DocumentObjectType::Location: {
-                auto location = static_cast<BusinessLayer::LocationModel*>(model);
-                for (const auto& photo : location->photos()) {
-                    documentsToRemove.append(photo.uuid);
-                }
-                break;
-            }
-
-            case Domain::DocumentObjectType::World: {
-                auto world = static_cast<BusinessLayer::WorldModel*>(model);
-                for (const auto& photo : world->photos()) {
-                    documentsToRemove.append(photo.uuid);
-                }
-                break;
-            }
-
-            default: {
-                break;
-            }
-            }
-            //
-            // ... удалим все невалидные айдишники
-            //
-            documentsToRemove.removeAll({});
-        }
-        //
-        // ... удаляем из структуры
-        //
-        projectStructureModel->removeItem(_item);
-        //
-        // ... собственно удаляем модель и документ
-        //
-        modelsFacade.removeModelFor(document);
-        DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
-        //
-        // ... уведомляем об удалённых документах
-        //
-        for (const auto& documentUuid : std::as_const(documentsToRemove)) {
-            emit q->documentRemoved(documentUuid);
-        }
-    };
-
     //
     // Если тут нужно принудительное удаление, то удаляем сразу без лишних вопросов
     //
     if (_force) {
-        removeImpl(_item);
+        removeDocumentImpl(_item);
         return;
     }
 
@@ -928,24 +868,144 @@ void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureMode
     dialog->showDialog({}, tr("Do you really want to permanently remove document?"),
                        { { kCancelButtonId, tr("No"), Dialog::RejectButton },
                          { kRemoveButtonId, tr("Yes, remove"), Dialog::NormalButton } });
-    QObject::connect(
-        dialog, &Dialog::finished,
-        [removeImpl, _item, kCancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
-            dialog->hideDialog();
+    QObject::connect(dialog, &Dialog::finished,
+                     [this, _item, kCancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                         dialog->hideDialog();
 
-            //
-            // Пользователь передумал удалять
-            //
-            if (_buttonInfo.id == kCancelButtonId) {
-                return;
-            }
+                         //
+                         // Пользователь передумал удалять
+                         //
+                         if (_buttonInfo.id == kCancelButtonId) {
+                             return;
+                         }
 
-            //
-            // Если таки хочет, то удаляем документ
-            //
-            removeImpl(_item);
-        });
+                         //
+                         // Если таки хочет, то удаляем документ
+                         //
+                         removeDocumentImpl(_item);
+                     });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+}
+
+void ProjectManager::Implementation::removeDocumentImpl(BusinessLayer::StructureModelItem* _item)
+{
+    //
+    // Кроме того, что нужно удалить сам документ, нужно ещё удалить и все вложенные документы
+    // NOTE: порядок удаления важен
+    //
+
+    //
+    // Сформируем модели детей, чтобы они не формировались на этапе удаления, т.к. часть
+    // связанных между собой документов уже будет удалена
+    //
+    for (int index = 0; index < _item->childCount(); ++index) {
+        modelsFacade.modelFor(_item->childAt(index)->uuid());
+    }
+
+    //
+    // Сначала удаляем детей
+    //
+    while (_item->hasChildren()) {
+        auto child = _item->childAt(0);
+        removeDocumentImpl(child);
+    }
+
+    //
+    // Перед удалением сформируем дополнительный список документов, которые должны быть удалены
+    //
+    QVector<QUuid> documentsToRemove = { _item->uuid() };
+    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(_item->uuid());
+    if (document != nullptr) {
+        //
+        // ... изображения
+        //
+        auto model = modelsFacade.modelFor(document);
+        switch (document->type()) {
+        case Domain::DocumentObjectType::Character: {
+            auto character = static_cast<BusinessLayer::CharacterModel*>(model);
+            for (const auto& photo : character->photos()) {
+                documentsToRemove.append(photo.uuid);
+            }
+            break;
+        }
+
+        case Domain::DocumentObjectType::Location: {
+            auto location = static_cast<BusinessLayer::LocationModel*>(model);
+            for (const auto& photo : location->photos()) {
+                documentsToRemove.append(photo.uuid);
+            }
+            break;
+        }
+
+        case Domain::DocumentObjectType::World: {
+            auto world = static_cast<BusinessLayer::WorldModel*>(model);
+            for (const auto& photo : world->photos()) {
+                documentsToRemove.append(photo.uuid);
+            }
+            for (const auto& item : world->races()) {
+                documentsToRemove.append(item.photo.uuid);
+            }
+            for (const auto& item : world->floras()) {
+                documentsToRemove.append(item.photo.uuid);
+            }
+            for (const auto& item : world->animals()) {
+                documentsToRemove.append(item.photo.uuid);
+            }
+            for (const auto& item : world->naturalResources()) {
+                documentsToRemove.append(item.photo.uuid);
+            }
+            for (const auto& item : world->climates()) {
+                documentsToRemove.append(item.photo.uuid);
+            }
+            for (const auto& item : world->religions()) {
+                documentsToRemove.append(item.photo.uuid);
+            }
+            for (const auto& item : world->ethics()) {
+                documentsToRemove.append(item.photo.uuid);
+            }
+            for (const auto& item : world->languages()) {
+                documentsToRemove.append(item.photo.uuid);
+            }
+            for (const auto& item : world->castes()) {
+                documentsToRemove.append(item.photo.uuid);
+            }
+            for (const auto& item : world->magicTypes()) {
+                documentsToRemove.append(item.photo.uuid);
+            }
+            break;
+        }
+
+        default: {
+            break;
+        }
+        }
+        //
+        // ... версии
+        //
+        for (const auto& version : _item->versions()) {
+            documentsToRemove.append(version->uuid());
+        }
+        //
+        // ... удалим все невалидные айдишники
+        //
+        documentsToRemove.removeAll({});
+    }
+    //
+    // ... удаляем из структуры
+    //
+    projectStructureModel->removeItem(_item);
+    //
+    // ... собственно удаляем модель и документ
+    //
+    for (const auto& documentUuid : std::as_const(documentsToRemove)) {
+        document = DataStorageLayer::StorageFacade::documentStorage()->document(documentUuid);
+        modelsFacade.removeModelFor(document);
+        DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
+        //
+        // ... уведомляем об удалённых документах
+        //
+        emit q->documentRemoved(documentUuid);
+    }
 }
 
 void ProjectManager::Implementation::findAllCharacters()
@@ -1202,34 +1262,12 @@ void ProjectManager::Implementation::emptyRecycleBin()
             }
 
             //
-            // Если таки хочет, то удаляем все вложенные документы рекурсивно
-            // NOTE: порядок удаления важен
+            // Собственно очищаем корзину
             //
-            std::function<void(BusinessLayer::StructureModelItem*)> removeItem;
-            removeItem = [this, &removeItem](BusinessLayer::StructureModelItem* _item) {
-                //
-                // Сформируем модели детей, чтобы они не формировались на этапе удаления, т.к. часть
-                // связанных между собой документов уже будет удалена
-                //
-                for (int index = 0; index < _item->childCount(); ++index) {
-                    modelsFacade.modelFor(_item->childAt(index)->uuid());
-                }
-                //
-                // Сначала удаляем детей
-                //
-                while (_item->hasChildren()) {
-                    auto child = _item->childAt(0);
-                    removeItem(child);
-                }
-                //
-                // ... а потом сам элемент
-                //
-                const auto forceRemove = true;
-                removeDocument(_item, forceRemove);
-            };
             while (recycleBin->hasChildren()) {
                 auto itemToRemove = recycleBin->childAt(0);
-                removeItem(itemToRemove);
+                const auto forceRemove = true;
+                removeDocument(itemToRemove, forceRemove);
             }
 
             //

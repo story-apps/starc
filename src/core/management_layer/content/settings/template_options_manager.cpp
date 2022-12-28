@@ -308,6 +308,11 @@ void TemplateOptionsManager::Implementation::saveParagraphParameters(
     paragraphStyle.setActive(paragraphsView->isParagraphEnabled());
     paragraphStyle.setStartFromNewPage(paragraphsView->isStartsFromNewPage());
     QFont font(paragraphsView->fontFamily());
+    font.setFamilies({
+        font.family(),
+        "Apple Color Emoji",
+        "Noto Color Emoji",
+    });
     font.setPixelSize(MeasurementHelper::ptToPx(paragraphsView->fontSize()));
     font.setCapitalization(paragraphsView->isUppercase() ? QFont::AllUppercase : QFont::MixedCase);
     font.setBold(paragraphsView->isBold());
