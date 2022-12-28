@@ -171,7 +171,8 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
     title->setText(documenTypeToTitle.value(_type));
     documentInfo->setText(documenTypeToInfo.value(_type));
     if (_type == Domain::DocumentObjectType::Character
-        || _type == Domain::DocumentObjectType::Location) {
+        || _type == Domain::DocumentObjectType::Location
+        || _type == Domain::DocumentObjectType::World) {
         insertIntoParent->hide();
     } else {
         insertIntoParent->setVisible(insertIntoParentEnabled);
