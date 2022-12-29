@@ -184,6 +184,16 @@ void ApplicationView::restoreState(bool _onboaringPassed, const QVariantMap& _st
     }
     if (_state.contains(kViewGeometry)) {
         restoreGeometry(_state[kViewGeometry].toByteArray());
+
+        //
+        // Иногда (пока такое только на маке встречалось) бывает так, что приложение начинает
+        // загружать геометрию невалидную, поэтому сделана эта проверка и расширение размера вьюхи
+        //
+        constexpr int minSize = 100;
+        if (height() < minSize || width() < minSize) {
+            resize(Ui::DesignSystem::layout().px(1200), Ui::DesignSystem::layout().px(740));
+            move(screen()->availableGeometry().center() - QPoint(width() / 2, height() / 2));
+        }
     }
 
     //
