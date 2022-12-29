@@ -983,7 +983,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
             //
             // Если в конце разрыва, вернёмся к началу
             //
-            if (blockFormat.boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd)) {
+            if (blockFormat.boolProperty(TextBlockStyle::PropertyIsBreakCorrectionEnd)
+                && !cursor.atStart()) {
                 //
                 // Началом может быть элемент с соответствующим флагом, либо простой элемент,
                 // в случае, когда было удаление переноса строки между абзацем с переносом и
@@ -997,7 +998,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                     // ... восстанавливаем последнюю высоту от предыдущего элемента
                     //
                     setLastBlockHeight(blockItems[currentBlockInfo.number].top);
-                } while (cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
+                } while (!cursor.atStart()
+                         && cursor.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
                          && !cursor.blockFormat().boolProperty(
                              TextBlockStyle::PropertyIsBreakCorrectionStart));
             }
