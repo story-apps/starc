@@ -64,11 +64,17 @@ ColorPicker::Implementation::Implementation(QWidget* _parent)
         overlay->setCursor(Qt::CrossCursor);
         overlay->setMouseTracking(true);
 
+        QColor backgroundColor = Qt::white;
         //
         // Если сделать полностью прозрачный фон, то на Windows такое окно автоматом закрывается
         //
-        QColor backgroundColor = Qt::white;
-        backgroundColor.setAlpha(1);
+        backgroundColor.setAlpha(
+#ifdef Q_OS_WIN
+            1
+#else
+            0
+#endif
+        );
         overlay->setBackgroundColor(backgroundColor);
 
         overlay->move(screen->geometry().topLeft());
@@ -81,6 +87,10 @@ QColor ColorPicker::Implementation::grabScreenColor(const QPoint& _position)
 {
     const auto desktop = QApplication::desktop();
     const auto screen = QGuiApplication::screenAt(_position);
+    if (desktop == nullptr || screen == nullptr) {
+        return {};
+    }
+
     const auto sceenPixmap
         = screen->grabWindow(desktop->winId(), _position.x(), _position.y(), 1, 1);
     return sceenPixmap.toImage().pixel(0, 0);
@@ -216,6 +226,10 @@ bool ColorPicker::eventFilter(QObject* _watched, QEvent* _event)
             break;
         }
 
+        case QEvent::Enter: {
+            QApplication::restoreOverrideCursor();
+            break;
+        }
 
         default: {
             break;
