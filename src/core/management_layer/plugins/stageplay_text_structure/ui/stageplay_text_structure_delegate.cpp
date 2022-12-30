@@ -55,15 +55,53 @@ void StageplayTextStructureDelegate::Implementation::paintItemColor(
     QPainter* _painter, const QStyleOptionViewItem& _option, const QVariant& _color,
     const QModelIndex& _index) const
 {
-    if (_color.isNull() || !_color.canConvert<QColor>()) {
-        return;
+    //
+    // Собираем цвета до самого верха
+    //
+    QVector<QColor> colors;
+    auto addColor = [&colors](const QVariant& _color) {
+        if (_color.isNull() || !_color.canConvert<QColor>()) {
+            return;
+        }
+
+        const QColor color = _color.value<QColor>();
+        if (!color.isValid()) {
+            return;
+        }
+
+        colors.prepend(color);
+    };
+    addColor(_color);
+    //
+    auto index = _index;
+    while (index.parent().isValid()) {
+        index = index.parent();
+
+        const auto typeValue = index.data(Qt::UserRole);
+        if (!typeValue.isValid()) {
+            continue;
+        }
+
+        using namespace BusinessLayer;
+        const auto type = static_cast<TextModelItemType>(typeValue.toInt());
+        switch (type) {
+        case TextModelItemType::Folder: {
+            addColor(index.data(TextModelFolderItem::FolderColorRole));
+            break;
+        }
+        case TextModelItemType::Group: {
+            addColor(index.data(TextModelGroupItem::GroupColorRole));
+            break;
+        }
+        default: {
+            break;
+        }
+        }
     }
 
-    const QColor color = _color.value<QColor>();
-    if (!color.isValid()) {
-        return;
-    }
-
+    //
+    // Рисуем цвета
+    //
     auto fullIndicatorWidth = [_index] {
         int level = 0;
         auto index = _index;
@@ -74,12 +112,17 @@ void StageplayTextStructureDelegate::Implementation::paintItemColor(
         return level * Ui::DesignSystem::tree().indicatorWidth();
     };
     const auto backgroundRect = _option.rect;
-    const QRectF colorRect(
-        QLocale().textDirection() == Qt::LeftToRight
-            ? 0.0
-            : (backgroundRect.right() + fullIndicatorWidth() - Ui::DesignSystem::layout().px4()),
-        backgroundRect.top(), Ui::DesignSystem::layout().px4(), backgroundRect.height());
-    _painter->fillRect(colorRect, color);
+    auto lastX = QLocale().textDirection() == Qt::LeftToRight
+        ? 0.0
+        : (backgroundRect.right() + fullIndicatorWidth() - Ui::DesignSystem::layout().px(5));
+    for (const auto& color : colors) {
+        const QRectF colorRect(lastX, backgroundRect.top(), Ui::DesignSystem::layout().px(5),
+                               backgroundRect.height());
+        _painter->fillRect(colorRect, color);
+
+        lastX += (QLocale().textDirection() == Qt::LeftToRight ? 1 : -1)
+            * Ui::DesignSystem::layout().px(7);
+    }
 }
 
 QRectF StageplayTextStructureDelegate::Implementation::paintItemDuration(
