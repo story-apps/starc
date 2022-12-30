@@ -756,7 +756,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             if (lastSceneColor.isValid()) {
                 const auto isBlockSceneHeadingWithNumberAtRight
                     = blockType == TextParagraphType::SceneHeading && d->showSceneNumber
-                    && d->showSceneNumberOnRight;
+                    && d->showSceneNumberOnRight && !block.text().isEmpty();
                 if (!isBlockSceneHeadingWithNumberAtRight) {
                     const QPointF topLeft(
                         isLeftToRight ? textRight + leftDelta + DesignSystem::layout().px8()
