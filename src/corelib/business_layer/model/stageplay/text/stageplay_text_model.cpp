@@ -296,6 +296,13 @@ QVector<QModelIndex> StageplayTextModel::characterDialogues(const QString& _name
                 break;
             }
 
+            case TextParagraphType::Parenthetical: {
+                //
+                // Не очищаем имя персонажа, идём до реплики
+                //
+                break;
+            }
+
             case TextParagraphType::Dialogue:
             case TextParagraphType::Lyrics: {
                 if (lastCharacter == _name) {
