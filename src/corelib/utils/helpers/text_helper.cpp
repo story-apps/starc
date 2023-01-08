@@ -83,6 +83,10 @@ static void initFontMetrics()
     //
     auto addFontDelta
         = [courierNewLineSpacing](const QString& _fontFamily, int _fontMetricsHeight) {
+              if (!QFontDatabase().hasFamily(_fontFamily)) {
+                  return;
+              }
+
               QFont font(_fontFamily);
               font.setPixelSize(MeasurementHelper::ptToPx(12));
               QFontMetricsF fontMetrics(font);
