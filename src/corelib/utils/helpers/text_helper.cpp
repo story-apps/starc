@@ -79,58 +79,31 @@ static void initFontMetrics()
     sFontToLineSpacing[courierNewFont.family()] = courierNewDelta;
 
     //
-    // Высчитываем дельту для Courier Prime
+    // Остальные дельты высчитываются на основе Courier New
     //
-    constexpr auto courierPrimeHeight = 2060.0;
-    QFont courierPrimeFont("Courier Prime");
-    courierPrimeFont.setPixelSize(MeasurementHelper::ptToPx(12));
-    QFontMetricsF courierPrimeMetrics(courierPrimeFont);
-    qreal courierPrimeDelta =
-        //
-        // ... такой Line Spacing должен быть у Courier Prime
-        //
-        courierNewLineSpacing * (courierPrimeHeight / courierNewHeight)
-        //
-        // ... вычитая из него Line Spacing из метрики, получим дельту
-        //
-        - courierPrimeMetrics.lineSpacing();
-    sFontToLineSpacing["Courier Prime"] = courierPrimeDelta;
-
+    auto addFontDelta
+        = [courierNewLineSpacing](const QString& _fontFamily, int _fontMetricsHeight) {
+              QFont font(_fontFamily);
+              font.setPixelSize(MeasurementHelper::ptToPx(12));
+              QFontMetricsF fontMetrics(font);
+              const qreal fontDelta =
+                  //
+                  // ... такой Line Spacing должен быть у настраимого шрифта
+                  //
+                  courierNewLineSpacing * (_fontMetricsHeight / courierNewHeight)
+                  //
+                  // ... вычитая из него Line Spacing из метрики, получим дельту
+                  //
+                  - fontMetrics.lineSpacing();
+              sFontToLineSpacing[_fontFamily] = fontDelta;
+          };
     //
-    // Высчитываем дельту для Courier Screenplay
+    // ... собственно высчитываем дельту для других шрифтов
     //
-    constexpr auto courierScreenplayHeight = 2370.0;
-    QFont courierScreenplayFont("Courier Screenplay");
-    courierScreenplayFont.setPixelSize(MeasurementHelper::ptToPx(12));
-    QFontMetricsF courierScreenplayMetrics(courierScreenplayFont);
-    qreal courierScreenplayDelta =
-        //
-        // ... такой Line Spacing должен быть у Courier Screenplay
-        //
-        courierNewLineSpacing * (courierScreenplayHeight / courierNewHeight)
-        //
-        // ... вычитая из него Line Spacing из метрики, получим дельту
-        //
-        - courierScreenplayMetrics.lineSpacing();
-    sFontToLineSpacing["Courier Screenplay"] = courierScreenplayDelta;
-
-    //
-    // Высчитываем дельту для Arial
-    //
-    constexpr auto arialHeight = 2370.0;
-    QFont arialFont("Arial");
-    arialFont.setPixelSize(MeasurementHelper::ptToPx(12));
-    QFontMetricsF arialMetrics(arialFont);
-    qreal arialDelta =
-        //
-        // ... такой Line Spacing должен быть у Arial
-        //
-        courierNewLineSpacing * (arialHeight / courierNewHeight)
-        //
-        // ... вычитая из него Line Spacing из метрики, получим дельту
-        //
-        - arialMetrics.lineSpacing();
-    sFontToLineSpacing["Arial"] = arialDelta;
+    addFontDelta("Courier Prime", 2060.0);
+    addFontDelta("Courier Screenplay", 2370.0);
+    addFontDelta("Courier Final Draft", 2318.0);
+    addFontDelta("Arial", 2370.0);
 }
 } // namespace
 
