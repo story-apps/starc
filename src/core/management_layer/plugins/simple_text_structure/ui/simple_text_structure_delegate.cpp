@@ -1,6 +1,7 @@
 #include "simple_text_structure_delegate.h"
 
 #include <business_layer/model/simple_text/simple_text_model_chapter_item.h>
+#include <business_layer/model/text/text_model_folder_item.h>
 #include <business_layer/simple_text_structure_model.h>
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
@@ -15,6 +16,12 @@ namespace Ui {
 class SimpleTextStructureDelegate::Implementation
 {
 public:
+    /**
+     * @brief Нарисовать цвет элемента
+     */
+    void paintItemColor(QPainter* _painter, const QStyleOptionViewItem& _option,
+                        const QVariant& _color, const QModelIndex& _index) const;
+
     /**
      * @brief Нарисовать элемент
      */
@@ -32,6 +39,80 @@ public:
      */
     int textLines = 2;
 };
+
+void SimpleTextStructureDelegate::Implementation::paintItemColor(
+    QPainter* _painter, const QStyleOptionViewItem& _option, const QVariant& _color,
+    const QModelIndex& _index) const
+{
+    //
+    // Собираем цвета до самого верха
+    //
+    QVector<QColor> colors;
+    auto addColor = [&colors](const QVariant& _color) {
+        if (_color.isNull() || !_color.canConvert<QColor>()) {
+            return;
+        }
+
+        const QColor color = _color.value<QColor>();
+        if (!color.isValid()) {
+            return;
+        }
+
+        colors.prepend(color);
+    };
+    addColor(_color);
+    //
+    auto index = _index;
+    while (index.parent().isValid()) {
+        index = index.parent();
+
+        const auto typeValue = index.data(Qt::UserRole);
+        if (!typeValue.isValid()) {
+            continue;
+        }
+
+        using namespace BusinessLayer;
+        const auto type = static_cast<TextModelItemType>(typeValue.toInt());
+        switch (type) {
+        case TextModelItemType::Folder: {
+            addColor(index.data(TextModelFolderItem::FolderColorRole));
+            break;
+        }
+        case TextModelItemType::Group: {
+            addColor(index.data(TextModelGroupItem::GroupColorRole));
+            break;
+        }
+        default: {
+            break;
+        }
+        }
+    }
+
+    //
+    // Рисуем цвета
+    //
+    auto fullIndicatorWidth = [_index] {
+        int level = 0;
+        auto index = _index;
+        while (index.isValid()) {
+            ++level;
+            index = index.parent();
+        }
+        return level * Ui::DesignSystem::tree().indicatorWidth();
+    };
+    const auto backgroundRect = _option.rect;
+    auto lastX = QLocale().textDirection() == Qt::LeftToRight
+        ? 0.0
+        : (backgroundRect.right() + fullIndicatorWidth() - Ui::DesignSystem::layout().px(5));
+    for (const auto& color : colors) {
+        const QRectF colorRect(lastX, backgroundRect.top(), Ui::DesignSystem::layout().px(5),
+                               backgroundRect.height());
+        _painter->fillRect(colorRect, color);
+
+        lastX += (QLocale().textDirection() == Qt::LeftToRight ? 1 : -1)
+            * Ui::DesignSystem::layout().px(7);
+    }
+}
 
 void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painter,
                                                                const QStyleOptionViewItem& _option,
@@ -73,28 +154,7 @@ void SimpleTextStructureDelegate::Implementation::paintChapter(QPainter* _painte
     //
     // ... цвет главы
     //
-    const auto itemColor = _index.data(TextModelGroupItem::GroupColorRole);
-    if (!itemColor.isNull() && itemColor.canConvert<QColor>()) {
-        const QColor color = itemColor.value<QColor>();
-        if (color.isValid()) {
-            auto fullIndicatorWidth = [_index] {
-                int level = 0;
-                auto index = _index;
-                while (index.isValid()) {
-                    ++level;
-                    index = index.parent();
-                }
-                return level * Ui::DesignSystem::tree().indicatorWidth();
-            };
-            const auto backgroundRect = _option.rect;
-            const QRectF itemColorRect(
-                isLeftToRight ? 0.0
-                              : (backgroundRect.right() + fullIndicatorWidth()
-                                 - Ui::DesignSystem::layout().px4()),
-                backgroundRect.top(), Ui::DesignSystem::layout().px4(), backgroundRect.height());
-            _painter->fillRect(itemColorRect, color);
-        }
-    }
+    paintItemColor(_painter, _option, _index.data(TextModelGroupItem::GroupColorRole), _index);
 
     //
     // ... иконка
