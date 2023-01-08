@@ -119,7 +119,7 @@ void AccountNavigator::Implementation::updateTeamSubtitleLabel()
         teamSpaceStats->setProgress(cloudStorageSizeUsed / static_cast<qreal>(cloudStorageSize));
         const qreal divider = 1024. * 1024. * 1024.;
         teamSpaceInfo->setText(
-            tr("Used %1 Gb from %2 Gb")
+            tr("Used %1 GB from %2 GB")
                 .arg(QString::number(static_cast<qreal>(cloudStorageSizeUsed) / divider, 'f', 2),
                      QString::number(static_cast<qreal>(cloudStorageSize) / divider, 'f', 2)));
     }
