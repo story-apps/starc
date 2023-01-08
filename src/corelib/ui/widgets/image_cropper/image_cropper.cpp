@@ -419,6 +419,11 @@ ImageCropper::ImageCropper(QWidget* _parent)
 
 ImageCropper::~ImageCropper() = default;
 
+QPixmap ImageCropper::image() const
+{
+    return d->sourceImage;
+}
+
 void ImageCropper::setImage(const QPixmap& _image)
 {
     d->sourceImage = _image;

@@ -15,8 +15,9 @@ public:
     ~ImageCropper() override;
 
     /**
-     * @brief Установить изображение для обрезки
+     * @brief Изображение для обрезки
      */
+    QPixmap image() const;
     void setImage(const QPixmap& _image);
 
     /**

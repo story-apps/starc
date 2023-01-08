@@ -81,4 +81,9 @@ public:
      */
     static void drawRoundedImage(QPainter& _painter, const QRectF& _rect, const QPixmap& _image,
                                  qreal _roundingRadius, int _notRoundedEdge = 0);
+
+    /**
+     * @brief Повернуть изображение
+     */
+    static QPixmap rotateImage(const QPixmap& _image, bool _left);
 };

@@ -396,3 +396,21 @@ void ImageHelper::drawRoundedImage(QPainter& _painter, const QRectF& _rect, cons
     _painter.drawRoundedRect(roundedRect, _roundingRadius, _roundingRadius);
     _painter.setRenderHint(QPainter::Antialiasing, false);
 }
+
+QPixmap ImageHelper::rotateImage(const QPixmap& _image, bool _left)
+{
+    QPixmap rotatedImage(_image.height(), _image.width());
+
+    QPainter painter(&rotatedImage);
+    if (_left) {
+        painter.translate(rotatedImage.rect().bottomLeft());
+        painter.rotate(-90);
+    } else {
+        painter.translate(rotatedImage.rect().topRight());
+        painter.rotate(90);
+    }
+    painter.drawPixmap(_image.rect(), _image);
+    painter.end();
+
+    return rotatedImage;
+}
