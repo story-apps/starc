@@ -48,13 +48,13 @@ public:
         QString toString() const;
 
         const QColor& primary() const;
-        const QColor& secondary() const;
+        const QColor& accent() const;
         const QColor& background() const;
         const QColor& surface() const;
         const QColor& error() const;
         const QColor& shadow() const;
         const QColor& onPrimary() const;
-        const QColor& onSecondary() const;
+        const QColor& onAccent() const;
         const QColor& onBackground() const;
         const QColor& onSurface() const;
         const QColor& onError() const;
@@ -64,13 +64,13 @@ public:
         const QColor& onTextEditor() const;
 
         void setPrimary(const QColor& _color);
-        void setSecondary(const QColor& _color);
+        void setAccent(const QColor& _color);
         void setBackground(const QColor& _color);
         void setSurface(const QColor& _color);
         void setError(const QColor& _color);
         void setShadow(const QColor& _color);
         void setOnPrimary(const QColor& _color);
-        void setOnSecondary(const QColor& _color);
+        void setOnAccent(const QColor& _color);
         void setOnBackground(const QColor& _color);
         void setOnSurface(const QColor& _color);
         void setOnError(const QColor& _color);

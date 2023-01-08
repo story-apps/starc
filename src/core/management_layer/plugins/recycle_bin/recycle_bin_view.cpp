@@ -135,7 +135,7 @@ void RecycleBinView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->iconLabel->setBackgroundColor(Ui::DesignSystem::color().surface());
-    d->iconLabel->setTextColor(Ui::DesignSystem::color().secondary());
+    d->iconLabel->setTextColor(Ui::DesignSystem::color().accent());
     d->titleLabel->setBackgroundColor(Ui::DesignSystem::color().surface());
     d->titleLabel->setTextColor(Ui::DesignSystem::color().onSurface());
     d->titleLabel->setContentsMargins(Ui::DesignSystem::layout().px24(),
@@ -147,8 +147,8 @@ void RecycleBinView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->subtitleLabel->setContentsMargins(
         Ui::DesignSystem::layout().px(128), Ui::DesignSystem::layout().px24(),
         Ui::DesignSystem::layout().px(128), Ui::DesignSystem::layout().px24());
-    d->emptyRecycleBinButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->emptyRecycleBinButton->setTextColor(Ui::DesignSystem::color().secondary());
+    d->emptyRecycleBinButton->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->emptyRecycleBinButton->setTextColor(Ui::DesignSystem::color().accent());
 }
 
 } // namespace Ui

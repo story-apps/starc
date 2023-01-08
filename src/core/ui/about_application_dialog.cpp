@@ -199,9 +199,9 @@ void AboutApplicationDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
     auto middleLabelMargins = leftLabelMargins;
     middleLabelMargins.setLeft(0);
     d->authorsLink->setContentsMargins(middleLabelMargins);
-    d->authorsLink->setTextColor(Ui::DesignSystem::color().secondary());
+    d->authorsLink->setTextColor(Ui::DesignSystem::color().accent());
     d->partnerLink->setContentsMargins(middleLabelMargins);
-    d->partnerLink->setTextColor(Ui::DesignSystem::color().secondary());
+    d->partnerLink->setTextColor(Ui::DesignSystem::color().accent());
     auto rightLabelMargins = labelMargins;
     rightLabelMargins.setLeft(0);
     d->authorsLabel2->setContentsMargins(rightLabelMargins);
@@ -220,8 +220,8 @@ void AboutApplicationDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
     d->mailButton->setBackgroundColor(Ui::DesignSystem::color().background());
     d->mailButton->setTextColor(Ui::DesignSystem::color().onBackground());
 
-    d->closeButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->closeButton->setTextColor(Ui::DesignSystem::color().secondary());
+    d->closeButton->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->closeButton->setTextColor(Ui::DesignSystem::color().accent());
 
     d->buttonsLayout->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),

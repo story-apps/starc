@@ -96,14 +96,14 @@ void ThemePreview::paintEvent(QPaintEvent* _event)
                                             sideBarRect.width(), Ui::DesignSystem::layout().px12());
     //
     painter.fillRect(selectedItemBackgroundRect,
-                     ColorHelper::transparent(themeColor.secondary(),
+                     ColorHelper::transparent(themeColor.accent(),
                                               Ui::DesignSystem::hoverBackgroundOpacity()));
     const QRectF selectedItemTextRect(
         Ui::DesignSystem::layout().px4(),
         selectedItemBackgroundRect.center().y() - Ui::DesignSystem::layout().px(),
         selectedItemBackgroundRect.width() - Ui::DesignSystem::layout().px8(),
         Ui::DesignSystem::layout().px2());
-    painter.setBrush(themeColor.secondary());
+    painter.setBrush(themeColor.accent());
     painter.drawRoundedRect(selectedItemTextRect, selectedItemTextRect.height() / 2,
                             selectedItemTextRect.height() / 2);
     //
@@ -134,7 +134,7 @@ void ThemePreview::paintEvent(QPaintEvent* _event)
                              toolBarRect.height() - Ui::DesignSystem::layout().px(6));
     for (int item = 0; item < 4; ++item) {
         painter.setBrush(item == 1
-                             ? themeColor.secondary()
+                             ? themeColor.accent()
                              : ColorHelper::transparent(themeColor.onPrimary(),
                                                         Ui::DesignSystem::inactiveTextOpacity()));
         painter.drawRoundedRect(toolBarActionRect, toolBarActionRect.height() / 2,
@@ -205,7 +205,7 @@ void ThemePreview::paintEvent(QPaintEvent* _event)
     //
     // Название темы
     //
-    painter.setPen(isThemeUsed ? Ui::DesignSystem::color().secondary() : textColor());
+    painter.setPen(isThemeUsed ? Ui::DesignSystem::color().accent() : textColor());
     painter.setFont(Ui::DesignSystem::font().body1());
     QString themeName;
     switch (d->theme) {
@@ -236,7 +236,7 @@ void ThemePreview::paintEvent(QPaintEvent* _event)
     if (isThemeUsed) {
         painter.translate(-contentsRect().topLeft());
         painter.setPen(
-            QPen(Ui::DesignSystem::color().secondary(), Ui::DesignSystem::layout().px2()));
+            QPen(Ui::DesignSystem::color().accent(), Ui::DesignSystem::layout().px2()));
         painter.setBrush(Qt::NoBrush);
         painter.drawRoundedRect(contentsRect(), Ui::DesignSystem::layout().px12(),
                                 Ui::DesignSystem::layout().px12());

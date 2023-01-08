@@ -106,8 +106,8 @@ void Dialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->supportingText->setTextColor(Ui::DesignSystem::color().onBackground());
 
     for (auto button : std::as_const(d->buttons)) {
-        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        button->setTextColor(Ui::DesignSystem::color().secondary());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
     d->buttonsSideBySideLayout->setContentsMargins(

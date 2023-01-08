@@ -611,7 +611,7 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
                 QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
                        actionRect.height()));
             configurePen(action,
-                         action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
+                         action->isChecked() ? Ui::DesignSystem::color().accent() : textColor());
             painter.setFont(Ui::DesignSystem::font().iconsMid());
             painter.drawText(iconRect, Qt::AlignCenter, action->iconText());
         }
@@ -654,7 +654,7 @@ void ContextMenu::paintEvent(QPaintEvent* _event)
         || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
         painter.setClipRect(d->decorationRect);
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setBrush(Ui::DesignSystem::color().accent());
         painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
         painter.drawEllipse(d->decorationCenterPosition,
                             d->decorationRadiusAnimation.currentValue().toReal(),

@@ -471,7 +471,7 @@ void ImagesList::paintEvent(QPaintEvent* _event)
         const auto imageOverlayAnimationIter = d->imageToOverlayAnimation.find(kAddImageIndex);
         if (imageOverlayAnimationIter != d->imageToOverlayAnimation.end()) {
             painter.setOpacity(imageOverlayAnimationIter.value()->currentValue().toReal());
-            painter.setPen(Ui::DesignSystem::color().secondary());
+            painter.setPen(Ui::DesignSystem::color().accent());
             painter.drawText(addButtonRect, Qt::AlignCenter, u8"\U000F0EDB");
         }
     }
@@ -485,12 +485,12 @@ void ImagesList::paintEvent(QPaintEvent* _event)
         painter.setOpacity(d->dragIndicationOpacityAnimation.currentValue().toReal());
         //
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setBrush(Ui::DesignSystem::color().accent());
         const auto cardRect = contentsRect();
         const auto borderRadius = Ui::DesignSystem::card().borderRadius();
         painter.drawRoundedRect(cardRect, borderRadius, borderRadius);
         //
-        painter.setPen(Ui::DesignSystem::color().onSecondary());
+        painter.setPen(Ui::DesignSystem::color().onAccent());
         painter.setBrush(Qt::NoBrush);
         auto iconFont = Ui::DesignSystem::font().iconsForEditors();
         iconFont.setPixelSize(Ui::DesignSystem::layout().px(82));

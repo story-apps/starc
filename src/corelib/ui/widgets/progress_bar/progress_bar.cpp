@@ -90,7 +90,7 @@ void ProgressBar::paintEvent(QPaintEvent* _event)
     //
     painter.fillRect(
         contentsRect(),
-        ColorHelper::transparent(Ui::DesignSystem::color().secondary(),
+        ColorHelper::transparent(Ui::DesignSystem::color().accent(),
                                  Ui::DesignSystem::progressBar().unfilledPartOpacity()));
     //
     // Собственно выполненный прогресс
@@ -99,5 +99,5 @@ void ProgressBar::paintEvent(QPaintEvent* _event)
         contentsRect().x()
             + (isLeftToRight() ? 0 : contentsRect().width() - contentsRect().width() * d->progress),
         contentsRect().y(), contentsRect().width() * d->progress, contentsRect().height());
-    painter.fillRect(progressRect, Ui::DesignSystem::color().secondary());
+    painter.fillRect(progressRect, Ui::DesignSystem::color().accent());
 }

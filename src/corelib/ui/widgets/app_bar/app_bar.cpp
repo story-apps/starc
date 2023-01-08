@@ -315,7 +315,7 @@ void AppBar::paintEvent(QPaintEvent* _event)
             && (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
                 || d->decorationOpacityAnimation.state() == QVariantAnimation::Running)) {
             painter.setPen(Qt::NoPen);
-            painter.setBrush(Ui::DesignSystem::color().secondary());
+            painter.setBrush(Ui::DesignSystem::color().accent());
             painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
             painter.drawEllipse(actionRect.center(),
                                 d->decorationRadiusAnimation.currentValue().toReal(),

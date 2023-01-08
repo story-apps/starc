@@ -153,7 +153,7 @@ void ThemeColor::paintEvent(QPaintEvent* _event)
     painter.drawRoundedRect(colorsRect, colorsRect.height() / 2, colorsRect.height() / 2);
     if (hasFocus()) {
         painter.setPen(
-            QPen(Ui::DesignSystem::color().secondary(), Ui::DesignSystem::layout().px2()));
+            QPen(Ui::DesignSystem::color().accent(), Ui::DesignSystem::layout().px2()));
     }
     colorsRect.adjust(-Ui::DesignSystem::layout().px4(), -Ui::DesignSystem::layout().px4(),
                       Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4());
@@ -266,8 +266,8 @@ ThemeSetupView::ThemeSetupView(QWidget* _parent)
         auto color(Ui::DesignSystem::color());
         color.setPrimary(d->primary->color());
         color.setOnPrimary(d->primary->onColor());
-        color.setSecondary(d->secondary->color());
-        color.setOnSecondary(d->secondary->onColor());
+        color.setAccent(d->secondary->color());
+        color.setOnAccent(d->secondary->onColor());
         color.setBackground(d->background->color());
         color.setOnBackground(d->background->onColor());
         color.setSurface(d->surface->color());
@@ -459,8 +459,8 @@ void ThemeSetupView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->primary->setColor(theme.primary());
     d->primary->setOnColor(theme.onPrimary());
-    d->secondary->setColor(theme.secondary());
-    d->secondary->setOnColor(theme.onSecondary());
+    d->secondary->setColor(theme.accent());
+    d->secondary->setOnColor(theme.onAccent());
     d->background->setColor(theme.background());
     d->background->setOnColor(theme.onBackground());
     d->surface->setColor(theme.surface());
@@ -474,8 +474,8 @@ void ThemeSetupView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->colorPickerPopup->setTextColor(Ui::DesignSystem::color().onBackground());
 
     for (auto button : { d->cancelButton, d->saveButton }) {
-        button->setBackgroundColor(theme.secondary());
-        button->setTextColor(theme.secondary());
+        button->setBackgroundColor(theme.accent());
+        button->setTextColor(theme.accent());
     }
 
     d->heightAnimation.setStartValue(0);

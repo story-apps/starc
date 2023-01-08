@@ -196,7 +196,7 @@ void Slider::paintEvent(QPaintEvent* _event)
                 (height() - Ui::DesignSystem::slider().trackHeight()) / 2.0),
         QSizeF(leftTrackWidth, Ui::DesignSystem::slider().trackHeight()));
     const auto activeColor
-        = d->activeColor.isValid() ? d->activeColor : Ui::DesignSystem::color().secondary();
+        = d->activeColor.isValid() ? d->activeColor : Ui::DesignSystem::color().accent();
     painter.fillRect(leftTrackRect, activeColor);
 
     //
@@ -232,7 +232,7 @@ void Slider::paintEvent(QPaintEvent* _event)
     {
         if (underMouse() && !hasFocus()) {
             painter.setPen(Qt::NoPen);
-            painter.setBrush(Ui::DesignSystem::color().secondary());
+            painter.setBrush(Ui::DesignSystem::color().accent());
             painter.setOpacity(Ui::DesignSystem::hoverBackgroundOpacity());
             painter.drawEllipse(thumbCenter, d->decorationRadiusAnimation.endValue().toReal(),
                                 d->decorationRadiusAnimation.endValue().toReal());
@@ -240,7 +240,7 @@ void Slider::paintEvent(QPaintEvent* _event)
 
         } else if (hasFocus()) {
             painter.setPen(Qt::NoPen);
-            painter.setBrush(Ui::DesignSystem::color().secondary());
+            painter.setBrush(Ui::DesignSystem::color().accent());
             painter.setOpacity(Ui::DesignSystem::focusBackgroundOpacity());
             painter.drawEllipse(thumbCenter, d->decorationRadiusAnimation.endValue().toReal(),
                                 d->decorationRadiusAnimation.endValue().toReal());
@@ -255,7 +255,7 @@ void Slider::paintEvent(QPaintEvent* _event)
         || d->decorationOpacityAnimation.state() == QVariantAnimation::Running
         || (underMouse() && !QApplication::mouseButtons().testFlag(Qt::NoButton))) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setBrush(Ui::DesignSystem::color().accent());
         painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
         painter.drawEllipse(thumbCenter, d->decorationRadiusAnimation.currentValue().toReal(),
                             d->decorationRadiusAnimation.currentValue().toReal());
@@ -266,7 +266,7 @@ void Slider::paintEvent(QPaintEvent* _event)
     // Рисуем пипку
     //
     painter.setPen(Qt::NoPen);
-    painter.setBrush(Ui::DesignSystem::color().secondary());
+    painter.setBrush(Ui::DesignSystem::color().accent());
     painter.drawEllipse(thumbCenter, Ui::DesignSystem::slider().thumbRadius(),
                         Ui::DesignSystem::slider().thumbRadius());
 }

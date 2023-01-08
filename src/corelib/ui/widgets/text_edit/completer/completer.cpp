@@ -89,7 +89,7 @@ void Completer::Implementation::reconfigurePopup()
     palette.setColor(QPalette::AlternateBase, alternateBaseColor);
     palette.setColor(QPalette::Text, textColor);
     palette.setColor(QPalette::Highlight, Ui::DesignSystem::tree().selectionColor());
-    palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().secondary());
+    palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().accent());
     popup->setPalette(palette);
     popup->setIndentation(static_cast<int>(Ui::DesignSystem::tree().indicatorWidth()));
 }

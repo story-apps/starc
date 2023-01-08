@@ -290,7 +290,7 @@ void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->defaultPageAddItemButton->setContentsMargins(
         0, static_cast<int>(Ui::DesignSystem::layout().px16()), 0, 0);
     d->defaultPageAddItemButton->setBackgroundColor(Ui::DesignSystem::color().surface());
-    d->defaultPageAddItemButton->setTextColor(Ui::DesignSystem::color().secondary());
+    d->defaultPageAddItemButton->setTextColor(Ui::DesignSystem::color().accent());
 
     d->notImplementedPage->setBackgroundColor(Ui::DesignSystem::color().surface());
     d->notImplementedPageBodyLabel->setContentsMargins(

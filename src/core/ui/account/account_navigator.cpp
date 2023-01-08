@@ -400,8 +400,8 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->renewTeamSubscriptionButton,
              d->logoutButton,
          }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        button->setTextColor(Ui::DesignSystem::color().secondary());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
     d->teamSpaceStats->setBackgroundColor(Ui::DesignSystem::color().primary());

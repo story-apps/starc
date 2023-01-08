@@ -92,8 +92,8 @@ void ProjectsView::Implementation::updateEmptyPageUi()
     emptyPageTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     emptyPageTitleLabel->setBackgroundColor(DesignSystem::color().surface());
     emptyPageTitleLabel->setTextColor(DesignSystem::color().onSurface());
-    emptyPageCreateProjectButton->setBackgroundColor(DesignSystem::color().secondary());
-    emptyPageCreateProjectButton->setTextColor(DesignSystem::color().secondary());
+    emptyPageCreateProjectButton->setBackgroundColor(DesignSystem::color().accent());
+    emptyPageCreateProjectButton->setTextColor(DesignSystem::color().accent());
 }
 
 void ProjectsView::Implementation::initProjectsPage()

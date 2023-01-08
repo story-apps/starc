@@ -301,7 +301,7 @@ void CommentRepliesView::designSystemChangeEvent(DesignSystemChangeEvent* _event
         ColorHelper::transparent(textColor(), Ui::DesignSystem::focusBackgroundOpacity()));
 
     d->editingTitle->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->editingTitle->setTextColor(Ui::DesignSystem::color().secondary());
+    d->editingTitle->setTextColor(Ui::DesignSystem::color().accent());
     d->editingTitle->setContentsMargins(Ui::DesignSystem::layout().px16(),
                                         Ui::DesignSystem::layout().px12(), 0,
                                         Ui::DesignSystem::layout().px4());

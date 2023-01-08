@@ -359,7 +359,7 @@ void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->languageHowToAddLink->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
     d->languageHowToAddLink->setBackgroundColor(DesignSystem::color().background());
-    d->languageHowToAddLink->setTextColor(DesignSystem::color().secondary());
+    d->languageHowToAddLink->setTextColor(DesignSystem::color().accent());
     d->translationProgressLabel->setContentsMargins(0, 0, Ui::DesignSystem::layout().px24(), 0);
     d->translationProgressLabel->setBackgroundColor(DesignSystem::color().background());
     d->translationProgressLabel->setTextColor(DesignSystem::color().onBackground());
@@ -368,8 +368,8 @@ void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->improveButton,
              d->closeButton,
          }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        button->setTextColor(Ui::DesignSystem::color().secondary());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));

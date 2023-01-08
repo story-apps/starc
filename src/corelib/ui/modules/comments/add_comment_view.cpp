@@ -157,10 +157,10 @@ void AddCommentView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->buttonsLayout->setContentsMargins(
         0, 0, Ui::DesignSystem::layout().px12() + Ui::DesignSystem::layout().px2(), 0);
-    d->cancelButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->cancelButton->setTextColor(Ui::DesignSystem::color().secondary());
-    d->saveButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->saveButton->setTextColor(Ui::DesignSystem::color().secondary());
+    d->cancelButton->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->cancelButton->setTextColor(Ui::DesignSystem::color().accent());
+    d->saveButton->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->saveButton->setTextColor(Ui::DesignSystem::color().accent());
 }
 
 } // namespace Ui

@@ -95,9 +95,9 @@ void PurchaseDialogOption::paintEvent(QPaintEvent* _event)
     //
     painter.setPen(
         d->isChecked
-            ? QPen(Ui::DesignSystem::color().secondary(), Ui::DesignSystem::layout().px2())
+            ? QPen(Ui::DesignSystem::color().accent(), Ui::DesignSystem::layout().px2())
             : (underMouse()
-                   ? QPen(Ui::DesignSystem::color().secondary(), Ui::DesignSystem::layout().px())
+                   ? QPen(Ui::DesignSystem::color().accent(), Ui::DesignSystem::layout().px())
                    : QPen(ColorHelper::transparent(textColor(),
                                                    Ui::DesignSystem::elevationEndOpacity()),
                           Ui::DesignSystem::layout().px())));
@@ -136,7 +136,7 @@ void PurchaseDialogOption::paintEvent(QPaintEvent* _event)
         //
         // ... цена без скидки
         //
-        painter.setPen(Ui::DesignSystem::color().secondary());
+        painter.setPen(Ui::DesignSystem::color().accent());
         painter.setFont(Ui::DesignSystem::font().button());
         if (d->option.amount != d->option.totalAmount) {
             painter.setPen(
@@ -150,7 +150,7 @@ void PurchaseDialogOption::paintEvent(QPaintEvent* _event)
         // ... цена со скидкой
         //
         if (d->option.amount != d->option.totalAmount) {
-            painter.setPen(Ui::DesignSystem::color().secondary());
+            painter.setPen(Ui::DesignSystem::color().accent());
             painter.setFont(Ui::DesignSystem::font().button());
             auto totalPriceRect = textRect.adjusted(
                 0, TextHelper::fineLineSpacing(painter.font()) + Ui::DesignSystem::layout().px8(),
@@ -212,7 +212,7 @@ void PurchaseDialogOption::paintEvent(QPaintEvent* _event)
         //
         textRect.moveTop(textRect.bottom() + Ui::DesignSystem::layout().px2());
         textRect.setHeight(Ui::DesignSystem::layout().px24());
-        painter.setPen(Ui::DesignSystem::color().secondary());
+        painter.setPen(Ui::DesignSystem::color().accent());
         painter.setFont(Ui::DesignSystem::font().button());
         if (d->option.amount != d->option.totalAmount) {
             painter.setPen(
@@ -230,7 +230,7 @@ void PurchaseDialogOption::paintEvent(QPaintEvent* _event)
             totalPriceRect.setLeft(textRect.left()
                                    + TextHelper::fineTextWidthF(regularPrice, painter.font())
                                    + Ui::DesignSystem::layout().px8());
-            painter.setPen(Ui::DesignSystem::color().secondary());
+            painter.setPen(Ui::DesignSystem::color().accent());
             painter.setFont(Ui::DesignSystem::font().button());
             painter.drawText(totalPriceRect, Qt::AlignLeft | Qt::AlignVCenter, totalPrice);
         }
@@ -262,7 +262,7 @@ void PurchaseDialogOption::paintEvent(QPaintEvent* _event)
 
     if (d->decorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setBrush(Ui::DesignSystem::color().accent());
         painter.setClipRect(d->decorationAnimation.clipRect());
         painter.setOpacity(d->decorationAnimation.opacity());
         const auto radius = d->decorationAnimation.radius();

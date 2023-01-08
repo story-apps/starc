@@ -31,13 +31,13 @@ public:
     Implementation();
 
     QColor primary;
-    QColor secondary;
+    QColor accent;
     QColor background;
     QColor surface;
     QColor error;
     QColor shadow;
     QColor onPrimary;
-    QColor onSecondary;
+    QColor onAccent;
     QColor onBackground;
     QColor onSurface;
     QColor onError;
@@ -50,14 +50,14 @@ public:
 DesignSystem::Color::Implementation::Implementation()
 {
     primary = QColor("#323740");
-    secondary = QColor("#448aff");
+    accent = QColor("#448aff");
     background = QColor("#ffffff");
     surface = QColor("#f3f3f3");
     error = QColor("#b00020");
     shadow = QColor("#000000");
     shadow.setAlphaF(0.36);
     onPrimary = QColor("#ffffff");
-    onSecondary = QColor("#ffffff");
+    onAccent = QColor("#ffffff");
     onBackground = QColor("#000000");
     onSurface = QColor("#000000");
     onError = QColor("#ffffff");
@@ -92,8 +92,8 @@ DesignSystem::Color::Color(const QString& _color)
     };
     setPrimary(nextColor());
     setOnPrimary(nextColor());
-    setSecondary(nextColor());
-    setOnSecondary(nextColor());
+    setAccent(nextColor());
+    setOnAccent(nextColor());
     setBackground(nextColor());
     setOnBackground(nextColor());
     setSurface(nextColor());
@@ -131,8 +131,8 @@ QString DesignSystem::Color::toString() const
     QString colorsString;
     colorsString += d->primary.name();
     colorsString += d->onPrimary.name();
-    colorsString += d->secondary.name();
-    colorsString += d->onSecondary.name();
+    colorsString += d->accent.name();
+    colorsString += d->onAccent.name();
     colorsString += d->background.name();
     colorsString += d->onBackground.name();
     colorsString += d->surface.name();
@@ -153,9 +153,9 @@ const QColor& DesignSystem::Color::primary() const
     return d->primary;
 }
 
-const QColor& DesignSystem::Color::secondary() const
+const QColor& DesignSystem::Color::accent() const
 {
-    return d->secondary;
+    return d->accent;
 }
 
 const QColor& DesignSystem::Color::background() const
@@ -183,9 +183,9 @@ const QColor& DesignSystem::Color::onPrimary() const
     return d->onPrimary;
 }
 
-const QColor& DesignSystem::Color::onSecondary() const
+const QColor& DesignSystem::Color::onAccent() const
 {
-    return d->onSecondary;
+    return d->onAccent;
 }
 
 const QColor& DesignSystem::Color::onBackground() const
@@ -223,9 +223,9 @@ void DesignSystem::Color::setPrimary(const QColor& _color)
     d->primary = _color;
 }
 
-void DesignSystem::Color::setSecondary(const QColor& _color)
+void DesignSystem::Color::setAccent(const QColor& _color)
 {
-    d->secondary = _color;
+    d->accent = _color;
 }
 
 void DesignSystem::Color::setBackground(const QColor& _color)
@@ -262,9 +262,9 @@ void DesignSystem::Color::setOnPrimary(const QColor& _color)
     d->onPrimary = _color;
 }
 
-void DesignSystem::Color::setOnSecondary(const QColor& _color)
+void DesignSystem::Color::setOnAccent(const QColor& _color)
 {
-    d->onSecondary = _color;
+    d->onAccent = _color;
 }
 
 void DesignSystem::Color::setOnBackground(const QColor& _color)
@@ -1684,7 +1684,7 @@ DesignSystem::Drawer::Implementation::Implementation(qreal _scaleFactor, const C
     iconSize *= _scaleFactor;
     separatorHeight *= _scaleFactor;
     separatorSpacing *= _scaleFactor;
-    selectionColor = _color.secondary();
+    selectionColor = _color.accent();
     selectionColor.setAlphaF(0.14);
 }
 
@@ -1830,7 +1830,7 @@ DesignSystem::Tree::Implementation::Implementation(qreal _scaleFactor, const Col
     indicatorWidth *= _scaleFactor;
     arrowHeight *= _scaleFactor;
     arrowHalfWidth *= _scaleFactor;
-    selectionColor = _color.secondary();
+    selectionColor = _color.accent();
     selectionColor.setAlphaF(0.14);
 }
 
@@ -2386,13 +2386,13 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
 {
     QColor primary;
     QColor onShadow;
-    QColor secondary;
+    QColor accent;
     QColor background;
     QColor surface;
     QColor error;
     QColor shadow;
     QColor onPrimary;
-    QColor onSecondary;
+    QColor onAccent;
     QColor onBackground;
     QColor onSurface;
     QColor onError;
@@ -2400,7 +2400,7 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
     switch (_forTheme) {
     case Ui::ApplicationTheme::DarkAndLight: {
         primary = "#323740";
-        secondary = "#448aff";
+        accent = "#448aff";
         background = "#ffffff";
         surface = "#f3f3f3";
         error = "#b00020";
@@ -2410,7 +2410,7 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
             return color;
         }();
         onPrimary = "#ffffff";
-        onSecondary = "#ffffff";
+        onAccent = "#ffffff";
         onBackground = "#000000";
         onSurface = "#000000";
         onError = "#ffffff";
@@ -2420,7 +2420,7 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
 
     case Ui::ApplicationTheme::Dark: {
         primary = "#323740";
-        secondary = "#5796ff";
+        accent = "#5796ff";
         background = "#272b34";
         surface = "#22262e";
         error = "#ec3740";
@@ -2430,7 +2430,7 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
             return color;
         }();
         onPrimary = "#ffffff";
-        onSecondary = "#f8f8f2";
+        onAccent = "#f8f8f2";
         onBackground = "#f8f8f2";
         onSurface = "#f8f8f2";
         onError = "#f8f8f2";
@@ -2440,7 +2440,7 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
 
     case Ui::ApplicationTheme::Light: {
         primary = "#e4e4e4";
-        secondary = "#448aff";
+        accent = "#448aff";
         background = "#ffffff";
         surface = "#f3f3f3";
         error = "#b00020";
@@ -2450,7 +2450,7 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
             return color;
         }();
         onPrimary = "#38393a";
-        onSecondary = "#ffffff";
+        onAccent = "#ffffff";
         onBackground = "#000000";
         onSurface = "#000000";
         onError = "#ffffff";
@@ -2468,13 +2468,13 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
 
     auto newColor(instance()->d->color);
     newColor.setPrimary(primary);
-    newColor.setSecondary(secondary);
+    newColor.setAccent(accent);
     newColor.setBackground(background);
     newColor.setSurface(surface);
     newColor.setError(error);
     newColor.setShadow(shadow);
     newColor.setOnPrimary(onPrimary);
-    newColor.setOnSecondary(onSecondary);
+    newColor.setOnAccent(onAccent);
     newColor.setOnBackground(onBackground);
     newColor.setOnSurface(onSurface);
     newColor.setOnError(onError);

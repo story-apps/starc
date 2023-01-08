@@ -313,7 +313,7 @@ void UnsplashImagesView::paintEvent(QPaintEvent* _event)
                 if (imageRect == d->decorationAnimation.clipRect()
                     && d->decorationAnimation.state() == ClickAnimation::Running) {
                     painter.setPen(Qt::NoPen);
-                    painter.setBrush(Ui::DesignSystem::color().secondary());
+                    painter.setBrush(Ui::DesignSystem::color().accent());
                     painter.setClipRect(d->decorationAnimation.clipRect());
                     painter.setOpacity(d->decorationAnimation.opacity());
                     const auto radius = d->decorationAnimation.radius();

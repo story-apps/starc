@@ -487,7 +487,7 @@ void Drawer::paintEvent(QPaintEvent* _event)
                                          Ui::DesignSystem::hoverBackgroundOpacity()));
         }
 
-        painter.setPen(action->isChecked() ? Ui::DesignSystem::color().secondary()
+        painter.setPen(action->isChecked() ? Ui::DesignSystem::color().accent()
                                            : Ui::DesignSystem::color().onPrimary());
         if (action->isChecked()) {
             painter.setOpacity(1.0);
@@ -545,7 +545,7 @@ void Drawer::paintEvent(QPaintEvent* _event)
         || d->decorationOpacityAnimation.state() == QVariantAnimation::Running) {
         painter.setClipRect(d->decorationRect);
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setBrush(Ui::DesignSystem::color().accent());
         painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
         painter.drawEllipse(d->decorationCenterPosition,
                             d->decorationRadiusAnimation.currentValue().toReal(),

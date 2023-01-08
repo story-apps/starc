@@ -580,10 +580,10 @@ void TabBar::paintEvent(QPaintEvent* _event)
         //
         if (isTabCurrent && hasFocus()) {
             painter.setOpacity(Ui::DesignSystem::focusBackgroundOpacity());
-            painter.fillRect(tabBoundingRect, Ui::DesignSystem::color().secondary());
+            painter.fillRect(tabBoundingRect, Ui::DesignSystem::color().accent());
         } else if (underMouse() && tabBoundingRect.contains(mapFromGlobal(QCursor::pos()))) {
             painter.setOpacity(Ui::DesignSystem::hoverBackgroundOpacity());
-            painter.fillRect(tabBoundingRect, Ui::DesignSystem::color().secondary());
+            painter.fillRect(tabBoundingRect, Ui::DesignSystem::color().accent());
         }
 
         //
@@ -600,7 +600,7 @@ void TabBar::paintEvent(QPaintEvent* _event)
                 || d->decorationOpacityAnimation.state() == QVariantAnimation::Running)) {
             painter.setClipRect(tabBoundingRect);
             painter.setPen(Qt::NoPen);
-            painter.setBrush(Ui::DesignSystem::color().secondary());
+            painter.setBrush(Ui::DesignSystem::color().accent());
             painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
             painter.drawEllipse(decorationCenterPosition,
                                 d->decorationRadiusAnimation.currentValue().toReal(),
@@ -614,7 +614,7 @@ void TabBar::paintEvent(QPaintEvent* _event)
         //
         painter.setPen(tab.color.isValid()
                            ? tab.color
-                           : (isTabCurrent ? Ui::DesignSystem::color().secondary() : textColor()));
+                           : (isTabCurrent ? Ui::DesignSystem::color().accent() : textColor()));
         painter.setOpacity(isTabCurrent ? 1.0 : Ui::DesignSystem::inactiveTextOpacity());
         const qreal xDelta = (tabBoundingRect.width() - d->tabContentWidth(tab)) / 2.0;
         const qreal heightDelta = height() - d->tabHeightHint(tab);
@@ -633,7 +633,7 @@ void TabBar::paintEvent(QPaintEvent* _event)
         //
         // ... текст
         //
-        painter.setPen(isTabCurrent ? Ui::DesignSystem::color().secondary() : textColor());
+        painter.setPen(isTabCurrent ? Ui::DesignSystem::color().accent() : textColor());
         painter.setFont(Ui::DesignSystem::font().button());
         QRectF tabTextRect;
         if (!tabIconRect.isNull()) {

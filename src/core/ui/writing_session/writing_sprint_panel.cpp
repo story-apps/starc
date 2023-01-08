@@ -187,8 +187,8 @@ void WritingSprintPanel::Implementation::updateSprintAction()
         sprintAction->setTextColor(Ui::DesignSystem::color().onError());
     } else {
         sprintAction->setIcon(u8"\U000F040A");
-        sprintAction->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        sprintAction->setTextColor(Ui::DesignSystem::color().onSecondary());
+        sprintAction->setBackgroundColor(Ui::DesignSystem::color().accent());
+        sprintAction->setTextColor(Ui::DesignSystem::color().onAccent());
     }
 }
 
@@ -230,7 +230,7 @@ WritingSprintPanel::WritingSprintPanel(QWidget* _parent)
 
         WAF::Animation::circleFillIn(
             topLevelWidget(), mapToGlobal(rect().topRight()),
-            ColorHelper::transparent(Ui::DesignSystem::color().secondary(),
+            ColorHelper::transparent(Ui::DesignSystem::color().accent(),
                                      Ui::DesignSystem::disabledTextOpacity()));
 
         emit sprintFinished();
@@ -375,7 +375,7 @@ void WritingSprintPanel::paintEvent(QPaintEvent* _event)
     painter.fillRect(rect(), Qt::transparent);
     const auto backgroundRect = rect().adjusted(0, 0, 0, -Ui::DesignSystem::layout().px(6));
     painter.fillRect(backgroundRect,
-                     ColorHelper::transparent(Ui::DesignSystem::color().secondary(),
+                     ColorHelper::transparent(Ui::DesignSystem::color().accent(),
                                               d->isSprintFinished()
                                                   ? Ui::DesignSystem::inactiveTextOpacity()
                                                   : Ui::DesignSystem::hoverBackgroundOpacity()));
@@ -386,7 +386,7 @@ void WritingSprintPanel::paintEvent(QPaintEvent* _event)
     auto completedRect = backgroundRect;
     completedRect.setWidth(completedRect.width() * d->sprintDuration.currentValue().toDouble());
     painter.fillRect(completedRect,
-                     ColorHelper::transparent(Ui::DesignSystem::color().secondary(),
+                     ColorHelper::transparent(Ui::DesignSystem::color().accent(),
                                               Ui::DesignSystem::inactiveTextOpacity()));
 
     //
@@ -415,7 +415,7 @@ void WritingSprintPanel::paintEvent(QPaintEvent* _event)
         // ... над залитой областью
         //
         painter.setClipRect(completedRect);
-        painter.setPen(Ui::DesignSystem::color().onSecondary());
+        painter.setPen(Ui::DesignSystem::color().onAccent());
         painter.setFont(Ui::DesignSystem::font().iconsSmall());
         painter.drawText(closeIconRect, Qt::AlignCenter, u8"\U000F0156");
         //
@@ -485,7 +485,7 @@ void WritingSprintPanel::designSystemChangeEvent(DesignSystemChangeEvent* _event
     d->sprintTime->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     d->sprintTime->setTextColor(Ui::DesignSystem::color().onBackground());
     d->sprintTime->setCustomMargins({ 0, 0, Ui::DesignSystem::layout().px16(), 0 });
-    d->sprintAction->setBackgroundColor(Ui::DesignSystem::color().secondary());
+    d->sprintAction->setBackgroundColor(Ui::DesignSystem::color().accent());
     d->sprintAction->setTextColor(Ui::DesignSystem::color().background());
 
     d->sprintResultsLayout->setContentsMargins(
@@ -498,12 +498,12 @@ void WritingSprintPanel::designSystemChangeEvent(DesignSystemChangeEvent* _event
     d->sprintResultTitle->setTextColor(Ui::DesignSystem::color().onBackground());
     d->sprintResultTitle->setContentsMargins(0, Ui::DesignSystem::layout().px12(), 0, 0);
     d->sprintResultWords->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->sprintResultWords->setTextColor(Ui::DesignSystem::color().secondary());
+    d->sprintResultWords->setTextColor(Ui::DesignSystem::color().accent());
     d->sprintResultSubtitle->setBackgroundColor(Ui::DesignSystem::color().background());
     d->sprintResultSubtitle->setTextColor(Ui::DesignSystem::color().onBackground());
     d->sprintResultSubtitle->setContentsMargins(0, 0, 0, Ui::DesignSystem::layout().px48());
-    d->restartSprint->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->restartSprint->setTextColor(Ui::DesignSystem::color().onSecondary());
+    d->restartSprint->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->restartSprint->setTextColor(Ui::DesignSystem::color().onAccent());
 }
 
 } // namespace Ui

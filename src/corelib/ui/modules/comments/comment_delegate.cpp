@@ -119,7 +119,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
                         + Ui::DesignSystem::layout().px4()),
             iconSize);
         _painter->setFont(Ui::DesignSystem::font().iconsMid());
-        _painter->setPen(m_isSingleCommentMode ? textColor : Ui::DesignSystem::color().secondary());
+        _painter->setPen(m_isSingleCommentMode ? textColor : Ui::DesignSystem::color().accent());
         _painter->drawText(doneIconRect, Qt::AlignCenter,
                            m_isSingleCommentMode ? u8"\U000f0156" : u8"\U000F012C");
         if (m_isSingleCommentMode && done) {
@@ -128,7 +128,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
             } else {
                 doneIconRect.moveLeft(doneIconRect.right());
             }
-            _painter->setPen(Ui::DesignSystem::color().secondary());
+            _painter->setPen(Ui::DesignSystem::color().accent());
             _painter->drawText(doneIconRect, Qt::AlignCenter, u8"\U000F012C");
         }
     }

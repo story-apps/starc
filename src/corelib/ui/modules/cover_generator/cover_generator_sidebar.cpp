@@ -415,7 +415,7 @@ CoverGeneratorSidebar::CoverGeneratorSidebar(QWidget* _parent)
                             ? Ui::DesignSystem::color().primary()
                             : ColorHelper::nearby(Ui::DesignSystem::color().primary()));
                     textFieldWithOptions->text->setTrailingIconColor(
-                        isOptionsVisible ? QColor() : Ui::DesignSystem::color().secondary());
+                        isOptionsVisible ? QColor() : Ui::DesignSystem::color().accent());
                     textFieldWithOptions->setOptionsVisible(!isOptionsVisible);
                 });
         connect(textFieldWithOptions->fontFamily, &ComboBox::currentIndexChanged, this,

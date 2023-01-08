@@ -169,14 +169,14 @@ void SessionWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     if (d->sessionInfo.isCurrentDevice) {
         d->lastUsedIcon->setBackgroundColor(Ui::DesignSystem::color().background());
         d->lastUsedIcon->setTextColor(ColorHelper::transparent(
-            Ui::DesignSystem::color().secondary(), Ui::DesignSystem::inactiveTextOpacity()));
+            Ui::DesignSystem::color().accent(), Ui::DesignSystem::inactiveTextOpacity()));
         d->lastUsedIcon->setContentsMargins(labelMargins);
         labelMargins.setLeft(Ui::DesignSystem::layout().px8());
     }
     d->lastUsed->setContentsMargins(labelMargins);
 
-    d->terinateSession->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->terinateSession->setTextColor(Ui::DesignSystem::color().secondary());
+    d->terinateSession->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->terinateSession->setTextColor(Ui::DesignSystem::color().accent());
 
     d->layout->setContentsMargins(0, 0, Ui::DesignSystem::layout().px16(),
                                   Ui::DesignSystem::layout().px16());

@@ -274,10 +274,10 @@ void ColorPicker::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->colorHueSlider->setFixedHeight(Ui::DesignSystem::layout().px24());
 
-    d->addButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->addButton->setTextColor(Ui::DesignSystem::color().secondary());
-    d->cancelButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->cancelButton->setTextColor(Ui::DesignSystem::color().secondary());
+    d->addButton->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->addButton->setTextColor(Ui::DesignSystem::color().accent());
+    d->cancelButton->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->cancelButton->setTextColor(Ui::DesignSystem::color().accent());
     //
     d->buttonsLayout->setContentsMargins(
         Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px2(),

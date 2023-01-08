@@ -311,7 +311,7 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
                 QString("%1 (%2)").arg(character.name, QString::number(character.totalDialogues)));
             if (character.isFirstAppearance) {
                 characterItem->setData(u8"\U000F09DE", Qt::DecorationRole);
-                characterItem->setData(Ui::DesignSystem::color().secondary(),
+                characterItem->setData(Ui::DesignSystem::color().accent(),
                                        Qt::DecorationPropertyRole);
             }
             sceneItem->appendRow({ characterItem, createModelItem({}), createModelItem({}),

@@ -181,14 +181,14 @@ void Stepper::paintEvent(QPaintEvent* _event)
         //
         const QColor stepNumberBackgroundColor = !d->isFinished && stepIndex > d->currentStepIndex
             ? d->inactiveStepNumberBackgroundColor
-            : Ui::DesignSystem::color().secondary();
+            : Ui::DesignSystem::color().accent();
         painter.setPen(stepNumberBackgroundColor);
         painter.setBrush(stepNumberBackgroundColor);
         painter.drawEllipse(stepNumberBackgroundRect);
         //
         // ... и номер внутри
         //
-        painter.setPen(Ui::DesignSystem::color().onSecondary());
+        painter.setPen(Ui::DesignSystem::color().onAccent());
         if (!d->isFinished && stepIndex >= d->currentStepIndex) {
             const QString stepNumber = QString::number(stepIndex + 1);
             painter.drawText(stepNumberBackgroundRect, Qt::AlignCenter, stepNumber);

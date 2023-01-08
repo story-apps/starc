@@ -111,7 +111,7 @@ void PageLayout::paintEvent(QPaintEvent* _event)
         if (d->currentItem == _item) {
             painter.save();
             auto pen = painter.pen();
-            pen.setBrush(Ui::DesignSystem::color().secondary());
+            pen.setBrush(Ui::DesignSystem::color().accent());
             pen.setStyle(Qt::SolidLine);
             painter.setPen(pen);
         }

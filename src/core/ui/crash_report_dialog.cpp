@@ -240,8 +240,8 @@ void CrashReportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto button : { d->cancelButton, d->sendButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        button->setTextColor(Ui::DesignSystem::color().secondary());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
     d->intro->setContentsMargins(Ui::DesignSystem::layout().px24(), 0,

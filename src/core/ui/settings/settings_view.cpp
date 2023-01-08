@@ -3113,7 +3113,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
     d->contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
 
-    d->colorAnimation.setStartValue(Ui::DesignSystem::color().secondary());
+    d->colorAnimation.setStartValue(Ui::DesignSystem::color().accent());
 
     for (auto card : {
              d->applicationCard,
@@ -3362,8 +3362,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto button : { d->changeLanuage }) {
-        button->setBackgroundColor(DesignSystem::color().secondary());
-        button->setTextColor(DesignSystem::color().secondary());
+        button->setBackgroundColor(DesignSystem::color().accent());
+        button->setTextColor(DesignSystem::color().accent());
     }
 
     for (auto theme : {

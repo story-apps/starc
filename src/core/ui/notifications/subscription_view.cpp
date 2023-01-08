@@ -67,7 +67,7 @@ void SubscriptionView::Implementation::setupView()
         = QDateTime::fromString(json.value("end_date").toString(), Qt::ISODateWithMs);
     const int daysLeft = notification.dateTime.daysTo(endDateTime);
     avatarLabel->setTextColor(daysLeft <= 0 ? Ui::DesignSystem::color().error()
-                                            : Ui::DesignSystem::color().secondary());
+                                            : Ui::DesignSystem::color().accent());
     QString title;
     QString body;
     bool isButtonVisible = true;
@@ -218,8 +218,8 @@ void SubscriptionView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->titleLabel->setContentsMargins(0, 0, 0, Ui::DesignSystem::layout().px12());
     d->bodyLabel->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->bodyLabel->setContentsMargins(leftMargin, 0, rightMargin, Ui::DesignSystem::layout().px12());
-    d->renewButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->renewButton->setTextColor(Ui::DesignSystem::color().secondary());
+    d->renewButton->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->renewButton->setTextColor(Ui::DesignSystem::color().accent());
     d->renewButton->setContentsMargins(0, Ui::DesignSystem::layout().px(6), 0,
                                        Ui::DesignSystem::layout().px4());
 

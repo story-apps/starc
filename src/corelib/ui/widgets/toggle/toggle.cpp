@@ -145,7 +145,7 @@ void Toggle::paintEvent(QPaintEvent* _event)
     painter.fillRect(_event->rect(), backgroundColor());
 
     const auto tumblerColor = d->isChecked
-        ? Ui::DesignSystem::color().secondary()
+        ? Ui::DesignSystem::color().accent()
         : (ColorHelper::isColorLight(backgroundColor()) ? backgroundColor() : textColor());
     const auto trackColor
         = d->isChecked ? tumblerColor.lighter(140) : ColorHelper::nearby(tumblerColor, 160);

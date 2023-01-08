@@ -360,8 +360,8 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
     d->insertIntoParent->setBackgroundColor(Ui::DesignSystem::color().background());
 
     for (auto button : { d->cancelButton, d->createButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        button->setTextColor(Ui::DesignSystem::color().secondary());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
     d->buttonsLayout->setContentsMargins(

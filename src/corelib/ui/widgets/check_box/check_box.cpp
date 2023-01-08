@@ -175,7 +175,7 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     // Рисуем декорацию переключателя
     //
     const auto checkMarkColor
-        = d->checkMarkColor.isValid() ? d->checkMarkColor : Ui::DesignSystem::color().secondary();
+        = d->checkMarkColor.isValid() ? d->checkMarkColor : Ui::DesignSystem::color().accent();
     if (underMouse() || hasFocus()) {
         painter.setPen(Qt::NoPen);
         painter.setBrush(isChecked() || isIndeterminate() ? checkMarkColor : textColor());

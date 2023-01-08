@@ -735,8 +735,8 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->accountContinueButton,
              d->socialContinueButton,
          }) {
-        containedButton->setBackgroundColor(DesignSystem::color().secondary());
-        containedButton->setTextColor(DesignSystem::color().onSecondary());
+        containedButton->setBackgroundColor(DesignSystem::color().accent());
+        containedButton->setTextColor(DesignSystem::color().onAccent());
         containedButton->setContentsMargins(margin - DesignSystem::card().shadowMargins().left(), 0,
                                             margin - DesignSystem::card().shadowMargins().right(),
                                             DesignSystem::layout().px16());
@@ -745,8 +745,8 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->signInContinueButton,
              d->accountChangeAvatarButton,
          }) {
-        button->setBackgroundColor(DesignSystem::color().secondary());
-        button->setTextColor(DesignSystem::color().secondary());
+        button->setBackgroundColor(DesignSystem::color().accent());
+        button->setTextColor(DesignSystem::color().accent());
     }
 
     for (auto iconButton : {

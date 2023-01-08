@@ -204,8 +204,8 @@ void SettingsNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->content->setBackgroundColor(DesignSystem::color().primary());
     d->tree->setBackgroundColor(DesignSystem::color().primary());
     d->tree->setTextColor(DesignSystem::color().onPrimary());
-    d->resetToDefaults->setBackgroundColor(DesignSystem::color().secondary());
-    d->resetToDefaults->setTextColor(DesignSystem::color().secondary());
+    d->resetToDefaults->setBackgroundColor(DesignSystem::color().accent());
+    d->resetToDefaults->setTextColor(DesignSystem::color().accent());
     d->resetToDefaults->setContentsMargins(
         DesignSystem::layout().px12(), DesignSystem::layout().px24(), DesignSystem::layout().px12(),
         DesignSystem::layout().px12());

@@ -270,16 +270,16 @@ void StageplayTextSearchToolbar::processBackgroundColorChange()
 {
     d->searchText->setBackgroundColor(backgroundColor());
     d->replaceText->setBackgroundColor(backgroundColor());
-    d->replace->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->replaceAll->setBackgroundColor(Ui::DesignSystem::color().secondary());
+    d->replace->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->replaceAll->setBackgroundColor(Ui::DesignSystem::color().accent());
 }
 
 void StageplayTextSearchToolbar::processTextColorChange()
 {
     d->searchText->setTextColor(textColor());
     d->replaceText->setTextColor(textColor());
-    d->replace->setTextColor(Ui::DesignSystem::color().secondary());
-    d->replaceAll->setTextColor(Ui::DesignSystem::color().secondary());
+    d->replace->setTextColor(Ui::DesignSystem::color().accent());
+    d->replaceAll->setTextColor(Ui::DesignSystem::color().accent());
 }
 
 void StageplayTextSearchToolbar::updateTranslations()

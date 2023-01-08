@@ -154,8 +154,8 @@ void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto button : { d->importButton, d->cancelButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        button->setTextColor(Ui::DesignSystem::color().secondary());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));

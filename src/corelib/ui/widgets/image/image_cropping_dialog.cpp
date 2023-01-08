@@ -157,8 +157,8 @@ void ImageCroppingDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
         button->setTextColor(Ui::DesignSystem::color().onBackground());
     }
     for (auto button : { d->cancelButton, d->selectButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        button->setTextColor(Ui::DesignSystem::color().secondary());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
     d->buttonsLayout->setContentsMargins(

@@ -96,9 +96,9 @@ void CreateDocumentDialogOption::paintEvent(QPaintEvent* _event)
     //
     painter.setPen(
         d->isChecked
-            ? QPen(Ui::DesignSystem::color().secondary(), Ui::DesignSystem::layout().px2())
+            ? QPen(Ui::DesignSystem::color().accent(), Ui::DesignSystem::layout().px2())
             : (underMouse()
-                   ? QPen(Ui::DesignSystem::color().secondary(), Ui::DesignSystem::layout().px())
+                   ? QPen(Ui::DesignSystem::color().accent(), Ui::DesignSystem::layout().px())
                    : QPen(ColorHelper::transparent(textColor(),
                                                    Ui::DesignSystem::elevationEndOpacity()),
                           Ui::DesignSystem::layout().px())));
@@ -132,7 +132,7 @@ void CreateDocumentDialogOption::paintEvent(QPaintEvent* _event)
     //
     if (d->decorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setBrush(Ui::DesignSystem::color().accent());
         painter.setClipRect(d->decorationAnimation.clipRect());
         painter.setOpacity(d->decorationAnimation.opacity());
         const auto radius = d->decorationAnimation.radius();

@@ -112,7 +112,7 @@ protected:
         m_readMore->setContentsMargins(Ui::DesignSystem::layout().px4(),
                                        Ui::DesignSystem::layout().px12(),
                                        Ui::DesignSystem::layout().px24(), 0);
-        m_readMore->setTextColor(Ui::DesignSystem::color().secondary());
+        m_readMore->setTextColor(Ui::DesignSystem::color().accent());
     }
 
 private:
@@ -963,7 +963,7 @@ void LoglineGeneratorDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
         label->setTextColor(Ui::DesignSystem::color().onBackground());
         label->setContentsMargins({});
     }
-    d->loglineIcon->setTextColor(Ui::DesignSystem::color().secondary());
+    d->loglineIcon->setTextColor(Ui::DesignSystem::color().accent());
     d->loglineTitle->setContentsMargins(Ui::DesignSystem::layout().px24(),
                                         Ui::DesignSystem::layout().px24(),
                                         Ui::DesignSystem::layout().px24(), 0);
@@ -971,10 +971,10 @@ void LoglineGeneratorDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
                                    Ui::DesignSystem::layout().px24(),
                                    Ui::DesignSystem::layout().px(160), 0);
 
-    d->continueButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->continueButton->setTextColor(Ui::DesignSystem::color().secondary());
-    d->doneButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->doneButton->setTextColor(Ui::DesignSystem::color().secondary());
+    d->continueButton->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->continueButton->setTextColor(Ui::DesignSystem::color().accent());
+    d->doneButton->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->doneButton->setTextColor(Ui::DesignSystem::color().accent());
     d->closeButton->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     d->closeButton->setTextColor(Ui::DesignSystem::color().onBackground());
     d->backButton->setBackgroundColor(Ui::DesignSystem::color().onBackground());

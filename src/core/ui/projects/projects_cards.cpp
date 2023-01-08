@@ -335,7 +335,7 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
         || QApplication::mouseButtons().testFlag(Qt::LeftButton)) {
         _painter->setClipRect(backgroundRect);
         _painter->setPen(Qt::NoPen);
-        _painter->setBrush(Ui::DesignSystem::color().secondary());
+        _painter->setBrush(Ui::DesignSystem::color().accent());
         _painter->setOpacity(m_decorationOpacityAnimation.currentValue().toReal());
         _painter->drawEllipse(m_decorationCenterPosition,
                               m_decorationRadiusAnimation.currentValue().toReal(),

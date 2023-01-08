@@ -449,13 +449,13 @@ void ImageCard::paintEvent(QPaintEvent* _event)
         painter.setOpacity(d->dragIndicationOpacityAnimation.currentValue().toReal());
         //
         painter.setPen(Qt::NoPen);
-        painter.setBrush(Ui::DesignSystem::color().secondary());
+        painter.setBrush(Ui::DesignSystem::color().accent());
         const auto cardRect
             = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins().toMargins());
         const auto borderRadius = Ui::DesignSystem::card().borderRadius();
         painter.drawRoundedRect(cardRect, borderRadius, borderRadius);
         //
-        painter.setPen(Ui::DesignSystem::color().onSecondary());
+        painter.setPen(Ui::DesignSystem::color().onAccent());
         painter.setBrush(Qt::NoBrush);
         auto iconFont = Ui::DesignSystem::font().iconsForEditors();
         iconFont.setPixelSize(Ui::DesignSystem::layout().px(82));
@@ -618,7 +618,7 @@ void ImageCard::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->decorationColorAnimation.setStartValue(
         ColorHelper::transparent(textColor(), Ui::DesignSystem::disabledTextOpacity()));
-    d->decorationColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
+    d->decorationColorAnimation.setEndValue(Ui::DesignSystem::color().accent());
 
     d->contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
     d->contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());

@@ -136,7 +136,7 @@ void AudioplayTextFastFormatWidget::setCurrentParagraphType(const QModelIndex& _
     for (auto button : d->buttons) {
         const bool isCurrentType = button->property(kButtonTypeKey).toModelIndex() == _index;
         button->setProperty(kIsButtonCurrentTypeKey, isCurrentType);
-        button->setTextColor(isCurrentType ? DesignSystem::color().secondary()
+        button->setTextColor(isCurrentType ? DesignSystem::color().accent()
                                            : DesignSystem::color().onPrimary());
     }
 }
@@ -153,7 +153,7 @@ void AudioplayTextFastFormatWidget::designSystemChangeEvent(DesignSystemChangeEv
     for (auto button : d->buttons) {
         button->setBackgroundColor(ColorHelper::nearby(DesignSystem::color().primary()));
         button->setTextColor(button->property(kIsButtonCurrentTypeKey).toBool()
-                                 ? DesignSystem::color().secondary()
+                                 ? DesignSystem::color().accent()
                                  : DesignSystem::color().onPrimary());
     }
 }

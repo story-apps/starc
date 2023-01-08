@@ -278,16 +278,16 @@ void OnboardingView::Implementation::updateLanguagePageUi()
     languageTranslationProgressLink->setContentsMargins(Ui::DesignSystem::layout().px24(), 0,
                                                         Ui::DesignSystem::layout().px24(), 0);
     languageTranslationProgressLink->setBackgroundColor(DesignSystem::color().surface());
-    languageTranslationProgressLink->setTextColor(DesignSystem::color().secondary());
+    languageTranslationProgressLink->setTextColor(DesignSystem::color().accent());
     languageHowToAddLink->setContentsMargins(
         Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12(),
         Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24());
     languageHowToAddLink->setBackgroundColor(DesignSystem::color().surface());
-    languageHowToAddLink->setTextColor(DesignSystem::color().secondary());
-    goToThemeButton->setBackgroundColor(DesignSystem::color().secondary());
-    goToThemeButton->setTextColor(DesignSystem::color().onSecondary());
-    skipOnboardingButton->setBackgroundColor(DesignSystem::color().secondary());
-    skipOnboardingButton->setTextColor(DesignSystem::color().secondary());
+    languageHowToAddLink->setTextColor(DesignSystem::color().accent());
+    goToThemeButton->setBackgroundColor(DesignSystem::color().accent());
+    goToThemeButton->setTextColor(DesignSystem::color().onAccent());
+    skipOnboardingButton->setBackgroundColor(DesignSystem::color().accent());
+    skipOnboardingButton->setTextColor(DesignSystem::color().accent());
     languagePageButtonsLayout->setSpacing(
         static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
     languagePageButtonsLayout->setContentsMargins(
@@ -389,8 +389,8 @@ void OnboardingView::Implementation::updateThemePageUi()
         label->setBackgroundColor(DesignSystem::color().surface());
         label->setTextColor(themeInfoLabelTextColor);
     }
-    finishOnboardingButton->setBackgroundColor(DesignSystem::color().secondary());
-    finishOnboardingButton->setTextColor(DesignSystem::color().onSecondary());
+    finishOnboardingButton->setBackgroundColor(DesignSystem::color().accent());
+    finishOnboardingButton->setTextColor(DesignSystem::color().onAccent());
     themePageButtonsLayout->setSpacing(
         static_cast<int>(Ui::DesignSystem::layout().buttonsSpacing()));
     themePageButtonsLayout->setContentsMargins(

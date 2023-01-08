@@ -236,8 +236,8 @@ void SimpleTextExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
     }
 
     for (auto button : { d->exportButton, d->cancelButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        button->setTextColor(Ui::DesignSystem::color().secondary());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
     d->watermarkColorPopup->setBackgroundColor(Ui::DesignSystem::color().background());

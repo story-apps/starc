@@ -412,13 +412,13 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
         QMarginsF(Ui::DesignSystem::layout().px24(), 0.0, Ui::DesignSystem::layout().px4(),
                   Ui::DesignSystem::layout().px12())
             .toMargins());
-    d->cloudProjectCreationAction->setTextColor(Ui::DesignSystem::color().secondary());
+    d->cloudProjectCreationAction->setTextColor(Ui::DesignSystem::color().accent());
     d->cloudProjectCreationActionNote->setContentsMargins(
         QMarginsF(0, 0.0, Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12())
             .toMargins());
     for (auto button : { d->cancelButton, d->createButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        button->setTextColor(Ui::DesignSystem::color().secondary());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
     contentsLayout()->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px12()));

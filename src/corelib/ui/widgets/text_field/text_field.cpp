@@ -145,8 +145,8 @@ void TextField::Implementation::reconfigure()
     palette.setColor(QPalette::Base, Qt::transparent);
     palette.setColor(QPalette::Text, textColor);
     palette.setColor(QPalette::Disabled, QPalette::Text, textDisabledColor);
-    palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().secondary());
-    palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onSecondary());
+    palette.setColor(QPalette::Highlight, Ui::DesignSystem::color().accent());
+    palette.setColor(QPalette::HighlightedText, Ui::DesignSystem::color().onAccent());
     q->setPalette(palette);
 
     QMarginsF frameMargins;
@@ -955,7 +955,7 @@ void TextField::paintEvent(QPaintEvent* _event)
             decorationRect.moveTop(d->decorationRectInFocus().top());
             const QColor decorationColor = !d->error.isEmpty()
                 ? Ui::DesignSystem::color().error()
-                : Ui::DesignSystem::color().secondary();
+                : Ui::DesignSystem::color().accent();
             painter.fillRect(decorationRect, decorationColor);
         }
     }
@@ -1017,9 +1017,9 @@ void TextField::focusInEvent(QFocusEvent* _event)
     // анимировать отображение декораций
     //
 
-    if (d->labelColorAnimation.endValue() != Ui::DesignSystem::color().secondary()) {
+    if (d->labelColorAnimation.endValue() != Ui::DesignSystem::color().accent()) {
         d->labelColorAnimation.setStartValue(d->textDisabledColor);
-        d->labelColorAnimation.setEndValue(Ui::DesignSystem::color().secondary());
+        d->labelColorAnimation.setEndValue(Ui::DesignSystem::color().accent());
         d->labelColorAnimation.start();
     }
 
@@ -1048,7 +1048,7 @@ void TextField::focusOutEvent(QFocusEvent* _event)
         return;
     }
 
-    d->labelColorAnimation.setStartValue(Ui::DesignSystem::color().secondary());
+    d->labelColorAnimation.setStartValue(Ui::DesignSystem::color().accent());
     d->labelColorAnimation.setEndValue(d->textDisabledColor);
     d->labelColorAnimation.start();
 

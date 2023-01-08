@@ -278,10 +278,10 @@ void ProjectNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->buttonsLayout->setContentsMargins(
         DesignSystem::layout().px12(), DesignSystem::layout().px12(), DesignSystem::layout().px12(),
         DesignSystem::layout().px12());
-    d->addDocumentButton->setBackgroundColor(DesignSystem::color().secondary());
-    d->addDocumentButton->setTextColor(DesignSystem::color().secondary());
-    d->emptyRecycleBinButton->setBackgroundColor(DesignSystem::color().secondary());
-    d->emptyRecycleBinButton->setTextColor(DesignSystem::color().secondary());
+    d->addDocumentButton->setBackgroundColor(DesignSystem::color().accent());
+    d->addDocumentButton->setTextColor(DesignSystem::color().accent());
+    d->emptyRecycleBinButton->setBackgroundColor(DesignSystem::color().accent());
+    d->emptyRecycleBinButton->setTextColor(DesignSystem::color().accent());
 }
 
 } // namespace Ui

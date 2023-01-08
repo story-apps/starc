@@ -101,8 +101,8 @@ void ProjectsNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->quoteAuthorLabel->setTextColor(ColorHelper::colorBetween(DesignSystem::color().primary(),
                                                                 DesignSystem::color().onPrimary()));
     for (auto button : { d->createProjectButton, d->openProjectButton, d->helpButton }) {
-        button->setBackgroundColor(DesignSystem::color().secondary());
-        button->setTextColor(DesignSystem::color().secondary());
+        button->setBackgroundColor(DesignSystem::color().accent());
+        button->setTextColor(DesignSystem::color().accent());
     }
 }
 

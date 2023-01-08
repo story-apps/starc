@@ -149,7 +149,7 @@ void IconButton::paintEvent(QPaintEvent* _event)
                  Ui::DesignSystem::toggleButton().iconSize());
     if (d->decorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(isChecked() ? Ui::DesignSystem::color().secondary() : textColor());
+        painter.setBrush(isChecked() ? Ui::DesignSystem::color().accent() : textColor());
         painter.setOpacity(d->decorationAnimation.opacity());
         const auto radius = d->decorationAnimation.radius();
         painter.drawEllipse(iconRect.center(), radius, radius);
@@ -160,7 +160,7 @@ void IconButton::paintEvent(QPaintEvent* _event)
     // Рисуем иконку
     //
     painter.setFont(d->customFont.value_or(Ui::DesignSystem::font().iconsMid()));
-    const auto iconColor = d->isChecked ? Ui::DesignSystem::color().secondary() : textColor();
+    const auto iconColor = d->isChecked ? Ui::DesignSystem::color().accent() : textColor();
     painter.setPen(
         isEnabled() ? iconColor
                     : ColorHelper::transparent(iconColor, Ui::DesignSystem::disabledTextOpacity()));

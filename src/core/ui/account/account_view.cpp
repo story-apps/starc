@@ -585,7 +585,7 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                   Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
             .toMargins());
 
-    d->colorAnimation.setStartValue(Ui::DesignSystem::color().secondary());
+    d->colorAnimation.setStartValue(Ui::DesignSystem::color().accent());
 
     for (auto card : {
              d->accountInfo,
@@ -655,8 +655,8 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->subscriptionUpgradeToTeam,
              d->activatePromocode,
          }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        button->setTextColor(Ui::DesignSystem::color().secondary());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
     d->avatar->setBackgroundColor(Ui::DesignSystem::color().background());

@@ -245,7 +245,7 @@ void ReleaseView::Implementation::updateState()
         if (QCoreApplication::applicationVersion() == version) {
             installButton->hide();
             installedIcon->setIcon(u8"\U000F05E0");
-            installedIcon->setTextColor(Ui::DesignSystem::color().secondary());
+            installedIcon->setTextColor(Ui::DesignSystem::color().accent());
             installedIcon->show();
             installedLabel->show();
         } else {
@@ -293,7 +293,7 @@ void ReleaseView::Implementation::updateState()
         downloadingProgress->hide();
         downloadingAction->hide();
         installedIcon->setIcon(u8"\U000F05E0");
-        installedIcon->setTextColor(Ui::DesignSystem::color().secondary());
+        installedIcon->setTextColor(Ui::DesignSystem::color().accent());
         installedIcon->show();
         installedLabel->show();
         installButton->show();
@@ -400,7 +400,7 @@ void ReleaseView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->readMoreLink->setTextColor(ColorHelper::transparent(
         Ui::DesignSystem::color().onPrimary(), Ui::DesignSystem::disabledTextOpacity()));
     d->readMoreLink->setContentsMargins(leftMargin, 0, rightMargin, 0);
-    d->installedIcon->setTextColor(Ui::DesignSystem::color().secondary());
+    d->installedIcon->setTextColor(Ui::DesignSystem::color().accent());
     d->installedIcon->setContentsMargins(
         isLeftToRight() ? Ui::DesignSystem::layout().px16() : Ui::DesignSystem::layout().px8(),
         Ui::DesignSystem::layout().px(17),
@@ -414,8 +414,8 @@ void ReleaseView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->downloadingProgress->setContentsMargins(
         isLeftToRight() ? Ui::DesignSystem::layout().px16() : 0, 0,
         isLeftToRight() ? 0 : Ui::DesignSystem::layout().px16(), 0);
-    d->installButton->setBackgroundColor(Ui::DesignSystem::color().secondary());
-    d->installButton->setTextColor(Ui::DesignSystem::color().secondary());
+    d->installButton->setBackgroundColor(Ui::DesignSystem::color().accent());
+    d->installButton->setTextColor(Ui::DesignSystem::color().accent());
     d->installButton->setContentsMargins(0, Ui::DesignSystem::layout().px(6), 0,
                                          Ui::DesignSystem::layout().px4());
 

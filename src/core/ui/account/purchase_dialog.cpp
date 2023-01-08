@@ -170,8 +170,8 @@ void PurchaseDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->cancelButton,
              d->purchaseButton,
          }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        button->setTextColor(Ui::DesignSystem::color().secondary());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
     contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));

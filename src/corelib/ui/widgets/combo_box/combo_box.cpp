@@ -226,7 +226,7 @@ void ComboBox::mousePressEvent(QMouseEvent* _event)
     if (!d->isReadOnly) {
         if (!d->popup->isVisible()) {
             setTrailingIcon(u8"\U000f0360");
-            setTrailingIconColor(Ui::DesignSystem::color().secondary());
+            setTrailingIconColor(Ui::DesignSystem::color().accent());
             d->showPopup(this);
         } else {
             setTrailingIcon(u8"\U000f035d");

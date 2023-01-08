@@ -284,7 +284,7 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     TaskBar::registerTaskBar(this, Ui::DesignSystem::color().primary(),
                              Ui::DesignSystem::color().onPrimary(),
-                             Ui::DesignSystem::color().secondary());
+                             Ui::DesignSystem::color().accent());
 
     PlatformHelper::setTitleBarTheme(
         this, ColorHelper::isColorLight(Ui::DesignSystem::color().background()));

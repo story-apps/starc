@@ -470,7 +470,7 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
             }
 
             return ColorHelper::transparent(
-                action->isChecked() ? Ui::DesignSystem::color().secondary() : textColor(),
+                action->isChecked() ? Ui::DesignSystem::color().accent() : textColor(),
                 action->isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity());
         }();
         painter.setPen(penColor);
@@ -531,7 +531,7 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
                 && (d->decorationRadiusAnimation.state() == QVariantAnimation::Running
                     || d->decorationOpacityAnimation.state() == QVariantAnimation::Running)) {
                 painter.setPen(Qt::NoPen);
-                painter.setBrush(Ui::DesignSystem::color().secondary());
+                painter.setBrush(Ui::DesignSystem::color().accent());
                 painter.setOpacity(d->decorationOpacityAnimation.currentValue().toReal());
                 painter.drawEllipse(actionRect.center(),
                                     d->decorationRadiusAnimation.currentValue().toReal(),

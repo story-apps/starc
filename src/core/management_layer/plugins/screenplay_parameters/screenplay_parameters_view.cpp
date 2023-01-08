@@ -505,8 +505,8 @@ void ScreenplayParametersView::designSystemChangeEvent(DesignSystemChangeEvent* 
              d->relockScenesNumbers,
              d->unlockScenesNumbers,
          }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().secondary());
-        button->setTextColor(Ui::DesignSystem::color().onSecondary());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().onAccent());
     }
     for (auto button : {
              d->lockScenesNumbers,
