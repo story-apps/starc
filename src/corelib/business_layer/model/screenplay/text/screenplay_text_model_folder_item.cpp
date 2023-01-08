@@ -130,8 +130,11 @@ void ScreenplayTextModelFolderItem::handleChange()
         auto child = childAt(childIndex);
         switch (child->type()) {
         case TextModelItemType::Folder: {
-            auto childItem = static_cast<ScreenplayTextModelFolderItem*>(child);
-            d->duration += childItem->duration();
+            auto folderItem = static_cast<ScreenplayTextModelFolderItem*>(child);
+            d->wordsCount += folderItem->wordsCount();
+            d->charactersCount.first += folderItem->charactersCount().first;
+            d->charactersCount.second += folderItem->charactersCount().second;
+            d->duration += folderItem->duration();
             break;
         }
 
