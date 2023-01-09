@@ -85,8 +85,8 @@ public:
 protected:
     void updateTranslations() override
     {
-        m_title->setText(tr("Hint"));
-        m_readMore->setText(tr("Read more"));
+        m_title->setText(LoglineGeneratorDialog::tr("Hint"));
+        m_readMore->setText(LoglineGeneratorDialog::tr("Read more"));
     }
 
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override
