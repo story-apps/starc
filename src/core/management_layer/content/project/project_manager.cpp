@@ -829,6 +829,10 @@ void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemInde
 void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureModelItem* _item,
                                                     bool _force)
 {
+    if (_item == nullptr) {
+        return;
+    }
+
     //
     // Если тут нужно принудительное удаление, то удаляем сразу без лишних вопросов
     //
@@ -889,6 +893,22 @@ void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureMode
 
 void ProjectManager::Implementation::removeDocumentImpl(BusinessLayer::StructureModelItem* _item)
 {
+    if (_item == nullptr) {
+        return;
+    }
+
+    //
+    // Если удаляемый документ открыт в одном из редакторов в данный момент, то закроем его
+    //
+    if (view.activeModel != nullptr && view.activeModel->document() != nullptr
+        && view.activeModel->document()->uuid() == _item->uuid()) {
+        view.active->showDefaultPage();
+    }
+    if (view.inactiveModel != nullptr && view.inactiveModel->document() != nullptr
+        && view.inactiveModel->document()->uuid() == _item->uuid()) {
+        view.inactive->showDefaultPage();
+    }
+
     //
     // Кроме того, что нужно удалить сам документ, нужно ещё удалить и все вложенные документы
     // NOTE: порядок удаления важен
@@ -905,9 +925,20 @@ void ProjectManager::Implementation::removeDocumentImpl(BusinessLayer::Structure
     //
     // Сначала удаляем детей
     //
-    while (_item->hasChildren()) {
-        auto child = _item->childAt(0);
+    for (int index = _item->childCount() - 1; index >= 0; --index) {
+        auto child = _item->childAt(index);
         removeDocumentImpl(child);
+    }
+
+    //
+    // Некоторые документы мы всё таки не удаляем, т.к. они основообразующие
+    //
+    if (_item->type() == Domain::DocumentObjectType::Project
+        || _item->type() == Domain::DocumentObjectType::Characters
+        || _item->type() == Domain::DocumentObjectType::Locations
+        || _item->type() == Domain::DocumentObjectType::Worlds
+        || _item->type() == Domain::DocumentObjectType::RecycleBin) {
+        return;
     }
 
     //
@@ -991,9 +1022,12 @@ void ProjectManager::Implementation::removeDocumentImpl(BusinessLayer::Structure
         documentsToRemove.removeAll({});
     }
     //
-    // ... удаляем из структуры
+    // ... удаляем из структуры только в том случае, если не происходит изменение структуры во время
+    //     синхронизации документа
     //
-    projectStructureModel->removeItem(_item);
+    if (!projectStructureModel->isChangesApplyingInProcess()) {
+        projectStructureModel->removeItem(_item);
+    }
     //
     // ... собственно удаляем модель и документ
     //
@@ -1004,7 +1038,9 @@ void ProjectManager::Implementation::removeDocumentImpl(BusinessLayer::Structure
         //
         // ... уведомляем об удалённых документах
         //
-        emit q->documentRemoved(documentUuid);
+        if (!projectStructureModel->isChangesApplyingInProcess()) {
+            emit q->documentRemoved(documentUuid);
+        }
     }
 }
 
@@ -1469,6 +1505,18 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             documentModel->reassignContent();
             emit uploadDocumentRequested(_uuid, true);
         });
+    connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAboutToBeRemoved,
+            this, [this](const QUuid& _uuid) {
+                //
+                // Удаляем документы только в случае, если накладываются изменения из облака
+                //
+                if (!d->projectStructureModel->isChangesApplyingInProcess()) {
+                    return;
+                }
+
+                const auto item = d->projectStructureModel->itemForUuid(_uuid);
+                d->removeDocumentImpl(item);
+            });
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::contentsChanged, this,
             [this](const QByteArray& _undo, const QByteArray& _redo) {
                 handleModelChange(d->projectStructureModel, _undo, _redo);
@@ -1530,6 +1578,23 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                         d->modelsFacade.modelFor(removedItem->uuid())));
                 }
             }
+            //
+            // Восстанавливаем миры
+            //
+            else if (insertedInItem->type() == Domain::DocumentObjectType::Worlds) {
+                const auto worldsDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Worlds);
+                auto worldsModel = d->modelsFacade.modelFor(worldsDocument);
+                auto worlds = qobject_cast<BusinessLayer::WorldsModel*>(worldsModel);
+                for (int row = _first; row <= _last; ++row) {
+                    const auto removedItemIndex = d->projectStructureModel->index(row, 0, _parent);
+                    const auto removedItem
+                        = d->projectStructureModel->itemForIndex(removedItemIndex);
+                    worlds->addWorldModel(qobject_cast<BusinessLayer::WorldModel*>(
+                        d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
         });
     connect(
         d->projectStructureModel, &BusinessLayer::StructureModel::rowsAboutToBeRemoved, this,
@@ -1571,6 +1636,23 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     const auto removedItem
                         = d->projectStructureModel->itemForIndex(removedItemIndex);
                     locations->removeLocationModel(qobject_cast<BusinessLayer::LocationModel*>(
+                        d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
+            //
+            // Удаляем миры
+            //
+            else if (removedFromItem->type() == Domain::DocumentObjectType::Worlds) {
+                const auto worldsDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Worlds);
+                auto worldsModel = d->modelsFacade.modelFor(worldsDocument);
+                auto worlds = qobject_cast<BusinessLayer::WorldsModel*>(worldsModel);
+                for (int row = _first; row <= _last; ++row) {
+                    const auto removedItemIndex = d->projectStructureModel->index(row, 0, _parent);
+                    const auto removedItem
+                        = d->projectStructureModel->itemForIndex(removedItemIndex);
+                    worlds->removeWorldModel(qobject_cast<BusinessLayer::WorldModel*>(
                         d->modelsFacade.modelFor(removedItem->uuid())));
                 }
             }
@@ -1624,6 +1706,25 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 }
             }
             //
+            // Удаляем мир
+            //
+            else if (sourceParentItem->type() == Domain::DocumentObjectType::Worlds
+                     && destinationItem->type() == Domain::DocumentObjectType::RecycleBin) {
+                const auto worldsDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Worlds);
+                auto worldsModel = d->modelsFacade.modelFor(worldsDocument);
+                auto worlds = qobject_cast<BusinessLayer::WorldsModel*>(worldsModel);
+                for (int row = _sourceStart; row <= _sourceEnd; ++row) {
+                    const auto removedItemIndex
+                        = d->projectStructureModel->index(row, 0, _sourceParent);
+                    const auto removedItem
+                        = d->projectStructureModel->itemForIndex(removedItemIndex);
+                    worlds->removeWorldModel(qobject_cast<BusinessLayer::WorldModel*>(
+                        d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
+            //
             // Восстанавливаем персонажей
             //
             else if (sourceParentItem->type() == Domain::DocumentObjectType::RecycleBin
@@ -1658,6 +1759,25 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     const auto removedItem
                         = d->projectStructureModel->itemForIndex(removedItemIndex);
                     locations->addLocationModel(qobject_cast<BusinessLayer::LocationModel*>(
+                        d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
+            //
+            // Восстанавливаем миры
+            //
+            else if (sourceParentItem->type() == Domain::DocumentObjectType::RecycleBin
+                     && destinationItem->type() == Domain::DocumentObjectType::Worlds) {
+                const auto worldsDocument
+                    = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Worlds);
+                auto worldsModel = d->modelsFacade.modelFor(worldsDocument);
+                auto worlds = qobject_cast<BusinessLayer::WorldsModel*>(worldsModel);
+                for (int row = _sourceStart; row <= _sourceEnd; ++row) {
+                    const auto removedItemIndex
+                        = d->projectStructureModel->index(row, 0, _sourceParent);
+                    const auto removedItem
+                        = d->projectStructureModel->itemForIndex(removedItemIndex);
+                    worlds->addWorldModel(qobject_cast<BusinessLayer::WorldModel*>(
                         d->modelsFacade.modelFor(removedItem->uuid())));
                 }
             }

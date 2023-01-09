@@ -409,7 +409,8 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
     return index(parentItem->childCount() - indexDelta, 0, indexForItem(parentItem));
 }
 
-void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* _parentItem)
+void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* _parentItem,
+                                 const QByteArray& _content)
 {
     if (_item == nullptr) {
         return;
@@ -428,6 +429,8 @@ void StructureModel::prependItem(StructureModelItem* _item, StructureModelItem* 
     beginInsertRows(parentIndex, itemRowIndex, itemRowIndex);
     _parentItem->prependItem(_item);
     endInsertRows();
+
+    emit documentAdded(_item->uuid(), _parentItem->uuid(), _item->type(), _item->name(), _content);
 }
 
 void StructureModel::appendItem(StructureModelItem* _item, StructureModelItem* _parentItem,
@@ -536,6 +539,9 @@ void StructureModel::removeItem(StructureModelItem* _item)
     const QModelIndex itemParentIndex = indexForItem(_item).parent();
     const int itemRowIndex = itemParent->rowOfChild(_item);
     beginRemoveRows(itemParentIndex, itemRowIndex, itemRowIndex);
+
+    emit documentAboutToBeRemoved(_item->uuid());
+
     itemParent->removeItem(_item);
     endRemoveRows();
 }
@@ -1384,6 +1390,15 @@ void StructureModel::applyPatch(const QByteArray& _patch)
             auto nextItem = findNextItem(modelItem);
             removeItem(modelItem);
 
+            //
+            // Обновляем родителя, т.к. у него видмость зависит от наличия детей
+            //
+            if (previousModelItem->type() == Domain::DocumentObjectType::Characters
+                || previousModelItem->type() == Domain::DocumentObjectType::Locations
+                || previousModelItem->type() == Domain::DocumentObjectType::Worlds) {
+                updateItem(previousModelItem);
+            }
+
             modelItem = nextItem;
             break;
         }
@@ -1413,6 +1428,15 @@ void StructureModel::applyPatch(const QByteArray& _patch)
                 }
             }
 
+            //
+            // Обновляем родителя, т.к. у него видмость зависит от наличия детей
+            //
+            if (previousModelItem->type() == Domain::DocumentObjectType::Characters
+                || previousModelItem->type() == Domain::DocumentObjectType::Locations
+                || previousModelItem->type() == Domain::DocumentObjectType::Worlds) {
+                updateItem(previousModelItem);
+            }
+
             previousModelItem = itemToInsert;
             break;
         }
@@ -1421,7 +1445,6 @@ void StructureModel::applyPatch(const QByteArray& _patch)
             //
             // Обновляем элемент
             //
-            //            Q_ASSERT(modelItem->type() == newItem->type());
             if (!modelItem->isEqual(newItem)) {
                 modelItem->copyFrom(newItem);
                 updateItem(modelItem);

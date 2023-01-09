@@ -48,7 +48,8 @@ public:
     /**
      * @brief Добавить элемент в начало
      */
-    void prependItem(StructureModelItem* _item, StructureModelItem* _parentItem = nullptr);
+    void prependItem(StructureModelItem* _item, StructureModelItem* _parentItem = nullptr,
+                     const QByteArray& _content = {});
 
     /**
      * @brief Добавить элемент в конец
@@ -165,6 +166,11 @@ signals:
     void documentAdded(const QUuid& _uuid, const QUuid& _parentUuid,
                        Domain::DocumentObjectType _type, const QString& _name,
                        const QByteArray& _content);
+
+    /**
+     * @brief Документ сейчас будет удалён
+     */
+    void documentAboutToBeRemoved(const QUuid& _uuid);
 
 protected:
     /**

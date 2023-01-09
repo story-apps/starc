@@ -205,7 +205,7 @@ bool StructureModelItem::isEqual(const StructureModelItem* _other) const
 
 void StructureModelItem::copyFrom(const StructureModelItem* _other) const
 {
-    if (_other == nullptr || type() != _other->type()) {
+    if (_other == nullptr) {
         Q_ASSERT(false);
         return;
     }
