@@ -67,37 +67,37 @@ WorldInformationStructureView::Implementation::Implementation(QWidget* _parent)
     //
     auto createItem = [](const QString& _icon) {
         auto item = new QStandardItem;
-        //        item->setData(_icon, Qt::DecorationRole);
+        item->setData(_icon, Qt::DecorationRole);
         item->setEditable(false);
         return item;
     };
     auto traitsModel = new QStandardItemModel(traits);
-    traitsModel->appendRow(createItem({}));
-    traitsModel->appendRow(createItem({}));
-    auto natureItem = createItem({});
+    traitsModel->appendRow(createItem(u8"\U000F02DC"));
+    traitsModel->appendRow(createItem(u8"\U000F1A7D"));
+    auto natureItem = createItem(u8"\U000F038E");
     natureItem->appendRows({
-        createItem({}),
-        createItem({}),
-        createItem({}),
-        createItem({}),
-        createItem({}),
-        createItem({}),
+        createItem(u8"\U000F09AA"),
+        createItem(u8"\U000F0643"),
+        createItem(u8"\U000F032A"),
+        createItem(u8"\U000F1A62"),
+        createItem(u8"\U000F01C8"),
+        createItem(u8"\U000F050F"),
     });
     traitsModel->appendRow(natureItem);
-    auto cultureItem = createItem({});
+    auto cultureItem = createItem(u8"\U000F1571");
     cultureItem->appendRows({
-        createItem({}),
-        createItem({}),
-        createItem({}),
-        createItem({}),
+        createItem(u8"\U000F134A"),
+        createItem(u8"\U000F05D1"),
+        createItem(u8"\U000F05CA"),
+        createItem(u8"\U000F0849"),
     });
     traitsModel->appendRow(cultureItem);
-    traitsModel->appendRow(createItem({}));
-    traitsModel->appendRow(createItem({}));
-    auto magicItem = createItem({});
+    traitsModel->appendRow(createItem(u8"\U000F0F94"));
+    traitsModel->appendRow(createItem(u8"\U000F029B"));
+    auto magicItem = createItem(u8"\U000F0068");
     magicItem->appendRows({
-        createItem({}),
-        createItem({}),
+        createItem(u8"\U000F09AA"),
+        createItem(u8"\U000F0AE3"),
     });
     traitsModel->appendRow(magicItem);
     traits->setModel(traitsModel);
