@@ -152,8 +152,7 @@ void ThemeColor::paintEvent(QPaintEvent* _event)
     painter.setBrush(Qt::NoBrush);
     painter.drawRoundedRect(colorsRect, colorsRect.height() / 2, colorsRect.height() / 2);
     if (hasFocus()) {
-        painter.setPen(
-            QPen(Ui::DesignSystem::color().accent(), Ui::DesignSystem::layout().px2()));
+        painter.setPen(QPen(Ui::DesignSystem::color().accent(), Ui::DesignSystem::layout().px2()));
     }
     colorsRect.adjust(-Ui::DesignSystem::layout().px4(), -Ui::DesignSystem::layout().px4(),
                       Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4());

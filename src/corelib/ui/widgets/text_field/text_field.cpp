@@ -953,9 +953,8 @@ void TextField::paintEvent(QPaintEvent* _event)
         if (d->decorationAnimation.currentValue().isValid()) {
             QRectF decorationRect = d->decorationAnimation.currentValue().toRectF();
             decorationRect.moveTop(d->decorationRectInFocus().top());
-            const QColor decorationColor = !d->error.isEmpty()
-                ? Ui::DesignSystem::color().error()
-                : Ui::DesignSystem::color().accent();
+            const QColor decorationColor = !d->error.isEmpty() ? Ui::DesignSystem::color().error()
+                                                               : Ui::DesignSystem::color().accent();
             painter.fillRect(decorationRect, decorationColor);
         }
     }

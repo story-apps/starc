@@ -95,9 +95,9 @@ void ThemePreview::paintEvent(QPaintEvent* _event)
     const QRectF selectedItemBackgroundRect(0, Ui::DesignSystem::layout().px(22),
                                             sideBarRect.width(), Ui::DesignSystem::layout().px12());
     //
-    painter.fillRect(selectedItemBackgroundRect,
-                     ColorHelper::transparent(themeColor.accent(),
-                                              Ui::DesignSystem::hoverBackgroundOpacity()));
+    painter.fillRect(
+        selectedItemBackgroundRect,
+        ColorHelper::transparent(themeColor.accent(), Ui::DesignSystem::hoverBackgroundOpacity()));
     const QRectF selectedItemTextRect(
         Ui::DesignSystem::layout().px4(),
         selectedItemBackgroundRect.center().y() - Ui::DesignSystem::layout().px(),
@@ -235,8 +235,7 @@ void ThemePreview::paintEvent(QPaintEvent* _event)
     //
     if (isThemeUsed) {
         painter.translate(-contentsRect().topLeft());
-        painter.setPen(
-            QPen(Ui::DesignSystem::color().accent(), Ui::DesignSystem::layout().px2()));
+        painter.setPen(QPen(Ui::DesignSystem::color().accent(), Ui::DesignSystem::layout().px2()));
         painter.setBrush(Qt::NoBrush);
         painter.drawRoundedRect(contentsRect(), Ui::DesignSystem::layout().px12(),
                                 Ui::DesignSystem::layout().px12());

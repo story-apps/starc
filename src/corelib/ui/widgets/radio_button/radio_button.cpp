@@ -163,8 +163,7 @@ void RadioButton::paintEvent(QPaintEvent* _event)
 void RadioButton::paintBox(QPainter& _painter, const QRectF& _rect, const QColor& _penColor)
 {
     _painter.setFont(Ui::DesignSystem::font().iconsMid());
-    _painter.setPen(isEnabled() && d->isChecked ? Ui::DesignSystem::color().accent()
-                                                : _penColor);
+    _painter.setPen(isEnabled() && d->isChecked ? Ui::DesignSystem::color().accent() : _penColor);
     _painter.drawText(_rect, Qt::AlignCenter, d->isChecked ? u8"\U000f043e" : u8"\U000f043d");
 }
 
