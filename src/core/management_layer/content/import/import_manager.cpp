@@ -1,6 +1,6 @@
 #include "import_manager.h"
 
-#include <business_layer/import/screenplay/screenlay_import_options.h>
+#include <business_layer/import/screenplay/screenplay_import_options.h>
 #include <business_layer/import/screenplay/screenplay_celtx_importer.h>
 #include <business_layer/import/screenplay/screenplay_document_importer.h>
 #include <business_layer/import/screenplay/screenplay_fdx_importer.h>

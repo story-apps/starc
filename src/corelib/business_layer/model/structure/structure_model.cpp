@@ -1421,7 +1421,7 @@ void StructureModel::applyPatch(const QByteArray& _patch)
             //
             // Обновляем элемент
             //
-            Q_ASSERT(modelItem->type() == newItem->type());
+            //            Q_ASSERT(modelItem->type() == newItem->type());
             if (!modelItem->isEqual(newItem)) {
                 modelItem->copyFrom(newItem);
                 updateItem(modelItem);

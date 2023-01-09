@@ -394,12 +394,12 @@ HEADERS += \
     business_layer/import/comic_book/comic_book_abstract_importer.h \
     business_layer/import/comic_book/comic_book_import_options.h \
     business_layer/import/comic_book/comic_book_plain_text_importer.h \
-    business_layer/import/screenplay/screenlay_import_options.h \
     business_layer/import/screenplay/screenplay_abstract_importer.h \
     business_layer/import/screenplay/screenplay_celtx_importer.h \
     business_layer/import/screenplay/screenplay_document_importer.h \
     business_layer/import/screenplay/screenplay_fdx_importer.h \
     business_layer/import/screenplay/screenplay_fountain_importer.h \
+    business_layer/import/screenplay/screenplay_import_options.h \
     business_layer/import/screenplay/screenplay_kit_scenarist_importer.h \
     business_layer/import/screenplay/screenplay_trelby_importer.h \
     business_layer/import/stageplay/stageplay_abstract_importer.h \
