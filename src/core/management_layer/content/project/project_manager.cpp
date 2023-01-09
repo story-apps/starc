@@ -3167,7 +3167,8 @@ void ProjectManager::setCursors(const QUuid& _document, const QVector<Domain::Cu
     //
     // Если активен редактор документа, где есть соавтор, отобразить в нём его курсор
     //
-    if (d->view.activeModel->document()->uuid() == _document) {
+    if (d->view.activeModel != nullptr && d->view.activeModel->document() != nullptr
+        && d->view.activeModel->document()->uuid() == _document) {
         if (d->view.active == d->view.left) {
             d->pluginsBuilder.setCursors(_cursors, d->view.activeViewMimeType);
         } else {
