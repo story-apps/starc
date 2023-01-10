@@ -177,6 +177,12 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
     } else {
         insertIntoParent->setVisible(insertIntoParentEnabled);
     }
+
+    if (_type == Domain::DocumentObjectType::Character) {
+        NamesGenerator::bind(documentName);
+    } else {
+        NamesGenerator::unbind(documentName);
+    }
 }
 
 
