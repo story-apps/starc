@@ -81,26 +81,26 @@ static void initFontMetrics()
     //
     // Остальные дельты высчитываются на основе Courier New
     //
-    auto addFontDelta
-        = [courierNewLineSpacing](const QString& _fontFamily, int _fontMetricsHeight) {
-              if (!QFontDatabase().hasFamily(_fontFamily)) {
-                  return;
-              }
+    auto addFontDelta = [courierNewHeight, courierNewLineSpacing](const QString& _fontFamily,
+                                                                  int _fontMetricsHeight) {
+        if (!QFontDatabase().hasFamily(_fontFamily)) {
+            return;
+        }
 
-              QFont font(_fontFamily);
-              font.setPixelSize(MeasurementHelper::ptToPx(12));
-              QFontMetricsF fontMetrics(font);
-              const qreal fontDelta =
-                  //
-                  // ... такой Line Spacing должен быть у настраимого шрифта
-                  //
-                  courierNewLineSpacing * (_fontMetricsHeight / courierNewHeight)
-                  //
-                  // ... вычитая из него Line Spacing из метрики, получим дельту
-                  //
-                  - fontMetrics.lineSpacing();
-              sFontToLineSpacing[_fontFamily] = fontDelta;
-          };
+        QFont font(_fontFamily);
+        font.setPixelSize(MeasurementHelper::ptToPx(12));
+        QFontMetricsF fontMetrics(font);
+        const qreal fontDelta =
+            //
+            // ... такой Line Spacing должен быть у настраимого шрифта
+            //
+            courierNewLineSpacing * (_fontMetricsHeight / courierNewHeight)
+            //
+            // ... вычитая из него Line Spacing из метрики, получим дельту
+            //
+            - fontMetrics.lineSpacing();
+        sFontToLineSpacing[_fontFamily] = fontDelta;
+    };
     //
     // ... собственно высчитываем дельту для других шрифтов
     //
