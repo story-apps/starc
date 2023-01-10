@@ -2033,6 +2033,11 @@ void PageTextEditPrivate::paintTextBlocksOverlay(QPainter* _painter)
 
     Q_Q(PageTextEdit);
 
+    const qreal pageLeft = 0 - hbar->value() + Ui::DesignSystem::card().shadowMargins().left();
+    const qreal pageRight = pageLeft + pageMetrics.pxPageSize().width()
+        - Ui::DesignSystem::card().shadowMargins().left()
+        - Ui::DesignSystem::card().shadowMargins().right();
+
     //
     // Идём наверх
     //
@@ -2065,6 +2070,8 @@ void PageTextEditPrivate::paintTextBlocksOverlay(QPainter* _painter)
             }
         }
     }
+    topRect.setLeft(pageLeft);
+    topRect.setRight(pageRight);
     //
     // ... закрашиваем текст
     //
@@ -2107,6 +2114,8 @@ void PageTextEditPrivate::paintTextBlocksOverlay(QPainter* _painter)
 
         block = block.next();
     }
+    bottomRect.setLeft(pageLeft);
+    bottomRect.setRight(pageRight);
     //
     // ... закрашиваем текст
     //
