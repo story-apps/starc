@@ -146,10 +146,13 @@ void NamesGenerator::bind(TextField* _textField)
             //
             {
                 auto typeAction = new QAction;
-                typeAction->setText(
-                    instance().d->options.type.isEmpty()
-                        ? QCoreApplication::translate("NamesGenerator", "Type of name")
-                        : instance().d->options.type);
+                auto updateTypeActionText = [typeAction] {
+                    typeAction->setText(
+                        instance().d->options.type.isEmpty()
+                            ? QCoreApplication::translate("NamesGenerator", "Type of name")
+                            : instance().d->options.type);
+                };
+                updateTypeActionText();
                 typeAction->setSeparator(true);
                 actions.append(typeAction);
 
@@ -161,11 +164,14 @@ void NamesGenerator::bind(TextField* _textField)
                     action->setChecked(instance().d->options.type == type);
                     action->setIconText(action->isChecked() ? u8"\U000F012C" : u8"\U000F68c0");
                     typesGroup->addAction(action);
-                    QObject::connect(action, &QAction::toggled, action, [typeAction, action] {
-                        action->setIconText(action->isChecked() ? u8"\U000F012C" : u8"\U000F68c0");
-                        instance().d->options.type = action->text();
-                        typeAction->setText(action->text());
-                    });
+                    QObject::connect(action, &QAction::toggled, action,
+                                     [updateTypeActionText, action] {
+                                         action->setIconText(action->isChecked() ? u8"\U000F012C"
+                                                                                 : u8"\U000F68c0");
+                                         instance().d->options.type
+                                             = action->isChecked() ? action->text() : QString();
+                                         updateTypeActionText();
+                                     });
                 }
             }
 
