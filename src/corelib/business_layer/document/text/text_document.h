@@ -53,6 +53,11 @@ public:
     QColor itemColor(const QTextBlock& _forBlock) const;
 
     /**
+     * @brief Получить цвета всех родительских элементов заданного блока
+     */
+    QVector<QColor> itemColors(const QTextBlock& _forBlock) const;
+
+    /**
      * @brief Получить заголовк сцены для заданного блока
      */
     QString groupTitle(const QTextBlock& _forBlock) const;

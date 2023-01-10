@@ -599,8 +599,9 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
     //
     const bool isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
     const qreal pageLeft = 0;
-    const qreal pageRight = viewport()->width();
-    const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();
+    const qreal pageRight
+        = viewport()->width() - verticalScrollBar()->width() - DesignSystem::layout().px8();
+    const qreal spaceBetweenSceneNumberAndText = DesignSystem::layout().px(10);
     const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
         + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
     const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
@@ -675,8 +676,9 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
         //
         QTextBlock block = topBlock;
         const QRectF viewportGeometry = viewport()->geometry();
+        int previousSceneBlockBottom = 0;
         int lastSceneBlockBottom = 0;
-        QColor lastItemColor;
+        QVector<QColor> lastSceneColors;
         bool isLastBlockSceneHeadingWithNumberAtRight = false;
         int lastCharacterBlockBottom = 0;
         QColor lastCharacterColor;
@@ -707,36 +709,51 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
             //
             // Определим цвет сцены
             //
-            if (blockType == TextParagraphType::PageHeading
-                || blockType == TextParagraphType::PanelHeading
-                || blockType == TextParagraphType::SequenceHeading) {
+            switch (blockType) {
+            case TextParagraphType::PageHeading:
+            case TextParagraphType::PanelHeading:
+            case TextParagraphType::SequenceHeading:
+            case TextParagraphType::ActHeading:
+            case TextParagraphType::SequenceFooter:
+            case TextParagraphType::ActFooter: {
+                previousSceneBlockBottom = lastSceneBlockBottom;
                 lastSceneBlockBottom = cursorR.top();
-                lastItemColor = d->document.itemColor(block);
+                lastSceneColors = d->document.itemColors(block);
+                break;
+            }
+            default: {
+                break;
+            }
             }
 
             //
-            // Нарисуем цвет панели
+            // Нарисуем цвета
             //
-            if (lastItemColor.isValid()) {
-                const auto isBlockSceneHeadingWithNumberAtRight
-                    = blockType == TextParagraphType::PanelHeading && d->showSceneNumber
-                    && d->showSceneNumberOnRight;
-                if (!isBlockSceneHeadingWithNumberAtRight) {
-                    const QPointF topLeft(
-                        isLeftToRight ? textRight + leftDelta + DesignSystem::layout().px8()
-                                      : (textLeft - DesignSystem::layout().px4() + leftDelta),
-                        isLastBlockSceneHeadingWithNumberAtRight
-                            ? cursorR.top() - verticalMargin
-                            : lastSceneBlockBottom - verticalMargin);
-                    const QPointF bottomRight(isLeftToRight ? textRight
-                                                      + DesignSystem::layout().px4() + leftDelta
-                                                            : textLeft + leftDelta,
-                                              cursorREnd.bottom() + verticalMargin);
-                    const QRectF rect(topLeft, bottomRight);
-                    painter.fillRect(rect, lastItemColor);
-                }
+            if (!lastSceneColors.isEmpty()) {
+                const QPointF topLeft(isLeftToRight
+                                          ? pageRight + leftDelta - DesignSystem::layout().px4()
+                                          : pageLeft + leftDelta,
+                                      lastSceneBlockBottom - verticalMargin);
+                const QPointF bottomRight(isLeftToRight
+                                              ? pageRight + leftDelta
+                                              : pageLeft + leftDelta + DesignSystem::layout().px4(),
+                                          cursorREnd.bottom() + verticalMargin);
+                QRectF rect(topLeft, bottomRight);
+                for (const auto& color : std::as_const(lastSceneColors)) {
+                    if (!color.isValid()) {
+                        continue;
+                    }
 
-                isLastBlockSceneHeadingWithNumberAtRight = isBlockSceneHeadingWithNumberAtRight;
+                    auto colorRect = rect;
+                    if (color != lastSceneColors.constLast()) {
+                        colorRect.setTop(previousSceneBlockBottom);
+                    }
+
+                    painter.setPen(Qt::NoPen);
+                    painter.setBrush(color);
+                    painter.drawRect(colorRect);
+                    rect.moveLeft(rect.left() - DesignSystem::layout().px12());
+                }
             }
 
             //
@@ -1052,8 +1069,6 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                     }
                 }
             }
-
-            lastSceneBlockBottom = cursorREnd.bottom();
 
             block = block.next();
         }

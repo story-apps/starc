@@ -1182,6 +1182,40 @@ QColor TextDocument::itemColor(const QTextBlock& _forBlock) const
     return color;
 }
 
+QVector<QColor> TextDocument::itemColors(const QTextBlock& _forBlock) const
+{
+    if (_forBlock.userData() == nullptr) {
+        return {};
+    }
+
+    const auto blockData = static_cast<TextBlockData*>(_forBlock.userData());
+    if (blockData == nullptr) {
+        return {};
+    }
+
+    auto itemParent = blockData->item()->parent();
+    if (itemParent == nullptr) {
+        return {};
+    }
+
+    QVector<QColor> colors;
+    while (itemParent != nullptr) {
+        QColor itemParentColor;
+        if (itemParent->type() == TextModelItemType::Folder) {
+            const auto folderItem = static_cast<const TextModelFolderItem*>(itemParent);
+            itemParentColor = folderItem->color();
+        } else if (itemParent->type() == TextModelItemType::Group) {
+            const auto groupItem = static_cast<const TextModelGroupItem*>(itemParent);
+            itemParentColor = groupItem->color();
+        }
+
+        colors.prepend(itemParentColor);
+
+        itemParent = itemParent->parent();
+    }
+    return colors;
+}
+
 QString TextDocument::groupTitle(const QTextBlock& _forBlock) const
 {
     if (_forBlock.userData() == nullptr) {

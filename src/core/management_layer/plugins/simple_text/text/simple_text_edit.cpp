@@ -362,8 +362,9 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
     //
     const bool isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
     const qreal pageLeft = 0;
-    const qreal pageRight = viewport()->width();
-    const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();
+    const qreal pageRight
+        = viewport()->width() - verticalScrollBar()->width() - DesignSystem::layout().px8();
+    const qreal spaceBetweenSceneNumberAndText = DesignSystem::layout().px(10);
     const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
         + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
     const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
@@ -427,8 +428,9 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
             //
             QTextBlock block = topBlock;
             const QRectF viewportGeometry = viewport()->geometry();
+            int previousSceneBlockBottom = 0;
             int lastSceneBlockBottom = 0;
-            QColor lastSceneColor;
+            QVector<QColor> lastSceneColors;
             bool isLastBlockSceneHeadingWithNumberAtRight = false;
             //
             auto setPainterPen = [&painter, &block, this](const QColor& _color) {
@@ -457,32 +459,52 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Определим цвет главы
                 //
-                if (blockType == TextParagraphType::ChapterHeading1
-                    || blockType == TextParagraphType::ChapterHeading2
-                    || blockType == TextParagraphType::ChapterHeading3
-                    || blockType == TextParagraphType::ChapterHeading4
-                    || blockType == TextParagraphType::ChapterHeading5
-                    || blockType == TextParagraphType::ChapterHeading6) {
+
+                switch (blockType) {
+                case TextParagraphType::ChapterHeading1:
+                case TextParagraphType::ChapterHeading2:
+                case TextParagraphType::ChapterHeading3:
+                case TextParagraphType::ChapterHeading4:
+                case TextParagraphType::ChapterHeading5:
+                case TextParagraphType::ChapterHeading6: {
+                    previousSceneBlockBottom = lastSceneBlockBottom;
                     lastSceneBlockBottom = cursorR.top();
-                    lastSceneColor = d->document.itemColor(block);
+                    lastSceneColors = d->document.itemColors(block);
+                    break;
+                }
+                default: {
+                    break;
+                }
                 }
 
                 //
-                // Нарисуем цвет главы
+                // Нарисуем цвета сцены
                 //
-                if (lastSceneColor.isValid()) {
-                    const QPointF topLeft(
-                        isLeftToRight ? textRight + leftDelta + DesignSystem::layout().px8()
-                                      : (textLeft - DesignSystem::layout().px4() + leftDelta),
-                        isLastBlockSceneHeadingWithNumberAtRight
-                            ? cursorR.top() - verticalMargin
-                            : lastSceneBlockBottom - verticalMargin);
-                    const QPointF bottomRight(isLeftToRight ? textRight
-                                                      + DesignSystem::layout().px4() + leftDelta
-                                                            : textLeft + leftDelta,
+                if (!lastSceneColors.isEmpty()) {
+                    const QPointF topLeft(isLeftToRight
+                                              ? pageRight + leftDelta - DesignSystem::layout().px4()
+                                              : pageLeft + leftDelta,
+                                          lastSceneBlockBottom - verticalMargin);
+                    const QPointF bottomRight(isLeftToRight ? pageRight + leftDelta
+                                                            : pageLeft + leftDelta
+                                                      + DesignSystem::layout().px4(),
                                               cursorREnd.bottom() + verticalMargin);
-                    const QRectF rect(topLeft, bottomRight);
-                    painter.fillRect(rect, lastSceneColor);
+                    QRectF rect(topLeft, bottomRight);
+                    for (const auto& color : std::as_const(lastSceneColors)) {
+                        if (!color.isValid()) {
+                            continue;
+                        }
+
+                        auto colorRect = rect;
+                        if (color != lastSceneColors.constLast()) {
+                            colorRect.setTop(previousSceneBlockBottom);
+                        }
+
+                        painter.setPen(Qt::NoPen);
+                        painter.setBrush(color);
+                        painter.drawRect(colorRect);
+                        rect.moveLeft(rect.left() - DesignSystem::layout().px12());
+                    }
                 }
 
                 //

@@ -603,14 +603,14 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     //
     const bool isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
     const qreal pageLeft = 0;
-    const qreal pageRight = viewport()->width();
-    const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();
+    const qreal pageRight
+        = viewport()->width() - verticalScrollBar()->width() - DesignSystem::layout().px8();
+    const qreal spaceBetweenSceneNumberAndText = DesignSystem::layout().px(10);
     const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
         + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
     const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
         - document()->rootFrame()->frameFormat().rightMargin() + spaceBetweenSceneNumberAndText;
     const qreal leftDelta = (isLeftToRight ? -1 : 1) * horizontalScrollBar()->value();
-    //    int colorRectWidth = 0;
     qreal verticalMargin = 0;
     const qreal splitterX = leftDelta + textLeft
         + (textRight - textLeft) * d->screenplayTemplate().leftHalfOfPageWidthPercents() / 100;
@@ -678,9 +678,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
         //
         QTextBlock block = topBlock;
         const QRectF viewportGeometry = viewport()->geometry();
+        int previousSceneBlockBottom = 0;
         int lastSceneBlockBottom = 0;
-        QColor lastSceneColor;
-        bool isLastBlockSceneHeadingWithNumberAtRight = false;
+        QVector<QColor> lastSceneColors;
         struct {
             bool isPainted = true;
             QString text;
@@ -743,36 +743,50 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             //
             // Определим цвет сцены
             //
-            if (blockType == TextParagraphType::SceneHeading
-                || blockType == TextParagraphType::SequenceHeading
-                || blockType == TextParagraphType::ActHeading) {
+            switch (blockType) {
+            case TextParagraphType::SceneHeading:
+            case TextParagraphType::SequenceHeading:
+            case TextParagraphType::ActHeading:
+            case TextParagraphType::SequenceFooter:
+            case TextParagraphType::ActFooter: {
+                previousSceneBlockBottom = lastSceneBlockBottom;
                 lastSceneBlockBottom = cursorR.top();
-                lastSceneColor = d->document.itemColor(block);
+                lastSceneColors = d->document.itemColors(block);
+                break;
+            }
+            default: {
+                break;
+            }
             }
 
             //
-            // Нарисуем цвет сцены
+            // Нарисуем цвета сцены
             //
-            if (lastSceneColor.isValid()) {
-                const auto isBlockSceneHeadingWithNumberAtRight
-                    = blockType == TextParagraphType::SceneHeading && d->showSceneNumber
-                    && d->showSceneNumberOnRight && !block.text().isEmpty();
-                if (!isBlockSceneHeadingWithNumberAtRight) {
-                    const QPointF topLeft(
-                        isLeftToRight ? textRight + leftDelta + DesignSystem::layout().px8()
-                                      : (textLeft - DesignSystem::layout().px4() + leftDelta),
-                        isLastBlockSceneHeadingWithNumberAtRight
-                            ? cursorR.top() - verticalMargin
-                            : lastSceneBlockBottom - verticalMargin);
-                    const QPointF bottomRight(isLeftToRight ? textRight
-                                                      + DesignSystem::layout().px4() + leftDelta
-                                                            : textLeft + leftDelta,
-                                              cursorREnd.bottom() + verticalMargin);
-                    const QRectF rect(topLeft, bottomRight);
-                    painter.fillRect(rect, lastSceneColor);
-                }
+            if (!lastSceneColors.isEmpty()) {
+                const QPointF topLeft(isLeftToRight
+                                          ? pageRight + leftDelta - DesignSystem::layout().px4()
+                                          : pageLeft + leftDelta,
+                                      lastSceneBlockBottom - verticalMargin);
+                const QPointF bottomRight(isLeftToRight
+                                              ? pageRight + leftDelta
+                                              : pageLeft + leftDelta + DesignSystem::layout().px4(),
+                                          cursorREnd.bottom() + verticalMargin);
+                QRectF rect(topLeft, bottomRight);
+                for (const auto& color : std::as_const(lastSceneColors)) {
+                    if (!color.isValid()) {
+                        continue;
+                    }
 
-                isLastBlockSceneHeadingWithNumberAtRight = isBlockSceneHeadingWithNumberAtRight;
+                    auto colorRect = rect;
+                    if (color != lastSceneColors.constLast()) {
+                        colorRect.setTop(previousSceneBlockBottom);
+                    }
+
+                    painter.setPen(Qt::NoPen);
+                    painter.setBrush(color);
+                    painter.drawRect(colorRect);
+                    rect.moveLeft(rect.left() - DesignSystem::layout().px12());
+                }
             }
 
             //
@@ -1087,13 +1101,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                                                   : textLeft - leftDelta,
                                                     cursorR.bottom());
                                 QRectF rect(topLeft, bottomRight);
-                                if (lastSceneColor.isValid()) {
-                                    setPainterPen(lastSceneColor);
-                                }
                                 painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop, sceneNumber);
-                                if (lastSceneColor.isValid()) {
-                                    setPainterPen(palette().text().color());
-                                }
                             }
                         }
                     }
@@ -1270,8 +1278,6 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                      postfix);
                 }
             }
-
-            lastSceneBlockBottom = cursorREnd.bottom();
 
             block = block.next();
         }

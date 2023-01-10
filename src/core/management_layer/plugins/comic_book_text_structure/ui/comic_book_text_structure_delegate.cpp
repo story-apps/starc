@@ -299,7 +299,7 @@ void ComicBookTextStructureDelegate::Implementation::paintPage(QPainter* _painte
     //
     // ... цвет папки
     //
-    paintItemColor(_painter, _option, _index.data(TextModelFolderItem::FolderColorRole), _index);
+    paintItemColor(_painter, _option, _index.data(TextModelGroupItem::GroupColorRole), _index);
 
     //
     // ... иконка
