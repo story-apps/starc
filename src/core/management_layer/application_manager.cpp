@@ -1749,6 +1749,11 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
         }
     }
 #endif
+
+    //
+    // Запускаем писательскую сессию
+    //
+    writingSessionManager->startSession(currentProject.uuid(), currentProject.name());
 }
 
 void ApplicationManager::Implementation::closeCurrentProject()
@@ -1780,6 +1785,8 @@ void ApplicationManager::Implementation::closeCurrentProject()
     projectsManager->closeCurrentProject();
 
     menuView->setProjectActionsVisible(false);
+
+    writingSessionManager->finishSession();
 
     state = ApplicationState::Working;
 }
@@ -2180,6 +2187,12 @@ bool ApplicationManager::event(QEvent* _event)
         for (auto manager : { d->projectManager.data() }) {
             QApplication::sendEvent(manager, _event);
         }
+        //
+        // Если был долгий простой, то завершаем текущую сессию, пользователь ушёл
+        //
+        if (auto event = static_cast<IdleEvent*>(_event); event->isLongIdle) {
+            d->writingSessionManager->finishSession();
+        }
 
         _event->accept();
         return true;
@@ -2386,6 +2399,8 @@ void ApplicationManager::initConnections()
             &AccountManager::upgradeAccount);
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
             [this] { d->markChangesSaved(false); });
+    connect(d->projectManager.data(), &ProjectManager::projectUuidChanged,
+            d->projectsManager.data(), &ProjectsManager::setCurrentProjectUuid);
     connect(d->projectManager.data(), &ProjectManager::projectNameChanged, this,
             [this](const QString& _name) {
                 d->projectsManager->setCurrentProjectName(_name);

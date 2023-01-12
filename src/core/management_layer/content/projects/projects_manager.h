@@ -96,6 +96,11 @@ public:
     void setCurrentProject(int _projectId);
 
     /**
+     * @brief Установить гуид текущего проекта
+     */
+    void setCurrentProjectUuid(const QUuid& _uuid);
+
+    /**
      * @brief Установить название текущего проекта
      */
     void setCurrentProjectName(const QString& _name);

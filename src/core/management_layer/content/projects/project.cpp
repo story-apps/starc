@@ -20,6 +20,7 @@ public:
 
     mutable QPixmap poster;
     QString posterPath;
+    QUuid uuid;
     QString name;
     QString logline;
     QDateTime lastEditTime;
@@ -83,26 +84,6 @@ void Project::setType(ProjectType _type)
     d->type = _type;
 }
 
-QString Project::name() const
-{
-    return d->name;
-}
-
-void Project::setName(const QString& _name)
-{
-    d->name = _name;
-}
-
-QString Project::logline() const
-{
-    return d->logline;
-}
-
-void Project::setLogline(const QString& _logline)
-{
-    d->logline = _logline;
-}
-
 QString Project::path() const
 {
     return d->path;
@@ -158,6 +139,36 @@ void Project::setPosterPath(const QString& _path)
     // Обнуляем постер, чтобы он потом извлёкся по заданному пути
     //
     d->poster = {};
+}
+
+QUuid Project::uuid() const
+{
+    return d->uuid;
+}
+
+void Project::setUuid(const QUuid& _uuid)
+{
+    d->uuid = _uuid;
+}
+
+QString Project::name() const
+{
+    return d->name;
+}
+
+void Project::setName(const QString& _name)
+{
+    d->name = _name;
+}
+
+QString Project::logline() const
+{
+    return d->logline;
+}
+
+void Project::setLogline(const QString& _logline)
+{
+    d->logline = _logline;
 }
 
 QString Project::displayLastEditTime() const
@@ -289,8 +300,9 @@ QVariant Project::data(int _role) const
 
 bool operator==(const Project& _lhs, const Project& _rhs)
 {
-    return _lhs.type() == _rhs.type() && _lhs.path() == _rhs.path() && _lhs.name() == _rhs.name()
-        && _lhs.logline() == _rhs.logline() && _lhs.lastEditTime() == _rhs.lastEditTime();
+    return _lhs.type() == _rhs.type() && _lhs.path() == _rhs.path() && _lhs.uuid() == _rhs.uuid()
+        && _lhs.name() == _rhs.name() && _lhs.logline() == _rhs.logline()
+        && _lhs.lastEditTime() == _rhs.lastEditTime();
 }
 
 

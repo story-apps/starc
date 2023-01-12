@@ -436,6 +436,7 @@ void ProjectsManager::loadProjects()
             project.setEditingMode(static_cast<DocumentEditingMode>(projectJson["role"].toInt()));
         }
         project.setType(static_cast<ProjectType>(projectJson["type"].toInt()));
+        project.setUuid(projectJson["uuid"].toString());
         project.setName(projectJson["name"].toString());
         project.setLogline(projectJson["logline"].toString());
         project.setPath(projectJson["path"].toString());
@@ -460,6 +461,7 @@ void ProjectsManager::saveProjects()
             projectJson["role"] = static_cast<int>(project.editingMode());
         }
         projectJson["type"] = static_cast<int>(project.type());
+        projectJson["uuid"] = project.uuid().toString();
         projectJson["name"] = project.name();
         projectJson["logline"] = project.logline();
         projectJson["path"] = project.path();
@@ -823,6 +825,12 @@ void ProjectsManager::setCurrentProject(int _projectId)
     // ... и установим его текущим
     //
     setCurrentProject(newCurrentProjectPath);
+}
+
+void ProjectsManager::setCurrentProjectUuid(const QUuid& _uuid)
+{
+    d->currentProject.setUuid(_uuid);
+    d->projects->updateProject(d->currentProject);
 }
 
 void ProjectsManager::setCurrentProjectName(const QString& _name)

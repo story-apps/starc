@@ -2395,6 +2395,7 @@ void ProjectManager::loadCurrentProject(const Project& _project)
     auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(
         d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
             Domain::DocumentObjectType::Project)));
+    emit projectUuidChanged(projectInformationModel->document()->uuid());
     if (projectInformationModel->name().isEmpty()) {
         //
         // При создании нового проекта, применим его название и сразу сохраним изменения в документ

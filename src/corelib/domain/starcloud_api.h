@@ -85,6 +85,11 @@ struct PaymentOption {
     int amount = -1;
 
     /**
+     * @brief Скидка в процентах
+     */
+    int discount = -1;
+
+    /**
      * @brief Стоимость со скидкой, в центах
      */
     int totalAmount = -1;

@@ -33,14 +33,20 @@ enum class EventType {
 class IdleEvent : public QEvent
 {
 public:
-    IdleEvent()
+    IdleEvent(bool isLongIdle)
         : QEvent(static_cast<QEvent::Type>(EventType::IdleEvent))
+        , isLongIdle(isLongIdle)
     {
     }
+
+    /**
+     * @brief Долгий ли был простой
+     */
+    const bool isLongIdle;
 };
 
 /**
- * @brief Событие простоя приложения
+ * @brief Событие смены фокуса
  */
 class FocusChangeEvent : public QEvent
 {

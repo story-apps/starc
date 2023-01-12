@@ -187,6 +187,11 @@ signals:
     void contentsChanged(BusinessLayer::AbstractModel* _model);
 
     /**
+     * @brief Изменился гуид проекта
+     */
+    void projectUuidChanged(const QUuid& _uuid);
+
+    /**
      * @brief Изменилось название проекта
      */
     void projectNameChanged(const QString& _name);

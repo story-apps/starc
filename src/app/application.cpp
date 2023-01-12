@@ -33,8 +33,20 @@ public:
     QObject* applicationManager = nullptr;
 
     QString fileToOpen;
+
+    /**
+     * @brief Таймер кратковременного простоя приложения (3 секунды)
+     */
     QTimer idleTimer;
 
+    /**
+     * @brief Таймер долгосрочного простоя приложения (30 минут)
+     */
+    QTimer longIdleTimer;
+
+    /**
+     * @brief Нажатые в данный момент клавиши
+     */
     QSet<int> pressedKeys;
 };
 
@@ -51,15 +63,27 @@ Application::Application(int& _argc, char** _argv)
     setOrganizationDomain("storyapps.dev");
 
     //
-    // Настроим таймер определения простоя приложения
+    // Настроим таймеры определения простоя приложения
     //
+    d->idleTimer.setSingleShot(true);
     d->idleTimer.setInterval(std::chrono::seconds{ 3 });
     connect(&d->idleTimer, &QTimer::timeout, this, [this] {
         if (d->applicationManager != nullptr) {
-            postEvent(d->applicationManager, new IdleEvent);
+            constexpr bool isLongIdle = false;
+            postEvent(d->applicationManager, new IdleEvent(isLongIdle));
         }
     });
     d->idleTimer.start();
+    //
+    d->longIdleTimer.setSingleShot(true);
+    d->longIdleTimer.setInterval(std::chrono::minutes{ 30 });
+    connect(&d->longIdleTimer, &QTimer::timeout, this, [this] {
+        if (d->applicationManager != nullptr) {
+            constexpr bool isLongIdle = true;
+            postEvent(d->applicationManager, new IdleEvent(isLongIdle));
+        }
+    });
+    d->longIdleTimer.start();
 }
 
 Application::~Application()
@@ -117,6 +141,7 @@ bool Application::notify(QObject* _object, QEvent* _event)
         case QEvent::Wheel:
         case QEvent::Gesture: {
             d->idleTimer.start();
+            d->longIdleTimer.start();
             break;
         }
 

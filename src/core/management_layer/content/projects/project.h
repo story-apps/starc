@@ -83,6 +83,12 @@ public:
     void setPosterPath(const QString& _path);
 
     /**
+     * @brief Идентификатор проекта
+     */
+    QUuid uuid() const;
+    void setUuid(const QUuid& _uuid);
+
+    /**
      * @brief Название проекта
      */
     QString name() const;
