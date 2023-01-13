@@ -127,6 +127,10 @@ void ScreenplayCharactersActivityPlot::build(QAbstractItemModel* _model) const
 
             case TextModelItemType::Text: {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+                if (textItem->isCorrection()) {
+                    break;
+                }
+
                 //
                 // ... стата по объектам
                 //
