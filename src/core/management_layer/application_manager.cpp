@@ -156,6 +156,11 @@ public:
     void showSettings();
 
     /**
+     * @brief Показать страницу статистика работы с программой
+     */
+    void showSessionStatistics();
+
+    /**
      * @brief Показать предыдущий контент
      */
     void showLastContent();
@@ -323,6 +328,11 @@ public:
      * @brief Таймер автосохранения проекта
      */
     QTimer autosaveTimer;
+
+    /**
+     * @brief Дата и время последней активности пользователя
+     */
+    QDateTime lastActivityDateTime;
 
     /**
      * @brief Состояние приложения в данный момент
@@ -763,12 +773,9 @@ void ApplicationManager::Implementation::showContent()
         // ... локальные
         //
         projectsManager->loadProjects();
-#ifdef CLOUD_SERVICE_MANAGER
         //
-        // ... облачные
+        // ... облачные автоматом загружаются в момент подключения к серверу
         //
-        cloudServiceManager->askProjects();
-#endif
         //
         // ... а затем уже отобразить
         //
@@ -817,6 +824,12 @@ void ApplicationManager::Implementation::showSettings()
 {
     Log::info("Show settings screen");
     showContent(settingsManager.data());
+}
+
+void ApplicationManager::Implementation::showSessionStatistics()
+{
+    Log::info("Show session statistics screen");
+    showContent(writingSessionManager.data());
 }
 
 void ApplicationManager::Implementation::showLastContent()
@@ -2191,7 +2204,17 @@ bool ApplicationManager::event(QEvent* _event)
         // Если был долгий простой, то завершаем текущую сессию, пользователь ушёл
         //
         if (auto event = static_cast<IdleEvent*>(_event); event->isLongIdle) {
-            d->writingSessionManager->finishSession();
+            //
+            // ... текущая сессия завершилась во время последней активности в приложении
+            //
+            d->writingSessionManager->splitSession(d->lastActivityDateTime);
+        }
+        //
+        // А если был маленький простой после активности персонажа, запоминаем этот момент,
+        // как дату и время последней активности пользователя
+        //
+        else {
+            d->lastActivityDateTime = QDateTime::currentDateTimeUtc();
         }
 
         _event->accept();
@@ -2315,6 +2338,12 @@ void ApplicationManager::initConnections()
     connect(d->menuView, &Ui::MenuView::fullscreenPressed, this, [this] { d->toggleFullScreen(); });
     connect(d->menuView, &Ui::MenuView::settingsPressed, this, [this] { d->showSettings(); });
     //
+    connect(d->menuView, &Ui::MenuView::writingStatisticsPressed, this, [this] {
+#ifdef CLOUD_SERVICE_MANAGER
+        d->cloudServiceManager->askSessionStatistics();
+#endif
+        d->showSessionStatistics();
+    });
     connect(d->menuView, &Ui::MenuView::writingSprintPressed, this,
             [this] { d->writingSessionManager->showSprintPanel(); });
     //
@@ -2523,6 +2552,13 @@ void ApplicationManager::initConnections()
         }
     });
 
+    //
+    // Менеджер статистики по сессиям работы с программой
+    //
+    connect(d->writingSessionManager.data(),
+            &WritingSessionManager::closeSessionStatisticsRequested, this,
+            [this] { d->showLastContent(); });
+
 #ifdef CLOUD_SERVICE_MANAGER
     //
     // Менеджер облака
@@ -2592,6 +2628,7 @@ void ApplicationManager::initConnections()
                 }
                 d->cloudServiceManager->askNotifications();
                 d->cloudServiceManager->askProjects();
+                d->cloudServiceManager->askSessionStatistics();
 
                 //
                 // Если поймали подключение и сейчас работаем с облачным проектом
@@ -2940,6 +2977,15 @@ void ApplicationManager::initConnections()
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::cursorsChanged,
             d->projectManager.data(), &ProjectManager::setCursors);
+
+    //
+    // Статистика по сессии
+    //
+    connect(d->writingSessionManager.data(),
+            &WritingSessionManager::sessionStatisticsPublishRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::pushSessionStatistics);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::sessionStatisticsReceived,
+            d->writingSessionManager.data(), &WritingSessionManager::setSessionStatistics);
 #endif
 }
 

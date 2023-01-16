@@ -89,7 +89,7 @@ QColor ColorHelper::forNumber(int _number)
     case 2:
         return "#1E844F";
     case 3:
-        return "#3D2AA7";
+        return "#6843FE";
     case 4:
         return "#E64C4D";
     case 5:
@@ -99,8 +99,6 @@ QColor ColorHelper::forNumber(int _number)
     case 7:
         return "#41D089";
     case 8:
-        return "#6843FE";
-    case 9:
         return "#EB0E4D";
     }
 }

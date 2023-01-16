@@ -181,8 +181,7 @@ MenuView::Implementation::Implementation(QWidget* _parent)
         actions->addAction(project);
         actions->addAction(settings);
 
-        writingStatistics->setIconText(u8"\U000F0127");
-        writingStatistics->setVisible(false);
+        writingStatistics->setIconText(u8"\U000F085D");
         //
         writingSprint->setIconText(u8"\U000F13AB");
         //
@@ -270,6 +269,7 @@ MenuView::MenuView(QWidget* _parent)
     connect(d->fullScreen, &QAction::triggered, this, &MenuView::fullscreenPressed);
     connect(d->settings, &QAction::triggered, this, &MenuView::settingsPressed);
     //
+    connect(d->writingStatistics, &QAction::triggered, this, &MenuView::writingStatisticsPressed);
     connect(d->writingSprint, &QAction::triggered, this, &MenuView::writingSprintPressed);
     connect(d->notifications, &QAction::triggered, this, [this] {
         setCurrentWidget(d->notificationsPage);
@@ -295,6 +295,7 @@ MenuView::MenuView(QWidget* _parent)
     connect(this, &MenuView::settingsPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::helpPressed, this, &MenuView::closeMenu);
     //
+    connect(this, &MenuView::writingStatisticsPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::writingSprintPressed, this, &MenuView::closeMenu);
     //
     connect(d->notificationsBackButton, &IconButton::clicked, this,
@@ -526,6 +527,7 @@ void MenuView::updateTranslations()
         QKeySequence(QKeySequence::FullScreen).toString(QKeySequence::NativeText));
     d->settings->setText(tr("Application settings"));
 
+    d->writingStatistics->setToolTip(tr("Show writing statistics"));
     d->writingSprint->setToolTip(tr("Show writing sprint timer"));
     d->notifications->setToolTip(tr("Show notifications"));
 

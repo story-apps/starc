@@ -4,6 +4,10 @@
 
 class QKeyEvent;
 
+namespace Domain {
+struct SessionStatistics;
+}
+
 
 namespace ManagementLayer {
 
@@ -17,6 +21,10 @@ class WritingSessionManager : public QObject
 public:
     explicit WritingSessionManager(QObject* _parent, QWidget* _parentWidget);
     ~WritingSessionManager() override;
+
+    QWidget* toolBar() const;
+    QWidget* navigator() const;
+    QWidget* view() const;
 
     /**
      * @brief Добавить событие нажатия кнопки
@@ -35,6 +43,11 @@ public:
     void setCountingEnabled(bool _enabled);
 
     /**
+     * @brief Разорвать текущую сессию в случае, когда пользователь долго бездействует
+     */
+    void splitSession(const QDateTime& _lastActionAt);
+
+    /**
      * @brief Завершить текущую сессию работы с проектом
      */
     void finishSession();
@@ -43,6 +56,23 @@ public:
      * @brief Показать панель писательского спринта
      */
     void showSprintPanel();
+
+    /**
+     * @brief Задать статистика по сессиям полученную с сервера
+     */
+    void setSessionStatistics(const QVector<Domain::SessionStatistics>& _sessionStatistics);
+
+signals:
+    /**
+     * @brief Пользователь хочет выйти со страницы статистики
+     */
+    void closeSessionStatisticsRequested();
+
+    /**
+     * @brief Запрос на публикацию статистики по сессиям
+     */
+    void sessionStatisticsPublishRequested(
+        const QVector<Domain::SessionStatistics>& _sessionStatistics);
 
 private:
     class Implementation;

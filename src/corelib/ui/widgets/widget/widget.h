@@ -43,6 +43,11 @@ public:
     void setOpacity(qreal _opacity);
 
     /**
+     * @brief Добавляем отступы просто проксируя в базовый класс, приводя к QMargins
+     */
+    void setContentsMarginsF(const QMarginsF& _margins);
+
+    /**
      * @brief Переопределяем для испускания сигналов моментах, когда виджет стал показан или скрыт
      */
     void setVisible(bool _visible) override;
@@ -51,11 +56,13 @@ signals:
     /**
      * @brief Виджет был показан
      */
+    void aboutToBeAppeared();
     void appeared();
 
     /**
      * @brief Виджет был скрыт
      */
+    void aboutToBeDisappeared();
     void disappeared();
 
 protected:

@@ -19,9 +19,14 @@ struct CORE_LIBRARY_EXPORT PlotData {
     QString name;
 
     /**
-     * @brief Цвет
+     * @brief Цвет линии
      */
     QColor color;
+
+    /**
+     * @brief Цвет заливки
+     */
+    QColor brushColor;
 
     /**
      * @brief Координаты
@@ -46,11 +51,6 @@ struct CORE_LIBRARY_EXPORT Plot {
      * @brief Данные о графике
      */
     QVector<PlotData> data;
-
-    /**
-     * @brief Использовать ли заливку по иксу
-     */
-    bool useBrush = false;
 };
 
 /**

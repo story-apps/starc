@@ -28,7 +28,6 @@ ThemePreview::ThemePreview(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation)
 {
-    designSystemChangeEvent(nullptr);
 }
 
 ThemePreview::~ThemePreview() = default;

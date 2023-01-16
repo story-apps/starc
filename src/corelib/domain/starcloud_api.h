@@ -206,4 +206,19 @@ struct CursorInfo {
     QDateTime updatedAt;
 };
 
+/**
+ * @brief Статистика по сессиям
+ */
+struct SessionStatistics {
+    QUuid uuid;
+    QUuid projectUuid;
+    QString projectName;
+    QString deviceUuid;
+    QString deviceName;
+    QDateTime startDateTime;
+    QDateTime endDateTime;
+    int words = 0;
+    int characters = 0;
+};
+
 } // namespace Domain

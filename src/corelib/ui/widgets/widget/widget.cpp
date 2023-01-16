@@ -116,8 +116,19 @@ void Widget::setOpacity(qreal _opacity)
     update();
 }
 
+void Widget::setContentsMarginsF(const QMarginsF& _margins)
+{
+    setContentsMargins(_margins.toMargins());
+}
+
 void Widget::setVisible(bool _visible)
 {
+    if (_visible) {
+        emit aboutToBeAppeared();
+    } else {
+        emit aboutToBeDisappeared();
+    }
+
     QWidget::setVisible(_visible);
 
     if (_visible) {

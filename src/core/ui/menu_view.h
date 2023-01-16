@@ -175,6 +175,11 @@ signals:
     void helpPressed();
 
     /**
+     * @brief Нажата кнопка отображения статистики по сессиям работы с программой
+     */
+    void writingStatisticsPressed();
+
+    /**
      * @brief Нажата кнопка отображения таймера писательского спринта
      */
     void writingSprintPressed();

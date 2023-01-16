@@ -99,6 +99,11 @@ SOURCES += \
     ui/projects/projects_navigator.cpp \
     ui/projects/projects_tool_bar.cpp \
     ui/projects/projects_view.cpp \
+    ui/session_statistics/counter_widget.cpp \
+    ui/session_statistics/overview_widget.cpp \
+    ui/session_statistics/session_statistics_navigator.cpp \
+    ui/session_statistics/session_statistics_tool_bar.cpp \
+    ui/session_statistics/session_statistics_view.cpp \
     ui/settings/language_dialog.cpp \
     ui/settings/screenplay_template/screenplay_template_navigator.cpp \
     ui/settings/screenplay_template/screenplay_template_page_view.cpp \
@@ -166,6 +171,11 @@ HEADERS += \
     ui/projects/projects_navigator.h \
     ui/projects/projects_tool_bar.h \
     ui/projects/projects_view.h \
+    ui/session_statistics/counter_widget.h \
+    ui/session_statistics/overview_widget.h \
+    ui/session_statistics/session_statistics_navigator.h \
+    ui/session_statistics/session_statistics_tool_bar.h \
+    ui/session_statistics/session_statistics_view.h \
     ui/settings/language_dialog.h \
     ui/settings/screenplay_template/screenplay_template_navigator.h \
     ui/settings/screenplay_template/screenplay_template_page_view.h \
