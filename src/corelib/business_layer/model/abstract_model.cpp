@@ -22,6 +22,11 @@ public:
     Domain::DocumentObject* document = nullptr;
 
     /**
+     * @brief Счётчик транзакций операции сброса модели
+     */
+    int resetModelTransationsCounter = 0;
+
+    /**
      * @brief Загрузчик фотографий
      */
     AbstractImageWrapper* image = nullptr;
@@ -244,11 +249,11 @@ bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
     }
 
 
-    beginResetModel();
+    beginResetModelTransaction();
     clearDocument();
     document()->setContent(newContent);
     initDocument();
-    endResetModel();
+    endResetModelTransaction();
     return true;
 }
 
@@ -310,6 +315,24 @@ QVariant AbstractModel::data(const QModelIndex& _index, int _role) const
     Q_UNUSED(_role)
 
     return {};
+}
+
+void AbstractModel::beginResetModelTransaction()
+{
+    if (d->resetModelTransationsCounter == 0) {
+        beginResetModel();
+    }
+
+    ++d->resetModelTransationsCounter;
+}
+
+void AbstractModel::endResetModelTransaction()
+{
+    --d->resetModelTransationsCounter;
+
+    if (d->resetModelTransationsCounter == 0) {
+        endResetModel();
+    }
 }
 
 void AbstractModel::initImageWrapper()

@@ -1187,9 +1187,9 @@ void StructureModel::initDocument()
     // А если данные есть, то загрузим их из документа
     //
     else {
-        beginResetModel();
+        beginResetModelTransaction();
         d->buildModel(document());
-        endResetModel();
+        endResetModelTransaction();
     }
 }
 

@@ -781,6 +781,10 @@ void CommentsModel::setTextModel(TextModel* _model)
         };
         readReviewMarksFromModel({});
 
+        connect(d->model, &TextModel::modelAboutToBeReset, this, [this] {
+            d->modelTextItems.clear();
+            d->reviewMarks.clear();
+        });
         connect(d->model, &TextModel::modelReset, this, [this] { setTextModel(d->model); });
         connect(d->model, &TextModel::rowsInserted, this,
                 [this](const QModelIndex& _parent, int _first, int _last) {

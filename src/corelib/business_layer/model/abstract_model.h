@@ -163,6 +163,12 @@ signals:
 
 protected:
     /**
+     * @brief Транзакция, для управления операция сброса данных модели
+     */
+    void beginResetModelTransaction();
+    void endResetModelTransaction();
+
+    /**
      * @brief Настроить хранилище изображений
      */
     virtual void initImageWrapper();

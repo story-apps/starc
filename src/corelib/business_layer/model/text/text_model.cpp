@@ -1592,9 +1592,9 @@ void TextModel::initDocument()
     // А если данные есть, то загрузим их из документа
     //
     else {
-        beginResetModel();
+        beginResetModelTransaction();
         d->buildModel(document());
-        endResetModel();
+        endResetModelTransaction();
     }
 
     //
@@ -1609,11 +1609,11 @@ void TextModel::clearDocument()
         return;
     }
 
-    beginResetModel();
+    beginResetModelTransaction();
     while (d->rootItem->childCount() > 0) {
         d->rootItem->removeItem(d->rootItem->childAt(0));
     }
-    endResetModel();
+    endResetModelTransaction();
 }
 
 QByteArray TextModel::toXml() const

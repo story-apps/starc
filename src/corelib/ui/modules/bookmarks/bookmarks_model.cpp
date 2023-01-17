@@ -335,6 +335,10 @@ void BookmarksModel::setTextModel(TextModel* _model)
         };
         readBookmarksFromModel({});
 
+        connect(d->model, &TextModel::modelAboutToBeReset, this, [this] {
+            d->modelTextItems.clear();
+            d->bookmarks.clear();
+        });
         connect(d->model, &TextModel::modelReset, this, [this] { setTextModel(d->model); });
         connect(d->model, &TextModel::rowsInserted, this,
                 [this](const QModelIndex& _parent, int _first, int _last) {
