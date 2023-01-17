@@ -9,7 +9,7 @@ TEMPLATE = lib
 CONFIG += plugin c++1z
 CONFIG += force_debug_info
 CONFIG += separate_debug_info
-QT += concurrent widgets multimedia network
+QT += concurrent widgets multimedia network sql
 
 TARGET = coreplugin
 
@@ -61,6 +61,7 @@ SOURCES += \
     management_layer/content/settings/settings_manager.cpp \
     management_layer/content/settings/template_options_manager.cpp \
     management_layer/content/writing_session/writing_session_manager.cpp \
+    management_layer/content/writing_session/writing_session_storage.cpp \
     management_layer/plugins_builder.cpp \
     ui/about_application_dialog.cpp \
     ui/account/account_navigator.cpp \
@@ -133,6 +134,7 @@ HEADERS += \
     management_layer/content/settings/settings_manager.h \
     management_layer/content/settings/template_options_manager.h \
     management_layer/content/writing_session/writing_session_manager.h \
+    management_layer/content/writing_session/writing_session_storage.h \
     management_layer/plugins_builder.h \
     ui/about_application_dialog.h \
     ui/account/account_navigator.h \

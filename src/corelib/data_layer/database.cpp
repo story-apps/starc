@@ -266,10 +266,10 @@ void Database::createTables(QSqlDatabase& _database)
     // Таблица системных переменных
     //
     query.exec("CREATE TABLE system_variables "
-               "( "
+               "("
                "variable TEXT PRIMARY KEY ON CONFLICT REPLACE, "
                "value TEXT NOT NULL "
-               "); ");
+               ");");
 
     //
     // Таблица с документами

@@ -2629,6 +2629,8 @@ void ApplicationManager::initConnections()
                 }
                 d->cloudServiceManager->askNotifications();
                 d->cloudServiceManager->askProjects();
+                d->cloudServiceManager->askSessionStatistics(
+                    d->writingSessionManager->sessionStatisticsLastSyncDateTime());
 
                 //
                 // Если поймали подключение и сейчас работаем с облачным проектом

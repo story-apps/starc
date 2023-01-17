@@ -20,6 +20,11 @@ public:
     ~SessionStatisticsView() override;
 
     /**
+     * @brief Настроить возможность отображения детальной статистики
+     */
+    void setAbleToShowDetails(bool _able);
+
+    /**
      * @brief Показывать каждое устройство по отдельности
      */
     bool showDevices() const;

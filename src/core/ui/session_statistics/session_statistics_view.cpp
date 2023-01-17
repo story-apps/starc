@@ -162,6 +162,12 @@ SessionStatisticsView::SessionStatisticsView(QWidget* _parent)
 
 SessionStatisticsView::~SessionStatisticsView() = default;
 
+void SessionStatisticsView::setAbleToShowDetails(bool _able)
+{
+    d->showAllDevices->setEnabled(_able);
+    updateTranslations();
+}
+
 bool SessionStatisticsView::showDevices() const
 {
     return d->showAllDevices->isChecked();
@@ -279,6 +285,10 @@ void SessionStatisticsView::resizeEvent(QResizeEvent* _event)
 void SessionStatisticsView::updateTranslations()
 {
     d->showAllDevices->setText(tr("Separate statistics by devices"));
+    d->showAllDevices->setToolTip(
+        d->showAllDevices->isEnabled()
+            ? ""
+            : tr("To show detailed statistics, you need to upgrade to the PRO version."));
     d->weekPlotFilter->setText(tr("Dayly"));
     d->monthPlotFilter->setText(tr("Monthly"));
     d->yearPlotFilter->setText(tr("Yearly"));

@@ -1,5 +1,7 @@
 #include "writing_session_manager.h"
 
+#include "writing_session_storage.h"
+
 #include <business_layer/plots/abstract_plot.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -22,21 +24,6 @@
 
 namespace ManagementLayer {
 
-namespace {
-
-/**
- * @brief Путь с файлом локальных сессий
- */
-QString sessionsFilePath()
-{
-    const QString appDataFolderPath
-        = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    const QString sessionsFilePath = appDataFolderPath + QDir::separator() + "sessions.csv";
-    return sessionsFilePath;
-}
-
-} // namespace
-
 class WritingSessionManager::Implementation
 {
 public:
@@ -58,6 +45,8 @@ public:
     Ui::SessionStatisticsToolBar* toolBar = nullptr;
     Ui::SessionStatisticsNavigator* navigator = nullptr;
     Ui::SessionStatisticsView* view = nullptr;
+
+    DataStorageLayer::WritingSessionStorage sessionStorage;
 
     QUuid sessionUuid;
     QUuid projectUuid;
@@ -114,25 +103,7 @@ void WritingSessionManager::Implementation::saveCurrentSession(const QDateTime& 
     // FIXME: Потенциально тут в файл может записаться хрень, если перед выключением компьютера были
     //        запущены несколько копий приложения и они начнут писать одновременно
     //
-    QFile sessionsFile(sessionsFilePath());
-    if (sessionsFile.open(QIODevice::WriteOnly | QIODevice::Append)) {
-        sessionsFile.write(
-            QString("%1;%2;%3;%4;%5;%6;%7;%8;%9;%10\n")
-                .arg(DataStorageLayer::StorageFacade::settingsStorage()->accountEmail(),
-                     sessionUuid.toString(), projectUuid.toString(), projectName,
-                     settingsValue(DataStorageLayer::kDeviceUuidKey).toString(),
-                     QSysInfo::prettyProductName(), sessionStartedAt.toString(Qt::ISODateWithMs),
-                     sessionEndsAt.toString(Qt::ISODateWithMs))
-                .arg(words)
-                .arg(characters)
-                .toUtf8());
-        sessionsFile.close();
-    }
-
-    //
-    // Уведомляем клиентов о том, что была создаана новая сессия
-    //
-    emit q->sessionStatisticsPublishRequested({ {
+    const Domain::SessionStatistics session{
         sessionUuid,
         projectUuid,
         projectName,
@@ -142,60 +113,18 @@ void WritingSessionManager::Implementation::saveCurrentSession(const QDateTime& 
         sessionEndsAt,
         words,
         characters,
-    } });
+    };
+    sessionStorage.saveSessionStatistics({ session });
+
+    //
+    // Уведомляем клиентов о том, что была создаана новая сессия
+    //
+    emit q->sessionStatisticsPublishRequested({ session });
 }
 
 void WritingSessionManager::Implementation::processStatistics()
 {
-    //
-    // Читаем статистику из файла
-    //
-    QFile sessionsFile(sessionsFilePath());
-    if (!sessionsFile.open(QIODevice::ReadOnly)) {
-        return;
-    }
-    //
-    QVector<Domain::SessionStatistics> sessionStatistics;
-    while (!sessionsFile.atEnd()) {
-        const auto sessionData = sessionsFile.readLine().split(';');
-        if (sessionData.size() != 10) {
-            continue;
-        }
-
-        if (!sessionData.constFirst().isEmpty()
-            && sessionData.constFirst()
-                != DataStorageLayer::StorageFacade::settingsStorage()->accountEmail()) {
-            continue;
-        }
-
-        const Domain::SessionStatistics session{
-            sessionData[1],
-            sessionData[2],
-            sessionData[3],
-            sessionData[4],
-            sessionData[5],
-            QDateTime::fromString(sessionData[6], Qt::ISODateWithMs).toLocalTime(),
-            QDateTime::fromString(sessionData[7], Qt::ISODateWithMs).toLocalTime(),
-            sessionData[8].toInt(),
-            sessionData[9].toInt(),
-        };
-
-        //
-        // ... отсеиваем всё, что меньше 10 минут и меньше 100 слов
-        //
-        if (session.startDateTime.secsTo(session.endDateTime) < 10 * 60 && session.words < 100) {
-            continue;
-        }
-
-        sessionStatistics.append(session);
-    }
-    //
-    // ... сортируем по времени
-    //
-    std::sort(sessionStatistics.begin(), sessionStatistics.end(),
-              [](const Domain::SessionStatistics& _lhs, const Domain::SessionStatistics& _rhs) {
-                  return _lhs.startDateTime < _rhs.startDateTime;
-              });
+    QVector<Domain::SessionStatistics> sessionStatistics = sessionStorage.sessionStatistics();
 
     //
     // Бежим по статистике и формируем график
@@ -228,15 +157,18 @@ void WritingSessionManager::Implementation::processStatistics()
         deviceNames[session.deviceUuid] = session.deviceName;
 
         if (overviewStart < session.startDateTime) {
-            durationOverview.first = std::min(
-                durationOverview.first,
-                std::chrono::seconds{ session.startDateTime.secsTo(session.endDateTime) });
-            durationOverview.second = std::max(
-                durationOverview.second,
-                std::chrono::seconds{ session.startDateTime.secsTo(session.endDateTime) });
+            //
+            // ... не учитываем сессии короче 3х минут
+            //
+            const auto sessionDuration
+                = std::chrono::seconds{ session.startDateTime.secsTo(session.endDateTime) };
+            if (sessionDuration > std::chrono::minutes{ 3 }) {
+                durationOverview.first = std::min(durationOverview.first, sessionDuration);
+                durationOverview.second = std::max(durationOverview.second, sessionDuration);
+            }
 
             //
-            // ... не учитываем пустые сессии
+            // ... не учитываем сессии без словк
             //
             if (session.words > 0) {
                 wordsOverview.first = std::min(wordsOverview.first, session.words);
@@ -385,7 +317,8 @@ void WritingSessionManager::addKeyPressEvent(QKeyEvent* _event)
     //
     // Для случая, когда сессия была прервана по долгому ожиданию, возобновляем её
     //
-    if (!d->sessionStartedAt.isValid()) {
+    if (!d->projectUuid.isNull() && !d->sessionStartedAt.isValid()) {
+        d->sessionUuid = QUuid::createUuid();
         d->sessionStartedAt = QDateTime::currentDateTimeUtc();
     }
 
@@ -413,7 +346,7 @@ void WritingSessionManager::addKeyPressEvent(QKeyEvent* _event)
 
 QDateTime WritingSessionManager::sessionStatisticsLastSyncDateTime() const
 {
-    return {};
+    return d->sessionStorage.sessionStatisticsLastSyncDateTime();
 }
 
 void WritingSessionManager::startSession(const QUuid& _projectUuid, const QString& _projectName)
@@ -433,6 +366,7 @@ void WritingSessionManager::splitSession(const QDateTime& _lastActionAt)
 {
     d->saveCurrentSession(_lastActionAt);
 
+    d->sessionUuid = {};
     d->sessionStartedAt = {};
     d->words = 0;
     d->characters = 0;
@@ -462,7 +396,22 @@ void WritingSessionManager::showSprintPanel()
 void WritingSessionManager::setSessionStatistics(
     const QVector<Domain::SessionStatistics>& _sessionStatistics, bool _ableToShowDeatils)
 {
-    qDebug("hehe");
+    //
+    // Сперва отправим на сервер все сессии с момента последней синхронизации
+    //
+    emit sessionStatisticsPublishRequested(
+        d->sessionStorage.sessionStatistics(d->sessionStorage.sessionStatisticsLastSyncDateTime()));
+
+    //
+    // Запоминаем дату текущей синхронизации сессий и записываем сессии
+    //
+    d->sessionStorage.saveSessionStatisticsLastSyncDateTime(QDateTime::currentDateTimeUtc());
+    d->sessionStorage.saveSessionStatistics(_sessionStatistics);
+
+    //
+    // Настраиваем доступность просмотра детальной статистики
+    //
+    d->view->setAbleToShowDetails(_ableToShowDeatils);
 }
 
 } // namespace ManagementLayer
