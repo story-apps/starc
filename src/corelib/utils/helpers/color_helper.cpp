@@ -83,22 +83,24 @@ QColor ColorHelper::forNumber(int _number)
     switch (_number) {
     default:
     case 0:
-        return "#41AEFF";
+        return "#48C6FC";
     case 1:
-        return "#B2E82A";
+        return "#FF9036";
     case 2:
-        return "#1E844F";
+        return "#5D34FF";
     case 3:
-        return "#6843FE";
+        return "#FF4081";
     case 4:
-        return "#E64C4D";
+        return "#08D070";
     case 5:
-        return "#F8B50D";
+        return "#FEC62E";
     case 6:
-        return "#A245E0";
+        return "#FE3235";
     case 7:
-        return "#41D089";
+        return "#A6DC0D";
     case 8:
-        return "#EB0E4D";
+        return "#0038FF";
+    case 9:
+        return "#BD00FF";
     }
 }
