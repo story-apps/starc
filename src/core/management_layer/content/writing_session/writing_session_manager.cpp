@@ -125,6 +125,9 @@ void WritingSessionManager::Implementation::saveCurrentSession(const QDateTime& 
 void WritingSessionManager::Implementation::processStatistics()
 {
     QVector<Domain::SessionStatistics> sessionStatistics = sessionStorage.sessionStatistics();
+    if (sessionStatistics.isEmpty()) {
+        return;
+    }
 
     //
     // Бежим по статистике и формируем график
