@@ -894,6 +894,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         break;
     }
 
+    case QLocale::Dutch: {
+        translation = "nl";
+        break;
+    }
+
     case QLocale::Esperanto: {
         translation = "eo";
         break;

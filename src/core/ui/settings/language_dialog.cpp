@@ -34,6 +34,7 @@ public:
     PercentRadioButton* chinese = nullptr;
     PercentRadioButton* croatian = nullptr;
     PercentRadioButton* danish = nullptr;
+    PercentRadioButton* dutch = nullptr;
     PercentRadioButton* english = nullptr;
     PercentRadioButton* esperanto = nullptr;
     PercentRadioButton* french = nullptr;
@@ -68,34 +69,35 @@ public:
 
 LanguageDialog::Implementation::Implementation(QWidget* _parent)
     : arabic(new PercentRadioButton(_parent, 17))
-    , azerbaijani(new PercentRadioButton(_parent, 100))
-    , belarusian(new PercentRadioButton(_parent, 51))
-    , catalan(new PercentRadioButton(_parent, 88))
+    , azerbaijani(new PercentRadioButton(_parent, 99))
+    , belarusian(new PercentRadioButton(_parent, 47))
+    , catalan(new PercentRadioButton(_parent, 83))
     , chinese(new PercentRadioButton(_parent, 6))
-    , croatian(new PercentRadioButton(_parent, 71))
-    , danish(new PercentRadioButton(_parent, 92))
+    , croatian(new PercentRadioButton(_parent, 66))
+    , danish(new PercentRadioButton(_parent, 86))
+    , dutch(new PercentRadioButton(_parent, 91))
     , english(new PercentRadioButton(_parent, 100))
     , esperanto(new PercentRadioButton(_parent, 9))
-    , french(new PercentRadioButton(_parent, 67))
-    , galician(new PercentRadioButton(_parent, 71))
+    , french(new PercentRadioButton(_parent, 62))
+    , galician(new PercentRadioButton(_parent, 66))
     , german(new PercentRadioButton(_parent, 100))
-    , hebrew(new PercentRadioButton(_parent, 84))
-    , hindi(new PercentRadioButton(_parent, 37))
-    , hungarian(new PercentRadioButton(_parent, 36))
+    , hebrew(new PercentRadioButton(_parent, 79))
+    , hindi(new PercentRadioButton(_parent, 34))
+    , hungarian(new PercentRadioButton(_parent, 33))
     , indonesian(new PercentRadioButton(_parent, 10))
-    , italian(new PercentRadioButton(_parent, 29))
-    , korean(new PercentRadioButton(_parent, 78))
-    , persian(new PercentRadioButton(_parent, 65))
+    , italian(new PercentRadioButton(_parent, 27))
+    , korean(new PercentRadioButton(_parent, 73))
+    , persian(new PercentRadioButton(_parent, 61))
     , polish(new PercentRadioButton(_parent, 41))
     , portuguese(new PercentRadioButton(_parent, 13))
     , portugueseBrazil(new PercentRadioButton(_parent, 69))
     , romanian(new PercentRadioButton(_parent, 64))
     , russian(new PercentRadioButton(_parent, 100))
     , slovenian(new PercentRadioButton(_parent, 100))
-    , spanish(new PercentRadioButton(_parent, 91))
+    , spanish(new PercentRadioButton(_parent, 85))
     , tagalog(new PercentRadioButton(_parent, 20))
     , tamil(new PercentRadioButton(_parent, 46))
-    , turkish(new PercentRadioButton(_parent, 98))
+    , turkish(new PercentRadioButton(_parent, 93))
     , ukrainian(new PercentRadioButton(_parent, 100))
     , languageHowToAddLink(new Body1LinkLabel(_parent))
     , translationProgressLabel(new Body2Label(_parent))
@@ -116,6 +118,8 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     croatian->setProperty(kLanguageKey, QLocale::Croatian);
     danish->setText("Dansk");
     danish->setProperty(kLanguageKey, QLocale::Danish);
+    dutch->setText("Nederlands");
+    dutch->setProperty(kLanguageKey, QLocale::Dutch);
     english->setChecked(true);
     english->setText("English");
     english->setProperty(kLanguageKey, QLocale::English);
@@ -185,11 +189,11 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
 std::vector<PercentRadioButton*> LanguageDialog::Implementation::languages() const
 {
     return {
-        arabic,           azerbaijani, belarusian, catalan,   chinese, croatian, danish,
-        english,          esperanto,   french,     galician,  german,  hebrew,   hindi,
-        hungarian,        indonesian,  italian,    korean,    persian, polish,   portuguese,
-        portugueseBrazil, romanian,    russian,    slovenian, spanish, tagalog,  tamil,
-        turkish,          ukrainian,
+        arabic,     azerbaijani,      belarusian, catalan, chinese,   croatian, danish,
+        dutch,      english,          esperanto,  french,  galician,  german,   hebrew,
+        hindi,      hungarian,        indonesian, italian, korean,    persian,  polish,
+        portuguese, portugueseBrazil, romanian,   russian, slovenian, spanish,  tagalog,
+        tamil,      turkish,          ukrainian,
     };
 }
 
@@ -217,6 +221,7 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
         d->belarusian,
         d->catalan,
         d->danish,
+        d->dutch,
         d->german,
         d->english,
         d->spanish,
@@ -262,9 +267,10 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->indonesian, rowForSecondColumn++, 1);
     contentsLayout()->addWidget(d->italian, rowForSecondColumn++, 1);
     contentsLayout()->addWidget(d->hungarian, rowForSecondColumn++, 1);
+    contentsLayout()->addWidget(d->dutch, rowForSecondColumn++, 1);
     contentsLayout()->addWidget(d->polish, rowForSecondColumn++, 1);
-    contentsLayout()->addWidget(d->portuguese, rowForSecondColumn++, 1);
     int rowForThirdColumn = 0;
+    contentsLayout()->addWidget(d->portuguese, rowForThirdColumn++, 2);
     contentsLayout()->addWidget(d->portugueseBrazil, rowForThirdColumn++, 2);
     contentsLayout()->addWidget(d->romanian, rowForThirdColumn++, 2);
     contentsLayout()->addWidget(d->russian, rowForThirdColumn++, 2);
