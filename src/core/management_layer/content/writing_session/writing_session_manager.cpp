@@ -411,6 +411,11 @@ void WritingSessionManager::addKeyPressEvent(QKeyEvent* _event)
     }
 }
 
+QDateTime WritingSessionManager::sessionStatisticsLastSyncDateTime() const
+{
+    return {};
+}
+
 void WritingSessionManager::startSession(const QUuid& _projectUuid, const QString& _projectName)
 {
     d->sessionUuid = QUuid::createUuid();
@@ -455,7 +460,7 @@ void WritingSessionManager::showSprintPanel()
 }
 
 void WritingSessionManager::setSessionStatistics(
-    const QVector<Domain::SessionStatistics>& _sessionStatistics)
+    const QVector<Domain::SessionStatistics>& _sessionStatistics, bool _ableToShowDeatils)
 {
     qDebug("hehe");
 }

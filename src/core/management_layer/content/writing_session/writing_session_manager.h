@@ -32,6 +32,11 @@ public:
     void addKeyPressEvent(QKeyEvent* _event);
 
     /**
+     * @brief Дата и время последней синхронизации сессий
+     */
+    QDateTime sessionStatisticsLastSyncDateTime() const;
+
+    /**
      * @brief Запустить сессию работы с проектом
      */
     void startSession(const QUuid& _projectUuid, const QString& _projectName);
@@ -60,7 +65,8 @@ public:
     /**
      * @brief Задать статистика по сессиям полученную с сервера
      */
-    void setSessionStatistics(const QVector<Domain::SessionStatistics>& _sessionStatistics);
+    void setSessionStatistics(const QVector<Domain::SessionStatistics>& _sessionStatistics,
+                              bool _ableToShowDeatils);
 
 signals:
     /**

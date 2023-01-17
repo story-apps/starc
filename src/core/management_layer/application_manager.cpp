@@ -2340,7 +2340,8 @@ void ApplicationManager::initConnections()
     //
     connect(d->menuView, &Ui::MenuView::writingStatisticsPressed, this, [this] {
 #ifdef CLOUD_SERVICE_MANAGER
-        d->cloudServiceManager->askSessionStatistics();
+        d->cloudServiceManager->askSessionStatistics(
+            d->writingSessionManager->sessionStatisticsLastSyncDateTime());
 #endif
         d->showSessionStatistics();
     });
@@ -2628,7 +2629,6 @@ void ApplicationManager::initConnections()
                 }
                 d->cloudServiceManager->askNotifications();
                 d->cloudServiceManager->askProjects();
-                d->cloudServiceManager->askSessionStatistics();
 
                 //
                 // Если поймали подключение и сейчас работаем с облачным проектом
