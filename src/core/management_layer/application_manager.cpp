@@ -1519,10 +1519,9 @@ void ApplicationManager::Implementation::createRemoteProject(const QString& _pro
                       //
                       goToEditCurrentProject(_importFilePath);
                       //
-                      // ... подпишемся на документ структуры проекта
+                      // ... подписываться на документы структуры и параметров проекта нет
+                      //     необходимости, т.к. это будет осуществлено на этапе их создания
                       //
-                      cloudServiceManager->openStructure(_projectInfo.id);
-                      cloudServiceManager->openProjectInfo(_projectInfo.id);
                   });
 
     //
