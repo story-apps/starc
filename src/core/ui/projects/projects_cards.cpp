@@ -800,7 +800,7 @@ void ProjectsCards::setProjects(ManagementLayer::ProjectsModel* _projects)
                 //
                 notifyVisibleChange();
             });
-    connect(d->projects, &ManagementLayer::ProjectsModel::rowsRemoved, this,
+    connect(d->projects, &ManagementLayer::ProjectsModel::rowsAboutToBeRemoved, this,
             [this](const QModelIndex& _parent, int _first, int _last) {
                 Q_UNUSED(_parent)
 

@@ -2420,8 +2420,8 @@ void ApplicationManager::initConnections()
             });
     connect(d->projectsManager.data(), &ProjectsManager::closeCurrentProjectRequested, this,
             [this] {
-                d->saveChanges();
                 d->closeCurrentProject();
+                d->markChangesSaved(true);
                 d->updateWindowTitle();
             });
 
@@ -2734,6 +2734,8 @@ void ApplicationManager::initConnections()
             d->projectsManager.data(), [this](int _projectId) {
                 if (d->projectsManager->currentProject().id() == _projectId) {
                     d->closeCurrentProject();
+                    d->markChangesSaved(true);
+                    d->updateWindowTitle();
                     d->showProjects();
                 }
                 d->projectsManager->removeProject(_projectId);

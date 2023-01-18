@@ -300,9 +300,12 @@ QVariant Project::data(int _role) const
 
 bool operator==(const Project& _lhs, const Project& _rhs)
 {
-    return _lhs.type() == _rhs.type() && _lhs.path() == _rhs.path() && _lhs.uuid() == _rhs.uuid()
-        && _lhs.name() == _rhs.name() && _lhs.logline() == _rhs.logline()
-        && _lhs.lastEditTime() == _rhs.lastEditTime();
+    if (!_lhs.uuid().isNull() && !_rhs.uuid().isNull()) {
+        return _lhs.uuid() == _rhs.uuid();
+    }
+
+    return _lhs.type() == _rhs.type() && _lhs.path() == _rhs.path() && _lhs.name() == _rhs.name()
+        && _lhs.logline() == _rhs.logline() && _lhs.lastEditTime() == _rhs.lastEditTime();
 }
 
 
