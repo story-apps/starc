@@ -249,6 +249,7 @@ void ScreenplayTreatmentView::Implementation::reconfigureTemplate(bool _withMode
         }
 
         auto typeItem = new QStandardItem(toDisplayString(type));
+        typeItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         typeItem->setData(shortcutsManager.shortcut(type), Qt::WhatsThisRole);
         typeItem->setData(static_cast<int>(type), kTypeDataRole);
         paragraphTypesModel->appendRow(typeItem);
