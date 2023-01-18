@@ -493,6 +493,10 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             setApplicationTheme(_theme);
             emit applicationThemeChanged(_theme);
         });
+    connect(d->view, &Ui::SettingsView::customThemeHashPasted, this,
+            &SettingsManager::applicationCustomThemeColorsChanged);
+    connect(d->view, &Ui::SettingsView::customThemeHashPasted, this,
+            &SettingsManager::setApplicationCustomThemeColors);
     connect(d->view, &Ui::SettingsView::applicationScaleFactorChanged, this,
             &SettingsManager::setApplicationScaleFactor);
     connect(d->view, &Ui::SettingsView::applicationUseAutoSaveChanged, this,

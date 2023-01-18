@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ui/design_system/design_system.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 
 class QAbstractItemModel;
@@ -7,8 +8,6 @@ class HierarchicalModel;
 
 
 namespace Ui {
-
-enum class ApplicationTheme;
 
 /**
  * @brief Представление настроек
@@ -151,6 +150,7 @@ signals:
     // Уведомление об изменении параметров приложения
     //
     void applicationThemePressed(Ui::ApplicationTheme _theme);
+    void customThemeHashPasted(const DesignSystem::Color& _color);
     void applicationScaleFactorChanged(qreal _scaleFactor);
     void applicationUseAutoSaveChanged(bool _use);
     void applicationSaveBackupsChanged(bool _save);

@@ -5,6 +5,7 @@
 #include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/icon_button/icon_button.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QBoxLayout>
 #include <QClipboard>
@@ -315,17 +316,14 @@ ThemeSetupView::ThemeSetupView(QWidget* _parent)
                             notifyThemeChanged);
                 });
     }
-    auto showToolTip = [](const QString& _text) {
-        QToolTip::showText(QCursor::pos(), _text, nullptr, {}, 1600);
-    };
-    connect(d->copyHash, &IconButton::clicked, this, [showToolTip] {
+    connect(d->copyHash, &IconButton::clicked, this, [] {
         QGuiApplication::clipboard()->setText(Ui::DesignSystem::color().toString());
-        showToolTip(tr("HASH copied."));
+        UiHelper::showToolTip(tr("HASH copied."));
     });
-    connect(d->pasteHash, &IconButton::clicked, this, [this, showToolTip] {
+    connect(d->pasteHash, &IconButton::clicked, this, [this] {
         const auto hash = QGuiApplication::clipboard()->text();
         if (hash.length() != 84) {
-            showToolTip(tr("Pasted HASH has incorrect length"));
+            UiHelper::showToolTip(tr("Pasted HASH has incorrect length"));
             return;
         }
 
@@ -335,7 +333,7 @@ ThemeSetupView::ThemeSetupView(QWidget* _parent)
             const int length = 6;
             const QColor color = "#" + hash.mid(startIndex, length);
             if (!color.isValid()) {
-                showToolTip(tr("Pasted HASH has invalid colors"));
+                UiHelper::showToolTip(tr("Pasted HASH has invalid colors"));
                 return;
             }
 
@@ -344,12 +342,12 @@ ThemeSetupView::ThemeSetupView(QWidget* _parent)
         }
         for (const auto& color : std::as_const(colors)) {
             if (colors.count(color) > 6) {
-                showToolTip(tr("Pasted HASH has too many equal colors"));
+                UiHelper::showToolTip(tr("Pasted HASH has too many equal colors"));
                 return;
             }
         }
 
-        showToolTip(tr("HASH pasted."));
+        UiHelper::showToolTip(tr("HASH pasted."));
         emit customThemeColorsChanged(Ui::DesignSystem::Color(hash));
     });
     connect(d->cancelButton, &Button::clicked, this, [this] {

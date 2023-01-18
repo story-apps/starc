@@ -5,6 +5,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QAction>
 #include <QClipboard>
@@ -248,6 +249,8 @@ void ThemePreview::mousePressEvent(QMouseEvent* _event)
     if (_event->button() == Qt::LeftButton) {
         emit themePressed(d->theme);
     } else if (_event->button() == Qt::RightButton) {
+        QVector<QAction*> actions;
+
         auto copyAction = new QAction;
         copyAction->setText(tr("Copy theme HASH"));
         connect(copyAction, &QAction::triggered, this, [this] {
@@ -257,9 +260,45 @@ void ThemePreview::mousePressEvent(QMouseEvent* _event)
                                                           : Ui::DesignSystem::color(d->theme))
                     .toString());
         });
+        actions.append(copyAction);
+
+        if (d->theme == Ui::ApplicationTheme::Custom) {
+            auto pasteAction = new QAction;
+            pasteAction->setText(tr("Paste theme HASH"));
+            connect(pasteAction, &QAction::triggered, this, [this] {
+                const auto hash = QGuiApplication::clipboard()->text();
+                if (hash.length() != 84) {
+                    UiHelper::showToolTip(tr("Pasted HASH has incorrect length"));
+                    return;
+                }
+
+                QVector<QColor> colors;
+                int startIndex = 0;
+                for (int colorIndex = 0; colorIndex < 14; ++colorIndex) {
+                    const int length = 6;
+                    const QColor color = "#" + hash.mid(startIndex, length);
+                    if (!color.isValid()) {
+                        UiHelper::showToolTip(tr("Pasted HASH has invalid colors"));
+                        return;
+                    }
+
+                    startIndex += length;
+                    colors.append(color);
+                }
+                for (const auto& color : std::as_const(colors)) {
+                    if (colors.count(color) > 6) {
+                        UiHelper::showToolTip(tr("Pasted HASH has too many equal colors"));
+                        return;
+                    }
+                }
+
+                emit customThemeHashPasted(Ui::DesignSystem::Color(hash));
+            });
+            actions.append(pasteAction);
+        }
 
         auto menu = new ContextMenu(this);
-        menu->setActions({ copyAction });
+        menu->setActions(actions);
         menu->setBackgroundColor(Ui::DesignSystem::color().background());
         menu->setTextColor(Ui::DesignSystem::color().onBackground());
         connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);

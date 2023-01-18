@@ -6,6 +6,7 @@
 #include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
 
 #include <QScrollArea>
+#include <QToolTip>
 #include <QVBoxLayout>
 
 
@@ -58,4 +59,9 @@ QScrollArea* UiHelper::createScrollArea(QWidget* _parent)
     layout->addStretch();
 
     return content;
+}
+
+void UiHelper::showToolTip(const QString& _text)
+{
+    QToolTip::showText(QCursor::pos(), _text, nullptr, {}, 1600);
 }

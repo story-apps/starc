@@ -1,10 +1,7 @@
 #pragma once
 
+#include <ui/design_system/design_system.h>
 #include <ui/widgets/widget/widget.h>
-
-namespace Ui {
-enum class ApplicationTheme;
-}
 
 
 /**
@@ -33,6 +30,11 @@ signals:
      * @brief Пользователь кликнул на теме
      */
     void themePressed(Ui::ApplicationTheme _theme);
+
+    /**
+     * @brief Был вставлен хэш кастомной темы
+     */
+    void customThemeHashPasted(const Ui::DesignSystem::Color& _color);
 
 protected:
     /**

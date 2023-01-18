@@ -1299,6 +1299,8 @@ SettingsView::SettingsView(QWidget* _parent)
              d->customTheme,
          }) {
         connect(theme, &ThemePreview::themePressed, this, &SettingsView::applicationThemePressed);
+        connect(theme, &ThemePreview::customThemeHashPasted, this,
+                &SettingsView::customThemeHashPasted);
     }
     connect(d->scaleFactor, &Slider::valueChanged, this, [this](int _value) {
         emit applicationScaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
