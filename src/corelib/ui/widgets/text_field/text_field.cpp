@@ -165,10 +165,11 @@ void TextField::Implementation::reconfigure()
     //
     // Переконфигурируем цвет и размер лейблов
     //
-    labelColorAnimation.setEndValue(textDisabledColor);
-    if (q->text().isEmpty() && q->placeholderText().isEmpty()) {
+    if (q->text().isEmpty() && q->placeholderText().isEmpty() && !q->hasFocus()) {
+        labelColorAnimation.setEndValue(textDisabledColor);
         animateLabelToBottom();
     } else {
+        labelColorAnimation.setEndValue(Ui::DesignSystem::color().accent());
         animateLabelToTop();
     }
 
