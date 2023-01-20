@@ -1,5 +1,7 @@
 #include "onboarding_navigator.h"
 
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/settings/widgets/theme_preview.h>
@@ -41,6 +43,7 @@ public:
     void initUiPage();
     void initSignUpPage();
     void initAccountPage();
+    void initBackupsPage();
     void initSocialPage();
 
     /**
@@ -91,6 +94,13 @@ public:
     CheckBox* accountSubscription = nullptr;
     Button* accountContinueButton = nullptr;
     Domain::AccountInfo accountInfo;
+
+    Widget* backupsPage = nullptr;
+    ImageLabel* backupsLogo = nullptr;
+    H6Label* backupsTitle = nullptr;
+    Body2Label* backupsSubtitle = nullptr;
+    Subtitle1Label* backupsDescription = nullptr;
+    Button* backupsContinueButton = nullptr;
 
     Widget* socialPage = nullptr;
     ImageLabel* socialLogo = nullptr;
@@ -144,6 +154,13 @@ OnboardingNavigator::Implementation::Implementation(OnboardingNavigator* _q)
     , accountSubscription(new CheckBox(accountPage))
     , accountContinueButton(new Button(accountPage))
     //
+    , backupsPage(new Widget(q))
+    , backupsLogo(new ImageLabel(backupsPage))
+    , backupsTitle(new H6Label(backupsPage))
+    , backupsSubtitle(new Body2Label(backupsPage))
+    , backupsDescription(new Subtitle1Label(backupsPage))
+    , backupsContinueButton(new Button(backupsPage))
+    //
     , socialPage(new Widget(q))
     , socialLogo(new ImageLabel(socialPage))
     , socialTitle(new H6Label(socialPage))
@@ -159,6 +176,7 @@ OnboardingNavigator::Implementation::Implementation(OnboardingNavigator* _q)
     initUiPage();
     initSignUpPage();
     initAccountPage();
+    initBackupsPage();
     initSocialPage();
 }
 
@@ -320,6 +338,25 @@ void OnboardingNavigator::Implementation::initAccountPage()
     accountPage->setLayout(pageLayout);
 }
 
+void OnboardingNavigator::Implementation::initBackupsPage()
+{
+    backupsLogo->setImage(QPixmap(":/images/logo"));
+    backupsTitle->setAlignment(Qt::AlignCenter);
+    backupsSubtitle->setAlignment(Qt::AlignCenter);
+    backupsContinueButton->setContained(true);
+
+    auto pageLayout = new QVBoxLayout;
+    pageLayout->setContentsMargins({});
+    pageLayout->setSpacing(0);
+    pageLayout->addWidget(backupsLogo, 0, Qt::AlignHCenter);
+    pageLayout->addWidget(backupsTitle);
+    pageLayout->addWidget(backupsSubtitle);
+    pageLayout->addWidget(backupsDescription);
+    pageLayout->addStretch();
+    pageLayout->addWidget(backupsContinueButton);
+    backupsPage->setLayout(pageLayout);
+}
+
 void OnboardingNavigator::Implementation::initSocialPage()
 {
     socialLogo->setImage(QPixmap(":/images/logo"));
@@ -382,6 +419,7 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
     setCurrentWidget(d->uiPage);
     addWidget(d->signInPage);
     addWidget(d->accountPage);
+    addWidget(d->backupsPage);
     addWidget(d->socialPage);
 
 
@@ -452,7 +490,7 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
     });
     connect(d->signInResendCodeButton, &Button::clicked, d->signInSignInButton, &Button::click);
     connect(d->signInContinueButton, &Button::clicked, this,
-            [this] { setCurrentWidget(d->socialPage); });
+            [this] { setCurrentWidget(d->backupsPage); });
     //
     auto notifyAccountChanged = [this] {
         emit accountInfoChanged(d->accountInfo.email, d->accountInfo.name,
@@ -510,7 +548,7 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
         notifyAccountChanged();
     });
     connect(d->accountContinueButton, &Button::clicked, this,
-            [this] { setCurrentWidget(d->socialPage); });
+            [this] { setCurrentWidget(d->backupsPage); });
     //
     connect(d->socialTwitterButton, &IconButton::clicked, this,
             [] { QDesktopServices::openUrl(QUrl("https://twitter.com/starcapp_")); });
@@ -525,6 +563,9 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
                                            ? "https://www.facebook.com/starc.application.ru/"
                                            : "https://www.facebook.com/starc.application/"));
     });
+    connect(d->backupsContinueButton, &Button::clicked, this,
+            [this] { setCurrentWidget(d->socialPage); });
+    //
     connect(d->socialContinueButton, &Button::clicked, this,
             &OnboardingNavigator::finishOnboardingRequested);
 }
@@ -610,6 +651,19 @@ void OnboardingNavigator::updateTranslations()
     d->accountSubscription->setText(tr("I want to receive project's news"));
     d->accountContinueButton->setText(tr("Continue"));
 
+    d->backupsTitle->setText(tr("Before you get started"));
+    d->backupsSubtitle->setText(tr("Feel our care"));
+    d->backupsDescription->setText(
+        tr("You should know that Story Architect cares about the safety of your work, so the "
+           "app:\n\n"
+           "• automatically saves changes every three seconds when there is no activity\n\n"
+           "• automatically saves changes every three minutes when you are actively working\n\n"
+           "• automatically creates backup copies of local and cloud projects in the folder "
+           "\"%1\"\n\n"
+           "This will help to protect your creativity in any unforeseen situation.")
+            .arg(settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString()));
+    d->backupsContinueButton->setText(tr("Thanks I'll know"));
+
     d->socialTitle->setText(tr("Follow us on social media"));
     d->socialSubtitle->setText(tr("Let's unite to make the best app for writers"));
     d->socialDescription->setText(tr(
@@ -658,6 +712,12 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->accountAvatar,
              d->accountSubscription,
              //
+             d->backupsPage,
+             d->backupsLogo,
+             d->backupsTitle,
+             d->backupsSubtitle,
+             d->backupsDescription,
+             //
              d->socialPage,
              d->socialLogo,
              d->socialTitle,
@@ -686,6 +746,11 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
     d->accountTitle->setContentsMargins(margin / 2.0, DesignSystem::layout().px24(), margin / 2.0,
                                         DesignSystem::layout().px4());
     d->accountSubtitle->setContentsMargins(margin, 0, margin, 0);
+    d->backupsTitle->setContentsMargins(margin / 2.0, DesignSystem::layout().px24(), margin / 2.0,
+                                        DesignSystem::layout().px4());
+    d->backupsSubtitle->setContentsMargins(margin, 0, margin, 0);
+    d->backupsDescription->setContentsMargins(margin, DesignSystem::layout().px24(), margin,
+                                              DesignSystem::layout().px48());
     d->socialTitle->setContentsMargins(margin / 2.0, DesignSystem::layout().px24(), margin / 2.0,
                                        DesignSystem::layout().px4());
     d->socialSubtitle->setContentsMargins(margin, 0, margin, 0);
@@ -694,6 +759,7 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
 
     for (auto logo : {
              d->uiLogo,
+             d->backupsLogo,
              d->socialLogo,
          }) {
         logo->setFixedSize(DesignSystem::layout().px62(), DesignSystem::layout().px62());
@@ -734,6 +800,7 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->signInResendCodeButton,
              d->signInContinueButton,
              d->accountContinueButton,
+             d->backupsContinueButton,
              d->socialContinueButton,
          }) {
         containedButton->setBackgroundColor(DesignSystem::color().accent());
