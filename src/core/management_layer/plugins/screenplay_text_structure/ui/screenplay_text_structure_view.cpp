@@ -58,7 +58,7 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
 
     content->setContextMenuPolicy(Qt::CustomContextMenu);
     content->setDragDropEnabled(true);
-    content->setSelectionMode(QAbstractItemView::ContiguousSelection);
+    content->setSelectionMode(QAbstractItemView::ExtendedSelection);
     content->setItemDelegate(contentDelegate);
 
     new Shadow(Qt::TopEdge, content);
@@ -162,6 +162,11 @@ void ScreenplayTextStructureView::setEditingMode(ManagementLayer::DocumentEditin
     d->content->setDragDropEnabled(!readOnly);
 }
 
+void ScreenplayTextStructureView::setCurrentModelIndex(const QModelIndex& _mappedIndex)
+{
+    d->content->setCurrentIndex(_mappedIndex);
+}
+
 void ScreenplayTextStructureView::reconfigure()
 {
     const bool showSceneNumber
@@ -210,11 +215,6 @@ void ScreenplayTextStructureView::setModel(QAbstractItemModel* _model)
         connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsRemoved, this,
                 [this] { d->updateCounters(); });
     }
-}
-
-void ScreenplayTextStructureView::setCurrentModelIndex(const QModelIndex& _mappedIndex)
-{
-    d->content->setCurrentIndex(_mappedIndex);
 }
 
 QModelIndexList ScreenplayTextStructureView::selectedIndexes() const

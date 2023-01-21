@@ -42,7 +42,7 @@ StageplayTextStructureView::Implementation::Implementation(QWidget* _parent)
 
     content->setContextMenuPolicy(Qt::CustomContextMenu);
     content->setDragDropEnabled(true);
-    content->setSelectionMode(QAbstractItemView::ContiguousSelection);
+    content->setSelectionMode(QAbstractItemView::ExtendedSelection);
     content->setItemDelegate(contentDelegate);
 
     new Shadow(Qt::TopEdge, content);
@@ -95,6 +95,11 @@ void StageplayTextStructureView::setEditingMode(ManagementLayer::DocumentEditing
     d->content->setDragDropEnabled(!readOnly);
 }
 
+void StageplayTextStructureView::setCurrentModelIndex(const QModelIndex& _sourceIndex)
+{
+    d->content->setCurrentIndex(_sourceIndex);
+}
+
 void StageplayTextStructureView::reconfigure()
 {
     const bool showSceneNumber
@@ -124,13 +129,6 @@ void StageplayTextStructureView::setTitle(const QString& _title)
 void StageplayTextStructureView::setModel(QAbstractItemModel* _model)
 {
     d->content->setModel(_model);
-}
-
-void StageplayTextStructureView::setCurrentModelIndex(const QModelIndex& _sourceIndex,
-                                                      const QModelIndex& _mappedIndex)
-{
-    Q_UNUSED(_sourceIndex);
-    d->content->setCurrentIndex(_mappedIndex);
 }
 
 QModelIndexList StageplayTextStructureView::selectedIndexes() const

@@ -177,6 +177,11 @@ void AbstractModel::saveChanges()
         return;
     }
 
+    qDebug("\n\n");
+    qDebug(QByteArray::fromPercentEncoding(qUtf8Printable(undoPatch)));
+    qDebug("\n\n");
+    qDebug(QByteArray::fromPercentEncoding(qUtf8Printable(redoPatch)));
+    qDebug("\n\n");
     //
     // Уведомляем о смене контента только, если контент уже был установлен,
     // если содержимое документа было пустым (как правило это кейс после создания документа),

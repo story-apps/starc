@@ -38,7 +38,7 @@ SimpleTextStructureView::Implementation::Implementation(QWidget* _parent)
 
     content->setContextMenuPolicy(Qt::CustomContextMenu);
     content->setDragDropEnabled(true);
-    content->setSelectionMode(QAbstractItemView::ContiguousSelection);
+    content->setSelectionMode(QAbstractItemView::ExtendedSelection);
     content->setItemDelegate(contentDelegate);
 
     new Shadow(Qt::TopEdge, content);

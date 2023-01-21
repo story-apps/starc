@@ -137,9 +137,55 @@ void SimpleTextStructureManager::Implementation::updateContextMenu(const QModelI
     // ... для нескольких
     //
     else {
+        bool isSameColor = true;
+        std::optional<QColor> itemColor;
+        QVector<BusinessLayer::TextModelItem*> items;
+        for (const auto& index : _indexes) {
+            const auto itemIndex = structureModel->mapToSource(index);
+            const auto item = model->itemForIndex(itemIndex);
+            QColor color;
+            if (item->type() == BusinessLayer::TextModelItemType::Group) {
+                const auto sceneItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+                color = sceneItem->color();
+            }
+
+            if (!itemColor.has_value()) {
+                itemColor = color;
+            } else if (isSameColor && itemColor.value() != color) {
+                isSameColor = false;
+            }
+
+            items.append(item);
+        }
+
         //
-        // Цвета показываем только для папок и сцен
+        // ... цвет
         //
+
+        auto colorMenu = new QAction;
+        colorMenu->setText(tr("Color"));
+        actions.append(colorMenu);
+
+        auto colorAction = new QWidgetAction(colorMenu);
+        auto colorPicker = new ColorPicker;
+        colorAction->setDefaultWidget(colorPicker);
+        colorPicker->setColorCanBeDeselected(true);
+        colorPicker->setSelectedColor(isSameColor ? itemColor.value() : QColor());
+        colorPicker->setBackgroundColor(Ui::DesignSystem::color().background());
+        colorPicker->setTextColor(Ui::DesignSystem::color().onBackground());
+        connect(colorPicker, &ColorPicker::selectedColorChanged, view,
+                [this, itemColor, items](const QColor& _color) {
+                    for (auto item : items) {
+                        if (item->type() == BusinessLayer::TextModelItemType::Group) {
+                            const auto sceneItem
+                                = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+                            sceneItem->setColor(_color);
+                        }
+
+                        model->updateItem(item);
+                    }
+                    contextMenu->hideContextMenu();
+                });
     }
 
     contextMenu->setActions(actions);

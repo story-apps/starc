@@ -860,17 +860,27 @@ QMimeData* TextModel::mimeData(const QModelIndexList& _indexes) const
     }
 
     //
-    // Для того, чтобы запретить разрывать папки проверяем выделены ли элементы одного уровня
+    // Для того, чтобы запретить разрывать папки проверяем выделены ли элементы одного уровня и
+    // идущие подряд
     //
     bool itemsHaveSameParent = true;
+    bool itemsPlacedContinuously = true;
+    QModelIndex lastItemIndex;
     const QModelIndex& genericParent = correctedIndexes.first().parent();
     for (const auto& index : correctedIndexes) {
+        if (index != correctedIndexes.constFirst() && index.row() != lastItemIndex.row() + 1) {
+            itemsPlacedContinuously = false;
+            break;
+        }
+
         if (index.parent() != genericParent) {
             itemsHaveSameParent = false;
             break;
         }
+
+        lastItemIndex = index;
     }
-    if (!itemsHaveSameParent) {
+    if (!itemsHaveSameParent || !itemsPlacedContinuously) {
         return nullptr;
     }
 
