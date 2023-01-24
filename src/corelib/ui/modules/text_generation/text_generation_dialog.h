@@ -8,7 +8,7 @@ namespace Ui {
 /**
  * @brief Диалог генерации текста
  */
-class TextGenerationDialog : public AbstractDialog
+class CORE_LIBRARY_EXPORT TextGenerationDialog : public AbstractDialog
 {
     Q_OBJECT
 

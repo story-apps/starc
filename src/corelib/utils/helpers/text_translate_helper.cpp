@@ -17,7 +17,7 @@ TextTranslateHelper::TextTranslateHelper(QObject* _parent)
 }
 
 void TextTranslateHelper::translate(const QString& _text, const QString& _sourceLanguage,
-                                      const QString& _targetLanguage)
+                                    const QString& _targetLanguage)
 {
     if (_text.isEmpty() || _targetLanguage.isEmpty()) {
         return;
