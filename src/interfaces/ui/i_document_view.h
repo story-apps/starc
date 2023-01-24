@@ -71,6 +71,13 @@ public:
     virtual void setCurrentModelIndex(const QModelIndex& _index)
     {
     }
+
+    /**
+     * @brief Задать сгенерированный текст
+     */
+    virtual void setGeneratedText(const QString& _text)
+    {
+    }
 };
 
 } // namespace Ui

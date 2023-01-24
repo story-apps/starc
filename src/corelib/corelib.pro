@@ -247,6 +247,7 @@ SOURCES += \
     ui/modules/logline_generator/logline_generator_dialog.cpp \
     ui/modules/screenplay/screenplay_item_parameters_view.cpp \
     ui/modules/script_text_edit/script_text_edit.cpp \
+    ui/modules/text_generation/text_generation_dialog.cpp \
     ui/widgets/animations/click_animation.cpp \
     ui/widgets/app_bar/app_bar.cpp \
     ui/widgets/button/button.cpp \
@@ -339,6 +340,7 @@ SOURCES += \
     utils/helpers/shortcuts_helper.cpp \
     utils/helpers/string_helper.cpp \
     utils/helpers/text_helper.cpp \
+    utils/helpers/text_translate_helper.cpp \
     utils/helpers/time_helper.cpp \
     utils/helpers/ui_helper.cpp \
     utils/logging.cpp \
@@ -534,6 +536,7 @@ HEADERS += \
     ui/modules/logline_generator/logline_generator_dialog.h \
     ui/modules/screenplay/screenplay_item_parameters_view.h \
     ui/modules/script_text_edit/script_text_edit.h \
+    ui/modules/text_generation/text_generation_dialog.h \
     ui/widgets/animations/click_animation.h \
     ui/widgets/app_bar/app_bar.h \
     ui/widgets/button/button.h \
@@ -630,6 +633,7 @@ HEADERS += \
     utils/helpers/shortcuts_helper.h \
     utils/helpers/string_helper.h \
     utils/helpers/text_helper.h \
+    utils/helpers/text_translate_helper.h \
     utils/helpers/time_helper.h \
     utils/helpers/ui_helper.h \
     utils/logging.h \

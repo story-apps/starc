@@ -153,17 +153,6 @@ signals:
      */
     void activatePromocodeRequested(const QString& _promocode);
 
-
-    // =============================================
-    // LEGACY
-
-    /**
-     * @brief Изменилась возможность создания проектов в облаке
-     * @param _authorized - авторизован ли пользователь
-     * @param _ableToCreate - может ли пользователь создавать новые проекты (активна ли подписка)
-     */
-    void cloudProjectsCreationAvailabilityChanged(bool _authorized, bool _ableToCreate);
-
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

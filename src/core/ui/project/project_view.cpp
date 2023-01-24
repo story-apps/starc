@@ -163,20 +163,20 @@ void ProjectView::showNotImplementedPage()
     setCurrentWidget(d->notImplementedPage);
 }
 
+QWidget* ProjectView::currentEditor() const
+{
+    if (currentWidget() != d->documentEditorPage) {
+        return nullptr;
+    }
+
+    return d->documentEditor->currentWidget();
+}
+
 void ProjectView::showEditor(QWidget* _widget)
 {
     setFocus();
     d->documentEditor->setCurrentWidget(_widget);
     setCurrentWidget(d->documentEditorPage);
-}
-
-void ProjectView::focusEditor()
-{
-    if (currentWidget() != d->documentEditorPage) {
-        return;
-    }
-
-    d->documentEditor->currentWidget()->setFocus();
 }
 
 void ProjectView::setActive(bool _active)

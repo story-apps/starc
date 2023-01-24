@@ -1404,9 +1404,20 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     showBookmarks->setIconText(u8"\U000F0E16");
     connect(showBookmarks, &QAction::triggered, this, &ScreenplayTextEdit::showBookmarksRequested);
 
+    //
+    // Генерация текста сценария
+    //
+    auto generateAction = new QAction(this);
+    generateAction->setSeparator(true);
+    generateAction->setText(tr("Generate text"));
+    generateAction->setIconText(u8"\U000F0068");
+    connect(generateAction, &QAction::triggered, this,
+            [this] { emit generateTextRequested(textCursor().selectedText()); });
+
     auto actions = menu->actions().toVector();
     actions.prepend(splitAction);
     actions.prepend(bookmarkAction);
+    actions.append(generateAction);
     menu->setActions(actions);
 
     return menu;

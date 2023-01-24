@@ -170,6 +170,11 @@ public:
      */
     void clearCursors();
 
+    /**
+     * @brief Установить результат генерации текста
+     */
+    void setGeneratedText(const QString& _generatedText);
+
 signals:
     /**
      * @brief Запрос на отображение меню
@@ -242,6 +247,12 @@ signals:
      * @brief Изменилась позиция курсора
      */
     void cursorChanged(const QUuid& _documentUuid, const QByteArray& _cursorData);
+
+    /**
+     * @brief Запрос на генерацию текста с заданными настройками
+     */
+    void generateTextRequested(const QString& _title, const QString& _promptPrefix,
+                               const QString& _prompt);
 
 protected:
     /**

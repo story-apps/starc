@@ -51,6 +51,12 @@ signals:
      */
     void currentModelIndexChanged(const QModelIndex& _index);
 
+    /**
+     * @brief Запрос на генерацию текста с заданными настройками
+     */
+    void generateTextRequested(const QString& _title, const QString& _promptPrefix,
+                               const QString& _prompt);
+
 protected:
     /**
      * @brief Переопределяем, чтобы отслеживать событие смены языка

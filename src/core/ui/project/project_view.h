@@ -31,14 +31,14 @@ public:
     void showNotImplementedPage();
 
     /**
+     * @brief Текущий редактор
+     */
+    QWidget* currentEditor() const;
+
+    /**
      * @brief Отобразить заданный редактор
      */
     void showEditor(QWidget* _widget);
-
-    /**
-     * @brief Сфокусировать текущий редактор
-     */
-    void focusEditor();
 
     /**
      * @brief Активно ли представление в данный момент

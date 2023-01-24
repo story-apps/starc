@@ -32,6 +32,7 @@ public:
     void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
     void setCursors(const QVector<Domain::CursorInfo>& _cursors) override;
     void setCurrentModelIndex(const QModelIndex& _index) override;
+    void setGeneratedText(const QString& _text) override;
     /** @} */
 
     /**
@@ -100,6 +101,11 @@ signals:
      * @brief Изменилась позиция курсора
      */
     void cursorChanged(const QByteArray& _cursorData);
+
+    /**
+     * @brief Запрос на генерацию текста
+     */
+    void generateTextRequested(const QString& _text);
 
 protected:
     /**

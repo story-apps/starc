@@ -38,10 +38,12 @@
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/measurement_helper.h>
+#include <utils/helpers/text_helper.h>
 #include <utils/helpers/ui_helper.h>
 #include <utils/tools/debouncer.h>
 
 #include <QAction>
+#include <QCoreApplication>
 #include <QPointer>
 #include <QStandardItem>
 #include <QStandardItemModel>
@@ -801,6 +803,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             &ScreenplayTextView::removeBookmarkRequested);
     connect(d->textEdit, &ScreenplayTextEdit::showBookmarksRequested, d->showBookmarksAction,
             &QAction::toggle);
+    connect(d->textEdit, &ScreenplayTextEdit::generateTextRequested, this,
+            &ScreenplayTextView::generateTextRequested);
     //
     connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this](int _currentIndex) {
         switch (_currentIndex) {
@@ -1249,6 +1253,64 @@ void ScreenplayTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 void ScreenplayTextView::setCurrentModelIndex(const QModelIndex& _index)
 {
     d->textEdit->setCurrentModelIndex(_index);
+}
+
+void ScreenplayTextView::setGeneratedText(const QString& _text)
+{
+    //
+    // Переходим в конец текущей строки/на новую строку, чтобы помещать текст в новом блоке
+    //
+    if (!d->textEdit->textCursor().block().text().isEmpty()) {
+        d->textEdit->moveCursor(QTextCursor::EndOfBlock);
+        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
+    }
+
+    const auto lines = _text.split('\n', Qt::SkipEmptyParts);
+    bool nextBlockShoudBeDialogue = false;
+    for (const auto& line : lines) {
+        if (line == TextHelper::smartToUpper(line)) {
+            if (line.contains('.') && (line.contains('-') || line.contains("–"))) {
+                d->textEdit->setCurrentParagraphType(
+                    BusinessLayer::TextParagraphType::SceneHeading);
+                nextBlockShoudBeDialogue = false;
+            } else if (line.contains(':') || line == lines.constFirst()
+                       || line == lines.constLast()) {
+                d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Shot);
+                nextBlockShoudBeDialogue = false;
+            } else {
+                d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Character);
+                nextBlockShoudBeDialogue = true;
+            }
+        } else {
+            if (line.contains('(') && line.contains(')')) {
+                d->textEdit->setCurrentParagraphType(
+                    BusinessLayer::TextParagraphType::Parenthetical);
+                nextBlockShoudBeDialogue = true;
+            } else if (nextBlockShoudBeDialogue) {
+                d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Dialogue);
+                nextBlockShoudBeDialogue = false;
+            } else {
+                d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Action);
+                nextBlockShoudBeDialogue = false;
+            }
+        }
+
+        for (int index = 0; index < line.length(); ++index) {
+            QCoreApplication::postEvent(
+                d->textEdit,
+                new QKeyEvent(QEvent::KeyPress, Qt::Key_unknown, Qt::NoModifier, line[index]));
+            QCoreApplication::postEvent(
+                d->textEdit,
+                new QKeyEvent(QEvent::KeyRelease, Qt::Key_unknown, Qt::NoModifier, line[index]));
+            QCoreApplication::processEvents();
+        }
+
+        QCoreApplication::postEvent(
+            d->textEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
+        QCoreApplication::postEvent(
+            d->textEdit, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Return, Qt::NoModifier));
+        QCoreApplication::processEvents();
+    }
 }
 
 DictionariesView* ScreenplayTextView::dictionariesView() const

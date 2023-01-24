@@ -192,6 +192,14 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
         modelForView(view)->updateItem(textItem);
     });
     //
+    connect(view, &Ui::ScreenplayTextView::generateTextRequested, q, [this](const QString& _text) {
+        emit q->generateTextRequested(
+            tr("Generate screenplay text"),
+            tr("Start prompt from something like \"Write a screenplay about ...\", or \"Write a "
+               "short movie screenplay about ...\""),
+            _text);
+    });
+    //
     connect(
         view->dictionariesView(), &Ui::DictionariesView::typeChanged, q,
         [this, view](const QModelIndex& _index) { updateDictionaryItemsList(_index.row(), view); });

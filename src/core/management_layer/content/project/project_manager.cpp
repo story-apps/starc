@@ -3184,6 +3184,14 @@ void ProjectManager::clearCursors()
     d->collaboratorsCursors.clear();
 }
 
+void ProjectManager::setGeneratedText(const QString& _generatedText)
+{
+    if (auto view = dynamic_cast<Ui::IDocumentView*>(d->view.active->currentEditor());
+        view != nullptr) {
+        view->setGeneratedText(_generatedText);
+    }
+}
+
 QVector<Domain::DocumentChangeObject*> ProjectManager::unsyncedChanges(
     const QUuid& _documentUuid) const
 {
@@ -3511,6 +3519,12 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             connect(documentManager, SIGNAL(linkActivated(QUuid, QModelIndex)), this,
                     SLOT(activateLink(QUuid, QModelIndex)), Qt::UniqueConnection);
         }
+        if (documentManager->metaObject()->indexOfSignal(
+                "generateTextRequested(QString,QString,QString)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(generateTextRequested(QString, QString, QString)), this,
+                    SIGNAL(generateTextRequested(QString, QString, QString)), Qt::UniqueConnection);
+        }
     }
 
     //
@@ -3525,8 +3539,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Фокусируем представление
     //
-    QTimer::singleShot(d->view.active->animationDuration() * 1.3, this,
-                       [this] { d->view.active->focusEditor(); });
+    QTimer::singleShot(d->view.active->animationDuration() * 1.3, this, [this] {
+        if (auto editor = d->view.active->currentEditor(); editor != nullptr) {
+            editor->setFocus();
+        }
+    });
 
     Log::info("Plugin activated");
 }

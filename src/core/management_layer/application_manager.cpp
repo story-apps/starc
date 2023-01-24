@@ -16,7 +16,6 @@
 #include <cloud/cloud_service_manager.h>
 #endif
 
-#include <3rd_party/webloader/src/NetworkRequestLoader.h>
 #include <business_layer/model/abstract_model.h>
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
@@ -73,7 +72,7 @@
 #include <QWidget>
 #include <QtConcurrentRun>
 
-#include <NetworkRequest.h>
+#include <NetworkRequestLoader.h>>
 
 namespace ManagementLayer {
 
@@ -2994,6 +2993,18 @@ void ApplicationManager::initConnections()
             d->cloudServiceManager.data(), &CloudServiceManager::pushSessionStatistics);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::sessionStatisticsReceived,
             d->writingSessionManager.data(), &WritingSessionManager::setSessionStatistics);
+
+    //
+    // Генерация текста
+    //
+    connect(d->projectManager.data(), &ProjectManager::generateTextRequested,
+            d->cloudServiceManager.data(),
+            [this](const QString& _title, const QString& _promptPrefix, const QString& _prompt) {
+                d->cloudServiceManager->generateText(_title, _promptPrefix, _prompt,
+                                                     d->applicationView);
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textGenerated,
+            d->projectManager.data(), &ProjectManager::setGeneratedText);
 #endif
 }
 
