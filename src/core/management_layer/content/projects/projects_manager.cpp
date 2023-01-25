@@ -47,6 +47,9 @@ public:
 
     QString projectPosterPath(const QString& _projectPath);
 
+    QString newProjectPath(const QString& _projectName, const QString& _projectPath);
+    QString newProjectPath(const QString& _projectName);
+
 
     bool isConnected = false;
     bool isUserAuthorized = false;
@@ -94,6 +97,34 @@ QString ProjectsManager::Implementation::projectPosterPath(const QString& _proje
     const QString posterName
         = QCryptographicHash::hash(_projectPath.toUtf8(), QCryptographicHash::Md5).toHex();
     return posterDir + posterName;
+}
+
+QString ProjectsManager::Implementation::newProjectPath(const QString& _projectName,
+                                                        const QString& _projectPath)
+{
+    const auto projectPathPrefix
+        = _projectPath + "/" + PlatformHelper::systemSavebleFileName(_projectName);
+    auto projectPath = projectPathPrefix + Project::extension();
+    //
+    // Ситуация, что файл с таким названием уже существует крайне редка, хотя и
+    // гипотетически возможна
+    //
+    if (QFileInfo::exists(projectPath)) {
+        //
+        // ... в таком случае добавляем метку с датой и временем создания файла, чтобы имена
+        //     не пересекались
+        //
+        projectPath = projectPathPrefix + "_"
+            + QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss") + Project::extension();
+    }
+
+    return projectPath;
+}
+
+QString ProjectsManager::Implementation::newProjectPath(const QString& _projectName)
+{
+    return newProjectPath(_projectName,
+                          settingsValue(DataStorageLayer::kProjectSaveFolderKey).toString());
 }
 
 
@@ -267,10 +298,28 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
             //
             else {
                 //
+                // Если пользователь может изменть проект
+                //
+                if (_project.editingMode() == DocumentEditingMode::Edit) {
+                    auto saveLocallyAction = new QAction;
+                    saveLocallyAction->setIconText(u8"\U000F0162");
+                    saveLocallyAction->setText(tr("Save to local file"));
+                    connect(saveLocallyAction, &QAction::triggered, this, [this, _project] {
+                        QTimer::singleShot(500, this, [this, _project] {
+                            emit createLocalProjectRequested(_project.name(),
+                                                             d->newProjectPath(_project.name()),
+                                                             _project.path());
+                        });
+                    });
+                    actions.append(saveLocallyAction);
+                }
+
+                //
                 // Если пользователь владеет проектом
                 //
                 if (_project.isOwner()) {
                     auto removeProjectAction = new QAction;
+                    removeProjectAction->setSeparator(!actions.isEmpty());
                     removeProjectAction->setIconText(u8"\U000F01B4");
                     removeProjectAction->setText(tr("Remove project"));
                     connect(removeProjectAction, &QAction::triggered, this, [this, _project] {
@@ -307,6 +356,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                 //
                 else {
                     auto unsubscribeAction = new QAction;
+                    unsubscribeAction->setSeparator(!actions.isEmpty());
                     unsubscribeAction->setIconText(u8"\U000F01B4");
                     unsubscribeAction->setText(tr("Unsubscribe"));
                     connect(unsubscribeAction, &QAction::triggered, this, [this, _project] {
@@ -544,22 +594,8 @@ void ProjectsManager::createProject()
                          d->createProjectDialog->importFilePath());
 
         if (d->createProjectDialog->isLocal()) {
-            const auto projectPathPrefix = d->createProjectDialog->projectFolder() + "/"
-                + PlatformHelper::systemSavebleFileName(d->createProjectDialog->projectName());
-            auto projectPath = projectPathPrefix + Project::extension();
-            //
-            // Ситуация, что файл с таким названием уже существует крайне редка, хотя и
-            // гипотетически возможна
-            //
-            if (QFileInfo::exists(projectPath)) {
-                //
-                // ... в таком случае добавляем метку с датой и временем создания файла, чтобы имена
-                //     не пересекались
-                //
-                projectPath = projectPathPrefix + "_"
-                    + QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss")
-                    + Project::extension();
-            }
+            const auto projectPath = d->newProjectPath(d->createProjectDialog->projectName(),
+                                                       d->createProjectDialog->projectFolder());
             emit createLocalProjectRequested(d->createProjectDialog->projectName(), projectPath,
                                              d->createProjectDialog->importFilePath());
         } else {

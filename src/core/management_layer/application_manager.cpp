@@ -1450,6 +1450,21 @@ void ApplicationManager::Implementation::createLocalProject(const QString& _proj
     //
     // Если возможна запись в файл
     //
+    // ... если в новый проект должны быть импортированы данные другого проекта,
+    //     то просто создаём новый, как копию импортируемого файла
+    //
+    if (_importFilePath.endsWith(ExtensionHelper::starc())) {
+        //
+        // ... удаляем файл, который был создан при проверки возможности записи в файл
+        //
+        QFile::remove(QDir::toNativeSeparators(_projectPath));
+        //
+        // ... а затем копируем исходный файл
+        //
+        QFile::copy(QDir::toNativeSeparators(_importFilePath),
+                    QDir::toNativeSeparators(_projectPath));
+    }
+    //
     // ... создаём новую базу данных в файле и делаем её текущим проектом
     //
     projectsManager->setCurrentProject(_projectPath);
