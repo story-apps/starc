@@ -3186,8 +3186,15 @@ void ProjectManager::clearCursors()
 
 void ProjectManager::setGeneratedText(const QString& _generatedText)
 {
-    if (auto view = dynamic_cast<Ui::IDocumentView*>(d->view.active->currentEditor());
-        view != nullptr) {
+    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = plugin->view(d->view.activeModel);
+    } else {
+        view = plugin->secondaryView(d->view.activeModel);
+    }
+
+    if (view != nullptr) {
         view->setGeneratedText(_generatedText);
     }
 }
