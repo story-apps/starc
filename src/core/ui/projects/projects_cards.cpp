@@ -402,19 +402,12 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
 
     auto scene = projectsScene();
 
-    bool needToReorder = true;
-    if (m_decorationOpacityAnimation.state() == QVariantAnimation::Running) {
+    const bool notifyProjectPreseed
+        = m_decorationOpacityAnimation.state() == QVariantAnimation::Running;
+    if (notifyProjectPreseed) {
         m_decorationOpacityAnimation.pause();
         m_decorationOpacityAnimation.setEndValue(0.0);
         m_decorationOpacityAnimation.resume();
-
-        //
-        // Отложенно уведомляем о клике на карточке.
-        // NOTE: Важно, чтобы это событие выполнилось после завершения анимации, чтобы
-        // корректно обработать кейс, когда проект был удалён/переименован на компе, в
-        // результате чего, клик на карточке приведёт к её удалению
-        //
-        QMetaObject::invokeMethod(scene, [this, scene] { emit scene->projectPressed(m_project); });
     } else {
         m_decorationOpacityAnimation.setStartValue(0.15);
         m_decorationOpacityAnimation.setEndValue(0.0);
@@ -422,15 +415,19 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
     }
 
     //
-    // Возвращаем карточку на место
+    // Отложенно возвращаем карточку на место и уведомляем о клике на карточке.
+    // NOTE: Делаем отложенный вызов, чтобы mouseGrabber сцены освободился
+    // NOTE: Важно, чтобы это событие выполнилось после завершения анимации, чтобы
+    // корректно обработать кейс, когда проект был удалён/переименован на компе, в
+    // результате чего, клик на карточке приведёт к её удалению
     //
-    // Делаем отложенный вызов, чтобы mouseGrabber сцены освободился
-    //
-    if (needToReorder) {
-        QMetaObject::invokeMethod(
-            scene, [this, scene] { emit scene->reorderProjectCardRequested(this); },
-            Qt::QueuedConnection);
-    }
+    QMetaObject::invokeMethod(
+        scene,
+        [this, scene] {
+            emit scene->reorderProjectCardRequested(this);
+            emit scene->projectPressed(m_project);
+        },
+        Qt::QueuedConnection);
 }
 
 ProjectsScene* ProjectCard::projectsScene() const
