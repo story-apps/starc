@@ -602,10 +602,10 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     // Определить область прорисовки по краям от текста
     //
     const bool isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
-    const qreal pageLeft = 0;
-    const qreal pageRight
-        = viewport()->width() - verticalScrollBar()->width() - DesignSystem::layout().px8();
-    const qreal spaceBetweenSceneNumberAndText = DesignSystem::layout().px(10);
+    const qreal pageLeft = Ui::DesignSystem::card().shadowMargins().left();
+    const qreal pageRight = viewport()->width() - Ui::DesignSystem::card().shadowMargins().right()
+        - Ui::DesignSystem::layout().px8();
+    const qreal spaceBetweenSceneNumberAndText = DesignSystem::layout().px24();
     const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
         + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
     const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
@@ -763,14 +763,12 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             // Нарисуем цвета сцены
             //
             if (!lastSceneColors.isEmpty()) {
-                const QPointF topLeft(isLeftToRight
-                                          ? pageRight + leftDelta - DesignSystem::layout().px4()
-                                          : pageLeft + leftDelta,
+                const QPointF topLeft(isLeftToRight ? pageRight - DesignSystem::layout().px4()
+                                                    : pageLeft + leftDelta,
                                       lastSceneBlockBottom - verticalMargin);
-                const QPointF bottomRight(isLeftToRight
-                                              ? pageRight + leftDelta
-                                              : pageLeft + leftDelta + DesignSystem::layout().px4(),
-                                          cursorREnd.bottom() + verticalMargin);
+                const QPointF bottomRight(
+                    isLeftToRight ? pageRight : pageLeft + leftDelta + DesignSystem::layout().px4(),
+                    cursorREnd.bottom() + verticalMargin);
                 QRectF rect(topLeft, bottomRight);
                 for (const auto& color : std::as_const(lastSceneColors)) {
                     if (!color.isValid()) {
@@ -867,15 +865,11 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     //
                     // Определим область для отрисовки
                     //
-                    QPointF topLeft(isLeftToRight
-                                        ? (pageLeft + leftDelta
-                                           + Ui::DesignSystem::card().shadowMargins().left())
-                                        : (textRight + leftDelta),
+                    QPointF topLeft(isLeftToRight ? (pageLeft + leftDelta)
+                                                  : (textRight + leftDelta),
                                     cursorR.top());
-                    QPointF bottomRight(isLeftToRight
-                                            ? textLeft + leftDelta
-                                            : (pageRight + leftDelta
-                                               - Ui::DesignSystem::card().shadowMargins().right()),
+                    QPointF bottomRight(isLeftToRight ? (textLeft + leftDelta)
+                                                      : (pageRight + leftDelta),
                                         cursorR.bottom());
                     QRectF rect(topLeft, bottomRight);
                     const auto yDelta = Ui::DesignSystem::layout().px(32) - rect.height() / 2.0;
@@ -1084,8 +1078,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             // в зависимости от стороны
                             //
                             if (d->showSceneNumberOnLeft) {
-                                QPointF topLeft(isLeftToRight ? pageLeft + leftDelta
-                                                              : textRight + leftDelta,
+                                QPointF topLeft(isLeftToRight ? (pageLeft + leftDelta)
+                                                              : (textRight + leftDelta),
                                                 cursorR.top());
                                 QPointF bottomRight(isLeftToRight ? textLeft + leftDelta
                                                                   : pageRight + leftDelta,
@@ -1094,8 +1088,8 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                 painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, sceneNumber);
                             }
                             if (d->showSceneNumberOnRight) {
-                                QPointF topLeft(isLeftToRight ? textRight + leftDelta
-                                                              : pageLeft - leftDelta,
+                                QPointF topLeft(isLeftToRight ? (textRight + leftDelta)
+                                                              : (pageLeft - leftDelta),
                                                 cursorR.top());
                                 QPointF bottomRight(isLeftToRight ? pageRight
                                                                   : textLeft - leftDelta,
