@@ -21,11 +21,6 @@ mac {
 INCLUDEPATH += $$PWD/../../../..
 
 #
-# Подключаем дополнительные опции, чтобы в маке работал dynamic_cast в классах плагинов
-#
-mac:QMAKE_LFLAGS += -Wl,-flat_namespace,-U,_environ
-
-#
 # Подключаем библиотеку corelib
 #
 
