@@ -143,7 +143,7 @@ void UnsplashImagesView::Implementation::loadCurrentPage()
     const QUrl url(QString("https://starc.app/api/services/unsplash/search?text=%1&page=%2")
                        .arg(keywords)
                        .arg(currentImagesPage)
-                       .replace(' ', ','));
+                       .replace(' ', '-'));
     request->loadAsync(url);
     emit q->imagesLoadingProgressChanged(0.0);
 }

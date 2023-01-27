@@ -61,9 +61,9 @@ void CharacterImageCard::Implementation::generateCharacterPhoto()
     //
     QString keywords;
     if (characterGender == 0) {
-        keywords.append("male,");
+        keywords.append("male-");
     } else if (characterGender == 1) {
-        keywords.append("female,");
+        keywords.append("female-");
     }
     keywords.append("face");
     const auto url
