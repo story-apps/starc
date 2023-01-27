@@ -49,8 +49,8 @@ SubscriptionView::Implementation::Implementation(SubscriptionView* _q,
     , buttonsLayout(new QHBoxLayout)
 {
     avatarLabel->setIcon(notification.type == Domain::NotificationType::ProSubscriptionEnds
-                             ? u8"\U000F18BC"
-                             : u8"\U000F015F");
+                             ? u8"\U000F18BD"
+                             : u8"\U000F0163");
     avatarLabel->setDecorationVisible(true);
 
     buttonsLayout->setContentsMargins({});

@@ -2444,7 +2444,7 @@ void ApplicationManager::initConnections()
     connect(d->projectManager.data(), &ProjectManager::menuRequested, this,
             [this] { d->showMenu(); });
     connect(d->projectManager.data(), &ProjectManager::upgradeRequested, d->accountManager.data(),
-            &AccountManager::upgradeAccount);
+            &AccountManager::upgradeAccountToPro);
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
             [this] { d->markChangesSaved(false); });
     connect(d->projectManager.data(), &ProjectManager::projectUuidChanged,
@@ -3012,6 +3012,8 @@ void ApplicationManager::initConnections()
     //
     // Генерация текста
     //
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::buyCreditsRequested,
+            d->accountManager.data(), &AccountManager::buyCredits);
     connect(d->projectManager.data(), &ProjectManager::generateTextRequested,
             d->cloudServiceManager.data(),
             [this](const QString& _title, const QString& _promptPrefix, const QString& _prompt) {

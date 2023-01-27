@@ -19,14 +19,19 @@ public:
     /**
      * @brief Задать параметры диалога
      */
-    void setOptions(const QString& _title, int _availableGenerations, int _totalGenerations,
-                    const QString& _promptLabel, const QString& _prompt);
+    void setOptions(const QString& _title, int _credits, const QString& _promptLabel,
+                    const QString& _prompt);
 
 signals:
     /**
      * @brief Пользователь нажал кнопку генерировать с заданным запросом
      */
     void generatePressed(const QString& _prompt);
+
+    /**
+     * @brief Нажата кнопка покупки кредитов
+     */
+    void buyCreditsPressed();
 
 protected:
     /**

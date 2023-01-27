@@ -1273,8 +1273,10 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
                 d->textEdit->setCurrentParagraphType(
                     BusinessLayer::TextParagraphType::SceneHeading);
                 nextBlockShoudBeDialogue = false;
-            } else if (line.contains(':') || line == lines.constFirst()
-                       || line == lines.constLast()) {
+            } else if (line == lines.constFirst() || line == lines.constLast()) {
+                //
+                // TODO: добавить проверку на стандартные переходы и кадры
+                //
                 d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Shot);
                 nextBlockShoudBeDialogue = false;
             } else {
@@ -1282,7 +1284,7 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
                 nextBlockShoudBeDialogue = true;
             }
         } else {
-            if (line.contains('(') && line.contains(')')) {
+            if (line.startsWith('(') && line.endsWith(')')) {
                 d->textEdit->setCurrentParagraphType(
                     BusinessLayer::TextParagraphType::Parenthetical);
                 nextBlockShoudBeDialogue = true;

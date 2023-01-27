@@ -31,12 +31,14 @@ public:
      */
     void updateProSubtitleLabel();
     void updateTeamSubtitleLabel();
+    void updateCreditsSubtitleLabel();
 
 
     quint64 cloudStorageSize = 0;
     quint64 cloudStorageSizeUsed = 0;
     QDateTime proSubscriptionEnds;
     QDateTime teamSubscriptionEnds;
+    int creditsAvailable = 0;
 
     Tree* tree = nullptr;
 
@@ -57,6 +59,11 @@ public:
     Subtitle2Label* teamSubtitle = nullptr;
     Button* tryTeamButton = nullptr;
     Button* renewTeamSubscriptionButton = nullptr;
+
+    IconsMidLabel* creditsTitleIcon = nullptr;
+    ButtonLabel* creditsTitle = nullptr;
+    Subtitle2Label* creditsSubtitle = nullptr;
+    Button* buyCreditsButton = nullptr;
 
     Button* logoutButton = nullptr;
 
@@ -83,6 +90,11 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     , tryTeamButton(new Button(_parent))
     , renewTeamSubscriptionButton(new Button(_parent))
     //
+    , creditsTitleIcon(new IconsMidLabel(_parent))
+    , creditsTitle(new ButtonLabel(_parent))
+    , creditsSubtitle(new Subtitle2Label(_parent))
+    , buyCreditsButton(new Button(_parent))
+    //
     , logoutButton(new Button(_parent))
     , layout(new QGridLayout)
 {
@@ -101,6 +113,7 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
 
     proTitleIcon->setIcon(u8"\U000F18BC");
     teamTitleIcon->setIcon(u8"\U000F015F");
+    creditsTitleIcon->setIcon(u8"\U000F133C");
 
     logoutButton->setIcon(u8"\U000F0343");
 }
@@ -127,6 +140,13 @@ void AccountNavigator::Implementation::updateTeamSubtitleLabel()
         teamSubscriptionEnds.isNull()
             ? tr("Lifetime access")
             : tr("Active until %1").arg(teamSubscriptionEnds.toString("dd.MM.yyyy")));
+}
+
+void AccountNavigator::Implementation::updateCreditsSubtitleLabel()
+{
+    creditsSubtitle->setText(creditsAvailable > 0
+                                 ? tr("%n credits available", nullptr, creditsAvailable)
+                                 : tr("No credits available"));
 }
 
 
@@ -170,6 +190,17 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
     d->layout->addWidget(d->tryTeamButton, row++, 2);
     d->layout->addWidget(d->renewTeamSubscriptionButton, row++, 2);
     //
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(d->creditsTitleIcon);
+        layout->addWidget(d->creditsTitle, 1);
+        d->layout->addLayout(layout, row++, 2);
+    }
+    d->layout->addWidget(d->creditsSubtitle, row++, 2);
+    d->layout->addWidget(d->buyCreditsButton, row++, 2);
+    //
     d->layout->setRowStretch(row++, 1);
     d->layout->addWidget(d->logoutButton, row++, 1, 1, 2);
     setLayout(d->layout);
@@ -201,6 +232,7 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
     connect(d->tryTeamButton, &Button::clicked, this, &AccountNavigator::tryTeamForFreePressed);
     connect(d->renewTeamSubscriptionButton, &Button::clicked, this,
             &AccountNavigator::renewTeamPressed);
+    connect(d->buyCreditsButton, &Button::clicked, this, &AccountNavigator::buyCreditsPressed);
     connect(d->logoutButton, &Button::clicked, this, &AccountNavigator::logoutPressed);
 }
 
@@ -213,6 +245,7 @@ void AccountNavigator::setConnected(bool _connected)
     d->renewProSubscriptionButton->setEnabled(_connected);
     d->tryTeamButton->setEnabled(_connected);
     d->renewTeamSubscriptionButton->setEnabled(_connected);
+    d->buyCreditsButton->setEnabled(_connected);
 }
 
 void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
@@ -317,6 +350,12 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
         }
     }
+
+    //
+    // Также настроим информацию о доступных кредитах
+    //
+    d->creditsAvailable = _account.credits;
+    d->updateCreditsSubtitleLabel();
 }
 
 void AccountNavigator::updateTranslations()
@@ -336,6 +375,8 @@ void AccountNavigator::updateTranslations()
     d->updateTeamSubtitleLabel();
     d->tryTeamButton->setText(tr("Try for free"));
     d->renewTeamSubscriptionButton->setText(tr("Renew"));
+    d->creditsTitle->setText(tr("Credits for Ai tools"));
+    d->buyCreditsButton->setText(tr("Buy credits"));
     d->logoutButton->setText(tr("Logout"));
 }
 
@@ -354,6 +395,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto icon : {
              d->proTitleIcon,
              d->teamTitleIcon,
+             d->creditsTitleIcon,
          }) {
         icon->setBackgroundColor(Ui::DesignSystem::color().primary());
         icon->setTextColor(Ui::DesignSystem::color().onPrimary());
@@ -367,6 +409,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->freeTitle,
              d->proTitle,
              d->teamTitle,
+             d->creditsTitle,
          }) {
         title->setBackgroundColor(Ui::DesignSystem::color().primary());
         title->setTextColor(Ui::DesignSystem::color().onPrimary());
@@ -385,6 +428,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->proSubtitle,
              d->teamSpaceInfo,
              d->teamSubtitle,
+             d->creditsSubtitle,
          }) {
         subtitle->setBackgroundColor(Ui::DesignSystem::color().primary());
         subtitle->setTextColor(ColorHelper::transparent(Ui::DesignSystem::color().onPrimary(),
@@ -398,6 +442,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->renewProSubscriptionButton,
              d->tryTeamButton,
              d->renewTeamSubscriptionButton,
+             d->buyCreditsButton,
              d->logoutButton,
          }) {
         button->setBackgroundColor(Ui::DesignSystem::color().accent());

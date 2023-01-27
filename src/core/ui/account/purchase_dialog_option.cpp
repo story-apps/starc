@@ -75,7 +75,7 @@ QSize PurchaseDialogOption::sizeHint() const
 {
     return QSize(10,
                  contentsMargins().top()
-                     + (d->option.subscriptionType == Domain::SubscriptionType::ProLifetime
+                     + (d->option.duration == Domain::PaymentDuration::Lifetime
                             ? Ui::DesignSystem::layout().px(82)
                             : Ui::DesignSystem::layout().px(124))
                      + contentsMargins().bottom());
@@ -116,7 +116,7 @@ void PurchaseDialogOption::paintEvent(QPaintEvent* _event)
     const auto regularPrice = QString("$%1").arg(d->option.amount / 100.0, 0, 'f', 2);
     const auto totalPrice = QString("$%1").arg(d->option.totalAmount / 100.0, 0, 'f', 2);
     auto paymentMethodsText
-        = [](int _price) { return _price >= 2000 ? u8" \U000F019B \U000F0813" : u8" \U000F019B"; };
+        = [](int _price) { return _price >= 2000 ? u8" \U000F019B" : u8" \U000F019B"; };
 
     //
     // Лайфтайм версия рисуется на всю ширину
@@ -184,18 +184,19 @@ void PurchaseDialogOption::paintEvent(QPaintEvent* _event)
                                contentsMargins().top() + Ui::DesignSystem::layout().px16(),
                                contentsRect().width(), Ui::DesignSystem::layout().px24());
         const auto months = static_cast<int>(d->option.duration);
-        const auto isOneMonth = months == 1;
         //
         // ... заголовок
         //
         painter.setPen(textColor());
         painter.setFont(Ui::DesignSystem::font().body1());
-        painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter,
-                         tr("%1 for %2").arg(subscriptionTypeTitle, tr("%n month(s)", "", months)));
+        const auto title = d->option.type == Domain::PaymentType::Subscription
+            ? tr("%1 for %2").arg(subscriptionTypeTitle, tr("%n month(s)", "", months))
+            : tr("%1 credits").arg(d->option.credits);
+        painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, title);
         //
-        // ... месячная стоимость
+        // ... добавляем месячную стоимость
         //
-        if (!isOneMonth) {
+        if (d->option.type == Domain::PaymentType::Subscription && months > 1) {
             textRect.moveTop(textRect.bottom() + Ui::DesignSystem::layout().px4());
             textRect.setHeight(Ui::DesignSystem::layout().px16());
             painter.setPen(
@@ -238,7 +239,7 @@ void PurchaseDialogOption::paintEvent(QPaintEvent* _event)
         // ... если это была цена одного месяца, то нужно ещё немного сместить, т.к. строка месячной
         // стоимости не заполнялась
         //
-        if (isOneMonth) {
+        if (months == 1 || d->option.type == Domain::PaymentType::Credits) {
             textRect.moveTop(textRect.top() + Ui::DesignSystem::layout().px16()
                              + Ui::DesignSystem::layout().px4());
         }

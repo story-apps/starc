@@ -105,7 +105,7 @@ void PurchaseDialog::setPaymentOptions(const QVector<Domain::PaymentOption>& _pa
         auto optionWidget = new PurchaseDialogOption(option);
         optionWidget->setBackgroundColor(Ui::DesignSystem::color().background());
         optionWidget->setTextColor(Ui::DesignSystem::color().onBackground());
-        if (option.subscriptionType == Domain::SubscriptionType::ProLifetime) {
+        if (option.duration == Domain::PaymentDuration::Lifetime) {
             optionWidget->setContentsMargins(
                 Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px4(),
                 Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12());

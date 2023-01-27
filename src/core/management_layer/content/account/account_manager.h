@@ -54,7 +54,8 @@ public:
     /**
      * @brief Проапгрейдить учётную любым из способов
      */
-    void upgradeAccount();
+    void upgradeAccountToPro();
+    void upgradeAccountToTeam();
 
     /**
      * @brief Активировать бесплатный период для ПРО
@@ -76,6 +77,11 @@ public:
      * @brief Оплатить ПРО версию
      */
     void renewTeam();
+
+    /**
+     * @brief Докупить кредиты
+     */
+    void buyCredits();
 
     /**
      * @brief Показать сообщение активации промокода

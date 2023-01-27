@@ -108,6 +108,7 @@ void AccountManager::Implementation::initNavigatorConnections()
     connect(navigator, &Ui::AccountNavigator::tryTeamForFreePressed, q,
             &AccountManager::tryTeamForFree);
     connect(navigator, &Ui::AccountNavigator::renewTeamPressed, q, &AccountManager::renewTeam);
+    connect(navigator, &Ui::AccountNavigator::buyCreditsPressed, q, &AccountManager::buyCredits);
     connect(navigator, &Ui::AccountNavigator::logoutPressed, q, [this] {
         q->clearAccountInfo();
         emit q->logoutRequested();
@@ -311,7 +312,7 @@ void AccountManager::clearAccountInfo()
     d->accountInfo = {};
 }
 
-void AccountManager::upgradeAccount()
+void AccountManager::upgradeAccountToPro()
 {
     //
     // Если ещё не авторизован, то отправим на авторизацию
@@ -329,6 +330,27 @@ void AccountManager::upgradeAccount()
         }
 
         buyProLifetme();
+    }
+}
+
+void AccountManager::upgradeAccountToTeam()
+{
+    //
+    // Если ещё не авторизован, то отправим на авторизацию
+    //
+    if (d->accountInfo.email.isEmpty()) {
+        signIn();
+    }
+    //
+    // Иначе, покажем диалог с апгрейдом аккаунта
+    //
+    else {
+        const auto canBeUpdatedForFree = tryTeamForFree();
+        if (canBeUpdatedForFree) {
+            return;
+        }
+
+        renewTeam();
     }
 }
 
@@ -399,7 +421,7 @@ void AccountManager::renewPro()
     auto proPaymentOptions = d->accountInfo.paymentOptions;
     for (int index = proPaymentOptions.size() - 1; index >= 0; --index) {
         const auto& option = proPaymentOptions.at(index);
-        if (option.amount == 0
+        if (option.amount == 0 || option.type != Domain::PaymentType::Subscription
             || (option.subscriptionType != Domain::SubscriptionType::ProMonthly
                 && option.subscriptionType != Domain::SubscriptionType::ProLifetime)) {
             proPaymentOptions.removeAt(index);
@@ -463,9 +485,28 @@ void AccountManager::renewTeam()
     auto teamPaymentOptions = d->accountInfo.paymentOptions;
     for (int index = teamPaymentOptions.size() - 1; index >= 0; --index) {
         const auto& option = teamPaymentOptions.at(index);
-        if (option.amount == 0
+        if (option.amount == 0 || option.type != Domain::PaymentType::Subscription
             || (option.subscriptionType != Domain::SubscriptionType::TeamMonthly
                 && option.subscriptionType != Domain::SubscriptionType::TeamLifetime)) {
+            teamPaymentOptions.removeAt(index);
+        }
+    }
+    if (teamPaymentOptions.isEmpty()) {
+        return;
+    }
+
+    d->initPurchaseDialog();
+    d->purchaseDialog->setPaymentOptions(teamPaymentOptions);
+    d->purchaseDialog->selectOption(teamPaymentOptions.constLast());
+    d->purchaseDialog->showDialog();
+}
+
+void AccountManager::buyCredits()
+{
+    auto teamPaymentOptions = d->accountInfo.paymentOptions;
+    for (int index = teamPaymentOptions.size() - 1; index >= 0; --index) {
+        const auto& option = teamPaymentOptions.at(index);
+        if (option.type != Domain::PaymentType::Credits) {
             teamPaymentOptions.removeAt(index);
         }
     }

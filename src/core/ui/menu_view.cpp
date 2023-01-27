@@ -1,6 +1,7 @@
 #include "menu_view.h"
 
 #include "about_application_dialog.h"
+#include "notifications/credits_view.h"
 #include "notifications/release_view.h"
 #include "notifications/subscription_view.h"
 
@@ -457,6 +458,11 @@ void MenuView::setNotifications(const QVector<Domain::Notification>& _notificati
             connect(view, &SubscriptionView::renewProPressed, this, &MenuView::renewProPressed);
             connect(view, &SubscriptionView::renewTeamPressed, this, &MenuView::renewTeamPressed);
             notificationView = view;
+            break;
+        }
+
+        case Domain::NotificationType::CreditsAdded: {
+            notificationView = new CreditsView(this, notification);
             break;
         }
 

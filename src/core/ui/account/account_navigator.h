@@ -48,6 +48,11 @@ signals:
     void renewTeamPressed();
 
     /**
+     * @brief Пользователь нажал кнопку покупки кредитов
+     */
+    void buyCreditsPressed();
+
+    /**
      * @brief Пользователь хочет выйти из личного кабинета
      */
     void logoutPressed();

@@ -24,18 +24,30 @@ enum class NotificationType {
     //
     ProSubscriptionEnds,
     TeamSubscriptionEnds,
+    //
+    CreditsAdded,
 };
 
 /**
  * @brief Тип подписки
  */
 enum class SubscriptionType {
+    Undefined = -1,
     Free = 0,
     ProMonthly = 1000,
     ProLifetime = 1100,
     TeamMonthly = 2000,
     TeamLifetime = 2100,
     Corporate = 10000,
+};
+
+/**
+ * @brief Тип платежа
+ */
+enum class PaymentType {
+    Subscription = 0,
+    Credits = 1,
+    Merchandize = 1000,
 };
 
 /**
@@ -95,6 +107,20 @@ struct PaymentOption {
     int totalAmount = -1;
 
     /**
+     * @brief Тип платежа
+     */
+    Domain::PaymentType type;
+
+    /**
+     * @brief Флаг длительности подписки, для формирования текстов на клиенте
+     */
+    PaymentDuration duration;
+
+    //
+    // Параметры подписки
+    //
+
+    /**
      * @brief Тип подписки
      */
     Domain::SubscriptionType subscriptionType;
@@ -104,10 +130,14 @@ struct PaymentOption {
      */
     QDateTime subscriptionEnds;
 
+    //
+    // Параметры кредитов
+    //
+
     /**
-     * @brief Флаг длительности подписки, для формирования текстов на клиенте
+     * @brief Количество кредитов
      */
-    PaymentDuration duration;
+    int credits = 0;
 };
 
 /**
@@ -142,6 +172,7 @@ struct AccountInfo {
     quint64 cloudStorageSizeUsed = 0;
     quint64 cloudStorageSize = 0;
     QVector<SubscriptionInfo> subscriptions;
+    int credits = 0;
     QVector<PaymentOption> paymentOptions;
     QVector<SessionInfo> sessions;
 };

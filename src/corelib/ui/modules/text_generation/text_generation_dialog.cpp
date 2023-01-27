@@ -3,6 +3,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/label/link_label.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
 
@@ -19,23 +20,28 @@ public:
     Body1Label* promptHintLabel = nullptr;
     TextField* promptText = nullptr;
 
-    Body1Label* generationsInfoLabel = nullptr;
+    Body1Label* creditsInfoLabel = nullptr;
+    Body1LinkLabel* buyCreditsLabel = nullptr;
     Button* cancelButton = nullptr;
     Button* generateButton = nullptr;
     QHBoxLayout* buttonsLayout = nullptr;
+
+    int credits = 0;
 };
 
 TextGenerationDialog::Implementation::Implementation(QWidget* _parent)
     : promptHintLabel(new Body1Label(_parent))
     , promptText(new TextField(_parent))
-    , generationsInfoLabel(new Body1Label(_parent))
+    , creditsInfoLabel(new Body1Label(_parent))
+    , buyCreditsLabel(new Body1LinkLabel(_parent))
     , cancelButton(new Button(_parent))
     , generateButton(new Button(_parent))
     , buttonsLayout(new QHBoxLayout)
 {
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
-    buttonsLayout->addWidget(generationsInfoLabel);
+    buttonsLayout->addWidget(creditsInfoLabel);
+    buttonsLayout->addWidget(buyCreditsLabel);
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton);
     buttonsLayout->addWidget(generateButton);
@@ -64,6 +70,8 @@ TextGenerationDialog::TextGenerationDialog(QWidget* _parent)
         }
         d->promptText->setError({});
     });
+    connect(d->buyCreditsLabel, &Body1LinkLabel::clicked, this,
+            &TextGenerationDialog::buyCreditsPressed);
     connect(d->cancelButton, &Button::clicked, this, &TextGenerationDialog::hideDialog);
     connect(d->generateButton, &Button::clicked, this, [this] {
         if (d->promptText->text().isEmpty()) {
@@ -81,17 +89,21 @@ TextGenerationDialog::TextGenerationDialog(QWidget* _parent)
 
 TextGenerationDialog::~TextGenerationDialog() = default;
 
-void TextGenerationDialog::setOptions(const QString& _title, int _availableGenerations,
-                                      int _totalGenerations, const QString& _promptLabel,
-                                      const QString& _prompt)
+void TextGenerationDialog::setOptions(const QString& _title, int _credits,
+                                      const QString& _promptLabel, const QString& _prompt)
 {
-    Q_UNUSED(_totalGenerations)
+    d->credits = _credits;
 
     setTitle(_title);
-    d->generationsInfoLabel->setText(
-        tr("%n generation(s) available", 0, _availableGenerations).arg(_availableGenerations));
     d->promptHintLabel->setText(_promptLabel);
     d->promptText->setText(_prompt);
+
+    d->creditsInfoLabel->setText(d->credits > 0 ? tr("%n credit(s) available", 0, _credits)
+                                                : tr("No credits available"));
+    d->buyCreditsLabel->setVisible(d->credits == 0);
+    d->generateButton->setEnabled(d->credits > 0);
+
+    designSystemChangeEvent(nullptr);
 }
 
 QWidget* TextGenerationDialog::focusedWidgetAfterShow() const
@@ -107,6 +119,7 @@ QWidget* TextGenerationDialog::lastFocusableWidget() const
 void TextGenerationDialog::updateTranslations()
 {
     d->promptText->setLabel(tr("Prompt"));
+    d->buyCreditsLabel->setText(tr("purchase"));
     d->cancelButton->setText(tr("Cancel"));
     d->generateButton->setText(tr("Generate"));
 }
@@ -115,9 +128,10 @@ void TextGenerationDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    for (auto label : {
+    for (auto label : std::vector<Widget*>{
              d->promptHintLabel,
-             d->generationsInfoLabel,
+             d->creditsInfoLabel,
+             d->buyCreditsLabel,
          }) {
         label->setBackgroundColor(Ui::DesignSystem::color().background());
         label->setTextColor(Ui::DesignSystem::color().onBackground());
@@ -125,11 +139,15 @@ void TextGenerationDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
     d->promptHintLabel->setContentsMargins(Ui::DesignSystem::layout().px24(), 0,
                                            Ui::DesignSystem::layout().px16(),
                                            Ui::DesignSystem::layout().px24());
-    d->generationsInfoLabel->setTextColor(ColorHelper::transparent(
+    d->creditsInfoLabel->setTextColor(ColorHelper::transparent(
         Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::disabledTextOpacity()));
-    d->generationsInfoLabel->setContentsMargins(
+    d->creditsInfoLabel->setContentsMargins(
         Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px8(),
         Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px12());
+    d->buyCreditsLabel->setTextColor(Ui::DesignSystem::color().accent());
+    d->buyCreditsLabel->setContentsMargins(
+        Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px8(),
+        Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px12());
 
     for (auto textField : std::vector<TextField*>{
              d->promptText,
@@ -138,8 +156,10 @@ void TextGenerationDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     }
 
-    d->generateButton->setBackgroundColor(Ui::DesignSystem::color().accent());
-    d->generateButton->setTextColor(Ui::DesignSystem::color().accent());
+    d->generateButton->setBackgroundColor(d->credits == 0 ? Ui::DesignSystem::color().onBackground()
+                                                          : Ui::DesignSystem::color().accent());
+    d->generateButton->setTextColor(d->credits == 0 ? Ui::DesignSystem::color().onBackground()
+                                                    : Ui::DesignSystem::color().accent());
     d->cancelButton->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     d->cancelButton->setTextColor(Ui::DesignSystem::color().onBackground());
 
