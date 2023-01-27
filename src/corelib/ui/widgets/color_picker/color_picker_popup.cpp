@@ -6,6 +6,7 @@
 
 #include <QHBoxLayout>
 #include <QKeyEvent>
+#include <QScreen>
 #include <QVariantAnimation>
 
 class ColorPickerPopup::Implementation
@@ -101,10 +102,13 @@ bool ColorPickerPopup::isPopupShown() const
 
 void ColorPickerPopup::showPopup(QWidget* _parent, Qt::Alignment _alignment)
 {
-    if (_parent) {
-        d->watchedWidget = _parent;
-        _parent->installEventFilter(this);
+    Q_ASSERT(_parent);
+    if (_parent == nullptr) {
+        return;
     }
+
+    d->watchedWidget = _parent;
+    _parent->installEventFilter(this);
 
     d->isPopupShown = true;
 
@@ -120,13 +124,23 @@ void ColorPickerPopup::showPopup(QWidget* _parent, Qt::Alignment _alignment)
             = QPoint(_parent->rect().right() - width(),
                      _parent->rect().bottom() - Ui::DesignSystem::textField().margins().bottom());
     }
-    const auto pos = _parent->mapToGlobal(leftTop);
+    auto pos = _parent->mapToGlobal(leftTop);
+
+    //
+    // Если не влезает внизу экрана, то смещаем наверх от нижнего края
+    //
+    const auto sizeHint = this->sizeHint();
+    const auto screenGeometry = screen()->geometry();
+    if (pos.y() + sizeHint.height() > screenGeometry.bottom()) {
+        pos.setY(screenGeometry.bottom() - sizeHint.height());
+    }
+
     move(pos);
     show();
     setFocus();
 
     d->heightAnimation.setDirection(QVariantAnimation::Forward);
-    d->heightAnimation.setEndValue(sizeHint().height());
+    d->heightAnimation.setEndValue(sizeHint.height());
     d->heightAnimation.start();
 }
 

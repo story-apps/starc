@@ -470,9 +470,10 @@ void ContextMenu::showContextMenu(const QPoint& _pos)
     //
     if (endPosition.y() + sizeHint.height() > screenGeometry.bottom()) {
         position.setY(position.y() - this->height());
-        endPosition.setY(endPosition.y() - sizeHint.height()
-                         + Ui::DesignSystem::card().shadowMargins().top()
-                         + Ui::DesignSystem::card().shadowMargins().bottom());
+        endPosition.setY(std::max(endPosition.y() - sizeHint.height()
+                                      + Ui::DesignSystem::card().shadowMargins().top()
+                                      + Ui::DesignSystem::card().shadowMargins().bottom(),
+                                  static_cast<qreal>(screenGeometry.top())));
     }
     d->positionAnimation.setStartValue(position);
     d->positionAnimation.setEndValue(endPosition);

@@ -166,13 +166,13 @@ void Completer::showCompleter(const QRect& _rect)
     //
     const auto parentWidget = qobject_cast<QWidget*>(parent());
     Q_ASSERT(parentWidget);
-    if (parentWidget->mapToGlobal(position).y() + finalHeight > screenGeometry.bottom()) {
-        popup()->move(parentWidget->mapFromGlobal(parentWidget->mapToGlobal(position)
-                                                  - QPoint(0, finalHeight))
-                      - QPoint(0, _rect.height()));
-    } else {
-        popup()->move(_rect.topLeft());
+    if (const auto positionGlobal = parentWidget->mapToGlobal(position);
+        positionGlobal.y() + finalHeight > screenGeometry.bottom()) {
+        position = positionGlobal;
+        position.setY(std::max(position.y() - finalHeight - _rect.height(), screenGeometry.top()));
+        position = parentWidget->mapFromGlobal(position);
     }
+    popup()->move(position);
 
     //        //
     //        // Анимируем размер попапа
