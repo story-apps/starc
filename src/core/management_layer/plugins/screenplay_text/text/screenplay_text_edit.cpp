@@ -817,7 +817,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     if (cursor.inTable() && cursor.inFirstColumn()) {
                         QPointF topLeft(
                             isLeftToRight ? textLeft + leftDelta - spaceBetweenSceneNumberAndText
-                                    + DesignSystem::layout().px4()
+                                    + DesignSystem::layout().px16()
                                           : textRight + leftDelta - spaceBetweenSceneNumberAndText,
                             cursorR.top());
                         const QPointF bottomRight(topLeft.x() + DesignSystem::layout().px4(),
@@ -825,7 +825,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         rect = QRectF(topLeft, bottomRight);
                     } else if (cursor.inTable() && !cursor.inFirstColumn()) {
                         QPointF topLeft(isLeftToRight ? splitterX - spaceBetweenSceneNumberAndText
-                                                + DesignSystem::layout().px4()
+                                                + DesignSystem::layout().px16()
                                                       : textRight + leftDelta
                                                 - spaceBetweenSceneNumberAndText,
                                         cursorR.top());
@@ -834,8 +834,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         rect = QRectF(topLeft, bottomRight);
                     } else {
                         QPointF topLeft(
-                            isLeftToRight ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                    + DesignSystem::layout().px4()
+                            isLeftToRight ? textLeft + leftDelta + DesignSystem::layout().px8()
                                           : textRight + leftDelta - spaceBetweenSceneNumberAndText,
                             cursorR.top());
                         const QPointF bottomRight(topLeft.x() + DesignSystem::layout().px4(),
