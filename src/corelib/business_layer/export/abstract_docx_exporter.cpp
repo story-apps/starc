@@ -443,8 +443,8 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                 formatRangeText = TextHelper::smartToUpper(formatRangeText);
             }
             documentXml.append(
-                QString(
-                    "<w:r><w:rPr><w:rFonts w:ascii=\"%1\" w:hAnsi=\"%1\"/><w:szCs w:val=\"%2\"/>")
+                QString("<w:r><w:rPr><w:rFonts w:ascii=\"%1\" w:hAnsi=\"%1\"/>"
+                        "<w:sz w:val=\"%2\"/><w:szCs w:val=\"%2\"/>")
                     .arg(range.format.font().family())
                     .arg(MeasurementHelper::pxToPt(range.format.font().pixelSize()) * 2));
             if (range.format.font().bold()) {
