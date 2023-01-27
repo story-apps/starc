@@ -423,9 +423,11 @@ void ProjectCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
     //
     QMetaObject::invokeMethod(
         scene,
-        [this, scene] {
+        [this, scene, notifyProjectPreseed] {
             emit scene->reorderProjectCardRequested(this);
-            emit scene->projectPressed(m_project);
+            if (notifyProjectPreseed) {
+                emit scene->projectPressed(m_project);
+            }
         },
         Qt::QueuedConnection);
 }
