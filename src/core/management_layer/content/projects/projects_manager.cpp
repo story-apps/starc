@@ -305,11 +305,8 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                     saveLocallyAction->setIconText(u8"\U000F0162");
                     saveLocallyAction->setText(tr("Save to local file"));
                     connect(saveLocallyAction, &QAction::triggered, this, [this, _project] {
-                        QTimer::singleShot(500, this, [this, _project] {
-                            emit createLocalProjectRequested(_project.name(),
-                                                             d->newProjectPath(_project.name()),
-                                                             _project.path());
-                        });
+                        emit createLocalProjectRequested(
+                            _project.name(), d->newProjectPath(_project.name()), _project.path());
                     });
                     actions.append(saveLocallyAction);
                 }

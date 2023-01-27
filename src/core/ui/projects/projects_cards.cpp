@@ -809,6 +809,10 @@ void ProjectsCards::setProjects(ManagementLayer::ProjectsModel* _projects)
                 for (int row = _last; row >= _first; --row) {
                     auto projectCard = d->projectsCards.takeAt(row);
                     d->scene->removeItem(projectCard);
+                    if (!d->projectsCardsAnimations[projectCard].isNull()) {
+                        d->projectsCardsAnimations[projectCard]->stop();
+                        d->projectsCardsAnimations[projectCard]->deleteLater();
+                    }
                     d->projectsCardsAnimations.remove(projectCard);
                     delete projectCard;
                     projectCard = nullptr;
