@@ -1508,7 +1508,7 @@
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="955"/>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="887"/>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="889"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="945"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="939"/>
         <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="948"/>
         <source>END OF</source>
         <translation type="unfinished"></translation>
@@ -1525,38 +1525,38 @@
 <context>
     <name>ManagementLayer::AccountManager</name>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="358"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="380"/>
         <source>Try PRO version for free</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="359"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="381"/>
         <source>You can try all the features of the PRO version during 30 days for free. After trial period, you can continue to use the PRO version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="362"/>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="445"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="384"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="467"/>
         <source>Continue with FREE version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="441"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="463"/>
         <source>Try TEAM version for free</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="442"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="464"/>
         <source>You can try all the features of the TEAM version during 30 days for free. After trial period, you can continue to use the TEAM version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="446"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="468"/>
         <source>Activate TEAM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="363"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="385"/>
         <source>Activate PRO</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1845,12 +1845,12 @@
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="366"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="381"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="375"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="390"/>
         <source>PRO version subscription activated for %n month(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1858,12 +1858,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="380"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="395"/>
         <source>PRO version lifetime access granted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="384"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="399"/>
         <source>TEAM version subscription activated for %n month(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1871,32 +1871,32 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="389"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="404"/>
         <source>TEAM version lifetime access granted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="574"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="589"/>
         <source>Promocode is incorrect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="578"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="593"/>
         <source>Promocode expired</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="582"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="597"/>
         <source>Maximum number of promocode activations done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="586"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="601"/>
         <source>Promocode already used</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="656"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="672"/>
         <source>Generating text</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2345,8 +2345,8 @@
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="237"/>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="269"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="331"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="368"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="328"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="365"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2357,18 +2357,18 @@
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="262"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="324"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="321"/>
         <source>Remove project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="330"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="327"/>
         <source>Do you really want to remove this project?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="270"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="332"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="329"/>
         <source>Yes, remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2414,22 +2414,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="361"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="358"/>
         <source>Unsubscribe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="367"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="364"/>
         <source>Do you really want to unsubscribe from this project?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="369"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="366"/>
         <source>Yes, unsubscribe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="626"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="623"/>
         <source>Choose the file to open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3187,72 +3187,95 @@
 <context>
     <name>Ui::AccountNavigator</name>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="112"/>
-        <location filename="../ui/account/account_navigator.cpp" line="128"/>
-        <location filename="../ui/account/account_navigator.cpp" line="329"/>
+        <location filename="../ui/account/account_navigator.cpp" line="125"/>
+        <location filename="../ui/account/account_navigator.cpp" line="141"/>
+        <location filename="../ui/account/account_navigator.cpp" line="368"/>
         <source>Lifetime access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="113"/>
-        <location filename="../ui/account/account_navigator.cpp" line="129"/>
+        <location filename="../ui/account/account_navigator.cpp" line="126"/>
+        <location filename="../ui/account/account_navigator.cpp" line="142"/>
         <source>Active until %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <location filename="../ui/account/account_navigator.cpp" line="148"/>
+        <source>%n credits available</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="325"/>
+        <location filename="../ui/account/account_navigator.cpp" line="149"/>
+        <source>No credits available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_navigator.cpp" line="364"/>
         <source>Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="326"/>
+        <location filename="../ui/account/account_navigator.cpp" line="365"/>
         <source>Subscription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="327"/>
+        <location filename="../ui/account/account_navigator.cpp" line="366"/>
         <source>Sessions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="328"/>
+        <location filename="../ui/account/account_navigator.cpp" line="367"/>
         <source>FREE version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="330"/>
+        <location filename="../ui/account/account_navigator.cpp" line="369"/>
         <source>PRO version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="332"/>
-        <location filename="../ui/account/account_navigator.cpp" line="337"/>
+        <location filename="../ui/account/account_navigator.cpp" line="371"/>
+        <location filename="../ui/account/account_navigator.cpp" line="376"/>
         <source>Try for free</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="334"/>
-        <location filename="../ui/account/account_navigator.cpp" line="338"/>
+        <location filename="../ui/account/account_navigator.cpp" line="373"/>
+        <location filename="../ui/account/account_navigator.cpp" line="377"/>
         <source>Renew</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="333"/>
+        <location filename="../ui/account/account_navigator.cpp" line="372"/>
         <source>Buy lifetime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="122"/>
+        <location filename="../ui/account/account_navigator.cpp" line="135"/>
         <source>Used %1 GB from %2 GB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="335"/>
+        <location filename="../ui/account/account_navigator.cpp" line="374"/>
         <source>TEAM version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="339"/>
+        <location filename="../ui/account/account_navigator.cpp" line="378"/>
+        <source>Credits for Ai tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_navigator.cpp" line="379"/>
+        <source>Buy credits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_navigator.cpp" line="380"/>
         <source>Logout</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5911,6 +5934,22 @@
     </message>
 </context>
 <context>
+    <name>Ui::CreditsView</name>
+    <message>
+        <location filename="../ui/notifications/credits_view.cpp" line="57"/>
+        <source>Credits added</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/notifications/credits_view.cpp" line="58"/>
+        <source>%n credits were added to your balance.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+</context>
+<context>
     <name>Ui::DictionariesView</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/ui/dictionaries_view.cpp" line="147"/>
@@ -6764,111 +6803,111 @@
 <context>
     <name>Ui::MenuView</name>
     <message>
-        <location filename="../ui/menu_view.cpp" line="321"/>
-        <location filename="../ui/menu_view.cpp" line="542"/>
+        <location filename="../ui/menu_view.cpp" line="322"/>
+        <location filename="../ui/menu_view.cpp" line="548"/>
         <source>Hide developers version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="322"/>
-        <location filename="../ui/menu_view.cpp" line="543"/>
+        <location filename="../ui/menu_view.cpp" line="323"/>
+        <location filename="../ui/menu_view.cpp" line="549"/>
         <source>Show developers version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="397"/>
-        <location filename="../ui/menu_view.cpp" line="516"/>
+        <location filename="../ui/menu_view.cpp" line="398"/>
+        <location filename="../ui/menu_view.cpp" line="522"/>
         <source>All changes saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="397"/>
-        <location filename="../ui/menu_view.cpp" line="515"/>
+        <location filename="../ui/menu_view.cpp" line="398"/>
+        <location filename="../ui/menu_view.cpp" line="521"/>
         <source>Save changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="511"/>
+        <location filename="../ui/menu_view.cpp" line="517"/>
         <source>Sign in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="512"/>
+        <location filename="../ui/menu_view.cpp" line="518"/>
         <source>Stories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="513"/>
+        <location filename="../ui/menu_view.cpp" line="519"/>
         <source>Create story</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="514"/>
+        <location filename="../ui/menu_view.cpp" line="520"/>
         <source>Open story</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="519"/>
+        <location filename="../ui/menu_view.cpp" line="525"/>
         <source>Save current story as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="520"/>
+        <location filename="../ui/menu_view.cpp" line="526"/>
         <source>Import...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="522"/>
+        <location filename="../ui/menu_view.cpp" line="528"/>
         <source>Export current document...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="525"/>
+        <location filename="../ui/menu_view.cpp" line="531"/>
         <source>Toggle full screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="528"/>
+        <location filename="../ui/menu_view.cpp" line="534"/>
         <source>Application settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="530"/>
+        <location filename="../ui/menu_view.cpp" line="536"/>
         <source>Show writing statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="531"/>
+        <location filename="../ui/menu_view.cpp" line="537"/>
         <source>Show writing sprint timer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="532"/>
+        <location filename="../ui/menu_view.cpp" line="538"/>
         <source>Show notifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="535"/>
+        <location filename="../ui/menu_view.cpp" line="541"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="536"/>
+        <location filename="../ui/menu_view.cpp" line="542"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="538"/>
+        <location filename="../ui/menu_view.cpp" line="544"/>
         <source>Back to main menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="539"/>
+        <location filename="../ui/menu_view.cpp" line="545"/>
         <source>Notifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="540"/>
+        <location filename="../ui/menu_view.cpp" line="546"/>
         <source>Notifications preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7401,12 +7440,12 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="194"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="193"/>
         <source>%1 for %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="194"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="193"/>
         <source>%n month(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -7414,7 +7453,12 @@ Discuss everything with fellow community of writers, share your work in progress
         </translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="206"/>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="194"/>
+        <source>%1 credits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_dialog_option.cpp" line="207"/>
         <source>$%1 per month</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8694,42 +8738,42 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1349"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1343"/>
         <source>Merge paragraph</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1352"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1346"/>
         <source>Split paragraph</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1380"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1374"/>
         <source>Bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1384"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1378"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1390"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1384"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1396"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1390"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1403"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1397"/>
         <source>Show/hide list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1412"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1406"/>
         <source>Generate text</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8939,27 +8983,27 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1559"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1561"/>
         <source>Formatting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1560"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1562"/>
         <source>Scene parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1561"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1563"/>
         <source>Comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1562"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1564"/>
         <source>Bookmarks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1563"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1565"/>
         <source>Dictionaries</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11149,35 +11193,45 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::TextGenerationDialog</name>
     <message>
-        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="62"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="68"/>
         <source>Prompt is too big, shorten it to 50 words</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="70"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="78"/>
         <source>Please, enter prompt for text generation</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="92"/>
-        <source>%n generation(s) available</source>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="101"/>
+        <source>%n credit(s) available</source>
         <translation type="unfinished">
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="109"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="102"/>
+        <source>No credits available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="121"/>
         <source>Prompt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="110"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="122"/>
+        <source>purchase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="123"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="111"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="124"/>
         <source>Generate</source>
         <translation type="unfinished"></translation>
     </message>
