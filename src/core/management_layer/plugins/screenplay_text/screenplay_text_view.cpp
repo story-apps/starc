@@ -34,6 +34,7 @@
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/tab_bar/tab_bar.h>
+#include <ui/widgets/task_bar/task_bar.h>
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <utils/helpers/color_helper.h>
@@ -44,7 +45,9 @@
 
 #include <QAction>
 #include <QCoreApplication>
+#include <QElapsedTimer>
 #include <QPointer>
+#include <QRandomGenerator>
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QTimer>
@@ -1257,6 +1260,15 @@ void ScreenplayTextView::setCurrentModelIndex(const QModelIndex& _index)
 
 void ScreenplayTextView::setGeneratedText(const QString& _text)
 {
+    const QLatin1String textWritingTaskKey("text-writing-task");
+    TaskBar::addTask(textWritingTaskKey);
+    TaskBar::setTaskTitle(textWritingTaskKey, tr("Writing text"));
+
+    //
+    // Отключим отображение всплывающих подсказок
+    //
+    d->textEdit->setUseCompleter(false);
+
     //
     // Переходим в конец текущей строки/на новую строку, чтобы помещать текст в новом блоке
     //
@@ -1264,6 +1276,19 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
         d->textEdit->moveCursor(QTextCursor::EndOfBlock);
         d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
     }
+
+    QElapsedTimer timer;
+    int progress = 0;
+    auto waitForNextOperation = [&timer, &progress, maximum = _text.length(), textWritingTaskKey] {
+        timer.restart();
+        const auto delay = QRandomGenerator::global()->bounded(10, 60);
+        while (!timer.hasExpired(delay)) {
+            QCoreApplication::processEvents();
+        }
+
+        ++progress;
+        TaskBar::setTaskProgress(textWritingTaskKey, progress * 100 / static_cast<qreal>(maximum));
+    };
 
     const auto lines = _text.split('\n', Qt::SkipEmptyParts);
     bool nextBlockShoudBeDialogue = false;
@@ -1273,7 +1298,8 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
                 d->textEdit->setCurrentParagraphType(
                     BusinessLayer::TextParagraphType::SceneHeading);
                 nextBlockShoudBeDialogue = false;
-            } else if (line == lines.constFirst() || line == lines.constLast()) {
+            } else if (line == lines.constFirst() || line == lines.constLast()
+                       || line.trimmed().endsWith(':')) {
                 //
                 // TODO: добавить проверку на стандартные переходы и кадры
                 //
@@ -1304,15 +1330,22 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
             QCoreApplication::postEvent(
                 d->textEdit,
                 new QKeyEvent(QEvent::KeyRelease, Qt::Key_unknown, Qt::NoModifier, line[index]));
-            QCoreApplication::processEvents();
+            waitForNextOperation();
         }
 
         QCoreApplication::postEvent(
             d->textEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
         QCoreApplication::postEvent(
             d->textEdit, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Return, Qt::NoModifier));
-        QCoreApplication::processEvents();
+        waitForNextOperation();
     }
+
+    //
+    // Возвращаем возможность использования всплывающих подсказок
+    //
+    d->textEdit->setUseCompleter(true);
+
+    TaskBar::finishTask(textWritingTaskKey);
 }
 
 DictionariesView* ScreenplayTextView::dictionariesView() const
