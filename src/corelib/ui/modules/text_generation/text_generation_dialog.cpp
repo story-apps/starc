@@ -8,9 +8,15 @@
 #include <utils/helpers/color_helper.h>
 
 #include <QBoxLayout>
+#include <QSettings>
 
 
 namespace Ui {
+
+namespace {
+const QString kLastPromptKey = "widgets/text-generation-dialog/last-prompt";
+}
+
 
 class TextGenerationDialog::Implementation
 {
@@ -85,18 +91,27 @@ TextGenerationDialog::TextGenerationDialog(QWidget* _parent)
 
         emit generatePressed(d->promptText->text());
     });
+
+    QSettings settings;
+    d->promptText->setText(settings.value(kLastPromptKey).toString());
 }
 
-TextGenerationDialog::~TextGenerationDialog() = default;
+TextGenerationDialog::~TextGenerationDialog()
+{
+    QSettings settings;
+    settings.setValue(kLastPromptKey, d->promptText->text());
+}
 
 void TextGenerationDialog::setOptions(const QString& _title, int _credits,
                                       const QString& _promptLabel, const QString& _prompt)
 {
     d->credits = _credits;
 
-    setTitle(_title);
+    setTitle(_title + " [beta]");
     d->promptHintLabel->setText(_promptLabel);
-    d->promptText->setText(_prompt);
+    if (!_prompt.trimmed().isEmpty()) {
+        d->promptText->setText(_prompt);
+    }
 
     d->creditsInfoLabel->setText(d->credits > 0 ? tr("%n credit(s) available", 0, _credits)
                                                 : tr("No credits available"));
