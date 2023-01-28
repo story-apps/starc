@@ -176,7 +176,11 @@ void SettingsManager::Implementation::loadScreenplaySettings()
             .toBool());
     //
     view->setScreenplayNavigatorShowBeats(
-        settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsKey).toBool());
+        settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsInTreatmentKey)
+            .toBool(),
+        settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsInScreenplayKey)
+            .toBool());
     view->setScreenplayNavigatorShowSceneNumber(
         settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowSceneNumberKey).toBool());
     view->setScreenplayNavigatorShowSceneText(
@@ -1378,9 +1382,14 @@ void SettingsManager::setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bo
         { DataStorageLayer::kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey });
 }
 
-void SettingsManager::setScreenplayNavigatorShowBeats(bool _show)
+void SettingsManager::setScreenplayNavigatorShowBeats(bool _show, bool _inTreatment,
+                                                      bool _inScreenplay)
 {
     setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsKey, _show);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsInTreatmentKey,
+                     _inTreatment);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsInScreenplayKey,
+                     _inScreenplay);
     emit screenplayNavigatorChanged();
 }
 

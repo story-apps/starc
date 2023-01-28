@@ -134,7 +134,7 @@ private:
     void setScreenplayEditorUseCharactersFromText(bool _use);
     void setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
-    void setScreenplayNavigatorShowBeats(bool _show);
+    void setScreenplayNavigatorShowBeats(bool _show, bool _inTreatment, bool _inScreenplay);
     void setScreenplayNavigatorShowSceneNumber(bool _show);
     void setScreenplayNavigatorShowSceneText(bool _show, int _lines);
     //

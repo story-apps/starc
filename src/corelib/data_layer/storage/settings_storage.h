@@ -197,6 +197,10 @@ const QString kComponentsScreenplayNavigatorKey
     = kComponentsScreenplayKey + QStringLiteral("/navigator");
 const QString kComponentsScreenplayNavigatorShowBeatsKey
     = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-beats");
+const QString kComponentsScreenplayNavigatorShowBeatsInTreatmentKey
+    = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-beats-in-treatment");
+const QString kComponentsScreenplayNavigatorShowBeatsInScreenplayKey
+    = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-beats-in-screenplay");
 const QString kComponentsScreenplayNavigatorShowSceneNumberKey
     = kComponentsScreenplayNavigatorKey + QStringLiteral("/show-scene-number");
 const QString kComponentsScreenplayNavigatorShowSceneTextKey

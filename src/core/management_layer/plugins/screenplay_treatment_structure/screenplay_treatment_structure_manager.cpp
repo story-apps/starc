@@ -281,7 +281,9 @@ void ScreenplayTreatmentStructureManager::reconfigure(const QStringList& _change
     Q_UNUSED(_changedSettingsKeys);
 
     const bool showBeats
-        = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsKey).toBool();
+        = settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsKey).toBool()
+        && settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsInTreatmentKey)
+               .toBool();
     d->structureModel->showBeats(showBeats);
 
     d->view->reconfigure();
