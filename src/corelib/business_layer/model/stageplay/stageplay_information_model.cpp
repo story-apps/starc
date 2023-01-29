@@ -124,6 +124,11 @@ void StageplayInformationModel::setName(const QString& _name)
     emit documentNameChanged(d->name);
 }
 
+QString StageplayInformationModel::documentName() const
+{
+    return name();
+}
+
 void StageplayInformationModel::setDocumentName(const QString& _name)
 {
     setName(_name);

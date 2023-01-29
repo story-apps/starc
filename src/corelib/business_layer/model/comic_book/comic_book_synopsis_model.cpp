@@ -1,5 +1,7 @@
 #include "comic_book_synopsis_model.h"
 
+#include "comic_book_information_model.h"
+
 
 namespace BusinessLayer {
 
@@ -20,9 +22,15 @@ ComicBookSynopsisModel::ComicBookSynopsisModel(QObject* _parent)
     : SimpleTextModel(_parent)
     , d(new Implementation)
 {
+    setName(tr("Synopsis"));
 }
 
 ComicBookSynopsisModel::~ComicBookSynopsisModel() = default;
+
+QString ComicBookSynopsisModel::documentName() const
+{
+    return QString("%1 | %2").arg(name(), d->informationModel->name());
+}
 
 void ComicBookSynopsisModel::setDocumentName(const QString& _name)
 {

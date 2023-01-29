@@ -1,5 +1,6 @@
 #include "screenplay_statistics_model.h"
 
+#include "screenplay_information_model.h"
 #include "text/screenplay_text_model.h"
 
 #include <business_layer/plots/screenplay/screenplay_characters_activity_plot.h>
@@ -35,6 +36,11 @@ ScreenplayStatisticsModel::ScreenplayStatisticsModel(QObject* _parent)
 }
 
 ScreenplayStatisticsModel::~ScreenplayStatisticsModel() = default;
+
+QString ScreenplayStatisticsModel::documentName() const
+{
+    return QString("%1 | %2").arg(tr("Statistics"), d->textModel->informationModel()->name());
+}
 
 ScreenplayTextModel* ScreenplayStatisticsModel::textModel() const
 {

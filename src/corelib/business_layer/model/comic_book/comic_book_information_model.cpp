@@ -119,6 +119,11 @@ void ComicBookInformationModel::setName(const QString& _name)
     emit documentNameChanged(d->name);
 }
 
+QString ComicBookInformationModel::documentName() const
+{
+    return name();
+}
+
 void ComicBookInformationModel::setDocumentName(const QString& _name)
 {
     setName(_name);

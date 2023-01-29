@@ -153,6 +153,11 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
 
 ScreenplayTextModel::~ScreenplayTextModel() = default;
 
+QString ScreenplayTextModel::documentName() const
+{
+    return QString("%1 | %2").arg(tr("Screenplay"), informationModel()->name());
+}
+
 TextModelFolderItem* ScreenplayTextModel::createFolderItem(TextFolderType _type) const
 {
     return new ScreenplayTextModelFolderItem(this, _type);

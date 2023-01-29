@@ -1,5 +1,7 @@
 #include "audioplay_title_page_model.h"
 
+#include "audioplay_information_model.h"
+
 
 namespace BusinessLayer {
 
@@ -23,6 +25,11 @@ AudioplayTitlePageModel::AudioplayTitlePageModel(QObject* _parent)
 }
 
 AudioplayTitlePageModel::~AudioplayTitlePageModel() = default;
+
+QString AudioplayTitlePageModel::documentName() const
+{
+    return QString("%1 | %2").arg(tr("Title page"), d->informationModel->name());
+}
 
 void AudioplayTitlePageModel::setDocumentName(const QString& _name)
 {

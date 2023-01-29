@@ -20,6 +20,11 @@ public:
     ~StageplayStatisticsModel() override;
 
     /**
+     * @brief Название документа
+     */
+    QString documentName() const override;
+
+    /**
      * @brief Задать модель
      */
     void setStageplayTextModel(StageplayTextModel* _model);

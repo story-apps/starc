@@ -164,6 +164,11 @@ void ScreenplayInformationModel::setName(const QString& _name)
     emit documentNameChanged(d->name);
 }
 
+QString ScreenplayInformationModel::documentName() const
+{
+    return name();
+}
+
 void ScreenplayInformationModel::setDocumentName(const QString& _name)
 {
     setName(_name);

@@ -1,5 +1,7 @@
 #include "stageplay_synopsis_model.h"
 
+#include "stageplay_information_model.h"
+
 
 namespace BusinessLayer {
 
@@ -24,6 +26,11 @@ StageplaySynopsisModel::StageplaySynopsisModel(QObject* _parent)
 }
 
 StageplaySynopsisModel::~StageplaySynopsisModel() = default;
+
+QString StageplaySynopsisModel::documentName() const
+{
+    return QString("%1 | %2").arg(name(), d->informationModel->name());
+}
 
 void StageplaySynopsisModel::setDocumentName(const QString& _name)
 {

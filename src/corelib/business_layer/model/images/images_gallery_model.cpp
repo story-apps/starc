@@ -58,6 +58,11 @@ void ImagesGalleryModel::setName(const QString& _name)
     emit documentNameChanged(d->name);
 }
 
+QString ImagesGalleryModel::documentName() const
+{
+    return name();
+}
+
 void ImagesGalleryModel::setDocumentName(const QString& _name)
 {
     setName(_name);

@@ -64,6 +64,11 @@ void ProjectInformationModel::setName(const QString& _name)
     emit documentNameChanged(d->name);
 }
 
+QString ProjectInformationModel::documentName() const
+{
+    return name();
+}
+
 void ProjectInformationModel::setDocumentName(const QString& _name)
 {
     setName(_name);

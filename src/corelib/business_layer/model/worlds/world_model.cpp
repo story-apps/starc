@@ -279,6 +279,11 @@ void WorldModel::setName(const QString& _name)
     emit documentNameChanged(d->name);
 }
 
+QString WorldModel::documentName() const
+{
+    return name();
+}
+
 void WorldModel::setDocumentName(const QString& _name)
 {
     setName(_name);

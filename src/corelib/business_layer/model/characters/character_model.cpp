@@ -373,6 +373,11 @@ void CharacterModel::setName(const QString& _name)
     emit documentNameChanged(d->name);
 }
 
+QString CharacterModel::documentName() const
+{
+    return name();
+}
+
 void CharacterModel::setDocumentName(const QString& _name)
 {
     setName(_name);

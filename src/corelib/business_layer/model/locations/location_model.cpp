@@ -143,6 +143,11 @@ void LocationModel::setName(const QString& _name)
     emit documentNameChanged(d->name);
 }
 
+QString LocationModel::documentName() const
+{
+    return name();
+}
+
 void LocationModel::setDocumentName(const QString& _name)
 {
     setName(_name);

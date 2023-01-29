@@ -537,8 +537,7 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
         window->resize(800, 600);
         window->show();
         //
-        // TODO: Почему-то ни одна из моделей не использует это поле
-        //       Ещё сюда нужно писать версию открытого документа, если это не текущая версия
+        // TODO: Ещё сюда нужно писать версию открытого документа, если это не текущая версия
         //
         window->setWindowTitle(view.activeModel->documentName());
 

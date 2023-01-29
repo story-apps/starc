@@ -176,6 +176,11 @@ void SimpleTextModel::setName(const QString& _name)
     emit nameChanged(d->name);
 }
 
+QString SimpleTextModel::documentName() const
+{
+    return name();
+}
+
 void SimpleTextModel::setDocumentName(const QString& _name)
 {
     setName(_name);

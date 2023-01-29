@@ -20,6 +20,11 @@ public:
     ~ComicBookStatisticsModel() override;
 
     /**
+     * @brief Название документа
+     */
+    QString documentName() const override;
+
+    /**
      * @brief Задать мМодель текста сценария
      */
     void setComicBookTextModel(ComicBookTextModel* _model);

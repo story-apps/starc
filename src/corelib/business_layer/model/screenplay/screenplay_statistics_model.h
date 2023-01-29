@@ -28,6 +28,11 @@ public:
     ~ScreenplayStatisticsModel() override;
 
     /**
+     * @brief Название документа
+     */
+    QString documentName() const override;
+
+    /**
      * @brief Модель текста сценария
      */
     ScreenplayTextModel* textModel() const;

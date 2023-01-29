@@ -1,5 +1,7 @@
 #include "audioplay_synopsis_model.h"
 
+#include "audioplay_information_model.h"
+
 
 namespace BusinessLayer {
 
@@ -24,6 +26,11 @@ AudioplaySynopsisModel::AudioplaySynopsisModel(QObject* _parent)
 }
 
 AudioplaySynopsisModel::~AudioplaySynopsisModel() = default;
+
+QString AudioplaySynopsisModel::documentName() const
+{
+    return QString("%1 | %2").arg(name(), d->informationModel->name());
+}
 
 void AudioplaySynopsisModel::setDocumentName(const QString& _name)
 {

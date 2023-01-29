@@ -134,6 +134,11 @@ void AudioplayInformationModel::setName(const QString& _name)
     emit documentNameChanged(d->name);
 }
 
+QString AudioplayInformationModel::documentName() const
+{
+    return name();
+}
+
 void AudioplayInformationModel::setDocumentName(const QString& _name)
 {
     setName(_name);

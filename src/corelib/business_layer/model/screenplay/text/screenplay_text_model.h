@@ -24,6 +24,11 @@ public:
     ~ScreenplayTextModel() override;
 
     /**
+     * @brief Название документа
+     */
+    QString documentName() const override;
+
+    /**
      * @brief Создать элементы модели
      */
     TextModelFolderItem* createFolderItem(TextFolderType _type) const override;

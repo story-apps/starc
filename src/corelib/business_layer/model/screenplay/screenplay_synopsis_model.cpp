@@ -1,5 +1,7 @@
 #include "screenplay_synopsis_model.h"
 
+#include "screenplay_information_model.h"
+
 
 namespace BusinessLayer {
 
@@ -20,6 +22,11 @@ ScreenplaySynopsisModel::ScreenplaySynopsisModel(QObject* _parent)
 }
 
 ScreenplaySynopsisModel::~ScreenplaySynopsisModel() = default;
+
+QString ScreenplaySynopsisModel::documentName() const
+{
+    return QString("%1 | %2").arg(name(), d->informationModel->name());
+}
 
 void ScreenplaySynopsisModel::setDocumentName(const QString& _name)
 {

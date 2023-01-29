@@ -65,6 +65,7 @@ public:
     QString name() const;
     void setName(const QString& _name);
     Q_SIGNAL void nameChanged(const QString& _newName, const QString& _oldName);
+    QString documentName() const override;
     void setDocumentName(const QString& _name) override;
 
     QColor color() const;

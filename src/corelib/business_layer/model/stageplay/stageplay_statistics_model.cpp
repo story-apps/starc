@@ -1,5 +1,6 @@
 #include "stageplay_statistics_model.h"
 
+#include "stageplay_information_model.h"
 #include "text/stageplay_text_model.h"
 
 #include <business_layer/reports/stageplay/stageplay_summary_report.h>
@@ -25,6 +26,11 @@ StageplayStatisticsModel::StageplayStatisticsModel(QObject* _parent)
 }
 
 StageplayStatisticsModel::~StageplayStatisticsModel() = default;
+
+QString StageplayStatisticsModel::documentName() const
+{
+    return QString("%1 | %2").arg(tr("Statistics"), d->textModel->informationModel()->name());
+}
 
 void StageplayStatisticsModel::setStageplayTextModel(StageplayTextModel* _model)
 {

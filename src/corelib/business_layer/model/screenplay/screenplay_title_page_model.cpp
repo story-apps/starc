@@ -1,5 +1,7 @@
 #include "screenplay_title_page_model.h"
 
+#include "screenplay_information_model.h"
+
 
 namespace BusinessLayer {
 
@@ -19,6 +21,11 @@ ScreenplayTitlePageModel::ScreenplayTitlePageModel(QObject* _parent)
 }
 
 ScreenplayTitlePageModel::~ScreenplayTitlePageModel() = default;
+
+QString ScreenplayTitlePageModel::documentName() const
+{
+    return QString("%1 | %2").arg(tr("Title page"), d->informationModel->name());
+}
 
 void ScreenplayTitlePageModel::setDocumentName(const QString& _name)
 {

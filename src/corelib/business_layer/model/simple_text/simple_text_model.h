@@ -28,8 +28,9 @@ public:
      */
     QString name() const;
     void setName(const QString& _name);
-    void setDocumentName(const QString& _name) override;
     Q_SIGNAL void nameChanged(const QString& _name);
+    QString documentName() const override;
+    void setDocumentName(const QString& _name) override;
 
     /**
      * @brief Перезаписать содержимое документа

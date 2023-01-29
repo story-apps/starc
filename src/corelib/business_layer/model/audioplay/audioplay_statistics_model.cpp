@@ -1,5 +1,6 @@
 #include "audioplay_statistics_model.h"
 
+#include "audioplay_information_model.h"
 #include "text/audioplay_text_model.h"
 
 #include <business_layer/reports/audioplay/audioplay_summary_report.h>
@@ -25,6 +26,11 @@ AudioplayStatisticsModel::AudioplayStatisticsModel(QObject* _parent)
 }
 
 AudioplayStatisticsModel::~AudioplayStatisticsModel() = default;
+
+QString AudioplayStatisticsModel::documentName() const
+{
+    return QString("%1 | %2").arg(tr("Statistics"), d->textModel->informationModel()->name());
+}
 
 void AudioplayStatisticsModel::setAudioplayTextModel(AudioplayTextModel* _model)
 {

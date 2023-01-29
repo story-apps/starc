@@ -20,6 +20,11 @@ public:
     ~AudioplayStatisticsModel() override;
 
     /**
+     * @brief Название документа
+     */
+    QString documentName() const override;
+
+    /**
      * @brief Задать модель текста сценария
      */
     void setAudioplayTextModel(AudioplayTextModel* _model);

@@ -19,6 +19,11 @@ public:
     ~ScreenplaySynopsisModel() override;
 
     /**
+     * @brief Название документа
+     */
+    QString documentName() const override;
+
+    /**
      * @brief Игнорируем установку названия документа
      */
     void setDocumentName(const QString& _name) override;
