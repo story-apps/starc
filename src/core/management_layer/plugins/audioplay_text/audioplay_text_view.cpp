@@ -678,6 +678,7 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
         // Если список закладок показан, добавляем новую через него
         //
         if (d->showBookmarksAction->isChecked()) {
+            d->sidebarTabs->setCurrentTab(kBookmarksTabIndex);
             d->bookmarksView->showAddBookmarkView(
                 {},
                 d->bookmarksView
@@ -697,6 +698,7 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
         // Если список закладок показан, редактируем через него
         //
         if (d->showBookmarksAction->isChecked()) {
+            d->sidebarTabs->setCurrentTab(kBookmarksTabIndex);
             d->bookmarksView->showAddBookmarkView(
                 d->bookmarksModel->mapFromModel(currentModelIndex()),
                 d->bookmarksView
