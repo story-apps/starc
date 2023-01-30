@@ -38,6 +38,13 @@ public:
     };
     QPair<Change, Change> changedXml(const QString& _xml, const QString& _patch) const;
 
+    /**
+     * @brief Получить финальную позицию изменения в изменённом тексте
+     * @param _before Текст до замены
+     * @param _after Текст после замены
+     */
+    int changeEndPosition(const QString& _before, const QString& _after) const;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

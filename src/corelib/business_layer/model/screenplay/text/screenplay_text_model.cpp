@@ -894,11 +894,13 @@ void ScreenplayTextModel::finalizeInitialization()
     emit rowsChanged();
 }
 
-void ScreenplayTextModel::applyPatch(const QByteArray& _patch)
+ChangeCursor ScreenplayTextModel::applyPatch(const QByteArray& _patch)
 {
-    TextModel::applyPatch(_patch);
+    const auto changeCursor = TextModel::applyPatch(_patch);
 
     updateNumbering();
+
+    return changeCursor;
 }
 
 } // namespace BusinessLayer

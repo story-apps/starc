@@ -616,7 +616,7 @@ QByteArray ScreenplayInformationModel::toXml() const
     return xml;
 }
 
-void ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
+ChangeCursor ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
 {
     //
     // Определить область изменения в xml
@@ -624,7 +624,7 @@ void ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
     auto changes = dmpController().changedXml(toXml(), _patch);
     if (changes.first.xml.isEmpty() && changes.second.xml.isEmpty()) {
         Log::warning("Screenplay information model patch don't lead to any changes");
-        return;
+        return {};
     }
 
     changes.second.xml = xml::prepareXml(changes.second.xml);
@@ -675,6 +675,8 @@ void ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
     setBool(kShowSceneNumbersOnLeftKey, std::bind(&M::setShowSceneNumbersOnLeft, this, _1));
     setBool(kShowScenesNumbersOnRightKey, std::bind(&M::setShowSceneNumbersOnRight, this, _1));
     setBool(kShowDialoguesNumbersKey, std::bind(&M::setShowDialoguesNumbers, this, _1));
+
+    return {};
 }
 
 } // namespace BusinessLayer

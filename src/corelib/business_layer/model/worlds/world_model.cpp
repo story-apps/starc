@@ -1932,7 +1932,7 @@ QByteArray WorldModel::toXml() const
     return xml;
 }
 
-void WorldModel::applyPatch(const QByteArray& _patch)
+ChangeCursor WorldModel::applyPatch(const QByteArray& _patch)
 {
     //
     // Применяем изменения
@@ -2312,6 +2312,8 @@ void WorldModel::applyPatch(const QByteArray& _patch)
         }
     }
     setMagicTypes(newMagicTypes);
+
+    return {};
 }
 
 } // namespace BusinessLayer

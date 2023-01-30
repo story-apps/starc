@@ -215,11 +215,13 @@ void SimpleTextModel::finalizeInitialization()
     emit rowsChanged();
 }
 
-void SimpleTextModel::applyPatch(const QByteArray& _patch)
+ChangeCursor SimpleTextModel::applyPatch(const QByteArray& _patch)
 {
-    TextModel::applyPatch(_patch);
+    const auto changeCursor = TextModel::applyPatch(_patch);
 
     d->updateNumbering();
+
+    return changeCursor;
 }
 
 } // namespace BusinessLayer

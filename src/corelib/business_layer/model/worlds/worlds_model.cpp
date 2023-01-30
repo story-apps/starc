@@ -360,7 +360,7 @@ QByteArray WorldsModel::toXml() const
     return xml;
 }
 
-void WorldsModel::applyPatch(const QByteArray& _patch)
+ChangeCursor WorldsModel::applyPatch(const QByteArray& _patch)
 {
     //
     // Применяем изменения
@@ -461,6 +461,8 @@ void WorldsModel::applyPatch(const QByteArray& _patch)
     for (auto iter = newWorldsPositions.begin(); iter != newWorldsPositions.end(); ++iter) {
         setWorldPosition(iter.key(), iter.value());
     }
+
+    return {};
 }
 
 } // namespace BusinessLayer

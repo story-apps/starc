@@ -1730,7 +1730,7 @@ QByteArray CharacterModel::toXml() const
     return xml;
 }
 
-void CharacterModel::applyPatch(const QByteArray& _patch)
+ChangeCursor CharacterModel::applyPatch(const QByteArray& _patch)
 {
     //
     // Применяем изменения
@@ -1919,6 +1919,8 @@ void CharacterModel::applyPatch(const QByteArray& _patch)
     setPlotInvolvement(load(kPlotInvolvementKey));
     setConflict(load(kConflictKey));
     setMostDefiningMoment(load(kMostDefiningMomentKey));
+
+    return {};
 }
 
 } // namespace BusinessLayer

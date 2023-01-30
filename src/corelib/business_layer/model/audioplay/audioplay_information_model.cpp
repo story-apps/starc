@@ -453,7 +453,7 @@ QByteArray AudioplayInformationModel::toXml() const
     return xml;
 }
 
-void AudioplayInformationModel::applyPatch(const QByteArray& _patch)
+ChangeCursor AudioplayInformationModel::applyPatch(const QByteArray& _patch)
 {
     //
     // Определить область изменения в xml
@@ -461,7 +461,7 @@ void AudioplayInformationModel::applyPatch(const QByteArray& _patch)
     auto changes = dmpController().changedXml(toXml(), _patch);
     if (changes.first.xml.isEmpty() && changes.second.xml.isEmpty()) {
         Log::warning("Audioplay information model patch don't lead to any changes");
-        return;
+        return {};
     }
 
     changes.second.xml = xml::prepareXml(changes.second.xml);
@@ -499,6 +499,8 @@ void AudioplayInformationModel::applyPatch(const QByteArray& _patch)
     setText(kTemplateIdKey, std::bind(&M::setTemplateId, this, _1));
     setBool(kShowBlockNumbersKey, std::bind(&M::setShowBlockNumbers, this, _1));
     setBool(kContinueBlockNumbersKey, std::bind(&M::setContinueBlockNumbers, this, _1));
+
+    return {};
 }
 
 } // namespace BusinessLayer

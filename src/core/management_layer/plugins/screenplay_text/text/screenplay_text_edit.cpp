@@ -106,22 +106,30 @@ void ScreenplayTextEdit::Implementation::revertAction(bool previous)
         return;
     }
 
-    const auto lastCursorPosition = q->textCursor().position();
-    //
+    BusinessLayer::ChangeCursor changeCursor;
     if (previous) {
-        model->undo();
+        changeCursor = model->undo();
     } else {
-        model->redo();
+        changeCursor = model->redo();
     }
     //
-    if (document.characterCount() > lastCursorPosition) {
+    if (changeCursor.item != nullptr) {
+        const auto item = static_cast<BusinessLayer::TextModelItem*>(changeCursor.item);
+        const auto itemIndex = model->indexForItem(item);
+        auto position = document.itemEndPosition(itemIndex);
+        if (changeCursor.position >= 0) {
+            position += changeCursor.position;
+        } else if (item->type() == BusinessLayer::TextModelItemType::Text) {
+            const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+            position += textItem->text().length();
+        }
         auto cursor = q->textCursor();
-        cursor.setPosition(lastCursorPosition);
+        cursor.setPosition(position);
         q->setTextCursorAndKeepScrollBars(cursor);
         q->ensureCursorVisible();
 
         //
-        // При отмене последнего действия позиция курсора могла и не поменяться,
+        // При отмене/повторе последнего действия позиция курсора могла и не поменяться,
         // но тип параграфа сменился, поэтому перестраховываемся и говорим будто бы
         // сменилась позиция курсора, чтобы обновить состояние панелей
         //

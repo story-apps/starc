@@ -201,7 +201,7 @@ QByteArray ProjectInformationModel::toXml() const
     return xml;
 }
 
-void ProjectInformationModel::applyPatch(const QByteArray& _patch)
+ChangeCursor ProjectInformationModel::applyPatch(const QByteArray& _patch)
 {
     //
     // Определить область изменения в xml
@@ -209,7 +209,7 @@ void ProjectInformationModel::applyPatch(const QByteArray& _patch)
     auto changes = dmpController().changedXml(toXml(), _patch);
     if (changes.first.xml.isEmpty() && changes.second.xml.isEmpty()) {
         Log::warning("Project information model patch don't lead to any changes");
-        return;
+        return {};
     }
 
     changes.second.xml = xml::prepareXml(changes.second.xml);
@@ -226,6 +226,8 @@ void ProjectInformationModel::applyPatch(const QByteArray& _patch)
     if (auto coverNode = documentNode.firstChildElement(kCoverKey); !coverNode.isNull()) {
         setCover(coverNode.text(), imageWrapper()->load(coverNode.text()));
     }
+
+    return {};
 }
 
 } // namespace BusinessLayer

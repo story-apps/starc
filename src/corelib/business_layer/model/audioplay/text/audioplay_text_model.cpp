@@ -579,11 +579,13 @@ void AudioplayTextModel::finalizeInitialization()
     emit rowsChanged();
 }
 
-void AudioplayTextModel::applyPatch(const QByteArray& _patch)
+ChangeCursor AudioplayTextModel::applyPatch(const QByteArray& _patch)
 {
-    TextModel::applyPatch(_patch);
+    const auto changeCursor = TextModel::applyPatch(_patch);
 
     d->updateNumbering();
+
+    return changeCursor;
 }
 
 } // namespace BusinessLayer

@@ -376,7 +376,7 @@ QByteArray CharactersModel::toXml() const
     return xml;
 }
 
-void CharactersModel::applyPatch(const QByteArray& _patch)
+ChangeCursor CharactersModel::applyPatch(const QByteArray& _patch)
 {
     //
     // Применяем изменения
@@ -478,6 +478,8 @@ void CharactersModel::applyPatch(const QByteArray& _patch)
     for (auto iter = newCharactersPositions.begin(); iter != newCharactersPositions.end(); ++iter) {
         setCharacterPosition(iter.key(), iter.value());
     }
+
+    return {};
 }
 
 } // namespace BusinessLayer

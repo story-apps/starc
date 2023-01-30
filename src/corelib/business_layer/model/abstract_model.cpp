@@ -1,6 +1,7 @@
 #include "abstract_model.h"
 
 #include "abstract_image_wrapper.h"
+#include "abstract_model_item.h"
 
 #include <domain/document_object.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
@@ -60,6 +61,11 @@ public:
      * @brief Шаг в истории изменений, который будет отменён как последняя правка
      */
     int undoStep = 0;
+
+    /**
+     * @brief Позиция текста после отмены/повтора последнего действия
+     */
+    ChangeCursor undoRedoPosition;
 
     /**
      * @brief Дебаунсер на изменение контента документа
@@ -189,9 +195,8 @@ void AbstractModel::saveChanges()
     }
 }
 
-void AbstractModel::undo()
+ChangeCursor AbstractModel::undo()
 {
-
     //
     // Перед отменой последнего действия нужно сохранить все несохранённые изменения
     //
@@ -201,30 +206,34 @@ void AbstractModel::undo()
     // И после этого уже можно отменять
     //
     emit undoRequested(d->undoStep);
+
+    return d->undoRedoPosition;
 }
 
 void AbstractModel::undoChange(const QByteArray& _undo, const QByteArray& _redo)
 {
     QScopedValueRollback isUndoInProgressRollback(d->isUndoInProgress, true);
 
-    applyPatch(_undo);
+    d->undoRedoPosition = applyPatch(_undo);
     saveChanges();
 
     d->undoedChanges.append({ _undo, _redo });
     d->undoStep += 2;
 }
 
-void AbstractModel::redo()
+ChangeCursor AbstractModel::redo()
 {
     if (d->undoedChanges.isEmpty()) {
-        return;
+        return {};
     }
 
     QScopedValueRollback isRedoInProgressRollback(d->isRedoInProgress, true);
 
     const auto change = d->undoedChanges.takeLast();
-    applyPatch(change.redo);
+    d->undoRedoPosition = applyPatch(change.redo);
     saveChanges();
+
+    return d->undoRedoPosition;
 }
 
 bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
@@ -339,13 +348,15 @@ void AbstractModel::initImageWrapper()
 {
 }
 
-void AbstractModel::applyPatch(const QByteArray& _patch)
+ChangeCursor AbstractModel::applyPatch(const QByteArray& _patch)
 {
     const auto newContent = d->dmpController.applyPatch(toXml(), _patch);
 
     clearDocument();
     document()->setContent(newContent);
     initDocument();
+
+    return {};
 }
 
 AbstractImageWrapper* AbstractModel::imageWrapper() const

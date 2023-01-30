@@ -184,7 +184,7 @@ QByteArray ImagesGalleryModel::toXml() const
     return xml;
 }
 
-void ImagesGalleryModel::applyPatch(const QByteArray& _patch)
+ChangeCursor ImagesGalleryModel::applyPatch(const QByteArray& _patch)
 {
     //
     // Применяем изменения
@@ -242,6 +242,8 @@ void ImagesGalleryModel::applyPatch(const QByteArray& _patch)
         addPhoto({ photoUuid });
         imageWrapper()->load(photoUuid);
     }
+
+    return {};
 }
 
 } // namespace BusinessLayer

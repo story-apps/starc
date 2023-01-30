@@ -14,6 +14,12 @@ class DocumentObject;
 namespace BusinessLayer {
 
 class AbstractImageWrapper;
+class AbstractModelItem;
+
+struct ChangeCursor {
+    AbstractModelItem* item = nullptr;
+    int position = -1;
+};
 
 /**
  * @brief Абстрактная модель для работы над документами
@@ -81,7 +87,7 @@ public:
     /**
      * @brief Отменить последнее изменение текущего пользователя
      */
-    void undo();
+    ChangeCursor undo();
 
     /**
      * @brief Отменить заданное изменение
@@ -91,7 +97,7 @@ public:
     /**
      * @brief Повторить отменённое действие
      */
-    void redo();
+    ChangeCursor redo();
 
     /**
      * @brief Смержить документ с заданным
@@ -190,8 +196,9 @@ protected:
 
     /**
      * @brief Применить заданное изменение для модели
+     * @return Положение курсора внутри документа в конце изменения
      */
-    virtual void applyPatch(const QByteArray& _patch);
+    virtual ChangeCursor applyPatch(const QByteArray& _patch);
 
     /**
      * @brief Получить обёртку для работы с изображениями

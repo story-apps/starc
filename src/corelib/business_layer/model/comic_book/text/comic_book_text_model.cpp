@@ -499,11 +499,13 @@ void ComicBookTextModel::finalizeInitialization()
     emit rowsChanged();
 }
 
-void ComicBookTextModel::applyPatch(const QByteArray& _patch)
+ChangeCursor ComicBookTextModel::applyPatch(const QByteArray& _patch)
 {
-    TextModel::applyPatch(_patch);
+    const auto changeCursor = TextModel::applyPatch(_patch);
 
     d->updateNumbering();
+
+    return changeCursor;
 }
 
 } // namespace BusinessLayer

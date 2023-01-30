@@ -1631,7 +1631,7 @@ QByteArray TextModel::toXml() const
     return d->toXml(document());
 }
 
-void TextModel::applyPatch(const QByteArray& _patch)
+ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
 {
     Q_ASSERT(document());
 
@@ -1649,7 +1649,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
     auto changes = dmpController().changedXml(toXml(), _patch);
     if (changes.first.xml.isEmpty() && changes.second.xml.isEmpty()) {
         Log::warning("Patch don't lead to any changes");
-        return;
+        return {};
     }
 
     changes.first.xml = xml::prepareXml(changes.first.xml);
@@ -1745,7 +1745,7 @@ void TextModel::applyPatch(const QByteArray& _patch)
         //     патч осуществлённого измененеия сравним собственное состояние с состоянием документа
         //
         document()->setContent(oldContent);
-        return;
+        return {};
     }
 
     //
@@ -2160,6 +2160,8 @@ void TextModel::applyPatch(const QByteArray& _patch)
         return true;
     };
 
+    TextModelItem* lastChangedItem = nullptr;
+    int lastChangedItemPosition = -1;
     for (const auto& operation : operations) {
         //
         // Если текущий элемент модели разбит на несколько абзацев, нужно его склеить
@@ -2286,6 +2288,12 @@ void TextModel::applyPatch(const QByteArray& _patch)
             //
             Q_ASSERT(modelItem->type() == newItem->type());
             if (!modelItem->isEqual(newItem)) {
+                if (modelItem->type() == TextModelItemType::Text) {
+                    const auto modelTextItem = static_cast<TextModelTextItem*>(modelItem);
+                    const auto newTextItem = static_cast<TextModelTextItem*>(newItem);
+                    lastChangedItemPosition = dmpController().changeEndPosition(
+                        modelTextItem->text(), newTextItem->text());
+                }
                 modelItem->copyFrom(newItem);
             }
 
@@ -2313,6 +2321,16 @@ void TextModel::applyPatch(const QByteArray& _patch)
             modelItem = nextItem;
             break;
         }
+        }
+
+        //
+        // Сохраняем последнего изменённого, если было обработано изменение
+        //
+        if (operation.type != edit_distance::OperationType::Skip) {
+            lastChangedItem = previousModelItem;
+            if (operation.type != edit_distance::OperationType::Replace) {
+                lastChangedItemPosition = -1;
+            }
         }
     }
 
@@ -2342,6 +2360,8 @@ void TextModel::applyPatch(const QByteArray& _patch)
     }
     Q_ASSERT(newContent == toXml());
 #endif
+
+    return { lastChangedItem, lastChangedItemPosition };
 }
 
 } // namespace BusinessLayer

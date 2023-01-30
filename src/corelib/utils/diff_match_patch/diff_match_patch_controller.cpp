@@ -284,3 +284,38 @@ QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMa
              { d->plainToXml(newXmlForUpdate).toUtf8(),
                d->plainToXml(newXmlPlain.left(newStartPosForXmlPlain)).length() } };
 }
+
+int DiffMatchPatchController::changeEndPosition(const QString& _before, const QString& _after) const
+{
+    diff_match_patch dmp;
+    const auto patches = dmp.patch_make(_before, _after);
+    if (patches.isEmpty()) {
+        return _after.length();
+    }
+
+    const auto& patch = patches.constLast();
+    if (patch.diffs.isEmpty()) {
+        return _after.length();
+    }
+
+    int position = patch.start2;
+    for (const auto& diff : std::as_const(patch.diffs)) {
+        switch (diff.operation) {
+        case EQUAL: {
+            if (diff == patch.diffs.constLast()) {
+                break;
+            }
+            Q_FALLTHROUGH();
+        }
+        case INSERT: {
+            position += diff.text.length();
+            break;
+        }
+
+        default: {
+            break;
+        }
+        }
+    }
+    return position;
+}

@@ -1211,7 +1211,7 @@ QByteArray StructureModel::toXml() const
     return d->toXml(document());
 }
 
-void StructureModel::applyPatch(const QByteArray& _patch)
+ChangeCursor StructureModel::applyPatch(const QByteArray& _patch)
 {
     Q_ASSERT(document());
 
@@ -1229,7 +1229,7 @@ void StructureModel::applyPatch(const QByteArray& _patch)
     auto changes = dmpController().changedXml(toXml(), _patch);
     if (changes.first.xml.isEmpty() && changes.second.xml.isEmpty()) {
         Log::warning("Patch don't lead to any changes");
-        return;
+        return {};
     }
 
     changes.first.xml = xml::prepareXml(changes.first.xml);
@@ -1501,6 +1501,8 @@ void StructureModel::applyPatch(const QByteArray& _patch)
     }
     Q_ASSERT(newContent == toXml());
 #endif
+
+    return {};
 }
 
 } // namespace BusinessLayer

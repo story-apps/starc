@@ -467,11 +467,13 @@ void StageplayTextModel::finalizeInitialization()
     emit rowsChanged();
 }
 
-void StageplayTextModel::applyPatch(const QByteArray& _patch)
+ChangeCursor StageplayTextModel::applyPatch(const QByteArray& _patch)
 {
-    TextModel::applyPatch(_patch);
+    const auto changeCursor = TextModel::applyPatch(_patch);
 
     d->updateNumbering();
+
+    return changeCursor;
 }
 
 } // namespace BusinessLayer

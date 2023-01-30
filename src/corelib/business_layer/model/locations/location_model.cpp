@@ -659,7 +659,7 @@ QByteArray LocationModel::toXml() const
     return xml;
 }
 
-void LocationModel::applyPatch(const QByteArray& _patch)
+ChangeCursor LocationModel::applyPatch(const QByteArray& _patch)
 {
     //
     // Применяем изменения
@@ -783,6 +783,8 @@ void LocationModel::applyPatch(const QByteArray& _patch)
     setLandmark(load(kLandmarkKey));
     setNearbyPlaces(load(kNearbyPlacesKey));
     setHistory(load(kHistoryKey));
+
+    return {};
 }
 
 } // namespace BusinessLayer
