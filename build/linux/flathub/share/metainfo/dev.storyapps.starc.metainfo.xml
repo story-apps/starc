@@ -90,7 +90,8 @@
             <image>https://starc.app/media/main/settings.png</image>
         </screenshot>
     </screenshots>
-    <releases>                                  
+    <releases>
+        <release version="0.4.1" date="2023-01-31"/>
         <release version="0.4.0" date="2023-01-17"/>
         <release version="0.3.4" date="2022-12-27"/>
         <release version="0.3.3" date="2022-11-30"/>
