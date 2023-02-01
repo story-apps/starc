@@ -612,6 +612,13 @@ void TextModelTextItem::setCorrection(bool _correction)
     } else {
         d->updateXml();
     }
+
+    //
+    // Не используем тут markChanged(), т.к. он игнорирует блоки корректировок, но в момент
+    // изменения типа блока обычный <-> корректировка, нужно обязательно пометить его изменённым,
+    // поэтому делаем тут ручками
+    //
+    setChanged(true);
 }
 
 bool TextModelTextItem::isCorrectionContinued() const

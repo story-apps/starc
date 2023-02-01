@@ -529,6 +529,9 @@ void CommentsModel::Implementation::processSourceModelDataChanged(const QModelIn
         // А если раньше блок был не корректировочным, исключим его из списка
         //
         modelTextItems.removeAll(textItem);
+        for (auto& reviewMark : reviewMarks) {
+            reviewMark.items.removeAll(textItem);
+        }
         return;
     }
 
