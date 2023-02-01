@@ -89,5 +89,5 @@ public:
      * @brief Применить заданный функтор форматирования для выделенного текста в курсоре
      */
     static void updateSelectionFormatting(
-        QTextCursor _cursor, std::function<QTextCharFormat(const QTextCharFormat&)> updateFormat);
+        QTextCursor _cursor, std::function<QTextCharFormat(const QTextCharFormat&)> _updateFormat);
 };

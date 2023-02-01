@@ -399,7 +399,7 @@ int TextHelper::wordsCount(const QString& _text)
 }
 
 void TextHelper::updateSelectionFormatting(
-    QTextCursor _cursor, std::function<QTextCharFormat(const QTextCharFormat&)> updateFormat)
+    QTextCursor _cursor, std::function<QTextCharFormat(const QTextCharFormat&)> _updateFormat)
 {
     if (!_cursor.hasSelection()) {
         return;
@@ -425,7 +425,7 @@ void TextHelper::updateSelectionFormatting(
                 _cursor.setPosition(std::max(formatStart, position));
                 _cursor.setPosition(std::min(formatEnd, lastPosition), QTextCursor::KeepAnchor);
 
-                const auto newFormat = updateFormat(format.format);
+                const auto newFormat = _updateFormat(format.format);
                 _cursor.mergeCharFormat(newFormat);
 
                 _cursor.clearSelection();
@@ -434,7 +434,7 @@ void TextHelper::updateSelectionFormatting(
         } else {
             _cursor.setPosition(block.position());
 
-            const auto newFormat = updateFormat(block.charFormat());
+            const auto newFormat = _updateFormat(block.charFormat());
             _cursor.mergeBlockCharFormat(newFormat);
         }
 

@@ -121,6 +121,13 @@ public:
      */
     bool selectBlockOnTripleClick(QMouseEvent* _event, BaseTextEdit* _textEdit);
 
+    /**
+     * @brief Обновить форматирование в блоке
+     */
+    void updateSelectionFormatting(
+        BaseTextEdit* _textEdit,
+        std::function<QTextCharFormat(const QTextCharFormat&)> _updateFormat);
+
 
     bool capitalizeWords = true;
     bool correctDoubleCapitals = true;
@@ -176,6 +183,26 @@ bool BaseTextEdit::Implementation::selectBlockOnTripleClick(QMouseEvent* _event,
     return false;
 }
 
+void BaseTextEdit::Implementation::updateSelectionFormatting(
+    BaseTextEdit* _textEdit, std::function<QTextCharFormat(const QTextCharFormat&)> _updateFormat)
+{
+    auto cursor = _textEdit->textCursor();
+
+    //
+    // Для кейса с изменением формата без выделенного текста нужно использовать метод самого
+    // редактора текста, видимо он как-то форсит это изменение, а если пробовать изменять чисто в
+    // курсоре, то тогда изменение не будет применяться
+    //
+    if (!cursor.hasSelection()) {
+        const auto newFormat = _updateFormat(cursor.charFormat());
+        cursor.mergeCharFormat(newFormat);
+        _textEdit->mergeCurrentCharFormat(newFormat);
+        return;
+    }
+
+    TextHelper::updateSelectionFormatting(cursor, _updateFormat);
+}
+
 
 // ****
 
@@ -216,7 +243,7 @@ void BaseTextEdit::setTextBold(bool _bold)
         format.setFontWeight(_bold ? QFont::Bold : QFont::Normal);
         return format;
     };
-    TextHelper::updateSelectionFormatting(textCursor(), buildFormat);
+    d->updateSelectionFormatting(this, buildFormat);
 }
 
 void BaseTextEdit::setTextItalic(bool _italic)
@@ -226,7 +253,7 @@ void BaseTextEdit::setTextItalic(bool _italic)
         format.setFontItalic(_italic);
         return format;
     };
-    TextHelper::updateSelectionFormatting(textCursor(), buildFormat);
+    d->updateSelectionFormatting(this, buildFormat);
 }
 
 void BaseTextEdit::setTextUnderline(bool _underline)
@@ -236,7 +263,7 @@ void BaseTextEdit::setTextUnderline(bool _underline)
         format.setFontUnderline(_underline);
         return format;
     };
-    TextHelper::updateSelectionFormatting(textCursor(), buildFormat);
+    d->updateSelectionFormatting(this, buildFormat);
 }
 
 void BaseTextEdit::setTextStrikethrough(bool _strikethrough)
@@ -246,7 +273,7 @@ void BaseTextEdit::setTextStrikethrough(bool _strikethrough)
         format.setFontStrikeOut(_strikethrough);
         return format;
     };
-    TextHelper::updateSelectionFormatting(textCursor(), buildFormat);
+    d->updateSelectionFormatting(this, buildFormat);
 }
 
 void BaseTextEdit::invertTextBold()
@@ -276,7 +303,7 @@ void BaseTextEdit::setTextFont(const QFont& _font)
         format.setFont(_font);
         return format;
     };
-    TextHelper::updateSelectionFormatting(textCursor(), buildFormat);
+    d->updateSelectionFormatting(this, buildFormat);
 }
 
 void BaseTextEdit::setTextAlignment(Qt::Alignment _alignment)
