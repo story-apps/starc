@@ -845,7 +845,7 @@ QModelIndex CommentsModel::mapFromModel(const QModelIndex& _index, int _position
                 continue;
             }
 
-            if (reviewMark.from <= _positionInBlock && _positionInBlock < reviewMark.end()) {
+            if (reviewMark.from <= _positionInBlock && _positionInBlock <= reviewMark.end()) {
                 return index(d->reviewMarks.indexOf(reviewMarkWrapper), 0);
             }
         }
