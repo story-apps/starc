@@ -20,6 +20,7 @@ public:
     Domain::DocumentObject* find(const QUuid& _uuid);
     Domain::DocumentObject* findFirst(Domain::DocumentObjectType _type);
     QVector<Domain::DocumentObject*> findAll(Domain::DocumentObjectType _type);
+    QVector<Domain::DocumentObject*> findAll();
 
     void insert(Domain::DocumentObject* _object);
     bool update(Domain::DocumentObject* _object);

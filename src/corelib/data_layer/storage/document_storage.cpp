@@ -72,6 +72,19 @@ QVector<Domain::DocumentObject*> DocumentStorage::documents(Domain::DocumentObje
     return documents;
 }
 
+QVector<Domain::DocumentObject*> DocumentStorage::documents()
+{
+    QVector<Domain::DocumentObject*> documents;
+
+    for (auto document : std::as_const(d->notSavedDocuments)) {
+        documents.append(document);
+    }
+
+    documents.append(DataMappingLayer::MapperFacade::documentMapper()->findAll());
+
+    return documents;
+}
+
 Domain::DocumentObject* DocumentStorage::createDocument(const QUuid& _uuid,
                                                         Domain::DocumentObjectType _type)
 {

@@ -41,6 +41,11 @@ public:
     QVector<Domain::DocumentObject*> documents(Domain::DocumentObjectType _type);
 
     /**
+     * @brief Получить все документы проекта
+     */
+    QVector<Domain::DocumentObject*> documents();
+
+    /**
      * @brief Сохранить документ
      */
     Domain::DocumentObject* createDocument(const QUuid& _uuid, Domain::DocumentObjectType _type);

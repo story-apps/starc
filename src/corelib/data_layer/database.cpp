@@ -171,6 +171,12 @@ void Database::commit()
     }
 }
 
+void Database::vacuum()
+{
+    auto query = Database::query();
+    query.exec("VACUUM");
+}
+
 // ****
 
 QSqlDatabase Database::instanse()

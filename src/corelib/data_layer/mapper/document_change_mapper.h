@@ -15,6 +15,7 @@ namespace DataMappingLayer {
 class DocumentChangeMapper : public AbstractMapper
 {
 public:
+    bool isEmpty();
     Domain::DocumentChangeObject* find(const Domain::Identifier& _id);
     Domain::DocumentChangeObject* find(const QUuid& _uuid);
     Domain::DocumentChangeObject* find(const QUuid& _documentUuid, int _changeIndex);
@@ -25,6 +26,7 @@ public:
     void insert(Domain::DocumentChangeObject* _object);
     bool update(Domain::DocumentChangeObject* _object);
     void remove(Domain::DocumentChangeObject* _object);
+    void removeAll();
 
 protected:
     QString findStatement(const Domain::Identifier& _id) const override;

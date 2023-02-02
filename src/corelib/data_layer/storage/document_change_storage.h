@@ -30,6 +30,11 @@ public:
         const QByteArray& _redoPatch, const QString& _userEmail, const QString& _userName);
 
     /**
+     * @brief Пуст ли список изменений документов
+     */
+    bool isEmpty() const;
+
+    /**
      * @brief Обновить параметры изменения
      */
     void updateDocumentChange(Domain::DocumentChangeObject* _change);
@@ -58,6 +63,11 @@ public:
      * @brief Сохранить несохранённые изменения сценарии
      */
     void store();
+
+    /**
+     * @brief Удалить все изменения
+     */
+    void removeAll();
 
     /**
      * @brief Очистить хранилище

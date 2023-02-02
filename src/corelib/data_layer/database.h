@@ -65,6 +65,11 @@ public:
     static void commit();
 
     /**
+     * @brief Сжать базу данных
+     */
+    static void vacuum();
+
+    /**
      * @brief Состояния базы данных
      */
     enum State {

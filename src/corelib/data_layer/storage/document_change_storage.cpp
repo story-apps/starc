@@ -34,6 +34,11 @@ Domain::DocumentChangeObject* DocumentChangeStorage::appendDocumentChange(
     return newDocumentChange;
 }
 
+bool DocumentChangeStorage::isEmpty() const
+{
+    return DataMappingLayer::MapperFacade::documentChangeMapper()->isEmpty();
+}
+
 void DocumentChangeStorage::updateDocumentChange(Domain::DocumentChangeObject* _change)
 {
     DataMappingLayer::MapperFacade::documentChangeMapper()->update(_change);
@@ -96,6 +101,12 @@ void DocumentChangeStorage::store()
             d->newDocumentChanges.takeFirst());
     }
     DatabaseLayer::Database::commit();
+}
+
+void DocumentChangeStorage::removeAll()
+{
+    DataMappingLayer::MapperFacade::documentChangeMapper()->removeAll();
+    DatabaseLayer::Database::vacuum();
 }
 
 void DocumentChangeStorage::clear()

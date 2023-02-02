@@ -82,6 +82,11 @@ public:
     void closeCurrentProject(const QString& _path);
 
     /**
+     * @brief Очистить историю изменений
+     */
+    void clearChangesHistory();
+
+    /**
      * @brief Сохранить изменения проекта
      */
     void saveChanges();

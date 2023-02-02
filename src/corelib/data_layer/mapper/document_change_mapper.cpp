@@ -4,6 +4,7 @@
 #include <domain/document_change_object.h>
 #include <domain/objects_builder.h>
 
+#include <QSqlQuery>
 #include <QSqlRecord>
 
 using Domain::DocumentChangeObject;
@@ -46,6 +47,18 @@ QString unsyncedFilter()
     return QString(" WHERE is_synced = 0 GROUP BY fk_document_uuid");
 }
 } // namespace
+
+bool DataMappingLayer::DocumentChangeMapper::isEmpty()
+{
+    QSqlQuery query = DatabaseLayer::Database::query();
+    query.prepare(QString("SELECT COUNT(*) FROM %1").arg(kTableName));
+
+    executeSql(query);
+
+    query.next();
+    const QSqlRecord record = query.record();
+    return record.value(0).toInt() > 0;
+}
 
 DocumentChangeObject* DocumentChangeMapper::find(const Domain::Identifier& _id)
 {
@@ -115,6 +128,14 @@ bool DocumentChangeMapper::update(DocumentChangeObject* _object)
 void DocumentChangeMapper::remove(DocumentChangeObject* _object)
 {
     abstractDelete(_object);
+}
+
+void DocumentChangeMapper::removeAll()
+{
+    QSqlQuery query = DatabaseLayer::Database::query();
+    query.prepare(QString("DELETE FROM %1").arg(kTableName));
+
+    executeSql(query);
 }
 
 QString DocumentChangeMapper::findStatement(const Domain::Identifier& _id) const

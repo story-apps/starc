@@ -67,6 +67,20 @@ QVector<Domain::DocumentObject*> DocumentMapper::findAll(Domain::DocumentObjectT
     return documentObjects;
 }
 
+QVector<Domain::DocumentObject*> DocumentMapper::findAll()
+{
+    const auto domainObjects = abstractFind("");
+    if (domainObjects.isEmpty()) {
+        return {};
+    }
+
+    QVector<Domain::DocumentObject*> documentObjects;
+    for (auto domainObject : domainObjects) {
+        documentObjects.append(static_cast<DocumentObject*>(domainObject));
+    }
+    return documentObjects;
+}
+
 void DocumentMapper::insert(DocumentObject* _object)
 {
     abstractInsert(_object);

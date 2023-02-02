@@ -2532,6 +2532,11 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     d->projectStructureModel->setProjectName({});
 }
 
+void ProjectManager::clearChangesHistory()
+{
+    DataStorageLayer::StorageFacade::documentChangeStorage()->removeAll();
+}
+
 void ProjectManager::saveChanges()
 {
     //
@@ -2729,17 +2734,28 @@ QVector<Domain::DocumentObject*> ProjectManager::unsyncedDocuments() const
 {
     using namespace DataStorageLayer;
 
-    const auto unsyncedDocuments = StorageFacade::documentChangeStorage()->unsyncedDocuments();
     QVector<Domain::DocumentObject*> documents;
-    for (const auto& documentUuid : unsyncedDocuments) {
-        auto document = StorageFacade::documentStorage()->document(documentUuid);
-        if (document != nullptr) {
-            documents.append(document);
-        } else {
-            const auto unsyncedDocumentChanges
-                = StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(documentUuid);
-            for (auto change : unsyncedDocumentChanges) {
-                StorageFacade::documentChangeStorage()->removeDocumentChange(change);
+    //
+    // Если нет изменений, то это импортированный проект, нужно синхронизировать все документы
+    //
+    if (StorageFacade::documentChangeStorage()->isEmpty()) {
+        documents = StorageFacade::documentStorage()->documents();
+    }
+    //
+    // А если изменения есть, то синхронизируем только те документы, которые были изменены по факту
+    //
+    else {
+        const auto unsyncedDocuments = StorageFacade::documentChangeStorage()->unsyncedDocuments();
+        for (const auto& documentUuid : unsyncedDocuments) {
+            auto document = StorageFacade::documentStorage()->document(documentUuid);
+            if (document != nullptr) {
+                documents.append(document);
+            } else {
+                const auto unsyncedDocumentChanges
+                    = StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(documentUuid);
+                for (auto change : unsyncedDocumentChanges) {
+                    StorageFacade::documentChangeStorage()->removeDocumentChange(change);
+                }
             }
         }
     }

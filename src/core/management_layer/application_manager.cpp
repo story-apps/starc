@@ -1651,8 +1651,8 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     // Импортировать будем всё, кроме старковских файлов, т.к. данные из них копируются на
     // предыдущем шаге
     //
-    const auto shouldPerformImport
-        = !_importFilePath.isEmpty() && !_importFilePath.endsWith(ExtensionHelper::starc());
+    const auto isImportedFromStarc = _importFilePath.endsWith(ExtensionHelper::starc());
+    const auto shouldPerformImport = !_importFilePath.isEmpty() && !isImportedFromStarc;
 
     //
     // Если будет импорт, то сбросим умолчальный тип проекта, чтобы не создавать лишних документов
@@ -1766,6 +1766,18 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
 
             QApplication::alert(applicationView);
         }
+    }
+
+    //
+    // При импорте из проекта старка, очищаем всю историю изменений, т.к. она может быть неполной,
+    // например если это проект из облака
+    //
+    if (isImportedFromStarc) {
+        //
+        // TODO: менять юид документа проекта, чтобы при копировании проектов не было одинаковых
+        //       юидов у разных проектов
+        //
+        projectManager->clearChangesHistory();
     }
 
 #ifdef CLOUD_SERVICE_MANAGER
