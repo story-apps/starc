@@ -342,28 +342,24 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
         boldAction->setText(tr("Bold"));
         boldAction->setWhatsThis(
             QKeySequence(QKeySequence::Bold).toString(QKeySequence::NativeText));
-        boldAction->setEnabled(textCursor().hasSelection());
         connect(boldAction, &QAction::triggered, this, &BaseTextEdit::invertTextBold);
         //
         auto italicAction = new QAction(formattingAction);
         italicAction->setText(tr("Italic"));
         italicAction->setWhatsThis(
             QKeySequence(QKeySequence::Italic).toString(QKeySequence::NativeText));
-        italicAction->setEnabled(textCursor().hasSelection());
         connect(italicAction, &QAction::triggered, this, &BaseTextEdit::invertTextItalic);
         //
         auto underlineAction = new QAction(formattingAction);
         underlineAction->setText(tr("Underline"));
         underlineAction->setWhatsThis(
             QKeySequence(QKeySequence::Underline).toString(QKeySequence::NativeText));
-        underlineAction->setEnabled(textCursor().hasSelection());
         connect(underlineAction, &QAction::triggered, this, &BaseTextEdit::invertTextUnderline);
 
         auto strikethroughAction = new QAction(formattingAction);
         strikethroughAction->setText(tr("Strikethrough"));
         strikethroughAction->setWhatsThis(
             QKeySequence("Shift+Ctrl+X").toString(QKeySequence::NativeText));
-        strikethroughAction->setEnabled(textCursor().hasSelection());
         connect(strikethroughAction, &QAction::triggered, this,
                 &BaseTextEdit::invertTextStrikethrough);
 
