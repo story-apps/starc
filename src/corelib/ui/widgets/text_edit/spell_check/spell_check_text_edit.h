@@ -61,6 +61,11 @@ public:
     bool isMispelledWordUnderCursor(const QPoint& _position) const;
 
     /**
+     * @brief Доступно ли контекстное меню для проверки орфографии
+     */
+    bool hasSpellingMenu(const QPoint& _position) const;
+
+    /**
      * @brief Добавляем опции проверки орфографии в контекстное меню
      */
     ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr) override;

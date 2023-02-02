@@ -330,7 +330,7 @@ void BaseTextEdit::setTextAlignment(Qt::Alignment _alignment)
 ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
     auto menu = CompleterTextEdit::createContextMenu(_position, _parent);
-    if (isReadOnly() || (!textCursor().hasSelection() && isMispelledWordUnderCursor(_position))) {
+    if (isReadOnly() || hasSpellingMenu(_position)) {
         return menu;
     }
 

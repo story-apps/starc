@@ -158,14 +158,26 @@ bool SpellCheckTextEdit::isMispelledWordUnderCursor(const QPoint& _position) con
     return !d->spellChecker.spellCheckWord(wordInCorrectRegister);
 }
 
+bool SpellCheckTextEdit::hasSpellingMenu(const QPoint& _position) const
+{
+    const auto ignoreSpellingMenu =
+        //
+        // Если в режиме только чтения, не используется проверка орфографии, есть выделенный текст
+        // или нет ошибок под курсором
+        //
+        !useSpellChecker()
+        || (textCursor().hasSelection() && textCursor().selectedText().simplified().contains(' '))
+        || !isMispelledWordUnderCursor(_position);
+    return !ignoreSpellingMenu;
+}
+
 ContextMenu* SpellCheckTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
     //
     // Если в режиме только чтения, не используется проверка орфографии, есть выделенный текст
     // или нет ошибок под курсором
     //
-    if (isReadOnly() || !useSpellChecker() || textCursor().hasSelection()
-        || !isMispelledWordUnderCursor(_position)) {
+    if (isReadOnly() || !hasSpellingMenu(_position)) {
         //
         // ... возвращаем стандартное меню
         //

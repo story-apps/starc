@@ -1209,7 +1209,7 @@ ContextMenu* StageplayTextEdit::createContextMenu(const QPoint& _position, QWidg
     // измениться курсор, который установлен в текстовом редакторе, и использовать его
     //
     auto menu = ScriptTextEdit::createContextMenu(_position, _parent);
-    if (isReadOnly() || (!textCursor().hasSelection() && isMispelledWordUnderCursor(_position))) {
+    if (isReadOnly() || hasSpellingMenu(_position)) {
         return menu;
     }
 
