@@ -57,7 +57,7 @@ bool DataMappingLayer::DocumentChangeMapper::isEmpty()
 
     query.next();
     const QSqlRecord record = query.record();
-    return record.value(0).toInt() > 0;
+    return record.value(0).toInt() == 0;
 }
 
 DocumentChangeObject* DocumentChangeMapper::find(const Domain::Identifier& _id)
