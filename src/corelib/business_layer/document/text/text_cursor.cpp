@@ -280,60 +280,66 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
         }
 
         //
-        // ... когда пользователь нажал делит в блоке идущем перед таблицей
+        // ... нажатие делит и бекспейс на границах таблицы
         //
-        {
-            auto checkCursor = cursor;
-            checkCursor.setPosition(topCursorPosition);
-            if (!checkCursor.inTable()) {
-                const bool isTopBlockEmpty = checkCursor.block().text().isEmpty();
-                const auto topBlock = checkCursor.block();
-                checkCursor.setPosition(bottomCursorPosition);
-                if (topBlock.next() == checkCursor.block()
-                    && TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter) {
-                    //
-                    // ... если блок пуст, то удалим блок, пододвинув таблицу наверх
-                    //
-                    if (isTopBlockEmpty) {
-                        cursor.setPosition(topCursorPosition);
-                        cursor.movePosition(TextCursor::NextCharacter, TextCursor::KeepAnchor);
-                        cursor.deleteChar();
-                        cursor.movePosition(TextCursor::NextCharacter);
-                        _editor->setTextCursor(cursor);
-                    }
-                    //
-                    // ... в противном случае, игнорируем изменение
-                    //
-
-                    return;
-                }
-            }
-        }
-
-        //
-        // ... когда пользователь нажал бэкспейс в блоке идущем после таблицы
-        //
-        {
-            auto checkCursor = cursor;
-            checkCursor.setPosition(topCursorPosition);
-            if (TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter) {
-                checkCursor.setPosition(bottomCursorPosition);
+        if (!cursor.hasSelection()) {
+            //
+            // ... когда пользователь нажал делит в блоке идущем перед таблицей
+            //
+            {
+                auto checkCursor = cursor;
+                checkCursor.setPosition(topCursorPosition);
                 if (!checkCursor.inTable()) {
-                    //
-                    // ... если блок не пуст, то игнорируем нажатие
-                    //
-                    if (!checkCursor.block().text().isEmpty()) {
+                    const bool isTopBlockEmpty = checkCursor.block().text().isEmpty();
+                    const auto topBlock = checkCursor.block();
+                    checkCursor.setPosition(bottomCursorPosition);
+                    if (topBlock.next() == checkCursor.block()
+                        && TextBlockStyle::forBlock(checkCursor)
+                            == TextParagraphType::PageSplitter) {
+                        //
+                        // ... если блок пуст, то удалим блок, пододвинув таблицу наверх
+                        //
+                        if (isTopBlockEmpty) {
+                            cursor.setPosition(topCursorPosition);
+                            cursor.movePosition(TextCursor::NextCharacter, TextCursor::KeepAnchor);
+                            cursor.deleteChar();
+                            cursor.movePosition(TextCursor::NextCharacter);
+                            _editor->setTextCursor(cursor);
+                        }
+                        //
+                        // ... в противном случае, игнорируем изменение
+                        //
+
                         return;
                     }
-                    //
-                    // ... в противном случае, работаем по общему алгоритму
-                    //
+                }
+            }
+
+            //
+            // ... когда пользователь нажал бэкспейс в блоке идущем после таблицы
+            //
+            {
+                auto checkCursor = cursor;
+                checkCursor.setPosition(topCursorPosition);
+                if (TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter) {
+                    checkCursor.setPosition(bottomCursorPosition);
+                    if (!checkCursor.inTable()) {
+                        //
+                        // ... если блок не пуст, то игнорируем нажатие
+                        //
+                        if (!checkCursor.block().text().isEmpty()) {
+                            return;
+                        }
+                        //
+                        // ... в противном случае, работаем по общему алгоритму
+                        //
+                    }
                 }
             }
         }
 
         //
-        // ... когда пользователь хочет удалить контент внутри таблицы
+        // ... когда пользователь хочет удалить контент внутри одной таблицы
         //
         {
             auto checkCursor = cursor;
@@ -375,10 +381,43 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                     //     только вся таблица целиком
                     //
                     else {
+                        //
+                        // ... выделяем таблицу вместе с границами
+                        //
+                        const auto selectionInterval = cursor.selectionInterval();
+                        cursor.setPosition(selectionInterval.from);
+                        while (TextBlockStyle::forBlock(cursor)
+                               != TextParagraphType::PageSplitter) {
+                            cursor.movePosition(TextCursor::PreviousBlock);
+                        }
+                        do {
+                            cursor.movePosition(TextCursor::NextBlock, TextCursor::KeepAnchor);
+                        } while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter
+                                 && cursor.position() < selectionInterval.to);
+                        //
+                        // ... удаляем таблицу
+                        //
                         cursor.removeSelectedText();
-                        auto textDocument = qobject_cast<BusinessLayer::TextDocument*>(document());
-                        textDocument->mergeParagraph(cursor);
                         cursor.deletePreviousChar();
+                        //
+                        // ... если в документе ничего не осталось, то применим дефолтный формат
+                        //
+                        if (cursor.document()->isEmpty()) {
+                            auto textDocument
+                                = qobject_cast<BusinessLayer::TextDocument*>(cursor.document());
+                            textDocument->setParagraphType(textTemplate().defaultParagraphType(),
+                                                           cursor);
+                        }
+                        //
+                        // ... а если осталось, то вернём курсор на символ назад, если он попал в
+                        // таблицу
+                        //
+                        else if (TextBlockStyle::forBlock(cursor)
+                                 == TextParagraphType::PageSplitter) {
+                            cursor.movePosition(TextCursor::PreviousBlock);
+                            cursor.movePosition(TextCursor::EndOfBlock);
+                            _editor->setTextCursor(cursor);
+                        }
                     }
                     return;
                 }
@@ -448,6 +487,56 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                 //
                 // ... во всех остальных случаях работаем по общей схеме
                 //
+            }
+        }
+
+        //
+        // ... когда пользователь хочет удалить несколько таблиц
+        //
+        if (cursor.hasSelection()) {
+            auto checkCursor = cursor;
+            checkCursor.setPosition(topCursorPosition);
+            const auto topCursorInPageSplitter
+                = TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter;
+            checkCursor.setPosition(bottomCursorPosition);
+            const auto bottomCursorInPageSplitter
+                = TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter;
+            if (topCursorInPageSplitter && bottomCursorInPageSplitter) {
+                //
+                // ... выделяем таблицу вместе с границами
+                //
+                const auto selectionInterval = cursor.selectionInterval();
+                cursor.setPosition(selectionInterval.from);
+                while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter) {
+                    cursor.movePosition(TextCursor::PreviousBlock);
+                }
+                do {
+                    cursor.movePosition(TextCursor::NextBlock, TextCursor::KeepAnchor);
+                } while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter
+                         && cursor.position() < selectionInterval.to);
+                //
+                // ... удаляем таблицу
+                //
+                cursor.removeSelectedText();
+                cursor.deletePreviousChar();
+                //
+                // ... если в документе ничего не осталось, то применим дефолтный формат
+                //
+                if (cursor.document()->isEmpty()) {
+                    auto textDocument
+                        = qobject_cast<BusinessLayer::TextDocument*>(cursor.document());
+                    textDocument->setParagraphType(textTemplate().defaultParagraphType(), cursor);
+                }
+                //
+                // ... а если осталось, то вернём курсор на символ назад, если он попал в
+                // таблицу
+                //
+                else if (TextBlockStyle::forBlock(cursor) == TextParagraphType::PageSplitter) {
+                    cursor.movePosition(TextCursor::PreviousBlock);
+                    cursor.movePosition(TextCursor::EndOfBlock);
+                    _editor->setTextCursor(cursor);
+                }
+                return;
             }
         }
     }
