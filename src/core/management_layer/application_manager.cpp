@@ -52,6 +52,7 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QFileDialog>
+#include <QFileSystemWatcher>
 #include <QFontDatabase>
 #include <QJsonDocument>
 #include <QKeyEvent>
@@ -1025,7 +1026,37 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         return translator;
     }();
     //
+    // ... для DEV-версии проверим, не задан ли кастомный файл с переводом
+    //
     QApplication::removeTranslator(appTranslator);
+    if (QApplication::applicationVersion().contains("dev")) {
+        const auto translationFilePath
+            = settingsValue(DataStorageLayer::kApplicationLanguagedFileKey).toString();
+        //
+        // ... если файл задан, то установим его в качестве источника перевода
+        //
+        if (!translationFilePath.isEmpty()) {
+            appTranslator->load(translationFilePath);
+            QApplication::installTranslator(appTranslator);
+            //
+            // ... подписываемся на изменения файла, чтобы автоматически перезагрузить его
+            //
+            auto watcher = new QFileSystemWatcher(q);
+            watcher->addPath(translationFilePath);
+            connect(watcher, &QFileSystemWatcher::fileChanged, q, [this, watcher] {
+                setTranslation(QLocale().language());
+                watcher->deleteLater();
+            });
+            //
+            // ... а эту переменную очищаем, чтобы далее не применялся стандартный перевод вшитый в
+            //     программу
+            //
+            translation.clear();
+        }
+    }
+    //
+    // ... применяем файл с переводом из ресурсов приложения, если задан язык
+    //
     if (!translation.isEmpty()) {
         appTranslator->load(":/translations/translation_" + translation + ".qm");
         QApplication::installTranslator(appTranslator);
@@ -2494,6 +2525,8 @@ void ApplicationManager::initConnections()
             [this] { d->showLastContent(); });
     connect(d->settingsManager.data(), &SettingsManager::applicationLanguageChanged, this,
             [this](QLocale::Language _language) { d->setTranslation(_language); });
+    connect(d->settingsManager.data(), &SettingsManager::applicationLanguageFileChanged, this,
+            [this] { d->setTranslation(QLocale().language()); });
     //
     auto postSpellingChangeEvent = [this] {
         const auto useSpellChecker

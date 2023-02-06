@@ -459,10 +459,18 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
         auto dialog = new Ui::LanguageDialog(_parentWidget);
         dialog->setCurrentLanguage(QLocale().language());
         dialog->showDialog();
-        connect(dialog, &Ui::LanguageDialog::languageChanged, this,
-                &SettingsManager::applicationLanguageChanged);
+        //
+        // Сначала сохраняем, а потом используем, чтобы в дев-версии корректно обрабатывался кейс,
+        // когда пользователь установил файл перевода внучную
+        //
         connect(dialog, &Ui::LanguageDialog::languageChanged, this,
                 &SettingsManager::setApplicationLanguage);
+        connect(dialog, &Ui::LanguageDialog::languageChanged, this,
+                &SettingsManager::applicationLanguageChanged);
+        connect(dialog, &Ui::LanguageDialog::languageFileChanged, this,
+                &SettingsManager::setApplicationLanguageFile);
+        connect(dialog, &Ui::LanguageDialog::languageFileChanged, this,
+                &SettingsManager::applicationLanguageFileChanged);
         connect(dialog, &Ui::LanguageDialog::disappeared, dialog, &Ui::LanguageDialog::deleteLater);
     });
     connect(
@@ -1014,6 +1022,16 @@ bool SettingsManager::eventFilter(QObject* _watched, QEvent* _event)
 void SettingsManager::setApplicationLanguage(int _language)
 {
     setSettingsValue(DataStorageLayer::kApplicationLanguagedKey, _language);
+
+    //
+    // При задании конкретного языка, стираем информацию о кастомном файле
+    //
+    setSettingsValue(DataStorageLayer::kApplicationLanguagedFileKey, {});
+}
+
+void SettingsManager::setApplicationLanguageFile(const QString& _filePath)
+{
+    setSettingsValue(DataStorageLayer::kApplicationLanguagedFileKey, _filePath);
 }
 
 void SettingsManager::setApplicationTheme(Ui::ApplicationTheme _theme)

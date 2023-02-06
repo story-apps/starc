@@ -6,7 +6,10 @@
 #include <ui/widgets/radio_button/percent_radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
 
+#include <QCoreApplication>
+#include <QFileDialog>
 #include <QGridLayout>
+#include <QStandardPaths>
 #include <QUrl>
 
 
@@ -64,6 +67,7 @@ public:
     QHBoxLayout* buttonsLayout = nullptr;
     Body2Label* translationProgressLabel = nullptr;
     Button* improveButton = nullptr;
+    Button* browseButton = nullptr;
     Button* closeButton = nullptr;
 };
 
@@ -102,6 +106,7 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     , languageHowToAddLink(new Body1LinkLabel(_parent))
     , translationProgressLabel(new Body2Label(_parent))
     , improveButton(new Button(_parent))
+    , browseButton(new Button(_parent))
     , closeButton(new Button(_parent))
 {
     arabic->setText("اَلْعَرَبِيَّةُ");
@@ -171,6 +176,7 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     languageHowToAddLink->setLink(QUrl("https://starc.app/translate"));
     translationProgressLabel->hide();
     improveButton->hide();
+    browseButton->setVisible(QCoreApplication::applicationVersion().contains("dev"));
 
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
@@ -178,6 +184,7 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(translationProgressLabel, 0, Qt::AlignVCenter);
     buttonsLayout->addWidget(improveButton);
+    buttonsLayout->addWidget(browseButton);
     buttonsLayout->addWidget(closeButton);
 
     auto projectLocationGroup = new RadioButtonGroup(_parent);
@@ -287,10 +294,18 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
                 });
     }
     connect(d->improveButton, &Button::clicked, d->languageHowToAddLink, &Body1LinkLabel::clicked);
-    connect(d->closeButton, &Button::clicked, this, &LanguageDialog::hideDialog);
+    connect(d->browseButton, &Button::clicked, this, [this] {
+        const auto translationPath = QFileDialog::getOpenFileName(
+            this, tr("Select file with translation"),
+            QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).constFirst(),
+            QString("%1 (*.qm)").arg(tr("Coplited Qt translation files")));
+        if (translationPath.isEmpty()) {
+            return;
+        }
 
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
+        emit languageFileChanged(translationPath);
+    });
+    connect(d->closeButton, &Button::clicked, this, &LanguageDialog::hideDialog);
 }
 
 void LanguageDialog::setCurrentLanguage(QLocale::Language _language)
@@ -323,6 +338,7 @@ void LanguageDialog::updateTranslations()
         tr("Did not find your preffered language? Read how you can add it yourself."));
 
     d->improveButton->setText(tr("Improve"));
+    d->browseButton->setText(tr("Browse"));
     d->closeButton->setText(tr("Close"));
 }
 
@@ -347,6 +363,7 @@ void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     for (auto button : {
              d->improveButton,
+             d->browseButton,
              d->closeButton,
          }) {
         button->setBackgroundColor(Ui::DesignSystem::color().accent());

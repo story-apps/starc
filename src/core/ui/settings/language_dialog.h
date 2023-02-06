@@ -26,6 +26,11 @@ signals:
      */
     void languageChanged(QLocale::Language _language);
 
+    /**
+     * @brief Пользователь установил файл перевода для использоания
+     */
+    void languageFileChanged(const QString& _filePath);
+
 protected:
     /**
      * @brief Определим виджет, который необходимо сфокусировать после отображения диалога
