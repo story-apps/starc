@@ -237,6 +237,13 @@ public:
     bool tryLockProject(const QString& _path);
 
     /**
+     * @brief Попробовать захватить владение файлом, заблокировав его изменение другими копиями
+     *        приложения при открытии проекта
+     * @note В данном методе есть возможность зафорсить открытие проекта
+     */
+    bool tryLockProjectOnOpen(const QString& _path);
+
+    /**
      * @brief Перейти к редактированию текущего проекта
      */
     void goToEditCurrentProject(const QString& _importFilePath = {});
@@ -1606,7 +1613,7 @@ bool ApplicationManager::Implementation::openProject(const QString& _path)
     //
     // ... проверяем открыт ли файл в другом приложении
     //
-    if (!tryLockProject(_path)) {
+    if (!tryLockProjectOnOpen(_path)) {
         return false;
     }
 
@@ -1649,6 +1656,40 @@ bool ApplicationManager::Implementation::tryLockProject(const QString& _path)
         StandardDialog::information(applicationView, {},
                                     tr("This file can't be open at this moment, because it is "
                                        "already open in another copy of the application."));
+        return false;
+    }
+
+    lockFile->setStaleLockTime(0);
+    return true;
+}
+
+bool ApplicationManager::Implementation::tryLockProjectOnOpen(const QString& _path)
+{
+    const QFileInfo projectFileInfo(_path);
+    lockFile.reset(new QLockFile(
+        QString("%1/.~lock.%2").arg(projectFileInfo.absolutePath(), projectFileInfo.fileName())));
+    if (!lockFile->tryLock()) {
+        //
+        // В некоторых случаях, после падения приложения (особенно в маке), файл блокировки не
+        // освобождается, т.к. названия процессов совпадают, поэтому для кейса с открытием документа
+        // даём возможность форсировать открытие путём удаления протухшего файла
+        //
+        auto dialog = new Dialog(applicationView->topLevelWidget());
+        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+        dialog->showDialog({},
+                           tr("This file can't be open at this moment, because it is already open "
+                              "in another copy of the application."),
+                           { { 0, StandardDialog::generateOkTerm(), Dialog::RejectButton },
+                             { 1, tr("Ignore and open"), Dialog::AcceptButton } });
+        connect(dialog, &Dialog::finished, q,
+                [this, dialog, _path](const Dialog::ButtonInfo& _presedButton) {
+                    dialog->hideDialog();
+                    if (_presedButton.type == Dialog::AcceptButton) {
+                        lockFile->removeStaleLockFile();
+                        openProject(_path);
+                    }
+                });
+        QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
         return false;
     }
 
