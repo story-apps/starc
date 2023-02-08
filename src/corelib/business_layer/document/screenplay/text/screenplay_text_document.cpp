@@ -55,6 +55,15 @@ ScreenplayTextDocument::ScreenplayTextDocument(QObject* _parent)
 
         if (d->isTreatmentVisible) {
             screenplayModel->setTreatmentPageCount(pageCount());
+
+            //
+            // Если включён режим отображения поэпизодника, то обработаем кейс, когда в документе
+            // есть только один блок и он невидим в поэпизоднике
+            //
+            if (blockCount() == 1
+                && !visibleBlocksTypes().contains(TextBlockStyle::forBlock(begin()))) {
+                applyParagraphType(TextParagraphType::SceneHeading, TextCursor(this));
+            }
         } else {
             screenplayModel->setScriptPageCount(pageCount());
         }
@@ -75,6 +84,39 @@ void ScreenplayTextDocument::setTreatmentVisible(bool _visible)
     }
 
     d->isTreatmentVisible = _visible;
+}
+
+QSet<TextParagraphType> ScreenplayTextDocument::visibleBlocksTypes() const
+{
+    if (d->isTreatmentVisible) {
+        return {
+            TextParagraphType::SceneHeading,      TextParagraphType::SceneHeadingShadowTreatment,
+            TextParagraphType::SceneCharacters,   TextParagraphType::BeatHeading,
+            TextParagraphType::BeatHeadingShadow, TextParagraphType::ActHeading,
+            TextParagraphType::ActFooter,         TextParagraphType::SequenceHeading,
+            TextParagraphType::SequenceFooter,
+        };
+    }
+
+    return {
+        TextParagraphType::SceneHeading,
+        TextParagraphType::SceneHeadingShadow,
+        TextParagraphType::SceneCharacters,
+        TextParagraphType::Action,
+        TextParagraphType::Character,
+        TextParagraphType::Parenthetical,
+        TextParagraphType::Dialogue,
+        TextParagraphType::Lyrics,
+        TextParagraphType::Shot,
+        TextParagraphType::Transition,
+        TextParagraphType::InlineNote,
+        TextParagraphType::UnformattedText,
+        TextParagraphType::ActHeading,
+        TextParagraphType::ActFooter,
+        TextParagraphType::SequenceHeading,
+        TextParagraphType::SequenceFooter,
+        TextParagraphType::PageSplitter,
+    };
 }
 
 void ScreenplayTextDocument::setCorrectionOptions(bool _needToCorrectCharactersNames,

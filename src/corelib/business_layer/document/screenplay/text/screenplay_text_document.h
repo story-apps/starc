@@ -23,6 +23,12 @@ public:
     void setTreatmentVisible(bool _visible);
 
     /**
+     * @brief Получить список видимых блоков в зависимости от режима отображения поэпизодника или
+     * сценария
+     */
+    QSet<TextParagraphType> visibleBlocksTypes() const;
+
+    /**
      * @brief Настроить необходимость корректировок
      */
     void setCorrectionOptions(bool _needToCorrectCharactersNames, bool _needToCorrectPageBreaks);

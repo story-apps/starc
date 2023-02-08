@@ -92,12 +92,6 @@ public:
     QTextDocument* document() const;
 
     /**
-     * @brief Получить список видимых блоков в зависимости от режима отображения поэпизодника или
-     * сценария
-     */
-    QSet<TextParagraphType> visibleBlocksTypes() const;
-
-    /**
      * @brief Обновить видимость блоков в заданном интервале
      */
     void updateBlocksVisibility(int _from);
@@ -296,46 +290,13 @@ QTextDocument* ScreenplayTextCorrector::Implementation::document() const
     return q->document();
 }
 
-QSet<TextParagraphType> ScreenplayTextCorrector::Implementation::visibleBlocksTypes() const
-{
-    auto screenplayDocument = qobject_cast<ScreenplayTextDocument*>(document());
-    if (screenplayDocument->isTreatmentVisible()) {
-        return {
-            TextParagraphType::SceneHeading,      TextParagraphType::SceneHeadingShadowTreatment,
-            TextParagraphType::SceneCharacters,   TextParagraphType::BeatHeading,
-            TextParagraphType::BeatHeadingShadow, TextParagraphType::ActHeading,
-            TextParagraphType::ActFooter,         TextParagraphType::SequenceHeading,
-            TextParagraphType::SequenceFooter,
-        };
-    }
-
-    return {
-        TextParagraphType::SceneHeading,
-        TextParagraphType::SceneHeadingShadow,
-        TextParagraphType::SceneCharacters,
-        TextParagraphType::Action,
-        TextParagraphType::Character,
-        TextParagraphType::Parenthetical,
-        TextParagraphType::Dialogue,
-        TextParagraphType::Lyrics,
-        TextParagraphType::Shot,
-        TextParagraphType::Transition,
-        TextParagraphType::InlineNote,
-        TextParagraphType::UnformattedText,
-        TextParagraphType::ActHeading,
-        TextParagraphType::ActFooter,
-        TextParagraphType::SequenceHeading,
-        TextParagraphType::SequenceFooter,
-        TextParagraphType::PageSplitter,
-    };
-}
-
 void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
 {
     //
     // Сформируем список типов блоков для отображения
     //
-    const auto visibleBlocksTypes = this->visibleBlocksTypes();
+    auto screenplayDocument = qobject_cast<ScreenplayTextDocument*>(document());
+    const auto visibleBlocksTypes = screenplayDocument->visibleBlocksTypes();
 
     //
     // Пробегаем документ и настраиваем видимые и невидимые блоки
