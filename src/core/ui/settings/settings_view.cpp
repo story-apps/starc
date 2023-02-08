@@ -813,7 +813,7 @@ void SettingsView::Implementation::initScreenplayCard()
     screenplayEditorShowSceneNumberOnLeft->setChecked(true);
     screenplayEditorShowSceneNumberOnRight->setEnabled(false);
     //
-    screenplayNavigatorShowBeatsInTreatment->setEnabled(true);
+    screenplayNavigatorShowBeatsInTreatment->setEnabled(false);
     screenplayNavigatorShowBeatsInTreatment->setChecked(true);
     screenplayNavigatorShowBeatsInScreenplay->setEnabled(false);
     screenplayNavigatorShowBeatsInScreenplay->setChecked(false);
