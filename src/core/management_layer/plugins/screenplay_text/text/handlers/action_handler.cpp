@@ -185,8 +185,6 @@ void ActionHandler::handleOther(QKeyEvent* _event)
         // Если было введено какое-либо значение из списка мест (ИНТ./НАТ. и т.п.)
         // то необходимо преобразовать блок во время и место
         //
-        QVector<QString> str;
-
         const QString maybeSceneIntro = TextHelper::smartToUpper(cursorBackwardText);
         if (editor()->dictionaries()->sceneIntros().contains(maybeSceneIntro)) {
             editor()->setCurrentParagraphType(TextParagraphType::SceneHeading);

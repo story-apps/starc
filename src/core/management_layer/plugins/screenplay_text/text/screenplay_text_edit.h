@@ -95,6 +95,11 @@ public:
     void redo();
 
     /**
+     * @brief Задать видимость битов в документе
+     */
+    void setBeatsVisible(bool _visible);
+
+    /**
      * @brief Вставить новый блок
      * @param Тип блока
      */

@@ -70,6 +70,7 @@ const QString kSettingsKey = "screenplay-text";
 const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
 const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
+const QString kIsBeatsVisibleKey = kSettingsKey + "/is-beats-visible";
 const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
 const QString kIsSceneParametersVisibleKey = kSettingsKey + "/is-scene-parameters-visible";
 const QString kIsBookmarksListVisibleKey = kSettingsKey + "/is-bookmarks-list-visible";
@@ -221,42 +222,6 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     , cursorChangeNotificationsDebounser(500)
 
 {
-    commentsModel->setParagraphTypesFiler({
-        BusinessLayer::TextParagraphType::SceneHeading,
-        BusinessLayer::TextParagraphType::SceneCharacters,
-        BusinessLayer::TextParagraphType::Action,
-        BusinessLayer::TextParagraphType::Character,
-        BusinessLayer::TextParagraphType::Parenthetical,
-        BusinessLayer::TextParagraphType::Dialogue,
-        BusinessLayer::TextParagraphType::Lyrics,
-        BusinessLayer::TextParagraphType::Shot,
-        BusinessLayer::TextParagraphType::Transition,
-        BusinessLayer::TextParagraphType::InlineNote,
-        BusinessLayer::TextParagraphType::UnformattedText,
-        BusinessLayer::TextParagraphType::ActHeading,
-        BusinessLayer::TextParagraphType::ActFooter,
-        BusinessLayer::TextParagraphType::SequenceHeading,
-        BusinessLayer::TextParagraphType::SequenceFooter,
-    });
-    bookmarksModel->setParagraphTypesFiler({
-        BusinessLayer::TextParagraphType::SceneHeading,
-        BusinessLayer::TextParagraphType::SceneCharacters,
-        BusinessLayer::TextParagraphType::Action,
-        BusinessLayer::TextParagraphType::Character,
-        BusinessLayer::TextParagraphType::Parenthetical,
-        BusinessLayer::TextParagraphType::Dialogue,
-        BusinessLayer::TextParagraphType::Lyrics,
-        BusinessLayer::TextParagraphType::Shot,
-        BusinessLayer::TextParagraphType::Transition,
-        BusinessLayer::TextParagraphType::InlineNote,
-        BusinessLayer::TextParagraphType::UnformattedText,
-        BusinessLayer::TextParagraphType::ActHeading,
-        BusinessLayer::TextParagraphType::ActFooter,
-        BusinessLayer::TextParagraphType::SequenceHeading,
-        BusinessLayer::TextParagraphType::SequenceFooter,
-    });
-
-
     toolbar->setParagraphTypesModel(paragraphTypesModel);
 
     commentsToolbar->hide();
@@ -313,21 +278,49 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
 
 void ScreenplayTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
 {
+    using namespace BusinessLayer;
+
     paragraphTypesModel->clear();
 
-    using namespace BusinessLayer;
+    //
+    // Настраиваем список доступных для работы типов блоков
+    //
+    QVector<TextParagraphType> types = {
+        TextParagraphType::SceneHeading,
+        TextParagraphType::SceneCharacters,
+        TextParagraphType::BeatHeading,
+        TextParagraphType::Action,
+        TextParagraphType::Character,
+        TextParagraphType::Parenthetical,
+        TextParagraphType::Dialogue,
+        TextParagraphType::Lyrics,
+        TextParagraphType::Shot,
+        TextParagraphType::Transition,
+        TextParagraphType::InlineNote,
+        TextParagraphType::UnformattedText,
+        TextParagraphType::SequenceHeading,
+        TextParagraphType::SequenceFooter,
+        TextParagraphType::ActHeading,
+        TextParagraphType::ActFooter,
+    };
+    if (!toolbar->isBeatsVisible()) {
+        types.removeOne(TextParagraphType::BeatHeading);
+    }
+
+    //
+    // Настраиваем фильтры моделей
+    //
+    commentsModel->setParagraphTypesFiler(types);
+    bookmarksModel->setParagraphTypesFiler(types);
+
+    //
+    // Убираем типы окончаний, для списка форматов редактора текста
+    //
+    types.removeOne(TextParagraphType::SequenceFooter);
+    types.removeOne(TextParagraphType::ActFooter);
     const auto& usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(
         model && model->informationModel() ? model->informationModel()->templateId() : "");
-    const QVector<TextParagraphType> types = {
-        TextParagraphType::SceneHeading,    TextParagraphType::SceneCharacters,
-        TextParagraphType::Action,          TextParagraphType::Character,
-        TextParagraphType::Parenthetical,   TextParagraphType::Dialogue,
-        TextParagraphType::Lyrics,          TextParagraphType::Shot,
-        TextParagraphType::Transition,      TextParagraphType::InlineNote,
-        TextParagraphType::UnformattedText, TextParagraphType::SequenceHeading,
-        TextParagraphType::ActHeading,
-    };
-    for (const auto type : types) {
+    for (const auto type : std::as_const(types)) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {
             continue;
         }
@@ -654,6 +647,12 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 }
                 d->updateSideBarVisibility(this);
             });
+    connect(d->toolbar, &ScreenplayTextEditToolbar::beatsVisibleChanged, this,
+            [this](bool _visible) {
+                d->textEdit->setBeatsVisible(_visible);
+                const bool withModelReinitialization = false;
+                d->reconfigureTemplate(withModelReinitialization);
+            });
     connect(d->toolbar, &ScreenplayTextEditToolbar::commentsModeEnabledChanged, this,
             [this](bool _enabled) {
                 d->sidebarTabs->setTabVisible(kCommentsTabIndex, _enabled);
@@ -943,10 +942,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                     auto beatHeadingItem = d->model->createTextItem();
                     beatHeadingItem->setParagraphType(
                         BusinessLayer::TextParagraphType::BeatHeading);
-                    auto beatContentItem = d->model->createTextItem();
-                    beatContentItem->setParagraphType(BusinessLayer::TextParagraphType::Action);
                     auto beatItem = d->model->createGroupItem(BusinessLayer::TextGroupType::Beat);
-                    beatItem->appendItems({ beatHeadingItem, beatContentItem });
+                    beatItem->appendItems({ beatHeadingItem });
                     d->model->insertItem(beatItem, childItem);
                     break;
                 }
@@ -986,29 +983,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 beatHeadingItem = d->model->createTextItem();
                 beatHeadingItem->setParagraphType(BusinessLayer::TextParagraphType::BeatHeading);
                 auto beatItem = d->model->createGroupItem(BusinessLayer::TextGroupType::Beat);
-                QVector<BusinessLayer::AbstractModelItem*> beatItems = { beatHeadingItem };
-                //
-                // ... если в сцене уже был текст, то закидываем его в новый, создаваемый бит,
-                //
-                if (item->childCount() > 1) {
-                    //
-                    // ... опускаем заголовок сцены - первый текстовый элемент
-                    //
-                    while (item->childCount() > 1) {
-                        auto child = item->childAt(1);
-                        d->model->takeItem(child);
-                        beatItems.append(child);
-                    }
-                }
-                //
-                // ... а если не было, то создаём пустой параграф описания действия
-                //
-                else {
-                    auto beatContentItem = d->model->createTextItem();
-                    beatContentItem->setParagraphType(BusinessLayer::TextParagraphType::Action);
-                    beatItems.append(beatContentItem);
-                }
-                beatItem->appendItems(beatItems);
+                beatItem->appendItems({ beatHeadingItem });
                 d->model->appendItem(beatItem, item);
             }
             //
@@ -1029,8 +1004,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 //
                 int currentBeatIndex = 0;
                 for (int childIndex = 1; childIndex < item->childCount(); ++childIndex) {
-                    auto child = item->childAt(childIndex);
-                    if (child->type() != BusinessLayer::TextModelItemType::Group) {
+                    auto beatItem = item->childAt(childIndex);
+                    if (beatItem->type() != BusinessLayer::TextModelItemType::Group) {
                         continue;
                     }
 
@@ -1040,9 +1015,34 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                     }
 
                     //
+                    // ... извлечём всех детей и перенесём их по назначению
+                    //
+                    if (beatItem->hasChildren() && beatItem->childCount() > 1) {
+                        QVector<BusinessLayer::TextModelItem*> beatChildren;
+                        while (beatItem->childCount() > 1) {
+                            auto beatChildItem = beatItem->childAt(1);
+                            d->model->takeItem(beatChildItem);
+                            beatChildren.append(beatChildItem);
+                        }
+
+                        const int beatItemIndex = beatItem->parent()->rowOfChild(beatItem);
+                        if (beatItemIndex == 0) {
+                            d->model->prependItems(beatChildren);
+                        } else {
+                            auto beforeBeatItem = beatItem->parent()->childAt(beatItemIndex - 1);
+                            Q_ASSERT(beforeBeatItem);
+                            if (beforeBeatItem->type() == BusinessLayer::TextModelItemType::Group) {
+                                d->model->appendItems(beatChildren, beforeBeatItem);
+                            } else {
+                                d->model->insertItems(beatChildren, beforeBeatItem);
+                            }
+                        }
+                    }
+
+                    //
                     // ... и удалим его
                     //
-                    d->model->removeItem(child);
+                    d->model->removeItem(beatItem);
                     break;
                 }
             });
@@ -1451,6 +1451,8 @@ void ScreenplayTextView::loadViewSettings()
     const auto isFastFormatPanelVisible
         = settingsValue(kIsFastFormatPanelVisibleKey, false).toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
+    const auto isBeatsVisible = settingsValue(kIsBeatsVisibleKey, false).toBool();
+    d->toolbar->setBeatsVisible(isBeatsVisible);
     const auto isSceneParametersVisible
         = settingsValue(kIsSceneParametersVisibleKey, false).toBool();
     d->showSceneParametersAction->setChecked(isSceneParametersVisible);
@@ -1472,6 +1474,7 @@ void ScreenplayTextView::saveViewSettings()
     setSettingsValue(kScaleFactorKey, d->scalableWrapper->zoomRange());
 
     setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
+    setSettingsValue(kIsBeatsVisibleKey, d->toolbar->isBeatsVisible());
     setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
     setSettingsValue(kIsSceneParametersVisibleKey, d->showSceneParametersAction->isChecked());
     setSettingsValue(kIsBookmarksListVisibleKey, d->showBookmarksAction->isChecked());

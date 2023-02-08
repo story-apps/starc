@@ -25,7 +25,12 @@ public:
     /**
      * @brief Отображать ли элементы поэпизодника (true) или текста сценария (false)
      */
-    bool isTreatmentVisible = false;
+    bool isTreatmentDocument = false;
+
+    /**
+     * @brief Отображать ли биты (только для режима сценария, когда isTreatmentDocument == false)
+     */
+    bool isBeatsVisible = false;
 };
 
 ScreenplayTextDocument::Implementation::Implementation(ScreenplayTextDocument* _q)
@@ -53,7 +58,7 @@ ScreenplayTextDocument::ScreenplayTextDocument(QObject* _parent)
             return;
         }
 
-        if (d->isTreatmentVisible) {
+        if (d->isTreatmentDocument) {
             screenplayModel->setTreatmentPageCount(pageCount());
 
             //
@@ -62,7 +67,7 @@ ScreenplayTextDocument::ScreenplayTextDocument(QObject* _parent)
             //
             if (blockCount() == 1
                 && !visibleBlocksTypes().contains(TextBlockStyle::forBlock(begin()))) {
-                applyParagraphType(TextParagraphType::SceneHeading, TextCursor(this));
+                setParagraphType(TextParagraphType::SceneHeading, TextCursor(this));
             }
         } else {
             screenplayModel->setScriptPageCount(pageCount());
@@ -72,29 +77,70 @@ ScreenplayTextDocument::ScreenplayTextDocument(QObject* _parent)
 
 ScreenplayTextDocument::~ScreenplayTextDocument() = default;
 
-bool ScreenplayTextDocument::isTreatmentVisible() const
+bool ScreenplayTextDocument::isTreatmentDocument() const
 {
-    return d->isTreatmentVisible;
+    return d->isTreatmentDocument;
 }
 
-void ScreenplayTextDocument::setTreatmentVisible(bool _visible)
+void ScreenplayTextDocument::setTreatmentDocument(bool _treatment)
 {
-    if (d->isTreatmentVisible == _visible) {
+    if (d->isTreatmentDocument == _treatment) {
         return;
     }
 
-    d->isTreatmentVisible = _visible;
+    d->isTreatmentDocument = _treatment;
+}
+
+bool ScreenplayTextDocument::isBeatsVisible() const
+{
+    return d->isBeatsVisible;
+}
+
+void ScreenplayTextDocument::setBeatsVisible(bool _visible)
+{
+    if (d->isBeatsVisible == _visible) {
+        return;
+    }
+
+    d->isBeatsVisible = _visible;
+
+    emit contentsChange(0, 0, 0);
+    emit contentsChanged();
 }
 
 QSet<TextParagraphType> ScreenplayTextDocument::visibleBlocksTypes() const
 {
-    if (d->isTreatmentVisible) {
+    if (d->isTreatmentDocument) {
         return {
             TextParagraphType::SceneHeading,      TextParagraphType::SceneHeadingShadowTreatment,
             TextParagraphType::SceneCharacters,   TextParagraphType::BeatHeading,
             TextParagraphType::BeatHeadingShadow, TextParagraphType::ActHeading,
             TextParagraphType::ActFooter,         TextParagraphType::SequenceHeading,
             TextParagraphType::SequenceFooter,
+        };
+    }
+
+    if (d->isBeatsVisible) {
+        return {
+            TextParagraphType::SceneHeading,
+            TextParagraphType::SceneHeadingShadow,
+            TextParagraphType::SceneCharacters,
+            TextParagraphType::BeatHeading,
+            TextParagraphType::BeatHeadingShadow,
+            TextParagraphType::Action,
+            TextParagraphType::Character,
+            TextParagraphType::Parenthetical,
+            TextParagraphType::Dialogue,
+            TextParagraphType::Lyrics,
+            TextParagraphType::Shot,
+            TextParagraphType::Transition,
+            TextParagraphType::InlineNote,
+            TextParagraphType::UnformattedText,
+            TextParagraphType::ActHeading,
+            TextParagraphType::ActFooter,
+            TextParagraphType::SequenceHeading,
+            TextParagraphType::SequenceFooter,
+            TextParagraphType::PageSplitter,
         };
     }
 

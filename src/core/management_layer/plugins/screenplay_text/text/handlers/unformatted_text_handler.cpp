@@ -58,9 +58,6 @@ void UnformattedTextHandler::handleEnter(QKeyEvent*)
             if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
-                //
-                // Ни чего не делаем
-                //
                 editor()->setCurrentParagraphType(
                     changeForEnter(TextParagraphType::UnformattedText));
             } else {
@@ -75,17 +72,11 @@ void UnformattedTextHandler::handleEnter(QKeyEvent*)
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
-                    //
-                    // Вставляем блок и применяем ему стиль описания действия
-                    //
                     editor()->addParagraph(jumpForEnter(TextParagraphType::UnformattedText));
                 } else {
                     //! Внутри блока
 
-                    //
-                    // Вставляем блок и применяем ему стиль описания действия
-                    //
-                    editor()->addParagraph(TextParagraphType::Action);
+                    editor()->addParagraph(TextParagraphType::UnformattedText);
                 }
             }
         }
@@ -131,9 +122,6 @@ void UnformattedTextHandler::handleTab(QKeyEvent*)
             if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
-                //
-                // Ни чего не делаем
-                //
                 editor()->setCurrentParagraphType(changeForTab(TextParagraphType::UnformattedText));
             } else {
                 //! Текст не пуст
@@ -147,9 +135,6 @@ void UnformattedTextHandler::handleTab(QKeyEvent*)
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
-                    //
-                    // Действуем как нажатие клавиши ENTER
-                    //
                     editor()->addParagraph(jumpForTab(TextParagraphType::UnformattedText));
                 } else {
                     //! Внутри блока

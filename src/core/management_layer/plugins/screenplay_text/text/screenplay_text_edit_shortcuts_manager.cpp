@@ -93,6 +93,7 @@ void ScreenplayTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
     d->createOrUpdateShortcut(TextParagraphType::UnformattedText);
     d->createOrUpdateShortcut(TextParagraphType::SceneHeading);
     d->createOrUpdateShortcut(TextParagraphType::SceneCharacters);
+    d->createOrUpdateShortcut(TextParagraphType::BeatHeading);
     d->createOrUpdateShortcut(TextParagraphType::Action);
     d->createOrUpdateShortcut(TextParagraphType::Character);
     d->createOrUpdateShortcut(TextParagraphType::Parenthetical);

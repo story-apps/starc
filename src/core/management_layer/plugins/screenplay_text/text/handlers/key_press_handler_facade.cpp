@@ -4,6 +4,7 @@
 #include "act_footer_handler.h"
 #include "act_heading_handler.h"
 #include "action_handler.h"
+#include "beat_heading_handler.h"
 #include "character_handler.h"
 #include "dialog_handler.h"
 #include "inline_note_handler.h"
@@ -40,8 +41,9 @@ public:
     QScopedPointer<PrepareHandler> prepareHandler;
     QScopedPointer<PreHandler> preHandler;
     QScopedPointer<UnformattedTextHandler> unformattedTextHandler;
-    QScopedPointer<SceneHeadingHandler> sceneHeaderHandler;
+    QScopedPointer<SceneHeadingHandler> sceneHeadingHandler;
     QScopedPointer<SceneCharactersHandler> sceneCharactersHandler;
+    QScopedPointer<BeatHeadingHandler> beatHeadingHandler;
     QScopedPointer<ActionHandler> actionHandler;
     QScopedPointer<CharacterHandler> characterHandler;
     QScopedPointer<ParentheticalHandler> parentheticalHandler;
@@ -62,8 +64,9 @@ KeyPressHandlerFacade::Implementation::Implementation(Ui::ScreenplayTextEdit* _e
     , prepareHandler(new PrepareHandler(_editor))
     , preHandler(new PreHandler(_editor))
     , unformattedTextHandler(new UnformattedTextHandler(_editor))
-    , sceneHeaderHandler(new SceneHeadingHandler(_editor))
+    , sceneHeadingHandler(new SceneHeadingHandler(_editor))
     , sceneCharactersHandler(new SceneCharactersHandler(_editor))
+    , beatHeadingHandler(new BeatHeadingHandler(_editor))
     , actionHandler(new ActionHandler(_editor))
     , characterHandler(new CharacterHandler(_editor))
     , parentheticalHandler(new ParentheticalHandler(_editor))
@@ -157,11 +160,15 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
     }
 
     case TextParagraphType::SceneHeading: {
-        return d->sceneHeaderHandler.data();
+        return d->sceneHeadingHandler.data();
     }
 
     case TextParagraphType::SceneCharacters: {
         return d->sceneCharactersHandler.data();
+    }
+
+    case TextParagraphType::BeatHeading: {
+        return d->beatHeadingHandler.data();
     }
 
     case TextParagraphType::Action: {

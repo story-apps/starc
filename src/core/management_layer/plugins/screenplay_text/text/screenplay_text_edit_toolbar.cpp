@@ -23,6 +23,7 @@ public:
 
     QAction* undoAction = nullptr;
     QAction* redoAction = nullptr;
+    QAction* beatsAction = nullptr;
     QAction* paragraphTypeAction = nullptr;
     QAction* fastFormatAction = nullptr;
     QAction* searchAction = nullptr;
@@ -34,6 +35,7 @@ public:
 ScreenplayTextEditToolbar::Implementation::Implementation(QWidget* _parent)
     : undoAction(new QAction(_parent))
     , redoAction(new QAction(_parent))
+    , beatsAction(new QAction(_parent))
     , paragraphTypeAction(new QAction(_parent))
     , fastFormatAction(new QAction(_parent))
     , searchAction(new QAction(_parent))
@@ -51,12 +53,12 @@ void ScreenplayTextEditToolbar::Implementation::showPopup(ScreenplayTextEditTool
         _parent->isLeftToRight() ? (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
                                     + Ui::DesignSystem::floatingToolBar().margins().left()
                                     + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
-                                    + Ui::DesignSystem::floatingToolBar().spacing()
+                                    + Ui::DesignSystem::floatingToolBar().spacing() * 1
                                     - Ui::DesignSystem::card().shadowMargins().left())
                                  : (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
                                     + Ui::DesignSystem::floatingToolBar().margins().left()
-                                    + Ui::DesignSystem::floatingToolBar().iconSize().width() * 3
-                                    + Ui::DesignSystem::floatingToolBar().spacing() * 2
+                                    + Ui::DesignSystem::floatingToolBar().iconSize().width() * 4
+                                    + Ui::DesignSystem::floatingToolBar().spacing() * 3
                                     - Ui::DesignSystem::card().shadowMargins().left()),
         _parent->rect().bottom() - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
     const auto position = _parent->mapToGlobal(left)
@@ -84,6 +86,12 @@ ScreenplayTextEditToolbar::ScreenplayTextEditToolbar(QWidget* _parent)
     d->redoAction->setIconText(u8"\U000f044e");
     addAction(d->redoAction);
     connect(d->redoAction, &QAction::triggered, this, &ScreenplayTextEditToolbar::redoPressed);
+
+    d->beatsAction->setIconText(u8"\U000F06C7");
+    d->beatsAction->setCheckable(true);
+    addAction(d->beatsAction);
+    connect(d->beatsAction, &QAction::toggled, this,
+            &ScreenplayTextEditToolbar::beatsVisibleChanged);
 
     d->paragraphTypeAction->setText(tr("Scene heading"));
     d->paragraphTypeAction->setIconText(u8"\U000f035d");
@@ -184,6 +192,16 @@ void ScreenplayTextEditToolbar::setFastFormatPanelVisible(bool _visible)
     d->fastFormatAction->setChecked(_visible);
 }
 
+bool ScreenplayTextEditToolbar::isBeatsVisible() const
+{
+    return d->beatsAction->isChecked();
+}
+
+void ScreenplayTextEditToolbar::setBeatsVisible(bool _visible)
+{
+    d->beatsAction->setChecked(_visible);
+}
+
 QString ScreenplayTextEditToolbar::searchIcon() const
 {
     return d->searchAction->iconText();
@@ -246,6 +264,8 @@ void ScreenplayTextEditToolbar::updateTranslations()
     d->fastFormatAction->setToolTip(d->fastFormatAction->isChecked()
                                         ? tr("Hide fast format panel")
                                         : tr("Show fast format panel"));
+    d->beatsAction->setToolTip(d->beatsAction->isChecked() ? tr("Hide beats headings")
+                                                           : tr("Show beats headings"));
     d->searchAction->setToolTip(
         tr("Search text")
         + QString(" (%1)").arg(

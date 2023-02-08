@@ -104,6 +104,7 @@ QStringListModel* buildScreenplayParagraphTypesModel(QObject* _parent,
     const QStringList paragraphTypes = {
         toDisplayString(TextParagraphType::SceneHeading),
         toDisplayString(TextParagraphType::SceneCharacters),
+        toDisplayString(TextParagraphType::BeatHeading),
         toDisplayString(TextParagraphType::Action),
         toDisplayString(TextParagraphType::Character),
         toDisplayString(TextParagraphType::Parenthetical),

@@ -49,6 +49,7 @@ public:
      * @brief Добавить элемент в начало
      */
     void prependItem(TextModelItem* _item, TextModelItem* _parentItem = nullptr);
+    void prependItems(const QVector<TextModelItem*>& _items, TextModelItem* _parentItem = nullptr);
 
     /**
      * @brief Вставить элемент после заданного

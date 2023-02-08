@@ -386,6 +386,10 @@ SettingsStorage::Implementation::Implementation()
                                            TextParagraphType::Action);
         addScreenplayEditorStylesJumpByEnter(TextParagraphType::SceneCharacters,
                                              TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByTab(TextParagraphType::BeatHeading,
+                                           TextParagraphType::Action);
+        addScreenplayEditorStylesJumpByEnter(TextParagraphType::BeatHeading,
+                                             TextParagraphType::Action);
         addScreenplayEditorStylesJumpByTab(TextParagraphType::Action, TextParagraphType::Character);
         addScreenplayEditorStylesJumpByEnter(TextParagraphType::Action, TextParagraphType::Action);
         addScreenplayEditorStylesJumpByTab(TextParagraphType::Character,
@@ -442,7 +446,11 @@ SettingsStorage::Implementation::Implementation()
         addScreenplayEditorStylesChangeByTab(TextParagraphType::SceneCharacters,
                                              TextParagraphType::Action);
         addScreenplayEditorStylesChangeByEnter(TextParagraphType::SceneCharacters,
-                                               TextParagraphType::SceneCharacters);
+                                               TextParagraphType::Action);
+        addScreenplayEditorStylesChangeByTab(TextParagraphType::BeatHeading,
+                                             TextParagraphType::Action);
+        addScreenplayEditorStylesChangeByEnter(TextParagraphType::BeatHeading,
+                                               TextParagraphType::Action);
         addScreenplayEditorStylesChangeByTab(TextParagraphType::Action,
                                              TextParagraphType::Character);
         addScreenplayEditorStylesChangeByEnter(TextParagraphType::Action,
@@ -492,6 +500,7 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::UnformattedText, "Ctrl+0");
         addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
         addShortcut(BusinessLayer::TextParagraphType::SceneCharacters, "Ctrl+2");
+        addShortcut(BusinessLayer::TextParagraphType::BeatHeading, "Ctrl+Shift+1");
         addShortcut(BusinessLayer::TextParagraphType::Action, "Ctrl+3");
         addShortcut(BusinessLayer::TextParagraphType::Character, "Ctrl+4");
         addShortcut(BusinessLayer::TextParagraphType::Parenthetical, "Ctrl+5");

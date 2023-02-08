@@ -89,7 +89,7 @@ public:
 ScreenplayTextEdit::Implementation::Implementation(ScreenplayTextEdit* _q)
     : q(_q)
 {
-    document.setTreatmentVisible(false);
+    document.setTreatmentDocument(false);
 }
 
 const BusinessLayer::ScreenplayTemplate& ScreenplayTextEdit::Implementation::screenplayTemplate()
@@ -338,6 +338,11 @@ void ScreenplayTextEdit::undo()
 void ScreenplayTextEdit::redo()
 {
     d->revertAction(false);
+}
+
+void ScreenplayTextEdit::setBeatsVisible(bool _visible)
+{
+    d->document.setBeatsVisible(_visible);
 }
 
 void ScreenplayTextEdit::addParagraph(TextParagraphType _type)
@@ -713,21 +718,21 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             const auto blockType = TextBlockStyle::forBlock(block);
 
             //
+            // Запоминаем информацию о бите
+            //
+            if (blockType == TextParagraphType::BeatHeading) {
+                lastBeat.isPainted = false;
+                lastBeat.text = block.text();
+                lastBeat.color = d->document.itemColor(block);
+                if (!lastBeat.color.isValid()) {
+                    lastBeat.color = palette().text().color();
+                }
+            }
+
+            //
             // Пропускаем невидимые блоки
             //
             if (!block.isVisible()) {
-                //
-                // ... но запоминаем информацию о бите
-                //
-                if (blockType == TextParagraphType::BeatHeading) {
-                    lastBeat.isPainted = false;
-                    lastBeat.text = block.text();
-                    lastBeat.color = d->document.itemColor(block);
-                    if (!lastBeat.color.isValid()) {
-                        lastBeat.color = palette().text().color();
-                    }
-                }
-
                 block = block.next();
                 continue;
             }
@@ -760,6 +765,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 previousSceneBlockBottom = lastSceneBlockBottom;
                 lastSceneBlockBottom = cursorR.top();
                 lastSceneColors = d->document.itemColors(block);
+                lastBeat = {};
                 break;
             }
             default: {
@@ -905,6 +911,22 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     && blockType != TextParagraphType::PageSplitter
                     && block.text().simplified().isEmpty()) {
                     //
+                    // Определить область, в которой должен быть отрисован текст блока
+                    //
+                    auto textRect = [textLeft, textRight, leftDelta, spaceBetweenSceneNumberAndText,
+                                     cursorR] {
+                        const QPoint topLeft
+                            = QPoint(textLeft + leftDelta + spaceBetweenSceneNumberAndText
+                                         - Ui::DesignSystem::card().shadowMargins().left(),
+                                     cursorR.top());
+                        const QPoint bottomRight
+                            = QPoint(textRight + leftDelta - spaceBetweenSceneNumberAndText
+                                         + Ui::DesignSystem::card().shadowMargins().right(),
+                                     cursorR.bottom());
+                        return QRect(topLeft, bottomRight);
+                    };
+
+                    //
                     // Настроим цвет
                     //
                     setPainterPen(ColorHelper::transparent(
@@ -946,12 +968,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             QCoreApplication::translate("KeyProcessingLayer::FolderFooterHandler",
                                                         "END OF"),
                             headerBlock.text());
-                        const QPoint topLeft = QPoint(
-                            textLeft + leftDelta + spaceBetweenSceneNumberAndText, cursorR.top());
-                        const QPoint bottomRight
-                            = QPoint(textRight + leftDelta - spaceBetweenSceneNumberAndText,
-                                     cursorR.bottom());
-                        const QRect rect(topLeft, bottomRight);
+                        const auto rect = textRect();
                         painter.drawText(rect, block.blockFormat().alignment(), placeholderText);
                     }
                     //
@@ -998,13 +1015,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         const auto title = d->document.groupTitle(block);
                         if (!title.isEmpty()) {
                             painter.setFont(block.charFormat().font());
-                            const QPoint topLeft
-                                = QPoint(textLeft + leftDelta + spaceBetweenSceneNumberAndText,
-                                         cursorR.top());
-                            const QPoint bottomRight
-                                = QPoint(textRight + leftDelta - spaceBetweenSceneNumberAndText,
-                                         cursorR.bottom());
-                            const QRect rect(topLeft, bottomRight);
+                            const auto rect = textRect();
                             painter.drawText(rect, block.blockFormat().alignment(),
                                              painter.fontMetrics().elidedText(title, Qt::ElideRight,
                                                                               rect.width()));
@@ -1020,12 +1031,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Определим область для отрисовки плейсхолдера
                         //
-                        const QPoint topLeft = QPoint(
-                            textLeft + leftDelta + spaceBetweenSceneNumberAndText, cursorR.top());
-                        const QPoint bottomRight
-                            = QPoint(textRight + leftDelta - spaceBetweenSceneNumberAndText,
-                                     cursorR.bottom());
-                        const QRect rect(topLeft, bottomRight);
+                        const auto rect = textRect();
                         painter.drawText(rect, block.blockFormat().alignment(),
                                          painter.fontMetrics().elidedText(
                                              lastBeat.text, Qt::ElideRight, rect.width()));
@@ -1221,7 +1227,10 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                     rect.adjust(0, yDelta,
                                 -TextHelper::fineTextWidthF(".", cursor.charFormat().font()) / 2,
                                 0);
-                    painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, u8"\U000F09DE");
+                    painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
+                                     blockType == BusinessLayer::TextParagraphType::BeatHeading
+                                         ? u8"\U000F09DE"
+                                         : u8"\U000F0AEF");
                 }
 
                 //
@@ -1346,12 +1355,11 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     auto splitAction = new QAction(this);
     splitAction->setSeparator(true);
     splitAction->setWhatsThis(QKeySequence("Ctrl+D").toString(QKeySequence::NativeText));
+    splitAction->setIconText(u8"\U000F1917");
     if (cursor.inTable()) {
         splitAction->setText(tr("Merge paragraph"));
-        splitAction->setIconText(u8"\U000f10e7");
     } else {
         splitAction->setText(tr("Split paragraph"));
-        splitAction->setIconText(u8"\U000f10e7");
 
         //
         // Запрещаем разделять некоторые блоки

@@ -290,7 +290,12 @@ void TextModel::appendItems(const QVector<TextModelItem*>& _items, TextModelItem
 
 void TextModel::prependItem(TextModelItem* _item, TextModelItem* _parentItem)
 {
-    if (_item == nullptr) {
+    prependItems({ _item }, _parentItem);
+}
+
+void TextModel::prependItems(const QVector<TextModelItem*>& _items, TextModelItem* _parentItem)
+{
+    if (_items.isEmpty()) {
         return;
     }
 
@@ -298,17 +303,13 @@ void TextModel::prependItem(TextModelItem* _item, TextModelItem* _parentItem)
         _parentItem = d->rootItem;
     }
 
-    if (_parentItem->hasChild(_item)) {
-        return;
-    }
-
     d->contentHash.clear();
 
     const QModelIndex parentIndex = indexForItem(_parentItem);
-    beginInsertRows(parentIndex, 0, 0);
-    _parentItem->prependItem(_item);
+    beginInsertRows(parentIndex, 0, _items.size() - 1);
+    _parentItem->prependItems({ _items.begin(), _items.end() });
     endInsertRows();
-    emit afterRowsInserted(parentIndex, 0, 0);
+    emit afterRowsInserted(parentIndex, 0, _items.size() - 1);
 
     updateItem(_parentItem);
 }

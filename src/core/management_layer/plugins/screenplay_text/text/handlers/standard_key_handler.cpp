@@ -342,10 +342,11 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     BusinessLayer::TextCursor cursor = editor()->textCursor();
 
     //
-    // Если пользователь нажимает Backspace в начале первого блока бита, то удаляем полностью блок с
-    // заголовком предшествующего бита
+    // Если пользователь нажимает Backspace в начале первого блока бита и он при этом скрыт,
+    // то удаляем полностью блок с заголовком предшествующего бита
     //
     if (!cursor.atStart() && !cursor.hasSelection() && cursor.positionInBlock() == 0 && _backward
+        && !cursor.block().previous().isVisible()
         && TextBlockStyle::forBlock(cursor.block().previous()) == TextParagraphType::BeatHeading) {
         cursor.movePosition(QTextCursor::PreviousBlock);
         cursor.movePosition(QTextCursor::StartOfBlock);
@@ -359,6 +360,7 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     //
     else if (!cursor.atEnd() && !cursor.hasSelection() && !cursor.block().text().isEmpty()
              && cursor.positionInBlock() == cursor.block().text().length() && !_backward
+             && !cursor.block().next().isVisible()
              && TextBlockStyle::forBlock(cursor.block().next()) == TextParagraphType::BeatHeading) {
         cursor.movePosition(QTextCursor::NextBlock);
         cursor.movePosition(QTextCursor::EndOfBlock);

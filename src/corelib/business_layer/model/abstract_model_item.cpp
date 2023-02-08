@@ -44,7 +44,7 @@ void AbstractModelItem::prependItem(AbstractModelItem* _item)
 
 void AbstractModelItem::prependItems(const QVector<AbstractModelItem*>& _items)
 {
-    for (auto item : _items) {
+    for (auto item : reversed(_items)) {
         if (item->parent() == this) {
             continue;
         }

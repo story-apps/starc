@@ -184,16 +184,6 @@ ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
     , showBookmarksAction(new QAction(_parent))
     , cursorChangeNotificationsDebounser(500)
 {
-    commentsModel->setParagraphTypesFiler({
-        BusinessLayer::TextParagraphType::SceneHeading,
-        BusinessLayer::TextParagraphType::SceneCharacters,
-        BusinessLayer::TextParagraphType::BeatHeading,
-        BusinessLayer::TextParagraphType::ActHeading,
-        BusinessLayer::TextParagraphType::ActFooter,
-        BusinessLayer::TextParagraphType::SequenceHeading,
-        BusinessLayer::TextParagraphType::SequenceFooter,
-    });
-
     toolbar->setParagraphTypesModel(paragraphTypesModel);
 
     commentsToolbar->hide();
@@ -233,17 +223,34 @@ ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
 
 void ScreenplayTreatmentView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
 {
+    using namespace BusinessLayer;
+
     paragraphTypesModel->clear();
 
-    using namespace BusinessLayer;
+    //
+    // Настраиваем список доступных для работы типов блоков
+    //
+    QVector<TextParagraphType> types = {
+        TextParagraphType::SceneHeading,   TextParagraphType::SceneCharacters,
+        TextParagraphType::BeatHeading,    TextParagraphType::SequenceHeading,
+        TextParagraphType::SequenceFooter, TextParagraphType::ActHeading,
+        TextParagraphType::ActFooter,
+    };
+
+    //
+    // Настраиваем фильтры моделей
+    //
+    commentsModel->setParagraphTypesFiler(types);
+    bookmarksModel->setParagraphTypesFiler(types);
+
+    //
+    // Убираем типы окончаний, для списка форматов редактора текста
+    //
+    types.removeOne(TextParagraphType::SequenceFooter);
+    types.removeOne(TextParagraphType::ActFooter);
     const auto& usedTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(
         model && model->informationModel() ? model->informationModel()->templateId() : "");
-    const QVector<TextParagraphType> types = {
-        TextParagraphType::SceneHeading, TextParagraphType::SceneCharacters,
-        TextParagraphType::BeatHeading,  TextParagraphType::SequenceHeading,
-        TextParagraphType::ActHeading,
-    };
-    for (const auto type : types) {
+    for (const auto type : std::as_const(types)) {
         if (!usedTemplate.paragraphStyle(type).isActive()) {
             continue;
         }

@@ -77,7 +77,7 @@ public:
 ScreenplayTreatmentEdit::Implementation::Implementation(ScreenplayTreatmentEdit* _q)
     : q(_q)
 {
-    document.setTreatmentVisible(true);
+    document.setTreatmentDocument(true);
 }
 
 const BusinessLayer::ScreenplayTemplate& ScreenplayTreatmentEdit::Implementation::
@@ -324,6 +324,9 @@ void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
 
     BusinessLayer::TextCursor cursor = textCursor();
     QString blockEndMime;
+    //
+    // Если добавление происходит в момент нахождения курсора в блоке бита
+    //
     if (TextBlockStyle::forBlock(cursor) == TextParagraphType::BeatHeading) {
         //
         // Если курсор в начале блока, то просто переносим всё содержимое блока вперёд
@@ -370,7 +373,7 @@ void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
     //
     if (_type == TextParagraphType::BeatHeading) {
         //
-        // Если это разрыв текущего бита, то вставим сохранённый в буфере контент
+        // ... и если это разрыв текущего бита, то вставим сохранённый в буфере контент
         //
         if (!blockEndMime.isEmpty()) {
             constexpr int invalidPosition = -1;
@@ -388,29 +391,21 @@ void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
             }
         }
         //
-        // В противном случае вложим к нему блок описания действия и скроем его
+        // ... если вставка нового бита, позиционируем его в конце сцены, либо между другими битами
         //
         else {
             //
-            // ... добавляем блок
+            // ... передвигаем курсор
+            //
+            while (cursor.block().next().isValid() && !cursor.block().next().isVisible()) {
+                moveCursor(QTextCursor::NextBlock);
+                moveCursor(QTextCursor::EndOfBlock);
+                cursor = textCursor();
+            }
+            //
+            // ... и добавляем блок бита
             //
             d->document.addParagraph(_type, textCursor());
-            //
-            // ... если дальше есть блоки с текстом сценария, они будут вложены внутрь
-            //
-            cursor = textCursor();
-            if (cursor.block().next().isValid() && !cursor.block().next().isVisible()) {
-                //
-                // ... поэтому тут ничего не делаем
-                //
-            }
-            //
-            // ... а если таких блоков нет, то добавим пустой блок с описанием действия
-            //
-            else {
-                d->document.addParagraph(TextParagraphType::Action, cursor);
-                moveCursor(QTextCursor::PreviousCharacter);
-            }
         }
     }
     //
@@ -436,23 +431,6 @@ void ScreenplayTreatmentEdit::setCurrentParagraphType(TextParagraphType _type)
         return;
     }
 
-    //
-    // Если изменяется бит, то убираем пустой блок описания действия из него,
-    // если он присутствует конечно же
-    //
-    if (currentType == TextParagraphType::BeatHeading) {
-        const auto item = d->currentItem();
-        Q_ASSERT(item);
-        Q_ASSERT(item->parent());
-        if (item->parent()->childCount() == 2) {
-            auto cursor = textCursor();
-            cursor.movePosition(QTextCursor::NextBlock);
-            if (cursor.block().text().isEmpty()) {
-                cursor.deletePreviousChar();
-            }
-        }
-    }
-
     d->document.setParagraphType(_type, textCursor());
 
     //
@@ -460,20 +438,6 @@ void ScreenplayTreatmentEdit::setCurrentParagraphType(TextParagraphType _type)
     //
     if (_type == TextParagraphType::ActHeading || _type == TextParagraphType::SequenceHeading) {
         moveCursor(QTextCursor::PreviousBlock);
-    }
-    //
-    // Если сменили на бит, то нужно проследить, чтобы у него внутри были блоки,
-    // в противном случае создаём блок описания действия
-    //
-    else if (_type == TextParagraphType::BeatHeading) {
-        const auto item = d->currentItem();
-        Q_ASSERT(item);
-        Q_ASSERT(item->parent());
-        if (item->parent()->childCount() < 2) {
-            auto cursor = textCursor();
-            cursor.movePosition(QTextCursor::EndOfBlock);
-            d->document.addParagraph(TextParagraphType::Action, cursor);
-        }
     }
 
     emit paragraphTypeChanged();

@@ -497,12 +497,18 @@ bool ScreenplayItemParametersView::eventFilter(QObject* _watched, QEvent* _event
             }
 
             const int beatIndex = d->beats.indexOf(textField);
-            emit beatRemoved(beatIndex);
-            d->beats[std::max(0,
-                              keyEvent->key() == Qt::Key_Delete && beatIndex < d->beats.size()
-                                  ? beatIndex
-                                  : beatIndex - 1)]
-                ->setFocus();
+            QMetaObject::invokeMethod(
+                this,
+                [this, beatIndex, key = keyEvent->key()] {
+                    d->beats[std::max(0,
+                                      key == Qt::Key_Delete && beatIndex < d->beats.size()
+                                          ? beatIndex
+                                          : beatIndex - 1)]
+                        ->setFocus();
+                    emit beatRemoved(beatIndex);
+                },
+                Qt::QueuedConnection);
+
             break;
         }
         }

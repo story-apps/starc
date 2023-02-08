@@ -17,14 +17,19 @@ public:
     ~ScreenplayTextDocument() override;
 
     /**
-     * @brief Настроить отображение поэпизодника
+     * @brief Отображается ли документ как поэпизодник или как сценарий
      */
-    bool isTreatmentVisible() const;
-    void setTreatmentVisible(bool _visible);
+    bool isTreatmentDocument() const;
+    void setTreatmentDocument(bool _treatment);
 
     /**
-     * @brief Получить список видимых блоков в зависимости от режима отображения поэпизодника или
-     * сценария
+     * @brief Отображать ли биты (только для режима сценария, когда isTreatmentDocument == false)
+     */
+    bool isBeatsVisible() const;
+    void setBeatsVisible(bool _visible);
+
+    /**
+     * @brief Список видимых блоков в зависимости от режима отображения документа
      */
     QSet<TextParagraphType> visibleBlocksTypes() const;
 

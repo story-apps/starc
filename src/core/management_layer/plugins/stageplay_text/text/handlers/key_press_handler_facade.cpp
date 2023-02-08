@@ -32,7 +32,7 @@ public:
     QScopedPointer<PrepareHandler> prepareHandler;
     QScopedPointer<PreHandler> preHandler;
     QScopedPointer<UnformattedTextHandler> unformattedTextHandler;
-    QScopedPointer<SceneHeadingHandler> sceneHeaderHandler;
+    QScopedPointer<SceneHeadingHandler> sceneHeadingHandler;
     QScopedPointer<CharacterHandler> characterHandler;
     QScopedPointer<DialogHandler> dialogHandler;
     QScopedPointer<ParentheticalHandler> parentheticalHandler;
@@ -46,7 +46,7 @@ KeyPressHandlerFacade::Implementation::Implementation(Ui::StageplayTextEdit* _ed
     , prepareHandler(new PrepareHandler(_editor))
     , preHandler(new PreHandler(_editor))
     , unformattedTextHandler(new UnformattedTextHandler(_editor))
-    , sceneHeaderHandler(new SceneHeadingHandler(_editor))
+    , sceneHeadingHandler(new SceneHeadingHandler(_editor))
     , characterHandler(new CharacterHandler(_editor))
     , dialogHandler(new DialogHandler(_editor))
     , parentheticalHandler(new ParentheticalHandler(_editor))
@@ -133,7 +133,7 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
     }
 
     case TextParagraphType::SceneHeading: {
-        return d->sceneHeaderHandler.data();
+        return d->sceneHeadingHandler.data();
     }
 
     case TextParagraphType::Character: {

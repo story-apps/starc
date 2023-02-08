@@ -269,7 +269,22 @@ BookmarksModel::~BookmarksModel() = default;
 
 void BookmarksModel::setParagraphTypesFiler(const QVector<TextParagraphType>& _types)
 {
+    if (_types.size() == d->typesFilter.size()) {
+        bool isContainersEqual = true;
+        for (auto blockType : _types) {
+            if (!d->typesFilter.contains(blockType)) {
+                isContainersEqual = false;
+                break;
+            }
+        }
+        if (isContainersEqual) {
+            return;
+        }
+    }
+
     d->typesFilter = { _types.begin(), _types.end() };
+
+    setTextModel(d->model);
 }
 
 void BookmarksModel::setTextModel(TextModel* _model)

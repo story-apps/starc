@@ -26,7 +26,7 @@ TextDocument* ScreenplayExporter::createDocument(const ExportOptions& _exportOpt
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey).toBool(),
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)
             .toBool());
-    document->setTreatmentVisible(exportOptions.includeTreatment);
+    document->setTreatmentDocument(exportOptions.includeTreatment);
     return document;
 }
 

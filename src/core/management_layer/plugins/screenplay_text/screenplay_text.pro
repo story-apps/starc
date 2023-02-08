@@ -37,6 +37,7 @@ HEADERS += \
     text/handlers/act_footer_handler.h \
     text/handlers/act_heading_handler.h \
     text/handlers/action_handler.h \
+    text/handlers/beat_heading_handler.h \
     text/handlers/character_handler.h \
     text/handlers/dialog_handler.h \
     text/handlers/inline_note_handler.h \
@@ -70,6 +71,7 @@ SOURCES += \
     text/handlers/act_footer_handler.cpp \
     text/handlers/act_heading_handler.cpp \
     text/handlers/action_handler.cpp \
+    text/handlers/beat_heading_handler.cpp \
     text/handlers/character_handler.cpp \
     text/handlers/dialog_handler.cpp \
     text/handlers/inline_note_handler.cpp \

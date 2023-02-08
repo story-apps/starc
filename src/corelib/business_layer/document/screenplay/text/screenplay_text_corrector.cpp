@@ -299,8 +299,9 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
     const auto visibleBlocksTypes = screenplayDocument->visibleBlocksTypes();
 
     //
-    // Пробегаем документ и настраиваем видимые и невидимые блоки
+    // Пробегаем документ и настраиваем видимые и невидимые блоки в соответствии с шаблоном
     //
+    const auto& currentTemplate = TemplatesFacade::screenplayTemplate(q->templateId());
     TextCursor cursor(document());
     cursor.setPosition(std::max(0, _from));
     bool isTextChanged = false;
@@ -341,6 +342,18 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
                 auto blockFormat = cursor.blockFormat();
                 blockFormat.setTopMargin(0);
                 blockFormat.setBottomMargin(0);
+                cursor.setBlockFormat(blockFormat);
+            }
+            //
+            // ... а для блоков, которые возвращаются для отображения, настроим отступы
+            //
+            else {
+                auto paragraphStyleBlockFormat
+                    = currentTemplate.paragraphStyle(TextBlockStyle::forBlock(block)).blockFormat();
+                cursor.setPosition(block.position());
+                auto blockFormat = cursor.blockFormat();
+                blockFormat.setTopMargin(paragraphStyleBlockFormat.topMargin());
+                blockFormat.setBottomMargin(paragraphStyleBlockFormat.bottomMargin());
                 cursor.setBlockFormat(blockFormat);
             }
         }
@@ -2096,7 +2109,7 @@ void ScreenplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBlo
     case TextParagraphType::SceneHeading: {
         auto screenplay = qobject_cast<ScreenplayTextDocument*>(document());
         Q_ASSERT(screenplay);
-        paragraphType = screenplay->isTreatmentVisible()
+        paragraphType = screenplay->isTreatmentDocument()
             ? TextParagraphType::SceneHeadingShadowTreatment
             : TextParagraphType::SceneHeadingShadow;
         break;

@@ -338,6 +338,7 @@ void SettingsManager::Implementation::loadShortcutsSettings()
     QStandardItemModel* blocksJumpsModel = new QStandardItemModel(rows, columns, view);
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::SceneHeading));
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::SceneCharacters));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::BeatHeading));
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Action));
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Character));
     blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Parenthetical));
