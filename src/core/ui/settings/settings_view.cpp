@@ -282,6 +282,7 @@ public:
     CheckBox* screenplayEditorCorrectTextOnPageBreaks = nullptr;
     CheckBox* screenplayEditorUseCharactersFromText = nullptr;
     CheckBox* screenplayEditorShowCharacterSuggestionsInEmptyBlock = nullptr;
+    CheckBox* screenplayEditorUseOpenBracketInDialogueForParenthetical = nullptr;
     //
     // ... Screenplay navigator
     //
@@ -503,6 +504,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayEditorCorrectTextOnPageBreaks(new CheckBox(screenplayCard))
     , screenplayEditorUseCharactersFromText(new CheckBox(screenplayCard))
     , screenplayEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(screenplayCard))
+    , screenplayEditorUseOpenBracketInDialogueForParenthetical(new CheckBox(screenplayCard))
     , screenplayNavigatorTitle(new H6Label(screenplayCard))
     , screenplayNavigatorShowBeats(new CheckBox(screenplayCard))
     , screenplayNavigatorShowBeatsInTreatment(new CheckBox(screenplayCard))
@@ -911,6 +913,8 @@ void SettingsView::Implementation::initScreenplayCard()
     screenplayCardLayout->addWidget(screenplayEditorCorrectTextOnPageBreaks, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorUseCharactersFromText, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorShowCharacterSuggestionsInEmptyBlock,
+                                    itemIndex++, 0);
+    screenplayCardLayout->addWidget(screenplayEditorUseOpenBracketInDialogueForParenthetical,
                                     itemIndex++, 0);
     //
     // ... навигатор сценария
@@ -1487,6 +1491,7 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->screenplayEditorCorrectTextOnPageBreaks,
                  d->screenplayEditorUseCharactersFromText,
                  d->screenplayEditorShowCharacterSuggestionsInEmptyBlock,
+                 d->screenplayEditorUseOpenBracketInDialogueForParenthetical,
                  d->screenplayNavigatorTitle,
                  d->screenplayNavigatorShowBeats,
                  d->screenplayNavigatorShowBeatsInTreatment,
@@ -1627,6 +1632,8 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::screenplayEditorUseCharactersFromTextChanged);
     connect(d->screenplayEditorShowCharacterSuggestionsInEmptyBlock, &CheckBox::checkedChanged,
             this, &SettingsView::screenplayEditorShowCharacterSuggestionsInEmptyBlockChanged);
+    connect(d->screenplayEditorUseOpenBracketInDialogueForParenthetical, &CheckBox::checkedChanged,
+            this, &SettingsView::screenplayEditorUseOpenBracketInDialogueForParentheticalChanged);
     //
     // ... навигатор сценария
     //
@@ -2524,6 +2531,11 @@ void SettingsView::setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool 
     d->screenplayEditorShowCharacterSuggestionsInEmptyBlock->setChecked(_show);
 }
 
+void SettingsView::setScreenplayEditorUseOpenBracketInDialogueForParenthetical(bool _use)
+{
+    d->screenplayEditorUseOpenBracketInDialogueForParenthetical->setChecked(_use);
+}
+
 void SettingsView::setScreenplayNavigatorShowBeats(bool _show, bool _inTreatment,
                                                    bool _inScreenplay)
 {
@@ -3032,6 +3044,8 @@ void SettingsView::updateTranslations()
         tr("Show hints for major & related to a current story characters only"));
     d->screenplayEditorShowCharacterSuggestionsInEmptyBlock->setText(
         tr("Show characters suggestions in empty paragraph"));
+    d->screenplayEditorUseOpenBracketInDialogueForParenthetical->setText(
+        tr("Use opening bracket in dialogue to switch to parenthetical"));
     d->screenplayNavigatorTitle->setText(tr("Screenplay navigator"));
     d->screenplayNavigatorShowBeats->setText(tr("Show beats"));
     d->screenplayNavigatorShowBeatsInTreatment->setText(tr("in treatment"));
@@ -3291,6 +3305,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayEditorCorrectTextOnPageBreaks,
              d->screenplayEditorUseCharactersFromText,
              d->screenplayEditorShowCharacterSuggestionsInEmptyBlock,
+             d->screenplayEditorUseOpenBracketInDialogueForParenthetical,
              d->screenplayNavigatorShowBeats,
              d->screenplayNavigatorShowBeatsInTreatment,
              d->screenplayNavigatorShowBeatsInScreenplay,

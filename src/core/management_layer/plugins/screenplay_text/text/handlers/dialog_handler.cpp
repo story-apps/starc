@@ -3,6 +3,8 @@
 #include "../screenplay_text_edit.h"
 
 #include <business_layer/templates/screenplay_template.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 
 #include <QKeyEvent>
 #include <QTextBlock>
@@ -234,12 +236,18 @@ void DialogHandler::handleOther(QKeyEvent* _event)
     const QString cursorBackwardText = currentBlock.text().left(cursor.positionInBlock());
     // ... текст после курсора
     const QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
+    // ... необходимо ли менять стиль при открытой скобке на ремарку
+    const bool needToCheckOpenBracket
+        = settingsValue(DataStorageLayer::
+                            kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey)
+              .toBool();
 
 
     //
     // Обработка
     //
-    if (cursorBackwardText.endsWith("(") && _event != 0 && _event->text() == "(") {
+    if (needToCheckOpenBracket && cursorBackwardText.endsWith("(") && _event != nullptr
+        && _event->text() == "(") {
         //! Если нажата открывающая скобка
 
         //

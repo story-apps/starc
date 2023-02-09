@@ -191,6 +191,9 @@ const QString kComponentsScreenplayEditorUseCharactersFromTextKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/use-characters-from-text");
 const QString kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
+const QString kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey
+    = kComponentsScreenplayEditorKey
+    + QStringLiteral("/use-open-bracket-in-dialogue-for-parenthetical");
 const QString kComponentsScreenplayEditorShortcutsKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/shortcuts");
 // ... навигатор

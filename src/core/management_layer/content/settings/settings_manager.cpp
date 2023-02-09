@@ -174,6 +174,10 @@ void SettingsManager::Implementation::loadScreenplaySettings()
         settingsValue(
             DataStorageLayer::kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey)
             .toBool());
+    view->setScreenplayEditorUseOpenBracketInDialogueForParenthetical(
+        settingsValue(DataStorageLayer::
+                          kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey)
+            .toBool());
     //
     view->setScreenplayNavigatorShowBeats(
         settingsValue(DataStorageLayer::kComponentsScreenplayNavigatorShowBeatsKey).toBool(),
@@ -567,6 +571,9 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setScreenplayEditorUseCharactersFromText);
     connect(d->view, &Ui::SettingsView::screenplayEditorShowCharacterSuggestionsInEmptyBlockChanged,
             this, &SettingsManager::setScreenplayEditorShowCharacterSuggestionsInEmptyBlock);
+    connect(d->view,
+            &Ui::SettingsView::screenplayEditorUseOpenBracketInDialogueForParentheticalChanged,
+            this, &SettingsManager::setScreenplayEditorUseOpenBracketInDialogueForParenthetical);
     //
     connect(d->view, &Ui::SettingsView::screenplayNavigatorShowBeatsChanged, this,
             &SettingsManager::setScreenplayNavigatorShowBeats);
@@ -1399,6 +1406,16 @@ void SettingsManager::setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bo
         _show);
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey });
+}
+
+void SettingsManager::setScreenplayEditorUseOpenBracketInDialogueForParenthetical(bool _use)
+{
+    setSettingsValue(
+        DataStorageLayer::kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey,
+        _use);
+    emit screenplayEditorChanged(
+        { DataStorageLayer::
+              kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey });
 }
 
 void SettingsManager::setScreenplayNavigatorShowBeats(bool _show, bool _inTreatment,

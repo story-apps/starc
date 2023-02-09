@@ -135,6 +135,7 @@ private:
     void setScreenplayEditorCorrectTextOnPageBreaks(bool _correct);
     void setScreenplayEditorUseCharactersFromText(bool _use);
     void setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
+    void setScreenplayEditorUseOpenBracketInDialogueForParenthetical(bool _use);
     //
     void setScreenplayNavigatorShowBeats(bool _show, bool _inTreatment, bool _inScreenplay);
     void setScreenplayNavigatorShowSceneNumber(bool _show);
