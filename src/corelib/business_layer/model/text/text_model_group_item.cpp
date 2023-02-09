@@ -591,7 +591,7 @@ QByteArray TextModelGroupItem::xmlHeader(bool _clearUuid) const
         xml += QString("<%1 %2=\"%3\" %4%5/>\n")
                    .arg(xml::kNumberTag, xml::kNumberValueAttribute, d->number->value,
                         (d->number->isCustom
-                             ? QString("%1=\"true\" %2")
+                             ? QString("%1=\"true\" %2 ")
                                    .arg(xml::kNumberIsCustomAttribute,
                                         (d->number->isEatNumber
                                              ? QString("%1=\"true\"")
@@ -599,7 +599,7 @@ QByteArray TextModelGroupItem::xmlHeader(bool _clearUuid) const
                                              : ""))
                              : ""),
                         (d->number->isLocked
-                             ? QString("%1=\"true\"").arg(xml::kNumberIsLockedAttribute)
+                             ? QString("%1=\"true\" ").arg(xml::kNumberIsLockedAttribute)
                              : ""))
                    .toUtf8();
     }
