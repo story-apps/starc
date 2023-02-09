@@ -30,29 +30,42 @@ QByteArray prepareXml(const QString& _xml)
         const auto index = contentTagIndex - 1;
 
         //
-        // Если закрытие вложенного блока
+        // Если это вообще тэг
         //
-        if (_xml[index] == '/') {
+        switch (_xml[index].toLatin1()) {
+        case '/':
+        case '<': {
             //
-            // ... если есть открытые группы, то декрементируем счётчик открытых групп
+            // Если закрытие вложенного блока
             //
-            if (openedGroupsCount > 0) {
-                --openedGroupsCount;
+            if (_xml[index] == '/') {
+                //
+                // ... если есть открытые группы, то декрементируем счётчик открытых групп
+                //
+                if (openedGroupsCount > 0) {
+                    --openedGroupsCount;
+                }
+                //
+                // ... а если открытых групп нет, то нужно дополнить xml текущим блоком
+                //
+                else {
+                    const auto parentTag = readParentTag(contentTagIndex);
+                    preparedXml.prepend(tagTemplate.arg(kContentTag));
+                    preparedXml.prepend(tagTemplate.arg(parentTag));
+                }
             }
             //
-            // ... а если открытых групп нет, то нужно дополнить xml текущим блоком
+            // Если открытие вложенного блока, то инкрементируем счётчик открытых групп
             //
             else {
-                const auto parentTag = readParentTag(contentTagIndex);
-                preparedXml.prepend(tagTemplate.arg(kContentTag));
-                preparedXml.prepend(tagTemplate.arg(parentTag));
+                ++openedGroupsCount;
             }
+            break;
         }
-        //
-        // Если открытие вложенного блока, то инкрементируем счётчик открытых групп
-        //
-        else {
-            ++openedGroupsCount;
+
+        default: {
+            break;
+        }
         }
 
         //
