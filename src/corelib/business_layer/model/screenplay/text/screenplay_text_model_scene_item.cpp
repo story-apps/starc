@@ -241,9 +241,10 @@ void ScreenplayTextModelSceneItem::handleChange()
             //
             // Собираем текст
             //
+            QString childTextItemText = childTextItem->text();
             switch (childTextItem->paragraphType()) {
             case TextParagraphType::SceneHeading: {
-                heading = TextHelper::smartToUpper(childTextItem->text());
+                heading = TextHelper::smartToUpper(childTextItemText);
                 break;
             }
 
@@ -252,11 +253,20 @@ void ScreenplayTextModelSceneItem::handleChange()
                 break;
             }
 
+            case TextParagraphType::SceneCharacters:
+            case TextParagraphType::Character:
+            case TextParagraphType::Shot:
+            case TextParagraphType::Transition: {
+                childTextItemText = TextHelper::smartToUpper(childTextItemText);
+                Q_FALLTHROUGH();
+            }
+
             default: {
-                if (!text.isEmpty() && !childTextItem->text().isEmpty()) {
+                if (!text.isEmpty() && !childTextItemText.isEmpty()) {
                     text.append(" ");
                 }
-                text.append(childTextItem->text());
+
+                text.append(childTextItemText);
                 break;
             }
             }
