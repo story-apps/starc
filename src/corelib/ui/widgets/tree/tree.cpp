@@ -130,6 +130,10 @@ void Tree::setHeaderVisible(bool _visible)
 
 void Tree::setColumnWidth(int _column, int _width)
 {
+    if (_column >= d->header->count()) {
+        return;
+    }
+
     d->header->setSectionResizeMode(_column, QHeaderView::Fixed);
     d->header->resizeSection(_column, _width);
 }
