@@ -1515,7 +1515,23 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             }
 
             if (lastItem->type() == TextModelItemType::Group) {
-                appendItem(item, lastItem);
+                //
+                // ... корректируем уровень групп при необходимости
+                //
+                if (item->type() == TextModelItemType::Group) {
+                    auto lastItemGroup = static_cast<TextModelGroupItem*>(lastItem);
+                    auto itemGroup = static_cast<TextModelGroupItem*>(item);
+                    if (lastItemGroup->level() < itemGroup->level()) {
+                        appendItem(item, lastItem);
+                    } else if (lastItemGroup->level() == itemGroup->level()) {
+                        insertItem(item, lastItem);
+                    } else {
+                        Q_ASSERT(false);
+                        insertItem(item, lastItem);
+                    }
+                } else {
+                    appendItem(item, lastItem);
+                }
             } else {
                 insertItem(item, lastItem);
             }
