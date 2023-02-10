@@ -2077,6 +2077,9 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                                 if (childGroupItem->level() > previousGroupItem->level()) {
                                     d->model->appendItem(childItem, previousItem);
                                     moved = true;
+                                } else if (childGroupItem->level() == previousGroupItem->level()) {
+                                    d->model->insertItem(childItem, previousItem);
+                                    moved = true;
                                 }
                             }
                             //

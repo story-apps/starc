@@ -347,14 +347,29 @@ void ScreenplayTextEdit::setBeatsVisible(bool _visible)
 
 void ScreenplayTextEdit::addParagraph(TextParagraphType _type)
 {
+    BusinessLayer::TextCursor cursor = textCursor();
+
     //
     // При попытке вставки папки или сцены в таблицу, подменяем тип на описание действия
     //
     if (_type == TextParagraphType::ActHeading || _type == TextParagraphType::SequenceHeading
         || _type == TextParagraphType::SceneHeading) {
-        BusinessLayer::TextCursor cursor = textCursor();
         if (cursor.inTable()) {
             _type = TextParagraphType::Action;
+        }
+    }
+
+    //
+    // При добавлении сцены/папки/акта в моменте, когда скрыты биты, нужно добавлять новый блок
+    // после всех скрытых блоков, идущих за текущим
+    //
+    if (cursor.atBlockEnd() && !d->document.isBeatsVisible()
+        && (_type == TextParagraphType::SceneHeading || _type == TextParagraphType::SequenceFooter
+            || _type == TextParagraphType::ActHeading)) {
+        while (cursor.block().next().isValid() && !cursor.block().next().isVisible()) {
+            moveCursor(QTextCursor::NextBlock);
+            moveCursor(QTextCursor::EndOfBlock);
+            cursor = textCursor();
         }
     }
 
@@ -370,33 +385,110 @@ void ScreenplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
     }
 
     BusinessLayer::TextCursor cursor = textCursor();
+    QString blockEndMime;
 
     //
-    // Если тип блока меняется на заголовок папки илисцены, но это единственный текстовый блок бита,
-    // то добавим сцену отдельным блоком после него, т.к. бит не может включать в себя сцену
+    // Добавляем дополнительную логику в кейсе, когда биты скрыты
     //
-    if (_type == TextParagraphType::ActHeading || _type == TextParagraphType::SequenceHeading
-        || _type == TextParagraphType::SceneHeading) {
-        //
-        // Внтури таблицы нельзя создавать папки и сцены
-        //
-        if (cursor.inTable()) {
-            return;
-        }
+    if (!d->document.isBeatsVisible()) {
+        const QSet<TextParagraphType> headerTypes = {
+            TextParagraphType::SceneHeading,
+            TextParagraphType::BeatHeading,
+            TextParagraphType::SequenceHeading,
+            TextParagraphType::ActHeading,
+        };
 
-        const auto item = d->currentItem();
-        Q_ASSERT(item);
-        if (item->parent() != nullptr
-            && item->parent()->type() == BusinessLayer::TextModelItemType::Group) {
-            const auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item->parent());
-            //
-            // 2, т.к. у нас всегда есть ещё заголовок самого бита
-            //
-            if (groupItem->groupType() == BusinessLayer::TextGroupType::Beat
-                && groupItem->childCount() == 2) {
-                addParagraph(_type);
-                return;
+        const auto currentTypeIsHeader = headerTypes.contains(currentParagraphType());
+        const auto targetTypeIsHeader = headerTypes.contains(_type);
+        //
+        // При изменении блока на сцену/папку/акт, нужно поставить этот блок и остальные, идущие за
+        // ним видимые блоки до заголовка, после всех скрытых блоков, идущих за ними
+        //
+        if (!currentTypeIsHeader && targetTypeIsHeader) {
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            while (cursor.block().next().isValid() && cursor.block().next().isVisible()
+                   && !headerTypes.contains(TextBlockStyle::forBlock(cursor.block().next()))) {
+                cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             }
+
+            //
+            // Если дошли до бита в конце текущего элемента
+            //
+            if (!cursor.atEnd() && !cursor.block().next().isVisible()) {
+                //
+                // ... то вырезаем весь выделенный контент
+                //
+                const auto selection = cursor.selectionInterval();
+                blockEndMime = d->document.mimeFromSelection(selection.from, selection.to);
+                //
+                // ... удалим выделение и оставшийся перенос строки
+                //
+                cursor.removeSelectedText();
+                cursor.deletePreviousChar();
+                //
+                // ... и передвигаем курсор для вставки вырезанной части
+                //
+                cursor = textCursor();
+                while (cursor.block().next().isValid() && !cursor.block().next().isVisible()) {
+                    moveCursor(QTextCursor::NextBlock);
+                    moveCursor(QTextCursor::EndOfBlock);
+                    cursor = textCursor();
+                }
+                //
+                // ... добавляем блок и вставляем данные из буфера обмена
+                //
+                addParagraph(_type);
+                const auto currentBlockPosition = cursor.position();
+                d->document.insertFromMime(cursor.position(), blockEndMime);
+                cursor.setPosition(currentBlockPosition);
+                setTextCursorForced(cursor);
+            }
+        }
+        //
+        // А если блок меняется со сцены/папки/акта на другой, то его и его содержимое потенциально
+        // нужно перенести над невидимыми блоками идущими перед ним
+        //
+        else if (currentTypeIsHeader && !targetTypeIsHeader && cursor.block().previous().isValid()
+                 && !cursor.block().previous().isVisible()) {
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            while (cursor.block().next().isValid() && cursor.block().next().isVisible()
+                   && !headerTypes.contains(TextBlockStyle::forBlock(cursor.block().next()))) {
+                cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            }
+
+            //
+            // Когда дошли до границы видимости текущего элемента
+            //
+            // ... вырезаем весь выделенный контент
+            //
+            const auto selection = cursor.selectionInterval();
+            blockEndMime = d->document.mimeFromSelection(selection.from, selection.to);
+            //
+            // ... удалим выделение и оставшийся перенос строки
+            //
+            cursor.removeSelectedText();
+            cursor.deletePreviousChar();
+            //
+            // ... и передвигаем курсор для вставки вырезанной части
+            //
+            cursor = textCursor();
+            while (cursor.block().isValid() && !cursor.block().isVisible()) {
+                moveCursor(QTextCursor::PreviousBlock);
+                moveCursor(QTextCursor::EndOfBlock);
+                cursor = textCursor();
+            }
+            //
+            // ... добавляем блок и вставляем данные из буфера обмена
+            //
+            addParagraph(_type);
+            const auto currentBlockPosition = cursor.position();
+            d->document.insertFromMime(cursor.position(), blockEndMime);
+            cursor.setPosition(currentBlockPosition);
+            setTextCursorForced(cursor);
         }
     }
 
@@ -865,7 +957,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             // ... ниже верхней границы
             if ((cursorR.top() > 0 || cursorR.bottom() > 0)
                 // ... и выше нижней
-                && cursorR.top() < viewportGeometry.bottom()) {
+                && cursorR.top() < viewportGeometry.bottom()
+                // ... и блок не является декорацией
+                && !block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
 
                 //
                 // Прорисовка закладок
@@ -907,8 +1001,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Прорисовка декораций пустой строки
                 //
-                if (!block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)
-                    && blockType != TextParagraphType::PageSplitter
+                if (blockType != TextParagraphType::PageSplitter
                     && block.text().simplified().isEmpty()) {
                     //
                     // Определить область, в которой должен быть отрисован текст блока
@@ -1234,12 +1327,10 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                 }
 
                 //
-                // Прорисовка префикса/постфикса для блока текста, если это не пустая декорация
+                // Прорисовка префикса/постфикса для блока текста
                 //
-                if ((!block.text().isEmpty()
-                     || !block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection))
-                    && (block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)
-                        || block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix))) {
+                if ((block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)
+                     || block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix))) {
                     setPainterPen(palette().text().color());
                     painter.setFont(block.charFormat().font());
 
