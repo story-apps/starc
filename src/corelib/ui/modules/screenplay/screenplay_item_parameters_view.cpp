@@ -380,20 +380,21 @@ void ScreenplayItemParametersView::setBeats(const QVector<QString>& _beats)
     const int beatsSize = std::max(1, _beats.size());
     if (d->beats.size() != beatsSize) {
         while (d->beats.size() > beatsSize) {
-            d->beats.takeLast()->deleteLater();
+            auto beat = d->beats.takeLast();
+            beat->disconnect();
+            beat->deleteLater();
         }
         while (d->beats.size() < beatsSize) {
-            auto cardBeat = new TextField(d->content->widget());
-            cardBeat->installEventFilter(this);
-            connect(cardBeat, &TextField::textChanged, this, [this, cardBeat] {
-                emit beatChanged(d->beats.indexOf(cardBeat), cardBeat->text());
-            });
+            auto beat = new TextField(d->content->widget());
+            beat->installEventFilter(this);
+            connect(beat, &TextField::textChanged, this,
+                    [this, beat] { emit beatChanged(d->beats.indexOf(beat), beat->text()); });
             //
             // ... вставляем новые поля перед штампом и тэгами (заголовок + список)
             //
             d->contentLayout->insertWidget(d->contentLayout->indexOf(d->beats.constLast()) + 1,
-                                           cardBeat);
-            d->beats.append(cardBeat);
+                                           beat);
+            d->beats.append(beat);
         }
         d->initCardBeats();
     }
