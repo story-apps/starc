@@ -52,9 +52,13 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
         bool needRemoveBlock = true;
         if (blockData && blockData->item() && blockData->item()->parent()
             && blockData->item()->parent()->type() == TextModelItemType::Group) {
-            const auto sceneItem
-                = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
-            if (exportOptions.exportScenes.contains(sceneItem->number()->value)) {
+            const auto groupItem = static_cast<TextModelGroupItem*>(blockData->item()->parent());
+            if (groupItem->groupType() == TextGroupType::Scene) {
+                const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(groupItem);
+                if (exportOptions.exportScenes.contains(sceneItem->number()->value)) {
+                    needRemoveBlock = false;
+                }
+            } else {
                 needRemoveBlock = false;
             }
         }
