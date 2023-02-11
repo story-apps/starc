@@ -50,16 +50,30 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
     if (!exportOptions.exportScenes.isEmpty()) {
         const auto blockData = static_cast<TextBlockData*>(_cursor.block().userData());
         bool needRemoveBlock = true;
-        if (blockData && blockData->item() && blockData->item()->parent()
-            && blockData->item()->parent()->type() == TextModelItemType::Group) {
-            const auto groupItem = static_cast<TextModelGroupItem*>(blockData->item()->parent());
-            if (groupItem->groupType() == TextGroupType::Scene) {
-                const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(groupItem);
+        auto checkScene = [exportOptions, &needRemoveBlock](TextModelGroupItem* _item) {
+            if (_item->groupType() == TextGroupType::Scene) {
+                const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(_item);
                 if (exportOptions.exportScenes.contains(sceneItem->number()->value)) {
                     needRemoveBlock = false;
                 }
-            } else {
-                needRemoveBlock = false;
+            }
+        };
+        if (blockData && blockData->item() && blockData->item()->parent()
+            && blockData->item()->parent()->type() == TextModelItemType::Group) {
+
+            const auto groupItem = static_cast<TextModelGroupItem*>(blockData->item()->parent());
+            //
+            // ... если этот блок и есть сцена, то проверим его
+            //
+            if (groupItem->groupType() == TextGroupType::Scene) {
+                checkScene(groupItem);
+            }
+            //
+            // ... в противном случае это бит, нужно проверить его родителя
+            //
+            else if (groupItem->parent()
+                     && groupItem->parent()->type() == TextModelItemType::Group) {
+                checkScene(static_cast<TextModelGroupItem*>(groupItem->parent()));
             }
         }
         if (needRemoveBlock) {
