@@ -5,6 +5,7 @@
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
+#include <business_layer/model/text/text_model_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
@@ -321,7 +322,29 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
         //
         // При необходимости корректируем видимость блока
         //
-        const auto isBlockShouldBeVisible = visibleBlocksTypes.contains(blockType);
+        const auto isBlockShouldBeVisible = [this, block, blockType, visibleBlocksTypes] {
+            //
+            // Если не задан верхнеуровневый видимый элемент, то смотрим только по типам
+            //
+            if (q->visibleTopLevelItem() == nullptr) {
+                return visibleBlocksTypes.contains(blockType);
+            }
+
+            //
+            // Если верхнеуровневый элемент задан и текущий элемент не является его дитём, то скроем
+            //
+            if (auto screenplayBlockData
+                = static_cast<BusinessLayer::TextBlockData*>(block.userData());
+                screenplayBlockData == nullptr || screenplayBlockData->item() == nullptr
+                || !screenplayBlockData->item()->isChildOf(q->visibleTopLevelItem())) {
+                return false;
+            }
+
+            //
+            // А если является дитём, то смотрим опять же по типам
+            //
+            return visibleBlocksTypes.contains(blockType);
+        }();
         if (block.isVisible() != isBlockShouldBeVisible) {
             //
             // ... если блоку нужно настроить видимость, запустим операцию изменения

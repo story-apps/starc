@@ -378,7 +378,7 @@ QVariant TextModelGroupItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
-        return u8"\U000f021a";
+        return !customIcon().isEmpty() ? customIcon() : u8"\U000f021a";
     }
 
     case GroupTypeRole: {

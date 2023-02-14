@@ -39,6 +39,11 @@ public:
     void setCorrectionOptions(const QStringList& _options);
 
     /**
+     * @brief Задать видимый верхнеуровневый элемент
+     */
+    void setVisibleTopLevelItem(const QModelIndex& _index);
+
+    /**
      * @brief Получить позицию элемента в заданном индексе
      * @param _fromStart - true начальная позиция, false конечная позиция
      * @return Позицию элемента, -1 если элемент не удалось найти

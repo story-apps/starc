@@ -120,7 +120,9 @@ QVariant TextModelFolderItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
-        return d->folderType == TextFolderType::Act ? u8"\U000F0253" : u8"\U000f024b";
+        return !customIcon().isEmpty()
+            ? customIcon()
+            : (d->folderType == TextFolderType::Act ? u8"\U000F0253" : u8"\U000f024b");
     }
 
     case Qt::DisplayRole:

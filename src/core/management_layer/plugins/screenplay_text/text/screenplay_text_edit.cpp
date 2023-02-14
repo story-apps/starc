@@ -544,6 +544,11 @@ void ScreenplayTextEdit::setCurrentModelIndex(const QModelIndex& _index)
     ensureCursorVisible(textCursor);
 }
 
+void ScreenplayTextEdit::setVisibleTopLevelItemIndex(const QModelIndex& _index)
+{
+    d->document.setVisibleTopLevelItem(_index);
+}
+
 int ScreenplayTextEdit::positionForModelIndex(const QModelIndex& _index)
 {
     return d->document.itemStartPosition(_index);

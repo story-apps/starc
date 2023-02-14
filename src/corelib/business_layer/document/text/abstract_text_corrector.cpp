@@ -1,8 +1,8 @@
 #include "abstract_text_corrector.h"
 
+#include <business_layer/model/text/text_model_item.h>
 #include <utils/logging.h>
 
-#include <QDebug>
 #include <QTextDocument>
 
 
@@ -23,6 +23,11 @@ public:
      * @brief Шаблон оформления сценария
      */
     QString templateId;
+
+    /**
+     * @brief Верхнеуровневый видимый элемент модели
+     */
+    TextModelItem* visibleTopLevelItem = nullptr;
 
     /**
      * @brief Запланированная корректировка
@@ -82,6 +87,39 @@ void AbstractTextCorrector::setTemplateId(const QString& _templateId)
 QString AbstractTextCorrector::templateId() const
 {
     return d->templateId;
+}
+
+void AbstractTextCorrector::setVisibleTopLevelItem(TextModelItem* _item)
+{
+    if (d->visibleTopLevelItem == _item) {
+        return;
+    }
+
+    //
+    // Убираем иконку с элемента, котрый раньше был изолирован
+    //
+    if (d->visibleTopLevelItem != nullptr) {
+        d->visibleTopLevelItem->setCustomIcon({});
+    }
+
+    //
+    // Сохраним новый элемент
+    //
+    d->visibleTopLevelItem = _item;
+
+    //
+    // Применяем к новому элементу иконку изолированности
+    //
+    if (d->visibleTopLevelItem != nullptr) {
+        d->visibleTopLevelItem->setCustomIcon(u8"\U000F0EFF");
+    }
+
+    makeCorrections(-1, -1);
+}
+
+TextModelItem* AbstractTextCorrector::visibleTopLevelItem() const
+{
+    return d->visibleTopLevelItem;
 }
 
 void AbstractTextCorrector::planCorrection(int _position, int _charsRemoved, int _charsAdded)

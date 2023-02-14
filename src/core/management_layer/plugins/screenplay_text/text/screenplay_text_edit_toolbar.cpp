@@ -28,6 +28,7 @@ public:
     QAction* fastFormatAction = nullptr;
     QAction* searchAction = nullptr;
     QAction* commentsAction = nullptr;
+    QAction* isolationAction = nullptr;
 
     CardPopupWithTree* popup = nullptr;
 };
@@ -40,6 +41,7 @@ ScreenplayTextEditToolbar::Implementation::Implementation(QWidget* _parent)
     , fastFormatAction(new QAction(_parent))
     , searchAction(new QAction(_parent))
     , commentsAction(new QAction(_parent))
+    , isolationAction(new QAction(_parent))
     , popup(new CardPopupWithTree(_parent))
 {
 }
@@ -125,6 +127,14 @@ ScreenplayTextEditToolbar::ScreenplayTextEditToolbar(QWidget* _parent)
             &ScreenplayTextEditToolbar::updateTranslations);
     connect(d->commentsAction, &QAction::toggled, this,
             &ScreenplayTextEditToolbar::commentsModeEnabledChanged);
+
+    d->isolationAction->setIconText(u8"\U000F0EFF");
+    d->isolationAction->setCheckable(true);
+    addAction(d->isolationAction);
+    connect(d->isolationAction, &QAction::toggled, this,
+            &ScreenplayTextEditToolbar::updateTranslations);
+    connect(d->isolationAction, &QAction::toggled, this,
+            &ScreenplayTextEditToolbar::itemIsolationEnabledChanged);
 
     connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
             [this](const QModelIndex& _index) { emit paragraphTypeChanged(_index); });
@@ -245,6 +255,16 @@ void ScreenplayTextEditToolbar::setCommentsModeEnabled(bool _enabled)
     d->commentsAction->setChecked(_enabled);
 }
 
+bool ScreenplayTextEditToolbar::isItemIsolationEnabled() const
+{
+    return d->isolationAction->isChecked();
+}
+
+void ScreenplayTextEditToolbar::setItemIsolationEnabled(bool _enabled)
+{
+    d->isolationAction->setChecked(_enabled);
+}
+
 bool ScreenplayTextEditToolbar::canAnimateHoverOut() const
 {
     return !d->popup->isVisible();
@@ -272,6 +292,9 @@ void ScreenplayTextEditToolbar::updateTranslations()
             QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     d->commentsAction->setToolTip(d->commentsAction->isChecked() ? tr("Disable review mode")
                                                                  : tr("Enable review mode"));
+    d->isolationAction->setToolTip(d->isolationAction->isChecked()
+                                       ? tr("Disable structure items isolation mode")
+                                       : tr("Enable structure items isolation mode"));
 }
 
 void ScreenplayTextEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

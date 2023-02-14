@@ -199,8 +199,13 @@ void ScreenplayTextScrollBarManager::setModel(BusinessLayer::ScreenplayTextModel
     }
 }
 
-void ScreenplayTextScrollBarManager::setScrollBarVisible(bool _visible)
+void ScreenplayTextScrollBarManager::setScrollBarVisible(bool _visible, bool _animate)
 {
+    if (!_animate) {
+        d->timeline->setVisible(_visible);
+        return;
+    }
+
     if (_visible) {
         d->needAnimateTimelineOpacity = false;
         d->showTimelineAnimated();

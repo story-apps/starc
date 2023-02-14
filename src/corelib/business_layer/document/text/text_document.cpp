@@ -1123,6 +1123,51 @@ void TextDocument::setCorrectionOptions(const QStringList& _options)
     }
 }
 
+void TextDocument::setVisibleTopLevelItem(const QModelIndex& _index)
+{
+    if (!d->corrector) {
+        return;
+    }
+
+    //
+    // Сюда может прилететь любой индекс, но сделать видимой мы должны как минимум сцену,
+    // или группу, а так же папку
+    //
+    auto item = _index.isValid() ? d->model->itemForIndex(_index) : nullptr;
+    if (item != nullptr && item->type() != TextModelItemType::Folder) {
+        if (item->type() == TextModelItemType::Text
+            || item->type() == TextModelItemType::Splitter) {
+            item = item->parent();
+        }
+        while (item != nullptr && item->type() == TextModelItemType::Group) {
+            auto groupItem = static_cast<TextModelGroupItem*>(item);
+            if (groupItem->groupType() == TextGroupType::Scene) {
+                break;
+            }
+
+            item = item->parent();
+        }
+    }
+
+    const auto previousVisibleTopLevelItem = d->corrector->visibleTopLevelItem();
+    d->corrector->setVisibleTopLevelItem(item);
+
+    //
+    // Уведомляем об изменении декорации вручную, т.к. данные иконки не влияют на содержимое модели
+    // по-сути и их изменение не приведёт к срабатыванию механизмов оповещения модели об изменениях
+    //
+    auto updateItem = [this](TextModelItem* _item) {
+        if (_item == nullptr) {
+            return;
+        }
+
+        const auto itemIndex = d->model->indexForItem(_item);
+        emit d->model->dataChanged(itemIndex, itemIndex, { Qt::DecorationRole });
+    };
+    updateItem(previousVisibleTopLevelItem);
+    updateItem(item);
+}
+
 int TextDocument::itemPosition(const QModelIndex& _index, bool _fromStart)
 {
     auto item = d->model->itemForIndex(_index);

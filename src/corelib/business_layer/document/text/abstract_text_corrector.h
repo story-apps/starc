@@ -9,6 +9,8 @@ class QTextDocument;
 
 namespace BusinessLayer {
 
+class TextModelItem;
+
 /**
  * @brief Класс корректирующий текст документа
  */
@@ -35,6 +37,12 @@ public:
      * @brief Установить необходимость корректировать текст блоков имён персонажей
      */
     virtual void setCorrectionOptions(const QStringList& _options) = 0;
+
+    /**
+     * @brief Задавть верхнеуровневый видимый элемент
+     */
+    void setVisibleTopLevelItem(TextModelItem* _item);
+    TextModelItem* visibleTopLevelItem() const;
 
     /**
      * @brief Очистить все сохранённые параметры

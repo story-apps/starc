@@ -52,6 +52,12 @@ public:
     virtual int subtype() const;
 
     /**
+     * @brief Кастомная иконка элемента
+     */
+    QString customIcon() const;
+    void setCustomIcon(const QString& _icon);
+
+    /**
      * @brief Получить модель, в которой находится данный элемент
      */
     const TextModel* model() const;

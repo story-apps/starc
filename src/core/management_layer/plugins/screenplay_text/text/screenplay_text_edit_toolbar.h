@@ -66,6 +66,12 @@ public:
     bool isCommentsModeEnabled() const;
     void setCommentsModeEnabled(bool _enabled);
 
+    /**
+     * @brief Включена ли опция изолирования элементов на экране
+     */
+    bool isItemIsolationEnabled() const;
+    void setItemIsolationEnabled(bool _enabled);
+
 signals:
     void undoPressed();
     void redoPressed();
@@ -74,6 +80,7 @@ signals:
     void beatsVisibleChanged(bool _visible);
     void searchPressed();
     void commentsModeEnabledChanged(bool _enabled);
+    void itemIsolationEnabledChanged(bool _enabled);
 
 protected:
     /**

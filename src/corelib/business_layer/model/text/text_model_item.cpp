@@ -11,6 +11,7 @@ public:
     Implementation(TextModelItemType _type, const TextModel* _model);
 
     const TextModelItemType type;
+    QString icon;
     const TextModel* model = nullptr;
 };
 
@@ -40,6 +41,16 @@ const TextModelItemType& TextModelItem::type() const
 int TextModelItem::subtype() const
 {
     return 0;
+}
+
+QString TextModelItem::customIcon() const
+{
+    return d->icon;
+}
+
+void TextModelItem::setCustomIcon(const QString& _icon)
+{
+    d->icon = _icon;
 }
 
 const TextModel* TextModelItem::model() const
