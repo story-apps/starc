@@ -298,7 +298,7 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
         const auto translationPath = QFileDialog::getOpenFileName(
             this, tr("Select file with translation"),
             QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).constFirst(),
-            QString("%1 (*.qm)").arg(tr("Coplited Qt translation files")));
+            QString("%1 (*.qm)").arg(tr("Compiled Qt translation files")));
         if (translationPath.isEmpty()) {
             return;
         }
