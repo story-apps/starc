@@ -549,7 +549,31 @@ void PluginsBuilder::bindEditors(const QString& _viewMimeType) const
     //
     // Определеим группу редакторо, чтобы их связать
     //
-    const auto viewGroupMimeType = _viewMimeType.left(_viewMimeType.lastIndexOf("/"));
+    auto viewGroupMimeType = _viewMimeType;
+    const auto groupsCount = viewGroupMimeType.count('/') + 1;
+    //
+    // ... если групп меньше пяти, то не связываем, чтобы не привязать несовместимые плагины
+    //
+    if (groupsCount < 5) {
+        return;
+    }
+    //
+    // ... если групп всего пять, то для связи используем именно этот майм тип
+    //
+    else if (groupsCount == 5) {
+    }
+    //
+    // ... если групп шесть, то связываем на предыдущем уровне майма
+    //
+    else if (groupsCount == 6) {
+        viewGroupMimeType = viewGroupMimeType.left(_viewMimeType.lastIndexOf("/"));
+    }
+    //
+    // ... такого, чтобы групп было больше шести пока нет
+    //
+    else {
+        Q_ASSERT(false);
+    }
     //
     // Соберём все редакторы заданной группы
     //
