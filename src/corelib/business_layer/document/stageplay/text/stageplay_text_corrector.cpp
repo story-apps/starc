@@ -1780,7 +1780,7 @@ void StageplayTextCorrector::setCorrectionOptions(const QStringList& _options)
     makeCorrections();
 }
 
-void StageplayTextCorrector::clear()
+void StageplayTextCorrector::clearImpl()
 {
     d->lastDocumentSize = QSizeF();
     d->currentBlockInfo.number = 0;

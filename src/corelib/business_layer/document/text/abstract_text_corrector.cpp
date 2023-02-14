@@ -122,6 +122,16 @@ TextModelItem* AbstractTextCorrector::visibleTopLevelItem() const
     return d->visibleTopLevelItem;
 }
 
+void AbstractTextCorrector::clear()
+{
+    if (d->visibleTopLevelItem != nullptr) {
+        d->visibleTopLevelItem->setCustomIcon({});
+        d->visibleTopLevelItem = nullptr;
+    }
+
+    clearImpl();
+}
+
 void AbstractTextCorrector::planCorrection(int _position, int _charsRemoved, int _charsAdded)
 {
     //

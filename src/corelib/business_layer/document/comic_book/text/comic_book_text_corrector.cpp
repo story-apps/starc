@@ -1816,7 +1816,7 @@ void ComicBookTextCorrector::setCorrectionOptions(const QStringList& _options)
     makeCorrections();
 }
 
-void ComicBookTextCorrector::clear()
+void ComicBookTextCorrector::clearImpl()
 {
     d->lastDocumentSize = QSizeF();
     d->currentBlockInfo.number = 0;

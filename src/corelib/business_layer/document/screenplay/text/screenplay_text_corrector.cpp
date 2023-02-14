@@ -2233,7 +2233,7 @@ void ScreenplayTextCorrector::setCorrectionOptions(const QStringList& _options)
     makeCorrections();
 }
 
-void ScreenplayTextCorrector::clear()
+void ScreenplayTextCorrector::clearImpl()
 {
     d->lastDocumentSize = QSizeF();
     d->currentBlockInfo.number = 0;

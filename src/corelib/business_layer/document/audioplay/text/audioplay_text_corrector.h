@@ -27,12 +27,12 @@ public:
      */
     void setCorrectionOptions(const QStringList& _options) override;
 
+protected:
     /**
      * @brief Очистить все сохранённые параметры
      */
-    void clear() override;
+    void clearImpl() override;
 
-protected:
     /**
      * @brief Выполнить корректировки
      */

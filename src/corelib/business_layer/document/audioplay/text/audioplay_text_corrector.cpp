@@ -1780,7 +1780,7 @@ void AudioplayTextCorrector::setCorrectionOptions(const QStringList& _options)
     makeCorrections();
 }
 
-void AudioplayTextCorrector::clear()
+void AudioplayTextCorrector::clearImpl()
 {
     d->lastDocumentSize = QSizeF();
     d->currentBlockInfo.number = 0;

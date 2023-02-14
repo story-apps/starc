@@ -47,7 +47,7 @@ public:
     /**
      * @brief Очистить все сохранённые параметры
      */
-    virtual void clear() = 0;
+    void clear();
 
     /**
      * @brief Подготовиться к корректировке
@@ -60,6 +60,11 @@ public:
     void makePlannedCorrection(const QByteArray& _contentHash);
 
 protected:
+    /**
+     * @brief Реализация очистки, которая будет выполняться внутри корректора
+     */
+    virtual void clearImpl() = 0;
+
     /**
      * @brief Выполнить все корректировки
      */
