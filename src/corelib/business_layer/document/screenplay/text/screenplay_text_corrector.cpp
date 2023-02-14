@@ -307,6 +307,8 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
     cursor.setPosition(std::max(0, _from));
     bool isTextChanged = false;
 
+    bool isFirstVisibleBlock = cursor.position() == 0;
+    bool isFirstBlockAfterInvisible = true;
     auto block = cursor.block();
     while (block.isValid()) {
         const auto blockType = TextBlockStyle::forBlock(block);
@@ -345,7 +347,23 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
             //
             return visibleBlocksTypes.contains(blockType);
         }();
-        if (block.isVisible() != isBlockShouldBeVisible) {
+        //
+        // Корректируем параметры в кейсах
+        // - сменилась видимость блока
+        // - это первый видимый блок (у него не должно быть дополнительных отступов сверху)
+        // - это первый блок который шёл после невидимых (он был первым видимым в предыдущем проходе
+        //   и поэтому у него сброшены отступы)
+        //
+        if (block.isVisible() != isBlockShouldBeVisible
+            || (isBlockShouldBeVisible && isFirstVisibleBlock)
+            || (block.isVisible() && isBlockShouldBeVisible && isFirstBlockAfterInvisible)) {
+            //
+            // ... если это кейс с обновлением формата первого блока следующего за невидимым,
+            //     то запомним, что мы его выполнили
+            //
+            if (block.isVisible() && isBlockShouldBeVisible && isFirstBlockAfterInvisible) {
+                isFirstBlockAfterInvisible = false;
+            }
             //
             // ... если блоку нужно настроить видимость, запустим операцию изменения
             //
@@ -354,31 +372,41 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
                 cursor.beginEditBlock();
             }
             //
-            // ... собственно настраиваем видимость
-            //
-            block.setVisible(isBlockShouldBeVisible);
-            //
             // ... уберём отступы у скрытых блоков, чтобы они не ломали компоновку документа
             //
+            cursor.setPosition(block.position());
+            auto blockFormat = cursor.blockFormat();
             if (!isBlockShouldBeVisible) {
-                cursor.setPosition(block.position());
-                auto blockFormat = cursor.blockFormat();
                 blockFormat.setTopMargin(0);
                 blockFormat.setBottomMargin(0);
-                cursor.setBlockFormat(blockFormat);
+                blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
             }
             //
             // ... а для блоков, которые возвращаются для отображения, настроим отступы
             //
             else {
                 auto paragraphStyleBlockFormat
-                    = currentTemplate.paragraphStyle(TextBlockStyle::forBlock(block)).blockFormat();
-                cursor.setPosition(block.position());
-                auto blockFormat = cursor.blockFormat();
-                blockFormat.setTopMargin(paragraphStyleBlockFormat.topMargin());
+                    = currentTemplate.paragraphStyle(TextBlockStyle::forBlock(block))
+                          .blockFormat(cursor.inTable());
+                blockFormat.setTopMargin(
+                    isFirstVisibleBlock ? 0 : paragraphStyleBlockFormat.topMargin());
                 blockFormat.setBottomMargin(paragraphStyleBlockFormat.bottomMargin());
-                cursor.setBlockFormat(blockFormat);
+                blockFormat.setPageBreakPolicy(isFirstVisibleBlock
+                                                   ? QTextFormat::PageBreak_Auto
+                                                   : paragraphStyleBlockFormat.pageBreakPolicy());
             }
+            //
+            // ... применим настроенный стиль блока
+            //
+            cursor.setBlockFormat(blockFormat);
+            //
+            // ... собственно настраиваем видимость
+            //
+            block.setVisible(isBlockShouldBeVisible);
+        }
+
+        if (isFirstVisibleBlock && isBlockShouldBeVisible) {
+            isFirstVisibleBlock = false;
         }
 
         block = block.next();

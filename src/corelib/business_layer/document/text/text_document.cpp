@@ -847,8 +847,8 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
             // Если происходит удаление разделителя таблицы, то удаляем таблицу,
             // а все блоки переносим за таблицу
             //
-            if (auto item = d->model->itemForIndex(fromIndex);
-                item->type() == TextModelItemType::Splitter) {
+            auto item = d->model->itemForIndex(fromIndex);
+            if (item->type() == TextModelItemType::Splitter) {
                 auto splitterItem = static_cast<TextModelSplitterItem*>(item);
 
                 //
@@ -974,6 +974,13 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                 }
 
                 return;
+            }
+
+            //
+            // Если удаляется изолированный элемент, то сбросим изоляцию
+            //
+            if (d->corrector->visibleTopLevelItem() == item) {
+                d->corrector->setVisibleTopLevelItem(nullptr);
             }
 
             const QModelIndex toIndex = d->model->index(_to, 0, _parent);
@@ -1801,19 +1808,6 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
 
     if (!d->canChangeModel) {
         return;
-    }
-
-    //
-    // Обновляем формат первого блока, если там нужен был разрыв страницы, чтобы первый блок
-    // документа не перескакивал на вторую страницу
-    //
-    if (_position == 0
-        && begin().blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
-        TextCursor cursor(this);
-        cursor.movePosition(TextCursor::Start);
-        auto blockFormat = cursor.blockFormat();
-        blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
-        cursor.setBlockFormat(blockFormat);
     }
 
     if (d->state != DocumentState::Ready && d->state != DocumentState::Correcting) {
@@ -2684,20 +2678,6 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
         // Старый блок
         //
         else {
-            //
-            // ... если блок, который был вначале документа и поэтому был лишён переноса страницы
-            //     был перемещён в другое место, то возвращаем ему перенос
-            //
-            if (d->documentTemplate().paragraphStyle(paragraphType).isStartFromNewPage()
-                && block.position() > 0
-                && block.blockFormat().pageBreakPolicy() != QTextFormat::PageBreak_AlwaysBefore) {
-                TextCursor cursor(this);
-                cursor.setPosition(block.position());
-                auto blockFormat = cursor.blockFormat();
-                blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
-                cursor.setBlockFormat(blockFormat);
-            }
-
             updateTableInfo(block);
             auto blockData = static_cast<TextBlockData*>(block.userData());
             auto item = blockData->item();
