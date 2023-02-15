@@ -1146,13 +1146,14 @@ void TextDocument::setVisibleTopLevelItem(const QModelIndex& _index)
             || item->type() == TextModelItemType::Splitter) {
             item = item->parent();
         }
-        while (item != nullptr && item->type() == TextModelItemType::Group) {
+        //
+        // ... изолировать можно любой элемент, кроме битов
+        //
+        if (item != nullptr && item->type() == TextModelItemType::Group) {
             auto groupItem = static_cast<TextModelGroupItem*>(item);
-            if (groupItem->groupType() == TextGroupType::Scene) {
-                break;
+            if (groupItem->groupType() == TextGroupType::Beat) {
+                item = item->parent();
             }
-
-            item = item->parent();
         }
     }
 
