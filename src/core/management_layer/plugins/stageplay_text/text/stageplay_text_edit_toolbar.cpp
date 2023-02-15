@@ -27,6 +27,7 @@ public:
     QAction* fastFormatAction = nullptr;
     QAction* searchAction = nullptr;
     QAction* commentsAction = nullptr;
+    QAction* isolationAction = nullptr;
 
     CardPopupWithTree* popup = nullptr;
 };
@@ -38,6 +39,7 @@ StageplayTextEditToolbar::Implementation::Implementation(QWidget* _parent)
     , fastFormatAction(new QAction(_parent))
     , searchAction(new QAction(_parent))
     , commentsAction(new QAction(_parent))
+    , isolationAction(new QAction(_parent))
     , popup(new CardPopupWithTree(_parent))
 {
 }
@@ -117,6 +119,14 @@ StageplayTextEditToolbar::StageplayTextEditToolbar(QWidget* _parent)
             &StageplayTextEditToolbar::updateTranslations);
     connect(d->commentsAction, &QAction::toggled, this,
             &StageplayTextEditToolbar::commentsModeEnabledChanged);
+
+    d->isolationAction->setIconText(u8"\U000F0EFF");
+    d->isolationAction->setCheckable(true);
+    addAction(d->isolationAction);
+    connect(d->isolationAction, &QAction::toggled, this,
+            &StageplayTextEditToolbar::updateTranslations);
+    connect(d->isolationAction, &QAction::toggled, this,
+            &StageplayTextEditToolbar::itemIsolationEnabledChanged);
 
     connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
             [this](const QModelIndex& _index) { emit paragraphTypeChanged(_index); });
@@ -227,6 +237,16 @@ void StageplayTextEditToolbar::setCommentsModeEnabled(bool _enabled)
     d->commentsAction->setChecked(_enabled);
 }
 
+bool StageplayTextEditToolbar::isItemIsolationEnabled() const
+{
+    return d->isolationAction->isChecked();
+}
+
+void StageplayTextEditToolbar::setItemIsolationEnabled(bool _enabled)
+{
+    d->isolationAction->setChecked(_enabled);
+}
+
 bool StageplayTextEditToolbar::canAnimateHoverOut() const
 {
     return !d->popup->isVisible();
@@ -252,6 +272,9 @@ void StageplayTextEditToolbar::updateTranslations()
             QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     d->commentsAction->setToolTip(d->commentsAction->isChecked() ? tr("Disable review mode")
                                                                  : tr("Enable review mode"));
+    d->isolationAction->setToolTip(d->isolationAction->isChecked()
+                                       ? tr("Disable structure items isolation mode")
+                                       : tr("Enable structure items isolation mode"));
 }
 
 void StageplayTextEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

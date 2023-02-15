@@ -452,6 +452,11 @@ void StageplayTextEdit::setCurrentModelIndex(const QModelIndex& _index)
     ensureCursorVisible(textCursor);
 }
 
+void StageplayTextEdit::setVisibleTopLevelItemIndex(const QModelIndex& _index)
+{
+    d->document.setVisibleTopLevelItem(_index);
+}
+
 int StageplayTextEdit::positionForModelIndex(const QModelIndex& _index)
 {
     return d->document.itemStartPosition(_index);
