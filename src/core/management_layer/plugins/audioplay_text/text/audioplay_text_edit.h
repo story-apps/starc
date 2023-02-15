@@ -102,6 +102,11 @@ public:
     void setCurrentModelIndex(const QModelIndex& _index);
 
     /**
+     * @brief Задать индекс верхнеуровневого видимого элемента
+     */
+    void setVisibleTopLevelItemIndex(const QModelIndex& _index);
+
+    /**
      * @brief Получить позицию заданного элемента модели
      */
     int positionForModelIndex(const QModelIndex& _index);

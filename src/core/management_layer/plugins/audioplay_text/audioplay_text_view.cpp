@@ -57,6 +57,7 @@ const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
 const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
 const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+const QString kIsItemIsolationEnabledKey = kSettingsKey + "/is-item-isolation-enabled";
 const QString kIsBookmarksListVisibleKey = kSettingsKey + "/is-bookmarks-list-visible";
 const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 } // namespace
@@ -508,6 +509,15 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
                 }
                 d->updateSideBarVisibility(this);
             });
+    connect(d->toolbar, &AudioplayTextEditToolbar::itemIsolationEnabledChanged, this,
+            [this](bool _enabled) {
+                d->textEdit->setVisibleTopLevelItemIndex(_enabled ? d->textEdit->currentModelIndex()
+                                                                  : QModelIndex());
+
+                const bool animate = false;
+                d->audioplayTextScrollbarManager->setScrollBarVisible(!_enabled, animate);
+                d->textEdit->ensureCursorVisible(d->textEdit->textCursor(), animate);
+            });
     connect(d->toolbar, &AudioplayTextEditToolbar::searchPressed, this, [this] {
         d->toolbarAnimation->switchToolbars(d->toolbar->searchIcon(),
                                             d->toolbar->searchIconPosition(), d->toolbar,
@@ -558,6 +568,11 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
     connect(d->commentsView, &CommentsView::commentSelected, this,
             [this](const QModelIndex& _index) {
                 const auto positionHint = d->commentsModel->mapToModel(_index);
+
+                if (d->toolbar->isItemIsolationEnabled()) {
+                    d->textEdit->setVisibleTopLevelItemIndex(positionHint.index);
+                }
+
                 const auto position = d->textEdit->positionForModelIndex(positionHint.index)
                     + positionHint.blockPosition;
                 auto cursor = d->textEdit->textCursor();
@@ -590,6 +605,11 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
     connect(d->bookmarksView, &BookmarksView::bookmarkSelected, this,
             [this](const QModelIndex& _index) {
                 const auto index = d->bookmarksModel->mapToModel(_index);
+
+                if (d->toolbar->isItemIsolationEnabled()) {
+                    d->textEdit->setVisibleTopLevelItemIndex(index);
+                }
+
                 const auto position = d->textEdit->positionForModelIndex(index);
                 auto cursor = d->textEdit->textCursor();
                 cursor.setPosition(position);
@@ -776,6 +796,10 @@ void AudioplayTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 
 void AudioplayTextView::setCurrentModelIndex(const QModelIndex& _index)
 {
+    if (d->toolbar->isItemIsolationEnabled()) {
+        d->textEdit->setVisibleTopLevelItemIndex(_index);
+    }
+
     d->textEdit->setCurrentModelIndex(_index);
 }
 
@@ -861,6 +885,8 @@ void AudioplayTextView::loadViewSettings()
 
     const auto isBookmarksListVisible = settingsValue(kIsBookmarksListVisibleKey, false).toBool();
     d->showBookmarksAction->setChecked(isBookmarksListVisible);
+    const auto isItemIsolationEnabled = settingsValue(kIsItemIsolationEnabledKey, false).toBool();
+    d->toolbar->setItemIsolationEnabled(isItemIsolationEnabled);
     const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
     const auto isFastFormatPanelVisible
@@ -881,6 +907,7 @@ void AudioplayTextView::saveViewSettings()
 
     setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
     setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
+    setSettingsValue(kIsItemIsolationEnabledKey, d->toolbar->isItemIsolationEnabled());
     setSettingsValue(kIsBookmarksListVisibleKey, d->showBookmarksAction->isChecked());
     setSettingsValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab());
 

@@ -27,6 +27,7 @@ public:
     QAction* fastFormatAction = nullptr;
     QAction* searchAction = nullptr;
     QAction* commentsAction = nullptr;
+    QAction* isolationAction = nullptr;
 
     CardPopupWithTree* popup = nullptr;
 };
@@ -38,6 +39,7 @@ AudioplayTextEditToolbar::Implementation::Implementation(QWidget* _parent)
     , fastFormatAction(new QAction(_parent))
     , searchAction(new QAction(_parent))
     , commentsAction(new QAction(_parent))
+    , isolationAction(new QAction(_parent))
     , popup(new CardPopupWithTree(_parent))
 {
 }
@@ -117,6 +119,14 @@ AudioplayTextEditToolbar::AudioplayTextEditToolbar(QWidget* _parent)
             &AudioplayTextEditToolbar::updateTranslations);
     connect(d->commentsAction, &QAction::toggled, this,
             &AudioplayTextEditToolbar::commentsModeEnabledChanged);
+
+    d->isolationAction->setIconText(u8"\U000F0EFF");
+    d->isolationAction->setCheckable(true);
+    addAction(d->isolationAction);
+    connect(d->isolationAction, &QAction::toggled, this,
+            &AudioplayTextEditToolbar::updateTranslations);
+    connect(d->isolationAction, &QAction::toggled, this,
+            &AudioplayTextEditToolbar::itemIsolationEnabledChanged);
 
     connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
             [this](const QModelIndex& _index) { emit paragraphTypeChanged(_index); });
@@ -227,6 +237,16 @@ void AudioplayTextEditToolbar::setCommentsModeEnabled(bool _enabled)
     d->commentsAction->setChecked(_enabled);
 }
 
+bool AudioplayTextEditToolbar::isItemIsolationEnabled() const
+{
+    return d->isolationAction->isChecked();
+}
+
+void AudioplayTextEditToolbar::setItemIsolationEnabled(bool _enabled)
+{
+    d->isolationAction->setChecked(_enabled);
+}
+
 bool AudioplayTextEditToolbar::canAnimateHoverOut() const
 {
     return !d->popup->isVisible();
@@ -252,6 +272,9 @@ void AudioplayTextEditToolbar::updateTranslations()
             QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     d->commentsAction->setToolTip(d->commentsAction->isChecked() ? tr("Disable review mode")
                                                                  : tr("Enable review mode"));
+    d->isolationAction->setToolTip(d->isolationAction->isChecked()
+                                       ? tr("Disable structure items isolation mode")
+                                       : tr("Enable structure items isolation mode"));
 }
 
 void AudioplayTextEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

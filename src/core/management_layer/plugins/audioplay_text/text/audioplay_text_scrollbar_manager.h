@@ -41,7 +41,7 @@ public:
     /**
      * @brief Настроить видимость скролбара
      */
-    void setScrollBarVisible(bool _visible);
+    void setScrollBarVisible(bool _visible, bool _animate = true);
 
     /**
      * @brief Ловим события об изменении размера родивиджета,

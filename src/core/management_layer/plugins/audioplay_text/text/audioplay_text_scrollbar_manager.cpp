@@ -199,8 +199,13 @@ void AudioplayTextScrollBarManager::setModel(BusinessLayer::AudioplayTextModel* 
     }
 }
 
-void AudioplayTextScrollBarManager::setScrollBarVisible(bool _visible)
+void AudioplayTextScrollBarManager::setScrollBarVisible(bool _visible, bool _animate)
 {
+    if (!_animate) {
+        d->timeline->setVisible(_visible);
+        return;
+    }
+
     if (_visible) {
         d->needAnimateTimelineOpacity = false;
         d->showTimelineAnimated();
