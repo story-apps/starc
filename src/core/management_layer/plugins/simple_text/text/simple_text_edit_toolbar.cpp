@@ -27,6 +27,7 @@ public:
     QAction* fastFormatAction = nullptr;
     QAction* searchAction = nullptr;
     QAction* commentsAction = nullptr;
+    QAction* isolationAction = nullptr;
 
     CardPopupWithTree* popup = nullptr;
 };
@@ -38,6 +39,7 @@ SimpleTextEditToolbar::Implementation::Implementation(QWidget* _parent)
     , fastFormatAction(new QAction)
     , searchAction(new QAction)
     , commentsAction(new QAction)
+    , isolationAction(new QAction(_parent))
     , popup(new CardPopupWithTree(_parent))
 {
 }
@@ -116,6 +118,15 @@ SimpleTextEditToolbar::SimpleTextEditToolbar(QWidget* _parent)
     connect(d->commentsAction, &QAction::toggled, this, &SimpleTextEditToolbar::updateTranslations);
     connect(d->commentsAction, &QAction::toggled, this,
             &SimpleTextEditToolbar::commentsModeEnabledChanged);
+
+
+    d->isolationAction->setIconText(u8"\U000F0EFF");
+    d->isolationAction->setCheckable(true);
+    addAction(d->isolationAction);
+    connect(d->isolationAction, &QAction::toggled, this,
+            &SimpleTextEditToolbar::updateTranslations);
+    connect(d->isolationAction, &QAction::toggled, this,
+            &SimpleTextEditToolbar::itemIsolationEnabledChanged);
 
     connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
             [this](const QModelIndex& _index) { emit paragraphTypeChanged(_index); });
@@ -221,6 +232,16 @@ void SimpleTextEditToolbar::setCommentsModeEnabled(bool _enabled)
     d->commentsAction->setChecked(_enabled);
 }
 
+bool SimpleTextEditToolbar::isItemIsolationEnabled() const
+{
+    return d->isolationAction->isChecked();
+}
+
+void SimpleTextEditToolbar::setItemIsolationEnabled(bool _enabled)
+{
+    d->isolationAction->setChecked(_enabled);
+}
+
 bool SimpleTextEditToolbar::canAnimateHoverOut() const
 {
     return !d->popup->isVisible();
@@ -246,6 +267,9 @@ void SimpleTextEditToolbar::updateTranslations()
             QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     d->commentsAction->setToolTip(d->commentsAction->isChecked() ? tr("Disable review mode")
                                                                  : tr("Enable review mode"));
+    d->isolationAction->setToolTip(d->isolationAction->isChecked()
+                                       ? tr("Disable structure items isolation mode")
+                                       : tr("Enable structure items isolation mode"));
 }
 
 void SimpleTextEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

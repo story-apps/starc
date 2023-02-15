@@ -226,6 +226,11 @@ void SimpleTextEdit::setCurrentModelIndex(const QModelIndex& _index)
     ensureCursorVisible(textCursor);
 }
 
+void SimpleTextEdit::setVisibleTopLevelItemIndex(const QModelIndex& _index)
+{
+    d->document.setVisibleTopLevelItem(_index);
+}
+
 int SimpleTextEdit::positionForModelIndex(const QModelIndex& _index)
 {
     return d->document.itemStartPosition(_index);

@@ -1,5 +1,7 @@
 #include "simple_text_document.h"
 
+#include "simple_text_corrector.h"
+
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/model/simple_text/simple_text_model_chapter_item.h>
 
@@ -9,6 +11,7 @@ namespace BusinessLayer {
 SimpleTextDocument::SimpleTextDocument(QObject* _parent)
     : TextDocument(_parent)
 {
+    setCorrector(new SimpleTextCorrector(this));
 }
 
 QString SimpleTextDocument::chapterNumber(const QTextBlock& _forBlock) const
