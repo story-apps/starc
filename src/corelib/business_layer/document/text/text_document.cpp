@@ -522,9 +522,20 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     //
     // Настроим соединения
     //
-    connect(d->model, &TextModel::modelReset, this, [this] {
-        setModel(d->model);
-        processModelReset();
+    connect(d->model, &TextModel::modelAboutToBeReset, this, [this] {
+        //
+        // При сбросе модели, делаем финт ушами
+        // - сначала отключаемся от модели
+        // - а потом переустанавливаем модель по сигналу завершения сброса
+        //
+
+        auto model = d->model;
+        setModel(nullptr);
+
+        connect(model, &TextModel::modelReset, this, [this, model] {
+            setModel(model);
+            processModelReset();
+        });
     });
     connect(
         d->model, &TextModel::dataChanged, this,
