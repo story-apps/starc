@@ -105,8 +105,10 @@ QVariant ComicBookTextModelPageItem::data(int _role) const
 {
     switch (_role) {
     case Qt::DecorationRole: {
-        return (d->number.has_value() && d->number->text.contains('-')) ? u8"\U000F0AB7"
-                                                                        : u8"\U000f021a";
+        return !customIcon().isEmpty()
+            ? customIcon()
+            : ((d->number.has_value() && d->number->text.contains('-')) ? u8"\U000F0AB7"
+                                                                        : u8"\U000f021a");
     }
 
     case PagePanelsCountRole: {

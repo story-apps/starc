@@ -463,6 +463,11 @@ void ComicBookTextEdit::setCurrentModelIndex(const QModelIndex& _index)
     ensureCursorVisible(textCursor);
 }
 
+void ComicBookTextEdit::setVisibleTopLevelItemIndex(const QModelIndex& _index)
+{
+    d->document.setVisibleTopLevelItem(_index);
+}
+
 int ComicBookTextEdit::positionForModelIndex(const QModelIndex& _index)
 {
     return d->document.itemStartPosition(_index);

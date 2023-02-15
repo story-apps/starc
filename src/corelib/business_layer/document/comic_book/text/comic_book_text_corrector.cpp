@@ -92,6 +92,11 @@ public:
     QTextDocument* document() const;
 
     /**
+     * @brief Обновить видимость блоков в заданном интервале
+     */
+    void updateBlocksVisibility(int _from);
+
+    /**
      * @brief Скорректировать имена персонажей
      */
     void correctCharactersNames(int _position = -1, int _charsChanged = 0);
@@ -280,6 +285,126 @@ ComicBookTextCorrector::Implementation::Implementation(ComicBookTextCorrector* _
 QTextDocument* ComicBookTextCorrector::Implementation::document() const
 {
     return q->document();
+}
+
+void ComicBookTextCorrector::Implementation::updateBlocksVisibility(int _from)
+{
+    //
+    // Пробегаем документ и настраиваем видимые и невидимые блоки в соответствии с шаблоном
+    //
+    const auto& currentTemplate = TemplatesFacade::comicBookTemplate(q->templateId());
+    TextCursor cursor(document());
+    cursor.setPosition(std::max(0, _from));
+    bool isTextChanged = false;
+
+    bool isFirstVisibleBlock = cursor.position() == 0;
+    bool isFirstBlockAfterInvisible = true;
+    auto block = cursor.block();
+    while (block.isValid()) {
+        const auto blockType = TextBlockStyle::forBlock(block);
+
+        //
+        // В некоторых случаях, мы попадаем сюда, когда документ не до конца настроен, поэтому
+        // когда обнаруживается такая ситация, завершаем выполнение
+        //
+        if (blockType == TextParagraphType::Undefined) {
+            break;
+        }
+
+        //
+        // При необходимости корректируем видимость блока
+        //
+        const auto isBlockShouldBeVisible = [this, block] {
+            //
+            // Если не задан верхнеуровневый видимый элемент, то покажем
+            //
+            if (q->visibleTopLevelItem() == nullptr) {
+                return true;
+            }
+
+            //
+            // Если верхнеуровневый элемент задан и текущий элемент не является его дитём, то скроем
+            //
+            if (auto screenplayBlockData
+                = static_cast<BusinessLayer::TextBlockData*>(block.userData());
+                screenplayBlockData == nullptr || screenplayBlockData->item() == nullptr
+                || !screenplayBlockData->item()->isChildOf(q->visibleTopLevelItem())) {
+                return false;
+            }
+
+            //
+            // А если является дитём, то покажем
+            //
+            return true;
+        }();
+        //
+        // Корректируем параметры в кейсах
+        // - сменилась видимость блока
+        // - это первый видимый блок (у него не должно быть дополнительных отступов сверху)
+        // - это первый блок который шёл после невидимых (он был первым видимым в предыдущем проходе
+        //   и поэтому у него сброшены отступы)
+        //
+        if (block.isVisible() != isBlockShouldBeVisible
+            || (isBlockShouldBeVisible && isFirstVisibleBlock)
+            || (block.isVisible() && isBlockShouldBeVisible && isFirstBlockAfterInvisible)) {
+            //
+            // ... если это кейс с обновлением формата первого блока следующего за невидимым,
+            //     то запомним, что мы его выполнили
+            //
+            if (block.isVisible() && isBlockShouldBeVisible && isFirstBlockAfterInvisible) {
+                isFirstBlockAfterInvisible = false;
+            }
+            //
+            // ... если блоку нужно настроить видимость, запустим операцию изменения
+            //
+            if (isTextChanged == false) {
+                isTextChanged = true;
+                cursor.beginEditBlock();
+            }
+            //
+            // ... уберём отступы у скрытых блоков, чтобы они не ломали компоновку документа
+            //
+            cursor.setPosition(block.position());
+            auto blockFormat = cursor.blockFormat();
+            if (!isBlockShouldBeVisible) {
+                blockFormat.setTopMargin(0);
+                blockFormat.setBottomMargin(0);
+                blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+            }
+            //
+            // ... а для блоков, которые возвращаются для отображения, настроим отступы
+            //
+            else {
+                auto paragraphStyleBlockFormat
+                    = currentTemplate.paragraphStyle(TextBlockStyle::forBlock(block))
+                          .blockFormat(cursor.inTable());
+                blockFormat.setTopMargin(
+                    isFirstVisibleBlock ? 0 : paragraphStyleBlockFormat.topMargin());
+                blockFormat.setBottomMargin(paragraphStyleBlockFormat.bottomMargin());
+                blockFormat.setPageBreakPolicy(isFirstVisibleBlock
+                                                   ? QTextFormat::PageBreak_Auto
+                                                   : paragraphStyleBlockFormat.pageBreakPolicy());
+            }
+            //
+            // ... применим настроенный стиль блока
+            //
+            cursor.setBlockFormat(blockFormat);
+            //
+            // ... собственно настраиваем видимость
+            //
+            block.setVisible(isBlockShouldBeVisible);
+        }
+
+        if (isFirstVisibleBlock && isBlockShouldBeVisible) {
+            isFirstVisibleBlock = false;
+        }
+
+        block = block.next();
+    }
+
+    if (isTextChanged) {
+        cursor.endEditBlock();
+    }
 }
 
 void ComicBookTextCorrector::Implementation::correctCharactersNames(int _position,
@@ -1823,12 +1948,6 @@ void ComicBookTextCorrector::clearImpl()
     d->blockItems.clear();
 }
 
-void ComicBookTextCorrector::makeSoftCorrections(int _position, int _charsChanged)
-{
-    Q_UNUSED(_position)
-    Q_UNUSED(_charsChanged)
-}
-
 void ComicBookTextCorrector::makeCorrections(int _position, int _charsChanged)
 {
     //
@@ -1839,6 +1958,15 @@ void ComicBookTextCorrector::makeCorrections(int _position, int _charsChanged)
     if (!canRun) {
         return;
     }
+
+    //
+    // Сначала корректируем видимость блоков
+    //
+    makeSoftCorrections(_position, _charsChanged);
+
+    //
+    // Затем при необходимости корректируем сам текст
+    //
 
     if (d->needToCorrectCharactersNames) {
         d->correctCharactersNames(_position, _charsChanged);
@@ -1851,6 +1979,13 @@ void ComicBookTextCorrector::makeCorrections(int _position, int _charsChanged)
     if (d->needToCorrectPageBreaks) {
         d->correctPageBreaks(_position);
     }
+}
+
+void ComicBookTextCorrector::makeSoftCorrections(int _position, int _charsChanged)
+{
+    Q_UNUSED(_charsChanged)
+
+    d->updateBlocksVisibility(_position);
 }
 
 } // namespace BusinessLayer
