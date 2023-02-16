@@ -231,6 +231,7 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
             //
             // После вставки таблицы нужно завершить транзакцию изменения документа,
             // чтобы корректно считывались таблицы в положении курсора
+            // FIXME: у больших документов это приводит к долгой работе, особенно в маке
             //
             _cursor.restartEditBlock();
 

@@ -54,8 +54,8 @@ void ScreenplayTextEditToolbar::Implementation::showPopup(ScreenplayTextEditTool
     const auto left = QPoint(
         _parent->isLeftToRight() ? (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
                                     + Ui::DesignSystem::floatingToolBar().margins().left()
-                                    + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
-                                    + Ui::DesignSystem::floatingToolBar().spacing() * 1
+                                    + Ui::DesignSystem::floatingToolBar().iconSize().width() * 3
+                                    + Ui::DesignSystem::floatingToolBar().spacing() * 2
                                     - Ui::DesignSystem::card().shadowMargins().left())
                                  : (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
                                     + Ui::DesignSystem::floatingToolBar().margins().left()
