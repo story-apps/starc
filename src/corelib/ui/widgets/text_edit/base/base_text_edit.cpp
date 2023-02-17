@@ -133,7 +133,8 @@ public:
     bool correctDoubleCapitals = true;
     bool replaceThreeDots = false;
     bool smartQuotes = false;
-    bool compressSpaces = false;
+    bool replaceTwoDashes = false;
+    bool avoidMultipleSpaces = false;
 
     /**
      * @brief Количеств
@@ -234,6 +235,16 @@ void BaseTextEdit::setReplaceThreeDots(bool _replace)
 void BaseTextEdit::setUseSmartQuotes(bool _use)
 {
     d->smartQuotes = _use;
+}
+
+void BaseTextEdit::setReplaceTwoDashes(bool _replace)
+{
+    d->replaceTwoDashes = _replace;
+}
+
+void BaseTextEdit::setAvoidMultipleSpaces(bool _avoid)
+{
+    d->avoidMultipleSpaces = _avoid;
 }
 
 void BaseTextEdit::setTextBold(bool _bold)
@@ -823,10 +834,24 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     }
 
     //
+    // Заменяем два тире символом длинного тире
+    //
+    if (d->replaceTwoDashes && _eventText == "-" && cursorBackwardText.endsWith("--")) {
+        //
+        // Три последних символа
+        //
+        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 2);
+        cursor.insertText("—");
+
+        return true;
+    }
+
+    //
     // Если была попытка ввести несколько пробелов подряд, или пробел в начале строки,
     // удаляем этот лишний пробел
     //
-    if (d->compressSpaces && (cursorBackwardText == " " || cursorBackwardText.endsWith("  "))) {
+    if (d->avoidMultipleSpaces
+        && (cursorBackwardText == " " || cursorBackwardText.endsWith("  "))) {
         cursor.deletePreviousChar();
 
         return true;

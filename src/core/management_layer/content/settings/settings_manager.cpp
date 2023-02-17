@@ -120,6 +120,10 @@ void SettingsManager::Implementation::loadApplicationSettings()
         settingsValue(DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey).toBool());
     view->setApplicationUseSmartQuotes(
         settingsValue(DataStorageLayer::kApplicationSmartQuotesKey).toBool());
+    view->setApplicationReplaceTwoDashesWithEmDash(
+        settingsValue(DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey).toBool());
+    view->setApplicationAvoidMultipleSpaces(
+        settingsValue(DataStorageLayer::kApplicationAvoidMultipleSpacesKey).toBool());
 }
 
 void SettingsManager::Implementation::loadComponentsSettings()
@@ -540,6 +544,10 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setApplicationReplaceThreeDotsWithEllipsis);
     connect(d->view, &Ui::SettingsView::applicationUseSmartQuotesChanged, this,
             &SettingsManager::setApplicationUseSmartQuotes);
+    connect(d->view, &Ui::SettingsView::applicationReplaceTwoDashedWithEmDashChanged, this,
+            &SettingsManager::setApplicationReplaceTwoDashesWithEmDash);
+    connect(d->view, &Ui::SettingsView::applicationAvoidMultipleSpacesChanged, this,
+            &SettingsManager::setApplicationAvoidMultipleSpaces);
     //
     // ... простой редактор текста
     //
@@ -1322,6 +1330,26 @@ void SettingsManager::setApplicationUseSmartQuotes(bool _use)
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationSmartQuotesKey });
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationSmartQuotesKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationSmartQuotesKey });
+}
+
+void SettingsManager::setApplicationReplaceTwoDashesWithEmDash(bool _replace)
+{
+    setSettingsValue(DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey, _replace);
+    emit simpleTextEditorChanged({ DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey });
+    emit screenplayEditorChanged({ DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey });
+    emit comicBookEditorChanged({ DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey });
+    emit audioplayEditorChanged({ DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey });
+    emit stageplayEditorChanged({ DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey });
+}
+
+void SettingsManager::setApplicationAvoidMultipleSpaces(bool _avoid)
+{
+    setSettingsValue(DataStorageLayer::kApplicationAvoidMultipleSpacesKey, _avoid);
+    emit simpleTextEditorChanged({ DataStorageLayer::kApplicationAvoidMultipleSpacesKey });
+    emit screenplayEditorChanged({ DataStorageLayer::kApplicationAvoidMultipleSpacesKey });
+    emit comicBookEditorChanged({ DataStorageLayer::kApplicationAvoidMultipleSpacesKey });
+    emit audioplayEditorChanged({ DataStorageLayer::kApplicationAvoidMultipleSpacesKey });
+    emit stageplayEditorChanged({ DataStorageLayer::kApplicationAvoidMultipleSpacesKey });
 }
 
 void SettingsManager::setSimpleTextAvailable(bool _available)

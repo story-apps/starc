@@ -80,6 +80,11 @@ const QString kApplicationReplaceThreeDotsWithEllipsisKey
     = kApplicationGroupKey + "/replace-three-dots-with-ellipsis";
 // активны ли замены обычных кавычек на умные для текущего языка
 const QString kApplicationSmartQuotesKey = kApplicationGroupKey + "/smart-quotes";
+// заменять два тире на длинное тире
+const QString kApplicationReplaceTwoDashesWithEmDashKey
+    = kApplicationGroupKey + "/replace-two-dashes-with-em-dash";
+// запретить вводить несколько пробелов подряд
+const QString kApplicationAvoidMultipleSpacesKey = kApplicationGroupKey + "/avoid-multiple-spaces";
 // список недавних проектов
 const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
 

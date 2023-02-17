@@ -113,6 +113,8 @@ private:
     void setApplicationUseTypewriterScrolling(bool _use);
     void setApplicationReplaceThreeDotsWithEllipsis(bool _replace);
     void setApplicationUseSmartQuotes(bool _use);
+    void setApplicationReplaceTwoDashesWithEmDash(bool _replace);
+    void setApplicationAvoidMultipleSpaces(bool _avoid);
 
     //
     // Сохранение параметров редактора сценария

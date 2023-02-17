@@ -32,6 +32,16 @@ public:
     void setUseSmartQuotes(bool _use);
 
     /**
+     * @brief Заменять два тира на длинное тире
+     */
+    void setReplaceTwoDashes(bool _replace);
+
+    /**
+     * @brief Запретить вводить несколько пробелов подряд
+     */
+    void setAvoidMultipleSpaces(bool _avoid);
+
+    /**
      * @brief Настроить форматирование выделенного текста
      */
     /** @{ */

@@ -57,6 +57,8 @@ public:
     void setApplicationUseTypewriterScrolling(bool _use);
     void setApplicationReplaceThreeDotsWithEllipsis(bool _replace);
     void setApplicationUseSmartQuotes(bool _use);
+    void setApplicationReplaceTwoDashesWithEmDash(bool _replace);
+    void setApplicationAvoidMultipleSpaces(bool _avoid);
 
     //
     // Задание параметров редактора текста
@@ -165,6 +167,8 @@ signals:
     void applicationUseTypewriterScrollingChanged(bool _use);
     void applicationReplaceThreeDotsWithEllipsisChanged(bool _replace);
     void applicationUseSmartQuotesChanged(bool _use);
+    void applicationReplaceTwoDashedWithEmDashChanged(bool _replace);
+    void applicationAvoidMultipleSpacesChanged(bool _avoid);
 
     //
     // Уведомление об изменении параметров редактора текста

@@ -875,6 +875,17 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->textEdit->setUseSmartQuotes(
             settingsValue(DataStorageLayer::kApplicationSmartQuotesKey).toBool());
     }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey)) {
+        d->textEdit->setReplaceTwoDashes(
+            settingsValue(DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey).toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationAvoidMultipleSpacesKey)) {
+        d->textEdit->setAvoidMultipleSpaces(
+            settingsValue(DataStorageLayer::kApplicationAvoidMultipleSpacesKey).toBool());
+    }
 }
 
 void ComicBookTextView::loadViewSettings()

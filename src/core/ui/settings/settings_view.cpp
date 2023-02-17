@@ -229,6 +229,8 @@ public:
     Subtitle1Label* applicationTextEditingSubtitle = nullptr;
     CheckBox* replaceThreeDotsWithEllipsis = nullptr;
     CheckBox* useSmartQuotes = nullptr;
+    CheckBox* replaceTwoDashesWithEmDash = nullptr;
+    CheckBox* avoidMultipleSpaces = nullptr;
     //
     int applicationCardBottomSpacerIndex = 0;
 
@@ -471,6 +473,8 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , applicationTextEditingSubtitle(new Subtitle1Label(applicationCard))
     , replaceThreeDotsWithEllipsis(new CheckBox(applicationCard))
     , useSmartQuotes(new CheckBox(applicationCard))
+    , replaceTwoDashesWithEmDash(new CheckBox(applicationCard))
+    , avoidMultipleSpaces(new CheckBox(applicationCard))
     //
     , componentsTitle(new H5Label(content))
     //
@@ -737,6 +741,8 @@ void SettingsView::Implementation::initApplicationCard()
     applicationCardLayout->addWidget(applicationTextEditingSubtitle, itemIndex++, 0);
     applicationCardLayout->addWidget(replaceThreeDotsWithEllipsis, itemIndex++, 0);
     applicationCardLayout->addWidget(useSmartQuotes, itemIndex++, 0);
+    applicationCardLayout->addWidget(replaceTwoDashesWithEmDash, itemIndex++, 0);
+    applicationCardLayout->addWidget(avoidMultipleSpaces, itemIndex++, 0);
 
     applicationCardBottomSpacerIndex = itemIndex;
     applicationCard->setContentLayout(applicationCardLayout);
@@ -1358,6 +1364,10 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::applicationReplaceThreeDotsWithEllipsisChanged);
     connect(d->useSmartQuotes, &CheckBox::checkedChanged, this,
             &SettingsView::applicationUseSmartQuotesChanged);
+    connect(d->replaceTwoDashesWithEmDash, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationReplaceTwoDashedWithEmDashChanged);
+    connect(d->avoidMultipleSpaces, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationAvoidMultipleSpacesChanged);
 
     //
     // Компоненты
@@ -2445,6 +2455,16 @@ void SettingsView::setApplicationUseSmartQuotes(bool _use)
     d->useSmartQuotes->setChecked(_use);
 }
 
+void SettingsView::setApplicationReplaceTwoDashesWithEmDash(bool _replace)
+{
+    d->replaceTwoDashesWithEmDash->setChecked(_replace);
+}
+
+void SettingsView::setApplicationAvoidMultipleSpaces(bool _avoid)
+{
+    d->avoidMultipleSpaces->setChecked(_avoid);
+}
+
 void SettingsView::setSimpleTextAvailable(bool _available)
 {
     d->simpleTextAvailable->setChecked(_available);
@@ -3007,6 +3027,8 @@ void SettingsView::updateTranslations()
     d->applicationTextEditingSubtitle->setText(tr("Automatic text corrections"));
     d->replaceThreeDotsWithEllipsis->setText(tr("Replace three single dots with ellipsis"));
     d->useSmartQuotes->setText(tr("Replace vertical quotation marks to curly ones"));
+    d->replaceTwoDashesWithEmDash->setText(tr("Replace two dashes with em dash"));
+    d->avoidMultipleSpaces->setText(tr("Avoid multiple spaces"));
 
     d->componentsTitle->setText(tr("Components"));
     //
@@ -3294,6 +3316,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->useTypewriterScrolling,
              d->replaceThreeDotsWithEllipsis,
              d->useSmartQuotes,
+             d->replaceTwoDashesWithEmDash,
+             d->avoidMultipleSpaces,
              //
              d->simpleTextNavigatorShowSceneText,
              //
