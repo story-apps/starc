@@ -1218,7 +1218,7 @@ void ProjectManager::Implementation::findAllLocations()
     //
     // Т.к. локаций может быть очень много, расширяем максимальное ограничение по ширине для диалога
     //
-    dialog->setContentMaximumWidth(topLevelWidget->width() * 0.7);
+    dialog->setContentFixedWidth(topLevelWidget->width() * 0.7);
     const auto placeButtonSideBySide = false;
     dialog->showDialog(
         {}, message,
