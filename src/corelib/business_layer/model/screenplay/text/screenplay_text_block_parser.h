@@ -64,7 +64,6 @@ public:
         SectionSceneIntro, //!< МЕСТО
         SectionLocation, //!< ЛОКАЦИЯ
         SectionSceneTime, //!< ВРЕМЯ
-        SectionStoryDay, //!< ДЕНЬ ИСТОРИИ
     };
 
 public:
@@ -82,11 +81,6 @@ public:
      * @brief Получить название локации, если задан \p _force, то берём текст до конца
      */
     static QString location(const QString& _text, bool _force = false);
-
-    /**
-     * @brief Получить название сценарного дня
-     */
-    static QString storyDay(const QString& _text);
 
     /**
      * @brief Получить название времени

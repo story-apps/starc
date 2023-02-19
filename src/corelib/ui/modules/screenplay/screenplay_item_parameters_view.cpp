@@ -68,11 +68,14 @@ public:
     TextField* title = nullptr;
     TextField* heading = nullptr;
     QVector<TextField*> beats;
+    TextField* storyDay = nullptr;
+    bool isStampVisible = true;
     TextField* stamp = nullptr;
     Subtitle2Label* numberingTitle = nullptr;
     Toggle* autoNumbering = nullptr;
     TextField* customNumber = nullptr;
     CheckBox* eatNumber = nullptr;
+    bool isTagsVisible = true;
     Subtitle2Label* tagsTitle = nullptr;
     IconButton* addTagButton = nullptr;
     Tree* tags = nullptr;
@@ -88,6 +91,7 @@ ScreenplayItemParametersView::Implementation::Implementation(ScreenplayItemParam
     , title(new TextField(content))
     , heading(new TextField(content))
     , beats({ new TextField(content) })
+    , storyDay(new TextField(content))
     , stamp(new TextField(content))
     , numberingTitle(new Subtitle2Label(content))
     , autoNumbering(new Toggle(content))
@@ -114,6 +118,7 @@ ScreenplayItemParametersView::Implementation::Implementation(ScreenplayItemParam
         title,
         heading,
         beats.constFirst(),
+        storyDay,
         stamp,
     });
     autoNumbering->setChecked(true);
@@ -136,6 +141,7 @@ ScreenplayItemParametersView::Implementation::Implementation(ScreenplayItemParam
     contentLayout->addWidget(title);
     contentLayout->addWidget(heading);
     contentLayout->addWidget(beats.constFirst());
+    contentLayout->addWidget(storyDay);
     contentLayout->addWidget(stamp);
     {
         auto layout = new QHBoxLayout;
@@ -175,7 +181,7 @@ void ScreenplayItemParametersView::Implementation::initCardBeats()
     for (int index = 1; index < beats.size(); ++index) {
         QWidget::setTabOrder(beats[index - 1], beats[index]);
     }
-    QWidget::setTabOrder(beats.constLast(), stamp);
+    QWidget::setTabOrder(beats.constLast(), storyDay);
 
     beats.constFirst()->setLabelVisible(true);
     beats.constFirst()->setLabel(tr("Description"));
@@ -240,6 +246,8 @@ ScreenplayItemParametersView::ScreenplayItemParametersView(QWidget* _parent)
             [this] { emit headingChanged(d->heading->text()); });
     connect(d->beats.constFirst(), &TextField::textChanged, this,
             [this] { emit beatChanged(0, d->beats.constFirst()->text()); });
+    connect(d->storyDay, &TextField::textChanged, this,
+            [this] { emit storyDayChanged(d->storyDay->text()); });
     connect(d->stamp, &TextField::textChanged, this,
             [this] { emit stampChanged(d->stamp->text()); });
     connect(d->autoNumbering, &Toggle::checkedChanged, this, [this](bool _checked) {
@@ -296,14 +304,15 @@ void ScreenplayItemParametersView::setItemType(ScreenplayItemType _type)
         for (auto beat : std::as_const(d->beats)) {
             beat->setVisible(false);
         }
-        d->stamp->setVisible(true);
+        d->storyDay->setVisible(false);
+        d->stamp->setVisible(d->isStampVisible && true);
         d->numberingTitle->setVisible(false);
         d->autoNumbering->setVisible(false);
         d->customNumber->setVisible(false);
         d->eatNumber->setVisible(false);
-        d->tagsTitle->setVisible(false);
-        d->addTagButton->setVisible(false);
-        d->tags->setVisible(false);
+        d->tagsTitle->setVisible(d->isTagsVisible && false);
+        d->addTagButton->setVisible(d->isTagsVisible && false);
+        d->tags->setVisible(d->isTagsVisible && false);
         break;
     }
 
@@ -313,14 +322,15 @@ void ScreenplayItemParametersView::setItemType(ScreenplayItemType _type)
         for (auto beat : std::as_const(d->beats)) {
             beat->setVisible(true);
         }
-        d->stamp->setVisible(true);
+        d->storyDay->setVisible(true);
+        d->stamp->setVisible(d->isTagsVisible && true);
         d->numberingTitle->setVisible(true);
         d->autoNumbering->setVisible(true);
         d->customNumber->setVisible(false);
         d->eatNumber->setVisible(false);
-        d->tagsTitle->setVisible(true);
-        d->addTagButton->setVisible(true);
-        d->tags->setVisible(true);
+        d->tagsTitle->setVisible(d->isTagsVisible && true);
+        d->addTagButton->setVisible(d->isTagsVisible && true);
+        d->tags->setVisible(d->isTagsVisible && true);
         break;
     }
 
@@ -416,6 +426,21 @@ void ScreenplayItemParametersView::setBeats(const QVector<QString>& _beats)
     }
 }
 
+void ScreenplayItemParametersView::setStoryDay(const QString& _storyDay)
+{
+    if (d->storyDay->text() == _storyDay) {
+        return;
+    }
+
+    d->storyDay->setText(_storyDay);
+}
+
+void ScreenplayItemParametersView::setStampVisible(bool _visible)
+{
+    d->isStampVisible = _visible;
+    d->stamp->setVisible(_visible);
+}
+
 void ScreenplayItemParametersView::setStamp(const QString& _stamp)
 {
     if (d->stamp->text() == _stamp) {
@@ -444,6 +469,18 @@ void ScreenplayItemParametersView::setNumber(const QString& _number, bool _isCus
     d->eatNumber->setVisible(!d->autoNumbering->isChecked() && !_isLocked);
 }
 
+void ScreenplayItemParametersView::setTagsVisible(bool _visible)
+{
+    d->isTagsVisible = _visible;
+    for (auto widget : std::vector<QWidget*>{
+             d->tagsTitle,
+             d->addTagButton,
+             d->tags,
+         }) {
+        widget->setVisible(_visible);
+    }
+}
+
 void ScreenplayItemParametersView::setTags(const QVector<QPair<QString, QColor>>& _tags)
 {
     d->tagsModel->clear();
@@ -465,6 +502,7 @@ void ScreenplayItemParametersView::setReadOnly(bool _readOnly)
     for (auto cardBeat : std::as_const(d->beats)) {
         cardBeat->setEnabled(enabled);
     }
+    d->storyDay->setEnabled(enabled);
     d->stamp->setEnabled(enabled);
     d->addTagButton->setEnabled(enabled);
 }
@@ -544,6 +582,7 @@ void ScreenplayItemParametersView::updateTranslations()
     d->heading->setLabel(tr("Heading"));
     d->heading->setHelper(tr("Header text (visible in screenplay)"));
     d->initCardBeats();
+    d->storyDay->setLabel(tr("Story day"));
     d->stamp->setLabel(tr("Stamp"));
     d->numberingTitle->setText(tr("Auto scene numbering"));
     d->customNumber->setLabel(tr("Scene number"));
@@ -598,6 +637,7 @@ void ScreenplayItemParametersView::designSystemChangeEvent(DesignSystemChangeEve
     for (auto textField : std::vector<TextField*>{
              d->title,
              d->heading,
+             d->storyDay,
              d->stamp,
              d->customNumber,
          }) {

@@ -11,6 +11,10 @@
 
 namespace BusinessLayer {
 
+namespace {
+static const QRegularExpression s_rxState("[(](.*)");
+}
+
 ScreenplayCharacterParser::Section ScreenplayCharacterParser::section(const QString& _text)
 {
     ScreenplayCharacterParser::Section section = SectionUndefined;
@@ -32,7 +36,7 @@ QString ScreenplayCharacterParser::name(const QString& _text)
     //
 
     QString name = _text;
-    return TextHelper::smartToUpper(name.remove(QRegularExpression("[(](.*)")).simplified());
+    return TextHelper::smartToUpper(name.remove(s_rxState).simplified());
 }
 
 QString ScreenplayCharacterParser::extension(const QString& _text)
@@ -42,8 +46,7 @@ QString ScreenplayCharacterParser::extension(const QString& _text)
     // эти указания даются в скобках, они нам как раз и нужны
     //
 
-    const QRegularExpression rx_state("[(](.*)");
-    QRegularExpressionMatch match = rx_state.match(_text);
+    QRegularExpressionMatch match = s_rxState.match(_text);
     QString state;
     if (match.hasMatch()) {
         state = match.captured(0);
@@ -58,9 +61,7 @@ ScreenplaySceneHeadingParser::Section ScreenplaySceneHeadingParser::section(cons
 {
     ScreenplaySceneHeadingParser::Section section = SectionUndefined;
 
-    if (_text.split(", ").count() == 2) {
-        section = SectionStoryDay;
-    } else if (_text.split(" - ").count() >= 2) {
+    if (_text.split(" - ").count() >= 2) {
         section = SectionSceneTime;
     } else {
         const int splitDotCount = _text.split(". ").count();
@@ -98,17 +99,6 @@ QString ScreenplaySceneHeadingParser::location(const QString& _text, bool _force
     }
 
     return TextHelper::smartToUpper(locationName).simplified();
-}
-
-QString ScreenplaySceneHeadingParser::storyDay(const QString& _text)
-{
-    QString scenarioDayName;
-
-    if (_text.split(", ").count() == 2) {
-        scenarioDayName = _text.split(", ").last();
-    }
-
-    return TextHelper::smartToUpper(scenarioDayName).simplified();
 }
 
 QString ScreenplaySceneHeadingParser::sceneTime(const QString& _text)

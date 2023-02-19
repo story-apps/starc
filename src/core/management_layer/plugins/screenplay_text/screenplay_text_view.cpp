@@ -10,6 +10,7 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_folder_item.h>
@@ -261,6 +262,8 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     sidebarContent->addWidget(dictionariesView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
+    itemParametersView->setStampVisible(false);
+    itemParametersView->setTagsVisible(false);
     itemParametersView->hide();
     commentsView->setModel(commentsModel);
     commentsView->hide();
@@ -552,6 +555,7 @@ void ScreenplayTextView::Implementation::showParametersFor(BusinessLayer::TextMo
         itemParametersView->setTitle(sceneItem->title());
         itemParametersView->setHeading(sceneItem->heading());
         itemParametersView->setBeats(sceneItem->beats());
+        itemParametersView->setStoryDay(sceneItem->storyDay());
         itemParametersView->setStamp(sceneItem->stamp());
         if (const auto sceneNumber = sceneItem->number(); sceneNumber.has_value()) {
             itemParametersView->setNumber(sceneNumber->followNumber + sceneNumber->value,
@@ -1056,32 +1060,20 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                     break;
                 }
             });
-    connect(d->itemParametersView, &ScreenplayItemParametersView::stampChanged, this,
-            [this, findCurrentModelItem](const QString& _stamp) {
+    connect(d->itemParametersView, &ScreenplayItemParametersView::storyDayChanged, this,
+            [this, findCurrentModelItem](const QString& _storyDay) {
                 auto item = findCurrentModelItem();
-                if (item == nullptr) {
+                if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
                     return;
                 }
 
-                switch (item->type()) {
-                case BusinessLayer::TextModelItemType::Folder: {
-                    auto folderItem = static_cast<BusinessLayer::TextModelFolderItem*>(item);
-                    folderItem->setStamp(_stamp);
-                    break;
-                }
+                auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
 
-                case BusinessLayer::TextModelItemType::Group: {
-                    auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
-                    groupItem->setStamp(_stamp);
-                    break;
-                }
-
-                default: {
-                    Q_ASSERT(false);
-                }
-                }
-
-                d->model->updateItem(item);
+                d->model->dictionariesModel()->removeStoryDay(groupItem->storyDay());
+                d->model->dictionariesModel()->addStoryDay(_storyDay);
+                //
+                groupItem->setStoryDay(_storyDay);
+                d->model->updateItem(groupItem);
             });
     connect(
         d->itemParametersView, &ScreenplayItemParametersView::numberChanged, this,
@@ -1100,17 +1092,6 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             d->model->updateItem(groupItem);
             d->model->updateNumbering();
         });
-    connect(d->itemParametersView, &ScreenplayItemParametersView::tagsChanged, this,
-            [this, findCurrentModelItem](const QVector<QPair<QString, QColor>>& _tags) {
-                auto item = findCurrentModelItem();
-                if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
-                    return;
-                }
-
-                auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
-                groupItem->setTags(_tags);
-                d->model->updateItem(groupItem);
-            });
     //
     connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
             [this](const QColor& _color, const QString& _comment) {

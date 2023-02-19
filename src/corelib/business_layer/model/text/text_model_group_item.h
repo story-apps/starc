@@ -70,7 +70,6 @@ public:
         GroupHeadingRole,
         GroupTextRole,
         GroupColorRole,
-        GroupStampRole,
         GroupInlineNotesSizeRole,
         GroupReviewMarksSizeRole,
         GroupUserRole,
@@ -123,6 +122,12 @@ public:
      */
     QString title() const;
     void setTitle(const QString& _title);
+
+    /**
+     * @brief День сценария
+     */
+    QString storyDay() const;
+    void setStoryDay(const QString& _storyDay);
 
     /**
      * @brief Штамп группы

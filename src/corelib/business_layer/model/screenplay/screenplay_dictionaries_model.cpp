@@ -9,15 +9,25 @@
 namespace BusinessLayer {
 
 namespace {
+
 const QLatin1String kDocumentKey("document");
 const QLatin1String kPageIntrosKey("scene_intros");
 const QLatin1String kSceneTimesKey("scene_times");
-const QLatin1String kStoryDaysKey("story_days");
 const QLatin1String kCharacterExtensionsKey("character_extensions");
-const QLatin1String kPanelIntrosKey("transitions");
-const QLatin1String kTagsKey("transitions");
-const QLatin1String kTagColorKey("color");
+const QLatin1String kTransitionsKey("transitions");
+const QLatin1String kStoryDaysKey("story_days");
+const QLatin1String kTagsKey("tags");
 const QLatin1String kItemKey("v");
+const QLatin1String kItemColorAttribute("color");
+const QLatin1String kItemCountAttribute("count");
+
+struct ColorsComparator {
+    bool operator()(const QPair<QString, QColor>& _lhs, const QPair<QString, QColor>& _rhs) const
+    {
+        return _lhs.first < _rhs.first && _lhs.second.name() < _rhs.second.name();
+    }
+};
+
 } // namespace
 
 class ScreenplayDictionariesModel::Implementation
@@ -25,10 +35,18 @@ class ScreenplayDictionariesModel::Implementation
 public:
     QVector<QString> sceneIntros;
     QVector<QString> sceneTimes;
-    QVector<QString> storyDays;
     QVector<QString> characterExtensions;
     QVector<QString> transitions;
-    QVector<QPair<QString, QColor>> tags;
+
+    /**
+     * @brief Дни истории <название, кол-во>
+     */
+    std::map<QString, int> storyDays;
+
+    /**
+     * @brief Тэги карточек <тэг, кол-вл>
+     */
+    std::map<QPair<QString, QColor>, int, ColorsComparator> tags;
 };
 
 
@@ -37,7 +55,7 @@ public:
 
 ScreenplayDictionariesModel::ScreenplayDictionariesModel(QObject* _parent)
     : AbstractModel({ kDocumentKey, kPageIntrosKey, kSceneTimesKey, kStoryDaysKey,
-                      kCharacterExtensionsKey, kPanelIntrosKey, kItemKey },
+                      kCharacterExtensionsKey, kTransitionsKey, kItemKey },
                     _parent)
     , d(new Implementation)
 {
@@ -139,47 +157,6 @@ void ScreenplayDictionariesModel::removeSceneTime(int _index)
     emit sceneTimesChanged();
 }
 
-const QVector<QString>& ScreenplayDictionariesModel::storyDays() const
-{
-    return d->storyDays;
-}
-
-void ScreenplayDictionariesModel::addStoryDay(const QString& _day)
-{
-    const auto dayCorrected = TextHelper::smartToUpper(_day);
-    if (d->storyDays.contains(dayCorrected)) {
-        return;
-    }
-
-    d->storyDays.append(dayCorrected);
-    emit storyDaysChanged();
-}
-
-void ScreenplayDictionariesModel::setStoryDay(int _index, const QString& _day)
-{
-    const auto dayCorrected = TextHelper::smartToUpper(_day);
-    if (d->storyDays.contains(dayCorrected)) {
-        return;
-    }
-
-    if (_index < 0 || d->storyDays.size() <= _index) {
-        return;
-    }
-
-    d->storyDays[_index] = dayCorrected;
-    emit storyDaysChanged();
-}
-
-void ScreenplayDictionariesModel::removeStoryDay(int _index)
-{
-    if (_index < 0 || d->storyDays.size() <= _index) {
-        return;
-    }
-
-    d->storyDays.removeAt(_index);
-    emit storyDaysChanged();
-}
-
 const QVector<QString>& ScreenplayDictionariesModel::characterExtensions() const
 {
     return d->characterExtensions;
@@ -262,32 +239,85 @@ void ScreenplayDictionariesModel::removeTransition(int _index)
     emit transitionsChanged();
 }
 
-const QVector<QPair<QString, QColor>>& ScreenplayDictionariesModel::tags() const
+QVector<QString> ScreenplayDictionariesModel::storyDays() const
 {
-    return d->tags;
+    QVector<QString> storyDays;
+    for (const auto& [storyDay, count] : d->storyDays) {
+        storyDays.append(storyDay);
+    }
+    return storyDays;
 }
 
-void ScreenplayDictionariesModel::addTag(const QString& _tag, const QColor& _color)
+void ScreenplayDictionariesModel::addStoryDay(const QString& _day)
 {
-    if (d->tags.contains({ _tag, _color })) {
+    if (_day.isEmpty()) {
         return;
     }
 
-    d->tags.append({ _tag, _color });
-    std::sort(d->tags.begin(), d->tags.end(),
-              [](const QPair<QString, QColor>& _lhs, const QPair<QString, QColor>& _rhs) {
-                  return _lhs.first < _rhs.first;
-              });
-    emit transitionsChanged();
+    auto iter = d->storyDays.find(_day);
+    if (iter == d->storyDays.end()) {
+        d->storyDays.emplace(_day, 1);
+    } else {
+        ++d->storyDays[iter->first];
+    }
+    emit storyDaysChanged();
 }
 
-void ScreenplayDictionariesModel::removeTag(int _index)
+void ScreenplayDictionariesModel::removeStoryDay(const QString& _day)
 {
-    if (_index < 0 || d->tags.size() <= _index) {
+    auto iter = d->storyDays.find(_day);
+    if (iter == d->storyDays.end()) {
         return;
     }
 
-    d->tags.removeAt(_index);
+    if (iter->second == 1) {
+        d->storyDays.erase(iter);
+    } else {
+        --d->storyDays[iter->first];
+    }
+    emit storyDaysChanged();
+}
+
+QVector<QPair<QString, QColor>> ScreenplayDictionariesModel::tags() const
+{
+    QVector<QPair<QString, QColor>> tags;
+    for (const auto& [tag, count] : d->tags) {
+        tags.append(tag);
+    }
+    return tags;
+}
+
+void ScreenplayDictionariesModel::addTags(const QVector<QPair<QString, QColor>>& _tags)
+{
+    for (const auto& tag : _tags) {
+        if (tag.first.isEmpty()) {
+            continue;
+        }
+
+        auto iter = d->tags.find(tag);
+        if (iter == d->tags.end()) {
+            d->tags.emplace(tag, 1);
+        } else {
+            ++d->tags[iter->first];
+        }
+    }
+    emit tagsChanged();
+}
+
+void ScreenplayDictionariesModel::removeTags(const QVector<QPair<QString, QColor>>& _tags)
+{
+    for (const auto& tag : _tags) {
+        auto iter = d->tags.find(tag);
+        if (iter == d->tags.end()) {
+            continue;
+        }
+
+        if (iter->second == 1) {
+            d->tags.erase(iter);
+        } else {
+            --d->tags[iter->first];
+        }
+    }
     emit tagsChanged();
 }
 
@@ -327,8 +357,6 @@ void ScreenplayDictionariesModel::initDocument()
     };
     fillDictionary(kSceneTimesKey, defaultSceneTimes, d->sceneTimes);
     //
-    fillDictionary(kStoryDaysKey, {}, d->storyDays);
-    //
     const QVector<QString> defaultCharacterExtensions = {
         tr("V.O."), tr("O.S."), tr("O.C."), tr("SUBTITLE"), tr("CONT'D"),
     };
@@ -339,14 +367,31 @@ void ScreenplayDictionariesModel::initDocument()
         tr("FADE TO:"),      tr("DISSOLVE TO:"), tr("BACK TO:"),
         tr("MATCH CUT TO:"), tr("JUMP CUT TO:"), tr("FADE TO BLACK"),
     };
-    fillDictionary(kPanelIntrosKey, defaultTransitions, d->transitions);
+    fillDictionary(kTransitionsKey, defaultTransitions, d->transitions);
+    //
+    {
+        const auto storyDaysNode = documentNode.firstChildElement(kStoryDaysKey);
+        auto storyDayNode = storyDaysNode.firstChildElement();
+        while (!storyDayNode.isNull()) {
+            const auto storyDay = TextHelper::fromHtmlEscaped(storyDayNode.text());
+            const auto count = storyDayNode.hasAttribute(kItemCountAttribute)
+                ? storyDayNode.attributeNode(kItemCountAttribute).value().toInt()
+                : 1;
+            d->storyDays.emplace(storyDay, count);
+            storyDayNode = storyDayNode.nextSiblingElement();
+        }
+    }
     //
     {
         const auto tagsNode = documentNode.firstChildElement(kTagsKey);
         auto tagNode = tagsNode.firstChildElement();
         while (!tagNode.isNull()) {
-            d->tags.append({ TextHelper::fromHtmlEscaped(tagNode.text()),
-                             tagNode.attributeNode(kTagColorKey).value() });
+            const auto tag = qMakePair(TextHelper::fromHtmlEscaped(tagNode.text()),
+                                       tagNode.attributeNode(kItemColorAttribute).value());
+            const auto count = tagNode.hasAttribute(kItemCountAttribute)
+                ? tagNode.attributeNode(kItemCountAttribute).value().toInt()
+                : 1;
+            d->tags.emplace(tag, count);
             tagNode = tagNode.nextSiblingElement();
         }
     }
@@ -360,6 +405,7 @@ void ScreenplayDictionariesModel::clearDocument()
     d->sceneTimes.clear();
     d->characterExtensions.clear();
     d->transitions.clear();
+    d->storyDays.clear();
     d->tags.clear();
 }
 
@@ -384,19 +430,27 @@ QByteArray ScreenplayDictionariesModel::toXml() const
     };
     writeDictionary(kPageIntrosKey, d->sceneIntros);
     writeDictionary(kSceneTimesKey, d->sceneTimes);
-    writeDictionary(kStoryDaysKey, d->storyDays);
     writeDictionary(kCharacterExtensionsKey, d->characterExtensions);
-    writeDictionary(kPanelIntrosKey, d->transitions);
-    {
-        xml += QString("<%1>\n").arg(kTagsKey).toUtf8();
-        for (const auto& tag : std::as_const(d->tags)) {
-            xml += QString("<%1 %2=\"%3\"><![CDATA[%4]]></%1>\n")
-                       .arg(kItemKey, kTagColorKey, tag.second.name(),
-                            TextHelper::toHtmlEscaped(tag.first))
-                       .toUtf8();
-        }
-        xml += QString("</%1>\n").arg(kTagsKey).toUtf8();
+    writeDictionary(kTransitionsKey, d->transitions);
+    //
+    xml += QString("<%1>\n").arg(kStoryDaysKey).toUtf8();
+    for (const auto& [storyDay, count] : std::as_const(d->storyDays)) {
+        xml += QString("<%1 %2=\"%3\"><![CDATA[%4]]></%1>\n")
+                   .arg(kItemKey, kItemCountAttribute, QString::number(count),
+                        TextHelper::toHtmlEscaped(storyDay))
+                   .toUtf8();
     }
+    xml += QString("</%1>\n").arg(kStoryDaysKey).toUtf8();
+    //
+    xml += QString("<%1>\n").arg(kTagsKey).toUtf8();
+    for (const auto& [tag, count] : std::as_const(d->tags)) {
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\"><![CDATA[%6]]></%1>\n")
+                   .arg(kItemKey, kItemColorAttribute, tag.second.name(), kItemCountAttribute,
+                        QString::number(count), TextHelper::toHtmlEscaped(tag.first))
+                   .toUtf8();
+    }
+    xml += QString("</%1>\n").arg(kTagsKey).toUtf8();
+
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }

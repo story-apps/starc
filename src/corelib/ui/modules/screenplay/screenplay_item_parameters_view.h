@@ -58,8 +58,15 @@ public:
     Q_SIGNAL void beatRemoved(int _removedBeatIndex);
 
     /**
+     * @brief Сценарный день
+     */
+    void setStoryDay(const QString& _storyDay);
+    Q_SIGNAL void storyDayChanged(const QString& _storyDay);
+
+    /**
      * @brief Штамп
      */
+    void setStampVisible(bool _visible);
     void setStamp(const QString& _stamp);
     Q_SIGNAL void stampChanged(const QString& _stamp);
 
@@ -72,6 +79,7 @@ public:
     /**
      * @brief Тэги
      */
+    void setTagsVisible(bool _visible);
     void setTags(const QVector<QPair<QString, QColor>>& _tags);
     Q_SIGNAL void tagsChanged(const QVector<QPair<QString, QColor>>& _tags);
 

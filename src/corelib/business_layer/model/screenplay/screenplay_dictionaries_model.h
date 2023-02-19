@@ -25,12 +25,6 @@ public:
     void removeSceneTime(int _index);
     Q_SIGNAL void sceneTimesChanged();
 
-    const QVector<QString>& storyDays() const;
-    void addStoryDay(const QString& _day);
-    void setStoryDay(int _index, const QString& _day);
-    void removeStoryDay(int _index);
-    Q_SIGNAL void storyDaysChanged();
-
     const QVector<QString>& characterExtensions() const;
     void addCharacterExtension(const QString& _extension);
     void setCharacterExtension(int _index, const QString& _extension);
@@ -43,9 +37,14 @@ public:
     void removeTransition(int _index);
     Q_SIGNAL void transitionsChanged();
 
-    const QVector<QPair<QString, QColor>>& tags() const;
-    void addTag(const QString& _tag, const QColor& _color);
-    void removeTag(int _index);
+    QVector<QString> storyDays() const;
+    void addStoryDay(const QString& _day);
+    void removeStoryDay(const QString& _day);
+    Q_SIGNAL void storyDaysChanged();
+
+    QVector<QPair<QString, QColor>> tags() const;
+    void addTags(const QVector<QPair<QString, QColor>>& _tags);
+    void removeTags(const QVector<QPair<QString, QColor>>& _tags);
     Q_SIGNAL void tagsChanged();
 
 protected:

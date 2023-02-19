@@ -349,13 +349,6 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText,
         break;
     }
 
-    case ScreenplaySceneHeadingParser::SectionStoryDay: {
-        m_completerModel->setStringList(editor()->dictionaries()->storyDays().toList());
-        sectionModel = m_completerModel;
-        sectionText = ScreenplaySceneHeadingParser::storyDay(_currentBlockText);
-        break;
-    }
-
     case ScreenplaySceneHeadingParser::SectionSceneTime: {
         //
         // Возможно пользователь предпочитает обозначать локации и подлокации через минус,
@@ -455,12 +448,6 @@ void SceneHeadingHandler::storeSceneParameters() const
     //
     const QString sceneTime = ScreenplaySceneHeadingParser::sceneTime(cursorBackwardText);
     editor()->dictionaries()->addSceneTime(sceneTime);
-
-    //
-    // Сохраняем сценарный день
-    //
-    const QString storyDay = ScreenplaySceneHeadingParser::storyDay(cursorBackwardText);
-    editor()->dictionaries()->addStoryDay(storyDay);
 }
 
 } // namespace KeyProcessingLayer
