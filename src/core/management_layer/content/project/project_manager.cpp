@@ -1115,7 +1115,7 @@ void ProjectManager::Implementation::findAllCharacters()
     //
     // Т.к. персов может быть очень много, расширяем максимальное ограничение по ширине для диалога
     //
-    dialog->setContentMaximumWidth(topLevelWidget->width() * 0.7);
+    dialog->setContentFixedWidth(topLevelWidget->width() * 0.7);
     const auto placeButtonSideBySide = false;
     dialog->showDialog(
         {}, message,
