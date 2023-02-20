@@ -4,6 +4,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/animations/click_animation.h>
 #include <ui/widgets/context_menu/context_menu.h>
+#include <ui/widgets/text_edit/completer/completer.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/icon_helper.h>
 #include <utils/helpers/image_helper.h>
@@ -84,6 +85,11 @@ public:
      * @brief Определить область для отрисовки иконки
      */
     QRectF trailingIconRect() const;
+
+    /**
+     * @brief Показать автодополнение, если необходимо
+     */
+    void completeIfNeeded();
 
 
     TextField* q = nullptr;
@@ -374,6 +380,16 @@ QRectF TextField::Implementation::trailingIconRect() const
         Ui::DesignSystem::textField().iconSize());
 }
 
+void TextField::Implementation::completeIfNeeded()
+{
+    if (!q->isCompleterActive() || q->completer()->model() == nullptr
+        || q->completer()->model()->rowCount() == 0) {
+        return;
+    }
+
+    q->complete(q->completer()->model(), q->text());
+}
+
 
 // ****
 
@@ -384,6 +400,7 @@ TextField::TextField(QWidget* _parent)
 {
     setAttribute(Qt::WA_Hover);
     setAddSpaceToBottom(false);
+    setCompleterActive(false);
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -437,6 +454,11 @@ TextField::TextField(QWidget* _parent)
     connect(&d->iconDecorationAnimation, &ClickAnimation::valueChanged, this,
             qOverload<>(&TextField::update));
     connect(document(), &QTextDocument::contentsChange, this, &TextField::updateGeometry);
+    connect(this, &TextField::textChanged, this, [this] {
+        if (hasFocus()) {
+            d->completeIfNeeded();
+        }
+    });
 }
 
 TextField::~TextField() = default;
@@ -1038,13 +1060,15 @@ void TextField::focusInEvent(QFocusEvent* _event)
     }
 
     d->finishAnimationIfInvisible();
+
+    d->completeIfNeeded();
 }
 
 void TextField::focusOutEvent(QFocusEvent* _event)
 {
     BaseTextEdit::focusOutEvent(_event);
 
-    if (d->isContextMenuShown) {
+    if (d->isContextMenuShown || isCompleterVisible()) {
         return;
     }
 

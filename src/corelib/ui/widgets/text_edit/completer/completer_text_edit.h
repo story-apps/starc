@@ -20,7 +20,8 @@ public:
     /**
      * @brief Установить необходимость использования подстановщика
      */
-    void setUseCompleter(bool _use);
+    bool isCompleterActive() const;
+    void setCompleterActive(bool _use);
 
     /**
      * @brief Получить подстановщика
@@ -57,7 +58,7 @@ signals:
     /**
      * @brief Показан подстановщик
      */
-    void popupShowed();
+    void popupShown();
 
     /**
      * @brief Текст был дополнен

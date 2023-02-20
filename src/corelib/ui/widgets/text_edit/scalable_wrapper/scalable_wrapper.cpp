@@ -120,8 +120,9 @@ ScalableWrapper::ScalableWrapper(PageTextEdit* _editor, QWidget* _parent)
     connect(zoomOutShortcut, &QShortcut::activated, this, &ScalableWrapper::zoomOut);
 
     if (auto editor = qobject_cast<CompleterTextEdit*>(d->editor.data())) {
-        connect(editor, &CompleterTextEdit::popupShowed, this, [this, editor] {
-            const QPointF point = d->editorProxy->mapToScene(editor->completer()->popup()->pos());
+        connect(editor, &CompleterTextEdit::popupShown, this, [this, editor] {
+            const QPointF pointLocal = editor->mapFromGlobal(editor->completer()->popup()->pos());
+            const QPointF point = d->editorProxy->mapToScene(pointLocal);
             editor->completer()->popup()->move(mapToGlobal(mapFromScene(point)));
         });
     }

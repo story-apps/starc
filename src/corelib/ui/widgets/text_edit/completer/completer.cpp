@@ -160,17 +160,14 @@ void Completer::showCompleter(const QRect& _rect)
     const auto screen = popup()->screen();
     Q_ASSERT(screen);
     const auto screenGeometry = screen->geometry();
-    auto position = _rect.topLeft();
+    const auto parentWidget = qobject_cast<QWidget*>(parent());
+    Q_ASSERT(parentWidget);
+    auto position = parentWidget->mapToGlobal(_rect.topLeft());
     //
     // ... если попап не вмещается в нижнюю часть экрана
     //
-    const auto parentWidget = qobject_cast<QWidget*>(parent());
-    Q_ASSERT(parentWidget);
-    if (const auto positionGlobal = parentWidget->mapToGlobal(position);
-        positionGlobal.y() + finalHeight > screenGeometry.bottom()) {
-        position = positionGlobal;
+    if (position.y() + finalHeight > screenGeometry.bottom()) {
         position.setY(std::max(position.y() - finalHeight - _rect.height(), screenGeometry.top()));
-        position = parentWidget->mapFromGlobal(position);
     }
     popup()->move(position);
 

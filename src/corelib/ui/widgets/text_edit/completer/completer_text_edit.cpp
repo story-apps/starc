@@ -17,7 +17,7 @@ public:
     /**
      * @brief Использовать ли подстановщик
      */
-    bool useCompleter = true;
+    bool isCompleterActive = true;
 
     /**
      * @brief Подстановщик для завершения текста
@@ -46,9 +46,14 @@ CompleterTextEdit::CompleterTextEdit(QWidget* _parent)
 
 CompleterTextEdit::~CompleterTextEdit() = default;
 
-void CompleterTextEdit::setUseCompleter(bool _use)
+bool CompleterTextEdit::isCompleterActive() const
 {
-    d->useCompleter = _use;
+    return d->isCompleterActive;
+}
+
+void CompleterTextEdit::setCompleterActive(bool _use)
+{
+    d->isCompleterActive = _use;
 }
 
 Completer* CompleterTextEdit::completer() const
@@ -69,7 +74,7 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
 bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _completionPrefix,
                                  int _cursorMovement)
 {
-    if (!d->useCompleter) {
+    if (!d->isCompleterActive) {
         return false;
     }
 
@@ -106,7 +111,9 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, _cursorMovement);
     QRect rect = cursorRect(cursor);
-    rect.moveLeft(rect.left() + verticalScrollBar()->width() + viewportMargins().left());
+    rect.moveLeft(rect.left()
+                  + (verticalScrollBar()->isVisible() ? verticalScrollBar()->width() : 0)
+                  + (viewportMargins().isNull() ? 0 : viewportMargins().left()));
     const int heightDelta
         = cursor.block().layout()->boundingRect().height() + Ui::DesignSystem::layout().px16();
     rect.moveTop(rect.top() + heightDelta);
@@ -115,7 +122,7 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
                   + Ui::DesignSystem::treeOneLineItem().margins().right());
     rect.setHeight(heightDelta);
     d->completer->showCompleter(rect);
-    emit popupShowed();
+    emit popupShown();
     return true;
 }
 
