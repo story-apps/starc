@@ -61,7 +61,7 @@ ScreenplaySceneHeadingParser::Section ScreenplaySceneHeadingParser::section(cons
 {
     ScreenplaySceneHeadingParser::Section section = SectionUndefined;
 
-    if (_text.split(" - ").count() >= 2) {
+    if (_text.split(" -- ").count() >= 2 || _text.split(" - ").count() >= 2) {
         section = SectionSceneTime;
     } else {
         const int splitDotCount = _text.split(". ").count();
@@ -92,8 +92,12 @@ QString ScreenplaySceneHeadingParser::location(const QString& _text, bool _force
     if (_text.split(". ").count() > 1) {
         locationName = _text.mid(_text.indexOf(". ") + 2);
         if (!_force) {
-            const QString suffix = locationName.split(" - ").last();
-            locationName = locationName.remove(" - " + suffix);
+            if (auto locationParts = locationName.split(" -- "); locationParts.size() > 1) {
+                locationName = locationName.remove(" -- " + locationParts.constLast());
+            } else {
+                const QString suffix = locationName.split(" - ").constLast();
+                locationName = locationName.remove(" - " + suffix);
+            }
             locationName = locationName.simplified();
         }
     }
@@ -105,9 +109,10 @@ QString ScreenplaySceneHeadingParser::sceneTime(const QString& _text)
 {
     QString timeName;
 
-    if (_text.split(" - ").count() >= 2) {
-        timeName = _text.split(" - ").last().split(",").first();
-        timeName = timeName.simplified();
+    if (_text.split(" -- ").count() >= 2) {
+        timeName = _text.split(" -- ").last().simplified();
+    } else if (_text.split(" - ").count() >= 2) {
+        timeName = _text.split(" - ").last().simplified();
     }
 
     return TextHelper::smartToUpper(timeName).simplified();
