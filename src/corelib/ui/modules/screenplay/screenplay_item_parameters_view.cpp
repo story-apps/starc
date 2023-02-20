@@ -6,6 +6,7 @@
 #include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <ui/widgets/toggle/toggle.h>
 #include <ui/widgets/tree/tree.h>
@@ -69,6 +70,7 @@ public:
     TextField* heading = nullptr;
     QVector<TextField*> beats;
     TextField* storyDay = nullptr;
+    QStringListModel* storyDaysModel = nullptr;
     bool isStampVisible = true;
     TextField* stamp = nullptr;
     Subtitle2Label* numberingTitle = nullptr;
@@ -92,6 +94,7 @@ ScreenplayItemParametersView::Implementation::Implementation(ScreenplayItemParam
     , heading(new TextField(content))
     , beats({ new TextField(content) })
     , storyDay(new TextField(content))
+    , storyDaysModel(new QStringListModel(storyDay))
     , stamp(new TextField(content))
     , numberingTitle(new Subtitle2Label(content))
     , autoNumbering(new Toggle(content))
@@ -121,6 +124,8 @@ ScreenplayItemParametersView::Implementation::Implementation(ScreenplayItemParam
         storyDay,
         stamp,
     });
+    storyDay->setCompleterActive(true);
+    storyDay->completer()->setModel(storyDaysModel);
     autoNumbering->setChecked(true);
     customNumber->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     customNumber->hide();
@@ -426,13 +431,18 @@ void ScreenplayItemParametersView::setBeats(const QVector<QString>& _beats)
     }
 }
 
-void ScreenplayItemParametersView::setStoryDay(const QString& _storyDay)
+void ScreenplayItemParametersView::setStoryDay(const QString& _storyDay,
+                                               const QVector<QString>& _storyDays)
 {
-    if (d->storyDay->text() == _storyDay) {
-        return;
+    QStringList storyDaysToComplete = { _storyDays.begin(), _storyDays.end() };
+    storyDaysToComplete.removeAll(_storyDay);
+    if (d->storyDaysModel->stringList() != storyDaysToComplete) {
+        d->storyDaysModel->setStringList(storyDaysToComplete);
     }
 
-    d->storyDay->setText(_storyDay);
+    if (d->storyDay->text() != _storyDay) {
+        d->storyDay->setText(_storyDay);
+    }
 }
 
 void ScreenplayItemParametersView::setStampVisible(bool _visible)
@@ -509,6 +519,9 @@ void ScreenplayItemParametersView::setReadOnly(bool _readOnly)
 
 bool ScreenplayItemParametersView::eventFilter(QObject* _watched, QEvent* _event)
 {
+    //
+    // Биты
+    //
     if (auto textField = qobject_cast<TextField*>(_watched); textField != nullptr
         && d->beats.contains(textField) && _event->type() == QEvent::KeyPress) {
         auto keyEvent = static_cast<QKeyEvent*>(_event);
@@ -648,6 +661,9 @@ void ScreenplayItemParametersView::designSystemChangeEvent(DesignSystemChangeEve
                                       Ui::DesignSystem::layout().px24(), 0.0 });
     }
     d->updateCustomNumberMargins();
+    //
+    d->storyDay->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->storyDay->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
     //
     d->initCardBeats();
     //

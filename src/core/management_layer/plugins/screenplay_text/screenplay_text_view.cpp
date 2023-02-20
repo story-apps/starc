@@ -555,7 +555,8 @@ void ScreenplayTextView::Implementation::showParametersFor(BusinessLayer::TextMo
         itemParametersView->setTitle(sceneItem->title());
         itemParametersView->setHeading(sceneItem->heading());
         itemParametersView->setBeats(sceneItem->beats());
-        itemParametersView->setStoryDay(sceneItem->storyDay());
+        itemParametersView->setStoryDay(sceneItem->storyDay(),
+                                        model->dictionariesModel()->storyDays());
         itemParametersView->setStamp(sceneItem->stamp());
         if (const auto sceneNumber = sceneItem->number(); sceneNumber.has_value()) {
             itemParametersView->setNumber(sceneNumber->followNumber + sceneNumber->value,
@@ -1274,7 +1275,7 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
     //
     // Отключим отображение всплывающих подсказок
     //
-    d->textEdit->setUseCompleter(false);
+    d->textEdit->setCompleterActive(false);
 
     //
     // Переходим в конец текущей строки/на новую строку, чтобы помещать текст в новом блоке
@@ -1350,7 +1351,7 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
     //
     // Возвращаем возможность использования всплывающих подсказок
     //
-    d->textEdit->setUseCompleter(true);
+    d->textEdit->setCompleterActive(true);
 
     TaskBar::finishTask(textWritingTaskKey);
 }

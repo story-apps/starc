@@ -60,7 +60,7 @@ public:
     /**
      * @brief Сценарный день
      */
-    void setStoryDay(const QString& _storyDay);
+    void setStoryDay(const QString& _storyDay, const QVector<QString>& _storyDays);
     Q_SIGNAL void storyDayChanged(const QString& _storyDay);
 
     /**
