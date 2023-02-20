@@ -565,7 +565,7 @@ void ScreenplayTextView::Implementation::showParametersFor(BusinessLayer::TextMo
         } else {
             itemParametersView->setNumber({}, false, true, false);
         }
-        itemParametersView->setTags(sceneItem->tags());
+        itemParametersView->setTags(sceneItem->tags(), model->dictionariesModel()->tags());
         break;
     }
 

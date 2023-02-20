@@ -5,6 +5,7 @@
 #include <ui/design_system/design_system.h>
 
 #include <QAbstractItemView>
+#include <QAbstractProxyModel>
 #include <QScrollBar>
 #include <QTextBlock>
 
@@ -40,8 +41,8 @@ CompleterTextEdit::CompleterTextEdit(QWidget* _parent)
     : SpellCheckTextEdit(_parent)
     , d(new Implementation(this))
 {
-    connect(d->completer, qOverload<const QString&>(&QCompleter::activated), this,
-            qOverload<const QString&>(&CompleterTextEdit::applyCompletion));
+    connect(d->completer, qOverload<const QModelIndex&>(&QCompleter::activated), this,
+            qOverload<const QModelIndex&>(&CompleterTextEdit::applyCompletion));
 }
 
 CompleterTextEdit::~CompleterTextEdit() = default;
@@ -118,6 +119,7 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
         = cursor.block().layout()->boundingRect().height() + Ui::DesignSystem::layout().px16();
     rect.moveTop(rect.top() + heightDelta);
     rect.setWidth(Ui::DesignSystem::treeOneLineItem().margins().left()
+                  + Ui::DesignSystem::treeOneLineItem().spacing()
                   + d->completer->popup()->sizeHintForColumn(0)
                   + Ui::DesignSystem::treeOneLineItem().margins().right());
     rect.setHeight(heightDelta);
@@ -136,19 +138,22 @@ void CompleterTextEdit::applyCompletion()
     // Получим выбранный из списка дополнений элемент
     //
     const QModelIndex currentIndex = d->completer->popup()->currentIndex();
-    const QString completion = d->completer->popup()->model()->data(currentIndex).toString();
-    applyCompletion(completion);
+    applyCompletion(currentIndex);
 
     closeCompleter();
 }
 
-void CompleterTextEdit::applyCompletion(const QString& _completion)
+void CompleterTextEdit::applyCompletion(const QModelIndex& _completionIndex)
 {
+    auto completionModel = qobject_cast<QAbstractProxyModel*>(d->completer->completionModel());
+    const auto sourceCompletionIndex = completionModel->mapToSource(_completionIndex);
+
     //
     // Вставим дополнение в текст
     //
     const int completionStartFrom = d->completer->completionPrefix().length();
-    const QString textToInsert = _completion.mid(completionStartFrom);
+    const auto completion = d->completer->popup()->model()->data(_completionIndex).toString();
+    const QString textToInsert = completion.mid(completionStartFrom);
 
     //
     // Определяем позицию вставки текста дополнения и помещаем туда курсор редактора
@@ -167,7 +172,11 @@ void CompleterTextEdit::applyCompletion(const QString& _completion)
     // Собственно дополняем текст
     //
     textCursor().insertText(textToInsert);
-    emit completed();
+
+    //
+    // Уведомим об успешном дополнении
+    //
+    emit completed(sourceCompletionIndex);
 }
 
 void CompleterTextEdit::closeCompleter()

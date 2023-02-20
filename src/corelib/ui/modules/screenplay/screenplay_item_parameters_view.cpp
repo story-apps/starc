@@ -70,7 +70,7 @@ public:
     TextField* heading = nullptr;
     QVector<TextField*> beats;
     TextField* storyDay = nullptr;
-    QStringListModel* storyDaysModel = nullptr;
+    QStringListModel* allStoryDaysModel = nullptr;
     bool isStampVisible = true;
     TextField* stamp = nullptr;
     Subtitle2Label* numberingTitle = nullptr;
@@ -82,6 +82,7 @@ public:
     IconButton* addTagButton = nullptr;
     Tree* tags = nullptr;
     QStandardItemModel* tagsModel = nullptr;
+    QStandardItemModel* allTagsModel = nullptr;
     TextFieldItemDelegate* tagsDelegate = nullptr;
 };
 
@@ -94,7 +95,7 @@ ScreenplayItemParametersView::Implementation::Implementation(ScreenplayItemParam
     , heading(new TextField(content))
     , beats({ new TextField(content) })
     , storyDay(new TextField(content))
-    , storyDaysModel(new QStringListModel(storyDay))
+    , allStoryDaysModel(new QStringListModel(storyDay))
     , stamp(new TextField(content))
     , numberingTitle(new Subtitle2Label(content))
     , autoNumbering(new Toggle(content))
@@ -104,6 +105,7 @@ ScreenplayItemParametersView::Implementation::Implementation(ScreenplayItemParam
     , addTagButton(new IconButton(content))
     , tags(new Tree(content))
     , tagsModel(new QStandardItemModel(tags))
+    , allTagsModel(new QStandardItemModel(tags))
     , tagsDelegate(new TextFieldItemDelegate(tags))
 {
     colorPickerPopup->setColorCanBeDeselected(true);
@@ -125,7 +127,7 @@ ScreenplayItemParametersView::Implementation::Implementation(ScreenplayItemParam
         stamp,
     });
     storyDay->setCompleterActive(true);
-    storyDay->completer()->setModel(storyDaysModel);
+    storyDay->completer()->setModel(allStoryDaysModel);
     autoNumbering->setChecked(true);
     customNumber->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     customNumber->hide();
@@ -137,6 +139,7 @@ ScreenplayItemParametersView::Implementation::Implementation(ScreenplayItemParam
     tags->setModel(tagsModel);
     tagsDelegate->setHoverTrailingIcon(u8"\U000F01B4");
     tagsDelegate->setTrailingIconPickColor(true);
+    tagsDelegate->setCompletionModel(allTagsModel);
 
     auto cardInfoPageContent = new QWidget;
     content->setWidget(cardInfoPageContent);
@@ -432,12 +435,12 @@ void ScreenplayItemParametersView::setBeats(const QVector<QString>& _beats)
 }
 
 void ScreenplayItemParametersView::setStoryDay(const QString& _storyDay,
-                                               const QVector<QString>& _storyDays)
+                                               const QVector<QString>& _allStoryDays)
 {
-    QStringList storyDaysToComplete = { _storyDays.begin(), _storyDays.end() };
+    QStringList storyDaysToComplete = { _allStoryDays.begin(), _allStoryDays.end() };
     storyDaysToComplete.removeAll(_storyDay);
-    if (d->storyDaysModel->stringList() != storyDaysToComplete) {
-        d->storyDaysModel->setStringList(storyDaysToComplete);
+    if (d->allStoryDaysModel->stringList() != storyDaysToComplete) {
+        d->allStoryDaysModel->setStringList(storyDaysToComplete);
     }
 
     if (d->storyDay->text() != _storyDay) {
@@ -491,7 +494,8 @@ void ScreenplayItemParametersView::setTagsVisible(bool _visible)
     }
 }
 
-void ScreenplayItemParametersView::setTags(const QVector<QPair<QString, QColor>>& _tags)
+void ScreenplayItemParametersView::setTags(const QVector<QPair<QString, QColor>>& _tags,
+                                           const QVector<QPair<QString, QColor>>& _allTags)
 {
     d->tagsModel->clear();
     for (const auto& tag : _tags) {
@@ -499,6 +503,18 @@ void ScreenplayItemParametersView::setTags(const QVector<QPair<QString, QColor>>
         tagItem->setData(u8"\U000F0315", Qt::DecorationRole);
         tagItem->setData(tag.second, Qt::DecorationPropertyRole);
         d->tagsModel->appendRow(tagItem);
+    }
+
+    d->allTagsModel->clear();
+    for (const auto& tag : _allTags) {
+        if (_tags.contains(tag)) {
+            continue;
+        }
+
+        auto tagItem = new QStandardItem(tag.first);
+        tagItem->setData(u8"\U000F0315", Qt::DecorationRole);
+        tagItem->setData(tag.second, Qt::DecorationPropertyRole);
+        d->allTagsModel->appendRow(tagItem);
     }
 
     d->updateTagsSize();

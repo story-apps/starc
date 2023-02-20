@@ -40,6 +40,12 @@ public:
 
 protected:
     /**
+     * @brief Применить данные и закрыть редактор
+     */
+    void commitAndClose(QWidget* _editor);
+
+protected:
+    /**
      * @brief Дополнительный отступ слева
      */
     qreal m_additionalLeftMargin = 0.0;
@@ -105,6 +111,11 @@ public:
      */
     void setTrailingIconPickColor(bool _isPickColor);
 
+    /**
+     * @brief Задать модель автодополнения
+     */
+    void setCompletionModel(QAbstractItemModel* _model);
+
     QWidget* createEditor(QWidget* _parent, const QStyleOptionViewItem& _option,
                           const QModelIndex& _index) const override;
     void setEditorData(QWidget* _editor, const QModelIndex& _index) const override;
@@ -121,6 +132,11 @@ private:
      * @brief Иконка действия текстового поля
      */
     bool m_isTrailingIconPickColor = false;
+
+    /**
+     * @brief Модель автодополнения
+     */
+    QAbstractItemModel* m_completionModel = nullptr;
 
     /**
      * @brief Устанавливаются ли в данный момент данные в модель

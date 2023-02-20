@@ -46,7 +46,7 @@ public:
      */
     /** @{ */
     void applyCompletion();
-    void applyCompletion(const QString& _completion);
+    void applyCompletion(const QModelIndex& _completionIndex);
     /** @} */
 
     /**
@@ -63,7 +63,7 @@ signals:
     /**
      * @brief Текст был дополнен
      */
-    void completed();
+    void completed(const QModelIndex& _completionIndex);
 
 private:
     class Implementation;

@@ -4,6 +4,7 @@
 #include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/key_sequence_edit/key_sequence_edit.h>
+#include <ui/widgets/text_edit/completer/completer.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QAbstractItemView>
@@ -210,6 +211,12 @@ void TreeDelegate::destroyEditor(QWidget* editor, const QModelIndex& index) cons
     QStyledItemDelegate::destroyEditor(editor, index);
 
     m_editorActiveFor = {};
+}
+
+void TreeDelegate::commitAndClose(QWidget* _editor)
+{
+    emit commitData(_editor);
+    emit closeEditor(_editor);
 }
 
 
@@ -460,6 +467,11 @@ void TextFieldItemDelegate::setTrailingIconPickColor(bool _isPickColor)
     m_isTrailingIconPickColor = _isPickColor;
 }
 
+void TextFieldItemDelegate::setCompletionModel(QAbstractItemModel* _model)
+{
+    m_completionModel = _model;
+}
+
 QWidget* TextFieldItemDelegate::createEditor(QWidget* _parent, const QStyleOptionViewItem& _option,
                                              const QModelIndex& _index) const
 {
@@ -472,12 +484,22 @@ QWidget* TextFieldItemDelegate::createEditor(QWidget* _parent, const QStyleOptio
     editor->setDefaultMarginsEnabled(false);
     editor->setCapitalizeWords(false);
     editor->setLabel(m_label);
+    editor->setPlaceholderText(" ");
+    editor->setCompleterActive(true);
+    editor->completer()->setModel(m_completionModel);
+    editor->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
+    editor->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
+
     if (m_isTrailingIconPickColor) {
         editor->setTrailingIcon(u8"\U000f0766");
         auto colorPicker = new ColorPickerPopup(editor);
         colorPicker->setColorCanBeDeselected(true);
         colorPicker->setBackgroundColor(_parent->palette().base().color());
         colorPicker->setTextColor(_parent->palette().text().color());
+        auto updateEditorTrailingIcon = [editor](const QColor& _color) {
+            editor->setTrailingIcon(_color.isValid() ? u8"\U000F0765" : u8"\U000f0766");
+            editor->setTrailingIconColor(_color);
+        };
         connect(editor, &TextField::trailingIconPressed, colorPicker, [editor, colorPicker] {
             QSignalBlocker signalBlocker(colorPicker);
             if (editor->trailingIconColor().isValid()) {
@@ -486,12 +508,24 @@ QWidget* TextFieldItemDelegate::createEditor(QWidget* _parent, const QStyleOptio
             colorPicker->showPopup(editor, Qt::AlignBottom | Qt::AlignRight);
         });
         connect(colorPicker, &ColorPickerPopup::selectedColorChanged, editor,
-                [editor](const QColor& _color) {
-                    editor->setTrailingIcon(_color.isValid() ? u8"\U000F0765" : u8"\U000f0766");
-                    editor->setTrailingIconColor(_color);
+                updateEditorTrailingIcon);
+        connect(editor, &TextField::completed, editor,
+                [this, editor, updateEditorTrailingIcon](const QModelIndex& _completionIndex) {
+                    const auto colorData = _completionIndex.data(Qt::DecorationPropertyRole);
+                    if (colorData.isNull()) {
+                        return;
+                    }
+
+                    const auto color = colorData.value<QColor>();
+                    if (!color.isValid()) {
+                        return;
+                    }
+
+                    updateEditorTrailingIcon(color);
+
+                    const_cast<TextFieldItemDelegate*>(this)->commitAndClose(editor);
                 });
     }
-    editor->setPlaceholderText(" ");
     return editor;
 }
 

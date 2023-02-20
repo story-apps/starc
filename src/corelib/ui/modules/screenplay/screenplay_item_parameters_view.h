@@ -60,7 +60,7 @@ public:
     /**
      * @brief Сценарный день
      */
-    void setStoryDay(const QString& _storyDay, const QVector<QString>& _storyDays);
+    void setStoryDay(const QString& _storyDay, const QVector<QString>& _allStoryDays);
     Q_SIGNAL void storyDayChanged(const QString& _storyDay);
 
     /**
@@ -80,7 +80,8 @@ public:
      * @brief Тэги
      */
     void setTagsVisible(bool _visible);
-    void setTags(const QVector<QPair<QString, QColor>>& _tags);
+    void setTags(const QVector<QPair<QString, QColor>>& _tags,
+                 const QVector<QPair<QString, QColor>>& _allTags);
     Q_SIGNAL void tagsChanged(const QVector<QPair<QString, QColor>>& _tags);
 
     /**
