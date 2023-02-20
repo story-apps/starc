@@ -591,7 +591,10 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
                         && blockEndPosition <= changeEnd))) // входит в блок слева
         ) {
             block = block.next();
-            continue;
+            if (block.isValid()) {
+                continue;
+            }
+            break;
         }
 
         switch (blockType) {
