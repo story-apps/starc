@@ -350,6 +350,22 @@ const QString kComponentsStageplayNavigatorShowSceneTextKey
 const QString kComponentsStageplayNavigatorSceneTextLinesKey
     = kComponentsStageplayNavigatorKey + QStringLiteral("/scene-text-lines");
 //
+// текст
+const QString kComponentsNovelKey = kComponentsGroupKey + QStringLiteral("/novel");
+const QString kComponentsNovelAvailableKey = kComponentsNovelKey + QStringLiteral("/available");
+// ... редактор
+const QString kComponentsNovelEditorKey = kComponentsNovelKey + QStringLiteral("/editor");
+const QString kComponentsNovelEditorDefaultTemplateKey
+    = kComponentsNovelEditorKey + QStringLiteral("/default-template");
+const QString kComponentsNovelEditorShortcutsKey
+    = kComponentsNovelEditorKey + QStringLiteral("/shortcuts");
+// ... навигатор
+const QString kComponentsNovelNavigatorKey = kComponentsNovelKey + QStringLiteral("/navigator");
+const QString kComponentsNovelNavigatorShowSceneTextKey
+    = kComponentsNovelNavigatorKey + QStringLiteral("/show-scene-text");
+const QString kComponentsNovelNavigatorSceneTextLinesKey
+    = kComponentsNovelNavigatorKey + QStringLiteral("/scene-text-lines");
+//
 // редактор отношений персонажей
 const QString kComponentsCharactersRelationsKey
     = kComponentsGroupKey + QStringLiteral("/characters-relations");

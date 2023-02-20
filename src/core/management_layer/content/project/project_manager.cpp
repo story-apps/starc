@@ -2203,6 +2203,46 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                                    _visible);
             });
     //
+    connect(&d->modelsFacade, &ProjectModelsFacade::stageplayTitlePageVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
+                setDocumentVisible(_model, Domain::DocumentObjectType::StageplayTitlePage,
+                                   _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::stageplaySynopsisVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
+                setDocumentVisible(_model, Domain::DocumentObjectType::StageplaySynopsis, _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::stageplayTextVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
+                setDocumentVisible(_model, Domain::DocumentObjectType::StageplayText, _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::stageplayStatisticsVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
+                setDocumentVisible(_model, Domain::DocumentObjectType::StageplayStatistics,
+                                   _visible);
+            });
+    //
+    connect(&d->modelsFacade, &ProjectModelsFacade::novelTitlePageVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
+                setDocumentVisible(_model, Domain::DocumentObjectType::NovelTitlePage, _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::novelSynopsisVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
+                setDocumentVisible(_model, Domain::DocumentObjectType::NovelSynopsis, _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::novelOutlineVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
+                setDocumentVisible(_model, Domain::DocumentObjectType::NovelOutline, _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::novelTextVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
+                setDocumentVisible(_model, Domain::DocumentObjectType::NovelText, _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::novelStatisticsVisibilityChanged, this,
+            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
+                setDocumentVisible(_model, Domain::DocumentObjectType::NovelStatistics, _visible);
+            });
+    //
     connect(&d->modelsFacade, &ProjectModelsFacade::emptyRecycleBinRequested, this,
             [this] { d->emptyRecycleBin(); });
     //

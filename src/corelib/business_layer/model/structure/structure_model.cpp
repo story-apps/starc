@@ -325,6 +325,23 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         break;
     }
 
+    case DocumentObjectType::Novel: {
+        auto novelItem
+            = createItem(DocumentObjectType::Novel, !_name.isEmpty() ? _name : tr("Novel"));
+        appendItem(novelItem, parentItem);
+        appendItem(createItem(DocumentObjectType::NovelTitlePage, tr("Title page")), novelItem);
+        auto synopsisItem = createItem(DocumentObjectType::NovelSynopsis, tr("Synopsis"));
+        appendItem(synopsisItem, novelItem);
+        appendItem(createItem(DocumentObjectType::NovelText, tr("Text")), novelItem);
+        appendItem(createItem(DocumentObjectType::NovelStatistics, tr("Statistics")), novelItem);
+        //
+        // Вставляем аутлайн после всех документов, т.к. он является алиасом к документу текста
+        // и чтобы его сконструировать, нужны другие документы
+        //
+        insertItem(createItem(DocumentObjectType::NovelOutline, tr("Outline")), synopsisItem);
+        break;
+    }
+
     case DocumentObjectType::Characters: {
         appendItem(createItem(_type, tr("Characters")), parentItem, _content);
         break;

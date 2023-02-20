@@ -11,15 +11,15 @@ class QXmlStreamAttributes;
 namespace BusinessLayer {
 
 /**
- * @brief Класс шаблона сценария
+ * @brief Класс шаблона
  */
-class CORE_LIBRARY_EXPORT ScreenplayTemplate : public TextTemplate
+class CORE_LIBRARY_EXPORT NovelTemplate : public TextTemplate
 {
     class Implementation;
 
 public:
-    ScreenplayTemplate();
-    explicit ScreenplayTemplate(const QString& _fromFile);
+    NovelTemplate();
+    explicit NovelTemplate(const QString& _fromFile);
 
     /**
      * @brief Название

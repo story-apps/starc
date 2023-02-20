@@ -11,11 +11,13 @@
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/names_generator.h>
 #include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
+#include <QScrollArea>
 
 
 namespace Ui {
@@ -32,6 +34,7 @@ public:
     void updateDocumentInfo(Domain::DocumentObjectType _type);
 
 
+    QScrollArea* content = nullptr;
     Widget* optionsContainer = nullptr;
     QVBoxLayout* optionsLayout = nullptr;
     AbstractLabel* storyTitle;
@@ -51,7 +54,8 @@ public:
 };
 
 CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
-    : optionsContainer(new Widget(_parent))
+    : content(new QScrollArea(_parent))
+    , optionsContainer(new Widget(_parent))
     , optionsLayout(new QVBoxLayout(optionsContainer))
     , storyTitle(new Subtitle1Label(_parent))
     , storyWorldTitle(new Subtitle1Label(_parent))
@@ -64,6 +68,14 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     , cancelButton(new Button(_parent))
     , createButton(new Button(_parent))
 {
+    QPalette palette;
+    palette.setColor(QPalette::Base, Qt::transparent);
+    palette.setColor(QPalette::Window, Qt::transparent);
+    content->setPalette(palette);
+    content->setFrameShape(QFrame::NoFrame);
+    content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    content->setVerticalScrollBar(new ScrollBar);
+
     auto makeOption = [this, &_parent](Domain::DocumentObjectType _type) {
         auto option = new CreateDocumentDialogOption(_type, _parent);
         options.append(option);
@@ -89,7 +101,10 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
         if (settingsValue(DataStorageLayer::kComponentsStageplayAvailableKey).toBool()) {
             layout->addWidget(makeOption(Domain::DocumentObjectType::Stageplay));
         }
-        optionsLayout->addLayout(layout);
+        if (settingsValue(DataStorageLayer::kComponentsNovelAvailableKey).toBool()) {
+            layout->addWidget(makeOption(Domain::DocumentObjectType::Novel));
+        }
+        optionsLayout->addLayout(layout, 1);
     }
     optionsLayout->addWidget(storyWorldTitle);
     {
@@ -114,8 +129,12 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
         optionsLayout->addLayout(layout);
     }
 
-    UiHelper::setFocusPolicyRecursively(optionsContainer, Qt::NoFocus);
     options.constFirst()->setChecked(true);
+
+    content->setWidget(optionsContainer);
+    content->setWidgetResizable(true);
+
+    UiHelper::setFocusPolicyRecursively(content, Qt::NoFocus);
 
     documentName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
@@ -139,6 +158,7 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
         { Domain::DocumentObjectType::ComicBook, tr("Add comic book") },
         { Domain::DocumentObjectType::Audioplay, tr("Add audioplay") },
         { Domain::DocumentObjectType::Stageplay, tr("Add stageplay") },
+        { Domain::DocumentObjectType::Novel, tr("Add novel") },
         { Domain::DocumentObjectType::ImagesGallery, tr("Add image gallery") },
     };
     const QHash<Domain::DocumentObjectType, QString> documenTypeToInfo = {
@@ -164,6 +184,8 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
           tr("Create a document set to streamline your work on the audio drama, or podcast.") },
         { Domain::DocumentObjectType::Stageplay,
           tr("Create a document set to streamline your work on the stage play, or musical.") },
+        { Domain::DocumentObjectType::Novel,
+          tr("Create a document set to streamline your work on the fiction book.") },
         { Domain::DocumentObjectType::ImagesGallery,
           tr("Create a moodboard with atmospheric images or photos.") },
     };
@@ -197,7 +219,7 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
 
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
-    contentsLayout()->addWidget(d->optionsContainer, 0, 0, 6, 1);
+    contentsLayout()->addWidget(d->content, 0, 0, 6, 1);
     contentsLayout()->addWidget(d->title, 0, 1, 1, 1);
     contentsLayout()->addWidget(d->documentInfo, 1, 1, 1, 1);
     contentsLayout()->addWidget(d->documentName, 2, 1, 1, 1);
@@ -325,10 +347,10 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    setContentFixedWidth(Ui::DesignSystem::layout().px(888));
+    setContentFixedWidth(Ui::DesignSystem::layout().px(898));
 
     d->optionsContainer->setBackgroundColor(DesignSystem::color().surface());
-    d->optionsContainer->setFixedHeight(DesignSystem::layout().px(542));
+    d->content->setFixedHeight(DesignSystem::layout().px(556));
     d->optionsLayout->setContentsMargins(
         isLeftToRight() ? DesignSystem::layout().px16() : 0.0, DesignSystem::layout().px8(),
         isLeftToRight() ? 0.0 : DesignSystem::layout().px16(), DesignSystem::layout().px16());

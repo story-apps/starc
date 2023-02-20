@@ -63,6 +63,12 @@ enum class DocumentObjectType {
     StageplayStatistics = 10405,
     //
     Novel = 10500,
+    NovelTitlePage = 10501,
+    NovelSynopsis = 10502,
+    NovelOutline = 10503,
+    NovelText = 10504,
+    NovelDictionaries = 10505,
+    NovelStatistics = 10506,
     //
     GameScript = 10600,
     //
@@ -84,21 +90,6 @@ enum class DocumentObjectType {
     Image = 100004,
     ImagesGallery = 100005,
     Link = 100006,
-
-    /**
-    //    Item = 301,
-    //    World = 401,
-    //    WorldRace = 402,
-    //    WorldFlora = 403,
-    //    WorldAnimal = 404,
-    //    WorldNaturalResource = 405,
-    //    WorldClimate = 406,
-    //    WorldReligionAndBelief = 407,
-    //    WorldEthicsAndValues = 408,
-    //    WorldLanguage = 409,
-    //    WorldClassCasteSystem = 410,
-    //    WorldMagicType = 411,
-    **/
 };
 
 /**

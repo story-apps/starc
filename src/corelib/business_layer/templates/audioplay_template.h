@@ -2,10 +2,6 @@
 
 #include "text_template.h"
 
-#include <QHash>
-#include <QPageSize>
-#include <QTextFormat>
-
 #include <corelib_global.h>
 
 class QTextBlock;

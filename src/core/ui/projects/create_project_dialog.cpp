@@ -90,6 +90,9 @@ CreateProjectDialog::Implementation::Implementation(QWidget* _parent)
     if (settingsValue(DataStorageLayer::kComponentsStageplayAvailableKey).toBool()) {
         projectTypeModel->appendRow(makeItem(Domain::DocumentObjectType::Stageplay));
     }
+    if (settingsValue(DataStorageLayer::kComponentsNovelAvailableKey).toBool()) {
+        projectTypeModel->appendRow(makeItem(Domain::DocumentObjectType::Novel));
+    }
 
     localProject->setChecked(true);
 
@@ -355,6 +358,11 @@ void CreateProjectDialog::updateTranslations()
 
         case Domain::DocumentObjectType::Stageplay: {
             item->setText(tr("Stageplay"));
+            break;
+        }
+
+        case Domain::DocumentObjectType::Novel: {
+            item->setText(tr("Novel"));
             break;
         }
         }

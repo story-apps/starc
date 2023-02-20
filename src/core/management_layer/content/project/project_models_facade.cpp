@@ -16,6 +16,12 @@
 #include <business_layer/model/images/images_gallery_model.h>
 #include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/locations/locations_model.h>
+#include <business_layer/model/novel/novel_dictionaries_model.h>
+#include <business_layer/model/novel/novel_information_model.h>
+#include <business_layer/model/novel/novel_statistics_model.h>
+#include <business_layer/model/novel/novel_synopsis_model.h>
+#include <business_layer/model/novel/novel_title_page_model.h>
+#include <business_layer/model/novel/text/novel_text_model.h>
 #include <business_layer/model/project/project_information_model.h>
 #include <business_layer/model/recycle_bin/recycle_bin_model.h>
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
@@ -776,6 +782,183 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             auto stageplayModel
                 = qobject_cast<BusinessLayer::StageplayTextModel*>(modelFor(stageplayTextItemUuid));
             statisticsModel->setStageplayTextModel(stageplayModel);
+
+            model = statisticsModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::Novel: {
+            auto novelModel = new BusinessLayer::NovelInformationModel;
+            connect(novelModel, &BusinessLayer::NovelInformationModel::titlePageVisibleChanged,
+                    this, [this, novelModel](bool _visible) {
+                        emit novelTitlePageVisibilityChanged(novelModel, _visible);
+                    });
+            connect(novelModel, &BusinessLayer::NovelInformationModel::synopsisVisibleChanged, this,
+                    [this, novelModel](bool _visible) {
+                        emit novelSynopsisVisibilityChanged(novelModel, _visible);
+                    });
+            connect(novelModel, &BusinessLayer::NovelInformationModel::outlineVisibleChanged, this,
+                    [this, novelModel](bool _visible) {
+                        emit novelOutlineVisibilityChanged(novelModel, _visible);
+                    });
+            connect(novelModel, &BusinessLayer::NovelInformationModel::novelTextVisibleChanged,
+                    this, [this, novelModel](bool _visible) {
+                        emit novelTextVisibilityChanged(novelModel, _visible);
+                    });
+            connect(novelModel,
+                    &BusinessLayer::NovelInformationModel::novelStatisticsVisibleChanged, this,
+                    [this, novelModel](bool _visible) {
+                        emit novelStatisticsVisibilityChanged(novelModel, _visible);
+                    });
+
+            model = novelModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::NovelTitlePage: {
+            auto titlePageModel = new BusinessLayer::NovelTitlePageModel;
+
+            const auto titlePageItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(titlePageItem);
+            Q_ASSERT(titlePageItem->parent());
+            const auto parentUuid = titlePageItem->parent()->uuid();
+
+            //
+            // Добавляем в модель титульной страницы, модель информации о сценарие
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::NovelInformationModel*>(modelFor(parentUuid));
+            titlePageModel->setInformationModel(informationModel);
+
+            model = titlePageModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::NovelSynopsis: {
+            auto synopsisModel = new BusinessLayer::NovelSynopsisModel;
+
+            const auto synopsisItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(synopsisItem);
+            Q_ASSERT(synopsisItem->parent());
+            const auto parentUuid = synopsisItem->parent()->uuid();
+
+            //
+            // Добавляем в модель синопсиса, модель информации о сценарие
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::NovelInformationModel*>(modelFor(parentUuid));
+            synopsisModel->setInformationModel(informationModel);
+
+            model = synopsisModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::NovelOutline: {
+            //
+            // Модель по сути является алиасом к тексту сценария, поэтому используем модель сценария
+            //
+            isDocumentAlias = true;
+
+            const auto treatmentItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(treatmentItem);
+            Q_ASSERT(treatmentItem->parent());
+            //
+            // ... модель сценария
+            //
+            BusinessLayer::StructureModelItem* novelItem = nullptr;
+            for (int index = 0; index < treatmentItem->parent()->childCount(); ++index) {
+                auto childItem = treatmentItem->parent()->childAt(index);
+                if (childItem->type() == Domain::DocumentObjectType::NovelText) {
+                    novelItem = childItem;
+                    break;
+                }
+            }
+            Q_ASSERT(novelItem);
+            model = modelFor(novelItem->uuid());
+            break;
+        }
+
+        case Domain::DocumentObjectType::NovelText: {
+            auto novelModel = new BusinessLayer::NovelTextModel;
+
+            const auto novelItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(novelItem);
+            Q_ASSERT(novelItem->parent());
+            const auto parentUuid = novelItem->parent()->uuid();
+
+            //
+            // Добавляем в модель сценария, модель информации о сценарие
+            //
+            auto informationModel
+                = qobject_cast<BusinessLayer::NovelInformationModel*>(modelFor(parentUuid));
+            novelModel->setInformationModel(informationModel);
+            //
+            // ... модель титульной страницы
+            //
+            const auto titlePageIndex = 0;
+            auto titlePageItem = novelItem->parent()->childAt(titlePageIndex);
+            Q_ASSERT(titlePageItem);
+            Q_ASSERT(titlePageItem->type() == Domain::DocumentObjectType::NovelTitlePage);
+            auto titlePageModel
+                = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(titlePageItem->uuid()));
+            novelModel->setTitlePageModel(titlePageModel);
+            //
+            // ... модель синопсиса
+            //
+            const auto synopsisIndex = 1;
+            auto synopsisItem = novelItem->parent()->childAt(synopsisIndex);
+            Q_ASSERT(synopsisItem);
+            Q_ASSERT(synopsisItem->type() == Domain::DocumentObjectType::NovelSynopsis);
+            auto synopsisModel
+                = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(synopsisItem->uuid()));
+            novelModel->setSynopsisModel(synopsisModel);
+            //
+            // ... модель справочников сценариев
+            //
+            auto dictionariesModel = qobject_cast<BusinessLayer::NovelDictionariesModel*>(
+                modelFor(Domain::DocumentObjectType::NovelDictionaries));
+            novelModel->setDictionariesModel(dictionariesModel);
+            //
+            // ... модель персонажей
+            //
+            auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
+                modelFor(Domain::DocumentObjectType::Characters));
+            novelModel->setCharactersModel(charactersModel);
+            //
+            // ... и модель локаций
+            //
+            auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(
+                modelFor(Domain::DocumentObjectType::Locations));
+            novelModel->setLocationsModel(locationsModel);
+
+            model = novelModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::NovelDictionaries: {
+            model = new BusinessLayer::NovelDictionariesModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::NovelStatistics: {
+            auto statisticsModel = new BusinessLayer::NovelStatisticsModel;
+
+            const auto statisticsItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            Q_ASSERT(statisticsItem);
+            const auto novelItem = statisticsItem->parent();
+            Q_ASSERT(novelItem);
+            QUuid novelTextItemUuid;
+            for (int childIndex = 0; childIndex < novelItem->childCount(); ++childIndex) {
+                const auto childItem = novelItem->childAt(childIndex);
+                if (childItem->type() == Domain::DocumentObjectType::NovelText) {
+                    novelTextItemUuid = childItem->uuid();
+                    break;
+                }
+            }
+            Q_ASSERT(!novelTextItemUuid.isNull());
+            auto novelModel
+                = qobject_cast<BusinessLayer::NovelTextModel*>(modelFor(novelTextItemUuid));
+            statisticsModel->setNovelTextModel(novelModel);
 
             model = statisticsModel;
             break;

@@ -948,6 +948,129 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsStageplayNavigatorShowSceneTextKey, true);
         defaultValues.insert(kComponentsStageplayNavigatorSceneTextLinesKey, 1);
     }
+    //
+    // Параметры редактора романа
+    //
+    {
+        const QString kNovelEditorKey = "novel/editor";
+        auto addNovelEditorStylesAction
+            = [this, kNovelEditorKey](const QString& _actionType, const QString& _actionKey,
+                                      TextParagraphType _from, TextParagraphType _to) {
+                  defaultValues.insert(
+                      QString("%1/styles-%2/from-%3-by-%4")
+                          .arg(kNovelEditorKey, _actionType, toString(_from), _actionKey),
+                      toString(_to));
+              };
+        auto addNovelEditorStylesActionByTab
+            = [addNovelEditorStylesAction](const QString& _actionType, TextParagraphType _from,
+                                           TextParagraphType _to) {
+                  addNovelEditorStylesAction(_actionType, "tab", _from, _to);
+              };
+        auto addNovelEditorStylesActionByEnter
+            = [addNovelEditorStylesAction](const QString& _actionType, TextParagraphType _from,
+                                           TextParagraphType _to) {
+                  addNovelEditorStylesAction(_actionType, "enter", _from, _to);
+              };
+        //
+        auto addNovelEditorStylesJumpByTab
+            = [addNovelEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                  addNovelEditorStylesActionByTab("jumping", _from, _to);
+              };
+        auto addNovelEditorStylesJumpByEnter
+            = [addNovelEditorStylesActionByEnter](TextParagraphType _from, TextParagraphType _to) {
+                  addNovelEditorStylesActionByEnter("jumping", _from, _to);
+              };
+        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading1,
+                                      TextParagraphType::ChapterHeading2);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading1,
+                                        TextParagraphType::Text);
+        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading2,
+                                      TextParagraphType::ChapterHeading3);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading2,
+                                        TextParagraphType::Text);
+        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading3,
+                                      TextParagraphType::ChapterHeading4);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading3,
+                                        TextParagraphType::Text);
+        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading4,
+                                      TextParagraphType::ChapterHeading5);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading4,
+                                        TextParagraphType::Text);
+        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading5,
+                                      TextParagraphType::ChapterHeading6);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading5,
+                                        TextParagraphType::Text);
+        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading6, TextParagraphType::Text);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading6,
+                                        TextParagraphType::Text);
+        addNovelEditorStylesJumpByTab(TextParagraphType::Text, TextParagraphType::Text);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::Text, TextParagraphType::Text);
+        addNovelEditorStylesJumpByTab(TextParagraphType::InlineNote, TextParagraphType::Text);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::InlineNote, TextParagraphType::Text);
+        //
+        auto addNovelEditorStylesChangeByTab
+            = [addNovelEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
+                  addNovelEditorStylesActionByTab("changing", _from, _to);
+              };
+        auto addNovelEditorStylesChangeByEnter
+            = [addNovelEditorStylesActionByEnter](TextParagraphType _from, TextParagraphType _to) {
+                  addNovelEditorStylesActionByEnter("changing", _from, _to);
+              };
+        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading1,
+                                        TextParagraphType::ChapterHeading2);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading1,
+                                          TextParagraphType::ChapterHeading1);
+        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading2,
+                                        TextParagraphType::ChapterHeading3);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading2,
+                                          TextParagraphType::ChapterHeading1);
+        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading3,
+                                        TextParagraphType::ChapterHeading4);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading3,
+                                          TextParagraphType::ChapterHeading2);
+        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading4,
+                                        TextParagraphType::ChapterHeading5);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading4,
+                                          TextParagraphType::ChapterHeading3);
+        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading5,
+                                        TextParagraphType::ChapterHeading6);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading5,
+                                          TextParagraphType::ChapterHeading4);
+        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading6,
+                                        TextParagraphType::Text);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading6,
+                                          TextParagraphType::ChapterHeading5);
+        addNovelEditorStylesChangeByTab(TextParagraphType::Text, TextParagraphType::InlineNote);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::Text,
+                                          TextParagraphType::ChapterHeading6);
+        addNovelEditorStylesChangeByTab(TextParagraphType::InlineNote, TextParagraphType::Text);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::InlineNote,
+                                          TextParagraphType::InlineNote);
+        //
+        auto addShortcut = [this, kNovelEditorKey](BusinessLayer::TextParagraphType _type,
+                                                   const QString& _shortcut) {
+            defaultValues.insert(
+                QString("%1/shortcuts/%2").arg(kNovelEditorKey, BusinessLayer::toString(_type)),
+                QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+        };
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading1, "Ctrl+1");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading2, "Ctrl+2");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading3, "Ctrl+3");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading4, "Ctrl+4");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading5, "Ctrl+5");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading6, "Ctrl+6");
+        addShortcut(BusinessLayer::TextParagraphType::Text, "Ctrl+7");
+        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        //
+        defaultValues.insert(kComponentsNovelAvailableKey, true);
+        //
+        defaultValues.insert(kComponentsNovelEditorDefaultTemplateKey, "mono_cp_a4");
+        //
+        // Параметры навигатора простого текстового документа
+        //
+        defaultValues.insert(kComponentsNovelNavigatorShowSceneTextKey, true);
+        defaultValues.insert(kComponentsNovelNavigatorSceneTextLinesKey, 1);
+    }
 
 
     defaultValues.insert(kSystemUsernameKey, systemUserName());

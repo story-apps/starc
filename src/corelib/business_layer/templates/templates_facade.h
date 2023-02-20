@@ -14,6 +14,7 @@ class TextModel;
 class TextTemplate;
 class AudioplayTemplate;
 class ComicBookTemplate;
+class NovelTemplate;
 class ScreenplayTemplate;
 class SimpleTextTemplate;
 class StageplayTemplate;
@@ -37,6 +38,7 @@ public:
     static QStandardItemModel* comicBookTemplates();
     static QStandardItemModel* audioplayTemplates();
     static QStandardItemModel* stageplayTemplates();
+    static QStandardItemModel* novelTemplates();
 
     /**
      * @brief Получить шаблон используемый для заданной модели
@@ -52,6 +54,7 @@ public:
     static const ComicBookTemplate& comicBookTemplate(const QString& _templateId = {});
     static const AudioplayTemplate& audioplayTemplate(const QString& _templateId = {});
     static const StageplayTemplate& stageplayTemplate(const QString& _templateId = {});
+    static const NovelTemplate& novelTemplate(const QString& _templateId = {});
 
     /**
      * @brief Задать стандартный шаблон
@@ -61,6 +64,7 @@ public:
     static void setDefaultComicBookTemplate(const QString& _templateId);
     static void setDefaultAudioplayTemplate(const QString& _templateId);
     static void setDefaultStageplayTemplate(const QString& _templateId);
+    static void setDefaultNovelTemplate(const QString& _templateId);
 
     /**
      * @brief Сохранить стиль в библиотеке шаблонов
@@ -70,6 +74,7 @@ public:
     static void saveComicBookTemplate(const ComicBookTemplate& _template);
     static void saveAudioplayTemplate(const AudioplayTemplate& _template);
     static void saveStageplayTemplate(const StageplayTemplate& _template);
+    static void saveNovelTemplate(const NovelTemplate& _template);
 
     /**
      * @brief Удалить шаблон по заданному имены
@@ -79,6 +84,7 @@ public:
     static void removeComicBookTemplate(const QString& _templateId);
     static void removeAudioplayTemplate(const QString& _templateId);
     static void removeStageplayTemplate(const QString& _templateId);
+    static void removeNovelTemplate(const QString& _templateId);
 
     /**
      * @brief Обновить переводы

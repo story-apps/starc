@@ -2,6 +2,7 @@
 
 #include "audioplay_template.h"
 #include "comic_book_template.h"
+#include "novel_template.h"
 #include "screenplay_template.h"
 #include "simple_text_template.h"
 #include "stageplay_template.h"
@@ -14,6 +15,10 @@
 #include <business_layer/model/comic_book/comic_book_synopsis_model.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
+#include <business_layer/model/novel/novel_information_model.h>
+#include <business_layer/model/novel/novel_synopsis_model.h>
+#include <business_layer/model/novel/novel_title_page_model.h>
+#include <business_layer/model/novel/text/novel_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
@@ -39,6 +44,7 @@ const QLatin1String kScreenplayTemplatesDirectory("templates/screenplay");
 const QLatin1String kComicBookTemplatesDirectory("templates/comicbook");
 const QLatin1String kAudioplayTemplatesDirectory("templates/audioplay");
 const QLatin1String kStageplayTemplatesDirectory("templates/stageplay");
+const QLatin1String kNovelTemplatesDirectory("templates/novel");
 
 /**
  * @brief Параметры группы шаблонов
@@ -98,6 +104,7 @@ public:
     TemplateInfo<ComicBookTemplate> comicBook;
     TemplateInfo<AudioplayTemplate> audioplay;
     TemplateInfo<StageplayTemplate> stageplay;
+    TemplateInfo<NovelTemplate> novel;
 };
 
 template<>
@@ -126,6 +133,11 @@ template<>
 TemplateInfo<StageplayTemplate>& TemplatesFacade::Implementation::templateInfo<StageplayTemplate>()
 {
     return stageplay;
+}
+template<>
+TemplateInfo<NovelTemplate>& TemplatesFacade::Implementation::templateInfo<NovelTemplate>()
+{
+    return novel;
 }
 
 template<typename TemplateType>
@@ -379,6 +391,11 @@ QStandardItemModel* TemplatesFacade::stageplayTemplates()
     return instance().d->templatesModel<StageplayTemplate>();
 }
 
+QStandardItemModel* TemplatesFacade::novelTemplates()
+{
+    return instance().d->templatesModel<NovelTemplate>();
+}
+
 const TextTemplate& TemplatesFacade::textTemplate(const TextModel* _model)
 {
     //
@@ -443,6 +460,11 @@ const StageplayTemplate& TemplatesFacade::stageplayTemplate(const QString& _temp
     return instance().d->getTemplate<StageplayTemplate>(_templateId);
 }
 
+const NovelTemplate& TemplatesFacade::novelTemplate(const QString& _templateId)
+{
+    return instance().d->getTemplate<NovelTemplate>(_templateId);
+}
+
 void TemplatesFacade::setDefaultSimpleTextTemplate(const QString& _templateId)
 {
     instance().d->setDefaultTemplate<SimpleTextTemplate>(_templateId);
@@ -466,6 +488,11 @@ void TemplatesFacade::setDefaultAudioplayTemplate(const QString& _templateId)
 void TemplatesFacade::setDefaultStageplayTemplate(const QString& _templateId)
 {
     instance().d->setDefaultTemplate<StageplayTemplate>(_templateId);
+}
+
+void TemplatesFacade::setDefaultNovelTemplate(const QString& _templateId)
+{
+    instance().d->setDefaultTemplate<NovelTemplate>(_templateId);
 }
 
 void TemplatesFacade::saveSimpleTextTemplate(const SimpleTextTemplate& _template)
@@ -493,6 +520,11 @@ void TemplatesFacade::saveStageplayTemplate(const StageplayTemplate& _template)
     instance().d->saveTemplate<StageplayTemplate>(kStageplayTemplatesDirectory, _template);
 }
 
+void TemplatesFacade::saveNovelTemplate(const NovelTemplate& _template)
+{
+    instance().d->saveTemplate<NovelTemplate>(kNovelTemplatesDirectory, _template);
+}
+
 void TemplatesFacade::removeSimpleTextTemplate(const QString& _templateId)
 {
     instance().d->removeTemplate<SimpleTextTemplate>(kSimpleTextTemplatesDirectory, _templateId);
@@ -518,6 +550,11 @@ void TemplatesFacade::removeStageplayTemplate(const QString& _templateId)
     instance().d->removeTemplate<StageplayTemplate>(kStageplayTemplatesDirectory, _templateId);
 }
 
+void TemplatesFacade::removeNovelTemplate(const QString& _templateId)
+{
+    instance().d->removeTemplate<NovelTemplate>(kNovelTemplatesDirectory, _templateId);
+}
+
 void TemplatesFacade::updateTranslations()
 {
     instance().d->updateTranslations<SimpleTextTemplate>();
@@ -525,6 +562,7 @@ void TemplatesFacade::updateTranslations()
     instance().d->updateTranslations<ComicBookTemplate>();
     instance().d->updateTranslations<AudioplayTemplate>();
     instance().d->updateTranslations<StageplayTemplate>();
+    instance().d->updateTranslations<NovelTemplate>();
 }
 
 TemplatesFacade::~TemplatesFacade() = default;
@@ -565,6 +603,16 @@ TemplatesFacade::TemplatesFacade()
                                             QLatin1String("bbc"),
                                             QLatin1String("us"),
                                         });
+    d->loadTemplates<NovelTemplate>(kNovelTemplatesDirectory,
+                                    {
+                                        QLatin1String("manuscript_cp_a4"),
+                                        QLatin1String("manuscript_cn_a4"),
+                                        QLatin1String("manuscript_t_a4"),
+                                        QLatin1String("manuscript_cp_letter"),
+                                        QLatin1String("manuscript_t_letter"),
+                                        QLatin1String("modern_a4"),
+                                        QLatin1String("modern_letter"),
+                                    });
 }
 
 TemplatesFacade& TemplatesFacade::instance()

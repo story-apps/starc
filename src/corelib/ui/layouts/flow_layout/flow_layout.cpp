@@ -61,8 +61,9 @@ FlowLayout::FlowLayout(int margin, int hSpacing, int vSpacing)
 FlowLayout::~FlowLayout()
 {
     QLayoutItem* item;
-    while ((item = takeAt(0)))
+    while ((item = takeAt(0))) {
         delete item;
+    }
 }
 
 void FlowLayout::addItem(QLayoutItem* item)
@@ -116,7 +117,7 @@ QLayoutItem* FlowLayout::takeAt(int index)
 
 Qt::Orientations FlowLayout::expandingDirections() const
 {
-    return 0;
+    return {};
 }
 
 bool FlowLayout::hasHeightForWidth() const

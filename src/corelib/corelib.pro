@@ -89,6 +89,8 @@ SOURCES += \
     business_layer/document/audioplay/text/audioplay_text_document.cpp \
     business_layer/document/comic_book/text/comic_book_text_corrector.cpp \
     business_layer/document/comic_book/text/comic_book_text_document.cpp \
+    business_layer/document/novel/text/novel_text_corrector.cpp \
+    business_layer/document/novel/text/novel_text_document.cpp \
     business_layer/document/screenplay/text/screenplay_text_corrector.cpp \
     business_layer/document/screenplay/text/screenplay_text_document.cpp \
     business_layer/document/simple_text/simple_text_corrector.cpp \
@@ -155,6 +157,18 @@ SOURCES += \
     business_layer/model/images/images_gallery_model.cpp \
     business_layer/model/locations/location_model.cpp \
     business_layer/model/locations/locations_model.cpp \
+    business_layer/model/novel/novel_dictionaries_model.cpp \
+    business_layer/model/novel/novel_information_model.cpp \
+    business_layer/model/novel/novel_statistics_model.cpp \
+    business_layer/model/novel/novel_synopsis_model.cpp \
+    business_layer/model/novel/novel_title_page_model.cpp \
+    business_layer/model/novel/text/novel_text_block_parser.cpp \
+    business_layer/model/novel/text/novel_text_mime_handler.cpp \
+    business_layer/model/novel/text/novel_text_model.cpp \
+    business_layer/model/novel/text/novel_text_model_beat_item.cpp \
+    business_layer/model/novel/text/novel_text_model_folder_item.cpp \
+    business_layer/model/novel/text/novel_text_model_scene_item.cpp \
+    business_layer/model/novel/text/novel_text_model_text_item.cpp \
     business_layer/model/project/project_information_model.cpp \
     business_layer/model/recycle_bin/recycle_bin_model.cpp \
     business_layer/model/screenplay/screenplay_dictionaries_model.cpp \
@@ -195,6 +209,7 @@ SOURCES += \
     business_layer/plots/screenplay/screenplay_structure_analysis_plot.cpp \
     business_layer/reports/audioplay/audioplay_summary_report.cpp \
     business_layer/reports/comic_book/comic_book_summary_report.cpp \
+    business_layer/reports/novel/novel_summary_report.cpp \
     business_layer/reports/screenplay/screenplay_cast_report.cpp \
     business_layer/reports/screenplay/screenplay_gender_report.cpp \
     business_layer/reports/screenplay/screenplay_location_report.cpp \
@@ -203,6 +218,7 @@ SOURCES += \
     business_layer/reports/stageplay/stageplay_summary_report.cpp \
     business_layer/templates/audioplay_template.cpp \
     business_layer/templates/comic_book_template.cpp \
+    business_layer/templates/novel_template.cpp \
     business_layer/templates/screenplay_template.cpp \
     business_layer/templates/simple_text_template.cpp \
     business_layer/templates/stageplay_template.cpp \
@@ -357,6 +373,8 @@ HEADERS += \
     business_layer/document/audioplay/text/audioplay_text_document.h \
     business_layer/document/comic_book/text/comic_book_text_corrector.h \
     business_layer/document/comic_book/text/comic_book_text_document.h \
+    business_layer/document/novel/text/novel_text_corrector.h \
+    business_layer/document/novel/text/novel_text_document.h \
     business_layer/document/screenplay/text/screenplay_text_corrector.h \
     business_layer/document/screenplay/text/screenplay_text_document.h \
     business_layer/document/simple_text/simple_text_corrector.h \
@@ -439,6 +457,18 @@ HEADERS += \
     business_layer/model/images/images_gallery_model.h \
     business_layer/model/locations/location_model.h \
     business_layer/model/locations/locations_model.h \
+    business_layer/model/novel/novel_dictionaries_model.h \
+    business_layer/model/novel/novel_information_model.h \
+    business_layer/model/novel/novel_statistics_model.h \
+    business_layer/model/novel/novel_synopsis_model.h \
+    business_layer/model/novel/novel_title_page_model.h \
+    business_layer/model/novel/text/novel_text_block_parser.h \
+    business_layer/model/novel/text/novel_text_mime_handler.h \
+    business_layer/model/novel/text/novel_text_model.h \
+    business_layer/model/novel/text/novel_text_model_beat_item.h \
+    business_layer/model/novel/text/novel_text_model_folder_item.h \
+    business_layer/model/novel/text/novel_text_model_scene_item.h \
+    business_layer/model/novel/text/novel_text_model_text_item.h \
     business_layer/model/project/project_information_model.h \
     business_layer/model/recycle_bin/recycle_bin_model.h \
     business_layer/model/screenplay/screenplay_dictionaries_model.h \
@@ -482,6 +512,7 @@ HEADERS += \
     business_layer/reports/abstract_report.h \
     business_layer/reports/audioplay/audioplay_summary_report.h \
     business_layer/reports/comic_book/comic_book_summary_report.h \
+    business_layer/reports/novel/novel_summary_report.h \
     business_layer/reports/screenplay/screenplay_cast_report.h \
     business_layer/reports/screenplay/screenplay_gender_report.h \
     business_layer/reports/screenplay/screenplay_location_report.h \
@@ -490,6 +521,7 @@ HEADERS += \
     business_layer/reports/stageplay/stageplay_summary_report.h \
     business_layer/templates/audioplay_template.h \
     business_layer/templates/comic_book_template.h \
+    business_layer/templates/novel_template.h \
     business_layer/templates/screenplay_template.h \
     business_layer/templates/simple_text_template.h \
     business_layer/templates/stageplay_template.h \
