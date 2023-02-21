@@ -88,6 +88,10 @@ bool isTextItem(BusinessLayer::StructureModelItem* _item)
         Domain::DocumentObjectType::StageplayTitlePage,
         Domain::DocumentObjectType::StageplaySynopsis,
         Domain::DocumentObjectType::StageplayText,
+        Domain::DocumentObjectType::NovelTitlePage,
+        Domain::DocumentObjectType::NovelSynopsis,
+        Domain::DocumentObjectType::NovelOutline,
+        Domain::DocumentObjectType::NovelText,
         Domain::DocumentObjectType::SimpleText,
     };
     return textItems.contains(_item->type());
@@ -481,6 +485,11 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
             Domain::DocumentObjectType::StageplaySynopsis,
             Domain::DocumentObjectType::StageplayText,
             Domain::DocumentObjectType::StageplayStatistics,
+            Domain::DocumentObjectType::NovelTitlePage,
+            Domain::DocumentObjectType::NovelSynopsis,
+            Domain::DocumentObjectType::NovelOutline,
+            Domain::DocumentObjectType::NovelText,
+            Domain::DocumentObjectType::NovelStatistics,
         };
         if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
             auto removeDocument = new QAction(tr("Remove document"));
@@ -625,7 +634,8 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
             constexpr int invalidIndex = -1;
             int childIndex = invalidIndex;
             switch (_type) {
-            case Domain::DocumentObjectType::Screenplay: {
+            case Domain::DocumentObjectType::Screenplay:
+            case Domain::DocumentObjectType::Novel: {
                 childIndex = 3;
                 break;
             }
@@ -676,7 +686,8 @@ BusinessLayer::StructureModelItem* ProjectManager::Implementation::aliasedItemFo
     const QModelIndex& _index)
 {
     auto item = projectStructureModel->itemForIndex(_index);
-    if (item->type() != Domain::DocumentObjectType::ScreenplayTreatment) {
+    if (item->type() != Domain::DocumentObjectType::ScreenplayTreatment
+        && item->type() != Domain::DocumentObjectType::NovelOutline) {
         return item;
     }
 
@@ -2699,7 +2710,8 @@ BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
         return scriptTextModel(item);
     }
     case Domain::DocumentObjectType::AudioplayTitlePage:
-    case Domain::DocumentObjectType::AudioplaySynopsis: {
+    case Domain::DocumentObjectType::AudioplaySynopsis:
+    case Domain::DocumentObjectType::AudioplayStatistics: {
         if (item == nullptr) {
             break;
         }
@@ -2711,7 +2723,8 @@ BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
         return scriptTextModel(item);
     }
     case Domain::DocumentObjectType::ComicBookTitlePage:
-    case Domain::DocumentObjectType::ComicBookSynopsis: {
+    case Domain::DocumentObjectType::ComicBookSynopsis:
+    case Domain::DocumentObjectType::ComicBookStatistics: {
         if (item == nullptr) {
             break;
         }
@@ -2736,7 +2749,21 @@ BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
         return scriptTextModel(item);
     }
     case Domain::DocumentObjectType::StageplayTitlePage:
-    case Domain::DocumentObjectType::StageplaySynopsis: {
+    case Domain::DocumentObjectType::StageplaySynopsis:
+    case Domain::DocumentObjectType::StageplayStatistics: {
+        if (item == nullptr) {
+            break;
+        }
+
+        return scriptTextModel(item->parent());
+    }
+
+    case Domain::DocumentObjectType::Novel: {
+        return scriptTextModel(item);
+    }
+    case Domain::DocumentObjectType::NovelTitlePage:
+    case Domain::DocumentObjectType::NovelSynopsis:
+    case Domain::DocumentObjectType::NovelStatistics: {
         if (item == nullptr) {
             break;
         }
@@ -2762,7 +2789,8 @@ BusinessLayer::AbstractModel* ProjectManager::firstScriptModel() const
             && (item->type() == Domain::DocumentObjectType::Audioplay
                 || item->type() == Domain::DocumentObjectType::ComicBook
                 || item->type() == Domain::DocumentObjectType::Screenplay
-                || item->type() == Domain::DocumentObjectType::Stageplay)) {
+                || item->type() == Domain::DocumentObjectType::Stageplay
+                || item->type() == Domain::DocumentObjectType::Novel)) {
             constexpr int scriptTextIndex = 2;
             return d->modelsFacade.modelFor(item->childAt(scriptTextIndex)->uuid());
         }
@@ -3105,6 +3133,7 @@ QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) co
 
     const QSet<Domain::DocumentObjectType> aliases = {
         Domain::DocumentObjectType::ScreenplayTreatment,
+        Domain::DocumentObjectType::NovelOutline,
     };
 
     QVector<QUuid> documents;
@@ -3162,7 +3191,12 @@ QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) co
     case Domain::DocumentObjectType::StageplayTitlePage:
     case Domain::DocumentObjectType::StageplaySynopsis:
     case Domain::DocumentObjectType::StageplayText:
-    case Domain::DocumentObjectType::StageplayStatistics: {
+    case Domain::DocumentObjectType::StageplayStatistics:
+    case Domain::DocumentObjectType::NovelTitlePage:
+    case Domain::DocumentObjectType::NovelSynopsis:
+    case Domain::DocumentObjectType::NovelOutline:
+    case Domain::DocumentObjectType::NovelText:
+    case Domain::DocumentObjectType::NovelStatistics: {
         //
         // Персонажи
         //

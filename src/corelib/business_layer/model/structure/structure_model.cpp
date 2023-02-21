@@ -644,6 +644,7 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     case Domain::DocumentObjectType::ComicBook:
     case Domain::DocumentObjectType::Audioplay:
     case Domain::DocumentObjectType::Stageplay:
+    case Domain::DocumentObjectType::Novel:
     case Domain::DocumentObjectType::Character:
     case Domain::DocumentObjectType::Location:
     case Domain::DocumentObjectType::World:
@@ -689,7 +690,12 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     case Domain::DocumentObjectType::StageplayTitlePage:
     case Domain::DocumentObjectType::StageplaySynopsis:
     case Domain::DocumentObjectType::StageplayText:
-    case Domain::DocumentObjectType::StageplayStatistics: {
+    case Domain::DocumentObjectType::StageplayStatistics:
+    case Domain::DocumentObjectType::NovelTitlePage:
+    case Domain::DocumentObjectType::NovelSynopsis:
+    case Domain::DocumentObjectType::NovelOutline:
+    case Domain::DocumentObjectType::NovelText:
+    case Domain::DocumentObjectType::NovelStatistics: {
         return defaultFlags;
     }
 
@@ -824,7 +830,8 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     case Domain::DocumentObjectType::Screenplay:
     case Domain::DocumentObjectType::ComicBook:
     case Domain::DocumentObjectType::Audioplay:
-    case Domain::DocumentObjectType::Stageplay: {
+    case Domain::DocumentObjectType::Stageplay:
+    case Domain::DocumentObjectType::Novel: {
         return false;
     }
 

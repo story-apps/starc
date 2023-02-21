@@ -25,6 +25,8 @@ SUBDIRS = \
     stageplay_parameters \
     stageplay_text \
     stageplay_text_structure \
+    novel_information \
+    novel_parameters \
     title_page \
     recycle_bin \
     world_information_structure
