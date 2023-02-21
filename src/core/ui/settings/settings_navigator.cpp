@@ -132,10 +132,10 @@ SettingsNavigator::SettingsNavigator(QWidget* _parent)
                     emit componentsStageplayPressed();
                     break;
                 }
-                    case kComponentsNovelIndex: {
-                        emit componentsNovelPressed();
-                        break;
-                    }
+                case kComponentsNovelIndex: {
+                    emit componentsNovelPressed();
+                    break;
+                }
                 default: {
                     break;
                 }

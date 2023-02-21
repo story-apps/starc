@@ -5,10 +5,10 @@
 #include <business_layer/chronometry/chronometer.h>
 #include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/comic_book_template.h>
+#include <business_layer/templates/novel_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/stageplay_template.h>
-#include <business_layer/templates/novel_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -1274,8 +1274,7 @@ void SettingsView::Implementation::initStageplayCard()
 void SettingsView::Implementation::initNovelCard()
 {
     novelEditorDefaultTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    novelEditorDefaultTemplate->setModel(
-        BusinessLayer::TemplatesFacade::novelTemplates());
+    novelEditorDefaultTemplate->setModel(BusinessLayer::TemplatesFacade::novelTemplates());
     novelEditorDefaultTemplateOptions->setIcon(u8"\U000F01D9");
     //
     auto linesGroup = new RadioButtonGroup(novelCard);
@@ -2340,9 +2339,9 @@ SettingsView::SettingsView(QWidget* _parent)
              }) {
             widget->setVisible(_available);
         }
-        d->novelCardLayout->setRowMinimumHeight(
-            d->novelCardBottomSpacerIndex,
-            _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
+        d->novelCardLayout->setRowMinimumHeight(d->novelCardBottomSpacerIndex,
+                                                _available ? Ui::DesignSystem::layout().px24()
+                                                           : Ui::DesignSystem::layout().px12());
 
         emit novelAvailableChanged(_available);
     });
@@ -2421,8 +2420,8 @@ SettingsView::SettingsView(QWidget* _parent)
         } else if (d->novelNavigatorSceneDescriptionLines5->isChecked()) {
             sceneTextLines = 5;
         }
-        emit novelNavigatorShowSceneTextChanged(
-            d->novelNavigatorShowSceneText->isChecked(), sceneTextLines);
+        emit novelNavigatorShowSceneTextChanged(d->novelNavigatorShowSceneText->isChecked(),
+                                                sceneTextLines);
     };
     connect(d->novelNavigatorShowSceneText, &CheckBox::checkedChanged, this,
             notifynovelNavigatorShowSceneTextChanged);
@@ -3067,12 +3066,11 @@ void SettingsView::setNovelNavigatorShowSceneText(bool _show, int _lines)
 {
     d->novelNavigatorShowSceneText->setChecked(_show);
     if (_show) {
-        const QHash<int, RadioButton*> buttons
-            = { { 1, d->novelNavigatorSceneDescriptionLines1 },
-                { 2, d->novelNavigatorSceneDescriptionLines2 },
-                { 3, d->novelNavigatorSceneDescriptionLines3 },
-                { 4, d->novelNavigatorSceneDescriptionLines4 },
-                { 5, d->novelNavigatorSceneDescriptionLines5 } };
+        const QHash<int, RadioButton*> buttons = { { 1, d->novelNavigatorSceneDescriptionLines1 },
+                                                   { 2, d->novelNavigatorSceneDescriptionLines2 },
+                                                   { 3, d->novelNavigatorSceneDescriptionLines3 },
+                                                   { 4, d->novelNavigatorSceneDescriptionLines4 },
+                                                   { 5, d->novelNavigatorSceneDescriptionLines5 } };
         buttons[_lines]->setChecked(true);
     }
 }
