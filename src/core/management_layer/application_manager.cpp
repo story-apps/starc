@@ -2639,6 +2639,13 @@ void ApplicationManager::initConnections()
     connect(d->settingsManager.data(), &SettingsManager::stageplayNavigatorChanged, this,
             [this] { d->projectManager->reconfigureStageplayNavigator(); });
     //
+    connect(d->settingsManager.data(), &SettingsManager::novelEditorChanged, this,
+            [this](const QStringList& _changedSettingsKeys) {
+                d->projectManager->reconfigureNovelEditor(_changedSettingsKeys);
+            });
+    connect(d->settingsManager.data(), &SettingsManager::novelNavigatorChanged, this,
+            [this] { d->projectManager->reconfigureNovelNavigator(); });
+    //
     connect(d->settingsManager.data(), &SettingsManager::resetToDefaultsRequested, this, [this] {
         //
         // Если пользователь хочет сбросить все настройки, закроем текущий проект

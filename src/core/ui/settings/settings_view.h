@@ -38,6 +38,7 @@ public:
     void showComponentsComicBook();
     void showComponentsAudioplay();
     void showComponentsStageplay();
+    void showComponentsNovel();
     void showShortcuts();
 
     //
@@ -137,6 +138,15 @@ public:
     //
     void setStageplayNavigatorShowSceneNumber(bool _show);
     void setStageplayNavigatorShowSceneText(bool _show, int _lines);
+
+    //
+    // Задание параметров редактора текста
+    //
+    void setNovelAvailable(bool _available);
+    //
+    void setNovelEditorDefaultTemplate(const QString& _templateId);
+    //
+    void setNovelNavigatorShowSceneText(bool _show, int _lines);
 
     //
     // Задание параметров горячих клавиш
@@ -250,6 +260,15 @@ signals:
     void stageplayNavigatorShowSceneTextChanged(bool _show, int _lines);
 
     //
+    // Уведомление об изменении параметров редактора романов
+    //
+    void novelAvailableChanged(bool _available);
+    //
+    void novelEditorDefaultTemplateChanged(const QString& _templateId);
+    //
+    void novelNavigatorShowSceneTextChanged(bool _show, int _lines);
+
+    //
     // Редактирование шаблонов
     //
     // ... простой текстовый документ
@@ -291,6 +310,14 @@ signals:
     void saveToFileCurrentStageplayEditorTemplateRequested(const QString& _templateId);
     void removeCurrentStageplayEditorTemplateRequested(const QString& _templateId);
     void loadFromFileStageplayEditorTemplateRequested();
+    //
+    // ... роман
+    //
+    void editCurrentNovelEditorTemplateRequested(const QString& _templateId);
+    void duplicateCurrentNovelEditorTemplateRequested(const QString& _templateId);
+    void saveToFileCurrentNovelEditorTemplateRequested(const QString& _templateId);
+    void removeCurrentNovelEditorTemplateRequested(const QString& _templateId);
+    void loadFromFileNovelEditorTemplateRequested();
 
     //
     // Параметры горячих клавиш

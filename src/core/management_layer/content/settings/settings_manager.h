@@ -76,6 +76,8 @@ signals:
     void audioplayDurationChanged();
     void stageplayEditorChanged(const QStringList& _changedSettingsKeys);
     void stageplayNavigatorChanged();
+    void novelEditorChanged(const QStringList& _changedSettingsKeys);
+    void novelNavigatorChanged();
 
     /**
      * @brief Пользователь хочет сбросить настройки к заводским
@@ -193,6 +195,15 @@ private:
     //
     void setStageplayNavigatorShowSceneNumber(bool _show);
     void setStageplayNavigatorShowSceneText(bool _show, int _lines);
+
+    //
+    // Сохранение параметров редактора сценария
+    //
+    void setNovelAvailable(bool _available);
+    //
+    void setNovelEditorDefaultTemplate(const QString& _templateId);
+    //
+    void setNovelNavigatorShowSceneText(bool _show, int _lines);
 
     //
     // Сохранение параметров горячих клавиш

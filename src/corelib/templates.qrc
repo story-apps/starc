@@ -18,5 +18,12 @@
         <file>templates/audioplay/bbc_scene</file>
         <file>templates/stageplay/bbc</file>
         <file>templates/stageplay/us</file>
+        <file>templates/novel/manuscript_cn_a4</file>
+        <file>templates/novel/manuscript_cp_a4</file>
+        <file>templates/novel/manuscript_cp_letter</file>
+        <file>templates/novel/manuscript_t_a4</file>
+        <file>templates/novel/manuscript_t_letter</file>
+        <file>templates/novel/modern_a4</file>
+        <file>templates/novel/modern_letter</file>
     </qresource>
 </RCC>

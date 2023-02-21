@@ -20,13 +20,15 @@ enum class TextFolderType {
     Root,
     Act,
     Sequence,
+    Part,
+    Chapter,
 };
 
 /**
  * @brief Типы групп
  */
 enum class TextGroupType {
-    Undefined = 10,
+    Undefined = 100,
     Scene,
     Beat,
     Page,
@@ -44,15 +46,23 @@ enum class TextGroupType {
  */
 enum class TextParagraphType {
     //
-    // Общие для всех стилей
+    Undefined = 1000,
     //
-    Undefined = 100,
+    // Общее для всех
+    //
     UnformattedText, //!< Простой текст (без особенного форматирования и отступов)
     InlineNote, //!< Заметка по тексту
+    //
+    // Группирующие блока
+    //
     ActHeading, //!< Заголовок акта
     ActFooter, //!< Окончание акта
     SequenceHeading, //!< Заголовок папки
     SequenceFooter, //!< Окончание папки
+    PartHeading, //!< Заголовок части
+    PartFooter, //!< Окончание части
+    ChapterHeading, //!< Заголовок главы
+    ChapterFooter, //!< Окончание главы
     //
     PageSplitter, //!< Разделитель страницы (для блоков внутри которых находятся таблицы)
     //
@@ -88,7 +98,7 @@ enum class TextParagraphType {
     PanelHeadingShadow, //!< Панель, для вспомогательных разрывов
     Description, //!< Описание поисходящего на панели
     //
-    // Простой текст
+    // Простой текст и частично романы
     //
     ChapterHeading1, //!< Заголовок 1
     ChapterHeading2, //!< Заголовок 2

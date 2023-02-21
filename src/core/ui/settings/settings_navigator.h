@@ -35,6 +35,7 @@ signals:
     void componentsComicBookPressed();
     void componentsAudioplayPressed();
     void componentsStageplayPressed();
+    void componentsNovelPressed();
     void shortcutsPressed();
 
     /**

@@ -2402,6 +2402,16 @@ void ProjectManager::reconfigureStageplayNavigator()
     d->pluginsBuilder.reconfigureStageplayNavigator();
 }
 
+void ProjectManager::reconfigureNovelEditor(const QStringList& _changedSettingsKeys)
+{
+    d->pluginsBuilder.reconfigureNovelEditor(_changedSettingsKeys);
+}
+
+void ProjectManager::reconfigureNovelNavigator()
+{
+    d->pluginsBuilder.reconfigureNovelNavigator();
+}
+
 void ProjectManager::checkAvailabilityToEdit()
 {
     d->pluginsBuilder.checkAvailabilityToEdit();

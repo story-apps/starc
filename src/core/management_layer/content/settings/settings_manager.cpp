@@ -5,6 +5,7 @@
 #include <3rd_party/webloader/src/NetworkRequest.h>
 #include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/comic_book_template.h>
+#include <business_layer/templates/novel_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/stageplay_template.h>
@@ -68,6 +69,7 @@ public:
     void loadComicBookSettings();
     void loadAudioplaySettings();
     void loadStageplaySettings();
+    void loadNovelSettings();
     void loadShortcutsSettings();
 
 
@@ -133,6 +135,7 @@ void SettingsManager::Implementation::loadComponentsSettings()
     loadComicBookSettings();
     loadAudioplaySettings();
     loadStageplaySettings();
+    loadNovelSettings();
 }
 
 void SettingsManager::Implementation::loadSimpleTextSettings()
@@ -292,7 +295,7 @@ void SettingsManager::Implementation::loadAudioplaySettings()
 
 void SettingsManager::Implementation::loadStageplaySettings()
 {
-    view->setAudioplayAvailable(
+    view->setStageplayAvailable(
         settingsValue(DataStorageLayer::kComponentsStageplayAvailableKey).toBool());
     const auto defaultTemplate
         = settingsValue(DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey).toString();
@@ -313,6 +316,19 @@ void SettingsManager::Implementation::loadStageplaySettings()
     view->setStageplayNavigatorShowSceneText(
         settingsValue(DataStorageLayer::kComponentsStageplayNavigatorShowSceneTextKey).toBool(),
         settingsValue(DataStorageLayer::kComponentsStageplayNavigatorSceneTextLinesKey).toInt());
+}
+
+void SettingsManager::Implementation::loadNovelSettings()
+{
+    view->setNovelAvailable(settingsValue(DataStorageLayer::kComponentsNovelAvailableKey).toBool());
+    const auto defaultTemplate
+        = settingsValue(DataStorageLayer::kComponentsNovelEditorDefaultTemplateKey).toString();
+    view->setNovelEditorDefaultTemplate(defaultTemplate);
+    BusinessLayer::TemplatesFacade::setDefaultNovelTemplate(defaultTemplate);
+    //
+    view->setNovelNavigatorShowSceneText(
+        settingsValue(DataStorageLayer::kComponentsNovelNavigatorShowSceneTextKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsNovelNavigatorSceneTextLinesKey).toInt());
 }
 
 void SettingsManager::Implementation::loadShortcutsSettings()
@@ -433,6 +449,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &Ui::SettingsView::showComponentsAudioplay);
     connect(d->navigator, &Ui::SettingsNavigator::componentsStageplayPressed, d->view,
             &Ui::SettingsView::showComponentsStageplay);
+    connect(d->navigator, &Ui::SettingsNavigator::componentsNovelPressed, d->view,
+            &Ui::SettingsView::showComponentsNovel);
     connect(d->navigator, &Ui::SettingsNavigator::shortcutsPressed, d->view,
             &Ui::SettingsView::showShortcuts);
     connect(d->navigator, &Ui::SettingsNavigator::resetToDefaultsPressed, this, [this] {
@@ -671,6 +689,17 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setStageplayNavigatorShowSceneNumber);
     connect(d->view, &Ui::SettingsView::stageplayNavigatorShowSceneTextChanged, this,
             &SettingsManager::setStageplayNavigatorShowSceneText);
+    //
+    // ... роман
+    //
+    connect(d->view, &Ui::SettingsView::novelAvailableChanged, this,
+            &SettingsManager::setNovelAvailable);
+    //
+    connect(d->view, &Ui::SettingsView::novelEditorDefaultTemplateChanged, this,
+            &SettingsManager::setNovelEditorDefaultTemplate);
+    //
+    connect(d->view, &Ui::SettingsView::novelNavigatorShowSceneTextChanged, this,
+            &SettingsManager::setNovelNavigatorShowSceneText);
 
     //
     // Работа с библиотекой шаблонов сценария
@@ -935,6 +964,56 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
         BusinessLayer::TemplatesFacade::saveStageplayTemplate(stageplayTemplate);
     });
     //
+    // ... роман
+    //
+    connect(d->view, &Ui::SettingsView::editCurrentNovelEditorTemplateRequested, this,
+            [this, showTemplateOptionsEditor](const QString& _templateId) {
+                d->templateOptionsManager->setCurrentDocumentType(
+                    Domain::DocumentObjectType::Novel);
+                d->templateOptionsManager->editTemplate(_templateId);
+                showTemplateOptionsEditor();
+            });
+    connect(d->view, &Ui::SettingsView::duplicateCurrentNovelEditorTemplateRequested, this,
+            [this, showTemplateOptionsEditor](const QString& _templateId) {
+                d->templateOptionsManager->setCurrentDocumentType(
+                    Domain::DocumentObjectType::Novel);
+                d->templateOptionsManager->duplicateTemplate(_templateId);
+                showTemplateOptionsEditor();
+            });
+    connect(d->view, &Ui::SettingsView::saveToFileCurrentNovelEditorTemplateRequested, this,
+            [this](const QString& _templateId) {
+                auto saveToFilePath = QFileDialog::getSaveFileName(
+                    d->view->topLevelWidget(), tr("Choose the file to save template"),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    DialogHelper::starcTemplateFilter());
+                if (saveToFilePath.isEmpty()) {
+                    return;
+                }
+
+                if (!saveToFilePath.endsWith(ExtensionHelper::starct())) {
+                    saveToFilePath.append(QString(".%1").arg(ExtensionHelper::starct()));
+                }
+                const auto novelTemplate
+                    = BusinessLayer::TemplatesFacade::novelTemplate(_templateId);
+                novelTemplate.saveToFile(saveToFilePath);
+            });
+    connect(d->view, &Ui::SettingsView::removeCurrentNovelEditorTemplateRequested, this,
+            [](const QString& _templateId) {
+                BusinessLayer::TemplatesFacade::removeNovelTemplate(_templateId);
+            });
+    connect(d->view, &Ui::SettingsView::loadFromFileNovelEditorTemplateRequested, this, [this] {
+        const auto templateFilePath = QFileDialog::getOpenFileName(
+            d->view->topLevelWidget(), tr("Choose the file with template to load"),
+            QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+            DialogHelper::starcTemplateFilter());
+        if (templateFilePath.isEmpty()) {
+            return;
+        }
+
+        const BusinessLayer::NovelTemplate novelTemplate(templateFilePath);
+        BusinessLayer::TemplatesFacade::saveNovelTemplate(novelTemplate);
+    });
+    //
     // ... сам менеджер шаблона
     //
     connect(d->templateOptionsManager, &TemplateOptionsManager::closeRequested, this, [this] {
@@ -975,6 +1054,11 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
         case Domain::DocumentObjectType::Stageplay: {
             emit stageplayEditorChanged(
                 { DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey });
+            break;
+        }
+
+        case Domain::DocumentObjectType::Novel: {
+            emit novelEditorChanged({ DataStorageLayer::kComponentsNovelEditorDefaultTemplateKey });
             break;
         }
         }
@@ -1092,6 +1176,7 @@ void SettingsManager::setApplicationShowDocumentsPages(bool _show)
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
+    emit novelEditorChanged({ DataStorageLayer::kApplicationShowDocumentsPagesKey });
 }
 
 void SettingsManager::setApplicationUseTypeWriterSound(bool _use)
@@ -1290,6 +1375,7 @@ void SettingsManager::setApplicationHighlightCurrentLine(bool _highlight)
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
+    emit novelEditorChanged({ DataStorageLayer::kApplicationHighlightCurrentLineKey });
 }
 
 void SettingsManager::setApplicationFocusCurrentParagraph(bool _focus)
@@ -1300,6 +1386,7 @@ void SettingsManager::setApplicationFocusCurrentParagraph(bool _focus)
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
+    emit novelEditorChanged({ DataStorageLayer::kApplicationFocusCurrentParagraphKey });
 }
 
 void SettingsManager::setApplicationUseTypewriterScrolling(bool _use)
@@ -1310,6 +1397,7 @@ void SettingsManager::setApplicationUseTypewriterScrolling(bool _use)
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
+    emit novelEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
 }
 
 void SettingsManager::setApplicationReplaceThreeDotsWithEllipsis(bool _replace)
@@ -1320,6 +1408,7 @@ void SettingsManager::setApplicationReplaceThreeDotsWithEllipsis(bool _replace)
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey });
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey });
+    emit novelEditorChanged({ DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey });
 }
 
 void SettingsManager::setApplicationUseSmartQuotes(bool _use)
@@ -1330,6 +1419,7 @@ void SettingsManager::setApplicationUseSmartQuotes(bool _use)
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationSmartQuotesKey });
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationSmartQuotesKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationSmartQuotesKey });
+    emit novelEditorChanged({ DataStorageLayer::kApplicationSmartQuotesKey });
 }
 
 void SettingsManager::setApplicationReplaceTwoDashesWithEmDash(bool _replace)
@@ -1340,6 +1430,7 @@ void SettingsManager::setApplicationReplaceTwoDashesWithEmDash(bool _replace)
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey });
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey });
+    emit novelEditorChanged({ DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey });
 }
 
 void SettingsManager::setApplicationAvoidMultipleSpaces(bool _avoid)
@@ -1350,6 +1441,7 @@ void SettingsManager::setApplicationAvoidMultipleSpaces(bool _avoid)
     emit comicBookEditorChanged({ DataStorageLayer::kApplicationAvoidMultipleSpacesKey });
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationAvoidMultipleSpacesKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationAvoidMultipleSpacesKey });
+    emit novelEditorChanged({ DataStorageLayer::kApplicationAvoidMultipleSpacesKey });
 }
 
 void SettingsManager::setSimpleTextAvailable(bool _available)
@@ -1687,6 +1779,25 @@ void SettingsManager::setStageplayNavigatorShowSceneText(bool _show, int _lines)
     setSettingsValue(DataStorageLayer::kComponentsStageplayNavigatorShowSceneTextKey, _show);
     setSettingsValue(DataStorageLayer::kComponentsStageplayNavigatorSceneTextLinesKey, _lines);
     emit stageplayNavigatorChanged();
+}
+
+void SettingsManager::setNovelAvailable(bool _available)
+{
+    setSettingsValue(DataStorageLayer::kComponentsNovelAvailableKey, _available);
+}
+
+void SettingsManager::setNovelEditorDefaultTemplate(const QString& _templateId)
+{
+    setSettingsValue(DataStorageLayer::kComponentsNovelEditorDefaultTemplateKey, _templateId);
+    BusinessLayer::TemplatesFacade::setDefaultNovelTemplate(_templateId);
+    emit novelEditorChanged({ DataStorageLayer::kComponentsNovelEditorDefaultTemplateKey });
+}
+
+void SettingsManager::setNovelNavigatorShowSceneText(bool _show, int _lines)
+{
+    setSettingsValue(DataStorageLayer::kComponentsNovelNavigatorShowSceneTextKey, _show);
+    setSettingsValue(DataStorageLayer::kComponentsNovelNavigatorSceneTextLinesKey, _lines);
+    emit novelNavigatorChanged();
 }
 
 void SettingsManager::setShortcutsForScreenplayEdit(

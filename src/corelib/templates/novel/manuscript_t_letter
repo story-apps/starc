@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style id="manuscript_t_letter" default="true" page_format="Letter" page_margins="38,24,17,24" page_numbers_alignment="top,right">
+    <titlepage/>
+    <blocks>
+        <block id="heading_1" active="true" starts_from_new_page="false" font_family="Roboto" font_size="36" bold="true" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,8" line_spacing="single" line_spacing_value="0"/>
+        <block id="heading_2" active="true" starts_from_new_page="false" font_family="Roboto" font_size="30" bold="true" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,6,0,6" line_spacing="single" line_spacing_value="0"/>
+        <block id="heading_3" active="true" starts_from_new_page="false" font_family="Roboto" font_size="26" bold="true" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,5,0,5" line_spacing="single" line_spacing_value="0"/>
+        <block id="heading_4" active="true" starts_from_new_page="false" font_family="Roboto" font_size="24" bold="false" italic="true" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,4,0,4" line_spacing="single" line_spacing_value="0"/>
+        <block id="heading_5" active="true" starts_from_new_page="false" font_family="Roboto" font_size="20" bold="true" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,3,0,3" line_spacing="single" line_spacing_value="0"/>
+        <block id="heading_6" active="true" starts_from_new_page="false" font_family="Roboto" font_size="16" bold="true" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,3,0,2" line_spacing="single" line_spacing_value="0"/>
+        <block id="text" active="true" starts_from_new_page="false" font_family="Roboto" font_size="14" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="0,0,0,2" line_spacing="single" line_spacing_value="0"/>
+        <block id="inline_note" active="true" starts_from_new_page="false" font_family="Roboto" font_size="14" bold="false" italic="false" underline="false" uppercase="false" alignment="left" lines_before="1" lines_after="0" margins="67.5,0,0,2" line_spacing="single" line_spacing_value="0"/>
+    </blocks>
+</style>

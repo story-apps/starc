@@ -38,6 +38,7 @@ public:
     Widget* optionsContainer = nullptr;
     QVBoxLayout* optionsLayout = nullptr;
     AbstractLabel* storyTitle;
+    FlowLayout* storyOptionsLayout = nullptr;
     AbstractLabel* storyWorldTitle;
     AbstractLabel* otherTitle;
     QVector<CreateDocumentDialogOption*> options;
@@ -58,6 +59,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     , optionsContainer(new Widget(_parent))
     , optionsLayout(new QVBoxLayout(optionsContainer))
     , storyTitle(new Subtitle1Label(_parent))
+    , storyOptionsLayout(new FlowLayout)
     , storyWorldTitle(new Subtitle1Label(_parent))
     , otherTitle(new Subtitle1Label(_parent))
     , title(new H6Label(_parent))
@@ -86,25 +88,24 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     optionsLayout->setSpacing(0);
     optionsLayout->addWidget(storyTitle);
     {
-        auto layout = new FlowLayout;
-        layout->setContentsMargins({});
-        layout->setSpacing(0);
+        storyOptionsLayout->setContentsMargins({});
+        storyOptionsLayout->setSpacing(0);
         if (settingsValue(DataStorageLayer::kComponentsScreenplayAvailableKey).toBool()) {
-            layout->addWidget(makeOption(Domain::DocumentObjectType::Screenplay));
+            storyOptionsLayout->addWidget(makeOption(Domain::DocumentObjectType::Screenplay));
         }
         if (settingsValue(DataStorageLayer::kComponentsComicBookAvailableKey).toBool()) {
-            layout->addWidget(makeOption(Domain::DocumentObjectType::ComicBook));
+            storyOptionsLayout->addWidget(makeOption(Domain::DocumentObjectType::ComicBook));
         }
         if (settingsValue(DataStorageLayer::kComponentsAudioplayAvailableKey).toBool()) {
-            layout->addWidget(makeOption(Domain::DocumentObjectType::Audioplay));
+            storyOptionsLayout->addWidget(makeOption(Domain::DocumentObjectType::Audioplay));
         }
         if (settingsValue(DataStorageLayer::kComponentsStageplayAvailableKey).toBool()) {
-            layout->addWidget(makeOption(Domain::DocumentObjectType::Stageplay));
+            storyOptionsLayout->addWidget(makeOption(Domain::DocumentObjectType::Stageplay));
         }
         if (settingsValue(DataStorageLayer::kComponentsNovelAvailableKey).toBool()) {
-            layout->addWidget(makeOption(Domain::DocumentObjectType::Novel));
+            storyOptionsLayout->addWidget(makeOption(Domain::DocumentObjectType::Novel));
         }
-        optionsLayout->addLayout(layout, 1);
+        optionsLayout->addLayout(storyOptionsLayout, 1);
     }
     optionsLayout->addWidget(storyWorldTitle);
     {
@@ -229,6 +230,7 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
     contentsLayout()->setColumnStretch(0, 2);
     contentsLayout()->setColumnStretch(1, 1);
 
+
     for (auto option : std::as_const(d->options)) {
         connect(option, &CreateDocumentDialogOption::checkedChanged, this, [this](bool _isChecked) {
             if (!_isChecked) {
@@ -347,7 +349,9 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    setContentFixedWidth(Ui::DesignSystem::layout().px(898));
+    contentsLayout()->setColumnMinimumWidth(1, Ui::DesignSystem::layout().px(299));
+    setContentFixedWidth(
+        Ui::DesignSystem::layout().px(d->storyOptionsLayout->count() > 3 ? 898 : 754));
 
     d->optionsContainer->setBackgroundColor(DesignSystem::color().surface());
     d->content->setFixedHeight(DesignSystem::layout().px(556));
