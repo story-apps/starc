@@ -307,7 +307,7 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
     cursor.setPosition(std::max(0, _from));
     bool isTextChanged = false;
 
-    bool isFirstVisibleBlock = cursor.position() == 0;
+    bool isFirstVisibleBlock = cursor.block() == document()->begin();
     bool isFirstBlockAfterInvisible = true;
     auto block = cursor.block();
     while (block.isValid()) {
