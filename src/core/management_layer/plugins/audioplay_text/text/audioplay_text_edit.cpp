@@ -321,6 +321,24 @@ void AudioplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
     BusinessLayer::TextCursor cursor = textCursor();
 
     //
+    // Если изменяется заголовок изолированного элемента, то снимаем изоляцию на время
+    // операции, а после изолируем предшествующий текущему элемент, либо его родителя
+    //
+    const QSet<TextParagraphType> headerTypes = {
+        TextParagraphType::SceneHeading,    TextParagraphType::BeatHeading,
+        TextParagraphType::SequenceHeading, TextParagraphType::SequenceFooter,
+        TextParagraphType::ActHeading,      TextParagraphType::ActFooter,
+    };
+
+    const auto currentTypeIsHeader = headerTypes.contains(currentParagraphType());
+    const auto targetTypeIsHeader = headerTypes.contains(_type);
+    const auto needReisolate = (currentTypeIsHeader || targetTypeIsHeader)
+        && d->document.visibleTopLeveLItem().isValid();
+    if (needReisolate) {
+        d->document.setVisibleTopLevelItem({});
+    }
+
+    //
     // Меняем тип блока на персонажа
     //
     if (_type == TextParagraphType::Character) {
@@ -369,10 +387,9 @@ void AudioplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
             setTextCursor(otherCursor);
         }
         //
-        //
+        // Если текущий блок в табилце, ничего не делаем
         //
         else {
-            return;
         }
     }
     //
@@ -395,7 +412,6 @@ void AudioplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
             // ... если таблица не пуста, ничего не делаем
             //
             else {
-                return;
             }
         }
         //
@@ -407,9 +423,16 @@ void AudioplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
     }
 
     //
+    // ... при необходимости восстанавливаем режим изоляции
+    //
+    if (needReisolate) {
+        d->document.setVisibleTopLevelItem(d->document.itemIndex(textCursor().block()));
+    }
+
+    //
     // Если вставили папку, то нужно перейти к предыдущему блоку (из футера к хидеру)
     //
-    if (_type == TextParagraphType::SequenceHeading) {
+    if (_type == TextParagraphType::ActHeading || _type == TextParagraphType::SequenceHeading) {
         moveCursor(QTextCursor::PreviousBlock);
     }
 

@@ -520,7 +520,9 @@ void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _conta
 
 void ScreenplayTextView::Implementation::showParametersFor(BusinessLayer::TextModelItem* _item)
 {
-    if (_item == nullptr) {
+    if (_item == nullptr
+        || (_item->type() != BusinessLayer::TextModelItemType::Folder
+            && _item->type() != BusinessLayer::TextModelItemType::Group)) {
         return;
     }
 
@@ -570,7 +572,8 @@ void ScreenplayTextView::Implementation::showParametersFor(BusinessLayer::TextMo
     }
 
     default: {
-        Q_ASSERT(false);
+        break;
+        ;
     }
     }
 }

@@ -1142,6 +1142,15 @@ void TextDocument::setCorrectionOptions(const QStringList& _options)
     }
 }
 
+QModelIndex TextDocument::visibleTopLeveLItem() const
+{
+    if (!d->corrector) {
+        return {};
+    }
+
+    return d->model->indexForItem(d->corrector->visibleTopLevelItem());
+}
+
 void TextDocument::setVisibleTopLevelItem(const QModelIndex& _index)
 {
     if (!d->corrector) {
@@ -1218,6 +1227,20 @@ int TextDocument::itemStartPosition(const QModelIndex& _index)
 int TextDocument::itemEndPosition(const QModelIndex& _index)
 {
     return itemPosition(_index, false);
+}
+
+QModelIndex TextDocument::itemIndex(const QTextBlock& _forBlock) const
+{
+    if (_forBlock.userData() == nullptr) {
+        return {};
+    }
+
+    const auto blockData = static_cast<TextBlockData*>(_forBlock.userData());
+    if (blockData == nullptr) {
+        return {};
+    }
+
+    return d->model->indexForItem(blockData->item());
 }
 
 QColor TextDocument::itemColor(const QTextBlock& _forBlock) const

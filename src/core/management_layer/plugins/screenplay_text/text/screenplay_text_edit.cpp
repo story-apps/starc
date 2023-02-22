@@ -388,18 +388,27 @@ void ScreenplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
     QString blockEndMime;
 
     //
+    // Если изменяется заголовок изолированного элемента, то снимаем изоляцию на время
+    // операции, а после изолируем предшествующий текущему элемент, либо его родителя
+    //
+    const QSet<TextParagraphType> headerTypes = {
+        TextParagraphType::SceneHeading,    TextParagraphType::BeatHeading,
+        TextParagraphType::SequenceHeading, TextParagraphType::SequenceFooter,
+        TextParagraphType::ActHeading,      TextParagraphType::ActFooter,
+    };
+
+    const auto currentTypeIsHeader = headerTypes.contains(currentParagraphType());
+    const auto targetTypeIsHeader = headerTypes.contains(_type);
+    const auto needReisolate = (currentTypeIsHeader || targetTypeIsHeader)
+        && d->document.visibleTopLeveLItem().isValid();
+    if (needReisolate) {
+        d->document.setVisibleTopLevelItem({});
+    }
+
+    //
     // Добавляем дополнительную логику в кейсе, когда биты скрыты
     //
     if (!d->document.isBeatsVisible()) {
-        const QSet<TextParagraphType> headerTypes = {
-            TextParagraphType::SceneHeading,
-            TextParagraphType::BeatHeading,
-            TextParagraphType::SequenceHeading,
-            TextParagraphType::ActHeading,
-        };
-
-        const auto currentTypeIsHeader = headerTypes.contains(currentParagraphType());
-        const auto targetTypeIsHeader = headerTypes.contains(_type);
         //
         // При изменении блока на сцену/папку/акт, нужно поставить этот блок и остальные, идущие за
         // ним видимые блоки до заголовка, после всех скрытых блоков, идущих за ними
@@ -452,6 +461,10 @@ void ScreenplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
         //
         else if (currentTypeIsHeader && !targetTypeIsHeader && cursor.block().previous().isValid()
                  && !cursor.block().previous().isVisible()) {
+
+            //
+            // ... выделяем текст для перемещения
+            //
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             while (cursor.block().next().isValid() && cursor.block().next().isVisible()
@@ -493,6 +506,13 @@ void ScreenplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
     }
 
     d->document.setParagraphType(_type, textCursor());
+
+    //
+    // ... при необходимости восстанавливаем режим изоляции
+    //
+    if (needReisolate) {
+        d->document.setVisibleTopLevelItem(d->document.itemIndex(textCursor().block()));
+    }
 
     //
     // Если вставили папку, то нужно перейти к предыдущему блоку (из футера к хидеру)

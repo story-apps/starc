@@ -39,8 +39,9 @@ public:
     void setCorrectionOptions(const QStringList& _options);
 
     /**
-     * @brief Задать видимый верхнеуровневый элемент
+     * @brief Видимый верхнеуровневый элемент
      */
+    QModelIndex visibleTopLeveLItem() const;
     void setVisibleTopLevelItem(const QModelIndex& _index);
 
     /**
@@ -51,6 +52,11 @@ public:
     int itemPosition(const QModelIndex& _index, bool _fromStart);
     int itemStartPosition(const QModelIndex& _index);
     int itemEndPosition(const QModelIndex& _index);
+
+    /**
+     * @brief Получить индекс элемента модели для заданного блока
+     */
+    QModelIndex itemIndex(const QTextBlock& _forBlock) const;
 
     /**
      * @brief Получить цвет сцены/папки для заданного блока
