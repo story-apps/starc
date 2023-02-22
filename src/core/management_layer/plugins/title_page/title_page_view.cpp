@@ -7,10 +7,11 @@
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/audioplay/audioplay_title_page_model.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
+#include <business_layer/model/novel/novel_title_page_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/stageplay/stageplay_title_page_model.h>
-#include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
@@ -219,6 +220,11 @@ void TitlePageView::reconfigure(const QStringList& _changedSettingsKeys)
         break;
     }
 
+    case Domain::DocumentObjectType::NovelTitlePage: {
+        defaultTemplateKey = DataStorageLayer::kComponentsNovelEditorDefaultTemplateKey;
+        break;
+    }
+
     default: {
         break;
     }
@@ -278,6 +284,8 @@ void TitlePageView::setModel(BusinessLayer::SimpleTextModel* _model)
         d->currentModelType = Domain::DocumentObjectType::AudioplayTitlePage;
     } else if (qobject_cast<BusinessLayer::StageplayTitlePageModel*>(_model)) {
         d->currentModelType = Domain::DocumentObjectType::StageplayTitlePage;
+    } else if (qobject_cast<BusinessLayer::NovelTitlePageModel*>(_model)) {
+        d->currentModelType = Domain::DocumentObjectType::NovelTitlePage;
     } else {
         d->currentModelType = Domain::DocumentObjectType::Undefined;
     }

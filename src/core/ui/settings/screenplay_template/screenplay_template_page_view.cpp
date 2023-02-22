@@ -214,9 +214,6 @@ ScreenplayTemplatePageView::ScreenplayTemplatePageView(QWidget* _parent)
             _value / static_cast<qreal>(d->pageSplitter->maximumValue()));
         emit pageChanged();
     });
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 ScreenplayTemplatePageView::~ScreenplayTemplatePageView() = default;
@@ -243,7 +240,8 @@ void ScreenplayTemplatePageView::configureTemplateFor(Domain::DocumentObjectType
              d->pageSplitterLeft,
              d->pageSplitterRight,
          }) {
-        widget->setVisible(_type != Domain::DocumentObjectType::SimpleText);
+        widget->setVisible(_type != Domain::DocumentObjectType::SimpleText
+                           && _type != Domain::DocumentObjectType::Novel);
     }
 }
 

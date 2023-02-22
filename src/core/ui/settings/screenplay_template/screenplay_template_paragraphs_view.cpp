@@ -61,6 +61,7 @@ public:
     RadioButton* verticalIndentationInMm = nullptr;
     CaptionLabel* horizontalIndentationTitle = nullptr;
     TextField* leftIndent = nullptr;
+    TextField* firstLineIndent = nullptr;
     TextField* rightIndent = nullptr;
     CaptionLabel* horizontalIndentationInTableTitle = nullptr;
     TextField* leftIndentInTable = nullptr;
@@ -105,6 +106,7 @@ ScreenplayTemplateParagraphsView::Implementation::Implementation(QWidget* _paren
     , verticalIndentationInMm(new RadioButton(card))
     , horizontalIndentationTitle(new CaptionLabel(card))
     , leftIndent(new TextField(card))
+    , firstLineIndent(new TextField(card))
     , rightIndent(new TextField(card))
     , horizontalIndentationInTableTitle(new CaptionLabel(card))
     , leftIndentInTable(new TextField(card))
@@ -202,6 +204,7 @@ ScreenplayTemplateParagraphsView::Implementation::Implementation(QWidget* _paren
         layout->setContentsMargins({});
         layout->setSpacing(0);
         layout->addWidget(leftIndent);
+        layout->addWidget(firstLineIndent);
         layout->addWidget(rightIndent);
         layout->addStretch();
         cardLayout->addLayout(layout);
@@ -248,6 +251,7 @@ void ScreenplayTemplateParagraphsView::Implementation::updateParagraphOptions(
 {
     auto setIndentationVisible = [this](bool _visible, bool _visibleInTable) {
         leftIndent->setVisible(_visible);
+        firstLineIndent->setVisible(_visible);
         rightIndent->setVisible(_visible);
         horizontalIndentationInTableTitle->setVisible(_visible && _visibleInTable);
         leftIndentInTable->setVisible(_visibleInTable);
@@ -298,6 +302,12 @@ void ScreenplayTemplateParagraphsView::Implementation::updateParagraphOptions(
         break;
     }
 
+    case Domain::DocumentObjectType::Novel: {
+        setIndentationVisible(true, false);
+        setBlockTitleVisible(false);
+        break;
+    }
+
     default: {
         break;
     }
@@ -344,6 +354,7 @@ ScreenplayTemplateParagraphsView::ScreenplayTemplateParagraphsView(QWidget* _par
                  d->verticalIndentationInMm,
                  d->horizontalIndentationTitle,
                  d->leftIndent,
+                 d->firstLineIndent,
                  d->rightIndent,
                  d->horizontalIndentationInTableTitle,
                  d->leftIndentInTable,
@@ -401,6 +412,7 @@ ScreenplayTemplateParagraphsView::ScreenplayTemplateParagraphsView(QWidget* _par
              d->topIndent,
              d->bottomIndent,
              d->leftIndent,
+             d->firstLineIndent,
              d->rightIndent,
              d->leftIndentInTable,
              d->rightIndentInTable,
@@ -411,10 +423,6 @@ ScreenplayTemplateParagraphsView::ScreenplayTemplateParagraphsView(QWidget* _par
         connect(textField, &TextField::textChanged, this,
                 &ScreenplayTemplateParagraphsView::currentParagraphChanged);
     }
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 ScreenplayTemplateParagraphsView::~ScreenplayTemplateParagraphsView() = default;
@@ -510,6 +518,21 @@ void ScreenplayTemplateParagraphsView::configureTemplateFor(Domain::DocumentObje
             BusinessLayer::TextParagraphType::Action,
             BusinessLayer::TextParagraphType::InlineNote,
             BusinessLayer::TextParagraphType::UnformattedText,
+        };
+        break;
+    }
+
+    case Domain::DocumentObjectType::Novel: {
+        d->paragraphTypes = {
+            BusinessLayer::TextParagraphType::SceneHeading,
+            BusinessLayer::TextParagraphType::BeatHeading,
+            BusinessLayer::TextParagraphType::Text,
+            BusinessLayer::TextParagraphType::InlineNote,
+            BusinessLayer::TextParagraphType::UnformattedText,
+            BusinessLayer::TextParagraphType::ChapterHeading,
+            BusinessLayer::TextParagraphType::ChapterFooter,
+            BusinessLayer::TextParagraphType::PartHeading,
+            BusinessLayer::TextParagraphType::PartFooter,
         };
         break;
     }
@@ -685,6 +708,16 @@ void ScreenplayTemplateParagraphsView::setLeftIndent(qreal _indent)
     d->leftIndent->setText(QString::number(_indent));
 }
 
+qreal ScreenplayTemplateParagraphsView::firstLineIndent() const
+{
+    return d->firstLineIndent->text().toDouble();
+}
+
+void ScreenplayTemplateParagraphsView::setFirstLineIndentIndent(qreal _indent)
+{
+    d->firstLineIndent->setText(QString::number(_indent));
+}
+
 qreal ScreenplayTemplateParagraphsView::rightIndent() const
 {
     return d->rightIndent->text().toDouble();
@@ -783,6 +816,8 @@ void ScreenplayTemplateParagraphsView::updateTranslations()
     d->horizontalIndentationTitle->setText(tr("Horizontal indentation"));
     d->leftIndent->setLabel(tr("Left"));
     d->leftIndent->setSuffix(metricSystem);
+    d->firstLineIndent->setLabel(tr("First line"));
+    d->firstLineIndent->setSuffix(metricSystem);
     d->rightIndent->setLabel(tr("Right"));
     d->rightIndent->setSuffix(metricSystem);
     d->horizontalIndentationInTableTitle->setText(
@@ -848,6 +883,7 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
              d->textAlignmentTitle,
              d->verticalIndentationTitle,
              d->horizontalIndentationTitle,
+             d->horizontalIndentationInTableTitle,
              d->lineSpacingTitle,
          }) {
         title->setTextColor(ColorHelper::transparent(DesignSystem::color().onBackground(),
@@ -875,6 +911,7 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
              d->topIndent,
              d->bottomIndent,
              d->leftIndent,
+             d->firstLineIndent,
              d->rightIndent,
              d->leftIndentInTable,
              d->rightIndentInTable,
@@ -891,6 +928,7 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
              d->topIndent,
              d->bottomIndent,
              d->leftIndent,
+             d->firstLineIndent,
              d->rightIndent,
              d->leftIndentInTable,
              d->rightIndentInTable,

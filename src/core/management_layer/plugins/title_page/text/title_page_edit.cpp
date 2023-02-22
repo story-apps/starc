@@ -10,6 +10,8 @@
 #include <business_layer/model/audioplay/audioplay_title_page_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
+#include <business_layer/model/novel/novel_information_model.h>
+#include <business_layer/model/novel/novel_title_page_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
@@ -18,6 +20,7 @@
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/comic_book_template.h>
+#include <business_layer/templates/novel_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/stageplay_template.h>
@@ -136,6 +139,17 @@ TitlePageEdit::~TitlePageEdit() = default;
 void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
 {
     if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
+        titlePageModel->informationModel()->disconnect(this);
+    } else if (auto titlePageModel
+               = qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(d->model)) {
+        titlePageModel->informationModel()->disconnect(this);
+    } else if (auto titlePageModel
+               = qobject_cast<BusinessLayer::AudioplayTitlePageModel*>(d->model)) {
+        titlePageModel->informationModel()->disconnect(this);
+    } else if (auto titlePageModel
+               = qobject_cast<BusinessLayer::StageplayTitlePageModel*>(d->model)) {
+        titlePageModel->informationModel()->disconnect(this);
+    } else if (auto titlePageModel = qobject_cast<BusinessLayer::NovelTitlePageModel*>(d->model)) {
         titlePageModel->informationModel()->disconnect(this);
     }
 
@@ -270,6 +284,38 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
 
         connect(titlePageModel->informationModel(),
                 &BusinessLayer::StageplayInformationModel::templateIdChanged, this,
+                &TitlePageEdit::reinit);
+    }
+    //
+    // Роман
+    //
+    else if (auto titlePageModel = qobject_cast<BusinessLayer::NovelTitlePageModel*>(d->model)) {
+        auto updateHeader = [this, titlePageModel] {
+            setHeader(titlePageModel->informationModel()->printHeaderOnTitlePage()
+                          ? titlePageModel->informationModel()->header()
+                          : QString());
+        };
+        updateHeader();
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::NovelInformationModel::printHeaderOnTitlePageChanged, this,
+                updateHeader);
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::NovelInformationModel::headerChanged, this, updateHeader);
+
+        auto updateFooter = [this, titlePageModel] {
+            setFooter(titlePageModel->informationModel()->printFooterOnTitlePage()
+                          ? titlePageModel->informationModel()->footer()
+                          : QString());
+        };
+        updateFooter();
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::NovelInformationModel::printFooterOnTitlePageChanged, this,
+                updateFooter);
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::NovelInformationModel::footerChanged, this, updateFooter);
+
+        connect(titlePageModel->informationModel(),
+                &BusinessLayer::NovelInformationModel::templateIdChanged, this,
                 &TitlePageEdit::reinit);
     }
 

@@ -282,6 +282,12 @@ public:
     void setMargins(const QMarginsF& _margins);
 
     /**
+     * @brief Красная строка
+     */
+    qreal firstLineMargin() const;
+    void setFirstLineMargin(qreal _margin);
+
+    /**
      * @brief Отступы вокруг блока в режиме разделения на колонки, мм
      */
     QMarginsF marginsOnHalfPage() const;
@@ -404,6 +410,11 @@ private:
      * @brief Отступы вокруг блока, мм
      */
     QMarginsF m_margins;
+
+    /**
+     * @brief Красная строка
+     */
+    qreal m_firstLineMargin = 0.0;
 
     /**
      * @brief Отступы вокруг блока в режиме разделения на колонки, мм
@@ -545,7 +556,7 @@ public:
     /**
      * @brief Шаблон оформления титульной страницы
      */
-    const TextTemplate& titlePageTemplate() const;
+    virtual const TextTemplate& titlePageTemplate() const;
 
     /**
      * @brief Стандартный текст титульной страницы
@@ -556,7 +567,7 @@ public:
     /**
      * @brief Шаблон оформления синопсиса
      */
-    const TextTemplate& synopsisTemplate() const;
+    virtual const TextTemplate& synopsisTemplate() const;
 
     /**
      * @brief Получить стиль блока

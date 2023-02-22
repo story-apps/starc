@@ -20,7 +20,7 @@ namespace {
 /**
  * @brief Шаблон экспорта
  */
-const ScreenplayTemplate& exportTemplate(const ScreenplayExportOptions& _exportOptions)
+const TextTemplate& exportTemplate(const ScreenplayExportOptions& _exportOptions)
 {
     return TemplatesFacade::screenplayTemplate(_exportOptions.templateId);
 }

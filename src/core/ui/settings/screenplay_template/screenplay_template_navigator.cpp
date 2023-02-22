@@ -54,8 +54,6 @@ ScreenplayTemplateNavigator::ScreenplayTemplateNavigator(QWidget* _parent)
 
     connect(d->mm, &RadioButton::checkedChanged, this,
             &ScreenplayTemplateNavigator::mmCheckedChanged);
-
-    designSystemChangeEvent(nullptr);
 }
 
 void ScreenplayTemplateNavigator::checkMm()

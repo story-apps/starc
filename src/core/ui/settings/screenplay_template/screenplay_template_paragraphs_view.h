@@ -73,6 +73,8 @@ public:
     void setVericalIndentationInLines(bool _inLines);
     qreal leftIndent() const;
     void setLeftIndent(qreal _indent);
+    qreal firstLineIndent() const;
+    void setFirstLineIndentIndent(qreal _indent);
     qreal rightIndent() const;
     void setRightIndent(qreal _indent);
     qreal leftIndentInTable() const;

@@ -4,6 +4,7 @@
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
 #include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/comic_book_template.h>
+#include <business_layer/templates/novel_template.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/stageplay_template.h>
@@ -106,6 +107,8 @@ public:
                 return audioplay;
             } else if (stageplay.isValid()) {
                 return stageplay;
+            } else if (novel.isValid()) {
+                return novel;
             } else {
                 return simpleText;
             }
@@ -116,6 +119,7 @@ public:
         BusinessLayer::ComicBookTemplate comicBook;
         BusinessLayer::AudioplayTemplate audioplay;
         BusinessLayer::StageplayTemplate stageplay;
+        BusinessLayer::NovelTemplate novel;
     } currentTemplate;
 
     /**
@@ -197,6 +201,11 @@ void TemplateOptionsManager::Implementation::prepareViewToEdit(const QString& _t
 
     case Domain::DocumentObjectType::Stageplay: {
         currentTemplate.stageplay = BusinessLayer::TemplatesFacade::stageplayTemplate(_templateId);
+        break;
+    }
+
+    case Domain::DocumentObjectType::Novel: {
+        currentTemplate.novel = BusinessLayer::TemplatesFacade::novelTemplate(_templateId);
         break;
     }
     }
@@ -290,6 +299,7 @@ void TemplateOptionsManager::Implementation::updateParagraphParameters(
         paragraphsView->setVericalIndentationInLines(true);
     }
     paragraphsView->setLeftIndent(mmToCurrentMetrics(paragraphStyle.margins().left()));
+    paragraphsView->setFirstLineIndentIndent(mmToCurrentMetrics(paragraphStyle.firstLineMargin()));
     paragraphsView->setRightIndent(mmToCurrentMetrics(paragraphStyle.margins().right()));
     paragraphsView->setLeftIndentInTable(
         mmToCurrentMetrics(paragraphStyle.marginsOnHalfPage().left()));
@@ -331,6 +341,7 @@ void TemplateOptionsManager::Implementation::saveParagraphParameters(
         margins.setBottom(mmFromCurrentMetrics(paragraphsView->bottomIndent()));
     }
     margins.setLeft(mmFromCurrentMetrics(paragraphsView->leftIndent()));
+    paragraphStyle.setFirstLineMargin(mmFromCurrentMetrics(paragraphsView->firstLineIndent()));
     margins.setRight(mmFromCurrentMetrics(paragraphsView->rightIndent()));
     paragraphStyle.setMargins(margins);
     QMarginsF marginsOnHalfPage = margins;
@@ -376,6 +387,11 @@ void TemplateOptionsManager::Implementation::saveTemplate()
 
     case Domain::DocumentObjectType::Stageplay: {
         BusinessLayer::TemplatesFacade::saveStageplayTemplate(currentTemplate.stageplay);
+        break;
+    }
+
+    case Domain::DocumentObjectType::Novel: {
+        BusinessLayer::TemplatesFacade::saveNovelTemplate(currentTemplate.novel);
         break;
     }
     }

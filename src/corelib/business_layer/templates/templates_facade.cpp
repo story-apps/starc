@@ -90,7 +90,8 @@ public:
     void updateTranslations();
 
     template<typename TemplateType>
-    void loadTemplates(const QString& _templatesDir, const QVector<QString> _templateNames);
+    void loadTemplates(const QString& _templatesDir, const QVector<QString> _templateNames,
+                       bool _saveAdditionalTemplates = true);
 
     template<typename TemplateType>
     void saveTemplate(const QString& _templatesDir, const TemplateType& _template);
@@ -189,7 +190,8 @@ void TemplatesFacade::Implementation::updateTranslations()
 
 template<typename TemplateType>
 void TemplatesFacade::Implementation::loadTemplates(const QString& _templatesDir,
-                                                    const QVector<QString> _templateNames)
+                                                    const QVector<QString> _templateNames,
+                                                    bool _saveAdditionalTemplates)
 {
     //
     // Настроим путь к папке с шаблонами
@@ -249,6 +251,12 @@ void TemplatesFacade::Implementation::loadTemplates(const QString& _templatesDir
         if (!templateInfo.templates.contains(concreteTemplate.id())) {
             templateInfo.templates.insert(concreteTemplate.id(), concreteTemplate);
         }
+
+        auto& simpleTextTemplateInfo = this->templateInfo<SimpleTextTemplate>();
+        simpleTextTemplateInfo.templates[concreteTemplate.titlePageTemplate().id()]
+            = static_cast<const SimpleTextTemplate&>(concreteTemplate.titlePageTemplate());
+        simpleTextTemplateInfo.templates[concreteTemplate.synopsisTemplate().id()]
+            = static_cast<const SimpleTextTemplate&>(concreteTemplate.synopsisTemplate());
     }
 
     //
@@ -432,6 +440,14 @@ const TextTemplate& TemplatesFacade::textTemplate(const TextModel* _model)
     } else if (auto model = qobject_cast<const StageplaySynopsisModel*>(_model)) {
         return stageplayTemplate(model->informationModel()->templateId()).synopsisTemplate();
     }
+    //
+    else if (auto model = qobject_cast<const NovelTextModel*>(_model)) {
+        return novelTemplate(model->informationModel()->templateId());
+    } else if (auto model = qobject_cast<const NovelTitlePageModel*>(_model)) {
+        return novelTemplate(model->informationModel()->templateId()).titlePageTemplate();
+    } else if (auto model = qobject_cast<const NovelSynopsisModel*>(_model)) {
+        return novelTemplate(model->informationModel()->templateId()).synopsisTemplate();
+    }
     return simpleTextTemplate();
 }
 
@@ -570,6 +586,10 @@ TemplatesFacade::~TemplatesFacade() = default;
 TemplatesFacade::TemplatesFacade()
     : d(new Implementation)
 {
+    //
+    // Для простого текста не загружаем дополнительные шаблоны титульной страницы и синопсиса
+    //
+    const bool loadAdditionalTemplates = false;
     d->loadTemplates<SimpleTextTemplate>(kSimpleTextTemplatesDirectory,
                                          {
                                              QLatin1String("mono_cp_a4"),
@@ -577,7 +597,9 @@ TemplatesFacade::TemplatesFacade()
                                              QLatin1String("mono_cp_letter"),
                                              QLatin1String("sans_a4"),
                                              QLatin1String("sans_letter"),
-                                         });
+                                         },
+                                         loadAdditionalTemplates);
+    //
     d->loadTemplates<ScreenplayTemplate>(kScreenplayTemplatesDirectory,
                                          {
                                              QLatin1String("world_cp"),

@@ -21,6 +21,8 @@ const QHash<TextFolderType, QString> kAbstractParagraphFolderToString = {
     { TextFolderType::Undefined, QLatin1String("undefined") },
     { TextFolderType::Act, QLatin1String("act") },
     { TextFolderType::Sequence, QLatin1String("sequence") },
+    { TextFolderType::Part, QLatin1String("part") },
+    { TextFolderType::Chapter, QLatin1String("chapter") },
 };
 
 const QHash<TextGroupType, QString> kAbstractParagraphGroupToString = {
@@ -41,10 +43,16 @@ const QHash<TextParagraphType, QString> kAbstractParagraphTypeToString = {
     { TextParagraphType::Undefined, QLatin1String("undefined") },
     { TextParagraphType::UnformattedText, QLatin1String("unformatted_text") },
     { TextParagraphType::InlineNote, QLatin1String("inline_note") },
+    //
     { TextParagraphType::ActHeading, QLatin1String("act_heading") },
     { TextParagraphType::ActFooter, QLatin1String("act_footer") },
     { TextParagraphType::SequenceHeading, QLatin1String("sequence_heading") },
     { TextParagraphType::SequenceFooter, QLatin1String("sequence_footer") },
+    { TextParagraphType::PartHeading, QLatin1String("part_heading") },
+    { TextParagraphType::PartFooter, QLatin1String("part_footer") },
+    { TextParagraphType::ChapterHeading, QLatin1String("chapter_heading") },
+    { TextParagraphType::ChapterFooter, QLatin1String("chapter_footer") },
+    //
     { TextParagraphType::PageSplitter, QLatin1String("page_splitter") },
     //
     { TextParagraphType::SceneHeading, QLatin1String("scene_heading") },
@@ -130,6 +138,7 @@ QString toDisplayString(TextParagraphType _type)
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Unformatted text");
     case TextParagraphType::InlineNote:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Inline note");
+    //
     case TextParagraphType::ActHeading:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Act");
     case TextParagraphType::ActFooter:
@@ -138,6 +147,14 @@ QString toDisplayString(TextParagraphType _type)
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Sequence");
     case TextParagraphType::SequenceFooter:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Sequence footer");
+    case TextParagraphType::PartHeading:
+        return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Part");
+    case TextParagraphType::PartFooter:
+        return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Part footer");
+    case TextParagraphType::ChapterHeading:
+        return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Chapter");
+    case TextParagraphType::ChapterFooter:
+        return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Chapter footer");
     //
     case TextParagraphType::SceneHeading:
         return QCoreApplication::translate("BusinessLayer::AbstractTemplate", "Scene heading");
@@ -390,25 +407,40 @@ QMarginsF TextBlockStyle::margins() const
 
 void TextBlockStyle::setMargins(const QMarginsF& _margins)
 {
-    if (m_margins.left() != _margins.left()) {
+    if (!qFuzzyCompare(m_margins.left(), _margins.left())) {
         m_margins.setLeft(_margins.left());
         m_blockFormat.setLeftMargin(MeasurementHelper::mmToPx(m_margins.left()));
     }
 
-    if (m_margins.top() != _margins.top()) {
+    if (!qFuzzyCompare(m_margins.top(), _margins.top())) {
         m_margins.setTop(_margins.top());
         updateTopMargin();
     }
 
-    if (m_margins.right() != _margins.right()) {
+    if (!qFuzzyCompare(m_margins.right(), _margins.right())) {
         m_margins.setRight(_margins.right());
         m_blockFormat.setRightMargin(MeasurementHelper::mmToPx(m_margins.right()));
     }
 
-    if (m_margins.bottom() != _margins.bottom()) {
+    if (!qFuzzyCompare(m_margins.bottom(), _margins.bottom())) {
         m_margins.setBottom(_margins.bottom());
         updateBottomMargin();
     }
+}
+
+qreal TextBlockStyle::firstLineMargin() const
+{
+    return m_firstLineMargin;
+}
+
+void TextBlockStyle::setFirstLineMargin(qreal _margin)
+{
+    if (qFuzzyCompare(m_firstLineMargin, _margin)) {
+        return;
+    }
+
+    m_firstLineMargin = _margin;
+    m_blockFormat.setTextIndent(m_firstLineMargin);
 }
 
 QMarginsF TextBlockStyle::marginsOnHalfPage() const
@@ -418,13 +450,13 @@ QMarginsF TextBlockStyle::marginsOnHalfPage() const
 
 void TextBlockStyle::setMarginsOnHalfPage(const QMarginsF& _margins)
 {
-    if (m_marginsOnHalfPage.left() != _margins.left()) {
+    if (!qFuzzyCompare(m_marginsOnHalfPage.left(), _margins.left())) {
         m_marginsOnHalfPage.setLeft(_margins.left());
         m_blockFormatOnHalfPage.setLeftMargin(
             MeasurementHelper::mmToPx(m_marginsOnHalfPage.left()));
     }
 
-    if (m_marginsOnHalfPage.right() != _margins.right()) {
+    if (!qFuzzyCompare(m_marginsOnHalfPage.right(), _margins.right())) {
         m_marginsOnHalfPage.setRight(_margins.right());
         m_blockFormatOnHalfPage.setRightMargin(
             MeasurementHelper::mmToPx(m_marginsOnHalfPage.right()));
@@ -544,6 +576,7 @@ TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
     m_lineSpacing.value = _blockAttributes.value("line_spacing_value").toDouble();
     m_linesBefore = _blockAttributes.value("lines_before").toInt();
     m_margins = marginsFromString(_blockAttributes.value("margins").toString());
+    m_firstLineMargin = _blockAttributes.value("first_line_margin").toDouble();
     m_marginsOnHalfPage
         = marginsFromString(_blockAttributes.value("margins_on_half_page").toString());
     m_linesAfter = _blockAttributes.value("lines_after").toInt();
@@ -559,6 +592,7 @@ TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
     m_blockFormat.setAlignment(m_align);
     m_blockFormat.setLeftMargin(MeasurementHelper::mmToPx(m_margins.left()));
     m_blockFormat.setRightMargin(MeasurementHelper::mmToPx(m_margins.right()));
+    m_blockFormat.setTextIndent(MeasurementHelper::mmToPx(m_firstLineMargin));
     m_blockFormat.setPageBreakPolicy(m_isStartFromNewPage ? QTextFormat::PageBreak_AlwaysBefore
                                                           : QTextFormat::PageBreak_Auto);
     m_blockFormatOnHalfPage.setAlignment(m_align);
@@ -782,8 +816,19 @@ void TextTemplate::Implementation::buildTitlePageTemplate()
         return;
     }
 
+    titlePageTemplate->d->id = id + "#title_page";
     titlePageTemplate->setPageSizeId(pageSizeId);
-    titlePageTemplate->setPageMargins(pageMargins);
+    //
+    // Уравновешиваем поля для титульной страницы
+    //
+    auto titlePageMargins = pageMargins;
+    if (titlePageMargins.left() > titlePageMargins.right()) {
+        titlePageMargins.setLeft(titlePageMargins.right());
+    } else {
+        titlePageMargins.setRight(titlePageMargins.left());
+    }
+    titlePageTemplate->setPageMargins(titlePageMargins);
+    //
     titlePageTemplate->setPageNumbersAlignment(pageNumbersAlignment);
 
     TextBlockStyle defaultBlockStyle = paragraphsStyles.value(defaultParagraphType());
@@ -791,6 +836,7 @@ void TextTemplate::Implementation::buildTitlePageTemplate()
     defaultBlockStyle.setStartFromNewPage(false);
     defaultBlockStyle.setFont(defaultFont());
     defaultBlockStyle.setMargins({});
+    defaultBlockStyle.setFirstLineMargin(0.0);
     defaultBlockStyle.setLinesBefore(0);
     defaultBlockStyle.setLinesAfter(0);
     defaultBlockStyle.setLineSpacingType(TextBlockStyle::LineSpacingType::SingleLineSpacing);
@@ -804,6 +850,7 @@ void TextTemplate::Implementation::buildTitlePageTemplate()
              TextParagraphType::ChapterHeading6,
              TextParagraphType::Text,
              TextParagraphType::InlineNote,
+             TextParagraphType::UnformattedText,
          }) {
         auto blockStyle = defaultBlockStyle;
         blockStyle.setType(type);
@@ -817,6 +864,7 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
         return;
     }
 
+    synopsisTemplate->d->id = id + "#synopsis";
     synopsisTemplate->setPageSizeId(pageSizeId);
     synopsisTemplate->setPageMargins(pageMargins);
     synopsisTemplate->setPageNumbersAlignment(pageNumbersAlignment);
@@ -824,23 +872,23 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
     TextBlockStyle defaultBlockStyle = paragraphsStyles.value(defaultParagraphType());
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
-    defaultBlockStyle.setFont(defaultFont());
-    defaultBlockStyle.setMargins({});
-    defaultBlockStyle.setLinesBefore(1);
-    defaultBlockStyle.setLinesAfter(0);
-    defaultBlockStyle.setLineSpacingType(TextBlockStyle::LineSpacingType::SingleLineSpacing);
     //
     for (auto type : {
              TextParagraphType::Text,
              TextParagraphType::InlineNote,
+             TextParagraphType::UnformattedText,
          }) {
         auto blockStyle = defaultBlockStyle;
         blockStyle.setType(type);
+        blockStyle.updateLineHeight();
         synopsisTemplate->setParagraphStyle(blockStyle);
     }
     //
-    auto headingFont = defaultBlockStyle.font();
+    auto headingBlockStyle = defaultBlockStyle;
+    headingBlockStyle.setFirstLineMargin(0.0);
+    auto headingFont = headingBlockStyle.font();
     headingFont.setBold(true);
+    headingBlockStyle.setFont(headingFont);
     for (auto type : {
              TextParagraphType::ChapterHeading6,
              TextParagraphType::ChapterHeading5,
@@ -849,9 +897,8 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
              TextParagraphType::ChapterHeading2,
              TextParagraphType::ChapterHeading1,
          }) {
-        auto blockStyle = defaultBlockStyle;
+        auto blockStyle = headingBlockStyle;
         blockStyle.setType(type);
-        blockStyle.setFont(headingFont);
         synopsisTemplate->setParagraphStyle(blockStyle);
 
         headingFont.setPixelSize(headingFont.pixelSize() + MeasurementHelper::ptToPx(2));
@@ -1055,6 +1102,7 @@ void TextTemplate::saveToFile(const QString& _filePath) const
         writer.writeAttribute("line_spacing_value", ::toString(blockStyle.lineSpacingValue()));
         writer.writeAttribute("lines_before", ::toString(blockStyle.linesBefore()));
         writer.writeAttribute("margins", ::toString(blockStyle.margins()));
+        writer.writeAttribute("first_line_margin", ::toString(blockStyle.firstLineMargin()));
         writer.writeAttribute("margins_on_half_page", ::toString(blockStyle.marginsOnHalfPage()));
         writer.writeAttribute("lines_after", ::toString(blockStyle.linesAfter()));
         writer.writeAttribute("show_title", ::toString(blockStyle.isTitleVisible()));
