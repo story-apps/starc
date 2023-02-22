@@ -34,6 +34,7 @@ Tree::Implementation::Implementation(QWidget* _parent)
     tree->setHeader(header);
     tree->setHeaderHidden(true);
     tree->setAnimated(true);
+    tree->setAutoScroll(true);
     tree->setMouseTracking(true);
     tree->setFrameShape(QFrame::NoFrame);
     tree->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -338,6 +339,7 @@ void Tree::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->tree->setItemDelegate(nullptr);
     d->tree->setItemDelegate(lastDelegate);
     d->tree->setAnimated(isLeftToRight());
+    d->tree->setAutoScrollMargin(Ui::DesignSystem::treeOneLineItem().height());
 
     d->header->setPalette(palette);
 
