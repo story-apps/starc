@@ -40,7 +40,7 @@ public:
     /**
      * @brief Пересчитать хронометраж элемента и всех детей
      */
-    void updateChildrenDuration(const TextModelItem* _item);
+    void updateChildrenCounters(const TextModelItem* _item);
 
 
     /**
@@ -71,8 +71,8 @@ public:
     /**
      * @brief Количество страниц
      */
-    int treatmentPageCount = 0;
-    int scriptPageCount = 0;
+    int outlinePageCount = 0;
+    int textPageCount = 0;
 
     /**
      * @brief Количество сцен
@@ -90,7 +90,7 @@ TextModelItem* NovelTextModel::Implementation::rootItem() const
     return q->itemForIndex({});
 }
 
-void NovelTextModel::Implementation::updateChildrenDuration(const TextModelItem* _item)
+void NovelTextModel::Implementation::updateChildrenCounters(const TextModelItem* _item)
 {
     if (_item == nullptr) {
         return;
@@ -101,7 +101,7 @@ void NovelTextModel::Implementation::updateChildrenDuration(const TextModelItem*
         switch (childItem->type()) {
         case TextModelItemType::Folder:
         case TextModelItemType::Group: {
-            updateChildrenDuration(childItem);
+            updateChildrenCounters(childItem);
             break;
         }
 
@@ -125,10 +125,8 @@ NovelTextModel::NovelTextModel(QObject* _parent)
     : TextModel(_parent, NovelTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
-    auto updateCounters = [this](const QModelIndex& _index) {
-        updateNumbering();
-        d->updateChildrenDuration(itemForIndex(_index));
-    };
+    auto updateCounters
+        = [this](const QModelIndex& _index) { d->updateChildrenCounters(itemForIndex(_index)); };
     //
     // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
     // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
@@ -493,18 +491,18 @@ void NovelTextModel::updateLocationName(const QString& _oldName, const QString& 
     emit rowsChanged();
 }
 
-int NovelTextModel::treatmentPageCount() const
+int NovelTextModel::outlinePageCount() const
 {
-    return d->treatmentPageCount;
+    return d->outlinePageCount;
 }
 
-void NovelTextModel::setTreatmentPageCount(int _count)
+void NovelTextModel::setOutlinePageCount(int _count)
 {
-    if (d->treatmentPageCount == _count) {
+    if (d->outlinePageCount == _count) {
         return;
     }
 
-    d->treatmentPageCount = _count;
+    d->outlinePageCount = _count;
 
     //
     // Создаём фейковое уведомление, чтобы оповестить клиентов
@@ -512,18 +510,18 @@ void NovelTextModel::setTreatmentPageCount(int _count)
     emit dataChanged(index(0, 0), index(0, 0));
 }
 
-int NovelTextModel::scriptPageCount() const
+int NovelTextModel::textPageCount() const
 {
-    return d->scriptPageCount;
+    return d->textPageCount;
 }
 
-void NovelTextModel::setScriptPageCount(int _count)
+void NovelTextModel::setTextPageCount(int _count)
 {
-    if (d->scriptPageCount == _count) {
+    if (d->textPageCount == _count) {
         return;
     }
 
-    d->scriptPageCount = _count;
+    d->textPageCount = _count;
 
     //
     // Создаём фейковое уведомление, чтобы оповестить клиентов
@@ -546,197 +544,6 @@ QPair<int, int> NovelTextModel::charactersCount() const
     return static_cast<NovelTextModelFolderItem*>(d->rootItem())->charactersCount();
 }
 
-std::map<std::chrono::milliseconds, QColor> NovelTextModel::itemsColors() const
-{
-    std::chrono::milliseconds lastItemDuration{ 0 };
-    std::map<std::chrono::milliseconds, QColor> colors;
-    std::function<void(const TextModelItem*)> collectChildColors;
-    collectChildColors
-        = [&collectChildColors, &lastItemDuration, &colors](const TextModelItem* _item) {
-              for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-                  auto childItem = _item->childAt(childIndex);
-                  switch (childItem->type()) {
-                  case TextModelItemType::Folder: {
-                      collectChildColors(childItem);
-                      break;
-                  }
-
-                  case TextModelItemType::Group: {
-                      const auto sceneItem = static_cast<const NovelTextModelSceneItem*>(childItem);
-                      colors.emplace(lastItemDuration, sceneItem->color());
-                      break;
-                  }
-
-                  default:
-                      break;
-                  }
-              }
-          };
-    collectChildColors(d->rootItem());
-    return colors;
-}
-
-std::map<std::chrono::milliseconds, QColor> NovelTextModel::itemsBookmarks() const
-{
-    std::chrono::milliseconds lastItemDuration{ 0 };
-    std::map<std::chrono::milliseconds, QColor> colors;
-    std::function<void(const TextModelItem*)> collectChildColors;
-    collectChildColors = [&collectChildColors, &lastItemDuration,
-                          &colors](const TextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case TextModelItemType::Folder:
-            case TextModelItemType::Group: {
-                collectChildColors(childItem);
-                break;
-            }
-
-            case TextModelItemType::Text: {
-                const auto textItem = static_cast<const NovelTextModelTextItem*>(childItem);
-                if (textItem->bookmark().has_value() && textItem->bookmark().value().isValid()) {
-                    colors.emplace(lastItemDuration, textItem->bookmark()->color);
-                }
-                break;
-            }
-
-            default:
-                break;
-            }
-        }
-    };
-    collectChildColors(d->rootItem());
-    return colors;
-}
-
-void NovelTextModel::updateNumbering()
-{
-    d->scenesCount = 0;
-    int sceneNumber = 1;
-    int dialogueNumber = 1;
-    QString lastLockedSceneFullNumber;
-    std::function<void(const TextModelItem*)> updateChildNumbering;
-    updateChildNumbering = [this, &sceneNumber, &dialogueNumber, &lastLockedSceneFullNumber,
-                            &updateChildNumbering](const TextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case TextModelItemType::Folder: {
-                updateChildNumbering(childItem);
-                break;
-            }
-
-            case TextModelItemType::Group: {
-                updateChildNumbering(childItem);
-                auto groupItem = static_cast<TextModelGroupItem*>(childItem);
-                if (groupItem->groupType() == TextGroupType::Scene) {
-                    ++d->scenesCount;
-
-                    //
-                    // Если у сцены номер заблокирован, то запоминаем последний заблокированный для
-                    // работы с номерами незаблокированных сцен и сбрасываем счётчик номеров
-                    //
-                    if (groupItem->number().has_value() && groupItem->number()->isLocked) {
-                        lastLockedSceneFullNumber
-                            = groupItem->number()->followNumber + groupItem->number()->value;
-                        sceneNumber = 0;
-                    }
-                    //
-                    // Если у сцены задан кастомный номер, то не меняем его
-                    //
-                    else if (groupItem->number().has_value() && groupItem->number()->isCustom) {
-                        //
-                        // ... но при необходимости переводим счётчик номеров сцен
-                        //
-                        if (groupItem->number()->isEatNumber) {
-                            ++sceneNumber;
-                        }
-                    }
-                    //
-                    // А если номера назначаются автоматически, то задаём очередной номер
-                    //
-                    else {
-                        if (groupItem->setNumber(sceneNumber, lastLockedSceneFullNumber)) {
-                            updateItem(groupItem);
-                            ++sceneNumber;
-                        }
-                    }
-
-                    //
-                    // После того, как номер сформирован, декорируем его
-                    //
-                    groupItem->prepareNumberText("#.");
-                }
-                break;
-            }
-
-            case TextModelItemType::Text: {
-                auto textItem = static_cast<NovelTextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == TextParagraphType::Character
-                    && !textItem->isCorrection()) {
-                    textItem->setNumber(dialogueNumber);
-                    updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole });
-                    ++dialogueNumber;
-                }
-                break;
-            }
-
-            default:
-                break;
-            }
-        }
-    };
-    updateChildNumbering(d->rootItem());
-}
-
-void NovelTextModel::setScenesNumbersLocked(bool _locked)
-{
-    std::function<void(const TextModelItem*)> setSceneNumbersLockedImpl;
-    setSceneNumbersLockedImpl
-        = [this, _locked, &setSceneNumbersLockedImpl](const TextModelItem* _item) {
-              for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-                  auto childItem = _item->childAt(childIndex);
-                  switch (childItem->type()) {
-                  case TextModelItemType::Folder: {
-                      setSceneNumbersLockedImpl(childItem);
-                      break;
-                  }
-
-                  case TextModelItemType::Group: {
-                      auto groupItem = static_cast<TextModelGroupItem*>(childItem);
-                      if (groupItem->groupType() == TextGroupType::Scene) {
-                          if (_locked) {
-                              groupItem->lockNumber();
-                          } else {
-                              groupItem->resetNumber();
-                          }
-                          updateItem(groupItem);
-                      }
-                      break;
-                  }
-
-                  default:
-                      break;
-                  }
-              }
-          };
-    setSceneNumbersLockedImpl(d->rootItem());
-
-    //
-    // Если номера были разблокированы, то нужно сформировать их заново
-    //
-    if (!_locked) {
-        updateNumbering();
-    }
-}
-
-void NovelTextModel::recalculateDuration()
-{
-    emit rowsAboutToBeChanged();
-    d->updateChildrenDuration(d->rootItem());
-    emit rowsChanged();
-}
-
 void NovelTextModel::initEmptyDocument()
 {
     auto sceneHeading = new NovelTextModelTextItem(this);
@@ -748,18 +555,6 @@ void NovelTextModel::initEmptyDocument()
 
 void NovelTextModel::finalizeInitialization()
 {
-    emit rowsAboutToBeChanged();
-    updateNumbering();
-    emit rowsChanged();
-}
-
-ChangeCursor NovelTextModel::applyPatch(const QByteArray& _patch)
-{
-    const auto changeCursor = TextModel::applyPatch(_patch);
-
-    updateNumbering();
-
-    return changeCursor;
 }
 
 } // namespace BusinessLayer

@@ -25,7 +25,7 @@ public:
     /**
      * @brief Отображать ли элементы поэпизодника (true) или текста сценария (false)
      */
-    bool isTreatmentDocument = false;
+    bool isOutlineDocument = false;
 
     /**
      * @brief Отображать ли биты (только для режима сценария, когда isTreatmentDocument == false)
@@ -58,8 +58,8 @@ NovelTextDocument::NovelTextDocument(QObject* _parent)
             return;
         }
 
-        if (d->isTreatmentDocument) {
-            novelModel->setTreatmentPageCount(pageCount());
+        if (d->isOutlineDocument) {
+            novelModel->setOutlinePageCount(pageCount());
 
             //
             // Если включён режим отображения поэпизодника, то обработаем кейс, когда в документе
@@ -70,25 +70,25 @@ NovelTextDocument::NovelTextDocument(QObject* _parent)
                 setParagraphType(TextParagraphType::SceneHeading, TextCursor(this));
             }
         } else {
-            novelModel->setScriptPageCount(pageCount());
+            novelModel->setTextPageCount(pageCount());
         }
     });
 }
 
 NovelTextDocument::~NovelTextDocument() = default;
 
-bool NovelTextDocument::isTreatmentDocument() const
+bool NovelTextDocument::isOutlineDocument() const
 {
-    return d->isTreatmentDocument;
+    return d->isOutlineDocument;
 }
 
-void NovelTextDocument::setTreatmentDocument(bool _treatment)
+void NovelTextDocument::setOutlineDocument(bool _treatment)
 {
-    if (d->isTreatmentDocument == _treatment) {
+    if (d->isOutlineDocument == _treatment) {
         return;
     }
 
-    d->isTreatmentDocument = _treatment;
+    d->isOutlineDocument = _treatment;
 }
 
 bool NovelTextDocument::isBeatsVisible() const
@@ -110,13 +110,13 @@ void NovelTextDocument::setBeatsVisible(bool _visible)
 
 QSet<TextParagraphType> NovelTextDocument::visibleBlocksTypes() const
 {
-    if (d->isTreatmentDocument) {
+    if (d->isOutlineDocument) {
         return {
             TextParagraphType::SceneHeading,      TextParagraphType::SceneHeadingShadowTreatment,
             TextParagraphType::SceneCharacters,   TextParagraphType::BeatHeading,
-            TextParagraphType::BeatHeadingShadow, TextParagraphType::ActHeading,
-            TextParagraphType::ActFooter,         TextParagraphType::SequenceHeading,
-            TextParagraphType::SequenceFooter,
+            TextParagraphType::BeatHeadingShadow, TextParagraphType::PartHeading,
+            TextParagraphType::PartFooter,        TextParagraphType::ChapterHeading,
+            TextParagraphType::ChapterFooter,
         };
     }
 
@@ -136,10 +136,10 @@ QSet<TextParagraphType> NovelTextDocument::visibleBlocksTypes() const
             TextParagraphType::Transition,
             TextParagraphType::InlineNote,
             TextParagraphType::UnformattedText,
-            TextParagraphType::ActHeading,
-            TextParagraphType::ActFooter,
-            TextParagraphType::SequenceHeading,
-            TextParagraphType::SequenceFooter,
+            TextParagraphType::PartHeading,
+            TextParagraphType::PartFooter,
+            TextParagraphType::ChapterHeading,
+            TextParagraphType::ChapterFooter,
             TextParagraphType::PageSplitter,
         };
     }
@@ -157,21 +157,17 @@ QSet<TextParagraphType> NovelTextDocument::visibleBlocksTypes() const
         TextParagraphType::Transition,
         TextParagraphType::InlineNote,
         TextParagraphType::UnformattedText,
-        TextParagraphType::ActHeading,
-        TextParagraphType::ActFooter,
-        TextParagraphType::SequenceHeading,
-        TextParagraphType::SequenceFooter,
+        TextParagraphType::PartHeading,
+        TextParagraphType::PartFooter,
+        TextParagraphType::ChapterHeading,
+        TextParagraphType::ChapterFooter,
         TextParagraphType::PageSplitter,
     };
 }
 
-void NovelTextDocument::setCorrectionOptions(bool _needToCorrectCharactersNames,
-                                             bool _needToCorrectPageBreaks)
+void NovelTextDocument::setCorrectionOptions(bool _needToCorrectPageBreaks)
 {
     QStringList correctionOptions;
-    if (_needToCorrectCharactersNames) {
-        correctionOptions.append("correct-characters-names");
-    }
     if (_needToCorrectPageBreaks) {
         correctionOptions.append("correct-page-breaks");
     }

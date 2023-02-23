@@ -249,21 +249,27 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
             // Подставляем текст для пустых завершающих блоков
             //
             if (blockType == TextParagraphType::ActFooter
-                || blockType == TextParagraphType::SequenceFooter) {
+                || blockType == TextParagraphType::SequenceFooter
+                || blockType == TextParagraphType::PartFooter
+                || blockType == TextParagraphType::ChapterFooter) {
                 if (cursor.block().text().isEmpty()) {
                     auto headerBlock = cursor.block().previous();
                     int openedFolders = 0;
                     while (headerBlock.isValid()) {
                         const auto headerBlockType = TextBlockStyle::forBlock(headerBlock);
                         if (headerBlockType == TextParagraphType::ActHeading
-                            || headerBlockType == TextParagraphType::SequenceHeading) {
+                            || headerBlockType == TextParagraphType::SequenceHeading
+                            || headerBlockType == TextParagraphType::PartHeading
+                            || headerBlockType == TextParagraphType::ChapterHeading) {
                             if (openedFolders > 0) {
                                 --openedFolders;
                             } else {
                                 break;
                             }
                         } else if (headerBlockType == TextParagraphType::ActFooter
-                                   || headerBlockType == TextParagraphType::SequenceFooter) {
+                                   || headerBlockType == TextParagraphType::SequenceFooter
+                                   || headerBlockType == TextParagraphType::PartFooter
+                                   || headerBlockType == TextParagraphType::ChapterFooter) {
                             ++openedFolders;
                         }
 

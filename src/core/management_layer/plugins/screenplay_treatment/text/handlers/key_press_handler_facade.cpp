@@ -33,10 +33,10 @@ public:
     QScopedPointer<SceneHeadingHandler> m_sceneHeaderHandler;
     QScopedPointer<SceneCharactersHandler> m_sceneCharactersHandler;
     QScopedPointer<BeatHeadingHandler> m_beatHeadingHandler;
-    QScopedPointer<SequenceHeadingHandler> m_sequenceHeadingHandler;
-    QScopedPointer<SequenceFooterHandler> m_sequenceFooterHandler;
-    QScopedPointer<ActHeadingHandler> m_actHeadingHandler;
-    QScopedPointer<ActFooterHandler> m_actFooterHandler;
+    QScopedPointer<SequenceHeadingHandler> m_chapterHeadingHandler;
+    QScopedPointer<SequenceFooterHandler> m_chapterFooterHandler;
+    QScopedPointer<ActHeadingHandler> m_partHeadingHandler;
+    QScopedPointer<ActFooterHandler> m_partFooterHandler;
 };
 
 KeyPressHandlerFacade::Implementation::Implementation(Ui::ScreenplayTreatmentEdit* _editor)
@@ -46,10 +46,10 @@ KeyPressHandlerFacade::Implementation::Implementation(Ui::ScreenplayTreatmentEdi
     , m_sceneHeaderHandler(new SceneHeadingHandler(_editor))
     , m_sceneCharactersHandler(new SceneCharactersHandler(_editor))
     , m_beatHeadingHandler(new BeatHeadingHandler(_editor))
-    , m_sequenceHeadingHandler(new SequenceHeadingHandler(_editor))
-    , m_sequenceFooterHandler(new SequenceFooterHandler(_editor))
-    , m_actHeadingHandler(new ActHeadingHandler(_editor))
-    , m_actFooterHandler(new ActFooterHandler(_editor))
+    , m_chapterHeadingHandler(new SequenceHeadingHandler(_editor))
+    , m_chapterFooterHandler(new SequenceFooterHandler(_editor))
+    , m_partHeadingHandler(new ActHeadingHandler(_editor))
+    , m_partFooterHandler(new ActFooterHandler(_editor))
 {
 }
 
@@ -139,19 +139,19 @@ AbstractKeyHandler* KeyPressHandlerFacade::handlerFor(TextParagraphType _type)
     }
 
     case TextParagraphType::SequenceHeading: {
-        return d->m_sequenceHeadingHandler.data();
+        return d->m_chapterHeadingHandler.data();
     }
 
     case TextParagraphType::SequenceFooter: {
-        return d->m_sequenceFooterHandler.data();
+        return d->m_chapterFooterHandler.data();
     }
 
     case TextParagraphType::ActHeading: {
-        return d->m_actHeadingHandler.data();
+        return d->m_partHeadingHandler.data();
     }
 
     case TextParagraphType::ActFooter: {
-        return d->m_actFooterHandler.data();
+        return d->m_partFooterHandler.data();
     }
 
     default: {

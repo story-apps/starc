@@ -172,10 +172,10 @@ const QString kComponentsScreenplayKey = kComponentsGroupKey + QStringLiteral("/
 const QString kComponentsScreenplayAvailableKey
     = kComponentsScreenplayKey + QStringLiteral("/available");
 // ... редактор тритмента
-const QString kComponentsTreatmentEditorKey
+const QString kComponentsScreenplayTreatmentEditorKey
     = kComponentsScreenplayKey + QStringLiteral("/treatment");
-const QString kComponentsTreatmentEditorShortcutsKey
-    = kComponentsTreatmentEditorKey + QStringLiteral("/shortcuts");
+const QString kComponentsScreenplayTreatmentEditorShortcutsKey
+    = kComponentsScreenplayTreatmentEditorKey + QStringLiteral("/shortcuts");
 // ... редактор текста
 const QString kComponentsScreenplayEditorKey = kComponentsScreenplayKey + QStringLiteral("/editor");
 const QString kComponentsScreenplayEditorDefaultTemplateKey
@@ -350,17 +350,29 @@ const QString kComponentsStageplayNavigatorShowSceneTextKey
 const QString kComponentsStageplayNavigatorSceneTextLinesKey
     = kComponentsStageplayNavigatorKey + QStringLiteral("/scene-text-lines");
 //
-// текст
+// роман
 const QString kComponentsNovelKey = kComponentsGroupKey + QStringLiteral("/novel");
 const QString kComponentsNovelAvailableKey = kComponentsNovelKey + QStringLiteral("/available");
+// ... редактор плана
+const QString kComponentsNovelOutlineEditorKey = kComponentsNovelKey + QStringLiteral("/outline");
+const QString kComponentsNovelOutlineEditorShortcutsKey
+    = kComponentsNovelOutlineEditorKey + QStringLiteral("/shortcuts");
 // ... редактор
 const QString kComponentsNovelEditorKey = kComponentsNovelKey + QStringLiteral("/editor");
 const QString kComponentsNovelEditorDefaultTemplateKey
     = kComponentsNovelEditorKey + QStringLiteral("/default-template");
+const QString kComponentsNovelEditorCorrectTextOnPageBreaksKey
+    = kComponentsNovelEditorKey + QStringLiteral("/correct-text-on-page-breaks");
 const QString kComponentsNovelEditorShortcutsKey
     = kComponentsNovelEditorKey + QStringLiteral("/shortcuts");
 // ... навигатор
 const QString kComponentsNovelNavigatorKey = kComponentsNovelKey + QStringLiteral("/navigator");
+const QString kComponentsNovelNavigatorShowBeatsKey
+    = kComponentsNovelNavigatorKey + QStringLiteral("/show-beats");
+const QString kComponentsNovelNavigatorShowBeatsInTreatmentKey
+    = kComponentsNovelNavigatorKey + QStringLiteral("/show-beats-in-treatment");
+const QString kComponentsNovelNavigatorShowBeatsInScreenplayKey
+    = kComponentsNovelNavigatorKey + QStringLiteral("/show-beats-in-screenplay");
 const QString kComponentsNovelNavigatorShowSceneTextKey
     = kComponentsNovelNavigatorKey + QStringLiteral("/show-scene-text");
 const QString kComponentsNovelNavigatorSceneTextLinesKey

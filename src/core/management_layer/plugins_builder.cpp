@@ -221,8 +221,8 @@ const QHash<QString, QString> kMimeToPlugin
         { "application/x-starc/editor/novel/information", "*novelinformationplugin*" },
         { "application/x-starc/editor/novel/parameters", "*novelparametersplugin*" },
         { kNovelTitlePageEditorMime, "*titlepageplugin*" },
-        { kNovelOutlineEditorMime, "*noveltreatmentplugin*" },
-        { kNovelOutlineNavigatorMime, "*noveltreatmentstructureplugin*" },
+        { kNovelOutlineEditorMime, "*noveloutlineplugin*" },
+        { kNovelOutlineNavigatorMime, "*noveloutlinestructureplugin*" },
         { "application/x-starc/editor/novel/treatment-cards", "*noveltreatmentcardsplugin*" },
         { kNovelTextEditorMime, "*noveltextplugin*" },
         { kNovelTextNavigatorMime, "*noveltextstructureplugin*" },
@@ -819,7 +819,9 @@ void PluginsBuilder::reconfigureStageplayNavigator() const
 void PluginsBuilder::reconfigureNovelEditor(const QStringList& _changedSettingsKeys) const
 {
     reconfigurePlugin(kNovelTitlePageEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kNovelOutlineEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kNovelTextEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kNovelTextCardsMime, _changedSettingsKeys);
 }
 
 void PluginsBuilder::reconfigureNovelNavigator() const

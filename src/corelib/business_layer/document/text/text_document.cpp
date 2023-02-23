@@ -1446,7 +1446,9 @@ void TextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
     // Нельзя сменить стиль конечных элементов папок
     //
     if (currentParagraphType == TextParagraphType::ActFooter
-        || currentParagraphType == TextParagraphType::SequenceFooter) {
+        || currentParagraphType == TextParagraphType::SequenceFooter
+        || currentParagraphType == TextParagraphType::PartFooter
+        || currentParagraphType == TextParagraphType::ChapterFooter) {
         return;
     }
 
@@ -1475,7 +1477,9 @@ void TextDocument::cleanParagraphType(const TextCursor& _cursor)
 {
     const auto oldBlockType = TextBlockStyle::forBlock(_cursor.block());
     if (oldBlockType != TextParagraphType::ActHeading
-        && oldBlockType != TextParagraphType::SequenceHeading) {
+        && oldBlockType != TextParagraphType::SequenceHeading
+        && oldBlockType != TextParagraphType::PartHeading
+        && oldBlockType != TextParagraphType::ChapterHeading) {
         return;
     }
 
@@ -1492,7 +1496,9 @@ void TextDocument::cleanParagraphType(const TextCursor& _cursor)
     do {
         const auto currentType = TextBlockStyle::forBlock(cursor.block());
         if (currentType == TextParagraphType::ActFooter
-            || currentType == TextParagraphType::SequenceFooter) {
+            || currentType == TextParagraphType::SequenceFooter
+            || currentType == TextParagraphType::PartFooter
+            || currentType == TextParagraphType::ChapterFooter) {
             if (openedGroups == 0) {
                 cursor.movePosition(QTextCursor::PreviousBlock);
                 cursor.movePosition(QTextCursor::EndOfBlock);
@@ -1572,10 +1578,25 @@ void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
     //
     // Для заголовка папки нужно создать завершение
     //
-    if (_type == TextParagraphType::ActHeading || _type == TextParagraphType::SequenceHeading) {
-        const auto footerStyle = d->documentTemplate().paragraphStyle(
-            _type == TextParagraphType::ActHeading ? TextParagraphType::ActFooter
-                                                   : TextParagraphType::SequenceFooter);
+    if (_type == TextParagraphType::ActHeading || _type == TextParagraphType::SequenceHeading
+        || _type == TextParagraphType::PartHeading || _type == TextParagraphType::ChapterHeading) {
+        const auto footerStyle = d->documentTemplate().paragraphStyle([_type] {
+            switch (_type) {
+            default:
+            case TextParagraphType::ActHeading: {
+                return TextParagraphType::ActFooter;
+            }
+            case TextParagraphType::SequenceHeading: {
+                return TextParagraphType::SequenceFooter;
+            }
+            case TextParagraphType::PartHeading: {
+                return TextParagraphType::PartFooter;
+            }
+            case TextParagraphType::ChapterHeading: {
+                return TextParagraphType::ChapterFooter;
+            }
+            }
+        }());
 
         //
         // Вставляем закрывающий блок после заголовка
@@ -2079,6 +2100,8 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 //
                 needToDeleteParent = textItem->paragraphType() == TextParagraphType::ActFooter
                     || textItem->paragraphType() == TextParagraphType::SequenceFooter
+                    || textItem->paragraphType() == TextParagraphType::PartFooter
+                    || textItem->paragraphType() == TextParagraphType::ChapterFooter
                     || textItem->paragraphType() == TextParagraphType::SceneHeading
                     || textItem->paragraphType() == TextParagraphType::BeatHeading
                     || textItem->paragraphType() == TextParagraphType::PageHeading
@@ -2355,6 +2378,16 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 break;
             }
 
+            case TextParagraphType::PartHeading: {
+                parentItem = d->model->createFolderItem(TextFolderType::Part);
+                break;
+            }
+
+            case TextParagraphType::ChapterHeading: {
+                parentItem = d->model->createFolderItem(TextFolderType::Chapter);
+                break;
+            }
+
             case TextParagraphType::SceneHeading: {
                 parentItem = d->model->createGroupItem(TextGroupType::Scene);
                 break;
@@ -2442,7 +2475,9 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
 
                 auto textItem = static_cast<TextModelTextItem*>(previousTextItem);
                 return textItem->paragraphType() == TextParagraphType::ActFooter
-                    || textItem->paragraphType() == TextParagraphType::SequenceFooter;
+                    || textItem->paragraphType() == TextParagraphType::SequenceFooter
+                    || textItem->paragraphType() == TextParagraphType::PartFooter
+                    || textItem->paragraphType() == TextParagraphType::ChapterFooter;
             }();
 
             //
@@ -2603,7 +2638,11 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                                 if (grandParentChildTextItem->paragraphType()
                                         == TextParagraphType::ActFooter
                                     || grandParentChildTextItem->paragraphType()
-                                        == TextParagraphType::SequenceFooter) {
+                                        == TextParagraphType::SequenceFooter
+                                    || grandParentChildTextItem->paragraphType()
+                                        == TextParagraphType::PartFooter
+                                    || grandParentChildTextItem->paragraphType()
+                                        == TextParagraphType::ChapterFooter) {
                                     break;
                                 }
                             } else if (grandParentChildItem->type() == TextModelItemType::Group) {
@@ -2659,7 +2698,11 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                         if (grandParentChildTextItem->paragraphType()
                                 == TextParagraphType::ActFooter
                             || grandParentChildTextItem->paragraphType()
-                                == TextParagraphType::SequenceFooter) {
+                                == TextParagraphType::SequenceFooter
+                            || grandParentChildTextItem->paragraphType()
+                                == TextParagraphType::PartFooter
+                            || grandParentChildTextItem->paragraphType()
+                                == TextParagraphType::ChapterFooter) {
                             break;
                         }
 

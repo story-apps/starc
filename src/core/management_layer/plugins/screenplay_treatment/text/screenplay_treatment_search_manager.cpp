@@ -60,11 +60,7 @@ TextParagraphType ScreenplayTreatmentSearchManager::Implementation::searchInType
     case 1:
         return TextParagraphType::SceneHeading;
     case 2:
-        return TextParagraphType::Action;
-    case 3:
-        return TextParagraphType::Character;
-    case 4:
-        return TextParagraphType::Dialogue;
+        return TextParagraphType::BeatHeading;
     }
 }
 

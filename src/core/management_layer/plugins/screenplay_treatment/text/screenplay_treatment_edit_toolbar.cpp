@@ -96,7 +96,7 @@ ScreenplayTreatmentEditToolbar::ScreenplayTreatmentEditToolbar(QWidget* _parent)
             &ScreenplayTreatmentEditToolbar::updateTranslations);
     connect(d->fastFormatAction, &QAction::toggled, this,
             &ScreenplayTreatmentEditToolbar::fastFormatPanelVisibleChanged);
-    connect(d->fastFormatAction, &QAction::toggled, [this](bool _checked) {
+    connect(d->fastFormatAction, &QAction::toggled, this, [this](bool _checked) {
         d->paragraphTypeAction->setVisible(!_checked);
         designSystemChangeEvent(nullptr);
     });

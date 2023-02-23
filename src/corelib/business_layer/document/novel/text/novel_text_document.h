@@ -19,8 +19,8 @@ public:
     /**
      * @brief Отображается ли документ как поэпизодник или как сценарий
      */
-    bool isTreatmentDocument() const;
-    void setTreatmentDocument(bool _treatment);
+    bool isOutlineDocument() const;
+    void setOutlineDocument(bool _outline);
 
     /**
      * @brief Отображать ли биты (только для режима сценария, когда isTreatmentDocument == false)
@@ -36,7 +36,7 @@ public:
     /**
      * @brief Настроить необходимость корректировок
      */
-    void setCorrectionOptions(bool _needToCorrectCharactersNames, bool _needToCorrectPageBreaks);
+    void setCorrectionOptions(bool _needToCorrectPageBreaks);
 
     /**
      * @brief Получить номер сцены для заданного блока

@@ -122,7 +122,9 @@ QVariant TextModelFolderItem::data(int _role) const
     case Qt::DecorationRole: {
         return !customIcon().isEmpty()
             ? customIcon()
-            : (d->folderType == TextFolderType::Act ? u8"\U000F0253" : u8"\U000f024b");
+            : (d->folderType == TextFolderType::Act || d->folderType == TextFolderType::Part
+                   ? u8"\U000F0253"
+                   : u8"\U000f024b");
     }
 
     case Qt::DisplayRole:
@@ -218,9 +220,23 @@ QByteArray TextModelFolderItem::toXml(TextModelItem* _from, int _fromPosition, T
 {
     auto folderFooterXml = [this] {
         TextModelTextItem item(model());
-        item.setParagraphType(d->folderType == TextFolderType::Act
-                                  ? TextParagraphType::ActFooter
-                                  : TextParagraphType::SequenceFooter);
+        item.setParagraphType([type = d->folderType] {
+            switch (type) {
+            default:
+            case TextFolderType::Act: {
+                return TextParagraphType::ActFooter;
+            }
+            case TextFolderType::Sequence: {
+                return TextParagraphType::SequenceFooter;
+            }
+            case TextFolderType::Part: {
+                return TextParagraphType::PartFooter;
+            }
+            case TextFolderType::Chapter: {
+                return TextParagraphType::ChapterFooter;
+            }
+            }
+        }());
         return item.toXml();
     };
 
@@ -285,7 +301,9 @@ QByteArray TextModelFolderItem::toXml(TextModelItem* _from, int _fromPosition, T
             // Если папка не была закрыта, добавим корректное завершение для неё
             //
             if (textItem->paragraphType() != TextParagraphType::ActFooter
-                && textItem->paragraphType() != TextParagraphType::SequenceFooter) {
+                && textItem->paragraphType() != TextParagraphType::SequenceFooter
+                && textItem->paragraphType() != TextParagraphType::PartFooter
+                && textItem->paragraphType() != TextParagraphType::ChapterFooter) {
                 xml += folderFooterXml();
             }
             break;

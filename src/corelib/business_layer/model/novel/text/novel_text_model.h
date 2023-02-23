@@ -107,14 +107,14 @@ public:
     /**
      * @brief Количество страниц текста поэпизодника
      */
-    int treatmentPageCount() const;
-    void setTreatmentPageCount(int _count);
+    int outlinePageCount() const;
+    void setOutlinePageCount(int _count);
 
     /**
      * @brief Количество страниц текста сценария
      */
-    int scriptPageCount() const;
-    void setScriptPageCount(int _count);
+    int textPageCount() const;
+    void setTextPageCount(int _count);
 
     /**
      * @brief Количество сцен
@@ -132,31 +132,6 @@ public:
     QPair<int, int> charactersCount() const;
 
     /**
-     * @brief Получить цвета элементов сценария
-     */
-    std::map<std::chrono::milliseconds, QColor> itemsColors() const;
-
-    /**
-     * @brief Получить цвета заладок элементов сценария
-     */
-    std::map<std::chrono::milliseconds, QColor> itemsBookmarks() const;
-
-    /**
-     * @brief Обновить номера сцен и реплик
-     */
-    void updateNumbering();
-
-    /**
-     * @brief Задать блокировку номеров сцен
-     */
-    void setScenesNumbersLocked(bool _locked);
-
-    /**
-     * @brief Пересчитать хронометраж
-     */
-    void recalculateDuration();
-
-    /**
      * @brief Определим список майм типов для модели
      */
     QStringList mimeTypes() const override;
@@ -171,11 +146,6 @@ protected:
      * @brief Донастроить модель после её инициилизации
      */
     void finalizeInitialization() override;
-
-    /**
-     * @brief Добавляем дополнительную логику после применения патча в модели
-     */
-    ChangeCursor applyPatch(const QByteArray& _patch) override;
 
 private:
     class Implementation;

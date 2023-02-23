@@ -252,6 +252,7 @@ bool isTextParagraphAHeading(TextParagraphType _type)
 {
     const QSet<TextParagraphType> headings = {
         TextParagraphType::ActHeading,      TextParagraphType::SequenceHeading,
+        TextParagraphType::PartHeading,     TextParagraphType::ChapterHeading,
         TextParagraphType::SceneHeading,    TextParagraphType::BeatHeading,
         TextParagraphType::PageHeading,     TextParagraphType::PanelHeading,
         TextParagraphType::ChapterHeading1, TextParagraphType::ChapterHeading2,

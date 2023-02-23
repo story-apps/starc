@@ -256,7 +256,11 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
             if (((TextBlockStyle::forBlock(topBlock) == TextParagraphType::ActHeading
                   && TextBlockStyle::forBlock(bottomBlock) == TextParagraphType::ActFooter)
                  || (TextBlockStyle::forBlock(topBlock) == TextParagraphType::SequenceHeading
-                     && TextBlockStyle::forBlock(bottomBlock) == TextParagraphType::SequenceFooter))
+                     && TextBlockStyle::forBlock(bottomBlock) == TextParagraphType::SequenceFooter)
+                 || (TextBlockStyle::forBlock(topBlock) == TextParagraphType::PartHeading
+                     && TextBlockStyle::forBlock(bottomBlock) == TextParagraphType::PartFooter)
+                 || (TextBlockStyle::forBlock(topBlock) == TextParagraphType::ChapterHeading
+                     && TextBlockStyle::forBlock(bottomBlock) == TextParagraphType::ChapterFooter))
                 && topBlock == document()->begin() && bottomBlock == document()->lastBlock()) {
                 //
                 // Нельзя просто взять и удалить весь текст, потому что тогда останется блок
@@ -568,7 +572,11 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
     if (((topParagraphType == TextParagraphType::ActHeading
           && bottomParagraphType == TextParagraphType::ActFooter)
          || (topParagraphType == TextParagraphType::SequenceHeading
-             && bottomParagraphType == TextParagraphType::SequenceFooter))
+             && bottomParagraphType == TextParagraphType::SequenceFooter)
+         || (topParagraphType == TextParagraphType::PartHeading
+             && bottomParagraphType == TextParagraphType::PartFooter)
+         || (topParagraphType == TextParagraphType::ChapterHeading
+             && bottomParagraphType == TextParagraphType::ChapterFooter))
         && topBlock.next() == bottomBlock) {
         if (bottomBlock.next() == document()->end()) {
             cursor.setPosition(topBlock.position());
@@ -771,7 +779,9 @@ TextCursor::FoldersToDelete TextCursor::findFoldersToDelete(int _topCursorPositi
         // Если найден блок открывающий папку, то нужно удалить закрывающий блок
         //
         if (currentType == TextParagraphType::ActHeading
-            || currentType == TextParagraphType::SequenceHeading) {
+            || currentType == TextParagraphType::SequenceHeading
+            || currentType == TextParagraphType::PartHeading
+            || currentType == TextParagraphType::ChapterHeading) {
             //
             // ... если все группы закрыты, нужно удалить последующую закрытую
             //
@@ -789,7 +799,9 @@ TextCursor::FoldersToDelete TextCursor::findFoldersToDelete(int _topCursorPositi
         // Если найден блок закрывающий папку
         //
         else if (currentType == TextParagraphType::ActFooter
-                 || currentType == TextParagraphType::SequenceFooter) {
+                 || currentType == TextParagraphType::SequenceFooter
+                 || currentType == TextParagraphType::PartFooter
+                 || currentType == TextParagraphType::ChapterFooter) {
             //
             // ... если все группы закрыты, нужно удалить предыдущую открытую
             //
@@ -836,7 +848,9 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
         //
         if (const auto cursorParagraphType = TextBlockStyle::forBlock(cursor);
             !isTopBlockShouldBeRemoved || cursorParagraphType == TextParagraphType::ActFooter
-            || cursorParagraphType == TextParagraphType::SequenceFooter) {
+            || cursorParagraphType == TextParagraphType::SequenceFooter
+            || cursorParagraphType == TextParagraphType::PartFooter
+            || cursorParagraphType == TextParagraphType::ChapterFooter) {
             cursor.movePosition(QTextCursor::NextBlock);
         }
 
@@ -848,7 +862,9 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
         do {
             const auto currentType = TextBlockStyle::forBlock(cursor.block());
             if (currentType == TextParagraphType::ActFooter
-                || currentType == TextParagraphType::SequenceFooter) {
+                || currentType == TextParagraphType::SequenceFooter
+                || currentType == TextParagraphType::PartFooter
+                || currentType == TextParagraphType::ChapterFooter) {
                 if (openedGroups == 0) {
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -876,7 +892,9 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
                     --openedGroups;
                 }
             } else if (currentType == TextParagraphType::ActHeading
-                       || currentType == TextParagraphType::SequenceHeading) {
+                       || currentType == TextParagraphType::SequenceHeading
+                       || currentType == TextParagraphType::PartHeading
+                       || currentType == TextParagraphType::ChapterHeading) {
                 //
                 // ... встретилась новая группа, которую не нужно удалять
                 //
@@ -905,7 +923,9 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
         //
         if (const auto cursorParagraphType = TextBlockStyle::forBlock(cursor);
             !isTopBlockShouldBeRemoved || cursorParagraphType == TextParagraphType::ActHeading
-            || cursorParagraphType == TextParagraphType::SequenceHeading) {
+            || cursorParagraphType == TextParagraphType::SequenceHeading
+            || cursorParagraphType == TextParagraphType::PartHeading
+            || cursorParagraphType == TextParagraphType::ChapterHeading) {
             cursor.movePosition(QTextCursor::PreviousBlock);
         }
 
@@ -917,7 +937,9 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
         do {
             const auto currentType = TextBlockStyle::forBlock(cursor.block());
             if (currentType == TextParagraphType::ActHeading
-                || currentType == TextParagraphType::SequenceHeading) {
+                || currentType == TextParagraphType::SequenceHeading
+                || currentType == TextParagraphType::PartHeading
+                || currentType == TextParagraphType::ChapterHeading) {
                 if (openedGroups == 0) {
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -945,7 +967,9 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
                     --openedGroups;
                 }
             } else if (currentType == TextParagraphType::ActFooter
-                       || currentType == TextParagraphType::SequenceFooter) {
+                       || currentType == TextParagraphType::SequenceFooter
+                       || currentType == TextParagraphType::PartFooter
+                       || currentType == TextParagraphType::ChapterFooter) {
                 //
                 // ... встретилась новая группа, которую не нужно удалять
                 //

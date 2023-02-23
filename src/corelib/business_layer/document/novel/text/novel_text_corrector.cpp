@@ -248,7 +248,7 @@ void NovelTextCorrector::Implementation::updateBlocksVisibility(int _from)
     cursor.setPosition(std::max(0, _from));
     bool isTextChanged = false;
 
-    bool isFirstVisibleBlock = cursor.position() == 0;
+    bool isFirstVisibleBlock = cursor.block() == document()->begin();
     bool isFirstBlockAfterInvisible = true;
     auto block = cursor.block();
     while (block.isValid()) {
@@ -330,7 +330,7 @@ void NovelTextCorrector::Implementation::updateBlocksVisibility(int _from)
                     = currentTemplate.paragraphStyle(TextBlockStyle::forBlock(block))
                           .blockFormat(cursor.inTable());
                 blockFormat.setTopMargin(
-                    isFirstVisibleBlock ? 0 : paragraphStyleBlockFormat.topMargin());
+                    /*isFirstVisibleBlock ? 0 :*/ paragraphStyleBlockFormat.topMargin());
                 blockFormat.setBottomMargin(paragraphStyleBlockFormat.bottomMargin());
                 blockFormat.setPageBreakPolicy(isFirstVisibleBlock
                                                    ? QTextFormat::PageBreak_Auto
@@ -818,7 +818,7 @@ void NovelTextCorrector::Implementation::correctPageBreaks(int _position)
             case TextParagraphType::ChapterHeading4:
             case TextParagraphType::ChapterHeading5:
             case TextParagraphType::ChapterHeading6:
-            case TextParagraphType::SequenceHeading: {
+            case TextParagraphType::ChapterHeading: {
                 //
                 // Переносим на следующую страницу
                 //
@@ -832,7 +832,7 @@ void NovelTextCorrector::Implementation::correctPageBreaks(int _position)
             // Конец папки распологаем либо только в конце страницы, либо целиком переносим на
             // следующую страницу
             //
-            case TextParagraphType::SequenceFooter: {
+            case TextParagraphType::ChapterFooter: {
                 //
                 // Если в конце страницы, оставляем как есть
                 //
@@ -1067,10 +1067,10 @@ void NovelTextCorrector::Implementation::moveBlockToNextPage(const QTextBlock& _
         paragraphType = TextParagraphType::BeatHeadingShadow;
         break;
     }
-    case TextParagraphType::ActHeading:
-    case TextParagraphType::ActFooter:
-    case TextParagraphType::SequenceHeading:
-    case TextParagraphType::SequenceFooter: {
+    case TextParagraphType::PartHeading:
+    case TextParagraphType::PartFooter:
+    case TextParagraphType::ChapterHeading:
+    case TextParagraphType::ChapterFooter: {
         paragraphType = TextParagraphType::Action;
         break;
     }

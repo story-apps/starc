@@ -27,6 +27,10 @@ SUBDIRS = \
     stageplay_text_structure \
     novel_information \
     novel_parameters \
+    novel_outline \
+    novel_outline_structure \
+#    novel_text \
+#    novel_text_structure \
     title_page \
     recycle_bin \
     world_information_structure

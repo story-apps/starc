@@ -195,6 +195,10 @@ TextModel::TextModel(QObject* _parent, TextModelFolderItem* _rootItem)
             toString(TextParagraphType::ActFooter),
             toString(TextParagraphType::SequenceHeading),
             toString(TextParagraphType::SequenceFooter),
+            toString(TextParagraphType::PartHeading),
+            toString(TextParagraphType::PartFooter),
+            toString(TextParagraphType::ChapterHeading),
+            toString(TextParagraphType::ChapterFooter),
             toString(TextParagraphType::PageSplitter),
             toString(TextParagraphType::SceneHeading),
             toString(TextParagraphType::SceneCharacters),
@@ -990,7 +994,9 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
                 // папок
                 //
                 if (textItem->paragraphType() == TextParagraphType::ActFooter
-                    || textItem->paragraphType() == TextParagraphType::SequenceFooter) {
+                    || textItem->paragraphType() == TextParagraphType::SequenceFooter
+                    || textItem->paragraphType() == TextParagraphType::PartFooter
+                    || textItem->paragraphType() == TextParagraphType::ChapterFooter) {
                     break;
                 }
 
@@ -1033,6 +1039,8 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
         const auto textItem = static_cast<TextModelTextItem*>(fromItem);
         if (textItem->paragraphType() == TextParagraphType::ActHeading
             || textItem->paragraphType() == TextParagraphType::SequenceHeading
+            || textItem->paragraphType() == TextParagraphType::PartHeading
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading
             || textItem->paragraphType() == TextParagraphType::SceneHeading
             || textItem->paragraphType() == TextParagraphType::BeatHeading
             || textItem->paragraphType() == TextParagraphType::PageHeading
@@ -1161,7 +1169,9 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         if (!isMimeContainsJustOneBlock
             && (textItem->paragraphType() == TextParagraphType::ActFooter
-                || textItem->paragraphType() == TextParagraphType::SequenceFooter)) {
+                || textItem->paragraphType() == TextParagraphType::SequenceFooter
+                || textItem->paragraphType() == TextParagraphType::PartFooter
+                || textItem->paragraphType() == TextParagraphType::ChapterFooter)) {
             //
             // ... то вставляем после папки
             //

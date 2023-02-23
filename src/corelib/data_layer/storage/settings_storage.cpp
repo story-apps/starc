@@ -249,15 +249,15 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsSimpleTextNavigatorSceneTextLinesKey, 1);
     }
     //
-    // Параметры редактора тритмента
+    // Параметры редактора тритмента сценария
     //
     {
         auto addTreatmentEditorStylesAction
             = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
                      TextParagraphType _to) {
                   defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
-                                           .arg(kComponentsTreatmentEditorKey, _actionType,
-                                                toString(_from), _actionKey),
+                                           .arg(kComponentsScreenplayTreatmentEditorKey,
+                                                _actionType, toString(_from), _actionKey),
                                        toString(_to));
               };
         auto addTreatmentEditorStylesActionByTab
@@ -333,10 +333,10 @@ SettingsStorage::Implementation::Implementation()
         //
         auto addShortcut
             = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
-                  defaultValues.insert(
-                      QString("%1/shortcuts/%2")
-                          .arg(kComponentsTreatmentEditorKey, BusinessLayer::toString(_type)),
-                      QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+                  defaultValues.insert(QString("%1/shortcuts/%2")
+                                           .arg(kComponentsScreenplayTreatmentEditorKey,
+                                                BusinessLayer::toString(_type)),
+                                       QKeySequence(_shortcut).toString(QKeySequence::NativeText));
               };
         addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
         addShortcut(BusinessLayer::TextParagraphType::SceneCharacters, "Ctrl+2");
@@ -949,6 +949,95 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsStageplayNavigatorSceneTextLinesKey, 1);
     }
     //
+    // Параметры редактора плана романа
+    //
+    {
+        auto addNovelOutlineEditorStylesAction
+            = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
+                     TextParagraphType _to) {
+                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                           .arg(kComponentsNovelOutlineEditorKey, _actionType,
+                                                toString(_from), _actionKey),
+                                       toString(_to));
+              };
+        auto addNovelOutlineEditorStylesActionByTab
+            = [addNovelOutlineEditorStylesAction](const QString& _actionType,
+                                                  TextParagraphType _from, TextParagraphType _to) {
+                  addNovelOutlineEditorStylesAction(_actionType, "tab", _from, _to);
+              };
+        auto addNovelOutlineEditorStylesActionByEnter
+            = [addNovelOutlineEditorStylesAction](const QString& _actionType,
+                                                  TextParagraphType _from, TextParagraphType _to) {
+                  addNovelOutlineEditorStylesAction(_actionType, "enter", _from, _to);
+              };
+        //
+        auto addNovelOutlineEditorStylesJumpByTab
+            = [addNovelOutlineEditorStylesActionByTab](TextParagraphType _from,
+                                                       TextParagraphType _to) {
+                  addNovelOutlineEditorStylesActionByTab("jumping", _from, _to);
+              };
+        auto addNovelOutlineEditorStylesJumpByEnter
+            = [addNovelOutlineEditorStylesActionByEnter](TextParagraphType _from,
+                                                         TextParagraphType _to) {
+                  addNovelOutlineEditorStylesActionByEnter("jumping", _from, _to);
+              };
+        addNovelOutlineEditorStylesJumpByTab(TextParagraphType::SceneHeading,
+                                             TextParagraphType::BeatHeading);
+        addNovelOutlineEditorStylesJumpByEnter(TextParagraphType::SceneHeading,
+                                               TextParagraphType::BeatHeading);
+        addNovelOutlineEditorStylesJumpByTab(TextParagraphType::BeatHeading,
+                                             TextParagraphType::BeatHeading);
+        addNovelOutlineEditorStylesJumpByEnter(TextParagraphType::BeatHeading,
+                                               TextParagraphType::BeatHeading);
+        addNovelOutlineEditorStylesJumpByTab(TextParagraphType::ChapterHeading,
+                                             TextParagraphType::BeatHeading);
+        addNovelOutlineEditorStylesJumpByEnter(TextParagraphType::ChapterHeading,
+                                               TextParagraphType::SceneHeading);
+        addNovelOutlineEditorStylesJumpByTab(TextParagraphType::PartHeading,
+                                             TextParagraphType::BeatHeading);
+        addNovelOutlineEditorStylesJumpByEnter(TextParagraphType::PartHeading,
+                                               TextParagraphType::ChapterHeading);
+        //
+        auto addNovelOutlineEditorStylesChangeByTab
+            = [addNovelOutlineEditorStylesActionByTab](TextParagraphType _from,
+                                                       TextParagraphType _to) {
+                  addNovelOutlineEditorStylesActionByTab("changing", _from, _to);
+              };
+        auto addNovelOutlineEditorStylesChangeByEnter
+            = [addNovelOutlineEditorStylesActionByEnter](TextParagraphType _from,
+                                                         TextParagraphType _to) {
+                  addNovelOutlineEditorStylesActionByEnter("changing", _from, _to);
+              };
+        addNovelOutlineEditorStylesChangeByTab(TextParagraphType::SceneHeading,
+                                               TextParagraphType::BeatHeading);
+        addNovelOutlineEditorStylesChangeByEnter(TextParagraphType::SceneHeading,
+                                                 TextParagraphType::ChapterHeading);
+        addNovelOutlineEditorStylesChangeByTab(TextParagraphType::BeatHeading,
+                                               TextParagraphType::BeatHeading);
+        addNovelOutlineEditorStylesChangeByEnter(TextParagraphType::BeatHeading,
+                                                 TextParagraphType::SceneHeading);
+        addNovelOutlineEditorStylesChangeByTab(TextParagraphType::ChapterHeading,
+                                               TextParagraphType::SceneHeading);
+        addNovelOutlineEditorStylesChangeByEnter(TextParagraphType::ChapterHeading,
+                                                 TextParagraphType::PartHeading);
+        addNovelOutlineEditorStylesChangeByTab(TextParagraphType::PartHeading,
+                                               TextParagraphType::ChapterHeading);
+        addNovelOutlineEditorStylesChangeByEnter(TextParagraphType::PartHeading,
+                                                 TextParagraphType::PartHeading);
+        //
+        auto addShortcut
+            = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
+                  defaultValues.insert(
+                      QString("%1/shortcuts/%2")
+                          .arg(kComponentsNovelOutlineEditorKey, BusinessLayer::toString(_type)),
+                      QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+              };
+        addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
+        addShortcut(BusinessLayer::TextParagraphType::BeatHeading, "Ctrl+2");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading, "Ctrl+Space");
+        addShortcut(BusinessLayer::TextParagraphType::PartHeading, "Ctrl+Shift+Space");
+    }
+    //
     // Параметры редактора романа
     //
     {
@@ -1064,10 +1153,14 @@ SettingsStorage::Implementation::Implementation()
         //
         defaultValues.insert(kComponentsNovelAvailableKey, true);
         //
-        defaultValues.insert(kComponentsNovelEditorDefaultTemplateKey, "mono_cp_a4");
+        defaultValues.insert(kComponentsNovelEditorDefaultTemplateKey, "manuscript_t_a4");
+        defaultValues.insert(kComponentsNovelEditorCorrectTextOnPageBreaksKey, true);
         //
-        // Параметры навигатора простого текстового документа
+        // Параметры навигатора
         //
+        defaultValues.insert(kComponentsNovelNavigatorShowBeatsKey, true);
+        defaultValues.insert(kComponentsNovelNavigatorShowBeatsInTreatmentKey, true);
+        defaultValues.insert(kComponentsNovelNavigatorShowBeatsInScreenplayKey, false);
         defaultValues.insert(kComponentsNovelNavigatorShowSceneTextKey, true);
         defaultValues.insert(kComponentsNovelNavigatorSceneTextLinesKey, 1);
     }

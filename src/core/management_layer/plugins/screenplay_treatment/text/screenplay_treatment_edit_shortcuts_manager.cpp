@@ -56,7 +56,7 @@ void ScreenplayTreatmentEditShortcutsManager::Implementation::createOrUpdateShor
         return;
     }
 
-    const QKeySequence keySequence(ShortcutsHelper::treatmentShortcut(_forBlockType));
+    const QKeySequence keySequence(ShortcutsHelper::screenplayTreatmentShortcut(_forBlockType));
 
     if (paragraphTypeToShortcut.contains(_forBlockType)) {
         paragraphTypeToShortcut.value(_forBlockType)->setKey(keySequence);
