@@ -27,5 +27,9 @@
         <file alias="montserrat-regular">fonts/montserrat-regular.ttf</file>
         <file alias="sf-movie-poster">fonts/sf-movie-poster.ttf</file>
         <file alias="font-awesome-brands">fonts/font-awesome-6-brands-regular.otf</file>
+        <file>fonts/times-new-roman-bold-italic.ttf</file>
+        <file>fonts/times-new-roman-bold.ttf</file>
+        <file>fonts/times-new-roman-italic.ttf</file>
+        <file>fonts/times-new-roman.ttf</file>
     </qresource>
 </RCC>

@@ -2134,6 +2134,10 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     fontDatabase.addApplicationFont(":/fonts/courier-prime-bold-italic");
     fontDatabase.addApplicationFont(":/fonts/muktamalar-bold");
     fontDatabase.addApplicationFont(":/fonts/muktamalar-regular");
+    fontDatabase.addApplicationFont(":/fonts/times-new-roman");
+    fontDatabase.addApplicationFont(":/fonts/times-new-roman-bold");
+    fontDatabase.addApplicationFont(":/fonts/times-new-roman-italic");
+    fontDatabase.addApplicationFont(":/fonts/times-new-roman-bold-italic");
     //
     fontDatabase.addApplicationFont(":/fonts/montserrat-regular");
     fontDatabase.addApplicationFont(":/fonts/montserrat-bold");
