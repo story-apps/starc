@@ -24,10 +24,10 @@ namespace {
  */
 static TextParagraphType actionFor(bool _tab, bool _jump, TextParagraphType _blockType)
 {
-    const QString settingsKey = QString("comicbook-editor/styles-%1/from-%2-by-%3")
-                                    .arg(_jump ? "jumping" : "changing")
-                                    .arg(BusinessLayer::toString(_blockType))
-                                    .arg(_tab ? "tab" : "enter");
+    const QString settingsKey
+        = QString("%1/styles-%1/from-%2-by-%3")
+              .arg(DataStorageLayer::kComponentsComicBookEditorKey, _jump ? "jumping" : "changing",
+                   BusinessLayer::toString(_blockType), _tab ? "tab" : "enter");
 
     const auto typeString = settingsValue(settingsKey).toString();
 

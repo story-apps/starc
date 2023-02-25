@@ -1,10 +1,9 @@
-#include "simple_text_edit_shortcuts_manager.h"
+#include "novel_text_edit_shortcuts_manager.h"
 
-#include "simple_text_edit.h"
+#include "novel_text_edit.h"
 
-#include <business_layer/templates/simple_text_template.h>
-#include <data_layer/storage/settings_storage.h>
-#include <data_layer/storage/storage_facade.h>
+#include <business_layer/templates/novel_template.h>
+#include <utils/helpers/shortcuts_helper.h>
 
 #include <QShortcut>
 #include <QSignalMapper>
@@ -14,10 +13,10 @@ using BusinessLayer::TextParagraphType;
 
 namespace Ui {
 
-class SimpleTextEditShortcutsManager::Implementation
+class NovelTextEditShortcutsManager::Implementation
 {
 public:
-    explicit Implementation(SimpleTextEdit* _editor);
+    explicit Implementation(NovelTextEdit* _editor);
 
     /**
      * @brief Создать или обновить комбинацию для заданного типа
@@ -29,9 +28,9 @@ public:
     //
 
     /**
-     * @brief Редактор текста
+     * @brief Редактор сценария
      */
-    SimpleTextEdit* textEditor = nullptr;
+    NovelTextEdit* novelEditor = nullptr;
 
     /**
      * @brief Виджет в контексте которого будут активироваться горячие клавиши
@@ -44,31 +43,25 @@ public:
     QHash<TextParagraphType, QShortcut*> paragraphTypeToShortcut;
 };
 
-SimpleTextEditShortcutsManager::Implementation::Implementation(SimpleTextEdit* _editor)
-    : textEditor(_editor)
+NovelTextEditShortcutsManager::Implementation::Implementation(NovelTextEdit* _editor)
+    : novelEditor(_editor)
 {
 }
 
-void SimpleTextEditShortcutsManager::Implementation::createOrUpdateShortcut(
+void NovelTextEditShortcutsManager::Implementation::createOrUpdateShortcut(
     TextParagraphType _forBlockType)
 {
     if (shortcutsContext == nullptr) {
         return;
     }
 
-    const auto blockType = static_cast<TextParagraphType>(_forBlockType);
-    const QString typeShortName = BusinessLayer::toString(blockType);
-    const QString keySequenceText
-        = settingsValue(QString("%1/shortcuts/%2")
-                            .arg(DataStorageLayer::kComponentsSimpleTextEditorKey, typeShortName))
-              .toString();
-    const QKeySequence keySequence(keySequenceText);
+    const QKeySequence keyChapter(ShortcutsHelper::novelShortcut(_forBlockType));
 
     if (paragraphTypeToShortcut.contains(_forBlockType)) {
-        paragraphTypeToShortcut.value(_forBlockType)->setKey(keySequence);
+        paragraphTypeToShortcut.value(_forBlockType)->setKey(keyChapter);
     } else {
         paragraphTypeToShortcut[_forBlockType]
-            = new QShortcut(keySequence, shortcutsContext, 0, 0, Qt::WidgetWithChildrenShortcut);
+            = new QShortcut(keyChapter, shortcutsContext, 0, 0, Qt::WidgetWithChildrenShortcut);
     }
 }
 
@@ -76,16 +69,16 @@ void SimpleTextEditShortcutsManager::Implementation::createOrUpdateShortcut(
 // ****
 
 
-SimpleTextEditShortcutsManager::SimpleTextEditShortcutsManager(SimpleTextEdit* _parent)
+NovelTextEditShortcutsManager::NovelTextEditShortcutsManager(NovelTextEdit* _parent)
     : QObject(_parent)
     , d(new Implementation(_parent))
 {
     Q_ASSERT(_parent);
 }
 
-SimpleTextEditShortcutsManager::~SimpleTextEditShortcutsManager() = default;
+NovelTextEditShortcutsManager::~NovelTextEditShortcutsManager() = default;
 
-void SimpleTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
+void NovelTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
 {
     if (d->shortcutsContext == _context) {
         return;
@@ -97,14 +90,13 @@ void SimpleTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
     //
     // Создаём шорткаты
     //
-    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading1);
-    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading2);
-    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading3);
-    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading4);
-    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading5);
-    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading6);
+    d->createOrUpdateShortcut(TextParagraphType::UnformattedText);
+    d->createOrUpdateShortcut(TextParagraphType::SceneHeading);
+    d->createOrUpdateShortcut(TextParagraphType::BeatHeading);
     d->createOrUpdateShortcut(TextParagraphType::Text);
     d->createOrUpdateShortcut(TextParagraphType::InlineNote);
+    d->createOrUpdateShortcut(TextParagraphType::ChapterHeading);
+    d->createOrUpdateShortcut(TextParagraphType::PartHeading);
 
     //
     // Настраиваем их
@@ -117,28 +109,29 @@ void SimpleTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
         mapper->setMapping(shortcutIter.value(), static_cast<int>(shortcutIter.key()));
     }
     connect(mapper, &QSignalMapper::mappedInt, this, [this](int _value) {
-        d->textEditor->setCurrentParagraphType(static_cast<TextParagraphType>(_value));
+        d->novelEditor->setCurrentParagraphType(static_cast<TextParagraphType>(_value));
     });
 }
 
-void SimpleTextEditShortcutsManager::reconfigure()
+void NovelTextEditShortcutsManager::reconfigure()
 {
     //
     // Обновим сочетания клавиш для всех блоков
     //
-    for (const auto type : d->paragraphTypeToShortcut.keys()) {
-        d->createOrUpdateShortcut(type);
+    for (auto iter = d->paragraphTypeToShortcut.begin(); iter != d->paragraphTypeToShortcut.end();
+         ++iter) {
+        d->createOrUpdateShortcut(iter.key());
     }
 }
 
-void SimpleTextEditShortcutsManager::setEnabled(bool _enabled)
+void NovelTextEditShortcutsManager::setEnabled(bool _enabled)
 {
     for (auto shortcut : d->paragraphTypeToShortcut) {
         shortcut->setEnabled(_enabled);
     }
 }
 
-QString SimpleTextEditShortcutsManager::shortcut(TextParagraphType _forBlockType) const
+QString NovelTextEditShortcutsManager::shortcut(TextParagraphType _forBlockType) const
 {
     if (!d->paragraphTypeToShortcut.contains(_forBlockType)) {
         return {};

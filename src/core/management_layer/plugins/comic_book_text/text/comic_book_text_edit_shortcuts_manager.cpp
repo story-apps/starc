@@ -59,7 +59,9 @@ void ComicBookTextEditShortcutsManager::Implementation::createOrUpdateShortcut(
     const auto blockType = static_cast<TextParagraphType>(_forBlockType);
     const QString typeShortName = BusinessLayer::toString(blockType);
     const QString keySequenceText
-        = settingsValue(QString("comicbook-editor/shortcuts/%1").arg(typeShortName)).toString();
+        = settingsValue(QString("%1/shortcuts/%2")
+                            .arg(DataStorageLayer::kComponentsComicBookEditorKey, typeShortName))
+              .toString();
     const QKeySequence keySequence(keySequenceText);
 
     if (paragraphTypeToShortcut.contains(_forBlockType)) {

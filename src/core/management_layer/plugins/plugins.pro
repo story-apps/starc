@@ -29,7 +29,7 @@ SUBDIRS = \
     novel_parameters \
     novel_outline \
     novel_outline_structure \
-#    novel_text \
+    novel_text \
     novel_text_structure \
     title_page \
     recycle_bin \

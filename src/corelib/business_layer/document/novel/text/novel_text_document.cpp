@@ -112,11 +112,10 @@ QSet<TextParagraphType> NovelTextDocument::visibleBlocksTypes() const
 {
     if (d->isOutlineDocument) {
         return {
-            TextParagraphType::SceneHeading,      TextParagraphType::SceneHeadingShadowTreatment,
-            TextParagraphType::SceneCharacters,   TextParagraphType::BeatHeading,
-            TextParagraphType::BeatHeadingShadow, TextParagraphType::PartHeading,
-            TextParagraphType::PartFooter,        TextParagraphType::ChapterHeading,
-            TextParagraphType::ChapterFooter,
+            TextParagraphType::SceneHeading,   TextParagraphType::SceneHeadingShadowTreatment,
+            TextParagraphType::BeatHeading,    TextParagraphType::BeatHeadingShadow,
+            TextParagraphType::PartHeading,    TextParagraphType::PartFooter,
+            TextParagraphType::ChapterHeading, TextParagraphType::ChapterFooter,
         };
     }
 
@@ -124,37 +123,22 @@ QSet<TextParagraphType> NovelTextDocument::visibleBlocksTypes() const
         return {
             TextParagraphType::SceneHeading,
             TextParagraphType::SceneHeadingShadow,
-            TextParagraphType::SceneCharacters,
             TextParagraphType::BeatHeading,
             TextParagraphType::BeatHeadingShadow,
-            TextParagraphType::Action,
-            TextParagraphType::Character,
-            TextParagraphType::Parenthetical,
-            TextParagraphType::Dialogue,
-            TextParagraphType::Lyrics,
-            TextParagraphType::Shot,
-            TextParagraphType::Transition,
+            TextParagraphType::Text,
             TextParagraphType::InlineNote,
             TextParagraphType::UnformattedText,
             TextParagraphType::PartHeading,
             TextParagraphType::PartFooter,
             TextParagraphType::ChapterHeading,
             TextParagraphType::ChapterFooter,
-            TextParagraphType::PageSplitter,
         };
     }
 
     return {
         TextParagraphType::SceneHeading,
         TextParagraphType::SceneHeadingShadow,
-        TextParagraphType::SceneCharacters,
-        TextParagraphType::Action,
-        TextParagraphType::Character,
-        TextParagraphType::Parenthetical,
-        TextParagraphType::Dialogue,
-        TextParagraphType::Lyrics,
-        TextParagraphType::Shot,
-        TextParagraphType::Transition,
+        TextParagraphType::Text,
         TextParagraphType::InlineNote,
         TextParagraphType::UnformattedText,
         TextParagraphType::PartHeading,

@@ -123,14 +123,13 @@ SettingsStorage::Implementation::Implementation()
     // Параметры редактора текста
     //
     {
-        const QString kSimpleTextEditorKey = "simple-text/editor";
         auto addSimpleTextEditorStylesAction
-            = [this, kSimpleTextEditorKey](const QString& _actionType, const QString& _actionKey,
-                                           TextParagraphType _from, TextParagraphType _to) {
-                  defaultValues.insert(
-                      QString("%1/styles-%2/from-%3-by-%4")
-                          .arg(kSimpleTextEditorKey, _actionType, toString(_from), _actionKey),
-                      toString(_to));
+            = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
+                     TextParagraphType _to) {
+                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                           .arg(kComponentsSimpleTextEditorKey, _actionType,
+                                                toString(_from), _actionKey),
+                                       toString(_to));
               };
         auto addSimpleTextEditorStylesActionByTab
             = [addSimpleTextEditorStylesAction](const QString& _actionType, TextParagraphType _from,
@@ -224,12 +223,13 @@ SettingsStorage::Implementation::Implementation()
         addSimpleTextEditorStylesChangeByEnter(TextParagraphType::InlineNote,
                                                TextParagraphType::InlineNote);
         //
-        auto addShortcut = [this, kSimpleTextEditorKey](BusinessLayer::TextParagraphType _type,
-                                                        const QString& _shortcut) {
-            defaultValues.insert(QString("%1/shortcuts/%2")
-                                     .arg(kSimpleTextEditorKey, BusinessLayer::toString(_type)),
-                                 QKeySequence(_shortcut).toString(QKeySequence::NativeText));
-        };
+        auto addShortcut
+            = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
+                  defaultValues.insert(
+                      QString("%1/shortcuts/%2")
+                          .arg(kComponentsSimpleTextEditorKey, BusinessLayer::toString(_type)),
+                      QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+              };
         addShortcut(BusinessLayer::TextParagraphType::ChapterHeading1, "Ctrl+1");
         addShortcut(BusinessLayer::TextParagraphType::ChapterHeading2, "Ctrl+2");
         addShortcut(BusinessLayer::TextParagraphType::ChapterHeading3, "Ctrl+3");
@@ -339,8 +339,8 @@ SettingsStorage::Implementation::Implementation()
                                        QKeySequence(_shortcut).toString(QKeySequence::NativeText));
               };
         addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
+        addShortcut(BusinessLayer::TextParagraphType::BeatHeading, "Ctrl+Shift+1");
         addShortcut(BusinessLayer::TextParagraphType::SceneCharacters, "Ctrl+2");
-        addShortcut(BusinessLayer::TextParagraphType::BeatHeading, "Ctrl+3");
         addShortcut(BusinessLayer::TextParagraphType::SequenceHeading, "Ctrl+Space");
         addShortcut(BusinessLayer::TextParagraphType::ActHeading, "Ctrl+Shift+Space");
     }
@@ -484,11 +484,11 @@ SettingsStorage::Implementation::Implementation()
         addScreenplayEditorStylesChangeByEnter(TextParagraphType::InlineNote,
                                                TextParagraphType::InlineNote);
         addScreenplayEditorStylesChangeByTab(TextParagraphType::SequenceHeading,
-                                             TextParagraphType::SequenceHeading);
+                                             TextParagraphType::SceneHeading);
         addScreenplayEditorStylesChangeByEnter(TextParagraphType::SequenceHeading,
-                                               TextParagraphType::SequenceHeading);
+                                               TextParagraphType::ActHeading);
         addScreenplayEditorStylesChangeByTab(TextParagraphType::ActHeading,
-                                             TextParagraphType::ActHeading);
+                                             TextParagraphType::SequenceHeading);
         addScreenplayEditorStylesChangeByEnter(TextParagraphType::ActHeading,
                                                TextParagraphType::ActHeading);
         //
@@ -501,8 +501,8 @@ SettingsStorage::Implementation::Implementation()
               };
         addShortcut(BusinessLayer::TextParagraphType::UnformattedText, "Ctrl+0");
         addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
-        addShortcut(BusinessLayer::TextParagraphType::SceneCharacters, "Ctrl+2");
         addShortcut(BusinessLayer::TextParagraphType::BeatHeading, "Ctrl+Shift+1");
+        addShortcut(BusinessLayer::TextParagraphType::SceneCharacters, "Ctrl+2");
         addShortcut(BusinessLayer::TextParagraphType::Action, "Ctrl+3");
         addShortcut(BusinessLayer::TextParagraphType::Character, "Ctrl+4");
         addShortcut(BusinessLayer::TextParagraphType::Parenthetical, "Ctrl+5");
@@ -570,14 +570,13 @@ SettingsStorage::Implementation::Implementation()
     // Параметры редактора комикса
     //
     {
-        const QString kComicBookEditorKey = "comicbook-editor";
         auto addComicBookEditorStylesAction
-            = [this, kComicBookEditorKey](const QString& _actionType, const QString& _actionKey,
-                                          TextParagraphType _from, TextParagraphType _to) {
-                  defaultValues.insert(
-                      QString("%1/styles-%2/from-%3-by-%4")
-                          .arg(kComicBookEditorKey, _actionType, toString(_from), _actionKey),
-                      toString(_to));
+            = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
+                     TextParagraphType _to) {
+                  defaultValues.insert(QString("%1/styles-%2/from-%3-by-%4")
+                                           .arg(kComponentsComicBookEditorKey, _actionType,
+                                                toString(_from), _actionKey),
+                                       toString(_to));
               };
         auto addComicBookEditorStylesActionByTab
             = [addComicBookEditorStylesAction](const QString& _actionType, TextParagraphType _from,
@@ -666,12 +665,13 @@ SettingsStorage::Implementation::Implementation()
         addComicBookEditorStylesChangeByEnter(TextParagraphType::InlineNote,
                                               TextParagraphType::InlineNote);
         //
-        auto addShortcut = [this, kComicBookEditorKey](BusinessLayer::TextParagraphType _type,
-                                                       const QString& _shortcut) {
-            defaultValues.insert(
-                QString("%1/shortcuts/%2").arg(kComicBookEditorKey, BusinessLayer::toString(_type)),
-                QKeySequence(_shortcut).toString(QKeySequence::NativeText));
-        };
+        auto addShortcut
+            = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
+                  defaultValues.insert(
+                      QString("%1/shortcuts/%2")
+                          .arg(kComponentsComicBookEditorKey, BusinessLayer::toString(_type)),
+                      QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+              };
         addShortcut(BusinessLayer::TextParagraphType::UnformattedText, "Ctrl+0");
         addShortcut(BusinessLayer::TextParagraphType::PageHeading, "Ctrl+1");
         addShortcut(BusinessLayer::TextParagraphType::PanelHeading, "Ctrl+2");
@@ -1033,7 +1033,7 @@ SettingsStorage::Implementation::Implementation()
                       QKeySequence(_shortcut).toString(QKeySequence::NativeText));
               };
         addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
-        addShortcut(BusinessLayer::TextParagraphType::BeatHeading, "Ctrl+2");
+        addShortcut(BusinessLayer::TextParagraphType::BeatHeading, "Ctrl+Shift+1");
         addShortcut(BusinessLayer::TextParagraphType::ChapterHeading, "Ctrl+Space");
         addShortcut(BusinessLayer::TextParagraphType::PartHeading, "Ctrl+Shift+Space");
     }
@@ -1041,13 +1041,12 @@ SettingsStorage::Implementation::Implementation()
     // Параметры редактора романа
     //
     {
-        const QString kNovelEditorKey = "novel/editor";
         auto addNovelEditorStylesAction
-            = [this, kNovelEditorKey](const QString& _actionType, const QString& _actionKey,
-                                      TextParagraphType _from, TextParagraphType _to) {
+            = [this](const QString& _actionType, const QString& _actionKey, TextParagraphType _from,
+                     TextParagraphType _to) {
                   defaultValues.insert(
                       QString("%1/styles-%2/from-%3-by-%4")
-                          .arg(kNovelEditorKey, _actionType, toString(_from), _actionKey),
+                          .arg(kComponentsNovelEditorKey, _actionType, toString(_from), _actionKey),
                       toString(_to));
               };
         auto addNovelEditorStylesActionByTab
@@ -1069,33 +1068,26 @@ SettingsStorage::Implementation::Implementation()
             = [addNovelEditorStylesActionByEnter](TextParagraphType _from, TextParagraphType _to) {
                   addNovelEditorStylesActionByEnter("jumping", _from, _to);
               };
-        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading1,
-                                      TextParagraphType::ChapterHeading2);
-        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading1,
-                                        TextParagraphType::Text);
-        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading2,
-                                      TextParagraphType::ChapterHeading3);
-        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading2,
-                                        TextParagraphType::Text);
-        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading3,
-                                      TextParagraphType::ChapterHeading4);
-        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading3,
-                                        TextParagraphType::Text);
-        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading4,
-                                      TextParagraphType::ChapterHeading5);
-        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading4,
-                                        TextParagraphType::Text);
-        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading5,
-                                      TextParagraphType::ChapterHeading6);
-        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading5,
-                                        TextParagraphType::Text);
-        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading6, TextParagraphType::Text);
-        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading6,
-                                        TextParagraphType::Text);
+        addNovelEditorStylesJumpByTab(TextParagraphType::UnformattedText,
+                                      TextParagraphType::UnformattedText);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::UnformattedText,
+                                        TextParagraphType::UnformattedText);
+        addNovelEditorStylesJumpByTab(TextParagraphType::SceneHeading, TextParagraphType::Text);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::SceneHeading, TextParagraphType::Text);
+        addNovelEditorStylesJumpByTab(TextParagraphType::BeatHeading, TextParagraphType::Text);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::BeatHeading, TextParagraphType::Text);
         addNovelEditorStylesJumpByTab(TextParagraphType::Text, TextParagraphType::Text);
         addNovelEditorStylesJumpByEnter(TextParagraphType::Text, TextParagraphType::Text);
         addNovelEditorStylesJumpByTab(TextParagraphType::InlineNote, TextParagraphType::Text);
         addNovelEditorStylesJumpByEnter(TextParagraphType::InlineNote, TextParagraphType::Text);
+        addNovelEditorStylesJumpByTab(TextParagraphType::ChapterHeading,
+                                      TextParagraphType::SceneHeading);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::ChapterHeading,
+                                        TextParagraphType::SceneHeading);
+        addNovelEditorStylesJumpByTab(TextParagraphType::PartHeading,
+                                      TextParagraphType::ChapterHeading);
+        addNovelEditorStylesJumpByEnter(TextParagraphType::PartHeading,
+                                        TextParagraphType::SceneHeading);
         //
         auto addNovelEditorStylesChangeByTab
             = [addNovelEditorStylesActionByTab](TextParagraphType _from, TextParagraphType _to) {
@@ -1105,51 +1097,44 @@ SettingsStorage::Implementation::Implementation()
             = [addNovelEditorStylesActionByEnter](TextParagraphType _from, TextParagraphType _to) {
                   addNovelEditorStylesActionByEnter("changing", _from, _to);
               };
-        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading1,
-                                        TextParagraphType::ChapterHeading2);
-        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading1,
-                                          TextParagraphType::ChapterHeading1);
-        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading2,
-                                        TextParagraphType::ChapterHeading3);
-        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading2,
-                                          TextParagraphType::ChapterHeading1);
-        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading3,
-                                        TextParagraphType::ChapterHeading4);
-        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading3,
-                                          TextParagraphType::ChapterHeading2);
-        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading4,
-                                        TextParagraphType::ChapterHeading5);
-        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading4,
-                                          TextParagraphType::ChapterHeading3);
-        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading5,
-                                        TextParagraphType::ChapterHeading6);
-        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading5,
-                                          TextParagraphType::ChapterHeading4);
-        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading6,
-                                        TextParagraphType::Text);
-        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading6,
-                                          TextParagraphType::ChapterHeading5);
-        addNovelEditorStylesChangeByTab(TextParagraphType::Text, TextParagraphType::InlineNote);
-        addNovelEditorStylesChangeByEnter(TextParagraphType::Text,
-                                          TextParagraphType::ChapterHeading6);
-        addNovelEditorStylesChangeByTab(TextParagraphType::InlineNote, TextParagraphType::Text);
+        addNovelEditorStylesChangeByTab(TextParagraphType::UnformattedText,
+                                        TextParagraphType::UnformattedText);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::UnformattedText,
+                                          TextParagraphType::UnformattedText);
+        addNovelEditorStylesChangeByTab(TextParagraphType::SceneHeading, TextParagraphType::Text);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::SceneHeading,
+                                          TextParagraphType::ChapterHeading);
+        addNovelEditorStylesChangeByTab(TextParagraphType::BeatHeading, TextParagraphType::Text);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::BeatHeading, TextParagraphType::Text);
+        addNovelEditorStylesChangeByTab(TextParagraphType::Text, TextParagraphType::Text);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::Text, TextParagraphType::SceneHeading);
+        addNovelEditorStylesChangeByTab(TextParagraphType::InlineNote,
+                                        TextParagraphType::InlineNote);
         addNovelEditorStylesChangeByEnter(TextParagraphType::InlineNote,
                                           TextParagraphType::InlineNote);
+        addNovelEditorStylesChangeByTab(TextParagraphType::ChapterHeading,
+                                        TextParagraphType::SceneHeading);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::ChapterHeading,
+                                          TextParagraphType::PartHeading);
+        addNovelEditorStylesChangeByTab(TextParagraphType::PartHeading,
+                                        TextParagraphType::ChapterHeading);
+        addNovelEditorStylesChangeByEnter(TextParagraphType::PartHeading,
+                                          TextParagraphType::PartHeading);
         //
-        auto addShortcut = [this, kNovelEditorKey](BusinessLayer::TextParagraphType _type,
-                                                   const QString& _shortcut) {
-            defaultValues.insert(
-                QString("%1/shortcuts/%2").arg(kNovelEditorKey, BusinessLayer::toString(_type)),
-                QKeySequence(_shortcut).toString(QKeySequence::NativeText));
-        };
-        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading1, "Ctrl+1");
-        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading2, "Ctrl+2");
-        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading3, "Ctrl+3");
-        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading4, "Ctrl+4");
-        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading5, "Ctrl+5");
-        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading6, "Ctrl+6");
-        addShortcut(BusinessLayer::TextParagraphType::Text, "Ctrl+7");
+        auto addShortcut
+            = [this](BusinessLayer::TextParagraphType _type, const QString& _shortcut) {
+                  defaultValues.insert(
+                      QString("%1/shortcuts/%2")
+                          .arg(kComponentsNovelEditorKey, BusinessLayer::toString(_type)),
+                      QKeySequence(_shortcut).toString(QKeySequence::NativeText));
+              };
+        addShortcut(BusinessLayer::TextParagraphType::UnformattedText, "Ctrl+0");
+        addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
+        addShortcut(BusinessLayer::TextParagraphType::BeatHeading, "Ctrl+Shift+1");
+        addShortcut(BusinessLayer::TextParagraphType::Text, "Ctrl+2");
         addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        addShortcut(BusinessLayer::TextParagraphType::ChapterHeading, "Ctrl+Space");
+        addShortcut(BusinessLayer::TextParagraphType::PartHeading, "Ctrl+Shift+Space");
         //
         defaultValues.insert(kComponentsNovelAvailableKey, true);
         //

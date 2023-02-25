@@ -25,8 +25,9 @@ namespace {
 static TextParagraphType actionFor(bool _tab, bool _jump, TextParagraphType _blockType)
 {
     const QString settingsKey
-        = QString("simple-text/editor/styles-%1/from-%2-by-%3")
-              .arg((_jump ? "jumping" : "changing"), BusinessLayer::toString(_blockType),
+        = QString("%1/styles-%2/from-%3-by-%4")
+              .arg(DataStorageLayer::kComponentsSimpleTextEditorKey,
+                   (_jump ? "jumping" : "changing"), BusinessLayer::toString(_blockType),
                    (_tab ? "tab" : "enter"));
 
     const auto typeString = settingsValue(settingsKey).toString();

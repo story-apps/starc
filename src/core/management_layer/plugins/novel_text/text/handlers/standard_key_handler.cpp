@@ -1,10 +1,10 @@
 #include "standard_key_handler.h"
 
-#include "../simple_text_edit.h"
+#include "../novel_text_edit.h"
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
-#include <business_layer/templates/simple_text_template.h>
+#include <business_layer/templates/novel_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
@@ -13,7 +13,7 @@
 
 using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
-using Ui::SimpleTextEdit;
+using Ui::NovelTextEdit;
 
 
 namespace KeyProcessingLayer {
@@ -26,12 +26,9 @@ static TextParagraphType actionFor(bool _tab, bool _jump, TextParagraphType _blo
 {
     const QString settingsKey
         = QString("%1/styles-%2/from-%3-by-%4")
-              .arg(DataStorageLayer::kComponentsSimpleTextEditorKey,
-                   (_jump ? "jumping" : "changing"), BusinessLayer::toString(_blockType),
-                   (_tab ? "tab" : "enter"));
-
+              .arg(DataStorageLayer::kComponentsNovelEditorKey, (_jump ? "jumping" : "changing"),
+                   BusinessLayer::toString(_blockType), (_tab ? "tab" : "enter"));
     const auto typeString = settingsValue(settingsKey).toString();
-
     return BusinessLayer::textParagraphTypeFromString(typeString);
 }
 
@@ -47,7 +44,7 @@ const bool kChange = false;
 } // namespace
 
 
-StandardKeyHandler::StandardKeyHandler(Ui::SimpleTextEdit* _editor)
+StandardKeyHandler::StandardKeyHandler(Ui::NovelTextEdit* _editor)
     : AbstractKeyHandler(_editor)
 {
 }
@@ -292,7 +289,16 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
         bestXDelta = xDelta;
     }
 
-    editor()->setTextCursor(cursor);
+    editor()->setTextCursorForced(cursor);
+
+    //
+    // Если курсор в абзаце с таблицей, а под таблицей ничего нет, то добавим блок вниз,
+    //
+    if (cursor.atEnd()
+        && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::PageSplitter) {
+        cursor.movePosition(QTextCursor::PreviousBlock);
+        editor()->addParagraph(TextParagraphType::Action);
+    }
 }
 
 void StandardKeyHandler::handlePageUp(QKeyEvent* _event)
@@ -333,15 +339,41 @@ void StandardKeyHandler::handleOther(QKeyEvent*)
 void StandardKeyHandler::removeCharacters(bool _backward)
 {
     BusinessLayer::TextCursor cursor = editor()->textCursor();
-    if (cursor.hasSelection()) {
-        cursor.removeSelectedText();
-    } else {
-        if (_backward) {
-            cursor.deletePreviousChar();
-        } else {
-            cursor.deleteChar();
-        }
+
+    //
+    // TODO: При удалении заголовка сцены бекспейсом, нужно удалить все его биты и текст
+    // присоединить к тексту предыдущей сцены
+    //
+
+    //
+    // Если пользователь нажимает Backspace в начале первого блока бита и он при этом скрыт,
+    // то удаляем полностью блок с заголовком предшествующего бита
+    //
+    if (!cursor.atStart() && !cursor.hasSelection() && cursor.positionInBlock() == 0 && _backward
+        && !cursor.block().previous().isVisible()
+        && TextBlockStyle::forBlock(cursor.block().previous()) == TextParagraphType::BeatHeading) {
+        cursor.movePosition(QTextCursor::PreviousBlock);
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+        editor()->setTextCursorForced(cursor);
     }
+    //
+    // Если пользователь нажал Delete в конце непустого абзаца и при этом после текущего абзаца идёт
+    // блок с заголовком бита, то удаляем блок заголовка бита
+    //
+    else if (!cursor.atEnd() && !cursor.hasSelection() && !cursor.block().text().isEmpty()
+             && cursor.positionInBlock() == cursor.block().text().length() && !_backward
+             && !cursor.block().next().isVisible()
+             && TextBlockStyle::forBlock(cursor.block().next()) == TextParagraphType::BeatHeading) {
+        cursor.movePosition(QTextCursor::NextBlock);
+        cursor.movePosition(QTextCursor::EndOfBlock);
+        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+        editor()->setTextCursorForced(cursor);
+    }
+
+    cursor.removeCharacters(_backward, editor());
 }
 
 } // namespace KeyProcessingLayer

@@ -1,5 +1,7 @@
 #include "novel_text_corrector.h"
 
+#include "novel_text_document.h"
+
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/text/text_model_item.h>
@@ -241,6 +243,12 @@ QTextDocument* NovelTextCorrector::Implementation::document() const
 void NovelTextCorrector::Implementation::updateBlocksVisibility(int _from)
 {
     //
+    // Сформируем список типов блоков для отображения
+    //
+    auto screenplayDocument = qobject_cast<NovelTextDocument*>(document());
+    const auto visibleBlocksTypes = screenplayDocument->visibleBlocksTypes();
+
+    //
     // Пробегаем документ и настраиваем видимые и невидимые блоки в соответствии с шаблоном
     //
     const auto& currentTemplate = TemplatesFacade::novelTemplate(q->templateId());
@@ -265,12 +273,12 @@ void NovelTextCorrector::Implementation::updateBlocksVisibility(int _from)
         //
         // При необходимости корректируем видимость блока
         //
-        const auto isBlockShouldBeVisible = [this, block] {
+        const auto isBlockShouldBeVisible = [this, block, blockType, visibleBlocksTypes] {
             //
-            // Если не задан верхнеуровневый видимый элемент, то покажем
+            // Если не задан верхнеуровневый видимый элемент, то смотрим только по типам
             //
             if (q->visibleTopLevelItem() == nullptr) {
-                return true;
+                return visibleBlocksTypes.contains(blockType);
             }
 
             //
@@ -284,9 +292,9 @@ void NovelTextCorrector::Implementation::updateBlocksVisibility(int _from)
             }
 
             //
-            // А если является дитём, то покажем
+            // А если является дитём, то смотрим опять же по типам
             //
-            return true;
+            return visibleBlocksTypes.contains(blockType);
         }();
         //
         // Корректируем параметры в кейсах
@@ -330,7 +338,7 @@ void NovelTextCorrector::Implementation::updateBlocksVisibility(int _from)
                     = currentTemplate.paragraphStyle(TextBlockStyle::forBlock(block))
                           .blockFormat(cursor.inTable());
                 blockFormat.setTopMargin(
-                    /*isFirstVisibleBlock ? 0 :*/ paragraphStyleBlockFormat.topMargin());
+                    isFirstVisibleBlock ? 0 : paragraphStyleBlockFormat.topMargin());
                 blockFormat.setBottomMargin(paragraphStyleBlockFormat.bottomMargin());
                 blockFormat.setPageBreakPolicy(isFirstVisibleBlock
                                                    ? QTextFormat::PageBreak_Auto
