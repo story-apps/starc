@@ -1,7 +1,7 @@
-#include "novel_outline_structure_manager.h"
+#include "novel_text_structure_manager.h"
 
-#include "business_layer/novel_outline_structure_model.h"
-#include "ui/novel_outline_structure_view.h"
+#include "business_layer/novel_text_structure_model.h"
+#include "ui/novel_text_structure_view.h"
 
 #include <business_layer/model/novel/novel_information_model.h>
 #include <business_layer/model/novel/text/novel_text_model.h>
@@ -14,7 +14,6 @@
 #include <ui/widgets/context_menu/context_menu.h>
 
 #include <QAction>
-#include <QTimer>
 #include <QWidgetAction>
 
 #include <optional>
@@ -22,7 +21,7 @@
 
 namespace ManagementLayer {
 
-class NovelOutlineStructureManager::Implementation
+class NovelTextStructureManager::Implementation
 {
 public:
     explicit Implementation();
@@ -30,7 +29,7 @@ public:
     /**
      * @brief Создать представление
      */
-    Ui::NovelOutlineStructureView* createView();
+    Ui::NovelTextStructureView* createView();
 
     /**
      * @brief Настроить контекстное меню
@@ -54,12 +53,12 @@ public:
     /**
      * @brief Модель отображения структуры сценария
      */
-    BusinessLayer::NovelOutlineStructureModel* structureModel = nullptr;
+    BusinessLayer::NovelTextStructureModel* structureModel = nullptr;
 
     /**
      * @brief Предаставление для основного окна
      */
-    Ui::NovelOutlineStructureView* view = nullptr;
+    Ui::NovelTextStructureView* view = nullptr;
 
     /**
      * @brief Контекстное меню для элементов навигатора
@@ -69,23 +68,22 @@ public:
     /**
      * @brief Все созданные представления
      */
-    QVector<Ui::NovelOutlineStructureView*> allViews;
+    QVector<Ui::NovelTextStructureView*> allViews;
 };
 
-NovelOutlineStructureManager::Implementation::Implementation()
+NovelTextStructureManager::Implementation::Implementation()
 {
     view = createView();
     contextMenu = new ContextMenu(view);
 }
 
-Ui::NovelOutlineStructureView* NovelOutlineStructureManager::Implementation::createView()
+Ui::NovelTextStructureView* NovelTextStructureManager::Implementation::createView()
 {
-    allViews.append(new Ui::NovelOutlineStructureView);
+    allViews.append(new Ui::NovelTextStructureView);
     return allViews.last();
 }
 
-void NovelOutlineStructureManager::Implementation::updateContextMenu(
-    const QModelIndexList& _indexes)
+void NovelTextStructureManager::Implementation::updateContextMenu(const QModelIndexList& _indexes)
 {
     if (_indexes.isEmpty()) {
         return;
@@ -213,15 +211,15 @@ void NovelOutlineStructureManager::Implementation::updateContextMenu(
 // ****
 
 
-NovelOutlineStructureManager::NovelOutlineStructureManager(QObject* _parent)
+NovelTextStructureManager::NovelTextStructureManager(QObject* _parent)
     : QObject(_parent)
     , d(new Implementation)
 {
-    connect(d->view, &Ui::NovelOutlineStructureView::currentModelIndexChanged, this,
+    connect(d->view, &Ui::NovelTextStructureView::currentModelIndexChanged, this,
             [this](const QModelIndex& _index) {
                 emit currentModelIndexChanged(d->structureModel->mapToSource(_index));
             });
-    connect(d->view, &Ui::NovelOutlineStructureView::customContextMenuRequested, this,
+    connect(d->view, &Ui::NovelTextStructureView::customContextMenuRequested, this,
             [this](const QPoint& _pos) {
                 if (d->view->selectedIndexes().isEmpty()) {
                     return;
@@ -232,73 +230,77 @@ NovelOutlineStructureManager::NovelOutlineStructureManager(QObject* _parent)
             });
 }
 
-NovelOutlineStructureManager::~NovelOutlineStructureManager() = default;
+NovelTextStructureManager::~NovelTextStructureManager() = default;
 
-QObject* NovelOutlineStructureManager::asQObject()
+QObject* NovelTextStructureManager::asQObject()
 {
     return this;
 }
 
-Ui::IDocumentView* NovelOutlineStructureManager::view()
+bool NovelTextStructureManager::isNavigationManager() const
+{
+    return true;
+}
+
+Ui::IDocumentView* NovelTextStructureManager::view()
 {
     return d->view;
 }
 
-Ui::IDocumentView* NovelOutlineStructureManager::view(BusinessLayer::AbstractModel* _model)
+Ui::IDocumentView* NovelTextStructureManager::view(BusinessLayer::AbstractModel* _model)
 {
     setModel(_model);
     return d->view;
 }
 
-Ui::IDocumentView* NovelOutlineStructureManager::secondaryView()
+Ui::IDocumentView* NovelTextStructureManager::secondaryView()
 {
     return nullptr;
 }
 
-Ui::IDocumentView* NovelOutlineStructureManager::secondaryView(BusinessLayer::AbstractModel* _model)
-{
-    Q_UNUSED(_model);
-    return nullptr;
-}
-
-Ui::IDocumentView* NovelOutlineStructureManager::createView(BusinessLayer::AbstractModel* _model)
+Ui::IDocumentView* NovelTextStructureManager::secondaryView(BusinessLayer::AbstractModel* _model)
 {
     Q_UNUSED(_model);
     return nullptr;
 }
 
-void NovelOutlineStructureManager::resetModels()
+Ui::IDocumentView* NovelTextStructureManager::createView(BusinessLayer::AbstractModel* _model)
+{
+    Q_UNUSED(_model);
+    return nullptr;
+}
+
+void NovelTextStructureManager::resetModels()
 {
     setModel(nullptr);
 }
 
-void NovelOutlineStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
+void NovelTextStructureManager::reconfigure(const QStringList& _changedSettingsKeys)
 {
     Q_UNUSED(_changedSettingsKeys);
 
     const bool showBeats
         = settingsValue(DataStorageLayer::kComponentsNovelNavigatorShowBeatsKey).toBool()
-        && settingsValue(DataStorageLayer::kComponentsNovelNavigatorShowBeatsInOutlineKey)
-               .toBool();
+        && settingsValue(DataStorageLayer::kComponentsNovelNavigatorShowBeatsInTextKey).toBool();
     d->structureModel->showBeats(showBeats);
 
     d->view->reconfigure();
 }
 
-void NovelOutlineStructureManager::bind(IDocumentManager* _manager)
+void NovelTextStructureManager::bind(IDocumentManager* _manager)
 {
     Q_ASSERT(_manager);
 
-    connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
+    connect(_manager->asQObject(), SIGNAL(viewCurrentModelIndexChanged(QModelIndex)), this,
             SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
 }
 
-void NovelOutlineStructureManager::setEditingMode(DocumentEditingMode _mode)
+void NovelTextStructureManager::setEditingMode(DocumentEditingMode _mode)
 {
     d->view->setEditingMode(_mode);
 }
 
-void NovelOutlineStructureManager::setCurrentModelIndex(const QModelIndex& _index)
+void NovelTextStructureManager::setCurrentModelIndex(const QModelIndex& _index)
 {
     if (!_index.isValid()) {
         return;
@@ -312,12 +314,18 @@ void NovelOutlineStructureManager::setCurrentModelIndex(const QModelIndex& _inde
     QSignalBlocker signalBlocker(this);
 
     //
+    // Из редактора карточек мы получаем индексы сцен и папок
+    //
+    auto indexForSelect = d->structureModel->mapFromSource(_index);
+    //
     // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
     // папок, сцен или битов, которые как раз и отображаются в навигаторе
     //
-    auto indexForSelect = d->structureModel->mapFromSource(_index.parent());
+    if (!indexForSelect.isValid()) {
+        indexForSelect = d->structureModel->mapFromSource(_index.parent());
+    }
     //
-    // ... когда быти скрыты в навигаторе, берём папку или сцену, в которой они находятся
+    // ... когда биты скрыты в навигаторе, берём папку или сцену, в которой они находятся
     //
     if (!indexForSelect.isValid()) {
         indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());
@@ -326,14 +334,13 @@ void NovelOutlineStructureManager::setCurrentModelIndex(const QModelIndex& _inde
     d->modelIndexToSelect = {};
 }
 
-void NovelOutlineStructureManager::setModel(BusinessLayer::AbstractModel* _model)
+void NovelTextStructureManager::setModel(BusinessLayer::AbstractModel* _model)
 {
     //
     // Разрываем соединения со старой моделью
     //
-    if (d->model != nullptr) {
-        disconnect(d->model->informationModel(), &BusinessLayer::NovelInformationModel::nameChanged,
-                   d->view, nullptr);
+    if (d->model != nullptr && d->model->informationModel() != nullptr) {
+        d->model->informationModel()->disconnect(d->view);
     }
 
     //
@@ -345,7 +352,7 @@ void NovelOutlineStructureManager::setModel(BusinessLayer::AbstractModel* _model
     // Создаём прокси модель, если ещё не была создана и настриваем её
     //
     if (d->structureModel == nullptr) {
-        d->structureModel = new BusinessLayer::NovelOutlineStructureModel(d->view);
+        d->structureModel = new BusinessLayer::NovelTextStructureModel(d->view);
         d->view->setModel(d->structureModel);
     }
 
@@ -360,7 +367,7 @@ void NovelOutlineStructureManager::setModel(BusinessLayer::AbstractModel* _model
     if (d->model != nullptr) {
         auto updateTitle = [this] {
             d->view->setTitle(
-                QString("%1 | %2").arg(tr("Outline"), d->model->informationModel()->name()));
+                QString("%1 | %2").arg(tr("Novel"), d->model->informationModel()->name()));
         };
         updateTitle();
         connect(d->model->informationModel(), &BusinessLayer::NovelInformationModel::nameChanged,

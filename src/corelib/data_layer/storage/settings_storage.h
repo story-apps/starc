@@ -369,10 +369,10 @@ const QString kComponentsNovelEditorShortcutsKey
 const QString kComponentsNovelNavigatorKey = kComponentsNovelKey + QStringLiteral("/navigator");
 const QString kComponentsNovelNavigatorShowBeatsKey
     = kComponentsNovelNavigatorKey + QStringLiteral("/show-beats");
-const QString kComponentsNovelNavigatorShowBeatsInTreatmentKey
-    = kComponentsNovelNavigatorKey + QStringLiteral("/show-beats-in-treatment");
-const QString kComponentsNovelNavigatorShowBeatsInScreenplayKey
-    = kComponentsNovelNavigatorKey + QStringLiteral("/show-beats-in-screenplay");
+const QString kComponentsNovelNavigatorShowBeatsInOutlineKey
+    = kComponentsNovelNavigatorKey + QStringLiteral("/show-beats-in-outline");
+const QString kComponentsNovelNavigatorShowBeatsInTextKey
+    = kComponentsNovelNavigatorKey + QStringLiteral("/show-beats-in-text");
 const QString kComponentsNovelNavigatorShowSceneTextKey
     = kComponentsNovelNavigatorKey + QStringLiteral("/show-scene-text");
 const QString kComponentsNovelNavigatorSceneTextLinesKey

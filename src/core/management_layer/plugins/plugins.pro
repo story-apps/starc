@@ -30,7 +30,7 @@ SUBDIRS = \
     novel_outline \
     novel_outline_structure \
 #    novel_text \
-#    novel_text_structure \
+    novel_text_structure \
     title_page \
     recycle_bin \
     world_information_structure

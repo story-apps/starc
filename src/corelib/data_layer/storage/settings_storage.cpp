@@ -1159,8 +1159,8 @@ SettingsStorage::Implementation::Implementation()
         // Параметры навигатора
         //
         defaultValues.insert(kComponentsNovelNavigatorShowBeatsKey, true);
-        defaultValues.insert(kComponentsNovelNavigatorShowBeatsInTreatmentKey, true);
-        defaultValues.insert(kComponentsNovelNavigatorShowBeatsInScreenplayKey, false);
+        defaultValues.insert(kComponentsNovelNavigatorShowBeatsInOutlineKey, true);
+        defaultValues.insert(kComponentsNovelNavigatorShowBeatsInTextKey, false);
         defaultValues.insert(kComponentsNovelNavigatorShowSceneTextKey, true);
         defaultValues.insert(kComponentsNovelNavigatorSceneTextLinesKey, 1);
     }
