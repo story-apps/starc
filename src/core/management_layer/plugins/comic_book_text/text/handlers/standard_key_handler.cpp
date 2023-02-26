@@ -25,7 +25,7 @@ namespace {
 static TextParagraphType actionFor(bool _tab, bool _jump, TextParagraphType _blockType)
 {
     const QString settingsKey
-        = QString("%1/styles-%1/from-%2-by-%3")
+        = QString("%1/styles-%2/from-%3-by-%4")
               .arg(DataStorageLayer::kComponentsComicBookEditorKey, _jump ? "jumping" : "changing",
                    BusinessLayer::toString(_blockType), _tab ? "tab" : "enter");
 
