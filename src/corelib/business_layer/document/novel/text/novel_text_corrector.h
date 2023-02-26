@@ -13,12 +13,6 @@ class CORE_LIBRARY_EXPORT NovelTextCorrector : public AbstractTextCorrector
     Q_OBJECT
 
 public:
-    /**
-     * @brief Автоматически добавляемые продолжения в диалогах
-     */
-    static QString continuedTerm();
-
-public:
     explicit NovelTextCorrector(QTextDocument* _document);
     ~NovelTextCorrector() override;
 
