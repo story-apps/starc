@@ -972,7 +972,7 @@ void SimpleTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->textEdit->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
     d->textEdit->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
 
-    d->splitter->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->splitter->setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->sidebarTabs->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->sidebarTabs->setBackgroundColor(Ui::DesignSystem::color().primary());
