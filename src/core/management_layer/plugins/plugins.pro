@@ -90,3 +90,7 @@ exists (screenplay_cards/screenplay_cards.pro) {
 exists (images_gallery/images_gallery.pro) {
     SUBDIRS += images_gallery
 }
+
+exists (novel_cards/novel_cards.pro) {
+    SUBDIRS += novel_cards
+}
