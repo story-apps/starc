@@ -45,6 +45,12 @@ public:
     Tree* content = nullptr;
     ScreenplayTextStructureDelegate* contentDelegate = nullptr;
     CountersInfoWidget* countersWidget = nullptr;
+
+    /**
+     * @brief Редактор текста, который будет использоваться для подсчёта кол-ва страниц, если в
+     *        приложении ещё не был открыт редактор текста модели, структуру которого отображаем
+     */
+    QScopedPointer<PageTextEdit> textEdit;
 };
 
 ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
@@ -76,11 +82,12 @@ void ScreenplayTextStructureView::Implementation::updateCounters()
         return;
     }
 
-    const auto pageCount = [screenplayModel] {
+    const auto pageCount = [this, screenplayModel] {
         //
         // Если в модели уже задано количество страниц, то используем его
         //
         if (screenplayModel->scriptPageCount() > 0) {
+            textEdit.reset();
             return screenplayModel->scriptPageCount();
         }
 
@@ -88,21 +95,23 @@ void ScreenplayTextStructureView::Implementation::updateCounters()
         // А если не задано, то придётся считать вручную
         // NOTE: это возможно, когда не был активирован редактор текста сценария
         //
-        const auto& screenplayTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(
-            screenplayModel->informationModel()->templateId());
+        if (textEdit.isNull()) {
+            const auto& screenplayTemplate = BusinessLayer::TemplatesFacade::screenplayTemplate(
+                screenplayModel->informationModel()->templateId());
 
-        PageTextEdit textEdit;
-        textEdit.setUsePageMode(true);
-        textEdit.setPageSpacing(0);
-        textEdit.setPageFormat(screenplayTemplate.pageSizeId());
-        textEdit.setPageMarginsMm(screenplayTemplate.pageMargins());
-        BusinessLayer::ScreenplayTextDocument screenplayDocument;
-        textEdit.setDocument(&screenplayDocument);
+            textEdit.reset(new PageTextEdit);
+            textEdit->setUsePageMode(true);
+            textEdit->setPageSpacing(0);
+            textEdit->setPageFormat(screenplayTemplate.pageSizeId());
+            textEdit->setPageMarginsMm(screenplayTemplate.pageMargins());
+            auto novelDocument = new BusinessLayer::ScreenplayTextDocument(textEdit.data());
+            textEdit->setDocument(novelDocument);
 
-        const bool kCanChangeModel = false;
-        screenplayDocument.setModel(screenplayModel, kCanChangeModel);
+            const bool kCanChangeModel = false;
+            novelDocument->setModel(screenplayModel, kCanChangeModel);
+        }
 
-        return screenplayDocument.pageCount();
+        return textEdit->document()->pageCount();
     }();
 
     countersWidget->setCounters({
@@ -198,6 +207,7 @@ void ScreenplayTextStructureView::setModel(QAbstractItemModel* _model)
 {
     if (d->model != nullptr) {
         d->model->disconnect(this);
+        d->textEdit.reset();
     }
 
     d->content->setModel(_model);
