@@ -1148,6 +1148,15 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsNovelNavigatorShowBeatsInTextKey, false);
         defaultValues.insert(kComponentsNovelNavigatorShowSceneTextKey, true);
         defaultValues.insert(kComponentsNovelNavigatorSceneTextLinesKey, 1);
+        //
+        // Параметры карточек сценария
+        //
+        defaultValues.insert(kComponentsNovelCardsLockCardsKey, true);
+        defaultValues.insert(kComponentsNovelCardsArrangeByRowsKey, true);
+        defaultValues.insert(kComponentsNovelCardsCardsSizeKey, 10);
+        defaultValues.insert(kComponentsNovelCardsCardsRatioKey, 2);
+        defaultValues.insert(kComponentsNovelCardsCardsSpacingKey, 20);
+        defaultValues.insert(kComponentsNovelCardsCardsInRowKey, -1);
     }
 
 

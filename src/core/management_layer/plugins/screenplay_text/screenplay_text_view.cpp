@@ -25,10 +25,10 @@
 #include <ui/design_system/design_system.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
 #include <ui/modules/bookmarks/bookmarks_view.h>
+#include <ui/modules/cards/card_item_parameters_view.h>
 #include <ui/modules/comments/comments_model.h>
 #include <ui/modules/comments/comments_toolbar.h>
 #include <ui/modules/comments/comments_view.h>
-#include <ui/modules/screenplay/screenplay_item_parameters_view.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -175,7 +175,7 @@ public:
     TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
     ScreenplayTextFastFormatWidget* fastFormatWidget = nullptr;
-    ScreenplayItemParametersView* itemParametersView = nullptr;
+    CardItemParametersView* itemParametersView = nullptr;
     CommentsView* commentsView = nullptr;
     BookmarksView* bookmarksView = nullptr;
     DictionariesView* dictionariesView = nullptr;
@@ -213,7 +213,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     , sidebarTabs(new TabBar(_q))
     , sidebarContent(new StackWidget(_q))
     , fastFormatWidget(new ScreenplayTextFastFormatWidget(_q))
-    , itemParametersView(new ScreenplayItemParametersView(_q))
+    , itemParametersView(new CardItemParametersView(_q))
     , commentsView(new CommentsView(_q))
     , bookmarksView(new BookmarksView(_q))
     , dictionariesView(new DictionariesView(_q))
@@ -535,11 +535,12 @@ void ScreenplayTextView::Implementation::showParametersFor(BusinessLayer::TextMo
 
     switch (_item->type()) {
     case BusinessLayer::TextModelItemType::Folder: {
-        itemParametersView->setItemType(Ui::ScreenplayItemType::Folder);
+        itemParametersView->setItemType(Ui::CardItemType::Folder);
 
         auto folderItem = static_cast<BusinessLayer::TextModelFolderItem*>(lastSelectedItem);
         itemParametersView->setColor(folderItem->color());
         itemParametersView->setTitle(folderItem->heading());
+        itemParametersView->setDescription(folderItem->description());
         itemParametersView->setStamp(folderItem->stamp());
         break;
     }
@@ -550,7 +551,7 @@ void ScreenplayTextView::Implementation::showParametersFor(BusinessLayer::TextMo
             return;
         }
 
-        itemParametersView->setItemType(Ui::ScreenplayItemType::Scene);
+        itemParametersView->setItemType(Ui::CardItemType::Scene);
 
         const auto sceneItem = static_cast<BusinessLayer::ScreenplayTextModelSceneItem*>(groupItem);
         itemParametersView->setColor(sceneItem->color());
@@ -865,7 +866,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 d->scalableWrapper->setFocus();
             });
     //
-    connect(d->itemParametersView, &ScreenplayItemParametersView::colorChanged, this,
+    connect(d->itemParametersView, &CardItemParametersView::colorChanged, this,
             [this, findCurrentModelItem](const QColor& _color) {
                 auto item = findCurrentModelItem();
                 if (item == nullptr) {
@@ -892,7 +893,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
 
                 d->model->updateItem(item);
             });
-    connect(d->itemParametersView, &ScreenplayItemParametersView::titleChanged, this,
+    connect(d->itemParametersView, &CardItemParametersView::titleChanged, this,
             [this, findCurrentModelItem](const QString& _title) {
                 auto item = findCurrentModelItem();
                 if (item == nullptr) {
@@ -921,7 +922,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
 
                 d->model->updateItem(item);
             });
-    connect(d->itemParametersView, &ScreenplayItemParametersView::headingChanged, this,
+    connect(d->itemParametersView, &CardItemParametersView::headingChanged, this,
             [this, findCurrentModelItem](const QString& _heading) {
                 auto item = findCurrentModelItem();
                 if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
@@ -932,7 +933,18 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 textItem->setText(_heading);
                 d->model->updateItem(textItem);
             });
-    connect(d->itemParametersView, &ScreenplayItemParametersView::beatAdded, this,
+    connect(d->itemParametersView, &CardItemParametersView::descriptionChanged, this,
+            [this, findCurrentModelItem](const QString& _description) {
+                auto item = findCurrentModelItem();
+                if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Folder) {
+                    return;
+                }
+
+                auto folderItem = static_cast<BusinessLayer::TextModelFolderItem*>(item);
+                folderItem->setDescription(_description);
+                d->model->updateItem(folderItem);
+            });
+    connect(d->itemParametersView, &CardItemParametersView::beatAdded, this,
             [this, findCurrentModelItem](int _beatIndex) {
                 auto item = findCurrentModelItem();
                 if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
@@ -967,7 +979,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 }
             });
     connect(
-        d->itemParametersView, &ScreenplayItemParametersView::beatChanged, this,
+        d->itemParametersView, &CardItemParametersView::beatChanged, this,
         [this, findCurrentModelItem](int _beatIndex, const QString& _beat) {
             auto item = findCurrentModelItem();
             if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
@@ -1010,7 +1022,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             beatHeadingItem->setText(_beat);
             d->model->updateItem(beatHeadingItem);
         });
-    connect(d->itemParametersView, &ScreenplayItemParametersView::beatRemoved, this,
+    connect(d->itemParametersView, &CardItemParametersView::beatRemoved, this,
             [this, findCurrentModelItem](int _beatIndex) {
                 auto item = findCurrentModelItem();
                 if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
@@ -1064,7 +1076,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                     break;
                 }
             });
-    connect(d->itemParametersView, &ScreenplayItemParametersView::storyDayChanged, this,
+    connect(d->itemParametersView, &CardItemParametersView::storyDayChanged, this,
             [this, findCurrentModelItem](const QString& _storyDay) {
                 auto item = findCurrentModelItem();
                 if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
@@ -1080,7 +1092,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 d->model->updateItem(groupItem);
             });
     connect(
-        d->itemParametersView, &ScreenplayItemParametersView::numberChanged, this,
+        d->itemParametersView, &CardItemParametersView::numberChanged, this,
         [this, findCurrentModelItem](const QString& _number, bool _isCustom, bool _isEatNumber) {
             auto item = findCurrentModelItem();
             if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {

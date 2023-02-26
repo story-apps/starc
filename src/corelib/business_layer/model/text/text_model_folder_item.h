@@ -24,6 +24,7 @@ public:
     enum {
         FolderHeadingRole = Qt::UserRole + 1,
         FolderColorRole,
+        FolderDescriptionRole,
         FolderStampRole,
         FolderUserRole,
     };
@@ -48,6 +49,12 @@ public:
      */
     QColor color() const;
     void setColor(const QColor& _color);
+
+    /**
+     * @brief Штамп папки
+     */
+    QString description() const;
+    void setDescription(const QString& _description);
 
     /**
      * @brief Штамп папки

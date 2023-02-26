@@ -377,6 +377,26 @@ const QString kComponentsNovelNavigatorShowSceneTextKey
     = kComponentsNovelNavigatorKey + QStringLiteral("/show-scene-text");
 const QString kComponentsNovelNavigatorSceneTextLinesKey
     = kComponentsNovelNavigatorKey + QStringLiteral("/scene-text-lines");
+// ... редактор карточек
+const QString kComponentsNovelCardsKey = kComponentsNovelKey + QStringLiteral("/cards");
+const QString kComponentsNovelCardsSplitterStateKey
+    = kComponentsNovelCardsKey + QStringLiteral("/splitter-state");
+const QString kComponentsNovelCardsLockCardsKey
+    = kComponentsNovelCardsKey + QStringLiteral("/lock-cards");
+const QString kComponentsNovelCardsArrangeByRowsKey
+    = kComponentsNovelCardsKey + QStringLiteral("/arrange-by-rows");
+const QString kComponentsNovelCardsCardsSizeKey
+    = kComponentsNovelCardsKey + QStringLiteral("/cards-size");
+const QString kComponentsNovelCardsCardsRatioKey
+    = kComponentsNovelCardsKey + QStringLiteral("/cards-ratio");
+const QString kComponentsNovelCardsCardsSpacingKey
+    = kComponentsNovelCardsKey + QStringLiteral("/cards-spacing");
+const QString kComponentsNovelCardsCardsInRowKey
+    = kComponentsNovelCardsKey + QStringLiteral("/cards-in-row");
+// ... статистика
+const QString kComponentsNovelStatisticsKey = kComponentsNovelKey + QStringLiteral("/statistics");
+const QString kComponentsNovelStatisticsSplitterStateKey
+    = kComponentsNovelStatisticsKey + QStringLiteral("/splitter-state");
 //
 // редактор отношений персонажей
 const QString kComponentsCharactersRelationsKey

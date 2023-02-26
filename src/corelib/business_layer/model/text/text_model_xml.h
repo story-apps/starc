@@ -20,6 +20,7 @@ const QLatin1String kNumberIsLockedAttribute("fixed");
 const QLatin1String kColorTag("color");
 const QLatin1String kTitleTag("title");
 const QLatin1String kStoryDayTag("story_day");
+const QLatin1String kDescriptionTag("description");
 const QLatin1String kStampTag("stamp");
 const QLatin1String kTagsTag("tags");
 const QLatin1String kTagTag("tag");

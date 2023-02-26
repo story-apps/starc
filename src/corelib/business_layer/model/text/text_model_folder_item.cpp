@@ -36,6 +36,11 @@ public:
     QColor color;
 
     /**
+     * @brief Описание папки
+     */
+    QString description;
+
+    /**
      * @brief Штамп
      */
     QString stamp;
@@ -97,6 +102,20 @@ void TextModelFolderItem::setColor(const QColor& _color)
     setChanged(true);
 }
 
+QString TextModelFolderItem::description() const
+{
+    return d->description;
+}
+
+void TextModelFolderItem::setDescription(const QString& _description)
+{
+    if (d->description == _description) {
+        return;
+    }
+    d->description = _description;
+    setChanged(true);
+}
+
 QString TextModelFolderItem::stamp() const
 {
     return d->stamp;
@@ -136,6 +155,10 @@ QVariant TextModelFolderItem::data(int _role) const
         return d->color;
     }
 
+    case FolderDescriptionRole: {
+        return d->description;
+    }
+
     case FolderStampRole: {
         return d->stamp;
     }
@@ -159,6 +182,12 @@ void TextModelFolderItem::readContent(QXmlStreamReader& _contentReader)
 
     if (currentTag == xml::kColorTag) {
         d->color = xml::readContent(_contentReader).toString();
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
+
+    if (currentTag == xml::kDescriptionTag) {
+        d->description = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
         xml::readNextElement(_contentReader); // end
         currentTag = xml::readNextElement(_contentReader); // next
     }
@@ -332,6 +361,11 @@ QByteArray TextModelFolderItem::xmlHeader(bool _clearUuid) const
     if (d->color.isValid()) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(xml::kColorTag, d->color.name()).toUtf8();
     }
+    if (!d->description.isEmpty()) {
+        xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                   .arg(xml::kDescriptionTag, TextHelper::toHtmlEscaped(d->description))
+                   .toUtf8();
+    }
     if (!d->stamp.isEmpty()) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n")
                    .arg(xml::kStampTag, TextHelper::toHtmlEscaped(d->stamp))
@@ -352,6 +386,7 @@ void TextModelFolderItem::copyFrom(TextModelItem* _item)
     auto folderItem = static_cast<TextModelFolderItem*>(_item);
     d->uuid = folderItem->d->uuid;
     d->color = folderItem->d->color;
+    d->description = folderItem->d->description;
     d->stamp = folderItem->d->stamp;
 }
 
@@ -363,7 +398,7 @@ bool TextModelFolderItem::isEqual(TextModelItem* _item) const
 
     const auto folderItem = static_cast<TextModelFolderItem*>(_item);
     return d->uuid == folderItem->d->uuid && d->color == folderItem->d->color
-        && d->stamp == folderItem->d->stamp;
+        && d->description == folderItem->d->description && d->stamp == folderItem->d->stamp;
 }
 
 void TextModelFolderItem::setHeading(const QString& _heading)
