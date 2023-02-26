@@ -1259,33 +1259,6 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                             }
                         }
                     }
-
-                    //
-                    // Прорисовка автоматических (ПРОД) для реплик
-                    //
-                    if (blockType == TextParagraphType::Character
-                        && block.blockFormat().boolProperty(
-                            TextBlockStyle::PropertyIsCharacterContinued)
-                        && !block.blockFormat().boolProperty(
-                            TextBlockStyle::PropertyIsCorrection)) {
-                        setPainterPen(palette().text().color());
-                        painter.setFont(cursor.charFormat().font());
-
-                        //
-                        // Определим место положение конца имени персонажа
-                        //
-                        const int continuedTermWidth = TextHelper::fineTextWidthF(
-                            BusinessLayer::NovelTextCorrector::continuedTerm(), painter.font());
-                        const QPoint topLeft = isLeftToRight
-                            ? cursorREnd.topLeft()
-                            : cursorREnd.topRight() - QPoint(continuedTermWidth, 0);
-                        const QPoint bottomRight = isLeftToRight
-                            ? cursorREnd.bottomRight() + QPoint(continuedTermWidth, 0)
-                            : cursorREnd.bottomLeft();
-                        const QRect rect(topLeft, bottomRight);
-                        painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
-                                         BusinessLayer::NovelTextCorrector::continuedTerm());
-                    }
                 }
 
                 //

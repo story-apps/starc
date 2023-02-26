@@ -278,8 +278,7 @@ void NovelOutlineStructureManager::reconfigure(const QStringList& _changedSettin
 
     const bool showBeats
         = settingsValue(DataStorageLayer::kComponentsNovelNavigatorShowBeatsKey).toBool()
-        && settingsValue(DataStorageLayer::kComponentsNovelNavigatorShowBeatsInOutlineKey)
-               .toBool();
+        && settingsValue(DataStorageLayer::kComponentsNovelNavigatorShowBeatsInOutlineKey).toBool();
     d->structureModel->showBeats(showBeats);
 
     d->view->reconfigure();
