@@ -12,6 +12,7 @@
 #include <ui/widgets/image/image_cropping_dialog.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/slider/slider.h>
+#include <ui/widgets/toggle/toggle.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/tools/debouncer.h>
@@ -43,6 +44,7 @@ public:
     void initUiPage();
     void initSignUpPage();
     void initAccountPage();
+    void initModulesPage();
     void initBackupsPage();
     void initSocialPage();
 
@@ -94,6 +96,23 @@ public:
     CheckBox* accountSubscription = nullptr;
     Button* accountContinueButton = nullptr;
     Domain::AccountInfo accountInfo;
+
+    Widget* modulesPage = nullptr;
+    ImageLabel* modulesLogo = nullptr;
+    H6Label* modulesTitle = nullptr;
+    Body2Label* modulesSubtitle = nullptr;
+    Subtitle1Label* modulesDescription = nullptr;
+    Toggle* modulesScreenplayToggle = nullptr;
+    Body1Label* modulesScreenplayTitle = nullptr;
+    Toggle* modulesComicBookToggle = nullptr;
+    Body1Label* modulesComicBookTitle = nullptr;
+    Toggle* modulesAudioplayToggle = nullptr;
+    Body1Label* modulesAudioplayTitle = nullptr;
+    Toggle* modulesStageplayToggle = nullptr;
+    Body1Label* modulesStageplayTitle = nullptr;
+    Toggle* modulesNovelToggle = nullptr;
+    Body1Label* modulesNovelTitle = nullptr;
+    Button* modulesContinueButton = nullptr;
 
     Widget* backupsPage = nullptr;
     ImageLabel* backupsLogo = nullptr;
@@ -154,6 +173,23 @@ OnboardingNavigator::Implementation::Implementation(OnboardingNavigator* _q)
     , accountSubscription(new CheckBox(accountPage))
     , accountContinueButton(new Button(accountPage))
     //
+    , modulesPage(new Widget(q))
+    , modulesLogo(new ImageLabel(modulesPage))
+    , modulesTitle(new H6Label(modulesPage))
+    , modulesSubtitle(new Body2Label(modulesPage))
+    , modulesDescription(new Subtitle1Label(modulesPage))
+    , modulesScreenplayToggle(new Toggle(modulesPage))
+    , modulesScreenplayTitle(new Body1Label(modulesPage))
+    , modulesComicBookToggle(new Toggle(modulesPage))
+    , modulesComicBookTitle(new Body1Label(modulesPage))
+    , modulesAudioplayToggle(new Toggle(modulesPage))
+    , modulesAudioplayTitle(new Body1Label(modulesPage))
+    , modulesStageplayToggle(new Toggle(modulesPage))
+    , modulesStageplayTitle(new Body1Label(modulesPage))
+    , modulesNovelToggle(new Toggle(modulesPage))
+    , modulesNovelTitle(new Body1Label(modulesPage))
+    , modulesContinueButton(new Button(modulesPage))
+    //
     , backupsPage(new Widget(q))
     , backupsLogo(new ImageLabel(backupsPage))
     , backupsTitle(new H6Label(backupsPage))
@@ -176,6 +212,7 @@ OnboardingNavigator::Implementation::Implementation(OnboardingNavigator* _q)
     initUiPage();
     initSignUpPage();
     initAccountPage();
+    initModulesPage();
     initBackupsPage();
     initSocialPage();
 }
@@ -338,6 +375,38 @@ void OnboardingNavigator::Implementation::initAccountPage()
     accountPage->setLayout(pageLayout);
 }
 
+void OnboardingNavigator::Implementation::initModulesPage()
+{
+    modulesLogo->setImage(QPixmap(":/images/logo"));
+    modulesTitle->setAlignment(Qt::AlignCenter);
+    modulesSubtitle->setAlignment(Qt::AlignCenter);
+    modulesContinueButton->setContained(true);
+
+    auto pageLayout = new QVBoxLayout;
+    pageLayout->setContentsMargins({});
+    pageLayout->setSpacing(0);
+    pageLayout->addWidget(modulesLogo, 0, Qt::AlignHCenter);
+    pageLayout->addWidget(modulesTitle);
+    pageLayout->addWidget(modulesSubtitle);
+    pageLayout->addWidget(modulesDescription);
+    auto addToggleWithTitle = [&pageLayout](Toggle* _toggle, AbstractLabel* _label) {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(_toggle);
+        layout->addWidget(_label, 1, Qt::AlignVCenter);
+        pageLayout->addLayout(layout);
+    };
+    addToggleWithTitle(modulesScreenplayToggle, modulesScreenplayTitle);
+    addToggleWithTitle(modulesComicBookToggle, modulesComicBookTitle);
+    addToggleWithTitle(modulesAudioplayToggle, modulesAudioplayTitle);
+    addToggleWithTitle(modulesStageplayToggle, modulesStageplayTitle);
+    addToggleWithTitle(modulesNovelToggle, modulesNovelTitle);
+    pageLayout->addStretch();
+    pageLayout->addWidget(modulesContinueButton);
+    modulesPage->setLayout(pageLayout);
+}
+
 void OnboardingNavigator::Implementation::initBackupsPage()
 {
     backupsLogo->setImage(QPixmap(":/images/logo"));
@@ -419,6 +488,7 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
     setCurrentWidget(d->uiPage);
     addWidget(d->signInPage);
     addWidget(d->accountPage);
+    addWidget(d->modulesPage);
     addWidget(d->backupsPage);
     addWidget(d->socialPage);
 
@@ -490,7 +560,7 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
     });
     connect(d->signInResendCodeButton, &Button::clicked, d->signInSignInButton, &Button::click);
     connect(d->signInContinueButton, &Button::clicked, this,
-            [this] { setCurrentWidget(d->backupsPage); });
+            [this] { setCurrentWidget(d->modulesPage); });
     //
     auto notifyAccountChanged = [this] {
         emit accountInfoChanged(d->accountInfo.email, d->accountInfo.name,
@@ -548,7 +618,28 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
         notifyAccountChanged();
     });
     connect(d->accountContinueButton, &Button::clicked, this,
+            [this] { setCurrentWidget(d->modulesPage); });
+    //
+    connect(d->modulesScreenplayToggle, &Toggle::checkedChanged, this, [](bool _checked) {
+        setSettingsValue(DataStorageLayer::kComponentsScreenplayAvailableKey, _checked);
+    });
+    connect(d->modulesComicBookToggle, &Toggle::checkedChanged, this, [](bool _checked) {
+        setSettingsValue(DataStorageLayer::kComponentsComicBookAvailableKey, _checked);
+    });
+    connect(d->modulesAudioplayToggle, &Toggle::checkedChanged, this, [](bool _checked) {
+        setSettingsValue(DataStorageLayer::kComponentsAudioplayAvailableKey, _checked);
+    });
+    connect(d->modulesStageplayToggle, &Toggle::checkedChanged, this, [](bool _checked) {
+        setSettingsValue(DataStorageLayer::kComponentsStageplayAvailableKey, _checked);
+    });
+    connect(d->modulesNovelToggle, &Toggle::checkedChanged, this, [](bool _checked) {
+        setSettingsValue(DataStorageLayer::kComponentsNovelAvailableKey, _checked);
+    });
+    connect(d->modulesContinueButton, &Button::clicked, this,
             [this] { setCurrentWidget(d->backupsPage); });
+    //
+    connect(d->backupsContinueButton, &Button::clicked, this,
+            [this] { setCurrentWidget(d->socialPage); });
     //
     connect(d->socialTwitterButton, &IconButton::clicked, this,
             [] { QDesktopServices::openUrl(QUrl("https://twitter.com/starcapp_")); });
@@ -560,11 +651,10 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
             [] { QDesktopServices::openUrl(QUrl("https://vk.com/starc_app")); });
     connect(d->socialFacebookButton, &IconButton::clicked, this, [] {
         QDesktopServices::openUrl(QUrl(QLocale().language() == QLocale::Russian
+                                               || QLocale().language() == QLocale::Belarusian
                                            ? "https://www.facebook.com/starc.application.ru/"
                                            : "https://www.facebook.com/starc.application/"));
     });
-    connect(d->backupsContinueButton, &Button::clicked, this,
-            [this] { setCurrentWidget(d->socialPage); });
     //
     connect(d->socialContinueButton, &Button::clicked, this,
             &OnboardingNavigator::finishOnboardingRequested);
@@ -651,6 +741,19 @@ void OnboardingNavigator::updateTranslations()
     d->accountSubscription->setText(tr("I want to receive project's news"));
     d->accountContinueButton->setText(tr("Continue"));
 
+    d->modulesTitle->setText(tr("Customize your workspace"));
+    d->modulesSubtitle->setText(tr("Feel at home"));
+    d->modulesDescription->setText(
+        tr("Story Architect provides tools for working with any form of writing. Choose which ones "
+           "you plan to use:")
+            .arg(settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString()));
+    d->modulesScreenplayTitle->setText(tr("Screenplay"));
+    d->modulesComicBookTitle->setText(tr("Comic book"));
+    d->modulesAudioplayTitle->setText(tr("Audioplay"));
+    d->modulesStageplayTitle->setText(tr("Stageplay"));
+    d->modulesNovelTitle->setText(tr("Novel"));
+    d->modulesContinueButton->setText(tr("Continue"));
+
     d->backupsTitle->setText(tr("Before you get started"));
     d->backupsSubtitle->setText(tr("Feel our care"));
     d->backupsDescription->setText(
@@ -671,9 +774,8 @@ void OnboardingNavigator::updateTranslations()
         "Get in touch with our technical support, share your feedback and suggest improvements.\n\n"
         "Discuss everything with fellow community of writers, share your work in progress and chat "
         "about life."));
-    const auto isRussianSpeaking = QLocale().language() == QLocale::Russian
-        || QLocale().language() == QLocale::Belarusian
-        || QLocale().language() == QLocale::Ukrainian;
+    const auto isRussianSpeaking
+        = QLocale().language() == QLocale::Russian || QLocale().language() == QLocale::Belarusian;
     d->socialTwitterButton->setVisible(!isRussianSpeaking);
     d->socialDiscordButton->setVisible(!isRussianSpeaking);
     d->socialVkButton->setVisible(isRussianSpeaking);
@@ -712,6 +814,17 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->accountAvatar,
              d->accountSubscription,
              //
+             d->modulesPage,
+             d->modulesLogo,
+             d->modulesTitle,
+             d->modulesSubtitle,
+             d->modulesDescription,
+             d->modulesScreenplayTitle,
+             d->modulesComicBookTitle,
+             d->modulesAudioplayTitle,
+             d->modulesStageplayTitle,
+             d->modulesNovelTitle,
+             //
              d->backupsPage,
              d->backupsLogo,
              d->backupsTitle,
@@ -746,6 +859,11 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
     d->accountTitle->setContentsMargins(margin / 2.0, DesignSystem::layout().px24(), margin / 2.0,
                                         DesignSystem::layout().px4());
     d->accountSubtitle->setContentsMargins(margin, 0, margin, 0);
+    d->modulesTitle->setContentsMargins(margin / 2.0, DesignSystem::layout().px24(), margin / 2.0,
+                                        DesignSystem::layout().px4());
+    d->modulesSubtitle->setContentsMargins(margin, 0, margin, 0);
+    d->modulesDescription->setContentsMargins(margin, DesignSystem::layout().px24(), margin,
+                                              DesignSystem::layout().px12());
     d->backupsTitle->setContentsMargins(margin / 2.0, DesignSystem::layout().px24(), margin / 2.0,
                                         DesignSystem::layout().px4());
     d->backupsSubtitle->setContentsMargins(margin, 0, margin, 0);
@@ -759,6 +877,7 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
 
     for (auto logo : {
              d->uiLogo,
+             d->modulesLogo,
              d->backupsLogo,
              d->socialLogo,
          }) {
@@ -800,6 +919,7 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->signInResendCodeButton,
              d->signInContinueButton,
              d->accountContinueButton,
+             d->modulesContinueButton,
              d->backupsContinueButton,
              d->socialContinueButton,
          }) {
@@ -815,6 +935,18 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
          }) {
         button->setBackgroundColor(DesignSystem::color().accent());
         button->setTextColor(DesignSystem::color().accent());
+    }
+
+    for (auto toggle : {
+             d->modulesScreenplayToggle,
+             d->modulesComicBookToggle,
+             d->modulesAudioplayToggle,
+             d->modulesStageplayToggle,
+             d->modulesNovelToggle,
+         }) {
+        toggle->setBackgroundColor(DesignSystem::color().primary());
+        toggle->setTextColor(DesignSystem::color().onPrimary());
+        toggle->setContentsMargins(DesignSystem::layout().px(32), 0, 0, 0);
     }
 
     for (auto iconButton : {
