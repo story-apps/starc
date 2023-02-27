@@ -263,7 +263,6 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
     itemParametersView->setStampVisible(false);
-    itemParametersView->setTagsVisible(false);
     itemParametersView->hide();
     commentsView->setModel(commentsModel);
     commentsView->hide();

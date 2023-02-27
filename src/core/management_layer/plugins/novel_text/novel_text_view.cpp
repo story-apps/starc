@@ -248,8 +248,8 @@ NovelTextView::Implementation::Implementation(NovelTextView* _q)
     sidebarContent->addWidget(bookmarksView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
+    itemParametersView->setNumberingVisible(false);
     itemParametersView->setStampVisible(false);
-    itemParametersView->setTagsVisible(false);
     itemParametersView->hide();
     commentsView->setModel(commentsModel);
     commentsView->hide();
