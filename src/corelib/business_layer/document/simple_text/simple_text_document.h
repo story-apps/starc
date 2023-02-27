@@ -16,6 +16,11 @@ public:
     explicit SimpleTextDocument(QObject* _parent = nullptr);
 
     /**
+     * @brief Настроить необходимость корректировок
+     */
+    void setCorrectionOptions(bool _needToCorrectPageBreaks);
+
+    /**
      * @brief Получить номер главы для заданного блока
      */
     QString chapterNumber(const QTextBlock& _forBlock) const;

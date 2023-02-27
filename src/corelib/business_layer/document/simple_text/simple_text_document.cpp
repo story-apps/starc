@@ -14,6 +14,15 @@ SimpleTextDocument::SimpleTextDocument(QObject* _parent)
     setCorrector(new SimpleTextCorrector(this));
 }
 
+void SimpleTextDocument::setCorrectionOptions(bool _needToCorrectPageBreaks)
+{
+    QStringList correctionOptions;
+    if (_needToCorrectPageBreaks) {
+        correctionOptions.append("correct-page-breaks");
+    }
+    TextDocument::setCorrectionOptions(correctionOptions);
+}
+
 QString SimpleTextDocument::chapterNumber(const QTextBlock& _forBlock) const
 {
     if (_forBlock.userData() == nullptr) {

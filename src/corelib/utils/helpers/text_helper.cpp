@@ -102,12 +102,13 @@ static void initFontMetrics()
         sFontToLineSpacing[_fontFamily] = fontDelta;
     };
     //
-    // ... собственно высчитываем дельту для других шрифтов
+    // ... собственно высчитываем дельту для других шрифтов (HHead group summary)
     //
     addFontDelta("Courier Prime", 2060.0);
     addFontDelta("Courier Screenplay", 2370.0);
     addFontDelta("Courier Final Draft", 2318.0);
-    addFontDelta("Arial", 2370.0);
+    addFontDelta("Arial", 2355.0);
+    addFontDelta("Times New Roman", 2355.0);
 }
 } // namespace
 

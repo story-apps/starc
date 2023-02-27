@@ -78,6 +78,7 @@ SOURCES += \
     ui/crash_report_dialog.cpp \
     ui/export/audioplay_export_dialog.cpp \
     ui/export/comic_book_export_dialog.cpp \
+    ui/export/novel_export_dialog.cpp \
     ui/export/screenplay_export_dialog.cpp \
     ui/export/simple_text_export_dialog.cpp \
     ui/export/stageplay_export_dialog.cpp \
@@ -152,6 +153,7 @@ HEADERS += \
     ui/crash_report_dialog.h \
     ui/export/audioplay_export_dialog.h \
     ui/export/comic_book_export_dialog.h \
+    ui/export/novel_export_dialog.h \
     ui/export/screenplay_export_dialog.h \
     ui/export/simple_text_export_dialog.h \
     ui/export/stageplay_export_dialog.h \

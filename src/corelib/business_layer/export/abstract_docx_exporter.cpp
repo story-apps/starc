@@ -207,9 +207,10 @@ QString AbstractDocxExporter::Implementation::docxBlockStyle(const TextBlockStyl
     //
     // ... отступы
     //
-    blockStyle.append(QString("<w:ind w:left=\"%1\" w:right=\"%2\"/>")
+    blockStyle.append(QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:firstLine=\"%3\"/>")
                           .arg(pxToTwips(_style.blockFormat(_onHalfPage).leftMargin()))
-                          .arg(pxToTwips(_style.blockFormat(_onHalfPage).rightMargin())));
+                          .arg(pxToTwips(_style.blockFormat(_onHalfPage).rightMargin()))
+                          .arg(pxToTwips(_style.blockFormat(_onHalfPage).textIndent())));
     //
     // ... интервалы
     //

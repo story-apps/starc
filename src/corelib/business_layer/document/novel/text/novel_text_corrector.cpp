@@ -368,8 +368,6 @@ void NovelTextCorrector::Implementation::updateBlocksVisibility(int _from)
 
 void NovelTextCorrector::Implementation::correctPageBreaks(int _position)
 {
-    return;
-
     //
     // Определим высоту страницы
     //
@@ -820,13 +818,9 @@ void NovelTextCorrector::Implementation::correctPageBreaks(int _position)
             //
             // Если это время и место, бит, кадр или начало папки
             //
-            case TextParagraphType::ChapterHeading1:
-            case TextParagraphType::ChapterHeading2:
-            case TextParagraphType::ChapterHeading3:
-            case TextParagraphType::ChapterHeading4:
-            case TextParagraphType::ChapterHeading5:
-            case TextParagraphType::ChapterHeading6:
-            case TextParagraphType::ChapterHeading: {
+            case TextParagraphType::PartHeading:
+            case TextParagraphType::ChapterHeading:
+            case TextParagraphType::SceneHeading: {
                 //
                 // Переносим на следующую страницу
                 //
@@ -840,6 +834,7 @@ void NovelTextCorrector::Implementation::correctPageBreaks(int _position)
             // Конец папки распологаем либо только в конце страницы, либо целиком переносим на
             // следующую страницу
             //
+            case TextParagraphType::PartFooter:
             case TextParagraphType::ChapterFooter: {
                 //
                 // Если в конце страницы, оставляем как есть

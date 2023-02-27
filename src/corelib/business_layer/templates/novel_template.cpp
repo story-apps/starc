@@ -37,10 +37,10 @@ QString NovelTemplate::name() const
             "Manuscript template (page: Letter; font: Times New Roman)");
     } else if (id() == "modern_a4") {
         return QCoreApplication::translate("BusinessLayer::TextTemplate",
-                                           "Modern template (page: A4; font: Roboto)");
+                                           "Modern template (page: A4; font: Arial)");
     } else if (id() == "modern_letter") {
         return QCoreApplication::translate("BusinessLayer::TextTemplate",
-                                           "Modern template (page: Letter; font: Roboto)");
+                                           "Modern template (page: Letter; font: Arial)");
     } else {
         return TextTemplate::name();
     }

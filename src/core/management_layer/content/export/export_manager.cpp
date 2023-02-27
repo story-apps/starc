@@ -7,6 +7,9 @@
 #include <business_layer/export/comic_book/comic_book_export_options.h>
 #include <business_layer/export/comic_book/comic_book_pdf_exporter.h>
 #include <business_layer/export/export_options.h>
+#include <business_layer/export/novel/novel_docx_exporter.h>
+#include <business_layer/export/novel/novel_export_options.h>
+#include <business_layer/export/novel/novel_pdf_exporter.h>
 #include <business_layer/export/screenplay/screenplay_docx_exporter.h>
 #include <business_layer/export/screenplay/screenplay_export_options.h>
 #include <business_layer/export/screenplay/screenplay_fdx_exporter.h>
@@ -21,6 +24,8 @@
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
+#include <business_layer/model/novel/novel_information_model.h>
+#include <business_layer/model/novel/text/novel_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
@@ -33,6 +38,7 @@
 #include <domain/document_object.h>
 #include <ui/export/audioplay_export_dialog.h>
 #include <ui/export/comic_book_export_dialog.h>
+#include <ui/export/novel_export_dialog.h>
 #include <ui/export/screenplay_export_dialog.h>
 #include <ui/export/simple_text_export_dialog.h>
 #include <ui/export/stageplay_export_dialog.h>
@@ -75,6 +81,7 @@ public:
     void exportAudioplay(BusinessLayer::AbstractModel* _model);
     void exportStageplay(BusinessLayer::AbstractModel* _model);
     void exportSimpleText(BusinessLayer::AbstractModel* _model);
+    void exportNovel(BusinessLayer::AbstractModel* _model);
 
     //
     // Данные
@@ -89,6 +96,7 @@ public:
     Ui::AudioplayExportDialog* audioplayExportDialog = nullptr;
     Ui::StageplayExportDialog* stageplayExportDialog = nullptr;
     Ui::SimpleTextExportDialog* simpleTextExportDialog = nullptr;
+    Ui::NovelExportDialog* novelExportDialog = nullptr;
 };
 
 ExportManager::Implementation::Implementation(ExportManager* _parent, QWidget* _topLevelWidget)
@@ -844,6 +852,147 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
     simpleTextExportDialog->showDialog();
 }
 
+void ExportManager::Implementation::exportNovel(BusinessLayer::AbstractModel* _model)
+{
+    using namespace BusinessLayer;
+
+    if (novelExportDialog == nullptr) {
+        novelExportDialog = new Ui::NovelExportDialog(topLevelWidget);
+        connect(
+            novelExportDialog, &Ui::NovelExportDialog::exportRequested, novelExportDialog,
+            [this, _model] {
+                auto exportOptions = novelExportDialog->exportOptions();
+
+                //
+                // Предоставим пользователю возможность выбрать файл, куда он будет экспортировать
+                //
+                QString exportFilter;
+                QString exportExtension;
+                switch (exportOptions.fileFormat) {
+                default:
+                case ExportFileFormat::Pdf: {
+                    exportFilter = DialogHelper::pdfFilter();
+                    exportExtension = ExtensionHelper::pdf();
+                    break;
+                }
+                case ExportFileFormat::Docx: {
+                    exportFilter = DialogHelper::msWordFilter();
+                    exportExtension = ExtensionHelper::msOfficeOpenXml();
+                    break;
+                }
+                }
+                const auto novelTextModel = qobject_cast<BusinessLayer::NovelTextModel*>(_model);
+                const auto projectExportFolder
+                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                auto modelExportFile
+                    = QString("%1/%2.%3")
+                          .arg(projectExportFolder, novelTextModel->informationModel()->name(),
+                               exportExtension);
+                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                if (!modelExportFile.endsWith(exportExtension)) {
+                    const auto dotIndex = modelExportFile.lastIndexOf('.');
+                    if (dotIndex == -1) {
+                        modelExportFile += '.';
+                    } else {
+                        modelExportFile = modelExportFile.mid(0, dotIndex + 1);
+                    }
+                    modelExportFile += exportExtension;
+                }
+                auto exportFilePath = QFileDialog::getSaveFileName(
+                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                if (exportFilePath.isEmpty()) {
+                    return;
+                }
+
+                //
+                // Сохраним файл, в который экспортировали данную модель
+                //
+                setSettingsValue(exportModelKey(_model), exportFilePath);
+
+                //
+                // Если файл был выбран
+                //
+                exportOptions.filePath = exportFilePath;
+                //
+                // ... проверяем возможность записи в файл
+                //
+                QFile file(exportFilePath);
+                const bool canWrite = file.open(QIODevice::WriteOnly);
+                file.close();
+                if (!canWrite) {
+                    //
+                    // ... предупреждаем
+                    //
+                    QString errorMessage;
+                    const QFileInfo fileInfo(exportFilePath);
+                    if (fileInfo.exists()) {
+                        errorMessage = tr("Can't write to file. Looks like it's opened by another "
+                                          "application. Please close it and retry the export.");
+                    } else {
+                        errorMessage = tr("Can't write to file. Check permissions to write in the "
+                                          "chosen folder or choose another folder.");
+                    }
+                    StandardDialog::information(topLevelWidget, tr("Export error"), errorMessage);
+                    return;
+                }
+
+                //
+                // ... донастроим параметры экспорта
+                //
+                const auto novelInformation = novelTextModel->informationModel();
+                exportOptions.templateId = novelInformation->templateId();
+                exportOptions.header = novelInformation->header();
+                exportOptions.printHeaderOnTitlePage = novelInformation->printHeaderOnTitlePage();
+                exportOptions.footer = novelInformation->footer();
+                exportOptions.printFooterOnTitlePage = novelInformation->printFooterOnTitlePage();
+                //
+                // ... обновим папку, куда в следующий раз он предположительно опять будет
+                //     экспортировать
+                //
+                setSettingsValue(DataStorageLayer::kProjectExportFolderKey,
+                                 QFileInfo(exportFilePath).dir().absolutePath());
+                //
+                // ... и экспортируем документ
+                //
+                QScopedPointer<BusinessLayer::AbstractExporter> exporter;
+                switch (exportOptions.fileFormat) {
+                default:
+                case ExportFileFormat::Pdf: {
+                    exporter.reset(new BusinessLayer::NovelPdfExporter);
+                    break;
+                }
+                case ExportFileFormat::Docx: {
+                    exporter.reset(new BusinessLayer::NovelDocxExporter);
+                    break;
+                }
+                }
+                if (exporter.isNull()) {
+                    return;
+                }
+                exporter->exportTo(novelTextModel, exportOptions);
+
+                //
+                // Если необходимо, откроем экспортированный документ
+                //
+                if (novelExportDialog->openDocumentAfterExport()) {
+                    QDesktopServices::openUrl(QUrl::fromLocalFile(exportOptions.filePath));
+                }
+                //
+                // ... и закрываем диалог экспорта
+                //
+                novelExportDialog->hideDialog();
+            });
+        connect(novelExportDialog, &Ui::NovelExportDialog::canceled, novelExportDialog,
+                &Ui::NovelExportDialog::hideDialog);
+        connect(novelExportDialog, &Ui::NovelExportDialog::disappeared, novelExportDialog, [this] {
+            novelExportDialog->deleteLater();
+            novelExportDialog = nullptr;
+        });
+    }
+
+    novelExportDialog->showDialog();
+}
+
 
 // ****
 
@@ -886,6 +1035,13 @@ bool ExportManager::canExportDocument(BusinessLayer::AbstractModel* _model) cons
     case Domain::DocumentObjectType::StageplayText:
     //
     case Domain::DocumentObjectType::SimpleText:
+    //
+    case Domain::DocumentObjectType::Novel:
+    case Domain::DocumentObjectType::NovelTitlePage:
+    case Domain::DocumentObjectType::NovelSynopsis:
+    case Domain::DocumentObjectType::NovelOutline:
+    case Domain::DocumentObjectType::NovelText:
+    case Domain::DocumentObjectType::NovelStatistics:
         return true;
 
     default:
@@ -920,6 +1076,11 @@ void ExportManager::exportDocument(BusinessLayer::AbstractModel* _model)
 
     case Domain::DocumentObjectType::StageplayText: {
         d->exportStageplay(_model);
+        break;
+    }
+
+    case Domain::DocumentObjectType::NovelText: {
+        d->exportNovel(_model);
         break;
     }
 

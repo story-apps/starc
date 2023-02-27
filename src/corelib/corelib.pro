@@ -110,6 +110,9 @@ SOURCES += \
     business_layer/export/comic_book/comic_book_docx_exporter.cpp \
     business_layer/export/comic_book/comic_book_exporter.cpp \
     business_layer/export/comic_book/comic_book_pdf_exporter.cpp \
+    business_layer/export/novel/novel_docx_exporter.cpp \
+    business_layer/export/novel/novel_exporter.cpp \
+    business_layer/export/novel/novel_pdf_exporter.cpp \
     business_layer/export/screenplay/screenplay_docx_exporter.cpp \
     business_layer/export/screenplay/screenplay_exporter.cpp \
     business_layer/export/screenplay/screenplay_fdx_exporter.cpp \
@@ -398,6 +401,10 @@ HEADERS += \
     business_layer/export/comic_book/comic_book_exporter.h \
     business_layer/export/comic_book/comic_book_pdf_exporter.h \
     business_layer/export/export_options.h \
+    business_layer/export/novel/novel_docx_exporter.h \
+    business_layer/export/novel/novel_export_options.h \
+    business_layer/export/novel/novel_exporter.h \
+    business_layer/export/novel/novel_pdf_exporter.h \
     business_layer/export/screenplay/screenplay_docx_exporter.h \
     business_layer/export/screenplay/screenplay_export_options.h \
     business_layer/export/screenplay/screenplay_exporter.h \

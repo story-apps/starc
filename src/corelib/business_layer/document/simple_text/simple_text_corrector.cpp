@@ -360,8 +360,6 @@ void SimpleTextCorrector::Implementation::updateBlocksVisibility(int _from)
 
 void SimpleTextCorrector::Implementation::correctPageBreaks(int _position)
 {
-    return;
-
     //
     // Определим высоту страницы
     //
@@ -817,8 +815,7 @@ void SimpleTextCorrector::Implementation::correctPageBreaks(int _position)
             case TextParagraphType::ChapterHeading3:
             case TextParagraphType::ChapterHeading4:
             case TextParagraphType::ChapterHeading5:
-            case TextParagraphType::ChapterHeading6:
-            case TextParagraphType::SequenceHeading: {
+            case TextParagraphType::ChapterHeading6: {
                 //
                 // Переносим на следующую страницу
                 //
