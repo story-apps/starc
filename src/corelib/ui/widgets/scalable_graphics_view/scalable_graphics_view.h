@@ -31,6 +31,12 @@ public:
     void animateCenterOn(QGraphicsItem* _item);
 
     /**
+     * @brief Убедиться, что элемент на экране, если нет, анимированно сместить экран так, чтобы
+     *        элемент был виден
+     */
+    void animateEnsureVisible(QGraphicsItem* _item);
+
+    /**
      * @brief Сохранить текущее состояние
      */
     QByteArray saveState() const;

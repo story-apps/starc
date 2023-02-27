@@ -83,6 +83,47 @@ void ScalableGraphicsView::animateCenterOn(QGraphicsItem* _item)
     scrollingAnimation->start(QVariantAnimation::DeleteWhenStopped);
 }
 
+void ScalableGraphicsView::animateEnsureVisible(QGraphicsItem* _item)
+{
+    const qreal width = viewport()->width();
+    const qreal height = viewport()->height();
+    const QRectF viewRect
+        = QRectF(transform().map(_item->mapToScene(_item->shape().boundingRect().topLeft())),
+                 _item->boundingRect().size());
+    const qreal left = horizontalScrollBar()->value();
+    const qreal right = left + width;
+    const qreal top = verticalScrollBar()->value();
+    const qreal bottom = top + height;
+    const int xmargin = 50;
+    const int ymargin = 50;
+    QPoint targetPosition(left, top);
+    if (viewRect.left() <= left + xmargin) {
+        targetPosition.setX(viewRect.left() - xmargin - 0.5);
+    }
+    if (viewRect.right() >= right - xmargin) {
+        targetPosition.setX(viewRect.right() - width + xmargin + 0.5);
+    }
+    if (viewRect.top() <= top + ymargin) {
+        targetPosition.setY(viewRect.top() - ymargin - 0.5);
+    }
+    if (viewRect.bottom() >= bottom - ymargin) {
+        targetPosition.setY(viewRect.bottom() - height + ymargin + 0.5);
+    }
+
+    auto scrollingAnimation = new QVariantAnimation(this);
+    scrollingAnimation->setEasingCurve(QEasingCurve::OutQuad);
+    scrollingAnimation->setDuration(240);
+    scrollingAnimation->setStartValue(QPoint(left, top));
+    scrollingAnimation->setEndValue(targetPosition);
+    connect(scrollingAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) {
+                const auto position = _value.toPoint();
+                horizontalScrollBar()->setValue(position.x());
+                verticalScrollBar()->setValue(position.y());
+            });
+    scrollingAnimation->start(QVariantAnimation::DeleteWhenStopped);
+}
+
 QByteArray ScalableGraphicsView::saveState() const
 {
     QByteArray state;
