@@ -49,3 +49,6 @@
 [submodule "src/core/management_layer/plugins/novel_cards"]
 	path = src/core/management_layer/plugins/novel_cards
 	url = git@github.com:story-apps/starc-novel-cards-plugin.git 
+[submodule "src/core/management_layer/plugins/novel_statistics"]
+    path = src/core/management_layer/plugins/novel_statistics
+    url = git@github.com:story-apps/starc-novel-statistics-plugin.git

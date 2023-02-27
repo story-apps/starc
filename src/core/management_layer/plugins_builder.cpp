@@ -103,7 +103,7 @@ const QHash<QString, QString> kEditorToNavigator
         { kNovelOutlineEditorMime, kNovelOutlineNavigatorMime },
         { kNovelTextEditorMime, kNovelTextNavigatorMime },
         { kNovelTextCardsMime, kNovelTextNavigatorMime },
-        { kNovelStatisticsViewMime, kNovelStatisticsNavigatorMime },
+//        { kNovelStatisticsViewMime, kNovelStatisticsNavigatorMime },
       };
 
 /**

@@ -53,11 +53,6 @@ public:
      */
     QAbstractItemModel* textInfoModel() const;
 
-    /**
-     * @brief Получить информацию о персонажах
-     */
-    QAbstractItemModel* charactersInfoModel() const;
-
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

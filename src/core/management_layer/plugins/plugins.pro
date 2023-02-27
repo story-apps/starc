@@ -94,3 +94,7 @@ exists (images_gallery/images_gallery.pro) {
 exists (novel_cards/novel_cards.pro) {
     SUBDIRS += novel_cards
 }
+
+exists (novel_statistics/novel_statistics.pro) {
+    SUBDIRS += novel_statistics
+}
