@@ -242,6 +242,7 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsSimpleTextAvailableKey, true);
         //
         defaultValues.insert(kComponentsSimpleTextEditorDefaultTemplateKey, "mono_cp_a4");
+        defaultValues.insert(kComponentsSimpleTextEditorCorrectTextOnPageBreaksKey, false);
         //
         // Параметры навигатора простого текстового документа
         //
@@ -1139,7 +1140,7 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsNovelAvailableKey, true);
         //
         defaultValues.insert(kComponentsNovelEditorDefaultTemplateKey, "manuscript_t_a4");
-        defaultValues.insert(kComponentsNovelEditorCorrectTextOnPageBreaksKey, true);
+        defaultValues.insert(kComponentsNovelEditorCorrectTextOnPageBreaksKey, false);
         //
         // Параметры навигатора
         //

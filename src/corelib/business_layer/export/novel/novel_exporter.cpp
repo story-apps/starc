@@ -7,6 +7,8 @@
 #include <business_layer/export/export_options.h>
 #include <business_layer/templates/novel_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 
 
 namespace BusinessLayer {
@@ -16,7 +18,8 @@ TextDocument* NovelExporter::createDocument(const ExportOptions& _exportOptions)
     Q_UNUSED(_exportOptions)
 
     auto document = new NovelTextDocument;
-    document->setCorrectionOptions(true);
+    document->setCorrectionOptions(
+        settingsValue(DataStorageLayer::kComponentsNovelEditorCorrectTextOnPageBreaksKey).toBool());
     return document;
 }
 

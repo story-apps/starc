@@ -157,6 +157,8 @@ const QString kComponentsSimpleTextAvailableKey
 const QString kComponentsSimpleTextEditorKey = kComponentsSimpleTextKey + QStringLiteral("/editor");
 const QString kComponentsSimpleTextEditorDefaultTemplateKey
     = kComponentsSimpleTextEditorKey + QStringLiteral("/default-template");
+const QString kComponentsSimpleTextEditorCorrectTextOnPageBreaksKey
+    = kComponentsSimpleTextEditorKey + QStringLiteral("/correct-text-on-page-breaks");
 const QString kComponentsSimpleTextEditorShortcutsKey
     = kComponentsSimpleTextEditorKey + QStringLiteral("/shortcuts");
 // ... навигатор

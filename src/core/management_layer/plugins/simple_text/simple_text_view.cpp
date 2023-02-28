@@ -773,6 +773,13 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
 
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsSimpleTextEditorCorrectTextOnPageBreaksKey)) {
+        d->textEdit->setCorrectionOptions(
+            settingsValue(DataStorageLayer::kComponentsSimpleTextEditorCorrectTextOnPageBreaksKey)
+                .toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsSimpleTextEditorShortcutsKey)) {
         d->shortcutsManager.reconfigure();
     }

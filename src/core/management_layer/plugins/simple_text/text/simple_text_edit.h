@@ -27,6 +27,11 @@ public:
     ~SimpleTextEdit() override;
 
     /**
+     * @brief Настроить необходимость корректировок
+     */
+    void setCorrectionOptions(bool _needToCorrectPageBreaks);
+
+    /**
      * @brief Задать модель текста сценария
      */
     void initWithModel(BusinessLayer::SimpleTextModel* _model);

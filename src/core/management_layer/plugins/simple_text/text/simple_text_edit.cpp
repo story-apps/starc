@@ -127,6 +127,11 @@ SimpleTextEdit::SimpleTextEdit(QWidget* _parent)
 
 SimpleTextEdit::~SimpleTextEdit() = default;
 
+void SimpleTextEdit::setCorrectionOptions(bool _needToCorrectPageBreaks)
+{
+    d->document.setCorrectionOptions(_needToCorrectPageBreaks);
+}
+
 void SimpleTextEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
 {
     if (d->model) {
