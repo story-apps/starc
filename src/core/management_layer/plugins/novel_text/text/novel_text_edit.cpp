@@ -250,14 +250,6 @@ void NovelTextEdit::initWithModel(BusinessLayer::NovelTextModel* _model)
         connect(d->model->informationModel(), &BusinessLayer::NovelInformationModel::footerChanged,
                 this, &NovelTextEdit::setFooter);
     }
-    //
-    // Добавляем словарные термины в список исключений для проверки орфографии
-    //
-    if (d->model && d->model->dictionariesModel()) {
-        for (const auto& sceneIntro : d->model->dictionariesModel()->sceneIntros()) {
-            ignoreWord(sceneIntro.endsWith('.') ? sceneIntro.chopped(1) : sceneIntro);
-        }
-    }
 }
 
 void NovelTextEdit::reinit()

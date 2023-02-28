@@ -13,30 +13,6 @@ public:
     explicit NovelDictionariesModel(QObject* _parent = nullptr);
     ~NovelDictionariesModel() override;
 
-    const QVector<QString>& sceneIntros() const;
-    void addSceneIntro(const QString& _intro);
-    void setSceneIntro(int _index, const QString& _intro);
-    void removeSceneIntro(int _index);
-    Q_SIGNAL void sceneIntrosChanged();
-
-    const QVector<QString>& sceneTimes() const;
-    void addSceneTime(const QString& _time);
-    void setSceneTime(int _index, const QString& _time);
-    void removeSceneTime(int _index);
-    Q_SIGNAL void sceneTimesChanged();
-
-    const QVector<QString>& characterExtensions() const;
-    void addCharacterExtension(const QString& _extension);
-    void setCharacterExtension(int _index, const QString& _extension);
-    void removeCharacterExtension(int _index);
-    Q_SIGNAL void charactersExtensionsChanged();
-
-    const QVector<QString>& transitions() const;
-    void addTransition(const QString& _transition);
-    void setTransition(int _index, const QString& _transition);
-    void removeTransition(int _index);
-    Q_SIGNAL void transitionsChanged();
-
     QVector<QString> storyDays() const;
     void addStoryDay(const QString& _day);
     void removeStoryDay(const QString& _day);
