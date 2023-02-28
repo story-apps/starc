@@ -74,7 +74,12 @@ public:
     /**
      * @brief Обновить видимость блоков в заданном интервале
      */
-    void updateBlocksVisibility(int _from);
+    void updateBlocksVisibility(int _position);
+
+    /**
+     * @brief Обновить высоту блоков при необходимости
+     */
+    void updateBlocksHeight(int _position, int _charsChanged);
 
     /**
      * @brief Скорректировать текст сценария
@@ -238,14 +243,15 @@ QTextDocument* SimpleTextCorrector::Implementation::document() const
     return q->document();
 }
 
-void SimpleTextCorrector::Implementation::updateBlocksVisibility(int _from)
+void SimpleTextCorrector::Implementation::updateBlocksVisibility(int _position)
 {
     //
-    // Пробегаем документ и настраиваем видимые и невидимые блоки в соответствии с шаблоном
+    // Пробегаем документ и настраиваем видимые и невидимые блоки в соответствии с шаблоном,
     //
+
     const auto& currentTemplate = TemplatesFacade::simpleTextTemplate(q->templateId());
     TextCursor cursor(document());
-    cursor.setPosition(std::max(0, _from));
+    cursor.setPosition(std::max(0, _position));
     bool isTextChanged = false;
 
     bool isFirstVisibleBlock = cursor.block() == document()->begin();
@@ -345,9 +351,67 @@ void SimpleTextCorrector::Implementation::updateBlocksVisibility(int _from)
             //
             block.setVisible(isBlockShouldBeVisible);
         }
-
+        //
         if (isFirstVisibleBlock && isBlockShouldBeVisible) {
             isFirstVisibleBlock = false;
+        }
+
+        block = block.next();
+    }
+
+    if (isTextChanged) {
+        cursor.endEditBlock();
+    }
+}
+
+void SimpleTextCorrector::Implementation::updateBlocksHeight(int _position, int _charsChanged)
+{
+    //
+    // Пробегаем документ и настраиваем  высоту строк, в зависимости от используемых шрифтов в них
+    //
+
+    TextCursor cursor(document());
+    cursor.setPosition(std::max(0, _position));
+    bool isTextChanged = false;
+
+    const int endPosition
+        = _charsChanged > 0 ? cursor.position() + _charsChanged : document()->characterCount();
+    auto block = cursor.block();
+    while (block.isValid() && block.position() < endPosition) {
+        const auto blockType = TextBlockStyle::forBlock(block);
+
+        //
+        // В некоторых случаях, мы попадаем сюда, когда документ не до конца настроен, поэтому
+        // когда обнаруживается такая ситация, завершаем выполнение
+        //
+        if (blockType == TextParagraphType::Undefined) {
+            break;
+        }
+
+        //
+        // Корректируем высоту строк
+        //
+        if (const auto formats = block.textFormats(); !formats.isEmpty()) {
+            qreal blockHeight = 0.0;
+            if (!formats.isEmpty()) {
+                for (const auto& format : formats) {
+                    blockHeight
+                        = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
+                }
+            } else {
+                blockHeight = TextHelper::fineLineSpacing(cursor.blockCharFormat().font());
+            }
+            if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
+                if (!isTextChanged) {
+                    isTextChanged = true;
+                    cursor.beginEditBlock();
+                }
+
+                cursor.setPosition(block.position());
+                auto blockFormat = cursor.blockFormat();
+                blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
+                cursor.setBlockFormat(blockFormat);
+            }
         }
 
         block = block.next();
@@ -1177,9 +1241,8 @@ void SimpleTextCorrector::makeCorrections(int _position, int _charsChanged)
 
 void SimpleTextCorrector::makeSoftCorrections(int _position, int _charsChanged)
 {
-    Q_UNUSED(_charsChanged)
-
     d->updateBlocksVisibility(_position);
+    d->updateBlocksHeight(_position, _charsChanged);
 }
 
 } // namespace BusinessLayer

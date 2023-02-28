@@ -122,42 +122,10 @@ TitlePageView::TitlePageView(QWidget* _parent)
     connect(d->toolbar, &TitlePageEditToolbar::redoPressed, d->textEdit, &TitlePageEdit::redo);
     connect(d->toolbar, &TitlePageEditToolbar::fontChanged, this, [this](const QFont& _font) {
         //
-        // Запомним интервал выделения
-        //
-        BusinessLayer::TextCursor cursor = d->textEdit->textCursor();
-        const auto selectionInterval = cursor.selectionInterval();
-
-        //
         // Применяем шрифт
         //
         d->textEdit->setTextFont(_font);
-        //
-        // Обновим высоту блока, если требуется
-        //
-        qreal blockHeight = 0.0;
-        cursor.setPosition(selectionInterval.from);
-        while (cursor.position() <= selectionInterval.to) {
-            const auto formats = cursor.block().textFormats();
-            if (!formats.isEmpty()) {
-                for (const auto& format : formats) {
-                    blockHeight
-                        = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
-                }
-            } else {
-                blockHeight = TextHelper::fineLineSpacing(cursor.blockCharFormat().font());
-            }
-            if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
-                auto blockFormat = cursor.blockFormat();
-                blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
-                cursor.setBlockFormat(blockFormat);
-            }
-            cursor.movePosition(QTextCursor::EndOfBlock);
-            if (cursor.atEnd()) {
-                break;
-            }
 
-            cursor.movePosition(QTextCursor::NextBlock);
-        }
         //
         // Возвращем фокус в редактор текста
         //
