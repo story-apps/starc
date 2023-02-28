@@ -314,8 +314,7 @@ void NovelExportDialog::updateTranslations()
     d->includeInlineNotes->setText(tr("Include inline notes"));
     d->includeReviewMarks->setText(tr("Include review marks"));
     d->ornamentalBreak->setLabel(tr("Scenes' ornamental break"));
-    d->ornamentalBreak->setHelper(
-        tr("Keep empty, if you want to print scene headings instead"));
+    d->ornamentalBreak->setHelper(tr("Keep empty, if you want to print scene headings instead"));
     d->watermark->setLabel(tr("Watermark"));
 
     d->openDocumentAfterExport->setText(tr("Open document after export"));
