@@ -3,7 +3,7 @@
     <id type="desktop">dev.storyapps.starc</id>
     <launchable type="desktop-id">dev.storyapps.starc.desktop</launchable>
     <name>Story Architect (STARC)</name>
-    <summary>All-in-One Screenwriting App</summary>
+    <summary>All-in-One Writing App</summary>
     <metadata_license>CC0-1.0</metadata_license>
     <project_license>LicenseRef-proprietary</project_license>
     <developer_name>Story Apps</developer_name>
@@ -26,6 +26,10 @@
         <keyword>series</keyword>
         <keyword>episode</keyword>
         <keyword>fountain</keyword>
+        <keyword>novel</keyword>
+        <keyword>prose</keyword>
+        <keyword>fiction</keyword>
+        <keyword>fiction writing</keyword>
     </keywords>
     <url type="homepage">https://starc.app</url>
     <url type="bugtracker">https://github.com/story-apps/starc/issues</url>
@@ -39,7 +43,7 @@
             <li>Ability to maintain a project bible</li>
             <li>Detailed descriptions of the characters + diagram of their relationship</li>
             <li>Detailed descriptions of locations + map of locations</li>
-            <li>Ability to work with screenplays, comic books, plays and audio drama</li>
+            <li>Ability to work with screenplays, comic books, plays, audio drama and novels</li>
             <li>Specialized editors that automate the work on each of the forms of your works</li>
             <li>Ability to create an unlimited number of series within one project</li>
             <li>Ability to save your works in DOCX and PDF formats</li>
@@ -91,6 +95,7 @@
         </screenshot>
     </screenshots>
     <releases>
+        <release version="0.4.3" date="2023-02-28"/>
         <release version="0.4.2" date="2023-02-16"/>
         <release version="0.4.1" date="2023-01-31"/>
         <release version="0.4.0" date="2023-01-17"/>
