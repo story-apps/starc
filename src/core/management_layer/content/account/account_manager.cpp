@@ -263,6 +263,11 @@ void AccountManager::completeSignIn(bool _openAccount)
     }
 }
 
+const Domain::AccountInfo& AccountManager::accountInfo() const
+{
+    return d->accountInfo;
+}
+
 void AccountManager::setAccountInfo(const Domain::AccountInfo& _accountInfo)
 {
     d->accountInfo = _accountInfo;

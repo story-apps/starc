@@ -500,7 +500,7 @@ void ApplicationManager::Implementation::sendCrashInfo()
     //
     // Настраиваем соединения диалога
     //
-    connect(dialog, &Ui::CrashReportDialog::sendReportPressed, q, [crashDumps, dialog] {
+    connect(dialog, &Ui::CrashReportDialog::sendReportPressed, q, [this, crashDumps, dialog] {
         //
         // Сформируем пары <дамп, лог>
         //
@@ -539,6 +539,7 @@ void ApplicationManager::Implementation::sendCrashInfo()
             loader->setRequestMethod(NetworkRequestMethod::Post);
             loader->addRequestAttribute("app_info", appInfo(dumpAndLog.second));
             loader->addRequestAttribute("email", dialog->contactEmail());
+            loader->addRequestAttribute("username", accountManager->accountInfo().name);
             loader->addRequestAttribute("frequency", dialog->frequency());
             loader->addRequestAttribute("crashSource", dialog->crashSource());
             loader->addRequestAttribute("message", dialog->crashDetails());

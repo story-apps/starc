@@ -46,8 +46,9 @@ public:
     void completeSignIn(bool _openAccount);
 
     /**
-     * @brief Установить параметры аккаунта
+     * @brief Параметры аккаунта
      */
+    const Domain::AccountInfo& accountInfo() const;
     void setAccountInfo(const Domain::AccountInfo& _accountInfo);
     void clearAccountInfo();
 
