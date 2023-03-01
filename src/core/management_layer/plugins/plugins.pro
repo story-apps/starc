@@ -67,6 +67,14 @@ exists (world_information/world_information.pro) {
     SUBDIRS += world_information
 }
 
+exists (screenplay_cards/screenplay_cards.pro) {
+    SUBDIRS += screenplay_cards
+}
+
+exists (screenplay_breakdown/screenplay_breakdown.pro) {
+    SUBDIRS += screenplay_breakdown
+}
+
 exists (screenplay_statistics/screenplay_statistics.pro) {
     SUBDIRS += screenplay_statistics
 }
@@ -83,18 +91,14 @@ exists (stageplay_statistics/stageplay_statistics.pro) {
     SUBDIRS += stageplay_statistics
 }
 
-exists (screenplay_cards/screenplay_cards.pro) {
-    SUBDIRS += screenplay_cards
-}
-
-exists (images_gallery/images_gallery.pro) {
-    SUBDIRS += images_gallery
-}
-
 exists (novel_cards/novel_cards.pro) {
     SUBDIRS += novel_cards
 }
 
 exists (novel_statistics/novel_statistics.pro) {
     SUBDIRS += novel_statistics
+}
+
+exists (images_gallery/images_gallery.pro) {
+    SUBDIRS += images_gallery
 }

@@ -52,6 +52,8 @@ const QString kScreenplayTreatmentNavigatorMime = QStringLiteral("application/x-
 const QString kScreenplayTextEditorMime = QStringLiteral("application/x-starc/editor/screenplay/text/text");
 const QString kScreenplayTextNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/text");
 const QString kScreenplayTextCardsMime = QStringLiteral("application/x-starc/editor/screenplay/text/cards");
+const QString kScreenplayTextBreakdownMime = QStringLiteral("application/x-starc/editor/screenplay/text/breakdown");
+const QString kScreenplayTextBreakdownNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/text/breakdown");
 const QString kScreenplayStatisticsViewMime = QStringLiteral("application/x-starc/view/screenplay/statistics");
 const QString kScreenplayStatisticsNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/statistics");
 //
@@ -96,6 +98,7 @@ const QHash<QString, QString> kEditorToNavigator
         { kScreenplayTreatmentEditorMime, kScreenplayTreatmentNavigatorMime },
         { kScreenplayTextEditorMime, kScreenplayTextNavigatorMime },
         { kScreenplayTextCardsMime, kScreenplayTextNavigatorMime },
+        { kScreenplayTextBreakdownMime, kScreenplayTextBreakdownNavigatorMime },
         { kScreenplayStatisticsViewMime, kScreenplayStatisticsNavigatorMime },
         { kComicBookTextEditorMime, kComicBookTextNavigatorMime },
         { kAudioplayTextEditorMime, kAudioplayTextNavigatorMime },
@@ -121,7 +124,8 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
                                                                   /*{ "application/x-starc/editor/screenplay/beatboard", u8"\U000F13D2" }*/ } },
         { "application/x-starc/document/screenplay/text",       { { kScreenplayTextEditorMime, u8"\U000f09ed" },
                                                                   { kScreenplayTextCardsMime, u8"\U000f0554" },
-                                                                  /*{ "application/x-starc/editor/screenplay/timeline", u8"\U000F066C" }*/ } },
+                                                                  /*{ "application/x-starc/editor/screenplay/timeline", u8"\U000F066C" }*/
+                                                                  { kScreenplayTextBreakdownMime, u8"\U000F04FC" } } },
         { "application/x-starc/document/screenplay/statistics", { { kScreenplayStatisticsViewMime, u8"\U000f0127" } } },
         //
         { "application/x-starc/document/comicbook",  { { "application/x-starc/editor/comicbook/information", u8"\U000f02fd" },
@@ -194,6 +198,8 @@ const QHash<QString, QString> kMimeToPlugin
         { kScreenplayTextEditorMime, "*screenplaytextplugin*" },
         { kScreenplayTextNavigatorMime, "*screenplaytextstructureplugin*" },
         { kScreenplayTextCardsMime, "*screenplaycardsplugin*" },
+        { kScreenplayTextBreakdownMime, "*screenplaybreakdownplugin*" },
+        { kScreenplayTextBreakdownNavigatorMime, "*screenplaytextbreakdownstructureplugin*" },
         { kScreenplayStatisticsViewMime, "*screenplaystatisticsplugin*" },
         { kScreenplayStatisticsNavigatorMime, "*screenplaystatisticsstructureplugin*" },
         //
@@ -435,7 +441,9 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                 { kScreenplayTextCardsMime,
                   QApplication::translate("ProjectPluginsBuilder", "Cards") },
                 { "application/x-starc/editor/screenplay/timeline",
-                  QApplication::translate("ProjectPluginsBuilder", "Timeline") } } },
+                  QApplication::translate("ProjectPluginsBuilder", "Timeline") },
+                { kScreenplayTextBreakdownMime,
+                  QApplication::translate("ProjectPluginsBuilder", "Breakdown") } } },
             { "application/x-starc/document/screenplay/statistics",
               { { kScreenplayStatisticsViewMime,
                   QApplication::translate("ProjectPluginsBuilder", "Statistics") } } },
@@ -775,12 +783,14 @@ void PluginsBuilder::reconfigureScreenplayEditor(const QStringList& _changedSett
     reconfigurePlugin(kScreenplayTreatmentEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTextEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTextCardsMime, _changedSettingsKeys);
+    reconfigurePlugin(kScreenplayTextBreakdownMime, _changedSettingsKeys);
 }
 
 void PluginsBuilder::reconfigureScreenplayNavigator() const
 {
     reconfigurePlugin(kScreenplayTreatmentNavigatorMime, {});
     reconfigurePlugin(kScreenplayTextNavigatorMime, {});
+    reconfigurePlugin(kScreenplayTextBreakdownNavigatorMime, {});
 }
 
 void PluginsBuilder::reconfigureComicBookEditor(const QStringList& _changedSettingsKeys) const

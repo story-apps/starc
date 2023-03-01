@@ -52,3 +52,6 @@
 [submodule "src/core/management_layer/plugins/novel_statistics"]
     path = src/core/management_layer/plugins/novel_statistics
     url = git@github.com:story-apps/starc-novel-statistics-plugin.git
+[submodule "src/core/management_layer/plugins/screenplay_breakdown"]
+    path = src/core/management_layer/plugins/screenplay_breakdown
+    url = git@github.com:story-apps/starc-screenplay-breakdown-plugin.git

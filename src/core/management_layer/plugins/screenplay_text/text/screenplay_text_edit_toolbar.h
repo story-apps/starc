@@ -29,6 +29,12 @@ public:
     void setParagraphTypesModel(QAbstractItemModel* _model);
 
     /**
+     * @brief Включено ли отображение битов в сценарии
+     */
+    bool isBeatsVisible() const;
+    void setBeatsVisible(bool _visible);
+
+    /**
      * @brief Задать название типа текущего параграфа
      */
     void setCurrentParagraphType(const QModelIndex& _index);
@@ -43,12 +49,6 @@ public:
      */
     bool isFastFormatPanelVisible() const;
     void setFastFormatPanelVisible(bool _visible);
-
-    /**
-     * @brief Включено ли отображение битов в сценарии
-     */
-    bool isBeatsVisible() const;
-    void setBeatsVisible(bool _visible);
 
     /**
      * @brief Иконка поиска
@@ -75,9 +75,9 @@ public:
 signals:
     void undoPressed();
     void redoPressed();
+    void beatsVisibleChanged(bool _visible);
     void paragraphTypeChanged(const QModelIndex& _index);
     void fastFormatPanelVisibleChanged(bool _visible);
-    void beatsVisibleChanged(bool _visible);
     void searchPressed();
     void commentsModeEnabledChanged(bool _enabled);
     void itemIsolationEnabledChanged(bool _enabled);

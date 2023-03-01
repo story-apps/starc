@@ -176,6 +176,16 @@ void ScreenplayTextEditToolbar::setParagraphTypesModel(QAbstractItemModel* _mode
     designSystemChangeEvent(nullptr);
 }
 
+bool ScreenplayTextEditToolbar::isBeatsVisible() const
+{
+    return d->beatsAction->isChecked();
+}
+
+void ScreenplayTextEditToolbar::setBeatsVisible(bool _visible)
+{
+    d->beatsAction->setChecked(_visible);
+}
+
 void ScreenplayTextEditToolbar::setCurrentParagraphType(const QModelIndex& _index)
 {
     //
@@ -200,16 +210,6 @@ bool ScreenplayTextEditToolbar::isFastFormatPanelVisible() const
 void ScreenplayTextEditToolbar::setFastFormatPanelVisible(bool _visible)
 {
     d->fastFormatAction->setChecked(_visible);
-}
-
-bool ScreenplayTextEditToolbar::isBeatsVisible() const
-{
-    return d->beatsAction->isChecked();
-}
-
-void ScreenplayTextEditToolbar::setBeatsVisible(bool _visible)
-{
-    d->beatsAction->setChecked(_visible);
 }
 
 QString ScreenplayTextEditToolbar::searchIcon() const
