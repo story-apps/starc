@@ -54,9 +54,10 @@ void NovelSummaryReport::build(QAbstractItemModel* _model)
     };
     QHash<TextParagraphType, Counters> paragraphsToCounters;
     const QVector<TextParagraphType> paragraphTypes = {
-        TextParagraphType::PartHeading, TextParagraphType::ChapterHeading,
+        TextParagraphType::PartHeading,
+        TextParagraphType::ChapterHeading,
         TextParagraphType::SceneHeading,
-        //        TextParagraphType::Text,
+        TextParagraphType::Text,
     };
     for (const auto type : paragraphTypes) {
         paragraphsToCounters.insert(type, {});
