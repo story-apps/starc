@@ -40,6 +40,8 @@ public:
     bool complete(QAbstractItemModel* _model, const QString& _completionPrefix);
     bool complete(QAbstractItemModel* _model, const QString& _completionPrefix,
                   int _cursorMovement);
+    bool complete(QAbstractItemModel* _model, const QString& _completionPrefix, int _cursorMovement,
+                  Qt::MatchFlags _filterMode);
 
     /**
      * @brief Применить выбранный в подстановщике элемент

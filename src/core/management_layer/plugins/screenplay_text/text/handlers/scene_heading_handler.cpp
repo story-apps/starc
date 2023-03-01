@@ -334,6 +334,7 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText,
     // ... в соответствии со введённым в секции текстом
     //
     QString sectionText;
+    Qt::MatchFlags filterMode = Qt::MatchStartsWith;
 
     switch (currentSection) {
     case ScreenplaySceneHeadingParser::SectionSceneIntro: {
@@ -344,8 +345,48 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText,
     }
 
     case ScreenplaySceneHeadingParser::SectionLocation: {
-        sectionModel = editor()->locations();
         sectionText = ScreenplaySceneHeadingParser::location(_currentBlockText);
+        //
+        // ... если пользователь ещё не начал вводить название локации, то используем модель целиком
+        //
+        if (sectionText.isEmpty()) {
+            sectionModel = editor()->locations();
+        }
+        //
+        // ... а если начал, то сортируем особым образом
+        //
+        else {
+            QStringList locationsToShow;
+            const auto locations = editor()->locations();
+            for (int row = 0; row < locations->rowCount(); ++row) {
+                const auto location = locations->data(locations->index(row, 0)).toString();
+                if (location.contains(sectionText)) {
+                    locationsToShow.append(location);
+                }
+            }
+            //
+            std::sort(locationsToShow.begin(), locationsToShow.end(),
+                      [sectionText](const QString& _lhs, const QString& _rhs) {
+                          if (_lhs.startsWith(sectionText)) {
+                              if (_rhs.startsWith(sectionText)) {
+                                  return _lhs < _rhs;
+                              } else {
+                                  return true;
+                              }
+                          } else {
+                              if (_rhs.startsWith(sectionText)) {
+                                  return false;
+                              } else {
+                                  return _lhs < _rhs;
+                              }
+                          }
+                      });
+            //
+            m_completerModel->setStringList(locationsToShow);
+            sectionModel = m_completerModel;
+        }
+
+        filterMode = Qt::MatchContains;
         break;
     }
 
@@ -401,8 +442,8 @@ void SceneHeadingHandler::complete(const QString& _currentBlockText,
     // ... дополняем, когда цикл обработки событий выполнится, чтобы позиция курсора
     //     корректно определилась после изменения текста
     //
-    QTimer::singleShot(0, editor(), [this, sectionModel, sectionText, cursorMovement] {
-        editor()->complete(sectionModel, sectionText, cursorMovement);
+    QTimer::singleShot(0, editor(), [this, sectionModel, sectionText, cursorMovement, filterMode] {
+        editor()->complete(sectionModel, sectionText, cursorMovement, filterMode);
     });
 }
 

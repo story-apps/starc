@@ -75,6 +75,12 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
 bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _completionPrefix,
                                  int _cursorMovement)
 {
+    return complete(_model, _completionPrefix, _cursorMovement, Qt::MatchStartsWith);
+}
+
+bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _completionPrefix,
+                                 int _cursorMovement, Qt::MatchFlags _filterMode)
+{
     if (!d->isCompleterActive) {
         return false;
     }
@@ -90,6 +96,7 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     d->completer->setModelSorting(QCompleter::UnsortedModel);
     d->completer->setCaseSensitivity(Qt::CaseInsensitive);
     d->completer->setCompletionPrefix(_completionPrefix);
+    d->completer->setFilterMode(_filterMode);
 
     //
     // Если в модели для дополнения нет элементов, или она уже полностью дополнена
@@ -151,27 +158,28 @@ void CompleterTextEdit::applyCompletion(const QModelIndex& _completionIndex)
     //
     // Вставим дополнение в текст
     //
-    const int completionStartFrom = d->completer->completionPrefix().length();
+    const auto completionPrefix = d->completer->completionPrefix();
     const auto completion = d->completer->popup()->model()->data(_completionIndex).toString();
-    const QString textToInsert = completion.mid(completionStartFrom);
 
     //
     // Определяем позицию вставки текста дополнения и помещаем туда курсор редактора
     //
-    while (!textCursor().atBlockEnd()) {
-        QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor,
-                            completionStartFrom);
-        if (cursor.selectedText().endsWith(d->completer->completionPrefix(), Qt::CaseInsensitive)) {
-            break;
+    QTextCursor cursor = textCursor();
+    if (!completionPrefix.isEmpty()) {
+        cursor.movePosition(QTextCursor::EndOfBlock);
+        while (!cursor.atBlockStart()
+               && cursor.selectedText().compare(completionPrefix, Qt::CaseInsensitive) != 0) {
+            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+            if (!completionPrefix.endsWith(cursor.selectedText(), Qt::CaseInsensitive)) {
+                cursor.clearSelection();
+            }
         }
-        moveCursor(QTextCursor::NextCharacter);
     }
 
     //
     // Собственно дополняем текст
     //
-    textCursor().insertText(textToInsert);
+    cursor.insertText(completion);
 
     //
     // Уведомим об успешном дополнении
