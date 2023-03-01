@@ -608,7 +608,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/novel/text/novel_text_model.cpp" line="143"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Роман</translation>
     </message>
 </context>
 <context>
@@ -1274,7 +1274,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="330"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Роман</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="335"/>
@@ -1284,7 +1284,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="341"/>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>План</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="346"/>
@@ -1338,37 +1338,37 @@
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="22"/>
         <source>Manuscript template (page: A4; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблон рукопису (формат: A4; шрифт: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="25"/>
         <source>Manuscript template (page: A4; font: Courier New)</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблон рукопису (формат: A4; шрифт: Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="28"/>
         <source>Manuscript template (page: A4; font: Times New Roman)</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблон рукопису (формат: A4; шрифт: Times New Roman)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="31"/>
         <source>Manuscript template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблон рукопису (формат: Letter; шрифт: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="35"/>
         <source>Manuscript template (page: Letter; font: Times New Roman)</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблон рукопису (формат: Letter; шрифт: Times New Roman)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="39"/>
         <source>Modern template (page: A4; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблон рукопису (формат: A4; шрифт: Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="42"/>
         <source>Modern template (page: Letter; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблон рукопису (формат: Letter; шрифт: Arial)</translation>
     </message>
 </context>
 <context>
@@ -2319,7 +2319,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="113"/>
         <source>To edit novel cards, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Щоб редагувати нові картки, потрібно перейти на PRO версію.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="114"/>
@@ -2343,7 +2343,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_outline_structure/novel_outline_structure_manager.cpp" line="362"/>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>План</translation>
     </message>
 </context>
 <context>
@@ -2351,12 +2351,12 @@
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_manager.cpp" line="170"/>
         <source>Generate novel text</source>
-        <translation type="unfinished"></translation>
+        <translation>Згенеруйте текст роману </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_manager.cpp" line="171"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a short novel about ...&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Почніть запит з чогось на кшталт &quot;Напиши роман про...&quot; або &quot;Напиши невелику новелу про...&quot;</translation>
     </message>
 </context>
 <context>
@@ -2370,7 +2370,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_text_structure/novel_text_structure_manager.cpp" line="370"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Роман</translation>
     </message>
 </context>
 <context>
@@ -3191,22 +3191,22 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="505"/>
         <source>Information about novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація про роман</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="507"/>
         <source>Novel parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметри роману</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="516"/>
         <source>Outline text</source>
-        <translation type="unfinished"></translation>
+        <translation>Текст плану</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="523"/>
         <source>Novel text</source>
-        <translation type="unfinished"></translation>
+        <translation>Текст роману</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="534"/>
@@ -4261,7 +4261,7 @@
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="637"/>
         <source>Human-readable name (hidden in text)</source>
-        <translation type="unfinished"></translation>
+        <translation>Тег картки (приховано в тексті)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="638"/>
@@ -4271,12 +4271,12 @@
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="648"/>
         <source>Header text (visible in text)</source>
-        <translation type="unfinished"></translation>
+        <translation>Назва картки (видна в тексті)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="651"/>
         <source>Story day</source>
-        <translation type="unfinished"></translation>
+        <translation>День подій</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="652"/>
@@ -5978,7 +5978,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="162"/>
         <source>Add novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати роман</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="163"/>
@@ -6033,7 +6033,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="189"/>
         <source>Create a document set to streamline your work on the fiction book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Створити набір документів для роботи над книгою.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="191"/>
@@ -6146,7 +6146,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="223"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Роман</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="228"/>
@@ -6267,7 +6267,7 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="365"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Роман</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="371"/>
@@ -7547,7 +7547,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="165"/>
         <source>Unlock ability to edit novel cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Розблокувати можливість редагування карток роману</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="167"/>
@@ -7562,12 +7562,12 @@
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="174"/>
         <source>Add part</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати частину</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="175"/>
         <source>Add chapter</source>
-        <translation type="unfinished"></translation>
+        <translation>Додати розділ</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="176"/>
@@ -7595,7 +7595,7 @@
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="306"/>
         <source>Export novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Експортувати роман</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="308"/>
@@ -7610,12 +7610,12 @@
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="310"/>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>План</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="311"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Роман</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="313"/>
@@ -7635,12 +7635,12 @@
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="316"/>
         <source>Scenes&apos; ornamental break</source>
-        <translation type="unfinished"></translation>
+        <translation>Декоративний розрив сцен</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="317"/>
         <source>Keep empty, if you want to print scene headings instead</source>
-        <translation type="unfinished"></translation>
+        <translation>Залиште порожнім, якщо хочете друкувати заголовки сцен</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="318"/>
@@ -7692,7 +7692,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="233"/>
         <source>Novel name</source>
-        <translation type="unfinished"></translation>
+        <translation>Назва роману</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="234"/>
@@ -7722,12 +7722,12 @@
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="239"/>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>План</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="240"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Роман</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="241"/>
@@ -7854,7 +7854,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="294"/>
         <source>In beats</source>
-        <translation type="unfinished"></translation>
+        <translation>У бітах</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="298"/>
@@ -7940,7 +7940,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="222"/>
         <source>Override common settings for this novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевизначити налаштування для цього роману</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="223"/>
@@ -8163,7 +8163,7 @@
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="118"/>
         <source>%n page(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n сторінка</numerusform>
             <numerusform>%n сторінки</numerusform>
             <numerusform>%n сторінок</numerusform>
@@ -8172,7 +8172,7 @@
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="119"/>
         <source>%n scene(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n сцена</numerusform>
             <numerusform>%n сцени</numerusform>
             <numerusform>%n сцен</numerusform>
@@ -8190,7 +8190,7 @@
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="121"/>
         <source>%n character(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n символ</numerusform>
             <numerusform>%n символи</numerusform>
             <numerusform>%n символів</numerusform>
@@ -8199,7 +8199,7 @@
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="122"/>
         <source>%n character(s) with spaces</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%n символ з пробілами</numerusform>
             <numerusform>%n символи з пробілами</numerusform>
             <numerusform>%n символів з пробілами</numerusform>
@@ -8409,17 +8409,17 @@ FREE, PRO і TEAM версій</translation>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="744"/>
         <source>Customize your workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Налаштуйте власний робочий простір</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="745"/>
         <source>Feel at home</source>
-        <translation type="unfinished"></translation>
+        <translation>Почувайтеся як вдома</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="747"/>
         <source>Story Architect provides tools for working with any form of writing. Choose which ones you plan to use:</source>
-        <translation type="unfinished"></translation>
+        <translation>Story Architect надає інструменти для будь-якої писемної діяльності. Виберіть, над чим ви плануєте працювати: </translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="750"/>
@@ -8444,7 +8444,7 @@ FREE, PRO і TEAM версій</translation>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="754"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Роман</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="757"/>
@@ -9963,7 +9963,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="819"/>
         <source>First line</source>
-        <translation type="unfinished"></translation>
+        <translation>Перший рядок</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="824"/>
@@ -10484,7 +10484,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="297"/>
         <source>In beats</source>
-        <translation type="unfinished"></translation>
+        <translation>У бітах</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="301"/>
@@ -10763,7 +10763,7 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="200"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Роман</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="201"/>
@@ -11475,12 +11475,12 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3288"/>
         <source>Replace two dashes with em dash</source>
-        <translation type="unfinished"></translation>
+        <translation>Замінити подвійне тире на довге</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3289"/>
         <source>Avoid multiple spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Заборонити введення декількох пробілів поспіль</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3296"/>
@@ -11608,17 +11608,17 @@ STARTED</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3433"/>
         <source>Novel module</source>
-        <translation type="unfinished"></translation>
+        <translation>Модуль роману</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3434"/>
         <source>Turn on/off novel module</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути/вимкнути модуль роману</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3440"/>
         <source>Show part, chapter and scene text, lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Показувати текст частини, розділу та сцени, рядків</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3454"/>

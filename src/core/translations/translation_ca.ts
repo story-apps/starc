@@ -107,12 +107,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="155"/>
         <source>Chapter</source>
-        <translation type="unfinished"></translation>
+        <translation>Capítol</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="157"/>
         <source>Chapter footer</source>
-        <translation type="unfinished"></translation>
+        <translation>Peu de capítol</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="160"/>

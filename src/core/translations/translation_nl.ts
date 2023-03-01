@@ -97,22 +97,22 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="151"/>
         <source>Part</source>
-        <translation type="unfinished"></translation>
+        <translation>Onderdeel</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="153"/>
         <source>Part footer</source>
-        <translation type="unfinished"></translation>
+        <translation>Onderdeelvoettekst</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="155"/>
         <source>Chapter</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoofdstuk</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="157"/>
         <source>Chapter footer</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoofdstukvoettekst</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="160"/>
@@ -608,7 +608,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/novel/text/novel_text_model.cpp" line="143"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman</translation>
     </message>
 </context>
 <context>
@@ -1273,7 +1273,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="330"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="335"/>
@@ -1283,7 +1283,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="341"/>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>Contour</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="346"/>
@@ -1337,37 +1337,37 @@
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="22"/>
         <source>Manuscript template (page: A4; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuscriptsjabloon (paginatype: A4; lettertype: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="25"/>
         <source>Manuscript template (page: A4; font: Courier New)</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuscriptsjabloon (paginatype: A4; lettertype: Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="28"/>
         <source>Manuscript template (page: A4; font: Times New Roman)</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuscriptsjabloon (paginatype: A4; lettertype: Times New Roman)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="31"/>
         <source>Manuscript template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuscriptsjabloon (paginatype: briefpapier; lettertype: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="35"/>
         <source>Manuscript template (page: Letter; font: Times New Roman)</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuscriptsjabloon (paginatype: briefpapier; lettertype: Times New Roman)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="39"/>
         <source>Modern template (page: A4; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>Modern sjabloon (paginatype: A4; lettertype: Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="42"/>
         <source>Modern template (page: Letter; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>Modern sjabloon (paginatype: briefpapier; lettertype: Arial)</translation>
     </message>
 </context>
 <context>
@@ -2315,7 +2315,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="113"/>
         <source>To edit novel cards, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Romankaarten kunnen alléén worden bewerkt in de PRO-versie.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="114"/>
@@ -2339,7 +2339,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_outline_structure/novel_outline_structure_manager.cpp" line="362"/>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>Contour</translation>
     </message>
 </context>
 <context>
@@ -2347,12 +2347,12 @@
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_manager.cpp" line="170"/>
         <source>Generate novel text</source>
-        <translation type="unfinished"></translation>
+        <translation>Romantekst genereren</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_manager.cpp" line="171"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a short novel about ...&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Begin de suggestie met iets als ‘Schrijf een roman over …’ of ‘Schrijf een korte roman over …’</translation>
     </message>
 </context>
 <context>
@@ -2366,7 +2366,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_text_structure/novel_text_structure_manager.cpp" line="370"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman</translation>
     </message>
 </context>
 <context>
@@ -3172,7 +3172,7 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="485"/>
         <source>Information about stageplay</source>
-        <translation>Informatie over toneelstuk</translation>
+        <translation>Toneelstukinformatie</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="487"/>
@@ -3187,22 +3187,22 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="505"/>
         <source>Information about novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Romaninformatie</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="507"/>
         <source>Novel parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Romanopties</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="516"/>
         <source>Outline text</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst voorzien van contour</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="523"/>
         <source>Novel text</source>
-        <translation type="unfinished"></translation>
+        <translation>Romantekst</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="534"/>
@@ -4255,7 +4255,7 @@
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="637"/>
         <source>Human-readable name (hidden in text)</source>
-        <translation type="unfinished"></translation>
+        <translation>Leesbare naam (verborgen in tekst)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="638"/>
@@ -4265,12 +4265,12 @@
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="648"/>
         <source>Header text (visible in text)</source>
-        <translation type="unfinished"></translation>
+        <translation>Koptekst (zichtbaar in tekst)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="651"/>
         <source>Story day</source>
-        <translation type="unfinished"></translation>
+        <translation>Dag in verhaal</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="652"/>
@@ -5968,7 +5968,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="162"/>
         <source>Add novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman toevoegen</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="163"/>
@@ -6023,7 +6023,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="189"/>
         <source>Create a document set to streamline your work on the fiction book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Maak een document om uw werk te stroomlijnen.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="191"/>
@@ -6136,7 +6136,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="223"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="228"/>
@@ -6257,7 +6257,7 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="365"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="371"/>
@@ -7536,7 +7536,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="165"/>
         <source>Unlock ability to edit novel cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Mogelijkheid om romankaarten te bewerken ontgrendelen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="167"/>
@@ -7551,12 +7551,12 @@
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="174"/>
         <source>Add part</source>
-        <translation type="unfinished"></translation>
+        <translation>Onderdeel toevoegen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="175"/>
         <source>Add chapter</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoofdstuk toevoegen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="176"/>
@@ -7584,7 +7584,7 @@
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="306"/>
         <source>Export novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman exporteren</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="308"/>
@@ -7599,12 +7599,12 @@
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="310"/>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>Contour</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="311"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="313"/>
@@ -7624,12 +7624,12 @@
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="316"/>
         <source>Scenes&apos; ornamental break</source>
-        <translation type="unfinished"></translation>
+        <translation>Lange tussenpauze in scène</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="317"/>
         <source>Keep empty, if you want to print scene headings instead</source>
-        <translation type="unfinished"></translation>
+        <translation>Laat leeg als u alle scènekoppen wilt afdrukken</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="318"/>
@@ -7680,7 +7680,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="233"/>
         <source>Novel name</source>
-        <translation type="unfinished"></translation>
+        <translation>Romannaam</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="234"/>
@@ -7710,12 +7710,12 @@
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="239"/>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>Contour</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="240"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="241"/>
@@ -7842,7 +7842,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="294"/>
         <source>In beats</source>
-        <translation type="unfinished"></translation>
+        <translation>In beats</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="298"/>
@@ -7928,7 +7928,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="222"/>
         <source>Override common settings for this novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Algemene instellingen van roman omzeilen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="223"/>
@@ -8392,17 +8392,17 @@ GRATIS, PRO- en TEAM-functies</translation>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="744"/>
         <source>Customize your workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Zet de werkruimte naar eigen hand</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="745"/>
         <source>Feel at home</source>
-        <translation type="unfinished"></translation>
+        <translation>Voel u thuis</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="747"/>
         <source>Story Architect provides tools for working with any form of writing. Choose which ones you plan to use:</source>
-        <translation type="unfinished"></translation>
+        <translation>Story Architect biedt hulpmiddelen voor het werken aan elk soort geschrift. Kies het abonnement dat bij u past:</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="750"/>
@@ -8427,7 +8427,7 @@ GRATIS, PRO- en TEAM-functies</translation>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="754"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="757"/>
@@ -9941,7 +9941,7 @@ Bespreek alles wat u maar wilt met andere schrijvers, deel uw voortgang en praat
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="819"/>
         <source>First line</source>
-        <translation type="unfinished"></translation>
+        <translation>Eerste regel</translation>
     </message>
     <message>
         <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="824"/>
@@ -10457,7 +10457,7 @@ Bespreek alles wat u maar wilt met andere schrijvers, deel uw voortgang en praat
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="297"/>
         <source>In beats</source>
-        <translation type="unfinished"></translation>
+        <translation>In beats</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="301"/>
@@ -10735,7 +10735,7 @@ OM</translation>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="200"/>
         <source>Novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_navigator.cpp" line="201"/>
@@ -11447,12 +11447,12 @@ OM</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3288"/>
         <source>Replace two dashes with em dash</source>
-        <translation type="unfinished"></translation>
+        <translation>Twee streepjes vervangen door gedachtestreepje</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3289"/>
         <source>Avoid multiple spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Meerdere spaties corrigeren</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3296"/>
@@ -11580,17 +11580,17 @@ OM</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3433"/>
         <source>Novel module</source>
-        <translation type="unfinished"></translation>
+        <translation>Romanmodule</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3434"/>
         <source>Turn on/off novel module</source>
-        <translation type="unfinished"></translation>
+        <translation>Romanmodule aan/uit</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3440"/>
         <source>Show part, chapter and scene text, lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Onderdeel-, hoofdstuk-, scènetekst en -regels tonen</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3454"/>

@@ -6025,7 +6025,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="189"/>
         <source>Create a document set to streamline your work on the fiction book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erstellen sie einen Satz von Dokumenten um die Arbeit an ihrem Buch zu optimieren.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="191"/>
@@ -7626,12 +7626,12 @@
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="316"/>
         <source>Scenes&apos; ornamental break</source>
-        <translation type="unfinished"></translation>
+        <translation>dekorative Szenen-Unterbrechungen</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="317"/>
         <source>Keep empty, if you want to print scene headings instead</source>
-        <translation>Leer lassen, falls sie lieber Szenenüberschriften wollen</translation>
+        <translation>Leer lassen, falls sie lieber Szenenüberschriften drucken wollen</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="318"/>
@@ -7676,7 +7676,7 @@
         <source>%n word(s)</source>
         <translation>
             <numerusform>%n Wort</numerusform>
-            <numerusform>%n Worte</numerusform>
+            <numerusform>%n Wort(e)</numerusform>
         </translation>
     </message>
     <message>
@@ -7692,7 +7692,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="235"/>
         <source>Logline</source>
-        <translation>Log Line</translation>
+        <translation>Logline</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="236"/>
@@ -7844,7 +7844,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="294"/>
         <source>In beats</source>
-        <translation type="unfinished"></translation>
+        <translation>In Beats</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="298"/>
@@ -8115,7 +8115,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="299"/>
         <source>In text</source>
-        <translation>In Text</translation>
+        <translation>Im Text</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="303"/>
@@ -10450,7 +10450,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="297"/>
         <source>In beats</source>
-        <translation type="unfinished"></translation>
+        <translation>In beats</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="301"/>
