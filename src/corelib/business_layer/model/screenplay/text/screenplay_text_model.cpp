@@ -8,6 +8,7 @@
 
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
+#include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -77,6 +78,7 @@ public:
      * @brief Справочники, которые строятся в рантайме
      */
     QStringListModel* charactersModelFromText = nullptr;
+    QStringListModel* locationsModelFromText = nullptr;
 
     /**
      * @brief Количество страниц
@@ -438,6 +440,10 @@ void ScreenplayTextModel::setLocationsModel(LocationsModel* _model)
 
 QAbstractItemModel* ScreenplayTextModel::locationsModel() const
 {
+    if (d->locationsModelFromText != nullptr) {
+        return d->locationsModelFromText;
+    }
+
     return d->locationsModel;
 }
 
@@ -802,6 +808,10 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
             d->charactersModelFromText->deleteLater();
             d->charactersModelFromText = nullptr;
         }
+        if (d->locationsModelFromText != nullptr) {
+            d->locationsModelFromText->deleteLater();
+            d->locationsModelFromText = nullptr;
+        }
         //
         // ... и далее ничего не делаем
         //
@@ -813,7 +823,7 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
     //
     QSet<QString> characters;
     std::function<void(const TextModelItem*)> findCharactersInText;
-    findCharactersInText = [this, &findCharactersInText, &characters](const TextModelItem* _item) {
+    findCharactersInText = [&findCharactersInText, &characters](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
@@ -831,18 +841,13 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
                     const auto sceneCharacters
                         = ScreenplaySceneCharactersParser::characters(textItem->text());
                     for (const auto& character : sceneCharacters) {
-                        if (d->charactersModel->exists(character)) {
-                            characters.insert(character);
-                        }
+                        characters.insert(character);
                     }
                     break;
                 }
 
                 case TextParagraphType::Character: {
-                    const auto character = ScreenplayCharacterParser::name(textItem->text());
-                    if (d->charactersModel->exists(character)) {
-                        characters.insert(character);
-                    }
+                    characters.insert(ScreenplayCharacterParser::name(textItem->text()));
                     break;
                 }
 
@@ -860,6 +865,7 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
         }
     };
     findCharactersInText(d->rootItem());
+    characters.remove({});
     //
     // ... не забываем приаттачить всех персонажей, у кого определена роль в истории
     //
@@ -876,6 +882,55 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
         d->charactersModelFromText = new QStringListModel(this);
     }
     d->charactersModelFromText->setStringList(characters.values());
+
+    //
+    // Собираем локации из текста
+    //
+    QSet<QString> locations;
+    std::function<void(const TextModelItem*)> findLocationsInText;
+    findLocationsInText = [&findLocationsInText, &locations](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case TextModelItemType::Folder:
+            case TextModelItemType::Group: {
+                findLocationsInText(childItem);
+                break;
+            }
+
+            case TextModelItemType::Text: {
+                auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+
+                if (textItem->paragraphType() == TextParagraphType::SceneHeading) {
+                    locations.insert(ScreenplaySceneHeadingParser::location(textItem->text()));
+                }
+
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
+    findLocationsInText(d->rootItem());
+    locations.remove({});
+    //
+    // ... не забываем приаттачить всех персонажей, у кого определена роль в истории
+    //
+    for (int row = 0; row < d->locationsModel->rowCount(); ++row) {
+        const auto location = d->locationsModel->location(row);
+        if (location->storyRole() != LocationStoryRole::Undefined) {
+            locations.insert(location->name());
+        }
+    }
+    //
+    // ... создаём (при необходимости) и наполняем модель
+    //
+    if (d->locationsModelFromText == nullptr) {
+        d->locationsModelFromText = new QStringListModel(this);
+    }
+    d->locationsModelFromText->setStringList(locations.values());
 }
 
 void ScreenplayTextModel::initEmptyDocument()

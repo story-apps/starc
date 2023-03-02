@@ -163,6 +163,15 @@ LocationModel* LocationsModel::location(const QString& _name) const
     return nullptr;
 }
 
+LocationModel* LocationsModel::location(int _row) const
+{
+    if (0 <= _row && _row < d->locationModels.size()) {
+        return d->locationModels.at(_row);
+    }
+
+    return nullptr;
+}
+
 QVector<LocationModel*> LocationsModel::locations(const QString& _name) const
 {
     QVector<LocationModel*> locations;

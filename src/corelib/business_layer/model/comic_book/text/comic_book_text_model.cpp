@@ -425,7 +425,7 @@ void ComicBookTextModel::updateRuntimeDictionaries()
     //
     QSet<QString> characters;
     std::function<void(const TextModelItem*)> findCharactersInText;
-    findCharactersInText = [this, &findCharactersInText, &characters](const TextModelItem* _item) {
+    findCharactersInText = [&findCharactersInText, &characters](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
@@ -440,10 +440,7 @@ void ComicBookTextModel::updateRuntimeDictionaries()
 
                 switch (textItem->paragraphType()) {
                 case TextParagraphType::Character: {
-                    const auto character = ComicBookCharacterParser::name(textItem->text());
-                    if (d->charactersModel->exists(character)) {
-                        characters.insert(character);
-                    }
+                    characters.insert(ComicBookCharacterParser::name(textItem->text()));
                     break;
                 }
 
@@ -461,6 +458,7 @@ void ComicBookTextModel::updateRuntimeDictionaries()
         }
     };
     findCharactersInText(d->rootItem());
+    characters.remove({});
     //
     // ... не забываем приаттачить всех персонажей, у кого определена роль в истории
     //

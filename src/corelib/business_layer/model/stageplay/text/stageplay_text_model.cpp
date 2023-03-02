@@ -397,7 +397,7 @@ void StageplayTextModel::updateRuntimeDictionaries()
     //
     QSet<QString> characters;
     std::function<void(const TextModelItem*)> findCharactersInText;
-    findCharactersInText = [this, &findCharactersInText, &characters](const TextModelItem* _item) {
+    findCharactersInText = [&findCharactersInText, &characters](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
@@ -412,10 +412,7 @@ void StageplayTextModel::updateRuntimeDictionaries()
 
                 switch (textItem->paragraphType()) {
                 case TextParagraphType::Character: {
-                    const auto character = StageplayCharacterParser::name(textItem->text());
-                    if (d->charactersModel->exists(character)) {
-                        characters.insert(character);
-                    }
+                    characters.insert(StageplayCharacterParser::name(textItem->text()));
                     break;
                 }
 
@@ -433,6 +430,7 @@ void StageplayTextModel::updateRuntimeDictionaries()
         }
     };
     findCharactersInText(d->rootItem());
+    characters.remove({});
     //
     // ... не забываем приаттачить всех персонажей, у кого определена роль в истории
     //

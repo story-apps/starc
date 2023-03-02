@@ -72,6 +72,11 @@ public:
     LocationModel* location(const QString& _name) const;
 
     /**
+     * @brief Получить модель локации по её индексу
+     */
+    LocationModel* location(int _row) const;
+
+    /**
      * @brief Получить все модели локаций с заданным именем
      */
     QVector<LocationModel*> locations(const QString& _name) const;

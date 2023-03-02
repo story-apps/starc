@@ -3332,7 +3332,7 @@ void SettingsView::updateTranslations()
     d->screenplayEditorCorrectTextOnPageBreaks->setText(
         tr("Automatically correct screenplay text on page breaks"));
     d->screenplayEditorUseCharactersFromText->setText(
-        tr("Show hints for major & related to a current story characters only"));
+        tr("Show hints for major & related to a current story characters and locations only"));
     d->screenplayEditorShowCharacterSuggestionsInEmptyBlock->setText(
         tr("Show characters suggestions in empty paragraph"));
     d->screenplayEditorUseOpenBracketInDialogueForParenthetical->setText(
