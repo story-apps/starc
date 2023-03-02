@@ -6,6 +6,7 @@
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/tools/run_once.h>
 
@@ -370,6 +371,7 @@ void SimpleTextCorrector::Implementation::updateBlocksHeight(int _position, int 
     // Пробегаем документ и настраиваем  высоту строк, в зависимости от используемых шрифтов в них
     //
 
+    const auto& currentTemplate = TemplatesFacade::simpleTextTemplate(q->templateId());
     TextCursor cursor(document());
     cursor.setPosition(std::max(0, _position));
     bool isTextChanged = false;
@@ -378,13 +380,13 @@ void SimpleTextCorrector::Implementation::updateBlocksHeight(int _position, int 
         = _charsChanged > 0 ? cursor.position() + _charsChanged : document()->characterCount();
     auto block = cursor.block();
     while (block.isValid() && block.position() < endPosition) {
-        const auto blockType = TextBlockStyle::forBlock(block);
+        const auto blockStyle = currentTemplate.paragraphStyle(block);
 
         //
         // В некоторых случаях, мы попадаем сюда, когда документ не до конца настроен, поэтому
         // когда обнаруживается такая ситация, завершаем выполнение
         //
-        if (blockType == TextParagraphType::Undefined) {
+        if (blockStyle.type() == TextParagraphType::Undefined) {
             break;
         }
 
@@ -392,16 +394,43 @@ void SimpleTextCorrector::Implementation::updateBlocksHeight(int _position, int 
         // Корректируем высоту строк
         //
         if (const auto formats = block.textFormats(); !formats.isEmpty()) {
-            qreal blockHeight = 0.0;
+            //
+            // ... определяем высоту максимально высокой строки
+            //
+            qreal lineHeight = 0.0;
             if (!formats.isEmpty()) {
                 for (const auto& format : formats) {
-                    blockHeight
-                        = std::max(blockHeight, TextHelper::fineLineSpacing(format.format.font()));
+                    lineHeight
+                        = std::max(lineHeight, TextHelper::fineLineSpacing(format.format.font()));
                 }
             } else {
-                blockHeight = TextHelper::fineLineSpacing(cursor.blockCharFormat().font());
+                lineHeight = TextHelper::fineLineSpacing(cursor.blockCharFormat().font());
             }
-            if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), blockHeight)) {
+            //
+            // ... учитываем межстрочный интервал стиля блока
+            //
+            switch (blockStyle.lineSpacingType()) {
+            case TextBlockStyle::LineSpacingType::FixedLineSpacing: {
+                lineHeight = MeasurementHelper::mmToPx(blockStyle.lineSpacingValue());
+                break;
+            }
+            case TextBlockStyle::LineSpacingType::DoubleLineSpacing: {
+                lineHeight *= 2.0;
+                break;
+            }
+            case TextBlockStyle::LineSpacingType::OneAndHalfLineSpacing: {
+                lineHeight *= 1.5;
+                break;
+            }
+            case TextBlockStyle::LineSpacingType::SingleLineSpacing:
+            default: {
+                break;
+            }
+            }
+            //
+            // ... если высота линии изменилась, то обновим
+            //
+            if (!qFuzzyCompare(cursor.blockFormat().lineHeight(), lineHeight)) {
                 if (!isTextChanged) {
                     isTextChanged = true;
                     cursor.beginEditBlock();
@@ -409,7 +438,7 @@ void SimpleTextCorrector::Implementation::updateBlocksHeight(int _position, int 
 
                 cursor.setPosition(block.position());
                 auto blockFormat = cursor.blockFormat();
-                blockFormat.setLineHeight(blockHeight, QTextBlockFormat::FixedHeight);
+                blockFormat.setLineHeight(lineHeight, QTextBlockFormat::FixedHeight);
                 cursor.setBlockFormat(blockFormat);
             }
         }
