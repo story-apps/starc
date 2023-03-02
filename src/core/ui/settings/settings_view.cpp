@@ -342,6 +342,7 @@ public:
     H6Label* comicBookEditorTitle = nullptr;
     ComboBox* comicBookEditorDefaultTemplate = nullptr;
     IconButton* comicBookEditorDefaultTemplateOptions = nullptr;
+    CheckBox* comicBookEditorShowDialogueNumber = nullptr;
     CheckBox* comicBookEditorUseCharactersFromText = nullptr;
     CheckBox* comicBookEditorShowCharacterSuggestionsInEmptyBlock = nullptr;
     //
@@ -576,6 +577,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , comicBookEditorTitle(new H6Label(comicBookCard))
     , comicBookEditorDefaultTemplate(new ComboBox(comicBookCard))
     , comicBookEditorDefaultTemplateOptions(new IconButton(comicBookCard))
+    , comicBookEditorShowDialogueNumber(new CheckBox(comicBookCard))
     , comicBookEditorUseCharactersFromText(new CheckBox(comicBookCard))
     , comicBookEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(comicBookCard))
     , comicBookNavigatorTitle(new H6Label(comicBookCard))
@@ -1091,6 +1093,7 @@ void SettingsView::Implementation::initComicBookCard()
         layout->addWidget(comicBookEditorDefaultTemplateOptions);
         comicBookCardLayout->addLayout(layout, itemIndex++, 0);
     }
+    comicBookCardLayout->addWidget(comicBookEditorShowDialogueNumber, itemIndex++, 0);
     comicBookCardLayout->addWidget(comicBookEditorUseCharactersFromText, itemIndex++, 0);
     comicBookCardLayout->addWidget(comicBookEditorShowCharacterSuggestionsInEmptyBlock, itemIndex++,
                                    0);
@@ -1934,6 +1937,7 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->comicBookEditorTitle,
                  d->comicBookEditorDefaultTemplate,
                  d->comicBookEditorDefaultTemplateOptions,
+                 d->comicBookEditorShowDialogueNumber,
                  d->comicBookEditorUseCharactersFromText,
                  d->comicBookEditorShowCharacterSuggestionsInEmptyBlock,
                  d->comicBookNavigatorTitle,
@@ -2002,6 +2006,8 @@ SettingsView::SettingsView(QWidget* _parent)
                 emit comicBookEditorDefaultTemplateChanged(
                     _index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
             });
+    connect(d->comicBookEditorShowDialogueNumber, &CheckBox::checkedChanged, this,
+            &SettingsView::comicBookEditorShowDialogueNumberChanged);
     connect(d->comicBookEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
             &SettingsView::comicBookEditorUseCharactersFromTextChanged);
     connect(d->comicBookEditorShowCharacterSuggestionsInEmptyBlock, &CheckBox::checkedChanged, this,
@@ -2907,6 +2913,11 @@ void SettingsView::setComicBookEditorDefaultTemplate(const QString& _templateId)
     }
 }
 
+void SettingsView::setComicBookEditorShowDialogueNumber(bool _show)
+{
+    d->comicBookEditorShowDialogueNumber->setChecked(_show);
+}
+
 void SettingsView::setComicBookEditorUseCharactersFromText(bool _use)
 {
     d->comicBookEditorUseCharactersFromText->setChecked(_use);
@@ -3372,6 +3383,7 @@ void SettingsView::updateTranslations()
     d->comicBookEditorDefaultTemplate->setLabel(tr("Default template"));
     d->comicBookEditorDefaultTemplateOptions->setToolTip(
         tr("Available actions for the selected template"));
+    d->comicBookEditorShowDialogueNumber->setText(tr("Show dialogue number"));
     d->comicBookEditorUseCharactersFromText->setText(
         tr("Show hints for major & related to a current story characters only"));
     d->comicBookEditorShowCharacterSuggestionsInEmptyBlock->setText(
@@ -3615,6 +3627,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayNavigatorShowSceneText,
              d->screenplayDurationByCharactersIncludingSpaces,
              //
+             d->comicBookEditorShowDialogueNumber,
              d->comicBookEditorUseCharactersFromText,
              d->comicBookEditorShowCharacterSuggestionsInEmptyBlock,
              d->comicBookNavigatorShowSceneText,

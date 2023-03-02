@@ -17,13 +17,16 @@ ComicBookTextDocument::ComicBookTextDocument(QObject* _parent)
 }
 
 void ComicBookTextDocument::setCorrectionOptions(bool _needToCorrectCharactersNames,
+                                                 bool _showDialogueNumbers,
                                                  bool _needToCorrectPageBreaks)
 {
     QStringList correctionOptions;
     if (_needToCorrectCharactersNames) {
         correctionOptions.append("correct-characters-names");
     }
-    correctionOptions.append("correct-blocks-numbers");
+    if (_showDialogueNumbers) {
+        correctionOptions.append("show-dialogue-number");
+    }
     correctionOptions.append("bold-panel-title");
     if (_needToCorrectPageBreaks) {
         correctionOptions.append("correct-page-breaks");

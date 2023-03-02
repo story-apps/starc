@@ -106,6 +106,7 @@ public:
     void setComicBookAvailable(bool _available);
     //
     void setComicBookEditorDefaultTemplate(const QString& _templateId);
+    void setComicBookEditorShowDialogueNumber(bool _show);
     void setComicBookEditorUseCharactersFromText(bool _use);
     void setComicBookEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
@@ -225,6 +226,7 @@ signals:
     void comicBookAvailableChanged(bool _available);
     //
     void comicBookEditorDefaultTemplateChanged(const QString& _templateId);
+    void comicBookEditorShowDialogueNumberChanged(bool _show);
     void comicBookEditorUseCharactersFromTextChanged(bool _use);
     void comicBookEditorShowCharacterSuggestionsInEmptyBlockChanged(bool _show);
     //

@@ -279,6 +279,8 @@ const QString kComponentsComicBookAvailableKey
 const QString kComponentsComicBookEditorKey = kComponentsComicBookKey + QStringLiteral("/editor");
 const QString kComponentsComicBookEditorDefaultTemplateKey
     = kComponentsComicBookEditorKey + QStringLiteral("/default-template");
+const QString kComponentsComicBookEditorShowDialogueNumberKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/show-dialogue-number");
 const QString kComponentsComicBookEditorUseCharactersFromTextKey
     = kComponentsComicBookEditorKey + QStringLiteral("/use-characters-from-text");
 const QString kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey

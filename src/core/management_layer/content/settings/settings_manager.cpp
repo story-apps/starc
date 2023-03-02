@@ -248,6 +248,8 @@ void SettingsManager::Implementation::loadComicBookSettings()
         = settingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey).toString();
     view->setComicBookEditorDefaultTemplate(defaultTemplate);
     BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(defaultTemplate);
+    view->setComicBookEditorShowDialogueNumber(
+        settingsValue(DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey).toBool());
     view->setComicBookEditorUseCharactersFromText(
         settingsValue(DataStorageLayer::kComponentsComicBookEditorUseCharactersFromTextKey)
             .toBool());
@@ -641,6 +643,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     //
     connect(d->view, &Ui::SettingsView::comicBookEditorDefaultTemplateChanged, this,
             &SettingsManager::setComicBookEditorDefaultTemplate);
+    connect(d->view, &Ui::SettingsView::comicBookEditorShowDialogueNumberChanged, this,
+            &SettingsManager::setComicBookEditorShowDialogueNumber);
     connect(d->view, &Ui::SettingsView::comicBookEditorUseCharactersFromTextChanged, this,
             &SettingsManager::setComicBookEditorUseCharactersFromText);
     connect(d->view, &Ui::SettingsView::comicBookEditorShowCharacterSuggestionsInEmptyBlockChanged,
@@ -1655,6 +1659,13 @@ void SettingsManager::setComicBookEditorDefaultTemplate(const QString& _template
     setSettingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey, _templateId);
     BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(_templateId);
     emit comicBookEditorChanged({ DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey });
+}
+
+void SettingsManager::setComicBookEditorShowDialogueNumber(bool _show)
+{
+    setSettingsValue(DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey, _show);
+    emit comicBookEditorChanged(
+        { DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey });
 }
 
 void SettingsManager::setComicBookEditorUseCharactersFromText(bool _use)

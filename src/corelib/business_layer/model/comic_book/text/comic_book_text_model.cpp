@@ -3,6 +3,7 @@
 #include "comic_book_text_block_parser.h"
 #include "comic_book_text_model_page_item.h"
 #include "comic_book_text_model_panel_item.h"
+#include "comic_book_text_model_text_item.h"
 
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
@@ -189,7 +190,7 @@ TextModelGroupItem* ComicBookTextModel::createGroupItem(TextGroupType _type) con
 
 TextModelTextItem* ComicBookTextModel::createTextItem() const
 {
-    return new TextModelTextItem(this);
+    return new ComicBookTextModelTextItem(this);
 }
 
 void ComicBookTextModel::setInformationModel(ComicBookInformationModel* _model)

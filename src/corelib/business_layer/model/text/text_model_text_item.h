@@ -225,6 +225,13 @@ protected:
      */
     void markChanged();
 
+    /**
+     * @brief Текст элемента, который будет сохранён
+     * @note Иногда нужно сохранять тект не в таком виде, как он отображается при работе с ним,
+     *       например текст диалогов комиксов сохраняется без номеров
+     */
+    virtual QString textToSave() const;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

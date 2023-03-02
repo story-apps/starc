@@ -194,9 +194,9 @@ public:
     bool needToCorrectCharactersNames = true;
 
     /**
-     * @brief Необходимо ли корректировать номера блоков
+     * @brief Необходимо ли добавлять номера репликам персонажей
      */
-    bool needToCorrectBlocksNumbers = true;
+    bool needToShowDialogueNumber = true;
 
     /**
      * @brief Нужно ли делать заголовок пнели жирным
@@ -705,23 +705,21 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
                     break;
                 }
 
-                const auto sourceDialogueNumber = ComicBookCharacterParser::number(block.text());
-                auto newDialogueNumber = sourceDialogueNumber;
-
                 //
                 // При необходимости обновляем номер диалога
                 //
-                const auto textItemNumber = QString::number(textItem->number()->value);
+                const auto sourceDialogueNumber = ComicBookCharacterParser::number(block.text());
+                const QString decoration = ". ";
+                const auto textItemNumber = needToShowDialogueNumber
+                    ? QString("%1%2").arg(textItem->number()->value).arg(decoration)
+                    : "";
                 if (sourceDialogueNumber != textItemNumber) {
-                    const QString decoration = ". ";
-                    newDialogueNumber = textItemNumber + decoration;
-
                     cursor.setPosition(block.position());
                     if (!sourceDialogueNumber.isEmpty()) {
                         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
                                             sourceDialogueNumber.length() + decoration.length());
                     }
-                    cursor.insertText(newDialogueNumber);
+                    cursor.insertText(textItemNumber);
                 }
             }
             once;
@@ -1925,18 +1923,18 @@ ComicBookTextCorrector::~ComicBookTextCorrector() = default;
 void ComicBookTextCorrector::setCorrectionOptions(const QStringList& _options)
 {
     const auto needToCorrectCharactersNames = _options.contains("correct-characters-names");
-    const auto needToCorrectBlocksNumbers = _options.contains("correct-blocks-numbers");
+    const auto needToShowDialogueNumber = _options.contains("show-dialogue-number");
     const auto needToBoldPanelTitle = _options.contains("bold-panel-title");
     const auto needToCorrectPageBreaks = _options.contains("correct-page-breaks");
     if (d->needToCorrectCharactersNames == needToCorrectCharactersNames
-        && d->needToCorrectBlocksNumbers == needToCorrectBlocksNumbers
+        && d->needToShowDialogueNumber == needToShowDialogueNumber
         && d->needToBoldPanelTitle == needToBoldPanelTitle
         && d->needToCorrectPageBreaks == needToCorrectPageBreaks) {
         return;
     }
 
     d->needToCorrectCharactersNames = needToCorrectCharactersNames;
-    d->needToCorrectBlocksNumbers = needToCorrectBlocksNumbers;
+    d->needToShowDialogueNumber = needToShowDialogueNumber;
     d->needToBoldPanelTitle = needToBoldPanelTitle;
     d->needToCorrectPageBreaks = needToCorrectPageBreaks;
 
@@ -1975,9 +1973,7 @@ void ComicBookTextCorrector::makeCorrections(int _position, int _charsChanged)
         d->correctCharactersNames(_position, _charsChanged);
     }
 
-    if (d->needToCorrectBlocksNumbers) {
-        d->correctBlocksNumbers(_position, _charsChanged);
-    }
+    d->correctBlocksNumbers(_position, _charsChanged);
 
     if (d->needToCorrectPageBreaks) {
         d->correctPageBreaks(_position);

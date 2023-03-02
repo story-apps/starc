@@ -22,6 +22,8 @@ namespace BusinessLayer {
 class TextModelTextItem::Implementation
 {
 public:
+    explicit Implementation(TextModelTextItem* _q);
+
     /**
      * @brief Считать данные из xml
      */
@@ -37,6 +39,8 @@ public:
      */
     QByteArray buildXml(int _from, int _length);
 
+
+    TextModelTextItem* q = nullptr;
 
     /**
      * @brief Номер блока
@@ -104,6 +108,11 @@ public:
      */
     QByteArray xml;
 };
+
+TextModelTextItem::Implementation::Implementation(TextModelTextItem* _q)
+    : q(_q)
+{
+}
 
 void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader)
 {
@@ -246,7 +255,7 @@ void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader
 
 void TextModelTextItem::Implementation::updateXml()
 {
-    xml = buildXml(0, text.length());
+    xml = buildXml(0, q->textToSave().length());
 }
 
 QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
@@ -278,7 +287,7 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
                    .toUtf8();
     }
     xml += QString("<%1><![CDATA[%2]]></%1>")
-               .arg(xml::kValueTag, TextHelper::toHtmlEscaped(text.mid(_from, _length)))
+               .arg(xml::kValueTag, TextHelper::toHtmlEscaped(q->textToSave().mid(_from, _length)))
                .toUtf8();
 
     //
@@ -551,7 +560,7 @@ bool TextModelTextItem::Revision::operator==(const Revision& _other) const
 
 TextModelTextItem::TextModelTextItem(const TextModel* _model)
     : TextModelItem(TextModelItemType::Text, _model)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
 }
 
@@ -1031,6 +1040,11 @@ void TextModelTextItem::markChanged()
     }
 
     setChanged(true);
+}
+
+QString TextModelTextItem::textToSave() const
+{
+    return d->text;
 }
 
 } // namespace BusinessLayer

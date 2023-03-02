@@ -158,6 +158,7 @@ SOURCES += \
     business_layer/model/comic_book/text/comic_book_text_model.cpp \
     business_layer/model/comic_book/text/comic_book_text_model_page_item.cpp \
     business_layer/model/comic_book/text/comic_book_text_model_panel_item.cpp \
+    business_layer/model/comic_book/text/comic_book_text_model_text_item.cpp \
     business_layer/model/images/images_gallery_model.cpp \
     business_layer/model/locations/location_model.cpp \
     business_layer/model/locations/locations_model.cpp \
@@ -465,6 +466,7 @@ HEADERS += \
     business_layer/model/comic_book/text/comic_book_text_model.h \
     business_layer/model/comic_book/text/comic_book_text_model_page_item.h \
     business_layer/model/comic_book/text/comic_book_text_model_panel_item.h \
+    business_layer/model/comic_book/text/comic_book_text_model_text_item.h \
     business_layer/model/images/images_gallery_model.h \
     business_layer/model/locations/location_model.h \
     business_layer/model/locations/locations_model.h \

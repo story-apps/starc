@@ -4,6 +4,8 @@
 #include <business_layer/export/export_options.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 
 
 namespace BusinessLayer {
@@ -13,7 +15,10 @@ TextDocument* ComicBookExporter::createDocument(const ExportOptions& _exportOpti
     Q_UNUSED(_exportOptions)
 
     auto document = new ComicBookTextDocument;
-    document->setCorrectionOptions(true, true);
+    document->setCorrectionOptions(
+        true,
+        settingsValue(DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey).toBool(),
+        true);
     return document;
 }
 

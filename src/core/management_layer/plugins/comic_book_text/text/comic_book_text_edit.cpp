@@ -142,9 +142,11 @@ void ComicBookTextEdit::setShowDialogueNumber(bool _show)
 }
 
 void ComicBookTextEdit::setCorrectionOptions(bool _needToCorrectCharactersNames,
+                                             bool _showDialogueNumber,
                                              bool _needToCorrectPageBreaks)
 {
-    d->document.setCorrectionOptions(_needToCorrectCharactersNames, _needToCorrectPageBreaks);
+    d->document.setCorrectionOptions(_needToCorrectCharactersNames, _showDialogueNumber,
+                                     _needToCorrectPageBreaks);
 }
 
 void ComicBookTextEdit::initWithModel(BusinessLayer::ComicBookTextModel* _model)

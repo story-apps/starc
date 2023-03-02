@@ -684,6 +684,7 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsComicBookAvailableKey, true);
         //
         defaultValues.insert(kComponentsComicBookEditorDefaultTemplateKey, "world");
+        defaultValues.insert(kComponentsComicBookEditorShowDialogueNumberKey, true);
         defaultValues.insert(kComponentsComicBookEditorUseCharactersFromTextKey, false);
         defaultValues.insert(kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey,
                              false);

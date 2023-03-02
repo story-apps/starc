@@ -812,17 +812,16 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
     //            settingsValue(DataStorageLayer::kComponentsComicBookEditorShowSceneNumberOnLeftKey)
     //                .toBool());
     //    }
-    //    if (_changedSettingsKeys.isEmpty()
-    //        || _changedSettingsKeys.contains(
-    //            DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey)) {
-    //        d->comicBookText->setShowDialogueNumber(
-    //            settingsValue(DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey)
-    //                .toBool());
-    //    }
     // d->reconfigureBlockNumbersVisiblity();
 
-    if (_changedSettingsKeys.isEmpty()) {
-        d->textEdit->setCorrectionOptions(true, true);
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
+            DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey)) {
+        d->textEdit->setCorrectionOptions(
+            true,
+            settingsValue(DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey)
+                .toBool(),
+            true);
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(

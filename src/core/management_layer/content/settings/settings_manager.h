@@ -163,6 +163,7 @@ private:
     void setComicBookAvailable(bool _available);
     //
     void setComicBookEditorDefaultTemplate(const QString& _templateId);
+    void setComicBookEditorShowDialogueNumber(bool _show);
     void setComicBookEditorUseCharactersFromText(bool _use);
     void setComicBookEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
