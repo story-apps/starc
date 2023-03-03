@@ -53,7 +53,7 @@ const QString kScreenplayTextEditorMime = QStringLiteral("application/x-starc/ed
 const QString kScreenplayTextNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/text");
 const QString kScreenplayTextCardsMime = QStringLiteral("application/x-starc/editor/screenplay/text/cards");
 const QString kScreenplayTextBreakdownMime = QStringLiteral("application/x-starc/editor/screenplay/text/breakdown");
-const QString kScreenplayTextBreakdownNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/text/breakdown");
+const QString kScreenplayBreakdownNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/breakdown");
 const QString kScreenplayStatisticsViewMime = QStringLiteral("application/x-starc/view/screenplay/statistics");
 const QString kScreenplayStatisticsNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/statistics");
 //
@@ -98,7 +98,7 @@ const QHash<QString, QString> kEditorToNavigator
         { kScreenplayTreatmentEditorMime, kScreenplayTreatmentNavigatorMime },
         { kScreenplayTextEditorMime, kScreenplayTextNavigatorMime },
         { kScreenplayTextCardsMime, kScreenplayTextNavigatorMime },
-        { kScreenplayTextBreakdownMime, kScreenplayTextBreakdownNavigatorMime },
+        { kScreenplayTextBreakdownMime, kScreenplayBreakdownNavigatorMime },
         { kScreenplayStatisticsViewMime, kScreenplayStatisticsNavigatorMime },
         { kComicBookTextEditorMime, kComicBookTextNavigatorMime },
         { kAudioplayTextEditorMime, kAudioplayTextNavigatorMime },
@@ -199,7 +199,7 @@ const QHash<QString, QString> kMimeToPlugin
         { kScreenplayTextNavigatorMime, "*screenplaytextstructureplugin*" },
         { kScreenplayTextCardsMime, "*screenplaycardsplugin*" },
         { kScreenplayTextBreakdownMime, "*screenplaybreakdownplugin*" },
-        { kScreenplayTextBreakdownNavigatorMime, "*screenplaytextbreakdownstructureplugin*" },
+        { kScreenplayBreakdownNavigatorMime, "*screenplaybreakdownstructureplugin*" },
         { kScreenplayStatisticsViewMime, "*screenplaystatisticsplugin*" },
         { kScreenplayStatisticsNavigatorMime, "*screenplaystatisticsstructureplugin*" },
         //
@@ -790,7 +790,7 @@ void PluginsBuilder::reconfigureScreenplayNavigator() const
 {
     reconfigurePlugin(kScreenplayTreatmentNavigatorMime, {});
     reconfigurePlugin(kScreenplayTextNavigatorMime, {});
-    reconfigurePlugin(kScreenplayTextBreakdownNavigatorMime, {});
+    reconfigurePlugin(kScreenplayBreakdownNavigatorMime, {});
 }
 
 void PluginsBuilder::reconfigureComicBookEditor(const QStringList& _changedSettingsKeys) const
