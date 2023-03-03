@@ -2114,6 +2114,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     QFontDatabase fontDatabase;
     fontDatabase.addApplicationFont(":/fonts/materialdesignicons");
     fontDatabase.addApplicationFont(":/fonts/font-awesome-brands");
+    fontDatabase.addApplicationFont(":/fonts/roboto-bold");
     fontDatabase.addApplicationFont(":/fonts/roboto-light");
     fontDatabase.addApplicationFont(":/fonts/roboto-medium");
     fontDatabase.addApplicationFont(":/fonts/roboto-regular");
