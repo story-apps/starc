@@ -60,6 +60,7 @@ public:
     Tree* scenesView = nullptr;
     Tree* charactersView = nullptr;
     Tree* locationsView = nullptr;
+    QVariant locationsViewState;
     Tree* tagsView = nullptr;
     ScreenplayBreakdownStructureSceneDelegate* scenesDelegate = nullptr;
     ScreenplayBreakdownStructureTagDelegate* tagsDelegate = nullptr;
@@ -224,8 +225,14 @@ void ScreenplayBreakdownStructureView::setModels(QAbstractItemModel* _scenesMode
                                                  QAbstractItemModel* _locationsModel)
 {
     d->scenesView->setModel(_scenesModel);
+
     d->charactersView->setModel(_charactersModel);
+
     d->locationsView->setModel(_locationsModel);
+    connect(_locationsModel, &QAbstractItemModel::modelAboutToBeReset, this,
+            [this] { d->locationsViewState = d->locationsView->saveState(); });
+    connect(_locationsModel, &QAbstractItemModel::modelReset, this,
+            [this] { d->locationsView->restoreState(d->locationsViewState); });
 }
 
 QModelIndexList ScreenplayBreakdownStructureView::selectedIndexes() const

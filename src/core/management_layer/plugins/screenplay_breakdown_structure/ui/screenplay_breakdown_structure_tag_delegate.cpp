@@ -225,7 +225,7 @@ void ScreenplayBreakdownStructureTagDelegate::Implementation::paintItem(
     // ... название папки
     //
     auto textFont = Ui::DesignSystem::font().subtitle2();
-    textFont.setWeight(isHighlighted ? QFont::Weight::Bold : QFont::Normal);
+    textFont.setWeight(isHighlighted ? QFont::Weight::Bold : QFont::Medium);
     _painter->setFont(textFont);
     _painter->setPen(textColor);
     QRectF headingRect;

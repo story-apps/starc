@@ -8,6 +8,7 @@
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/text_template.h>
+#include <utils/tools/debouncer.h>
 
 #include <QPointer>
 
@@ -36,9 +37,16 @@ public:
      */
     void clear();
 
-    void processSourceModelRowsInserted(const QModelIndex& _parent, int _firstRow, int _lastRow);
-    void processSourceModelRowsRemoved(const QModelIndex& _parent, int _firstRow, int _lastRow);
-    void processSourceModelDataChanged(const QModelIndex& _index);
+    /**
+     * @brief Собрать модель из исходной
+     */
+    void buildModel();
+
+    /**
+     * @brief Транзакция, для управления операция сброса данных модели
+     */
+    void beginResetModelTransaction();
+    void endResetModelTransaction();
 
 
     ScreenplayBreakdownStructureLocationsModel* q = nullptr;
@@ -54,20 +62,27 @@ public:
     QScopedPointer<ScreenplayBreakdownStructureModelItem> rootItem;
 
     /**
+     * @brief Счётчик транзакций операции сброса модели
+     */
+    int resetModelTransationsCounter = 0;
+
+    /**
      * @brief Последний подсвеченный элемент
      */
+    QModelIndex lastHighlightedItemIndex;
     ScreenplayBreakdownStructureModelItem* lastHighlightedItem = nullptr;
 
     /**
-     * @brief Карта персонажей <элемент персонажа, кол-во сцен>
+     * @brief Дебаунсер на перестройку модели локаций при изменении модели текста
      */
-    QHash<ScreenplayBreakdownStructureModelItem*, int> locationItems;
+    Debouncer modelRebuildDebouncer;
 };
 
 ScreenplayBreakdownStructureLocationsModel::Implementation::Implementation(
     ScreenplayBreakdownStructureLocationsModel* _q)
     : q(_q)
     , rootItem(new ScreenplayBreakdownStructureModelItem({}))
+    , modelRebuildDebouncer(300)
 {
 }
 
@@ -113,26 +128,196 @@ void ScreenplayBreakdownStructureLocationsModel::Implementation::clear()
         return;
     }
 
-    q->beginResetModel();
+    beginResetModelTransaction();
     while (rootItem->childCount() > 0) {
         rootItem->removeItem(rootItem->childAt(0));
     }
-    q->endResetModel();
+    endResetModelTransaction();
 }
 
-void ScreenplayBreakdownStructureLocationsModel::Implementation::processSourceModelRowsInserted(
-    const QModelIndex& _parent, int _firstRow, int _lastRow)
+void ScreenplayBreakdownStructureLocationsModel::Implementation::buildModel()
 {
+    //
+    // Считываем данные модели
+    //
+    std::set<QString> locations;
+    QHash<QString, QVector<QModelIndex>> locationsScenes;
+    auto saveLocation
+        = [this, &locations, &locationsScenes](const QString& _name, TextModelTextItem* _textItem) {
+              if (_name.simplified().isEmpty()) {
+                  return;
+              }
+
+              //
+              // Тут имена локаций с разными разделителями приводим к единому виду,
+              // чтобы единообразно потом их обрабатывать
+              //
+              auto nameCorrected = _name.simplified();
+              nameCorrected.replace(". ", " - ");
+              nameCorrected.remove('.');
+
+              const auto sceneIndex = model->indexForItem(_textItem).parent();
+
+              const auto iter = locations.find(nameCorrected);
+              if (iter == locations.end()) {
+                  locations.insert(nameCorrected);
+                  locationsScenes.insert(nameCorrected, { sceneIndex });
+                  return;
+              }
+
+              auto& scenes = locationsScenes[nameCorrected];
+              if (scenes.constLast() != sceneIndex) {
+                  scenes.append(sceneIndex);
+              }
+          };
+    std::function<void(const TextModelItem*)> findLocationsInText;
+    findLocationsInText = [&findLocationsInText, &saveLocation](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case TextModelItemType::Folder:
+            case TextModelItemType::Group: {
+                findLocationsInText(childItem);
+                break;
+            }
+
+            case TextModelItemType::Text: {
+                auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
+                if (textItem->paragraphType() == TextParagraphType::SceneHeading) {
+                    saveLocation(ScreenplaySceneHeadingParser::location(textItem->text()),
+                                 textItem);
+                }
+
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
+    findLocationsInText(model->itemForIndex({}));
+    //
+    // ... сохраняем собранные данные
+    //
+    beginResetModelTransaction();
+    //
+    // ... сперва формируем нормализованную структуру
+    //
+    std::function<void(ScreenplayBreakdownStructureModelItem*, std::set<QString>&, const QString&)>
+        fillLocation;
+    fillLocation = [&fillLocation,
+                    &locationsScenes](ScreenplayBreakdownStructureModelItem* parentItem,
+                                      std::set<QString>& locations, const QString& _prefix) {
+        while (!locations.empty()) {
+            const auto location = *locations.begin();
+            locations.erase(location);
+
+            const auto locationParts = location.mid(_prefix.length()).split(" - ");
+            std::set<QString> sublocations;
+            if (location.startsWith(_prefix)) {
+                sublocations.insert(location);
+                while (!locations.empty()
+                       && locations.begin()->startsWith(_prefix + locationParts.constFirst())) {
+                    const auto sublocation = *locations.begin();
+                    locations.erase(sublocation);
+                    sublocations.insert(sublocation);
+                }
+            }
+            //
+            // Если у локации есть подлокации
+            //
+            if (!sublocations.empty()) {
+                //
+                // ... создаём родительский элемент этой локации и дальше обрабатываем вложенные
+                //
+                auto locationItem
+                    = new ScreenplayBreakdownStructureModelItem(locationParts.constFirst());
+                fillLocation(locationItem, sublocations,
+                             _prefix + locationParts.constFirst() + " - ");
+
+                parentItem->appendItem(locationItem);
+            }
+            //
+            // А если подлокаций нет
+            //
+            else {
+                //
+                // ... сохраняем локацию в текущем родительском элементе
+                //
+                if (location.startsWith(_prefix)) {
+                    auto locationItem = new ScreenplayBreakdownStructureModelItem(location);
+                    const auto locationScenes = locationsScenes[location];
+                    for (const auto& sceneIndex : locationScenes) {
+                        locationItem->appendItem(new ScreenplayBreakdownStructureModelItem(
+                            sceneIndex.data(TextModelGroupItem::GroupNumberRole).toString() + " "
+                                + sceneIndex.data().toString(),
+                            sceneIndex));
+                    }
+
+                    parentItem->appendItem(locationItem);
+                }
+                //
+                // ... помещаем оставшиеся в списке элементы в текущего родителя
+                //
+                fillLocation(parentItem, locations, _prefix);
+                //
+                // ... сохраняем список сцен текущей локации
+                //
+                if (!location.startsWith(_prefix)) {
+                    const auto locationScenes = locationsScenes[location];
+                    for (const auto& sceneIndex : locationScenes) {
+                        parentItem->appendItem(new ScreenplayBreakdownStructureModelItem(
+                            sceneIndex.data(TextModelGroupItem::GroupNumberRole).toString() + " "
+                                + sceneIndex.data().toString(),
+                            sceneIndex));
+                    }
+                }
+            }
+        }
+    };
+    fillLocation(rootItem.data(), locations, {});
+    //
+    // ... затем схлапываем её, чтобы не было пустых уровней вложенности
+    //
+    std::function<void(ScreenplayBreakdownStructureModelItem*)> optimizeItem;
+    optimizeItem = [&optimizeItem](ScreenplayBreakdownStructureModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            optimizeItem(_item->childAt(childIndex));
+        }
+
+        if (_item->childCount() == 1 && !_item->childAt(0)->isScene()) {
+            auto childItem = _item->childAt(0);
+            while (childItem->hasChildren()) {
+                auto grandChildItem = childItem->childAt(0);
+                childItem->takeItem(grandChildItem);
+                _item->appendItem(grandChildItem);
+            }
+            _item->name += " - " + childItem->name;
+            _item->removeItem(childItem);
+        }
+    };
+    optimizeItem(rootItem.data());
+    //
+    endResetModelTransaction();
 }
 
-void ScreenplayBreakdownStructureLocationsModel::Implementation::processSourceModelRowsRemoved(
-    const QModelIndex& _parent, int _firstRow, int _lastRow)
+void ScreenplayBreakdownStructureLocationsModel::Implementation::beginResetModelTransaction()
 {
+    if (resetModelTransationsCounter == 0) {
+        q->beginResetModel();
+    }
+
+    ++resetModelTransationsCounter;
 }
 
-void ScreenplayBreakdownStructureLocationsModel::Implementation::processSourceModelDataChanged(
-    const QModelIndex& _index)
+void ScreenplayBreakdownStructureLocationsModel::Implementation::endResetModelTransaction()
 {
+    --resetModelTransationsCounter;
+
+    if (resetModelTransationsCounter == 0) {
+        q->endResetModel();
+    }
 }
 
 
@@ -144,6 +329,14 @@ ScreenplayBreakdownStructureLocationsModel::ScreenplayBreakdownStructureLocation
     : QAbstractItemModel(_parent)
     , d(new Implementation(this))
 {
+    connect(&d->modelRebuildDebouncer, &Debouncer::gotWork, this, [this] {
+        d->beginResetModelTransaction();
+        d->clear();
+        d->buildModel();
+        d->endResetModelTransaction();
+
+        setSourceModelCurrentIndex(d->lastHighlightedItemIndex);
+    });
 }
 
 ScreenplayBreakdownStructureLocationsModel::~ScreenplayBreakdownStructureLocationsModel()
@@ -161,195 +354,29 @@ void ScreenplayBreakdownStructureLocationsModel::setSourceModel(ScreenplayTextMo
     d->model = _model;
 
     if (!d->model.isNull()) {
-        //
-        // Считываем данные модели
-        //
-        std::set<QString> locations;
-        QHash<QString, QVector<QModelIndex>> locationsScenes;
-        auto saveLocation = [this, &locations, &locationsScenes](const QString& _name,
-                                                                 TextModelTextItem* _textItem) {
-            if (_name.simplified().isEmpty()) {
-                return;
-            }
-
-            //
-            // Тут имена локаций с разными разделителями приводим к единому виду,
-            // чтобы единообразно потом их обрабатывать
-            //
-            auto nameCorrected = _name.simplified();
-            nameCorrected.replace(". ", " - ");
-            nameCorrected.remove('.');
-
-            const auto sceneIndex = d->model->indexForItem(_textItem).parent();
-
-            const auto iter = locations.find(nameCorrected);
-            if (iter == locations.end()) {
-                locations.insert(nameCorrected);
-                locationsScenes.insert(nameCorrected, { sceneIndex });
-                return;
-            }
-
-            auto& scenes = locationsScenes[nameCorrected];
-            if (scenes.constLast() != sceneIndex) {
-                scenes.append(sceneIndex);
-            }
-        };
-        std::function<void(const TextModelItem*)> findLocationsInText;
-        findLocationsInText = [&findLocationsInText, &saveLocation](const TextModelItem* _item) {
-            for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-                auto childItem = _item->childAt(childIndex);
-                switch (childItem->type()) {
-                case TextModelItemType::Folder:
-                case TextModelItemType::Group: {
-                    findLocationsInText(childItem);
-                    break;
-                }
-
-                case TextModelItemType::Text: {
-                    auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                    if (textItem->paragraphType() == TextParagraphType::SceneHeading) {
-                        saveLocation(ScreenplaySceneHeadingParser::location(textItem->text()),
-                                     textItem);
-                    }
-
-                    break;
-                }
-
-                default:
-                    break;
-                }
-            }
-        };
-        findLocationsInText(d->model->itemForIndex({}));
-        //
-        // ... сохраняем собранные данные
-        //
-        beginResetModel();
-        //
-        // ... сперва формируем нормализованную структуру
-        //
-        std::function<void(ScreenplayBreakdownStructureModelItem*, std::set<QString>&,
-                           const QString&)>
-            fillLocation;
-        fillLocation = [&fillLocation,
-                        &locationsScenes](ScreenplayBreakdownStructureModelItem* parentItem,
-                                          std::set<QString>& locations, const QString& _prefix) {
-            while (!locations.empty()) {
-                const auto location = *locations.begin();
-                locations.erase(location);
-
-                const auto locationParts = location.mid(_prefix.length()).split(" - ");
-                std::set<QString> sublocations;
-                if (location.startsWith(_prefix)) {
-                    sublocations.insert(location);
-                    while (!locations.empty()
-                           && locations.begin()->startsWith(_prefix + locationParts.constFirst())) {
-                        const auto sublocation = *locations.begin();
-                        locations.erase(sublocation);
-                        sublocations.insert(sublocation);
-                    }
-                }
-                //
-                // Если у локации есть подлокации
-                //
-                if (!sublocations.empty()) {
-                    //
-                    // ... создаём родительский элемент этой локации и дальше обрабатываем вложенные
-                    //
-                    auto locationItem
-                        = new ScreenplayBreakdownStructureModelItem(locationParts.constFirst());
-                    fillLocation(locationItem, sublocations,
-                                 _prefix + locationParts.constFirst() + " - ");
-
-                    parentItem->appendItem(locationItem);
-                }
-                //
-                // А если подлокаций нет
-                //
-                else {
-                    //
-                    // ... сохраняем локацию в текущем родительском элементе
-                    //
-                    if (location.startsWith(_prefix)) {
-                        auto locationItem = new ScreenplayBreakdownStructureModelItem(location);
-                        const auto locationScenes = locationsScenes[location];
-                        for (const auto& sceneIndex : locationScenes) {
-                            locationItem->appendItem(new ScreenplayBreakdownStructureModelItem(
-                                sceneIndex.data(TextModelGroupItem::GroupNumberRole).toString()
-                                    + " " + sceneIndex.data().toString(),
-                                sceneIndex));
-                        }
-
-                        parentItem->appendItem(locationItem);
-                    }
-                    //
-                    // ... помещаем оставшиеся в списке элементы в текущего родителя
-                    //
-                    fillLocation(parentItem, locations, _prefix);
-                    //
-                    // ... сохраняем список сцен текущей локации
-                    //
-                    if (!location.startsWith(_prefix)) {
-                        const auto locationScenes = locationsScenes[location];
-                        for (const auto& sceneIndex : locationScenes) {
-                            parentItem->appendItem(new ScreenplayBreakdownStructureModelItem(
-                                sceneIndex.data(TextModelGroupItem::GroupNumberRole).toString()
-                                    + " " + sceneIndex.data().toString(),
-                                sceneIndex));
-                        }
-                    }
-                }
-            }
-        };
-        fillLocation(d->rootItem.data(), locations, {});
-        //
-        // ... затем схлапываем её, чтобы не было пустых уровней вложенности
-        //
-        std::function<void(ScreenplayBreakdownStructureModelItem*)> optimizeItem;
-        optimizeItem = [&optimizeItem](ScreenplayBreakdownStructureModelItem* _item) {
-            for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-                optimizeItem(_item->childAt(childIndex));
-            }
-
-            if (_item->childCount() == 1 && !_item->childAt(0)->isScene()) {
-                auto childItem = _item->childAt(0);
-                while (childItem->hasChildren()) {
-                    auto grandChildItem = childItem->childAt(0);
-                    childItem->takeItem(grandChildItem);
-                    _item->appendItem(grandChildItem);
-                }
-                _item->name += "/" + childItem->name;
-                _item->removeItem(childItem);
-            }
-        };
-        optimizeItem(d->rootItem.data());
-        //
-        endResetModel();
+        d->buildModel();
 
         //
         // Наблюдаем за событиями модели, чтобы обновлять собственные данные
         //
         connect(d->model, &TextModel::modelAboutToBeReset, this, [this] { d->clear(); });
         connect(d->model, &TextModel::modelReset, this, [this] { setSourceModel(d->model); });
-        connect(d->model, &TextModel::rowsInserted, this,
-                [this](const QModelIndex& _parent, int _first, int _last) {
-                    d->processSourceModelRowsInserted(_parent, _first, _last);
-                });
-        connect(d->model, &TextModel::rowsAboutToBeRemoved, this,
-                [this](const QModelIndex& _parent, int _first, int _last) {
-                    d->processSourceModelRowsRemoved(_parent, _first, _last);
-                });
-        connect(d->model, &TextModel::dataChanged, this,
-                [this](const QModelIndex& _topLeft, const QModelIndex& _bottomRight) {
-                    Q_ASSERT(_topLeft == _bottomRight);
-                    d->processSourceModelDataChanged(_topLeft);
-                });
+        connect(d->model, &TextModel::rowsInserted, &d->modelRebuildDebouncer,
+                &Debouncer::orderWork);
+        connect(d->model, &TextModel::rowsAboutToBeRemoved, &d->modelRebuildDebouncer,
+                &Debouncer::orderWork);
+        connect(d->model, &TextModel::dataChanged, &d->modelRebuildDebouncer,
+                &Debouncer::orderWork);
     }
 }
 
 void ScreenplayBreakdownStructureLocationsModel::setSourceModelCurrentIndex(
     const QModelIndex& _index)
 {
+    if (d->lastHighlightedItemIndex == _index && d->lastHighlightedItem != nullptr) {
+        return;
+    }
+
     //
     // Снять выделение с последнего выделенного
     //
@@ -362,6 +389,11 @@ void ScreenplayBreakdownStructureLocationsModel::setSourceModelCurrentIndex(
             itemForUpdate = itemForUpdate->parent();
         }
         d->lastHighlightedItem = nullptr;
+    }
+
+    d->lastHighlightedItemIndex = _index;
+    if (!_index.isValid()) {
+        return;
     }
 
     std::function<bool(ScreenplayBreakdownStructureModelItem*)> updateHighlighted;
