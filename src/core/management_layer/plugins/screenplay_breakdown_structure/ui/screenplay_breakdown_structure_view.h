@@ -43,6 +43,17 @@ public:
                    QAbstractItemModel* _locationsModel);
 
     /**
+     * @brief Развернуть список локаций
+     * @note Если level развен -1, то разворачивается всё дерево, 0 - первый уровенть, 1 - второй
+     */
+    void expandLocations(int _level = -1);
+
+    /**
+     * @brief Свернуть дерево локаций
+     */
+    void collapseAllLocations();
+
+    /**
      * @brief Список выделенных элементов
      */
     QModelIndexList selectedIndexes() const;
@@ -53,6 +64,11 @@ signals:
      */
     void currentSceneModelIndexChanged(const QModelIndex& _index);
     void currentLocationSceneModelIndexChanged(const QModelIndex& _index);
+
+    /**
+     * @brief Пользователь хочет открыть контекстное меню
+     */
+    void locationsViewContextMenuRequested(const QPoint& _pos);
 
 protected:
     /**

@@ -34,6 +34,7 @@ HEADERS += \
     business_layer/screenplay_breakdown_structure_characters_model.h \
     business_layer/screenplay_breakdown_structure_locations_model.h \
     business_layer/screenplay_breakdown_structure_model_item.h \
+    business_layer/screenplay_breakdown_structure_model_proxy.h \
     business_layer/screenplay_breakdown_structure_scenes_model.h \
     screenplay_breakdown_structure_manager.h \
     ui/counters_info_widget.h \
@@ -45,6 +46,7 @@ SOURCES += \
     business_layer/screenplay_breakdown_structure_characters_model.cpp \
     business_layer/screenplay_breakdown_structure_locations_model.cpp \
     business_layer/screenplay_breakdown_structure_model_item.cpp \
+    business_layer/screenplay_breakdown_structure_model_proxy.cpp \
     business_layer/screenplay_breakdown_structure_scenes_model.cpp \
     screenplay_breakdown_structure_manager.cpp \
     ui/counters_info_widget.cpp \

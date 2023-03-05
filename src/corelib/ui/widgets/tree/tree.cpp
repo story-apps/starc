@@ -274,7 +274,9 @@ void Tree::edit(const QModelIndex& _index)
 
 void Tree::restoreState(const QVariant& _state)
 {
+    d->tree->setAnimated(false);
     d->tree->restoreState(_state);
+    d->tree->setAnimated(true);
 
     d->lastClickedIndex = currentIndex();
 }

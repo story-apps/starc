@@ -2,6 +2,7 @@
 
 #include "business_layer/screenplay_breakdown_structure_characters_model.h"
 #include "business_layer/screenplay_breakdown_structure_locations_model.h"
+#include "business_layer/screenplay_breakdown_structure_model_proxy.h"
 #include "business_layer/screenplay_breakdown_structure_scenes_model.h"
 #include "ui/screenplay_breakdown_structure_view.h"
 
@@ -34,6 +35,12 @@ public:
     Ui::ScreenplayBreakdownStructureView* createView();
 
     /**
+     * @brief Настроить контекстное меню
+     */
+    void prepareContextMenuForLocations(const QModelIndexList& _indexes);
+
+
+    /**
      * @brief Текущая модель сценария
      */
     QPointer<BusinessLayer::ScreenplayTextModel> model;
@@ -52,11 +59,17 @@ public:
     BusinessLayer::ScreenplayBreakdownStructureScenesModel* structureModel = nullptr;
     BusinessLayer::ScreenplayBreakdownStructureCharactersModel* charactersModel = nullptr;
     BusinessLayer::ScreenplayBreakdownStructureLocationsModel* locationsModel = nullptr;
+    BusinessLayer::ScreenplayBreakdownStructureModelProxy* locationsProxyModel = nullptr;
 
     /**
      * @brief Предаставление для основного окна
      */
     Ui::ScreenplayBreakdownStructureView* view = nullptr;
+
+    /**
+     * @brief Контекстное меню для элементов навигатора
+     */
+    ContextMenu* contextMenu = nullptr;
 
     /**
      * @brief Все созданные представления
@@ -67,6 +80,7 @@ public:
 ScreenplayBreakdownStructureManager::Implementation::Implementation()
 {
     view = createView();
+    contextMenu = new ContextMenu(view);
 }
 
 Ui::ScreenplayBreakdownStructureView* ScreenplayBreakdownStructureManager::Implementation::
@@ -74,6 +88,62 @@ Ui::ScreenplayBreakdownStructureView* ScreenplayBreakdownStructureManager::Imple
 {
     allViews.append(new Ui::ScreenplayBreakdownStructureView);
     return allViews.last();
+}
+
+void ScreenplayBreakdownStructureManager::Implementation::prepareContextMenuForLocations(
+    const QModelIndexList& _indexes)
+{
+    Q_UNUSED(_indexes)
+
+    //
+    // Настроим внешний вид меню
+    //
+    contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
+    contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
+
+    //
+    // Настроим действия меню
+    //
+    QVector<QAction*> actions;
+    //
+    auto expandLevel1Action = new QAction(tr("Expand level 1"));
+    expandLevel1Action->setIconText(u8"\U000F0616");
+    connect(expandLevel1Action, &QAction::triggered, view, [this] { view->expandLocations(0); });
+    actions.append(expandLevel1Action);
+    //
+    auto expandLevel2Action = new QAction(tr("Expand level 2"));
+    expandLevel2Action->setIconText(u8"\U000f68c0");
+    connect(expandLevel2Action, &QAction::triggered, view, [this] { view->expandLocations(1); });
+    actions.append(expandLevel2Action);
+    //
+    auto expandAllAction = new QAction(tr("Expand all"));
+    expandAllAction->setIconText(u8"\U000F004C");
+    connect(expandAllAction, &QAction::triggered, view, [this] { view->expandLocations(); });
+    actions.append(expandAllAction);
+    //
+    auto collapseAllAction = new QAction(tr("Collapse all"));
+    collapseAllAction->setIconText(u8"\U000F0044");
+    connect(collapseAllAction, &QAction::triggered, view, [this] { view->collapseAllLocations(); });
+    actions.append(collapseAllAction);
+    //
+    auto sortAlphabeticallyAction = new QAction(tr("Sort alphabetically"));
+    sortAlphabeticallyAction->setSeparator(true);
+    sortAlphabeticallyAction->setIconText(u8"\U000F033C");
+    connect(sortAlphabeticallyAction, &QAction::triggered, view, [this] {
+        locationsProxyModel->setSortOrder(
+            BusinessLayer::ScreenplayBreakdownStructureModelProxy::SortOrder::Alphabetically);
+    });
+    actions.append(sortAlphabeticallyAction);
+    //
+    auto sortByDurationAction = new QAction(tr("Sort by duration"));
+    sortByDurationAction->setIconText(u8"\U000F04BF");
+    connect(sortByDurationAction, &QAction::triggered, view, [this] {
+        locationsProxyModel->setSortOrder(
+            BusinessLayer::ScreenplayBreakdownStructureModelProxy::SortOrder::ByDuration);
+    });
+    actions.append(sortByDurationAction);
+
+    contextMenu->setActions(actions);
 }
 
 
@@ -94,6 +164,15 @@ ScreenplayBreakdownStructureManager::ScreenplayBreakdownStructureManager(QObject
             this, [this](const QModelIndex& _index) {
                 emit currentModelIndexChanged(_index);
                 d->locationsModel->setSourceModelCurrentIndex(_index);
+            });
+    connect(d->view, &Ui::ScreenplayBreakdownStructureView::locationsViewContextMenuRequested, this,
+            [this](const QPoint& _pos) {
+                if (d->view->selectedIndexes().isEmpty()) {
+                    return;
+                }
+
+                d->prepareContextMenuForLocations(d->view->selectedIndexes());
+                d->contextMenu->showContextMenu(d->view->mapToGlobal(_pos));
             });
 }
 
@@ -228,8 +307,12 @@ void ScreenplayBreakdownStructureManager::setModel(BusinessLayer::AbstractModel*
     }
     if (d->locationsModel == nullptr) {
         d->locationsModel = new BusinessLayer::ScreenplayBreakdownStructureLocationsModel(d->view);
+        d->locationsProxyModel = new BusinessLayer::ScreenplayBreakdownStructureModelProxy(d->view);
+        d->locationsProxyModel->setSourceModel(d->locationsModel);
+        d->locationsProxyModel->setSortOrder(
+            BusinessLayer::ScreenplayBreakdownStructureModelProxy::SortOrder::Alphabetically);
     }
-    d->view->setModels(d->structureModel, d->charactersModel, d->locationsModel);
+    d->view->setModels(d->structureModel, d->charactersModel, d->locationsProxyModel);
 
     //
     // Помещаем модель с данными в прокси

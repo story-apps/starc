@@ -142,6 +142,7 @@ void ScreenplayBreakdownStructureLocationsModel::Implementation::buildModel()
     //
     std::set<QString> locations;
     QHash<QString, QVector<QModelIndex>> locationsScenes;
+    //
     auto saveLocation
         = [this, &locations, &locationsScenes](const QString& _name, TextModelTextItem* _textItem) {
               if (_name.simplified().isEmpty()) {
@@ -154,7 +155,6 @@ void ScreenplayBreakdownStructureLocationsModel::Implementation::buildModel()
               //
               auto nameCorrected = _name.simplified();
               nameCorrected.replace(". ", " - ");
-              nameCorrected.remove('.');
 
               const auto sceneIndex = model->indexForItem(_textItem).parent();
 
@@ -206,76 +206,78 @@ void ScreenplayBreakdownStructureLocationsModel::Implementation::buildModel()
     //
     std::function<void(ScreenplayBreakdownStructureModelItem*, std::set<QString>&, const QString&)>
         fillLocation;
-    fillLocation = [&fillLocation,
-                    &locationsScenes](ScreenplayBreakdownStructureModelItem* parentItem,
-                                      std::set<QString>& locations, const QString& _prefix) {
-        while (!locations.empty()) {
-            const auto location = *locations.begin();
-            locations.erase(location);
+    fillLocation
+        = [&fillLocation, &locationsScenes](ScreenplayBreakdownStructureModelItem* parentItem,
+                                            std::set<QString>& locations, const QString& _prefix) {
+              while (!locations.empty()) {
+                  const auto location = *locations.begin();
+                  locations.erase(location);
 
-            const auto locationParts = location.mid(_prefix.length()).split(" - ");
-            std::set<QString> sublocations;
-            if (location.startsWith(_prefix)) {
-                sublocations.insert(location);
-                while (!locations.empty()
-                       && locations.begin()->startsWith(_prefix + locationParts.constFirst())) {
-                    const auto sublocation = *locations.begin();
-                    locations.erase(sublocation);
-                    sublocations.insert(sublocation);
-                }
-            }
-            //
-            // Если у локации есть подлокации
-            //
-            if (!sublocations.empty()) {
-                //
-                // ... создаём родительский элемент этой локации и дальше обрабатываем вложенные
-                //
-                auto locationItem
-                    = new ScreenplayBreakdownStructureModelItem(locationParts.constFirst());
-                fillLocation(locationItem, sublocations,
-                             _prefix + locationParts.constFirst() + " - ");
+                  const auto locationParts = location.mid(_prefix.length()).split(" - ");
+                  std::set<QString> sublocations;
+                  if (location.startsWith(_prefix)) {
+                      sublocations.insert(location);
+                      while (!locations.empty()
+                             && locations.begin()->startsWith(_prefix + locationParts.constFirst()
+                                                              + " - ")) {
+                          const auto sublocation = *locations.begin();
+                          locations.erase(sublocation);
+                          sublocations.insert(sublocation);
+                      }
+                  }
+                  //
+                  // Если у локации есть подлокации
+                  //
+                  if (!sublocations.empty()) {
+                      //
+                      // ... создаём родительский элемент этой локации и дальше обрабатываем
+                      // вложенные
+                      //
+                      auto locationItem
+                          = new ScreenplayBreakdownStructureModelItem(locationParts.constFirst());
+                      fillLocation(locationItem, sublocations,
+                                   _prefix + locationParts.constFirst() + " - ");
 
-                parentItem->appendItem(locationItem);
-            }
-            //
-            // А если подлокаций нет
-            //
-            else {
-                //
-                // ... сохраняем локацию в текущем родительском элементе
-                //
-                if (location.startsWith(_prefix)) {
-                    auto locationItem = new ScreenplayBreakdownStructureModelItem(location);
-                    const auto locationScenes = locationsScenes[location];
-                    for (const auto& sceneIndex : locationScenes) {
-                        locationItem->appendItem(new ScreenplayBreakdownStructureModelItem(
-                            sceneIndex.data(TextModelGroupItem::GroupNumberRole).toString() + " "
-                                + sceneIndex.data().toString(),
-                            sceneIndex));
-                    }
+                      parentItem->appendItem(locationItem);
+                  }
+                  //
+                  // А если подлокаций нет
+                  //
+                  else {
+                      //
+                      // ... сохраняем локацию в текущем родительском элементе
+                      //
+                      if (location.startsWith(_prefix)) {
+                          auto locationItem = new ScreenplayBreakdownStructureModelItem(location);
+                          const auto locationScenes = locationsScenes[location];
+                          for (const auto& sceneIndex : locationScenes) {
+                              locationItem->appendItem(new ScreenplayBreakdownStructureModelItem(
+                                  sceneIndex.data(TextModelGroupItem::GroupNumberRole).toString()
+                                      + " " + sceneIndex.data().toString(),
+                                  sceneIndex));
+                          }
 
-                    parentItem->appendItem(locationItem);
-                }
-                //
-                // ... помещаем оставшиеся в списке элементы в текущего родителя
-                //
-                fillLocation(parentItem, locations, _prefix);
-                //
-                // ... сохраняем список сцен текущей локации
-                //
-                if (!location.startsWith(_prefix)) {
-                    const auto locationScenes = locationsScenes[location];
-                    for (const auto& sceneIndex : locationScenes) {
-                        parentItem->appendItem(new ScreenplayBreakdownStructureModelItem(
-                            sceneIndex.data(TextModelGroupItem::GroupNumberRole).toString() + " "
-                                + sceneIndex.data().toString(),
-                            sceneIndex));
-                    }
-                }
-            }
-        }
-    };
+                          parentItem->appendItem(locationItem);
+                      }
+                      //
+                      // ... сохраняем список сцен текущей локации
+                      //
+                      else {
+                          const auto locationScenes = locationsScenes[location];
+                          for (const auto& sceneIndex : locationScenes) {
+                              parentItem->appendItem(new ScreenplayBreakdownStructureModelItem(
+                                  sceneIndex.data(TextModelGroupItem::GroupNumberRole).toString()
+                                      + " " + sceneIndex.data().toString(),
+                                  sceneIndex));
+                          }
+                      }
+                      //
+                      // ... помещаем оставшиеся в списке элементы в текущего родителя
+                      //
+                      fillLocation(parentItem, locations, _prefix);
+                  }
+              }
+          };
     fillLocation(rootItem.data(), locations, {});
     //
     // ... затем схлапываем её, чтобы не было пустых уровней вложенности

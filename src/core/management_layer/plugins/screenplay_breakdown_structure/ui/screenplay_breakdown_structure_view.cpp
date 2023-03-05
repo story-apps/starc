@@ -97,8 +97,11 @@ ScreenplayBreakdownStructureView::Implementation::Implementation(QWidget* _paren
     scenesView->setDragDropEnabled(true);
     scenesView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     scenesView->setItemDelegate(scenesDelegate);
+    charactersView->setContextMenuPolicy(Qt::CustomContextMenu);
     charactersView->setItemDelegate(tagsDelegate);
+    locationsView->setContextMenuPolicy(Qt::CustomContextMenu);
     locationsView->setItemDelegate(tagsDelegate);
+    tagsView->setContextMenuPolicy(Qt::CustomContextMenu);
     tagsView->setItemDelegate(tagsDelegate);
 
     countersWidget->hide();
@@ -169,6 +172,9 @@ ScreenplayBreakdownStructureView::ScreenplayBreakdownStructureView(QWidget* _par
             emit currentLocationSceneModelIndexChanged(screenplayItemIndex);
         }
     });
+    connect(d->locationsView, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
+        emit locationsViewContextMenuRequested(d->locationsView->mapTo(this, _pos));
+    });
 }
 
 ScreenplayBreakdownStructureView::~ScreenplayBreakdownStructureView() = default;
@@ -233,6 +239,50 @@ void ScreenplayBreakdownStructureView::setModels(QAbstractItemModel* _scenesMode
             [this] { d->locationsViewState = d->locationsView->saveState(); });
     connect(_locationsModel, &QAbstractItemModel::modelReset, this,
             [this] { d->locationsView->restoreState(d->locationsViewState); });
+}
+
+void ScreenplayBreakdownStructureView::expandLocations(int _level)
+{
+    //
+    // Сначала всё свернём
+    //
+    collapseAllLocations();
+    //
+    // ... а потом открываем необходимый уовень
+    //
+    switch (_level) {
+    default:
+    case -1: {
+        d->locationsView->expandAll();
+        break;
+    }
+
+    case 0: {
+        for (int row = 0; row < d->locationsView->model()->rowCount(); ++row) {
+            const auto index = d->locationsView->model()->index(row, 0);
+            d->locationsView->expand(index);
+        }
+        break;
+    }
+
+    case 1: {
+        for (int row = 0; row < d->locationsView->model()->rowCount(); ++row) {
+            const auto index = d->locationsView->model()->index(row, 0);
+            d->locationsView->expand(index);
+            for (int childRow = 0; childRow < d->locationsView->model()->rowCount(index);
+                 ++childRow) {
+                const auto childIndex = d->locationsView->model()->index(childRow, 0, index);
+                d->locationsView->expand(childIndex);
+            }
+        }
+        break;
+    }
+    }
+}
+
+void ScreenplayBreakdownStructureView::collapseAllLocations()
+{
+    d->locationsView->collapseAll();
 }
 
 QModelIndexList ScreenplayBreakdownStructureView::selectedIndexes() const
