@@ -1158,8 +1158,13 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             mimeDocument.setContent(correctedMimeData);
             auto document = mimeDocument.firstChildElement(xml::kDocumentTag);
             // document -> folder/group -> content tag -> text block
-            auto textNode = document.firstChild().firstChild().firstChild();
-            document.removeChild(document.firstChild());
+            const auto itemNode = document.firstChild();
+            auto contentNode = itemNode.firstChild();
+            while (contentNode.nodeName() != xml::kContentTag) {
+                contentNode = contentNode.nextSibling();
+            }
+            const auto textNode = contentNode.firstChild();
+            document.removeChild(itemNode);
             document.appendChild(textNode);
             correctedMimeData = mimeDocument.toString();
         }
@@ -1440,7 +1445,9 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         if (textFolderTypeFromString(contentReader.name().toString()) != TextFolderType::Undefined
             || textGroupTypeFromString(contentReader.name().toString())
                 != TextGroupType::Undefined) {
-            contentReader.readNextStartElement(); // content
+            while (contentReader.name() != xml::kContentTag) {
+                contentReader.readNextStartElement(); // content
+            }
             contentReader.readNextStartElement(); // text node
         }
 

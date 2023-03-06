@@ -34,8 +34,8 @@ void ScreenplayBreakdownStructureScenesModel::setSourceModel(QAbstractItemModel*
     QSortFilterProxyModel::setSourceModel(_sourceModel);
 }
 
-bool ScreenplayBreakdownStructureScenesModel::filterAcceptsRow(int _sourceRow,
-                                                         const QModelIndex& _sourceParent) const
+bool ScreenplayBreakdownStructureScenesModel::filterAcceptsRow(
+    int _sourceRow, const QModelIndex& _sourceParent) const
 {
     if (d->screenplayModel == nullptr) {
         return false;
