@@ -36,6 +36,10 @@ QString ScreenplayTemplate::name() const
     } else if (id() == "tamil") {
         return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "Tamil template (page: A4; font: Mukta Malar)");
+    } else if (id() == "telugu") {
+        return QCoreApplication::translate(
+            "BusinessLayer::ScreenplayTemplate",
+            "Telugu template (page: A4; font: Courier Prime, Mallanna)");
     } else if (id() == "us") {
         return QCoreApplication::translate("BusinessLayer::ScreenplayTemplate",
                                            "US template (page: Letter; font: Courier Prime)");

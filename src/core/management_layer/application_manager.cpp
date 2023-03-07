@@ -607,6 +607,12 @@ void ApplicationManager::Implementation::loadMissedFonts()
               QLatin1String("noto-sans-tamil-regular.ttf"),
               QLatin1String("noto-sans-tamil-medium.ttf"),
           } },
+        { QLatin1String("Noto Sans Telugu"),
+          {
+              QLatin1String("noto-sans-telugu-light.ttf"),
+              QLatin1String("noto-sans-telugu-regular.ttf"),
+              QLatin1String("noto-sans-telugu-medium.ttf"),
+          } },
         { QLatin1String("Noto Sans KR"),
           {
               QLatin1String("noto-sans-kr-light.otf"),
@@ -1004,6 +1010,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
 
     case QLocale::Tamil: {
         translation = "ta";
+        break;
+    }
+
+    case QLocale::Telugu: {
+        translation = "te";
         break;
     }
 
@@ -2134,6 +2145,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     fontDatabase.addApplicationFont(":/fonts/courier-prime-bold");
     fontDatabase.addApplicationFont(":/fonts/courier-prime-italic");
     fontDatabase.addApplicationFont(":/fonts/courier-prime-bold-italic");
+    fontDatabase.addApplicationFont(":/fonts/mallanna-regular");
     fontDatabase.addApplicationFont(":/fonts/muktamalar-bold");
     fontDatabase.addApplicationFont(":/fonts/muktamalar-regular");
     fontDatabase.addApplicationFont(":/fonts/times-new-roman");

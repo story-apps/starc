@@ -367,6 +367,12 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
         break;
     }
 
+    case QLocale::Telugu: {
+        fontFamilies.prepend(QLatin1String("Noto Sans"));
+        fontFamilies.prepend(QLatin1String("Noto Sans Telugu"));
+        break;
+    }
+
     case QLocale::Korean: {
         fontFamilies.prepend(QLatin1String("Noto Sans"));
         fontFamilies.prepend(QLatin1String("Noto Sans KR"));
@@ -450,6 +456,11 @@ QVector<QString> DesignSystem::Font::missedFonts() const
 
     case QLocale::Tamil: {
         fontFamilies.prepend(QLatin1String("Noto Sans Tamil"));
+        break;
+    }
+
+    case QLocale::Telugu: {
+        fontFamilies.prepend(QLatin1String("Noto Sans Telugu"));
         break;
     }
 

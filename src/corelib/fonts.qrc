@@ -32,5 +32,6 @@
         <file alias="times-new-roman-italic">fonts/times-new-roman-italic.ttf</file>
         <file alias="times-new-roman">fonts/times-new-roman.ttf</file>
         <file alias="roboto-bold">fonts/roboto-bold.ttf</file>
+        <file alias="mallanna-regular">fonts/mallanna-regular.ttf</file>
     </qresource>
 </RCC>

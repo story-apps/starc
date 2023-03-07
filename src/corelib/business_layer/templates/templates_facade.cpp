@@ -608,6 +608,7 @@ TemplatesFacade::TemplatesFacade()
                                              QLatin1String("he"),
                                              QLatin1String("ru"),
                                              QLatin1String("tamil"),
+                                             QLatin1String("telugu"),
                                              QLatin1String("us"),
                                          });
     d->loadTemplates<ComicBookTemplate>(kComicBookTemplatesDirectory,

@@ -25,5 +25,6 @@
         <file>templates/novel/manuscript_t_letter</file>
         <file>templates/novel/modern_a4</file>
         <file>templates/novel/modern_letter</file>
+        <file>templates/screenplay/telugu</file>
     </qresource>
 </RCC>
