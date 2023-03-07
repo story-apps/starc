@@ -546,12 +546,17 @@ QModelIndex ScreenplayTextEdit::currentModelIndex() const
 
 void ScreenplayTextEdit::setCurrentModelIndex(const QModelIndex& _index)
 {
-    if (!_index.isValid() || _index.model() != d->model) {
+    if (!_index.isValid() || _index.model() != d->model || _index == currentModelIndex()) {
+        return;
+    }
+
+    const auto cursorPosition = d->document.itemStartPosition(_index);
+    if (cursorPosition == -1) {
         return;
     }
 
     BusinessLayer::TextCursor textCursor(document());
-    textCursor.setPosition(d->document.itemStartPosition(_index));
+    textCursor.setPosition(cursorPosition);
 
     //
     // В кейсе с битами мы попадаем на невидимый блок, но интересует нас следующий за ним -

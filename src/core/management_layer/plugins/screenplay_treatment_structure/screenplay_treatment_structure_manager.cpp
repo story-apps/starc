@@ -294,7 +294,8 @@ void ScreenplayTreatmentStructureManager::bind(IDocumentManager* _manager)
     Q_ASSERT(_manager);
 
     connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
-            SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
+            SLOT(setCurrentModelIndex(QModelIndex)),
+            static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
 }
 
 void ScreenplayTreatmentStructureManager::setEditingMode(DocumentEditingMode _mode)

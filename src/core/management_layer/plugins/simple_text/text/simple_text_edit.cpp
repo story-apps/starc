@@ -222,12 +222,17 @@ QModelIndex SimpleTextEdit::currentModelIndex() const
 
 void SimpleTextEdit::setCurrentModelIndex(const QModelIndex& _index)
 {
-    if (!_index.isValid() || _index.model() != d->model) {
+    if (!_index.isValid() || _index.model() != d->model || _index == currentModelIndex()) {
         return;
     }
 
-    QTextCursor textCursor(document());
-    textCursor.setPosition(d->document.itemStartPosition(_index));
+    const auto cursorPosition = d->document.itemStartPosition(_index);
+    if (cursorPosition == -1) {
+        return;
+    }
+
+    BusinessLayer::TextCursor textCursor(document());
+    textCursor.setPosition(cursorPosition);
     ensureCursorVisible(textCursor);
 }
 
