@@ -11,6 +11,7 @@ namespace BusinessLayer {
  * @brief Порядок сортировки элементов
  */
 enum class ScreenplayBreakdownSortOrder {
+    Undefined,
     Alphabetically,
     ByScriptOrder,
     ByDuration,

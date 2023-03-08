@@ -12,12 +12,17 @@
 #include <utils/tools/alphanum_comparer.h>
 #include <utils/tools/debouncer.h>
 
+#include <QMimeData>
 #include <QPointer>
 
 #include <set>
 
 
 namespace BusinessLayer {
+
+namespace {
+const char* kMimeType = "application/x-starc/breakdown/character";
+}
 
 class ScreenplayBreakdownStructureCharactersModel::Implementation
 {
@@ -78,6 +83,11 @@ public:
      */
     QModelIndex lastHighlightedSceneIndex;
     QVector<ScreenplayBreakdownStructureModelItem*> lastHighlightedItems;
+
+    /**
+     * @brief Последние положенные в майм элементы
+     */
+    mutable QVector<ScreenplayBreakdownStructureModelItem*> lastMimeItems;
 
     /**
      * @brief Дебаунсер на перестройку модели локаций при изменении модели текста
@@ -374,6 +384,10 @@ void ScreenplayBreakdownStructureCharactersModel::sortBy(ScreenplayBreakdownSort
               [_sortOrder](ScreenplayBreakdownStructureModelItem* _lhs,
                            ScreenplayBreakdownStructureModelItem* _rhs) {
                   switch (_sortOrder) {
+                  case ScreenplayBreakdownSortOrder::Undefined: {
+                      return false;
+                  }
+
                   case ScreenplayBreakdownSortOrder::Alphabetically: {
                       return _lhs->name < _rhs->name;
                   }
@@ -529,7 +543,20 @@ int ScreenplayBreakdownStructureCharactersModel::rowCount(const QModelIndex& _pa
 
 Qt::ItemFlags ScreenplayBreakdownStructureCharactersModel::flags(const QModelIndex& _index) const
 {
-    Q_UNUSED(_index)
+    //
+    // Вставлять можно только в рута
+    //
+    if (!_index.isValid()) {
+        return Qt::ItemIsDropEnabled;
+    }
+
+    //
+    // Перетаскивать можно только элементы верхнего уровня
+    //
+    if (!_index.parent().isValid()) {
+        return Qt::ItemIsDragEnabled | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    }
+
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
@@ -546,6 +573,210 @@ QVariant ScreenplayBreakdownStructureCharactersModel::data(const QModelIndex& _i
     }
 
     return item->data(_role);
+}
+
+bool ScreenplayBreakdownStructureCharactersModel::canDropMimeData(const QMimeData* _data,
+                                                                  Qt::DropAction _action, int _row,
+                                                                  int _column,
+                                                                  const QModelIndex& _parent) const
+{
+    Q_UNUSED(_action)
+    Q_UNUSED(_row)
+    Q_UNUSED(_parent)
+
+    if (!_data->hasFormat(kMimeType)) {
+        return false;
+    }
+
+    if (_column > 0) {
+        return false;
+    }
+
+    if (d->lastMimeItems.isEmpty()) {
+        return false;
+    }
+
+    //
+    // Проверяем, что перемещаются данные из модели
+    //
+    QByteArray encodedData = _data->data(kMimeType);
+    QDataStream stream(&encodedData, QIODevice::ReadOnly);
+    int row = 0;
+    while (!stream.atEnd()) {
+        QString itemName;
+        stream >> itemName;
+        if (itemName != d->lastMimeItems[row]->name) {
+            //
+            // ... если это какие-то внешние данные, то ничего не делаем
+            //
+            return false;
+        }
+
+        ++row;
+    }
+
+    return true;
+}
+
+bool ScreenplayBreakdownStructureCharactersModel::dropMimeData(const QMimeData* _data,
+                                                               Qt::DropAction _action, int _row,
+                                                               int _column,
+                                                               const QModelIndex& _parent)
+{
+    if (!canDropMimeData(_data, _action, _row, _column, _parent)) {
+        return false;
+    }
+
+    if (_action == Qt::IgnoreAction) {
+        return true;
+    }
+
+    //
+    // Перемещаем все элементы по очереди
+    //
+
+    auto parentItem = d->itemForIndex(_parent);
+
+    //
+    // Добавляем после всех элементов выбранного
+    //
+    if (_row == -1 || _row == parentItem->childCount()) {
+        //
+        // Если вставляем перед корзиной, то добавляем дельту
+        //
+        const int recycleBinIndexDelta = 0;
+
+        while (!d->lastMimeItems.isEmpty()) {
+            auto item = d->lastMimeItems.takeFirst();
+            const auto itemIndex = d->indexForItem(item);
+
+            if (item->parent() == parentItem
+                && itemIndex.row() == (parentItem->childCount() - 1 + recycleBinIndexDelta)) {
+                continue;
+            }
+
+            beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(), _parent,
+                          parentItem->childCount() + recycleBinIndexDelta);
+            item->parent()->takeItem(item);
+            parentItem->insertItem(parentItem->childCount() + recycleBinIndexDelta, item);
+            endMoveRows();
+        }
+    }
+    //
+    // Вставляем между элементами
+    //
+    else {
+        const QModelIndex insertBeforeItemIndex = index(_row, _column, _parent);
+        auto insertBeforeItem = d->itemForIndex(insertBeforeItemIndex);
+
+        if (d->lastMimeItems.contains(insertBeforeItem)) {
+            return false;
+        }
+
+        while (!d->lastMimeItems.isEmpty()) {
+            auto item = d->lastMimeItems.takeFirst();
+            auto itemIndex = d->indexForItem(item);
+
+            //
+            // Нет смысла перемещать элемент на то же самое место
+            //
+            if (itemIndex.parent() == insertBeforeItemIndex.parent()
+                && (itemIndex.row() == insertBeforeItemIndex.row()
+                    || itemIndex.row() == insertBeforeItemIndex.row() - 1)) {
+                continue;
+            }
+
+            beginMoveRows(itemIndex.parent(), itemIndex.row(), itemIndex.row(),
+                          insertBeforeItemIndex.parent(), _row);
+            item->parent()->takeItem(item);
+            parentItem->insertItem(parentItem->rowOfChild(insertBeforeItem), item);
+            endMoveRows();
+        }
+    }
+
+    //
+    // После того, как переставили элементы, нужно обновить порядок следования элементов
+    // в исходной модели персонажей
+    //
+    sortBy(ScreenplayBreakdownSortOrder::Undefined);
+
+    return true;
+}
+
+QMimeData* ScreenplayBreakdownStructureCharactersModel::mimeData(
+    const QModelIndexList& _indexes) const
+{
+    d->lastMimeItems.clear();
+
+    if (_indexes.isEmpty()) {
+        return nullptr;
+    }
+
+    //
+    // Формируем список элементов для перемещения
+    //
+    for (const QModelIndex& index : _indexes) {
+        if (index.isValid()) {
+            d->lastMimeItems << d->itemForIndex(index);
+        }
+    }
+    //
+    // ... и упорядочиваем его
+    //
+    std::sort(d->lastMimeItems.begin(), d->lastMimeItems.end(),
+              [](ScreenplayBreakdownStructureModelItem* _lhs,
+                 ScreenplayBreakdownStructureModelItem* _rhs) {
+                  //
+                  // Для элементов находящихся на одном уровне сравниваем их позиции
+                  //
+                  if (_lhs->parent() == _rhs->parent()) {
+                      return _lhs->parent()->rowOfChild(_lhs) < _rhs->parent()->rowOfChild(_rhs);
+                  }
+
+                  //
+                  // Для разноуровневых элементов определяем путь до верха и сравниваем пути
+                  //
+                  auto buildPath = [](ScreenplayBreakdownStructureModelItem* _item) {
+                      QString path;
+                      auto child = _item;
+                      auto parent = child->parent();
+                      while (parent != nullptr) {
+                          path.prepend(QString("0000%1").arg(parent->rowOfChild(child)).right(5));
+                          child = parent;
+                          parent = child->parent();
+                      }
+                      return path;
+                  };
+                  return buildPath(_lhs) < buildPath(_rhs);
+              });
+
+    //
+    // Помещаем индексы перемещаемых элементов в майм
+    //
+    QByteArray encodedData;
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+    for (const auto& item : std::as_const(d->lastMimeItems)) {
+        stream << item->name;
+    }
+
+    QMimeData* mimeData = new QMimeData();
+    mimeData->setData(kMimeType, encodedData);
+    return mimeData;
+}
+
+QStringList ScreenplayBreakdownStructureCharactersModel::mimeTypes() const
+{
+    return { kMimeType };
+}
+
+Qt::DropActions ScreenplayBreakdownStructureCharactersModel::supportedDragActions() const
+{
+    return Qt::MoveAction;
+}
+
+Qt::DropActions ScreenplayBreakdownStructureCharactersModel::supportedDropActions() const
+{
+    return Qt::MoveAction;
 }
 
 } // namespace BusinessLayer
