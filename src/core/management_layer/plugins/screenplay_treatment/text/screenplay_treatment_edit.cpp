@@ -272,7 +272,7 @@ QAbstractItemModel* ScreenplayTreatmentEdit::characters() const
         return nullptr;
     }
 
-    return d->model->charactersModel();
+    return d->model->charactersList();
 }
 
 void ScreenplayTreatmentEdit::createCharacter(const QString& _name)

@@ -76,7 +76,7 @@ void ScreenplayStructureAnalysisPlot::build(QAbstractItemModel* _model) const
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
     //
     QString rxPattern;
-    auto charactersModel = screenplayModel->charactersModel();
+    auto charactersModel = screenplayModel->charactersList();
     for (int index = 0; index < charactersModel->rowCount(); ++index) {
         auto characterName = charactersModel->index(index, 0).data().toString();
         if (!rxPattern.isEmpty()) {

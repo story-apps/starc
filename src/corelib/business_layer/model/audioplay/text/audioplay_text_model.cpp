@@ -235,7 +235,7 @@ void AudioplayTextModel::setCharactersModel(CharactersModel* _model)
             [this] { d->needUpdateRuntimeDictionaries = true; });
 }
 
-QAbstractItemModel* AudioplayTextModel::charactersModel() const
+QAbstractItemModel* AudioplayTextModel::charactersList() const
 {
     if (d->charactersModelFromText != nullptr) {
         return d->charactersModelFromText;

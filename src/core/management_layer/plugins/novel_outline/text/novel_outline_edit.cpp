@@ -229,7 +229,7 @@ QAbstractItemModel* NovelOutlineEdit::characters() const
         return nullptr;
     }
 
-    return d->model->charactersModel();
+    return d->model->charactersList();
 }
 
 void NovelOutlineEdit::createCharacter(const QString& _name)

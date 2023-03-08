@@ -200,7 +200,7 @@ void StageplayTextModel::setCharactersModel(CharactersModel* _model)
             [this] { d->needUpdateRuntimeDictionaries = true; });
 }
 
-QAbstractItemModel* StageplayTextModel::charactersModel() const
+QAbstractItemModel* StageplayTextModel::charactersList() const
 {
     if (d->charactersModelFromText != nullptr) {
         return d->charactersModelFromText;

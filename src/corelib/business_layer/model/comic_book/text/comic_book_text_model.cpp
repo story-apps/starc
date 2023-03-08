@@ -229,7 +229,7 @@ void ComicBookTextModel::setCharactersModel(CharactersModel* _model)
             [this] { d->needUpdateRuntimeDictionaries = true; });
 }
 
-QAbstractItemModel* ComicBookTextModel::charactersModel() const
+QAbstractItemModel* ComicBookTextModel::charactersList() const
 {
     if (d->charactersModelFromText != nullptr) {
         return d->charactersModelFromText;

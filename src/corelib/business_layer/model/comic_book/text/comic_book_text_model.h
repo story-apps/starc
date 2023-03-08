@@ -44,7 +44,7 @@ public:
      * @brief Задать модель персонажей проекта
      */
     void setCharactersModel(CharactersModel* _model);
-    QAbstractItemModel* charactersModel() const;
+    QAbstractItemModel* charactersList() const;
 
     /**
      * @brief Получить модель персонажа по заданному имени

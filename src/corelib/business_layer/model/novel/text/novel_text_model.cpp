@@ -213,7 +213,7 @@ void NovelTextModel::setCharactersModel(CharactersModel* _model)
     d->charactersModel = _model;
 }
 
-QAbstractItemModel* NovelTextModel::charactersModel() const
+QAbstractItemModel* NovelTextModel::charactersList() const
 {
     return d->charactersModel;
 }

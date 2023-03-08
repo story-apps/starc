@@ -214,7 +214,7 @@ QAbstractItemModel* StageplayTextEdit::characters() const
         return nullptr;
     }
 
-    return d->model->charactersModel();
+    return d->model->charactersList();
 }
 
 void StageplayTextEdit::createCharacter(const QString& _name)
@@ -793,7 +793,7 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
             // Определим цвет персонажа
             //
             if (blockType == TextParagraphType::Character && d->model
-                && d->model->charactersModel() != nullptr) {
+                && d->model->charactersList() != nullptr) {
                 lastCharacterColor = QColor();
                 lastCharacterColorWithNumberRectBottom = 0;
                 const QString characterName

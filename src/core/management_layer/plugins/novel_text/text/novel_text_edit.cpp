@@ -280,7 +280,7 @@ QAbstractItemModel* NovelTextEdit::characters() const
         return nullptr;
     }
 
-    return d->model->charactersModel();
+    return d->model->charactersList();
 }
 
 void NovelTextEdit::createCharacter(const QString& _name)
@@ -887,7 +887,7 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
             // Определим цвет персонажа
             //
             if (blockType == TextParagraphType::Character && d->model
-                && d->model->charactersModel() != nullptr) {
+                && d->model->charactersList() != nullptr) {
                 lastCharacterColor = QColor();
                 const QString characterName
                     = BusinessLayer::NovelCharacterParser::name(block.text());

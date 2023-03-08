@@ -215,7 +215,7 @@ QAbstractItemModel* AudioplayTextEdit::characters() const
         return nullptr;
     }
 
-    return d->model->charactersModel();
+    return d->model->charactersList();
 }
 
 void AudioplayTextEdit::createCharacter(const QString& _name)
@@ -801,7 +801,7 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
             // Определим цвет персонажа
             //
             if (blockType == TextParagraphType::Character && d->model
-                && d->model->charactersModel() != nullptr) {
+                && d->model->charactersList() != nullptr) {
                 lastCharacterColor = QColor();
                 lastCharacterColorWithNumberRectBottom = 0;
                 const QString characterName

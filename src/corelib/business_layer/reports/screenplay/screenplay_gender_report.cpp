@@ -76,7 +76,7 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
     //
     QString rxPattern;
-    auto charactersModel = screenplayModel->charactersModel();
+    auto charactersModel = screenplayModel->charactersList();
     for (int index = 0; index < charactersModel->rowCount(); ++index) {
         auto characterName = charactersModel->index(index, 0).data().toString();
         if (!rxPattern.isEmpty()) {
@@ -95,9 +95,9 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     //
     // Соберём список персонажей
     //
-    for (int index = 0; index < screenplayModel->charactersModel()->rowCount(); ++index) {
+    for (int index = 0; index < screenplayModel->charactersList()->rowCount(); ++index) {
         const auto characterName
-            = screenplayModel->charactersModel()->index(index, 0).data().toString();
+            = screenplayModel->charactersList()->index(index, 0).data().toString();
         const auto character = screenplayModel->character(characterName);
         switch (character->gender()) {
         case 0: {
