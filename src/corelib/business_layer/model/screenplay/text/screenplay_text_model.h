@@ -48,10 +48,15 @@ public:
     ScreenplayDictionariesModel* dictionariesModel() const;
 
     /**
-     * @brief Задать модель персонажей проекта
+     * @brief Модель персонажей проекта
      */
     void setCharactersModel(CharactersModel* _model);
-    QAbstractItemModel* charactersModel() const;
+    CharactersModel* charactersModel() const;
+
+    /**
+     * @brief Список персонажей
+     */
+    QAbstractItemModel* charactersList() const;
 
     /**
      * @brief Получить модель персонажа по заданному имени

@@ -5,6 +5,7 @@
 
 namespace BusinessLayer {
 
+enum class ScreenplayBreakdownSortOrder;
 class ScreenplayTextModel;
 
 /**
@@ -22,6 +23,16 @@ public:
      * @brief Задать модель текста сценария
      */
     void setSourceModel(BusinessLayer::ScreenplayTextModel* _model);
+
+    /**
+     * @brief Отсортировать модель в заданной последовательности
+     */
+    void sortBy(ScreenplayBreakdownSortOrder _sortOrder);
+
+    /**
+     * @brief Задать текущий элемент модели текста сценария
+     */
+    void setSourceModelCurrentIndex(const QModelIndex& _index);
 
     /**
      * @brief Реализация базовых вещей для древовидной модели

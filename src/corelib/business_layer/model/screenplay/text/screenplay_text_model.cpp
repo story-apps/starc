@@ -242,7 +242,12 @@ void ScreenplayTextModel::setCharactersModel(CharactersModel* _model)
             [this] { d->needUpdateRuntimeDictionaries = true; });
 }
 
-QAbstractItemModel* ScreenplayTextModel::charactersModel() const
+CharactersModel* ScreenplayTextModel::charactersModel() const
+{
+    return d->charactersModel;
+}
+
+QAbstractItemModel* ScreenplayTextModel::charactersList() const
 {
     if (d->charactersModelFromText != nullptr) {
         return d->charactersModelFromText;

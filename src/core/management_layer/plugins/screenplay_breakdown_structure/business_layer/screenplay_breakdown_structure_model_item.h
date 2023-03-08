@@ -8,6 +8,15 @@
 namespace BusinessLayer {
 
 /**
+ * @brief Порядок сортировки элементов
+ */
+enum class ScreenplayBreakdownSortOrder {
+    Alphabetically,
+    ByScriptOrder,
+    ByDuration,
+};
+
+/**
  * @brief Элемент модели разбивки сценария
  */
 class ScreenplayBreakdownStructureModelItem : public AbstractModelItem

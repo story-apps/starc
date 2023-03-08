@@ -985,6 +985,8 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
 
             connect(charactersModel, &BusinessLayer::CharactersModel::createCharacterRequested,
                     this, &ProjectModelsFacade::createCharacterRequested);
+            connect(charactersModel, &BusinessLayer::CharactersModel::moveCharacterRequested, this,
+                    &ProjectModelsFacade::moveCharacterRequested);
 
             model = charactersModel;
             break;

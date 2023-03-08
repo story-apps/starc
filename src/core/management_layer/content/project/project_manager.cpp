@@ -1912,6 +1912,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 d->addDocumentToContainer(Domain::DocumentObjectType::Characters,
                                           Domain::DocumentObjectType::Character, _name, _content);
             });
+    connect(&d->modelsFacade, &ProjectModelsFacade::moveCharacterRequested,
+            d->projectStructureModel, &BusinessLayer::StructureModel::moveCharacter);
     connect(&d->modelsFacade, &ProjectModelsFacade::characterNameChanged, this,
             [this](BusinessLayer::AbstractModel* _character, const QString& _newName,
                    const QString& _oldName) {

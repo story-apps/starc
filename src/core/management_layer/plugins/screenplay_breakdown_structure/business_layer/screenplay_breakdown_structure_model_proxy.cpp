@@ -39,10 +39,21 @@ ScreenplayBreakdownStructureModelProxy::ScreenplayBreakdownStructureModelProxy(Q
 
 ScreenplayBreakdownStructureModelProxy::~ScreenplayBreakdownStructureModelProxy() = default;
 
-void ScreenplayBreakdownStructureModelProxy::setSortOrder(SortOrder _sortOrder)
+void ScreenplayBreakdownStructureModelProxy::sortBy(SortOrder _sortOrder)
 {
     d->sortOrder = _sortOrder;
     sort(0);
+    d->sortOrder = SortOrder::Undefined;
+}
+
+bool ScreenplayBreakdownStructureModelProxy::filterAcceptsRow(
+    int _sourceRow, const QModelIndex& _sourceParent) const
+{
+    return sourceModel()
+               ->index(_sourceRow, 0, _sourceParent)
+               .data(ScreenplayBreakdownStructureModelItem::DurationRole)
+               .toInt()
+        > 0;
 }
 
 bool ScreenplayBreakdownStructureModelProxy::lessThan(const QModelIndex& _sourceLeft,

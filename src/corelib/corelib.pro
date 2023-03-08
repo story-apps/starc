@@ -685,6 +685,7 @@ HEADERS += \
     utils/helpers/ui_helper.h \
     utils/logging.h \
     utils/shugar.h \
+    utils/tools/alphanum_comparer.h \
     utils/tools/backup_builder.h \
     utils/tools/debouncer.h \
     utils/tools/model_index_path.h \

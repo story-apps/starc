@@ -170,6 +170,11 @@ signals:
     void createCharacterRequested(const QString& _name, const QByteArray& _content);
 
     /**
+     * @brief Необходимо переставить персонажа в новое место
+     */
+    void moveCharacterRequested(const QUuid& _uuid, int _to);
+
+    /**
      * @brief Изменилось имя персонажа
      */
     void characterNameChanged(BusinessLayer::AbstractModel* _character, const QString& _oldName,

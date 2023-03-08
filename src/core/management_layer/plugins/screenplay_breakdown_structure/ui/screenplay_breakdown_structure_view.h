@@ -43,6 +43,16 @@ public:
                    QAbstractItemModel* _locationsModel);
 
     /**
+     * @brief Развернуть список всех персонажей
+     */
+    void expandCharacters();
+
+    /**
+     * @brief Свернуть список всех персонажей
+     */
+    void collapseAllCharacters();
+
+    /**
      * @brief Развернуть список локаций
      * @note Если level развен -1, то разворачивается всё дерево, 0 - первый уровенть, 1 - второй
      */
@@ -63,11 +73,13 @@ signals:
      * @brief Пользователь выбрал элемент в навигаторе с заданным индексом
      */
     void currentSceneModelIndexChanged(const QModelIndex& _index);
+    void currentCharacterSceneModelIndexChanged(const QModelIndex& _index);
     void currentLocationSceneModelIndexChanged(const QModelIndex& _index);
 
     /**
      * @brief Пользователь хочет открыть контекстное меню
      */
+    void charactersViewContextMenuRequested(const QPoint& _pos);
     void locationsViewContextMenuRequested(const QPoint& _pos);
 
 protected:

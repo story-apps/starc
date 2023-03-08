@@ -67,6 +67,7 @@ public:
      * @brief Перенести элемент в заданного родителя
      */
     void moveItem(StructureModelItem* _item, StructureModelItem* _parentItem);
+    void moveItem(StructureModelItem* _item, StructureModelItem* _parentItem, int _targetIndex);
 
     /**
      * @brief Извлечь заданный элемент без удаления
@@ -82,6 +83,11 @@ public:
      * @brief Обновить элемент
      */
     void updateItem(StructureModelItem* _item);
+
+    /**
+     * @brief Перенести персонажа
+     */
+    void moveCharacter(const QUuid& _uuid, int _to);
 
     /**
      * @brief Реализация древовидной модели

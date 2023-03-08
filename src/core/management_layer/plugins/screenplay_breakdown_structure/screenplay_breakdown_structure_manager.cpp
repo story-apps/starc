@@ -2,6 +2,7 @@
 
 #include "business_layer/screenplay_breakdown_structure_characters_model.h"
 #include "business_layer/screenplay_breakdown_structure_locations_model.h"
+#include "business_layer/screenplay_breakdown_structure_model_item.h"
 #include "business_layer/screenplay_breakdown_structure_model_proxy.h"
 #include "business_layer/screenplay_breakdown_structure_scenes_model.h"
 #include "ui/screenplay_breakdown_structure_view.h"
@@ -37,6 +38,7 @@ public:
     /**
      * @brief Настроить контекстное меню
      */
+    void prepareContextMenuForCharacters(const QModelIndexList& _indexes);
     void prepareContextMenuForLocations(const QModelIndexList& _indexes);
 
 
@@ -90,6 +92,58 @@ Ui::ScreenplayBreakdownStructureView* ScreenplayBreakdownStructureManager::Imple
     return allViews.last();
 }
 
+void ScreenplayBreakdownStructureManager::Implementation::prepareContextMenuForCharacters(
+    const QModelIndexList& _indexes)
+{
+    Q_UNUSED(_indexes)
+
+    //
+    // Настроим внешний вид меню
+    //
+    contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
+    contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
+
+    //
+    // Настроим действия меню
+    //
+    QVector<QAction*> actions;
+    //
+    auto expandAllAction = new QAction(tr("Expand all"));
+    expandAllAction->setIconText(u8"\U000F004C");
+    connect(expandAllAction, &QAction::triggered, view, [this] { view->expandCharacters(); });
+    actions.append(expandAllAction);
+    //
+    auto collapseAllAction = new QAction(tr("Collapse all"));
+    collapseAllAction->setIconText(u8"\U000F0044");
+    connect(collapseAllAction, &QAction::triggered, view,
+            [this] { view->collapseAllCharacters(); });
+    actions.append(collapseAllAction);
+    //
+    auto sortAlphabeticallyAction = new QAction(tr("Sort alphabetically"));
+    sortAlphabeticallyAction->setSeparator(true);
+    sortAlphabeticallyAction->setIconText(u8"\U000F033C");
+    connect(sortAlphabeticallyAction, &QAction::triggered, view, [this] {
+        charactersModel->sortBy(BusinessLayer::ScreenplayBreakdownSortOrder::Alphabetically);
+    });
+    actions.append(sortAlphabeticallyAction);
+    //
+    auto sortByScriptOrderAction = new QAction(tr("Sort by script order"));
+    sortByScriptOrderAction->setIconText(u8"\U000f68c0");
+    connect(sortByScriptOrderAction, &QAction::triggered, view, [this] {
+        charactersModel->sortBy(BusinessLayer::ScreenplayBreakdownSortOrder::ByScriptOrder);
+    });
+    actions.append(sortByScriptOrderAction);
+    //
+    auto sortByDurationAction = new QAction(tr("Sort by duration"));
+    sortByDurationAction->setIconText(u8"\U000f68c0");
+    connect(sortByDurationAction, &QAction::triggered, view, [this] {
+        charactersModel->sortBy(BusinessLayer::ScreenplayBreakdownSortOrder::ByDuration);
+    });
+    actions.append(sortByDurationAction);
+
+    contextMenu->setActions(actions);
+}
+
 void ScreenplayBreakdownStructureManager::Implementation::prepareContextMenuForLocations(
     const QModelIndexList& _indexes)
 {
@@ -130,7 +184,7 @@ void ScreenplayBreakdownStructureManager::Implementation::prepareContextMenuForL
     sortAlphabeticallyAction->setSeparator(true);
     sortAlphabeticallyAction->setIconText(u8"\U000F033C");
     connect(sortAlphabeticallyAction, &QAction::triggered, view, [this] {
-        locationsProxyModel->setSortOrder(
+        locationsProxyModel->sortBy(
             BusinessLayer::ScreenplayBreakdownStructureModelProxy::SortOrder::Alphabetically);
     });
     actions.append(sortAlphabeticallyAction);
@@ -138,7 +192,7 @@ void ScreenplayBreakdownStructureManager::Implementation::prepareContextMenuForL
     auto sortByDurationAction = new QAction(tr("Sort by duration"));
     sortByDurationAction->setIconText(u8"\U000F04BF");
     connect(sortByDurationAction, &QAction::triggered, view, [this] {
-        locationsProxyModel->setSortOrder(
+        locationsProxyModel->sortBy(
             BusinessLayer::ScreenplayBreakdownStructureModelProxy::SortOrder::ByDuration);
     });
     actions.append(sortByDurationAction);
@@ -154,17 +208,29 @@ ScreenplayBreakdownStructureManager::ScreenplayBreakdownStructureManager(QObject
     : QObject(_parent)
     , d(new Implementation)
 {
+    connect(this, &ScreenplayBreakdownStructureManager::currentModelIndexChanged, this,
+            [this](const QModelIndex& _index) {
+                d->charactersModel->setSourceModelCurrentIndex(_index);
+                d->locationsModel->setSourceModelCurrentIndex(_index);
+            });
     connect(d->view, &Ui::ScreenplayBreakdownStructureView::currentSceneModelIndexChanged, this,
             [this](const QModelIndex& _index) {
                 const auto sourceIndex = d->structureModel->mapToSource(_index);
                 emit currentModelIndexChanged(sourceIndex);
-                d->locationsModel->setSourceModelCurrentIndex(sourceIndex);
+            });
+    connect(d->view, &Ui::ScreenplayBreakdownStructureView::currentCharacterSceneModelIndexChanged,
+            this, &ScreenplayBreakdownStructureManager::currentModelIndexChanged);
+    connect(d->view, &Ui::ScreenplayBreakdownStructureView::charactersViewContextMenuRequested,
+            this, [this](const QPoint& _pos) {
+                if (d->view->selectedIndexes().isEmpty()) {
+                    return;
+                }
+
+                d->prepareContextMenuForCharacters(d->view->selectedIndexes());
+                d->contextMenu->showContextMenu(d->view->mapToGlobal(_pos));
             });
     connect(d->view, &Ui::ScreenplayBreakdownStructureView::currentLocationSceneModelIndexChanged,
-            this, [this](const QModelIndex& _index) {
-                emit currentModelIndexChanged(_index);
-                d->locationsModel->setSourceModelCurrentIndex(_index);
-            });
+            this, &ScreenplayBreakdownStructureManager::currentModelIndexChanged);
     connect(d->view, &Ui::ScreenplayBreakdownStructureView::locationsViewContextMenuRequested, this,
             [this](const QPoint& _pos) {
                 if (d->view->selectedIndexes().isEmpty()) {
@@ -276,6 +342,7 @@ void ScreenplayBreakdownStructureManager::setCurrentModelIndex(const QModelIndex
     d->view->setCurrentModelIndex(indexForSelect);
 
     const auto sourceIndexForSelect = d->structureModel->mapToSource(indexForSelect);
+    d->charactersModel->setSourceModelCurrentIndex(sourceIndexForSelect);
     d->locationsModel->setSourceModelCurrentIndex(sourceIndexForSelect);
 
     d->modelIndexToSelect = {};
@@ -309,8 +376,6 @@ void ScreenplayBreakdownStructureManager::setModel(BusinessLayer::AbstractModel*
         d->locationsModel = new BusinessLayer::ScreenplayBreakdownStructureLocationsModel(d->view);
         d->locationsProxyModel = new BusinessLayer::ScreenplayBreakdownStructureModelProxy(d->view);
         d->locationsProxyModel->setSourceModel(d->locationsModel);
-        d->locationsProxyModel->setSortOrder(
-            BusinessLayer::ScreenplayBreakdownStructureModelProxy::SortOrder::Alphabetically);
     }
     d->view->setModels(d->structureModel, d->charactersModel, d->locationsProxyModel);
 

@@ -59,6 +59,7 @@ public:
     StackWidget* content = nullptr;
     Tree* scenesView = nullptr;
     Tree* charactersView = nullptr;
+    QVariant charactersViewState;
     Tree* locationsView = nullptr;
     QVariant locationsViewState;
     Tree* tagsView = nullptr;
@@ -164,6 +165,17 @@ ScreenplayBreakdownStructureView::ScreenplayBreakdownStructureView(QWidget* _par
     });
     connect(d->scenesView, &Tree::clicked, this,
             &ScreenplayBreakdownStructureView::currentSceneModelIndexChanged);
+    connect(d->charactersView, &Tree::clicked, this, [this](const QModelIndex& _index) {
+        const auto screenplayItemIndex
+            = _index.data(BusinessLayer::ScreenplayBreakdownStructureModelItem::ScreenplayIndexRole)
+                  .toModelIndex();
+        if (screenplayItemIndex.isValid()) {
+            emit currentCharacterSceneModelIndexChanged(screenplayItemIndex);
+        }
+    });
+    connect(d->charactersView, &Tree::customContextMenuRequested, this, [this](const QPoint& _pos) {
+        emit charactersViewContextMenuRequested(d->locationsView->mapTo(this, _pos));
+    });
     connect(d->locationsView, &Tree::clicked, this, [this](const QModelIndex& _index) {
         const auto screenplayItemIndex
             = _index.data(BusinessLayer::ScreenplayBreakdownStructureModelItem::ScreenplayIndexRole)
@@ -230,15 +242,36 @@ void ScreenplayBreakdownStructureView::setModels(QAbstractItemModel* _scenesMode
                                                  QAbstractItemModel* _charactersModel,
                                                  QAbstractItemModel* _locationsModel)
 {
+    if (d->charactersView->model() != nullptr) {
+        d->charactersView->model()->disconnect(this);
+    }
+    if (d->locationsView->model() != nullptr) {
+        d->locationsView->model()->disconnect(this);
+    }
+
     d->scenesView->setModel(_scenesModel);
 
     d->charactersView->setModel(_charactersModel);
+    connect(_charactersModel, &QAbstractItemModel::modelAboutToBeReset, this,
+            [this] { d->charactersViewState = d->charactersView->saveState(); });
+    connect(_charactersModel, &QAbstractItemModel::modelReset, this,
+            [this] { d->charactersView->restoreState(d->charactersViewState); });
 
     d->locationsView->setModel(_locationsModel);
     connect(_locationsModel, &QAbstractItemModel::modelAboutToBeReset, this,
             [this] { d->locationsViewState = d->locationsView->saveState(); });
     connect(_locationsModel, &QAbstractItemModel::modelReset, this,
             [this] { d->locationsView->restoreState(d->locationsViewState); });
+}
+
+void ScreenplayBreakdownStructureView::expandCharacters()
+{
+    d->charactersView->expandAll();
+}
+
+void ScreenplayBreakdownStructureView::collapseAllCharacters()
+{
+    d->charactersView->collapseAll();
 }
 
 void ScreenplayBreakdownStructureView::expandLocations(int _level)

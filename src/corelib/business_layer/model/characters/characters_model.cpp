@@ -85,6 +85,8 @@ CharactersModel::CharactersModel(QObject* _parent)
             &CharactersModel::updateDocumentContent);
     connect(this, &CharactersModel::characterPositionChanged, this,
             &CharactersModel::updateDocumentContent);
+    connect(this, &CharactersModel::moveCharacterRequested, this,
+            &CharactersModel::updateDocumentContent);
 }
 
 void CharactersModel::addCharacterModel(CharacterModel* _characterModel)
@@ -127,6 +129,23 @@ void CharactersModel::createCharacter(const QString& _name, const QByteArray& _c
     }
 
     emit createCharacterRequested(_name, _content);
+}
+
+void CharactersModel::moveCharacter(const QString& _name, int _index)
+{
+    if (_name.simplified().isEmpty()) {
+        return;
+    }
+
+    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
+    for (int index = 0; index < d->characterModels.size(); ++index) {
+        auto characterModel = d->characterModels[index];
+        if (characterModel->name() == nameCorrected) {
+            d->characterModels.move(index, _index);
+            emit moveCharacterRequested(characterModel->document()->uuid(), _index);
+            break;
+        }
+    }
 }
 
 bool CharactersModel::exists(const QString& _name) const
@@ -307,6 +326,9 @@ void CharactersModel::initDocument()
     QDomDocument domDocument;
     domDocument.setContent(document()->content());
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
+
+    //
+    // Считываем информацию о группах персонажей
     //
     auto charactersGroupNode = documentNode.firstChildElement(kCharactersGroupKey);
     while (!charactersGroupNode.isNull() && charactersGroupNode.nodeName() == kCharactersGroupKey) {
@@ -324,10 +346,22 @@ void CharactersModel::initDocument()
 
         charactersGroupNode = charactersGroupNode.nextSiblingElement();
     }
+
     //
+    // Считываем информацию о персонажах
+    //
+    int characterIndex = 0;
     auto characterNode = documentNode.firstChildElement(kCharacterKey);
     while (!characterNode.isNull() && characterNode.nodeName() == kCharacterKey) {
         const auto characterName = TextHelper::fromHtmlEscaped(characterNode.attribute(kNameKey));
+        //
+        // ... упорядочиваем персонажей
+        //
+        d->characterModels.move(d->characterModels.indexOf(character(characterName)),
+                                characterIndex++);
+        //
+        // ... запоминаем позиции персонажей на схеме
+        //
         const auto positionText = characterNode.attribute(kPositionKey).split(";");
         Q_ASSERT(positionText.size() == 2);
         const QPointF position(positionText.constFirst().toDouble(),

@@ -513,6 +513,12 @@ void StructureModel::insertItem(StructureModelItem* _item, StructureModelItem* _
 
 void StructureModel::moveItem(StructureModelItem* _item, StructureModelItem* _parentItem)
 {
+    moveItem(_item, _parentItem, _parentItem->childCount());
+}
+
+void StructureModel::moveItem(StructureModelItem* _item, StructureModelItem* _parentItem,
+                              int _targetIndex)
+{
     if (_item == nullptr || _parentItem == nullptr) {
         return;
     }
@@ -523,12 +529,16 @@ void StructureModel::moveItem(StructureModelItem* _item, StructureModelItem* _pa
     }
 
     const auto itemIndex = indexForItem(_item);
+    if (sourceParent == _parentItem && itemIndex.row() == _targetIndex) {
+        return;
+    }
+
     const auto sourceParentIndex = indexForItem(sourceParent);
     const auto destinationIndex = indexForItem(_parentItem);
     beginMoveRows(sourceParentIndex, itemIndex.row(), itemIndex.row(), destinationIndex,
-                  _parentItem->childCount());
+                  _targetIndex);
     sourceParent->takeItem(_item);
-    _parentItem->appendItem(_item);
+    _parentItem->insertItem(_targetIndex, _item);
     endMoveRows();
 }
 
@@ -571,6 +581,12 @@ void StructureModel::updateItem(StructureModelItem* _item)
 
     const QModelIndex indexForUpdate = indexForItem(_item);
     emit dataChanged(indexForUpdate, indexForUpdate);
+}
+
+void StructureModel::moveCharacter(const QUuid& _uuid, int _to)
+{
+    const auto characterItem = itemForUuid(_uuid);
+    moveItem(characterItem, characterItem->parent(), _to);
 }
 
 QModelIndex StructureModel::index(int _row, int _column, const QModelIndex& _parent) const

@@ -57,6 +57,11 @@ public:
     void createCharacter(const QString& _name, const QByteArray& _content = {});
 
     /**
+     * @brief Расположить персонажа по заданному индексу
+     */
+    void moveCharacter(const QString& _name, int _index);
+
+    /**
      * @brief Существует ли персонаж с заданным именем
      */
     bool exists(const QString& _name) const;
@@ -116,6 +121,11 @@ signals:
      * @brief Необходимо создать персонажа с заданным именем
      */
     void createCharacterRequested(const QString& _name, const QByteArray& _content);
+
+    /**
+     * @brief Необходимо перенести персонажа на заданную позицию
+     */
+    void moveCharacterRequested(const QUuid& _uuid, int _to);
 
 protected:
     /**
