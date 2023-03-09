@@ -3,7 +3,6 @@
 #include "business_layer/screenplay_breakdown_structure_characters_model.h"
 #include "business_layer/screenplay_breakdown_structure_locations_model.h"
 #include "business_layer/screenplay_breakdown_structure_model_item.h"
-#include "business_layer/screenplay_breakdown_structure_model_proxy.h"
 #include "business_layer/screenplay_breakdown_structure_scenes_model.h"
 #include "ui/screenplay_breakdown_structure_view.h"
 
@@ -61,7 +60,6 @@ public:
     BusinessLayer::ScreenplayBreakdownStructureScenesModel* structureModel = nullptr;
     BusinessLayer::ScreenplayBreakdownStructureCharactersModel* charactersModel = nullptr;
     BusinessLayer::ScreenplayBreakdownStructureLocationsModel* locationsModel = nullptr;
-    BusinessLayer::ScreenplayBreakdownStructureModelProxy* locationsProxyModel = nullptr;
 
     /**
      * @brief Предаставление для основного окна
@@ -184,16 +182,14 @@ void ScreenplayBreakdownStructureManager::Implementation::prepareContextMenuForL
     sortAlphabeticallyAction->setSeparator(true);
     sortAlphabeticallyAction->setIconText(u8"\U000F033C");
     connect(sortAlphabeticallyAction, &QAction::triggered, view, [this] {
-        locationsProxyModel->sortBy(
-            BusinessLayer::ScreenplayBreakdownStructureModelProxy::SortOrder::Alphabetically);
+        locationsModel->sortBy(BusinessLayer::ScreenplayBreakdownSortOrder::Alphabetically);
     });
     actions.append(sortAlphabeticallyAction);
     //
     auto sortByDurationAction = new QAction(tr("Sort by duration"));
     sortByDurationAction->setIconText(u8"\U000F04BF");
     connect(sortByDurationAction, &QAction::triggered, view, [this] {
-        locationsProxyModel->sortBy(
-            BusinessLayer::ScreenplayBreakdownStructureModelProxy::SortOrder::ByDuration);
+        locationsModel->sortBy(BusinessLayer::ScreenplayBreakdownSortOrder::ByDuration);
     });
     actions.append(sortByDurationAction);
 
@@ -374,10 +370,8 @@ void ScreenplayBreakdownStructureManager::setModel(BusinessLayer::AbstractModel*
     }
     if (d->locationsModel == nullptr) {
         d->locationsModel = new BusinessLayer::ScreenplayBreakdownStructureLocationsModel(d->view);
-        d->locationsProxyModel = new BusinessLayer::ScreenplayBreakdownStructureModelProxy(d->view);
-        d->locationsProxyModel->setSourceModel(d->locationsModel);
     }
-    d->view->setModels(d->structureModel, d->charactersModel, d->locationsProxyModel);
+    d->view->setModels(d->structureModel, d->charactersModel, d->locationsModel);
 
     //
     // Помещаем модель с данными в прокси

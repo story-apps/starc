@@ -290,7 +290,7 @@ QAbstractItemModel* ScreenplayTreatmentEdit::locations() const
         return nullptr;
     }
 
-    return d->model->locationsModel();
+    return d->model->locationsList();
 }
 
 void ScreenplayTreatmentEdit::createLocation(const QString& _name)

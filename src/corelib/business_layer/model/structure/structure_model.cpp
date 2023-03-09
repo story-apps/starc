@@ -542,6 +542,12 @@ void StructureModel::moveItem(StructureModelItem* _item, StructureModelItem* _pa
     endMoveRows();
 }
 
+void StructureModel::moveItem(const QUuid& _uuid, int _to)
+{
+    const auto item = itemForUuid(_uuid);
+    moveItem(item, item->parent(), _to);
+}
+
 void StructureModel::takeItem(StructureModelItem* _item)
 {
     if (_item == nullptr || _item->parent() == nullptr) {
@@ -581,12 +587,6 @@ void StructureModel::updateItem(StructureModelItem* _item)
 
     const QModelIndex indexForUpdate = indexForItem(_item);
     emit dataChanged(indexForUpdate, indexForUpdate);
-}
-
-void StructureModel::moveCharacter(const QUuid& _uuid, int _to)
-{
-    const auto characterItem = itemForUuid(_uuid);
-    moveItem(characterItem, characterItem->parent(), _to);
 }
 
 QModelIndex StructureModel::index(int _row, int _column, const QModelIndex& _parent) const

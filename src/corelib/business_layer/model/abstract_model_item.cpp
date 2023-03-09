@@ -202,6 +202,12 @@ int AbstractModelItem::rowOfChild(AbstractModelItem* _child) const
     return d->children.indexOf(_child);
 }
 
+void AbstractModelItem::sortChildren(
+    const std::function<bool(AbstractModelItem*, AbstractModelItem*)>& _sorter)
+{
+    std::sort(d->children.begin(), d->children.end(), _sorter);
+}
+
 AbstractModelItem* AbstractModelItem::childAt(int _index) const
 {
     return d->children.value(_index, nullptr);

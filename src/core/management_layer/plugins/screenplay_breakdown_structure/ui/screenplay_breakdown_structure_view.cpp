@@ -102,6 +102,7 @@ ScreenplayBreakdownStructureView::Implementation::Implementation(QWidget* _paren
     charactersView->setDragDropEnabled(true);
     charactersView->setItemDelegate(tagsDelegate);
     locationsView->setContextMenuPolicy(Qt::CustomContextMenu);
+    locationsView->setDragDropEnabled(true);
     locationsView->setItemDelegate(tagsDelegate);
     tagsView->setContextMenuPolicy(Qt::CustomContextMenu);
     tagsView->setItemDelegate(tagsDelegate);

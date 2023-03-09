@@ -318,7 +318,7 @@ QAbstractItemModel* ScreenplayTextEdit::locations() const
         return nullptr;
     }
 
-    return d->model->locationsModel();
+    return d->model->locationsList();
 }
 
 void ScreenplayTextEdit::createLocation(const QString& _name)

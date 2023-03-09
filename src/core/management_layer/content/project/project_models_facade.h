@@ -191,6 +191,11 @@ signals:
     void createLocationRequested(const QString& _name, const QByteArray& _content);
 
     /**
+     * @brief Необходимо переставить локацию в новое место
+     */
+    void moveLocationRequested(const QUuid& _uuid, int _to);
+
+    /**
      * @brief Изменилось название локации
      */
     void locationNameChanged(BusinessLayer::AbstractModel* _location, const QString& _oldName,

@@ -15,8 +15,6 @@
 #include <QMimeData>
 #include <QPointer>
 
-#include <set>
-
 
 namespace BusinessLayer {
 
@@ -139,7 +137,6 @@ QModelIndex ScreenplayBreakdownStructureCharactersModel::Implementation::indexFo
 
 void ScreenplayBreakdownStructureCharactersModel::Implementation::clear()
 {
-    charactersToSave.clear();
     lastHighlightedItems.clear();
 
     if (!rootItem->hasChildren()) {
@@ -342,6 +339,7 @@ void ScreenplayBreakdownStructureCharactersModel::setSourceModel(ScreenplayTextM
     if (!d->model.isNull()) {
         disconnect(d->model);
         d->clear();
+        d->charactersToSave.clear();
     }
 
     d->model = _model;
@@ -377,9 +375,6 @@ void ScreenplayBreakdownStructureCharactersModel::sortBy(ScreenplayBreakdownSort
     for (int index = 0; index < d->rootItem->childCount(); ++index) {
         characters.append(d->rootItem->childAt(index));
     }
-    //
-    // ... если понадобится порядок следования в сценарии, определим его
-    //
     std::sort(characters.begin(), characters.end(),
               [_sortOrder](ScreenplayBreakdownStructureModelItem* _lhs,
                            ScreenplayBreakdownStructureModelItem* _rhs) {

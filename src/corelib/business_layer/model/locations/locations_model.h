@@ -57,6 +57,11 @@ public:
     void createLocation(const QString& _name, const QByteArray& _content = {});
 
     /**
+     * @brief Расположить локацию по заданному индексу
+     */
+    void moveLocation(const QString& _name, int _index);
+
+    /**
      * @brief Существует ли локация с заданным именем
      */
     bool exists(const QString& _name) const;
@@ -116,6 +121,11 @@ signals:
      * @brief Неоходимо создать локацию с заданным именем
      */
     void createLocationRequested(const QString& _name, const QByteArray& _content);
+
+    /**
+     * @brief Необходимо перенести локацию на заданную позицию
+     */
+    void moveLocationRequested(const QUuid& _uuid, int _to);
 
 protected:
     /**

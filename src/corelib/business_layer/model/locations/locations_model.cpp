@@ -83,6 +83,8 @@ LocationsModel::LocationsModel(QObject* _parent)
             &LocationsModel::updateDocumentContent);
     connect(this, &LocationsModel::locationPositionChanged, this,
             &LocationsModel::updateDocumentContent);
+    connect(this, &LocationsModel::moveLocationRequested, this,
+            &LocationsModel::updateDocumentContent);
 }
 
 void LocationsModel::addLocationModel(LocationModel* _locationModel)
@@ -127,6 +129,23 @@ void LocationsModel::createLocation(const QString& _name, const QByteArray& _con
     }
 
     emit createLocationRequested(_name, _content);
+}
+
+void LocationsModel::moveLocation(const QString& _name, int _index)
+{
+    if (_name.simplified().isEmpty()) {
+        return;
+    }
+
+    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
+    for (int index = 0; index < d->locationModels.size(); ++index) {
+        auto locationModel = d->locationModels[index];
+        if (locationModel->name() == nameCorrected) {
+            d->locationModels.move(index, _index);
+            emit moveLocationRequested(locationModel->document()->uuid(), _index);
+            break;
+        }
+    }
 }
 
 bool LocationsModel::exists(const QString& _name) const
@@ -307,6 +326,9 @@ void LocationsModel::initDocument()
     QDomDocument domDocument;
     domDocument.setContent(document()->content());
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
+
+    //
+    // Считываем информацию о группах локаций
     //
     auto locationsGroupNode = documentNode.firstChildElement(kLocationsGroupKey);
     while (!locationsGroupNode.isNull() && locationsGroupNode.nodeName() == kLocationsGroupKey) {
@@ -324,10 +346,21 @@ void LocationsModel::initDocument()
 
         locationsGroupNode = locationsGroupNode.nextSiblingElement();
     }
+
     //
+    // Считываем информацию о локациях
+    //
+    int locationIndex = 0;
     auto locationNode = documentNode.firstChildElement(kLocationKey);
     while (!locationNode.isNull() && locationNode.nodeName() == kLocationKey) {
         const auto locationName = TextHelper::fromHtmlEscaped(locationNode.attribute(kNameKey));
+        //
+        // ... упорядочиваем локации
+        //
+        d->locationModels.move(d->locationModels.indexOf(location(locationName)), locationIndex++);
+        //
+        // ... запоминаем позиции локаций на схеме
+        //
         const auto positionText = locationNode.attribute(kPositionKey).split(";");
         Q_ASSERT(positionText.size() == 2);
         const QPointF position(positionText.constFirst().toDouble(),

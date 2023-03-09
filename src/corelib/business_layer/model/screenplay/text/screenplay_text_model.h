@@ -84,10 +84,15 @@ public:
     QSet<QString> findCharactersFromText() const;
 
     /**
-     * @brief Задать модель локаций проекта
+     * @brief Модель локаций проекта
      */
     void setLocationsModel(LocationsModel* _model);
-    QAbstractItemModel* locationsModel() const;
+    LocationsModel* locationsModel() const;
+
+    /**
+     * @brief Список локаций
+     */
+    QAbstractItemModel* locationsList() const;
 
     /**
      * @brief Получить модель локации по заданному имени

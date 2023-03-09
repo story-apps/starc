@@ -440,10 +440,22 @@ QSet<QString> ScreenplayTextModel::findCharactersFromText() const
 
 void ScreenplayTextModel::setLocationsModel(LocationsModel* _model)
 {
+    if (d->locationsModel) {
+        d->locationsModel->disconnect(this);
+    }
+
     d->locationsModel = _model;
+
+    connect(d->locationsModel, &LocationsModel::contentsChanged, this,
+            [this] { d->needUpdateRuntimeDictionaries = true; });
 }
 
-QAbstractItemModel* ScreenplayTextModel::locationsModel() const
+LocationsModel* ScreenplayTextModel::locationsModel() const
+{
+    return d->locationsModel;
+}
+
+QAbstractItemModel* ScreenplayTextModel::locationsList() const
 {
     if (d->locationsModelFromText != nullptr) {
         return d->locationsModelFromText;

@@ -3,6 +3,7 @@
 #include <QScopedPointer>
 
 #include <corelib_global.h>
+#include <functional>
 
 class QVariant;
 
@@ -93,6 +94,11 @@ public:
      * @brief Индекс дочернего элемента
      */
     int rowOfChild(AbstractModelItem* _child) const;
+
+    /**
+     * @brief Отсортировать детей
+     */
+    void sortChildren(const std::function<bool(AbstractModelItem*, AbstractModelItem*)>& _sorter);
 
     /**
      * @brief Дочерний элемент по индексу
