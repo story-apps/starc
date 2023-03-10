@@ -13,7 +13,7 @@
 class CORE_LIBRARY_EXPORT AlphanumComparer
 {
 public:
-    static bool lessThan(const QString& s1, const QString& s2)
+    bool lessThan(const QString& s1, const QString& s2)
     {
         return compare(s1, s2) < 0;
     }

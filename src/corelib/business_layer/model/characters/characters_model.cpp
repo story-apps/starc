@@ -357,8 +357,11 @@ void CharactersModel::initDocument()
         //
         // ... упорядочиваем персонажей
         //
-        d->characterModels.move(d->characterModels.indexOf(character(characterName)),
-                                characterIndex++);
+        for (int index = 0; index < d->characterModels.size(); ++index) {
+            if (d->characterModels.at(index)->name() == characterName) {
+                d->characterModels.move(index, characterIndex++);
+            }
+        }
         //
         // ... запоминаем позиции персонажей на схеме
         //

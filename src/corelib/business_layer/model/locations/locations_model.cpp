@@ -357,7 +357,11 @@ void LocationsModel::initDocument()
         //
         // ... упорядочиваем локации
         //
-        d->locationModels.move(d->locationModels.indexOf(location(locationName)), locationIndex++);
+        for (int index = 0; index < d->locationModels.size(); ++index) {
+            if (d->locationModels.at(index)->name() == locationName) {
+                d->locationModels.move(index, locationIndex++);
+            }
+        }
         //
         // ... запоминаем позиции локаций на схеме
         //

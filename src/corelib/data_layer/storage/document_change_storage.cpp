@@ -82,7 +82,7 @@ QVector<Domain::DocumentChangeObject*> DocumentChangeStorage::unsyncedDocumentCh
     const QUuid& _documentUuid)
 {
     QVector<Domain::DocumentChangeObject*> changes;
-    for (auto change : std::as_const(d->newDocumentChanges)) {
+    for (const auto change : std::as_const(d->newDocumentChanges)) {
         if (change->documentUuid() == _documentUuid && !change->isSynced()) {
             changes.append(change);
         }
@@ -97,20 +97,24 @@ void DocumentChangeStorage::store()
 {
     DatabaseLayer::Database::transaction();
     while (!d->newDocumentChanges.isEmpty()) {
-        DataMappingLayer::MapperFacade::documentChangeMapper()->insert(
-            d->newDocumentChanges.takeFirst());
+        auto change = d->newDocumentChanges.takeFirst();
+        DataMappingLayer::MapperFacade::documentChangeMapper()->insert(change);
     }
     DatabaseLayer::Database::commit();
 }
 
 void DocumentChangeStorage::removeAll()
 {
+    qDeleteAll(d->newDocumentChanges);
+    d->newDocumentChanges.clear();
     DataMappingLayer::MapperFacade::documentChangeMapper()->removeAll();
     DatabaseLayer::Database::vacuum();
 }
 
 void DocumentChangeStorage::clear()
 {
+    qDeleteAll(d->newDocumentChanges);
+    d->newDocumentChanges.clear();
     DataMappingLayer::MapperFacade::documentChangeMapper()->clear();
 }
 
