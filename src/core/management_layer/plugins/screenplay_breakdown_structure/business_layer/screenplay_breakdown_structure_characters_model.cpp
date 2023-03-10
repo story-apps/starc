@@ -388,8 +388,8 @@ void ScreenplayBreakdownStructureCharactersModel::sortBy(ScreenplayBreakdownSort
                   }
 
                   case ScreenplayBreakdownSortOrder::ByScriptOrder: {
-                      return AlphanumComparer().lessThan(_lhs->childAt(0)->name,
-                                                         _rhs->childAt(0)->name);
+                      return AlphanumComparer::lessThan(_lhs->childAt(0)->name,
+                                                        _rhs->childAt(0)->name);
                   }
 
                   case ScreenplayBreakdownSortOrder::ByDuration: {

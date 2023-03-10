@@ -366,6 +366,7 @@ SOURCES += \
     utils/helpers/time_helper.cpp \
     utils/helpers/ui_helper.cpp \
     utils/logging.cpp \
+    utils/tools/alphanum_comparer.cpp \
     utils/tools/backup_builder.cpp \
     utils/tools/debouncer.cpp \
     utils/tools/model_index_path.cpp \
