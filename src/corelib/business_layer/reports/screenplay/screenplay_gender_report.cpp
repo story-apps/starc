@@ -98,24 +98,27 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     for (int index = 0; index < screenplayModel->charactersList()->rowCount(); ++index) {
         const auto characterName
             = screenplayModel->charactersList()->index(index, 0).data().toString();
-        const auto character = screenplayModel->character(characterName);
-        switch (character->gender()) {
-        case 0: {
-            male.insert(character->name());
-            break;
-        }
-        case 1: {
-            female.insert(character->name());
-            break;
-        }
-        case 2: {
-            other.insert(character->name());
-            break;
-        }
-        case 3: {
-            undefined.insert(character->name());
-            break;
-        }
+        if (const auto character = screenplayModel->character(characterName)) {
+            switch (character->gender()) {
+            case 0: {
+                male.insert(character->name());
+                break;
+            }
+            case 1: {
+                female.insert(character->name());
+                break;
+            }
+            case 2: {
+                other.insert(character->name());
+                break;
+            }
+            case 3: {
+                undefined.insert(character->name());
+                break;
+            }
+            }
+        } else {
+            undefined.insert(characterName);
         }
     }
 

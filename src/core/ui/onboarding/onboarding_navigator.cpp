@@ -664,6 +664,7 @@ OnboardingNavigator::~OnboardingNavigator() = default;
 
 void OnboardingNavigator::showWelcomePage()
 {
+    d->uiPage->setFocus();
     d->uiScaleSlider->setValue(d->uiScaleSlider->defaultValue());
 
     setCurrentWidget(d->uiPage);
@@ -745,8 +746,7 @@ void OnboardingNavigator::updateTranslations()
     d->modulesSubtitle->setText(tr("Feel at home"));
     d->modulesDescription->setText(
         tr("Story Architect provides tools for working with any form of writing. Choose which ones "
-           "you plan to use:")
-            .arg(settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString()));
+           "you plan to use:"));
     d->modulesScreenplayTitle->setText(tr("Screenplay"));
     d->modulesComicBookTitle->setText(tr("Comic book"));
     d->modulesAudioplayTitle->setText(tr("Audioplay"));

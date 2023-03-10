@@ -824,6 +824,8 @@ void ApplicationManager::Implementation::showProjects()
     menuView->checkProjects();
     showContent(projectsManager.data());
     saveLastContent(projectsManager.data());
+
+    projectsManager->view()->setFocus();
 }
 
 void ApplicationManager::Implementation::showProject()
