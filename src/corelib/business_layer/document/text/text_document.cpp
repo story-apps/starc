@@ -1456,6 +1456,20 @@ void TextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
     cursor.beginEditBlock();
 
     //
+    // NOTE: Тут костылик - перед применением стиля, добавляем пробел, чтобы блоки корректно
+    //       обновились на всех связанных с моделью документах, почему-то при попытке изменения
+    //       стиля пустого блока в кейсе НАЧАЛО/КОНЕЦ в связанных документах остаётся лишний блок
+    //       конца блока
+    //
+    const struct {
+        bool isEmpty = false;
+        int postion = -1;
+    } sourceBlockInfo = { cursor.block().text().isEmpty(), cursor.position() };
+    if (sourceBlockInfo.isEmpty) {
+        cursor.insertText(" ");
+    }
+
+    //
     // Первым делом очищаем пользовательские данные
     //
     cursor.block().setUserData(nullptr);
@@ -1469,6 +1483,14 @@ void TextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
     // Применим новый стиль к блоку
     //
     applyParagraphType(_type, _cursor);
+
+    //
+    // NOTE: После завершения операции, удаляем добавленный пробел
+    //
+    if (sourceBlockInfo.isEmpty) {
+        cursor.setPosition(sourceBlockInfo.postion);
+        cursor.deleteChar();
+    }
 
     cursor.endEditBlock();
 }
