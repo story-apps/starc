@@ -1237,7 +1237,7 @@ QMimeData* ScreenplayTreatmentEdit::createMimeDataFromSelection() const
             text.append(cursor.blockCharFormat().fontCapitalization() == QFont::AllUppercase
                             ? TextHelper::smartToUpper(cursor.selectedText()).toUtf8()
                             : cursor.selectedText().toUtf8());
-        } while (cursor.position() < textCursor().selectionEnd() && !cursor.atEnd()
+        } while (cursor.position() < selection.to && !cursor.atEnd()
                  && cursor.movePosition(QTextCursor::NextBlock));
 
         mimeData->setData("text/plain", text);
