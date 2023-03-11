@@ -4,6 +4,7 @@
 
 #include <ui/design_system/design_system.h>
 
+#include <QDebug>
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QScreen>
@@ -65,8 +66,11 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
             [this](const QVariant& _value) {
                 const auto height = _value.toInt();
                 resize(width(), height);
+                qDebug() << "Popup animation value changed; rect =" << rect();
             });
     connect(&d->heightAnimation, &QVariantAnimation::finished, this, [this] {
+        qDebug() << "Popup animation finished; visibility =" << d->isPopupShown << ","
+                 << isVisible() << "| rect =" << rect();
         if (!d->isPopupShown) {
             hide();
         }
