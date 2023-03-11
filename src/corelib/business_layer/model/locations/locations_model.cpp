@@ -359,7 +359,8 @@ void LocationsModel::initDocument()
         //
         for (int index = 0; index < d->locationModels.size(); ++index) {
             if (d->locationModels.at(index)->name() == locationName) {
-                d->locationModels.move(index, locationIndex++);
+                d->locationModels.move(index,
+                                       std::min(locationIndex++, d->locationModels.size() - 1));
             }
         }
         //

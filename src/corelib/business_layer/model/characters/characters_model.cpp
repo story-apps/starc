@@ -359,7 +359,8 @@ void CharactersModel::initDocument()
         //
         for (int index = 0; index < d->characterModels.size(); ++index) {
             if (d->characterModels.at(index)->name() == characterName) {
-                d->characterModels.move(index, characterIndex++);
+                d->characterModels.move(index,
+                                        std::min(characterIndex++, d->characterModels.size() - 1));
             }
         }
         //
