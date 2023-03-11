@@ -133,13 +133,16 @@ SessionStatisticsView::Implementation::Implementation(QWidget* _parent)
 
 void SessionStatisticsView::Implementation::updatePlotSize()
 {
-    plot->setFixedSize(content->width() - Ui::DesignSystem::layout().px24() * 4
-                           - Ui::DesignSystem::card().shadowMargins().left()
-                           - Ui::DesignSystem::card().shadowMargins().right(),
-                       content->height() - Ui::DesignSystem::layout().topContentMargin()
-                           - Ui::DesignSystem::layout().px24() * 3
-                           - Ui::DesignSystem::card().shadowMargins().top()
-                           - Ui::DesignSystem::card().shadowMargins().bottom());
+    const QSize plotSize(content->width() - Ui::DesignSystem::layout().px24() * 4
+                             - Ui::DesignSystem::card().shadowMargins().left()
+                             - Ui::DesignSystem::card().shadowMargins().right(),
+                         content->height() - Ui::DesignSystem::layout().topContentMargin()
+                             - Ui::DesignSystem::layout().px24() * 3
+                             - Ui::DesignSystem::card().shadowMargins().top()
+                             - Ui::DesignSystem::card().shadowMargins().bottom());
+    if (plotSize.isValid()) {
+        plot->setFixedSize(plotSize);
+    }
 }
 
 
