@@ -157,6 +157,8 @@ void SimpleTextEditToolbar::setParagraphTypesModel(QAbstractItemModel* _model)
     if (_model != nullptr) {
         connect(_model, &QAbstractItemModel::rowsInserted, this,
                 [this] { designSystemChangeEvent(nullptr); });
+        connect(_model, &QAbstractItemModel::rowsRemoved, this,
+                [this] { designSystemChangeEvent(nullptr); });
         if (_model->rowCount() > 0) {
             d->popup->setCurrentIndex(_model->index(0, 0));
         }
