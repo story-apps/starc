@@ -281,6 +281,7 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
                                                    "END OF"),
                         headerBlock.text());
                     cursor.insertText(footerText);
+                    cursor.movePosition(QTextCursor::StartOfBlock);
                 }
             }
 

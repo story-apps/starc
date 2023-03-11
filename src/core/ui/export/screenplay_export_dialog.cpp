@@ -119,7 +119,7 @@ QVector<QString> ScreenplayExportDialog::Implementation::scenesToPrint() const
                 scenesToPrint.append(range.constFirst());
             }
         } else {
-            scenesToPrint.append(scenesRange);
+            scenesToPrint.append(scenesRange.simplified());
         }
     }
     return scenesToPrint;
