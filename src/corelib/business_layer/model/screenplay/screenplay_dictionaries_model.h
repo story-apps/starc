@@ -2,9 +2,36 @@
 
 #include "../abstract_model.h"
 
+#include <QColor>
+#include <QUuid>
+
 
 namespace BusinessLayer {
 
+/**
+ * @brief Категории ресурсов
+ */
+struct BreakdownResourceCategory {
+    QUuid uuid;
+    QString name;
+    QString icon;
+    QColor color;
+};
+
+/**
+ * @brief Ресурсы
+ */
+struct BreakdownResource {
+    QUuid uuid;
+    QUuid categoryUuid;
+    QString name;
+    QString description;
+};
+
+
+/**
+ * @brief Модель справочников сценария
+ */
 class CORE_LIBRARY_EXPORT ScreenplayDictionariesModel : public AbstractModel
 {
     Q_OBJECT
@@ -46,6 +73,20 @@ public:
     void addTags(const QVector<QPair<QString, QColor>>& _tags);
     void removeTags(const QVector<QPair<QString, QColor>>& _tags);
     Q_SIGNAL void tagsChanged();
+
+    QVector<BreakdownResourceCategory> resourceCategories() const;
+    void addResourceCategory(const QString& _name, const QString& _icon, const QColor& _color);
+    void setResourceCategory(const QUuid& _uuid, const QString& _name, const QString& _icon,
+                             const QColor& _color);
+    void removeResourceCategory(const QUuid& _uuid);
+    Q_SIGNAL void resourceCategoriesChanged();
+
+    QVector<BreakdownResource> resources() const;
+    void addResource(const QUuid& _categoryUuid, const QString& _name, const QString& _description);
+    void setResource(const QUuid& _uuid, const QUuid& _categoryUuid, const QString& _name,
+                     const QString& _description);
+    void removeResource(const QUuid& _uuid);
+    Q_SIGNAL void resourcesChanged();
 
 protected:
     /**

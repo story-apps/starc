@@ -17,8 +17,14 @@ const QLatin1String kCharacterExtensionsKey("character_extensions");
 const QLatin1String kTransitionsKey("transitions");
 const QLatin1String kStoryDaysKey("story_days");
 const QLatin1String kTagsKey("tags");
+const QLatin1String kResourceCategoriesKey("resource_categories");
+const QLatin1String kResourcesKey("resources");
 const QLatin1String kItemKey("v");
+const QLatin1String kItemNameKey("name");
+const QLatin1String kItemDescriptionKey("description");
+const QLatin1String kItemUuidAttribute("uuid");
 const QLatin1String kItemColorAttribute("color");
+const QLatin1String kItemIconAttribute("icon");
 const QLatin1String kItemCountAttribute("count");
 
 struct ColorsComparator {
@@ -47,6 +53,16 @@ public:
      * @brief Тэги карточек <тэг, кол-вл>
      */
     std::map<QPair<QString, QColor>, int, ColorsComparator> tags;
+
+    /**
+     * @brief Категории ресурсов
+     */
+    QVector<BreakdownResourceCategory> resourceCategories;
+
+    /**
+     * @brief Ресурсы
+     */
+    QVector<BreakdownResource> resources;
 };
 
 
@@ -321,6 +337,118 @@ void ScreenplayDictionariesModel::removeTags(const QVector<QPair<QString, QColor
     emit tagsChanged();
 }
 
+QVector<BreakdownResourceCategory> ScreenplayDictionariesModel::resourceCategories() const
+{
+    return d->resourceCategories;
+}
+
+void ScreenplayDictionariesModel::addResourceCategory(const QString& _name, const QString& _icon,
+                                                      const QColor& _color)
+{
+    if (_name.isEmpty()) {
+        return;
+    }
+
+    d->resourceCategories.append({ QUuid::createUuid(), _name, _icon, _color });
+    emit resourceCategoriesChanged();
+}
+
+void ScreenplayDictionariesModel::setResourceCategory(const QUuid& _uuid, const QString& _name,
+                                                      const QString& _icon, const QColor& _color)
+{
+    for (auto& category : d->resourceCategories) {
+        if (category.uuid != _uuid) {
+            continue;
+        }
+
+        category.name = _name;
+        category.icon = _icon;
+        category.color = _color;
+        emit resourceCategoriesChanged();
+        break;
+    }
+}
+
+void ScreenplayDictionariesModel::removeResourceCategory(const QUuid& _uuid)
+{
+    for (int index = 0; index < d->resourceCategories.size(); ++index) {
+        if (d->resourceCategories.at(index).uuid != _uuid) {
+            continue;
+        }
+
+        d->resourceCategories.removeAt(index);
+
+        bool isResourcesChanged = false;
+        for (int resourceIndex = 0; resourceIndex < d->resources.size(); ++resourceIndex) {
+            if (d->resources.at(resourceIndex).categoryUuid == _uuid) {
+                d->resources.removeAt(resourceIndex);
+                --resourceIndex;
+                isResourcesChanged = true;
+            }
+        }
+
+        emit resourceCategoriesChanged();
+        if (isResourcesChanged) {
+            emit resourcesChanged();
+        }
+        break;
+    }
+}
+
+QVector<BreakdownResource> ScreenplayDictionariesModel::resources() const
+{
+    return d->resources;
+}
+
+void ScreenplayDictionariesModel::addResource(const QUuid& _categoryUuid, const QString& _name,
+                                              const QString& _description)
+{
+    if (_categoryUuid.isNull() || _name.isEmpty()) {
+        return;
+    }
+
+    bool isResourceCategoryExists = false;
+    for (const auto& resourceCategory : std::as_const(d->resourceCategories)) {
+        if (resourceCategory.uuid == _categoryUuid) {
+            isResourceCategoryExists = true;
+            break;
+        }
+    }
+    if (!isResourceCategoryExists) {
+        return;
+    }
+
+    d->resources.append({ QUuid::createUuid(), _categoryUuid, _name, _description });
+    emit resourcesChanged();
+}
+
+void ScreenplayDictionariesModel::setResource(const QUuid& _uuid, const QUuid& _categoryUuid,
+                                              const QString& _name, const QString& _description)
+{
+    for (auto& resource : d->resources) {
+        if (resource.uuid != _uuid) {
+            continue;
+        }
+
+        resource.categoryUuid = _categoryUuid;
+        resource.name = _name;
+        resource.description = _description;
+        emit resourcesChanged();
+        break;
+    }
+}
+
+void ScreenplayDictionariesModel::removeResource(const QUuid& _uuid)
+{
+    for (int index = 0; index < d->resources.size(); ++index) {
+        if (d->resources.at(index).uuid == _uuid) {
+            d->resources.removeAt(index);
+            emit resourcesChanged();
+            break;
+        }
+    }
+}
+
 void ScreenplayDictionariesModel::initDocument()
 {
     if (document() == nullptr) {
@@ -395,6 +523,53 @@ void ScreenplayDictionariesModel::initDocument()
             tagNode = tagNode.nextSiblingElement();
         }
     }
+    //
+    {
+        const auto resourceCategoriesNode = documentNode.firstChildElement(kResourceCategoriesKey);
+        auto resourceCategoryNode = resourceCategoriesNode.firstChildElement();
+        bool hasCategories = false;
+        while (!resourceCategoryNode.isNull()) {
+            const BreakdownResourceCategory resourceCategory
+                = { resourceCategoryNode.attributeNode(kItemUuidAttribute).value(),
+                    TextHelper::fromHtmlEscaped(resourceCategoryNode.text()),
+                    resourceCategoryNode.attributeNode(kItemIconAttribute).value(),
+                    resourceCategoryNode.attributeNode(kItemColorAttribute).value() };
+            d->resourceCategories.append(resourceCategory);
+            resourceCategoryNode = resourceCategoryNode.nextSiblingElement();
+            hasCategories = true;
+        }
+
+        if (!hasCategories) {
+            for (auto resourceCategory : std::vector<BreakdownResourceCategory>{
+                     { QUuid::createUuid(), tr("Backgroun actors (atmosphere)"), u8"\U000F05CB",
+                       "#006724" },
+                     { QUuid::createUuid(), tr("Backgroun actors (silent)"), u8"\U000F0849",
+                       "#009434" },
+                     { QUuid::createUuid(), tr("Backgroun actors (special)"), u8"\U000F0BE8",
+                       "#2db75e" },
+                     { QUuid::createUuid(), tr("Stunts"), u8"\U000F1A41", "#d61530" },
+                     { QUuid::createUuid(), tr("Vehicles"), u8"\U000F010B", "#00acbe" },
+                     { QUuid::createUuid(), tr("Props"), u8"\U000F0E10", "#a56334" },
+                     { QUuid::createUuid(), tr("Camera"), u8"\U000F0567", "#c0da61" },
+                     { QUuid::createUuid(), tr("Special effects"), u8"\U000F0F35", "#78a9af" },
+                     { QUuid::createUuid(), tr("Wardrobe"), u8"\U000F0A7B", "#ff6500" },
+                     { QUuid::createUuid(), tr("Makeup/hair"), u8"\U000F1077", "#f400ee" },
+                     { QUuid::createUuid(), tr("Animals"), u8"\U000F1A61", "#abbb18" },
+                     { QUuid::createUuid(), tr("Animal handler"), u8"\U000F0E9B", "#dead00" },
+                     { QUuid::createUuid(), tr("Music"), u8"\U000F075A", "#007880" },
+                     { QUuid::createUuid(), tr("Sound"), u8"\U000F057E", "#a10f81" },
+                     { QUuid::createUuid(), tr("Set dressing"), u8"\U000F1353", "#00ef47" },
+                     { QUuid::createUuid(), tr("Greenery"), u8"\U000F0531", "#00ba69" },
+                     { QUuid::createUuid(), tr("Special equipment"), u8"\U000F0841", "#ff0000" },
+                     { QUuid::createUuid(), tr("Security"), u8"\U000F0483", {} },
+                     { QUuid::createUuid(), tr("Additional labor"), u8"\U000F05B5", {} },
+                     { QUuid::createUuid(), tr("Optical FX (Visual FX)"), u8"\U000F086D", {} },
+                     { QUuid::createUuid(), tr("Mechanical FX"), u8"\U000F0210", {} },
+                 }) {
+                d->resourceCategories.append(resourceCategory);
+            }
+        }
+    }
 }
 
 void ScreenplayDictionariesModel::clearDocument()
@@ -450,6 +625,17 @@ QByteArray ScreenplayDictionariesModel::toXml() const
                    .toUtf8();
     }
     xml += QString("</%1>\n").arg(kTagsKey).toUtf8();
+    //
+    xml += QString("<%1>\n").arg(kResourceCategoriesKey).toUtf8();
+    for (const auto& resourceCategory : std::as_const(d->resourceCategories)) {
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\"><![CDATA[%8]]></%1>\n")
+                   .arg(kItemKey, kItemUuidAttribute, resourceCategory.uuid.toString(),
+                        kItemIconAttribute, resourceCategory.icon, kItemColorAttribute,
+                        resourceCategory.color.name(),
+                        TextHelper::toHtmlEscaped(resourceCategory.name))
+                   .toUtf8();
+    }
+    xml += QString("</%1>\n").arg(kResourceCategoriesKey).toUtf8();
 
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
