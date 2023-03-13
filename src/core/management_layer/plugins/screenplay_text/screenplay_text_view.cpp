@@ -1312,9 +1312,9 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
         TaskBar::setTaskProgress(textWritingTaskKey, progress * 100 / static_cast<qreal>(maximum));
     };
 
-    const auto lines = _text.split('\n', Qt::SkipEmptyParts);
+    auto lines = _text.split('\n', Qt::SkipEmptyParts);
     bool nextBlockShoudBeDialogue = false;
-    for (const auto& line : lines) {
+    for (auto& line : lines) {
         if (line == TextHelper::smartToUpper(line)) {
             if (line.contains('.') && (line.contains('-') || line.contains("–"))) {
                 d->textEdit->setCurrentParagraphType(
@@ -1336,9 +1336,12 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
                 d->textEdit->setCurrentParagraphType(
                     BusinessLayer::TextParagraphType::Parenthetical);
                 nextBlockShoudBeDialogue = true;
-            } else if (nextBlockShoudBeDialogue) {
+            } else if (nextBlockShoudBeDialogue || line.endsWith(':')) {
                 d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Dialogue);
                 nextBlockShoudBeDialogue = false;
+                if (line.endsWith(':')) {
+                    line.chop(1);
+                }
             } else {
                 d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Action);
                 nextBlockShoudBeDialogue = false;
@@ -1346,12 +1349,12 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
         }
 
         for (int index = 0; index < line.length(); ++index) {
-            QCoreApplication::postEvent(
-                d->textEdit,
-                new QKeyEvent(QEvent::KeyPress, Qt::Key_unknown, Qt::NoModifier, line[index]));
-            QCoreApplication::postEvent(
-                d->textEdit,
-                new QKeyEvent(QEvent::KeyRelease, Qt::Key_unknown, Qt::NoModifier, line[index]));
+            QCoreApplication::postEvent(d->textEdit,
+                                        new QKeyEvent(QEvent::KeyPress, Qt::Key_unknown,
+                                                      Qt::NoModifier, line.mid(index, 1)));
+            QCoreApplication::postEvent(d->textEdit,
+                                        new QKeyEvent(QEvent::KeyRelease, Qt::Key_unknown,
+                                                      Qt::NoModifier, line.mid(index, 1)));
             waitForNextOperation();
         }
 
