@@ -19,7 +19,6 @@ SUBDIRS = \
     screenplay_text \
     screenplay_text_structure \
     screenplay_statistics_structure \
-    screenplay_breakdown_structure \
     simple_text \
     simple_text_structure \
     stageplay_information \
@@ -43,11 +42,9 @@ exists (project_collaborators/project_collaborators.pro) {
 exists (characters_relations/characters_relations.pro) {
     SUBDIRS += characters_relations
 }
-
 exists (character_information/character_information.pro) {
     SUBDIRS += character_information
 }
-
 exists (character_dialogues/character_dialogues.pro) {
     SUBDIRS += character_dialogues
 }
@@ -55,7 +52,6 @@ exists (character_dialogues/character_dialogues.pro) {
 exists (locations_map/locations_map.pro) {
     SUBDIRS += locations_map
 }
-
 exists (location_information/location_information.pro) {
     SUBDIRS += location_information
 }
@@ -63,7 +59,6 @@ exists (location_information/location_information.pro) {
 exists (worlds_map/worlds_map.pro) {
     SUBDIRS += worlds_map
 }
-
 exists (world_information/world_information.pro) {
     SUBDIRS += world_information
 }
@@ -71,11 +66,12 @@ exists (world_information/world_information.pro) {
 exists (screenplay_cards/screenplay_cards.pro) {
     SUBDIRS += screenplay_cards
 }
-
 exists (screenplay_breakdown/screenplay_breakdown.pro) {
     SUBDIRS += screenplay_breakdown
 }
-
+exists (screenplay_breakdown_structure/screenplay_breakdown_structure.pro) {
+    SUBDIRS += screenplay_breakdown_structure
+}
 exists (screenplay_statistics/screenplay_statistics.pro) {
     SUBDIRS += screenplay_statistics
 }
@@ -95,7 +91,6 @@ exists (stageplay_statistics/stageplay_statistics.pro) {
 exists (novel_cards/novel_cards.pro) {
     SUBDIRS += novel_cards
 }
-
 exists (novel_statistics/novel_statistics.pro) {
     SUBDIRS += novel_statistics
 }
