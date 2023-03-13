@@ -44,7 +44,8 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
     , d(new Implementation(this))
 {
     setFocusPolicy(Qt::StrongFocus);
-    setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint
+                   | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_Hover, false);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_ShowWithoutActivating);
@@ -66,11 +67,12 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
             [this](const QVariant& _value) {
                 const auto height = _value.toInt();
                 resize(width(), height);
-                qDebug() << "Popup animation value changed; rect =" << rect();
+                qDebug() << "Popup animation value changed; rect =" << rect()
+                         << "| pos = " << pos();
             });
     connect(&d->heightAnimation, &QVariantAnimation::finished, this, [this] {
         qDebug() << "Popup animation finished; visibility =" << d->isPopupShown << ","
-                 << isVisible() << "| rect =" << rect();
+                 << isVisible() << "| rect =" << rect() << "| pos = " << pos();
         if (!d->isPopupShown) {
             hide();
         }
