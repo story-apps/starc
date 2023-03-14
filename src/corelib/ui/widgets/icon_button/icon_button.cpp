@@ -149,7 +149,7 @@ void IconButton::paintEvent(QPaintEvent* _event)
                  Ui::DesignSystem::toggleButton().iconSize());
     if (d->decorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(isChecked() ? Ui::DesignSystem::color().accent() : textColor());
+        painter.setBrush(Ui::DesignSystem::color().accent());
         painter.setOpacity(d->decorationAnimation.opacity());
         const auto radius = d->decorationAnimation.radius();
         painter.drawEllipse(iconRect.center(), radius, radius);

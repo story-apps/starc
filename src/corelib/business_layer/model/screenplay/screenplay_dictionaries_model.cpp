@@ -87,6 +87,10 @@ ScreenplayDictionariesModel::ScreenplayDictionariesModel(QObject* _parent)
             &ScreenplayDictionariesModel::updateDocumentContent);
     connect(this, &ScreenplayDictionariesModel::tagsChanged, this,
             &ScreenplayDictionariesModel::updateDocumentContent);
+    connect(this, &ScreenplayDictionariesModel::resourceCategoriesChanged, this,
+            &ScreenplayDictionariesModel::updateDocumentContent);
+    connect(this, &ScreenplayDictionariesModel::resourcesChanged, this,
+            &ScreenplayDictionariesModel::updateDocumentContent);
 }
 
 ScreenplayDictionariesModel::~ScreenplayDictionariesModel() = default;
@@ -545,7 +549,7 @@ void ScreenplayDictionariesModel::initDocument()
                        "#006724" },
                      { QUuid::createUuid(), tr("Backgroun actors (silent)"), u8"\U000F0849",
                        "#009434" },
-                     { QUuid::createUuid(), tr("Backgroun actors (special)"), u8"\U000F0BE8",
+                     { QUuid::createUuid(), tr("Backgroun actors (special)"), u8"\U000F0017",
                        "#2db75e" },
                      { QUuid::createUuid(), tr("Stunts"), u8"\U000F1A41", "#d61530" },
                      { QUuid::createUuid(), tr("Vehicles"), u8"\U000F010B", "#00acbe" },
@@ -558,7 +562,7 @@ void ScreenplayDictionariesModel::initDocument()
                      { QUuid::createUuid(), tr("Animal handler"), u8"\U000F0E9B", "#dead00" },
                      { QUuid::createUuid(), tr("Music"), u8"\U000F075A", "#007880" },
                      { QUuid::createUuid(), tr("Sound"), u8"\U000F057E", "#a10f81" },
-                     { QUuid::createUuid(), tr("Set dressing"), u8"\U000F1353", "#00ef47" },
+                     { QUuid::createUuid(), tr("Set dressing"), u8"\U000F011A", "#00ef47" },
                      { QUuid::createUuid(), tr("Greenery"), u8"\U000F0531", "#00ba69" },
                      { QUuid::createUuid(), tr("Special equipment"), u8"\U000F0841", "#ff0000" },
                      { QUuid::createUuid(), tr("Security"), u8"\U000F0483", {} },
