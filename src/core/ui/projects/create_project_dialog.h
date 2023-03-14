@@ -50,6 +50,11 @@ public:
      */
     bool isLocal() const;
 
+    /**
+     * @brief Показать проблему создания проекта в заданной папке
+     */
+    void showProjectFolderError();
+
 signals:
     /**
      * @brief Пользователь нажал ссылку для авторизации

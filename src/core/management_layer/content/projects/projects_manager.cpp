@@ -591,8 +591,25 @@ void ProjectsManager::createProject()
                          d->createProjectDialog->importFilePath());
 
         if (d->createProjectDialog->isLocal()) {
+            //
+            // ... проверим, можно ли создавать проекты в заданной папке
+            //
             const auto projectPath = d->newProjectPath(d->createProjectDialog->projectName(),
                                                        d->createProjectDialog->projectFolder());
+            QFile file(projectPath);
+            const bool canWrite = file.open(QIODevice::WriteOnly);
+            file.close();
+            file.remove();
+            //
+            // ... если нет, то покажем эту проблему прямо в диалоге
+            //
+            if (!canWrite) {
+                d->createProjectDialog->showProjectFolderError();
+                return;
+            }
+            //
+            // ... а если может, то создаём проект
+            //
             emit createLocalProjectRequested(d->createProjectDialog->projectName(), projectPath,
                                              d->createProjectDialog->importFilePath());
         } else {

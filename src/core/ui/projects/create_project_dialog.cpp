@@ -161,6 +161,7 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
             this, tr("Choose the folder where new story will be saved"), d->projectFolder->text());
         if (!path.isEmpty()) {
             d->projectFolder->setText(path);
+            d->projectFolder->setError({});
         }
     });
     connect(d->importFilePath, &TextField::trailingIconPressed, this, [this] {
@@ -315,6 +316,12 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(bool _isConnected
 bool CreateProjectDialog::isLocal() const
 {
     return d->localProject->isChecked();
+}
+
+void CreateProjectDialog::showProjectFolderError()
+{
+    d->advancedSettingsButton->setChecked(true);
+    d->projectFolder->setError(tr("Can't create project in this folder, choose another one"));
 }
 
 QWidget* CreateProjectDialog::focusedWidgetAfterShow() const
