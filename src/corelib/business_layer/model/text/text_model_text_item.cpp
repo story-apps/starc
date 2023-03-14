@@ -1028,7 +1028,12 @@ bool TextModelTextItem::isEqual(TextModelItem* _item) const
     const auto textItem = static_cast<TextModelTextItem*>(_item);
     return d->isInFirstColumn == textItem->d->isInFirstColumn
         && d->paragraphType == textItem->d->paragraphType && d->alignment == textItem->d->alignment
-        && d->bookmark == textItem->d->bookmark && d->text == textItem->d->text
+        && d->bookmark == textItem->d->bookmark
+        //
+        // Сравниваем текст для сохранения, т.к. он может отличаться от текущего текста блока
+        //
+        && textToSave() == textItem->textToSave()
+        //
         && d->reviewMarks == textItem->d->reviewMarks && d->formats == textItem->d->formats
         && d->revisions == textItem->d->revisions;
 }

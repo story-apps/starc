@@ -1075,7 +1075,22 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                 const bool isFirstBlockOfSecondColumn
                     = !cursor.inFirstColumn() && previousBlockCursor.inFirstColumn();
                 if (isFirstBlockOfFirstColumn || isFirstBlockOfSecondColumn) {
-                    cursor.deleteChar();
+                    //
+                    // ... если курсор стоит в последнем блоке таблицы, то переход между блоками,
+                    //     или граница таблицы не удаляются, поэтому нужно добавить единичку к
+                    //     положению всех последующих блоков, а также удалить данные блока
+                    //
+                    if (TextBlockStyle::forBlock(cursor.block().next())
+                        == TextParagraphType::PageSplitter) {
+                        cursor.block().setUserData(nullptr);
+                        d->correctPositionsToItems(cursor.selectionInterval().to, 1);
+                    }
+                    //
+                    // ... если же дальше есть блоки, удаляем перенос строки и действуем стандартно
+                    //
+                    else {
+                        cursor.deleteChar();
+                    }
                 }
                 //
                 // ... в остальных случаях берём на один символ назад, чтобы удалить сам блок
