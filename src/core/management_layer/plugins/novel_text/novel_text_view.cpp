@@ -1517,6 +1517,17 @@ void NovelTextView::updateTranslations()
     d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
 
     d->updateOptionsTranslations();
+
+    //
+    // Обновить список форматов в выпадающем меню
+    //
+    const auto withModelReinitialization = false;
+    d->reconfigureTemplate(withModelReinitialization);
+    //
+    // ... и текст текущего формата
+    //
+    d->currentParagraphType = BusinessLayer::TextParagraphType::Undefined;
+    d->updateToolBarCurrentParagraphTypeName();
 }
 
 void NovelTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

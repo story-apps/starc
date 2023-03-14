@@ -1640,6 +1640,17 @@ void ScreenplayTextView::updateTranslations()
     d->sidebarTabs->setTabName(kDictionariesTabIndex, tr("Dictionaries"));
 
     d->updateOptionsTranslations();
+
+    //
+    // Обновить список форматов в выпадающем меню
+    //
+    const auto withModelReinitialization = false;
+    d->reconfigureTemplate(withModelReinitialization);
+    //
+    // ... и текст текущего формата
+    //
+    d->currentParagraphType = BusinessLayer::TextParagraphType::Undefined;
+    d->updateToolBarCurrentParagraphTypeName();
 }
 
 void ScreenplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

@@ -84,7 +84,7 @@ public:
     /**
      * @brief Обновить текущий отображаемый тип абзаца в панели инструментов
      */
-    void updateToolbarCurrentParagraphTypeName();
+    void updateToolBarCurrentParagraphTypeName();
 
     /**
      * @brief Обновить компоновку страницы
@@ -296,7 +296,7 @@ void SimpleTextView::Implementation::updateToolbarPositon()
             .toPoint());
 }
 
-void SimpleTextView::Implementation::updateToolbarCurrentParagraphTypeName()
+void SimpleTextView::Implementation::updateToolBarCurrentParagraphTypeName()
 {
     auto paragraphType = textEdit->currentParagraphType();
     if (currentParagraphType == paragraphType) {
@@ -625,7 +625,7 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
         //
         // Обновим состояние панелей форматов
         //
-        d->updateToolbarCurrentParagraphTypeName();
+        d->updateToolBarCurrentParagraphTypeName();
         //
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
@@ -889,7 +889,7 @@ void SimpleTextView::setModel(BusinessLayer::SimpleTextModel* _model)
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);
 
-    d->updateToolbarCurrentParagraphTypeName();
+    d->updateToolBarCurrentParagraphTypeName();
 }
 
 QModelIndex SimpleTextView::currentModelIndex() const
@@ -955,6 +955,17 @@ void SimpleTextView::updateTranslations()
     d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
 
     d->updateOptionsTranslations();
+
+    //
+    // Обновить список форматов в выпадающем меню
+    //
+    const auto withModelReinitialization = false;
+    d->reconfigureTemplate(withModelReinitialization);
+    //
+    // ... и текст текущего формата
+    //
+    d->currentParagraphType = BusinessLayer::TextParagraphType::Undefined;
+    d->updateToolBarCurrentParagraphTypeName();
 }
 
 void SimpleTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
