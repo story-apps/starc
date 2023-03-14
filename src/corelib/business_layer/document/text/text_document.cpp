@@ -473,7 +473,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     //
     // Сбрасываем корректор
     //
-    if (d->corrector) {
+    if (d->corrector != nullptr) {
         d->corrector->clear();
     }
 
@@ -492,7 +492,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
         return;
     }
 
-    if (d->corrector) {
+    if (d->corrector != nullptr) {
         d->corrector->setTemplateId(d->documentTemplate().id());
     }
 
@@ -1137,14 +1137,16 @@ TextModel* TextDocument::model() const
 
 void TextDocument::setCorrectionOptions(const QStringList& _options)
 {
-    if (d->corrector) {
-        d->corrector->setCorrectionOptions(_options);
+    if (d->corrector == nullptr) {
+        return;
     }
+
+    d->corrector->setCorrectionOptions(_options);
 }
 
 QModelIndex TextDocument::visibleTopLeveLItem() const
 {
-    if (!d->corrector) {
+    if (d->corrector == nullptr) {
         return {};
     }
 
@@ -1153,7 +1155,7 @@ QModelIndex TextDocument::visibleTopLeveLItem() const
 
 void TextDocument::setVisibleTopLevelItem(const QModelIndex& _index)
 {
-    if (!d->corrector) {
+    if (d->corrector == nullptr) {
         return;
     }
 

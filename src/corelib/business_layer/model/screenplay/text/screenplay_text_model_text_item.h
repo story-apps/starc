@@ -34,7 +34,7 @@ public:
     /**
      * @brief Обновить счётчики
      */
-    void updateCounters();
+    void updateCounters(bool _force = false);
 
     /**
      * @brief Определяем интерфейс получения данных сцены

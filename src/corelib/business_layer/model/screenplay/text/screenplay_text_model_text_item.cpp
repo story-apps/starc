@@ -64,7 +64,7 @@ std::chrono::milliseconds ScreenplayTextModelTextItem::duration() const
     return d->duration;
 }
 
-void ScreenplayTextModelTextItem::updateCounters()
+void ScreenplayTextModelTextItem::updateCounters(bool _force)
 {
     auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
     if (!canRun) {
@@ -79,10 +79,12 @@ void ScreenplayTextModelTextItem::updateCounters()
     }
 
     //
-    // Если элемент не менялся после последнего подсчёта счётчиков, не делаем лишнюю работу
+    // Если это не принудительное оновление счётчиков и элемент не менялся после последнего подсчёта
+    // счётчиков, не делаем лишнюю работу
     //
-    if ((d->wordsCount != 0 || d->charactersCount != QPair<int, int>()
-         || d->duration != std::chrono::milliseconds{ 0 })
+    if (!_force
+        && (d->wordsCount != 0 || d->charactersCount != QPair<int, int>()
+            || d->duration != std::chrono::milliseconds{ 0 })
         && !isChanged()) {
         return;
     }

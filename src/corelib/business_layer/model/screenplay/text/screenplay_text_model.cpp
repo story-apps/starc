@@ -41,7 +41,7 @@ public:
     /**
      * @brief Пересчитать хронометраж элемента и всех детей
      */
-    void updateChildrenDuration(const TextModelItem* _item);
+    void updateChildrenDuration(const TextModelItem* _item, bool _force = false);
 
 
     /**
@@ -102,7 +102,8 @@ TextModelItem* ScreenplayTextModel::Implementation::rootItem() const
     return q->itemForIndex({});
 }
 
-void ScreenplayTextModel::Implementation::updateChildrenDuration(const TextModelItem* _item)
+void ScreenplayTextModel::Implementation::updateChildrenDuration(const TextModelItem* _item,
+                                                                 bool _force)
 {
     if (_item == nullptr) {
         return;
@@ -113,13 +114,13 @@ void ScreenplayTextModel::Implementation::updateChildrenDuration(const TextModel
         switch (childItem->type()) {
         case TextModelItemType::Folder:
         case TextModelItemType::Group: {
-            updateChildrenDuration(childItem);
+            updateChildrenDuration(childItem, _force);
             break;
         }
 
         case TextModelItemType::Text: {
             auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-            textItem->updateCounters();
+            textItem->updateCounters(_force);
             break;
         }
 
@@ -793,7 +794,8 @@ void ScreenplayTextModel::setScenesNumbersLocked(bool _locked)
 void ScreenplayTextModel::recalculateDuration()
 {
     emit rowsAboutToBeChanged();
-    d->updateChildrenDuration(d->rootItem());
+    const auto forceUpdate = true;
+    d->updateChildrenDuration(d->rootItem(), forceUpdate);
     emit rowsChanged();
 }
 
