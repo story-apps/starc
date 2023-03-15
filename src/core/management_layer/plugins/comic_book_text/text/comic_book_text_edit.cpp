@@ -1313,7 +1313,11 @@ void ComicBookTextEdit::insertFromMimeData(const QMimeData* _source)
         // него пробел, чтобы его стиль не изменился, а сам текст будем вставлять в начало абзаца
         //
         if (!text.contains('\n') && cursor.block().text().isEmpty()) {
-            removeCharacterAtPosition = cursor.position();
+            //
+            // ... для комисков запоминаем не абсолютную позицию в документе, а относительно начала
+            // блока, т.к. текст других блоков может поменяться в процессе корректировок текста
+            //
+            removeCharacterAtPosition = cursor.positionInBlock();
             cursor.insertText(" ");
             setTextCursor(cursor);
         }
@@ -1336,7 +1340,7 @@ void ComicBookTextEdit::insertFromMimeData(const QMimeData* _source)
     // Удалим лишний пробел, который вставляли
     //
     if (removeCharacterAtPosition != invalidPosition) {
-        cursor.setPosition(removeCharacterAtPosition);
+        cursor.setPosition(cursor.block().position() + removeCharacterAtPosition);
         cursor.deleteChar();
         if (removeCharacterAtPosition < cursorPosition) {
             --cursorPosition;
