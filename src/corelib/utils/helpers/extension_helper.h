@@ -24,4 +24,5 @@ public:
     static QString celtx();
     static QString plainText();
     static QString pdf();
+    static QString png();
 };

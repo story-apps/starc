@@ -67,3 +67,8 @@ QString ExtensionHelper::pdf()
 {
     return QLatin1String("pdf");
 }
+
+QString ExtensionHelper::png()
+{
+    return QLatin1String("png");
+}

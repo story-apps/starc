@@ -46,6 +46,11 @@ public:
      */
     void restoreState(const QByteArray& _state);
 
+    /**
+     * @brief Сохранить сцену в картинку
+     */
+    QImage saveSceneToPng(qreal _scaleFactor = 2.0);
+
 signals:
     /**
      * @brief Изменился масштаб

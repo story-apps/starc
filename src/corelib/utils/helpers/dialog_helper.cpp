@@ -100,6 +100,11 @@ QString DialogHelper::pdfFilter()
                       ExtensionHelper::pdf());
 }
 
+QString DialogHelper::pngFilter()
+{
+    return makeFilter(QApplication::translate("DialogHelper", "PNG image"), ExtensionHelper::png());
+}
+
 QString DialogHelper::filtersForOpenProject()
 {
     QString filters = makeFilter(QApplication::translate("DialogHelper", "All supported files"),
@@ -147,4 +152,9 @@ QString DialogHelper::filtersForImport()
         filters.append(filter);
     }
     return filters;
+}
+
+QString DialogHelper::filtersForSceneImage()
+{
+    return pngFilter();
 }

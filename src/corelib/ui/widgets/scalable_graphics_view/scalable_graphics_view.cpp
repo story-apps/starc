@@ -152,6 +152,19 @@ void ScalableGraphicsView::restoreState(const QByteArray& _state)
     verticalScrollBar()->setValue(scrollValue);
 }
 
+QImage ScalableGraphicsView::saveSceneToPng(qreal _scaleFactor)
+{
+    scene()->clearSelection();
+    const auto contentsRect = scene()->itemsBoundingRect();
+    QImage image(contentsRect.size().toSize() * _scaleFactor, QImage::Format_ARGB32_Premultiplied);
+
+    QPainter painter(&image);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.fillRect(image.rect(), backgroundBrush());
+    scene()->render(&painter, image.rect(), contentsRect);
+    return image;
+}
+
 bool ScalableGraphicsView::event(QEvent* _event)
 {
     //
