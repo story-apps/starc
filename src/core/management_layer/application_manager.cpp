@@ -1281,7 +1281,7 @@ void ApplicationManager::Implementation::saveChanges()
         QFuture<void> future = QtConcurrent::run(
             BackupBuilder::save, projectsManager->currentProject().path(),
             settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString(),
-            baseBackupName);
+            baseBackupName, settingsValue(DataStorageLayer::kApplicationBackupsQtyKey).toInt());
     }
 }
 

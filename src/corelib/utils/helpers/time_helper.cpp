@@ -9,10 +9,10 @@ QString TimeHelper::toString(std::chrono::seconds _seconds)
     const auto minutes = std::chrono::duration_cast<std::chrono::minutes>(_seconds) - hours;
     const auto seconds = _seconds - minutes;
     const auto hoursText = hours.count() > 0 ? QString("%1:").arg(hours.count()) : "";
-    return QString("%1%2:%3")
-        .arg(hoursText)
-        .arg(minutes.count())
-        .arg(QString("0%1").arg(seconds.count()).right(2));
+    const auto minutesText = hoursText.isEmpty() ? QString::number(minutes.count())
+                                                 : QString("0%1").arg(minutes.count()).right(2);
+    const auto secondsText = QString("0%1").arg(seconds.count()).right(2);
+    return QString("%1%2:%3").arg(hoursText, minutesText, secondsText);
 }
 
 QString TimeHelper::toString(std::chrono::milliseconds _milliseconds)

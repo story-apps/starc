@@ -57,6 +57,8 @@ const QString kApplicationUseAutoSaveKey = kApplicationGroupKey + "/autosave";
 const QString kApplicationSaveBackupsKey = kApplicationGroupKey + "/save-backups";
 // папка в которую будут сохраняться резервные копии
 const QString kApplicationBackupsFolderKey = kApplicationGroupKey + "/backups-folder";
+// максимальное кол-во бекапов для сохранения
+const QString kApplicationBackupsQtyKey = kApplicationGroupKey + "/backups-qty";
 // показывать ли страницы текстовых документов
 const QString kApplicationShowDocumentsPagesKey = kApplicationGroupKey + "/show-documents-pages";
 // включены ли звуки печатной машинки при наборе текста

@@ -49,6 +49,7 @@ public:
     void setApplicationUseAutoSave(bool _use);
     void setApplicationSaveBackups(bool _save);
     void setApplicationBackupsFolder(const QString& _path);
+    void setApplicationBackupsQty(int _qty);
     void setApplicationShowDocumentsPages(bool _show);
     void setApplicationUseTypewriterSound(bool _use);
     void setApplicationUseSpellChecker(bool _use);
@@ -169,6 +170,7 @@ signals:
     void applicationUseAutoSaveChanged(bool _use);
     void applicationSaveBackupsChanged(bool _save);
     void applicationBackupsFolderChanged(const QString& _path);
+    void applicationBackupsQtyChanged(int _qty);
     void applicationShowDocumentsPagesChanged(bool _show);
     void applicationUseTypewriterSoundChanged(bool _use);
     void applicationUseSpellCheckerChanged(bool _use);

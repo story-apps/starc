@@ -60,6 +60,7 @@ signals:
     void applicationUseAutoSaveChanged(bool _use);
     void applicationSaveBackupsChanged(bool _save);
     void applicationBackupsFolderChanged(const QString& _path);
+    void applicationBackupsQtyChanged(int _qty);
 
     /**
      * @brief Изменились параметры компонентов
@@ -103,6 +104,7 @@ private:
     void setApplicationUseAutoSave(bool _use);
     void setApplicationSaveBackups(bool _save);
     void setApplicationBackupsFolder(const QString& _path);
+    void setApplicationBackupsQty(int _qty);
     void setApplicationShowDocumentsPages(bool _show);
     void setApplicationUseTypeWriterSound(bool _use);
     void setApplicationUseSpellChecker(bool _use);

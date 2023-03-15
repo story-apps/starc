@@ -215,6 +215,7 @@ public:
     CheckBox* autoSave = nullptr;
     CheckBox* saveBackups = nullptr;
     TextField* backupsFolderPath = nullptr;
+    TextField* backupsQty = nullptr;
     //
     // ... Text editing
     //
@@ -488,6 +489,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , autoSave(new CheckBox(applicationCard))
     , saveBackups(new CheckBox(applicationCard))
     , backupsFolderPath(new TextField(applicationCard))
+    , backupsQty(new TextField(applicationCard))
     , applicationTextEditingTitle(new H6Label(applicationCard))
     , showDocumentsPages(new CheckBox(applicationCard))
     , useTypewriterSound(new CheckBox(applicationCard))
@@ -708,6 +710,9 @@ void SettingsView::Implementation::initApplicationCard()
     backupsFolderPath->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     backupsFolderPath->setEnabled(false);
     backupsFolderPath->setTrailingIcon(u8"\U000f0256");
+    backupsQty->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    backupsQty->setEnabled(false);
+    backupsQty->setSuffix("  ");
     spellCheckerLanguage->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     spellCheckerLanguage->setEnabled(false);
     spellCheckerLanguage->setModel(spellCheckerLanguagesModel);
@@ -764,6 +769,7 @@ void SettingsView::Implementation::initApplicationCard()
         auto layout = makeLayout();
         layout->addWidget(saveBackups, 0, Qt::AlignCenter);
         layout->addWidget(backupsFolderPath);
+        layout->addWidget(backupsQty);
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
     //
@@ -1418,6 +1424,7 @@ SettingsView::SettingsView(QWidget* _parent)
             &ComboBox::setEnabled);
     connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsFolderPath,
             &TextField::setEnabled);
+    connect(d->saveBackups, &CheckBox::checkedChanged, d->backupsQty, &TextField::setEnabled);
     connect(d->backupsFolderPath, &TextField::trailingIconPressed, this, [this] {
         const auto path = QFileDialog::getExistingDirectory(
             this, tr("Choose the folder where backups will be saved"),
@@ -1447,6 +1454,23 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::applicationSaveBackupsChanged);
     connect(d->backupsFolderPath, &TextField::textChanged, this,
             [this] { emit applicationBackupsFolderChanged(d->backupsFolderPath->text()); });
+    connect(d->backupsQty, &TextField::textChanged, this, [this] {
+        QSignalBlocker signalBlocker(d->backupsQty);
+
+        bool isValidInt = false;
+        auto backupsQty = d->backupsQty->text().toInt(&isValidInt);
+        if (isValidInt) {
+            if (backupsQty <= 2) {
+                backupsQty = 2;
+            } else if (backupsQty > 50) {
+                backupsQty = 50;
+            }
+            setApplicationBackupsQty(backupsQty);
+            emit applicationBackupsQtyChanged(backupsQty);
+        } else {
+            d->backupsQty->undo();
+        }
+    });
     connect(d->showDocumentsPages, &CheckBox::checkedChanged, this,
             &SettingsView::applicationShowDocumentsPagesChanged);
     connect(d->useTypewriterSound, &CheckBox::checkedChanged, this,
@@ -2600,6 +2624,9 @@ void SettingsView::setApplicationLanguage(int _language)
         case QLocale::Tamil: {
             return "தமிழ்";
         }
+        case QLocale::Telugu: {
+            return "తెలుగు";
+        }
         case QLocale::Turkish: {
             return "Türkçe";
         }
@@ -2632,6 +2659,11 @@ void SettingsView::setApplicationSaveBackups(bool _save)
 void SettingsView::setApplicationBackupsFolder(const QString& _path)
 {
     d->backupsFolderPath->setText(_path);
+}
+
+void SettingsView::setApplicationBackupsQty(int _qty)
+{
+    d->backupsQty->setText(QString::number(_qty));
 }
 
 void SettingsView::setApplicationShowDocumentsPages(bool _show)
@@ -3155,6 +3187,7 @@ void SettingsView::updateTranslations()
            "If you work with no interruptions it saves the project every 3 minutes."));
     d->saveBackups->setText(tr("Save backups"));
     d->backupsFolderPath->setLabel(tr("Backups folder path"));
+    d->backupsQty->setLabel(tr("Qty"));
     d->applicationTextEditingTitle->setText(tr("Text editing"));
     d->showDocumentsPages->setText(tr("Show documents pages"));
     d->useTypewriterSound->setText(tr("Use typewriter sound for keys pressing"));
@@ -3449,7 +3482,7 @@ void SettingsView::updateTranslations()
     d->novelEditorDefaultTemplateOptions->setToolTip(
         tr("Available actions for the selected template"));
     d->novelNavigatorTitle->setText(tr("Navigator"));
-    d->novelNavigatorShowSceneText->setText(tr("Show part, chapter and scene text, lines"));
+    d->novelNavigatorShowSceneText->setText(tr("Show scene text, lines"));
     d->novelNavigatorSceneDescriptionLines1->setText("1");
     d->novelNavigatorSceneDescriptionLines2->setText("2");
     d->novelNavigatorSceneDescriptionLines3->setText("3");
@@ -3696,6 +3729,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     for (auto textField : std::vector<TextField*>{
              d->backupsFolderPath,
+             d->backupsQty,
              d->spellCheckerLanguage,
              //
              d->simpleTextEditorDefaultTemplate,
@@ -3725,6 +3759,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         textField->setBackgroundColor(DesignSystem::color().onBackground());
         textField->setTextColor(DesignSystem::color().onBackground());
     }
+    d->backupsQty->setCustomMargins({ isLeftToRight() ? 0.0 : DesignSystem::layout().px24(), 0.0,
+                                      isLeftToRight() ? DesignSystem::layout().px24() : 0.0, 0.0 });
     for (auto textField : {
              d->simpleTextEditorDefaultTemplate,
              d->screenplayEditorDefaultTemplate,
