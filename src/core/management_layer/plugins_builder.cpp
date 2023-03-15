@@ -124,8 +124,8 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
                                                                   /*{ "application/x-starc/editor/screenplay/beatboard", u8"\U000F13D2" }*/ } },
         { "application/x-starc/document/screenplay/text",       { { kScreenplayTextEditorMime, u8"\U000f09ed" },
                                                                   { kScreenplayTextCardsMime, u8"\U000f0554" },
-                                                                  /*{ "application/x-starc/editor/screenplay/timeline", u8"\U000F066C" }*/
-                                                                  { kScreenplayTextBreakdownMime, u8"\U000F14DD" } } },
+                                                                  /*{ "application/x-starc/editor/screenplay/timeline", u8"\U000F066C" },*/
+                                                                  /*{ kScreenplayTextBreakdownMime, u8"\U000F14DD" }*/ } },
         { "application/x-starc/document/screenplay/statistics", { { kScreenplayStatisticsViewMime, u8"\U000f0127" } } },
         //
         { "application/x-starc/document/comicbook",  { { "application/x-starc/editor/comicbook/information", u8"\U000f02fd" },
