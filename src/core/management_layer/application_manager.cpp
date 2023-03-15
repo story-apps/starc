@@ -1147,7 +1147,14 @@ void ApplicationManager::Implementation::updateWindowTitle()
         return;
     }
 
-    applicationView->setWindowTitle(QString("[*]%1 - Story Architect %2")
+    applicationView->setWindowTitle(QString("%1%2 - Story Architect %3")
+                                        .arg(
+#ifndef Q_OS_MAC
+                                            "[*]"
+#else
+                                            ""
+#endif
+                                            )
                                         .arg(projectsManager->currentProject().name(),
                                              (projectsManager->currentProject().isReadOnly()
                                                   ? QString("- %1").arg(tr("Read only"))
