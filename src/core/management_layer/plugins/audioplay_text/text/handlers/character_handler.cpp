@@ -25,7 +25,7 @@ namespace {
 /**
  * @brief Вставить двоеточие в конец блока
  */
-void insertColunAtEnd(QTextCursor& _cursor)
+void insertColonAtEnd(QTextCursor& _cursor)
 {
     _cursor.movePosition(QTextCursor::EndOfBlock);
     if (!_cursor.block().text().trimmed().endsWith(':')) {
@@ -89,7 +89,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
             //
             // Добавим двоеточие после имени
             //
-            insertColunAtEnd(cursor);
+            insertColonAtEnd(cursor);
 
             //
             // Переходим в следующий блок
@@ -130,7 +130,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                     //
                     // Добавим двоеточие после имени
                     //
-                    insertColunAtEnd(cursor);
+                    insertColonAtEnd(cursor);
 
                     //
                     // Переходим к следующему блоку, он уже отформатирован должным образом
@@ -207,7 +207,7 @@ void CharacterHandler::handleTab(QKeyEvent*)
                     //
                     // Добавим двоеточие после имени
                     //
-                    insertColunAtEnd(cursor);
+                    insertColonAtEnd(cursor);
 
                     //
                     // Переходим к следующему блоку, он уже отформатирован должным образом
