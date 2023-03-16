@@ -46,7 +46,12 @@ void DocumentChangeStorage::updateDocumentChange(Domain::DocumentChangeObject* _
 
 void DocumentChangeStorage::removeDocumentChange(Domain::DocumentChangeObject* _change)
 {
-    DataMappingLayer::MapperFacade::documentChangeMapper()->remove(_change);
+    if (const auto changeIndex = d->newDocumentChanges.indexOf(_change); changeIndex != -1) {
+        delete d->newDocumentChanges[changeIndex];
+        d->newDocumentChanges.removeAt(changeIndex);
+    } else {
+        DataMappingLayer::MapperFacade::documentChangeMapper()->remove(_change);
+    }
 }
 
 Domain::DocumentChangeObject* DocumentChangeStorage::documentChangeAt(const QUuid& _documentUuid,
