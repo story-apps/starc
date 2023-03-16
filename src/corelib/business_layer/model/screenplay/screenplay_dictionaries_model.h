@@ -78,6 +78,7 @@ public:
     void addResourceCategory(const QString& _name, const QString& _icon, const QColor& _color);
     void setResourceCategory(const QUuid& _uuid, const QString& _name, const QString& _icon,
                              const QColor& _color);
+    void moveResourceCategory(const QUuid& _uuid, int _index);
     void removeResourceCategory(const QUuid& _uuid);
     Q_SIGNAL void resourceCategoriesChanged();
 

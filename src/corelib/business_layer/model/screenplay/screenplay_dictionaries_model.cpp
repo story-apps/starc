@@ -360,14 +360,33 @@ void ScreenplayDictionariesModel::addResourceCategory(const QString& _name, cons
 void ScreenplayDictionariesModel::setResourceCategory(const QUuid& _uuid, const QString& _name,
                                                       const QString& _icon, const QColor& _color)
 {
+    Q_UNUSED(_icon)
+
     for (auto& category : d->resourceCategories) {
         if (category.uuid != _uuid) {
             continue;
         }
 
         category.name = _name;
-        category.icon = _icon;
+        //        category.icon = _icon;
         category.color = _color;
+        emit resourceCategoriesChanged();
+        break;
+    }
+}
+
+void ScreenplayDictionariesModel::moveResourceCategory(const QUuid& _uuid, int _index)
+{
+    if (_index < 0 || _index >= d->resourceCategories.size()) {
+        return;
+    }
+
+    for (int index = 0; index < d->resourceCategories.size(); ++index) {
+        if (d->resourceCategories.at(index).uuid != _uuid) {
+            continue;
+        }
+
+        d->resourceCategories.move(index, _index);
         emit resourceCategoriesChanged();
         break;
     }
@@ -533,11 +552,14 @@ void ScreenplayDictionariesModel::initDocument()
         auto resourceCategoryNode = resourceCategoriesNode.firstChildElement();
         bool hasCategories = false;
         while (!resourceCategoryNode.isNull()) {
-            const BreakdownResourceCategory resourceCategory
-                = { resourceCategoryNode.attributeNode(kItemUuidAttribute).value(),
-                    TextHelper::fromHtmlEscaped(resourceCategoryNode.text()),
-                    resourceCategoryNode.attributeNode(kItemIconAttribute).value(),
-                    resourceCategoryNode.attributeNode(kItemColorAttribute).value() };
+            BreakdownResourceCategory resourceCategory;
+            resourceCategory.uuid = resourceCategoryNode.attributeNode(kItemUuidAttribute).value();
+            resourceCategory.name = TextHelper::fromHtmlEscaped(resourceCategoryNode.text());
+            resourceCategory.icon = resourceCategoryNode.attributeNode(kItemIconAttribute).value();
+            if (resourceCategoryNode.hasAttribute(kItemColorAttribute)) {
+                resourceCategory.color
+                    = resourceCategoryNode.attributeNode(kItemColorAttribute).value();
+            }
             d->resourceCategories.append(resourceCategory);
             resourceCategoryNode = resourceCategoryNode.nextSiblingElement();
             hasCategories = true;
@@ -632,10 +654,13 @@ QByteArray ScreenplayDictionariesModel::toXml() const
     //
     xml += QString("<%1>\n").arg(kResourceCategoriesKey).toUtf8();
     for (const auto& resourceCategory : std::as_const(d->resourceCategories)) {
-        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\"><![CDATA[%8]]></%1>\n")
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6><![CDATA[%7]]></%1>\n")
                    .arg(kItemKey, kItemUuidAttribute, resourceCategory.uuid.toString(),
-                        kItemIconAttribute, resourceCategory.icon, kItemColorAttribute,
-                        resourceCategory.color.name(),
+                        kItemIconAttribute, resourceCategory.icon,
+                        (resourceCategory.color.isValid()
+                             ? QString(" %1=\"%2\"")
+                                   .arg(kItemColorAttribute, resourceCategory.color.name())
+                             : ""),
                         TextHelper::toHtmlEscaped(resourceCategory.name))
                    .toUtf8();
     }
