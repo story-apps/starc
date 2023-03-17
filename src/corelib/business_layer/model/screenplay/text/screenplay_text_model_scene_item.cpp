@@ -58,16 +58,41 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const ScreenplayTextM
 
 ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;
 
-void ScreenplayTextModelSceneItem::addResource(const QUuid& _uuid, int _qty,
-                                               const QString& _descriptionForScene)
-{
-    d->resources.append({ _uuid, _qty, _descriptionForScene });
-    setChanged(true);
-}
-
 QVector<BreakdownSceneResource> ScreenplayTextModelSceneItem::resources() const
 {
     return d->resources;
+}
+
+void ScreenplayTextModelSceneItem::storeResource(const QUuid& _uuid, int _qty,
+                                                 const QString& _descriptionForScene)
+{
+    bool updated = false;
+    for (auto& resource : d->resources) {
+        if (resource.uuid == _uuid) {
+            resource.qty = _qty;
+            resource.description = _descriptionForScene;
+            updated = true;
+            break;
+        }
+    }
+    if (!updated) {
+        d->resources.append({ _uuid, _qty, _descriptionForScene });
+    }
+
+    setChanged(true);
+}
+
+void ScreenplayTextModelSceneItem::removeResource(const QUuid& _uuid)
+{
+    for (int index = 0; index < d->resources.size(); ++index) {
+        if (d->resources.at(index).uuid != _uuid) {
+            continue;
+        }
+
+        d->resources.removeAt(index);
+        setChanged(true);
+        return;
+    }
 }
 
 int ScreenplayTextModelSceneItem::wordsCount() const
@@ -244,9 +269,8 @@ QByteArray ScreenplayTextModelSceneItem::customContent() const
         xml += QString("<%1>\n").arg(xml::kResourcesTag).toUtf8();
         for (const auto& resource : std::as_const(d->resources)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\"><![CDATA[%6]]></%1>\n")
-                       .arg(xml::kResourceTag, xml::kUuidAttribute,
-                            resource.uuid.toString(), xml::kQtyAttribute,
-                            QString::number(resource.qty),
+                       .arg(xml::kResourceTag, xml::kUuidAttribute, resource.uuid.toString(),
+                            xml::kQtyAttribute, QString::number(resource.qty),
                             TextHelper::toHtmlEscaped(resource.description))
                        .toUtf8();
         }

@@ -32,8 +32,9 @@ public:
     /**
      * @brief Ресурсы сцены
      */
-    void addResource(const QUuid& _uuid, int _qty, const QString& _descriptionForScene);
     QVector<BreakdownSceneResource> resources() const;
+    void storeResource(const QUuid& _uuid, int _qty, const QString& _descriptionForScene);
+    void removeResource(const QUuid& _uuid);
 
     /**
      * @brief Количество слов

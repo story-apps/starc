@@ -430,6 +430,9 @@ void ScreenplayDictionariesModel::addResource(const QUuid& _categoryUuid, const 
         return;
     }
 
+    //
+    // Проверяем, существует ли указанная категория
+    //
     bool isResourceCategoryExists = false;
     for (const auto& resourceCategory : std::as_const(d->resourceCategories)) {
         if (resourceCategory.uuid == _categoryUuid) {
@@ -441,6 +444,9 @@ void ScreenplayDictionariesModel::addResource(const QUuid& _categoryUuid, const 
         return;
     }
 
+    //
+    // Добавляем ресурс и уведомляем клиентов
+    //
     d->resources.append({ QUuid::createUuid(), _categoryUuid, _name, _description });
     emit resourcesChanged();
 }
