@@ -341,7 +341,7 @@ void CardItemParametersView::setItemType(CardItemType _type)
             beat->setVisible(true);
         }
         d->storyDay->setVisible(true);
-        d->stamp->setVisible(d->isTagsVisible && true);
+        d->stamp->setVisible(d->isStampVisible && true);
         d->numberingTitle->setVisible(d->isNumberingVisible && true);
         d->autoNumbering->setVisible(d->isNumberingVisible && true);
         d->customNumber->setVisible(d->isNumberingVisible && false);
