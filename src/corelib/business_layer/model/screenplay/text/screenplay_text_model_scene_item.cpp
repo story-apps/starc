@@ -19,6 +19,11 @@ public:
      */
     std::optional<int> plannedDuration;
 
+    /**
+     * @brief Ресурсы сцены
+     */
+    QVector<BreakdownSceneResource> resources;
+
     //
     // Ридонли свойства, которые формируются по ходу работы со сценарием
     //
@@ -52,6 +57,18 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const ScreenplayTextM
 }
 
 ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;
+
+void ScreenplayTextModelSceneItem::addResource(const QUuid& _uuid, int _qty,
+                                               const QString& _descriptionForScene)
+{
+    d->resources.append({ _uuid, _qty, _descriptionForScene });
+    setChanged(true);
+}
+
+QVector<BreakdownSceneResource> ScreenplayTextModelSceneItem::resources() const
+{
+    return d->resources;
+}
 
 int ScreenplayTextModelSceneItem::wordsCount() const
 {
@@ -193,6 +210,23 @@ QStringRef ScreenplayTextModelSceneItem::readCustomContent(QXmlStreamReader& _co
         currentTag = xml::readNextElement(_contentReader); // next
     }
 
+    if (currentTag == xml::kResourcesTag) {
+        d->resources.clear();
+        currentTag = xml::readNextElement(_contentReader); // next
+        while (currentTag == xml::kResourceTag) {
+            const QUuid resourceUuid
+                = _contentReader.attributes().value(xml::kUuidAttribute).toString();
+            const int resourceQty = _contentReader.attributes().value(xml::kQtyAttribute).toInt();
+            const auto resourceDescription
+                = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
+            d->resources.append({ resourceUuid, resourceQty, resourceDescription });
+
+            xml::readNextElement(_contentReader); // end
+            currentTag = xml::readNextElement(_contentReader); // next resource or resources end
+        }
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
+
     return currentTag;
 }
 
@@ -204,6 +238,19 @@ QByteArray ScreenplayTextModelSceneItem::customContent() const
         xml += QString("<%1>%2</%1>\n")
                    .arg(xml::kPlannedDurationTag, QString::number(*d->plannedDuration))
                    .toUtf8();
+    }
+
+    if (!d->resources.isEmpty()) {
+        xml += QString("<%1>\n").arg(xml::kResourcesTag).toUtf8();
+        for (const auto& resource : std::as_const(d->resources)) {
+            xml += QString("<%1 %2=\"%3\" %4=\"%5\"><![CDATA[%6]]></%1>\n")
+                       .arg(xml::kResourceTag, xml::kUuidAttribute,
+                            resource.uuid.toString(), xml::kQtyAttribute,
+                            QString::number(resource.qty),
+                            TextHelper::toHtmlEscaped(resource.description))
+                       .toUtf8();
+        }
+        xml += QString("</%1>\n").arg(xml::kResourcesTag).toUtf8();
     }
 
     return xml;

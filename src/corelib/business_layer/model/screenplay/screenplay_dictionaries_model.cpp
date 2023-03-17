@@ -20,9 +20,9 @@ const QLatin1String kTagsKey("tags");
 const QLatin1String kResourceCategoriesKey("resource_categories");
 const QLatin1String kResourcesKey("resources");
 const QLatin1String kItemKey("v");
-const QLatin1String kItemNameKey("name");
-const QLatin1String kItemDescriptionKey("description");
+const QLatin1String kItemParentUuidAttribute("parent_uuid");
 const QLatin1String kItemUuidAttribute("uuid");
+const QLatin1String kItemNameAttribute("name");
 const QLatin1String kItemColorAttribute("color");
 const QLatin1String kItemIconAttribute("icon");
 const QLatin1String kItemCountAttribute("count");
@@ -461,6 +461,39 @@ void ScreenplayDictionariesModel::setResource(const QUuid& _uuid, const QUuid& _
     }
 }
 
+void ScreenplayDictionariesModel::setResourceCategory(const QUuid& _uuid,
+                                                      const QUuid& _categoryUuid)
+{
+    for (auto& resource : d->resources) {
+        if (resource.uuid != _uuid) {
+            continue;
+        }
+
+        if (resource.categoryUuid != _categoryUuid) {
+            resource.categoryUuid = _categoryUuid;
+            emit resourcesChanged();
+        }
+        break;
+    }
+}
+
+void ScreenplayDictionariesModel::moveResource(const QUuid& _uuid, int _index)
+{
+    if (_index < 0 || _index >= d->resources.size()) {
+        return;
+    }
+
+    for (int index = 0; index < d->resources.size(); ++index) {
+        if (d->resources.at(index).uuid != _uuid) {
+            continue;
+        }
+
+        d->resources.move(index, _index);
+        emit resourcesChanged();
+        break;
+    }
+}
+
 void ScreenplayDictionariesModel::removeResource(const QUuid& _uuid)
 {
     for (int index = 0; index < d->resources.size(); ++index) {
@@ -596,6 +629,20 @@ void ScreenplayDictionariesModel::initDocument()
             }
         }
     }
+    //
+    {
+        const auto resourcesNode = documentNode.firstChildElement(kResourcesKey);
+        auto resourceNode = resourcesNode.firstChildElement();
+        while (!resourceNode.isNull()) {
+            BreakdownResource resource;
+            resource.uuid = resourceNode.attributeNode(kItemUuidAttribute).value();
+            resource.categoryUuid = resourceNode.attributeNode(kItemParentUuidAttribute).value();
+            resource.name = resourceNode.attributeNode(kItemNameAttribute).value();
+            resource.description = TextHelper::fromHtmlEscaped(resourceNode.text());
+            d->resources.append(resource);
+            resourceNode = resourceNode.nextSiblingElement();
+        }
+    }
 }
 
 void ScreenplayDictionariesModel::clearDocument()
@@ -662,6 +709,17 @@ QByteArray ScreenplayDictionariesModel::toXml() const
                                    .arg(kItemColorAttribute, resourceCategory.color.name())
                              : ""),
                         TextHelper::toHtmlEscaped(resourceCategory.name))
+                   .toUtf8();
+    }
+    xml += QString("</%1>\n").arg(kResourceCategoriesKey).toUtf8();
+    //
+    xml += QString("<%1>\n").arg(kResourcesKey).toUtf8();
+    for (const auto& resource : std::as_const(d->resources)) {
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\"><![CDATA[%8]]></%1>\n")
+                   .arg(kItemKey, kItemUuidAttribute, resource.uuid.toString(),
+                        kItemParentUuidAttribute, resource.categoryUuid.toString(),
+                        kItemNameAttribute, TextHelper::toHtmlEscaped(resource.name),
+                        TextHelper::toHtmlEscaped(resource.description))
                    .toUtf8();
     }
     xml += QString("</%1>\n").arg(kResourceCategoriesKey).toUtf8();

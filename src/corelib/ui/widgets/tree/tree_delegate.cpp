@@ -397,8 +397,8 @@ QSize MultilineDelegate::sizeHint(const QStyleOptionViewItem& _option,
     const auto availableWidth = width - Ui::DesignSystem::treeOneLineItem().margins().left()
         - Ui::DesignSystem::treeOneLineItem().margins().right();
     const auto text = _index.data().toString();
-    const auto textHeight = TextHelper::heightForWidth(
-        _index.data().toString(), Ui::DesignSystem::font().subtitle2(), availableWidth);
+    const auto textHeight
+        = TextHelper::heightForWidth(text, Ui::DesignSystem::font().subtitle2(), availableWidth);
 
     return QSizeF(width,
                   std::max(Ui::DesignSystem::treeOneLineItem().height(),

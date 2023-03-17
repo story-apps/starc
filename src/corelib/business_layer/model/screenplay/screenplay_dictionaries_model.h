@@ -19,7 +19,7 @@ struct BreakdownResourceCategory {
 };
 
 /**
- * @brief Ресурсы
+ * @brief Ресурс
  */
 struct BreakdownResource {
     QUuid uuid;
@@ -28,6 +28,14 @@ struct BreakdownResource {
     QString description;
 };
 
+/**
+ * @brief Ресурс сцены
+ */
+struct BreakdownSceneResource {
+    QUuid uuid;
+    int qty = 0;
+    QString description;
+};
 
 /**
  * @brief Модель справочников сценария
@@ -86,6 +94,8 @@ public:
     void addResource(const QUuid& _categoryUuid, const QString& _name, const QString& _description);
     void setResource(const QUuid& _uuid, const QUuid& _categoryUuid, const QString& _name,
                      const QString& _description);
+    void setResourceCategory(const QUuid& _uuid, const QUuid& _categoryUuid);
+    void moveResource(const QUuid& _uuid, int _index);
     void removeResource(const QUuid& _uuid);
     Q_SIGNAL void resourcesChanged();
 

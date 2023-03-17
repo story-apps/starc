@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../screenplay_dictionaries_model.h"
+
 #include <business_layer/model/text/text_model_group_item.h>
 
 #include <chrono>
@@ -26,6 +28,12 @@ public:
 public:
     explicit ScreenplayTextModelSceneItem(const ScreenplayTextModel* _model);
     ~ScreenplayTextModelSceneItem() override;
+
+    /**
+     * @brief Ресурсы сцены
+     */
+    void addResource(const QUuid& _uuid, int _qty, const QString& _descriptionForScene);
+    QVector<BreakdownSceneResource> resources() const;
 
     /**
      * @brief Количество слов
