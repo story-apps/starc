@@ -27,6 +27,11 @@ public:
     void setPopupBackgroundColor(const QColor& _color);
 
     /**
+     * @brief Задать максимальное допустимое кол-во элементов для отображения в попапе
+     */
+    void setPopupMaxItems(int _maxItems);
+
+    /**
      * @brief Необходимо ли расширят размер попапа, чтобы содержимое полностью вмещалось
      */
     void setUseContentsWidth(bool _use);

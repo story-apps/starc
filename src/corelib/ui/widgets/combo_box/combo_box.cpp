@@ -31,6 +31,7 @@ public:
     bool useContentsWidth = false;
     bool isReadOnly = false;
     CardPopupWithTree* popup = nullptr;
+    int popupMaxItems = 5;
 };
 
 ComboBox::Implementation::Implementation(QWidget* _parent)
@@ -73,7 +74,8 @@ void ComboBox::Implementation::showPopup(ComboBox* _parent)
         + QPointF(leftMargin - Ui::DesignSystem::card().shadowMargins().left(),
                   -Ui::DesignSystem::textField().margins().bottom());
     popup->showPopup(pos.toPoint(),
-                     _parent->height() - Ui::DesignSystem::textField().margins().top(), width);
+                     _parent->height() - Ui::DesignSystem::textField().margins().top(), width,
+                     popupMaxItems);
 }
 
 void ComboBox::Implementation::hidePopup()
@@ -115,6 +117,15 @@ void ComboBox::setReadOnly(bool _readOnly)
 void ComboBox::setPopupBackgroundColor(const QColor& _color)
 {
     d->popup->setBackgroundColor(_color);
+}
+
+void ComboBox::setPopupMaxItems(int _maxItems)
+{
+    if (_maxItems < 1) {
+        return;
+    }
+
+    d->popupMaxItems = _maxItems;
 }
 
 void ComboBox::setUseContentsWidth(bool _use)
