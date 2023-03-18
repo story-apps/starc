@@ -98,7 +98,7 @@ const QHash<DocumentObjectType, QString> kDocumentObjectTypeToIcon = {
     { DocumentObjectType::NovelStatistics, u8"\U000f0127" },
     { DocumentObjectType::Characters, u8"\U000f0849" },
     { DocumentObjectType::Character, u8"\U000f0004" },
-    { DocumentObjectType::Locations, u8"\U000f0d15" },
+    { DocumentObjectType::Locations, u8"\U000F0DD4" },
     { DocumentObjectType::Location, u8"\U000f02dc" },
     { DocumentObjectType::Worlds, u8"\U000F01E7" },
     { DocumentObjectType::World, u8"\U000F01E7" },
