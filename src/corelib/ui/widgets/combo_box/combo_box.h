@@ -3,6 +3,7 @@
 #include <ui/widgets/text_field/text_field.h>
 
 class QAbstractItemModel;
+class QAbstractItemDelegate;
 
 
 /**
@@ -30,6 +31,11 @@ public:
      * @brief Задать максимальное допустимое кол-во элементов для отображения в попапе
      */
     void setPopupMaxItems(int _maxItems);
+
+    /**
+     * @brief Задать делегат для отрисовки элементов выпадающего списка
+     */
+    void setPopupItemsDelegate(QAbstractItemDelegate* _delegate);
 
     /**
      * @brief Необходимо ли расширят размер попапа, чтобы содержимое полностью вмещалось

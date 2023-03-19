@@ -3,6 +3,7 @@
 #include "card_popup.h"
 
 class QAbstractItemModel;
+class QAbstractItemDelegate;
 
 
 /**
@@ -15,6 +16,11 @@ class CORE_LIBRARY_EXPORT CardPopupWithTree : public CardPopup
 public:
     explicit CardPopupWithTree(QWidget* _parent = nullptr);
     ~CardPopupWithTree() override;
+
+    /**
+     * @brief Задать делегат выпадающего списка
+     */
+    void setItemDelegate(QAbstractItemDelegate* _delegate);
 
     /**
      * @brief Модель элементов для отображения в попапе

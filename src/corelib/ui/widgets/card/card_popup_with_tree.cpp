@@ -48,6 +48,11 @@ CardPopupWithTree::CardPopupWithTree(QWidget* _parent)
 
 CardPopupWithTree::~CardPopupWithTree() = default;
 
+void CardPopupWithTree::setItemDelegate(QAbstractItemDelegate* _delegate)
+{
+    d->content->setItemDelegate(_delegate);
+}
+
 QAbstractItemModel* CardPopupWithTree::contentModel() const
 {
     return d->content->model();

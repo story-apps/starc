@@ -128,6 +128,11 @@ void ComboBox::setPopupMaxItems(int _maxItems)
     d->popupMaxItems = _maxItems;
 }
 
+void ComboBox::setPopupItemsDelegate(QAbstractItemDelegate* _delegate)
+{
+    d->popup->setItemDelegate(_delegate);
+}
+
 void ComboBox::setUseContentsWidth(bool _use)
 {
     d->useContentsWidth = _use;
