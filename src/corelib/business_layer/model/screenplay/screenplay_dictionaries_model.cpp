@@ -36,6 +36,13 @@ struct ColorsComparator {
 
 } // namespace
 
+
+bool operator==(const BreakdownSceneResource& _lhs, const BreakdownSceneResource& _rhs)
+{
+    return _lhs.uuid == _rhs.uuid;
+}
+
+
 class ScreenplayDictionariesModel::Implementation
 {
 public:
