@@ -238,6 +238,26 @@ void AbstractDialog::setContentFixedWidth(int _width)
     setContentMaximumWidth(_width);
 }
 
+void AbstractDialog::setContentMinimumHeight(int _height)
+{
+    d->content->setMinimumHeight(_height);
+    //    d->isContentMinimumHeightChanged = true;
+    updateGeometry();
+}
+
+void AbstractDialog::setContentMaximumHeight(int _height)
+{
+    d->content->setMaximumHeight(_height);
+    //    d->isContentMaximumHeightChanged = true;
+    updateGeometry();
+}
+
+void AbstractDialog::setContentFixedHeight(int _height)
+{
+    setContentMinimumHeight(_height);
+    setContentMaximumHeight(_height);
+}
+
 void AbstractDialog::setAcceptButton(Button* _button)
 {
     d->acceptButton = _button;

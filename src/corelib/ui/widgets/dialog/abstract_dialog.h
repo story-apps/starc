@@ -29,19 +29,18 @@ public:
     void hideDialog();
 
     /**
-     * @brief Задать минимальную ширину контента диалога
+     * @brief Настроить ширину контента диалога
      */
     void setContentMinimumWidth(int _width);
-
-    /**
-     * @brief Задать максимальную ширину контента диалога
-     */
     void setContentMaximumWidth(int _width);
+    void setContentFixedWidth(int _width);
 
     /**
-     * @brief Зафиксировать ширину контента диалога
+     * @brief Настроить высоту контента диалога
      */
-    void setContentFixedWidth(int _width);
+    void setContentMinimumHeight(int _height);
+    void setContentMaximumHeight(int _height);
+    void setContentFixedHeight(int _height);
 
     /**
      * @brief Задать кнопку, для нажатия при нажатии Enter в диалоге
