@@ -291,7 +291,7 @@ public:
     /**
      * @brief Путь текущего проекта
      */
-    QString projetPath;
+    QString projectPath;
 
     /**
      * @brief Работает ли пользователь с облачным проектом
@@ -2497,7 +2497,7 @@ void ProjectManager::loadCurrentProject(const Project& _project)
 
 void ProjectManager::updateCurrentProject(const Project& _project)
 {
-    d->projetPath = _project.path();
+    d->projectPath = _project.path();
     d->isProjectRemote = _project.isRemote();
     d->isProjectOwner = _project.isOwner();
     d->editingMode = _project.editingMode();
@@ -3025,7 +3025,7 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     //
     if (document->type() == Domain::DocumentObjectType::Structure) {
         d->view.activeIndex = {};
-        restoreCurrentProjectState(d->projetPath);
+        restoreCurrentProjectState(d->projectPath);
     }
     //
     // Если не структура, а какая-либо из моделей, то обновим представление для неё

@@ -246,7 +246,7 @@ public:
     /**
      * @brief Перейти к редактированию текущего проекта
      */
-    void goToEditCurrentProject(const QString& _importFilePath = {});
+    void goToEditCurrentProject(bool _afterProjectCreation, const QString& _importFilePath);
 
     /**
      * @brief Закрыть текущий проект
@@ -1535,7 +1535,8 @@ void ApplicationManager::Implementation::createLocalProject(const QString& _proj
     //
     // ... перейдём к редактированию
     //
-    goToEditCurrentProject(_importFilePath);
+    constexpr auto afterProjectCreation = true;
+    goToEditCurrentProject(afterProjectCreation, _importFilePath);
 }
 
 #ifdef CLOUD_SERVICE_MANAGER
@@ -1590,7 +1591,8 @@ void ApplicationManager::Implementation::createRemoteProject(const QString& _pro
                       //
                       // ... перейдём к редактированию
                       //
-                      goToEditCurrentProject(_importFilePath);
+                      constexpr auto afterProjectCreation = true;
+                      goToEditCurrentProject(afterProjectCreation, _importFilePath);
                       //
                       // ... подписываться на документы структуры и параметров проекта нет
                       //     необходимости, т.к. это будет осуществлено на этапе их создания
@@ -1663,7 +1665,8 @@ bool ApplicationManager::Implementation::openProject(const QString& _path)
     //
     // ... перейдём к редактированию
     //
-    goToEditCurrentProject(importFilePath);
+    constexpr auto afterProjectCreation = false;
+    goToEditCurrentProject(afterProjectCreation, importFilePath);
 
     return true;
 }
@@ -1718,7 +1721,8 @@ bool ApplicationManager::Implementation::tryLockProjectOnOpen(const QString& _pa
     return true;
 }
 
-void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _importFilePath)
+void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProjectCreation,
+                                                                const QString& _importFilePath)
 {
     state = ApplicationState::ProjectLoading;
 
@@ -1750,7 +1754,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     //
     // Если будет импорт, то сбросим умолчальный тип проекта, чтобы не создавать лишних документов
     //
-    if (shouldPerformImport) {
+    if (shouldPerformImport || !_afterProjectCreation) {
         setSettingsValue(DataStorageLayer::kProjectTypeKey,
                          static_cast<int>(Domain::DocumentObjectType::Undefined));
     }
@@ -1764,7 +1768,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(const QString& _
     //
     // Восстанавливаем тип проекта по-умолчанию для будущих свершений
     //
-    if (shouldPerformImport) {
+    if (shouldPerformImport || !_afterProjectCreation) {
         setSettingsValue(DataStorageLayer::kProjectTypeKey, static_cast<int>(projectType));
     }
 
