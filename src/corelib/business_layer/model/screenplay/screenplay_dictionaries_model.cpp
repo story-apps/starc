@@ -517,20 +517,24 @@ void ScreenplayDictionariesModel::initDocument()
         return;
     }
 
+    const auto shouldBeInitialized = document()->content().isEmpty();
+
     QDomDocument domDocument;
     domDocument.setContent(document()->content());
     const auto documentNode = domDocument.firstChildElement(kDocumentKey);
-    auto fillDictionary = [documentNode](const QString& _key, const QVector<QString>& _defaultItems,
-                                         QVector<QString>& _dictionary) {
+    auto fillDictionary = [documentNode, shouldBeInitialized](const QString& _key,
+                                                              const QVector<QString>& _defaultItems,
+                                                              QVector<QString>& _dictionary) {
+        if (shouldBeInitialized) {
+            _dictionary.append(_defaultItems);
+            return;
+        }
+
         const auto dictionaryNode = documentNode.firstChildElement(_key);
         auto itemNode = dictionaryNode.firstChildElement();
         while (!itemNode.isNull()) {
             _dictionary.append(TextHelper::fromHtmlEscaped(itemNode.text()));
             itemNode = itemNode.nextSiblingElement();
-        }
-
-        if (_dictionary.isEmpty()) {
-            _dictionary.append(_defaultItems);
         }
     };
     const QVector<QString> defaultSceneIntros = {
@@ -559,7 +563,7 @@ void ScreenplayDictionariesModel::initDocument()
     };
     fillDictionary(kTransitionsKey, defaultTransitions, d->transitions);
     //
-    {
+    if (!shouldBeInitialized) {
         const auto storyDaysNode = documentNode.firstChildElement(kStoryDaysKey);
         auto storyDayNode = storyDaysNode.firstChildElement();
         while (!storyDayNode.isNull()) {
@@ -572,7 +576,7 @@ void ScreenplayDictionariesModel::initDocument()
         }
     }
     //
-    {
+    if (!shouldBeInitialized) {
         const auto tagsNode = documentNode.firstChildElement(kTagsKey);
         auto tagNode = tagsNode.firstChildElement();
         while (!tagNode.isNull()) {
@@ -586,10 +590,40 @@ void ScreenplayDictionariesModel::initDocument()
         }
     }
     //
-    {
+    if (shouldBeInitialized) {
+        //
+        // Хардкодим UUID'ы чтобы дефолтный xml всегда был одинаковым
+        //
+        // clang-format off
+        for (const auto& resourceCategory : std::vector<BreakdownResourceCategory>{
+                 { QUuid("{ef2711ff-f92e-4fb0-9f53-101acd0b382c}"), tr("Backgroun actors (atmosphere)"), u8"\U000F05CB", "#006724" },
+                 { QUuid("{0f4a8d40-82b2-4d10-bebc-40cefb5a99f9}"), tr("Backgroun actors (silent)"), u8"\U000F0849", "#009434" },
+                 { QUuid("{a8ebbb8c-f6fc-4c83-b154-e1d8bf88ba47}"), tr("Backgroun actors (special)"), u8"\U000F0017", "#2db75e" },
+                 { QUuid("{79c87ced-e531-4c92-ae1f-89e90c00b6d2}"), tr("Stunts"), u8"\U000F1A41", "#d61530" },
+                 { QUuid("{6a913b68-6245-441b-a034-e14e9810de3d}"), tr("Vehicles"), u8"\U000F010B", "#00acbe" },
+                 { QUuid("{331c6ed2-bad6-4305-bf2c-1b25b69430da}"), tr("Props"), u8"\U000F0E10", "#a56334" },
+                 { QUuid("{afb07d68-ad59-417b-989f-512c687577c6}"), tr("Camera"), u8"\U000F0567", "#c0da61" },
+                 { QUuid("{6cc4a061-6a9c-42b1-82f6-61287feb96d5}"), tr("Special effects"), u8"\U000F0F35", "#78a9af" },
+                 { QUuid("{7700078e-fbca-417a-a596-e5f00fec534c}"), tr("Wardrobe"), u8"\U000F0A7B", "#ff6500" },
+                 { QUuid("{420da819-7233-47db-a6b3-9319d5b29b31}"), tr("Makeup/hair"), u8"\U000F1077", "#f400ee" },
+                 { QUuid("{11548941-c278-4e7a-862b-45b8c1b01bfc}"), tr("Animals"), u8"\U000F1A61", "#abbb18" },
+                 { QUuid("{1e7212d1-e50b-48d5-a669-385b4c8c4c14}"), tr("Animal handler"), u8"\U000F0E9B", "#dead00" },
+                 { QUuid("{82874cf3-8222-49d1-9222-33681bf10262}"), tr("Music"), u8"\U000F075A", "#007880" },
+                 { QUuid("{a9e55c5a-4373-426a-bdd4-19b52f24eb03}"), tr("Sound"), u8"\U000F057E", "#a10f81" },
+                 { QUuid("{4babab66-164f-4dfc-bd8a-732bf674a889}"), tr("Set dressing"), u8"\U000F011A", "#00ef47" },
+                 { QUuid("{f61bf97e-08cb-4591-b8c4-ddb72979eae0}"), tr("Greenery"), u8"\U000F0531", "#00ba69" },
+                 { QUuid("{c4efceaf-1ed6-4094-a5ef-d1b81e872b43}"), tr("Special equipment"), u8"\U000F0841", "#ff0000" },
+                 { QUuid("{6799a18c-4a5d-4599-9707-4f5467727dbd}"), tr("Security"), u8"\U000F0483", {} },
+                 { QUuid("{4166f271-1f2d-411a-86fd-b932e4c3fda8}"), tr("Additional labor"), u8"\U000F05B5", {} },
+                 { QUuid("{c508420d-d473-45ba-8d0f-40be453d9e10}"), tr("Optical FX (Visual FX)"), u8"\U000F086D", {} },
+                 { QUuid("{9e85ca3a-3319-491b-8504-5d83363fc05c}"), tr("Mechanical FX"), u8"\U000F0210", {} },
+             }) {
+            d->resourceCategories.append(resourceCategory);
+        }
+        // clang-format on
+    } else {
         const auto resourceCategoriesNode = documentNode.firstChildElement(kResourceCategoriesKey);
         auto resourceCategoryNode = resourceCategoriesNode.firstChildElement();
-        bool hasCategories = false;
         while (!resourceCategoryNode.isNull()) {
             BreakdownResourceCategory resourceCategory;
             resourceCategory.uuid = resourceCategoryNode.attributeNode(kItemUuidAttribute).value();
@@ -601,42 +635,10 @@ void ScreenplayDictionariesModel::initDocument()
             }
             d->resourceCategories.append(resourceCategory);
             resourceCategoryNode = resourceCategoryNode.nextSiblingElement();
-            hasCategories = true;
-        }
-
-        if (!hasCategories) {
-            for (auto resourceCategory : std::vector<BreakdownResourceCategory>{
-                     { QUuid::createUuid(), tr("Backgroun actors (atmosphere)"), u8"\U000F05CB",
-                       "#006724" },
-                     { QUuid::createUuid(), tr("Backgroun actors (silent)"), u8"\U000F0849",
-                       "#009434" },
-                     { QUuid::createUuid(), tr("Backgroun actors (special)"), u8"\U000F0017",
-                       "#2db75e" },
-                     { QUuid::createUuid(), tr("Stunts"), u8"\U000F1A41", "#d61530" },
-                     { QUuid::createUuid(), tr("Vehicles"), u8"\U000F010B", "#00acbe" },
-                     { QUuid::createUuid(), tr("Props"), u8"\U000F0E10", "#a56334" },
-                     { QUuid::createUuid(), tr("Camera"), u8"\U000F0567", "#c0da61" },
-                     { QUuid::createUuid(), tr("Special effects"), u8"\U000F0F35", "#78a9af" },
-                     { QUuid::createUuid(), tr("Wardrobe"), u8"\U000F0A7B", "#ff6500" },
-                     { QUuid::createUuid(), tr("Makeup/hair"), u8"\U000F1077", "#f400ee" },
-                     { QUuid::createUuid(), tr("Animals"), u8"\U000F1A61", "#abbb18" },
-                     { QUuid::createUuid(), tr("Animal handler"), u8"\U000F0E9B", "#dead00" },
-                     { QUuid::createUuid(), tr("Music"), u8"\U000F075A", "#007880" },
-                     { QUuid::createUuid(), tr("Sound"), u8"\U000F057E", "#a10f81" },
-                     { QUuid::createUuid(), tr("Set dressing"), u8"\U000F011A", "#00ef47" },
-                     { QUuid::createUuid(), tr("Greenery"), u8"\U000F0531", "#00ba69" },
-                     { QUuid::createUuid(), tr("Special equipment"), u8"\U000F0841", "#ff0000" },
-                     { QUuid::createUuid(), tr("Security"), u8"\U000F0483", {} },
-                     { QUuid::createUuid(), tr("Additional labor"), u8"\U000F05B5", {} },
-                     { QUuid::createUuid(), tr("Optical FX (Visual FX)"), u8"\U000F086D", {} },
-                     { QUuid::createUuid(), tr("Mechanical FX"), u8"\U000F0210", {} },
-                 }) {
-                d->resourceCategories.append(resourceCategory);
-            }
         }
     }
     //
-    {
+    if (!shouldBeInitialized) {
         const auto resourcesNode = documentNode.firstChildElement(kResourcesKey);
         auto resourceNode = resourcesNode.firstChildElement();
         while (!resourceNode.isNull()) {
@@ -648,6 +650,10 @@ void ScreenplayDictionariesModel::initDocument()
             d->resources.append(resource);
             resourceNode = resourceNode.nextSiblingElement();
         }
+    }
+
+    if (shouldBeInitialized) {
+        updateDocumentContent();
     }
 }
 
@@ -661,6 +667,8 @@ void ScreenplayDictionariesModel::clearDocument()
     d->transitions.clear();
     d->storyDays.clear();
     d->tags.clear();
+    d->resourceCategories.clear();
+    d->resources.clear();
 }
 
 QByteArray ScreenplayDictionariesModel::toXml() const
@@ -728,7 +736,7 @@ QByteArray ScreenplayDictionariesModel::toXml() const
                         TextHelper::toHtmlEscaped(resource.description))
                    .toUtf8();
     }
-    xml += QString("</%1>\n").arg(kResourceCategoriesKey).toUtf8();
+    xml += QString("</%1>\n").arg(kResourcesKey).toUtf8();
 
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
