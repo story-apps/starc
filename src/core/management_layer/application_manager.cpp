@@ -2892,6 +2892,7 @@ void ApplicationManager::initConnections()
 
                     d->cloudServiceManager->openStructure(_id);
                     d->cloudServiceManager->openProjectInfo(_id);
+                    d->cloudServiceManager->openScreenplayDictionaries(_id);
                 };
                 d->saveIfNeeded(callback);
             });

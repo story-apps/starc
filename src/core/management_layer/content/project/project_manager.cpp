@@ -2865,6 +2865,7 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     case Domain::DocumentObjectType::Structure:
     case Domain::DocumentObjectType::RecycleBin:
     case Domain::DocumentObjectType::Project:
+    case Domain::DocumentObjectType::ScreenplayDictionaries:
     case Domain::DocumentObjectType::Characters:
     case Domain::DocumentObjectType::Locations: {
         document = DataStorageLayer::StorageFacade::documentStorage()->document(documentType);
@@ -3213,7 +3214,7 @@ QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) co
                 //
                 documents.append(childItem->uuid());
                 //
-                // ... каждая из локаций
+                // ... каждый из персонажей
                 //
                 for (int index = 0; index < childItem->childCount(); ++index) {
                     documents.append(childItem->childAt(index)->uuid());
