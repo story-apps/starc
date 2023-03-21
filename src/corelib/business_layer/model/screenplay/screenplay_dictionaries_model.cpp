@@ -606,9 +606,9 @@ void ScreenplayDictionariesModel::initDocument()
         //
         // clang-format off
         for (const auto& resourceCategory : std::vector<BreakdownResourceCategory>{
-                 { QUuid("{ef2711ff-f92e-4fb0-9f53-101acd0b382c}"), tr("Backgroun actors (atmosphere)"), u8"\U000F05CB", "#006724" },
-                 { QUuid("{0f4a8d40-82b2-4d10-bebc-40cefb5a99f9}"), tr("Backgroun actors (silent)"), u8"\U000F0849", "#009434" },
-                 { QUuid("{a8ebbb8c-f6fc-4c83-b154-e1d8bf88ba47}"), tr("Backgroun actors (special)"), u8"\U000F0017", "#2db75e" },
+                 { QUuid("{ef2711ff-f92e-4fb0-9f53-101acd0b382c}"), tr("Background actors (atmosphere)"), u8"\U000F05CB", "#006724" },
+                 { QUuid("{0f4a8d40-82b2-4d10-bebc-40cefb5a99f9}"), tr("Background actors (silent)"), u8"\U000F0849", "#009434" },
+                 { QUuid("{a8ebbb8c-f6fc-4c83-b154-e1d8bf88ba47}"), tr("Background actors (special)"), u8"\U000F0017", "#2db75e" },
                  { QUuid("{79c87ced-e531-4c92-ae1f-89e90c00b6d2}"), tr("Stunts"), u8"\U000F1A41", "#d61530" },
                  { QUuid("{6a913b68-6245-441b-a034-e14e9810de3d}"), tr("Vehicles"), u8"\U000F010B", "#00acbe" },
                  { QUuid("{331c6ed2-bad6-4305-bf2c-1b25b69430da}"), tr("Props"), u8"\U000F0E10", "#a56334" },

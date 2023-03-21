@@ -86,7 +86,8 @@ public:
     Q_SIGNAL void tagsChanged();
 
     QVector<BreakdownResourceCategory> resourceCategories() const;
-    void addResourceCategory(const QString& _name, const QString& _icon, const QColor& _color, bool _hasIds);
+    void addResourceCategory(const QString& _name, const QString& _icon, const QColor& _color,
+                             bool _hasIds);
     void setResourceCategory(const QUuid& _uuid, const QString& _name, const QString& _icon,
                              const QColor& _color, bool _hasIds);
     void moveResourceCategory(const QUuid& _uuid, int _index);
