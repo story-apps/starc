@@ -154,6 +154,33 @@ struct XlsxColumnInfo
     bool collapsed;
 };
 
+enum XlsxPaneState {
+    XLSX_PANE_FROZEN,
+    XLSX_PANE_FROZEN_SPLIT,
+    XLSX_PANE_SPLIT
+};
+
+struct XlsxPane
+{
+    int xSplit;
+    int ySplit;
+    CellReference topLeftCell;
+    XlsxPanePos activePane;
+    XlsxPaneState state;
+};
+
+struct XlsxSelection
+{
+    XlsxPanePos pane;
+    CellReference activeCell;
+    CellRange sqref;
+};
+
+struct XlsxAutoFilter
+{
+    CellRange ref;
+};
+
 class XLSX_AUTOTEST_EXPORT WorksheetPrivate : public AbstractSheetPrivate
 {
     Q_DECLARE_PUBLIC(Worksheet)
@@ -229,6 +256,10 @@ public:
     bool showRuler;
     bool showOutlineSymbols;
     bool showWhiteSpace;
+
+    QScopedPointer<XlsxPane> pane;
+    QList<XlsxSelection> selections;
+    QScopedPointer<XlsxAutoFilter> autoFilter;
 
     QRegularExpression urlPattern;
 
