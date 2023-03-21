@@ -38,7 +38,8 @@ struct BreakdownSceneResource {
     QString description;
 };
 
-bool operator==(const BreakdownSceneResource& _lhs, const BreakdownSceneResource& _rhs);
+bool CORE_LIBRARY_EXPORT operator==(const BreakdownSceneResource& _lhs,
+                                    const BreakdownSceneResource& _rhs);
 
 /**
  * @brief Модель справочников сценария
