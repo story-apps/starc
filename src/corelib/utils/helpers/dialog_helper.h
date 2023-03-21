@@ -27,6 +27,7 @@ public:
     static QString plainTextFilter();
     static QString pdfFilter();
     static QString pngFilter();
+    static QString xlsxFilter();
 
     /**
      * @brief Получить список фильтров файлов которые приложение может открыть
@@ -42,4 +43,9 @@ public:
      * @brief Получить список фильтров файлов, в которые можно сохранять содержимое сцены
      */
     static QString filtersForSceneImage();
+
+    /**
+     * @brief Получить список фильтров файлов, в которые можно сохранять содержимое отчёта
+     */
+    static QString filtersForReport();
 };

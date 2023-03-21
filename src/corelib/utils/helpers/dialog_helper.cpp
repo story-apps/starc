@@ -105,6 +105,12 @@ QString DialogHelper::pngFilter()
     return makeFilter(QApplication::translate("DialogHelper", "PNG image"), ExtensionHelper::png());
 }
 
+QString DialogHelper::xlsxFilter()
+{
+    return makeFilter(QApplication::translate("DialogHelper", "MS Excel spreadsheet"),
+                      ExtensionHelper::xlsx());
+}
+
 QString DialogHelper::filtersForOpenProject()
 {
     QString filters = makeFilter(QApplication::translate("DialogHelper", "All supported files"),
@@ -157,4 +163,9 @@ QString DialogHelper::filtersForImport()
 QString DialogHelper::filtersForSceneImage()
 {
     return pngFilter();
+}
+
+QString DialogHelper::filtersForReport()
+{
+    return xlsxFilter();
 }

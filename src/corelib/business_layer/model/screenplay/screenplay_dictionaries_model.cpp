@@ -26,6 +26,7 @@ const QLatin1String kItemNameAttribute("name");
 const QLatin1String kItemColorAttribute("color");
 const QLatin1String kItemIconAttribute("icon");
 const QLatin1String kItemCountAttribute("count");
+const QLatin1String kItemHasIdsAttribute("has_ids");
 
 struct ColorsComparator {
     bool operator()(const QPair<QString, QColor>& _lhs, const QPair<QString, QColor>& _rhs) const
@@ -354,18 +355,19 @@ QVector<BreakdownResourceCategory> ScreenplayDictionariesModel::resourceCategori
 }
 
 void ScreenplayDictionariesModel::addResourceCategory(const QString& _name, const QString& _icon,
-                                                      const QColor& _color)
+                                                      const QColor& _color, bool _hasIds)
 {
     if (_name.isEmpty()) {
         return;
     }
 
-    d->resourceCategories.append({ QUuid::createUuid(), _name, _icon, _color });
+    d->resourceCategories.append({ QUuid::createUuid(), _name, _icon, _color, _hasIds });
     emit resourceCategoriesChanged();
 }
 
 void ScreenplayDictionariesModel::setResourceCategory(const QUuid& _uuid, const QString& _name,
-                                                      const QString& _icon, const QColor& _color)
+                                                      const QString& _icon, const QColor& _color,
+                                                      bool _hasIds)
 {
     Q_UNUSED(_icon)
 
@@ -377,6 +379,7 @@ void ScreenplayDictionariesModel::setResourceCategory(const QUuid& _uuid, const 
         category.name = _name;
         //        category.icon = _icon;
         category.color = _color;
+        category.hasIds = _hasIds;
         emit resourceCategoriesChanged();
         break;
     }
@@ -640,6 +643,7 @@ void ScreenplayDictionariesModel::initDocument()
                 resourceCategory.color
                     = resourceCategoryNode.attributeNode(kItemColorAttribute).value();
             }
+            resourceCategory.hasIds = resourceCategoryNode.hasAttribute(kItemHasIdsAttribute);
             d->resourceCategories.append(resourceCategory);
             resourceCategoryNode = resourceCategoryNode.nextSiblingElement();
         }
@@ -722,13 +726,15 @@ QByteArray ScreenplayDictionariesModel::toXml() const
     //
     xml += QString("<%1>\n").arg(kResourceCategoriesKey).toUtf8();
     for (const auto& resourceCategory : std::as_const(d->resourceCategories)) {
-        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6><![CDATA[%7]]></%1>\n")
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6%7><![CDATA[%8]]></%1>\n")
                    .arg(kItemKey, kItemUuidAttribute, resourceCategory.uuid.toString(),
                         kItemIconAttribute, resourceCategory.icon,
                         (resourceCategory.color.isValid()
                              ? QString(" %1=\"%2\"")
                                    .arg(kItemColorAttribute, resourceCategory.color.name())
                              : ""),
+                        (resourceCategory.hasIds ? QString(" %1=\"true\"").arg(kItemHasIdsAttribute)
+                                                 : ""),
                         TextHelper::toHtmlEscaped(resourceCategory.name))
                    .toUtf8();
     }

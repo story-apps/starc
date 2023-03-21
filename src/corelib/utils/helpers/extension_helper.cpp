@@ -72,3 +72,8 @@ QString ExtensionHelper::png()
 {
     return QLatin1String("png");
 }
+
+QString ExtensionHelper::xlsx()
+{
+    return QLatin1String("xlsx");
+}

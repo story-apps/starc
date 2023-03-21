@@ -25,4 +25,5 @@ public:
     static QString plainText();
     static QString pdf();
     static QString png();
+    static QString xlsx();
 };
