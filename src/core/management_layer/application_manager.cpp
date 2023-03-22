@@ -173,17 +173,22 @@ public:
     /**
      * @brief Установить тему
      */
-    void setTheme(Ui::ApplicationTheme _theme);
+    void setDesignSystemTheme(Ui::ApplicationTheme _theme);
 
     /**
      * @brief Установить цвета кастомной темы
      */
-    void setCustomThemeColors(const Ui::DesignSystem::Color& _color);
+    void setDesignSystemCustomThemeColors(const Ui::DesignSystem::Color& _color);
 
     /**
      * @brief Установить коэффициент масштабирования
      */
-    void setScaleFactor(qreal _scaleFactor);
+    void setDesignSystemScaleFactor(qreal _scaleFactor);
+
+    /**
+     * @brief Задать использование компакстного режима
+     */
+    void setDesignSystemCompact(bool _isCompact);
 
     //
     // Работа с проектом
@@ -1110,7 +1115,7 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     initDockMenu();
 }
 
-void ApplicationManager::Implementation::setTheme(Ui::ApplicationTheme _theme)
+void ApplicationManager::Implementation::setDesignSystemTheme(Ui::ApplicationTheme _theme)
 {
     if (state == ApplicationState::Working) {
         WAF::Animation::circleTransparentIn(applicationView, QCursor::pos(),
@@ -1120,7 +1125,8 @@ void ApplicationManager::Implementation::setTheme(Ui::ApplicationTheme _theme)
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
-void ApplicationManager::Implementation::setCustomThemeColors(const Ui::DesignSystem::Color& _color)
+void ApplicationManager::Implementation::setDesignSystemCustomThemeColors(
+    const Ui::DesignSystem::Color& _color)
 {
     if (Ui::DesignSystem::theme() != Ui::ApplicationTheme::Custom) {
         return;
@@ -1134,9 +1140,15 @@ void ApplicationManager::Implementation::setCustomThemeColors(const Ui::DesignSy
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
-void ApplicationManager::Implementation::setScaleFactor(qreal _scaleFactor)
+void ApplicationManager::Implementation::setDesignSystemScaleFactor(qreal _scaleFactor)
 {
     Ui::DesignSystem::setScaleFactor(_scaleFactor);
+    QApplication::postEvent(q, new DesignSystemChangeEvent);
+}
+
+void ApplicationManager::Implementation::setDesignSystemCompact(bool _isCompact)
+{
+    Ui::DesignSystem::setCompact(_isCompact);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
@@ -2246,11 +2258,13 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
     //
     d->setTranslation(
         settingsValue(DataStorageLayer::kApplicationLanguagedKey).value<QLocale::Language>());
-    d->setTheme(static_cast<Ui::ApplicationTheme>(
+    d->setDesignSystemTheme(static_cast<Ui::ApplicationTheme>(
         settingsValue(DataStorageLayer::kApplicationThemeKey).toInt()));
-    d->setCustomThemeColors(Ui::DesignSystem::Color(
+    d->setDesignSystemCustomThemeColors(Ui::DesignSystem::Color(
         settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString()));
-    d->setScaleFactor(settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
+    d->setDesignSystemScaleFactor(
+        settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
+    d->setDesignSystemCompact(settingsValue(DataStorageLayer::kApplicationIsCompactKey).toBool());
     d->applicationView->restoreState(
         settingsValue(DataStorageLayer::kApplicationConfiguredKey).toBool(),
         settingsValues(DataStorageLayer::kApplicationViewStateKey));
@@ -2492,10 +2506,10 @@ void ApplicationManager::initConnections()
     connect(d->onboardingManager.data(), &OnboardingManager::languageChanged, this,
             [this](QLocale::Language _language) { d->setTranslation(_language); });
     connect(d->onboardingManager.data(), &OnboardingManager::themeChanged, this,
-            [this](Ui::ApplicationTheme _theme) { d->setTheme(_theme); });
+            [this](Ui::ApplicationTheme _theme) { d->setDesignSystemTheme(_theme); });
     connect(d->onboardingManager.data(), &OnboardingManager::scaleFactorChanged, this,
             [this](qreal _scaleFactor) {
-                d->setScaleFactor(_scaleFactor);
+                d->setDesignSystemScaleFactor(_scaleFactor);
                 d->settingsManager->updateScaleFactor();
             });
     connect(d->onboardingManager.data(), &OnboardingManager::finished, this, [this] {
@@ -2615,19 +2629,23 @@ void ApplicationManager::initConnections()
     connect(
         d->settingsManager.data(), &SettingsManager::applicationThemeChanged, this,
         [this](Ui::ApplicationTheme _theme) {
-            d->setTheme(_theme);
+            d->setDesignSystemTheme(_theme);
             //
             // ... если применяется кастомная тема, то нужно загрузить её цвета
             //
             if (_theme == Ui::ApplicationTheme::Custom) {
-                d->setCustomThemeColors(Ui::DesignSystem::Color(
+                d->setDesignSystemCustomThemeColors(Ui::DesignSystem::Color(
                     settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString()));
             }
         });
     connect(d->settingsManager.data(), &SettingsManager::applicationCustomThemeColorsChanged, this,
-            [this](const Ui::DesignSystem::Color& _color) { d->setCustomThemeColors(_color); });
+            [this](const Ui::DesignSystem::Color& _color) {
+                d->setDesignSystemCustomThemeColors(_color);
+            });
     connect(d->settingsManager.data(), &SettingsManager::applicationScaleFactorChanged, this,
-            [this](qreal _scaleFactor) { d->setScaleFactor(_scaleFactor); });
+            [this](qreal _scaleFactor) { d->setDesignSystemScaleFactor(_scaleFactor); });
+    connect(d->settingsManager.data(), &SettingsManager::applicationIsCompactChanged, this,
+            [this](bool _isCompact) { d->setDesignSystemCompact(_isCompact); });
     connect(d->settingsManager.data(), &SettingsManager::applicationUseAutoSaveChanged, this,
             [this] { d->configureAutoSave(); });
     //

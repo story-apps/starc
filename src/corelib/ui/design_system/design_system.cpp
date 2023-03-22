@@ -597,7 +597,7 @@ DesignSystem::Font::Font(qreal _scaleFactor)
 class DesignSystem::Layout::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor);
+    explicit Implementation(qreal _scaleFactor, bool _isCompact);
 
     qreal px2 = 2.0;
     qreal px4 = 4.0;
@@ -611,18 +611,19 @@ public:
     qreal buttonsSpacing = 8.0;
 };
 
-DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor)
+DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor, bool _isCompact)
 {
-    px2 *= _scaleFactor;
-    px4 *= _scaleFactor;
-    px8 *= _scaleFactor;
-    px12 *= _scaleFactor;
-    px16 *= _scaleFactor;
-    px24 *= _scaleFactor;
-    px48 *= _scaleFactor;
-    px62 *= _scaleFactor;
-    topContentMargin *= _scaleFactor;
-    buttonsSpacing *= _scaleFactor;
+    const auto finalScaleFactor = _scaleFactor * (_isCompact ? 0.5 : 1.0);
+    px2 *= finalScaleFactor;
+    px4 *= finalScaleFactor;
+    px8 *= finalScaleFactor;
+    px12 *= finalScaleFactor;
+    px16 *= finalScaleFactor;
+    px24 *= finalScaleFactor;
+    px48 *= finalScaleFactor;
+    px62 *= finalScaleFactor;
+    topContentMargin *= finalScaleFactor;
+    buttonsSpacing *= finalScaleFactor;
 }
 
 
@@ -686,8 +687,8 @@ qreal DesignSystem::Layout::buttonsSpacing() const
     return d->buttonsSpacing;
 }
 
-DesignSystem::Layout::Layout(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
+DesignSystem::Layout::Layout(qreal _scaleFactor, bool _isCompact)
+    : d(new Implementation(_scaleFactor, _isCompact))
 {
 }
 
@@ -1765,22 +1766,33 @@ DesignSystem::Drawer::Drawer(qreal _scaleFactor, const Color& _color)
 class DesignSystem::TreeOneLineItem::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor);
+    explicit Implementation(qreal _scaleFactor, bool _isCompact);
 
     QMarginsF margins = { 16.0, 16.0, 16.0, 16.0 };
     qreal height = 56.0;
-    qreal spacing = 16.0;
+    qreal contentHeight = 0.0;
+    qreal spacing = 8.0;
     QSizeF iconSize = { 32.0, 32.0 };
     QSizeF avatarSize = { 40.0, 40.0 };
 };
 
-DesignSystem::TreeOneLineItem::Implementation::Implementation(qreal _scaleFactor)
+DesignSystem::TreeOneLineItem::Implementation::Implementation(qreal _scaleFactor, bool _isCompact)
 {
+    if (_isCompact) {
+        margins = { 8.0, 8.0, 8.0, 8.0 };
+        height = 40.0;
+        spacing = 8.0;
+        iconSize = { 24.0, 24.0 };
+        avatarSize = { 32.0, 32.0 };
+    }
+
     margins *= _scaleFactor;
     height *= _scaleFactor;
     spacing *= _scaleFactor;
     iconSize *= _scaleFactor;
     avatarSize *= _scaleFactor;
+
+    contentHeight = height - margins.top() - margins.bottom();
 }
 
 
@@ -1799,6 +1811,11 @@ qreal DesignSystem::TreeOneLineItem::height() const
     return d->height;
 }
 
+qreal DesignSystem::TreeOneLineItem::contentHeight() const
+{
+    return d->contentHeight;
+}
+
 qreal DesignSystem::TreeOneLineItem::spacing() const
 {
     return d->spacing;
@@ -1814,8 +1831,8 @@ const QSizeF& DesignSystem::TreeOneLineItem::avatarSize() const
     return d->avatarSize;
 }
 
-DesignSystem::TreeOneLineItem::TreeOneLineItem(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
+DesignSystem::TreeOneLineItem::TreeOneLineItem(qreal _scaleFactor, bool _isCompact)
+    : d(new Implementation(_scaleFactor, _isCompact))
 {
 }
 
@@ -2221,10 +2238,12 @@ class DesignSystemPrivate
 {
 public:
     explicit DesignSystemPrivate(ApplicationTheme _theme = ApplicationTheme::DarkAndLight,
-                                 qreal _scaleFactor = 1.0, const DesignSystem::Color& _color = {});
+                                 qreal _scaleFactor = 1.0, bool _isCompact = false,
+                                 const DesignSystem::Color& _color = {});
 
     ApplicationTheme theme = ApplicationTheme::DarkAndLight;
     qreal scaleFactor = 1.0;
+    bool isCompact = false;
 
     QMarginsF pageMargins = { 16.0, 26.0, 16.0, 16.0 };
     qreal pageSpacing = 16.0;
@@ -2239,6 +2258,7 @@ public:
     DesignSystem::Color color;
     DesignSystem::Font font;
     DesignSystem::Layout layout;
+    DesignSystem::Layout compactLayout;
     DesignSystem::AppBar appBar;
     DesignSystem::ContextMenu contextMenu;
     DesignSystem::Label label;
@@ -2267,12 +2287,14 @@ public:
 };
 
 DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFactor,
-                                         const DesignSystem::Color& _color)
+                                         bool _isCompact, const DesignSystem::Color& _color)
     : theme(_theme)
     , scaleFactor(_scaleFactor)
+    , isCompact(_isCompact)
     , color(_color)
     , font(_scaleFactor)
     , layout(_scaleFactor)
+    , compactLayout(_scaleFactor, _isCompact)
     , appBar(_scaleFactor)
     , contextMenu(_scaleFactor)
     , label(_scaleFactor)
@@ -2290,7 +2312,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
     , tabBar(_scaleFactor)
     , stepper(_scaleFactor)
     , drawer(_scaleFactor, _color)
-    , treeOneLineItem(_scaleFactor)
+    , treeOneLineItem(_scaleFactor, _isCompact)
     , tree(_scaleFactor, _color)
     , card(_scaleFactor)
     , dialog(_scaleFactor)
@@ -2315,7 +2337,7 @@ void DesignSystem::updateLanguage()
     //
     // Просто пересоздаём инстанс со стилями, а шрифты подхватятся при создании объекта Font
     //
-    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), color()));
+    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), isCompact(), color()));
 }
 
 void DesignSystem::setTheme(ApplicationTheme _theme)
@@ -2340,7 +2362,21 @@ void DesignSystem::setScaleFactor(qreal _scaleFactor)
         return;
     }
 
-    instance()->d.reset(new DesignSystemPrivate(theme(), _scaleFactor, color()));
+    instance()->d.reset(new DesignSystemPrivate(theme(), _scaleFactor, isCompact(), color()));
+}
+
+bool DesignSystem::isCompact()
+{
+    return instance()->d->isCompact;
+}
+
+void DesignSystem::setCompact(bool _isCompact)
+{
+    if (instance()->d->isCompact == _isCompact) {
+        return;
+    }
+
+    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), _isCompact, color()));
 }
 
 QMarginsF DesignSystem::pageMargins()
@@ -2497,7 +2533,7 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
 
 void DesignSystem::setColor(const DesignSystem::Color& _color)
 {
-    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), _color));
+    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), isCompact(), _color));
 }
 
 const DesignSystem::Font& DesignSystem::font()
@@ -2508,6 +2544,11 @@ const DesignSystem::Font& DesignSystem::font()
 const DesignSystem::Layout& DesignSystem::layout()
 {
     return instance()->d->layout;
+}
+
+const DesignSystem::Layout& DesignSystem::compactLayout()
+{
+    return instance()->d->compactLayout;
 }
 
 const DesignSystem::AppBar& DesignSystem::appBar()

@@ -49,6 +49,8 @@ const QString kApplicationThemeKey = kApplicationGroupKey + "/theme";
 const QString kApplicationCustomThemeColorsKey = kApplicationGroupKey + "/custom-theme";
 // масштаб приложения
 const QString kApplicationScaleFactorKey = kApplicationGroupKey + "/scale-factor";
+// использование компактного режима
+const QString kApplicationIsCompactKey = kApplicationGroupKey + "/is-compact";
 // состояние и геометрия основного окна приложения
 const QString kApplicationViewStateKey = kApplicationGroupKey + "-view/";
 // включено ли автосохранение

@@ -98,6 +98,7 @@ void SettingsManager::Implementation::loadApplicationSettings()
     view->setApplicationLanguage(settingsValue(DataStorageLayer::kApplicationLanguagedKey).toInt());
     view->setApplicationScaleFactor(
         settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
+    view->setApplicationCompact(settingsValue(DataStorageLayer::kApplicationIsCompactKey).toBool());
     view->setApplicationUseAutoSave(
         settingsValue(DataStorageLayer::kApplicationUseAutoSaveKey).toBool());
     view->setApplicationSaveBackups(
@@ -542,6 +543,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setApplicationCustomThemeColors);
     connect(d->view, &Ui::SettingsView::applicationScaleFactorChanged, this,
             &SettingsManager::setApplicationScaleFactor);
+    connect(d->view, &Ui::SettingsView::applicationIsCompactChanged, this,
+            &SettingsManager::setApplicationCompact);
     connect(d->view, &Ui::SettingsView::applicationUseAutoSaveChanged, this,
             &SettingsManager::setApplicationUseAutoSave);
     connect(d->view, &Ui::SettingsView::applicationSaveBackupsChanged, this,
@@ -1156,6 +1159,12 @@ void SettingsManager::setApplicationScaleFactor(qreal _scaleFactor)
 {
     setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey, _scaleFactor);
     emit applicationScaleFactorChanged(_scaleFactor);
+}
+
+void SettingsManager::setApplicationCompact(bool _isCompact)
+{
+    setSettingsValue(DataStorageLayer::kApplicationIsCompactKey, _isCompact);
+    emit applicationIsCompactChanged(_isCompact);
 }
 
 void SettingsManager::setApplicationUseAutoSave(bool _use)

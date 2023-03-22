@@ -208,6 +208,7 @@ public:
     Slider* scaleFactor = nullptr;
     Body2Label* scaleFactorSmallInfo = nullptr;
     Body2Label* scaleFactorBigInfo = nullptr;
+    CheckBox* isCompact = nullptr;
     //
     // ... Save changes & backups
     //
@@ -485,6 +486,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , scaleFactor(new Slider(applicationCard))
     , scaleFactorSmallInfo(new Body2Label(applicationCard))
     , scaleFactorBigInfo(new Body2Label(applicationCard))
+    , isCompact(new CheckBox(applicationCard))
     , applicationSaveAndBackupTitle(new H6Label(applicationCard))
     , autoSave(new CheckBox(applicationCard))
     , saveBackups(new CheckBox(applicationCard))
@@ -756,6 +758,7 @@ void SettingsView::Implementation::initApplicationCard()
         layout->addWidget(scaleFactorBigInfo);
         applicationCardLayout->addLayout(layout, itemIndex++, 0);
     }
+    applicationCardLayout->addWidget(isCompact, itemIndex++, 0);
     //
     // ... сохранение и бэкапы
     //
@@ -1448,6 +1451,8 @@ SettingsView::SettingsView(QWidget* _parent)
     connect(d->scaleFactor, &Slider::valueChanged, this, [this](int _value) {
         emit applicationScaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
     });
+    connect(d->isCompact, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationIsCompactChanged);
     connect(d->autoSave, &CheckBox::checkedChanged, this,
             &SettingsView::applicationUseAutoSaveChanged);
     connect(d->saveBackups, &CheckBox::checkedChanged, this,
@@ -2646,6 +2651,11 @@ void SettingsView::setApplicationScaleFactor(qreal _scaleFactor)
     d->scaleFactor->setValue((_scaleFactor - 0.5) * 1000.0);
 }
 
+void SettingsView::setApplicationCompact(bool _isCompact)
+{
+    d->isCompact->setChecked(_isCompact);
+}
+
 void SettingsView::setApplicationUseAutoSave(bool _use)
 {
     d->autoSave->setChecked(_use);
@@ -3179,6 +3189,7 @@ void SettingsView::updateTranslations()
     d->scaleFactorTitle->setText(tr("Size of the user interface elements:"));
     d->scaleFactorSmallInfo->setText(tr("small"));
     d->scaleFactorBigInfo->setText(tr("big"));
+    d->isCompact->setText(tr("Make application interface compact"));
     d->applicationSaveAndBackupTitle->setText(tr("Save changes & backups"));
     d->autoSave->setText(tr("Automatically save changes as soon as possible"));
     d->autoSave->setToolTip(
@@ -3628,6 +3639,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto checkBox : {
+             d->isCompact,
              d->autoSave,
              d->saveBackups,
              //

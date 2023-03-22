@@ -196,7 +196,7 @@ public:
         qreal buttonsSpacing() const;
 
     private:
-        explicit Layout(qreal _scaleFactor);
+        explicit Layout(qreal _scaleFactor, bool _isCompact = false);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -945,9 +945,10 @@ public:
         const QMarginsF& margins() const;
 
         /**
-         * @brief Высота элемента без основной иконки
+         * @brief Высота элемента
          */
         qreal height() const;
+        qreal contentHeight() const;
 
         /**
          * @brief Отступ между иконкой и текстом
@@ -961,7 +962,7 @@ public:
         const QSizeF& avatarSize() const;
 
     private:
-        explicit TreeOneLineItem(qreal _scaleFactor);
+        explicit TreeOneLineItem(qreal _scaleFactor, bool _isCompact);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -1234,6 +1235,16 @@ public:
     static void setScaleFactor(qreal _scaleFactor);
 
     /**
+     * @brief Используется ли компактный режим интерфейса
+     */
+    static bool isCompact();
+
+    /**
+     * @brief Задать компактный режим интерфейса
+     */
+    static void setCompact(bool _isCompact);
+
+    /**
      * @brief Отступы у страниц
      */
     static QMarginsF pageMargins();
@@ -1293,6 +1304,7 @@ public:
      * @brief Параметры компоновки
      */
     static const Layout& layout();
+    static const Layout& compactLayout();
 
     /**
      * @brief Параметры панели инструментов приложения

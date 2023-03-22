@@ -64,7 +64,7 @@ void BookmarkDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _op
         //
         // ... для остальных элементов
         //
-        textColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
+        textColor.setAlphaF(DesignSystem::inactiveTextOpacity());
     }
     _painter->fillRect(backgroundRect, backgroundColor);
 
@@ -83,13 +83,13 @@ void BookmarkDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _op
                     ++level;
                     index = index.parent();
                 }
-                return level * Ui::DesignSystem::tree().indicatorWidth();
+                return level * DesignSystem::tree().indicatorWidth();
             };
             const auto backgroundRect = _option.rect;
             itemColorRect = QRectF(isLeftToRight ? 0.0
                                                  : (backgroundRect.right() + fullIndicatorWidth()
-                                                    - Ui::DesignSystem::layout().px4()),
-                                   backgroundRect.top(), Ui::DesignSystem::layout().px4(),
+                                                    - DesignSystem::layout().px4()),
+                                   backgroundRect.top(), DesignSystem::layout().px4(),
                                    backgroundRect.height());
             _painter->fillRect(itemColorRect, color);
         }
@@ -98,18 +98,17 @@ void BookmarkDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _op
     //
     // ... заголовок
     //
-    _painter->setFont(Ui::DesignSystem::font().subtitle2());
+    _painter->setFont(DesignSystem::font().subtitle2());
     _painter->setPen(textColor);
-    const qreal textLeft = isLeftToRight
-        ? (itemColorRect.right() + Ui::DesignSystem::layout().px16())
-        : Ui::DesignSystem::layout().px12();
+    const qreal textLeft = isLeftToRight ? (itemColorRect.right() + DesignSystem::layout().px16())
+                                         : DesignSystem::treeOneLineItem().margins().left();
     const qreal textWidth = isLeftToRight
-        ? (backgroundRect.right() - textLeft - Ui::DesignSystem::layout().px12())
-        : (backgroundRect.right() + Ui::DesignSystem::tree().indicatorWidth() - textLeft
-           - itemColorRect.width() - Ui::DesignSystem::layout().px16());
+        ? (backgroundRect.right() - textLeft - DesignSystem::treeOneLineItem().margins().right())
+        : (backgroundRect.right() + DesignSystem::tree().indicatorWidth() - textLeft
+           - itemColorRect.width() - DesignSystem::treeOneLineItem().margins().right());
     const QRectF headingRect(
-        QPointF(textLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-        QSizeF(textWidth, Ui::DesignSystem::treeOneLineItem().iconSize().height()));
+        QPointF(textLeft, backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()),
+        QSizeF(textWidth, DesignSystem::treeOneLineItem().contentHeight()));
     auto header
         = TextHelper::smartToUpper(_index.data(BookmarksModel::BookmarkItemTextRole).toString());
     header = _painter->fontMetrics().elidedText(header, Qt::ElideRight,
@@ -122,11 +121,11 @@ void BookmarkDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _op
     const auto bookmarkName = _index.data(BookmarksModel::BookmarkNameRole).toString();
     if (!bookmarkName.isEmpty()) {
         const QRectF bookamrkNameRect(
-            QPointF(headingRect.left(), headingRect.bottom() + Ui::DesignSystem::layout().px4()),
+            QPointF(headingRect.left(), headingRect.bottom() + DesignSystem::compactLayout().px8()),
             QSizeF(headingRect.width(),
-                   TextHelper::heightForWidth(bookmarkName, Ui::DesignSystem::font().body2(),
+                   TextHelper::heightForWidth(bookmarkName, DesignSystem::font().body2(),
                                               headingRect.width())));
-        _painter->setFont(Ui::DesignSystem::font().body2());
+        _painter->setFont(DesignSystem::font().body2());
         _painter->setPen(textColor);
         QTextOption commentTextOption;
         commentTextOption.setAlignment(isLeftToRight ? Qt::AlignLeft : Qt::AlignRight);
@@ -147,31 +146,18 @@ QSize BookmarkDelegate::sizeHint(const QStyleOptionViewItem& _option,
     if (const QAbstractItemView* view = qobject_cast<const QAbstractItemView*>(_option.widget)) {
         width = view->viewport()->width();
     }
-    width -= Ui::DesignSystem::layout().px8() + Ui::DesignSystem::layout().px16()
-        + Ui::DesignSystem::layout().px16();
+    width -= DesignSystem::layout().px8() + DesignSystem::layout().px16()
+        + DesignSystem::layout().px16();
 
     //
     // Считаем высоту
     //
     const auto bookmarkName = _index.data(BookmarksModel::BookmarkNameRole).toString();
-    //
-    // ... высота заголовка: отступ сверху + высота иконки + отступ снизу
-    //
-    const int headerHeight = Ui::DesignSystem::layout().px16()
-        + Ui::DesignSystem::treeOneLineItem().iconSize().height()
-        + Ui::DesignSystem::layout().px16();
-    //
-    // ... высота без комментария
-    //
-    if (bookmarkName.isEmpty()) {
-        return { width, headerHeight };
+    int height = DesignSystem::treeOneLineItem().height();
+    if (!bookmarkName.isEmpty()) {
+        height += DesignSystem::compactLayout().px8()
+            + TextHelper::heightForWidth(bookmarkName, DesignSystem::font().body2(), width);
     }
-    //
-    // ... полная высота
-    //
-    int height = headerHeight + Ui::DesignSystem::layout().px12()
-        + TextHelper::heightForWidth(bookmarkName, Ui::DesignSystem::font().body2(), width);
-
     return { width, height };
 }
 

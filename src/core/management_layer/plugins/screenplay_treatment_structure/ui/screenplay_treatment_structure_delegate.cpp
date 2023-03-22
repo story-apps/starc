@@ -104,19 +104,19 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintItemColor(
             ++level;
             index = index.parent();
         }
-        return level * Ui::DesignSystem::tree().indicatorWidth();
+        return level * DesignSystem::tree().indicatorWidth();
     };
     const auto backgroundRect = _option.rect;
     auto lastX = QLocale().textDirection() == Qt::LeftToRight
         ? 0.0
-        : (backgroundRect.right() + fullIndicatorWidth() - Ui::DesignSystem::layout().px(5));
+        : (backgroundRect.right() + fullIndicatorWidth() - DesignSystem::layout().px(5));
     for (const auto& color : colors) {
-        const QRectF colorRect(lastX, backgroundRect.top(), Ui::DesignSystem::layout().px(5),
+        const QRectF colorRect(lastX, backgroundRect.top(), DesignSystem::layout().px(5),
                                backgroundRect.height());
         _painter->fillRect(colorRect, color);
 
         lastX += (QLocale().textDirection() == Qt::LeftToRight ? 1 : -1)
-            * Ui::DesignSystem::layout().px(7);
+            * DesignSystem::layout().px(7);
     }
 }
 
@@ -152,7 +152,7 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintFolder(
         //
         // ... для остальных элементов
         //
-        textColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
+        textColor.setAlphaF(DesignSystem::inactiveTextOpacity());
     }
     _painter->fillRect(backgroundRect, backgroundColor);
 
@@ -168,23 +168,19 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintFolder(
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
         if (isLeftToRight) {
-            iconRect = QRectF(
-                QPointF(std::max(backgroundRect.left(),
-                                 Ui::DesignSystem::treeOneLineItem().margins().left()),
-                        backgroundRect.top()),
-                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                       Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
-                           + Ui::DesignSystem::layout().px16()));
-        } else {
-            iconRect = QRectF(QPointF(backgroundRect.right()
-                                          - Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+            iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
+                                               DesignSystem::treeOneLineItem().margins().left()),
                                       backgroundRect.top()),
-                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                                     Ui::DesignSystem::layout().px16()
-                                         + Ui::DesignSystem::layout().px24()
-                                         + Ui::DesignSystem::layout().px16()));
+                              QSizeF(DesignSystem::treeOneLineItem().iconSize().width(),
+                                     DesignSystem::treeOneLineItem().height()));
+        } else {
+            iconRect = QRectF(
+                QPointF(backgroundRect.right() - DesignSystem::treeOneLineItem().iconSize().width(),
+                        backgroundRect.top()),
+                QSizeF(DesignSystem::treeOneLineItem().iconSize().width(),
+                       DesignSystem::treeOneLineItem().height()));
         }
-        _painter->setFont(Ui::DesignSystem::font().iconsMid());
+        _painter->setFont(DesignSystem::font().iconsMid());
         _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignVCenter,
                            _index.data(Qt::DecorationRole).toString());
     }
@@ -192,25 +188,22 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintFolder(
     //
     // ... название папки
     //
-    _painter->setFont(Ui::DesignSystem::font().subtitle2());
+    _painter->setFont(DesignSystem::font().subtitle2());
     _painter->setPen(textColor);
-    QRectF headingRect;
+    qreal headingLeft = 0.0;
+    qreal headingWidth = 0.0;
     if (isLeftToRight) {
-        const qreal headingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-        const qreal headingWidth = backgroundRect.right()
-            - Ui::DesignSystem::treeOneLineItem().margins().right() - headingLeft
-            - Ui::DesignSystem::treeOneLineItem().spacing();
-        headingRect
-            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+        headingLeft = iconRect.right() + DesignSystem::treeOneLineItem().spacing();
+        headingWidth = backgroundRect.right() - DesignSystem::treeOneLineItem().margins().right()
+            - headingLeft - DesignSystem::treeOneLineItem().spacing();
     } else {
-        const qreal headingLeft
-            = backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
-        const qreal headingWidth = iconRect.left() - headingLeft;
-        headingRect
-            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+        headingLeft = backgroundRect.left() + DesignSystem::treeOneLineItem().margins().left();
+        headingWidth = iconRect.left() - headingLeft;
     }
+    const QRectF headingRect(
+        QPointF(headingLeft,
+                backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()),
+        QSizeF(headingWidth, DesignSystem::treeOneLineItem().contentHeight()));
     const auto folderName = _painter->fontMetrics().elidedText(
         _index.data(TextModelFolderItem::FolderHeadingRole).toString(), Qt::ElideRight,
         static_cast<int>(headingRect.width()));
@@ -249,7 +242,7 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintScene(
         //
         // ... для остальных элементов
         //
-        textColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
+        textColor.setAlphaF(DesignSystem::inactiveTextOpacity());
     }
     _painter->fillRect(backgroundRect, backgroundColor);
 
@@ -265,23 +258,19 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintScene(
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
         if (isLeftToRight) {
-            iconRect = QRectF(
-                QPointF(std::max(backgroundRect.left(),
-                                 Ui::DesignSystem::treeOneLineItem().margins().left()),
-                        backgroundRect.top()),
-                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                       Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
-                           + Ui::DesignSystem::layout().px16()));
-        } else {
-            iconRect = QRectF(QPointF(backgroundRect.right()
-                                          - Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+            iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
+                                               DesignSystem::treeOneLineItem().margins().left()),
                                       backgroundRect.top()),
-                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                                     Ui::DesignSystem::layout().px16()
-                                         + Ui::DesignSystem::layout().px24()
-                                         + Ui::DesignSystem::layout().px16()));
+                              QSizeF(DesignSystem::treeOneLineItem().iconSize().width(),
+                                     DesignSystem::treeOneLineItem().height()));
+        } else {
+            iconRect = QRectF(
+                QPointF(backgroundRect.right() - DesignSystem::treeOneLineItem().iconSize().width(),
+                        backgroundRect.top()),
+                QSizeF(DesignSystem::treeOneLineItem().iconSize().width(),
+                       DesignSystem::treeOneLineItem().height()));
         }
-        _painter->setFont(Ui::DesignSystem::font().iconsMid());
+        _painter->setFont(DesignSystem::font().iconsMid());
         _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignVCenter,
                            _index.data(Qt::DecorationRole).toString());
     }
@@ -289,24 +278,21 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintScene(
     //
     // ... заголовок сцены
     //
-    _painter->setFont(Ui::DesignSystem::font().subtitle2());
-    QRectF headingRect;
+    _painter->setFont(DesignSystem::font().subtitle2());
+    qreal headingLeft = 0.0;
+    qreal headingWidth = 0.0;
     if (isLeftToRight) {
-        const qreal headingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-        const qreal headingWidth = backgroundRect.right()
-            - Ui::DesignSystem::treeOneLineItem().margins().right() - headingLeft
-            - Ui::DesignSystem::treeOneLineItem().spacing();
-        headingRect
-            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+        headingLeft = iconRect.right() + DesignSystem::treeOneLineItem().spacing();
+        headingWidth = backgroundRect.right() - DesignSystem::treeOneLineItem().margins().right()
+            - headingLeft - DesignSystem::treeOneLineItem().spacing();
     } else {
-        const qreal headingLeft
-            = backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
-        const qreal headingWidth = iconRect.left() - headingLeft;
-        headingRect
-            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+        headingLeft = backgroundRect.left() + DesignSystem::treeOneLineItem().margins().left();
+        headingWidth = iconRect.left() - headingLeft;
     }
+    const QRectF headingRect(
+        QPointF(headingLeft,
+                backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()),
+        QSizeF(headingWidth, DesignSystem::treeOneLineItem().contentHeight()));
     auto sceneHeading
         = TextHelper::smartToUpper(_index.data(TextModelGroupItem::GroupHeadingRole).toString());
     if (showSceneNumber) {
@@ -349,7 +335,7 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintBeat(
         //
         // ... для остальных элементов
         //
-        textColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
+        textColor.setAlphaF(DesignSystem::inactiveTextOpacity());
     }
     _painter->fillRect(backgroundRect, backgroundColor);
 
@@ -365,23 +351,19 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintBeat(
     QRectF iconRect;
     if (_index.data(Qt::DecorationRole).isValid()) {
         if (isLeftToRight) {
-            iconRect = QRectF(
-                QPointF(std::max(backgroundRect.left(),
-                                 Ui::DesignSystem::treeOneLineItem().margins().left()),
-                        backgroundRect.top()),
-                QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                       Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
-                           + Ui::DesignSystem::layout().px16()));
-        } else {
-            iconRect = QRectF(QPointF(backgroundRect.right()
-                                          - Ui::DesignSystem::treeOneLineItem().iconSize().width(),
+            iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
+                                               DesignSystem::treeOneLineItem().margins().left()),
                                       backgroundRect.top()),
-                              QSizeF(Ui::DesignSystem::treeOneLineItem().iconSize().width(),
-                                     Ui::DesignSystem::layout().px16()
-                                         + Ui::DesignSystem::layout().px24()
-                                         + Ui::DesignSystem::layout().px16()));
+                              QSizeF(DesignSystem::treeOneLineItem().iconSize().width(),
+                                     DesignSystem::treeOneLineItem().height()));
+        } else {
+            iconRect = QRectF(
+                QPointF(backgroundRect.right() - DesignSystem::treeOneLineItem().iconSize().width(),
+                        backgroundRect.top()),
+                QSizeF(DesignSystem::treeOneLineItem().iconSize().width(),
+                       DesignSystem::treeOneLineItem().height()));
         }
-        _painter->setFont(Ui::DesignSystem::font().iconsMid());
+        _painter->setFont(DesignSystem::font().iconsMid());
         _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignVCenter,
                            _index.data(Qt::DecorationRole).toString());
     }
@@ -389,25 +371,22 @@ void ScreenplayTreatmentStructureDelegate::Implementation::paintBeat(
     //
     // ... текст элемента
     //
-    _painter->setFont(Ui::DesignSystem::font().subtitle2());
+    _painter->setFont(DesignSystem::font().subtitle2());
     _painter->setPen(textColor);
-    QRectF headingRect;
+    qreal headingLeft = 0.0;
+    qreal headingWidth = 0.0;
     if (isLeftToRight) {
-        const qreal headingLeft = iconRect.right() + Ui::DesignSystem::layout().px4();
-        const qreal headingWidth = backgroundRect.right()
-            - Ui::DesignSystem::treeOneLineItem().margins().right() - headingLeft
-            - Ui::DesignSystem::treeOneLineItem().spacing();
-        headingRect
-            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+        headingLeft = iconRect.right() + DesignSystem::treeOneLineItem().spacing();
+        headingWidth = backgroundRect.right() - DesignSystem::treeOneLineItem().margins().right()
+            - headingLeft - DesignSystem::treeOneLineItem().spacing();
     } else {
-        const qreal headingLeft
-            = backgroundRect.left() + Ui::DesignSystem::treeOneLineItem().margins().left();
-        const qreal headingWidth = iconRect.left() - headingLeft;
-        headingRect
-            = QRectF(QPointF(headingLeft, backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-                     QSizeF(headingWidth, Ui::DesignSystem::layout().px24()));
+        headingLeft = backgroundRect.left() + DesignSystem::treeOneLineItem().margins().left();
+        headingWidth = iconRect.left() - headingLeft - DesignSystem::treeOneLineItem().spacing();
     }
+    const QRectF headingRect(
+        QPointF(headingLeft,
+                backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()),
+        QSizeF(headingWidth, DesignSystem::treeOneLineItem().contentHeight()));
     const auto heading = _painter->fontMetrics().elidedText(
         TextHelper::smartToUpper(_index.data(TextModelGroupItem::GroupHeadingRole).toString()),
         Qt::ElideRight, static_cast<int>(headingRect.width()));
@@ -426,15 +405,14 @@ QSize ScreenplayTreatmentStructureDelegate::Implementation::folderSizeHint(
     if (const QAbstractItemView* view = qobject_cast<const QAbstractItemView*>(_option.widget)) {
         width = view->viewport()->width();
     }
-    width -= Ui::DesignSystem::layout().px8() + Ui::DesignSystem::layout().px16()
-        + Ui::DesignSystem::layout().px16();
+    width -= DesignSystem::layout().px8() + DesignSystem::layout().px16()
+        + DesignSystem::layout().px16();
 
     //
     // Считаем высоту
     //
-    const QFontMetricsF fontMetrics(Ui::DesignSystem::font().body2());
-    int height = Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24()
-        + Ui::DesignSystem::layout().px16();
+    const QFontMetricsF fontMetrics(DesignSystem::font().body2());
+    int height = DesignSystem::treeOneLineItem().height();
 
     return { width, height };
 }
@@ -451,19 +429,16 @@ QSize ScreenplayTreatmentStructureDelegate::Implementation::sceneSizeHint(
     if (const QAbstractItemView* view = qobject_cast<const QAbstractItemView*>(_option.widget)) {
         width = view->viewport()->width();
     }
-    width -= Ui::DesignSystem::layout().px8() + Ui::DesignSystem::layout().px16()
-        + Ui::DesignSystem::layout().px16();
+    width -= DesignSystem::layout().px8() + DesignSystem::layout().px16()
+        + DesignSystem::layout().px16();
 
     //
     // Считаем высоту
     //
-    int height = Ui::DesignSystem::layout().px16() + Ui::DesignSystem::layout().px24();
+    int height = DesignSystem::treeOneLineItem().height();
     if (textLines > 0) {
-        height += Ui::DesignSystem::layout().px8()
-            + TextHelper::fineLineSpacing(Ui::DesignSystem::font().body2()) * textLines
-            + Ui::DesignSystem::layout().px16();
-    } else {
-        height += Ui::DesignSystem::layout().px16();
+        height += DesignSystem::compactLayout().px8()
+            + TextHelper::fineLineSpacing(DesignSystem::font().body2()) * textLines;
     }
     return { width, height };
 }

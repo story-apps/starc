@@ -46,6 +46,7 @@ public:
     //
     void setApplicationLanguage(int _language);
     void setApplicationScaleFactor(qreal _scaleFactor);
+    void setApplicationCompact(bool _isCompact);
     void setApplicationUseAutoSave(bool _use);
     void setApplicationSaveBackups(bool _save);
     void setApplicationBackupsFolder(const QString& _path);
@@ -167,6 +168,7 @@ signals:
     void applicationThemePressed(Ui::ApplicationTheme _theme);
     void customThemeHashPasted(const DesignSystem::Color& _color);
     void applicationScaleFactorChanged(qreal _scaleFactor);
+    void applicationIsCompactChanged(qreal _isCompact);
     void applicationUseAutoSaveChanged(bool _use);
     void applicationSaveBackupsChanged(bool _save);
     void applicationBackupsFolderChanged(const QString& _path);

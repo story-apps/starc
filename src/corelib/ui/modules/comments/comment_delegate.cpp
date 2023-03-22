@@ -56,8 +56,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     //
     const QRectF backgroundRect = opt.rect;
     const auto backgroundRectRight = backgroundRect.right()
-        + (!isLeftToRight && !m_isSingleCommentMode ? Ui::DesignSystem::tree().indicatorWidth()
-                                                    : 0.0);
+        + (!isLeftToRight && !m_isSingleCommentMode ? DesignSystem::tree().indicatorWidth() : 0.0);
     if (opt.state.testFlag(QStyle::State_Selected)) {
         //
         // ... для выделенных элементов
@@ -73,7 +72,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
         //
         // ... для остальных элементов
         //
-        textColor.setAlphaF(Ui::DesignSystem::inactiveTextOpacity());
+        textColor.setAlphaF(DesignSystem::inactiveTextOpacity());
     }
     _painter->fillRect(backgroundRect, backgroundColor);
 
@@ -81,20 +80,20 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     // ... цвет заметки
     //
     const QRectF colorRect(
-        QPointF(isLeftToRight ? 0.0 : (backgroundRectRight - Ui::DesignSystem::layout().px4()),
+        QPointF(isLeftToRight ? 0.0 : (backgroundRectRight - DesignSystem::layout().px4()),
                 backgroundRect.top()),
-        QSizeF(Ui::DesignSystem::layout().px4(), backgroundRect.height()));
+        QSizeF(DesignSystem::layout().px4(), backgroundRect.height()));
     _painter->fillRect(colorRect, _index.data(CommentsModel::ReviewMarkColorRole).value<QColor>());
 
     //
     // ... аватар
     //
     const QRectF avatarRect(
-        QPointF(isLeftToRight ? (colorRect.right() + Ui::DesignSystem::layout().px16())
-                              : (colorRect.left() - Ui::DesignSystem::layout().px16()
-                                 - Ui::DesignSystem::treeOneLineItem().avatarSize().width()),
-                backgroundRect.top() + Ui::DesignSystem::layout().px16()),
-        Ui::DesignSystem::treeOneLineItem().avatarSize());
+        QPointF(isLeftToRight ? (colorRect.right() + DesignSystem::layout().px16())
+                              : (colorRect.left() - DesignSystem::layout().px16()
+                                 - DesignSystem::treeOneLineItem().avatarSize().width()),
+                backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()),
+        DesignSystem::treeOneLineItem().avatarSize());
     const auto avatar
         = AvatarGenerator::avatar(_index.data(CommentsModel::ReviewMarkAuthorNameRole).toString(),
                                   _index.data(CommentsModel::ReviewMarkAuthorEmailRole).toString());
@@ -110,16 +109,17 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
         // ... в режиме единичного комментария также рисуем крестик, который будет закрывать
         // представление с комментарием
         //
-        const QSizeF iconSize = Ui::DesignSystem::treeOneLineItem().iconSize();
-        doneIconRect = QRectF(
-            QPointF(isLeftToRight ? (backgroundRectRight - iconSize.width()
-                                     - Ui::DesignSystem::layout().px12())
-                                  : (backgroundRect.left() + Ui::DesignSystem::layout().px12()),
-                    backgroundRect.top() + Ui::DesignSystem::layout().px16()
-                        + Ui::DesignSystem::layout().px4()),
-            iconSize);
-        _painter->setFont(Ui::DesignSystem::font().iconsMid());
-        _painter->setPen(m_isSingleCommentMode ? textColor : Ui::DesignSystem::color().accent());
+        const QSizeF iconSize = DesignSystem::treeOneLineItem().iconSize();
+        doneIconRect
+            = QRectF(QPointF(isLeftToRight ? (backgroundRectRight - iconSize.width()
+                                              - DesignSystem::treeOneLineItem().margins().right())
+                                           : (backgroundRect.left()
+                                              + DesignSystem::treeOneLineItem().margins().left()),
+                             backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()
+                                 + (avatarRect.height() - iconSize.height()) / 2.0),
+                     iconSize);
+        _painter->setFont(DesignSystem::font().iconsMid());
+        _painter->setPen(m_isSingleCommentMode ? textColor : DesignSystem::color().accent());
         _painter->drawText(doneIconRect, Qt::AlignCenter,
                            m_isSingleCommentMode ? u8"\U000f0156" : u8"\U000F012C");
         if (m_isSingleCommentMode && done) {
@@ -128,7 +128,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
             } else {
                 doneIconRect.moveLeft(doneIconRect.right());
             }
-            _painter->setPen(Ui::DesignSystem::color().accent());
+            _painter->setPen(DesignSystem::color().accent());
             _painter->drawText(doneIconRect, Qt::AlignCenter, u8"\U000F012C");
         }
     }
@@ -136,15 +136,16 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     //
     // ... пользователь
     //
-    _painter->setFont(Ui::DesignSystem::font().subtitle2());
+    _painter->setFont(DesignSystem::font().subtitle2());
     _painter->setPen(textColor);
-    const qreal textLeft = isLeftToRight ? (avatarRect.right() + Ui::DesignSystem::layout().px12())
-                                         : ((doneIconRect.isEmpty() ? 0.0 : doneIconRect.right())
-                                            + Ui::DesignSystem::layout().px12());
+    const qreal textLeft = isLeftToRight
+        ? (avatarRect.right() + DesignSystem::treeOneLineItem().spacing())
+        : ((doneIconRect.isEmpty() ? 0.0 : doneIconRect.right())
+           + DesignSystem::treeOneLineItem().spacing());
     const qreal textWidth = isLeftToRight
         ? ((doneIconRect.isEmpty() ? backgroundRectRight : doneIconRect.left()) - textLeft
-           - Ui::DesignSystem::layout().px12())
-        : (avatarRect.left() - textLeft - Ui::DesignSystem::layout().px12());
+           - DesignSystem::treeOneLineItem().spacing())
+        : (avatarRect.left() - textLeft - DesignSystem::treeOneLineItem().spacing());
     const QRectF textRect(QPointF(textLeft, avatarRect.top()),
                           QSizeF(textWidth, avatarRect.height() / 2));
     const auto text = _painter->fontMetrics().elidedText(
@@ -154,7 +155,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     //
     // ... дата
     //
-    _painter->setPen(ColorHelper::transparent(textColor, Ui::DesignSystem::disabledTextOpacity()));
+    _painter->setPen(ColorHelper::transparent(textColor, DesignSystem::disabledTextOpacity()));
     const QRectF dateRect(textRect.bottomLeft(), textRect.size());
     const auto date = _index.data(CommentsModel::ReviewMarkCreationDateRole).toDateTime();
     auto dateText = _painter->fontMetrics().elidedText(date.toString("HH:mm d MMM"), Qt::ElideRight,
@@ -170,28 +171,30 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     const auto comment = _index.data(CommentsModel::ReviewMarkCommentRole).toString();
     QRectF commentRect;
     if (m_isSingleCommentMode || !done) {
-        const auto commentWidth = (backgroundRectRight)-Ui::DesignSystem::layout().px16()
-            - Ui::DesignSystem::layout().px16() - Ui::DesignSystem::layout().px8();
+        const auto commentWidth = backgroundRectRight - colorRect.width()
+            - DesignSystem::layout().px16() - DesignSystem::treeOneLineItem().margins().right();
         if (!comment.isEmpty()) {
             commentRect = QRectF(
                 QPointF(isLeftToRight ? avatarRect.left()
-                                      : (backgroundRect.left() + Ui::DesignSystem::layout().px16()),
-                        avatarRect.bottom() + Ui::DesignSystem::layout().px12()),
+                                      : (backgroundRect.left()
+                                         + DesignSystem::treeOneLineItem().margins().left()),
+                        avatarRect.bottom() + DesignSystem::compactLayout().px8()),
                 QSizeF(commentWidth,
-                       TextHelper::heightForWidth(comment, Ui::DesignSystem::font().body2(),
+                       TextHelper::heightForWidth(comment, DesignSystem::font().body2(),
                                                   commentWidth)));
-            _painter->setFont(Ui::DesignSystem::font().body2());
+            _painter->setFont(DesignSystem::font().body2());
             _painter->setPen(textColor);
             QTextOption commentTextOption;
             commentTextOption.setAlignment(isLeftToRight ? Qt::AlignLeft : Qt::AlignRight);
             commentTextOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
             _painter->drawText(commentRect, comment, commentTextOption);
         } else {
-            commentRect = QRectF(
-                QPointF(isLeftToRight ? avatarRect.left()
-                                      : (backgroundRect.left() + Ui::DesignSystem::layout().px16()),
-                        avatarRect.bottom()),
-                QSizeF(commentWidth, 0));
+            commentRect = QRectF(QPointF(isLeftToRight
+                                             ? avatarRect.left()
+                                             : (backgroundRect.left()
+                                                + DesignSystem::treeOneLineItem().margins().left()),
+                                         avatarRect.bottom() + DesignSystem::compactLayout().px8()),
+                                 QSizeF(commentWidth, 0));
         }
     }
 
@@ -200,154 +203,152 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     //
     const auto comments = _index.data(CommentsModel::ReviewMarkRepliesRole)
                               .value<QVector<BusinessLayer::TextModelTextItem::ReviewComment>>();
-    if (!m_isSingleCommentMode && comments.size() > 1 && !done) {
-        const auto avatarSize = Ui::DesignSystem::treeOneLineItem().iconSize();
-        //
-        // ... суммарная информация
-        //
-        QRectF summaryRect;
-        if (comments.size() > 2) {
-            summaryRect = QRectF(commentRect.left(),
-                                 commentRect.bottom() + Ui::DesignSystem::layout().px16(),
-                                 commentRect.width(), avatarSize.height());
-            //
-            // Формируем список комментарторов
-            //
-            QVector<QPair<QString, QString>> commentators;
-            for (const auto& comment : comments) {
-                if (comment == comments.constFirst() || comment == comments.constLast()) {
-                    continue;
-                }
+    if (m_isSingleCommentMode || comments.size() <= 1 || done) {
+        return;
+    }
 
-                if (!commentators.contains({ comment.author, comment.authorEmail })) {
-                    commentators.append({ comment.author, comment.authorEmail });
-                }
-
-                if (commentators.size() == 3) {
-                    break;
-                }
+    const auto avatarSize = DesignSystem::treeOneLineItem().iconSize();
+    //
+    // ... суммарная информация
+    //
+    QRectF summaryRect;
+    if (comments.size() > 2) {
+        summaryRect = QRectF(commentRect.left(),
+                             commentRect.bottom() + DesignSystem::compactLayout().px12(),
+                             commentRect.width(), avatarSize.height());
+        //
+        // Формируем список комментарторов
+        //
+        QVector<QPair<QString, QString>> commentators;
+        for (const auto& comment : comments) {
+            if (comment == comments.constFirst() || comment == comments.constLast()) {
+                continue;
             }
 
-            //
-            // Рисуем авки комментаторов
-            //
-            const auto avatarsDistance = avatarSize.width() * 0.7;
-            auto avatarXDelta = DesignSystem::layout().px12();
-            QRectF avatarRect;
-            for (const auto& commentator : commentators) {
-                avatarRect
-                    = QRectF(isLeftToRight ? (summaryRect.topLeft() + QPointF(avatarXDelta, 0.0))
-                                           : (summaryRect.topRight()
-                                              - QPointF(avatarXDelta + avatarSize.width(), 0.0)),
-                             avatarSize);
-                if (commentator != commentators.constFirst()) {
-                    QPainterPath path;
-                    const QPointF clipDelta(Ui::DesignSystem::layout().px2(), 0.0);
-                    if (isLeftToRight) {
-                        path.moveTo(avatarRect.topLeft() + clipDelta);
-                        path.lineTo(avatarRect.topRight() + clipDelta);
-                        path.lineTo(avatarRect.bottomRight() + clipDelta);
-                        path.lineTo(avatarRect.bottomLeft() + clipDelta);
-                        path.quadTo(avatarRect.center() + clipDelta * 2,
-                                    avatarRect.topLeft() + clipDelta);
-                    } else {
-                        path.lineTo(avatarRect.topRight() - clipDelta);
-                        path.moveTo(avatarRect.topLeft() - clipDelta);
-                        path.lineTo(avatarRect.bottomLeft() - clipDelta);
-                        path.lineTo(avatarRect.bottomRight() - clipDelta);
-                        path.quadTo(avatarRect.center() - clipDelta * 2,
-                                    avatarRect.topRight() - clipDelta);
-                    }
-                }
-                const auto avatar = AvatarGenerator::avatar(commentator.first, commentator.second);
-                _painter->drawPixmap(avatarRect, avatar, avatar.rect());
-                avatarXDelta += avatarsDistance;
+            if (!commentators.contains({ comment.author, comment.authorEmail })) {
+                commentators.append({ comment.author, comment.authorEmail });
             }
 
-            //
-            // Суммарная информация по количеству комментариев
-            //
-            const QRectF commentsSummaryRect(
-                isLeftToRight ? (avatarRect.right() + Ui::DesignSystem::layout().px12())
-                              : Ui::DesignSystem::layout().px12(),
-                avatarRect.top(),
-                (isLeftToRight ? (summaryRect.right() - avatarRect.right()) : avatarRect.left())
-                    - Ui::DesignSystem::layout().px24(),
-                avatarRect.height());
-            _painter->drawText(commentsSummaryRect, Qt::AlignVCenter | Qt::AlignLeft,
-                               tr("%n reply(s)", "", comments.size() - 2));
+            if (commentators.size() == 3) {
+                break;
+            }
         }
 
         //
-        // ... последний ответ
+        // Рисуем авки комментаторов
         //
-        const auto lastComment = comments.constLast();
-        QRectF lastCommentAvatarRect(
-            QPointF(isLeftToRight ? (commentRect.left() + Ui::DesignSystem::layout().px12())
-                                  : (commentRect.right() - avatarSize.width()
-                                     - Ui::DesignSystem::layout().px12()),
-                    (summaryRect.isEmpty() ? commentRect.bottom() : summaryRect.bottom())
-                        + Ui::DesignSystem::layout().px16()),
-            avatarSize);
-
-        _painter->setFont(Ui::DesignSystem::font().subtitle2());
-        const auto titleFontLineSpacing = TextHelper::fineLineSpacing(_painter->font());
-        const auto maximumTextWidth
-            = (isLeftToRight ? (commentRect.right() - lastCommentAvatarRect.right())
-                             : (lastCommentAvatarRect.left() - commentRect.left()))
-            - Ui::DesignSystem::layout().px24() // марджины текста от балуна
-            - Ui::DesignSystem::layout().px12();
-        const auto lastCommentTextWidth
-            = std::max(std::min(maximumTextWidth,
-                                TextHelper::fineTextWidthF(lastComment.text,
-                                                           Ui::DesignSystem::font().body2())),
-                       TextHelper::fineTextWidthF(lastComment.author, _painter->font()));
-        const auto lastCommentTextHeight = TextHelper::heightForWidth(
-            lastComment.text, Ui::DesignSystem::font().body2(), lastCommentTextWidth);
-        const auto lastCommentHeightDelta = titleFontLineSpacing + Ui::DesignSystem::layout().px4();
-        const auto lastCommentWidth = lastCommentTextWidth + Ui::DesignSystem::layout().px24();
-        const auto lastCommentHeight = lastCommentTextHeight + Ui::DesignSystem::layout().px24();
-        const QRectF lastCommentRect(
-            (isLeftToRight
-                 ? (lastCommentAvatarRect.right() + Ui::DesignSystem::layout().px12())
-                 : (lastCommentAvatarRect.left() - commentRect.left() - lastCommentWidth)),
-            lastCommentAvatarRect.top(), lastCommentWidth,
-            lastCommentHeight + lastCommentHeightDelta);
-        const QRectF lastCommentTextRect = lastCommentRect.adjusted(
-            Ui::DesignSystem::layout().px12(),
-            Ui::DesignSystem::layout().px12() + lastCommentHeightDelta,
-            -Ui::DesignSystem::layout().px12(), -Ui::DesignSystem::layout().px12());
-        _painter->setPen(Qt::NoPen);
-        _painter->setBrush(ColorHelper::nearby(backgroundColor));
-        _painter->drawRoundedRect(lastCommentRect, Ui::DesignSystem::card().borderRadius(),
-                                  Ui::DesignSystem::card().borderRadius());
-        _painter->setPen(textColor);
-        QTextOption commentTextOption;
-        commentTextOption.setAlignment(isLeftToRight ? Qt::AlignLeft : Qt::AlignRight);
-        _painter->drawText(QRectF(QPointF(lastCommentTextRect.left(),
-                                          lastCommentRect.top() + Ui::DesignSystem::layout().px8()),
-                                  QSizeF(lastCommentTextRect.width(), titleFontLineSpacing)),
-                           lastComment.author, commentTextOption);
-        _painter->setFont(Ui::DesignSystem::font().body2());
-        _painter->setPen(textColor);
-        commentTextOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
-        _painter->drawText(lastCommentTextRect, lastComment.text, commentTextOption);
-
-        lastCommentAvatarRect.moveBottom(lastCommentRect.bottom());
-        const auto avatar = AvatarGenerator::avatar(lastComment.author, lastComment.authorEmail);
-        _painter->drawPixmap(lastCommentAvatarRect, avatar, avatar.rect());
+        const auto avatarsDistance = avatarSize.width() * 0.7;
+        auto avatarXDelta = DesignSystem::layout().px12();
+        QRectF avatarRect;
+        for (const auto& commentator : commentators) {
+            avatarRect = QRectF(isLeftToRight ? (summaryRect.topLeft() + QPointF(avatarXDelta, 0.0))
+                                              : (summaryRect.topRight()
+                                                 - QPointF(avatarXDelta + avatarSize.width(), 0.0)),
+                                avatarSize);
+            if (commentator != commentators.constFirst()) {
+                QPainterPath path;
+                const QPointF clipDelta(DesignSystem::layout().px2(), 0.0);
+                if (isLeftToRight) {
+                    path.moveTo(avatarRect.topLeft() + clipDelta);
+                    path.lineTo(avatarRect.topRight() + clipDelta);
+                    path.lineTo(avatarRect.bottomRight() + clipDelta);
+                    path.lineTo(avatarRect.bottomLeft() + clipDelta);
+                    path.quadTo(avatarRect.center() + clipDelta * 2,
+                                avatarRect.topLeft() + clipDelta);
+                } else {
+                    path.lineTo(avatarRect.topRight() - clipDelta);
+                    path.moveTo(avatarRect.topLeft() - clipDelta);
+                    path.lineTo(avatarRect.bottomLeft() - clipDelta);
+                    path.lineTo(avatarRect.bottomRight() - clipDelta);
+                    path.quadTo(avatarRect.center() - clipDelta * 2,
+                                avatarRect.topRight() - clipDelta);
+                }
+            }
+            const auto avatar = AvatarGenerator::avatar(commentator.first, commentator.second);
+            _painter->drawPixmap(avatarRect, avatar, avatar.rect());
+            avatarXDelta += avatarsDistance;
+        }
 
         //
-        // ... декорация слева
+        // Суммарная информация по количеству комментариев
         //
-        _painter->setPen(QPen(textColor, Ui::DesignSystem::scaleFactor()));
-        _painter->setOpacity(Ui::DesignSystem::focusBackgroundOpacity());
-        _painter->drawLine(QPointF(isLeftToRight ? commentRect.left() : commentRect.right(),
-                                   commentRect.bottom() + Ui::DesignSystem::layout().px16()),
-                           QPointF(isLeftToRight ? commentRect.left() : commentRect.right(),
-                                   lastCommentRect.bottom()));
-        _painter->setOpacity(1.0);
+        const QRectF commentsSummaryRect(
+            isLeftToRight ? (avatarRect.right() + DesignSystem::treeOneLineItem().spacing())
+                          : DesignSystem::treeOneLineItem().spacing(),
+            avatarRect.top(),
+            (isLeftToRight ? (summaryRect.right() - avatarRect.right()) : avatarRect.left())
+                - DesignSystem::layout().px24(),
+            avatarRect.height());
+        _painter->drawText(commentsSummaryRect, Qt::AlignVCenter | Qt::AlignLeft,
+                           tr("%n reply(s)", "", comments.size() - 2));
     }
+
+    //
+    // ... последний ответ
+    //
+    const auto lastComment = comments.constLast();
+    QRectF lastCommentAvatarRect(
+        QPointF(isLeftToRight
+                    ? (commentRect.left() + DesignSystem::layout().px12())
+                    : (commentRect.right() - avatarSize.width() - DesignSystem::layout().px12()),
+                (summaryRect.isEmpty() ? commentRect.bottom() : summaryRect.bottom())
+                    + DesignSystem::compactLayout().px12()),
+        avatarSize);
+
+    _painter->setFont(DesignSystem::font().subtitle2());
+    const auto titleFontLineSpacing = TextHelper::fineLineSpacing(_painter->font());
+    const auto maximumTextWidth
+        = (isLeftToRight ? (commentRect.right() - lastCommentAvatarRect.right())
+                         : (lastCommentAvatarRect.left() - commentRect.left()))
+        - DesignSystem::compactLayout().px24() // марджины текста от балуна
+        - DesignSystem::treeOneLineItem().spacing();
+    const auto lastCommentTextWidth = std::max(
+        std::min(maximumTextWidth,
+                 TextHelper::fineTextWidthF(lastComment.text, DesignSystem::font().body2())),
+        TextHelper::fineTextWidthF(lastComment.author, _painter->font()));
+    const auto lastCommentTextHeight = TextHelper::heightForWidth(
+        lastComment.text, DesignSystem::font().body2(), lastCommentTextWidth);
+    const auto lastCommentHeightDelta = titleFontLineSpacing + DesignSystem::compactLayout().px4();
+    const auto lastCommentWidth = lastCommentTextWidth + DesignSystem::compactLayout().px24();
+    const auto lastCommentHeight = lastCommentTextHeight + DesignSystem::compactLayout().px24();
+    const QRectF lastCommentRect(
+        (isLeftToRight ? (lastCommentAvatarRect.right() + DesignSystem::treeOneLineItem().spacing())
+                       : (lastCommentAvatarRect.left() - commentRect.left() - lastCommentWidth)),
+        lastCommentAvatarRect.top(), lastCommentWidth, lastCommentHeight + lastCommentHeightDelta);
+    const QRectF lastCommentTextRect = lastCommentRect.adjusted(
+        DesignSystem::compactLayout().px12(),
+        DesignSystem::compactLayout().px12() + lastCommentHeightDelta,
+        -DesignSystem::compactLayout().px12(), -DesignSystem::compactLayout().px12());
+    _painter->setPen(Qt::NoPen);
+    _painter->setBrush(ColorHelper::nearby(backgroundColor));
+    _painter->drawRoundedRect(lastCommentRect, DesignSystem::card().borderRadius(),
+                              DesignSystem::card().borderRadius());
+    _painter->setPen(textColor);
+    QTextOption commentTextOption;
+    commentTextOption.setAlignment(isLeftToRight ? Qt::AlignLeft : Qt::AlignRight);
+    _painter->drawText(QRectF(QPointF(lastCommentTextRect.left(),
+                                      lastCommentRect.top() + DesignSystem ::compactLayout().px8()),
+                              QSizeF(lastCommentTextRect.width(), titleFontLineSpacing)),
+                       lastComment.author, commentTextOption);
+    _painter->setFont(DesignSystem::font().body2());
+    _painter->setPen(textColor);
+    commentTextOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    _painter->drawText(lastCommentTextRect, lastComment.text, commentTextOption);
+
+    lastCommentAvatarRect.moveBottom(lastCommentRect.bottom());
+    const auto lastAvatar = AvatarGenerator::avatar(lastComment.author, lastComment.authorEmail);
+    _painter->drawPixmap(lastCommentAvatarRect, lastAvatar, lastAvatar.rect());
+
+    //
+    // ... декорация слева
+    //
+    _painter->setPen(QPen(textColor, DesignSystem::scaleFactor()));
+    _painter->setOpacity(DesignSystem::focusBackgroundOpacity());
+    _painter->drawLine(QPointF(isLeftToRight ? commentRect.left() : commentRect.right(),
+                               commentRect.bottom() + DesignSystem::layout().px16()),
+                       QPointF(isLeftToRight ? commentRect.left() : commentRect.right(),
+                               lastCommentRect.bottom()));
+    _painter->setOpacity(1.0);
 }
 
 QSize CommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
@@ -360,8 +361,6 @@ QSize CommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
     if (const QAbstractItemView* view = qobject_cast<const QAbstractItemView*>(_option.widget)) {
         width = view->viewport()->width();
     }
-    width -= Ui::DesignSystem::layout().px8() + Ui::DesignSystem::layout().px16()
-        + Ui::DesignSystem::layout().px16();
 
     //
     // Считаем высоту
@@ -375,9 +374,9 @@ QSize CommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
     //
     // ... высота заголовка: отступ сверху + высота аватара + отступ снизу
     //
-    const int headerHeight = Ui::DesignSystem::layout().px16()
-        + Ui::DesignSystem::treeOneLineItem().avatarSize().height()
-        + Ui::DesignSystem::layout().px16();
+    const int headerHeight = DesignSystem::treeOneLineItem().margins().top()
+        + DesignSystem::treeOneLineItem().avatarSize().height()
+        + DesignSystem::treeOneLineItem().margins().bottom();
     //
     // ... высота без комментария
     //
@@ -388,39 +387,47 @@ QSize CommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
     //
     // ... полная высота
     //
-    int height = headerHeight
-        + (comment.isEmpty() ? 0.0
-                             : Ui::DesignSystem::layout().px12()
-                   + TextHelper::heightForWidth(comment, Ui::DesignSystem::font().body2(), width));
+    int height = headerHeight;
+    if (!comment.isEmpty()) {
+        //
+        // ... ширина - ширина области цвета - левый отступ (фиксированный) - правое поле
+        //
+        const auto commentWidth = width - DesignSystem::layout().px4()
+            - DesignSystem::layout().px16() - DesignSystem::treeOneLineItem().margins().right();
+        height += DesignSystem::compactLayout().px8()
+            + TextHelper::heightForWidth(comment, DesignSystem::font().body2(), commentWidth);
+    }
     //
     // ... комментарии
     //
     if (!m_isSingleCommentMode) {
         if (comments.size() > 1) {
             if (comments.size() > 2) {
-                height += Ui::DesignSystem::treeOneLineItem().iconSize().height()
-                    + Ui::DesignSystem::layout().px16() * 2;
+                height += DesignSystem::treeOneLineItem().iconSize().height()
+                    + DesignSystem::compactLayout().px12() * 2;
             } else {
-                height += Ui::DesignSystem::layout().px16();
+                height += DesignSystem::compactLayout().px12();
             }
 
-            height += TextHelper::fineLineSpacing(Ui::DesignSystem::font().subtitle2())
-                + Ui::DesignSystem::layout().px4();
+            height += TextHelper::fineLineSpacing(DesignSystem::font().subtitle2())
+                + DesignSystem::compactLayout().px4();
 
             const auto lastComment = comments.constLast();
             const auto maximumTextWidth = width
-                - Ui::DesignSystem::layout().px12() // отступ до декорации коментов
-                - Ui::DesignSystem::treeOneLineItem().iconSize().width() // аватарка
-                - Ui::DesignSystem::layout().px12() // отступ от аватарки
-                - Ui::DesignSystem::layout().px24() // марджины текста от балуна
-                - Ui::DesignSystem::layout().px12(); // отступ до правого края
+                - DesignSystem::layout().px4() // ширина области цвета
+                - DesignSystem::layout().px16() // левый отступ (фиксированный)
+                - DesignSystem::layout().px12() // отступ до декорации коментов
+                - DesignSystem::treeOneLineItem().iconSize().width() // аватарка
+                - DesignSystem::treeOneLineItem().spacing() // отступ от аватарки
+                - DesignSystem::compactLayout().px24() // марджины текста от балуна
+                - DesignSystem::treeOneLineItem().margins().right(); // отступ до правого края
             const auto lastCommentTextWidth = std::min(
                 maximumTextWidth,
-                TextHelper::fineTextWidthF(lastComment.text, Ui::DesignSystem::font().body2()));
+                TextHelper::fineTextWidthF(lastComment.text, DesignSystem::font().body2()));
             const auto lastCommentTextHeight = TextHelper::heightForWidth(
-                lastComment.text, Ui::DesignSystem::font().body2(), lastCommentTextWidth);
-            height += lastCommentTextHeight + Ui::DesignSystem::layout().px8()
-                + Ui::DesignSystem::layout().px24();
+                lastComment.text, DesignSystem::font().body2(), lastCommentTextWidth);
+            height += lastCommentTextHeight + DesignSystem::compactLayout().px8()
+                + DesignSystem::compactLayout().px24();
         }
     }
 
