@@ -138,7 +138,7 @@ QRectF ComicBookTextStructureDelegate::Implementation::paintItemWordsCount(
 {
     using namespace BusinessLayer;
 
-    _painter->setFont(DesignSystem::font().body2());
+    _painter->setFont(DesignSystem::font().subtitle2());
 
     const auto wordsCountText = QString("%1").arg(QString::number(_wordsCount));
     const qreal wordsCountWidth = TextHelper::fineTextWidthF(wordsCountText, _painter->font());

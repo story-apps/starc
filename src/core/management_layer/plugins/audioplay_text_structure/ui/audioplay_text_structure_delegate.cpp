@@ -131,7 +131,7 @@ QRectF AudioplayTextStructureDelegate::Implementation::paintItemDuration(
 {
     using namespace BusinessLayer;
 
-    _painter->setFont(DesignSystem::font().body2());
+    _painter->setFont(DesignSystem::font().subtitle2());
 
     const auto durationText = QString("%1").arg(TimeHelper::toString(_duration));
     const qreal durationWidth = TextHelper::fineTextWidthF(durationText, _painter->font());
