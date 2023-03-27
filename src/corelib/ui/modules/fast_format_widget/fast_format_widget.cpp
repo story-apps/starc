@@ -1,10 +1,8 @@
-#include "comic_book_text_fast_format_widget.h"
+#include "fast_format_widget.h"
 
-#include "comic_book_text_edit.h"
-
-#include <business_layer/templates/comic_book_template.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
+#include <ui/widgets/check_box/check_box.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/tools/run_once.h>
@@ -12,6 +10,7 @@
 #include <QAbstractItemModel>
 #include <QPainter>
 #include <QPointer>
+#include <QSettings>
 #include <QVBoxLayout>
 
 
@@ -20,6 +19,7 @@ namespace Ui {
 namespace {
 const char* kButtonTypeKey = "button-type";
 const char* kIsButtonCurrentTypeKey = "is-button-current-type";
+const char* kShowShortcutsKey = "fast-format-widget/show-shortcuts";
 } // namespace
 
 /**
@@ -105,16 +105,18 @@ void FormatButton::paintEvent(QPaintEvent* _event)
 // ****
 
 
-class ComicBookTextFastFormatWidget::Implementation
+class FastFormatWidget::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(FastFormatWidget* _q);
 
     /**
      * @brief Обновить кнопки в соответствии с текущей моделью стилей
      */
     void updateButtons();
 
+
+    FastFormatWidget* q = nullptr;
 
     /**
      * @brief Модель типов форматов блоков
@@ -124,24 +126,53 @@ public:
     /**
      * @brief Список кнопок
      */
-    QList<FormatButton*> buttons;
+    QVector<FormatButton*> buttons;
+
+    /**
+     * @brief Показывать ли шорткаты на кнопках с форматами
+     */
+    CheckBox* showShortcuts = nullptr;
+
+    /**
+     * @brief Компоновщик
+     */
+    QVBoxLayout* buttonsLayout = nullptr;
 };
 
-ComicBookTextFastFormatWidget::Implementation::Implementation(QWidget* _parent)
+FastFormatWidget::Implementation::Implementation(FastFormatWidget* _q)
+    : q(_q)
+    , showShortcuts(new CheckBox(_q))
+    , buttonsLayout(new QVBoxLayout)
 {
-    //
-    // Создаём столько кнопок, сколько может быть стилей
-    //
-    for (int index = 0; index < 12; ++index) {
-        buttons.append(new FormatButton(_parent));
-    }
+    buttonsLayout->setSpacing(0);
+    buttonsLayout->setContentsMargins({});
+
+    showShortcuts->setChecked(QSettings().value(kShowShortcutsKey, false).toBool());
 }
 
-void ComicBookTextFastFormatWidget::Implementation::updateButtons()
+void FastFormatWidget::Implementation::updateButtons()
 {
     const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
     if (!canRun) {
         return;
+    }
+
+    //
+    // Создаём необходимое количество кнопок
+    //
+    for (int index = 0; index < model->rowCount() - buttons.size(); ++index) {
+        auto button = new FormatButton(q);
+        button->setBackgroundColor(ColorHelper::nearby(DesignSystem::color().primary()));
+        button->setTextColor(DesignSystem::color().onPrimary());
+        connect(button, &FormatButton::clicked, q, [this, button] {
+            emit q->paragraphTypeChanged(button->property(kButtonTypeKey).toModelIndex());
+        });
+        buttons.append(button);
+
+        //
+        // Вставляем в лейаут перед чекбоксом отображения шоркатов
+        //
+        buttonsLayout->addWidget(button);
     }
 
     //
@@ -153,7 +184,8 @@ void ComicBookTextFastFormatWidget::Implementation::updateButtons()
         auto button = buttons.at(itemIndex);
         button->setVisible(true);
         button->setText(itemModelIndex.data(Qt::DisplayRole).toString());
-        button->setShortcut(itemModelIndex.data(Qt::WhatsThisRole).toString());
+        button->setShortcut(
+            showShortcuts->isChecked() ? itemModelIndex.data(Qt::WhatsThisRole).toString() : "");
         button->setProperty(kButtonTypeKey, itemModelIndex);
     }
     //
@@ -163,39 +195,36 @@ void ComicBookTextFastFormatWidget::Implementation::updateButtons()
         buttons.at(itemIndex)->setVisible(false);
     }
 
-
-    auto w = buttons.first()->parentWidget();
-    w->setMinimumSize(w->sizeHint());
+    //
+    // Настроим минимальный размер панели быстрого форматирования
+    //
+    q->setMinimumSize(q->sizeHint());
 }
 
 
 // ****
 
 
-ComicBookTextFastFormatWidget::ComicBookTextFastFormatWidget(QWidget* _parent)
+FastFormatWidget::FastFormatWidget(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
-    for (auto button : d->buttons) {
-        connect(button, &Button::clicked, this, [this, button] {
-            emit paragraphTypeChanged(button->property(kButtonTypeKey).toModelIndex());
-        });
-    }
-
     auto layout = new QVBoxLayout(this);
     layout->setSpacing(0);
     layout->setContentsMargins({});
-    for (auto button : d->buttons) {
-        layout->addWidget(button);
-    }
+    layout->addLayout(d->buttonsLayout);
+    layout->addWidget(d->showShortcuts);
     layout->addStretch();
 
-    designSystemChangeEvent(nullptr);
+    connect(d->showShortcuts, &CheckBox::checkedChanged, this, [this](bool _checked) {
+        d->updateButtons();
+        QSettings().setValue(kShowShortcutsKey, _checked);
+    });
 }
 
-ComicBookTextFastFormatWidget::~ComicBookTextFastFormatWidget() = default;
+FastFormatWidget::~FastFormatWidget() = default;
 
-void ComicBookTextFastFormatWidget::setParagraphTypesModel(QAbstractItemModel* _model)
+void FastFormatWidget::setParagraphTypesModel(QAbstractItemModel* _model)
 {
     if (d->model == _model) {
         return;
@@ -206,6 +235,7 @@ void ComicBookTextFastFormatWidget::setParagraphTypesModel(QAbstractItemModel* _
     }
 
     d->model = _model;
+    d->updateButtons();
 
     connect(d->model, &QAbstractItemModel::dataChanged, this, [this] { d->updateButtons(); });
     connect(d->model, &QAbstractItemModel::rowsRemoved, this, [this] { d->updateButtons(); });
@@ -213,9 +243,9 @@ void ComicBookTextFastFormatWidget::setParagraphTypesModel(QAbstractItemModel* _
     connect(d->model, &QAbstractItemModel::modelReset, this, [this] { d->updateButtons(); });
 }
 
-void ComicBookTextFastFormatWidget::setCurrentParagraphType(const QModelIndex& _index)
+void FastFormatWidget::setCurrentParagraphType(const QModelIndex& _index)
 {
-    for (auto button : d->buttons) {
+    for (auto button : std::as_const(d->buttons)) {
         const bool isCurrentType = button->property(kButtonTypeKey).toModelIndex() == _index;
         button->setProperty(kIsButtonCurrentTypeKey, isCurrentType);
         button->setTextColor(isCurrentType ? DesignSystem::color().accent()
@@ -223,21 +253,29 @@ void ComicBookTextFastFormatWidget::setCurrentParagraphType(const QModelIndex& _
     }
 }
 
-void ComicBookTextFastFormatWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void FastFormatWidget::updateTranslations()
+{
+    d->showShortcuts->setText(tr("Show shotcuts"));
+}
+
+void FastFormatWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
     setBackgroundColor(DesignSystem::color().primary());
 
-    layout()->setSpacing(Ui::DesignSystem::layout().px12());
-    layout()->setContentsMargins(DesignSystem::layout().px16(), DesignSystem::layout().px16(),
-                                 DesignSystem::layout().px16(), DesignSystem::layout().px16());
+    d->buttonsLayout->setSpacing(Ui::DesignSystem::compactLayout().px16());
+    d->buttonsLayout->setContentsMargins(
+        DesignSystem::layout().px24(), DesignSystem::layout().px24(), DesignSystem::layout().px24(),
+        DesignSystem::compactLayout().px12());
     for (auto button : std::as_const(d->buttons)) {
         button->setBackgroundColor(ColorHelper::nearby(DesignSystem::color().primary()));
         button->setTextColor(button->property(kIsButtonCurrentTypeKey).toBool()
                                  ? DesignSystem::color().accent()
                                  : DesignSystem::color().onPrimary());
     }
+    d->showShortcuts->setBackgroundColor(DesignSystem::color().primary());
+    d->showShortcuts->setTextColor(DesignSystem::color().onPrimary());
 }
 
 } // namespace Ui

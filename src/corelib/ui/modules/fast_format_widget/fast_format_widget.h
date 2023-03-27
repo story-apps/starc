@@ -8,15 +8,15 @@ class QAbstractItemModel;
 namespace Ui {
 
 /**
- * @brief Панель быстрого форматирования сценария
+ * @brief Панель быстрого форматирования
  */
-class AudioplayTextFastFormatWidget : public Widget
+class FastFormatWidget : public Widget
 {
     Q_OBJECT
 
 public:
-    explicit AudioplayTextFastFormatWidget(QWidget* _parent = nullptr);
-    ~AudioplayTextFastFormatWidget() override;
+    explicit FastFormatWidget(QWidget* _parent = nullptr);
+    ~FastFormatWidget() override;
 
     /**
      * @brief Задать модель списка типов абзацев
@@ -35,6 +35,11 @@ signals:
     void paragraphTypeChanged(const QModelIndex& _index);
 
 protected:
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
+
     /**
      * @brief Обновляем навигатор при изменении дизайн системы
      */

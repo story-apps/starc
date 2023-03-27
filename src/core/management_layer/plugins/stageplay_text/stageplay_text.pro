@@ -48,7 +48,6 @@ HEADERS += \
     text/stageplay_text_edit.h \
     text/stageplay_text_edit_shortcuts_manager.h \
     text/stageplay_text_edit_toolbar.h \
-    text/stageplay_text_fast_format_widget.h \
     text/stageplay_text_search_manager.h \
     text/stageplay_text_search_toolbar.h
 
@@ -70,7 +69,6 @@ SOURCES += \
     text/stageplay_text_edit.cpp \
     text/stageplay_text_edit_shortcuts_manager.cpp \
     text/stageplay_text_edit_toolbar.cpp \
-    text/stageplay_text_fast_format_widget.cpp \
     text/stageplay_text_search_manager.cpp \
     text/stageplay_text_search_toolbar.cpp
 

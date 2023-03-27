@@ -3,7 +3,6 @@
 #include "text/stageplay_text_edit.h"
 #include "text/stageplay_text_edit_shortcuts_manager.h"
 #include "text/stageplay_text_edit_toolbar.h"
-#include "text/stageplay_text_fast_format_widget.h"
 #include "text/stageplay_text_search_manager.h"
 
 #include <business_layer/document/text/text_block_data.h>
@@ -22,6 +21,7 @@
 #include <ui/modules/comments/comments_model.h>
 #include <ui/modules/comments/comments_toolbar.h>
 #include <ui/modules/comments/comments_view.h>
+#include <ui/modules/fast_format_widget/fast_format_widget.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -146,7 +146,7 @@ public:
     Widget* sidebarWidget = nullptr;
     TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
-    StageplayTextFastFormatWidget* fastFormatWidget = nullptr;
+    FastFormatWidget* fastFormatWidget = nullptr;
     CommentsView* commentsView = nullptr;
     BookmarksView* bookmarksView = nullptr;
     //
@@ -179,7 +179,7 @@ StageplayTextView::Implementation::Implementation(StageplayTextView* _q)
     , sidebarWidget(new Widget(_q))
     , sidebarTabs(new TabBar(_q))
     , sidebarContent(new StackWidget(_q))
-    , fastFormatWidget(new StageplayTextFastFormatWidget(_q))
+    , fastFormatWidget(new FastFormatWidget(_q))
     , commentsView(new CommentsView(_q))
     , bookmarksView(new BookmarksView(_q))
     , splitter(new Splitter(_q))
@@ -616,7 +616,7 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
         }
     });
     //
-    connect(d->fastFormatWidget, &StageplayTextFastFormatWidget::paragraphTypeChanged, this,
+    connect(d->fastFormatWidget, &FastFormatWidget::paragraphTypeChanged, this,
             [this](const QModelIndex& _index) {
                 const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());

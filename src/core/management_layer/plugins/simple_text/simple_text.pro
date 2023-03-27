@@ -44,7 +44,6 @@ HEADERS += \
     text/simple_text_edit.h \
     text/simple_text_edit_shortcuts_manager.h \
     text/simple_text_edit_toolbar.h \
-    text/simple_text_fast_format_widget.h \
     text/simple_text_search_manager.h \
     text/simple_text_search_toolbar.h
 
@@ -62,7 +61,6 @@ SOURCES += \
     text/simple_text_edit.cpp \
     text/simple_text_edit_shortcuts_manager.cpp \
     text/simple_text_edit_toolbar.cpp \
-    text/simple_text_fast_format_widget.cpp \
     text/simple_text_search_manager.cpp \
     text/simple_text_search_toolbar.cpp
 

@@ -51,7 +51,6 @@ HEADERS += \
     text/comic_book_text_edit.h \
     text/comic_book_text_edit_shortcuts_manager.h \
     text/comic_book_text_edit_toolbar.h \
-    text/comic_book_text_fast_format_widget.h \
     text/comic_book_text_search_manager.h \
     text/comic_book_text_search_toolbar.h
 
@@ -75,7 +74,6 @@ SOURCES += \
     text/comic_book_text_edit.cpp \
     text/comic_book_text_edit_shortcuts_manager.cpp \
     text/comic_book_text_edit_toolbar.cpp \
-    text/comic_book_text_fast_format_widget.cpp \
     text/comic_book_text_search_manager.cpp \
     text/comic_book_text_search_toolbar.cpp
 

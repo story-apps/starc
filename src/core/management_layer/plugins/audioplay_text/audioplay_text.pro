@@ -50,7 +50,6 @@ HEADERS += \
     text/audioplay_text_edit.h \
     text/audioplay_text_edit_shortcuts_manager.h \
     text/audioplay_text_edit_toolbar.h \
-    text/audioplay_text_fast_format_widget.h \
     text/audioplay_text_scrollbar_manager.h \
     text/audioplay_text_search_manager.h \
     text/audioplay_text_search_toolbar.h
@@ -74,7 +73,6 @@ SOURCES += \
     text/audioplay_text_edit.cpp \
     text/audioplay_text_edit_shortcuts_manager.cpp \
     text/audioplay_text_edit_toolbar.cpp \
-    text/audioplay_text_fast_format_widget.cpp \
     text/audioplay_text_scrollbar_manager.cpp \
     text/audioplay_text_search_manager.cpp \
     text/audioplay_text_search_toolbar.cpp

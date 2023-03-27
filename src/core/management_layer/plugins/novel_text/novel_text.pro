@@ -50,7 +50,6 @@ HEADERS += \
     text/novel_text_edit.h \
     text/novel_text_edit_shortcuts_manager.h \
     text/novel_text_edit_toolbar.h \
-    text/novel_text_fast_format_widget.h \
     text/novel_text_search_manager.h \
     text/novel_text_search_toolbar.h \
 
@@ -74,7 +73,6 @@ SOURCES += \
     text/novel_text_edit.cpp \
     text/novel_text_edit_shortcuts_manager.cpp \
     text/novel_text_edit_toolbar.cpp \
-    text/novel_text_fast_format_widget.cpp \
     text/novel_text_search_manager.cpp \
     text/novel_text_search_toolbar.cpp \
 
