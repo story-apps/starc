@@ -80,10 +80,10 @@ TextModelItem* StageplayTextModel::Implementation::rootItem() const
 void StageplayTextModel::Implementation::updateNumbering()
 {
     int sceneNumber = 1;
-    int blockNumber = 1;
+    int dialogueNumber = 0;
     std::function<void(const TextModelItem*)> updateChildNumbering;
     updateChildNumbering
-        = [&sceneNumber, &blockNumber, &updateChildNumbering](const TextModelItem* _item) {
+        = [&sceneNumber, &dialogueNumber, &updateChildNumbering](const TextModelItem* _item) {
               for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
                   auto childItem = _item->childAt(childIndex);
                   switch (childItem->type()) {
@@ -103,9 +103,25 @@ void StageplayTextModel::Implementation::updateNumbering()
 
                   case TextModelItemType::Text: {
                       auto textItem = static_cast<TextModelTextItem*>(childItem);
-                      if ((textItem->paragraphType() == TextParagraphType::Dialogue)
-                          && !textItem->isCorrection()) {
-                          textItem->setNumber(blockNumber++);
+                      if (!textItem->isCorrection()) {
+                          switch (textItem->paragraphType()) {
+                          case TextParagraphType::Character: {
+                              ++dialogueNumber;
+                              Q_FALLTHROUGH();
+                          }
+
+                          case TextParagraphType::Dialogue:
+                          case TextParagraphType::Lyrics: {
+                              textItem->setNumber(dialogueNumber);
+                              // updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole
+                              // });
+                              break;
+                          }
+
+                          default: {
+                              break;
+                          }
+                          }
                       }
                       break;
                   }

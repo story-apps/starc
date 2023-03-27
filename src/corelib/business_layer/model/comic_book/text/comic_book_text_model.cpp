@@ -90,7 +90,7 @@ void ComicBookTextModel::Implementation::updateNumbering()
 {
     int pageNumber = 1;
     int panelNumber = 1;
-    int dialogueNumber = 1;
+    int dialogueNumber = 0;
     std::function<void(const TextModelItem*)> updateChildNumbering;
     updateChildNumbering = [this, &pageNumber, &panelNumber, &dialogueNumber,
                             &updateChildNumbering](const TextModelItem* _item) {
@@ -124,9 +124,24 @@ void ComicBookTextModel::Implementation::updateNumbering()
 
             case TextModelItemType::Text: {
                 auto textItem = static_cast<TextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == TextParagraphType::Character
-                    && !textItem->isCorrection()) {
-                    textItem->setNumber(dialogueNumber++);
+                if (!textItem->isCorrection()) {
+                    switch (textItem->paragraphType()) {
+                    case TextParagraphType::Character: {
+                        ++dialogueNumber;
+                        Q_FALLTHROUGH();
+                    }
+
+                    case TextParagraphType::Dialogue:
+                    case TextParagraphType::Lyrics: {
+                        textItem->setNumber(dialogueNumber);
+                        // updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole });
+                        break;
+                    }
+
+                    default: {
+                        break;
+                    }
+                    }
                 }
                 break;
             }

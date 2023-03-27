@@ -958,6 +958,13 @@ QVariant TextModelTextItem::data(int _role) const
         return d->text;
     }
 
+    case TextNumberRole: {
+        if (d->number.has_value()) {
+            return d->number->text;
+        }
+        return {};
+    }
+
     default: {
         return TextModelItem::data(_role);
     }

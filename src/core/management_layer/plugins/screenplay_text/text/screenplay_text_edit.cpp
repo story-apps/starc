@@ -1253,9 +1253,9 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             // ... в тексте или в первой колоке таблички
                             //
                             QRectF rect;
+                            const int numberWidth
+                                = TextHelper::fineTextWidthF(dialogueNumber, painter.font());
                             if (!cursor.inTable() || cursor.inFirstColumn()) {
-                                const int numberDelta
-                                    = TextHelper::fineTextWidthF(dialogueNumber, painter.font());
                                 //
                                 // ... поместим номер реплики внутри текстовой области,
                                 //     чтобы их было удобно отличать от номеров сцен
@@ -1263,34 +1263,28 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                                 QPointF topLeft(
                                     isLeftToRight
                                         ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                        : textRight + leftDelta - spaceBetweenSceneNumberAndText
-                                            - numberDelta,
-                                    cursorR.top());
-                                QPointF bottomRight(
-                                    isLeftToRight
-                                        ? textLeft + leftDelta + spaceBetweenSceneNumberAndText
-                                            + numberDelta
+                                            - Ui::DesignSystem::card().shadowMargins().left()
                                         : textRight + leftDelta - spaceBetweenSceneNumberAndText,
-                                    cursorR.bottom());
+                                    cursorR.top());
+                                QPointF bottomRight(isLeftToRight ? topLeft.x() + numberWidth
+                                                                  : topLeft.x() - numberWidth,
+                                                    cursorR.bottom());
                                 rect = QRectF(topLeft, bottomRight);
                             }
                             //
                             // ... во второй колонке таблички
                             //
                             else {
-                                const qreal x = splitterX + spaceBetweenSceneNumberAndText
-                                    + cursor.currentTable()->format().border();
-                                const int numberDelta
-                                    = TextHelper::fineTextWidthF(dialogueNumber, painter.font());
+                                const qreal x = splitterX + spaceBetweenSceneNumberAndText;
                                 const QPointF topLeft(x, cursorR.top());
-                                const QPointF bottomRight(x + numberDelta, cursorR.bottom());
+                                const QPointF bottomRight(x + numberWidth, cursorR.bottom());
                                 rect = QRectF(topLeft, bottomRight);
                             }
 
                             if (lastCharacterColor.isValid()) {
                                 setPainterPen(lastCharacterColor);
                             }
-                            painter.drawText(rect, Qt::AlignRight | Qt::AlignTop, dialogueNumber);
+                            painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop, dialogueNumber);
                             if (lastCharacterColor.isValid()) {
                                 setPainterPen(palette().text().color());
                             }

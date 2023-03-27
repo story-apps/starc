@@ -85,10 +85,10 @@ TextModelItem* AudioplayTextModel::Implementation::rootItem() const
 void AudioplayTextModel::Implementation::updateNumbering()
 {
     int sceneNumber = 1;
-    int blockNumber = 1;
+    int dialogueNumber = 0;
     std::function<void(const TextModelItem*)> updateChildNumbering;
     updateChildNumbering
-        = [&sceneNumber, &blockNumber, &updateChildNumbering](const TextModelItem* _item) {
+        = [&sceneNumber, &dialogueNumber, &updateChildNumbering](const TextModelItem* _item) {
               for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
                   auto childItem = _item->childAt(childIndex);
                   switch (childItem->type()) {
@@ -108,12 +108,27 @@ void AudioplayTextModel::Implementation::updateNumbering()
 
                   case TextModelItemType::Text: {
                       auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
-                      if ((textItem->paragraphType() == TextParagraphType::Dialogue
-                           || textItem->paragraphType() == TextParagraphType::Sound
-                           || textItem->paragraphType() == TextParagraphType::Music
-                           || textItem->paragraphType() == TextParagraphType::Cue)
-                          && !textItem->isCorrection()) {
-                          textItem->setNumber(blockNumber++);
+                      if (!textItem->isCorrection()) {
+                          switch (textItem->paragraphType()) {
+                          case TextParagraphType::Character:
+                          case TextParagraphType::Sound:
+                          case TextParagraphType::Music:
+                          case TextParagraphType::Cue: {
+                              ++dialogueNumber;
+                              Q_FALLTHROUGH();
+                          }
+
+                          case TextParagraphType::Dialogue:
+                          case TextParagraphType::Lyrics: {
+                              textItem->setNumber(dialogueNumber);
+                              // updateItemForRoles(textItem, {TextModelTextItem::TextNumberRole});
+                              break;
+                          }
+
+                          default: {
+                              break;
+                          }
+                          }
                       }
                       break;
                   }

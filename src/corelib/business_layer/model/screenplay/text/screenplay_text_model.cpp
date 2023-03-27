@@ -674,7 +674,7 @@ void ScreenplayTextModel::updateNumbering()
 {
     d->scenesCount = 0;
     int sceneNumber = d->informationModel->scenesNumberingStartAt();
-    int dialogueNumber = 1;
+    int dialogueNumber = 0;
     QString lastLockedSceneFullNumber;
     std::function<void(const TextModelItem*)> updateChildNumbering;
     updateChildNumbering = [this, &sceneNumber, &dialogueNumber, &lastLockedSceneFullNumber,
@@ -733,11 +733,24 @@ void ScreenplayTextModel::updateNumbering()
 
             case TextModelItemType::Text: {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == TextParagraphType::Character
-                    && !textItem->isCorrection()) {
-                    textItem->setNumber(dialogueNumber);
-                    updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole });
-                    ++dialogueNumber;
+                if (!textItem->isCorrection()) {
+                    switch (textItem->paragraphType()) {
+                    case TextParagraphType::Character: {
+                        ++dialogueNumber;
+                        Q_FALLTHROUGH();
+                    }
+
+                    case TextParagraphType::Dialogue:
+                    case TextParagraphType::Lyrics: {
+                        textItem->setNumber(dialogueNumber);
+                        updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole });
+                        break;
+                    }
+
+                    default: {
+                        break;
+                    }
+                    }
                 }
                 break;
             }
