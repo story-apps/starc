@@ -106,7 +106,7 @@ void ComicBookTextModel::Implementation::updateNumbering()
                 const auto groupItem = static_cast<TextModelGroupItem*>(childItem);
                 if (groupItem->groupType() == TextGroupType::Page) {
                     panelNumber = 1;
-                    dialogueNumber = 1;
+                    dialogueNumber = 0;
                     updateChildNumbering(childItem);
 
                     auto pageItem = static_cast<ComicBookTextModelPageItem*>(childItem);
@@ -134,7 +134,7 @@ void ComicBookTextModel::Implementation::updateNumbering()
                     case TextParagraphType::Dialogue:
                     case TextParagraphType::Lyrics: {
                         textItem->setNumber(dialogueNumber);
-                        // updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole });
+                        q->updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole });
                         break;
                     }
 
@@ -180,9 +180,7 @@ ComicBookTextModel::~ComicBookTextModel() = default;
 
 TextModelFolderItem* ComicBookTextModel::createFolderItem(TextFolderType _type) const
 {
-    Q_UNUSED(_type)
-
-    return new TextModelFolderItem(this);
+    return new TextModelFolderItem(this, _type);
 }
 
 TextModelGroupItem* ComicBookTextModel::createGroupItem(TextGroupType _type) const

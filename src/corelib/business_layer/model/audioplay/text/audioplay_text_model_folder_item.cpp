@@ -27,11 +27,11 @@ public:
 // ****
 
 
-AudioplayTextModelFolderItem::AudioplayTextModelFolderItem(const AudioplayTextModel* _model)
-    : TextModelFolderItem(_model)
+AudioplayTextModelFolderItem::AudioplayTextModelFolderItem(const AudioplayTextModel* _model,
+                                                           TextFolderType _type)
+    : TextModelFolderItem(_model, _type)
     , d(new Implementation)
 {
-    setFolderType(TextFolderType::Sequence);
 }
 
 AudioplayTextModelFolderItem::~AudioplayTextModelFolderItem() = default;

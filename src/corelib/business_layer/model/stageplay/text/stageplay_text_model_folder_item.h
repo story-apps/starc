@@ -13,7 +13,7 @@ class StageplayTextModel;
 class CORE_LIBRARY_EXPORT StageplayTextModelFolderItem : public TextModelFolderItem
 {
 public:
-    explicit StageplayTextModelFolderItem(const StageplayTextModel* _model);
+    explicit StageplayTextModelFolderItem(const StageplayTextModel* _model, TextFolderType _type);
     ~StageplayTextModelFolderItem() override;
 
 protected:

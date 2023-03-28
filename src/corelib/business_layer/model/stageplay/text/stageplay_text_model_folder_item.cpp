@@ -10,10 +10,10 @@
 
 namespace BusinessLayer {
 
-StageplayTextModelFolderItem::StageplayTextModelFolderItem(const StageplayTextModel* _model)
-    : TextModelFolderItem(_model)
+StageplayTextModelFolderItem::StageplayTextModelFolderItem(const StageplayTextModel* _model,
+                                                           TextFolderType _type)
+    : TextModelFolderItem(_model, _type)
 {
-    setFolderType(TextFolderType::Sequence);
 }
 
 StageplayTextModelFolderItem::~StageplayTextModelFolderItem() = default;

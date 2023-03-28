@@ -45,10 +45,9 @@ public:
 
 ScreenplayTextModelFolderItem::ScreenplayTextModelFolderItem(const ScreenplayTextModel* _model,
                                                              TextFolderType _type)
-    : TextModelFolderItem(_model)
+    : TextModelFolderItem(_model, _type)
     , d(new Implementation)
 {
-    setFolderType(_type);
 }
 
 ScreenplayTextModelFolderItem::~ScreenplayTextModelFolderItem() = default;

@@ -87,57 +87,57 @@ void AudioplayTextModel::Implementation::updateNumbering()
     int sceneNumber = 1;
     int dialogueNumber = 0;
     std::function<void(const TextModelItem*)> updateChildNumbering;
-    updateChildNumbering
-        = [&sceneNumber, &dialogueNumber, &updateChildNumbering](const TextModelItem* _item) {
-              for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-                  auto childItem = _item->childAt(childIndex);
-                  switch (childItem->type()) {
-                  case TextModelItemType::Folder: {
-                      updateChildNumbering(childItem);
-                      break;
-                  }
+    updateChildNumbering = [this, &sceneNumber, &dialogueNumber,
+                            &updateChildNumbering](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case TextModelItemType::Folder: {
+                updateChildNumbering(childItem);
+                break;
+            }
 
-                  case TextModelItemType::Group: {
-                      updateChildNumbering(childItem);
-                      auto groupItem = static_cast<TextModelGroupItem*>(childItem);
-                      if (groupItem->setNumber(sceneNumber, {})) {
-                          ++sceneNumber;
-                      }
-                      break;
-                  }
+            case TextModelItemType::Group: {
+                updateChildNumbering(childItem);
+                auto groupItem = static_cast<TextModelGroupItem*>(childItem);
+                if (groupItem->setNumber(sceneNumber, {})) {
+                    ++sceneNumber;
+                }
+                break;
+            }
 
-                  case TextModelItemType::Text: {
-                      auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
-                      if (!textItem->isCorrection()) {
-                          switch (textItem->paragraphType()) {
-                          case TextParagraphType::Character:
-                          case TextParagraphType::Sound:
-                          case TextParagraphType::Music:
-                          case TextParagraphType::Cue: {
-                              ++dialogueNumber;
-                              Q_FALLTHROUGH();
-                          }
+            case TextModelItemType::Text: {
+                auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
+                if (!textItem->isCorrection()) {
+                    switch (textItem->paragraphType()) {
+                    case TextParagraphType::Character:
+                    case TextParagraphType::Sound:
+                    case TextParagraphType::Music:
+                    case TextParagraphType::Cue: {
+                        ++dialogueNumber;
+                        Q_FALLTHROUGH();
+                    }
 
-                          case TextParagraphType::Dialogue:
-                          case TextParagraphType::Lyrics: {
-                              textItem->setNumber(dialogueNumber);
-                              // updateItemForRoles(textItem, {TextModelTextItem::TextNumberRole});
-                              break;
-                          }
+                    case TextParagraphType::Dialogue:
+                    case TextParagraphType::Lyrics: {
+                        textItem->setNumber(dialogueNumber);
+                        q->updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole });
+                        break;
+                    }
 
-                          default: {
-                              break;
-                          }
-                          }
-                      }
-                      break;
-                  }
+                    default: {
+                        break;
+                    }
+                    }
+                }
+                break;
+            }
 
-                  default:
-                      break;
-                  }
-              }
-          };
+            default:
+                break;
+            }
+        }
+    };
     updateChildNumbering(rootItem());
 }
 
@@ -193,9 +193,7 @@ AudioplayTextModel::~AudioplayTextModel() = default;
 
 TextModelFolderItem* AudioplayTextModel::createFolderItem(TextFolderType _type) const
 {
-    Q_UNUSED(_type)
-
-    return new AudioplayTextModelFolderItem(this);
+    return new AudioplayTextModelFolderItem(this, _type);
 }
 
 TextModelGroupItem* AudioplayTextModel::createGroupItem(TextGroupType _type) const

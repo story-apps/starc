@@ -185,7 +185,7 @@ QString ScreenplayTextDocument::sceneNumber(const QTextBlock& _forBlock) const
     }
 
     const auto blockData = static_cast<TextBlockData*>(_forBlock.userData());
-    if (blockData == nullptr) {
+    if (blockData == nullptr || blockData->item() == nullptr) {
         return {};
     }
 

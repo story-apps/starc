@@ -140,9 +140,7 @@ SimpleTextModel::~SimpleTextModel() = default;
 
 TextModelFolderItem* SimpleTextModel::createFolderItem(TextFolderType _type) const
 {
-    Q_UNUSED(_type)
-
-    return new TextModelFolderItem(this);
+    return new TextModelFolderItem(this, _type);
 }
 
 TextModelGroupItem* SimpleTextModel::createGroupItem(TextGroupType _type) const

@@ -23,7 +23,7 @@ public:
     };
 
 public:
-    explicit AudioplayTextModelFolderItem(const AudioplayTextModel* _model);
+    explicit AudioplayTextModelFolderItem(const AudioplayTextModel* _model, TextFolderType _type);
     ~AudioplayTextModelFolderItem() override;
 
     /**

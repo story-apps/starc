@@ -41,7 +41,7 @@ QString ComicBookTextDocument::pageNumber(const QTextBlock& _forBlock) const
     }
 
     const auto blockData = static_cast<TextBlockData*>(_forBlock.userData());
-    if (blockData == nullptr) {
+    if (blockData == nullptr || blockData->item() == nullptr) {
         return {};
     }
 
@@ -62,7 +62,7 @@ QString ComicBookTextDocument::panelNumber(const QTextBlock& _forBlock) const
     }
 
     const auto blockData = static_cast<TextBlockData*>(_forBlock.userData());
-    if (blockData == nullptr) {
+    if (blockData == nullptr || blockData->item() == nullptr) {
         return {};
     }
 

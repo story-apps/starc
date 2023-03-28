@@ -59,10 +59,11 @@ public:
 // ****
 
 
-TextModelFolderItem::TextModelFolderItem(const TextModel* _model)
+TextModelFolderItem::TextModelFolderItem(const TextModel* _model, TextFolderType _type)
     : TextModelItem(TextModelItemType::Folder, _model)
     , d(new Implementation)
 {
+    setFolderType(_type);
 }
 
 TextModelFolderItem::~TextModelFolderItem() = default;

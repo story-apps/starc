@@ -30,7 +30,7 @@ public:
     };
 
 public:
-    explicit TextModelFolderItem(const TextModel* _model);
+    explicit TextModelFolderItem(const TextModel* _model, TextFolderType _type);
     ~TextModelFolderItem() override;
 
     /**
