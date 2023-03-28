@@ -532,14 +532,14 @@ bool TabBar::event(QEvent* _event)
     }
 
     default: {
-        return QWidget::event(_event);
+        return Widget::event(_event);
     }
     }
 }
 
 void TabBar::resizeEvent(QResizeEvent* _event)
 {
-    QWidget::resizeEvent(_event);
+    Widget::resizeEvent(_event);
 
     d->updateScrollState();
 }

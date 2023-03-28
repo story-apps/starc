@@ -54,8 +54,6 @@ StageplayParametersView::Implementation::Implementation(QWidget* _parent)
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     content->setVerticalScrollBar(new ScrollBar);
 
-    stageplayInfo->setResizingActive(false);
-
     header->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     footer->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
@@ -73,17 +71,6 @@ StageplayParametersView::Implementation::Implementation(QWidget* _parent)
     infoLayout->addWidget(overrideCommonSettings, 1, Qt::AlignTop);
     infoLayout->addWidget(stageplayTemplate);
     stageplayInfo->setContentLayout(infoLayout);
-
-    //
-    // TODO: С лёту не завелось, т.к. при отображении скрытых виджетов, виджеты, которые были видны,
-    // сжимаются лейаутом, что даёт некрасивый эффект дёргания (собственно это актуально и для
-    // диалогов, просто там это не так сильно заметно как на больших карточках).
-    //
-    // Во время экспериментов не помогли ни фиксация размера виджета, ни установка минимального
-    // размера строки лейаута, ни разные полтики лейута, надо смотреть код лейаута и искать лазейку,
-    // как заставить его не сжимать некоторые из виджетов
-    //
-    stageplayInfo->setResizingActive(true);
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);

@@ -597,7 +597,7 @@ DesignSystem::Font::Font(qreal _scaleFactor)
 class DesignSystem::Layout::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor, bool _isCompact);
+    explicit Implementation(qreal _scaleFactor, int _density);
 
     qreal px2 = 2.0;
     qreal px4 = 4.0;
@@ -611,19 +611,37 @@ public:
     qreal buttonsSpacing = 8.0;
 };
 
-DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor, bool _isCompact)
+DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor, int _density)
 {
-    const auto finalScaleFactor = _scaleFactor * (_isCompact ? 0.5 : 1.0);
-    px2 *= finalScaleFactor;
-    px4 *= finalScaleFactor;
-    px8 *= finalScaleFactor;
-    px12 *= finalScaleFactor;
-    px16 *= finalScaleFactor;
-    px24 *= finalScaleFactor;
-    px48 *= finalScaleFactor;
-    px62 *= finalScaleFactor;
-    topContentMargin *= finalScaleFactor;
-    buttonsSpacing *= finalScaleFactor;
+    if (_density > 0) {
+        //
+        // Тут делаем кастомное изменение размера, чтобы симметрично изменять размеры, иначе, из-за
+        // разницы в изменении (т.к. она фиксированная), отступы в делегатах выглядят странно,
+        // учитывая арифметику между разными размерами
+        //
+        px2 /= 2.0;
+        px4 /= 2.0;
+        px8 /= 2.0;
+        px12 /= 2.0;
+        px16 /= 2.0;
+        px24 /= 2.0;
+        px48 /= 2.0;
+        px62 /= 2.0;
+
+        const auto delta = 4.0 * _scaleFactor * _density;
+        topContentMargin -= delta;
+    }
+
+    px2 *= _scaleFactor;
+    px4 *= _scaleFactor;
+    px8 *= _scaleFactor;
+    px12 *= _scaleFactor;
+    px16 *= _scaleFactor;
+    px24 *= _scaleFactor;
+    px48 *= _scaleFactor;
+    px62 *= _scaleFactor;
+    topContentMargin *= _scaleFactor;
+    buttonsSpacing *= _scaleFactor;
 }
 
 
@@ -634,7 +652,8 @@ DesignSystem::Layout::~Layout() = default;
 
 qreal DesignSystem::Layout::px(qreal _value) const
 {
-    return Ui::DesignSystem::scaleFactor() * _value;
+    return Ui::DesignSystem::scaleFactor()
+        * (_value / (Ui::DesignSystem::density() == 0 ? 1.0 : 2.0));
 }
 
 qreal DesignSystem::Layout::px2() const
@@ -687,8 +706,8 @@ qreal DesignSystem::Layout::buttonsSpacing() const
     return d->buttonsSpacing;
 }
 
-DesignSystem::Layout::Layout(qreal _scaleFactor, bool _isCompact)
-    : d(new Implementation(_scaleFactor, _isCompact))
+DesignSystem::Layout::Layout(qreal _scaleFactor, int _density)
+    : d(new Implementation(_scaleFactor, _density))
 {
 }
 
@@ -699,7 +718,7 @@ DesignSystem::Layout::Layout(qreal _scaleFactor, bool _isCompact)
 class DesignSystem::AppBar::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor);
+    explicit Implementation(qreal _scaleFactor, int _density);
 
     QMarginsF margins = { 16.0, 16.0, 16.0, 16.0 };
     QMarginsF bigIconMargins = { 0.0, 8.0, 16.0, 8.0 };
@@ -712,8 +731,20 @@ public:
     QPointF shadowOffset = { 0.0, 3.0 };
 };
 
-DesignSystem::AppBar::Implementation::Implementation(qreal _scaleFactor)
+DesignSystem::AppBar::Implementation::Implementation(qreal _scaleFactor, int _density)
 {
+    if (_density > 0) {
+        const auto delta = 4.0 * _scaleFactor * _density;
+        const auto halfDelta = delta / 2.0;
+        margins.setTop(margins.top() - halfDelta);
+        margins.setBottom(margins.bottom() - halfDelta);
+        bigIconMargins.setTop(bigIconMargins.top() - halfDelta);
+        bigIconMargins.setBottom(bigIconMargins.bottom() - halfDelta);
+        heightRegular -= delta;
+        iconsSpacing -= halfDelta;
+        shadowOffset.setY(shadowOffset.y() / _density);
+    }
+
     margins *= _scaleFactor;
     bigIconMargins *= _scaleFactor;
     heightRegular *= _scaleFactor;
@@ -774,46 +805,14 @@ QPointF DesignSystem::AppBar::shadowOffset() const
     return d->shadowOffset;
 }
 
-DesignSystem::AppBar::AppBar(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
+DesignSystem::AppBar::AppBar(qreal _scaleFactor, int _density)
+    : d(new Implementation(_scaleFactor, _density))
 {
 }
 
 
 // ****
 
-
-class DesignSystem::Label::Implementation
-{
-public:
-    explicit Implementation(qreal _scaleFactor);
-
-    QMarginsF margins = { 24.0, 24.0, 24.0, 24.0 };
-};
-
-DesignSystem::Label::Implementation::Implementation(qreal _scaleFactor)
-{
-    margins *= _scaleFactor;
-}
-
-
-// **
-
-
-DesignSystem::Label::~Label() = default;
-
-const QMarginsF& DesignSystem::Label::margins() const
-{
-    return d->margins;
-}
-
-DesignSystem::Label::Label(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
-{
-}
-
-
-// ****
 
 class DesignSystem::ContextMenu::Implementation
 {
@@ -828,6 +827,9 @@ DesignSystem::ContextMenu::Implementation::Implementation(qreal _scaleFactor)
     margin *= _scaleFactor;
 }
 
+// **
+
+
 DesignSystem::ContextMenu::~ContextMenu() = default;
 
 DesignSystem::ContextMenu::ContextMenu(qreal _scaleFactor)
@@ -840,13 +842,53 @@ const QMarginsF& DesignSystem::ContextMenu::margins() const
     return d->margin;
 }
 
+
+// ****
+
+
+class DesignSystem::Label::Implementation
+{
+public:
+    explicit Implementation(qreal _scaleFactor, int _density);
+
+    QMarginsF margins = { 24.0, 24.0, 24.0, 24.0 };
+};
+
+DesignSystem::Label::Implementation::Implementation(qreal _scaleFactor, int _density)
+{
+    if (_density > 0) {
+        const auto delta = 4.0 * _scaleFactor * _density;
+        const auto halfDelta = delta / 2.0;
+        margins.setTop(margins.top() - halfDelta);
+        margins.setBottom(margins.bottom() - halfDelta);
+    }
+
+    margins *= _scaleFactor;
+}
+
+
+// **
+
+
+DesignSystem::Label::~Label() = default;
+
+const QMarginsF& DesignSystem::Label::margins() const
+{
+    return d->margins;
+}
+
+DesignSystem::Label::Label(qreal _scaleFactor, int _density)
+    : d(new Implementation(_scaleFactor, _density))
+{
+}
+
 // ****
 
 
 class DesignSystem::Button::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor);
+    explicit Implementation(qreal _scaleFactor, int _density);
 
     qreal height = 38.0;
     qreal minimumWidth = 56.0;
@@ -859,8 +901,13 @@ public:
     QSizeF iconSize = { 22.0, 22.0 };
 };
 
-DesignSystem::Button::Implementation::Implementation(qreal _scaleFactor)
+DesignSystem::Button::Implementation::Implementation(qreal _scaleFactor, int _density)
 {
+    if (_density > 0) {
+        const auto delta = 4.0 * _scaleFactor * _density;
+        height -= delta;
+    }
+
     height *= _scaleFactor;
     minimumWidth *= _scaleFactor;
     margins *= _scaleFactor;
@@ -923,8 +970,8 @@ const QSizeF& DesignSystem::Button::iconSize() const
     return d->iconSize;
 }
 
-DesignSystem::Button::Button(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
+DesignSystem::Button::Button(qreal _scaleFactor, int _density)
+    : d(new Implementation(_scaleFactor, _density))
 {
 }
 
@@ -932,18 +979,27 @@ DesignSystem::Button::Button(qreal _scaleFactor)
 // ****
 
 
-class DesignSystem::ToggleButton::Implementation
+class DesignSystem::IconButton::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor);
+    explicit Implementation(qreal _scaleFactor, int _density);
 
     QSizeF size = { 48.0, 48.0 };
     QMarginsF margins = { 12.0, 12.0, 12.0, 12.0 };
     QSizeF iconSize = { 24.0, 24.0 };
 };
 
-DesignSystem::ToggleButton::Implementation::Implementation(qreal _scaleFactor)
+DesignSystem::IconButton::Implementation::Implementation(qreal _scaleFactor, int _density)
 {
+    if (_density > 0) {
+        const auto delta = 4.0 * _scaleFactor * _density;
+        const auto halfDelta = delta / 2.0;
+        size.setHeight(size.height() - delta);
+        size.setWidth(size.width() - delta);
+        margins.setTop(margins.top() - halfDelta);
+        margins.setBottom(margins.bottom() - halfDelta);
+    }
+
     size *= _scaleFactor;
     margins *= _scaleFactor;
     iconSize *= _scaleFactor;
@@ -953,25 +1009,25 @@ DesignSystem::ToggleButton::Implementation::Implementation(qreal _scaleFactor)
 // **
 
 
-DesignSystem::ToggleButton::~ToggleButton() = default;
+DesignSystem::IconButton::~IconButton() = default;
 
-const QSizeF& DesignSystem::ToggleButton::size() const
+const QSizeF& DesignSystem::IconButton::size() const
 {
     return d->size;
 }
 
-const QMarginsF& DesignSystem::ToggleButton::margins() const
+const QMarginsF& DesignSystem::IconButton::margins() const
 {
     return d->margins;
 }
 
-const QSizeF& DesignSystem::ToggleButton::iconSize() const
+const QSizeF& DesignSystem::IconButton::iconSize() const
 {
     return d->iconSize;
 }
 
-DesignSystem::ToggleButton::ToggleButton(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
+DesignSystem::IconButton::IconButton(qreal _scaleFactor, int _density)
+    : d(new Implementation(_scaleFactor, _density))
 {
 }
 
@@ -982,7 +1038,7 @@ DesignSystem::ToggleButton::ToggleButton(qreal _scaleFactor)
 class DesignSystem::RadioButton::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor);
+    explicit Implementation(qreal _scaleFactor, int _density);
 
     qreal height = 48.0;
     QMarginsF margins = { 24.0, 13.0, 24.0, 13.0 };
@@ -990,8 +1046,16 @@ public:
     qreal spacing = 16.0;
 };
 
-DesignSystem::RadioButton::Implementation::Implementation(qreal _scaleFactor)
+DesignSystem::RadioButton::Implementation::Implementation(qreal _scaleFactor, int _density)
 {
+    if (_density > 0) {
+        const auto delta = 4.0 * _scaleFactor * _density;
+        const auto halfDelta = delta / 2.0;
+        height -= delta;
+        margins.setTop(margins.top() - halfDelta);
+        margins.setBottom(margins.bottom() - halfDelta);
+    }
+
     height *= _scaleFactor;
     margins *= _scaleFactor;
     iconSize *= _scaleFactor;
@@ -1022,8 +1086,8 @@ qreal DesignSystem::RadioButton::spacing() const
     return d->spacing;
 }
 
-DesignSystem::RadioButton::RadioButton(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
+DesignSystem::RadioButton::RadioButton(qreal _scaleFactor, int _density)
+    : d(new Implementation(_scaleFactor, _density))
 {
 }
 
@@ -1034,7 +1098,7 @@ DesignSystem::RadioButton::RadioButton(qreal _scaleFactor)
 class DesignSystem::CheckBox::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor);
+    explicit Implementation(qreal _scaleFactor, int _density);
 
     qreal height = 48.0;
     QMarginsF margins = { 24.0, 13.0, 24.0, 13.0 };
@@ -1042,8 +1106,16 @@ public:
     qreal spacing = 16.0;
 };
 
-DesignSystem::CheckBox::Implementation::Implementation(qreal _scaleFactor)
+DesignSystem::CheckBox::Implementation::Implementation(qreal _scaleFactor, int _density)
 {
+    if (_density > 0) {
+        const auto delta = 4.0 * _scaleFactor * _density;
+        const auto halfDelta = delta / 2.0;
+        height -= delta;
+        margins.setTop(margins.top() - halfDelta);
+        margins.setBottom(margins.bottom() - halfDelta);
+    }
+
     height *= _scaleFactor;
     margins *= _scaleFactor;
     iconSize *= _scaleFactor;
@@ -1074,8 +1146,8 @@ qreal DesignSystem::CheckBox::spacing() const
     return d->spacing;
 }
 
-DesignSystem::CheckBox::CheckBox(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
+DesignSystem::CheckBox::CheckBox(qreal _scaleFactor, int _density)
+    : d(new Implementation(_scaleFactor, _density))
 {
 }
 
@@ -1131,7 +1203,7 @@ DesignSystem::Toggle::Toggle(qreal _scaleFactor)
 class DesignSystem::Slider::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor);
+    explicit Implementation(qreal _scaleFactor, int _density);
 
     qreal height = 48.0;
     qreal thumbRadius = 6.0;
@@ -1139,8 +1211,13 @@ public:
     qreal unfilledPartOpacity = 0.24;
 };
 
-DesignSystem::Slider::Implementation::Implementation(qreal _scaleFactor)
+DesignSystem::Slider::Implementation::Implementation(qreal _scaleFactor, int _density)
 {
+    if (_density > 0) {
+        const auto delta = 4.0 * _scaleFactor * _density;
+        height -= delta;
+    }
+
     height *= _scaleFactor;
     thumbRadius *= _scaleFactor;
     trackHeight *= _scaleFactor;
@@ -1172,8 +1249,8 @@ qreal DesignSystem::Slider::unfilledPartOpacity() const
     return d->unfilledPartOpacity;
 }
 
-DesignSystem::Slider::Slider(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
+DesignSystem::Slider::Slider(qreal _scaleFactor, int _density)
+    : d(new Implementation(_scaleFactor, _density))
 {
 }
 
@@ -1230,7 +1307,7 @@ DesignSystem::ProgressBar::ProgressBar(qreal _scaleFactor)
 class DesignSystem::TextField::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor);
+    explicit Implementation(qreal _scaleFactor, int _density);
 
     qreal backgroundInactiveColorOpacity = 0.06;
     qreal backgroundActiveColorOpacity = 0.1;
@@ -1248,8 +1325,19 @@ public:
     qreal helperHeight = 20.0;
 };
 
-DesignSystem::TextField::Implementation::Implementation(qreal _scaleFactor)
+DesignSystem::TextField::Implementation::Implementation(qreal _scaleFactor, int _density)
 {
+    if (_density > 0) {
+        const auto delta = 4.0 * _scaleFactor * _density;
+        const auto halfDelta = delta / 2.0;
+        margins.setTop(margins.top() - halfDelta);
+        margins.setBottom(margins.bottom() - halfDelta);
+        marginsWithoutTitle.setTop(marginsWithoutTitle.top() - halfDelta);
+        marginsWithoutTitle.setBottom(marginsWithoutTitle.bottom() - halfDelta);
+        labelTopLeft -= { 0.0, halfDelta };
+        iconTop -= halfDelta;
+    }
+
     contentsMargins *= _scaleFactor;
     margins *= _scaleFactor;
     marginsWithoutTitle *= _scaleFactor;
@@ -1332,8 +1420,8 @@ qreal DesignSystem::TextField::helperHeight() const
     return d->helperHeight;
 }
 
-DesignSystem::TextField::TextField(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
+DesignSystem::TextField::TextField(qreal _scaleFactor, int _density)
+    : d(new Implementation(_scaleFactor, _density))
 {
 }
 
@@ -1411,7 +1499,7 @@ DesignSystem::ScrollBar::ScrollBar(qreal _scaleFactor, const Color& _color)
 class DesignSystem::FloatingToolBar::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor);
+    explicit Implementation(qreal _scaleFactor, int _density);
 
     QMarginsF margins = { 16.0, 16.0, 16.0, 16.0 };
     QMarginsF shadowMargins = { 14.0, 14.0, 14.0, 16.0 };
@@ -1423,8 +1511,17 @@ public:
     qreal spacing = 24.0;
 };
 
-DesignSystem::FloatingToolBar::Implementation::Implementation(qreal _scaleFactor)
+DesignSystem::FloatingToolBar::Implementation::Implementation(qreal _scaleFactor, int _density)
 {
+    if (_density > 0) {
+        const auto delta = 4.0 * _scaleFactor * _density;
+        const auto halfDelta = delta / 2.0;
+        margins.setTop(margins.top() - halfDelta);
+        margins.setBottom(margins.bottom() - halfDelta);
+        height -= delta;
+        spacing -= halfDelta;
+    }
+
     margins *= _scaleFactor;
     shadowMargins *= _scaleFactor;
     minimumShadowBlurRadius *= _scaleFactor;
@@ -1475,8 +1572,8 @@ qreal DesignSystem::FloatingToolBar::spacing() const
     return d->spacing;
 }
 
-DesignSystem::FloatingToolBar::FloatingToolBar(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
+DesignSystem::FloatingToolBar::FloatingToolBar(qreal _scaleFactor, int _density)
+    : d(new Implementation(_scaleFactor, _density))
 {
 }
 
@@ -1487,7 +1584,7 @@ DesignSystem::FloatingToolBar::FloatingToolBar(qreal _scaleFactor)
 class DesignSystem::Tab::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor);
+    explicit Implementation(qreal _scaleFactor, int _density);
 
     qreal minimumWidth = 90.0;
     qreal heightWithText = 48.0;
@@ -1499,8 +1596,19 @@ public:
     QSizeF iconSize = { 24.0, 24.0 };
 };
 
-DesignSystem::Tab::Implementation::Implementation(qreal _scaleFactor)
+DesignSystem::Tab::Implementation::Implementation(qreal _scaleFactor, int _density)
 {
+    if (_density > 0) {
+        const auto delta = 4.0 * _scaleFactor * _density;
+        const auto halfDelta = delta / 2.0;
+        heightWithText -= delta;
+        heightWithIcon -= delta;
+        heightWithTextAndIcon -= delta;
+        heightWithTextAndLeadingIcon -= delta;
+        margins.setTop(margins.top() - halfDelta);
+        margins.setBottom(margins.bottom() - halfDelta);
+    }
+
     minimumWidth *= _scaleFactor;
     heightWithText *= _scaleFactor;
     heightWithIcon *= _scaleFactor;
@@ -1555,8 +1663,8 @@ QSizeF DesignSystem::Tab::iconSize() const
     return d->iconSize;
 }
 
-DesignSystem::Tab::Tab(qreal _scaleFactor)
-    : d(new Implementation(_scaleFactor))
+DesignSystem::Tab::Tab(qreal _scaleFactor, int _density)
+    : d(new Implementation(_scaleFactor, _density))
 {
 }
 
@@ -1671,7 +1779,7 @@ DesignSystem::Stepper::Stepper(qreal _scaleFactor)
 class DesignSystem::Drawer::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor, const Color& _color);
+    explicit Implementation(qreal _scaleFactor, int _density, const Color& _color);
 
     QMarginsF margins = { 16.0, 16.0, 16.0, 16.0 };
     QMarginsF actionMargins = { 16.0, 12.0, 12.0, 12.0 };
@@ -1685,8 +1793,21 @@ public:
     QColor selectionColor;
 };
 
-DesignSystem::Drawer::Implementation::Implementation(qreal _scaleFactor, const Color& _color)
+DesignSystem::Drawer::Implementation::Implementation(qreal _scaleFactor, int _density,
+                                                     const Color& _color)
 {
+    if (_density > 0) {
+        const auto delta = 4.0 * _scaleFactor * _density;
+        const auto halfDelta = delta / 2.0;
+        margins.setTop(margins.top() - halfDelta);
+        margins.setBottom(margins.bottom() - halfDelta);
+        actionMargins.setTop(actionMargins.top() - halfDelta);
+        actionMargins.setBottom(actionMargins.bottom() - halfDelta);
+        spacing -= halfDelta;
+        actionHeight -= delta;
+        separatorSpacing -= halfDelta;
+    }
+
     margins *= _scaleFactor;
     actionMargins *= _scaleFactor;
     selectionMargins *= _scaleFactor;
@@ -1754,8 +1875,8 @@ QColor DesignSystem::Drawer::selectionColor() const
     return d->selectionColor;
 }
 
-DesignSystem::Drawer::Drawer(qreal _scaleFactor, const Color& _color)
-    : d(new Implementation(_scaleFactor, _color))
+DesignSystem::Drawer::Drawer(qreal _scaleFactor, int _density, const Color& _color)
+    : d(new Implementation(_scaleFactor, _density, _color))
 {
 }
 
@@ -1766,7 +1887,7 @@ DesignSystem::Drawer::Drawer(qreal _scaleFactor, const Color& _color)
 class DesignSystem::TreeOneLineItem::Implementation
 {
 public:
-    explicit Implementation(qreal _scaleFactor, bool _isCompact);
+    explicit Implementation(qreal _scaleFactor, int _density);
 
     QMarginsF margins = { 16.0, 16.0, 16.0, 16.0 };
     qreal height = 56.0;
@@ -1776,14 +1897,14 @@ public:
     QSizeF avatarSize = { 40.0, 40.0 };
 };
 
-DesignSystem::TreeOneLineItem::Implementation::Implementation(qreal _scaleFactor, bool _isCompact)
+DesignSystem::TreeOneLineItem::Implementation::Implementation(qreal _scaleFactor, int _density)
 {
-    if (_isCompact) {
-        margins = { 8.0, 8.0, 8.0, 8.0 };
-        height = 40.0;
-        spacing = 8.0;
-        iconSize = { 24.0, 24.0 };
-        avatarSize = { 32.0, 32.0 };
+    if (_density > 0) {
+        const auto delta = 4.0 * _scaleFactor * _density;
+        const auto halfDelta = delta / 2.0;
+        margins.setTop(margins.top() - halfDelta);
+        margins.setBottom(margins.bottom() - halfDelta);
+        height -= delta;
     }
 
     margins *= _scaleFactor;
@@ -1831,8 +1952,8 @@ const QSizeF& DesignSystem::TreeOneLineItem::avatarSize() const
     return d->avatarSize;
 }
 
-DesignSystem::TreeOneLineItem::TreeOneLineItem(qreal _scaleFactor, bool _isCompact)
-    : d(new Implementation(_scaleFactor, _isCompact))
+DesignSystem::TreeOneLineItem::TreeOneLineItem(qreal _scaleFactor, int _density)
+    : d(new Implementation(_scaleFactor, _density))
 {
 }
 
@@ -2238,12 +2359,12 @@ class DesignSystemPrivate
 {
 public:
     explicit DesignSystemPrivate(ApplicationTheme _theme = ApplicationTheme::DarkAndLight,
-                                 qreal _scaleFactor = 1.0, bool _isCompact = false,
+                                 qreal _scaleFactor = 1.0, int _density = false,
                                  const DesignSystem::Color& _color = {});
 
     ApplicationTheme theme = ApplicationTheme::DarkAndLight;
     qreal scaleFactor = 1.0;
-    bool isCompact = false;
+    int density = 0;
 
     QMarginsF pageMargins = { 16.0, 26.0, 16.0, 16.0 };
     qreal pageSpacing = 16.0;
@@ -2263,7 +2384,7 @@ public:
     DesignSystem::ContextMenu contextMenu;
     DesignSystem::Label label;
     DesignSystem::Button button;
-    DesignSystem::ToggleButton toggleButton;
+    DesignSystem::IconButton iconButton;
     DesignSystem::RadioButton radioButton;
     DesignSystem::CheckBox checkBox;
     DesignSystem::Toggle toggle;
@@ -2286,33 +2407,35 @@ public:
     DesignSystem::LocationCard locationCard;
 };
 
-DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFactor,
-                                         bool _isCompact, const DesignSystem::Color& _color)
+DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFactor, int _density,
+                                         const DesignSystem::Color& _color)
     : theme(_theme)
     , scaleFactor(_scaleFactor)
-    , isCompact(_isCompact)
+    , density(_density)
     , color(_color)
     , font(_scaleFactor)
     , layout(_scaleFactor)
-    , compactLayout(_scaleFactor, _isCompact)
-    , appBar(_scaleFactor)
+    , compactLayout(_scaleFactor, _density)
+    , appBar(_scaleFactor, _density)
     , contextMenu(_scaleFactor)
-    , label(_scaleFactor)
-    , button(_scaleFactor)
-    , toggleButton(_scaleFactor)
-    , radioButton(_scaleFactor)
-    , checkBox(_scaleFactor)
+    , label(_scaleFactor, _density)
+    // для кнопок делаем увеличенный размер для большей гармоничности
+    , button(_scaleFactor, _density > 0 ? _density - 1 : _density)
+    , iconButton(_scaleFactor, _density)
+    , radioButton(_scaleFactor, _density)
+    , checkBox(_scaleFactor, _density)
     , toggle(_scaleFactor)
-    , slider(_scaleFactor)
+    , slider(_scaleFactor, _density)
     , progressBar(_scaleFactor)
-    , textField(_scaleFactor)
+    , textField(_scaleFactor, _density)
     , scrollBar(_scaleFactor, _color)
-    , floatingToolBar(_scaleFactor)
-    , tab(_scaleFactor)
+    , floatingToolBar(_scaleFactor, _density)
+    , tab(_scaleFactor, _density)
     , tabBar(_scaleFactor)
     , stepper(_scaleFactor)
-    , drawer(_scaleFactor, _color)
-    , treeOneLineItem(_scaleFactor, _isCompact)
+    , drawer(_scaleFactor, _density, _color)
+    // для элементов списков делаем уменьшенный размер для большей гармоничности
+    , treeOneLineItem(_scaleFactor, _density > 0 ? _density + 1 : _density)
     , tree(_scaleFactor, _color)
     , card(_scaleFactor)
     , dialog(_scaleFactor)
@@ -2337,7 +2460,7 @@ void DesignSystem::updateLanguage()
     //
     // Просто пересоздаём инстанс со стилями, а шрифты подхватятся при создании объекта Font
     //
-    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), isCompact(), color()));
+    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), density(), color()));
 }
 
 void DesignSystem::setTheme(ApplicationTheme _theme)
@@ -2362,21 +2485,23 @@ void DesignSystem::setScaleFactor(qreal _scaleFactor)
         return;
     }
 
-    instance()->d.reset(new DesignSystemPrivate(theme(), _scaleFactor, isCompact(), color()));
+    instance()->d.reset(new DesignSystemPrivate(theme(), _scaleFactor, density(), color()));
 }
 
-bool DesignSystem::isCompact()
+int DesignSystem::density()
 {
-    return instance()->d->isCompact;
+    return instance()->d->density;
 }
 
-void DesignSystem::setCompact(bool _isCompact)
+void DesignSystem::setDensity(int _density)
 {
-    if (instance()->d->isCompact == _isCompact) {
+    Q_ASSERT(0 <= _density && _density < 4);
+
+    if (instance()->d->density == _density) {
         return;
     }
 
-    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), _isCompact, color()));
+    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), _density, color()));
 }
 
 QMarginsF DesignSystem::pageMargins()
@@ -2533,7 +2658,7 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
 
 void DesignSystem::setColor(const DesignSystem::Color& _color)
 {
-    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), isCompact(), _color));
+    instance()->d.reset(new DesignSystemPrivate(theme(), scaleFactor(), density(), _color));
 }
 
 const DesignSystem::Font& DesignSystem::font()
@@ -2571,9 +2696,9 @@ const DesignSystem::Button& DesignSystem::button()
     return instance()->d->button;
 }
 
-const DesignSystem::ToggleButton& DesignSystem::toggleButton()
+const DesignSystem::IconButton& DesignSystem::iconButton()
 {
-    return instance()->d->toggleButton;
+    return instance()->d->iconButton;
 }
 
 const DesignSystem::RadioButton& DesignSystem::radioButton()

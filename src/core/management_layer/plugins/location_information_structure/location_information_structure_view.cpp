@@ -127,14 +127,14 @@ void LocationInformationStructureView::designSystemChangeEvent(DesignSystemChang
 
     d->backIcon->setContentsMargins(
         QMarginsF(isLeftToRight() ? DesignSystem::layout().px12() : DesignSystem::layout().px4(),
-                  DesignSystem::layout().px8(),
+                  DesignSystem::compactLayout().px8(),
                   isLeftToRight() ? DesignSystem::layout().px4() : DesignSystem::layout().px12(),
-                  DesignSystem::layout().px8())
+                  DesignSystem::compactLayout().px8())
             .toMargins());
     d->backText->setContentsMargins(QMarginsF(isLeftToRight() ? 0.0 : DesignSystem::layout().px16(),
-                                              DesignSystem::layout().px12(),
+                                              DesignSystem::compactLayout().px12(),
                                               isLeftToRight() ? DesignSystem::layout().px16() : 0.0,
-                                              DesignSystem::layout().px12())
+                                              DesignSystem::compactLayout().px12())
                                         .toMargins());
 }
 

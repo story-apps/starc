@@ -987,7 +987,8 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                         int panelsCountWidth = 0;
                         if (const auto blockData
                             = static_cast<BusinessLayer::TextBlockData*>(block.userData());
-                            blockData != nullptr && blockData->item()->parent() != nullptr) {
+                            blockData != nullptr && blockData->item() != nullptr
+                            && blockData->item()->parent() != nullptr) {
                             const auto itemParent = blockData->item()->parent();
                             if (itemParent->type() == BusinessLayer::TextModelItemType::Group
                                 && static_cast<BusinessLayer::TextModelGroupItem*>(itemParent)

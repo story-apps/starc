@@ -20,7 +20,7 @@
 
 #include <QEvent>
 #include <QLocale>
-#include <QPropertyAnimation>
+#include <QVariantAnimation>
 #include <QWidget>
 
 using WAF::SideSlideAnimator;
@@ -31,7 +31,7 @@ SideSlideAnimator::SideSlideAnimator(QWidget* _widgetForSlide)
     : AbstractAnimator(_widgetForSlide)
     , m_decorateBackground(true)
     , m_decorator(new SideSlideDecorator(_widgetForSlide->parentWidget()))
-    , m_animation(new QPropertyAnimation(_widgetForSlide, "pos"))
+    , m_animation(new QVariantAnimation(_widgetForSlide))
 {
     Q_ASSERT(_widgetForSlide);
     _widgetForSlide->parentWidget()->installEventFilter(this);
@@ -41,7 +41,9 @@ SideSlideAnimator::SideSlideAnimator(QWidget* _widgetForSlide)
 
     m_decorator->hide();
 
-    connect(m_animation, &QPropertyAnimation::finished, [this] {
+    connect(m_animation, &QVariantAnimation::valueChanged, _widgetForSlide,
+            [_widgetForSlide](const QVariant& _value) { _widgetForSlide->move(_value.toPoint()); });
+    connect(m_animation, &QVariantAnimation::finished, this, [this] {
         setAnimatedStopped();
         if (isAnimatedBackward()) {
             m_decorator->hide();
@@ -169,19 +171,19 @@ void SideSlideAnimator::slideIn()
     //
     // Выкатываем виджет
     //
-    if (m_animation->state() == QPropertyAnimation::Running) {
+    if (m_animation->state() == QVariantAnimation::Running) {
         //
         // ... если ещё не закончилась предыдущая анимация реверсируем её
         //
         m_animation->pause();
-        m_animation->setDirection(QPropertyAnimation::Backward);
+        m_animation->setDirection(QVariantAnimation::Backward);
         m_animation->resume();
     } else {
         //
         // ... если предыдущая анимация закончилась, запускаем новую анимацию
         //
         m_animation->setEasingCurve(QEasingCurve::OutQuart);
-        m_animation->setDirection(QPropertyAnimation::Forward);
+        m_animation->setDirection(QVariantAnimation::Forward);
         m_animation->setStartValue(startPosition);
         m_animation->setEndValue(finalPosition);
         m_animation->start();
@@ -259,19 +261,19 @@ void SideSlideAnimator::slideOut()
         //
         // Анимируем закатывание виджета
         //
-        if (m_animation->state() == QPropertyAnimation::Running) {
+        if (m_animation->state() == QVariantAnimation::Running) {
             //
             // ... если ещё не закончилась предыдущая анимация реверсируем её
             //
             m_animation->pause();
-            m_animation->setDirection(QPropertyAnimation::Backward);
+            m_animation->setDirection(QVariantAnimation::Backward);
             m_animation->resume();
         } else {
             //
             // ... если предыдущая анимация закончилась, запускаем новую анимацию
             //
             m_animation->setEasingCurve(QEasingCurve::InQuart);
-            m_animation->setDirection(QPropertyAnimation::Forward);
+            m_animation->setDirection(QVariantAnimation::Forward);
             m_animation->setStartValue(startPosition);
             m_animation->setEndValue(finalPosition);
             m_animation->start();

@@ -72,7 +72,6 @@ AudioplayInformationView::Implementation::Implementation(QWidget* _parent)
     audioplayInfoLayout->addWidget(audioplayTextVisiblity, row++, 0);
     audioplayInfoLayout->addWidget(audioplayStatisticsVisiblity, row++, 0);
     audioplayInfoLayout->setRowMinimumHeight(row++, 1); // добавляем пустую строку внизу
-    audioplayInfoLayout->setColumnStretch(0, 1);
     audioplayInfo->setContentLayout(audioplayInfoLayout);
 
     QWidget* contentWidget = new QWidget;
@@ -236,8 +235,9 @@ void AudioplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent* 
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+        QMarginsF(Ui::DesignSystem::layout().px24(),
+                  Ui::DesignSystem::compactLayout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
             .toMargins());
 
     d->audioplayInfo->setBackgroundColor(DesignSystem::color().background());
@@ -250,12 +250,13 @@ void AudioplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent* 
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->audioplayInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->audioplayInfoLayout->setVerticalSpacing(
+        static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
     d->audioplayInfoLayout->setRowMinimumHeight(
         0, static_cast<int>(Ui::DesignSystem::layout().px24()));
     d->audioplayInfoLayout->setRowMinimumHeight(
         d->audioplayInfoLayout->rowCount() - 1,
-        static_cast<int>(Ui::DesignSystem::layout().px24()));
+        static_cast<int>(Ui::DesignSystem::compactLayout().px24()));
 }
 
 } // namespace Ui

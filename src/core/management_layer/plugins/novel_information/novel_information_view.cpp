@@ -248,8 +248,9 @@ void NovelInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _eve
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+        QMarginsF(Ui::DesignSystem::layout().px24(),
+                  Ui::DesignSystem::compactLayout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
             .toMargins());
 
     d->novelInfo->setBackgroundColor(DesignSystem::color().background());
@@ -267,10 +268,12 @@ void NovelInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _eve
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->novelInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->novelInfoLayout->setVerticalSpacing(
+        static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
     d->novelInfoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->novelInfoLayout->setRowMinimumHeight(d->novelInfoLayout->rowCount() - 1,
-                                            static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->novelInfoLayout->setRowMinimumHeight(
+        d->novelInfoLayout->rowCount() - 1,
+        static_cast<int>(Ui::DesignSystem::compactLayout().px24()));
 }
 
 } // namespace Ui

@@ -22,7 +22,7 @@
 
 #include <QSize>
 
-class QPropertyAnimation;
+class QVariantAnimation;
 
 
 /**
@@ -127,7 +127,7 @@ private:
     /**
      * @brief Объект для анимирования выезжания
      */
-    QPropertyAnimation* m_animation;
+    QVariantAnimation* m_animation;
 
     /**
      * @brief Помошник перекрывающий анимируемый виджет

@@ -99,7 +99,8 @@ qreal Drawer::Implementation::accountPanelHeight() const
         return Ui::DesignSystem::drawer().margins().top();
     }
 
-    return Ui::DesignSystem::drawer().margins().top() + Ui::DesignSystem::layout().px48() // avatar
+    return Ui::DesignSystem::drawer().margins().top() + Ui::DesignSystem::layout().px2()
+        + Ui::DesignSystem::layout().px48() // avatar
         + Ui::DesignSystem::layout().px24() // avatar <-> user name spacing
         + Ui::DesignSystem::layout().px48() // user name + email
         + Ui::DesignSystem::layout().px8(); // bottom spacing

@@ -16,8 +16,6 @@ class SideSlideDecorator : public QWidget
 {
     Q_OBJECT
 
-    Q_PROPERTY(QPoint slidePos READ slidePos WRITE setSlidePos)
-
 public:
     explicit SideSlideDecorator(QWidget* _parent);
 
@@ -30,16 +28,6 @@ public:
      * @brief Задекорировать фон
      */
     void decorate(bool _dark);
-
-    /**
-     * @brief Получить позицию выкатываемого виджета
-     */
-    QPoint slidePos() const;
-
-    /**
-     * @brief Установить позицию выкатываемого виджета
-     */
-    void setSlidePos(const QPoint& _pos);
 
 signals:
     /**
@@ -59,11 +47,6 @@ protected:
     void mousePressEvent(QMouseEvent* _event);
 
 private:
-    /**
-     * @brief Позиция выкатываемого виджета
-     */
-    QPoint m_slidePos;
-
     /**
      * @brief Таймлайн для реализации анимированного декорирования
      */

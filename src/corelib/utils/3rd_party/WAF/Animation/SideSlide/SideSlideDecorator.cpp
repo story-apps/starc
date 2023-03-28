@@ -37,7 +37,7 @@ SideSlideDecorator::SideSlideDecorator(QWidget* _parent)
     //
     // Анимируем затемнение/осветление
     //
-    connect(&m_timeline, &QTimeLine::frameChanged, [this](int _value) {
+    connect(&m_timeline, &QTimeLine::frameChanged, this, [this](int _value) {
         m_decorationColor = QColor(0, 0, 0, _value / 100);
         update();
     });
@@ -56,19 +56,6 @@ void SideSlideDecorator::decorate(bool _dark)
 
     m_timeline.setDirection(_dark ? QTimeLine::Forward : QTimeLine::Backward);
     m_timeline.start();
-}
-
-QPoint SideSlideDecorator::slidePos() const
-{
-    return m_slidePos;
-}
-
-void SideSlideDecorator::setSlidePos(const QPoint& _pos)
-{
-    if (m_slidePos != _pos) {
-        m_slidePos = _pos;
-        update();
-    }
 }
 
 void SideSlideDecorator::paintEvent(QPaintEvent* _event)

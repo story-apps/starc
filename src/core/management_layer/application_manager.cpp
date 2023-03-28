@@ -188,7 +188,7 @@ public:
     /**
      * @brief Задать использование компакстного режима
      */
-    void setDesignSystemCompact(bool _isCompact);
+    void setDesignSystemDensity(int _density);
 
     //
     // Работа с проектом
@@ -1146,9 +1146,9 @@ void ApplicationManager::Implementation::setDesignSystemScaleFactor(qreal _scale
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
-void ApplicationManager::Implementation::setDesignSystemCompact(bool _isCompact)
+void ApplicationManager::Implementation::setDesignSystemDensity(int _density)
 {
-    Ui::DesignSystem::setCompact(_isCompact);
+    Ui::DesignSystem::setDensity(_density);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
@@ -2264,7 +2264,7 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
         settingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey).toString()));
     d->setDesignSystemScaleFactor(
         settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
-    d->setDesignSystemCompact(settingsValue(DataStorageLayer::kApplicationIsCompactKey).toBool());
+    d->setDesignSystemDensity(settingsValue(DataStorageLayer::kApplicationDensityKey).toInt());
     d->applicationView->restoreState(
         settingsValue(DataStorageLayer::kApplicationConfiguredKey).toBool(),
         settingsValues(DataStorageLayer::kApplicationViewStateKey));
@@ -2644,8 +2644,8 @@ void ApplicationManager::initConnections()
             });
     connect(d->settingsManager.data(), &SettingsManager::applicationScaleFactorChanged, this,
             [this](qreal _scaleFactor) { d->setDesignSystemScaleFactor(_scaleFactor); });
-    connect(d->settingsManager.data(), &SettingsManager::applicationIsCompactChanged, this,
-            [this](bool _isCompact) { d->setDesignSystemCompact(_isCompact); });
+    connect(d->settingsManager.data(), &SettingsManager::applicationDensityChanged, this,
+            [this](int _density) { d->setDesignSystemDensity(_density); });
     connect(d->settingsManager.data(), &SettingsManager::applicationUseAutoSaveChanged, this,
             [this] { d->configureAutoSave(); });
     //

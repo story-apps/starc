@@ -54,8 +54,6 @@ ComicBookParametersView::Implementation::Implementation(QWidget* _parent)
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     content->setVerticalScrollBar(new ScrollBar);
 
-    comicBookInfo->setResizingActive(false);
-
     header->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     footer->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
@@ -122,9 +120,6 @@ ComicBookParametersView::ComicBookParametersView(QWidget* _parent)
             });
     connect(d->overrideCommonSettings, &CheckBox::checkedChanged, this,
             [this](bool _checked) { d->comicBookTemplate->setVisible(_checked); });
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 ComicBookParametersView::~ComicBookParametersView() = default;
@@ -224,8 +219,9 @@ void ComicBookParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+        QMarginsF(Ui::DesignSystem::layout().px24(),
+                  Ui::DesignSystem::compactLayout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
             .toMargins());
 
     d->comicBookInfo->setBackgroundColor(DesignSystem::color().background());
@@ -250,9 +246,10 @@ void ComicBookParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->infoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->infoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
     d->infoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px24()));
-    d->infoLayout->setRowMinimumHeight(7, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->infoLayout->setRowMinimumHeight(7,
+                                       static_cast<int>(Ui::DesignSystem::compactLayout().px24()));
 }
 
 } // namespace Ui

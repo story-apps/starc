@@ -31,7 +31,7 @@ public:
     bool useContentsWidth = false;
     bool isReadOnly = false;
     CardPopupWithTree* popup = nullptr;
-    int popupMaxItems = 5;
+    int popupMaxItems = 7;
 };
 
 ComboBox::Implementation::Implementation(QWidget* _parent)

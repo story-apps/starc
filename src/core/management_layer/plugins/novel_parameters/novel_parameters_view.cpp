@@ -54,8 +54,6 @@ NovelParametersView::Implementation::Implementation(QWidget* _parent)
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     content->setVerticalScrollBar(new ScrollBar);
 
-    novelInfo->setResizingActive(false);
-
     header->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     footer->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
@@ -70,20 +68,9 @@ NovelParametersView::Implementation::Implementation(QWidget* _parent)
     infoLayout->addWidget(printHeaderOnTitlePage);
     infoLayout->addWidget(footer);
     infoLayout->addWidget(printFooterOnTitlePage);
-    infoLayout->addWidget(overrideCommonSettings, 1, Qt::AlignTop);
+    infoLayout->addWidget(overrideCommonSettings);
     infoLayout->addWidget(novelTemplate);
     novelInfo->setContentLayout(infoLayout);
-
-    //
-    // TODO: С лёту не завелось, т.к. при отображении скрытых виджетов, виджеты, которые были видны,
-    // сжимаются лейаутом, что даёт некрасивый эффект дёргания (собственно это актуально и для
-    // диалогов, просто там это не так сильно заметно как на больших карточках).
-    //
-    // Во время экспериментов не помогли ни фиксация размера виджета, ни установка минимального
-    // размера строки лейаута, ни разные полтики лейута, надо смотреть код лейаута и искать лазейку,
-    // как заставить его не сжимать некоторые из виджетов
-    //
-    novelInfo->setResizingActive(true);
 
     QWidget* contentWidget = new QWidget;
     content->setWidget(contentWidget);
@@ -230,8 +217,9 @@ void NovelParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _even
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+        QMarginsF(Ui::DesignSystem::layout().px24(),
+                  Ui::DesignSystem::compactLayout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
             .toMargins());
 
     d->novelInfo->setBackgroundColor(DesignSystem::color().background());
@@ -256,7 +244,7 @@ void NovelParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _even
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->infoLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->infoLayout->setSpacing(static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
     d->infoLayout->setContentsMargins(0, static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
                                       static_cast<int>(Ui::DesignSystem::layout().px12()));
 }

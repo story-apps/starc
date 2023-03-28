@@ -196,7 +196,7 @@ public:
         qreal buttonsSpacing() const;
 
     private:
-        explicit Layout(qreal _scaleFactor, bool _isCompact = false);
+        explicit Layout(qreal _scaleFactor, int _density = 0);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -257,7 +257,7 @@ public:
         QPointF shadowOffset() const;
 
     private:
-        explicit AppBar(qreal _scaleFactor);
+        explicit AppBar(qreal _scaleFactor, int _density);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -299,7 +299,7 @@ public:
         const QMarginsF& margins() const;
 
     private:
-        explicit Label(qreal _scaleFactor);
+        explicit Label(qreal _scaleFactor, int _density);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -360,7 +360,7 @@ public:
         const QSizeF& iconSize() const;
 
     private:
-        explicit Button(qreal _scaleFactor);
+        explicit Button(qreal _scaleFactor, int _density);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -370,10 +370,10 @@ public:
     /**
      * @brief Параметры виджета кнопки-тумблера
      */
-    class CORE_LIBRARY_EXPORT ToggleButton
+    class CORE_LIBRARY_EXPORT IconButton
     {
     public:
-        ~ToggleButton();
+        ~IconButton();
 
         /**
          * @brief Размер
@@ -391,7 +391,7 @@ public:
         const QSizeF& iconSize() const;
 
     private:
-        explicit ToggleButton(qreal _scaleFactor);
+        explicit IconButton(qreal _scaleFactor, int _density);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -427,7 +427,7 @@ public:
         qreal spacing() const;
 
     private:
-        explicit RadioButton(qreal _scaleFactor);
+        explicit RadioButton(qreal _scaleFactor, int _density);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -463,7 +463,7 @@ public:
         qreal spacing() const;
 
     private:
-        explicit CheckBox(qreal _scaleFactor);
+        explicit CheckBox(qreal _scaleFactor, int _density);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -530,7 +530,7 @@ public:
         qreal unfilledPartOpacity() const;
 
     private:
-        explicit Slider(qreal _scaleFactor);
+        explicit Slider(qreal _scaleFactor, int _density);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -642,7 +642,7 @@ public:
         qreal helperHeight() const;
 
     private:
-        explicit TextField(qreal _scaleFactor);
+        explicit TextField(qreal _scaleFactor, int _density);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -739,7 +739,7 @@ public:
         qreal spacing() const;
 
     private:
-        explicit FloatingToolBar(qreal _scaleFactor);
+        explicit FloatingToolBar(qreal _scaleFactor, int _density);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -785,7 +785,7 @@ public:
         QSizeF iconSize() const;
 
     private:
-        explicit Tab(qreal _scaleFactor);
+        explicit Tab(qreal _scaleFactor, int _density);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -924,7 +924,7 @@ public:
         QColor selectionColor() const;
 
     private:
-        explicit Drawer(qreal _scaleFactor, const Color& _color);
+        explicit Drawer(qreal _scaleFactor, int _density, const Color& _color);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -962,7 +962,7 @@ public:
         const QSizeF& avatarSize() const;
 
     private:
-        explicit TreeOneLineItem(qreal _scaleFactor, bool _isCompact);
+        explicit TreeOneLineItem(qreal _scaleFactor, int _density);
         friend class DesignSystemPrivate;
         //
         class Implementation;
@@ -1237,12 +1237,12 @@ public:
     /**
      * @brief Используется ли компактный режим интерфейса
      */
-    static bool isCompact();
+    static int density();
 
     /**
      * @brief Задать компактный режим интерфейса
      */
-    static void setCompact(bool _isCompact);
+    static void setDensity(int _density);
 
     /**
      * @brief Отступы у страниц
@@ -1329,7 +1329,7 @@ public:
     /**
      * @brief Параметры кнопки-тумблера
      */
-    static const ToggleButton& toggleButton();
+    static const IconButton& iconButton();
 
     /**
      * @brief Параметры кнопки-переключателя

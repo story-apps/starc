@@ -38,7 +38,7 @@ public:
     int current = 50;
 
     std::optional<int> defaultValue;
-    qreal defaultPositionDelta = 0;
+    qreal defaultPositionDelta = 0.0;
 
     /**
      * @brief  Декорации слайдера при клике

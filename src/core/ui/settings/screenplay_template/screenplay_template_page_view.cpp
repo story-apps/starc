@@ -91,8 +91,6 @@ ScreenplayTemplatePageView::Implementation::Implementation(QWidget* _parent)
     , pageSplitterRight(new CaptionLabel(card))
     , pageLayoutPreview(new PageLayout(card))
 {
-    card->setResizingActive(false);
-
     auto pageFormatGroup = new RadioButtonGroup(card);
     pageFormatGroup->add(pageFormatA4);
     pageFormatGroup->add(pageFormatLetter);

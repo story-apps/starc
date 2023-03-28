@@ -4,7 +4,7 @@
 #include "../../AbstractAnimator.h"
 #include "../../WAF.h"
 
-class QPropertyAnimation;
+class QVariantAnimation;
 
 
 /**
@@ -86,7 +86,7 @@ private:
     /**
      * @brief Объект для анимирования выезжания
      */
-    QPropertyAnimation* m_animation = nullptr;
+    QVariantAnimation* m_animation = nullptr;
 };
 } // namespace WAF
 

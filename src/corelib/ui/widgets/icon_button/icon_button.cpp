@@ -122,7 +122,7 @@ void IconButton::setCustomFont(const QFont& _font)
 
 QSize IconButton::sizeHint() const
 {
-    return QRectF({}, Ui::DesignSystem::toggleButton().size())
+    return QRectF({}, Ui::DesignSystem::iconButton().size())
         .marginsAdded(contentsMargins())
         .size()
         .toSize();
@@ -144,9 +144,9 @@ void IconButton::paintEvent(QPaintEvent* _event)
     //
     const auto iconRect = d->customFont.has_value()
         ? contentsRect()
-        : QRectF(QPointF(Ui::DesignSystem::toggleButton().margins().left(),
-                         Ui::DesignSystem::toggleButton().margins().top()),
-                 Ui::DesignSystem::toggleButton().iconSize());
+        : QRectF(QPointF(Ui::DesignSystem::iconButton().margins().left(),
+                         Ui::DesignSystem::iconButton().margins().top()),
+                 Ui::DesignSystem::iconButton().iconSize());
     if (d->decorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
         painter.setBrush(Ui::DesignSystem::color().accent());

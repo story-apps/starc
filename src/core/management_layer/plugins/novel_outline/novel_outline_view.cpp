@@ -3,7 +3,6 @@
 #include "text/novel_outline_edit.h"
 #include "text/novel_outline_edit_shortcuts_manager.h"
 #include "text/novel_outline_edit_toolbar.h"
-#include "text/novel_outline_fast_format_widget.h"
 #include "text/novel_outline_search_manager.h"
 
 #include <business_layer/document/text/text_block_data.h>
@@ -22,6 +21,7 @@
 #include <ui/modules/comments/comments_model.h>
 #include <ui/modules/comments/comments_toolbar.h>
 #include <ui/modules/comments/comments_view.h>
+#include <ui/modules/fast_format_widget/fast_format_widget.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -143,7 +143,7 @@ public:
     Widget* sidebarWidget = nullptr;
     TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
-    NovelOutlineFastFormatWidget* fastFormatWidget = nullptr;
+    FastFormatWidget* fastFormatWidget = nullptr;
     CommentsView* commentsView = nullptr;
     BookmarksView* bookmarksView = nullptr;
     //
@@ -175,7 +175,7 @@ NovelOutlineView::Implementation::Implementation(QWidget* _parent)
     , sidebarWidget(new Widget(_parent))
     , sidebarTabs(new TabBar(_parent))
     , sidebarContent(new StackWidget(_parent))
-    , fastFormatWidget(new NovelOutlineFastFormatWidget(_parent))
+    , fastFormatWidget(new FastFormatWidget(_parent))
     , commentsView(new CommentsView(_parent))
     , bookmarksView(new BookmarksView(_parent))
     , splitter(new Splitter(_parent))
@@ -603,7 +603,7 @@ NovelOutlineView::NovelOutlineView(QWidget* _parent)
         }
     });
     //
-    connect(d->fastFormatWidget, &NovelOutlineFastFormatWidget::paragraphTypeChanged, this,
+    connect(d->fastFormatWidget, &FastFormatWidget::paragraphTypeChanged, this,
             [this](const QModelIndex& _index) {
                 const auto type = static_cast<BusinessLayer::TextParagraphType>(
                     _index.data(kTypeDataRole).toInt());

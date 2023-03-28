@@ -141,6 +141,8 @@ ProjectView::ProjectView(QWidget* _parent)
         if (d->documentVersionsHeightAnimation.direction() == QVariantAnimation::Backward) {
             d->documentVersions->hide();
         }
+        d->documentVersions->setMinimumHeight(0);
+        d->documentVersions->setMaximumHeight(QWIDGETSIZE_MAX);
     });
     connect(&d->overlayOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) { d->overlay->setOpacity(_value.toReal()); });
@@ -231,6 +233,7 @@ void ProjectView::setVersionsVisible(bool _visible)
     }
 
     if (_visible) {
+        d->documentVersions->setFixedHeight(0);
         d->documentVersions->show();
     }
     d->documentVersionsHeightAnimation.setDirection(_visible ? QVariantAnimation::Forward

@@ -57,7 +57,7 @@ signals:
     void applicationThemeChanged(Ui::ApplicationTheme _theme);
     void applicationCustomThemeColorsChanged(const Ui::DesignSystem::Color& _color);
     void applicationScaleFactorChanged(qreal _scaleFactor);
-    void applicationIsCompactChanged(qreal _isCompact);
+    void applicationDensityChanged(qreal _isCompact);
     void applicationUseAutoSaveChanged(bool _use);
     void applicationSaveBackupsChanged(bool _save);
     void applicationBackupsFolderChanged(const QString& _path);
@@ -102,7 +102,7 @@ private:
     void setApplicationTheme(Ui::ApplicationTheme _theme);
     void setApplicationCustomThemeColors(const Ui::DesignSystem::Color& _color);
     void setApplicationScaleFactor(qreal _scaleFactor);
-    void setApplicationCompact(bool _isCompact);
+    void setApplicationDensity(int _density);
     void setApplicationUseAutoSave(bool _use);
     void setApplicationSaveBackups(bool _save);
     void setApplicationBackupsFolder(const QString& _path);
