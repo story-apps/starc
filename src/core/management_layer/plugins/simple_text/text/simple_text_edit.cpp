@@ -207,7 +207,7 @@ BusinessLayer::TextParagraphType SimpleTextEdit::currentParagraphType() const
 
 QModelIndex SimpleTextEdit::currentModelIndex() const
 {
-    if (d->model == nullptr) {
+    if (d->model == nullptr || d->document.isEditTransactionActive()) {
         return {};
     }
 

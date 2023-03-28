@@ -446,7 +446,7 @@ BusinessLayer::TextParagraphType AudioplayTextEdit::currentParagraphType() const
 
 QModelIndex AudioplayTextEdit::currentModelIndex() const
 {
-    if (d->model == nullptr) {
+    if (d->model == nullptr || d->document.isEditTransactionActive()) {
         return {};
     }
 

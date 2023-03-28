@@ -601,7 +601,8 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
         case TextParagraphType::PageHeading: {
             const auto item = itemFromBlock(block);
             do {
-                if (item->parent() == nullptr || item->parent()->type() != TextModelItemType::Group
+                if (item == nullptr || item->parent() == nullptr
+                    || item->parent()->type() != TextModelItemType::Group
                     || static_cast<TextModelGroupItem*>(item->parent())->groupType()
                         != TextGroupType::Page) {
                     break;
@@ -634,7 +635,8 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
         case TextParagraphType::PanelHeading: {
             const auto item = itemFromBlock(block);
             do {
-                if (item->parent() == nullptr || item->parent()->type() != TextModelItemType::Group
+                if (item == nullptr || item->parent() == nullptr
+                    || item->parent()->type() != TextModelItemType::Group
                     || static_cast<TextModelGroupItem*>(item->parent())->groupType()
                         != TextGroupType::Panel) {
                     break;
@@ -696,7 +698,7 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
         case TextParagraphType::Character: {
             const auto item = itemFromBlock(block);
             do {
-                if (item->type() != TextModelItemType::Text) {
+                if (item == nullptr || item->type() != TextModelItemType::Text) {
                     break;
                 }
 

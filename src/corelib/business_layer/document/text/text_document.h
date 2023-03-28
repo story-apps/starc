@@ -23,9 +23,16 @@ class CORE_LIBRARY_EXPORT TextDocument : public QTextDocument
 {
     Q_OBJECT
 
+    friend class TextCursor;
+
 public:
     explicit TextDocument(QObject* _parent = nullptr);
     ~TextDocument() override;
+
+    /**
+     * @brief Активна ли в данный момент транзакция по изменению документа
+     */
+    bool isEditTransactionActive();
 
     /**
      * @brief Модель текста
@@ -151,6 +158,11 @@ private:
      * @brief Вставить таблицу в заданном курсоре
      */
     void insertTable(const TextCursor& _cursor);
+
+    /**
+     * @brief Задать состояние изменения документа
+     */
+    void setEditTransactionActive(bool _active);
 
 private:
     class Implementation;

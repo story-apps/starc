@@ -511,7 +511,7 @@ BusinessLayer::TextParagraphType NovelTextEdit::currentParagraphType() const
 
 QModelIndex NovelTextEdit::currentModelIndex() const
 {
-    if (d->model == nullptr) {
+    if (d->model == nullptr || d->document.isEditTransactionActive()) {
         return {};
     }
 

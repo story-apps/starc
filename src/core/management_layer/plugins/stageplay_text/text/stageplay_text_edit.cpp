@@ -450,7 +450,7 @@ BusinessLayer::TextParagraphType StageplayTextEdit::currentParagraphType() const
 
 QModelIndex StageplayTextEdit::currentModelIndex() const
 {
-    if (d->model == nullptr) {
+    if (d->model == nullptr || d->document.isEditTransactionActive()) {
         return {};
     }
 

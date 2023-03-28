@@ -464,7 +464,7 @@ BusinessLayer::TextParagraphType ComicBookTextEdit::currentParagraphType() const
 
 QModelIndex ComicBookTextEdit::currentModelIndex() const
 {
-    if (d->model == nullptr) {
+    if (d->model == nullptr || d->document.isEditTransactionActive()) {
         return {};
     }
 

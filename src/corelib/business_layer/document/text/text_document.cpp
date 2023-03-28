@@ -81,6 +81,11 @@ public:
     TextDocument* q = nullptr;
 
     /**
+     * @brief Находится ли документ в состоянии изменения
+     */
+    bool isEditTransactionActive = false;
+
+    /**
      * @brief Текущее состояние документа
      */
     DocumentState state = DocumentState::Undefined;
@@ -458,6 +463,11 @@ TextDocument::TextDocument(QObject* _parent)
 
 TextDocument::~TextDocument() = default;
 
+bool TextDocument::isEditTransactionActive()
+{
+    return d->isEditTransactionActive;
+}
+
 void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeModel)
 {
     d->state = DocumentState::Loading;
@@ -542,7 +552,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
         d->model, &TextModel::dataChanged, this,
         [this](const QModelIndex& _topLeft, const QModelIndex& _bottomRight,
                const QVector<int>& _roles) {
-            if (d->state != DocumentState::Ready) {
+            if (d->state != DocumentState::Ready || d->isEditTransactionActive) {
                 return;
             }
 
@@ -734,7 +744,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
         });
     connect(d->model, &TextModel::rowsInserted, this,
             [this](const QModelIndex& _parent, int _from, int _to) {
-                if (d->state != DocumentState::Ready) {
+                if (d->state != DocumentState::Ready || d->isEditTransactionActive) {
                     return;
                 }
 
@@ -839,7 +849,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     connect(
         d->model, &TextModel::rowsAboutToBeRemoved, this,
         [this](const QModelIndex& _parent, int _from, int _to) {
-            if (d->state != DocumentState::Ready) {
+            if (d->state != DocumentState::Ready || d->isEditTransactionActive) {
                 return;
             }
 
@@ -1294,7 +1304,7 @@ QVector<QColor> TextDocument::itemColors(const QTextBlock& _forBlock) const
     }
 
     const auto blockData = static_cast<TextBlockData*>(_forBlock.userData());
-    if (blockData == nullptr) {
+    if (blockData == nullptr || blockData->item() == nullptr) {
         return {};
     }
 
@@ -1898,11 +1908,7 @@ void TextDocument::processModelReset()
 
 void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded)
 {
-    if (d->model == nullptr) {
-        return;
-    }
-
-    if (!d->canChangeModel) {
+    if (d->model == nullptr || !d->canChangeModel || isEditTransactionActive()) {
         return;
     }
 
@@ -2800,7 +2806,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             auto blockData = static_cast<TextBlockData*>(block.userData());
             auto item = blockData->item();
 
-            if (item->type() == TextModelItemType::Text) {
+            if (item != nullptr && item->type() == TextModelItemType::Text) {
                 auto textItem = static_cast<TextModelTextItem*>(item);
                 textItem->setCorrection(
                     block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection));
@@ -2868,6 +2874,11 @@ void TextDocument::insertTable(const TextCursor& _cursor)
     format.setTopMargin(-1 * qtTableBorderWidth * 2);
     auto cursor = _cursor;
     cursor.insertTable(1, 2, format);
+}
+
+void TextDocument::setEditTransactionActive(bool _active)
+{
+    d->isEditTransactionActive = _active;
 }
 
 } // namespace BusinessLayer

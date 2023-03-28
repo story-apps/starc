@@ -110,6 +110,17 @@ TextCursor::Selection TextCursor::selectionInterval() const
 
 void TextCursor::restartEditBlock()
 {
+    if (!isInEditBlock()) {
+        return;
+    }
+
+    auto textDocument = qobject_cast<BusinessLayer::TextDocument*>(document());
+    if (textDocument == nullptr) {
+        return;
+    }
+    Q_ASSERT(!textDocument->isEditTransactionActive());
+    textDocument->setEditTransactionActive(true);
+
     endEditBlock();
 
     int editsCount = 0;
@@ -124,6 +135,8 @@ void TextCursor::restartEditBlock()
         beginEditBlock();
         --editsCount;
     }
+
+    textDocument->setEditTransactionActive(false);
 }
 
 void TextCursor::removeCharacters(BaseTextEdit* _editor)
@@ -271,7 +284,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                 // - удаляем весь остальной контент и заодно вставленный на предыдущем шаге символ
                 //
                 cursor.movePosition(QTextCursor::Start);
-                auto textDocument = static_cast<BusinessLayer::TextDocument*>(document());
+                auto textDocument = qobject_cast<BusinessLayer::TextDocument*>(document());
                 Q_ASSERT(textDocument);
                 textDocument->setParagraphType(textTemplate().defaultParagraphType(), cursor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -376,7 +389,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                         //
                         if (isTableEmpty || textTemplate().canMergeParagraph()) {
                             auto textDocument
-                                = static_cast<BusinessLayer::TextDocument*>(document());
+                                = qobject_cast<BusinessLayer::TextDocument*>(document());
                             textDocument->mergeParagraph(cursor);
                         }
                     }
