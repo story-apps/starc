@@ -873,6 +873,8 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
     TextBlockStyle defaultBlockStyle = paragraphsStyles.value(defaultParagraphType());
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
+    defaultBlockStyle.setMargins(
+        { 0.0, defaultBlockStyle.margins().top(), 0.0, defaultBlockStyle.margins().bottom() });
     //
     for (auto type : {
              TextParagraphType::Text,
