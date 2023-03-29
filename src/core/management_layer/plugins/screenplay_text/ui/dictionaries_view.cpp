@@ -157,13 +157,13 @@ void DictionariesView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->dictionaryType->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->dictionaryType->setPopupBackgroundColor(Ui::DesignSystem::color().primary());
     d->dictionaryType->setCustomMargins(
-        { Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
-          Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px24() });
+        { Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24(),
+          Ui::DesignSystem::compactLayout().px16(), Ui::DesignSystem::compactLayout().px24() });
     d->addItemToDictionary->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->addItemToDictionary->setTextColor(Ui::DesignSystem::color().onPrimary());
-    d->addItemToDictionary->setContentsMargins(0, Ui::DesignSystem::layout().px24(),
+    d->addItemToDictionary->setContentsMargins(0, Ui::DesignSystem::compactLayout().px24(),
                                                Ui::DesignSystem::layout().px12(),
-                                               Ui::DesignSystem::layout().px24());
+                                               Ui::DesignSystem::compactLayout().px24());
     d->dictionaryItems->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->dictionaryItems->setTextColor(Ui::DesignSystem::color().onPrimary());
     d->dictionaryItemsDelegate->setAdditionalLeftMargin(Ui::DesignSystem::layout().px8());

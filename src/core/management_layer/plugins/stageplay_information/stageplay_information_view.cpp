@@ -239,8 +239,9 @@ void StageplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent* 
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+        QMarginsF(Ui::DesignSystem::layout().px24(),
+                  Ui::DesignSystem::compactLayout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
             .toMargins());
 
     d->stageplayInfo->setBackgroundColor(DesignSystem::color().background());
@@ -253,7 +254,8 @@ void StageplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent* 
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->stageplayInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->stageplayInfoLayout->setVerticalSpacing(
+        static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
     d->stageplayInfoLayout->setRowMinimumHeight(
         0, static_cast<int>(Ui::DesignSystem::layout().px24()));
     d->stageplayInfoLayout->setRowMinimumHeight(

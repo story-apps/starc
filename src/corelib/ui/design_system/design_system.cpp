@@ -599,6 +599,7 @@ class DesignSystem::Layout::Implementation
 public:
     explicit Implementation(qreal _scaleFactor, int _density);
 
+    int density = 0;
     qreal px2 = 2.0;
     qreal px4 = 4.0;
     qreal px8 = 8.0;
@@ -612,8 +613,9 @@ public:
 };
 
 DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor, int _density)
+    : density(_density)
 {
-    if (_density > 0) {
+    if (density > 0) {
         //
         // Тут делаем кастомное изменение размера, чтобы симметрично изменять размеры, иначе, из-за
         // разницы в изменении (т.к. она фиксированная), отступы в делегатах выглядят странно,
@@ -628,7 +630,7 @@ DesignSystem::Layout::Implementation::Implementation(qreal _scaleFactor, int _de
         px48 /= 2.0;
         px62 /= 2.0;
 
-        const auto delta = 4.0 * _scaleFactor * _density;
+        const auto delta = 4.0 * _scaleFactor * density;
         topContentMargin -= delta;
     }
 
@@ -652,8 +654,7 @@ DesignSystem::Layout::~Layout() = default;
 
 qreal DesignSystem::Layout::px(qreal _value) const
 {
-    return Ui::DesignSystem::scaleFactor()
-        * (_value / (Ui::DesignSystem::density() == 0 ? 1.0 : 2.0));
+    return Ui::DesignSystem::scaleFactor() * (_value / (d->density == 0 ? 1.0 : 2.0));
 }
 
 qreal DesignSystem::Layout::px2() const
@@ -2435,6 +2436,7 @@ DesignSystemPrivate::DesignSystemPrivate(ApplicationTheme _theme, qreal _scaleFa
     , stepper(_scaleFactor)
     , drawer(_scaleFactor, _density, _color)
     // для элементов списков делаем уменьшенный размер для большей гармоничности
+    // NOTE: Это аффектит на редакторы текстовые поля в делегатах, там выглядит очень уёбищно
     , treeOneLineItem(_scaleFactor, _density > 0 ? _density + 1 : _density)
     , tree(_scaleFactor, _color)
     , card(_scaleFactor)

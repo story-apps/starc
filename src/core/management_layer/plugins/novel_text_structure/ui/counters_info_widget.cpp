@@ -173,8 +173,8 @@ void CountersInfoWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event
     }
 
     layout()->setContentsMargins(
-        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12(),
-        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12());
+        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::compactLayout().px12(),
+        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::compactLayout().px12());
 }
 
 } // namespace Ui

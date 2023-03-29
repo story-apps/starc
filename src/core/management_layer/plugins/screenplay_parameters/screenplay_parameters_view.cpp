@@ -444,8 +444,9 @@ void ScreenplayParametersView::designSystemChangeEvent(DesignSystemChangeEvent* 
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+        QMarginsF(Ui::DesignSystem::layout().px24(),
+                  Ui::DesignSystem::compactLayout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
             .toMargins());
 
     d->screenplayInfo->setBackgroundColor(DesignSystem::color().background());
@@ -505,7 +506,7 @@ void ScreenplayParametersView::designSystemChangeEvent(DesignSystemChangeEvent* 
             button->setContentsMargins(0, 0, Ui::DesignSystem::layout().px16(), 0);
         }
     }
-    d->infoLayout->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->infoLayout->setSpacing(static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
     d->infoLayout->setContentsMargins(0, static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
                                       static_cast<int>(Ui::DesignSystem::layout().px12()));
 }

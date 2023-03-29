@@ -90,7 +90,7 @@ RecycleBinView::RecycleBinView(QWidget* _parent)
     setFocusPolicy(Qt::StrongFocus);
 
     auto layout = new QVBoxLayout;
-    layout->setContentsMargins(QMargins());
+    layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addStretch();
     layout->addWidget(d->iconLabel, 0, Qt::AlignHCenter);
@@ -139,14 +139,14 @@ void RecycleBinView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->titleLabel->setBackgroundColor(Ui::DesignSystem::color().surface());
     d->titleLabel->setTextColor(Ui::DesignSystem::color().onSurface());
     d->titleLabel->setContentsMargins(Ui::DesignSystem::layout().px24(),
-                                      Ui::DesignSystem::layout().px24(),
+                                      Ui::DesignSystem::compactLayout().px24(),
                                       Ui::DesignSystem::layout().px24(), 0);
     d->subtitleLabel->setBackgroundColor(Ui::DesignSystem::color().surface());
     d->subtitleLabel->setTextColor(ColorHelper::transparent(
         Ui::DesignSystem::color().onSurface(), Ui::DesignSystem::inactiveTextOpacity()));
     d->subtitleLabel->setContentsMargins(
-        Ui::DesignSystem::layout().px(128), Ui::DesignSystem::layout().px24(),
-        Ui::DesignSystem::layout().px(128), Ui::DesignSystem::layout().px24());
+        Ui::DesignSystem::layout().px(128), Ui::DesignSystem::compactLayout().px24(),
+        Ui::DesignSystem::layout().px(128), Ui::DesignSystem::compactLayout().px24());
     d->emptyRecycleBinButton->setBackgroundColor(Ui::DesignSystem::color().accent());
     d->emptyRecycleBinButton->setTextColor(Ui::DesignSystem::color().accent());
 }

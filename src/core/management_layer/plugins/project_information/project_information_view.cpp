@@ -173,8 +173,9 @@ void ProjectInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _e
     d->content->setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->parametersPage->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+        QMarginsF(Ui::DesignSystem::layout().px24(),
+                  Ui::DesignSystem::compactLayout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
             .toMargins());
 
     d->projectInfo->setBackgroundColor(DesignSystem::color().background());
@@ -182,7 +183,8 @@ void ProjectInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _e
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->projectInfoLayout->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px16()));
+    d->projectInfoLayout->setVerticalSpacing(
+        static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
     d->projectInfoLayout->setRowMinimumHeight(0,
                                               static_cast<int>(Ui::DesignSystem::layout().px24()));
     d->projectInfoLayout->setRowMinimumHeight(3,

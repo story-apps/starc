@@ -160,16 +160,16 @@ void StageplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent
 
     d->backIcon->setContentsMargins(QMarginsF(isLeftToRight() ? Ui::DesignSystem::layout().px12()
                                                               : Ui::DesignSystem::layout().px4(),
-                                              Ui::DesignSystem::layout().px8(),
+                                              Ui::DesignSystem::compactLayout().px8(),
                                               isLeftToRight() ? Ui::DesignSystem::layout().px4()
                                                               : Ui::DesignSystem::layout().px12(),
-                                              Ui::DesignSystem::layout().px8())
+                                              Ui::DesignSystem::compactLayout().px8())
                                         .toMargins());
     d->backText->setContentsMargins(
         QMarginsF(isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px16(),
-                  Ui::DesignSystem::layout().px12(),
+                  Ui::DesignSystem::compactLayout().px12(),
                   isLeftToRight() ? Ui::DesignSystem::layout().px16() : 0.0,
-                  Ui::DesignSystem::layout().px12())
+                  Ui::DesignSystem::compactLayout().px12())
             .toMargins());
 }
 

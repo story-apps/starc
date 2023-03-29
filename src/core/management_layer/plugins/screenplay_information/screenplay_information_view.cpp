@@ -248,8 +248,9 @@ void ScreenplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent*
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+        QMarginsF(Ui::DesignSystem::layout().px24(),
+                  Ui::DesignSystem::compactLayout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
             .toMargins());
 
     d->screenplayInfo->setBackgroundColor(DesignSystem::color().background());
@@ -263,12 +264,12 @@ void ScreenplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent*
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
     d->screenplayInfoLayout->setVerticalSpacing(
-        static_cast<int>(Ui::DesignSystem::layout().px16()));
+        static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
     d->screenplayInfoLayout->setRowMinimumHeight(
         0, static_cast<int>(Ui::DesignSystem::layout().px24()));
     d->screenplayInfoLayout->setRowMinimumHeight(
         d->screenplayInfoLayout->rowCount() - 1,
-        static_cast<int>(Ui::DesignSystem::layout().px24()));
+        static_cast<int>(Ui::DesignSystem::compactLayout().px24()));
 }
 
 } // namespace Ui

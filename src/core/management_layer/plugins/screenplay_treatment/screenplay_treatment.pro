@@ -48,7 +48,6 @@ HEADERS += \
     text/screenplay_treatment_edit.h \
     text/screenplay_treatment_edit_shortcuts_manager.h \
     text/screenplay_treatment_edit_toolbar.h \
-    text/screenplay_treatment_fast_format_widget.h \
     text/screenplay_treatment_search_manager.h \
     text/screenplay_treatment_search_toolbar.h
 
@@ -70,7 +69,6 @@ SOURCES += \
     text/screenplay_treatment_edit.cpp \
     text/screenplay_treatment_edit_shortcuts_manager.cpp \
     text/screenplay_treatment_edit_toolbar.cpp \
-    text/screenplay_treatment_fast_format_widget.cpp \
     text/screenplay_treatment_search_manager.cpp \
     text/screenplay_treatment_search_toolbar.cpp
 
