@@ -390,8 +390,8 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->tree->setTextColor(DesignSystem::color().onPrimary());
 
     auto titleIconMargins
-        = QMarginsF(Ui::DesignSystem::layout().px(18), Ui::DesignSystem::layout().px(20),
-                    Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px4());
+        = QMarginsF(Ui::DesignSystem::layout().px(18), Ui::DesignSystem::compactLayout().px(20),
+                    Ui::DesignSystem::layout().px12(), Ui::DesignSystem::compactLayout().px4());
     for (auto icon : {
              d->proTitleIcon,
              d->teamTitleIcon,
@@ -403,7 +403,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
     auto titleMargins = Ui::DesignSystem::label().margins();
     titleMargins.setLeft(0);
-    titleMargins.setTop(Ui::DesignSystem::layout().px24());
+    titleMargins.setTop(Ui::DesignSystem::compactLayout().px24());
     titleMargins.setBottom(0);
     for (auto title : {
              d->freeTitle,
@@ -418,11 +418,11 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     auto freeTitleMargins = titleMargins;
     freeTitleMargins.setLeft(Ui::DesignSystem::layout().px(18));
-    freeTitleMargins.setBottom(Ui::DesignSystem::layout().px12());
+    freeTitleMargins.setBottom(Ui::DesignSystem::compactLayout().px12());
     d->freeTitle->setContentsMargins(freeTitleMargins.toMargins());
 
     auto subtitleMargins = freeTitleMargins;
-    subtitleMargins.setTop(Ui::DesignSystem::layout().px2());
+    subtitleMargins.setTop(Ui::DesignSystem::compactLayout().px2());
     for (auto subtitle : {
              d->freeSubtitle,
              d->proSubtitle,
@@ -451,10 +451,10 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->teamSpaceStats->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->teamSpaceStats->setContentsMargins(
-        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px4());
+        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::compactLayout().px16(),
+        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px4());
 
-    d->layout->setVerticalSpacing(Ui::DesignSystem::layout().px4());
+    d->layout->setVerticalSpacing(Ui::DesignSystem::compactLayout().px4());
     d->layout->setColumnMinimumWidth(0, Ui::DesignSystem::layout().px12());
     d->layout->setColumnMinimumWidth(1, Ui::DesignSystem::layout().px16());
     d->layout->setColumnMinimumWidth(3, Ui::DesignSystem::layout().px12());

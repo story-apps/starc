@@ -75,7 +75,7 @@ ProjectsView::Implementation::Implementation(ProjectsView* _parent)
 void ProjectsView::Implementation::initEmptyPage()
 {
     QVBoxLayout* layout = new QVBoxLayout(emptyPage);
-    layout->setContentsMargins(QMargins());
+    layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addStretch();
     layout->addWidget(emptyPageTitleLabel, 0, Qt::AlignHCenter);
@@ -89,7 +89,7 @@ void ProjectsView::Implementation::updateEmptyPageUi()
 {
     emptyPage->setBackgroundColor(DesignSystem::color().surface());
 
-    emptyPageTitleLabel->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+    emptyPageTitleLabel->setContentsMargins(DesignSystem::label().margins().toMargins());
     emptyPageTitleLabel->setBackgroundColor(DesignSystem::color().surface());
     emptyPageTitleLabel->setTextColor(DesignSystem::color().onSurface());
     emptyPageCreateProjectButton->setBackgroundColor(DesignSystem::color().accent());
@@ -103,23 +103,23 @@ void ProjectsView::Implementation::initProjectsPage()
 
 void ProjectsView::Implementation::updateProjectsPageUi()
 {
-    projectsPage->setBackgroundColor(Ui::DesignSystem::color().surface());
+    projectsPage->setBackgroundColor(DesignSystem::color().surface());
 }
 
 void ProjectsView::Implementation::updateToolbarUi()
 {
     toolbar->resize(toolbar->sizeHint());
     updateToolbarPositon();
-    toolbar->setBackgroundColor(ColorHelper::nearby(Ui::DesignSystem::color().background()));
-    toolbar->setTextColor(Ui::DesignSystem::color().onBackground());
+    toolbar->setBackgroundColor(ColorHelper::nearby(DesignSystem::color().background()));
+    toolbar->setTextColor(DesignSystem::color().onBackground());
     toolbar->raise();
 }
 
 void ProjectsView::Implementation::updateToolbarPositon()
 {
-    toolbar->move(QPointF((q->width() - toolbar->width()) / 2.0,
-                          -Ui::DesignSystem::card().shadowMargins().top())
-                      .toPoint());
+    toolbar->move(
+        QPointF((q->width() - toolbar->width()) / 2.0, -DesignSystem::card().shadowMargins().top())
+            .toPoint());
 }
 
 

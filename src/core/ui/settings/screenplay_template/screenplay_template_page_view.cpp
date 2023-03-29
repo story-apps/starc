@@ -385,24 +385,30 @@ void ScreenplayTemplatePageView::designSystemChangeEvent(DesignSystemChangeEvent
 {
     Widget::designSystemChangeEvent(_event);
 
-    setBackgroundColor(Ui::DesignSystem::color().surface());
+    setBackgroundColor(DesignSystem::color().surface());
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+        QMarginsF(DesignSystem::layout().px24(), DesignSystem::compactLayout().topContentMargin(),
+                  DesignSystem::layout().px24(), DesignSystem::compactLayout().px24())
             .toMargins());
-    d->card->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->card->setContentsMargins(0, Ui::DesignSystem::layout().px24(), 0,
-                                Ui::DesignSystem::layout().px24());
+    d->card->setBackgroundColor(DesignSystem::color().background());
+    d->card->setContentsMargins(0, DesignSystem::layout().px24(), 0, DesignSystem::layout().px24());
 
     for (auto textField :
          { d->templateName, d->leftMargin, d->topMargin, d->rightMargin, d->bottomMargin }) {
-        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-        textField->setTextColor(Ui::DesignSystem::color().onBackground());
+        textField->setBackgroundColor(DesignSystem::color().onBackground());
+        textField->setTextColor(DesignSystem::color().onBackground());
     }
     for (auto textField : { d->leftMargin, d->topMargin }) {
-        textField->setCustomMargins(
-            { isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0.0, 0.0,
-              isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px24(), 0.0 });
+        textField->setCustomMargins({ isLeftToRight() ? DesignSystem::layout().px24() : 0.0, 0.0,
+                                      isLeftToRight() ? 0.0 : DesignSystem::layout().px24(), 0.0 });
+    }
+    for (auto textField : { d->rightMargin, d->bottomMargin }) {
+        textField->setCustomMargins({ isLeftToRight() ? DesignSystem::compactLayout().px16()
+                                                      : DesignSystem::layout().px24(),
+                                      0.0,
+                                      isLeftToRight() ? DesignSystem::layout().px24()
+                                                      : DesignSystem::compactLayout().px16(),
+                                      0.0 });
     }
 
     for (auto title : { d->pageFormatTitle, d->pageMarginsTitle, d->pageNumbersAlignHorizontalTitle,
@@ -410,23 +416,23 @@ void ScreenplayTemplatePageView::designSystemChangeEvent(DesignSystemChangeEvent
                         d->pageSplitterRight }) {
         title->setBackgroundColor(DesignSystem::color().background());
         title->setTextColor(ColorHelper::transparent(DesignSystem::color().onBackground(),
-                                                     Ui::DesignSystem::inactiveTextOpacity()));
-        title->setContentsMargins(
-            Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
-            Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px4());
+                                                     DesignSystem::inactiveTextOpacity()));
+        title->setContentsMargins(DesignSystem::layout().px24(),
+                                  DesignSystem::compactLayout().px24(),
+                                  DesignSystem::layout().px24(), DesignSystem::layout().px4());
     }
     d->pageMarginsTitle->setContentsMargins(
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12());
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px16(),
+        DesignSystem::layout().px24(), DesignSystem::layout().px12());
     d->pageNumbersAlignHorizontalTitle->setContentsMargins(
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px4(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px4());
+        DesignSystem::layout().px24(), DesignSystem::layout().px4(), DesignSystem::layout().px24(),
+        DesignSystem::layout().px4());
     d->pageSplitterLeft->setContentsMargins(
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px4(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24());
+        DesignSystem::layout().px24(), DesignSystem::layout().px4(), DesignSystem::layout().px24(),
+        DesignSystem::layout().px24());
     d->pageSplitterRight->setContentsMargins(
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px4(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24());
+        DesignSystem::layout().px24(), DesignSystem::layout().px4(), DesignSystem::layout().px24(),
+        DesignSystem::layout().px24());
 
     for (auto radioButton :
          { d->pageFormatA4, d->pageFormatLetter, d->pageNumbersAlignTop, d->pageNumbersAlignBottom,
@@ -435,15 +441,15 @@ void ScreenplayTemplatePageView::designSystemChangeEvent(DesignSystemChangeEvent
         radioButton->setTextColor(DesignSystem::color().onBackground());
     }
 
-    d->cardLayout->setRowMinimumHeight(d->marginsSplitterRow, Ui::DesignSystem::layout().px24());
+    d->cardLayout->setRowMinimumHeight(d->marginsSplitterRow, DesignSystem::compactLayout().px16());
 
-    d->pageSplitter->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->pageSplitter->setContentsMargins(Ui::DesignSystem::layout().px24(), 0,
-                                        Ui::DesignSystem::layout().px24(), 0);
+    d->pageSplitter->setBackgroundColor(DesignSystem::color().background());
+    d->pageSplitter->setContentsMargins(DesignSystem::layout().px24(), 0,
+                                        DesignSystem::layout().px24(), 0);
 
-    d->pageLayoutPreview->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->pageLayoutPreview->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->pageLayoutPreview->setContentsMargins(0, 0, Ui::DesignSystem::layout().px24(), 0);
+    d->pageLayoutPreview->setBackgroundColor(DesignSystem::color().background());
+    d->pageLayoutPreview->setTextColor(DesignSystem::color().onBackground());
+    d->pageLayoutPreview->setContentsMargins(0, 0, DesignSystem::layout().px24(), 0);
 }
 
 } // namespace Ui

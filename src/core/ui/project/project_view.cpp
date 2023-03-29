@@ -277,44 +277,43 @@ void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     StackWidget::designSystemChangeEvent(_event);
 
-    setBackgroundColor(Ui::DesignSystem::color().surface());
+    setBackgroundColor(DesignSystem::color().surface());
 
-    d->defaultPage->setBackgroundColor(Ui::DesignSystem::color().surface());
-    d->defaultPageBodyLabel->setContentsMargins(
-        0, static_cast<int>(Ui::DesignSystem::layout().px16()),
-        static_cast<int>(Ui::DesignSystem::layout().px4()), 0);
+    d->defaultPage->setBackgroundColor(DesignSystem::color().surface());
+    d->defaultPageBodyLabel->setContentsMargins(0, static_cast<int>(DesignSystem::layout().px16()),
+                                                static_cast<int>(DesignSystem::layout().px4()), 0);
     for (auto label : std::vector<Widget*>{
              d->defaultPageTitleLabel,
              d->defaultPageBodyLabel,
          }) {
-        label->setBackgroundColor(Ui::DesignSystem::color().surface());
-        label->setTextColor(Ui::DesignSystem::color().onSurface());
+        label->setBackgroundColor(DesignSystem::color().surface());
+        label->setTextColor(DesignSystem::color().onSurface());
     }
     d->defaultPageAddItemButton->setContentsMargins(
-        0, static_cast<int>(Ui::DesignSystem::layout().px16()), 0, 0);
-    d->defaultPageAddItemButton->setBackgroundColor(Ui::DesignSystem::color().surface());
-    d->defaultPageAddItemButton->setTextColor(Ui::DesignSystem::color().accent());
+        0, static_cast<int>(DesignSystem::layout().px16()), 0, 0);
+    d->defaultPageAddItemButton->setBackgroundColor(DesignSystem::color().surface());
+    d->defaultPageAddItemButton->setTextColor(DesignSystem::color().accent());
 
-    d->notImplementedPage->setBackgroundColor(Ui::DesignSystem::color().surface());
+    d->notImplementedPage->setBackgroundColor(DesignSystem::color().surface());
     d->notImplementedPageBodyLabel->setContentsMargins(
-        0, static_cast<int>(Ui::DesignSystem::layout().px16()),
-        static_cast<int>(Ui::DesignSystem::layout().px4()), 0);
+        0, static_cast<int>(DesignSystem::layout().px16()),
+        static_cast<int>(DesignSystem::layout().px4()), 0);
     for (auto label : std::vector<Widget*>{
              d->notImplementedPageTitleLabel,
              d->notImplementedPageBodyLabel,
          }) {
-        label->setBackgroundColor(Ui::DesignSystem::color().surface());
-        label->setTextColor(Ui::DesignSystem::color().onSurface());
+        label->setBackgroundColor(DesignSystem::color().surface());
+        label->setTextColor(DesignSystem::color().onSurface());
     }
 
-    d->documentEditorPage->setBackgroundColor(Ui::DesignSystem::color().surface());
+    d->documentEditorPage->setBackgroundColor(DesignSystem::color().surface());
     d->documentVersions->setBackgroundColor(
-        ColorHelper::nearby(Ui::DesignSystem::color().background()));
-    d->documentVersions->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->documentEditor->setBackgroundColor(Ui::DesignSystem::color().surface());
+        ColorHelper::nearby(DesignSystem::color().background()));
+    d->documentVersions->setTextColor(DesignSystem::color().onBackground());
+    d->documentEditor->setBackgroundColor(DesignSystem::color().surface());
 
     d->overlay->setBackgroundColor(backgroundColor());
-    d->overlayOpacityAnimation.setEndValue(Ui::DesignSystem::focusBackgroundOpacity());
+    d->overlayOpacityAnimation.setEndValue(DesignSystem::focusBackgroundOpacity());
 }
 
 void ProjectView::setCurrentWidget(QWidget* _widget)

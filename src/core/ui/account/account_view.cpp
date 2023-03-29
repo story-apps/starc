@@ -581,8 +581,9 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     setBackgroundColor(DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+        QMarginsF(Ui::DesignSystem::layout().px24(),
+                  Ui::DesignSystem::compactLayout().topContentMargin(),
+                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
             .toMargins());
 
     d->colorAnimation.setStartValue(Ui::DesignSystem::color().accent());
@@ -639,8 +640,8 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     d->name->setCustomMargins(
-        { Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
-          Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px16() });
+        { Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24(),
+          Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px16() });
 
     d->newsletterSubscription->setBackgroundColor(Ui::DesignSystem::color().background());
     d->newsletterSubscription->setTextColor(Ui::DesignSystem::color().onBackground());
@@ -665,7 +666,7 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->accountInfoLayout->setRowMinimumHeight(d->accountInfoLastRow,
                                               static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->subscriptionInfoLayout->setVerticalSpacing(Ui::DesignSystem::layout().px24());
+    d->subscriptionInfoLayout->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
     d->subscriptionInfoLayout->setRowMinimumHeight(
         d->subscriptionInfoLastRow, static_cast<int>(Ui::DesignSystem::layout().px16()));
     d->subscriptionInfoLayout->setContentsMargins(0, 0, Ui::DesignSystem::layout().px16(), 0);

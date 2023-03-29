@@ -839,17 +839,16 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
 {
     Widget::designSystemChangeEvent(_event);
 
-    setBackgroundColor(Ui::DesignSystem::color().surface());
+    setBackgroundColor(DesignSystem::color().surface());
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+        QMarginsF(DesignSystem::layout().px24(), DesignSystem::compactLayout().topContentMargin(),
+                  DesignSystem::layout().px24(), DesignSystem::compactLayout().px24())
             .toMargins());
-    d->card->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->card->setContentsMargins(0, Ui::DesignSystem::layout().px24(), 0,
-                                Ui::DesignSystem::layout().px24());
+    d->card->setBackgroundColor(DesignSystem::color().background());
+    d->card->setContentsMargins(0, DesignSystem::layout().px24(), 0, DesignSystem::layout().px24());
 
     for (auto row : std::as_const(d->additionalSpacingRows)) {
-        d->cardLayout->itemAt(row)->spacerItem()->changeSize(0, Ui::DesignSystem::layout().px8());
+        d->cardLayout->itemAt(row)->spacerItem()->changeSize(0, DesignSystem::layout().px8());
     }
 
     for (auto widget : std::vector<Widget*>{
@@ -874,8 +873,8 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
              d->showParagraphTitle,
              d->showCustomParagraphTitle,
          }) {
-        widget->setBackgroundColor(Ui::DesignSystem::color().background());
-        widget->setTextColor(Ui::DesignSystem::color().onBackground());
+        widget->setBackgroundColor(DesignSystem::color().background());
+        widget->setTextColor(DesignSystem::color().onBackground());
     }
     for (auto title : {
              d->textAlignmentTitle,
@@ -885,23 +884,23 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
              d->lineSpacingTitle,
          }) {
         title->setTextColor(ColorHelper::transparent(DesignSystem::color().onBackground(),
-                                                     Ui::DesignSystem::inactiveTextOpacity()));
+                                                     DesignSystem::inactiveTextOpacity()));
     }
     d->textAlignmentTitle->setContentsMargins(
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px4());
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px12(),
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px4());
     d->verticalIndentationTitle->setContentsMargins(
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px16());
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px12(),
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px16());
     d->horizontalIndentationTitle->setContentsMargins(
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px16());
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px24(),
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px16());
     d->horizontalIndentationInTableTitle->setContentsMargins(
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12());
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px24(),
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px12());
     d->lineSpacingTitle->setContentsMargins(
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12());
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px24(),
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px12());
 
     for (auto textField : std::vector<TextField*>{
              d->fontFamily,
@@ -917,9 +916,9 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
              d->lineSpacingValue,
              d->customParagraphTitle,
          }) {
-        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-        textField->setTextColor(Ui::DesignSystem::color().onBackground());
-        textField->setMinimumWidth(Ui::DesignSystem::layout().px62() * 3);
+        textField->setBackgroundColor(DesignSystem::color().onBackground());
+        textField->setTextColor(DesignSystem::color().onBackground());
+        textField->setMinimumWidth(DesignSystem::layout().px62() * 3);
     }
     for (auto textField : std::vector<TextField*>{
              d->fontFamily,
@@ -933,16 +932,27 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
              d->lineSpacing,
              d->lineSpacingValue,
          }) {
+        textField->setCustomMargins({ isLeftToRight() ? DesignSystem::layout().px24() : 0.0, 0.0,
+                                      isLeftToRight() ? 0.0 : DesignSystem::layout().px24(), 0.0 });
+    }
+    for (auto textField : std::vector<TextField*>{
+             d->fontSize,
+             d->bottomIndent,
+             d->firstLineIndent,
+             d->rightIndent,
+             d->rightIndentInTable,
+             d->lineSpacingValue,
+         }) {
         textField->setCustomMargins(
-            { isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0.0, 0.0,
-              isLeftToRight() ? 0.0 : Ui::DesignSystem::layout().px24(), 0.0 });
+            { isLeftToRight() ? DesignSystem::compactLayout().px16() : 0.0, 0.0,
+              isLeftToRight() ? 0.0 : DesignSystem::compactLayout().px16(), 0.0 });
     }
     for (auto combobox : {
              d->fontFamily,
              d->fontSize,
              d->lineSpacing,
          }) {
-        combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+        combobox->setPopupBackgroundColor(DesignSystem::color().background());
     }
 }
 

@@ -362,9 +362,6 @@ ThemeSetupView::ThemeSetupView(QWidget* _parent)
             hide();
         }
     });
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 ThemeSetupView::~ThemeSetupView() = default;
@@ -436,8 +433,8 @@ void ThemeSetupView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     setBackgroundColor(theme.primary());
 
     d->layout->setContentsMargins(
-        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16(),
-        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
+        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::compactLayout().px16(),
+        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::compactLayout().px16());
 
     for (auto widget : std::vector<Widget*>{
              d->pasteHash,

@@ -229,7 +229,7 @@ void LoginDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
-    contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
+    contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::compactLayout().px8()));
     d->buttonsLayout->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
                   Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16())

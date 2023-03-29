@@ -84,7 +84,7 @@ void ScreenplayTemplateNavigator::designSystemChangeEvent(DesignSystemChangeEven
                                                     Ui::DesignSystem::inactiveTextOpacity()));
     d->title->setContentsMargins(
         Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12(),
-        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24());
+        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px16());
     d->metricsTitle->setContentsMargins(Ui::DesignSystem::layout().px24(), 0.0,
                                         Ui::DesignSystem::layout().px24(),
                                         Ui::DesignSystem::layout().px4());

@@ -133,13 +133,13 @@ SessionStatisticsView::Implementation::Implementation(QWidget* _parent)
 
 void SessionStatisticsView::Implementation::updatePlotSize()
 {
-    const QSize plotSize(content->width() - Ui::DesignSystem::layout().px24() * 4
-                             - Ui::DesignSystem::card().shadowMargins().left()
-                             - Ui::DesignSystem::card().shadowMargins().right(),
-                         content->height() - Ui::DesignSystem::layout().topContentMargin()
-                             - Ui::DesignSystem::layout().px24() * 3
-                             - Ui::DesignSystem::card().shadowMargins().top()
-                             - Ui::DesignSystem::card().shadowMargins().bottom());
+    const QSize plotSize(content->width() - DesignSystem::layout().px24() * 4
+                             - DesignSystem::card().shadowMargins().left()
+                             - DesignSystem::card().shadowMargins().right(),
+                         content->height() - DesignSystem::layout().topContentMargin()
+                             - DesignSystem::layout().px24() * 3
+                             - DesignSystem::card().shadowMargins().top()
+                             - DesignSystem::card().shadowMargins().bottom());
     if (plotSize.isValid()) {
         plot->setFixedSize(plotSize);
     }
@@ -206,16 +206,16 @@ void SessionStatisticsView::setPlot(const BusinessLayer::Plot& _plot)
         QCPGraph* plot = d->plot->addGraph();
         plot->setSelectable(QCP::stNone);
         plot->setName(singlePlotData.name);
-        plot->setPen(QPen(singlePlotData.color, Ui::DesignSystem::layout().px2()));
+        plot->setPen(QPen(singlePlotData.color, DesignSystem::layout().px2()));
         if (singlePlotData.brushColor.isValid()) {
             plot->setBrush(singlePlotData.brushColor);
         }
         plot->setScatterStyle(
             QCPScatterStyle(QCPScatterStyle::ssCircle,
                             QPen(ColorHelper::transparent(singlePlotData.color,
-                                                          Ui::DesignSystem::inactiveItemOpacity()),
-                                 Ui::DesignSystem::layout().px(5)),
-                            Qt::white, Ui::DesignSystem::layout().px8()));
+                                                          DesignSystem::inactiveItemOpacity()),
+                                 DesignSystem::layout().px(5)),
+                            Qt::white, DesignSystem::layout().px8()));
 
         //
         // Отправляем данные в график
@@ -244,7 +244,7 @@ void SessionStatisticsView::setPlot(const BusinessLayer::Plot& _plot)
             auto deviceNameWidget = new Subtitle2Label(this);
             deviceNameWidget->setText(singlePlotData.name);
             deviceNameWidget->setTextColor(singlePlotData.color);
-            deviceNameWidget->setBackgroundColor(Ui::DesignSystem::color().surface());
+            deviceNameWidget->setBackgroundColor(DesignSystem::color().surface());
             deviceNameWidget->setContentsMargins(
                 isLeftToRight() ? 0 : DesignSystem::layout().px16(), 0,
                 isLeftToRight() ? DesignSystem::layout().px16() : 0, 0);
@@ -268,10 +268,9 @@ void SessionStatisticsView::setPlot(const BusinessLayer::Plot& _plot)
     //
     QLinearGradient backgroundGradient(0, 0, 0, d->plot->height());
     backgroundGradient.setColorAt(0, Qt::transparent);
-    backgroundGradient.setColorAt(
-        1,
-        ColorHelper::transparent(Ui::DesignSystem::color().accent(),
-                                 Ui::DesignSystem::hoverBackgroundOpacity()));
+    backgroundGradient.setColorAt(1,
+                                  ColorHelper::transparent(DesignSystem::color().accent(),
+                                                           DesignSystem::hoverBackgroundOpacity()));
     d->plot->axisRect()->setBackground(backgroundGradient);
 
     d->plot->replot();
@@ -303,18 +302,18 @@ void SessionStatisticsView::designSystemChangeEvent(DesignSystemChangeEvent* _ev
 {
     Widget::designSystemChangeEvent(_event);
 
-    setBackgroundColor(Ui::DesignSystem::color().surface());
+    setBackgroundColor(DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24())
+        QMarginsF(DesignSystem::layout().px24(), DesignSystem::compactLayout().topContentMargin(),
+                  DesignSystem::layout().px24(), DesignSystem::compactLayout().px24())
             .toMargins());
 
-    d->showAllDevices->setBackgroundColor(Ui::DesignSystem::color().surface());
-    d->showAllDevices->setTextColor(Ui::DesignSystem::color().onSurface());
+    d->showAllDevices->setBackgroundColor(DesignSystem::color().surface());
+    d->showAllDevices->setTextColor(DesignSystem::color().onSurface());
     for (auto checkBox : std::as_const(d->devices)) {
-        checkBox->setBackgroundColor(Ui::DesignSystem::color().surface());
-        checkBox->setTextColor(Ui::DesignSystem::color().onSurface());
+        checkBox->setBackgroundColor(DesignSystem::color().surface());
+        checkBox->setTextColor(DesignSystem::color().onSurface());
     }
     for (auto filter : {
              d->weekPlotFilter,
@@ -323,44 +322,43 @@ void SessionStatisticsView::designSystemChangeEvent(DesignSystemChangeEvent* _ev
          }) {
         filter->setBackgroundColor(DesignSystem::color().surface());
         filter->setTextColor(DesignSystem::color().accent());
-        filter->setContentsMargins(Ui::DesignSystem::layout().px8(), 0,
-                                   Ui::DesignSystem::layout().px8(), 0);
+        filter->setContentsMargins(DesignSystem::layout().px8(), 0, DesignSystem::layout().px8(),
+                                   0);
     }
-    d->yearPlotFilter->setContentsMargins(Ui::DesignSystem::layout().px8(), 0,
-                                          Ui::DesignSystem::layout().px24(), 0);
+    d->yearPlotFilter->setContentsMargins(DesignSystem::layout().px8(), 0,
+                                          DesignSystem::layout().px24(), 0);
 
     for (auto card : { d->plotCard }) {
         card->setBackgroundColor(DesignSystem::color().background());
     }
     for (auto cardLayout : { d->plotCardLayout }) {
-        cardLayout->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px24(), 0.0, 0.0,
-                                                 Ui::DesignSystem::layout().px24())
-                                           .toMargins());
+        cardLayout->setContentsMargins(
+            QMarginsF(DesignSystem::layout().px24(), 0.0, 0.0, DesignSystem::layout().px24())
+                .toMargins());
     }
 
     d->updatePlotSize();
-    d->plot->xAxis->setLabelFont(Ui::DesignSystem::font().subtitle2());
+    d->plot->xAxis->setLabelFont(DesignSystem::font().subtitle2());
     d->plot->xAxis->setBasePen(
-        QPen(Ui::DesignSystem::color().background(), Ui::DesignSystem::layout().px()));
+        QPen(DesignSystem::color().background(), DesignSystem::layout().px()));
     d->plot->yAxis->setBasePen(
-        QPen(Ui::DesignSystem::color().background(), Ui::DesignSystem::layout().px()));
-    d->plot->xAxis->setTickLabelColor(Ui::DesignSystem::color().onBackground());
-    d->plot->yAxis->setTickLabelColor(Ui::DesignSystem::color().onBackground());
+        QPen(DesignSystem::color().background(), DesignSystem::layout().px()));
+    d->plot->xAxis->setTickLabelColor(DesignSystem::color().onBackground());
+    d->plot->yAxis->setTickLabelColor(DesignSystem::color().onBackground());
     d->plot->yAxis->grid()->setPen(
-        QPen(ColorHelper::transparent(Ui::DesignSystem::color().accent(),
-                                      Ui::DesignSystem::focusBackgroundOpacity()),
-             Ui::DesignSystem::layout().px(), Qt::DashLine));
-    d->plot->xAxis->setLabelColor(ColorHelper::transparent(
-        Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::inactiveTextOpacity()));
-    d->plot->yAxis->setLabelColor(ColorHelper::transparent(
-        Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::inactiveTextOpacity()));
-    d->plot->setBackground(Ui::DesignSystem::color().background());
+        QPen(ColorHelper::transparent(DesignSystem::color().accent(),
+                                      DesignSystem::focusBackgroundOpacity()),
+             DesignSystem::layout().px(), Qt::DashLine));
+    d->plot->xAxis->setLabelColor(ColorHelper::transparent(DesignSystem::color().onBackground(),
+                                                           DesignSystem::inactiveTextOpacity()));
+    d->plot->yAxis->setLabelColor(ColorHelper::transparent(DesignSystem::color().onBackground(),
+                                                           DesignSystem::inactiveTextOpacity()));
+    d->plot->setBackground(DesignSystem::color().background());
     QLinearGradient backgroundGradient(0, 0, 0, d->plot->height());
     backgroundGradient.setColorAt(0, Qt::transparent);
-    backgroundGradient.setColorAt(
-        1,
-        ColorHelper::transparent(Ui::DesignSystem::color().accent(),
-                                 Ui::DesignSystem::hoverBackgroundOpacity()));
+    backgroundGradient.setColorAt(1,
+                                  ColorHelper::transparent(DesignSystem::color().accent(),
+                                                           DesignSystem::hoverBackgroundOpacity()));
     d->plot->axisRect()->setBackground(backgroundGradient);
     d->plot->replot();
 }

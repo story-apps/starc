@@ -214,7 +214,7 @@ void SettingsNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->resetToDefaults->setBackgroundColor(DesignSystem::color().accent());
     d->resetToDefaults->setTextColor(DesignSystem::color().accent());
     d->resetToDefaults->setContentsMargins(
-        DesignSystem::layout().px12(), DesignSystem::layout().px24(), DesignSystem::layout().px12(),
+        DesignSystem::layout().px12(), DesignSystem::layout().px16(), DesignSystem::layout().px12(),
         DesignSystem::layout().px12());
 }
 

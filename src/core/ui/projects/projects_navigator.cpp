@@ -82,20 +82,19 @@ void ProjectsNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     setBackgroundColor(DesignSystem::color().primary());
 
-    d->layout->setSpacing(Ui::DesignSystem::layout().px12());
+    d->layout->setSpacing(DesignSystem::compactLayout().px16());
     d->layout->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16())
+        QMarginsF(DesignSystem::layout().px16(), DesignSystem::layout().px16(),
+                  DesignSystem::layout().px16(), DesignSystem::layout().px16())
             .toMargins());
-    const QMarginsF quoteMargins(Ui::DesignSystem::layout().px16(),
-                                 Ui::DesignSystem::layout().px16(),
-                                 Ui::DesignSystem::layout().px16(), 0.0);
+    const QMarginsF quoteMargins(DesignSystem::layout().px16(), DesignSystem::layout().px16(),
+                                 DesignSystem::layout().px16(), 0.0);
     d->quoteLabel->setContentsMargins(quoteMargins.toMargins());
     d->quoteLabel->setBackgroundColor(DesignSystem::color().primary());
     d->quoteLabel->setTextColor(DesignSystem::color().onPrimary());
-    const QMarginsF quoteAuthorMargins(Ui::DesignSystem::layout().px16(), 0,
-                                       Ui::DesignSystem::layout().px16(),
-                                       Ui::DesignSystem::layout().px24() * 2);
+    const QMarginsF quoteAuthorMargins(DesignSystem::layout().px16(), 0,
+                                       DesignSystem::layout().px16(),
+                                       DesignSystem::layout().px24() * 2);
     d->quoteAuthorLabel->setContentsMargins(quoteAuthorMargins.toMargins());
     d->quoteAuthorLabel->setBackgroundColor(DesignSystem::color().primary());
     d->quoteAuthorLabel->setTextColor(ColorHelper::colorBetween(DesignSystem::color().primary(),

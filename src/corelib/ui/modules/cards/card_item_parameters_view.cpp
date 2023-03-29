@@ -711,7 +711,7 @@ void CardItemParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _e
         textField->setBackgroundColor(Ui::DesignSystem::color().onPrimary());
         textField->setTextColor(Ui::DesignSystem::color().onPrimary());
         textField->setCustomMargins({ Ui::DesignSystem::layout().px24(),
-                                      Ui::DesignSystem::layout().px16(),
+                                      Ui::DesignSystem::compactLayout().px16(),
                                       Ui::DesignSystem::layout().px24(), 0.0 });
     }
     d->updateCustomNumberMargins();
