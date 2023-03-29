@@ -1064,7 +1064,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             }
 
             connect(worldsModel, &BusinessLayer::WorldsModel::createWorldRequested, this,
-                    &ProjectModelsFacade::createLocationRequested);
+                    &ProjectModelsFacade::createWorldRequested);
 
             model = worldsModel;
             break;
