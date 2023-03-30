@@ -600,7 +600,7 @@ void ScreenplayDictionariesModel::initDocument()
         }
     }
     //
-    if (shouldBeInitialized) {
+    auto createCategories = [this] {
         //
         // Хардкодим UUID'ы чтобы дефолтный xml всегда был одинаковым
         //
@@ -631,6 +631,9 @@ void ScreenplayDictionariesModel::initDocument()
             d->resourceCategories.append(resourceCategory);
         }
         // clang-format on
+    };
+    if (shouldBeInitialized) {
+        createCategories();
     } else {
         const auto resourceCategoriesNode = documentNode.firstChildElement(kResourceCategoriesKey);
         auto resourceCategoryNode = resourceCategoriesNode.firstChildElement();
@@ -646,6 +649,14 @@ void ScreenplayDictionariesModel::initDocument()
             resourceCategory.hasIds = resourceCategoryNode.hasAttribute(kItemHasIdsAttribute);
             d->resourceCategories.append(resourceCategory);
             resourceCategoryNode = resourceCategoryNode.nextSiblingElement();
+        }
+
+        //
+        // Для старых проектов тоже создадим категории
+        // FIXME: Выпилить в версии 0.6.0
+        //
+        if (d->resourceCategories.isEmpty()) {
+            createCategories();
         }
     }
     //
