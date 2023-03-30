@@ -10,7 +10,7 @@ namespace Ui {
 /**
  * @brief Панель быстрого форматирования
  */
-class FastFormatWidget : public Widget
+class CORE_LIBRARY_EXPORT FastFormatWidget : public Widget
 {
     Q_OBJECT
 
