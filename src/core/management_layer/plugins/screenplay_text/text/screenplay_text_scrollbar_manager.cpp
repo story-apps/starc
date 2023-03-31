@@ -367,7 +367,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     const QRectF scrollbarRect(isLeftToRight() ? Ui::DesignSystem::layout().px16()
                                                : (width() - Ui::DesignSystem::layout().px24()),
                                0, Ui::DesignSystem::layout().px8(), contentRect.height());
-    const auto scrollbarColor = ColorHelper::nearby(Ui::DesignSystem::color().textEditor());
+    const auto scrollbarColor = ColorHelper::nearby(Ui::DesignSystem::color().surface());
     painter.fillRect(scrollbarRect, scrollbarColor);
     //
     // Рисуем дополнительные цвета скролбара
@@ -510,7 +510,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
         ? (scrollbarRect.right() + (handleTextLeft - scrollbarRect.right()) / 2)
         : handleTextLeft + handleTextWidth
             + ((scrollbarRect.left() - (handleTextLeft + handleTextWidth)) / 2);
-    const auto markColor = ColorHelper::transparent(Ui::DesignSystem::color().onTextEditor(),
+    const auto markColor = ColorHelper::transparent(Ui::DesignSystem::color().onSurface(),
                                                     Ui::DesignSystem::disabledTextOpacity());
     const qreal marksSpacing = painter.fontMetrics().lineSpacing() * 4;
     const int marksCount = (height() - painter.fontMetrics().lineSpacing()) / marksSpacing;
@@ -545,7 +545,7 @@ void ScreenplayTextTimeline::paintEvent(QPaintEvent* _event)
     // Рисуем хэндл
     //
     if (d->scrollable) {
-        painter.setPen(Ui::DesignSystem::color().onTextEditor());
+        painter.setPen(Ui::DesignSystem::color().onSurface());
         //
         // ... область
         //
