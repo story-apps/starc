@@ -191,7 +191,8 @@ signals:
     /**
      * @brief Запрос на апгрейд аккаунта из одного из плагинов
      */
-    void upgradeRequested();
+    void upgradeToProRequested();
+    void upgradeToTeamRequested();
 
     /**
      * @brief Изменились данные

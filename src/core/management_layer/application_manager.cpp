@@ -2572,8 +2572,10 @@ void ApplicationManager::initConnections()
     //
     connect(d->projectManager.data(), &ProjectManager::menuRequested, this,
             [this] { d->showMenu(); });
-    connect(d->projectManager.data(), &ProjectManager::upgradeRequested, d->accountManager.data(),
-            &AccountManager::upgradeAccountToPro);
+    connect(d->projectManager.data(), &ProjectManager::upgradeToProRequested,
+            d->accountManager.data(), &AccountManager::upgradeAccountToPro);
+    connect(d->projectManager.data(), &ProjectManager::upgradeToTeamRequested,
+            d->accountManager.data(), &AccountManager::upgradeAccountToTeam);
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
             [this] { d->markChangesSaved(false); });
     connect(d->projectManager.data(), &ProjectManager::projectUuidChanged,

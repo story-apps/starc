@@ -3621,10 +3621,15 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     if (auto documentManager = d->pluginsBuilder.plugin(viewMimeType)->asQObject();
         documentManager != nullptr) {
         const auto invalidSignalIndex = -1;
-        if (documentManager->metaObject()->indexOfSignal("upgradeRequested()")
+        if (documentManager->metaObject()->indexOfSignal("upgradeToProRequested()")
             != invalidSignalIndex) {
-            connect(documentManager, SIGNAL(upgradeRequested()), this, SIGNAL(upgradeRequested()),
-                    Qt::UniqueConnection);
+            connect(documentManager, SIGNAL(upgradeToProRequested()), this,
+                    SIGNAL(upgradeToProRequested()), Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal("upgradeToTeamRequested()")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(upgradeToTeamRequested()), this,
+                    SIGNAL(upgradeToTeamRequested()), Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal("linkActivated(QUuid,QModelIndex)")
             != invalidSignalIndex) {
