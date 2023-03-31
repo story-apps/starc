@@ -73,7 +73,7 @@
 #include <QWidget>
 #include <QtConcurrentRun>
 
-#include <NetworkRequestLoader.h>>
+#include <NetworkRequestLoader.h>
 
 namespace ManagementLayer {
 

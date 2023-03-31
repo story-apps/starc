@@ -241,14 +241,14 @@ public:
         //
         // Открытая модель
         //
-        QPointer<BusinessLayer::AbstractModel> activeModel;
-        QPointer<BusinessLayer::AbstractModel> inactiveModel;
+        QPointer<BusinessLayer::AbstractModel> activeModel = {};
+        QPointer<BusinessLayer::AbstractModel> inactiveModel = {};
 
         //
         // Майм-тип редактора открытой модели
         //
-        QString activeViewMimeType;
-        QString inactiveViewMimeType;
+        QString activeViewMimeType = {};
+        QString inactiveViewMimeType = {};
     } view;
 
     /**
