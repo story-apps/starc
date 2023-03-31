@@ -838,10 +838,27 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     //
     if (d->replaceTwoDashes && _eventText == "-" && cursorBackwardText.endsWith("--")) {
         //
-        // Три последних символа
+        // Два последних символа
         //
         cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 2);
         cursor.insertText("—");
+
+        return true;
+    }
+
+    //
+    // Заменяем i на I для английского
+    //
+    if (QLocale().language() == QLocale::English && !_eventText.isEmpty()
+        && (_eventText.front().isPunct() || _eventText.front().isSpace())
+        && cursorBackwardText.leftRef(cursorBackwardText.length() - _eventText.length())
+               .endsWith(" i")) {
+        //
+        // Несколько последних символа
+        //
+        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor,
+                            2 + _eventText.length());
+        cursor.insertText(QString(" I%1").arg(_eventText));
 
         return true;
     }
